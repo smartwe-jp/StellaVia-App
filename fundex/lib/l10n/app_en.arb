@@ -625,6 +625,16 @@
   "walletHistoryMoreAction": "View All",
   "walletHistoryEmpty": "No history yet.",
   "walletHistoryUnknownType": "Record",
+  "walletBankAccountMissingDescription": "No dedicated deposit account has been issued yet. Please apply for one before making a deposit.",
+  "walletBankAccountApplyAction": "Apply for Account",
+  "walletBankAccountApplySuccess": "Deposit account application submitted. Refreshing account info.",
+  "walletBankAccountApplyFailure": "Failed to apply for a deposit account. Please try again later.",
+  "walletBankAccountExpireNotice": "Please transfer by {date}.",
+  "@walletBankAccountExpireNotice": {
+    "placeholders": {
+      "date": {}
+    }
+  },
   "walletHistoryPendingStatus": "Pending",
   "walletHistoryInflowLabel": "Inflow",
   "walletHistoryOutflowLabel": "Outflow",

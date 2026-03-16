@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_color_tokens.dart';
+import 'ui_buttons.dart';
 import 'ui_tokens.dart';
 
 class FundDedicatedDepositAccountCard extends StatelessWidget {
@@ -20,6 +21,7 @@ class FundDedicatedDepositAccountCard extends StatelessWidget {
     required this.accountHolderLabel,
     required this.accountHolderValue,
     required this.helperMessage,
+    this.expirationMessage,
   });
 
   final String title;
@@ -36,6 +38,7 @@ class FundDedicatedDepositAccountCard extends StatelessWidget {
   final String accountHolderLabel;
   final String accountHolderValue;
   final String helperMessage;
+  final String? expirationMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +127,97 @@ class FundDedicatedDepositAccountCard extends StatelessWidget {
                   ],
                 ),
               ),
+            ),
+            if (expirationMessage != null) ...<Widget>[
+              const SizedBox(height: UiTokens.spacing8),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColorTokens.fundexWarningLight,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: UiTokens.spacing12,
+                    vertical: 10,
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      const Text('⏰', style: TextStyle(fontSize: 12)),
+                      const SizedBox(width: UiTokens.spacing8),
+                      Expanded(
+                        child: Text(
+                          expirationMessage!,
+                          style: const TextStyle(
+                            color: AppColorTokens.fundexWarning,
+                            fontSize: 11,
+                            height: 1.45,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FundWalletBankAccountApplyCard extends StatelessWidget {
+  const FundWalletBankAccountApplyCard({
+    super.key,
+    required this.title,
+    required this.description,
+    required this.actionLabel,
+    this.onTapAction,
+    this.isApplying = false,
+  });
+
+  final String title;
+  final String description;
+  final String actionLabel;
+  final VoidCallback? onTapAction;
+  final bool isApplying;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: _walletCardDecoration,
+      child: Padding(
+        padding: const EdgeInsets.all(UiTokens.spacing16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              title,
+              style: const TextStyle(
+                color: AppColorTokens.fundexText,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: UiTokens.spacing12),
+            Text(
+              description,
+              style: const TextStyle(
+                color: AppColorTokens.fundexTextSecondary,
+                fontSize: 13,
+                height: 1.6,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: UiTokens.spacing16),
+            PrimaryCtaButton(
+              label: actionLabel,
+              onPressed: onTapAction,
+              isLoading: isApplying,
+              fullWidth: false,
+              horizontalPadding: 0,
+              height: 48,
             ),
           ],
         ),

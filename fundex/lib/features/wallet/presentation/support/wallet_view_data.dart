@@ -7,6 +7,7 @@ class WalletDedicatedBankInfo {
     required this.accountType,
     required this.accountNumber,
     required this.accountHolder,
+    this.expireTime,
   });
 
   final String bankName;
@@ -14,6 +15,7 @@ class WalletDedicatedBankInfo {
   final String accountType;
   final String accountNumber;
   final String accountHolder;
+  final String? expireTime;
 }
 
 class WalletDepositPageViewData {
@@ -23,7 +25,7 @@ class WalletDepositPageViewData {
     required this.recentHistory,
   });
 
-  final WalletDedicatedBankInfo bankInfo;
+  final WalletDedicatedBankInfo? bankInfo;
   final num? standbyBalance;
   final List<WalletAccountHistory> recentHistory;
 }

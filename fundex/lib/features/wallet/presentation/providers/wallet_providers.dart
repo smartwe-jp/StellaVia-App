@@ -6,6 +6,8 @@ import '../../data/datasources/wallet_remote_data_source.dart';
 import '../../data/repositories/wallet_repository_impl.dart';
 import '../../domain/entities/wallet_account_history.dart';
 import '../../domain/repositories/wallet_repository.dart';
+import '../../domain/usecases/apply_wallet_bank_account_usecase.dart';
+import '../../domain/usecases/fetch_wallet_bank_account_info_usecase.dart';
 import '../../domain/usecases/fetch_wallet_account_history_usecase.dart';
 import '../support/wallet_view_data.dart';
 
@@ -30,6 +32,20 @@ final fetchWalletAccountHistoryUseCaseProvider =
       );
     });
 
+final fetchWalletBankAccountInfoUseCaseProvider =
+    Provider<FetchWalletBankAccountInfoUseCase>((ref) {
+      return FetchWalletBankAccountInfoUseCase(
+        ref.watch(walletRepositoryProvider),
+      );
+    });
+
+final applyWalletBankAccountUseCaseProvider =
+    Provider<ApplyWalletBankAccountUseCase>((ref) {
+      return ApplyWalletBankAccountUseCase(ref.watch(walletRepositoryProvider));
+    });
+
+final walletBankAccountApplyingProvider = StateProvider<bool>((ref) => false);
+
 final walletHistoryProvider = FutureProvider<List<WalletAccountHistory>>((ref) {
   return ref
       .watch(fetchWalletAccountHistoryUseCaseProvider)
@@ -38,6 +54,25 @@ final walletHistoryProvider = FutureProvider<List<WalletAccountHistory>>((ref) {
 
 final walletDepositPageViewDataProvider =
     FutureProvider<WalletDepositPageViewData>((ref) async {
+      WalletDedicatedBankInfo? bankInfo;
+      try {
+        final account = await ref
+            .watch(fetchWalletBankAccountInfoUseCaseProvider)
+            .call();
+        if (account != null) {
+          bankInfo = WalletDedicatedBankInfo(
+            bankName: account.bankName,
+            branchName: account.branchName,
+            accountType: account.accountType,
+            accountNumber: account.accountNumber,
+            accountHolder: account.accountHolder,
+            expireTime: account.expireTime,
+          );
+        }
+      } catch (_) {
+        bankInfo = null;
+      }
+
       List<WalletAccountHistory> history = const <WalletAccountHistory>[];
       try {
         final all = await ref
@@ -61,16 +96,8 @@ final walletDepositPageViewDataProvider =
       standbyBalance ??= history.isNotEmpty ? history.first.balance : null;
 
       return WalletDepositPageViewData(
-        bankInfo: _mockDedicatedBankInfo,
+        bankInfo: bankInfo,
         standbyBalance: standbyBalance,
         recentHistory: preview,
       );
     });
-
-const WalletDedicatedBankInfo _mockDedicatedBankInfo = WalletDedicatedBankInfo(
-  bankName: 'GMOあおぞらネット銀行',
-  branchName: '法人営業部（101）',
-  accountType: '普通',
-  accountNumber: '8401258',
-  accountHolder: 'ファンデックス（カ',
-);

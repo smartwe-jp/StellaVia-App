@@ -237,6 +237,9 @@ class FundMyPageProjectCard extends StatelessWidget {
       padding: shadowPadding,
       child: DecoratedBox(
         decoration: BoxDecoration(
+          color: accentColor != null
+              ? accentColor
+              : Colors.transparent,
           borderRadius: cardRadius,
           boxShadow: <BoxShadow>[
             BoxShadow(
@@ -261,19 +264,7 @@ class FundMyPageProjectCard extends StatelessWidget {
           child: InkWell(
             borderRadius: cardRadius,
             onTap: onTap,
-            child: Stack(
-              children: <Widget>[
-                if (accentColor != null)
-                  Positioned(
-                    left: 0,
-                    top: 0,
-                    bottom: 0,
-                    child: ColoredBox(
-                      color: accentColor!,
-                      child: const SizedBox(width: 5),
-                    ),
-                  ),
-
+            child: 
                 Container(
                   decoration: BoxDecoration(borderRadius: cardRadius),
                   margin: const EdgeInsets.only(left: 5),
@@ -366,8 +357,7 @@ class FundMyPageProjectCard extends StatelessWidget {
                     ],
                   ),
                 ),
-              ],
-            ),
+
           ),
         ),
       ),

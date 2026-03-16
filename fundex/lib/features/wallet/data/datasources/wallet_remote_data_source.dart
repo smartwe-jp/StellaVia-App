@@ -2,11 +2,16 @@ import 'package:company_api_runtime/company_api_runtime.dart';
 import 'package:core_network/core_network.dart';
 
 import '../models/wallet_account_history_dto.dart';
+import '../models/wallet_bank_account_info_dto.dart';
 
 abstract class WalletRemoteDataSource {
   Future<List<WalletAccountHistoryDto>> fetchAccountHistory({
     int accountType = 0,
   });
+
+  Future<WalletBankAccountInfoDto?> fetchBankAccountInfo();
+
+  Future<void> applyBankAccount();
 }
 
 class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
@@ -41,5 +46,15 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
     int accountType = 0,
   }) {
     return _apiClient.fetchAccountHistory(accountType: accountType);
+  }
+
+  @override
+  Future<WalletBankAccountInfoDto?> fetchBankAccountInfo() {
+    return _apiClient.fetchBankAccountInfo();
+  }
+
+  @override
+  Future<void> applyBankAccount() {
+    return _apiClient.applyBankAccount();
   }
 }

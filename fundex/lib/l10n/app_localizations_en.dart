@@ -1807,6 +1807,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletHistoryUnknownType => 'Record';
 
   @override
+  String get walletBankAccountMissingDescription =>
+      'No dedicated deposit account has been issued yet. Please apply for one before making a deposit.';
+
+  @override
+  String get walletBankAccountApplyAction => 'Apply for Account';
+
+  @override
+  String get walletBankAccountApplySuccess =>
+      'Deposit account application submitted. Refreshing account info.';
+
+  @override
+  String get walletBankAccountApplyFailure =>
+      'Failed to apply for a deposit account. Please try again later.';
+
+  @override
+  String walletBankAccountExpireNotice(Object date) {
+    return 'Please transfer by $date.';
+  }
+
+  @override
   String get walletHistoryPendingStatus => 'Pending';
 
   @override

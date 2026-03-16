@@ -9,6 +9,8 @@ class UserWalletApiPaths {
   const UserWalletApiPaths._();
 
   static const String accountHistory = '/member/wx/account/history';
+  static const String bankAccountApply = '/member/bank-account/apply';
+  static const String bankAccountInfo = '/member/bank-account/info';
 }
 
 class UserWalletApiClient {
@@ -16,6 +18,8 @@ class UserWalletApiClient {
     required UserWalletDioForPath dioForPath,
     LegacyEnvelopeCodec? envelopeCodec,
     this.accountHistoryPath = UserWalletApiPaths.accountHistory,
+    this.bankAccountApplyPath = UserWalletApiPaths.bankAccountApply,
+    this.bankAccountInfoPath = UserWalletApiPaths.bankAccountInfo,
   }) : _dioForPath = dioForPath,
        _envelopeCodec =
            envelopeCodec ??
@@ -27,6 +31,8 @@ class UserWalletApiClient {
   final LegacyEnvelopeCodec _envelopeCodec;
 
   final String accountHistoryPath;
+  final String bankAccountApplyPath;
+  final String bankAccountInfoPath;
 
   /// 0: all records, 1: CNY, 2: USD
   Future<List<UserWalletAccountHistoryItemDto>> fetchAccountHistory({
@@ -47,6 +53,50 @@ class UserWalletApiClient {
               UserWalletAccountHistoryItemDto.fromJson(row),
         )
         .toList(growable: false);
+  }
+
+  Future<void> applyBankAccount() async {
+    final response = await _dioForPath(bankAccountApplyPath)
+        .get<Map<String, dynamic>>(
+          bankAccountApplyPath,
+          options: authRequired(true),
+        );
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    if (payload.isEmpty) {
+      return;
+    }
+    _envelopeCodec.assertSuccessIfEnvelope(
+      payload,
+      fallbackMessage: 'Failed to apply bank account.',
+    );
+  }
+
+  Future<UserWalletBankAccountInfoDto?> fetchBankAccountInfo() async {
+    final response = await _dioForPath(bankAccountInfoPath)
+        .get<Map<String, dynamic>>(
+          bankAccountInfoPath,
+          options: authRequired(true),
+        );
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    if (payload.isEmpty) {
+      return null;
+    }
+
+    Map<String, dynamic> dataMap;
+    if (_envelopeCodec.looksLikeEnvelope(payload)) {
+      _envelopeCodec.assertSuccessIfEnvelope(
+        payload,
+        fallbackMessage: 'Failed to load bank account info.',
+      );
+      dataMap = _envelopeCodec.toJsonMap(payload['data']);
+    } else {
+      dataMap = payload;
+    }
+
+    if (dataMap.isEmpty) {
+      return null;
+    }
+    return UserWalletBankAccountInfoDto.fromJson(dataMap);
   }
 
   List<Map<String, dynamic>> _extractRows(Map<String, dynamic> payload) {

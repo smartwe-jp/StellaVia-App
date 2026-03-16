@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../providers/wallet_providers.dart';
 
 class DepositPage extends ConsumerWidget {
@@ -22,6 +23,7 @@ class DepositPage extends ConsumerWidget {
     );
 
     final asyncData = ref.watch(walletDepositPageViewDataProvider);
+    final isApplyingBankAccount = ref.watch(walletBankAccountApplyingProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -44,6 +46,7 @@ class DepositPage extends ConsumerWidget {
       ),
       body: asyncData.when(
         data: (data) {
+          final bankInfo = data.bankInfo;
           final historyEntries = data.recentHistory
               .map(
                 (item) => FundWalletBalanceEntry(
@@ -62,32 +65,81 @@ class DepositPage extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
             children: <Widget>[
-              FundDedicatedDepositAccountCard(
-                title: '🏦 ${l10n.walletDedicatedAccountTitle}',
-                bankNameLabel: l10n.walletBankNameLabel,
-                bankNameValue: data.bankInfo.bankName,
-                branchNameLabel: l10n.walletBranchNameLabel,
-                branchNameValue: data.bankInfo.branchName,
-                accountTypeLabel: l10n.walletAccountTypeLabel,
-                accountTypeValue: data.bankInfo.accountType,
-                accountNumberLabel: l10n.walletAccountNumberLabel,
-                accountNumberValue: data.bankInfo.accountNumber,
-                accountNumberCopyLabel: l10n.lotteryApplyCopyAction,
-                onTapCopyAccountNumber: () async {
-                  await Clipboard.setData(
-                    ClipboardData(text: data.bankInfo.accountNumber),
-                  );
-                  if (context.mounted) {
-                    AppNotice.show(
-                      context,
-                      message: l10n.lotteryApplyCopyDoneToast,
+              if (bankInfo == null)
+                FundWalletBankAccountApplyCard(
+                  title: '🏦 ${l10n.walletDedicatedAccountTitle}',
+                  description: l10n.walletBankAccountMissingDescription,
+                  actionLabel: l10n.walletBankAccountApplyAction,
+                  isApplying: isApplyingBankAccount,
+                  onTapAction: isApplyingBankAccount
+                      ? null
+                      : () async {
+                          ref
+                                  .read(
+                                    walletBankAccountApplyingProvider.notifier,
+                                  )
+                                  .state =
+                              true;
+                          try {
+                            await ref
+                                .read(applyWalletBankAccountUseCaseProvider)
+                                .call();
+                            ref.invalidate(walletDepositPageViewDataProvider);
+                            if (context.mounted) {
+                              AppNotice.show(
+                                context,
+                                message: l10n.walletBankAccountApplySuccess,
+                              );
+                            }
+                          } catch (_) {
+                            if (context.mounted) {
+                              AppNotice.show(
+                                context,
+                                message: l10n.walletBankAccountApplyFailure,
+                              );
+                            }
+                          } finally {
+                            ref
+                                    .read(
+                                      walletBankAccountApplyingProvider
+                                          .notifier,
+                                    )
+                                    .state =
+                                false;
+                          }
+                        },
+                )
+              else
+                FundDedicatedDepositAccountCard(
+                  title: '🏦 ${l10n.walletDedicatedAccountTitle}',
+                  bankNameLabel: l10n.walletBankNameLabel,
+                  bankNameValue: bankInfo.bankName,
+                  branchNameLabel: l10n.walletBranchNameLabel,
+                  branchNameValue: bankInfo.branchName,
+                  accountTypeLabel: l10n.walletAccountTypeLabel,
+                  accountTypeValue: bankInfo.accountType,
+                  accountNumberLabel: l10n.walletAccountNumberLabel,
+                  accountNumberValue: bankInfo.accountNumber,
+                  accountNumberCopyLabel: l10n.lotteryApplyCopyAction,
+                  onTapCopyAccountNumber: () async {
+                    await Clipboard.setData(
+                      ClipboardData(text: bankInfo.accountNumber),
                     );
-                  }
-                },
-                accountHolderLabel: l10n.walletAccountHolderLabel,
-                accountHolderValue: data.bankInfo.accountHolder,
-                helperMessage: l10n.walletDedicatedAccountDescription,
-              ),
+                    if (context.mounted) {
+                      AppNotice.show(
+                        context,
+                        message: l10n.lotteryApplyCopyDoneToast,
+                      );
+                    }
+                  },
+                  accountHolderLabel: l10n.walletAccountHolderLabel,
+                  accountHolderValue: bankInfo.accountHolder,
+                  helperMessage: l10n.walletDedicatedAccountDescription,
+                  expirationMessage: _buildExpirationMessage(
+                    l10n,
+                    bankInfo.expireTime,
+                  ),
+                ),
               const SizedBox(height: 20),
               FundWalletStandbyBalanceCard(
                 title: '📋 ${l10n.walletStandbyBalanceLabel}',
@@ -175,4 +227,12 @@ String _formatDateText(String? value) {
   final m = parsed.month.toString().padLeft(2, '0');
   final d = parsed.day.toString().padLeft(2, '0');
   return '$y/$m/$d';
+}
+
+String? _buildExpirationMessage(AppLocalizations l10n, String? expireTime) {
+  if (expireTime == null || expireTime.trim().isEmpty) {
+    return null;
+  }
+  final formatted = _formatDateText(expireTime);
+  return l10n.walletBankAccountExpireNotice(formatted);
 }

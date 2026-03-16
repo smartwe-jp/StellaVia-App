@@ -1702,6 +1702,23 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletHistoryUnknownType => '交易';
 
   @override
+  String get walletBankAccountMissingDescription => '当前还没有专用入金账户，请先申请账户后再进行入金。';
+
+  @override
+  String get walletBankAccountApplyAction => '申请账户';
+
+  @override
+  String get walletBankAccountApplySuccess => '已提交入金账户申请，正在刷新账户信息。';
+
+  @override
+  String get walletBankAccountApplyFailure => '账户申请失败，请稍后重试。';
+
+  @override
+  String walletBankAccountExpireNotice(Object date) {
+    return '请在 $date 前完成汇款';
+  }
+
+  @override
   String get walletHistoryPendingStatus => '未完成';
 
   @override
@@ -3864,6 +3881,23 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletHistoryUnknownType => '交易';
+
+  @override
+  String get walletBankAccountMissingDescription => '目前尚未取得專用入金帳戶，請先申請帳戶後再入金。';
+
+  @override
+  String get walletBankAccountApplyAction => '申請帳戶';
+
+  @override
+  String get walletBankAccountApplySuccess => '已送出入金帳戶申請，正在更新帳戶資訊。';
+
+  @override
+  String get walletBankAccountApplyFailure => '帳戶申請失敗，請稍後再試。';
+
+  @override
+  String walletBankAccountExpireNotice(Object date) {
+    return '請在 $date 前完成匯款';
+  }
 
   @override
   String get walletHistoryPendingStatus => '未完成';

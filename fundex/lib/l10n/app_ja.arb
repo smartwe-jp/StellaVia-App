@@ -625,6 +625,16 @@
   "walletHistoryMoreAction": "すべて見る",
   "walletHistoryEmpty": "履歴はまだありません。",
   "walletHistoryUnknownType": "取引",
+  "walletBankAccountMissingDescription": "お客様専用の入金口座がまだありません。口座を申請してからご入金ください。",
+  "walletBankAccountApplyAction": "口座を申請する",
+  "walletBankAccountApplySuccess": "入金口座を申請しました。情報を更新します。",
+  "walletBankAccountApplyFailure": "口座申請に失敗しました。時間をおいて再度お試しください。",
+  "walletBankAccountExpireNotice": "{date} まで、期限内にお振込みください",
+  "@walletBankAccountExpireNotice": {
+    "placeholders": {
+      "date": {}
+    }
+  },
   "walletHistoryPendingStatus": "未完了",
   "walletHistoryInflowLabel": "入金",
   "walletHistoryOutflowLabel": "出金",

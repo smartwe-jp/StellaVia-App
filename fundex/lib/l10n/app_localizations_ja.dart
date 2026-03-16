@@ -1714,6 +1714,24 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletHistoryUnknownType => '取引';
 
   @override
+  String get walletBankAccountMissingDescription =>
+      'お客様専用の入金口座がまだありません。口座を申請してからご入金ください。';
+
+  @override
+  String get walletBankAccountApplyAction => '口座を申請する';
+
+  @override
+  String get walletBankAccountApplySuccess => '入金口座を申請しました。情報を更新します。';
+
+  @override
+  String get walletBankAccountApplyFailure => '口座申請に失敗しました。時間をおいて再度お試しください。';
+
+  @override
+  String walletBankAccountExpireNotice(Object date) {
+    return '$date まで、期限内にお振込みください';
+  }
+
+  @override
   String get walletHistoryPendingStatus => '未完了';
 
   @override

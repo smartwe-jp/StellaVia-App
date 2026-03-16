@@ -3416,6 +3416,36 @@ abstract class AppLocalizations {
   /// **'Record'**
   String get walletHistoryUnknownType;
 
+  /// No description provided for @walletBankAccountMissingDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'No dedicated deposit account has been issued yet. Please apply for one before making a deposit.'**
+  String get walletBankAccountMissingDescription;
+
+  /// No description provided for @walletBankAccountApplyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply for Account'**
+  String get walletBankAccountApplyAction;
+
+  /// No description provided for @walletBankAccountApplySuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit account application submitted. Refreshing account info.'**
+  String get walletBankAccountApplySuccess;
+
+  /// No description provided for @walletBankAccountApplyFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to apply for a deposit account. Please try again later.'**
+  String get walletBankAccountApplyFailure;
+
+  /// No description provided for @walletBankAccountExpireNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Please transfer by {date}.'**
+  String walletBankAccountExpireNotice(Object date);
+
   /// No description provided for @walletHistoryPendingStatus.
   ///
   /// In en, this message translates to:

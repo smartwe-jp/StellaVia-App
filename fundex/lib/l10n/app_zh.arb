@@ -625,6 +625,16 @@
   "walletHistoryMoreAction": "查看全部",
   "walletHistoryEmpty": "暂无记录。",
   "walletHistoryUnknownType": "交易",
+  "walletBankAccountMissingDescription": "当前还没有专用入金账户，请先申请账户后再进行入金。",
+  "walletBankAccountApplyAction": "申请账户",
+  "walletBankAccountApplySuccess": "已提交入金账户申请，正在刷新账户信息。",
+  "walletBankAccountApplyFailure": "账户申请失败，请稍后重试。",
+  "walletBankAccountExpireNotice": "请在 {date} 前完成汇款",
+  "@walletBankAccountExpireNotice": {
+    "placeholders": {
+      "date": {}
+    }
+  },
   "walletHistoryPendingStatus": "未完成",
   "walletHistoryInflowLabel": "收入",
   "walletHistoryOutflowLabel": "支出",

@@ -625,6 +625,16 @@
   "walletHistoryMoreAction": "查看全部",
   "walletHistoryEmpty": "暫無紀錄。",
   "walletHistoryUnknownType": "交易",
+  "walletBankAccountMissingDescription": "目前尚未取得專用入金帳戶，請先申請帳戶後再入金。",
+  "walletBankAccountApplyAction": "申請帳戶",
+  "walletBankAccountApplySuccess": "已送出入金帳戶申請，正在更新帳戶資訊。",
+  "walletBankAccountApplyFailure": "帳戶申請失敗，請稍後再試。",
+  "walletBankAccountExpireNotice": "請在 {date} 前完成匯款",
+  "@walletBankAccountExpireNotice": {
+    "placeholders": {
+      "date": {}
+    }
+  },
   "walletHistoryPendingStatus": "未完成",
   "walletHistoryInflowLabel": "收入",
   "walletHistoryOutflowLabel": "支出",

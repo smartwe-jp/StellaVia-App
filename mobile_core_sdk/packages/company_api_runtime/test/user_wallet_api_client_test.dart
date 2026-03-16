@@ -75,5 +75,47 @@ void main() {
 
       expect(() => api.fetchAccountHistory(), throwsA(isA<StateError>()));
     });
+
+    test('fetchBankAccountInfo parses account pool and expiry', () async {
+      final dio = _buildDio((options) async {
+        expect(options.method, equals('GET'));
+        expect(options.path, equals(UserWalletApiPaths.bankAccountInfo));
+        expect(options.extra['auth_required'], isTrue);
+        return _jsonOk(
+          '{"msg":"success","code":200,"data":{"accountPool":{"id":"464950875485437952","bankName":"りそな銀行","branchName":"振込集中第一","accountType":"普通","accountNumber":"0550102","accountName":"カ)タニマチクン","version":1},"userId":48815,"bankAccountId":"464950875485437952","bindStatus":0,"expireTime":"2026-04-15","zeroBalanceStartTime":null,"createTime":"2026-03-16 17:22:16","updateTime":"2026-03-16 17:22:16"}}',
+        );
+      });
+      final api = UserWalletApiClient(dioForPath: (_) => dio);
+
+      final info = await api.fetchBankAccountInfo();
+
+      expect(info, isNotNull);
+      expect(info?.accountPool?.bankName, equals('りそな銀行'));
+      expect(info?.accountPool?.accountNumber, equals('0550102'));
+      expect(info?.expireTime, equals('2026-04-15'));
+    });
+
+    test('fetchBankAccountInfo returns null when data is empty', () async {
+      final dio = _buildDio((_) async {
+        return _jsonOk('{"msg":"success","code":200,"data":null}');
+      });
+      final api = UserWalletApiClient(dioForPath: (_) => dio);
+
+      final info = await api.fetchBankAccountInfo();
+
+      expect(info, isNull);
+    });
+
+    test('applyBankAccount sends GET and checks success envelope', () async {
+      final dio = _buildDio((options) async {
+        expect(options.method, equals('GET'));
+        expect(options.path, equals(UserWalletApiPaths.bankAccountApply));
+        expect(options.extra['auth_required'], isTrue);
+        return _jsonOk('{"msg":"success","code":200,"data":true}');
+      });
+      final api = UserWalletApiClient(dioForPath: (_) => dio);
+
+      await api.applyBankAccount();
+    });
   });
 }
