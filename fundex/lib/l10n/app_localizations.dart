@@ -3440,6 +3440,60 @@ abstract class AppLocalizations {
   /// **'Failed to apply for a deposit account. Please try again later.'**
   String get walletBankAccountApplyFailure;
 
+  /// No description provided for @walletBankSettingsRegisteredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Registered Accounts'**
+  String get walletBankSettingsRegisteredTitle;
+
+  /// No description provided for @walletBankSettingsEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No bank account has been registered yet. Add one to continue.'**
+  String get walletBankSettingsEmptyMessage;
+
+  /// No description provided for @walletBankSettingsAddAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Account'**
+  String get walletBankSettingsAddAction;
+
+  /// No description provided for @walletBankSettingsAddSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Bank Account'**
+  String get walletBankSettingsAddSheetTitle;
+
+  /// No description provided for @walletBankSettingsAddSheetDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the bank account information used for transfers.'**
+  String get walletBankSettingsAddSheetDescription;
+
+  /// No description provided for @walletBankSettingsCancelAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get walletBankSettingsCancelAction;
+
+  /// No description provided for @walletBankSettingsAddSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank account added.'**
+  String get walletBankSettingsAddSuccess;
+
+  /// No description provided for @walletBankSettingsAddFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to add bank account. Please try again later.'**
+  String get walletBankSettingsAddFailure;
+
+  /// No description provided for @walletBankSettingsRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in all fields.'**
+  String get walletBankSettingsRequiredError;
+
   /// No description provided for @walletBankAccountExpireNotice.
   ///
   /// In en, this message translates to:
@@ -3475,6 +3529,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to load deposit data.'**
   String get walletDataLoadError;
+
+  /// No description provided for @walletWithdrawTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw Request'**
+  String get walletWithdrawTitle;
+
+  /// No description provided for @walletWithdrawAvailableAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Available to withdraw'**
+  String get walletWithdrawAvailableAmountLabel;
+
+  /// No description provided for @walletWithdrawAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal amount'**
+  String get walletWithdrawAmountLabel;
+
+  /// No description provided for @walletWithdrawAmountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'¥100,000'**
+  String get walletWithdrawAmountHint;
+
+  /// No description provided for @walletWithdrawDestinationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer destination'**
+  String get walletWithdrawDestinationLabel;
+
+  /// No description provided for @walletWithdrawFeeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee'**
+  String get walletWithdrawFeeLabel;
+
+  /// No description provided for @walletWithdrawSelectDestination.
+  ///
+  /// In en, this message translates to:
+  /// **'Select destination'**
+  String get walletWithdrawSelectDestination;
+
+  /// No description provided for @walletWithdrawNeedAccountMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No withdrawal bank account is registered. Please add one first.'**
+  String get walletWithdrawNeedAccountMessage;
+
+  /// No description provided for @walletWithdrawNeedAccountAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add withdrawal account'**
+  String get walletWithdrawNeedAccountAction;
+
+  /// No description provided for @walletWithdrawSelectSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select transfer destination'**
+  String get walletWithdrawSelectSheetTitle;
+
+  /// No description provided for @walletWithdrawSubmitAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Withdraw Request'**
+  String get walletWithdrawSubmitAction;
+
+  /// No description provided for @walletWithdrawSubmitPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw API will be connected in a later implementation.'**
+  String get walletWithdrawSubmitPending;
 
   /// No description provided for @myPagePendingEmptyState.
   ///

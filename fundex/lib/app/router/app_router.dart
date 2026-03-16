@@ -25,6 +25,9 @@ import '../../features/member_profile/presentation/pages/profile_center_tab_page
 import '../../features/member_profile/presentation/support/mypage_section_support.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/wallet/presentation/pages/deposit_page.dart';
+import '../../features/wallet/presentation/pages/withdraw_page.dart';
+import '../../features/wallet/presentation/pages/wallet_bank_account_add_page.dart';
+import '../../features/wallet/presentation/pages/wallet_bank_settings_page.dart';
 import '../../features/wallet/presentation/pages/wallet_history_page.dart';
 
 String? resolveAuthRedirect({
@@ -235,6 +238,24 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/wallet/deposit',
         builder: (BuildContext context, GoRouterState state) {
           return const DepositPage();
+        },
+      ),
+      GoRoute(
+        path: '/wallet/withdraw',
+        builder: (BuildContext context, GoRouterState state) {
+          return const WithdrawPage();
+        },
+      ),
+      GoRoute(
+        path: '/wallet/bank-settings',
+        builder: (BuildContext context, GoRouterState state) {
+          return const WalletBankSettingsPage();
+        },
+      ),
+      GoRoute(
+        path: '/wallet/bank-settings/add',
+        builder: (BuildContext context, GoRouterState state) {
+          return const WalletBankAccountAddPage();
         },
       ),
       GoRoute(

@@ -11,6 +11,8 @@ class UserWalletApiPaths {
   static const String accountHistory = '/member/wx/account/history';
   static const String bankAccountApply = '/member/bank-account/apply';
   static const String bankAccountInfo = '/member/bank-account/info';
+  static const String bankAccountStatus = '/member/bank-account/status';
+  static const String bankAccountAdd = '/member/bank-account/add';
 }
 
 class UserWalletApiClient {
@@ -20,6 +22,8 @@ class UserWalletApiClient {
     this.accountHistoryPath = UserWalletApiPaths.accountHistory,
     this.bankAccountApplyPath = UserWalletApiPaths.bankAccountApply,
     this.bankAccountInfoPath = UserWalletApiPaths.bankAccountInfo,
+    this.bankAccountStatusPath = UserWalletApiPaths.bankAccountStatus,
+    this.bankAccountAddPath = UserWalletApiPaths.bankAccountAdd,
   }) : _dioForPath = dioForPath,
        _envelopeCodec =
            envelopeCodec ??
@@ -33,6 +37,8 @@ class UserWalletApiClient {
   final String accountHistoryPath;
   final String bankAccountApplyPath;
   final String bankAccountInfoPath;
+  final String bankAccountStatusPath;
+  final String bankAccountAddPath;
 
   /// 0: all records, 1: CNY, 2: USD
   Future<List<UserWalletAccountHistoryItemDto>> fetchAccountHistory({
@@ -46,13 +52,29 @@ class UserWalletApiClient {
         );
 
     final payload = _envelopeCodec.toJsonMap(response.data);
-    final rows = _extractRows(payload);
+    final rows = _extractRows(
+      payload,
+      fallbackMessage: 'Failed to load account history.',
+    );
     return rows
         .map(
           (Map<String, dynamic> row) =>
               UserWalletAccountHistoryItemDto.fromJson(row),
         )
         .toList(growable: false);
+  }
+
+  Future<List<UserWalletBankAccountPoolDto>> fetchBankAccountList() async {
+    final response = await _dioForPath(bankAccountStatusPath)
+        .get<Map<String, dynamic>>(
+          bankAccountStatusPath,
+          queryParameters: const <String, dynamic>{'status': 1},
+          options: authRequired(true),
+        );
+    return _extractRows(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load bank account list.',
+    ).map(UserWalletBankAccountPoolDto.fromJson).toList(growable: false);
   }
 
   Future<void> applyBankAccount() async {
@@ -68,6 +90,25 @@ class UserWalletApiClient {
     _envelopeCodec.assertSuccessIfEnvelope(
       payload,
       fallbackMessage: 'Failed to apply bank account.',
+    );
+  }
+
+  Future<void> addBankAccount(
+    UserWalletBankAccountAddRequestDto request,
+  ) async {
+    final response = await _dioForPath(bankAccountAddPath)
+        .post<Map<String, dynamic>>(
+          bankAccountAddPath,
+          data: request.toJson(),
+          options: authRequired(true),
+        );
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    if (payload.isEmpty) {
+      return;
+    }
+    _envelopeCodec.assertSuccessIfEnvelope(
+      payload,
+      fallbackMessage: 'Failed to add bank account.',
     );
   }
 
@@ -99,7 +140,10 @@ class UserWalletApiClient {
     return UserWalletBankAccountInfoDto.fromJson(dataMap);
   }
 
-  List<Map<String, dynamic>> _extractRows(Map<String, dynamic> payload) {
+  List<Map<String, dynamic>> _extractRows(
+    Map<String, dynamic> payload, {
+    required String fallbackMessage,
+  }) {
     if (payload.isEmpty) {
       return const <Map<String, dynamic>>[];
     }
@@ -107,7 +151,7 @@ class UserWalletApiClient {
     if (_envelopeCodec.looksLikeEnvelope(payload)) {
       _envelopeCodec.assertSuccessIfEnvelope(
         payload,
-        fallbackMessage: 'Failed to load account history.',
+        fallbackMessage: fallbackMessage,
       );
       final data = payload['data'];
       if (data is List) {
@@ -128,6 +172,9 @@ class UserWalletApiClient {
 
     if (payload['rows'] is List) {
       return _envelopeCodec.toJsonMapList(payload['rows']);
+    }
+    if (payload['list'] is List) {
+      return _envelopeCodec.toJsonMapList(payload['list']);
     }
     return _envelopeCodec.toJsonMapList(payload);
   }

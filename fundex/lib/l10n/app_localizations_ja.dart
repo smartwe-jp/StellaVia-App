@@ -1727,6 +1727,35 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletBankAccountApplyFailure => '口座申請に失敗しました。時間をおいて再度お試しください。';
 
   @override
+  String get walletBankSettingsRegisteredTitle => '登録済み口座';
+
+  @override
+  String get walletBankSettingsEmptyMessage =>
+      '登録済みの銀行口座がありません。下のボタンから口座を追加してください。';
+
+  @override
+  String get walletBankSettingsAddAction => '口座を追加';
+
+  @override
+  String get walletBankSettingsAddSheetTitle => '銀行口座を追加';
+
+  @override
+  String get walletBankSettingsAddSheetDescription =>
+      '振込先として利用する銀行口座情報を入力してください。';
+
+  @override
+  String get walletBankSettingsCancelAction => 'キャンセル';
+
+  @override
+  String get walletBankSettingsAddSuccess => '銀行口座を追加しました。';
+
+  @override
+  String get walletBankSettingsAddFailure => '銀行口座の追加に失敗しました。時間をおいて再度お試しください。';
+
+  @override
+  String get walletBankSettingsRequiredError => 'すべての項目を入力してください。';
+
+  @override
   String walletBankAccountExpireNotice(Object date) {
     return '$date まで、期限内にお振込みください';
   }
@@ -1745,6 +1774,42 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get walletDataLoadError => '入金情報の取得に失敗しました。';
+
+  @override
+  String get walletWithdrawTitle => '出金申請';
+
+  @override
+  String get walletWithdrawAvailableAmountLabel => '出金可能額';
+
+  @override
+  String get walletWithdrawAmountLabel => '出金金額';
+
+  @override
+  String get walletWithdrawAmountHint => '¥100,000';
+
+  @override
+  String get walletWithdrawDestinationLabel => '振込先';
+
+  @override
+  String get walletWithdrawFeeLabel => '手数料';
+
+  @override
+  String get walletWithdrawSelectDestination => '振込先を選択';
+
+  @override
+  String get walletWithdrawNeedAccountMessage => '出金先口座が未登録です。先に口座を追加してください。';
+
+  @override
+  String get walletWithdrawNeedAccountAction => '出金口座を追加';
+
+  @override
+  String get walletWithdrawSelectSheetTitle => '振込先を選択';
+
+  @override
+  String get walletWithdrawSubmitAction => '出金申請';
+
+  @override
+  String get walletWithdrawSubmitPending => '出金機能は次の実装で接続します。';
 
   @override
   String get myPagePendingEmptyState => '申込中または抽選待ちの案件はありません。';

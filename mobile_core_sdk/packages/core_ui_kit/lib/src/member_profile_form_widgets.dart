@@ -107,6 +107,97 @@ class MemberProfileSelectField<T> extends StatelessWidget {
   }
 }
 
+class MemberProfileBankAccountFormSection extends StatelessWidget {
+  const MemberProfileBankAccountFormSection({
+    super.key,
+    required this.bankNameLabel,
+    required this.bankNameController,
+    required this.bankNameHintText,
+    required this.branchNameLabel,
+    required this.branchNameController,
+    required this.branchNameHintText,
+    required this.accountTypeLabel,
+    required this.accountType,
+    required this.accountTypeItems,
+    required this.accountNumberLabel,
+    required this.accountNumberController,
+    required this.accountNumberHintText,
+    required this.accountHolderLabel,
+    required this.accountHolderController,
+    required this.accountHolderHintText,
+    this.onAccountTypeChanged,
+  });
+
+  final String bankNameLabel;
+  final TextEditingController bankNameController;
+  final String? bankNameHintText;
+
+  final String branchNameLabel;
+  final TextEditingController branchNameController;
+  final String? branchNameHintText;
+
+  final String accountTypeLabel;
+  final String? accountType;
+  final List<DropdownMenuItem<String>> accountTypeItems;
+  final ValueChanged<String?>? onAccountTypeChanged;
+
+  final String accountNumberLabel;
+  final TextEditingController accountNumberController;
+  final String? accountNumberHintText;
+
+  final String accountHolderLabel;
+  final TextEditingController accountHolderController;
+  final String? accountHolderHintText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        MemberProfileTextField(
+          label: bankNameLabel,
+          controller: bankNameController,
+          hintText: bankNameHintText,
+        ),
+        const SizedBox(height: 14),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: MemberProfileTextField(
+                label: branchNameLabel,
+                controller: branchNameController,
+                hintText: branchNameHintText,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: MemberProfileSelectField<String>(
+                label: accountTypeLabel,
+                value: accountType,
+                items: accountTypeItems,
+                onChanged: onAccountTypeChanged,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        MemberProfileTextField(
+          label: accountNumberLabel,
+          controller: accountNumberController,
+          hintText: accountNumberHintText,
+          keyboardType: TextInputType.number,
+        ),
+        const SizedBox(height: 14),
+        MemberProfileTextField(
+          label: accountHolderLabel,
+          controller: accountHolderController,
+          hintText: accountHolderHintText,
+        ),
+      ],
+    );
+  }
+}
+
 class MemberProfileNoticeCard extends StatelessWidget {
   const MemberProfileNoticeCard({
     super.key,
@@ -290,7 +381,6 @@ class MemberProfileUploadTile extends StatelessWidget {
           ),
         ),
       ),
-      
     );
   }
 }

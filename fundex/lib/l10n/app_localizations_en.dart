@@ -1822,6 +1822,36 @@ class AppLocalizationsEn extends AppLocalizations {
       'Failed to apply for a deposit account. Please try again later.';
 
   @override
+  String get walletBankSettingsRegisteredTitle => 'Registered Accounts';
+
+  @override
+  String get walletBankSettingsEmptyMessage =>
+      'No bank account has been registered yet. Add one to continue.';
+
+  @override
+  String get walletBankSettingsAddAction => 'Add Account';
+
+  @override
+  String get walletBankSettingsAddSheetTitle => 'Add Bank Account';
+
+  @override
+  String get walletBankSettingsAddSheetDescription =>
+      'Enter the bank account information used for transfers.';
+
+  @override
+  String get walletBankSettingsCancelAction => 'Cancel';
+
+  @override
+  String get walletBankSettingsAddSuccess => 'Bank account added.';
+
+  @override
+  String get walletBankSettingsAddFailure =>
+      'Failed to add bank account. Please try again later.';
+
+  @override
+  String get walletBankSettingsRequiredError => 'Please fill in all fields.';
+
+  @override
   String walletBankAccountExpireNotice(Object date) {
     return 'Please transfer by $date.';
   }
@@ -1840,6 +1870,44 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletDataLoadError => 'Failed to load deposit data.';
+
+  @override
+  String get walletWithdrawTitle => 'Withdraw Request';
+
+  @override
+  String get walletWithdrawAvailableAmountLabel => 'Available to withdraw';
+
+  @override
+  String get walletWithdrawAmountLabel => 'Withdrawal amount';
+
+  @override
+  String get walletWithdrawAmountHint => '¥100,000';
+
+  @override
+  String get walletWithdrawDestinationLabel => 'Transfer destination';
+
+  @override
+  String get walletWithdrawFeeLabel => 'Fee';
+
+  @override
+  String get walletWithdrawSelectDestination => 'Select destination';
+
+  @override
+  String get walletWithdrawNeedAccountMessage =>
+      'No withdrawal bank account is registered. Please add one first.';
+
+  @override
+  String get walletWithdrawNeedAccountAction => 'Add withdrawal account';
+
+  @override
+  String get walletWithdrawSelectSheetTitle => 'Select transfer destination';
+
+  @override
+  String get walletWithdrawSubmitAction => 'Submit Withdraw Request';
+
+  @override
+  String get walletWithdrawSubmitPending =>
+      'Withdraw API will be connected in a later implementation.';
 
   @override
   String get myPagePendingEmptyState =>

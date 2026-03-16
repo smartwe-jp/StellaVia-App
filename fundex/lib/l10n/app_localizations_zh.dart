@@ -1714,6 +1714,33 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletBankAccountApplyFailure => '账户申请失败，请稍后重试。';
 
   @override
+  String get walletBankSettingsRegisteredTitle => '已登记账户';
+
+  @override
+  String get walletBankSettingsEmptyMessage => '当前还没有已登记的银行账户，请先添加。';
+
+  @override
+  String get walletBankSettingsAddAction => '添加账户';
+
+  @override
+  String get walletBankSettingsAddSheetTitle => '添加银行账户';
+
+  @override
+  String get walletBankSettingsAddSheetDescription => '请输入用于收付款的银行账户信息。';
+
+  @override
+  String get walletBankSettingsCancelAction => '取消';
+
+  @override
+  String get walletBankSettingsAddSuccess => '银行账户已添加。';
+
+  @override
+  String get walletBankSettingsAddFailure => '银行账户添加失败，请稍后重试。';
+
+  @override
+  String get walletBankSettingsRequiredError => '请填写全部字段。';
+
+  @override
   String walletBankAccountExpireNotice(Object date) {
     return '请在 $date 前完成汇款';
   }
@@ -1732,6 +1759,42 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get walletDataLoadError => '入金信息读取失败。';
+
+  @override
+  String get walletWithdrawTitle => '出金申请';
+
+  @override
+  String get walletWithdrawAvailableAmountLabel => '可出金额';
+
+  @override
+  String get walletWithdrawAmountLabel => '出金金额';
+
+  @override
+  String get walletWithdrawAmountHint => '¥100,000';
+
+  @override
+  String get walletWithdrawDestinationLabel => '汇款账户';
+
+  @override
+  String get walletWithdrawFeeLabel => '手续费';
+
+  @override
+  String get walletWithdrawSelectDestination => '请选择汇款账户';
+
+  @override
+  String get walletWithdrawNeedAccountMessage => '尚未登记出金账户，请先添加。';
+
+  @override
+  String get walletWithdrawNeedAccountAction => '添加出金账户';
+
+  @override
+  String get walletWithdrawSelectSheetTitle => '选择汇款账户';
+
+  @override
+  String get walletWithdrawSubmitAction => '提交出金申请';
+
+  @override
+  String get walletWithdrawSubmitPending => '出金功能将在后续接入。';
 
   @override
   String get myPagePendingEmptyState => '当前没有申请中或等待抽签的项目。';
@@ -3895,6 +3958,33 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get walletBankAccountApplyFailure => '帳戶申請失敗，請稍後再試。';
 
   @override
+  String get walletBankSettingsRegisteredTitle => '已登記帳戶';
+
+  @override
+  String get walletBankSettingsEmptyMessage => '目前尚未登記銀行帳戶，請先新增。';
+
+  @override
+  String get walletBankSettingsAddAction => '新增帳戶';
+
+  @override
+  String get walletBankSettingsAddSheetTitle => '新增銀行帳戶';
+
+  @override
+  String get walletBankSettingsAddSheetDescription => '請輸入用於收付款的銀行帳戶資訊。';
+
+  @override
+  String get walletBankSettingsCancelAction => '取消';
+
+  @override
+  String get walletBankSettingsAddSuccess => '銀行帳戶已新增。';
+
+  @override
+  String get walletBankSettingsAddFailure => '銀行帳戶新增失敗，請稍後再試。';
+
+  @override
+  String get walletBankSettingsRequiredError => '請填寫所有欄位。';
+
+  @override
   String walletBankAccountExpireNotice(Object date) {
     return '請在 $date 前完成匯款';
   }
@@ -3913,6 +4003,42 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletDataLoadError => '入金資訊讀取失敗。';
+
+  @override
+  String get walletWithdrawTitle => '出金申請';
+
+  @override
+  String get walletWithdrawAvailableAmountLabel => '可出金額';
+
+  @override
+  String get walletWithdrawAmountLabel => '出金金額';
+
+  @override
+  String get walletWithdrawAmountHint => '¥100,000';
+
+  @override
+  String get walletWithdrawDestinationLabel => '匯款帳戶';
+
+  @override
+  String get walletWithdrawFeeLabel => '手續費';
+
+  @override
+  String get walletWithdrawSelectDestination => '請選擇匯款帳戶';
+
+  @override
+  String get walletWithdrawNeedAccountMessage => '尚未登記出金帳戶，請先新增。';
+
+  @override
+  String get walletWithdrawNeedAccountAction => '新增出金帳戶';
+
+  @override
+  String get walletWithdrawSelectSheetTitle => '選擇匯款帳戶';
+
+  @override
+  String get walletWithdrawSubmitAction => '提交出金申請';
+
+  @override
+  String get walletWithdrawSubmitPending => '出金功能將於後續接入。';
 
   @override
   String get myPagePendingEmptyState => '目前沒有申請中或等待抽籤的項目。';

@@ -36,49 +36,23 @@ class MemberProfileBankAccountStepPage extends StatelessWidget {
       primaryButtonLabel: l10n.memberProfileNextConsent,
       onPrimaryPressed: onNext,
       primaryButtonEnabled: primaryButtonEnabled,
-      child: Column(
-        children: <Widget>[
-          MemberProfileTextField(
-            label: l10n.memberProfileBankNameLabel,
-            controller: bankNameController,
-            hintText: l10n.memberProfileBankNameHint,
-          ),
-          const SizedBox(height: 14),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: MemberProfileTextField(
-                  label: l10n.memberProfileBranchLabel,
-                  controller: branchNameController,
-                  hintText: l10n.memberProfileBranchHint,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: MemberProfileSelectField<String>(
-                  label: l10n.memberProfileAccountTypeLabel,
-                  value: accountType,
-                  items: accountTypeItems,
-                  onChanged: onAccountTypeChanged,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          MemberProfileTextField(
-            label: l10n.memberProfileAccountNumberLabel,
-            controller: accountNumberController,
-            hintText: l10n.memberProfileAccountNumberHint,
-            keyboardType: TextInputType.number,
-          ),
-          const SizedBox(height: 14),
-          MemberProfileTextField(
-            label: l10n.memberProfileAccountHolderLabel,
-            controller: accountHolderController,
-            hintText: l10n.memberProfileAccountHolderHint,
-          ),
-        ],
+      child: MemberProfileBankAccountFormSection(
+        bankNameLabel: l10n.memberProfileBankNameLabel,
+        bankNameController: bankNameController,
+        bankNameHintText: l10n.memberProfileBankNameHint,
+        branchNameLabel: l10n.memberProfileBranchLabel,
+        branchNameController: branchNameController,
+        branchNameHintText: l10n.memberProfileBranchHint,
+        accountTypeLabel: l10n.memberProfileAccountTypeLabel,
+        accountType: accountType,
+        accountTypeItems: accountTypeItems,
+        onAccountTypeChanged: onAccountTypeChanged,
+        accountNumberLabel: l10n.memberProfileAccountNumberLabel,
+        accountNumberController: accountNumberController,
+        accountNumberHintText: l10n.memberProfileAccountNumberHint,
+        accountHolderLabel: l10n.memberProfileAccountHolderLabel,
+        accountHolderController: accountHolderController,
+        accountHolderHintText: l10n.memberProfileAccountHolderHint,
       ),
     );
   }

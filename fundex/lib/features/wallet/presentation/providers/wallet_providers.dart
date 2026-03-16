@@ -5,8 +5,11 @@ import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../data/datasources/wallet_remote_data_source.dart';
 import '../../data/repositories/wallet_repository_impl.dart';
 import '../../domain/entities/wallet_account_history.dart';
+import '../../domain/entities/wallet_bank_account_info.dart';
 import '../../domain/repositories/wallet_repository.dart';
+import '../../domain/usecases/add_wallet_bank_account_usecase.dart';
 import '../../domain/usecases/apply_wallet_bank_account_usecase.dart';
+import '../../domain/usecases/fetch_wallet_bank_account_list_usecase.dart';
 import '../../domain/usecases/fetch_wallet_bank_account_info_usecase.dart';
 import '../../domain/usecases/fetch_wallet_account_history_usecase.dart';
 import '../support/wallet_view_data.dart';
@@ -44,13 +47,31 @@ final applyWalletBankAccountUseCaseProvider =
       return ApplyWalletBankAccountUseCase(ref.watch(walletRepositoryProvider));
     });
 
+final fetchWalletBankAccountListUseCaseProvider =
+    Provider<FetchWalletBankAccountListUseCase>((ref) {
+      return FetchWalletBankAccountListUseCase(
+        ref.watch(walletRepositoryProvider),
+      );
+    });
+
+final addWalletBankAccountUseCaseProvider =
+    Provider<AddWalletBankAccountUseCase>((ref) {
+      return AddWalletBankAccountUseCase(ref.watch(walletRepositoryProvider));
+    });
+
 final walletBankAccountApplyingProvider = StateProvider<bool>((ref) => false);
+final walletBankAccountAddingProvider = StateProvider<bool>((ref) => false);
 
 final walletHistoryProvider = FutureProvider<List<WalletAccountHistory>>((ref) {
   return ref
       .watch(fetchWalletAccountHistoryUseCaseProvider)
       .call(accountType: 0);
 });
+
+final walletBankAccountListProvider =
+    FutureProvider<List<WalletBankAccountInfo>>((ref) {
+      return ref.watch(fetchWalletBankAccountListUseCaseProvider).call();
+    });
 
 final walletDepositPageViewDataProvider =
     FutureProvider<WalletDepositPageViewData>((ref) async {

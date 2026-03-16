@@ -89,6 +89,32 @@ class UserWalletBankAccountPoolDto {
   final int? version;
 }
 
+class UserWalletBankAccountAddRequestDto {
+  const UserWalletBankAccountAddRequestDto({
+    required this.bankName,
+    required this.branchName,
+    required this.accountType,
+    required this.accountNumber,
+    required this.accountName,
+  });
+
+  final String bankName;
+  final String branchName;
+  final String accountType;
+  final String accountNumber;
+  final String accountName;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'bankName': bankName.trim(),
+      'branchName': branchName.trim(),
+      'accountType': accountType.trim(),
+      'accountNumber': accountNumber.trim(),
+      'accountName': accountName.trim(),
+    };
+  }
+}
+
 class UserWalletBankAccountInfoDto {
   const UserWalletBankAccountInfoDto({
     this.accountPool,

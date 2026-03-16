@@ -452,7 +452,7 @@ Future<void> _handleWithdrawTap(BuildContext context, WidgetRef ref) async {
   if (!context.mounted || !allowed) {
     return;
   }
-  _showSnackBar(context, message: context.l10n.myPageWithdrawComingSoon);
+  context.push('/wallet/withdraw');
 }
 
 VoidCallback? _buildProjectTapHandler(BuildContext context, String? projectId) {

@@ -3,6 +3,7 @@ import 'package:core_network/core_network.dart';
 
 import '../models/wallet_account_history_dto.dart';
 import '../models/wallet_bank_account_info_dto.dart';
+import '../models/wallet_bank_account_pool_dto.dart';
 
 abstract class WalletRemoteDataSource {
   Future<List<WalletAccountHistoryDto>> fetchAccountHistory({
@@ -11,7 +12,11 @@ abstract class WalletRemoteDataSource {
 
   Future<WalletBankAccountInfoDto?> fetchBankAccountInfo();
 
+  Future<List<WalletBankAccountPoolDto>> fetchBankAccountList();
+
   Future<void> applyBankAccount();
+
+  Future<void> addBankAccount(WalletBankAccountAddRequestDto request);
 }
 
 class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
@@ -54,7 +59,17 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   }
 
   @override
+  Future<List<WalletBankAccountPoolDto>> fetchBankAccountList() {
+    return _apiClient.fetchBankAccountList();
+  }
+
+  @override
   Future<void> applyBankAccount() {
     return _apiClient.applyBankAccount();
+  }
+
+  @override
+  Future<void> addBankAccount(WalletBankAccountAddRequestDto request) {
+    return _apiClient.addBankAccount(request);
   }
 }
