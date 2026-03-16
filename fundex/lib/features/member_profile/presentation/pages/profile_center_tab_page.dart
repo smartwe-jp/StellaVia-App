@@ -27,6 +27,15 @@ class ProfileCenterTabPage extends ConsumerWidget {
     );
     final accountStatisticAsync = ref.watch(myPageAccountStatisticProvider);
     final accountStatistic = accountStatisticAsync.asData?.value;
+    final loanTypeFunds = accountStatistic?.financialTotal;
+    final totalAssetsExcludingLoan = _subtractLoanTypeFunds(
+      accountStatistic?.total,
+      loanTypeFunds,
+    );
+    final operatingAssetsExcludingLoan = _subtractLoanTypeFunds(
+      accountStatistic?.crowdfundingTotal,
+      loanTypeFunds,
+    );
     final applyAsync = ref.watch(myPageApplyListProvider);
     final orderInquiryAsync = ref.watch(myPageOrderInquiryListProvider);
     final investmentAsync = ref.watch(myPageInvestmentListProvider);
@@ -49,7 +58,7 @@ class ProfileCenterTabPage extends ConsumerWidget {
             FundMyPageAssetOverview(
               totalAssetsLabel: l10n.myPageTotalAssetsLabel,
               totalAssetsValue: _formatCurrency(
-                accountStatistic?.total,
+                totalAssetsExcludingLoan,
                 currencyFormatter,
               ),
               totalAssetsCaption: l10n.myPageTotalAssetsCaption,
@@ -65,8 +74,9 @@ class ProfileCenterTabPage extends ConsumerWidget {
               metrics: <FundMyPageMetricData>[
                 FundMyPageMetricData(
                   label: l10n.myPageMetricOperating,
-                  value: _formatCompactCurrency(
-                    accountStatistic?.crowdfundingTotal,
+                  value: _formatCompactCurrency(operatingAssetsExcludingLoan),
+                  onTap: () => context.push(
+                    '/my/section-list?type=${MyPageSectionType.activeFunds.queryValue}',
                   ),
                 ),
                 FundMyPageMetricData(
@@ -84,13 +94,6 @@ class ProfileCenterTabPage extends ConsumerWidget {
                         ),
                   valueColor: AppColorTokens.fundexSuccess,
                 ),
-                FundMyPageMetricData(
-                  label: l10n.myPageMetricLoanType,
-                  value: _formatCompactCurrency(
-                    accountStatistic?.financialTotal,
-                  ),
-                  valueColor: AppColorTokens.fundexViolet,
-                ),
               ],
               quickActions: <FundMyPageQuickActionData>[
                 FundMyPageQuickActionData(
@@ -98,10 +101,7 @@ class ProfileCenterTabPage extends ConsumerWidget {
                   label: l10n.myPageDepositAction,
                   backgroundColor: const Color(0xFFE0F2FE),
                   foregroundColor: AppColorTokens.fundexAccent,
-                  onTap: () => _showSnackBar(
-                    context,
-                    message: l10n.myPageDepositComingSoon,
-                  ),
+                  onTap: () => context.push('/wallet/deposit'),
                 ),
                 FundMyPageQuickActionData(
                   icon: const Text('💸', style: TextStyle(fontSize: 16)),
@@ -145,10 +145,7 @@ class ProfileCenterTabPage extends ConsumerWidget {
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton.icon(
-                      onPressed: () => _showSnackBar(
-                        context,
-                        message: l10n.myPageHistoryComingSoon,
-                      ),
+                      onPressed: () => context.push('/wallet/history'),
                       //icon: const Icon(Icons.receipt_long_outlined),
                       label: Text(l10n.myPageTransactionHistoryAction),
                       style: OutlinedButton.styleFrom(
@@ -658,6 +655,17 @@ String _formatYieldPercent(double? ratio) {
   final percentage = ratio > 1 ? ratio : ratio * 100;
   final hasFraction = percentage % 1 != 0;
   return '${percentage.toStringAsFixed(hasFraction ? 1 : 0)}%';
+}
+
+num? _subtractLoanTypeFunds(num? baseAmount, num? loanAmount) {
+  if (baseAmount == null) {
+    return null;
+  }
+  final adjusted = baseAmount - (loanAmount ?? 0);
+  if (adjusted < 0) {
+    return 0;
+  }
+  return adjusted;
 }
 
 num _sumInvestmentEarnings(List<MyPageInvestmentRecord> records) {

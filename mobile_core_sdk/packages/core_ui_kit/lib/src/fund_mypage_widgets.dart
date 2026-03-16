@@ -9,11 +9,13 @@ class FundMyPageMetricData {
     required this.label,
     required this.value,
     this.valueColor,
+    this.onTap,
   });
 
   final String label;
   final String value;
   final Color? valueColor;
+  final VoidCallback? onTap;
 }
 
 class FundMyPageQuickActionData {
@@ -261,8 +263,6 @@ class FundMyPageProjectCard extends StatelessWidget {
             onTap: onTap,
             child: Stack(
               children: <Widget>[
-
-
                 if (accentColor != null)
                   Positioned(
                     left: 0,
@@ -274,18 +274,10 @@ class FundMyPageProjectCard extends StatelessWidget {
                     ),
                   ),
 
-
                 Container(
-                  decoration: BoxDecoration(
-                    borderRadius: cardRadius,
-                  ),
+                  decoration: BoxDecoration(borderRadius: cardRadius),
                   margin: const EdgeInsets.only(left: 5),
-                  padding: EdgeInsets.fromLTRB(
-                    12,
-                    12,
-                    12,
-                    12,
-                  ),
+                  padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -392,42 +384,49 @@ class _FundMyPageMetricCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.white,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: data.onTap,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColorTokens.fundexBorder),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColorTokens.fundexBorder),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-        child: Column(
-          children: <Widget>[
-            Text(
-              data.label,
-              textAlign: TextAlign.center,
-              style: (theme.textTheme.labelSmall ?? const TextStyle()).copyWith(
-                color: AppColorTokens.fundexTextTertiary,
-              ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  data.label,
+                  textAlign: TextAlign.center,
+                  style: (theme.textTheme.labelSmall ?? const TextStyle())
+                      .copyWith(color: AppColorTokens.fundexTextTertiary),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  data.value,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: (theme.textTheme.titleSmall ?? const TextStyle())
+                      .copyWith(
+                        color: data.valueColor ?? AppColorTokens.fundexText,
+                        fontWeight: FontWeight.w900,
+                      ),
+                ),
+              ],
             ),
-            const SizedBox(height: 4),
-            Text(
-              data.value,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: (theme.textTheme.titleSmall ?? const TextStyle()).copyWith(
-                color: data.valueColor ?? AppColorTokens.fundexText,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

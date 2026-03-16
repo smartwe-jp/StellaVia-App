@@ -24,7 +24,7 @@ class AuthApiPaths {
       '/member/user/createRegisterEmailCode';
   static const String registerApply = '/member/user/registerApply';
   static const String oauthToken = '/uaa/oauth/token';
-  static const String crowdfundingUserIndex = '/crowdfunding/user/index';
+  static const String crowdfundingUserIndex = '/crowdfunding/user/index-new';
 }
 
 class AuthApiClient {
@@ -189,7 +189,11 @@ class AuthApiClient {
       return null;
     }
 
-    return AuthUserDto.tryFromCurrentUserPayload(payload);
+    final normalizedPayload = _normalizeCurrentUserPayload(payload);
+    if (normalizedPayload.isEmpty) {
+      return null;
+    }
+    return AuthUserDto.tryFromCurrentUserPayload(normalizedPayload);
   }
 
   Future<void> registerApply({
@@ -360,5 +364,64 @@ class AuthApiClient {
       payload,
       fallbackMessage: fallbackMessage,
     );
+  }
+
+  Map<String, dynamic> _normalizeCurrentUserPayload(
+    Map<String, dynamic> payload,
+  ) {
+    if (payload.isEmpty) {
+      return const <String, dynamic>{};
+    }
+
+    final baseInfo = _toJsonMap(payload['baseInfo']);
+    final identityInfo = _toJsonMap(payload['identityInfo']);
+    final suitabilityInfo = _toJsonMap(payload['suitabilityInfo']);
+
+    final normalized = <String, dynamic>{
+      ...((baseInfo.isNotEmpty ? baseInfo : payload)),
+    };
+
+    if (_toNormalizedString(normalized['frontUrl']) == null) {
+      final frontImage = _toNormalizedString(
+        identityInfo['documentFrontImage'],
+      );
+      if (frontImage != null) {
+        normalized['frontUrl'] = frontImage;
+      }
+    }
+    if (_toNormalizedString(normalized['backUrl']) == null) {
+      final backImage = _toNormalizedString(identityInfo['documentBackImage']);
+      if (backImage != null) {
+        normalized['backUrl'] = backImage;
+      }
+    }
+
+    // Keep full sections for future consumers while preserving AuthUserDto compatibility.
+    if (identityInfo.isNotEmpty) {
+      normalized['identityInfo'] = identityInfo;
+    }
+    if (suitabilityInfo.isNotEmpty) {
+      normalized['suitabilityInfo'] = suitabilityInfo;
+    }
+
+    return normalized;
+  }
+
+  Map<String, dynamic> _toJsonMap(dynamic value) {
+    if (value is Map<String, dynamic>) {
+      return value;
+    }
+    if (value is Map) {
+      return Map<String, dynamic>.from(value);
+    }
+    return const <String, dynamic>{};
+  }
+
+  String? _toNormalizedString(Object? value) {
+    if (value == null) {
+      return null;
+    }
+    final text = value.toString().trim();
+    return text.isEmpty ? null : text;
   }
 }

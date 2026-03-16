@@ -24,6 +24,8 @@ import '../../features/notifications/presentation/pages/notifications_page.dart'
 import '../../features/member_profile/presentation/pages/profile_center_tab_page.dart';
 import '../../features/member_profile/presentation/support/mypage_section_support.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
+import '../../features/wallet/presentation/pages/deposit_page.dart';
+import '../../features/wallet/presentation/pages/wallet_history_page.dart';
 
 String? resolveAuthRedirect({
   required AsyncValue<bool> authState,
@@ -227,6 +229,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/notifications',
         builder: (BuildContext context, GoRouterState state) {
           return const NotificationsPage();
+        },
+      ),
+      GoRoute(
+        path: '/wallet/deposit',
+        builder: (BuildContext context, GoRouterState state) {
+          return const DepositPage();
+        },
+      ),
+      GoRoute(
+        path: '/wallet/history',
+        builder: (BuildContext context, GoRouterState state) {
+          return const WalletHistoryPage();
         },
       ),
       GoRoute(

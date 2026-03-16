@@ -1671,6 +1671,55 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageHistoryComingSoon => '取引履歴画面は次の実装で接続します。';
 
   @override
+  String get walletDepositTitle => '入金';
+
+  @override
+  String get walletHistoryTitle => '入金履歴';
+
+  @override
+  String get walletDedicatedAccountTitle => 'お客様専用の入金口座';
+
+  @override
+  String get walletDedicatedAccountDescription =>
+      'この口座はお客様専用の入金口座です。入金は自動的に口座に反映されます。（最低入金額：¥10,000）\n3ヶ月間利用がない場合、入金口座が変更される場合があります。';
+
+  @override
+  String get walletBankNameLabel => '銀行名';
+
+  @override
+  String get walletBranchNameLabel => '支店名';
+
+  @override
+  String get walletAccountTypeLabel => '口座種別';
+
+  @override
+  String get walletAccountNumberLabel => '口座番号';
+
+  @override
+  String get walletAccountHolderLabel => '口座名義';
+
+  @override
+  String get walletStandbyBalanceLabel => '待機資金残高';
+
+  @override
+  String get walletHistorySectionTitle => '最新履歴';
+
+  @override
+  String get walletHistoryMoreAction => 'すべて見る';
+
+  @override
+  String get walletHistoryEmpty => '履歴はまだありません。';
+
+  @override
+  String get walletHistoryUnknownType => '取引';
+
+  @override
+  String get walletAutoReflectedSuffix => '（自動反映）';
+
+  @override
+  String get walletDataLoadError => '入金情報の取得に失敗しました。';
+
+  @override
   String get myPagePendingEmptyState => '申込中または抽選待ちの案件はありません。';
 
   @override

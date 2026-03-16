@@ -206,14 +206,14 @@ void main() {
     });
 
     test(
-      'fetchCurrentUser uses crowdfunding user endpoint and parses wrapped response',
+      'fetchCurrentUser uses crowdfunding user index-new endpoint and parses nested response',
       () async {
         final client = _buildClient((options) async {
           expect(options.method, 'GET');
           expect(options.path, AuthApiPaths.crowdfundingUserIndex);
           expect(options.extra['auth_required'], true);
           return _jsonOk(
-            '{"msg":"success","code":200,"data":{"id":"438786029784006656","memberId":125530,"accountId":"0125530","email":"dennis.diao@51fanxing.co.jp","firstName":"张","lastName":"冠李戴","intlTelCode":81,"phone":"09085309521","address":"東今里１－７－２４","status":4,"frontUrl":"https://example.com/front.jpg","backUrl":"https://example.com/back.jpg"}}',
+            '{"msg":"success","code":200,"data":{"baseInfo":{"id":"438786029784006656","memberId":125530,"accountId":"0125530","email":"dennis.diao@51fanxing.co.jp","firstName":"张","lastName":"冠李戴","intlTelCode":81,"phone":"09085309521","address":"東今里１－７－２４","status":4},"identityInfo":{"documentType":11,"documentFrontImage":"https://example.com/front-from-identity.jpg","documentBackImage":"https://example.com/back-from-identity.jpg"},"suitabilityInfo":{"occupation":"COMPANY_EMPLOYEE","annualIncome":"FROM_5M_TO_7M"}}}',
           );
         });
         final source = AuthRemoteDataSourceImpl(client);
@@ -233,6 +233,26 @@ void main() {
         expect(user?.lastName, '冠李戴');
         expect(user?.address, '東今里１－７－２４');
         expect(user?.status, 4);
+        expect(user?.frontUrl, 'https://example.com/front-from-identity.jpg');
+        expect(user?.backUrl, 'https://example.com/back-from-identity.jpg');
+      },
+    );
+
+    test(
+      'fetchCurrentUser keeps backward compatibility for legacy user index payload',
+      () async {
+        final client = _buildClient((options) async {
+          expect(options.method, 'GET');
+          expect(options.path, AuthApiPaths.crowdfundingUserIndex);
+          return _jsonOk(
+            '{"msg":"success","code":200,"data":{"id":"438786029784006656","memberId":125530,"accountId":"0125530","email":"dennis.diao@51fanxing.co.jp","firstName":"张","lastName":"冠李戴","intlTelCode":81,"phone":"09085309521","address":"東今里１－７－２４","status":4,"frontUrl":"https://example.com/front.jpg","backUrl":"https://example.com/back.jpg"}}',
+          );
+        });
+        final source = AuthRemoteDataSourceImpl(client);
+
+        final user = await source.fetchCurrentUser();
+
+        expect(user, isNotNull);
         expect(user?.frontUrl, 'https://example.com/front.jpg');
         expect(user?.backUrl, 'https://example.com/back.jpg');
       },

@@ -42,7 +42,7 @@
   }
 
 - 2.获取用户数据
-  [HTTP] REQ GET https://testoa.gutingjun.com/api/crowdfunding/user/index
+  [HTTP] REQ GET https://testoa.gutingjun.com/api/crowdfunding/user/index-new
   authorization:
   bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIwODAwMDAwMDAwMyIsIm1lbWJlckxld....
   

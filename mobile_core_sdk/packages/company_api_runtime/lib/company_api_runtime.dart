@@ -9,6 +9,8 @@ export 'src/investment/fund_project_api_client.dart';
 export 'src/investment/fund_project_dto.dart';
 export 'src/investment/user_investment_api_client.dart';
 export 'src/investment/user_investment_dtos.dart';
+export 'src/investment/user_wallet_api_client.dart';
+export 'src/investment/user_wallet_dtos.dart';
 export 'src/member_profile/member_profile_api_client.dart';
 export 'src/member_profile/member_profile_region_dto.dart';
 export 'src/notice/notice_api_client.dart';

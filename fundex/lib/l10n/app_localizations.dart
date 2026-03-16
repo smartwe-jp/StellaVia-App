@@ -3332,6 +3332,102 @@ abstract class AppLocalizations {
   /// **'Transaction history page will be connected in a later implementation.'**
   String get myPageHistoryComingSoon;
 
+  /// No description provided for @walletDepositTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit'**
+  String get walletDepositTitle;
+
+  /// No description provided for @walletHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit History'**
+  String get walletHistoryTitle;
+
+  /// No description provided for @walletDedicatedAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Dedicated Deposit Account'**
+  String get walletDedicatedAccountTitle;
+
+  /// No description provided for @walletDedicatedAccountDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This is your dedicated deposit account. Deposits are reflected automatically (minimum: ¥10,000). If unused for 3 months, the account may be changed.'**
+  String get walletDedicatedAccountDescription;
+
+  /// No description provided for @walletBankNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank'**
+  String get walletBankNameLabel;
+
+  /// No description provided for @walletBranchNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Branch'**
+  String get walletBranchNameLabel;
+
+  /// No description provided for @walletAccountTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get walletAccountTypeLabel;
+
+  /// No description provided for @walletAccountNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Account No.'**
+  String get walletAccountNumberLabel;
+
+  /// No description provided for @walletAccountHolderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Holder'**
+  String get walletAccountHolderLabel;
+
+  /// No description provided for @walletStandbyBalanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Standby Balance'**
+  String get walletStandbyBalanceLabel;
+
+  /// No description provided for @walletHistorySectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest History'**
+  String get walletHistorySectionTitle;
+
+  /// No description provided for @walletHistoryMoreAction.
+  ///
+  /// In en, this message translates to:
+  /// **'View All'**
+  String get walletHistoryMoreAction;
+
+  /// No description provided for @walletHistoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No history yet.'**
+  String get walletHistoryEmpty;
+
+  /// No description provided for @walletHistoryUnknownType.
+  ///
+  /// In en, this message translates to:
+  /// **'Record'**
+  String get walletHistoryUnknownType;
+
+  /// No description provided for @walletAutoReflectedSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'(Auto reflected)'**
+  String get walletAutoReflectedSuffix;
+
+  /// No description provided for @walletDataLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load deposit data.'**
+  String get walletDataLoadError;
+
   /// No description provided for @myPagePendingEmptyState.
   ///
   /// In en, this message translates to:

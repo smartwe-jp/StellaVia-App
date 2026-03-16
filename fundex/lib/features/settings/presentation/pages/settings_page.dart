@@ -165,7 +165,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 label: l10n.menuItemBankSettings,
                 iconBackgroundColor: AppColorTokens.fundexSuccessLight,
                 iconForegroundColor: AppColorTokens.fundexSuccess,
-                onTap: () => _showComingSoon(l10n.menuItemBankSettings),
+                onTap: () => context.push('/wallet/deposit'),
               ),
             ],
           ),

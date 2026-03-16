@@ -1764,6 +1764,55 @@ class AppLocalizationsEn extends AppLocalizations {
       'Transaction history page will be connected in a later implementation.';
 
   @override
+  String get walletDepositTitle => 'Deposit';
+
+  @override
+  String get walletHistoryTitle => 'Deposit History';
+
+  @override
+  String get walletDedicatedAccountTitle => 'Your Dedicated Deposit Account';
+
+  @override
+  String get walletDedicatedAccountDescription =>
+      'This is your dedicated deposit account. Deposits are reflected automatically (minimum: ¥10,000). If unused for 3 months, the account may be changed.';
+
+  @override
+  String get walletBankNameLabel => 'Bank';
+
+  @override
+  String get walletBranchNameLabel => 'Branch';
+
+  @override
+  String get walletAccountTypeLabel => 'Type';
+
+  @override
+  String get walletAccountNumberLabel => 'Account No.';
+
+  @override
+  String get walletAccountHolderLabel => 'Account Holder';
+
+  @override
+  String get walletStandbyBalanceLabel => 'Standby Balance';
+
+  @override
+  String get walletHistorySectionTitle => 'Latest History';
+
+  @override
+  String get walletHistoryMoreAction => 'View All';
+
+  @override
+  String get walletHistoryEmpty => 'No history yet.';
+
+  @override
+  String get walletHistoryUnknownType => 'Record';
+
+  @override
+  String get walletAutoReflectedSuffix => '(Auto reflected)';
+
+  @override
+  String get walletDataLoadError => 'Failed to load deposit data.';
+
+  @override
   String get myPagePendingEmptyState =>
       'No applications or lottery-waiting items.';
 

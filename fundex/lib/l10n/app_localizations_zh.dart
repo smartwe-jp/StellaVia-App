@@ -1659,6 +1659,55 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageHistoryComingSoon => '交易记录页面会在后续实现中接入。';
 
   @override
+  String get walletDepositTitle => '入金';
+
+  @override
+  String get walletHistoryTitle => '入金记录';
+
+  @override
+  String get walletDedicatedAccountTitle => '您的专用入金账户';
+
+  @override
+  String get walletDedicatedAccountDescription =>
+      '该账户为您的专用入金账户。入金会自动反映到账户（最低入金额：¥10,000）。\n若连续3个月未使用，入金账户可能会变更。';
+
+  @override
+  String get walletBankNameLabel => '银行名称';
+
+  @override
+  String get walletBranchNameLabel => '支店名称';
+
+  @override
+  String get walletAccountTypeLabel => '账户类型';
+
+  @override
+  String get walletAccountNumberLabel => '账户号码';
+
+  @override
+  String get walletAccountHolderLabel => '账户名义';
+
+  @override
+  String get walletStandbyBalanceLabel => '待机资金余额';
+
+  @override
+  String get walletHistorySectionTitle => '最新记录';
+
+  @override
+  String get walletHistoryMoreAction => '查看全部';
+
+  @override
+  String get walletHistoryEmpty => '暂无记录。';
+
+  @override
+  String get walletHistoryUnknownType => '交易';
+
+  @override
+  String get walletAutoReflectedSuffix => '（自动反映）';
+
+  @override
+  String get walletDataLoadError => '入金信息读取失败。';
+
+  @override
   String get myPagePendingEmptyState => '当前没有申请中或等待抽签的项目。';
 
   @override
@@ -3763,6 +3812,55 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageHistoryComingSoon => '交易记录页面会在后续实现中接入。';
+
+  @override
+  String get walletDepositTitle => '入金';
+
+  @override
+  String get walletHistoryTitle => '入金紀錄';
+
+  @override
+  String get walletDedicatedAccountTitle => '您的專用入金帳戶';
+
+  @override
+  String get walletDedicatedAccountDescription =>
+      '此帳戶為您的專用入金帳戶。入金會自動反映到帳戶（最低入金額：¥10,000）。\n若連續3個月未使用，入金帳戶可能會變更。';
+
+  @override
+  String get walletBankNameLabel => '銀行名稱';
+
+  @override
+  String get walletBranchNameLabel => '分行名稱';
+
+  @override
+  String get walletAccountTypeLabel => '帳戶類型';
+
+  @override
+  String get walletAccountNumberLabel => '帳戶號碼';
+
+  @override
+  String get walletAccountHolderLabel => '帳戶名義';
+
+  @override
+  String get walletStandbyBalanceLabel => '待機資金餘額';
+
+  @override
+  String get walletHistorySectionTitle => '最新紀錄';
+
+  @override
+  String get walletHistoryMoreAction => '查看全部';
+
+  @override
+  String get walletHistoryEmpty => '暫無紀錄。';
+
+  @override
+  String get walletHistoryUnknownType => '交易';
+
+  @override
+  String get walletAutoReflectedSuffix => '（自動反映）';
+
+  @override
+  String get walletDataLoadError => '入金資訊讀取失敗。';
 
   @override
   String get myPagePendingEmptyState => '目前沒有申請中或等待抽籤的項目。';
