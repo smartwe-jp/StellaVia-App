@@ -16,6 +16,7 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
     required this.applyButtonLabel,
     required this.onApply,
     this.highlightValue,
+    this.isSubmitting = false,
   });
 
   final String title;
@@ -28,6 +29,7 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
   final String applyButtonLabel;
   final VoidCallback? onApply;
   final String? highlightValue;
+  final bool isSubmitting;
 
   @override
   Widget build(BuildContext context) {
@@ -205,6 +207,7 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
         PrimaryCtaButton(
           label: applyButtonLabel,
           onPressed: onApply,
+          isLoading: isSubmitting,
           horizontalPadding: 0,
           backgroundColor: AppColorTokens.fundexViolet,
           shadowColor: AppColorTokens.fundexViolet.withValues(alpha: 0.36),

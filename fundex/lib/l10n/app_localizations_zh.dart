@@ -1183,6 +1183,14 @@ class AppLocalizationsZh extends AppLocalizations {
   String get lotteryApplyStep1AmountLabel => '出资金额（1口 = 10万日元）';
 
   @override
+  String lotteryApplyStep1AmountLabelWithRules(
+    Object unitAmount,
+    Object maxAmount,
+  ) {
+    return '出资金额（1口 = $unitAmount / 上限 $maxAmount）';
+  }
+
+  @override
   String get lotteryApplyStep1BalanceWarningTitle => '待机资金不足';
 
   @override
@@ -1191,6 +1199,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get lotteryApplyStep1BalanceWarningAction => '💰 前往入金页';
+
+  @override
+  String get lotteryApplyStep1MaximumWarningTitle => '超过可申请上限';
+
+  @override
+  String get lotteryApplyStep1MaximumWarningBody =>
+      '当前金额超过该项目的单人上限，请减少口数后重新输入。';
 
   @override
   String get lotteryApplyStep1EstimatedDistributionLabel => '预计分配金（税前）';
@@ -1248,6 +1263,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get lotteryApplySubmitAction => '🎲 申请抽签';
+
+  @override
+  String get lotteryApplySubmitFailedFallback => '抽签申请失败，请稍后重试。';
 
   @override
   String get lotteryApplyStep4Headline => '抽签申请已完成！';
@@ -3271,6 +3289,14 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get lotteryApplyStep1AmountLabel => '出資金額（1口 = 10萬日圓）';
 
   @override
+  String lotteryApplyStep1AmountLabelWithRules(
+    Object unitAmount,
+    Object maxAmount,
+  ) {
+    return '出資金額（1口 = $unitAmount / 上限 $maxAmount）';
+  }
+
+  @override
   String get lotteryApplyStep1BalanceWarningTitle => '待機資金不足';
 
   @override
@@ -3279,6 +3305,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get lotteryApplyStep1BalanceWarningAction => '💰 前往入金頁';
+
+  @override
+  String get lotteryApplyStep1MaximumWarningTitle => '超過可申請上限';
+
+  @override
+  String get lotteryApplyStep1MaximumWarningBody =>
+      '目前金額已超過該專案的單人上限，請減少口數後重新輸入。';
 
   @override
   String get lotteryApplyStep1EstimatedDistributionLabel => '預估分配金（稅前）';
@@ -3336,6 +3369,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get lotteryApplySubmitAction => '🎲 申請抽籤';
+
+  @override
+  String get lotteryApplySubmitFailedFallback => '抽籤申請失敗，請稍後再試。';
 
   @override
   String get lotteryApplyStep4Headline => '抽籤申請已完成！';

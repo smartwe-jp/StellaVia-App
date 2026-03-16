@@ -1254,6 +1254,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Investment amount (1 unit = ¥100,000)';
 
   @override
+  String lotteryApplyStep1AmountLabelWithRules(
+    Object unitAmount,
+    Object maxAmount,
+  ) {
+    return 'Investment amount (1 unit = $unitAmount / max $maxAmount)';
+  }
+
+  @override
   String get lotteryApplyStep1BalanceWarningTitle =>
       'Insufficient standby cash';
 
@@ -1263,6 +1271,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lotteryApplyStep1BalanceWarningAction => '💰 Go to deposit';
+
+  @override
+  String get lotteryApplyStep1MaximumWarningTitle => 'Exceeded maximum limit';
+
+  @override
+  String get lotteryApplyStep1MaximumWarningBody =>
+      'The selected amount exceeds the per-user limit for this project. Please reduce the number of units.';
 
   @override
   String get lotteryApplyStep1EstimatedDistributionLabel =>
@@ -1329,6 +1344,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lotteryApplySubmitAction => '🎲 Submit lottery application';
+
+  @override
+  String get lotteryApplySubmitFailedFallback =>
+      'Failed to submit lottery application. Please try again later.';
 
   @override
   String get lotteryApplyStep4Headline => 'Lottery application submitted!';

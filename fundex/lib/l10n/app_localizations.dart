@@ -2411,6 +2411,15 @@ abstract class AppLocalizations {
   /// **'Investment amount (1 unit = ¥100,000)'**
   String get lotteryApplyStep1AmountLabel;
 
+  /// No description provided for @lotteryApplyStep1AmountLabelWithRules.
+  ///
+  /// In en, this message translates to:
+  /// **'Investment amount (1 unit = {unitAmount} / max {maxAmount})'**
+  String lotteryApplyStep1AmountLabelWithRules(
+    Object unitAmount,
+    Object maxAmount,
+  );
+
   /// No description provided for @lotteryApplyStep1BalanceWarningTitle.
   ///
   /// In en, this message translates to:
@@ -2428,6 +2437,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'💰 Go to deposit'**
   String get lotteryApplyStep1BalanceWarningAction;
+
+  /// No description provided for @lotteryApplyStep1MaximumWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exceeded maximum limit'**
+  String get lotteryApplyStep1MaximumWarningTitle;
+
+  /// No description provided for @lotteryApplyStep1MaximumWarningBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The selected amount exceeds the per-user limit for this project. Please reduce the number of units.'**
+  String get lotteryApplyStep1MaximumWarningBody;
 
   /// No description provided for @lotteryApplyStep1EstimatedDistributionLabel.
   ///
@@ -2542,6 +2563,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'🎲 Submit lottery application'**
   String get lotteryApplySubmitAction;
+
+  /// No description provided for @lotteryApplySubmitFailedFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit lottery application. Please try again later.'**
+  String get lotteryApplySubmitFailedFallback;
 
   /// No description provided for @lotteryApplyStep4Headline.
   ///

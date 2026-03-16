@@ -11,6 +11,10 @@ class _FakeFundProjectRemoteDataSource implements FundProjectRemoteDataSource {
   );
   int callCount = 0;
   int detailCallCount = 0;
+  int submitCallCount = 0;
+  String? submittedProjectId;
+  int? submittedUnits;
+  int? submittedAmount;
 
   @override
   Future<List<FundProjectDto>> fetchFundProjectList() async {
@@ -22,6 +26,18 @@ class _FakeFundProjectRemoteDataSource implements FundProjectRemoteDataSource {
   Future<FundProjectDto> fetchFundProjectDetail({required String id}) async {
     detailCallCount += 1;
     return detailResult;
+  }
+
+  @override
+  Future<void> submitLotteryApply({
+    required String projectId,
+    required int units,
+    required int amount,
+  }) async {
+    submitCallCount += 1;
+    submittedProjectId = projectId;
+    submittedUnits = units;
+    submittedAmount = amount;
   }
 }
 
@@ -100,6 +116,22 @@ void main() {
       expect(entity.operatingCompanyAccount, 127005);
       expect(entity.accountId, '48978');
       expect(entity.detailData['permitNumber'], '東京都知事 第001号');
+    });
+
+    test('submitLotteryApply delegates to remote data source', () async {
+      final remote = _FakeFundProjectRemoteDataSource();
+      final repository = FundProjectRepositoryImpl(remote: remote);
+
+      await repository.submitLotteryApply(
+        projectId: '453461223659215318',
+        units: 5,
+        amount: 500000,
+      );
+
+      expect(remote.submitCallCount, 1);
+      expect(remote.submittedProjectId, '453461223659215318');
+      expect(remote.submittedUnits, 5);
+      expect(remote.submittedAmount, 500000);
     });
   });
 }

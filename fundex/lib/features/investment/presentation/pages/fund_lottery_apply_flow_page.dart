@@ -29,21 +29,23 @@ class FundLotteryApplyFlowPage extends ConsumerStatefulWidget {
 
 class _FundLotteryApplyFlowPageState
     extends ConsumerState<FundLotteryApplyFlowPage> {
-  static const int _unitAmount = 100000;
+  static const int _defaultUnitAmount = 100000;
+  static const int _defaultMaxMultiplier = 10;
   static const int _mockStandbyBalance = 650000;
-  static const List<int> _quickAmounts = <int>[100000, 300000, 500000, 1000000];
+  static const List<int> _quickAmountMultipliers = <int>[1, 3, 5, 10];
 
   late final TextEditingController _amountController;
 
   FundLotteryApplyStep _currentStep = FundLotteryApplyStep.amountInput;
-  int _amount = 500000;
+  int _amount = 0;
   final Set<int> _checkedDocuments = <int>{};
   bool _agreedToApply = false;
+  bool _isApplying = false;
 
   @override
   void initState() {
     super.initState();
-    _amountController = TextEditingController(text: CurrencyInputFormatter.formatCurrency(_amount.toString()));
+    _amountController = TextEditingController();
     _amountController.addListener(_handleAmountChanged);
   }
 
@@ -67,9 +69,10 @@ class _FundLotteryApplyFlowPageState
   }
 
   void _selectQuickAmount(int amount) {
+    final formatted = CurrencyInputFormatter.formatCurrency(amount.toString());
     _amountController.value = TextEditingValue(
-      text: CurrencyInputFormatter.formatCurrency(amount.toString()),
-      selection: TextSelection.collapsed(offset: amount.toString().length),
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
     );
   }
 
@@ -114,11 +117,7 @@ class _FundLotteryApplyFlowPageState
     AppNotice.show(context, message: message);
   }
 
-  bool get _isAmountValid => _amount > 0 && _amount % _unitAmount == 0;
-
   bool get _isBalanceEnough => _amount <= _mockStandbyBalance;
-
-  bool get _canProceedStep1 => _isAmountValid && _isBalanceEnough;
 
   bool _canProceedStep2(int requiredCount) =>
       _checkedDocuments.length == requiredCount;
@@ -205,6 +204,131 @@ class _FundLotteryApplyFlowPageState
         : '${value.toStringAsFixed(0)}%';
   }
 
+  int _resolveUnitAmount(FundProject project) {
+    final unit = project.investmentUnit ?? _defaultUnitAmount;
+    if (unit <= 0) {
+      return _defaultUnitAmount;
+    }
+    return unit;
+  }
+
+  int _resolveMaximumAmount(FundProject project, int unitAmount) {
+    final rawMaximum = project.maximumInvestmentPerPerson;
+    if (rawMaximum == null || rawMaximum <= 0) {
+      return unitAmount * _defaultMaxMultiplier;
+    }
+
+    // Backend data may provide "maximum units per person" instead of amount.
+    if (rawMaximum < unitAmount) {
+      return rawMaximum * unitAmount;
+    }
+
+    return rawMaximum;
+  }
+
+  List<int> _buildQuickAmounts({
+    required int unitAmount,
+    required int maximumAmount,
+  }) {
+    final values = <int>{};
+    for (final multiplier in _quickAmountMultipliers) {
+      final value = unitAmount * multiplier;
+      if (value <= maximumAmount) {
+        values.add(value);
+      }
+    }
+
+    if (values.isEmpty && unitAmount <= maximumAmount) {
+      values.add(unitAmount);
+    }
+
+    final sorted = values.toList(growable: false)..sort();
+    return sorted;
+  }
+
+  bool _isAmountInAllowedRange({
+    required int unitAmount,
+    required int maximumAmount,
+  }) {
+    return _amount > 0 && _amount % unitAmount == 0 && _amount <= maximumAmount;
+  }
+
+  bool _canProceedStep1({required int unitAmount, required int maximumAmount}) {
+    return _isAmountInAllowedRange(
+          unitAmount: unitAmount,
+          maximumAmount: maximumAmount,
+        ) &&
+        _isBalanceEnough;
+  }
+
+  String _buildAmountLabel(
+    BuildContext context, {
+    required int unitAmount,
+    required int maximumAmount,
+  }) {
+    return context.l10n.lotteryApplyStep1AmountLabelWithRules(
+      _formatCurrency(context, unitAmount),
+      _formatCurrency(context, maximumAmount),
+    );
+  }
+
+  String _resolveApplyErrorMessage(BuildContext context, Object error) {
+    if (error is StateError) {
+      final message = error.message.toString().trim();
+      if (message.isNotEmpty) {
+        return message;
+      }
+    }
+    return context.l10n.lotteryApplySubmitFailedFallback;
+  }
+
+  Future<void> _submitLotteryApply({
+    required FundProject project,
+    required int unitAmount,
+    required int maximumAmount,
+  }) async {
+    if (_isApplying) {
+      return;
+    }
+
+    if (!_isAmountInAllowedRange(
+      unitAmount: unitAmount,
+      maximumAmount: maximumAmount,
+    )) {
+      return;
+    }
+
+    final units = _amount ~/ unitAmount;
+    if (units <= 0) {
+      return;
+    }
+
+    setState(() {
+      _isApplying = true;
+    });
+
+    try {
+      await ref
+          .read(submitFundLotteryApplyUseCaseProvider)
+          .call(projectId: project.id, units: units, amount: _amount);
+      if (!mounted) {
+        return;
+      }
+      _goNextStep();
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      _showToast(_resolveApplyErrorMessage(context, error));
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isApplying = false;
+        });
+      }
+    }
+  }
+
   List<FundLotteryDocumentItem> _buildRequiredDocuments(BuildContext context) {
     final l10n = context.l10n;
     return <FundLotteryDocumentItem>[
@@ -240,6 +364,17 @@ class _FundLotteryApplyFlowPageState
             : project.projectName.trim();
         final yieldValue = _formatYieldPercent(_resolveYield(project));
         final lotteryDate = _resolveLotteryDate(context, project);
+        final unitAmount = _resolveUnitAmount(project);
+        final maximumAmount = _resolveMaximumAmount(project, unitAmount);
+        final quickAmounts = _buildQuickAmounts(
+          unitAmount: unitAmount,
+          maximumAmount: maximumAmount,
+        );
+        final canProceedStep1 = _canProceedStep1(
+          unitAmount: unitAmount,
+          maximumAmount: maximumAmount,
+        );
+        final exceededMaximum = _amount > maximumAmount;
         final estimatedDistribution = (_amount * _resolveYield(project) / 100)
             .round();
         final formatter = _currencyFormatter(context);
@@ -308,24 +443,33 @@ class _FundLotteryApplyFlowPageState
                             ),
                             depositActionLabel:
                                 l10n.lotteryApplyStep1DepositAction,
-                            investmentAmountLabel:
-                                l10n.lotteryApplyStep1AmountLabel,
+                            investmentAmountLabel: _buildAmountLabel(
+                              context,
+                              unitAmount: unitAmount,
+                              maximumAmount: maximumAmount,
+                            ),
                             amountController: _amountController,
-                            quickAmounts: _quickAmounts,
+                            quickAmounts: quickAmounts,
                             selectedAmount: _amount,
                             onQuickAmountTap: _selectQuickAmount,
                             onDepositTap: () =>
                                 _showToast(l10n.myPageDepositComingSoon),
                             showBalanceWarning:
-                                _amount > 0 && !_isBalanceEnough,
-                            balanceWarningTitle:
-                                l10n.lotteryApplyStep1BalanceWarningTitle,
-                            balanceWarningBody:
-                                l10n.lotteryApplyStep1BalanceWarningBody,
-                            balanceWarningActionLabel:
-                                l10n.lotteryApplyStep1BalanceWarningAction,
-                            onBalanceWarningActionTap: () =>
-                                _showToast(l10n.myPageDepositComingSoon),
+                                _amount > 0 &&
+                                (exceededMaximum || !_isBalanceEnough),
+                            balanceWarningTitle: exceededMaximum
+                                ? l10n.lotteryApplyStep1MaximumWarningTitle
+                                : l10n.lotteryApplyStep1BalanceWarningTitle,
+                            balanceWarningBody: exceededMaximum
+                                ? l10n.lotteryApplyStep1MaximumWarningBody
+                                : l10n.lotteryApplyStep1BalanceWarningBody,
+                            balanceWarningActionLabel: exceededMaximum
+                                ? null
+                                : l10n.lotteryApplyStep1BalanceWarningAction,
+                            onBalanceWarningActionTap: exceededMaximum
+                                ? null
+                                : () =>
+                                      _showToast(l10n.myPageDepositComingSoon),
                             estimatedDistributionLabel: l10n
                                 .lotteryApplyStep1EstimatedDistributionLabel,
                             estimatedDistributionAmount: formatter.format(
@@ -334,7 +478,7 @@ class _FundLotteryApplyFlowPageState
                             estimatedDistributionSuffix: l10n
                                 .lotteryApplyStep1EstimatedDistributionSuffix,
                             nextButtonLabel: l10n.lotteryApplyStep1NextAction,
-                            onNext: _canProceedStep1 ? _goNextStep : null,
+                            onNext: canProceedStep1 ? _goNextStep : null,
                           ),
                         FundLotteryApplyStep.contractDocuments =>
                           FundLotteryApplyDocumentsStep(
@@ -394,7 +538,14 @@ class _FundLotteryApplyFlowPageState
                             },
                             highlightValue: l10n.homeTagLottery,
                             applyButtonLabel: l10n.lotteryApplySubmitAction,
-                            onApply: _agreedToApply ? _goNextStep : null,
+                            isSubmitting: _isApplying,
+                            onApply: _agreedToApply && !_isApplying
+                                ? () => _submitLotteryApply(
+                                    project: project,
+                                    unitAmount: unitAmount,
+                                    maximumAmount: maximumAmount,
+                                  )
+                                : null,
                           ),
                         FundLotteryApplyStep.submitted =>
                           FundLotteryApplySubmittedStep(

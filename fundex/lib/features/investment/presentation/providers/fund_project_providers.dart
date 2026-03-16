@@ -7,6 +7,7 @@ import '../../domain/entities/fund_project.dart';
 import '../../domain/repositories/fund_project_repository.dart';
 import '../../domain/usecases/fetch_fund_project_detail_usecase.dart';
 import '../../domain/usecases/fetch_fund_project_list_usecase.dart';
+import '../../domain/usecases/submit_fund_lottery_apply_usecase.dart';
 import '../support/fund_detail_static_content.dart';
 
 final fundProjectRemoteDataSourceProvider =
@@ -32,6 +33,13 @@ final fetchFundProjectListUseCaseProvider =
 final fetchFundProjectDetailUseCaseProvider =
     Provider<FetchFundProjectDetailUseCase>((ref) {
       return FetchFundProjectDetailUseCase(
+        ref.watch(fundProjectRepositoryProvider),
+      );
+    });
+
+final submitFundLotteryApplyUseCaseProvider =
+    Provider<SubmitFundLotteryApplyUseCase>((ref) {
+      return SubmitFundLotteryApplyUseCase(
         ref.watch(fundProjectRepositoryProvider),
       );
     });

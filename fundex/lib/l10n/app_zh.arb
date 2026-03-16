@@ -428,9 +428,18 @@
   "lotteryApplyStep1BalanceLabel": "💰 待机资金余额",
   "lotteryApplyStep1DepositAction": "去入金",
   "lotteryApplyStep1AmountLabel": "出资金额（1口 = 10万日元）",
+  "lotteryApplyStep1AmountLabelWithRules": "出资金额（1口 = {unitAmount} / 上限 {maxAmount}）",
+  "@lotteryApplyStep1AmountLabelWithRules": {
+    "placeholders": {
+      "unitAmount": {},
+      "maxAmount": {}
+    }
+  },
   "lotteryApplyStep1BalanceWarningTitle": "待机资金不足",
   "lotteryApplyStep1BalanceWarningBody": "当前余额不足以覆盖申请金额，请先完成入金后再继续申请。",
   "lotteryApplyStep1BalanceWarningAction": "💰 前往入金页",
+  "lotteryApplyStep1MaximumWarningTitle": "超过可申请上限",
+  "lotteryApplyStep1MaximumWarningBody": "当前金额超过该项目的单人上限，请减少口数后重新输入。",
   "lotteryApplyStep1EstimatedDistributionLabel": "预计分配金（税前）",
   "lotteryApplyStep1EstimatedDistributionSuffix": "/年",
   "lotteryApplyStep1NextAction": "下一步：确认书面",
@@ -450,6 +459,7 @@
   "lotteryApplyNoticeBody": "本投资不保证本金。若抽签中签，需在指定期限内完成入金。",
   "lotteryApplyAgreementLabel": "我已确认以上内容，并同意进行抽签申请。",
   "lotteryApplySubmitAction": "🎲 申请抽签",
+  "lotteryApplySubmitFailedFallback": "抽签申请失败，请稍后重试。",
   "lotteryApplyStep4Headline": "抽签申请已完成！",
   "lotteryApplyStep4Body": "你已成功申请「{projectName}」抽签。结果将于下方日期公布，并通过 App 通知告知。",
   "@lotteryApplyStep4Body": {

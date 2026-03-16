@@ -9,6 +9,7 @@ class UserInvestmentApiPaths {
   const UserInvestmentApiPaths._();
 
   static const String accountStatistic = '/member/login/account-statistic';
+  static const String apply = '/crowdfunding/user/apply';
   static const String applyList = '/crowdfunding/user/apply/list';
   static const String orderInquiryPage = '/crowdfunding/secondary/market/page';
   static const String myInvestmentList = '/crowdfunding/user/invest/list';
@@ -20,6 +21,7 @@ class UserInvestmentApiClient {
     LegacyEnvelopeCodec? envelopeCodec,
     LegacyPageProfile? pageProfile,
     this.accountStatisticPath = UserInvestmentApiPaths.accountStatistic,
+    this.applyPath = UserInvestmentApiPaths.apply,
     this.applyListPath = UserInvestmentApiPaths.applyList,
     this.orderInquiryPagePath = UserInvestmentApiPaths.orderInquiryPage,
     this.myInvestmentListPath = UserInvestmentApiPaths.myInvestmentList,
@@ -32,6 +34,7 @@ class UserInvestmentApiClient {
   final LegacyPageProfile _pageProfile;
 
   final String accountStatisticPath;
+  final String applyPath;
   final String applyListPath;
   final String orderInquiryPagePath;
   final String myInvestmentListPath;
@@ -48,6 +51,27 @@ class UserInvestmentApiClient {
       fallbackMessage: 'Failed to load account statistic.',
     );
     return UserInvestmentAccountStatisticDto.fromJson(data);
+  }
+
+  Future<void> submitApply({
+    required String projectId,
+    required int units,
+    required int amount,
+  }) async {
+    final response = await _dioForPath(applyPath).post<Map<String, dynamic>>(
+      applyPath,
+      data: <String, dynamic>{
+        'projectId': int.tryParse(projectId) ?? projectId,
+        'num': units,
+        'money': amount,
+      },
+      options: authRequired(true),
+    );
+
+    _envelopeCodec.assertSuccessIfEnvelope(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to submit fund application.',
+    );
   }
 
   Future<List<UserInvestmentApplyRecordDto>> fetchApplyList({

@@ -428,9 +428,18 @@
   "lotteryApplyStep1BalanceLabel": "💰 Standby cash balance",
   "lotteryApplyStep1DepositAction": "Deposit",
   "lotteryApplyStep1AmountLabel": "Investment amount (1 unit = ¥100,000)",
+  "lotteryApplyStep1AmountLabelWithRules": "Investment amount (1 unit = {unitAmount} / max {maxAmount})",
+  "@lotteryApplyStep1AmountLabelWithRules": {
+    "placeholders": {
+      "unitAmount": {},
+      "maxAmount": {}
+    }
+  },
   "lotteryApplyStep1BalanceWarningTitle": "Insufficient standby cash",
   "lotteryApplyStep1BalanceWarningBody": "Your balance is lower than the selected amount. Please deposit first, then continue the application.",
   "lotteryApplyStep1BalanceWarningAction": "💰 Go to deposit",
+  "lotteryApplyStep1MaximumWarningTitle": "Exceeded maximum limit",
+  "lotteryApplyStep1MaximumWarningBody": "The selected amount exceeds the per-user limit for this project. Please reduce the number of units.",
   "lotteryApplyStep1EstimatedDistributionLabel": "Estimated distribution (before tax)",
   "lotteryApplyStep1EstimatedDistributionSuffix": "/year",
   "lotteryApplyStep1NextAction": "Next: Documents",
@@ -450,6 +459,7 @@
   "lotteryApplyNoticeBody": "This investment does not guarantee principal. If selected in the lottery, payment is required within the specified deadline.",
   "lotteryApplyAgreementLabel": "I have reviewed the above details and agree to proceed with the lottery application.",
   "lotteryApplySubmitAction": "🎲 Submit lottery application",
+  "lotteryApplySubmitFailedFallback": "Failed to submit lottery application. Please try again later.",
   "lotteryApplyStep4Headline": "Lottery application submitted!",
   "lotteryApplyStep4Body": "Your lottery application for \"{projectName}\" has been completed. The result will be announced on the date below, and you'll receive a notification in the app.",
   "@lotteryApplyStep4Body": {

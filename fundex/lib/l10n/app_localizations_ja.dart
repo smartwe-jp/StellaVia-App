@@ -1188,6 +1188,14 @@ class AppLocalizationsJa extends AppLocalizations {
   String get lotteryApplyStep1AmountLabel => '出資金額（1口 = 10万円）';
 
   @override
+  String lotteryApplyStep1AmountLabelWithRules(
+    Object unitAmount,
+    Object maxAmount,
+  ) {
+    return '出資金額（1口 = $unitAmount / 上限 $maxAmount）';
+  }
+
+  @override
   String get lotteryApplyStep1BalanceWarningTitle => '待機資金が不足しています';
 
   @override
@@ -1196,6 +1204,13 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get lotteryApplyStep1BalanceWarningAction => '💰 入金ページへ';
+
+  @override
+  String get lotteryApplyStep1MaximumWarningTitle => '上限を超えています';
+
+  @override
+  String get lotteryApplyStep1MaximumWarningBody =>
+      '申込金額が1人あたりの上限を超えています。口数を減らして再入力してください。';
 
   @override
   String get lotteryApplyStep1EstimatedDistributionLabel => '想定分配金（税引前）';
@@ -1257,6 +1272,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get lotteryApplySubmitAction => '🎲 抽選に申し込む';
+
+  @override
+  String get lotteryApplySubmitFailedFallback =>
+      '抽選申込に失敗しました。しばらくしてから再度お試しください。';
 
   @override
   String get lotteryApplyStep4Headline => '抽選申込が完了しました！';

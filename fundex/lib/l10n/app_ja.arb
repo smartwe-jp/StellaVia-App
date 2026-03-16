@@ -428,9 +428,18 @@
   "lotteryApplyStep1BalanceLabel": "💰 待機資金残高",
   "lotteryApplyStep1DepositAction": "入金する",
   "lotteryApplyStep1AmountLabel": "出資金額（1口 = 10万円）",
+  "lotteryApplyStep1AmountLabelWithRules": "出資金額（1口 = {unitAmount} / 上限 {maxAmount}）",
+  "@lotteryApplyStep1AmountLabelWithRules": {
+    "placeholders": {
+      "unitAmount": {},
+      "maxAmount": {}
+    }
+  },
   "lotteryApplyStep1BalanceWarningTitle": "待機資金が不足しています",
   "lotteryApplyStep1BalanceWarningBody": "申込金額に対して残高が不足しています。先にご入金のうえ、お申込みください。",
   "lotteryApplyStep1BalanceWarningAction": "💰 入金ページへ",
+  "lotteryApplyStep1MaximumWarningTitle": "上限を超えています",
+  "lotteryApplyStep1MaximumWarningBody": "申込金額が1人あたりの上限を超えています。口数を減らして再入力してください。",
   "lotteryApplyStep1EstimatedDistributionLabel": "想定分配金（税引前）",
   "lotteryApplyStep1EstimatedDistributionSuffix": "/年",
   "lotteryApplyStep1NextAction": "次へ：書面確認",
@@ -450,6 +459,7 @@
   "lotteryApplyNoticeBody": "本投資は元本保証ではありません。抽選に当選した場合、指定期限内にご入金が必要です。",
   "lotteryApplyAgreementLabel": "上記内容を確認し、抽選申込に同意します",
   "lotteryApplySubmitAction": "🎲 抽選に申し込む",
+  "lotteryApplySubmitFailedFallback": "抽選申込に失敗しました。しばらくしてから再度お試しください。",
   "lotteryApplyStep4Headline": "抽選申込が完了しました！",
   "lotteryApplyStep4Body": "「{projectName}」の抽選に申し込みました。抽選結果は下記の日程で発表予定です。結果はアプリの通知でお知らせいたします。",
   "@lotteryApplyStep4Body": {
