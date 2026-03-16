@@ -19,13 +19,12 @@ class NotificationsListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isUrgentUnread = item.isImportant && !item.isRead;
+    final isUnread = !item.isRead;
     final title = item.title.trim();
-    final body = item.body.trim();
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: isUrgentUnread ? const Color(0xFFF0F9FF) : Colors.white,
+        color: isUnread ? const Color(0xFFF0F9FF) : Colors.white,
         border: showDivider
             ? const Border(
                 bottom: BorderSide(color: AppColorTokens.fundexBorder),
@@ -66,19 +65,6 @@ class NotificationsListItem extends StatelessWidget {
                           height: 1.45,
                         ),
                       ),
-                      if (body.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 2),
-                          child: Text(
-                            body,
-                            style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w500,
-                              color: AppColorTokens.fundexTextSecondary,
-                              height: 1.55,
-                            ),
-                          ),
-                        ),
                     ],
                   ),
                 ),

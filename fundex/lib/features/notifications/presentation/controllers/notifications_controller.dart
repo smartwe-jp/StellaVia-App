@@ -1,48 +1,22 @@
 import 'dart:async';
 
-import 'package:core_storage/core_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../data/datasources/notifications_local_data_source.dart';
 import '../../data/datasources/notifications_remote_data_source.dart';
 import '../state/notifications_state.dart';
 import '../support/notification_item_view_data.dart';
 
 class NotificationsController extends StateNotifier<NotificationsState> {
-  NotificationsController(this._remoteDataSource, this._storage)
+  NotificationsController(this._remoteDataSource, this._localDataSource)
     : super(const NotificationsState.initial()) {
-    unawaited(_bootstrap());
+    unawaited(loadNotices());
   }
 
-  static const String _newsPushStorageKey = 'notifications_news_push_enabled';
   static const int _defaultLimit = 100;
 
   final NotificationsRemoteDataSource _remoteDataSource;
-  final KeyValueStorage _storage;
-
-  Future<void> _bootstrap() async {
-    await _restoreNewsPushEnabled();
-    await loadNotices();
-  }
-
-  Future<void> _restoreNewsPushEnabled() async {
-    final stored = await _storage.read(_newsPushStorageKey);
-    if (!mounted) {
-      return;
-    }
-    state = state.copyWith(newsPushEnabled: stored == '1');
-  }
-
-  Future<void> setNewsPushEnabled(bool enabled) async {
-    state = state.copyWith(newsPushEnabled: enabled);
-    await _storage.write(_newsPushStorageKey, enabled ? '1' : '0');
-  }
-
-  void selectTab(NotificationsTab tab) {
-    if (state.selectedTab == tab) {
-      return;
-    }
-    state = state.copyWith(selectedTab: tab);
-  }
+  final NotificationsLocalDataSource _localDataSource;
 
   Future<void> clearForGuestMode() async {
     if (!mounted) {
@@ -51,7 +25,6 @@ class NotificationsController extends StateNotifier<NotificationsState> {
     state = state.copyWith(
       isLoading: false,
       isRefreshing: false,
-      isMarkingAllRead: false,
       items: const <NotificationItemViewData>[],
       unreadCount: 0,
       updatingNoticeKeys: const <String>{},
@@ -60,7 +33,7 @@ class NotificationsController extends StateNotifier<NotificationsState> {
   }
 
   Future<void> loadNotices({bool refresh = false}) async {
-    if (state.isLoading && !refresh) {
+    if (!refresh && state.isLoading && state.hasData) {
       return;
     }
     if (state.isRefreshing && refresh) {
@@ -74,17 +47,21 @@ class NotificationsController extends StateNotifier<NotificationsState> {
     );
 
     try {
-      final noticesFuture = _remoteDataSource.fetchNotices(
+      final notices = await _remoteDataSource.fetchNotices(
         startPage: 1,
         limit: _defaultLimit,
       );
-      final statisticsFuture = _remoteDataSource.fetchStatistics();
-
-      final notices = await noticesFuture;
-      final statistics = await statisticsFuture;
+      final localReadIds = await _localDataSource.readReadNoticeIds();
 
       final mapped = notices
-          .map(NotificationItemViewData.fromNoticeDto)
+          .map((notice) {
+            final item = NotificationItemViewData.fromNoticeDto(notice);
+            final id = item.id;
+            if (id != null && localReadIds.contains(id)) {
+              return item.copyWith(isRead: true);
+            }
+            return item;
+          })
           .toList(growable: false);
       final sorted = _sortByCreatedAtDesc(mapped);
       final fallbackUnread = sorted
@@ -95,7 +72,7 @@ class NotificationsController extends StateNotifier<NotificationsState> {
         isLoading: false,
         isRefreshing: false,
         items: sorted,
-        unreadCount: statistics.uncheck ?? fallbackUnread,
+        unreadCount: fallbackUnread,
         clearError: true,
       );
     } catch (_) {
@@ -111,79 +88,11 @@ class NotificationsController extends StateNotifier<NotificationsState> {
     return loadNotices(refresh: true);
   }
 
-  Future<int> markAllAsReadCurrentTab() {
-    return markAllAsRead(state.selectedTab);
-  }
-
-  Future<int> markAllAsRead(NotificationsTab tab) async {
-    if (state.isMarkingAllRead) {
-      return 0;
-    }
-
-    final targets = state
-        .itemsForTab(tab)
-        .where(
-          (NotificationItemViewData item) => !item.isRead && item.id != null,
-        )
-        .toList(growable: false);
-    if (targets.isEmpty) {
-      return 0;
-    }
-
-    var updatedCount = 0;
-    var hasError = false;
-    state = state.copyWith(isMarkingAllRead: true, clearError: true);
-
-    for (final item in targets) {
-      final itemId = item.id;
-      if (itemId == null) {
-        continue;
-      }
-      try {
-        final checked = await _remoteDataSource.checkNotice(id: itemId);
-        final updated = NotificationItemViewData.fromNoticeDto(checked);
-        _replaceItem(
-          updated.copyWith(
-            isRead: true,
-            title: updated.title.isNotEmpty ? updated.title : item.title,
-            body: updated.body.isNotEmpty ? updated.body : item.body,
-            dateLabel: updated.dateLabel.isNotEmpty
-                ? updated.dateLabel
-                : item.dateLabel,
-            createdAt: updated.createdAt ?? item.createdAt,
-            isImportant: updated.isImportant || item.isImportant,
-          ),
-        );
-        updatedCount += 1;
-      } catch (_) {
-        hasError = true;
-      }
-    }
-
-    if (!mounted) {
-      return updatedCount;
-    }
-
-    state = state.copyWith(
-      isMarkingAllRead: false,
-      unreadCount: _calculateUnreadCount(state.items),
-      errorMessage: hasError && updatedCount == 0
-          ? 'notifications_mark_all_failed'
-          : null,
-      clearError: !(hasError && updatedCount == 0),
-    );
-    return updatedCount;
-  }
-
   Future<NotificationItemViewData?> openNotice(
     NotificationItemViewData item,
   ) async {
     final itemId = item.id;
-    if (itemId == null) {
-      return item;
-    }
-
-    if (item.isRead) {
+    if (itemId == null || item.isRead) {
       return item;
     }
 
@@ -197,16 +106,16 @@ class NotificationsController extends StateNotifier<NotificationsState> {
 
     try {
       final checked = await _remoteDataSource.checkNotice(id: itemId);
-      final refreshed = NotificationItemViewData.fromNoticeDto(checked);
-      final updated = refreshed.copyWith(
+      await _localDataSource.markNoticeRead(itemId);
+      final checkedItem = NotificationItemViewData.fromNoticeDto(checked);
+      final updated = checkedItem.copyWith(
         isRead: true,
-        title: refreshed.title.isNotEmpty ? refreshed.title : item.title,
-        body: refreshed.body.isNotEmpty ? refreshed.body : item.body,
-        dateLabel: refreshed.dateLabel.isNotEmpty
-            ? refreshed.dateLabel
+        title: checkedItem.title.isNotEmpty ? checkedItem.title : item.title,
+        body: checkedItem.body.isNotEmpty ? checkedItem.body : item.body,
+        dateLabel: checkedItem.dateLabel.isNotEmpty
+            ? checkedItem.dateLabel
             : item.dateLabel,
-        createdAt: refreshed.createdAt ?? item.createdAt,
-        isImportant: refreshed.isImportant || item.isImportant,
+        createdAt: checkedItem.createdAt ?? item.createdAt,
       );
 
       final merged = _replaceItem(updated);

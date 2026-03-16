@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/network/app_network_providers.dart';
 import '../../../../app/storage/app_storage_providers.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../data/datasources/notifications_local_data_source.dart';
 import '../../data/datasources/notifications_remote_data_source.dart';
 import '../controllers/notifications_controller.dart';
 import '../state/notifications_state.dart';
@@ -24,6 +26,14 @@ final notificationsRemoteDataSourceProvider =
       );
     });
 
+final notificationsLocalDataSourceProvider =
+    Provider<NotificationsLocalDataSource>((ref) {
+      return NotificationsLocalDataSourceImpl(
+        ref.watch(largeDataStoreProvider),
+        ref.watch(authLocalDataSourceProvider),
+      );
+    });
+
 final notificationsControllerProvider =
     StateNotifierProvider.autoDispose<
       NotificationsController,
@@ -31,6 +41,6 @@ final notificationsControllerProvider =
     >((ref) {
       return NotificationsController(
         ref.watch(notificationsRemoteDataSourceProvider),
-        ref.watch(sharedPrefsStorageProvider),
+        ref.watch(notificationsLocalDataSourceProvider),
       );
     });

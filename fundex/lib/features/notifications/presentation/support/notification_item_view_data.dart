@@ -4,13 +4,11 @@ class NotificationItemViewData {
   const NotificationItemViewData({
     required this.key,
     required this.id,
-    required this.noticeType,
     required this.title,
     required this.body,
     required this.dateLabel,
     required this.createdAt,
     required this.isRead,
-    required this.isImportant,
   });
 
   factory NotificationItemViewData.fromNoticeDto(NoticeItemDto dto) {
@@ -24,51 +22,39 @@ class NotificationItemViewData {
     return NotificationItemViewData(
       key: _buildStableKey(dto.id, rawDate, title, body),
       id: dto.id,
-      noticeType: dto.noticeType,
       title: title,
       body: body,
       dateLabel: _formatDateLabel(createdAt, rawDate),
       createdAt: createdAt,
       isRead: dto.status ?? false,
-      isImportant: _resolveImportantFlag(
-        noticeType: dto.noticeType,
-        title: title,
-        body: body,
-      ),
     );
   }
 
   final String key;
   final int? id;
-  final int? noticeType;
   final String title;
   final String body;
   final String dateLabel;
   final DateTime? createdAt;
   final bool isRead;
-  final bool isImportant;
 
   NotificationItemViewData copyWith({
     String? key,
     int? id,
-    int? noticeType,
     String? title,
     String? body,
     String? dateLabel,
     DateTime? createdAt,
     bool? isRead,
-    bool? isImportant,
   }) {
     return NotificationItemViewData(
       key: key ?? this.key,
       id: id ?? this.id,
-      noticeType: noticeType ?? this.noticeType,
       title: title ?? this.title,
       body: body ?? this.body,
       dateLabel: dateLabel ?? this.dateLabel,
       createdAt: createdAt ?? this.createdAt,
       isRead: isRead ?? this.isRead,
-      isImportant: isImportant ?? this.isImportant,
     );
   }
 }
@@ -130,31 +116,4 @@ String _formatDateLabel(DateTime? date, String? rawDate) {
   final m = (matcher.group(2) ?? '').padLeft(2, '0');
   final d = (matcher.group(3) ?? '').padLeft(2, '0');
   return '$y.$m.$d';
-}
-
-bool _resolveImportantFlag({
-  required int? noticeType,
-  required String title,
-  required String body,
-}) {
-  if (noticeType == 1) {
-    return true;
-  }
-
-  final sample = '${title.toLowerCase()} ${body.toLowerCase()}';
-  const keywords = <String>[
-    '要対応',
-    '要確認',
-    '要同意',
-    '重要',
-    'urgent',
-    'important',
-    'action required',
-    '本人情報',
-    'クーリングオフ',
-    '同意',
-    '请处理',
-    '請處理',
-  ];
-  return keywords.any(sample.contains);
 }
