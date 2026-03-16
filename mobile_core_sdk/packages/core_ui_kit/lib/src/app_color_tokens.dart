@@ -8,6 +8,8 @@ class AppColorTokens {
   static const Color fundexPrimaryDarkDradient = Color(0xFF1E3A5F);
   static const Color fundexPrimaryDarkAlt = Color(0xFF142240);
   static const Color fundexAccent = Color(0xFF2563EB);
+  static const Color fundexAccentLight = Color(0xFFDBEAFE);
+  static const Color fundexAccentSuperLight = Color(0xFFEFF6FF);
   static const Color fundexAccentDradient = Color(0xFF60A5FA);
   static const Color fundexAccentAlt = Color(0xFF3B82F6);
   static const Color fundexSuccess = Color(0xFF10B981);

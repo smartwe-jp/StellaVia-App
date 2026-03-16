@@ -6,7 +6,7 @@ class FetchWalletAccountHistoryUseCase {
 
   final WalletRepository _repository;
 
-  Future<List<WalletAccountHistory>> call({int startPage = 1, int limit = 20}) {
-    return _repository.fetchAccountHistory(startPage: startPage, limit: limit);
+  Future<List<WalletAccountHistory>> call({int accountType = 0}) {
+    return _repository.fetchAccountHistory(accountType: accountType);
   }
 }

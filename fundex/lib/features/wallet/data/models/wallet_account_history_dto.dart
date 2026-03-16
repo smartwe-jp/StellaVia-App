@@ -15,9 +15,17 @@ extension WalletAccountHistoryDtoMapper on WalletAccountHistoryDto {
       userId: userId,
       type: type,
       typeName: typeName,
+      tradeType: tradeType,
+      tradeTypeValue: tradeTypeValue,
+      inOut: inOut,
+      businessId: businessId,
+      amount: amount,
       money: money,
       balance: balance,
       remark: remark,
+      status: status,
+      createBy: createBy,
+      tradeTime: tradeTime,
       createTime: createTime,
     );
   }

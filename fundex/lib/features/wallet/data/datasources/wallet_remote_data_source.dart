@@ -5,8 +5,7 @@ import '../models/wallet_account_history_dto.dart';
 
 abstract class WalletRemoteDataSource {
   Future<List<WalletAccountHistoryDto>> fetchAccountHistory({
-    int startPage = 1,
-    int limit = 20,
+    int accountType = 0,
   });
 }
 
@@ -39,9 +38,8 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
 
   @override
   Future<List<WalletAccountHistoryDto>> fetchAccountHistory({
-    int startPage = 1,
-    int limit = 20,
+    int accountType = 0,
   }) {
-    return _apiClient.fetchAccountHistory(startPage: startPage, limit: limit);
+    return _apiClient.fetchAccountHistory(accountType: accountType);
   }
 }

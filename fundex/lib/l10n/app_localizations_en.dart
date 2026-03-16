@@ -1807,6 +1807,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletHistoryUnknownType => 'Record';
 
   @override
+  String get walletHistoryPendingStatus => 'Pending';
+
+  @override
+  String get walletHistoryInflowLabel => 'Inflow';
+
+  @override
+  String get walletHistoryOutflowLabel => 'Outflow';
+
+  @override
   String get walletAutoReflectedSuffix => '(Auto reflected)';
 
   @override

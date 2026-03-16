@@ -4,9 +4,17 @@ class UserWalletAccountHistoryItemDto {
     this.userId,
     this.type,
     this.typeName,
+    this.tradeType,
+    this.tradeTypeValue,
+    this.inOut,
+    this.businessId,
+    this.amount,
     this.money,
     this.balance,
     this.remark,
+    this.status,
+    this.createBy,
+    this.tradeTime,
     this.createTime,
   });
 
@@ -16,9 +24,17 @@ class UserWalletAccountHistoryItemDto {
       userId: _intOrNull(json['userId']),
       type: _intOrNull(json['type']),
       typeName: _stringOrNull(json['typeName'] ?? json['typeText']),
+      tradeType: _stringOrNull(json['tradeType']),
+      tradeTypeValue: _stringOrNull(json['tradeTypeValue']),
+      inOut: _stringOrNull(json['inOut']),
+      businessId: _stringOrNull(json['businessId']),
+      amount: _numOrNull(json['amount'] ?? json['money']),
       money: _numOrNull(json['money'] ?? json['amount']),
       balance: _numOrNull(json['balance']),
       remark: _stringOrNull(json['remark']),
+      status: _intOrNull(json['status']),
+      createBy: _stringOrNull(json['createBy']),
+      tradeTime: _stringOrNull(json['tradeTime']),
       createTime: _stringOrNull(json['createTime']),
     );
   }
@@ -27,9 +43,17 @@ class UserWalletAccountHistoryItemDto {
   final int? userId;
   final int? type;
   final String? typeName;
+  final String? tradeType;
+  final String? tradeTypeValue;
+  final String? inOut;
+  final String? businessId;
+  final num? amount;
   final num? money;
   final num? balance;
   final String? remark;
+  final int? status;
+  final String? createBy;
+  final String? tradeTime;
   final String? createTime;
 }
 

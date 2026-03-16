@@ -14,10 +14,10 @@ class WalletHistoryPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final locale = Localizations.localeOf(context).toLanguageTag();
-    final currency = NumberFormat.compactCurrency(
+    final currency = NumberFormat.currency(
       locale: locale,
       symbol: '¥',
-      decimalDigits: 1,
+      decimalDigits: 0,
     );
 
     final asyncHistory = ref.watch(walletHistoryProvider);
@@ -49,16 +49,30 @@ class WalletHistoryPage extends ConsumerWidget {
             itemCount: items.length,
             itemBuilder: (context, index) {
               final item = items[index];
-              final amount = item.money ?? 0;
-              final isPositive = amount >= 0;
-              final signedValue = isPositive
-                  ? '+${currency.format(amount)}'
-                  : '-${currency.format(amount.abs())}';
-              return FundWalletHistoryListItem(
-                title: item.typeName ?? l10n.walletHistoryUnknownType,
-                subtitle: item.createTime ?? '--',
-                amount: signedValue,
-                isPositive: isPositive,
+              final amount = item.amount ?? item.money;
+              final inOut = item.inOut;
+              final isIncome = _parseInflowFlag(inOut);
+              final isPending = _isPending(item.businessId);
+              return FundWalletTransactionCard(
+                tradeType:
+                    item.tradeType ??
+                    item.typeName ??
+                    l10n.walletHistoryUnknownType,
+                remark: item.remark ?? '--',
+                tradeTime: _formatDateText(item.tradeTime ?? item.createTime),
+                amountText: _formatAmountText(
+                  amount: amount,
+                  isIncome: isIncome,
+                  formatter: currency,
+                ),
+                amountColor: _resolveAmountColor(isIncome: isIncome),
+                directionLabel: _resolveDirectionLabel(
+                  isIncome: isIncome,
+                  inflowLabel: l10n.walletHistoryInflowLabel,
+                  outflowLabel: l10n.walletHistoryOutflowLabel,
+                ),
+                isPending: isPending,
+                pendingLabel: l10n.walletHistoryPendingStatus,
               );
             },
           );
@@ -73,4 +87,74 @@ class WalletHistoryPage extends ConsumerWidget {
       ),
     );
   }
+}
+
+bool? _parseInflowFlag(String? inOut) {
+  final value = inOut?.trim();
+  if (value == null || value.isEmpty) {
+    return null;
+  }
+  final normalized = value.toLowerCase();
+  if (value == '收' ||
+      value == '収' ||
+      normalized == 'in' ||
+      normalized == 'income') {
+    return true;
+  }
+  if (value == '支' ||
+      value == '出' ||
+      normalized == 'out' ||
+      normalized == 'expense') {
+    return false;
+  }
+  return null;
+}
+
+bool _isPending(String? businessId) {
+  return businessId == null || businessId.trim().isEmpty;
+}
+
+Color _resolveAmountColor({required bool? isIncome}) {
+  if (isIncome == null) {
+    return AppColorTokens.fundexTextSecondary;
+  }
+  return isIncome ? AppColorTokens.fundexSuccess : AppColorTokens.fundexDanger;
+}
+
+String _formatAmountText({
+  required num? amount,
+  required bool? isIncome,
+  required NumberFormat formatter,
+}) {
+  if (amount == null) {
+    return '--';
+  }
+  final value = amount.abs();
+  final sign = isIncome == null ? '' : (isIncome ? '+' : '-');
+  return '$sign${formatter.format(value)}';
+}
+
+String _resolveDirectionLabel({
+  required bool? isIncome,
+  required String inflowLabel,
+  required String outflowLabel,
+}) {
+  if (isIncome == null) {
+    return '--';
+  }
+  return isIncome ? inflowLabel : outflowLabel;
+}
+
+String _formatDateText(String? value) {
+  if (value == null || value.trim().isEmpty) {
+    return '--';
+  }
+  final parsed = DateTime.tryParse(value);
+  if (parsed == null) {
+    return value;
+  }
+  final y = parsed.year.toString().padLeft(4, '0');
+  final m = parsed.month.toString().padLeft(2, '0');
+  final d = parsed.day.toString().padLeft(2, '0');
+  return '$y/$m/$d';
 }

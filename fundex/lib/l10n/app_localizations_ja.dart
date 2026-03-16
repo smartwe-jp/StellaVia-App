@@ -1714,6 +1714,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletHistoryUnknownType => '取引';
 
   @override
+  String get walletHistoryPendingStatus => '未完了';
+
+  @override
+  String get walletHistoryInflowLabel => '入金';
+
+  @override
+  String get walletHistoryOutflowLabel => '出金';
+
+  @override
   String get walletAutoReflectedSuffix => '（自動反映）';
 
   @override

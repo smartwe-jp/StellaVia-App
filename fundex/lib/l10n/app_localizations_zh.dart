@@ -1702,6 +1702,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletHistoryUnknownType => '交易';
 
   @override
+  String get walletHistoryPendingStatus => '未完成';
+
+  @override
+  String get walletHistoryInflowLabel => '收入';
+
+  @override
+  String get walletHistoryOutflowLabel => '支出';
+
+  @override
   String get walletAutoReflectedSuffix => '（自动反映）';
 
   @override
@@ -3855,6 +3864,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletHistoryUnknownType => '交易';
+
+  @override
+  String get walletHistoryPendingStatus => '未完成';
+
+  @override
+  String get walletHistoryInflowLabel => '收入';
+
+  @override
+  String get walletHistoryOutflowLabel => '支出';
 
   @override
   String get walletAutoReflectedSuffix => '（自動反映）';

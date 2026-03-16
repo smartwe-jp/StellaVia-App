@@ -50,7 +50,7 @@ class FundDedicatedDepositAccountCard extends StatelessWidget {
               title,
               style: const TextStyle(
                 color: AppColorTokens.fundexText,
-                fontSize: 16,
+                fontSize: 14,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -58,7 +58,7 @@ class FundDedicatedDepositAccountCard extends StatelessWidget {
             DecoratedBox(
               decoration: BoxDecoration(
                 color: AppColorTokens.fundexBackground,
-                borderRadius: BorderRadius.circular(UiTokens.radius12),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(UiTokens.spacing12),
@@ -95,7 +95,7 @@ class FundDedicatedDepositAccountCard extends StatelessWidget {
             DecoratedBox(
               decoration: BoxDecoration(
                 color: const Color(0xFFEFF6FF),
-                borderRadius: BorderRadius.circular(UiTokens.radius12),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -149,10 +149,14 @@ class FundWalletStandbyBalanceCard extends StatelessWidget {
     super.key,
     required this.title,
     required this.entries,
+    this.actionLabel,
+    this.onTapAction,
   });
 
   final String title;
   final List<FundWalletBalanceEntry> entries;
+  final String? actionLabel;
+  final VoidCallback? onTapAction;
 
   @override
   Widget build(BuildContext context) {
@@ -163,19 +167,38 @@ class FundWalletStandbyBalanceCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              title,
-              style: const TextStyle(
-                color: AppColorTokens.fundexText,
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-              ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      color: AppColorTokens.fundexText,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                if (actionLabel != null && onTapAction != null)
+                  TextButton(
+                    onPressed: onTapAction,
+                    style: TextButton.styleFrom(
+                      minimumSize: Size.zero,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: Text(actionLabel!),
+                  ),
+              ],
             ),
             const SizedBox(height: UiTokens.spacing12),
             DecoratedBox(
               decoration: BoxDecoration(
                 color: AppColorTokens.fundexBackground,
-                borderRadius: BorderRadius.circular(UiTokens.radius12),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Padding(
                 padding: const EdgeInsets.all(UiTokens.spacing12),
@@ -216,14 +239,14 @@ class FundWalletStandbyBalanceSummaryBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: const Color(0xFFEFF6FF),
+        color: AppColorTokens.fundexAccent,
         borderRadius: BorderRadius.circular(UiTokens.radius16),
       ),
       child: Container(
-        decoration: const BoxDecoration(
-          border: Border(
-            left: BorderSide(color: AppColorTokens.fundexAccent, width: 4),
-          ),
+        margin: const EdgeInsets.only(left: UiTokens.spacing4),
+        decoration: BoxDecoration(
+          color: AppColorTokens.fundexAccentSuperLight,
+          borderRadius: BorderRadius.circular(UiTokens.radius14),
         ),
         padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
         child: Column(
@@ -242,7 +265,7 @@ class FundWalletStandbyBalanceSummaryBox extends StatelessWidget {
               value,
               style: const TextStyle(
                 color: AppColorTokens.fundexText,
-                fontSize: 22,
+                fontSize: 18,
                 fontWeight: FontWeight.w900,
               ),
             ),
@@ -387,6 +410,131 @@ class FundWalletHistoryListItem extends StatelessWidget {
   }
 }
 
+class FundWalletTransactionCard extends StatelessWidget {
+  const FundWalletTransactionCard({
+    super.key,
+    required this.tradeType,
+    required this.remark,
+    required this.tradeTime,
+    required this.amountText,
+    required this.amountColor,
+    required this.directionLabel,
+    required this.isPending,
+    required this.pendingLabel,
+  });
+
+  final String tradeType;
+  final String remark;
+  final String tradeTime;
+  final String amountText;
+  final Color amountColor;
+  final String directionLabel;
+  final bool isPending;
+  final String pendingLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final titleColor = isPending
+        ? AppColorTokens.fundexTextTertiary
+        : AppColorTokens.fundexText;
+    final bodyColor = isPending
+        ? AppColorTokens.fundexTextTertiary
+        : AppColorTokens.fundexTextSecondary;
+    final cardColor = isPending ? const Color(0xFFFAFAFA) : Colors.white;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(UiTokens.radius16),
+          border: Border.all(color: AppColorTokens.fundexBorder),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      tradeType,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: titleColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                  if (isPending)
+                    _FundWalletStatusChip(
+                      label: pendingLabel,
+                      backgroundColor: const Color(0xFFF1F5F9),
+                      textColor: AppColorTokens.fundexTextSecondary,
+                    ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                remark,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: bodyColor,
+                  fontSize: 13,
+                  height: 1.5,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      tradeTime,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: bodyColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  _FundWalletStatusChip(
+                    label: directionLabel,
+                    backgroundColor: amountColor.withValues(alpha: 0.12),
+                    textColor: amountColor,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    amountText,
+                    style: TextStyle(
+                      color: amountColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _FundWalletInfoRow extends StatelessWidget {
   const _FundWalletInfoRow({
     required this.label,
@@ -401,29 +549,30 @@ class _FundWalletInfoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: isLast ? 0 : UiTokens.spacing8),
+      padding: EdgeInsets.only(bottom: isLast ? 0 : 6),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          SizedBox(
-            width: 96,
+          Expanded(
             child: Text(
               label,
               style: const TextStyle(
-                color: AppColorTokens.fundexTextSecondary,
-                fontSize: 13,
+                color: AppColorTokens.fundexTextTertiary,
+                fontSize: 12,
                 height: 1.4,
               ),
             ),
           ),
           const SizedBox(width: UiTokens.spacing8),
-          Expanded(
+          Flexible(
             child: Text(
               value,
+              textAlign: TextAlign.right,
               style: const TextStyle(
                 color: AppColorTokens.fundexText,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+                fontSize: 12,
+                fontWeight: FontWeight.w800,
                 height: 1.4,
               ),
             ),
@@ -450,34 +599,35 @@ class _FundWalletInfoCopyRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: UiTokens.spacing8),
+      padding: const EdgeInsets.only(bottom: 6),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          SizedBox(
-            width: 96,
+          Expanded(
             child: Text(
               label,
               style: const TextStyle(
-                color: AppColorTokens.fundexTextSecondary,
-                fontSize: 13,
+                color: AppColorTokens.fundexTextTertiary,
+                fontSize: 12,
                 height: 1.4,
               ),
             ),
           ),
-          const SizedBox(width: UiTokens.spacing8),
-          Expanded(
+          Flexible(
             child: Wrap(
+              alignment: WrapAlignment.end,
               crossAxisAlignment: WrapCrossAlignment.center,
               spacing: 6,
               runSpacing: 4,
               children: <Widget>[
                 Text(
                   value,
+                  textAlign: TextAlign.right,
                   style: const TextStyle(
                     color: AppColorTokens.fundexText,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w800,
                     height: 1.4,
                   ),
                 ),
@@ -498,7 +648,7 @@ class _FundWalletInfoCopyRow extends StatelessWidget {
                       style: const TextStyle(
                         color: AppColorTokens.fundexAccent,
                         fontSize: 10,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w800,
                       ),
                     ),
                   ),
@@ -528,7 +678,7 @@ class _FundWalletBalanceHistoryRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: isLast ? 0 : UiTokens.spacing8),
+      padding: EdgeInsets.only(bottom: isLast ? 0 : 6),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -554,15 +704,51 @@ class _FundWalletBalanceHistoryRow extends StatelessWidget {
   }
 }
 
+class _FundWalletStatusChip extends StatelessWidget {
+  const _FundWalletStatusChip({
+    required this.label,
+    required this.backgroundColor,
+    required this.textColor,
+  });
+
+  final String label;
+  final Color backgroundColor;
+  final Color textColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: textColor,
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
+}
+
 final BoxDecoration _walletCardDecoration = BoxDecoration(
   color: Colors.white,
   borderRadius: BorderRadius.circular(UiTokens.radius16),
   border: Border.all(color: AppColorTokens.fundexBorder),
   boxShadow: <BoxShadow>[
     BoxShadow(
-      color: Colors.black.withValues(alpha: 0.03),
-      blurRadius: 8,
-      offset: const Offset(0, 3),
+      color: Colors.black.withValues(alpha: 0.06),
+      blurRadius: 3,
+      offset: const Offset(0, 1),
+    ),
+    BoxShadow(
+      color: Colors.black.withValues(alpha: 0.04),
+      blurRadius: 12,
+      offset: const Offset(0, 4),
     ),
   ],
 );

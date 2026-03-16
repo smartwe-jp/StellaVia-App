@@ -11,13 +11,9 @@ class WalletRepositoryImpl implements WalletRepository {
 
   @override
   Future<List<WalletAccountHistory>> fetchAccountHistory({
-    int startPage = 1,
-    int limit = 20,
+    int accountType = 0,
   }) async {
-    final dtos = await _remote.fetchAccountHistory(
-      startPage: startPage,
-      limit: limit,
-    );
+    final dtos = await _remote.fetchAccountHistory(accountType: accountType);
     return dtos.map((WalletAccountHistoryDto dto) => dto.toEntity()).toList();
   }
 }

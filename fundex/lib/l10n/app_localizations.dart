@@ -3416,6 +3416,24 @@ abstract class AppLocalizations {
   /// **'Record'**
   String get walletHistoryUnknownType;
 
+  /// No description provided for @walletHistoryPendingStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get walletHistoryPendingStatus;
+
+  /// No description provided for @walletHistoryInflowLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Inflow'**
+  String get walletHistoryInflowLabel;
+
+  /// No description provided for @walletHistoryOutflowLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Outflow'**
+  String get walletHistoryOutflowLabel;
+
   /// No description provided for @walletAutoReflectedSuffix.
   ///
   /// In en, this message translates to:

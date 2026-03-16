@@ -7,21 +7,29 @@ class AppObservabilityInterceptor extends Interceptor {
   AppObservabilityInterceptor({
     required AppLogger logger,
     required void Function(AppUiMessageKey messageKey) reportErrorMessage,
+    this.includeHttpPayloadLog = false,
   }) : _logger = logger,
        _reportErrorMessage = reportErrorMessage;
 
   final AppLogger _logger;
   final void Function(AppUiMessageKey messageKey) _reportErrorMessage;
+  final bool includeHttpPayloadLog;
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    _logger.debug(
-      'HTTP request',
-      context: <String, Object?>{
-        'method': options.method,
-        'path': options.path,
-      },
-    );
+    final context = <String, Object?>{
+      'method': options.method,
+      'path': options.path,
+    };
+    if (includeHttpPayloadLog) {
+      if (options.queryParameters.isNotEmpty) {
+        context['query'] = _stringifyForLog(options.queryParameters);
+      }
+      if (options.data != null) {
+        context['data'] = _stringifyForLog(options.data);
+      }
+    }
+    _logger.debug('HTTP request', context: context);
     handler.next(options);
   }
 
@@ -30,14 +38,16 @@ class AppObservabilityInterceptor extends Interceptor {
     Response<dynamic> response,
     ResponseInterceptorHandler handler,
   ) {
-    _logger.debug(
-      'HTTP response',
-      context: <String, Object?>{
-        'method': response.requestOptions.method,
-        'path': response.requestOptions.path,
-        'statusCode': response.statusCode,
-      },
-    );
+    final context = <String, Object?>{
+      'method': response.requestOptions.method,
+      'path': response.requestOptions.path,
+      'statusCode': response.statusCode,
+    };
+    if (includeHttpPayloadLog) {
+      context['dataType'] = response.data.runtimeType.toString();
+      context['data'] = _stringifyForLog(response.data);
+    }
+    _logger.debug('HTTP response', context: context);
     handler.next(response);
   }
 
@@ -54,6 +64,8 @@ class AppObservabilityInterceptor extends Interceptor {
           'path': err.requestOptions.path,
           'statusCode': failure.statusCode,
           'failureType': failure.type.name,
+          if (includeHttpPayloadLog && err.response?.data != null)
+            'responseData': _stringifyForLog(err.response?.data),
         },
       );
 
@@ -72,6 +84,8 @@ class AppObservabilityInterceptor extends Interceptor {
       context: <String, Object?>{
         'method': err.requestOptions.method,
         'path': err.requestOptions.path,
+        if (includeHttpPayloadLog && err.response?.data != null)
+          'responseData': _stringifyForLog(err.response?.data),
       },
     );
     _reportErrorMessage(AppUiMessageKey.requestFailed);
@@ -98,5 +112,14 @@ class AppObservabilityInterceptor extends Interceptor {
       case NetworkFailureType.unknown:
         return AppUiMessageKey.requestFailed;
     }
+  }
+
+  String _stringifyForLog(dynamic value) {
+    final text = value?.toString() ?? 'null';
+    const maxLen = 2000;
+    if (text.length <= maxLen) {
+      return text;
+    }
+    return '${text.substring(0, maxLen)}...<truncated>';
   }
 }

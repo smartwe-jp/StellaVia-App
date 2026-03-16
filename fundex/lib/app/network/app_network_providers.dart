@@ -82,6 +82,7 @@ final coreHttpClientByClusterProvider =
         AppObservabilityInterceptor(
           logger: logger,
           reportErrorMessage: messageController.showError,
+          includeHttpPayloadLog: environment.enableHttpLog,
         ),
       );
 
@@ -89,7 +90,7 @@ final coreHttpClientByClusterProvider =
         client.dio.interceptors.add(
           LogInterceptor(
             requestBody: true,
-            responseBody: false,
+            responseBody: true,
             logPrint: (Object value) => logger.debug(value.toString()),
           ),
         );

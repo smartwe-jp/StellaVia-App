@@ -31,7 +31,9 @@ final fetchWalletAccountHistoryUseCaseProvider =
     });
 
 final walletHistoryProvider = FutureProvider<List<WalletAccountHistory>>((ref) {
-  return ref.watch(fetchWalletAccountHistoryUseCaseProvider).call(limit: 50);
+  return ref
+      .watch(fetchWalletAccountHistoryUseCaseProvider)
+      .call(accountType: 0);
 });
 
 final walletDepositPageViewDataProvider =
@@ -40,7 +42,7 @@ final walletDepositPageViewDataProvider =
       try {
         final all = await ref
             .watch(fetchWalletAccountHistoryUseCaseProvider)
-            .call(startPage: 1, limit: 20);
+            .call(accountType: 0);
         history = all;
       } catch (_) {
         history = const <WalletAccountHistory>[];

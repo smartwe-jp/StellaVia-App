@@ -28,14 +28,14 @@ class UserWalletApiClient {
 
   final String accountHistoryPath;
 
+  /// 0: all records, 1: CNY, 2: USD
   Future<List<UserWalletAccountHistoryItemDto>> fetchAccountHistory({
-    int startPage = 1,
-    int limit = 20,
+    int accountType = 0,
   }) async {
     final response = await _dioForPath(accountHistoryPath)
-        .post<Map<String, dynamic>>(
+        .get<Map<String, dynamic>>(
           accountHistoryPath,
-          data: <String, dynamic>{'startPage': startPage, 'limit': limit},
+          queryParameters: <String, dynamic>{'accountType': accountType},
           options: authRequired(true),
         );
 
