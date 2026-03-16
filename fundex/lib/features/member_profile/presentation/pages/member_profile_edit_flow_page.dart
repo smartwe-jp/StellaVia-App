@@ -2,11 +2,14 @@ import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:core_identity_auth/core_identity_auth.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/domain/entities/auth_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../../auth/presentation/providers/identity_auth_sdk_providers.dart';
+import '../../../auth/presentation/support/identity_auth_message_resolver.dart';
 import '../../domain/constants/member_profile_upload_markers.dart';
 import '../../domain/entities/member_profile_details.dart';
 import '../../domain/entities/member_profile_region.dart';
@@ -15,6 +18,7 @@ import '../pages/edit_flow_steps/member_profile_bank_account_step_page.dart';
 import '../pages/edit_flow_steps/member_profile_basic_info_step_page.dart';
 import '../pages/edit_flow_steps/member_profile_consent_step_page.dart';
 import '../pages/edit_flow_steps/member_profile_ekyc_step_page.dart';
+import '../pages/edit_flow_steps/member_profile_real_person_auth_step_page.dart';
 import '../pages/edit_flow_steps/member_profile_suitability_step_page.dart';
 import '../providers/member_profile_providers.dart';
 import '../support/member_profile_edit_step.dart';
@@ -68,6 +72,8 @@ class _MemberProfileEditFlowPageState
   bool _isSubmitting = false;
   bool _isUploadingPhoto = false;
   bool _isAddressSearching = false;
+  bool _isRunningRealPersonAuth = false;
+  String? _realPersonAuthStatusMessage;
 
   @override
   void initState() {
@@ -286,7 +292,7 @@ class _MemberProfileEditFlowPageState
   }
 
   Future<void> _pickAndSaveImage({required bool isDocument}) async {
-    if (_isUploadingPhoto || _isSubmitting) {
+    if (_isUploadingPhoto || _isSubmitting || _isRunningRealPersonAuth) {
       return;
     }
     final ProfileDocumentImageSource? source =
@@ -375,7 +381,10 @@ class _MemberProfileEditFlowPageState
   }
 
   Future<void> _searchAddressByPostalCode() async {
-    if (_isAddressSearching || _isSubmitting || _isUploadingPhoto) {
+    if (_isAddressSearching ||
+        _isSubmitting ||
+        _isUploadingPhoto ||
+        _isRunningRealPersonAuth) {
       return;
     }
 
@@ -456,11 +465,17 @@ class _MemberProfileEditFlowPageState
   }
 
   Future<void> _goNextStep() async {
-    if (_isSubmitting || _isUploadingPhoto) {
+    if (_isSubmitting || _isUploadingPhoto || _isRunningRealPersonAuth) {
       return;
     }
     if (!_canProceedFromCurrentStep) {
       return;
+    }
+    if (_currentStep == MemberProfileEditStep.realPersonAuth) {
+      final verified = await _runRealPersonAuthStep();
+      if (!verified) {
+        return;
+      }
     }
     await _persistDraft();
     if (!mounted) {
@@ -477,7 +492,7 @@ class _MemberProfileEditFlowPageState
   }
 
   Future<void> _goPreviousStep() async {
-    if (_isSubmitting || _isUploadingPhoto) {
+    if (_isSubmitting || _isUploadingPhoto || _isRunningRealPersonAuth) {
       return;
     }
     await _persistDraft();
@@ -496,7 +511,7 @@ class _MemberProfileEditFlowPageState
   }
 
   Future<void> _completeFlow() async {
-    if (_isSubmitting || _isUploadingPhoto) {
+    if (_isSubmitting || _isUploadingPhoto || _isRunningRealPersonAuth) {
       return;
     }
     final l10n = context.l10n;
@@ -559,10 +574,132 @@ class _MemberProfileEditFlowPageState
         return _isSuitabilityStepReady;
       case MemberProfileEditStep.ekyc:
         return _isEkycStepReady;
+      case MemberProfileEditStep.realPersonAuth:
+        return _isSelfieUploaded(_selfiePhotoPath);
       case MemberProfileEditStep.bankAccount:
         return _isBankAccountStepReady;
       case MemberProfileEditStep.consent:
         return _isConsentStepReady;
+    }
+  }
+
+  Future<bool> _runRealPersonAuthStep() async {
+    final l10n = context.l10n;
+    if (!_isSelfieUploaded(_selfiePhotoPath)) {
+      final message = l10n.memberProfileStep5RealPersonSelfieRequired;
+      setState(() {
+        _realPersonAuthStatusMessage = message;
+      });
+      AppNotice.show(context, message: message);
+      return false;
+    }
+
+    setState(() {
+      _isRunningRealPersonAuth = true;
+      _realPersonAuthStatusMessage = null;
+    });
+
+    try {
+      final coordinator = ref.read(identityAuthCoordinatorProvider);
+      final decision = await coordinator.evaluate(
+        entryPoint: IdentityAuthEntryPoint.securityCenterRealPerson,
+      );
+      if (!mounted) {
+        return false;
+      }
+
+      if (decision.action == IdentityAuthAction.none) {
+        return true;
+      }
+      if (decision.action != IdentityAuthAction.startRealPersonEnrollment) {
+        final message = resolveIdentityAuthMessage(
+          l10n,
+          reasonCode: decision.reasonCode,
+          fallbackMessage: l10n.identityAuthVerifyFailed,
+        );
+        setState(() {
+          _realPersonAuthStatusMessage = message;
+        });
+        AppNotice.show(context, message: message);
+        return false;
+      }
+
+      final collector = ref.read(identityAuthLivenessCollectorProvider);
+      if (collector == null) {
+        final message = resolveIdentityAuthMessage(
+          l10n,
+          reasonCode: 'liveness_collector_not_configured',
+          fallbackMessage: l10n.identityAuthLivenessNotConfigured,
+        );
+        setState(() {
+          _realPersonAuthStatusMessage = message;
+        });
+        AppNotice.show(context, message: message);
+        return false;
+      }
+
+      final collected = await collector.collect();
+      if (!mounted) {
+        return false;
+      }
+      if (!collected.isSuccess) {
+        final message = resolveIdentityAuthMessage(
+          l10n,
+          reasonCode: 'liveness_collect_failed',
+          errorMessage: collected.errorMessage,
+          fallbackMessage: l10n.identityAuthCollectFailed,
+        );
+        setState(() {
+          _realPersonAuthStatusMessage = message;
+        });
+        AppNotice.show(context, message: message);
+        return false;
+      }
+
+      final result = await coordinator.verifyWithPhotoBase64(
+        photoBase64: collected.photoBase64,
+        entryPoint: IdentityAuthEntryPoint.securityCenterRealPerson,
+      );
+      if (!mounted) {
+        return false;
+      }
+
+      if (result.verified) {
+        AppNotice.show(context, message: l10n.identityAuthVerifySuccess);
+        return true;
+      }
+
+      final message = resolveIdentityAuthMessage(
+        l10n,
+        reasonCode: result.reasonCode,
+        errorMessage: result.errorMessage,
+        fallbackMessage: l10n.identityAuthVerifyFailed,
+      );
+      setState(() {
+        _realPersonAuthStatusMessage = message;
+      });
+      AppNotice.show(context, message: message);
+      return false;
+    } catch (error) {
+      if (!mounted) {
+        return false;
+      }
+      final message = resolveIdentityAuthMessage(
+        l10n,
+        errorMessage: error.toString(),
+        fallbackMessage: l10n.identityAuthVerifyFailed,
+      );
+      setState(() {
+        _realPersonAuthStatusMessage = message;
+      });
+      AppNotice.show(context, message: message);
+      return false;
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isRunningRealPersonAuth = false;
+        });
+      }
     }
   }
 
@@ -889,7 +1026,8 @@ class _MemberProfileEditFlowPageState
         if (!didPop &&
             !_currentStep.isFirst &&
             !_isSubmitting &&
-            !_isUploadingPhoto) {
+            !_isUploadingPhoto &&
+            !_isRunningRealPersonAuth) {
           _goPreviousStep();
         }
       },
@@ -906,6 +1044,8 @@ class _MemberProfileEditFlowPageState
               child: InkWell(
                 borderRadius: BorderRadius.circular(8),
                 onTap: (_isSubmitting || _isUploadingPhoto)
+                    ? null
+                    : _isRunningRealPersonAuth
                     ? null
                     : _goPreviousStep,
                 child: Icon(
@@ -1054,11 +1194,21 @@ class _MemberProfileEditFlowPageState
           },
           onUploadDocument: (_isSubmitting || _isUploadingPhoto)
               ? null
+              : _isRunningRealPersonAuth
+              ? null
               : () => _pickAndSaveImage(isDocument: true),
           onUploadSelfie: (_isSubmitting || _isUploadingPhoto)
               ? null
+              : _isRunningRealPersonAuth
+              ? null
               : () => _pickAndSaveImage(isDocument: false),
           onNext: _goNextStep,
+        );
+      case MemberProfileEditStep.realPersonAuth:
+        return MemberProfileRealPersonAuthStepPage(
+          isProcessing: _isRunningRealPersonAuth,
+          statusMessage: _realPersonAuthStatusMessage,
+          onStartVerification: _isRunningRealPersonAuth ? null : _goNextStep,
         );
       case MemberProfileEditStep.bankAccount:
         final accountTypeItems = _simpleItems(_accountTypeOptions(context));
@@ -1104,7 +1254,9 @@ class _MemberProfileEditFlowPageState
               _privacyConsent = value;
             });
           },
-          onComplete: _isSubmitting ? null : _completeFlow,
+          onComplete: (_isSubmitting || _isRunningRealPersonAuth)
+              ? null
+              : _completeFlow,
         );
     }
   }

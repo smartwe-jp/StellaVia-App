@@ -1842,7 +1842,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfileUploadSelfiePending => 'セルフィー撮影機能は次の実装で接続します。';
 
   @override
-  String get memberProfileStep5Title => 'Step 5：銀行口座登録';
+  String get memberProfileStep5RealPersonTitle => 'Step 5：実人確認（顔認証）';
+
+  @override
+  String get memberProfileStep5RealPersonDescription =>
+      'セルフィーアップロード後、顔のライブ認証を行ってください';
+
+  @override
+  String get memberProfileStep5RealPersonSelfieRequired =>
+      '先に自撮り写真のアップロードを完了してください。';
+
+  @override
+  String get memberProfileStep5Title => 'Step 6：銀行口座登録';
 
   @override
   String get memberProfileStep5Description => '分配金の振込先を登録してください';
@@ -1878,7 +1889,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfileNextConsent => '次へ：同意事項の確認';
 
   @override
-  String get memberProfileStep6Title => 'Step 6：同意事項の確認';
+  String get memberProfileStep6Title => 'Step 7：同意事項の確認';
 
   @override
   String get memberProfileStep6Description => '以下の事項をご確認いただき、すべてに同意してください。';

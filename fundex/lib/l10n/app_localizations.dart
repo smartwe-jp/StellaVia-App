@@ -3671,10 +3671,28 @@ abstract class AppLocalizations {
   /// **'Selfie capture will be connected in a later implementation.'**
   String get memberProfileUploadSelfiePending;
 
+  /// No description provided for @memberProfileStep5RealPersonTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Step 5: Real-Person Verification (Liveness)'**
+  String get memberProfileStep5RealPersonTitle;
+
+  /// No description provided for @memberProfileStep5RealPersonDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'After uploading your selfie, complete the live face verification.'**
+  String get memberProfileStep5RealPersonDescription;
+
+  /// No description provided for @memberProfileStep5RealPersonSelfieRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please upload a selfie photo first.'**
+  String get memberProfileStep5RealPersonSelfieRequired;
+
   /// No description provided for @memberProfileStep5Title.
   ///
   /// In en, this message translates to:
-  /// **'Step 5: Bank Account'**
+  /// **'Step 6: Bank Account'**
   String get memberProfileStep5Title;
 
   /// No description provided for @memberProfileStep5Description.
@@ -3746,7 +3764,7 @@ abstract class AppLocalizations {
   /// No description provided for @memberProfileStep6Title.
   ///
   /// In en, this message translates to:
-  /// **'Step 6: Consent'**
+  /// **'Step 7: Consent'**
   String get memberProfileStep6Title;
 
   /// No description provided for @memberProfileStep6Description.

@@ -3,6 +3,7 @@ enum MemberProfileEditStep {
   addressInfo,
   suitability,
   ekyc,
+  realPersonAuth,
   bankAccount,
   consent,
 }

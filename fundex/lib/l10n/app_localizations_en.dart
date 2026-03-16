@@ -1949,7 +1949,19 @@ class AppLocalizationsEn extends AppLocalizations {
       'Selfie capture will be connected in a later implementation.';
 
   @override
-  String get memberProfileStep5Title => 'Step 5: Bank Account';
+  String get memberProfileStep5RealPersonTitle =>
+      'Step 5: Real-Person Verification (Liveness)';
+
+  @override
+  String get memberProfileStep5RealPersonDescription =>
+      'After uploading your selfie, complete the live face verification.';
+
+  @override
+  String get memberProfileStep5RealPersonSelfieRequired =>
+      'Please upload a selfie photo first.';
+
+  @override
+  String get memberProfileStep5Title => 'Step 6: Bank Account';
 
   @override
   String get memberProfileStep5Description =>
@@ -1986,7 +1998,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memberProfileNextConsent => 'Next: Consent Confirmation';
 
   @override
-  String get memberProfileStep6Title => 'Step 6: Consent';
+  String get memberProfileStep6Title => 'Step 7: Consent';
 
   @override
   String get memberProfileStep6Description =>

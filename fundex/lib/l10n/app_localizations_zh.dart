@@ -1831,7 +1831,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileUploadSelfiePending => '自拍拍摄功能会在后续实现中接入。';
 
   @override
-  String get memberProfileStep5Title => 'Step 5：银行账户登记';
+  String get memberProfileStep5RealPersonTitle => 'Step 5：实人认证（人脸活体）';
+
+  @override
+  String get memberProfileStep5RealPersonDescription => '请在自拍照上传完成后进行人脸活体核验';
+
+  @override
+  String get memberProfileStep5RealPersonSelfieRequired => '请先完成自拍照上传。';
+
+  @override
+  String get memberProfileStep5Title => 'Step 6：银行账户登记';
 
   @override
   String get memberProfileStep5Description => '请登记分配金收款账户';
@@ -1867,7 +1876,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileNextConsent => '下一步：确认同意事项';
 
   @override
-  String get memberProfileStep6Title => 'Step 6：确认同意事项';
+  String get memberProfileStep6Title => 'Step 7：确认同意事项';
 
   @override
   String get memberProfileStep6Description => '请确认以下事项，并全部同意。';
@@ -3910,7 +3919,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileUploadSelfiePending => '自拍拍摄功能会在后续实现中接入。';
 
   @override
-  String get memberProfileStep5Title => 'Step 5：銀行帳戶登記';
+  String get memberProfileStep5RealPersonTitle => 'Step 5：真人認證（活體）';
+
+  @override
+  String get memberProfileStep5RealPersonDescription => '請先完成自拍照上傳，再進行人臉活體核驗';
+
+  @override
+  String get memberProfileStep5RealPersonSelfieRequired => '請先完成自拍照上傳。';
+
+  @override
+  String get memberProfileStep5Title => 'Step 6：銀行帳戶登記';
 
   @override
   String get memberProfileStep5Description => '請登記配息入帳帳戶';
@@ -3946,7 +3964,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileNextConsent => '下一步：確認同意事項';
 
   @override
-  String get memberProfileStep6Title => 'Step 6：同意事項確認';
+  String get memberProfileStep6Title => 'Step 7：同意事項確認';
 
   @override
   String get memberProfileStep6Description => '请确认以下事项，并全部同意。';

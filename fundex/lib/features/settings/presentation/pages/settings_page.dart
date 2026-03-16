@@ -358,8 +358,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               style:
                   (Theme.of(context).textTheme.bodySmall ?? const TextStyle())
                       .copyWith(
-                        color: AppColorTokens.fundexDanger,
-                        decoration: TextDecoration.underline,
+                        color: const Color.fromARGB(255, 27, 12, 12),
+                        //decoration: TextDecoration.underline,
                       ),
             ),
           ),
