@@ -84,6 +84,7 @@ class ProfileCenterTabPage extends ConsumerWidget {
                   value: _formatCompactCurrency(
                     accountStatistic?.firstLevelAccountTotal,
                   ),
+                  onTap: () => context.push('/wallet/deposit'),
                 ),
                 FundMyPageMetricData(
                   label: l10n.myPageMetricAccumulatedDistribution,

@@ -237,9 +237,7 @@ class FundMyPageProjectCard extends StatelessWidget {
       padding: shadowPadding,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: accentColor != null
-              ? accentColor
-              : Colors.transparent,
+          color: accentColor != null ? accentColor : Colors.transparent,
           borderRadius: cardRadius,
           boxShadow: <BoxShadow>[
             BoxShadow(
@@ -264,100 +262,90 @@ class FundMyPageProjectCard extends StatelessWidget {
           child: InkWell(
             borderRadius: cardRadius,
             onTap: onTap,
-            child: 
-                Container(
-                  decoration: BoxDecoration(borderRadius: cardRadius),
-                  margin: const EdgeInsets.only(left: 5),
-                  padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
-                  child: Column(
+            child: Container(
+              decoration: BoxDecoration(borderRadius: cardRadius),
+              margin: const EdgeInsets.only(left: 5),
+              padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              title,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style:
-                                  (theme.textTheme.bodyMedium ??
-                                          const TextStyle())
-                                      .copyWith(
-                                        color: AppColorTokens.fundexText,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w800,
-                                        height: 1.4,
-                                      ),
-                            ),
-                          ),
-                          if (trailing != null) ...<Widget>[
-                            const SizedBox(width: UiTokens.spacing8),
-                            trailing!,
-                          ],
-                        ],
-                      ),
-                      if (rows.isNotEmpty) const SizedBox(height: 8),
-                      for (
-                        var index = 0;
-                        index < rows.length;
-                        index++
-                      ) ...<Widget>[
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                rows[index].label,
-                                style:
-                                    (theme.textTheme.labelMedium ??
-                                            const TextStyle())
-                                        .copyWith(
-                                          color: AppColorTokens
-                                              .fundexTextSecondary,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                              ),
-                            ),
-                            const SizedBox(width: UiTokens.spacing8),
-                            Text(
-                              rows[index].value,
-                              style:
-                                  (theme.textTheme.bodySmall ??
-                                          const TextStyle())
-                                      .copyWith(
-                                        color:
-                                            rows[index].valueColor ??
-                                            AppColorTokens.fundexText,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w800,
-                                      ),
-                            ),
-                          ],
-                        ),
-                        if (index < rows.length - 1) const SizedBox(height: 4),
-                      ],
-                      if (footnote != null) ...<Widget>[
-                        const SizedBox(height: 4),
-                        Text(
-                          footnote!,
+                      Expanded(
+                        child: Text(
+                          title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style:
-                              (theme.textTheme.labelSmall ?? const TextStyle())
+                              (theme.textTheme.bodyMedium ?? const TextStyle())
                                   .copyWith(
-                                    color: AppColorTokens.fundexTextTertiary,
-                                    fontSize: 11,
-                                    height: 1.5,
+                                    color: AppColorTokens.fundexText,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w800,
+                                    height: 1.4,
                                   ),
                         ),
-                      ],
-                      if (footer != null) ...<Widget>[
-                        const SizedBox(height: 8),
-                        Align(alignment: Alignment.centerRight, child: footer),
+                      ),
+                      if (trailing != null) ...<Widget>[
+                        const SizedBox(width: UiTokens.spacing8),
+                        trailing!,
                       ],
                     ],
                   ),
-                ),
-
+                  if (rows.isNotEmpty) const SizedBox(height: 8),
+                  for (var index = 0; index < rows.length; index++) ...<Widget>[
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            rows[index].label,
+                            style:
+                                (theme.textTheme.labelMedium ??
+                                        const TextStyle())
+                                    .copyWith(
+                                      color: AppColorTokens.fundexTextSecondary,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                          ),
+                        ),
+                        const SizedBox(width: UiTokens.spacing8),
+                        Text(
+                          rows[index].value,
+                          style:
+                              (theme.textTheme.bodySmall ?? const TextStyle())
+                                  .copyWith(
+                                    color:
+                                        rows[index].valueColor ??
+                                        AppColorTokens.fundexText,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                        ),
+                      ],
+                    ),
+                    if (index < rows.length - 1) const SizedBox(height: 4),
+                  ],
+                  if (footnote != null) ...<Widget>[
+                    const SizedBox(height: 4),
+                    Text(
+                      footnote!,
+                      style: (theme.textTheme.labelSmall ?? const TextStyle())
+                          .copyWith(
+                            color: AppColorTokens.fundexTextTertiary,
+                            fontSize: 11,
+                            height: 1.5,
+                          ),
+                    ),
+                  ],
+                  if (footer != null) ...<Widget>[
+                    const SizedBox(height: 8),
+                    Align(alignment: Alignment.centerRight, child: footer),
+                  ],
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -365,56 +353,107 @@ class FundMyPageProjectCard extends StatelessWidget {
   }
 }
 
-class _FundMyPageMetricCard extends StatelessWidget {
+class _FundMyPageMetricCard extends StatefulWidget {
   const _FundMyPageMetricCard({required this.data});
 
   final FundMyPageMetricData data;
 
   @override
+  State<_FundMyPageMetricCard> createState() => _FundMyPageMetricCardState();
+}
+
+class _FundMyPageMetricCardState extends State<_FundMyPageMetricCard> {
+  var _pressed = false;
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final enabled = widget.data.onTap != null;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: data.onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Ink(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColorTokens.fundexBorder),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  data.label,
-                  textAlign: TextAlign.center,
-                  style: (theme.textTheme.labelSmall ?? const TextStyle())
-                      .copyWith(color: AppColorTokens.fundexTextTertiary),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  data.value,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: (theme.textTheme.titleSmall ?? const TextStyle())
-                      .copyWith(
-                        color: data.valueColor ?? AppColorTokens.fundexText,
-                        fontWeight: FontWeight.w900,
-                      ),
+    return Padding(
+      padding: const EdgeInsets.all(2),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: widget.data.onTap,
+        onTapDown: enabled
+            ? (_) {
+                if (_pressed) {
+                  return;
+                }
+                setState(() {
+                  _pressed = true;
+                });
+              }
+            : null,
+        onTapUp: enabled
+            ? (_) {
+                if (!_pressed) {
+                  return;
+                }
+                setState(() {
+                  _pressed = false;
+                });
+              }
+            : null,
+        onTapCancel: enabled
+            ? () {
+                if (!_pressed) {
+                  return;
+                }
+                setState(() {
+                  _pressed = false;
+                });
+              }
+            : null,
+        child: AnimatedScale(
+          scale: _pressed ? 0.97 : 1,
+          duration: const Duration(milliseconds: 110),
+          curve: Curves.easeOut,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColorTokens.fundexBorder),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: _pressed ? 0.03 : 0.05),
+                  blurRadius: _pressed ? 6 : 10,
+                  offset: Offset(0, _pressed ? 2 : 4),
                 ),
               ],
+            ),
+            child: SizedBox(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 12,
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      widget.data.label,
+                      textAlign: TextAlign.center,
+                      style: (theme.textTheme.labelSmall ?? const TextStyle())
+                          .copyWith(color: AppColorTokens.fundexTextTertiary),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      widget.data.value,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: (theme.textTheme.titleSmall ?? const TextStyle())
+                          .copyWith(
+                            color:
+                                widget.data.valueColor ??
+                                AppColorTokens.fundexText,
+                            fontWeight: FontWeight.w900,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
