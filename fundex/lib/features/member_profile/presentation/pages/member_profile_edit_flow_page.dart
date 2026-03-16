@@ -75,6 +75,9 @@ class _MemberProfileEditFlowPageState
   bool _isRunningRealPersonAuth = false;
   String? _realPersonAuthStatusMessage;
 
+  bool get _isIdentityAuthEnabled =>
+      ref.read(identityAuthFeatureEnabledProvider);
+
   @override
   void initState() {
     super.initState();
@@ -256,11 +259,12 @@ class _MemberProfileEditFlowPageState
         _privacyConsent = savedProfile?.privacyPolicyConsent ?? false;
         _completedAt = savedProfile?.completedAt;
         final savedStep = savedProfile?.lastEditingStep ?? 0;
-        _currentStep =
+        final resolvedStep =
             MemberProfileEditStep.values[savedStep.clamp(
               0,
               MemberProfileEditStep.values.length - 1,
             )];
+        _currentStep = _normalizeStepForIdentityAuth(resolvedStep);
         _isLoading = false;
       });
     } catch (_) {
@@ -471,7 +475,8 @@ class _MemberProfileEditFlowPageState
     if (!_canProceedFromCurrentStep) {
       return;
     }
-    if (_currentStep == MemberProfileEditStep.realPersonAuth) {
+    if (_isIdentityAuthEnabled &&
+        _currentStep == MemberProfileEditStep.realPersonAuth) {
       final verified = await _runRealPersonAuthStep();
       if (!verified) {
         return;
@@ -481,7 +486,7 @@ class _MemberProfileEditFlowPageState
     if (!mounted) {
       return;
     }
-    final MemberProfileEditStep? next = _currentStep.next;
+    final MemberProfileEditStep? next = _nextStep(_currentStep);
     if (next == null) {
       return;
     }
@@ -499,7 +504,7 @@ class _MemberProfileEditFlowPageState
     if (!mounted) {
       return;
     }
-    final MemberProfileEditStep? previous = _currentStep.previous;
+    final MemberProfileEditStep? previous = _previousStep(_currentStep);
     if (previous == null) {
       context.pop();
       return;
@@ -575,7 +580,7 @@ class _MemberProfileEditFlowPageState
       case MemberProfileEditStep.ekyc:
         return _isEkycStepReady;
       case MemberProfileEditStep.realPersonAuth:
-        return _isSelfieUploaded(_selfiePhotoPath);
+        return !_isIdentityAuthEnabled || _isSelfieUploaded(_selfiePhotoPath);
       case MemberProfileEditStep.bankAccount:
         return _isBankAccountStepReady;
       case MemberProfileEditStep.consent:
@@ -584,6 +589,10 @@ class _MemberProfileEditFlowPageState
   }
 
   Future<bool> _runRealPersonAuthStep() async {
+    if (!_isIdentityAuthEnabled) {
+      return true;
+    }
+
     final l10n = context.l10n;
     if (!_isSelfieUploaded(_selfiePhotoPath)) {
       final message = l10n.memberProfileStep5RealPersonSelfieRequired;
@@ -701,6 +710,34 @@ class _MemberProfileEditFlowPageState
         });
       }
     }
+  }
+
+  MemberProfileEditStep _normalizeStepForIdentityAuth(
+    MemberProfileEditStep step,
+  ) {
+    if (!_isIdentityAuthEnabled &&
+        step == MemberProfileEditStep.realPersonAuth) {
+      return MemberProfileEditStep.bankAccount;
+    }
+    return step;
+  }
+
+  MemberProfileEditStep? _nextStep(MemberProfileEditStep step) {
+    final MemberProfileEditStep? next = step.next;
+    if (!_isIdentityAuthEnabled &&
+        next == MemberProfileEditStep.realPersonAuth) {
+      return MemberProfileEditStep.bankAccount;
+    }
+    return next;
+  }
+
+  MemberProfileEditStep? _previousStep(MemberProfileEditStep step) {
+    final MemberProfileEditStep? previous = step.previous;
+    if (!_isIdentityAuthEnabled &&
+        previous == MemberProfileEditStep.realPersonAuth) {
+      return MemberProfileEditStep.ekyc;
+    }
+    return previous;
   }
 
   bool get _isBasicInfoStepReady =>
@@ -1019,6 +1056,13 @@ class _MemberProfileEditFlowPageState
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
+    final stepCount =
+        MemberProfileEditStep.values.length - (_isIdentityAuthEnabled ? 0 : 1);
+    final currentStepIndex = _isIdentityAuthEnabled
+        ? _currentStep.index
+        : (_currentStep.index > MemberProfileEditStep.realPersonAuth.index
+              ? _currentStep.index - 1
+              : _currentStep.index);
 
     return PopScope<void>(
       canPop: _currentStep.isFirst,
@@ -1060,8 +1104,8 @@ class _MemberProfileEditFlowPageState
         body: Column(
           children: <Widget>[
             AppStepProgressBar(
-              stepCount: MemberProfileEditStep.values.length,
-              currentStep: _currentStep.index,
+              stepCount: stepCount,
+              currentStep: currentStepIndex,
               pendingColor: const Color(0xFFE2E8F0),
             ),
             Expanded(
@@ -1205,6 +1249,9 @@ class _MemberProfileEditFlowPageState
           onNext: _goNextStep,
         );
       case MemberProfileEditStep.realPersonAuth:
+        if (!_isIdentityAuthEnabled) {
+          return const SizedBox.shrink();
+        }
         return MemberProfileRealPersonAuthStepPage(
           isProcessing: _isRunningRealPersonAuth,
           statusMessage: _realPersonAuthStatusMessage,

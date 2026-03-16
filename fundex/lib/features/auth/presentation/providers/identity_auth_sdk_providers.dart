@@ -1,4 +1,5 @@
 import 'package:core_identity_auth/core_identity_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/localization/app_locale_providers.dart';
@@ -8,6 +9,14 @@ import '../../data/adapters/auth_identity_auth_state_store.dart';
 import '../../data/adapters/baidu_face_liveness_collector.dart';
 import '../../data/adapters/system_device_biometric_authenticator.dart';
 import 'auth_providers.dart';
+
+final identityAuthFeatureEnabledProvider = Provider<bool>((ref) {
+  // Temporarily disabled by default until environment/license is stabilized.
+  return const bool.fromEnvironment(
+    'ENABLE_IDENTITY_AUTH',
+    defaultValue: false,
+  );
+});
 
 final identityAuthFlowPolicyProvider = Provider<IdentityAuthFlowPolicy>((ref) {
   return const IdentityAuthFlowPolicy();
@@ -41,7 +50,20 @@ final baiduFaceLicenseIdProvider = Provider<String?>((ref) {
     defaultValue: '',
   );
   final normalized = value.trim();
-  return normalized.isEmpty ? null : normalized;
+  if (normalized.isNotEmpty) {
+    return normalized;
+  }
+
+  if (kIsWeb) {
+    return null;
+  }
+
+  // Backward-compatible fallback used in legacy FUNDEX-family apps.
+  return switch (defaultTargetPlatform) {
+    TargetPlatform.android => 'gutingjun-googleplay-face-android',
+    TargetPlatform.iOS => 'gutingjun-app-face-ios',
+    _ => null,
+  };
 });
 
 final identityAuthBiometricAuthenticatorProvider =

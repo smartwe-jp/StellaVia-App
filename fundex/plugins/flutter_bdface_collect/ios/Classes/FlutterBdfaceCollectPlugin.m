@@ -28,10 +28,14 @@
 ///  初始化
 - (void)init:(NSString*)licenseId result:(FlutterResult)result{
     NSString* licensePath = [[NSBundle mainBundle] pathForResource:@"idl-license" ofType:@"face-ios"];
-    NSAssert([[NSFileManager defaultManager] fileExistsAtPath:licensePath], @"license文件路径不对，请仔细查看文档");
+    if (![[NSFileManager defaultManager] fileExistsAtPath:licensePath]) {
+        result(@"license文件路径不对，请仔细查看文档");
+        return;
+    }
     [[FaceSDKManager sharedInstance] setLicenseID:licenseId andLocalLicenceFile:licensePath andRemoteAuthorize:true];
     if ([[FaceSDKManager sharedInstance] canWork]){
         result(NULL);
+        return;
     }
     result(@"初始化失败");
 }

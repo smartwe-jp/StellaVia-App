@@ -42,6 +42,12 @@ String _resolveLivenessErrorMessage(AppLocalizations l10n, String message) {
     return l10n.identityAuthCollectFailed;
   }
 
+  final normalizedLower = normalized.toLowerCase();
+  if (normalizedLower.contains('license') ||
+      normalizedLower.contains('licence')) {
+    return l10n.identityAuthBaiduLicenseMissing;
+  }
+
   switch (normalized) {
     case 'baidu_face_license_missing':
       return l10n.identityAuthBaiduLicenseMissing;

@@ -13,6 +13,11 @@ Future<bool> ensureSensitiveActionAuthorized(
   WidgetRef ref, {
   String? identifyGroupId,
 }) async {
+  final isIdentityAuthEnabled = ref.read(identityAuthFeatureEnabledProvider);
+  if (!isIdentityAuthEnabled) {
+    return true;
+  }
+
   final coordinator = ref.read(identityAuthCoordinatorProvider);
   final firstResult = await coordinator.authenticateSensitiveAction(
     identifyGroupId: identifyGroupId,
