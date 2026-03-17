@@ -1987,6 +1987,100 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get myPageActiveFundDetailTitle => 'Active Fund Detail';
+
+  @override
+  String get myPageActiveFundMetaTitle => 'Contract Info';
+
+  @override
+  String get myPageActiveFundValidInvestmentAmountLabel =>
+      'Valid investment amount';
+
+  @override
+  String get myPageActiveFundInvestUnitsLabel => 'Investment units';
+
+  @override
+  String get myPageActiveFundValidUnitsLabel => 'Valid units';
+
+  @override
+  String get myPageActiveFundRemainingUnitsLabel => 'Remaining units';
+
+  @override
+  String get myPageActiveFundProcessIdLabel => 'Process ID';
+
+  @override
+  String get myPageActiveFundInvestorCodeLabel => 'Investor class';
+
+  @override
+  String get myPageActiveFundAppliedAtLabel => 'Applied at';
+
+  @override
+  String get myPageActiveFundWithdrawnAtLabel => 'Withdrawn at';
+
+  @override
+  String get myPageActiveFundTotalBenefitLabel => 'Total benefit';
+
+  @override
+  String get myPageActiveFundBenefitHistoryTitle => 'Benefit history';
+
+  @override
+  String get myPageActiveFundBenefitAmountLabel => 'Benefit amount';
+
+  @override
+  String get myPageActiveFundTaxLabel => 'Tax';
+
+  @override
+  String get myPageActiveFundNetBenefitLabel => 'Net benefit';
+
+  @override
+  String get myPageActiveFundWithdrawAction => 'Request withdrawal';
+
+  @override
+  String get myPageActiveFundWithdrawDone => 'Withdrawn';
+
+  @override
+  String get myPageActiveFundWithdrawConfirmTitle =>
+      'Submit a withdrawal request?';
+
+  @override
+  String get myPageActiveFundWithdrawConfirmBody =>
+      'A withdrawal request will be sent for this benefit.';
+
+  @override
+  String get myPageActiveFundWithdrawConfirmAction => 'Submit';
+
+  @override
+  String get myPageActiveFundWithdrawSuccess => 'Withdrawal request submitted.';
+
+  @override
+  String get myPageActiveFundWithdrawFailure =>
+      'Failed to submit the withdrawal request. Please try again later.';
+
+  @override
+  String get myPageActiveFundResaleAction => 'Request resale';
+
+  @override
+  String get myPageActiveFundResaleComingSoon =>
+      'Resale request will be connected in a later implementation.';
+
+  @override
+  String get myPageActiveFundBenefitEmptyState => 'No benefit history yet.';
+
+  @override
+  String get myPageActiveFundBenefitLoadError =>
+      'Failed to load benefit history.';
+
+  @override
+  String myPageActiveFundBenefitSeq(int seq) {
+    return 'Benefit #$seq';
+  }
+
+  @override
+  String myPageActiveFundBenefitPeriodRange(Object start, Object end) {
+    return '$start - $end';
+  }
+
+  @override
   String get commonNext => 'Next';
 
   @override

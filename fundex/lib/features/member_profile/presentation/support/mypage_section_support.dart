@@ -94,6 +94,19 @@ String resolveSectionEmptyState(AppLocalizations l10n, MyPageSectionType type) {
   };
 }
 
+String resolveProjectStatusLabel(AppLocalizations l10n, int? projectStatus) {
+  return switch (projectStatus) {
+    0 => l10n.fundListStatusUpcoming,
+    1 => l10n.fundListStatusOpen,
+    2 => l10n.fundListStatusFailed,
+    3 => l10n.fundListStatusClosed,
+    4 => l10n.fundListStatusOperating,
+    5 => l10n.fundListStatusOperatingEnded,
+    7 => l10n.fundListStatusCompleted,
+    _ => l10n.fundListStatusUnknown,
+  };
+}
+
 String resolveApplyStatusLabel(
   AppLocalizations l10n,
   MyPageApplyRecord record,

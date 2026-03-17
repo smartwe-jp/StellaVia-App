@@ -398,7 +398,11 @@ Widget _buildActiveFundsSection(
                     valueColor: AppColorTokens.fundexSuccess,
                   ),
                 ],
-                onTap: _buildProjectTapHandler(context, group.projectId),
+                onTap: _buildActiveFundDetailTapHandler(
+                  context,
+                  records: records,
+                  projectId: group.projectId,
+                ),
               ),
             );
           })
@@ -461,6 +465,21 @@ VoidCallback? _buildProjectTapHandler(BuildContext context, String? projectId) {
     return null;
   }
   return () => context.push('/funds/$projectId');
+}
+
+VoidCallback? _buildActiveFundDetailTapHandler(
+  BuildContext context, {
+  required List<MyPageInvestmentRecord> records,
+  required String? projectId,
+}) {
+  if (projectId == null || projectId.trim().isEmpty) {
+    return null;
+  }
+  final projectRecords = records
+      .where((record) => record.projectId == projectId)
+      .toList(growable: false);
+  return () =>
+      context.push('/my/active-funds/$projectId', extra: projectRecords);
 }
 
 List<MyPageApplyRecord> _selectPendingApplyRecords(

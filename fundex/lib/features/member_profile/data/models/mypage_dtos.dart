@@ -3,8 +3,10 @@ export 'package:company_api_runtime/company_api_runtime.dart'
         UserInvestmentAccountStatisticDto,
         UserInvestmentApplyRecordDto,
         UserInvestmentInvestorTypeDto,
+        UserInvestmentBenefitDetailDto,
         UserInvestmentOrderInquiryRecordDto,
         UserInvestmentPdfDocumentDto,
+        UserInvestmentProjectBenefitDto,
         UserInvestmentPdfUrlDto,
         UserInvestmentRecordDto;
 
@@ -13,8 +15,10 @@ import 'package:company_api_runtime/company_api_runtime.dart'
         UserInvestmentAccountStatisticDto,
         UserInvestmentApplyRecordDto,
         UserInvestmentInvestorTypeDto,
+        UserInvestmentBenefitDetailDto,
         UserInvestmentOrderInquiryRecordDto,
         UserInvestmentPdfDocumentDto,
+        UserInvestmentProjectBenefitDto,
         UserInvestmentPdfUrlDto,
         UserInvestmentRecordDto;
 
@@ -24,6 +28,8 @@ typedef MyPageAccountStatisticDto = UserInvestmentAccountStatisticDto;
 typedef MyPageApplyRecordDto = UserInvestmentApplyRecordDto;
 typedef MyPageInvestmentRecordDto = UserInvestmentRecordDto;
 typedef MyPageInvestorTypeDto = UserInvestmentInvestorTypeDto;
+typedef MyPageBenefitDetailDto = UserInvestmentBenefitDetailDto;
+typedef MyPageProjectBenefitDto = UserInvestmentProjectBenefitDto;
 typedef MyPageOrderInquiryRecordDto = UserInvestmentOrderInquiryRecordDto;
 typedef MyPagePdfDocumentDto = UserInvestmentPdfDocumentDto;
 typedef MyPagePdfUrlDto = UserInvestmentPdfUrlDto;
@@ -152,6 +158,41 @@ extension MyPageInvestmentRecordDtoMapper on MyPageInvestmentRecordDto {
       earnings: earnings,
       checkTimes: checkTimes,
       investorType: investorType?.toEntity(),
+    );
+  }
+}
+
+extension MyPageBenefitDetailDtoMapper on MyPageBenefitDetailDto {
+  MyPageBenefitDetail toEntity() {
+    return MyPageBenefitDetail(
+      id: id,
+      projectId: projectId,
+      processId: processId,
+      projectName: projectName,
+      headerId: headerId,
+      seq: seq,
+      type: type,
+      benefit: benefit,
+      tax: tax,
+      withdrawalTime: withdrawalTime,
+      remark: remark,
+      createTime: createTime,
+      benefitPeriodStartDate: benefitPeriodStartDate,
+      benefitPeriodEndDate: benefitPeriodEndDate,
+      memberId: memberId,
+      investorType: investorType,
+    );
+  }
+}
+
+extension MyPageProjectBenefitDtoMapper on MyPageProjectBenefitDto {
+  MyPageProjectBenefit toEntity() {
+    return MyPageProjectBenefit(
+      projectName: projectName,
+      balanceTotal: balanceTotal,
+      details: details
+          .map((MyPageBenefitDetailDto item) => item.toEntity())
+          .toList(growable: false),
     );
   }
 }

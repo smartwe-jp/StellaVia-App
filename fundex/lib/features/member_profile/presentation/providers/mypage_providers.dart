@@ -10,6 +10,8 @@ import '../../domain/usecases/fetch_mypage_account_statistic_usecase.dart';
 import '../../domain/usecases/fetch_mypage_apply_list_usecase.dart';
 import '../../domain/usecases/fetch_mypage_investment_list_usecase.dart';
 import '../../domain/usecases/fetch_mypage_order_inquiry_list_usecase.dart';
+import '../../domain/usecases/fetch_mypage_project_benefit_usecase.dart';
+import '../../domain/usecases/submit_mypage_benefit_withdrawal_usecase.dart';
 
 final myPageRemoteDataSourceProvider = Provider<MyPageRemoteDataSource>((ref) {
   return MyPageRemoteDataSourceImpl(
@@ -51,6 +53,20 @@ final fetchMyPageInvestmentListUseCaseProvider =
       );
     });
 
+final fetchMyPageProjectBenefitUseCaseProvider =
+    Provider<FetchMyPageProjectBenefitUseCase>((ref) {
+      return FetchMyPageProjectBenefitUseCase(
+        ref.watch(myPageRepositoryProvider),
+      );
+    });
+
+final submitMyPageBenefitWithdrawalUseCaseProvider =
+    Provider<SubmitMyPageBenefitWithdrawalUseCase>((ref) {
+      return SubmitMyPageBenefitWithdrawalUseCase(
+        ref.watch(myPageRepositoryProvider),
+      );
+    });
+
 final myPageApplyListProvider = FutureProvider<List<MyPageApplyRecord>>((
   ref,
 ) async {
@@ -84,4 +100,14 @@ final myPageOrderInquiryListProvider =
 final myPageInvestmentListProvider =
     FutureProvider<List<MyPageInvestmentRecord>>((ref) async {
       return ref.watch(fetchMyPageInvestmentListUseCaseProvider).call();
+    });
+
+final myPageProjectBenefitProvider =
+    FutureProvider.family<MyPageProjectBenefit, String>((
+      ref,
+      String projectId,
+    ) async {
+      return ref
+          .watch(fetchMyPageProjectBenefitUseCaseProvider)
+          .call(projectId: projectId);
     });

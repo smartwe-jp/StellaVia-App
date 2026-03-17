@@ -178,6 +178,56 @@ class MyPageInvestmentRecord {
   final MyPageInvestorType? investorType;
 }
 
+class MyPageBenefitDetail {
+  const MyPageBenefitDetail({
+    this.id,
+    this.projectId,
+    this.processId,
+    this.projectName,
+    this.headerId,
+    this.seq,
+    this.type,
+    this.benefit,
+    this.tax,
+    this.withdrawalTime,
+    this.remark,
+    this.createTime,
+    this.benefitPeriodStartDate,
+    this.benefitPeriodEndDate,
+    this.memberId,
+    this.investorType,
+  });
+
+  final String? id;
+  final String? projectId;
+  final String? processId;
+  final String? projectName;
+  final String? headerId;
+  final int? seq;
+  final int? type;
+  final num? benefit;
+  final num? tax;
+  final String? withdrawalTime;
+  final String? remark;
+  final String? createTime;
+  final String? benefitPeriodStartDate;
+  final String? benefitPeriodEndDate;
+  final int? memberId;
+  final String? investorType;
+}
+
+class MyPageProjectBenefit {
+  const MyPageProjectBenefit({
+    this.projectName,
+    this.balanceTotal,
+    this.details = const <MyPageBenefitDetail>[],
+  });
+
+  final String? projectName;
+  final num? balanceTotal;
+  final List<MyPageBenefitDetail> details;
+}
+
 class MyPageAccountStatistic {
   const MyPageAccountStatistic({
     this.userId,

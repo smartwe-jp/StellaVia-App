@@ -21,6 +21,12 @@ abstract class MyPageRemoteDataSource {
     int startPage = 1,
     int limit = 20,
   });
+
+  Future<MyPageProjectBenefitDto> fetchProjectBenefit({
+    required String projectId,
+  });
+
+  Future<bool> submitBenefitWithdrawal({required String benefitId});
 }
 
 class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
@@ -84,5 +90,17 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
     int limit = 20,
   }) async {
     return _apiClient.fetchInvestmentList(startPage: startPage, limit: limit);
+  }
+
+  @override
+  Future<MyPageProjectBenefitDto> fetchProjectBenefit({
+    required String projectId,
+  }) async {
+    return _apiClient.fetchProjectBenefit(projectId: projectId);
+  }
+
+  @override
+  Future<bool> submitBenefitWithdrawal({required String benefitId}) async {
+    return _apiClient.submitBenefitWithdrawal(benefitId: benefitId);
   }
 }

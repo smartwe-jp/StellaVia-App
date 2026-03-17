@@ -337,6 +337,90 @@ class UserInvestmentRecordDto {
   final UserInvestmentInvestorTypeDto? investorType;
 }
 
+class UserInvestmentBenefitDetailDto {
+  const UserInvestmentBenefitDetailDto({
+    this.id,
+    this.projectId,
+    this.processId,
+    this.projectName,
+    this.headerId,
+    this.seq,
+    this.type,
+    this.benefit,
+    this.tax,
+    this.withdrawalTime,
+    this.remark,
+    this.createTime,
+    this.benefitPeriodStartDate,
+    this.benefitPeriodEndDate,
+    this.memberId,
+    this.investorType,
+  });
+
+  factory UserInvestmentBenefitDetailDto.fromJson(Map<String, dynamic> json) {
+    return UserInvestmentBenefitDetailDto(
+      id: _stringOrNull(json['id']),
+      projectId: _stringOrNull(json['projectId']),
+      processId: _stringOrNull(json['processId']),
+      projectName: _stringOrNull(json['projectName']),
+      headerId: _stringOrNull(json['headerId']),
+      seq: _intOrNull(json['seq']),
+      type: _intOrNull(json['type']),
+      benefit: _numOrNull(json['benefit']),
+      tax: _numOrNull(json['tax']),
+      withdrawalTime: _stringOrNull(json['withdrawalTime']),
+      remark: _stringOrNull(json['remark']),
+      createTime: _stringOrNull(json['createTime']),
+      benefitPeriodStartDate: _stringOrNull(json['benefitPeriodStartDate']),
+      benefitPeriodEndDate: _stringOrNull(json['benefitPeriodEndDate']),
+      memberId: _intOrNull(json['memberId']),
+      investorType: _stringOrNull(json['investorType']),
+    );
+  }
+
+  final String? id;
+  final String? projectId;
+  final String? processId;
+  final String? projectName;
+  final String? headerId;
+  final int? seq;
+  final int? type;
+  final num? benefit;
+  final num? tax;
+  final String? withdrawalTime;
+  final String? remark;
+  final String? createTime;
+  final String? benefitPeriodStartDate;
+  final String? benefitPeriodEndDate;
+  final int? memberId;
+  final String? investorType;
+}
+
+class UserInvestmentProjectBenefitDto {
+  const UserInvestmentProjectBenefitDto({
+    this.projectName,
+    this.balanceTotal,
+    this.details = const <UserInvestmentBenefitDetailDto>[],
+  });
+
+  factory UserInvestmentProjectBenefitDto.fromJson(Map<String, dynamic> json) {
+    return UserInvestmentProjectBenefitDto(
+      projectName: _stringOrNull(json['projectName']),
+      balanceTotal: _numOrNull(json['balanceTotal']),
+      details: _toList(json['details'])
+          .map(
+            (dynamic item) =>
+                UserInvestmentBenefitDetailDto.fromJson(_toJsonMap(item)),
+          )
+          .toList(growable: false),
+    );
+  }
+
+  final String? projectName;
+  final num? balanceTotal;
+  final List<UserInvestmentBenefitDetailDto> details;
+}
+
 Map<String, dynamic> _toJsonMap(dynamic data) {
   if (data is Map<String, dynamic>) {
     return data;

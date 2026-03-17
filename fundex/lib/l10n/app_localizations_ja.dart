@@ -1886,6 +1886,95 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get myPageActiveFundDetailTitle => '運用中ファンド詳細';
+
+  @override
+  String get myPageActiveFundMetaTitle => '契約情報';
+
+  @override
+  String get myPageActiveFundValidInvestmentAmountLabel => '有効投資額';
+
+  @override
+  String get myPageActiveFundInvestUnitsLabel => '投資口数';
+
+  @override
+  String get myPageActiveFundValidUnitsLabel => '有効口数';
+
+  @override
+  String get myPageActiveFundRemainingUnitsLabel => '残口数';
+
+  @override
+  String get myPageActiveFundProcessIdLabel => 'プロセスID';
+
+  @override
+  String get myPageActiveFundInvestorCodeLabel => '投資者区分';
+
+  @override
+  String get myPageActiveFundAppliedAtLabel => '申込日時';
+
+  @override
+  String get myPageActiveFundWithdrawnAtLabel => '出金日時';
+
+  @override
+  String get myPageActiveFundTotalBenefitLabel => '総収益';
+
+  @override
+  String get myPageActiveFundBenefitHistoryTitle => '収益履歴';
+
+  @override
+  String get myPageActiveFundBenefitAmountLabel => '分配金';
+
+  @override
+  String get myPageActiveFundTaxLabel => '源泉税';
+
+  @override
+  String get myPageActiveFundNetBenefitLabel => '税引後';
+
+  @override
+  String get myPageActiveFundWithdrawAction => '出金依頼';
+
+  @override
+  String get myPageActiveFundWithdrawDone => '出金済み';
+
+  @override
+  String get myPageActiveFundWithdrawConfirmTitle => '出金依頼を送信しますか？';
+
+  @override
+  String get myPageActiveFundWithdrawConfirmBody => 'この分配金の出金依頼を送信します。よろしいですか？';
+
+  @override
+  String get myPageActiveFundWithdrawConfirmAction => '送信する';
+
+  @override
+  String get myPageActiveFundWithdrawSuccess => '出金依頼を送信しました。';
+
+  @override
+  String get myPageActiveFundWithdrawFailure =>
+      '出金依頼の送信に失敗しました。しばらくしてから再度お試しください。';
+
+  @override
+  String get myPageActiveFundResaleAction => '転売申請';
+
+  @override
+  String get myPageActiveFundResaleComingSoon => '転売申請機能は次の実装で接続します。';
+
+  @override
+  String get myPageActiveFundBenefitEmptyState => '収益履歴はまだありません。';
+
+  @override
+  String get myPageActiveFundBenefitLoadError => '収益履歴の取得に失敗しました。';
+
+  @override
+  String myPageActiveFundBenefitSeq(int seq) {
+    return '第$seq回分配';
+  }
+
+  @override
+  String myPageActiveFundBenefitPeriodRange(Object start, Object end) {
+    return '$start 〜 $end';
+  }
+
+  @override
   String get commonNext => '次へ';
 
   @override

@@ -19,9 +19,11 @@ import '../../features/investment/presentation/pages/investment_tab_page.dart';
 import '../../features/main_shell/presentation/pages/main_shell_page.dart';
 import '../../features/member_profile/presentation/pages/member_profile_edit_flow_page.dart';
 import '../../features/member_profile/presentation/pages/member_profile_intake_page.dart';
+import '../../features/member_profile/presentation/pages/my_page_active_fund_detail_page.dart';
 import '../../features/member_profile/presentation/pages/my_page_section_list_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/member_profile/presentation/pages/profile_center_tab_page.dart';
+import '../../features/member_profile/domain/entities/mypage_models.dart';
 import '../../features/member_profile/presentation/support/mypage_section_support.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/wallet/presentation/pages/deposit_page.dart';
@@ -272,6 +274,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           );
           return MyPageSectionListPage(
             sectionType: sectionType ?? MyPageSectionType.pendingApplications,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/my/active-funds/:projectId',
+        builder: (BuildContext context, GoRouterState state) {
+          final projectId = state.pathParameters['projectId'] ?? '';
+          final extra = state.extra;
+          final seedRecords = extra is List<MyPageInvestmentRecord>
+              ? extra
+              : const <MyPageInvestmentRecord>[];
+          return MyPageActiveFundDetailPage(
+            projectId: projectId,
+            seedRecords: seedRecords,
           );
         },
       ),

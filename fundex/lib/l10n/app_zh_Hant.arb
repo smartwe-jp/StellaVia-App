@@ -710,6 +710,47 @@
       "date": {}
     }
   },
+  "myPageActiveFundDetailTitle": "運用中基金詳情",
+  "myPageActiveFundMetaTitle": "合約資訊",
+  "myPageActiveFundValidInvestmentAmountLabel": "有效投資額",
+  "myPageActiveFundInvestUnitsLabel": "投資口數",
+  "myPageActiveFundValidUnitsLabel": "有效口數",
+  "myPageActiveFundRemainingUnitsLabel": "剩餘口數",
+  "myPageActiveFundProcessIdLabel": "流程ID",
+  "myPageActiveFundInvestorCodeLabel": "投資者區分",
+  "myPageActiveFundAppliedAtLabel": "申請時間",
+  "myPageActiveFundWithdrawnAtLabel": "出金時間",
+  "myPageActiveFundTotalBenefitLabel": "總收益",
+  "myPageActiveFundBenefitHistoryTitle": "收益紀錄",
+  "myPageActiveFundBenefitAmountLabel": "分配金",
+  "myPageActiveFundTaxLabel": "稅額",
+  "myPageActiveFundNetBenefitLabel": "稅後收益",
+  "myPageActiveFundWithdrawAction": "出金申請",
+  "myPageActiveFundWithdrawDone": "已出金",
+  "myPageActiveFundWithdrawConfirmTitle": "確認提交出金申請？",
+  "myPageActiveFundWithdrawConfirmBody": "將為此筆收益提交出金申請。",
+  "myPageActiveFundWithdrawConfirmAction": "確認提交",
+  "myPageActiveFundWithdrawSuccess": "出金申請已送出。",
+  "myPageActiveFundWithdrawFailure": "出金申請送出失敗，請稍後再試。",
+  "myPageActiveFundResaleAction": "轉賣申請",
+  "myPageActiveFundResaleComingSoon": "轉賣申請功能會在後續實作中接入。",
+  "myPageActiveFundBenefitEmptyState": "尚無收益紀錄。",
+  "myPageActiveFundBenefitLoadError": "收益紀錄取得失敗。",
+  "myPageActiveFundBenefitSeq": "第 {seq} 次分配",
+  "@myPageActiveFundBenefitSeq": {
+    "placeholders": {
+      "seq": {
+        "type": "int"
+      }
+    }
+  },
+  "myPageActiveFundBenefitPeriodRange": "{start} - {end}",
+  "@myPageActiveFundBenefitPeriodRange": {
+    "placeholders": {
+      "start": {},
+      "end": {}
+    }
+  },
   "commonNext": "下一步",
   "commonSkipChevron": "略過 ›",
   "commonOther": "其他",

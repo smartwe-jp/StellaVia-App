@@ -378,7 +378,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
             valueColor: AppColorTokens.fundexSuccess,
           ),
         ],
-        onTap: _buildProjectTapHandler(context, group.projectId),
+        onTap: _buildActiveFundTapHandler(context, group.projectId),
       ),
     );
   }
@@ -469,6 +469,19 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
       return null;
     }
     return () => context.push('/funds/$projectId');
+  }
+
+  VoidCallback? _buildActiveFundTapHandler(
+    BuildContext context,
+    String? projectId,
+  ) {
+    if (projectId == null || projectId.trim().isEmpty) {
+      return null;
+    }
+    final records = _investmentRecords
+        .where((record) => record.projectId == projectId)
+        .toList(growable: false);
+    return () => context.push('/my/active-funds/$projectId', extra: records);
   }
 
   void _showSnackBar(BuildContext context, {required String message}) {

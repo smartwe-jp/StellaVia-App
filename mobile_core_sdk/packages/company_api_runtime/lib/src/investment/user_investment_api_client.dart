@@ -13,6 +13,8 @@ class UserInvestmentApiPaths {
   static const String applyList = '/crowdfunding/user/apply/list';
   static const String orderInquiryPage = '/crowdfunding/secondary/market/page';
   static const String myInvestmentList = '/crowdfunding/user/invest/list';
+  static const String benefitProject = '/crowdfunding/benefit/project';
+  static const String benefitWithdrawal = '/crowdfunding/benefit/withdrawal';
 }
 
 class UserInvestmentApiClient {
@@ -25,6 +27,8 @@ class UserInvestmentApiClient {
     this.applyListPath = UserInvestmentApiPaths.applyList,
     this.orderInquiryPagePath = UserInvestmentApiPaths.orderInquiryPage,
     this.myInvestmentListPath = UserInvestmentApiPaths.myInvestmentList,
+    this.benefitProjectPath = UserInvestmentApiPaths.benefitProject,
+    this.benefitWithdrawalPath = UserInvestmentApiPaths.benefitWithdrawal,
   }) : _dioForPath = dioForPath,
        _envelopeCodec = envelopeCodec ?? const LegacyEnvelopeCodec(),
        _pageProfile = pageProfile ?? const LegacyPageProfile();
@@ -38,6 +42,8 @@ class UserInvestmentApiClient {
   final String applyListPath;
   final String orderInquiryPagePath;
   final String myInvestmentListPath;
+  final String benefitProjectPath;
+  final String benefitWithdrawalPath;
 
   Future<UserInvestmentAccountStatisticDto> fetchAccountStatistic() async {
     final response = await _dioForPath(accountStatisticPath)
@@ -148,5 +154,47 @@ class UserInvestmentApiClient {
           (Map<String, dynamic> row) => UserInvestmentRecordDto.fromJson(row),
         )
         .toList(growable: false);
+  }
+
+  Future<UserInvestmentProjectBenefitDto> fetchProjectBenefit({
+    required String projectId,
+  }) async {
+    final response = await _dioForPath(benefitProjectPath)
+        .get<Map<String, dynamic>>(
+          benefitProjectPath,
+          queryParameters: <String, dynamic>{
+            'projectId': int.tryParse(projectId) ?? projectId,
+          },
+          options: authRequired(true),
+        );
+
+    final data = _envelopeCodec.extractDataMap(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load project benefit details.',
+    );
+    return UserInvestmentProjectBenefitDto.fromJson(data);
+  }
+
+  Future<bool> submitBenefitWithdrawal({required String benefitId}) async {
+    final response = await _dioForPath(benefitWithdrawalPath)
+        .get<Map<String, dynamic>>(
+          benefitWithdrawalPath,
+          queryParameters: <String, dynamic>{
+            'id': int.tryParse(benefitId) ?? benefitId,
+          },
+          options: authRequired(true),
+        );
+
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    _envelopeCodec.assertSuccessIfEnvelope(
+      payload,
+      fallbackMessage: 'Failed to submit benefit withdrawal request.',
+      requireTruthyData: true,
+    );
+
+    if (_envelopeCodec.looksLikeEnvelope(payload)) {
+      return _envelopeCodec.isTruthyData(payload['data']);
+    }
+    return true;
   }
 }

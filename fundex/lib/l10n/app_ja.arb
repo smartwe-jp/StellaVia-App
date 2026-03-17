@@ -710,6 +710,47 @@
       "date": {}
     }
   },
+  "myPageActiveFundDetailTitle": "運用中ファンド詳細",
+  "myPageActiveFundMetaTitle": "契約情報",
+  "myPageActiveFundValidInvestmentAmountLabel": "有効投資額",
+  "myPageActiveFundInvestUnitsLabel": "投資口数",
+  "myPageActiveFundValidUnitsLabel": "有効口数",
+  "myPageActiveFundRemainingUnitsLabel": "残口数",
+  "myPageActiveFundProcessIdLabel": "プロセスID",
+  "myPageActiveFundInvestorCodeLabel": "投資者区分",
+  "myPageActiveFundAppliedAtLabel": "申込日時",
+  "myPageActiveFundWithdrawnAtLabel": "出金日時",
+  "myPageActiveFundTotalBenefitLabel": "総収益",
+  "myPageActiveFundBenefitHistoryTitle": "収益履歴",
+  "myPageActiveFundBenefitAmountLabel": "分配金",
+  "myPageActiveFundTaxLabel": "源泉税",
+  "myPageActiveFundNetBenefitLabel": "税引後",
+  "myPageActiveFundWithdrawAction": "出金依頼",
+  "myPageActiveFundWithdrawDone": "出金済み",
+  "myPageActiveFundWithdrawConfirmTitle": "出金依頼を送信しますか？",
+  "myPageActiveFundWithdrawConfirmBody": "この分配金の出金依頼を送信します。よろしいですか？",
+  "myPageActiveFundWithdrawConfirmAction": "送信する",
+  "myPageActiveFundWithdrawSuccess": "出金依頼を送信しました。",
+  "myPageActiveFundWithdrawFailure": "出金依頼の送信に失敗しました。しばらくしてから再度お試しください。",
+  "myPageActiveFundResaleAction": "転売申請",
+  "myPageActiveFundResaleComingSoon": "転売申請機能は次の実装で接続します。",
+  "myPageActiveFundBenefitEmptyState": "収益履歴はまだありません。",
+  "myPageActiveFundBenefitLoadError": "収益履歴の取得に失敗しました。",
+  "myPageActiveFundBenefitSeq": "第{seq}回分配",
+  "@myPageActiveFundBenefitSeq": {
+    "placeholders": {
+      "seq": {
+        "type": "int"
+      }
+    }
+  },
+  "myPageActiveFundBenefitPeriodRange": "{start} 〜 {end}",
+  "@myPageActiveFundBenefitPeriodRange": {
+    "placeholders": {
+      "start": {},
+      "end": {}
+    }
+  },
   "commonNext": "次へ",
   "commonSkipChevron": "スキップ ›",
   "commonOther": "その他",

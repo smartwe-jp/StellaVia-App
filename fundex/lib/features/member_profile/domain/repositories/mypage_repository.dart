@@ -18,4 +18,8 @@ abstract class MyPageRepository {
     int startPage = 1,
     int limit = 20,
   });
+
+  Future<MyPageProjectBenefit> fetchProjectBenefit({required String projectId});
+
+  Future<bool> submitBenefitWithdrawal({required String benefitId});
 }

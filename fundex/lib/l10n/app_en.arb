@@ -710,6 +710,47 @@
       "date": {}
     }
   },
+  "myPageActiveFundDetailTitle": "Active Fund Detail",
+  "myPageActiveFundMetaTitle": "Contract Info",
+  "myPageActiveFundValidInvestmentAmountLabel": "Valid investment amount",
+  "myPageActiveFundInvestUnitsLabel": "Investment units",
+  "myPageActiveFundValidUnitsLabel": "Valid units",
+  "myPageActiveFundRemainingUnitsLabel": "Remaining units",
+  "myPageActiveFundProcessIdLabel": "Process ID",
+  "myPageActiveFundInvestorCodeLabel": "Investor class",
+  "myPageActiveFundAppliedAtLabel": "Applied at",
+  "myPageActiveFundWithdrawnAtLabel": "Withdrawn at",
+  "myPageActiveFundTotalBenefitLabel": "Total benefit",
+  "myPageActiveFundBenefitHistoryTitle": "Benefit history",
+  "myPageActiveFundBenefitAmountLabel": "Benefit amount",
+  "myPageActiveFundTaxLabel": "Tax",
+  "myPageActiveFundNetBenefitLabel": "Net benefit",
+  "myPageActiveFundWithdrawAction": "Request withdrawal",
+  "myPageActiveFundWithdrawDone": "Withdrawn",
+  "myPageActiveFundWithdrawConfirmTitle": "Submit a withdrawal request?",
+  "myPageActiveFundWithdrawConfirmBody": "A withdrawal request will be sent for this benefit.",
+  "myPageActiveFundWithdrawConfirmAction": "Submit",
+  "myPageActiveFundWithdrawSuccess": "Withdrawal request submitted.",
+  "myPageActiveFundWithdrawFailure": "Failed to submit the withdrawal request. Please try again later.",
+  "myPageActiveFundResaleAction": "Request resale",
+  "myPageActiveFundResaleComingSoon": "Resale request will be connected in a later implementation.",
+  "myPageActiveFundBenefitEmptyState": "No benefit history yet.",
+  "myPageActiveFundBenefitLoadError": "Failed to load benefit history.",
+  "myPageActiveFundBenefitSeq": "Benefit #{seq}",
+  "@myPageActiveFundBenefitSeq": {
+    "placeholders": {
+      "seq": {
+        "type": "int"
+      }
+    }
+  },
+  "myPageActiveFundBenefitPeriodRange": "{start} - {end}",
+  "@myPageActiveFundBenefitPeriodRange": {
+    "placeholders": {
+      "start": {},
+      "end": {}
+    }
+  },
   "commonNext": "Next",
   "commonSkipChevron": "Skip ›",
   "commonOther": "Other",

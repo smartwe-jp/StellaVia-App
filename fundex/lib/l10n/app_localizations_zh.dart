@@ -1871,6 +1871,94 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get myPageActiveFundDetailTitle => '运用中基金详情';
+
+  @override
+  String get myPageActiveFundMetaTitle => '合约信息';
+
+  @override
+  String get myPageActiveFundValidInvestmentAmountLabel => '有效投资额';
+
+  @override
+  String get myPageActiveFundInvestUnitsLabel => '投资口数';
+
+  @override
+  String get myPageActiveFundValidUnitsLabel => '有效口数';
+
+  @override
+  String get myPageActiveFundRemainingUnitsLabel => '剩余口数';
+
+  @override
+  String get myPageActiveFundProcessIdLabel => '流程ID';
+
+  @override
+  String get myPageActiveFundInvestorCodeLabel => '投资者区分';
+
+  @override
+  String get myPageActiveFundAppliedAtLabel => '申请时间';
+
+  @override
+  String get myPageActiveFundWithdrawnAtLabel => '出金时间';
+
+  @override
+  String get myPageActiveFundTotalBenefitLabel => '总收益';
+
+  @override
+  String get myPageActiveFundBenefitHistoryTitle => '收益记录';
+
+  @override
+  String get myPageActiveFundBenefitAmountLabel => '分配金';
+
+  @override
+  String get myPageActiveFundTaxLabel => '税额';
+
+  @override
+  String get myPageActiveFundNetBenefitLabel => '税后收益';
+
+  @override
+  String get myPageActiveFundWithdrawAction => '出金申请';
+
+  @override
+  String get myPageActiveFundWithdrawDone => '已出金';
+
+  @override
+  String get myPageActiveFundWithdrawConfirmTitle => '确认提交出金申请？';
+
+  @override
+  String get myPageActiveFundWithdrawConfirmBody => '将为该笔收益提交出金申请。';
+
+  @override
+  String get myPageActiveFundWithdrawConfirmAction => '确认提交';
+
+  @override
+  String get myPageActiveFundWithdrawSuccess => '出金申请已提交。';
+
+  @override
+  String get myPageActiveFundWithdrawFailure => '出金申请提交失败，请稍后重试。';
+
+  @override
+  String get myPageActiveFundResaleAction => '转卖申请';
+
+  @override
+  String get myPageActiveFundResaleComingSoon => '转卖申请功能会在后续实现中接入。';
+
+  @override
+  String get myPageActiveFundBenefitEmptyState => '暂无收益记录。';
+
+  @override
+  String get myPageActiveFundBenefitLoadError => '收益记录获取失败。';
+
+  @override
+  String myPageActiveFundBenefitSeq(int seq) {
+    return '第 $seq 次分配';
+  }
+
+  @override
+  String myPageActiveFundBenefitPeriodRange(Object start, Object end) {
+    return '$start - $end';
+  }
+
+  @override
   String get commonNext => '下一步';
 
   @override
@@ -4146,6 +4234,94 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String myPageCoolingOffDeadlineExpired(Object date) {
     return '$date 已截止';
+  }
+
+  @override
+  String get myPageActiveFundDetailTitle => '運用中基金詳情';
+
+  @override
+  String get myPageActiveFundMetaTitle => '合約資訊';
+
+  @override
+  String get myPageActiveFundValidInvestmentAmountLabel => '有效投資額';
+
+  @override
+  String get myPageActiveFundInvestUnitsLabel => '投資口數';
+
+  @override
+  String get myPageActiveFundValidUnitsLabel => '有效口數';
+
+  @override
+  String get myPageActiveFundRemainingUnitsLabel => '剩餘口數';
+
+  @override
+  String get myPageActiveFundProcessIdLabel => '流程ID';
+
+  @override
+  String get myPageActiveFundInvestorCodeLabel => '投資者區分';
+
+  @override
+  String get myPageActiveFundAppliedAtLabel => '申請時間';
+
+  @override
+  String get myPageActiveFundWithdrawnAtLabel => '出金時間';
+
+  @override
+  String get myPageActiveFundTotalBenefitLabel => '總收益';
+
+  @override
+  String get myPageActiveFundBenefitHistoryTitle => '收益紀錄';
+
+  @override
+  String get myPageActiveFundBenefitAmountLabel => '分配金';
+
+  @override
+  String get myPageActiveFundTaxLabel => '稅額';
+
+  @override
+  String get myPageActiveFundNetBenefitLabel => '稅後收益';
+
+  @override
+  String get myPageActiveFundWithdrawAction => '出金申請';
+
+  @override
+  String get myPageActiveFundWithdrawDone => '已出金';
+
+  @override
+  String get myPageActiveFundWithdrawConfirmTitle => '確認提交出金申請？';
+
+  @override
+  String get myPageActiveFundWithdrawConfirmBody => '將為此筆收益提交出金申請。';
+
+  @override
+  String get myPageActiveFundWithdrawConfirmAction => '確認提交';
+
+  @override
+  String get myPageActiveFundWithdrawSuccess => '出金申請已送出。';
+
+  @override
+  String get myPageActiveFundWithdrawFailure => '出金申請送出失敗，請稍後再試。';
+
+  @override
+  String get myPageActiveFundResaleAction => '轉賣申請';
+
+  @override
+  String get myPageActiveFundResaleComingSoon => '轉賣申請功能會在後續實作中接入。';
+
+  @override
+  String get myPageActiveFundBenefitEmptyState => '尚無收益紀錄。';
+
+  @override
+  String get myPageActiveFundBenefitLoadError => '收益紀錄取得失敗。';
+
+  @override
+  String myPageActiveFundBenefitSeq(int seq) {
+    return '第 $seq 次分配';
+  }
+
+  @override
+  String myPageActiveFundBenefitPeriodRange(Object start, Object end) {
+    return '$start - $end';
   }
 
   @override

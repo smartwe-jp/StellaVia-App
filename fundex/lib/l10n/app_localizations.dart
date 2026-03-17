@@ -3734,6 +3734,174 @@ abstract class AppLocalizations {
   /// **'Expired on {date}'**
   String myPageCoolingOffDeadlineExpired(Object date);
 
+  /// No description provided for @myPageActiveFundDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Fund Detail'**
+  String get myPageActiveFundDetailTitle;
+
+  /// No description provided for @myPageActiveFundMetaTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract Info'**
+  String get myPageActiveFundMetaTitle;
+
+  /// No description provided for @myPageActiveFundValidInvestmentAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid investment amount'**
+  String get myPageActiveFundValidInvestmentAmountLabel;
+
+  /// No description provided for @myPageActiveFundInvestUnitsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Investment units'**
+  String get myPageActiveFundInvestUnitsLabel;
+
+  /// No description provided for @myPageActiveFundValidUnitsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid units'**
+  String get myPageActiveFundValidUnitsLabel;
+
+  /// No description provided for @myPageActiveFundRemainingUnitsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining units'**
+  String get myPageActiveFundRemainingUnitsLabel;
+
+  /// No description provided for @myPageActiveFundProcessIdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Process ID'**
+  String get myPageActiveFundProcessIdLabel;
+
+  /// No description provided for @myPageActiveFundInvestorCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Investor class'**
+  String get myPageActiveFundInvestorCodeLabel;
+
+  /// No description provided for @myPageActiveFundAppliedAtLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Applied at'**
+  String get myPageActiveFundAppliedAtLabel;
+
+  /// No description provided for @myPageActiveFundWithdrawnAtLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawn at'**
+  String get myPageActiveFundWithdrawnAtLabel;
+
+  /// No description provided for @myPageActiveFundTotalBenefitLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total benefit'**
+  String get myPageActiveFundTotalBenefitLabel;
+
+  /// No description provided for @myPageActiveFundBenefitHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Benefit history'**
+  String get myPageActiveFundBenefitHistoryTitle;
+
+  /// No description provided for @myPageActiveFundBenefitAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Benefit amount'**
+  String get myPageActiveFundBenefitAmountLabel;
+
+  /// No description provided for @myPageActiveFundTaxLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax'**
+  String get myPageActiveFundTaxLabel;
+
+  /// No description provided for @myPageActiveFundNetBenefitLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Net benefit'**
+  String get myPageActiveFundNetBenefitLabel;
+
+  /// No description provided for @myPageActiveFundWithdrawAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Request withdrawal'**
+  String get myPageActiveFundWithdrawAction;
+
+  /// No description provided for @myPageActiveFundWithdrawDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawn'**
+  String get myPageActiveFundWithdrawDone;
+
+  /// No description provided for @myPageActiveFundWithdrawConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit a withdrawal request?'**
+  String get myPageActiveFundWithdrawConfirmTitle;
+
+  /// No description provided for @myPageActiveFundWithdrawConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A withdrawal request will be sent for this benefit.'**
+  String get myPageActiveFundWithdrawConfirmBody;
+
+  /// No description provided for @myPageActiveFundWithdrawConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get myPageActiveFundWithdrawConfirmAction;
+
+  /// No description provided for @myPageActiveFundWithdrawSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal request submitted.'**
+  String get myPageActiveFundWithdrawSuccess;
+
+  /// No description provided for @myPageActiveFundWithdrawFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit the withdrawal request. Please try again later.'**
+  String get myPageActiveFundWithdrawFailure;
+
+  /// No description provided for @myPageActiveFundResaleAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Request resale'**
+  String get myPageActiveFundResaleAction;
+
+  /// No description provided for @myPageActiveFundResaleComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Resale request will be connected in a later implementation.'**
+  String get myPageActiveFundResaleComingSoon;
+
+  /// No description provided for @myPageActiveFundBenefitEmptyState.
+  ///
+  /// In en, this message translates to:
+  /// **'No benefit history yet.'**
+  String get myPageActiveFundBenefitEmptyState;
+
+  /// No description provided for @myPageActiveFundBenefitLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load benefit history.'**
+  String get myPageActiveFundBenefitLoadError;
+
+  /// No description provided for @myPageActiveFundBenefitSeq.
+  ///
+  /// In en, this message translates to:
+  /// **'Benefit #{seq}'**
+  String myPageActiveFundBenefitSeq(int seq);
+
+  /// No description provided for @myPageActiveFundBenefitPeriodRange.
+  ///
+  /// In en, this message translates to:
+  /// **'{start} - {end}'**
+  String myPageActiveFundBenefitPeriodRange(Object start, Object end);
+
   /// No description provided for @commonNext.
   ///
   /// In en, this message translates to:

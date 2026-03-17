@@ -52,4 +52,17 @@ class MyPageRepositoryImpl implements MyPageRepository {
     );
     return dtos.map((dto) => dto.toEntity()).toList(growable: false);
   }
+
+  @override
+  Future<MyPageProjectBenefit> fetchProjectBenefit({
+    required String projectId,
+  }) async {
+    final dto = await _remote.fetchProjectBenefit(projectId: projectId);
+    return dto.toEntity();
+  }
+
+  @override
+  Future<bool> submitBenefitWithdrawal({required String benefitId}) {
+    return _remote.submitBenefitWithdrawal(benefitId: benefitId);
+  }
 }
