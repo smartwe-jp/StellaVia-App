@@ -15,6 +15,7 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		A7069D1BAC34C71339A4F131 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 02CCC2A1A36E3D573A1F19FE /* GoogleService-Info.plist */; };
 		B1431673021E7591CCD22372 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3598E457609C8A63A94AACA4 /* Pods_Runner.framework */; };
 		BE144D782F67A7C0001C77FD /* idl-license.face-ios in Resources */ = {isa = PBXBuildFile; fileRef = BE144D772F67A7C0001C77FD /* idl-license.face-ios */; };
 /* End PBXBuildFile section */
@@ -43,6 +44,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		02CCC2A1A36E3D573A1F19FE /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		06F3E62FD83EF86AE9A107D5 /* Pods-Runner.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release-dev.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release-dev.xcconfig"; sourceTree = "<group>"; };
 		072B5FC4D6E1E29A169E7265 /* Pods-Runner.profile-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile-prod.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile-prod.xcconfig"; sourceTree = "<group>"; };
 		0E42EF47838158B8C12B053C /* Pods-Runner.debug-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug-dev.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug-dev.xcconfig"; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				331C8082294A63A400263BE5 /* RunnerTests */,
 				D1F2F03A7821390C0FA6BB97 /* Pods */,
 				1432792B700453D78118A21C /* Frameworks */,
+				02CCC2A1A36E3D573A1F19FE /* GoogleService-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -304,6 +307,7 @@
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 				BE144D782F67A7C0001C77FD /* idl-license.face-ios in Resources */,
+				A7069D1BAC34C71339A4F131 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,8 +2,10 @@ import 'dart:ui';
 
 import 'package:core_storage/core_storage.dart';
 import 'package:core_tool_kit/core_tool_kit.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fundex/firebase_options.dart';
 
 import 'app.dart';
 import 'config/app_environment.dart';
@@ -34,6 +36,10 @@ Future<void> bootstrap({
 }) async {
   WidgetsFlutterBinding.ensureInitialized();
   await CoreStorageBootstrap.initializeHive();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   const enableHttpLogDefine = String.fromEnvironment('ENABLE_HTTP_LOG');
   final enableHttpLogFromDefine = _parseOptionalBool(enableHttpLogDefine);

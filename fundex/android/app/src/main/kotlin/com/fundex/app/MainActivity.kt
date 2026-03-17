@@ -1,4 +1,4 @@
-package com.fundex.app
+package com.fund.stellavia
 
 import io.flutter.embedding.android.FlutterActivity
 
