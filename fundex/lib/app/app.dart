@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/app_localizations.dart';
 
 import 'config/environment_provider.dart';
+import 'firebase/push_token_sync_providers.dart';
 import 'localization/app_locale_providers.dart';
 import 'observability/app_observability_providers.dart';
 import 'observability/app_ui_message_localizer.dart';
@@ -27,6 +28,7 @@ class MemberTemplateApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     AppNotice.bindHostOverlayKey(_appNoticeOverlayKey);
+    ref.watch(pushTokenSyncBootstrapProvider);
 
     final router = ref.watch(appRouterProvider);
     final environment = ref.watch(appEnvironmentProvider);

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:core_storage/core_storage.dart';
 import 'package:core_tool_kit/core_tool_kit.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,6 +9,7 @@ import 'app.dart';
 import 'config/app_environment.dart';
 import 'config/app_flavor.dart';
 import 'config/environment_provider.dart';
+import 'firebase/app_firebase_runtime.dart';
 import 'observability/app_observability_providers.dart';
 
 bool? _parseOptionalBool(String value) {
@@ -37,9 +36,7 @@ Future<void> bootstrap({
   WidgetsFlutterBinding.ensureInitialized();
   await CoreStorageBootstrap.initializeHive();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   const enableHttpLogDefine = String.fromEnvironment('ENABLE_HTTP_LOG');
   final enableHttpLogFromDefine = _parseOptionalBool(enableHttpLogDefine);
@@ -61,23 +58,7 @@ Future<void> bootstrap({
     loggerName: 'fundex',
   );
 
-  FlutterError.onError = (FlutterErrorDetails details) {
-    logger.error(
-      'Flutter framework error',
-      error: details.exception,
-      stackTrace: details.stack,
-    );
-    FlutterError.presentError(details);
-  };
-
-  PlatformDispatcher.instance.onError = (Object error, StackTrace stackTrace) {
-    logger.error(
-      'Unhandled platform error',
-      error: error,
-      stackTrace: stackTrace,
-    );
-    return false;
-  };
+  await AppFirebaseRuntime.initialize(logger: logger);
 
   runApp(
     ProviderScope(
