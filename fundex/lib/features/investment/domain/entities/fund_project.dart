@@ -96,11 +96,20 @@ class FundProjectPdfDocument {
     this.projectId,
     this.type,
     this.description,
-    this.urls = const <String>[],
+    this.urls = const <FundProjectPdfUrl>[],
   });
 
   final String? projectId;
   final int? type;
   final String? description;
-  final List<String> urls;
+  final List<FundProjectPdfUrl> urls;
+}
+
+@immutable
+class FundProjectPdfUrl {
+  const FundProjectPdfUrl({this.name, this.url, this.createTime});
+
+  final String? name;
+  final String? url;
+  final String? createTime;
 }

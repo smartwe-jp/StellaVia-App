@@ -10,6 +10,13 @@
   "loginBrowseAsGuest": "Browse without signing in (Guest mode)",
   "loginCreateAccount": "Create account",
   "commonClose": "Close",
+  "pdfViewerPageTitle": "PDF",
+  "pdfViewerOpenExternalTooltip": "Open externally",
+  "pdfViewerOpenExternalLabel": "Open externally",
+  "pdfViewerLoadingLabel": "Loading PDF...",
+  "pdfViewerLoadFailedLabel": "Failed to load PDF.",
+  "pdfViewerInvalidUrlNotice": "Invalid PDF URL.",
+  "pdfViewerOpenExternalFailedNotice": "Unable to open PDF.",
   "loginForgotPassword": "Forgot password",
   "loginFootnote": "Designed for global members with Japan-ready UX and privacy standards.",
   "loginErrorSendCodeFailed": "Unable to send code. Please try again later.",
@@ -407,6 +414,23 @@
   "fundDetailOperatorBusinessStartLabel": "Business start filing",
   "fundDetailDocumentsTitle": "📄 Related documents",
   "fundDetailDocumentReady": "Tap to review",
+  "fundDetailDocumentMultipleReady": "{count} PDF files",
+  "@fundDetailDocumentMultipleReady": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fundDetailDocumentSelectTitle": "Select document",
+  "fundDetailDocumentPickerItem": "Document {index}",
+  "@fundDetailDocumentPickerItem": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
   "fundDetailDocumentUnavailable": "Document URL not available",
   "fundDetailPropertyPreviewBadge": "Property preview",
   "fundDetailCommentsTitle": "💬 Investor voices (KIZUNARK)",

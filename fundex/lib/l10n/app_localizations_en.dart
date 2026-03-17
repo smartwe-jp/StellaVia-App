@@ -40,6 +40,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonClose => 'Close';
 
   @override
+  String get pdfViewerPageTitle => 'PDF';
+
+  @override
+  String get pdfViewerOpenExternalTooltip => 'Open externally';
+
+  @override
+  String get pdfViewerOpenExternalLabel => 'Open externally';
+
+  @override
+  String get pdfViewerLoadingLabel => 'Loading PDF...';
+
+  @override
+  String get pdfViewerLoadFailedLabel => 'Failed to load PDF.';
+
+  @override
+  String get pdfViewerInvalidUrlNotice => 'Invalid PDF URL.';
+
+  @override
+  String get pdfViewerOpenExternalFailedNotice => 'Unable to open PDF.';
+
+  @override
   String get loginForgotPassword => 'Forgot password';
 
   @override
@@ -1183,6 +1204,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fundDetailDocumentReady => 'Tap to review';
+
+  @override
+  String fundDetailDocumentMultipleReady(int count) {
+    return '$count PDF files';
+  }
+
+  @override
+  String get fundDetailDocumentSelectTitle => 'Select document';
+
+  @override
+  String fundDetailDocumentPickerItem(int index) {
+    return 'Document $index';
+  }
 
   @override
   String get fundDetailDocumentUnavailable => 'Document URL not available';

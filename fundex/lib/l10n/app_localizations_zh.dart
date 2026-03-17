@@ -39,6 +39,27 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonClose => '关闭';
 
   @override
+  String get pdfViewerPageTitle => 'PDF';
+
+  @override
+  String get pdfViewerOpenExternalTooltip => '在外部应用中打开';
+
+  @override
+  String get pdfViewerOpenExternalLabel => '在外部应用中打开';
+
+  @override
+  String get pdfViewerLoadingLabel => '正在加载 PDF...';
+
+  @override
+  String get pdfViewerLoadFailedLabel => 'PDF 加载失败。';
+
+  @override
+  String get pdfViewerInvalidUrlNotice => 'PDF 链接无效。';
+
+  @override
+  String get pdfViewerOpenExternalFailedNotice => '无法打开 PDF。';
+
+  @override
   String get loginForgotPassword => '找回密码';
 
   @override
@@ -1117,6 +1138,19 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get fundDetailDocumentReady => '点击查看';
+
+  @override
+  String fundDetailDocumentMultipleReady(int count) {
+    return '$count份PDF';
+  }
+
+  @override
+  String get fundDetailDocumentSelectTitle => '选择书面';
+
+  @override
+  String fundDetailDocumentPickerItem(int index) {
+    return '书面 $index';
+  }
 
   @override
   String get fundDetailDocumentUnavailable => '未配置书面链接';
@@ -2283,6 +2317,27 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get commonClose => '关闭';
 
   @override
+  String get pdfViewerPageTitle => 'PDF';
+
+  @override
+  String get pdfViewerOpenExternalTooltip => '在外部應用中開啟';
+
+  @override
+  String get pdfViewerOpenExternalLabel => '在外部應用中開啟';
+
+  @override
+  String get pdfViewerLoadingLabel => '正在載入 PDF...';
+
+  @override
+  String get pdfViewerLoadFailedLabel => 'PDF 載入失敗。';
+
+  @override
+  String get pdfViewerInvalidUrlNotice => 'PDF 連結無效。';
+
+  @override
+  String get pdfViewerOpenExternalFailedNotice => '無法開啟 PDF。';
+
+  @override
   String get loginForgotPassword => '忘記密碼？';
 
   @override
@@ -3361,6 +3416,19 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get fundDetailDocumentReady => '点击查看';
+
+  @override
+  String fundDetailDocumentMultipleReady(int count) {
+    return '$count份PDF';
+  }
+
+  @override
+  String get fundDetailDocumentSelectTitle => '選擇書面';
+
+  @override
+  String fundDetailDocumentPickerItem(int index) {
+    return '書面 $index';
+  }
 
   @override
   String get fundDetailDocumentUnavailable => '未配置书面链接';

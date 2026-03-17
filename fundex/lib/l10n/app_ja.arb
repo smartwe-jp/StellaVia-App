@@ -10,6 +10,13 @@
   "loginBrowseAsGuest": "ログインせずに閲覧する（ゲストモード）",
   "loginCreateAccount": "新規登録",
   "commonClose": "閉じる",
+  "pdfViewerPageTitle": "PDF",
+  "pdfViewerOpenExternalTooltip": "外部アプリで開く",
+  "pdfViewerOpenExternalLabel": "外部アプリで開く",
+  "pdfViewerLoadingLabel": "PDFを読み込んでいます…",
+  "pdfViewerLoadFailedLabel": "PDFの読み込みに失敗しました。",
+  "pdfViewerInvalidUrlNotice": "PDFのURLが無効です。",
+  "pdfViewerOpenExternalFailedNotice": "PDFを開けませんでした。",
   "loginForgotPassword": "パスワードを忘れた場合",
   "loginFootnote": "日本市場とグローバル利用を意識した、上質で安全なUX設計。",
   "loginErrorSendCodeFailed": "コード送信に失敗しました。後でもう一度お試しください。",
@@ -407,6 +414,23 @@
   "fundDetailOperatorBusinessStartLabel": "事業開始届出",
   "fundDetailDocumentsTitle": "📄 関連書面",
   "fundDetailDocumentReady": "タップして確認",
+  "fundDetailDocumentMultipleReady": "{count}件のPDF",
+  "@fundDetailDocumentMultipleReady": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fundDetailDocumentSelectTitle": "書面を選択",
+  "fundDetailDocumentPickerItem": "書面 {index}",
+  "@fundDetailDocumentPickerItem": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
   "fundDetailDocumentUnavailable": "書面URL未設定",
   "fundDetailPropertyPreviewBadge": "物件プレビュー",
   "fundDetailCommentsTitle": "💬 投資家の声（KIZUNARK）",

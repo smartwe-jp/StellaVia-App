@@ -66,7 +66,13 @@ void main() {
                 projectId: 'p1',
                 type: 1,
                 description: '契約成立前書面',
-                urls: <String>['https://cdn.example.com/a.pdf'],
+                urls: <FundProjectPdfUrlDto>[
+                  FundProjectPdfUrlDto(
+                    name: '契約成立前書面.pdf',
+                    url: 'https://cdn.example.com/a.pdf',
+                    createTime: '2026-03-17T04:43:45.454Z',
+                  ),
+                ],
               ),
             ],
           ),
@@ -85,9 +91,12 @@ void main() {
       expect(entities.first.investorTypes.first.investorCode, '優先出資者A');
       expect(entities.first.pdfDocuments, hasLength(1));
       expect(entities.first.pdfDocuments.first.description, '契約成立前書面');
-      expect(entities.first.pdfDocuments.first.urls, <String>[
+      expect(entities.first.pdfDocuments.first.urls, hasLength(1));
+      expect(entities.first.pdfDocuments.first.urls.first.name, '契約成立前書面.pdf');
+      expect(
+        entities.first.pdfDocuments.first.urls.first.url,
         'https://cdn.example.com/a.pdf',
-      ]);
+      );
     });
 
     test('fetchFundProjectDetail maps DTO to domain entity', () async {

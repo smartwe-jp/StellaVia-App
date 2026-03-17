@@ -201,21 +201,6 @@ class FundProjectDto {
     return null;
   }
 
-  static List<String> _toStringList(Object? value) {
-    if (value is List) {
-      final list = value
-          .map<String?>((item) => _normalizedOptionalString(item))
-          .whereType<String>()
-          .toList(growable: false);
-      return List<String>.unmodifiable(list);
-    }
-    final single = _normalizedOptionalString(value);
-    if (single == null) {
-      return const <String>[];
-    }
-    return List<String>.unmodifiable(<String>[single]);
-  }
-
   static List<String> _photoUrlsFrom(Object? value) {
     if (value is! List) {
       return const <String>[];
@@ -275,6 +260,35 @@ class FundProjectDto {
     }
     return List<FundProjectPdfDocumentDto>.unmodifiable(list);
   }
+
+  static List<FundProjectPdfUrlDto> _pdfUrlsFrom(Object? value) {
+    if (value is List) {
+      final list = <FundProjectPdfUrlDto>[];
+      for (final item in value) {
+        if (item is String) {
+          final url = _normalizedOptionalString(item);
+          if (url != null) {
+            list.add(FundProjectPdfUrlDto(url: url));
+          }
+          continue;
+        }
+        final json = _mapOrNull(item);
+        if (json == null) {
+          continue;
+        }
+        list.add(FundProjectPdfUrlDto.fromJson(json));
+      }
+      return List<FundProjectPdfUrlDto>.unmodifiable(list);
+    }
+
+    final single = _normalizedOptionalString(value);
+    if (single == null) {
+      return const <FundProjectPdfUrlDto>[];
+    }
+    return List<FundProjectPdfUrlDto>.unmodifiable(<FundProjectPdfUrlDto>[
+      FundProjectPdfUrlDto(url: single),
+    ]);
+  }
 }
 
 class FundProjectInvestorTypeDto {
@@ -331,7 +345,7 @@ class FundProjectPdfDocumentDto {
     this.projectId,
     this.type,
     this.description,
-    this.urls = const <String>[],
+    this.urls = const <FundProjectPdfUrlDto>[],
   });
 
   factory FundProjectPdfDocumentDto.fromJson(Map<String, dynamic> json) {
@@ -339,12 +353,28 @@ class FundProjectPdfDocumentDto {
       projectId: FundProjectDto._normalizedOptionalString(json['projectId']),
       type: FundProjectDto._intOrNull(json['type']),
       description: FundProjectDto._normalizedOptionalString(json['desc']),
-      urls: FundProjectDto._toStringList(json['urls']),
+      urls: FundProjectDto._pdfUrlsFrom(json['urls']),
     );
   }
 
   final String? projectId;
   final int? type;
   final String? description;
-  final List<String> urls;
+  final List<FundProjectPdfUrlDto> urls;
+}
+
+class FundProjectPdfUrlDto {
+  const FundProjectPdfUrlDto({this.name, this.url, this.createTime});
+
+  factory FundProjectPdfUrlDto.fromJson(Map<String, dynamic> json) {
+    return FundProjectPdfUrlDto(
+      name: FundProjectDto._normalizedOptionalString(json['name']),
+      url: FundProjectDto._normalizedOptionalString(json['url']),
+      createTime: FundProjectDto._normalizedOptionalString(json['createTime']),
+    );
+  }
+
+  final String? name;
+  final String? url;
+  final String? createTime;
 }

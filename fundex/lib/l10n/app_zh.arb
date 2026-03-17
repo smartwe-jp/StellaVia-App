@@ -10,6 +10,13 @@
   "loginBrowseAsGuest": "不登录直接浏览（访客模式）",
   "loginCreateAccount": "免费注册",
   "commonClose": "关闭",
+  "pdfViewerPageTitle": "PDF",
+  "pdfViewerOpenExternalTooltip": "在外部应用中打开",
+  "pdfViewerOpenExternalLabel": "在外部应用中打开",
+  "pdfViewerLoadingLabel": "正在加载 PDF...",
+  "pdfViewerLoadFailedLabel": "PDF 加载失败。",
+  "pdfViewerInvalidUrlNotice": "PDF 链接无效。",
+  "pdfViewerOpenExternalFailedNotice": "无法打开 PDF。",
   "loginForgotPassword": "找回密码",
   "loginFootnote": "面向国际会员设计，兼顾日本市场体验与隐私规范。",
   "loginErrorSendCodeFailed": "验证码发送失败，请稍后重试",
@@ -407,6 +414,23 @@
   "fundDetailOperatorBusinessStartLabel": "事业开始申报",
   "fundDetailDocumentsTitle": "📄 相关书面",
   "fundDetailDocumentReady": "点击查看",
+  "fundDetailDocumentMultipleReady": "{count}份PDF",
+  "@fundDetailDocumentMultipleReady": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fundDetailDocumentSelectTitle": "选择书面",
+  "fundDetailDocumentPickerItem": "书面 {index}",
+  "@fundDetailDocumentPickerItem": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
   "fundDetailDocumentUnavailable": "未配置书面链接",
   "fundDetailPropertyPreviewBadge": "物件预览",
   "fundDetailCommentsTitle": "💬 投资者声音（KIZUNARK）",

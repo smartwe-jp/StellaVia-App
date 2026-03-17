@@ -1,8 +1,16 @@
 export 'package:company_api_runtime/company_api_runtime.dart'
-    show FundProjectDto, FundProjectInvestorTypeDto, FundProjectPdfDocumentDto;
+    show
+        FundProjectDto,
+        FundProjectInvestorTypeDto,
+        FundProjectPdfDocumentDto,
+        FundProjectPdfUrlDto;
 
 import 'package:company_api_runtime/company_api_runtime.dart'
-    show FundProjectDto, FundProjectInvestorTypeDto, FundProjectPdfDocumentDto;
+    show
+        FundProjectDto,
+        FundProjectInvestorTypeDto,
+        FundProjectPdfDocumentDto,
+        FundProjectPdfUrlDto;
 
 import '../../domain/entities/fund_project.dart';
 
@@ -68,7 +76,15 @@ extension FundProjectPdfDocumentDtoMapper on FundProjectPdfDocumentDto {
       projectId: projectId,
       type: type,
       description: description,
-      urls: List<String>.unmodifiable(urls),
+      urls: List<FundProjectPdfUrl>.unmodifiable(
+        urls.map((FundProjectPdfUrlDto item) => item.toEntity()),
+      ),
     );
+  }
+}
+
+extension FundProjectPdfUrlDtoMapper on FundProjectPdfUrlDto {
+  FundProjectPdfUrl toEntity() {
+    return FundProjectPdfUrl(name: name, url: url, createTime: createTime);
   }
 }

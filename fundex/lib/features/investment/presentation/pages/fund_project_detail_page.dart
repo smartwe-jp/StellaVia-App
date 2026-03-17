@@ -11,6 +11,7 @@ import '../support/fund_detail_static_content.dart';
 import '../support/fund_project_detail_structured_data.dart';
 import '../support/fund_project_detail_view_data.dart';
 import '../widgets/fund_project_detail_comments_section.dart';
+import '../widgets/fund_project_detail_documents_section.dart';
 import '../widgets/fund_project_detail_scaffold.dart';
 import '../widgets/fund_project_detail_tabs_section.dart';
 import '../widgets/fund_project_detail_title_block.dart';
@@ -327,12 +328,12 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                         ),
                       ),
                     ],
-                    if (viewData.documentItems.isNotEmpty) ...<Widget>[
+                    if (viewData.documentGroups.isNotEmpty) ...<Widget>[
                       const SizedBox(height: 18),
                       FundDetailSection(
                         title: context.l10n.fundDetailDocumentsTitle,
-                        child: FundDetailDocumentList(
-                          items: viewData.documentItems,
+                        child: FundProjectDetailDocumentsSection(
+                          groups: viewData.documentGroups,
                         ),
                       ),
                     ],

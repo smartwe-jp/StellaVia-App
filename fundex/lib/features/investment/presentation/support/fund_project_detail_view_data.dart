@@ -13,7 +13,7 @@ class FundProjectDetailViewData {
     required this.contractOverviewItems,
     required this.contractScheduleItems,
     required this.operatorItems,
-    required this.documentItems,
+    required this.documentGroups,
     required this.heroBadges,
     required this.heroGradientColors,
     required this.propertyLocation,
@@ -30,7 +30,7 @@ class FundProjectDetailViewData {
   final List<FundDetailInfoItemData> contractOverviewItems;
   final List<FundDetailInfoItemData> contractScheduleItems;
   final List<FundDetailInfoItemData> operatorItems;
-  final List<FundDetailDocumentItemData> documentItems;
+  final List<FundProjectDetailDocumentGroupData> documentGroups;
   final List<FundDetailBadgeData> heroBadges;
   final List<Color> heroGradientColors;
   final String propertyLocation;
@@ -40,6 +40,16 @@ class FundProjectDetailViewData {
   final bool actionEnabled;
   final String? operatorMetaText;
   final FundProjectDetailProtectionStructureData? protectionStructure;
+}
+
+class FundProjectDetailDocumentGroupData {
+  const FundProjectDetailDocumentGroupData({
+    required this.title,
+    required this.items,
+  });
+
+  final String title;
+  final List<FundDetailDocumentItemData> items;
 }
 
 class FundProjectDetailViewDataBuilder {
@@ -77,7 +87,7 @@ class FundProjectDetailViewDataBuilder {
       contractOverviewItems: contractTables.overviewItems,
       contractScheduleItems: contractTables.scheduleItems,
       operatorItems: _buildOperatorItems(context, project),
-      documentItems: _buildDocumentItems(context, project),
+      documentGroups: _buildDocumentGroups(context, project),
       heroBadges: _buildHeroBadges(context, project),
       heroGradientColors: _resolveHeroGradientColors(project.projectStatus),
       propertyLocation: propertyLocation,
@@ -361,23 +371,120 @@ String _buildOperatorMetaText(BuildContext context, FundProject project) {
   ].join(' ・ ');
 }
 
-List<FundDetailDocumentItemData> _buildDocumentItems(
+List<FundProjectDetailDocumentGroupData> _buildDocumentGroups(
   BuildContext context,
   FundProject project,
 ) {
   return project.pdfDocuments
-      .map(
-        (FundProjectPdfDocument document) => FundDetailDocumentItemData(
-          title: document.description ?? context.l10n.fundDetailDocumentsTitle,
-          subtitle: document.urls.isEmpty
-              ? context.l10n.fundDetailDocumentUnavailable
-              : context.l10n.fundDetailDocumentReady,
-          onTap: document.urls.isEmpty
-              ? null
-              : () => AppNotice.show(context, message: document.urls.first),
-        ),
-      )
+      .map((FundProjectPdfDocument document) {
+        final availablePdfs = _availablePdfUrls(document);
+        final title = _documentGroupTitle(context, document);
+        return FundProjectDetailDocumentGroupData(
+          title: title,
+          items: availablePdfs
+              .asMap()
+              .entries
+              .map((MapEntry<int, FundProjectPdfUrl> entry) {
+                final itemTitle = _documentLinkTitle(
+                  context,
+                  entry.value,
+                  entry.key,
+                );
+                return FundDetailDocumentItemData(
+                  title: itemTitle,
+                  subtitle:
+                      _formatDocumentCreatedAt(context, entry.value) ??
+                      context.l10n.fundDetailDocumentReady,
+                  onTap: () => _openPdfDocument(
+                    context,
+                    groupTitle: title,
+                    linkTitle: itemTitle,
+                    item: entry.value,
+                  ),
+                );
+              })
+              .toList(growable: false),
+        );
+      })
       .toList(growable: false);
+}
+
+List<FundProjectPdfUrl> _availablePdfUrls(FundProjectPdfDocument document) {
+  final list = <FundProjectPdfUrl>[];
+  for (final item in document.urls) {
+    final url = item.url?.trim();
+    if (url != null && url.isNotEmpty) {
+      list.add(item);
+    }
+  }
+  return List<FundProjectPdfUrl>.unmodifiable(list);
+}
+
+String _documentGroupTitle(
+  BuildContext context,
+  FundProjectPdfDocument document,
+) {
+  final title = document.description?.trim();
+  if (title != null && title.isNotEmpty) {
+    return title;
+  }
+  return context.l10n.fundDetailDocumentsTitle;
+}
+
+String _documentLinkTitle(
+  BuildContext context,
+  FundProjectPdfUrl item,
+  int index,
+) {
+  final name = item.name?.trim();
+  if (name != null && name.isNotEmpty) {
+    return name;
+  }
+  return context.l10n.fundDetailDocumentPickerItem(index + 1);
+}
+
+void _openPdfDocument(
+  BuildContext context, {
+  required String groupTitle,
+  required String linkTitle,
+  required FundProjectPdfUrl item,
+}) {
+  final selectedUrl = item.url?.trim();
+  if (selectedUrl == null || selectedUrl.isEmpty) {
+    return;
+  }
+  final l10n = context.l10n;
+  final viewerTexts = AppPdfViewerTexts(
+    pageTitle: l10n.pdfViewerPageTitle,
+    openExternalTooltip: l10n.pdfViewerOpenExternalTooltip,
+    openExternalLabel: l10n.pdfViewerOpenExternalLabel,
+    loadingLabel: l10n.pdfViewerLoadingLabel,
+    loadFailedLabel: l10n.pdfViewerLoadFailedLabel,
+    retryLabel: l10n.fundListRetry,
+    invalidUrlNotice: l10n.pdfViewerInvalidUrlNotice,
+    openExternalFailedNotice: l10n.pdfViewerOpenExternalFailedNotice,
+  );
+  openAppPdfViewer(
+    context,
+    url: selectedUrl,
+    title: linkTitle.isNotEmpty ? linkTitle : groupTitle,
+    texts: viewerTexts,
+  );
+}
+
+String? _formatDocumentCreatedAt(BuildContext context, FundProjectPdfUrl item) {
+  final raw = item.createTime?.trim();
+  if (raw == null || raw.isEmpty) {
+    return null;
+  }
+  final parsed = DateTime.tryParse(raw);
+  if (parsed == null) {
+    return raw;
+  }
+  final formatter = DateFormat.yMd(
+    Localizations.localeOf(context).toLanguageTag(),
+  ).add_Hm();
+  return formatter.format(parsed.toLocal());
 }
 
 FundProjectDetailProtectionStructureData? _buildProtectionStructure(

@@ -39,6 +39,27 @@ class AppLocalizationsJa extends AppLocalizations {
   String get commonClose => '閉じる';
 
   @override
+  String get pdfViewerPageTitle => 'PDF';
+
+  @override
+  String get pdfViewerOpenExternalTooltip => '外部アプリで開く';
+
+  @override
+  String get pdfViewerOpenExternalLabel => '外部アプリで開く';
+
+  @override
+  String get pdfViewerLoadingLabel => 'PDFを読み込んでいます…';
+
+  @override
+  String get pdfViewerLoadFailedLabel => 'PDFの読み込みに失敗しました。';
+
+  @override
+  String get pdfViewerInvalidUrlNotice => 'PDFのURLが無効です。';
+
+  @override
+  String get pdfViewerOpenExternalFailedNotice => 'PDFを開けませんでした。';
+
+  @override
   String get loginForgotPassword => 'パスワードを忘れた場合';
 
   @override
@@ -1122,6 +1143,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get fundDetailDocumentReady => 'タップして確認';
+
+  @override
+  String fundDetailDocumentMultipleReady(int count) {
+    return '$count件のPDF';
+  }
+
+  @override
+  String get fundDetailDocumentSelectTitle => '書面を選択';
+
+  @override
+  String fundDetailDocumentPickerItem(int index) {
+    return '書面 $index';
+  }
 
   @override
   String get fundDetailDocumentUnavailable => '書面URL未設定';

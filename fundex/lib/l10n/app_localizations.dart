@@ -161,6 +161,48 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get commonClose;
 
+  /// No description provided for @pdfViewerPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF'**
+  String get pdfViewerPageTitle;
+
+  /// No description provided for @pdfViewerOpenExternalTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Open externally'**
+  String get pdfViewerOpenExternalTooltip;
+
+  /// No description provided for @pdfViewerOpenExternalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Open externally'**
+  String get pdfViewerOpenExternalLabel;
+
+  /// No description provided for @pdfViewerLoadingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading PDF...'**
+  String get pdfViewerLoadingLabel;
+
+  /// No description provided for @pdfViewerLoadFailedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load PDF.'**
+  String get pdfViewerLoadFailedLabel;
+
+  /// No description provided for @pdfViewerInvalidUrlNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid PDF URL.'**
+  String get pdfViewerInvalidUrlNotice;
+
+  /// No description provided for @pdfViewerOpenExternalFailedNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open PDF.'**
+  String get pdfViewerOpenExternalFailedNotice;
+
   /// No description provided for @loginForgotPassword.
   ///
   /// In en, this message translates to:
@@ -2284,6 +2326,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap to review'**
   String get fundDetailDocumentReady;
+
+  /// No description provided for @fundDetailDocumentMultipleReady.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} PDF files'**
+  String fundDetailDocumentMultipleReady(int count);
+
+  /// No description provided for @fundDetailDocumentSelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select document'**
+  String get fundDetailDocumentSelectTitle;
+
+  /// No description provided for @fundDetailDocumentPickerItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Document {index}'**
+  String fundDetailDocumentPickerItem(int index);
 
   /// No description provided for @fundDetailDocumentUnavailable.
   ///
