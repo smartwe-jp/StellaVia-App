@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-@immutable
 class AppDialogAction<T> {
   const AppDialogAction({
     required this.label,

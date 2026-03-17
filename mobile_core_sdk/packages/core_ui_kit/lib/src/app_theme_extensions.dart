@@ -13,7 +13,6 @@ List<Color> _lerpColorList(List<Color> a, List<Color> b, double t) {
   });
 }
 
-@immutable
 class AppAuthVisualTheme extends ThemeExtension<AppAuthVisualTheme> {
   const AppAuthVisualTheme({
     required this.backgroundGradientColors,
@@ -142,7 +141,6 @@ class AppAuthVisualTheme extends ThemeExtension<AppAuthVisualTheme> {
   }
 }
 
-@immutable
 class AppFTKTheme extends ThemeExtension<AppFTKTheme> {
   const AppFTKTheme({
     required this.primaryButtonColor,
@@ -515,7 +513,6 @@ class AppFTKTheme extends ThemeExtension<AppFTKTheme> {
   }
 }
 
-@immutable
 class AppShellNavigationTheme extends ThemeExtension<AppShellNavigationTheme> {
   const AppShellNavigationTheme({required this.bottomTabInactiveColor});
 
