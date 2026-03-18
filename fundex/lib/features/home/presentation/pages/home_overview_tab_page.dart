@@ -127,7 +127,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
           accountStatistic?.firstLevelAccountTotal,
         ),
         showNotificationDot: true,
-        onNotificationTap: () => context.push('/notifications'),
+        onNotificationTap: () => context.push('/profile/notifications'),
       ),
       _ => FundGuestBrowsingBar(
         title: l10n.homeGuestBrowsingTitle,

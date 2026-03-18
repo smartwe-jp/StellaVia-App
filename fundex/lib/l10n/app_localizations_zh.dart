@@ -1959,6 +1959,102 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get myPageResaleOrderTitle => '卖出委托';
+
+  @override
+  String get myPageResaleTabOrder => '卖出';
+
+  @override
+  String get myPageResaleTabConfirm => '订单内容';
+
+  @override
+  String get myPageResaleFundNameLabel => '基金名';
+
+  @override
+  String get myPageResaleInvestorTypeLabel => '出资者类别';
+
+  @override
+  String get myPageResaleOrderMethodLabel => '委托方式';
+
+  @override
+  String get myPageResaleOrderMethodValue => '卖出委托';
+
+  @override
+  String get myPageResaleAvailableUnitsLabel => '可卖口数';
+
+  @override
+  String get myPageResaleSellUnitsLabel => '卖出口数';
+
+  @override
+  String get myPageResaleUnitPriceLabel => '卖出单价';
+
+  @override
+  String get myPageResaleFeeLabel => '卖出手续费';
+
+  @override
+  String get myPageResaleFeeValue => '成交金额的1.65%';
+
+  @override
+  String get myPageResaleAgreementLabel => '文件确认';
+
+  @override
+  String get myPageResaleAgreementBody => '我已同意以下文件并确认其内容，申请普通卖出委托。';
+
+  @override
+  String get myPageResaleAgreementSampleLabel => '契约地位转让协议（样本）';
+
+  @override
+  String get myPageResaleTotalAmountLabel => '卖出总额';
+
+  @override
+  String get myPageResaleFeeAmountLabel => '手续费金额';
+
+  @override
+  String get myPageResaleNetAmountLabel => '预计到账金额';
+
+  @override
+  String get myPageResaleValidationMessage => '请填写卖出口数、卖出单价，并同意文件确认。';
+
+  @override
+  String get myPageResaleConfirmButton => '确认';
+
+  @override
+  String get myPageResaleBackButton => '返回修改';
+
+  @override
+  String get myPageResaleSubmitButton => '提交申请';
+
+  @override
+  String get myPageResaleUnitsSuffix => '口';
+
+  @override
+  String get myPageResaleYenSuffix => '円';
+
+  @override
+  String myPageResaleFixedYieldLabel(Object ratio) {
+    return '固定$ratio收益率';
+  }
+
+  @override
+  String myPageResaleInvestorTypeFallback(Object ratio) {
+    return '固定$ratio收益率';
+  }
+
+  @override
+  String get myPageResaleHintTitle => '提示';
+
+  @override
+  String myPageResaleFinalConfirmMessage(Object price, Object units) {
+    return '确认以单价$price円卖出该项目持分$units口吗？';
+  }
+
+  @override
+  String get myPageResaleSubmitSuccess => '卖出申请已提交。';
+
+  @override
+  String get myPageResaleSubmitFailure => '卖出申请提交失败，请稍后重试。';
+
+  @override
   String get commonNext => '下一步';
 
   @override
@@ -4323,6 +4419,102 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String myPageActiveFundBenefitPeriodRange(Object start, Object end) {
     return '$start - $end';
   }
+
+  @override
+  String get myPageResaleOrderTitle => '賣出委託';
+
+  @override
+  String get myPageResaleTabOrder => '賣出';
+
+  @override
+  String get myPageResaleTabConfirm => '訂單內容';
+
+  @override
+  String get myPageResaleFundNameLabel => '基金名';
+
+  @override
+  String get myPageResaleInvestorTypeLabel => '出資者類別';
+
+  @override
+  String get myPageResaleOrderMethodLabel => '委託方式';
+
+  @override
+  String get myPageResaleOrderMethodValue => '賣出委託';
+
+  @override
+  String get myPageResaleAvailableUnitsLabel => '可賣口數';
+
+  @override
+  String get myPageResaleSellUnitsLabel => '賣出口數';
+
+  @override
+  String get myPageResaleUnitPriceLabel => '賣出單價';
+
+  @override
+  String get myPageResaleFeeLabel => '賣出手續費';
+
+  @override
+  String get myPageResaleFeeValue => '成交金額的1.65%';
+
+  @override
+  String get myPageResaleAgreementLabel => '文件確認';
+
+  @override
+  String get myPageResaleAgreementBody => '我已同意以下文件並確認其內容，申請一般賣出委託。';
+
+  @override
+  String get myPageResaleAgreementSampleLabel => '契約上地位轉讓契約書（樣本）';
+
+  @override
+  String get myPageResaleTotalAmountLabel => '賣出總額';
+
+  @override
+  String get myPageResaleFeeAmountLabel => '手續費金額';
+
+  @override
+  String get myPageResaleNetAmountLabel => '預計入帳金額';
+
+  @override
+  String get myPageResaleValidationMessage => '請填寫賣出口數、賣出單價，並同意文件確認。';
+
+  @override
+  String get myPageResaleConfirmButton => '確認';
+
+  @override
+  String get myPageResaleBackButton => '返回修改';
+
+  @override
+  String get myPageResaleSubmitButton => '提交申請';
+
+  @override
+  String get myPageResaleUnitsSuffix => '口';
+
+  @override
+  String get myPageResaleYenSuffix => '円';
+
+  @override
+  String myPageResaleFixedYieldLabel(Object ratio) {
+    return '固定$ratio收益率';
+  }
+
+  @override
+  String myPageResaleInvestorTypeFallback(Object ratio) {
+    return '固定$ratio收益率';
+  }
+
+  @override
+  String get myPageResaleHintTitle => 'ヒント';
+
+  @override
+  String myPageResaleFinalConfirmMessage(Object price, Object units) {
+    return '單價$price円でこのプロジェクトの持分$units口を売却することを確認しますか？';
+  }
+
+  @override
+  String get myPageResaleSubmitSuccess => '賣出申請已送出。';
+
+  @override
+  String get myPageResaleSubmitFailure => '賣出申請送出失敗，請稍後再試。';
 
   @override
   String get commonNext => '下一步';

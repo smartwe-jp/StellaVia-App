@@ -751,6 +751,52 @@
       "end": {}
     }
   },
+  "myPageResaleOrderTitle": "卖出委托",
+  "myPageResaleTabOrder": "卖出",
+  "myPageResaleTabConfirm": "订单内容",
+  "myPageResaleFundNameLabel": "基金名",
+  "myPageResaleInvestorTypeLabel": "出资者类别",
+  "myPageResaleOrderMethodLabel": "委托方式",
+  "myPageResaleOrderMethodValue": "卖出委托",
+  "myPageResaleAvailableUnitsLabel": "可卖口数",
+  "myPageResaleSellUnitsLabel": "卖出口数",
+  "myPageResaleUnitPriceLabel": "卖出单价",
+  "myPageResaleFeeLabel": "卖出手续费",
+  "myPageResaleFeeValue": "成交金额的1.65%",
+  "myPageResaleAgreementLabel": "文件确认",
+  "myPageResaleAgreementBody": "我已同意以下文件并确认其内容，申请普通卖出委托。",
+  "myPageResaleAgreementSampleLabel": "契约地位转让协议（样本）",
+  "myPageResaleTotalAmountLabel": "卖出总额",
+  "myPageResaleFeeAmountLabel": "手续费金额",
+  "myPageResaleNetAmountLabel": "预计到账金额",
+  "myPageResaleValidationMessage": "请填写卖出口数、卖出单价，并同意文件确认。",
+  "myPageResaleConfirmButton": "确认",
+  "myPageResaleBackButton": "返回修改",
+  "myPageResaleSubmitButton": "提交申请",
+  "myPageResaleUnitsSuffix": "口",
+  "myPageResaleYenSuffix": "円",
+  "myPageResaleFixedYieldLabel": "固定{ratio}收益率",
+  "@myPageResaleFixedYieldLabel": {
+    "placeholders": {
+      "ratio": {}
+    }
+  },
+  "myPageResaleInvestorTypeFallback": "固定{ratio}收益率",
+  "@myPageResaleInvestorTypeFallback": {
+    "placeholders": {
+      "ratio": {}
+    }
+  },
+  "myPageResaleHintTitle": "提示",
+  "myPageResaleFinalConfirmMessage": "确认以单价{price}円卖出该项目持分{units}口吗？",
+  "@myPageResaleFinalConfirmMessage": {
+    "placeholders": {
+      "price": {},
+      "units": {}
+    }
+  },
+  "myPageResaleSubmitSuccess": "卖出申请已提交。",
+  "myPageResaleSubmitFailure": "卖出申请提交失败，请稍后重试。",
   "commonNext": "下一步",
   "commonSkipChevron": "跳过 ›",
   "commonOther": "其他",

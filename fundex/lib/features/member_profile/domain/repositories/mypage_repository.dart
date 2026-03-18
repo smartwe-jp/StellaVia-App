@@ -22,4 +22,10 @@ abstract class MyPageRepository {
   Future<MyPageProjectBenefit> fetchProjectBenefit({required String projectId});
 
   Future<bool> submitBenefitWithdrawal({required String benefitId});
+
+  Future<void> submitSecondaryMarketCreate({
+    required String fromProcessId,
+    required int sellNum,
+    required int price,
+  });
 }

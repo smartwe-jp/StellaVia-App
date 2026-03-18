@@ -751,6 +751,52 @@
       "end": {}
     }
   },
+  "myPageResaleOrderTitle": "Sell Order",
+  "myPageResaleTabOrder": "Sell",
+  "myPageResaleTabConfirm": "Order Details",
+  "myPageResaleFundNameLabel": "Fund name",
+  "myPageResaleInvestorTypeLabel": "Investor type",
+  "myPageResaleOrderMethodLabel": "Order method",
+  "myPageResaleOrderMethodValue": "Sell order",
+  "myPageResaleAvailableUnitsLabel": "Available units",
+  "myPageResaleSellUnitsLabel": "Sell units",
+  "myPageResaleUnitPriceLabel": "Unit price",
+  "myPageResaleFeeLabel": "Sell fee",
+  "myPageResaleFeeValue": "1.65% of transaction amount",
+  "myPageResaleAgreementLabel": "Document confirmation",
+  "myPageResaleAgreementBody": "I agree to the document below and submit a normal sell order.",
+  "myPageResaleAgreementSampleLabel": "Assignment of contractual status agreement (sample)",
+  "myPageResaleTotalAmountLabel": "Total amount",
+  "myPageResaleFeeAmountLabel": "Fee amount",
+  "myPageResaleNetAmountLabel": "Estimated receivable",
+  "myPageResaleValidationMessage": "Enter sell units and unit price, then agree to the document confirmation.",
+  "myPageResaleConfirmButton": "Confirm",
+  "myPageResaleBackButton": "Edit",
+  "myPageResaleSubmitButton": "Submit",
+  "myPageResaleUnitsSuffix": "units",
+  "myPageResaleYenSuffix": "JPY",
+  "myPageResaleFixedYieldLabel": "Fixed {ratio} yield",
+  "@myPageResaleFixedYieldLabel": {
+    "placeholders": {
+      "ratio": {}
+    }
+  },
+  "myPageResaleInvestorTypeFallback": "Fixed {ratio} yield",
+  "@myPageResaleInvestorTypeFallback": {
+    "placeholders": {
+      "ratio": {}
+    }
+  },
+  "myPageResaleHintTitle": "Hint",
+  "myPageResaleFinalConfirmMessage": "Do you confirm selling {units} unit(s) of this project at {price} JPY per unit?",
+  "@myPageResaleFinalConfirmMessage": {
+    "placeholders": {
+      "price": {},
+      "units": {}
+    }
+  },
+  "myPageResaleSubmitSuccess": "Sell order submitted.",
+  "myPageResaleSubmitFailure": "Failed to submit the sell order. Please try again later.",
   "commonNext": "Next",
   "commonSkipChevron": "Skip ›",
   "commonOther": "Other",

@@ -12,6 +12,7 @@ import '../../domain/usecases/fetch_mypage_investment_list_usecase.dart';
 import '../../domain/usecases/fetch_mypage_order_inquiry_list_usecase.dart';
 import '../../domain/usecases/fetch_mypage_project_benefit_usecase.dart';
 import '../../domain/usecases/submit_mypage_benefit_withdrawal_usecase.dart';
+import '../../domain/usecases/submit_mypage_secondary_market_create_usecase.dart';
 
 final myPageRemoteDataSourceProvider = Provider<MyPageRemoteDataSource>((ref) {
   return MyPageRemoteDataSourceImpl(
@@ -63,6 +64,13 @@ final fetchMyPageProjectBenefitUseCaseProvider =
 final submitMyPageBenefitWithdrawalUseCaseProvider =
     Provider<SubmitMyPageBenefitWithdrawalUseCase>((ref) {
       return SubmitMyPageBenefitWithdrawalUseCase(
+        ref.watch(myPageRepositoryProvider),
+      );
+    });
+
+final submitMyPageSecondaryMarketCreateUseCaseProvider =
+    Provider<SubmitMyPageSecondaryMarketCreateUseCase>((ref) {
+      return SubmitMyPageSecondaryMarketCreateUseCase(
         ref.watch(myPageRepositoryProvider),
       );
     });

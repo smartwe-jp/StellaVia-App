@@ -3902,6 +3902,186 @@ abstract class AppLocalizations {
   /// **'{start} - {end}'**
   String myPageActiveFundBenefitPeriodRange(Object start, Object end);
 
+  /// No description provided for @myPageResaleOrderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell Order'**
+  String get myPageResaleOrderTitle;
+
+  /// No description provided for @myPageResaleTabOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell'**
+  String get myPageResaleTabOrder;
+
+  /// No description provided for @myPageResaleTabConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Details'**
+  String get myPageResaleTabConfirm;
+
+  /// No description provided for @myPageResaleFundNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fund name'**
+  String get myPageResaleFundNameLabel;
+
+  /// No description provided for @myPageResaleInvestorTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Investor type'**
+  String get myPageResaleInvestorTypeLabel;
+
+  /// No description provided for @myPageResaleOrderMethodLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Order method'**
+  String get myPageResaleOrderMethodLabel;
+
+  /// No description provided for @myPageResaleOrderMethodValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell order'**
+  String get myPageResaleOrderMethodValue;
+
+  /// No description provided for @myPageResaleAvailableUnitsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Available units'**
+  String get myPageResaleAvailableUnitsLabel;
+
+  /// No description provided for @myPageResaleSellUnitsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell units'**
+  String get myPageResaleSellUnitsLabel;
+
+  /// No description provided for @myPageResaleUnitPriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit price'**
+  String get myPageResaleUnitPriceLabel;
+
+  /// No description provided for @myPageResaleFeeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell fee'**
+  String get myPageResaleFeeLabel;
+
+  /// No description provided for @myPageResaleFeeValue.
+  ///
+  /// In en, this message translates to:
+  /// **'1.65% of transaction amount'**
+  String get myPageResaleFeeValue;
+
+  /// No description provided for @myPageResaleAgreementLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Document confirmation'**
+  String get myPageResaleAgreementLabel;
+
+  /// No description provided for @myPageResaleAgreementBody.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the document below and submit a normal sell order.'**
+  String get myPageResaleAgreementBody;
+
+  /// No description provided for @myPageResaleAgreementSampleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Assignment of contractual status agreement (sample)'**
+  String get myPageResaleAgreementSampleLabel;
+
+  /// No description provided for @myPageResaleTotalAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total amount'**
+  String get myPageResaleTotalAmountLabel;
+
+  /// No description provided for @myPageResaleFeeAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee amount'**
+  String get myPageResaleFeeAmountLabel;
+
+  /// No description provided for @myPageResaleNetAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated receivable'**
+  String get myPageResaleNetAmountLabel;
+
+  /// No description provided for @myPageResaleValidationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter sell units and unit price, then agree to the document confirmation.'**
+  String get myPageResaleValidationMessage;
+
+  /// No description provided for @myPageResaleConfirmButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get myPageResaleConfirmButton;
+
+  /// No description provided for @myPageResaleBackButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get myPageResaleBackButton;
+
+  /// No description provided for @myPageResaleSubmitButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get myPageResaleSubmitButton;
+
+  /// No description provided for @myPageResaleUnitsSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'units'**
+  String get myPageResaleUnitsSuffix;
+
+  /// No description provided for @myPageResaleYenSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'JPY'**
+  String get myPageResaleYenSuffix;
+
+  /// No description provided for @myPageResaleFixedYieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed {ratio} yield'**
+  String myPageResaleFixedYieldLabel(Object ratio);
+
+  /// No description provided for @myPageResaleInvestorTypeFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed {ratio} yield'**
+  String myPageResaleInvestorTypeFallback(Object ratio);
+
+  /// No description provided for @myPageResaleHintTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hint'**
+  String get myPageResaleHintTitle;
+
+  /// No description provided for @myPageResaleFinalConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you confirm selling {units} unit(s) of this project at {price} JPY per unit?'**
+  String myPageResaleFinalConfirmMessage(Object price, Object units);
+
+  /// No description provided for @myPageResaleSubmitSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell order submitted.'**
+  String get myPageResaleSubmitSuccess;
+
+  /// No description provided for @myPageResaleSubmitFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit the sell order. Please try again later.'**
+  String get myPageResaleSubmitFailure;
+
   /// No description provided for @commonNext.
   ///
   /// In en, this message translates to:

@@ -481,7 +481,8 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     final records = _investmentRecords
         .where((record) => record.projectId == projectId)
         .toList(growable: false);
-    return () => context.push('/my/active-funds/$projectId', extra: records);
+    return () =>
+        context.push('/profile/my/active-funds/$projectId', extra: records);
   }
 
   void _showSnackBar(BuildContext context, {required String message}) {

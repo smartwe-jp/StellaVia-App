@@ -144,7 +144,7 @@ class DepositPage extends ConsumerWidget {
               FundWalletStandbyBalanceCard(
                 title: '📋 ${l10n.walletStandbyBalanceLabel}',
                 actionLabel: l10n.walletHistoryMoreAction,
-                onTapAction: () => context.push('/wallet/history'),
+                onTapAction: () => context.push('/profile/wallet/history'),
                 entries: historyEntries.isEmpty
                     ? <FundWalletBalanceEntry>[
                         const FundWalletBalanceEntry(

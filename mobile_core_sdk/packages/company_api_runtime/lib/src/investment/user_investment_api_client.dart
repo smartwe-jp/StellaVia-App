@@ -15,6 +15,7 @@ class UserInvestmentApiPaths {
   static const String myInvestmentList = '/crowdfunding/user/invest/list';
   static const String benefitProject = '/crowdfunding/benefit/project';
   static const String benefitWithdrawal = '/crowdfunding/benefit/withdrawal';
+  static const String secondaryMarketCreate = '/crowdfunding/secondary/market/create';
 }
 
 class UserInvestmentApiClient {
@@ -29,6 +30,7 @@ class UserInvestmentApiClient {
     this.myInvestmentListPath = UserInvestmentApiPaths.myInvestmentList,
     this.benefitProjectPath = UserInvestmentApiPaths.benefitProject,
     this.benefitWithdrawalPath = UserInvestmentApiPaths.benefitWithdrawal,
+    this.secondaryMarketCreatePath = UserInvestmentApiPaths.secondaryMarketCreate,
   }) : _dioForPath = dioForPath,
        _envelopeCodec = envelopeCodec ?? const LegacyEnvelopeCodec(),
        _pageProfile = pageProfile ?? const LegacyPageProfile();
@@ -44,6 +46,7 @@ class UserInvestmentApiClient {
   final String myInvestmentListPath;
   final String benefitProjectPath;
   final String benefitWithdrawalPath;
+  final String secondaryMarketCreatePath;
 
   Future<UserInvestmentAccountStatisticDto> fetchAccountStatistic() async {
     final response = await _dioForPath(accountStatisticPath)
@@ -196,5 +199,28 @@ class UserInvestmentApiClient {
       return _envelopeCodec.isTruthyData(payload['data']);
     }
     return true;
+  }
+
+  Future<void> submitSecondaryMarketCreate({
+    required String fromProcessId,
+    required int sellNum,
+    required int price,
+  }) async {
+    final response = await _dioForPath(secondaryMarketCreatePath)
+        .post<Map<String, dynamic>>(
+          secondaryMarketCreatePath,
+          data: <String, dynamic>{
+            'fromProcessId': fromProcessId,
+            'sellNum': sellNum.toString(),
+            'price': price,
+          },
+          options: authRequired(true),
+        );
+
+    _envelopeCodec.assertSuccessIfEnvelope(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to create secondary market sell order.',
+      requireTruthyData: false,
+    );
   }
 }

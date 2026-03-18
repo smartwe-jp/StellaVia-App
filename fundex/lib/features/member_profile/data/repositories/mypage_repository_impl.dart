@@ -65,4 +65,17 @@ class MyPageRepositoryImpl implements MyPageRepository {
   Future<bool> submitBenefitWithdrawal({required String benefitId}) {
     return _remote.submitBenefitWithdrawal(benefitId: benefitId);
   }
+
+  @override
+  Future<void> submitSecondaryMarketCreate({
+    required String fromProcessId,
+    required int sellNum,
+    required int price,
+  }) {
+    return _remote.submitSecondaryMarketCreate(
+      fromProcessId: fromProcessId,
+      sellNum: sellNum,
+      price: price,
+    );
+  }
 }

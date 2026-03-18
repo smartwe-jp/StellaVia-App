@@ -20,10 +20,13 @@ import '../../features/main_shell/presentation/pages/main_shell_page.dart';
 import '../../features/member_profile/presentation/pages/member_profile_edit_flow_page.dart';
 import '../../features/member_profile/presentation/pages/member_profile_intake_page.dart';
 import '../../features/member_profile/presentation/pages/my_page_active_fund_detail_page.dart';
+import '../../features/member_profile/presentation/pages/my_page_secondary_market_sell_confirm_page.dart';
+import '../../features/member_profile/presentation/pages/my_page_secondary_market_sell_order_page.dart';
 import '../../features/member_profile/presentation/pages/my_page_section_list_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/member_profile/presentation/pages/profile_center_tab_page.dart';
 import '../../features/member_profile/domain/entities/mypage_models.dart';
+import '../../features/member_profile/presentation/support/mypage_secondary_market_models.dart';
 import '../../features/member_profile/presentation/support/mypage_section_support.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/wallet/presentation/pages/deposit_page.dart';
@@ -31,6 +34,10 @@ import '../../features/wallet/presentation/pages/withdraw_page.dart';
 import '../../features/wallet/presentation/pages/wallet_bank_account_add_page.dart';
 import '../../features/wallet/presentation/pages/wallet_bank_settings_page.dart';
 import '../../features/wallet/presentation/pages/wallet_history_page.dart';
+
+final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'root',
+);
 
 String? resolveAuthRedirect({
   required AsyncValue<bool> authState,
@@ -92,6 +99,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   });
 
   return GoRouter(
+    navigatorKey: _rootNavigatorKey,
     initialLocation: '/splash',
     refreshListenable: refreshNotifier,
     redirect: (BuildContext context, GoRouterState state) {
@@ -199,6 +207,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 builder: (BuildContext context, GoRouterState state) {
                   return const InvestmentTabPage();
                 },
+                routes: <RouteBase>[
+                  GoRoute(
+                    path: ':id',
+                    builder: (BuildContext context, GoRouterState state) {
+                      final id = state.pathParameters['id'] ?? '';
+                      return FundProjectDetailPage(projectId: id);
+                    },
+                  ),
+                  GoRoute(
+                    path: ':id/lottery-apply',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (BuildContext context, GoRouterState state) {
+                      final id = state.pathParameters['id'] ?? '';
+                      return FundLotteryApplyFlowPage(projectId: id);
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -219,6 +244,73 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 builder: (BuildContext context, GoRouterState state) {
                   return const ProfileCenterTabPage();
                 },
+                routes: <RouteBase>[
+                  GoRoute(
+                    path: 'settings',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const SettingsPage();
+                    },
+                  ),
+                  GoRoute(
+                    path: 'notifications',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const NotificationsPage();
+                    },
+                  ),
+                  GoRoute(
+                    path: 'wallet/bank-settings',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const WalletBankSettingsPage();
+                    },
+                  ),
+                  GoRoute(
+                    path: 'wallet/history',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const WalletHistoryPage();
+                    },
+                  ),
+                  GoRoute(
+                    path: 'my/section-list',
+                    builder: (BuildContext context, GoRouterState state) {
+                      final sectionType = MyPageSectionType.fromQueryValue(
+                        state.uri.queryParameters['type'],
+                      );
+                      return MyPageSectionListPage(
+                        sectionType:
+                            sectionType ??
+                            MyPageSectionType.pendingApplications,
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: 'my/secondary-market',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const MyPageSectionListPage(
+                        sectionType: MyPageSectionType.coolingOff,
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: 'my/active-funds/:projectId',
+                    builder: (BuildContext context, GoRouterState state) {
+                      final projectId = state.pathParameters['projectId'] ?? '';
+                      final extra = state.extra;
+                      final seedRecords = extra is List<MyPageInvestmentRecord>
+                          ? extra
+                          : const <MyPageInvestmentRecord>[];
+                      return MyPageActiveFundDetailPage(
+                        projectId: projectId,
+                        seedRecords: seedRecords,
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: 'secondary-market',
+                    redirect: (BuildContext context, GoRouterState state) {
+                      return '/profile/my/secondary-market';
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -226,14 +318,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/settings',
-        builder: (BuildContext context, GoRouterState state) {
-          return const SettingsPage();
+        redirect: (BuildContext context, GoRouterState state) {
+          return '/profile/settings';
         },
       ),
       GoRoute(
         path: '/notifications',
-        builder: (BuildContext context, GoRouterState state) {
-          return const NotificationsPage();
+        redirect: (BuildContext context, GoRouterState state) {
+          return '/profile/notifications';
         },
       ),
       GoRoute(
@@ -250,8 +342,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/wallet/bank-settings',
-        builder: (BuildContext context, GoRouterState state) {
-          return const WalletBankSettingsPage();
+        redirect: (BuildContext context, GoRouterState state) {
+          return '/profile/wallet/bank-settings';
         },
       ),
       GoRoute(
@@ -262,47 +354,54 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/wallet/history',
-        builder: (BuildContext context, GoRouterState state) {
-          return const WalletHistoryPage();
+        redirect: (BuildContext context, GoRouterState state) {
+          return '/profile/wallet/history';
         },
       ),
       GoRoute(
         path: '/my/section-list',
+        redirect: (BuildContext context, GoRouterState state) {
+          return Uri(
+            path: '/profile/my/section-list',
+            queryParameters: state.uri.queryParameters,
+          ).toString();
+        },
+      ),
+      GoRoute(
+        path: '/my/secondary-market',
+        redirect: (BuildContext context, GoRouterState state) {
+          return '/profile/my/secondary-market';
+        },
+      ),
+      GoRoute(
+        path: '/my/secondary-market/sell',
         builder: (BuildContext context, GoRouterState state) {
-          final sectionType = MyPageSectionType.fromQueryValue(
-            state.uri.queryParameters['type'],
-          );
-          return MyPageSectionListPage(
-            sectionType: sectionType ?? MyPageSectionType.pendingApplications,
-          );
+          final extra = state.extra;
+          if (extra is! MyPageSecondaryMarketSellSeed) {
+            return const Scaffold(
+              body: Center(child: Text('Invalid sell order context')),
+            );
+          }
+          return MyPageSecondaryMarketSellOrderPage(seed: extra);
+        },
+      ),
+      GoRoute(
+        path: '/my/secondary-market/sell/confirm',
+        builder: (BuildContext context, GoRouterState state) {
+          final extra = state.extra;
+          if (extra is! MyPageSecondaryMarketSellDraft) {
+            return const Scaffold(
+              body: Center(child: Text('Invalid sell confirmation context')),
+            );
+          }
+          return MyPageSecondaryMarketSellConfirmPage(draft: extra);
         },
       ),
       GoRoute(
         path: '/my/active-funds/:projectId',
-        builder: (BuildContext context, GoRouterState state) {
+        redirect: (BuildContext context, GoRouterState state) {
           final projectId = state.pathParameters['projectId'] ?? '';
-          final extra = state.extra;
-          final seedRecords = extra is List<MyPageInvestmentRecord>
-              ? extra
-              : const <MyPageInvestmentRecord>[];
-          return MyPageActiveFundDetailPage(
-            projectId: projectId,
-            seedRecords: seedRecords,
-          );
-        },
-      ),
-      GoRoute(
-        path: '/funds/:id/lottery-apply',
-        builder: (BuildContext context, GoRouterState state) {
-          final id = state.pathParameters['id'] ?? '';
-          return FundLotteryApplyFlowPage(projectId: id);
-        },
-      ),
-      GoRoute(
-        path: '/funds/:id',
-        builder: (BuildContext context, GoRouterState state) {
-          final id = state.pathParameters['id'] ?? '';
-          return FundProjectDetailPage(projectId: id);
+          return '/profile/my/active-funds/$projectId';
         },
       ),
       GoRoute(

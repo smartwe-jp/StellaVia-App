@@ -1975,6 +1975,102 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get myPageResaleOrderTitle => '売却注文';
+
+  @override
+  String get myPageResaleTabOrder => '売却';
+
+  @override
+  String get myPageResaleTabConfirm => 'ご注文内容';
+
+  @override
+  String get myPageResaleFundNameLabel => 'ファンド名';
+
+  @override
+  String get myPageResaleInvestorTypeLabel => '出資者種別';
+
+  @override
+  String get myPageResaleOrderMethodLabel => '注文方法';
+
+  @override
+  String get myPageResaleOrderMethodValue => '売却注文';
+
+  @override
+  String get myPageResaleAvailableUnitsLabel => '売却可能口数';
+
+  @override
+  String get myPageResaleSellUnitsLabel => '売却口数';
+
+  @override
+  String get myPageResaleUnitPriceLabel => '売却単価';
+
+  @override
+  String get myPageResaleFeeLabel => '売却手数料';
+
+  @override
+  String get myPageResaleFeeValue => '取引金額の1.65%';
+
+  @override
+  String get myPageResaleAgreementLabel => '書面確認';
+
+  @override
+  String get myPageResaleAgreementBody => '以下の書面に同意し、内容を承諾したので、通常注文を申込みます。';
+
+  @override
+  String get myPageResaleAgreementSampleLabel => '契約上の地位の譲渡契約書（サンプル）';
+
+  @override
+  String get myPageResaleTotalAmountLabel => '売却総額';
+
+  @override
+  String get myPageResaleFeeAmountLabel => '手数料';
+
+  @override
+  String get myPageResaleNetAmountLabel => '受取予定額';
+
+  @override
+  String get myPageResaleValidationMessage => '売却口数・売却単価を入力し、書面確認に同意してください。';
+
+  @override
+  String get myPageResaleConfirmButton => '確認';
+
+  @override
+  String get myPageResaleBackButton => '修正する';
+
+  @override
+  String get myPageResaleSubmitButton => '申込する';
+
+  @override
+  String get myPageResaleUnitsSuffix => '口';
+
+  @override
+  String get myPageResaleYenSuffix => '円';
+
+  @override
+  String myPageResaleFixedYieldLabel(Object ratio) {
+    return '固定$ratio収益率';
+  }
+
+  @override
+  String myPageResaleInvestorTypeFallback(Object ratio) {
+    return '固定$ratio収益率';
+  }
+
+  @override
+  String get myPageResaleHintTitle => 'ヒント';
+
+  @override
+  String myPageResaleFinalConfirmMessage(Object price, Object units) {
+    return '単価$price円でこのプロジェクトの持分$units口を売却することを確認しますか？';
+  }
+
+  @override
+  String get myPageResaleSubmitSuccess => '売却申込を送信しました。';
+
+  @override
+  String get myPageResaleSubmitFailure => '売却申込の送信に失敗しました。しばらくしてから再度お試しください。';
+
+  @override
   String get commonNext => '次へ';
 
   @override

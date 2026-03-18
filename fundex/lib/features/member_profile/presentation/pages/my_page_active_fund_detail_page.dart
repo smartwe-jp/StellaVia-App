@@ -1,6 +1,7 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
@@ -8,6 +9,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/support/identity_auth_guard.dart';
 import '../../domain/entities/mypage_models.dart';
 import '../providers/mypage_providers.dart';
+import '../support/mypage_secondary_market_models.dart';
 import '../support/mypage_section_support.dart';
 
 class MyPageActiveFundDetailPage extends ConsumerWidget {
@@ -222,10 +224,19 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
               const SizedBox(height: 12),
               PrimaryCtaButton(
                 label: l10n.myPageActiveFundResaleAction,
-                onPressed: () => AppNotice.show(
-                  context,
-                  message: l10n.myPageActiveFundResaleComingSoon,
-                ),
+                onPressed: summary.processId == null
+                    ? null
+                    : () => context.push(
+                        '/my/secondary-market/sell',
+                        extra: MyPageSecondaryMarketSellSeed(
+                          projectId: projectId,
+                          projectName: projectName,
+                          fromProcessId: summary.processId!,
+                          availableUnits: summary.investNumRemaining ?? 0,
+                          investorCode: summary.investorCode,
+                          earningRatio: summary.earningRatio,
+                        ),
+                      ),
                 backgroundColor: AppColorTokens.fundexDanger,
                 shadowColor: AppColorTokens.fundexDanger.withValues(alpha: 0.5),
                 horizontalPadding: 0,
@@ -484,6 +495,7 @@ class _ActiveFundSummary {
     required this.projectStatus,
     required this.processId,
     required this.investorCode,
+    required this.earningRatio,
     required this.createTime,
     required this.withdrawalTime,
     required this.investMoney,
@@ -498,6 +510,7 @@ class _ActiveFundSummary {
   final int? projectStatus;
   final String? processId;
   final String? investorCode;
+  final double? earningRatio;
   final String? createTime;
   final String? withdrawalTime;
   final num? investMoney;
@@ -514,6 +527,7 @@ class _ActiveFundSummary {
         projectStatus: null,
         processId: null,
         investorCode: null,
+        earningRatio: null,
         createTime: null,
         withdrawalTime: null,
         investMoney: null,
@@ -549,6 +563,7 @@ class _ActiveFundSummary {
       projectStatus: latest.projectStatus,
       processId: latest.processId,
       investorCode: latest.investorCode,
+      earningRatio: latest.earningRadio ?? latest.investorType?.earningsRadio,
       createTime: latest.createTime,
       withdrawalTime: latest.withdrawalTime,
       investMoney: sumInvestMoney,

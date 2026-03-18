@@ -2081,6 +2081,106 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get myPageResaleOrderTitle => 'Sell Order';
+
+  @override
+  String get myPageResaleTabOrder => 'Sell';
+
+  @override
+  String get myPageResaleTabConfirm => 'Order Details';
+
+  @override
+  String get myPageResaleFundNameLabel => 'Fund name';
+
+  @override
+  String get myPageResaleInvestorTypeLabel => 'Investor type';
+
+  @override
+  String get myPageResaleOrderMethodLabel => 'Order method';
+
+  @override
+  String get myPageResaleOrderMethodValue => 'Sell order';
+
+  @override
+  String get myPageResaleAvailableUnitsLabel => 'Available units';
+
+  @override
+  String get myPageResaleSellUnitsLabel => 'Sell units';
+
+  @override
+  String get myPageResaleUnitPriceLabel => 'Unit price';
+
+  @override
+  String get myPageResaleFeeLabel => 'Sell fee';
+
+  @override
+  String get myPageResaleFeeValue => '1.65% of transaction amount';
+
+  @override
+  String get myPageResaleAgreementLabel => 'Document confirmation';
+
+  @override
+  String get myPageResaleAgreementBody =>
+      'I agree to the document below and submit a normal sell order.';
+
+  @override
+  String get myPageResaleAgreementSampleLabel =>
+      'Assignment of contractual status agreement (sample)';
+
+  @override
+  String get myPageResaleTotalAmountLabel => 'Total amount';
+
+  @override
+  String get myPageResaleFeeAmountLabel => 'Fee amount';
+
+  @override
+  String get myPageResaleNetAmountLabel => 'Estimated receivable';
+
+  @override
+  String get myPageResaleValidationMessage =>
+      'Enter sell units and unit price, then agree to the document confirmation.';
+
+  @override
+  String get myPageResaleConfirmButton => 'Confirm';
+
+  @override
+  String get myPageResaleBackButton => 'Edit';
+
+  @override
+  String get myPageResaleSubmitButton => 'Submit';
+
+  @override
+  String get myPageResaleUnitsSuffix => 'units';
+
+  @override
+  String get myPageResaleYenSuffix => 'JPY';
+
+  @override
+  String myPageResaleFixedYieldLabel(Object ratio) {
+    return 'Fixed $ratio yield';
+  }
+
+  @override
+  String myPageResaleInvestorTypeFallback(Object ratio) {
+    return 'Fixed $ratio yield';
+  }
+
+  @override
+  String get myPageResaleHintTitle => 'Hint';
+
+  @override
+  String myPageResaleFinalConfirmMessage(Object price, Object units) {
+    return 'Do you confirm selling $units unit(s) of this project at $price JPY per unit?';
+  }
+
+  @override
+  String get myPageResaleSubmitSuccess => 'Sell order submitted.';
+
+  @override
+  String get myPageResaleSubmitFailure =>
+      'Failed to submit the sell order. Please try again later.';
+
+  @override
   String get commonNext => 'Next';
 
   @override

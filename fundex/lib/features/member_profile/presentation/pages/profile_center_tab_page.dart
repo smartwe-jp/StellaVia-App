@@ -65,18 +65,18 @@ class ProfileCenterTabPage extends ConsumerWidget {
               leading: _HeroHeaderActionButton(
                 icon: Icons.notifications_none_rounded,
                 showDot: true,
-                onTap: () => context.push('/notifications'),
+                onTap: () => context.push('/profile/notifications'),
               ),
               trailing: _HeroHeaderActionButton(
                 icon: Icons.menu_rounded,
-                onTap: () => context.push('/settings'),
+                onTap: () => context.push('/profile/settings'),
               ),
               metrics: <FundMyPageMetricData>[
                 FundMyPageMetricData(
                   label: l10n.myPageMetricOperating,
                   value: _formatCompactCurrency(operatingAssetsExcludingLoan),
                   onTap: () => context.push(
-                    '/my/section-list?type=${MyPageSectionType.activeFunds.queryValue}',
+                    '/profile/my/section-list?type=${MyPageSectionType.activeFunds.queryValue}',
                   ),
                 ),
                 FundMyPageMetricData(
@@ -146,7 +146,7 @@ class ProfileCenterTabPage extends ConsumerWidget {
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton.icon(
-                      onPressed: () => context.push('/wallet/history'),
+                      onPressed: () => context.push('/profile/wallet/history'),
                       //icon: const Icon(Icons.receipt_long_outlined),
                       label: Text(l10n.myPageTransactionHistoryAction),
                       style: OutlinedButton.styleFrom(
@@ -229,7 +229,7 @@ Widget _buildPendingApplicationsSection(
         initialVisibleCount: cards.isEmpty ? 1 : 3,
         actionLabel: l10n.homeViewAllAction,
         onActionTap: () => context.push(
-          '/my/section-list?type=${MyPageSectionType.pendingApplications.queryValue}',
+          '/profile/my/section-list?type=${MyPageSectionType.pendingApplications.queryValue}',
         ),
         children: cards.isEmpty
             ? <Widget>[_SectionStateCard(message: l10n.myPagePendingEmptyState)]
@@ -337,7 +337,7 @@ Widget _buildCoolingOffSection(
         initialVisibleCount: cards.isEmpty ? 1 : 3,
         actionLabel: l10n.homeViewAllAction,
         onActionTap: () => context.push(
-          '/my/section-list?type=${MyPageSectionType.coolingOff.queryValue}',
+          '/profile/my/section-list?type=${MyPageSectionType.coolingOff.queryValue}',
         ),
         children: cards.isEmpty
             ? <Widget>[
@@ -418,7 +418,7 @@ Widget _buildActiveFundsSection(
               ]
             : cards,
         onActionTap: () => context.push(
-          '/my/section-list?type=${MyPageSectionType.activeFunds.queryValue}',
+          '/profile/my/section-list?type=${MyPageSectionType.activeFunds.queryValue}',
         ),
       );
     },
@@ -478,8 +478,10 @@ VoidCallback? _buildActiveFundDetailTapHandler(
   final projectRecords = records
       .where((record) => record.projectId == projectId)
       .toList(growable: false);
-  return () =>
-      context.push('/my/active-funds/$projectId', extra: projectRecords);
+  return () => context.push(
+    '/profile/my/active-funds/$projectId',
+    extra: projectRecords,
+  );
 }
 
 List<MyPageApplyRecord> _selectPendingApplyRecords(

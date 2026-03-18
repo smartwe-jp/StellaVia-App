@@ -27,6 +27,12 @@ abstract class MyPageRemoteDataSource {
   });
 
   Future<bool> submitBenefitWithdrawal({required String benefitId});
+
+  Future<void> submitSecondaryMarketCreate({
+    required String fromProcessId,
+    required int sellNum,
+    required int price,
+  });
 }
 
 class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
@@ -102,5 +108,18 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
   @override
   Future<bool> submitBenefitWithdrawal({required String benefitId}) async {
     return _apiClient.submitBenefitWithdrawal(benefitId: benefitId);
+  }
+
+  @override
+  Future<void> submitSecondaryMarketCreate({
+    required String fromProcessId,
+    required int sellNum,
+    required int price,
+  }) async {
+    await _apiClient.submitSecondaryMarketCreate(
+      fromProcessId: fromProcessId,
+      sellNum: sellNum,
+      price: price,
+    );
   }
 }

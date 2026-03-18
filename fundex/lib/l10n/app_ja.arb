@@ -751,6 +751,52 @@
       "end": {}
     }
   },
+  "myPageResaleOrderTitle": "売却注文",
+  "myPageResaleTabOrder": "売却",
+  "myPageResaleTabConfirm": "ご注文内容",
+  "myPageResaleFundNameLabel": "ファンド名",
+  "myPageResaleInvestorTypeLabel": "出資者種別",
+  "myPageResaleOrderMethodLabel": "注文方法",
+  "myPageResaleOrderMethodValue": "売却注文",
+  "myPageResaleAvailableUnitsLabel": "売却可能口数",
+  "myPageResaleSellUnitsLabel": "売却口数",
+  "myPageResaleUnitPriceLabel": "売却単価",
+  "myPageResaleFeeLabel": "売却手数料",
+  "myPageResaleFeeValue": "取引金額の1.65%",
+  "myPageResaleAgreementLabel": "書面確認",
+  "myPageResaleAgreementBody": "以下の書面に同意し、内容を承諾したので、通常注文を申込みます。",
+  "myPageResaleAgreementSampleLabel": "契約上の地位の譲渡契約書（サンプル）",
+  "myPageResaleTotalAmountLabel": "売却総額",
+  "myPageResaleFeeAmountLabel": "手数料",
+  "myPageResaleNetAmountLabel": "受取予定額",
+  "myPageResaleValidationMessage": "売却口数・売却単価を入力し、書面確認に同意してください。",
+  "myPageResaleConfirmButton": "確認",
+  "myPageResaleBackButton": "修正する",
+  "myPageResaleSubmitButton": "申込する",
+  "myPageResaleUnitsSuffix": "口",
+  "myPageResaleYenSuffix": "円",
+  "myPageResaleFixedYieldLabel": "固定{ratio}収益率",
+  "@myPageResaleFixedYieldLabel": {
+    "placeholders": {
+      "ratio": {}
+    }
+  },
+  "myPageResaleInvestorTypeFallback": "固定{ratio}収益率",
+  "@myPageResaleInvestorTypeFallback": {
+    "placeholders": {
+      "ratio": {}
+    }
+  },
+  "myPageResaleHintTitle": "ヒント",
+  "myPageResaleFinalConfirmMessage": "単価{price}円でこのプロジェクトの持分{units}口を売却することを確認しますか？",
+  "@myPageResaleFinalConfirmMessage": {
+    "placeholders": {
+      "price": {},
+      "units": {}
+    }
+  },
+  "myPageResaleSubmitSuccess": "売却申込を送信しました。",
+  "myPageResaleSubmitFailure": "売却申込の送信に失敗しました。しばらくしてから再度お試しください。",
   "commonNext": "次へ",
   "commonSkipChevron": "スキップ ›",
   "commonOther": "その他",
