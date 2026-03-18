@@ -1944,6 +1944,69 @@ class AppLocalizationsEn extends AppLocalizations {
       'Withdraw API will be connected in a later implementation.';
 
   @override
+  String get walletWithdrawAmountInvalid =>
+      'Please enter a valid withdrawal amount.';
+
+  @override
+  String get walletWithdrawSelectAccountFirst =>
+      'Please select a destination bank account.';
+
+  @override
+  String get walletWithdrawSubmitSuccess => 'Withdrawal request submitted.';
+
+  @override
+  String get walletWithdrawSubmitFailure =>
+      'Failed to submit the withdrawal request. Please try again later.';
+
+  @override
+  String get walletWithdrawingAction => 'Withdrawing';
+
+  @override
+  String get walletWithdrawHistoryAction => 'Withdraw History';
+
+  @override
+  String get walletWithdrawingPageTitle => 'Withdrawing List';
+
+  @override
+  String get walletWithdrawHistoryPageTitle => 'Withdraw History';
+
+  @override
+  String get walletWithdrawRecordEmpty => 'No withdrawal records available.';
+
+  @override
+  String get walletWithdrawRecordFeeLabel => 'Fee';
+
+  @override
+  String get walletWithdrawRecordApplyTimeLabel => 'Applied at';
+
+  @override
+  String get walletWithdrawRecordPaidTimeLabel => 'Completed at';
+
+  @override
+  String get walletWithdrawRecordBookedTimeLabel => 'Booked time';
+
+  @override
+  String get walletWithdrawRecordBankNumberLabel => 'Bank account';
+
+  @override
+  String get walletWithdrawRecordTypeBankTransfer => 'Bank transfer';
+
+  @override
+  String get walletWithdrawRecordTypeCash => 'Cash withdrawal';
+
+  @override
+  String get walletWithdrawRecordTypeGentlePay => 'Withdraw to GentlePay';
+
+  @override
+  String get walletWithdrawRecordStatusPending => 'Processing';
+
+  @override
+  String get walletWithdrawRecordStatusDone => 'Completed';
+
+  @override
+  String get walletWithdrawRecordStatusUnknown => 'Unknown';
+
+  @override
   String get myPagePendingEmptyState =>
       'No applications or lottery-waiting items.';
 

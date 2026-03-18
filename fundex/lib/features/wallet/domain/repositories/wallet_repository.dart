@@ -1,6 +1,8 @@
 import '../entities/wallet_account_history.dart';
 import '../entities/wallet_bank_account_draft.dart';
 import '../entities/wallet_bank_account_info.dart';
+import '../entities/wallet_withdraw_apply_draft.dart';
+import '../entities/wallet_withdraw_record.dart';
 
 abstract class WalletRepository {
   Future<List<WalletAccountHistory>> fetchAccountHistory({int accountType = 0});
@@ -12,4 +14,10 @@ abstract class WalletRepository {
   Future<void> applyBankAccount();
 
   Future<void> addBankAccount(WalletBankAccountDraft draft);
+
+  Future<void> applyWithdraw(WalletWithdrawApplyDraft draft);
+
+  Future<List<WalletWithdrawRecord>> fetchWithdrawHistory();
+
+  Future<List<WalletWithdrawRecord>> fetchWithdrawingList();
 }

@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../domain/entities/wallet_bank_account_info.dart';
+import '../../domain/entities/wallet_withdraw_apply_draft.dart';
 import '../providers/wallet_providers.dart';
 
 class WithdrawPage extends ConsumerStatefulWidget {
@@ -50,6 +51,9 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
   }
 
   bool _isSameAccount(WalletBankAccountInfo lhs, WalletBankAccountInfo rhs) {
+    if (lhs.id != null && rhs.id != null) {
+      return lhs.id == rhs.id;
+    }
     return lhs.bankName == rhs.bankName &&
         lhs.branchName == rhs.branchName &&
         lhs.accountNumber == rhs.accountNumber &&
@@ -152,6 +156,66 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
     AppNotice.show(context, message: context.l10n.walletBankSettingsAddSuccess);
   }
 
+  num? _parseAmountOrNull() {
+    final raw = _amountController.text.trim();
+    if (raw.isEmpty) {
+      return null;
+    }
+    final sanitized = raw.replaceAll(RegExp(r'[^0-9.]'), '');
+    if (sanitized.isEmpty) {
+      return null;
+    }
+    return num.tryParse(sanitized);
+  }
+
+  Future<void> _submitWithdraw({
+    required WalletBankAccountInfo? selected,
+  }) async {
+    final l10n = context.l10n;
+    final amount = _parseAmountOrNull();
+    if (amount == null || amount <= 0) {
+      AppNotice.show(context, message: l10n.walletWithdrawAmountInvalid);
+      return;
+    }
+    if (selected == null ||
+        selected.id == null ||
+        selected.id!.trim().isEmpty) {
+      AppNotice.show(context, message: l10n.walletWithdrawSelectAccountFirst);
+      return;
+    }
+
+    final bankIdRaw = selected.id!.trim();
+    final parsedBankId = int.tryParse(bankIdRaw);
+    final bankId = parsedBankId ?? bankIdRaw;
+
+    ref.read(walletWithdrawSubmittingProvider.notifier).state = true;
+    try {
+      await ref
+          .read(submitWalletWithdrawApplyUseCaseProvider)
+          .call(
+            WalletWithdrawApplyDraft(
+              amount: amount,
+              bankId: bankId,
+              withdrawType: 0,
+            ),
+          );
+      if (!mounted) {
+        return;
+      }
+      AppNotice.show(context, message: l10n.walletWithdrawSubmitSuccess);
+      ref.invalidate(walletWithdrawingListProvider);
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      AppNotice.show(context, message: l10n.walletWithdrawSubmitFailure);
+    } finally {
+      if (mounted) {
+        ref.read(walletWithdrawSubmittingProvider.notifier).state = false;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -162,6 +226,7 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
       decimalDigits: 0,
     );
     final accountsAsync = ref.watch(walletBankAccountListProvider);
+    final isSubmitting = ref.watch(walletWithdrawSubmittingProvider);
     final availableAmountAsync = ref.watch(myPageAccountStatisticProvider);
     final availableAmount =
         availableAmountAsync.asData?.value?.firstLevelAccountTotal;
@@ -183,6 +248,34 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
           onTap: () => context.pop(),
           backgroundColor: Colors.transparent,
           foregroundColor: AppColorTokens.fundexText,
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        minimum: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () => context.push('/wallet/withdrawing'),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(0, 46),
+                  side: const BorderSide(color: AppColorTokens.fundexBorder),
+                ),
+                child: Text(l10n.walletWithdrawingAction),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: OutlinedButton(
+                onPressed: () => context.push('/wallet/withdraw/history'),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(0, 46),
+                  side: const BorderSide(color: AppColorTokens.fundexBorder),
+                ),
+                child: Text(l10n.walletWithdrawHistoryAction),
+              ),
+            ),
+          ],
         ),
       ),
       body: accountsAsync.when(
@@ -254,12 +347,10 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
               PrimaryCtaButton(
                 label: l10n.walletWithdrawSubmitAction,
                 fullWidth: true,
-                onPressed: () {
-                  AppNotice.show(
-                    context,
-                    message: l10n.walletWithdrawSubmitPending,
-                  );
-                },
+                isLoading: isSubmitting,
+                onPressed: isSubmitting
+                    ? null
+                    : () => _submitWithdraw(selected: selected),
               ),
             ],
           );

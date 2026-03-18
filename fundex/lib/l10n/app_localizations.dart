@@ -3662,6 +3662,126 @@ abstract class AppLocalizations {
   /// **'Withdraw API will be connected in a later implementation.'**
   String get walletWithdrawSubmitPending;
 
+  /// No description provided for @walletWithdrawAmountInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid withdrawal amount.'**
+  String get walletWithdrawAmountInvalid;
+
+  /// No description provided for @walletWithdrawSelectAccountFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a destination bank account.'**
+  String get walletWithdrawSelectAccountFirst;
+
+  /// No description provided for @walletWithdrawSubmitSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal request submitted.'**
+  String get walletWithdrawSubmitSuccess;
+
+  /// No description provided for @walletWithdrawSubmitFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit the withdrawal request. Please try again later.'**
+  String get walletWithdrawSubmitFailure;
+
+  /// No description provided for @walletWithdrawingAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawing'**
+  String get walletWithdrawingAction;
+
+  /// No description provided for @walletWithdrawHistoryAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw History'**
+  String get walletWithdrawHistoryAction;
+
+  /// No description provided for @walletWithdrawingPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawing List'**
+  String get walletWithdrawingPageTitle;
+
+  /// No description provided for @walletWithdrawHistoryPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw History'**
+  String get walletWithdrawHistoryPageTitle;
+
+  /// No description provided for @walletWithdrawRecordEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No withdrawal records available.'**
+  String get walletWithdrawRecordEmpty;
+
+  /// No description provided for @walletWithdrawRecordFeeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee'**
+  String get walletWithdrawRecordFeeLabel;
+
+  /// No description provided for @walletWithdrawRecordApplyTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Applied at'**
+  String get walletWithdrawRecordApplyTimeLabel;
+
+  /// No description provided for @walletWithdrawRecordPaidTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed at'**
+  String get walletWithdrawRecordPaidTimeLabel;
+
+  /// No description provided for @walletWithdrawRecordBookedTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Booked time'**
+  String get walletWithdrawRecordBookedTimeLabel;
+
+  /// No description provided for @walletWithdrawRecordBankNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank account'**
+  String get walletWithdrawRecordBankNumberLabel;
+
+  /// No description provided for @walletWithdrawRecordTypeBankTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank transfer'**
+  String get walletWithdrawRecordTypeBankTransfer;
+
+  /// No description provided for @walletWithdrawRecordTypeCash.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash withdrawal'**
+  String get walletWithdrawRecordTypeCash;
+
+  /// No description provided for @walletWithdrawRecordTypeGentlePay.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw to GentlePay'**
+  String get walletWithdrawRecordTypeGentlePay;
+
+  /// No description provided for @walletWithdrawRecordStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing'**
+  String get walletWithdrawRecordStatusPending;
+
+  /// No description provided for @walletWithdrawRecordStatusDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get walletWithdrawRecordStatusDone;
+
+  /// No description provided for @walletWithdrawRecordStatusUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get walletWithdrawRecordStatusUnknown;
+
   /// No description provided for @myPagePendingEmptyState.
   ///
   /// In en, this message translates to:

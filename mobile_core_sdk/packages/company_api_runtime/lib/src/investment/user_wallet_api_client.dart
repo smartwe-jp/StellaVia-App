@@ -9,6 +9,9 @@ class UserWalletApiPaths {
   const UserWalletApiPaths._();
 
   static const String accountHistory = '/member/wx/account/history';
+  static const String withdrawApply = '/member/wx/account/withdraw/apply';
+  static const String withdrawHistory = '/member/wx/account/withdraw/history';
+  static const String withdrawingList = '/member/wx/account/withdrawing/list';
   static const String bankAccountApply = '/member/bank-account/apply';
   static const String bankAccountInfo = '/member/bank-account/info';
   static const String bankAccountStatus = '/member/bank-account/status';
@@ -20,6 +23,9 @@ class UserWalletApiClient {
     required UserWalletDioForPath dioForPath,
     LegacyEnvelopeCodec? envelopeCodec,
     this.accountHistoryPath = UserWalletApiPaths.accountHistory,
+    this.withdrawApplyPath = UserWalletApiPaths.withdrawApply,
+    this.withdrawHistoryPath = UserWalletApiPaths.withdrawHistory,
+    this.withdrawingListPath = UserWalletApiPaths.withdrawingList,
     this.bankAccountApplyPath = UserWalletApiPaths.bankAccountApply,
     this.bankAccountInfoPath = UserWalletApiPaths.bankAccountInfo,
     this.bankAccountStatusPath = UserWalletApiPaths.bankAccountStatus,
@@ -35,6 +41,9 @@ class UserWalletApiClient {
   final LegacyEnvelopeCodec _envelopeCodec;
 
   final String accountHistoryPath;
+  final String withdrawApplyPath;
+  final String withdrawHistoryPath;
+  final String withdrawingListPath;
   final String bankAccountApplyPath;
   final String bankAccountInfoPath;
   final String bankAccountStatusPath;
@@ -62,6 +71,47 @@ class UserWalletApiClient {
               UserWalletAccountHistoryItemDto.fromJson(row),
         )
         .toList(growable: false);
+  }
+
+  Future<void> applyWithdraw(UserWalletWithdrawApplyRequestDto request) async {
+    final response = await _dioForPath(withdrawApplyPath)
+        .put<Map<String, dynamic>>(
+          withdrawApplyPath,
+          data: request.toJson(),
+          options: authRequired(true),
+        );
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    if (payload.isEmpty) {
+      return;
+    }
+    _envelopeCodec.assertSuccessIfEnvelope(
+      payload,
+      fallbackMessage: 'Failed to submit withdraw request.',
+    );
+  }
+
+  Future<List<UserWalletWithdrawRecordDto>> fetchWithdrawHistory() async {
+    final response = await _dioForPath(withdrawHistoryPath)
+        .get<Map<String, dynamic>>(
+          withdrawHistoryPath,
+          options: authRequired(true),
+        );
+    return _extractRows(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load withdraw history.',
+    ).map(UserWalletWithdrawRecordDto.fromJson).toList(growable: false);
+  }
+
+  Future<List<UserWalletWithdrawRecordDto>> fetchWithdrawingList() async {
+    final response = await _dioForPath(withdrawingListPath)
+        .get<Map<String, dynamic>>(
+          withdrawingListPath,
+          options: authRequired(true),
+        );
+    return _extractRows(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load withdrawing list.',
+    ).map(UserWalletWithdrawRecordDto.fromJson).toList(growable: false);
   }
 
   Future<List<UserWalletBankAccountPoolDto>> fetchBankAccountList() async {

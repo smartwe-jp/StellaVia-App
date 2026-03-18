@@ -1846,6 +1846,66 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletWithdrawSubmitPending => '出金機能は次の実装で接続します。';
 
   @override
+  String get walletWithdrawAmountInvalid => '有効な出金金額を入力してください。';
+
+  @override
+  String get walletWithdrawSelectAccountFirst => '出金先口座を選択してください。';
+
+  @override
+  String get walletWithdrawSubmitSuccess => '出金申請を送信しました。';
+
+  @override
+  String get walletWithdrawSubmitFailure => '出金申請の送信に失敗しました。時間をおいて再度お試しください。';
+
+  @override
+  String get walletWithdrawingAction => '出金中';
+
+  @override
+  String get walletWithdrawHistoryAction => '出金履歴';
+
+  @override
+  String get walletWithdrawingPageTitle => '出金中一覧';
+
+  @override
+  String get walletWithdrawHistoryPageTitle => '出金履歴';
+
+  @override
+  String get walletWithdrawRecordEmpty => '表示できる出金記録がありません。';
+
+  @override
+  String get walletWithdrawRecordFeeLabel => '手数料';
+
+  @override
+  String get walletWithdrawRecordApplyTimeLabel => '申請日時';
+
+  @override
+  String get walletWithdrawRecordPaidTimeLabel => '反映日時';
+
+  @override
+  String get walletWithdrawRecordBookedTimeLabel => '予約日時';
+
+  @override
+  String get walletWithdrawRecordBankNumberLabel => '振込先口座';
+
+  @override
+  String get walletWithdrawRecordTypeBankTransfer => '銀行振込';
+
+  @override
+  String get walletWithdrawRecordTypeCash => '現金引き出し';
+
+  @override
+  String get walletWithdrawRecordTypeGentlePay => 'GentlePay へ出金';
+
+  @override
+  String get walletWithdrawRecordStatusPending => '処理中';
+
+  @override
+  String get walletWithdrawRecordStatusDone => '完了';
+
+  @override
+  String get walletWithdrawRecordStatusUnknown => '状態不明';
+
+  @override
   String get myPagePendingEmptyState => '申込中または抽選待ちの案件はありません。';
 
   @override

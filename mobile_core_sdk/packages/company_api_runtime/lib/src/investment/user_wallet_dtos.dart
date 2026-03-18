@@ -155,6 +155,88 @@ class UserWalletBankAccountInfoDto {
   final String? updateTime;
 }
 
+class UserWalletWithdrawApplyRequestDto {
+  const UserWalletWithdrawApplyRequestDto({
+    required this.amount,
+    required this.bankId,
+    this.bookCrashAddress,
+    this.bookDate,
+    this.withdrawType = 0,
+  });
+
+  final num amount;
+  final Object bankId;
+  final String? bookCrashAddress;
+  final String? bookDate;
+  final int withdrawType;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'amount': amount,
+      'bankId': bankId,
+      'bookCrashAddress': _stringOrNull(bookCrashAddress),
+      'bookDate': _stringOrNull(bookDate),
+      'withdrawType': withdrawType,
+    }..removeWhere((_, dynamic value) => value == null);
+  }
+}
+
+class UserWalletWithdrawRecordDto {
+  const UserWalletWithdrawRecordDto({
+    this.withdrawId,
+    this.amount,
+    this.cost,
+    this.withdrawType,
+    this.applyTime,
+    this.bookDate,
+    this.bankNumber,
+    this.bankName,
+    this.bankBranch,
+    this.payStatus,
+    this.status,
+    this.remark,
+    this.payTime,
+    this.updateTime,
+    this.createTime,
+  });
+
+  factory UserWalletWithdrawRecordDto.fromJson(Map<String, dynamic> json) {
+    return UserWalletWithdrawRecordDto(
+      withdrawId: _stringOrNull(json['withdrawId'] ?? json['id']),
+      amount: _numOrNull(json['amount']),
+      cost: _numOrNull(json['cost'] ?? json['serviceFee']),
+      withdrawType: _intOrNull(json['withdrawType']),
+      applyTime: _stringOrNull(json['applyTime']),
+      bookDate: _stringOrNull(json['bookDate']),
+      bankNumber: _stringOrNull(json['bankNumber']),
+      bankName: _stringOrNull(json['bankName']),
+      bankBranch: _stringOrNull(json['branchName'] ?? json['bankBranch']),
+      payStatus: _intOrNull(json['payStatus']),
+      status: _intOrNull(json['status']),
+      remark: _stringOrNull(json['remark']),
+      payTime: _stringOrNull(json['payTime']),
+      updateTime: _stringOrNull(json['updateTime']),
+      createTime: _stringOrNull(json['createTime']),
+    );
+  }
+
+  final String? withdrawId;
+  final num? amount;
+  final num? cost;
+  final int? withdrawType;
+  final String? applyTime;
+  final String? bookDate;
+  final String? bankNumber;
+  final String? bankName;
+  final String? bankBranch;
+  final int? payStatus;
+  final int? status;
+  final String? remark;
+  final String? payTime;
+  final String? updateTime;
+  final String? createTime;
+}
+
 int? _intOrNull(dynamic value) {
   if (value == null) {
     return null;

@@ -1,5 +1,6 @@
 class WalletBankAccountInfo {
   const WalletBankAccountInfo({
+    this.id,
     required this.bankName,
     required this.branchName,
     required this.accountType,
@@ -8,6 +9,7 @@ class WalletBankAccountInfo {
     this.expireTime,
   });
 
+  final String? id;
   final String bankName;
   final String branchName;
   final String accountType;

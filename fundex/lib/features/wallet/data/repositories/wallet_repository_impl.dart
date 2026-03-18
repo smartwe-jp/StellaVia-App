@@ -1,11 +1,14 @@
 import '../../domain/entities/wallet_account_history.dart';
 import '../../domain/entities/wallet_bank_account_draft.dart';
 import '../../domain/entities/wallet_bank_account_info.dart';
+import '../../domain/entities/wallet_withdraw_apply_draft.dart';
+import '../../domain/entities/wallet_withdraw_record.dart';
 import '../../domain/repositories/wallet_repository.dart';
 import '../datasources/wallet_remote_data_source.dart';
 import '../models/wallet_account_history_dto.dart';
 import '../models/wallet_bank_account_info_dto.dart';
 import '../models/wallet_bank_account_pool_dto.dart';
+import '../models/wallet_withdraw_dto.dart';
 
 class WalletRepositoryImpl implements WalletRepository {
   WalletRepositoryImpl({required WalletRemoteDataSource remote})
@@ -43,5 +46,26 @@ class WalletRepositoryImpl implements WalletRepository {
   @override
   Future<void> addBankAccount(WalletBankAccountDraft draft) {
     return _remote.addBankAccount(draft.toDto());
+  }
+
+  @override
+  Future<void> applyWithdraw(WalletWithdrawApplyDraft draft) {
+    return _remote.applyWithdraw(draft.toDto());
+  }
+
+  @override
+  Future<List<WalletWithdrawRecord>> fetchWithdrawHistory() async {
+    final dtos = await _remote.fetchWithdrawHistory();
+    return dtos
+        .map((WalletWithdrawRecordDto dto) => dto.toEntity())
+        .toList(growable: false);
+  }
+
+  @override
+  Future<List<WalletWithdrawRecord>> fetchWithdrawingList() async {
+    final dtos = await _remote.fetchWithdrawingList();
+    return dtos
+        .map((WalletWithdrawRecordDto dto) => dto.toEntity())
+        .toList(growable: false);
   }
 }

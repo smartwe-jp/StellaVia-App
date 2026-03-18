@@ -34,6 +34,8 @@ import '../../features/wallet/presentation/pages/withdraw_page.dart';
 import '../../features/wallet/presentation/pages/wallet_bank_account_add_page.dart';
 import '../../features/wallet/presentation/pages/wallet_bank_settings_page.dart';
 import '../../features/wallet/presentation/pages/wallet_history_page.dart';
+import '../../features/wallet/presentation/pages/wallet_withdraw_history_page.dart';
+import '../../features/wallet/presentation/pages/wallet_withdrawing_list_page.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(
   debugLabel: 'root',
@@ -354,8 +356,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/wallet/history',
-        redirect: (BuildContext context, GoRouterState state) {
-          return '/profile/wallet/history';
+        builder: (BuildContext context, GoRouterState state) {
+          return const WalletHistoryPage();
+        },
+      ),
+      GoRoute(
+        path: '/wallet/withdraw/history',
+        builder: (BuildContext context, GoRouterState state) {
+          return const WalletWithdrawHistoryPage();
+        },
+      ),
+      GoRoute(
+        path: '/wallet/withdrawing',
+        builder: (BuildContext context, GoRouterState state) {
+          return const WalletWithdrawingListPage();
         },
       ),
       GoRoute(

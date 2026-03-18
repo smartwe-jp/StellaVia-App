@@ -16,6 +16,7 @@ extension WalletBankAccountInfoDtoMapper on WalletBankAccountInfoDto {
     }
 
     return WalletBankAccountInfo(
+      id: bankAccountId ?? pool.id,
       bankName: pool.bankName ?? '--',
       branchName: pool.branchName ?? '--',
       accountType: pool.accountType ?? '--',

@@ -13,6 +13,7 @@ typedef WalletBankAccountAddRequestDto = UserWalletBankAccountAddRequestDto;
 extension WalletBankAccountPoolDtoMapper on WalletBankAccountPoolDto {
   WalletBankAccountInfo toEntity() {
     return WalletBankAccountInfo(
+      id: id,
       bankName: bankName ?? '--',
       branchName: branchName ?? '--',
       accountType: accountType ?? '--',

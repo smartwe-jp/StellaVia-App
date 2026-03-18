@@ -1831,6 +1831,66 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletWithdrawSubmitPending => '出金功能将在后续接入。';
 
   @override
+  String get walletWithdrawAmountInvalid => '请输入有效的出金金额。';
+
+  @override
+  String get walletWithdrawSelectAccountFirst => '请选择出金账户。';
+
+  @override
+  String get walletWithdrawSubmitSuccess => '出金申请已提交。';
+
+  @override
+  String get walletWithdrawSubmitFailure => '出金申请提交失败，请稍后重试。';
+
+  @override
+  String get walletWithdrawingAction => '出金中';
+
+  @override
+  String get walletWithdrawHistoryAction => '出金记录';
+
+  @override
+  String get walletWithdrawingPageTitle => '出金中列表';
+
+  @override
+  String get walletWithdrawHistoryPageTitle => '出金记录';
+
+  @override
+  String get walletWithdrawRecordEmpty => '暂无可显示的出金记录。';
+
+  @override
+  String get walletWithdrawRecordFeeLabel => '手续费';
+
+  @override
+  String get walletWithdrawRecordApplyTimeLabel => '申请时间';
+
+  @override
+  String get walletWithdrawRecordPaidTimeLabel => '到账时间';
+
+  @override
+  String get walletWithdrawRecordBookedTimeLabel => '预约时间';
+
+  @override
+  String get walletWithdrawRecordBankNumberLabel => '收款账户';
+
+  @override
+  String get walletWithdrawRecordTypeBankTransfer => '银行转账';
+
+  @override
+  String get walletWithdrawRecordTypeCash => '现金提现';
+
+  @override
+  String get walletWithdrawRecordTypeGentlePay => '提现到 GentlePay';
+
+  @override
+  String get walletWithdrawRecordStatusPending => '处理中';
+
+  @override
+  String get walletWithdrawRecordStatusDone => '已完成';
+
+  @override
+  String get walletWithdrawRecordStatusUnknown => '状态未知';
+
+  @override
   String get myPagePendingEmptyState => '当前没有申请中或等待抽签的项目。';
 
   @override
@@ -4291,6 +4351,66 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletWithdrawSubmitPending => '出金功能將於後續接入。';
+
+  @override
+  String get walletWithdrawAmountInvalid => '請輸入有效的出金金額。';
+
+  @override
+  String get walletWithdrawSelectAccountFirst => '請先選擇出金帳戶。';
+
+  @override
+  String get walletWithdrawSubmitSuccess => '出金申請已送出。';
+
+  @override
+  String get walletWithdrawSubmitFailure => '出金申請送出失敗，請稍後再試。';
+
+  @override
+  String get walletWithdrawingAction => '出金中';
+
+  @override
+  String get walletWithdrawHistoryAction => '出金紀錄';
+
+  @override
+  String get walletWithdrawingPageTitle => '出金中列表';
+
+  @override
+  String get walletWithdrawHistoryPageTitle => '出金紀錄';
+
+  @override
+  String get walletWithdrawRecordEmpty => '目前沒有可顯示的出金紀錄。';
+
+  @override
+  String get walletWithdrawRecordFeeLabel => '手續費';
+
+  @override
+  String get walletWithdrawRecordApplyTimeLabel => '申請時間';
+
+  @override
+  String get walletWithdrawRecordPaidTimeLabel => '入帳時間';
+
+  @override
+  String get walletWithdrawRecordBookedTimeLabel => '預約時間';
+
+  @override
+  String get walletWithdrawRecordBankNumberLabel => '收款帳戶';
+
+  @override
+  String get walletWithdrawRecordTypeBankTransfer => '銀行轉帳';
+
+  @override
+  String get walletWithdrawRecordTypeCash => '現金提領';
+
+  @override
+  String get walletWithdrawRecordTypeGentlePay => '提現到 GentlePay';
+
+  @override
+  String get walletWithdrawRecordStatusPending => '處理中';
+
+  @override
+  String get walletWithdrawRecordStatusDone => '已完成';
+
+  @override
+  String get walletWithdrawRecordStatusUnknown => '狀態未知';
 
   @override
   String get myPagePendingEmptyState => '目前沒有申請中或等待抽籤的項目。';

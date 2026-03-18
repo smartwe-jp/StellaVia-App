@@ -146,7 +146,7 @@ class ProfileCenterTabPage extends ConsumerWidget {
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton.icon(
-                      onPressed: () => context.push('/profile/wallet/history'),
+                      onPressed: () => context.push('/wallet/history'),
                       //icon: const Icon(Icons.receipt_long_outlined),
                       label: Text(l10n.myPageTransactionHistoryAction),
                       style: OutlinedButton.styleFrom(
