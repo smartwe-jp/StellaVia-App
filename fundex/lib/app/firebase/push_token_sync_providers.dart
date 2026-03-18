@@ -16,9 +16,13 @@ final pushDeviceRegistrationApiClientProvider =
     });
 
 final pushTokenSyncServiceProvider = Provider<PushTokenSyncService>((ref) {
+  final pushRuntime = ref.watch(appPushRuntimeProvider);
   final service = PushTokenSyncService(
     apiClient: ref.watch(pushDeviceRegistrationApiClientProvider),
-    logger: AppPushTokenSyncLogger(ref.watch(appLoggerProvider)),
+    logger: AppPushTokenSyncLogger(
+      ref.watch(appLoggerProvider),
+      providerName: pushRuntime.providerName,
+    ),
     appVersionResolver: resolvePushSyncAppVersion,
     deviceTypeResolver: resolvePushSyncDeviceType,
   );

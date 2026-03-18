@@ -49,3 +49,6 @@ app.*.map.json
 
 # Plugin/Android build cache
 **/.gradle/
+
+# Local dart-define secrets for VS Code launch
+.vscode/dart_define.*.local.json

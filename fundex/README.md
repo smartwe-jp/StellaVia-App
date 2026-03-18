@@ -119,3 +119,21 @@ fvm flutter run --flavor staging -t lib/main_staging.dart \
   --dart-define=OA_API_BASE_URL=https://testoa.gutingjun.com/api \
   --dart-define=ENABLE_HTTP_LOG=true
 ```
+
+## Quick Run Scripts (Aliyun Push)
+
+To avoid long `--dart-define` commands, this repo provides scripts:
+
+```bash
+./scripts/run_dev.sh
+./scripts/run_staging.sh
+./scripts/run_prod.sh
+```
+
+If local define file is missing, create it once:
+
+```bash
+cp .vscode/dart_define.dev.example.json .vscode/dart_define.dev.local.json
+cp .vscode/dart_define.staging.example.json .vscode/dart_define.staging.local.json
+cp .vscode/dart_define.prod.example.json .vscode/dart_define.prod.local.json
+```

@@ -7,6 +7,9 @@ class FirebasePushRuntime implements AppPushRuntime {
   const FirebasePushRuntime();
 
   @override
+  String get providerName => 'fcm';
+
+  @override
   String? get latestToken => AppFirebaseRuntime.latestFcmToken;
 
   @override

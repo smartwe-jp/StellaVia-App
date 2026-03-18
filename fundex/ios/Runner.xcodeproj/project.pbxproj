@@ -18,6 +18,10 @@
 		A7069D1BAC34C71339A4F131 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 02CCC2A1A36E3D573A1F19FE /* GoogleService-Info.plist */; };
 		B1431673021E7591CCD22372 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3598E457609C8A63A94AACA4 /* Pods_Runner.framework */; };
 		BE144D782F67A7C0001C77FD /* idl-license.face-ios in Resources */ = {isa = PBXBuildFile; fileRef = BE144D772F67A7C0001C77FD /* idl-license.face-ios */; };
+		BEA698762F6A7424005F9DFA /* AlicloudELS.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA698752F6A7424005F9DFA /* AlicloudELS.xcframework */; };
+		BEA698772F6A7424005F9DFA /* AlicloudELS.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BEA698752F6A7424005F9DFA /* AlicloudELS.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		BEA698792F6A7433005F9DFA /* CloudPushSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA698782F6A7433005F9DFA /* CloudPushSDK.xcframework */; };
+		BEA6987A2F6A7433005F9DFA /* CloudPushSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BEA698782F6A7433005F9DFA /* CloudPushSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +41,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				BEA6987A2F6A7433005F9DFA /* CloudPushSDK.xcframework in Embed Frameworks */,
+				BEA698772F6A7424005F9DFA /* AlicloudELS.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -83,6 +89,8 @@
 		B470936278A678334630B11B /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
 		BAFD87D5133E53B6CDE94EEF /* Pods-RunnerTests.debug-prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug-prod.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug-prod.xcconfig"; sourceTree = "<group>"; };
 		BE144D772F67A7C0001C77FD /* idl-license.face-ios */ = {isa = PBXFileReference; lastKnownFileType = text; path = "idl-license.face-ios"; sourceTree = "<group>"; };
+		BEA698752F6A7424005F9DFA /* AlicloudELS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = AlicloudELS.xcframework; path = Pods/AlicloudELS/els/AlicloudELS.xcframework; sourceTree = "<group>"; };
+		BEA698782F6A7433005F9DFA /* CloudPushSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CloudPushSDK.xcframework; path = Pods/AlicloudPush/push/CloudPushSDK.xcframework; sourceTree = "<group>"; };
 		BF1D26E2E9D0F75AD9F397F6 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		C20A55EF6E211F2B11404089 /* Pods-RunnerTests.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release-dev.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release-dev.xcconfig"; sourceTree = "<group>"; };
 		C3EF048CD37AE4DF71E080F0 /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -103,6 +111,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1431673021E7591CCD22372 /* Pods_Runner.framework in Frameworks */,
+				BEA698792F6A7433005F9DFA /* CloudPushSDK.xcframework in Frameworks */,
+				BEA698762F6A7424005F9DFA /* AlicloudELS.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +122,8 @@
 		1432792B700453D78118A21C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BEA698782F6A7433005F9DFA /* CloudPushSDK.xcframework */,
+				BEA698752F6A7424005F9DFA /* AlicloudELS.xcframework */,
 				3598E457609C8A63A94AACA4 /* Pods_Runner.framework */,
 				7D50A3288AA1F10C25EFD653 /* Pods_RunnerTests.framework */,
 			);
@@ -733,12 +745,12 @@
 		97C147061CF9000F007C117D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9740EEB21CF90195004384FC /* Debug.xcconfig */;
-				buildSettings = {
-					ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-					CLANG_ENABLE_MODULES = YES;
-					CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-					CODE_SIGN_STYLE = Manual;
-					CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PGU4LJ2SPF;
 				ENABLE_BITCODE = NO;

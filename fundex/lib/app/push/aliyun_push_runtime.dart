@@ -34,6 +34,9 @@ class AliyunPushRuntime implements AppPushRuntime {
       StreamController<String>.broadcast();
 
   @override
+  String get providerName => 'aliyun';
+
+  @override
   String? get latestToken => _latestDeviceId;
 
   @override

@@ -1,6 +1,7 @@
 import 'package:core_tool_kit/core_tool_kit.dart';
 
 abstract interface class AppPushRuntime {
+  String get providerName;
   String? get latestToken;
   Stream<String> get tokenStream;
 
@@ -9,6 +10,9 @@ abstract interface class AppPushRuntime {
 
 class NoopPushRuntime implements AppPushRuntime {
   const NoopPushRuntime();
+
+  @override
+  String get providerName => 'noop';
 
   @override
   String? get latestToken => null;

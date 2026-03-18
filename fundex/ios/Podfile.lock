@@ -1,4 +1,12 @@
 PODS:
+  - AlicloudELS (1.0.3)
+  - AlicloudPush (3.2.3):
+    - AlicloudELS (~> 1.0.3)
+    - AlicloudUTDID (~> 1.0)
+  - AlicloudUTDID (1.6.1)
+  - aliyun_push_flutter (0.0.1):
+    - AlicloudPush (< 4.0, >= 3.2.3)
+    - Flutter
   - Firebase/CoreOnly (12.9.0):
     - FirebaseCore (~> 12.9.0)
   - Firebase/Crashlytics (12.9.0):
@@ -176,6 +184,7 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
+  - aliyun_push_flutter (from `.symlinks/plugins/aliyun_push_flutter/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
@@ -194,6 +203,10 @@ DEPENDENCIES:
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)
 
 SPEC REPOS:
+  https://github.com/aliyun/aliyun-specs.git:
+    - AlicloudELS
+    - AlicloudPush
+    - AlicloudUTDID
   trunk:
     - Firebase
     - FirebaseAnalytics
@@ -214,6 +227,8 @@ SPEC REPOS:
     - PromisesSwift
 
 EXTERNAL SOURCES:
+  aliyun_push_flutter:
+    :path: ".symlinks/plugins/aliyun_push_flutter/ios"
   firebase_analytics:
     :path: ".symlinks/plugins/firebase_analytics/ios"
   firebase_core:
@@ -248,6 +263,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
+  AlicloudELS: fbf821383330465a5af84a033f36f263ae46ca41
+  AlicloudPush: 52cbf38ffc20c07f039cbc72d5738745fd986215
+  AlicloudUTDID: 5d2f22d50e11eecd38f30bc7a48c71925ea90976
+  aliyun_push_flutter: ab0bf7112ef3797f506770a7a9f47f004635a9f6
   Firebase: 065f2bb395062046623036d8e6dc857bc2521d56
   firebase_analytics: b5c909bdc321fab0f9ddf8712f5cef79057e09fa
   firebase_core: 8f0a8c3aca22e29012e419ee18109b4aa021f777
@@ -282,6 +301,6 @@ SPEC CHECKSUMS:
   url_launcher_ios: bb13df5870e8c4234ca12609d04010a21be43dfa
   webview_flutter_wkwebview: 29eb20d43355b48fe7d07113835b9128f84e3af4
 
-PODFILE CHECKSUM: fec7d4e6ec104239ea07e6e49104da2ce36bf4e4
+PODFILE CHECKSUM: b45c7593a1fd24d06dbd7de4ab1ae6f274d895c3
 
 COCOAPODS: 1.16.2

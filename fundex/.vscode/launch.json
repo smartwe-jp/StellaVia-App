@@ -1,0 +1,41 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "FUNDEX Dev (Aliyun Push)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_dev.dart",
+      "flutterMode": "debug",
+      "args": [
+        "--flavor",
+        "dev",
+        "--dart-define-from-file=.vscode/dart_define.dev.local.json"
+      ]
+    },
+    {
+      "name": "FUNDEX Staging (Aliyun Push)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_staging.dart",
+      "flutterMode": "debug",
+      "args": [
+        "--flavor",
+        "staging",
+        "--dart-define-from-file=.vscode/dart_define.staging.local.json"
+      ]
+    },
+    {
+      "name": "FUNDEX Prod (Aliyun Push)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main_prod.dart",
+      "flutterMode": "debug",
+      "args": [
+        "--flavor",
+        "prod",
+        "--dart-define-from-file=.vscode/dart_define.prod.local.json"
+      ]
+    }
+  ]
+}
