@@ -13,6 +13,452 @@ List<Color> _lerpColorList(List<Color> a, List<Color> b, double t) {
   });
 }
 
+class AppSemanticColorTheme extends ThemeExtension<AppSemanticColorTheme> {
+  const AppSemanticColorTheme({
+    required this.brandPrimary,
+    required this.brandPrimaryDark,
+    required this.brandPrimaryBright,
+    required this.brandSecondary,
+    required this.brandAlert,
+    required this.brandNeutral,
+    required this.brandWhite,
+    required this.primary,
+    required this.primaryAlt,
+    required this.primarySoft,
+    required this.primarySubtle,
+    required this.success,
+    required this.successSubtle,
+    required this.successSoft,
+    required this.successBorder,
+    required this.successForeground,
+    required this.warning,
+    required this.warningSubtle,
+    required this.warningSoft,
+    required this.warningBorder,
+    required this.warningForeground,
+    required this.warningAction,
+    required this.danger,
+    required this.dangerSubtle,
+    required this.dangerSoft,
+    required this.dangerBorder,
+    required this.dangerForeground,
+    required this.info,
+    required this.infoSubtle,
+    required this.infoSoft,
+    required this.infoBorder,
+    required this.infoForeground,
+    required this.heroStart,
+    required this.heroMiddle,
+    required this.heroEnd,
+    required this.communityPrimary,
+    required this.communitySecondary,
+    required this.background,
+    required this.surface,
+    required this.surfaceAlt,
+    required this.border,
+    required this.borderSoft,
+    required this.textPrimary,
+    required this.textSecondary,
+    required this.textTertiary,
+    required this.onDark,
+    required this.disabled,
+    required this.highlightGold,
+    required this.scrim,
+  });
+
+  final Color brandPrimary;
+  final Color brandPrimaryDark;
+  final Color brandPrimaryBright;
+  final Color brandSecondary;
+  final Color brandAlert;
+  final Color brandNeutral;
+  final Color brandWhite;
+
+  final Color primary;
+  final Color primaryAlt;
+  final Color primarySoft;
+  final Color primarySubtle;
+
+  final Color success;
+  final Color successSubtle;
+  final Color successSoft;
+  final Color successBorder;
+  final Color successForeground;
+
+  final Color warning;
+  final Color warningSubtle;
+  final Color warningSoft;
+  final Color warningBorder;
+  final Color warningForeground;
+  final Color warningAction;
+
+  final Color danger;
+  final Color dangerSubtle;
+  final Color dangerSoft;
+  final Color dangerBorder;
+  final Color dangerForeground;
+
+  final Color info;
+  final Color infoSubtle;
+  final Color infoSoft;
+  final Color infoBorder;
+  final Color infoForeground;
+
+  final Color heroStart;
+  final Color heroMiddle;
+  final Color heroEnd;
+  final Color communityPrimary;
+  final Color communitySecondary;
+
+  final Color background;
+  final Color surface;
+  final Color surfaceAlt;
+  final Color border;
+  final Color borderSoft;
+  final Color textPrimary;
+  final Color textSecondary;
+  final Color textTertiary;
+  final Color onDark;
+  final Color disabled;
+  final Color highlightGold;
+  final Color scrim;
+
+  @override
+  AppSemanticColorTheme copyWith({
+    Color? brandPrimary,
+    Color? brandPrimaryDark,
+    Color? brandPrimaryBright,
+    Color? brandSecondary,
+    Color? brandAlert,
+    Color? brandNeutral,
+    Color? brandWhite,
+    Color? primary,
+    Color? primaryAlt,
+    Color? primarySoft,
+    Color? primarySubtle,
+    Color? success,
+    Color? successSubtle,
+    Color? successSoft,
+    Color? successBorder,
+    Color? successForeground,
+    Color? warning,
+    Color? warningSubtle,
+    Color? warningSoft,
+    Color? warningBorder,
+    Color? warningForeground,
+    Color? warningAction,
+    Color? danger,
+    Color? dangerSubtle,
+    Color? dangerSoft,
+    Color? dangerBorder,
+    Color? dangerForeground,
+    Color? info,
+    Color? infoSubtle,
+    Color? infoSoft,
+    Color? infoBorder,
+    Color? infoForeground,
+    Color? heroStart,
+    Color? heroMiddle,
+    Color? heroEnd,
+    Color? communityPrimary,
+    Color? communitySecondary,
+    Color? background,
+    Color? surface,
+    Color? surfaceAlt,
+    Color? border,
+    Color? borderSoft,
+    Color? textPrimary,
+    Color? textSecondary,
+    Color? textTertiary,
+    Color? onDark,
+    Color? disabled,
+    Color? highlightGold,
+    Color? scrim,
+  }) {
+    return AppSemanticColorTheme(
+      brandPrimary: brandPrimary ?? this.brandPrimary,
+      brandPrimaryDark: brandPrimaryDark ?? this.brandPrimaryDark,
+      brandPrimaryBright: brandPrimaryBright ?? this.brandPrimaryBright,
+      brandSecondary: brandSecondary ?? this.brandSecondary,
+      brandAlert: brandAlert ?? this.brandAlert,
+      brandNeutral: brandNeutral ?? this.brandNeutral,
+      brandWhite: brandWhite ?? this.brandWhite,
+      primary: primary ?? this.primary,
+      primaryAlt: primaryAlt ?? this.primaryAlt,
+      primarySoft: primarySoft ?? this.primarySoft,
+      primarySubtle: primarySubtle ?? this.primarySubtle,
+      success: success ?? this.success,
+      successSubtle: successSubtle ?? this.successSubtle,
+      successSoft: successSoft ?? this.successSoft,
+      successBorder: successBorder ?? this.successBorder,
+      successForeground: successForeground ?? this.successForeground,
+      warning: warning ?? this.warning,
+      warningSubtle: warningSubtle ?? this.warningSubtle,
+      warningSoft: warningSoft ?? this.warningSoft,
+      warningBorder: warningBorder ?? this.warningBorder,
+      warningForeground: warningForeground ?? this.warningForeground,
+      warningAction: warningAction ?? this.warningAction,
+      danger: danger ?? this.danger,
+      dangerSubtle: dangerSubtle ?? this.dangerSubtle,
+      dangerSoft: dangerSoft ?? this.dangerSoft,
+      dangerBorder: dangerBorder ?? this.dangerBorder,
+      dangerForeground: dangerForeground ?? this.dangerForeground,
+      info: info ?? this.info,
+      infoSubtle: infoSubtle ?? this.infoSubtle,
+      infoSoft: infoSoft ?? this.infoSoft,
+      infoBorder: infoBorder ?? this.infoBorder,
+      infoForeground: infoForeground ?? this.infoForeground,
+      heroStart: heroStart ?? this.heroStart,
+      heroMiddle: heroMiddle ?? this.heroMiddle,
+      heroEnd: heroEnd ?? this.heroEnd,
+      communityPrimary: communityPrimary ?? this.communityPrimary,
+      communitySecondary: communitySecondary ?? this.communitySecondary,
+      background: background ?? this.background,
+      surface: surface ?? this.surface,
+      surfaceAlt: surfaceAlt ?? this.surfaceAlt,
+      border: border ?? this.border,
+      borderSoft: borderSoft ?? this.borderSoft,
+      textPrimary: textPrimary ?? this.textPrimary,
+      textSecondary: textSecondary ?? this.textSecondary,
+      textTertiary: textTertiary ?? this.textTertiary,
+      onDark: onDark ?? this.onDark,
+      disabled: disabled ?? this.disabled,
+      highlightGold: highlightGold ?? this.highlightGold,
+      scrim: scrim ?? this.scrim,
+    );
+  }
+
+  @override
+  AppSemanticColorTheme lerp(
+    covariant ThemeExtension<AppSemanticColorTheme>? other,
+    double t,
+  ) {
+    if (other is! AppSemanticColorTheme) {
+      return this;
+    }
+
+    return AppSemanticColorTheme(
+      brandPrimary: _lerpColor(brandPrimary, other.brandPrimary, t),
+      brandPrimaryDark: _lerpColor(brandPrimaryDark, other.brandPrimaryDark, t),
+      brandPrimaryBright: _lerpColor(
+        brandPrimaryBright,
+        other.brandPrimaryBright,
+        t,
+      ),
+      brandSecondary: _lerpColor(brandSecondary, other.brandSecondary, t),
+      brandAlert: _lerpColor(brandAlert, other.brandAlert, t),
+      brandNeutral: _lerpColor(brandNeutral, other.brandNeutral, t),
+      brandWhite: _lerpColor(brandWhite, other.brandWhite, t),
+      primary: _lerpColor(primary, other.primary, t),
+      primaryAlt: _lerpColor(primaryAlt, other.primaryAlt, t),
+      primarySoft: _lerpColor(primarySoft, other.primarySoft, t),
+      primarySubtle: _lerpColor(primarySubtle, other.primarySubtle, t),
+      success: _lerpColor(success, other.success, t),
+      successSubtle: _lerpColor(successSubtle, other.successSubtle, t),
+      successSoft: _lerpColor(successSoft, other.successSoft, t),
+      successBorder: _lerpColor(successBorder, other.successBorder, t),
+      successForeground: _lerpColor(
+        successForeground,
+        other.successForeground,
+        t,
+      ),
+      warning: _lerpColor(warning, other.warning, t),
+      warningSubtle: _lerpColor(warningSubtle, other.warningSubtle, t),
+      warningSoft: _lerpColor(warningSoft, other.warningSoft, t),
+      warningBorder: _lerpColor(warningBorder, other.warningBorder, t),
+      warningForeground: _lerpColor(
+        warningForeground,
+        other.warningForeground,
+        t,
+      ),
+      warningAction: _lerpColor(warningAction, other.warningAction, t),
+      danger: _lerpColor(danger, other.danger, t),
+      dangerSubtle: _lerpColor(dangerSubtle, other.dangerSubtle, t),
+      dangerSoft: _lerpColor(dangerSoft, other.dangerSoft, t),
+      dangerBorder: _lerpColor(dangerBorder, other.dangerBorder, t),
+      dangerForeground: _lerpColor(dangerForeground, other.dangerForeground, t),
+      info: _lerpColor(info, other.info, t),
+      infoSubtle: _lerpColor(infoSubtle, other.infoSubtle, t),
+      infoSoft: _lerpColor(infoSoft, other.infoSoft, t),
+      infoBorder: _lerpColor(infoBorder, other.infoBorder, t),
+      infoForeground: _lerpColor(infoForeground, other.infoForeground, t),
+      heroStart: _lerpColor(heroStart, other.heroStart, t),
+      heroMiddle: _lerpColor(heroMiddle, other.heroMiddle, t),
+      heroEnd: _lerpColor(heroEnd, other.heroEnd, t),
+      communityPrimary: _lerpColor(
+        communityPrimary,
+        other.communityPrimary,
+        t,
+      ),
+      communitySecondary: _lerpColor(
+        communitySecondary,
+        other.communitySecondary,
+        t,
+      ),
+      background: _lerpColor(background, other.background, t),
+      surface: _lerpColor(surface, other.surface, t),
+      surfaceAlt: _lerpColor(surfaceAlt, other.surfaceAlt, t),
+      border: _lerpColor(border, other.border, t),
+      borderSoft: _lerpColor(borderSoft, other.borderSoft, t),
+      textPrimary: _lerpColor(textPrimary, other.textPrimary, t),
+      textSecondary: _lerpColor(textSecondary, other.textSecondary, t),
+      textTertiary: _lerpColor(textTertiary, other.textTertiary, t),
+      onDark: _lerpColor(onDark, other.onDark, t),
+      disabled: _lerpColor(disabled, other.disabled, t),
+      highlightGold: _lerpColor(highlightGold, other.highlightGold, t),
+      scrim: _lerpColor(scrim, other.scrim, t),
+    );
+  }
+}
+
+class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
+  const AppSemanticTextTheme({
+    required this.heroTitle,
+    required this.heroSubtitle,
+    required this.pageTitle,
+    required this.sectionTitle,
+    required this.cardTitle,
+    required this.body,
+    required this.bodyStrong,
+    required this.bodyMuted,
+    required this.caption,
+    required this.meta,
+    required this.micro,
+    required this.button,
+    required this.chip,
+    required this.inputLabel,
+    required this.inputText,
+    required this.helper,
+    required this.link,
+    required this.numericDisplay,
+    required this.numericHeadline,
+    required this.numericTitle,
+    required this.numericBody,
+    required this.numericCaption,
+  });
+
+  final TextStyle heroTitle;
+  final TextStyle heroSubtitle;
+  final TextStyle pageTitle;
+  final TextStyle sectionTitle;
+  final TextStyle cardTitle;
+  final TextStyle body;
+  final TextStyle bodyStrong;
+  final TextStyle bodyMuted;
+  final TextStyle caption;
+  final TextStyle meta;
+  final TextStyle micro;
+  final TextStyle button;
+  final TextStyle chip;
+  final TextStyle inputLabel;
+  final TextStyle inputText;
+  final TextStyle helper;
+  final TextStyle link;
+  final TextStyle numericDisplay;
+  final TextStyle numericHeadline;
+  final TextStyle numericTitle;
+  final TextStyle numericBody;
+  final TextStyle numericCaption;
+
+  @override
+  AppSemanticTextTheme copyWith({
+    TextStyle? heroTitle,
+    TextStyle? heroSubtitle,
+    TextStyle? pageTitle,
+    TextStyle? sectionTitle,
+    TextStyle? cardTitle,
+    TextStyle? body,
+    TextStyle? bodyStrong,
+    TextStyle? bodyMuted,
+    TextStyle? caption,
+    TextStyle? meta,
+    TextStyle? micro,
+    TextStyle? button,
+    TextStyle? chip,
+    TextStyle? inputLabel,
+    TextStyle? inputText,
+    TextStyle? helper,
+    TextStyle? link,
+    TextStyle? numericDisplay,
+    TextStyle? numericHeadline,
+    TextStyle? numericTitle,
+    TextStyle? numericBody,
+    TextStyle? numericCaption,
+  }) {
+    return AppSemanticTextTheme(
+      heroTitle: heroTitle ?? this.heroTitle,
+      heroSubtitle: heroSubtitle ?? this.heroSubtitle,
+      pageTitle: pageTitle ?? this.pageTitle,
+      sectionTitle: sectionTitle ?? this.sectionTitle,
+      cardTitle: cardTitle ?? this.cardTitle,
+      body: body ?? this.body,
+      bodyStrong: bodyStrong ?? this.bodyStrong,
+      bodyMuted: bodyMuted ?? this.bodyMuted,
+      caption: caption ?? this.caption,
+      meta: meta ?? this.meta,
+      micro: micro ?? this.micro,
+      button: button ?? this.button,
+      chip: chip ?? this.chip,
+      inputLabel: inputLabel ?? this.inputLabel,
+      inputText: inputText ?? this.inputText,
+      helper: helper ?? this.helper,
+      link: link ?? this.link,
+      numericDisplay: numericDisplay ?? this.numericDisplay,
+      numericHeadline: numericHeadline ?? this.numericHeadline,
+      numericTitle: numericTitle ?? this.numericTitle,
+      numericBody: numericBody ?? this.numericBody,
+      numericCaption: numericCaption ?? this.numericCaption,
+    );
+  }
+
+  @override
+  AppSemanticTextTheme lerp(
+    covariant ThemeExtension<AppSemanticTextTheme>? other,
+    double t,
+  ) {
+    if (other is! AppSemanticTextTheme) {
+      return this;
+    }
+
+    return AppSemanticTextTheme(
+      heroTitle: TextStyle.lerp(heroTitle, other.heroTitle, t)!,
+      heroSubtitle: TextStyle.lerp(heroSubtitle, other.heroSubtitle, t)!,
+      pageTitle: TextStyle.lerp(pageTitle, other.pageTitle, t)!,
+      sectionTitle: TextStyle.lerp(sectionTitle, other.sectionTitle, t)!,
+      cardTitle: TextStyle.lerp(cardTitle, other.cardTitle, t)!,
+      body: TextStyle.lerp(body, other.body, t)!,
+      bodyStrong: TextStyle.lerp(bodyStrong, other.bodyStrong, t)!,
+      bodyMuted: TextStyle.lerp(bodyMuted, other.bodyMuted, t)!,
+      caption: TextStyle.lerp(caption, other.caption, t)!,
+      meta: TextStyle.lerp(meta, other.meta, t)!,
+      micro: TextStyle.lerp(micro, other.micro, t)!,
+      button: TextStyle.lerp(button, other.button, t)!,
+      chip: TextStyle.lerp(chip, other.chip, t)!,
+      inputLabel: TextStyle.lerp(inputLabel, other.inputLabel, t)!,
+      inputText: TextStyle.lerp(inputText, other.inputText, t)!,
+      helper: TextStyle.lerp(helper, other.helper, t)!,
+      link: TextStyle.lerp(link, other.link, t)!,
+      numericDisplay: TextStyle.lerp(
+        numericDisplay,
+        other.numericDisplay,
+        t,
+      )!,
+      numericHeadline: TextStyle.lerp(
+        numericHeadline,
+        other.numericHeadline,
+        t,
+      )!,
+      numericTitle: TextStyle.lerp(numericTitle, other.numericTitle, t)!,
+      numericBody: TextStyle.lerp(numericBody, other.numericBody, t)!,
+      numericCaption: TextStyle.lerp(
+        numericCaption,
+        other.numericCaption,
+        t,
+      )!,
+    );
+  }
+}
+
 class AppAuthVisualTheme extends ThemeExtension<AppAuthVisualTheme> {
   const AppAuthVisualTheme({
     required this.backgroundGradientColors,
@@ -271,11 +717,9 @@ class AppFTKTheme extends ThemeExtension<AppFTKTheme> {
           primaryButtonShadowColor ?? this.primaryButtonShadowColor,
       primaryButtonTextStyle:
           primaryButtonTextStyle ?? this.primaryButtonTextStyle,
-      categorySelectedBackgroundColor:
-          categorySelectedBackgroundColor ??
+      categorySelectedBackgroundColor: categorySelectedBackgroundColor ??
           this.categorySelectedBackgroundColor,
-      categorySelectedForegroundColor:
-          categorySelectedForegroundColor ??
+      categorySelectedForegroundColor: categorySelectedForegroundColor ??
           this.categorySelectedForegroundColor,
       categorySelectedLabelStyle:
           categorySelectedLabelStyle ?? this.categorySelectedLabelStyle,
@@ -318,8 +762,7 @@ class AppFTKTheme extends ThemeExtension<AppFTKTheme> {
       photoCountChipTextStyle:
           photoCountChipTextStyle ?? this.photoCountChipTextStyle,
       ratingAccentColor: ratingAccentColor ?? this.ratingAccentColor,
-      hostActionButtonBackgroundColor:
-          hostActionButtonBackgroundColor ??
+      hostActionButtonBackgroundColor: hostActionButtonBackgroundColor ??
           this.hostActionButtonBackgroundColor,
       hostActionButtonShadowColor:
           hostActionButtonShadowColor ?? this.hostActionButtonShadowColor,
@@ -543,4 +986,16 @@ class AppShellNavigationTheme extends ThemeExtension<AppShellNavigationTheme> {
       ),
     );
   }
+}
+
+extension AppThemeLookup on ThemeData {
+  AppSemanticColorTheme get appColors => extension<AppSemanticColorTheme>()!;
+
+  AppSemanticTextTheme get appTextTheme => extension<AppSemanticTextTheme>()!;
+}
+
+extension AppBuildContextThemeLookup on BuildContext {
+  AppSemanticColorTheme get appColors => Theme.of(this).appColors;
+
+  AppSemanticTextTheme get appTextTheme => Theme.of(this).appTextTheme;
 }

@@ -42,20 +42,171 @@ class AppThemeFactory {
 
   static ThemeData _build(Brightness brightness) {
     final isDark = brightness == Brightness.dark;
-    final background = isDark
-        ? AppColorTokens.darkBackground
-        : AppColorTokens.lightBackground;
-    final surface = isDark
-        ? AppColorTokens.darkSurface
-        : AppColorTokens.lightSurface;
-    final onSurface = isDark
-        ? AppColorTokens.darkOnSurface
-        : AppColorTokens.lightOnSurface;
-    final outline = isDark
-        ? AppColorTokens.darkBorder
-        : AppColorTokens.lightBorder;
+    final background =
+        isDark ? AppColorTokens.darkBackground : AppColorTokens.lightBackground;
+    final surface =
+        isDark ? AppColorTokens.darkSurface : AppColorTokens.lightSurface;
+    final onSurface =
+        isDark ? AppColorTokens.darkOnSurface : AppColorTokens.lightOnSurface;
+    final outline =
+        isDark ? AppColorTokens.darkBorder : AppColorTokens.lightBorder;
     final textTheme = AppTypographyTokens.textTheme(brightness);
     final contentMuted = onSurface.withValues(alpha: 0.72);
+    final semanticColors = AppSemanticColorTheme(
+      brandPrimary: AppColorTokens.brandPrimary,
+      brandPrimaryDark: AppColorTokens.brandPrimaryDark,
+      brandPrimaryBright: AppColorTokens.brandPrimaryBright,
+      brandSecondary: AppColorTokens.brandSecondaryTeal,
+      brandAlert: AppColorTokens.brandAlert,
+      brandNeutral: AppColorTokens.brandNeutral,
+      brandWhite: AppColorTokens.brandWhite,
+      primary: AppColorTokens.fundexAccent,
+      primaryAlt: AppColorTokens.fundexAccentAlt,
+      primarySoft: AppColorTokens.fundexAccentLight,
+      primarySubtle: AppColorTokens.fundexAccentSuperLight,
+      success: AppColorTokens.fundexSuccess,
+      successSubtle: AppColorTokens.fundexSuccessLight,
+      successSoft: AppColorTokens.successSoft,
+      successBorder: AppColorTokens.successBorder,
+      successForeground: AppColorTokens.successStrong,
+      warning: AppColorTokens.fundexWarning,
+      warningSubtle: AppColorTokens.fundexWarningLight,
+      warningSoft: AppColorTokens.warningSoft,
+      warningBorder: AppColorTokens.warningBorder,
+      warningForeground: AppColorTokens.warningStrong,
+      warningAction: AppColorTokens.warningAction,
+      danger: AppColorTokens.fundexDanger,
+      dangerSubtle: AppColorTokens.fundexDangerLight,
+      dangerSoft: AppColorTokens.dangerSoft,
+      dangerBorder: AppColorTokens.dangerBorder,
+      dangerForeground: AppColorTokens.dangerText,
+      info: AppColorTokens.info,
+      infoSubtle: AppColorTokens.infoLight,
+      infoSoft: AppColorTokens.infoSoft,
+      infoBorder: AppColorTokens.infoBorder,
+      infoForeground: AppColorTokens.infoText,
+      heroStart: AppColorTokens.fundexPrimaryDark,
+      heroMiddle: AppColorTokens.fundexPrimaryDarkDradient,
+      heroEnd: AppColorTokens.fundexPrimaryDarkAlt,
+      communityPrimary: AppColorTokens.kizunarkPrimary,
+      communitySecondary: AppColorTokens.kizunarkSecondary,
+      background: background,
+      surface: surface,
+      surfaceAlt: isDark
+          ? AppColorTokens.darkSurfaceAlt
+          : AppColorTokens.lightSurfaceAlt,
+      border: outline,
+      borderSoft: isDark
+          ? AppColorTokens.darkBorderSoft
+          : AppColorTokens.lightBorderSoft,
+      textPrimary: onSurface,
+      textSecondary: isDark
+          ? AppColorTokens.darkMuted
+          : AppColorTokens.fundexTextSecondary,
+      textTertiary: isDark
+          ? AppColorTokens.darkMuted.withValues(alpha: 0.84)
+          : AppColorTokens.fundexTextTertiary,
+      onDark: AppColorTokens.darkOnSurface,
+      disabled: AppColorTokens.fundexDisabled,
+      highlightGold: AppColorTokens.fundexHighlightGold,
+      scrim: Colors.black.withValues(alpha: isDark ? 0.56 : 0.36),
+    );
+    final semanticTextTheme = AppSemanticTextTheme(
+      heroTitle: AppTypographyTokens.sansStyle(
+        size: 24,
+        weight: FontWeight.w700,
+        color: semanticColors.onDark,
+        height: 1.16,
+      ),
+      heroSubtitle: AppTypographyTokens.sansStyle(
+        size: 12,
+        weight: FontWeight.w400,
+        color: semanticColors.onDark.withValues(alpha: 0.72),
+        height: 1.5,
+      ),
+      pageTitle: (textTheme.headlineSmall ?? const TextStyle()).copyWith(
+        color: semanticColors.textPrimary,
+      ),
+      sectionTitle: (textTheme.titleLarge ?? const TextStyle()).copyWith(
+        color: semanticColors.textPrimary,
+      ),
+      cardTitle: (textTheme.titleMedium ?? const TextStyle()).copyWith(
+        color: semanticColors.textPrimary,
+      ),
+      body: (textTheme.bodyMedium ?? const TextStyle()).copyWith(
+        color: semanticColors.textPrimary,
+      ),
+      bodyStrong: (textTheme.bodyMedium ?? const TextStyle()).copyWith(
+        color: semanticColors.textPrimary,
+        fontWeight: FontWeight.w700,
+      ),
+      bodyMuted: (textTheme.bodyMedium ?? const TextStyle()).copyWith(
+        color: semanticColors.textSecondary,
+      ),
+      caption: (textTheme.bodySmall ?? const TextStyle()).copyWith(
+        color: semanticColors.textSecondary,
+      ),
+      meta: (textTheme.labelSmall ?? const TextStyle()).copyWith(
+        color: semanticColors.textTertiary,
+      ),
+      micro: AppTypographyTokens.sansStyle(
+        size: 9,
+        weight: FontWeight.w600,
+        color: semanticColors.textTertiary,
+        height: 1.22,
+        letterSpacing: 0.1,
+      ),
+      button: (textTheme.labelLarge ?? const TextStyle()).copyWith(
+        color: semanticColors.textPrimary,
+      ),
+      chip: (textTheme.labelMedium ?? const TextStyle()).copyWith(
+        color: semanticColors.textPrimary,
+      ),
+      inputLabel: (textTheme.bodySmall ?? const TextStyle()).copyWith(
+        color: semanticColors.textSecondary,
+        fontWeight: FontWeight.w600,
+      ),
+      inputText: (textTheme.bodyMedium ?? const TextStyle()).copyWith(
+        color: semanticColors.textPrimary,
+      ),
+      helper: (textTheme.bodySmall ?? const TextStyle()).copyWith(
+        color: semanticColors.textSecondary,
+      ),
+      link: (textTheme.bodySmall ?? const TextStyle()).copyWith(
+        color: semanticColors.primary,
+        fontWeight: FontWeight.w700,
+      ),
+      numericDisplay: AppTypographyTokens.numericStyle(
+        size: 44,
+        weight: FontWeight.w900,
+        color: semanticColors.textPrimary,
+        height: 1.04,
+      ),
+      numericHeadline: AppTypographyTokens.numericStyle(
+        size: 32,
+        weight: FontWeight.w900,
+        color: semanticColors.textPrimary,
+        height: 1.08,
+      ),
+      numericTitle: AppTypographyTokens.numericStyle(
+        size: 20,
+        weight: FontWeight.w800,
+        color: semanticColors.textPrimary,
+        height: 1.1,
+      ),
+      numericBody: AppTypographyTokens.numericStyle(
+        size: 14,
+        weight: FontWeight.w700,
+        color: semanticColors.textPrimary,
+        height: 1.2,
+      ),
+      numericCaption: AppTypographyTokens.numericStyle(
+        size: 10,
+        weight: FontWeight.w700,
+        color: semanticColors.textSecondary,
+        height: 1.2,
+      ),
+    );
 
     final authVisualTheme = AppAuthVisualTheme(
       backgroundGradientColors: isDark
@@ -111,49 +262,44 @@ class AppThemeFactory {
       primaryButtonShadowColor: AppColorTokens.travelPrimaryTeal.withValues(
         alpha: isDark ? 0.22 : 0.15,
       ),
-      primaryButtonTextStyle: (textTheme.titleMedium ?? const TextStyle())
-          .copyWith(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w900,
-            height: 22 / 16,
-          ),
+      primaryButtonTextStyle:
+          (textTheme.titleMedium ?? const TextStyle()).copyWith(
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.w900,
+        height: 22 / 16,
+      ),
       categorySelectedBackgroundColor: AppColorTokens.travelPrimaryBlueAlt,
       categorySelectedForegroundColor: Colors.white,
-      categorySelectedLabelStyle: (textTheme.bodySmall ?? const TextStyle())
-          .copyWith(
-            color: Colors.white,
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-            height: 16.5 / 12,
-          ),
-      categoryIdleBackgroundColor: isDark
-          ? const Color(0xFF161E2D)
-          : Colors.white,
+      categorySelectedLabelStyle:
+          (textTheme.bodySmall ?? const TextStyle()).copyWith(
+        color: Colors.white,
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        height: 16.5 / 12,
+      ),
+      categoryIdleBackgroundColor:
+          isDark ? const Color(0xFF161E2D) : Colors.white,
       categoryIdleBorderColor: isDark
           ? outline.withValues(alpha: 0.9)
           : AppColorTokens.travelBorderSoft,
-      categoryIdleIconColor: isDark
-          ? AppColorTokens.darkMuted
-          : AppColorTokens.travelTextMuted,
-      categoryIdleLabelStyle: (textTheme.bodySmall ?? const TextStyle())
-          .copyWith(
-            color: isDark
-                ? AppColorTokens.darkMuted
-                : AppColorTokens.travelTextSubtle,
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-            height: 16.5 / 12,
-          ),
+      categoryIdleIconColor:
+          isDark ? AppColorTokens.darkMuted : AppColorTokens.travelTextMuted,
+      categoryIdleLabelStyle:
+          (textTheme.bodySmall ?? const TextStyle()).copyWith(
+        color:
+            isDark ? AppColorTokens.darkMuted : AppColorTokens.travelTextSubtle,
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        height: 16.5 / 12,
+      ),
       categoryShadowColor: AppColorTokens.travelShadowBlue.withValues(
         alpha: isDark ? 0.18 : 0.5,
       ),
-      floatingIconBackgroundColor: isDark
-          ? const Color(0xFF17202E)
-          : Colors.white,
-      floatingIconForegroundColor: isDark
-          ? AppColorTokens.darkOnSurface
-          : AppColorTokens.travelIconNavy,
+      floatingIconBackgroundColor:
+          isDark ? const Color(0xFF17202E) : Colors.white,
+      floatingIconForegroundColor:
+          isDark ? AppColorTokens.darkOnSurface : AppColorTokens.travelIconNavy,
       floatingIconShadowColor: Colors.black.withValues(
         alpha: isDark ? 0.24 : 0.10,
       ),
@@ -164,43 +310,42 @@ class AppThemeFactory {
       amenityHighlightedShadowColor: Colors.black.withValues(
         alpha: isDark ? 0.26 : 0.10,
       ),
-      sectionTitleStyle: (textTheme.headlineSmall ?? const TextStyle())
-          .copyWith(
-            fontSize: 23,
-            fontWeight: FontWeight.w700,
-            height: 22 / 23,
-            color: isDark ? AppColorTokens.darkOnSurface : Colors.black,
-          ),
-      sectionActionColor: isDark
-          ? const Color(0xFFF3BA55)
-          : AppColorTokens.travelLinkGold,
-      mediaCardTitleStyle: (textTheme.titleMedium ?? const TextStyle())
-          .copyWith(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            height: 15.28 / 16,
-          ),
-      mediaCardSubtitleStyle: (textTheme.bodySmall ?? const TextStyle())
-          .copyWith(
-            color: Colors.white,
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
-            height: 11.46 / 12,
-          ),
+      sectionTitleStyle:
+          (textTheme.headlineSmall ?? const TextStyle()).copyWith(
+        fontSize: 23,
+        fontWeight: FontWeight.w700,
+        height: 22 / 23,
+        color: isDark ? AppColorTokens.darkOnSurface : Colors.black,
+      ),
+      sectionActionColor:
+          isDark ? const Color(0xFFF3BA55) : AppColorTokens.travelLinkGold,
+      mediaCardTitleStyle:
+          (textTheme.titleMedium ?? const TextStyle()).copyWith(
+        color: Colors.white,
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        height: 15.28 / 16,
+      ),
+      mediaCardSubtitleStyle:
+          (textTheme.bodySmall ?? const TextStyle()).copyWith(
+        color: Colors.white,
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        height: 11.46 / 12,
+      ),
       mediaCardPriceStyle: (textTheme.bodySmall ?? const TextStyle()).copyWith(
         color: Colors.white,
         fontSize: 12,
         fontWeight: FontWeight.w600,
         height: 11.46 / 12,
       ),
-      mediaCardRatingStyle: (textTheme.labelMedium ?? const TextStyle())
-          .copyWith(
-            color: Colors.white,
-            fontSize: 10,
-            fontWeight: FontWeight.w400,
-            height: 9.55 / 10,
-          ),
+      mediaCardRatingStyle:
+          (textTheme.labelMedium ?? const TextStyle()).copyWith(
+        color: Colors.white,
+        fontSize: 10,
+        fontWeight: FontWeight.w400,
+        height: 9.55 / 10,
+      ),
       mediaCardOverlayGradientColors: <Color>[
         Colors.transparent,
         AppColorTokens.travelOverlayCool.withValues(
@@ -221,31 +366,29 @@ class AppThemeFactory {
         Colors.black.withValues(alpha: isDark ? 1 : 0.96),
       ],
       discountChipBackgroundColor: AppColorTokens.travelDiscountCoral,
-      discountChipTextStyle: (textTheme.labelMedium ?? const TextStyle())
-          .copyWith(
-            color: Colors.white,
-            fontSize: 10,
-            fontWeight: FontWeight.w500,
-            height: 9.55 / 10,
-          ),
-      photoCountChipBackgroundColor: isDark
-          ? const Color(0x99404A56)
-          : const Color(0x801D1A19),
-      photoCountChipTextStyle: (textTheme.labelMedium ?? const TextStyle())
-          .copyWith(
-            color: Colors.white,
-            fontSize: 10,
-            fontWeight: FontWeight.w500,
-            height: 9.55 / 10,
-          ),
+      discountChipTextStyle:
+          (textTheme.labelMedium ?? const TextStyle()).copyWith(
+        color: Colors.white,
+        fontSize: 10,
+        fontWeight: FontWeight.w500,
+        height: 9.55 / 10,
+      ),
+      photoCountChipBackgroundColor:
+          isDark ? const Color(0x99404A56) : const Color(0x801D1A19),
+      photoCountChipTextStyle:
+          (textTheme.labelMedium ?? const TextStyle()).copyWith(
+        color: Colors.white,
+        fontSize: 10,
+        fontWeight: FontWeight.w500,
+        height: 9.55 / 10,
+      ),
       ratingAccentColor: AppColorTokens.travelRatingOrange,
       hostActionButtonBackgroundColor: AppColorTokens.travelFabOrange,
       hostActionButtonShadowColor: AppColorTokens.travelShadowOrange.withValues(
         alpha: isDark ? 0.55 : 1,
       ),
-      iconNavyColor: isDark
-          ? AppColorTokens.darkOnSurface
-          : AppColorTokens.travelIconNavy,
+      iconNavyColor:
+          isDark ? AppColorTokens.darkOnSurface : AppColorTokens.travelIconNavy,
       tileCornerRadius: 19,
       cardCornerRadius: 17,
       chipCornerRadius: 87,
@@ -259,15 +402,15 @@ class AppThemeFactory {
 
     final colorScheme = ColorScheme(
       brightness: brightness,
-      primary: AppColorTokens.fundingPrimary,
+      primary: semanticColors.primary,
       onPrimary: Colors.white,
-      secondary: AppColorTokens.accentTertiary,
+      secondary: semanticColors.primaryAlt,
       onSecondary: Colors.white,
-      error: AppColorTokens.danger,
+      error: semanticColors.danger,
       onError: Colors.white,
       surface: surface,
       onSurface: onSurface,
-      tertiary: AppColorTokens.accentSecondary,
+      tertiary: semanticColors.success,
       onTertiary: Colors.white,
     );
 
@@ -285,6 +428,8 @@ class AppThemeFactory {
       scaffoldBackgroundColor: background,
       textTheme: textTheme,
       extensions: <ThemeExtension<dynamic>>[
+        semanticColors,
+        semanticTextTheme,
         authVisualTheme,
         travelHotelTheme,
         shellNavigationTheme,
@@ -305,18 +450,14 @@ class AppThemeFactory {
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         foregroundColor: onSurface,
-        titleTextStyle: textTheme.titleLarge,
+        titleTextStyle: semanticTextTheme.pageTitle,
         systemOverlayStyle: statusBarOverlayStyle,
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: surface.withValues(alpha: isDark ? 0.68 : 0.9),
-        hintStyle: textTheme.bodyMedium?.copyWith(
-          color: (isDark
-              ? AppColorTokens.darkMuted
-              : AppColorTokens.lightMuted),
-        ),
-        labelStyle: textTheme.bodyMedium,
+        hintStyle: semanticTextTheme.helper,
+        labelStyle: semanticTextTheme.inputLabel,
         border: inputBorder,
         enabledBorder: inputBorder,
         focusedBorder: inputBorder.copyWith(
@@ -366,7 +507,8 @@ class AppThemeFactory {
               borderRadius: BorderRadius.circular(UiTokens.radius16),
             ),
           ),
-          textStyle: WidgetStatePropertyAll<TextStyle?>(textTheme.titleMedium),
+          textStyle:
+              WidgetStatePropertyAll<TextStyle?>(semanticTextTheme.button),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -380,7 +522,8 @@ class AppThemeFactory {
               borderRadius: BorderRadius.circular(UiTokens.radius16),
             ),
           ),
-          textStyle: WidgetStatePropertyAll<TextStyle?>(textTheme.titleMedium),
+          textStyle:
+              WidgetStatePropertyAll<TextStyle?>(semanticTextTheme.button),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
@@ -388,9 +531,8 @@ class AppThemeFactory {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(UiTokens.radius16),
         ),
-        backgroundColor: isDark
-            ? const Color(0xFF1B2433)
-            : const Color(0xFF1F2937),
+        backgroundColor:
+            isDark ? const Color(0xFF1B2433) : const Color(0xFF1F2937),
       ),
       cupertinoOverrideTheme: NoDefaultCupertinoThemeData(
         brightness: brightness,
@@ -398,9 +540,9 @@ class AppThemeFactory {
         scaffoldBackgroundColor: background,
         barBackgroundColor: surface.withValues(alpha: 0.8),
         textTheme: CupertinoTextThemeData(
-          textStyle: textTheme.bodyLarge,
-          navTitleTextStyle: textTheme.titleMedium,
-          navLargeTitleTextStyle: textTheme.headlineSmall,
+          textStyle: semanticTextTheme.body,
+          navTitleTextStyle: semanticTextTheme.sectionTitle,
+          navLargeTitleTextStyle: semanticTextTheme.pageTitle,
         ),
       ),
     );

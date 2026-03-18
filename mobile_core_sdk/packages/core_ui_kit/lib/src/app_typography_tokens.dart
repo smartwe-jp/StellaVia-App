@@ -5,100 +5,204 @@ import 'app_color_tokens.dart';
 class AppTypographyTokens {
   const AppTypographyTokens._();
 
-  static const List<String> fallbackFamily = <String>[
+  // Product requirement:
+  // - Japanese + English: Noto Sans JP
+  // - Simplified Chinese: Noto Sans SC
+  // - Traditional Chinese: Noto Sans TC
+  static const List<String> supportedContentFamilies = <String>[
+    'Noto Sans JP',
+    'Noto Sans SC',
+    'Noto Sans TC',
+  ];
+
+  // Platform-specific fallbacks keep glyph coverage stable when the preferred
+  // Noto families are unavailable on the device.
+  static const List<String> platformSansFallbackFamilies = <String>[
+    'Noto Sans CJK JP',
+    'Noto Sans CJK SC',
+    'Noto Sans CJK TC',
+    'PingFang SC',
+    'PingFang TC',
+    'Hiragino Sans',
+    'Hiragino Kaku Gothic ProN',
+    'Microsoft YaHei',
+    'Microsoft JhengHei',
     '.SF Pro Text',
     '.SF Pro Display',
-    'PingFang SC',
-    'Hiragino Sans',
-    'Noto Sans JP',
     'Helvetica Neue',
     'Arial',
     'sans-serif',
   ];
 
+  static const List<String> sansFamilyFallback = <String>[
+    ...supportedContentFamilies,
+    ...platformSansFallbackFamilies,
+  ];
+
+  static const List<String> numericFamilyFallback = <String>[
+    'DM Sans',
+    '.SF Pro Display',
+    '.SF Pro Text',
+    'Inter',
+    'Roboto',
+    ...supportedContentFamilies,
+    'Arial',
+    'sans-serif',
+  ];
+
+  // Preserve the old public name for compatibility with existing imports.
+  static const List<String> fallbackFamily = sansFamilyFallback;
+
+  static TextStyle sansStyle({
+    required double size,
+    required FontWeight weight,
+    required Color color,
+    double? height,
+    double? letterSpacing,
+  }) {
+    return _baseStyle(
+      size: size,
+      weight: weight,
+      color: color,
+      height: height,
+      letterSpacing: letterSpacing,
+      fontFamilyFallback: sansFamilyFallback,
+    );
+  }
+
+  static TextStyle numericStyle({
+    required double size,
+    required FontWeight weight,
+    required Color color,
+    double? height,
+    double? letterSpacing,
+  }) {
+    return _baseStyle(
+      size: size,
+      weight: weight,
+      color: color,
+      height: height,
+      letterSpacing: letterSpacing,
+      fontFamilyFallback: numericFamilyFallback,
+    );
+  }
+
+  static TextStyle _baseStyle({
+    required double size,
+    required FontWeight weight,
+    required Color color,
+    required List<String> fontFamilyFallback,
+    double? height,
+    double? letterSpacing,
+  }) {
+    return TextStyle(
+      fontSize: size,
+      fontWeight: weight,
+      height: height,
+      letterSpacing: letterSpacing,
+      color: color,
+      fontFamilyFallback: fontFamilyFallback,
+    );
+  }
+
   static TextTheme textTheme(Brightness brightness) {
     final isDark = brightness == Brightness.dark;
-    final onSurface = isDark
-        ? AppColorTokens.darkOnSurface
-        : AppColorTokens.lightOnSurface;
+    final onSurface =
+        isDark ? AppColorTokens.darkOnSurface : AppColorTokens.lightOnSurface;
     final muted = isDark ? AppColorTokens.darkMuted : AppColorTokens.lightMuted;
 
-    TextStyle baseStyle({
-      required double size,
-      required FontWeight weight,
-      required Color color,
-      double? height,
-      double? letterSpacing,
-    }) {
-      return TextStyle(
-        fontSize: size,
-        fontWeight: weight,
-        height: height,
-        letterSpacing: letterSpacing,
-        color: color,
-        fontFamilyFallback: fallbackFamily,
-      );
-    }
-
     return TextTheme(
-      displaySmall: baseStyle(
-        size: 34,
+      displayLarge: numericStyle(
+        size: 44,
+        weight: FontWeight.w900,
+        color: onSurface,
+        height: 1.04,
+      ),
+      displayMedium: numericStyle(
+        size: 32,
+        weight: FontWeight.w900,
+        color: onSurface,
+        height: 1.08,
+      ),
+      displaySmall: sansStyle(
+        size: 24,
         weight: FontWeight.w700,
         color: onSurface,
-        height: 1.12,
+        height: 1.16,
       ),
-      headlineMedium: baseStyle(
+      headlineLarge: sansStyle(
         size: 28,
-        weight: FontWeight.w700,
+        weight: FontWeight.w800,
         color: onSurface,
-        height: 1.15,
+        height: 1.14,
       ),
-      headlineSmall: baseStyle(
-        size: 22,
+      headlineMedium: sansStyle(
+        size: 24,
         weight: FontWeight.w700,
         color: onSurface,
         height: 1.2,
       ),
-      titleLarge: baseStyle(
+      headlineSmall: sansStyle(
         size: 20,
-        weight: FontWeight.w600,
+        weight: FontWeight.w700,
         color: onSurface,
-        height: 1.25,
+        height: 1.24,
       ),
-      titleMedium: baseStyle(
+      titleLarge: sansStyle(
+        size: 18,
+        weight: FontWeight.w700,
+        color: onSurface,
+        height: 1.28,
+      ),
+      titleMedium: sansStyle(
         size: 16,
-        weight: FontWeight.w600,
+        weight: FontWeight.w700,
         color: onSurface,
         height: 1.3,
       ),
-      bodyLarge: baseStyle(
+      titleSmall: sansStyle(
+        size: 14,
+        weight: FontWeight.w700,
+        color: onSurface,
+        height: 1.32,
+      ),
+      bodyLarge: sansStyle(
         size: 16,
-        weight: FontWeight.w500,
+        weight: FontWeight.w400,
         color: onSurface,
-        height: 1.4,
+        height: 1.5,
       ),
-      bodyMedium: baseStyle(
+      bodyMedium: sansStyle(
         size: 14,
-        weight: FontWeight.w500,
+        weight: FontWeight.w400,
         color: onSurface,
-        height: 1.42,
+        height: 1.5,
       ),
-      bodySmall: baseStyle(
+      bodySmall: sansStyle(
         size: 12,
-        weight: FontWeight.w500,
+        weight: FontWeight.w400,
         color: muted,
-        height: 1.45,
+        height: 1.5,
       ),
-      labelLarge: baseStyle(
-        size: 14,
-        weight: FontWeight.w600,
+      labelLarge: sansStyle(
+        size: 15,
+        weight: FontWeight.w700,
         color: onSurface,
+        height: 1.2,
         letterSpacing: 0.1,
       ),
-      labelMedium: baseStyle(
+      labelMedium: sansStyle(
         size: 12,
+        weight: FontWeight.w700,
+        color: onSurface,
+        height: 1.2,
+        letterSpacing: 0.2,
+      ),
+      labelSmall: sansStyle(
+        size: 10,
         weight: FontWeight.w600,
         color: muted,
+        height: 1.2,
         letterSpacing: 0.2,
       ),
     );

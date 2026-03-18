@@ -3,6 +3,15 @@ import 'package:flutter/material.dart';
 class AppColorTokens {
   const AppColorTokens._();
 
+  // Corporate guideline palette extracted from the UI spec image.
+  static const Color brandPrimary = Color(0xFF066FC9);
+  static const Color brandPrimaryDark = Color(0xFF055399);
+  static const Color brandPrimaryBright = Color(0xFF1782E2);
+  static const Color brandSecondaryTeal = Color(0xFF2495A3);
+  static const Color brandAlert = Color(0xFFF9675F);
+  static const Color brandNeutral = Color(0xFFE7E7E7);
+  static const Color brandWhite = Color(0xFFFFFFFF);
+
   // FUNDEX core palette (from demo source)
   static const Color fundexPrimaryDark = Color(0xFF0A1628);
   static const Color fundexPrimaryDarkDradient = Color(0xFF1E3A5F);
@@ -27,10 +36,16 @@ class AppColorTokens {
   static const Color kizunarkPrimaryLight = Color(0xFFEDE9FE);
   static const Color fundexBackground = Color(0xFFF8FAFC);
   static const Color fundexSurface = Color(0xFFFFFFFF);
+  static const Color fundexSurfaceAlt = Color(0xFFFAFBFC);
   static const Color fundexBorder = Color(0xFFE2E8F0);
+  static const Color fundexBorderSoft = Color(0xFFF1F5F9);
   static const Color fundexText = Color(0xFF0F172A);
   static const Color fundexTextSecondary = Color(0xFF475569);
   static const Color fundexTextTertiary = Color(0xFF94A3B8);
+  static const Color fundexDisabled = Color(0xFFCBD5E1);
+  static const Color fundexHighlightGold = Color(0xFFFBBF24);
+  static const Color fundexSurfaceInverse = Color(0xFF1E293B);
+  static const Color fundexSurfaceInverseAlt = Color(0xFF334155);
 
   // Semantic aliases used across the app.
   static const Color accent = fundexAccent;
@@ -42,13 +57,17 @@ class AppColorTokens {
   static const Color lightOnSurface = fundexText;
   static const Color lightMuted = fundexTextSecondary;
   static const Color lightBorder = fundexBorder;
+  static const Color lightSurfaceAlt = fundexSurfaceAlt;
+  static const Color lightBorderSoft = fundexBorderSoft;
 
   // Dark palette derived from FUNDEX brand tones.
   static const Color darkBackground = fundexPrimaryDark;
   static const Color darkSurface = fundexPrimaryDarkAlt;
+  static const Color darkSurfaceAlt = Color(0xFF1B2433);
   static const Color darkOnSurface = Color(0xFFF8FAFC);
   static const Color darkMuted = Color(0xFF94A3B8);
   static const Color darkBorder = Color(0xFF334155);
+  static const Color darkBorderSoft = Color(0xFF475569);
 
   // System UI status bar palette.
   // Keep light/dark entries separated for future adjustments; currently same.
@@ -57,6 +76,25 @@ class AppColorTokens {
 
   static const Color danger = fundexDanger;
   static const Color warning = fundexWarning;
+  static const Color info = fundexAccent;
+  static const Color infoLight = fundexAccentLight;
+  static const Color infoSoft = fundexAccentSuperLight;
+  static const Color infoBorder = Color(0xFFBAE6FD);
+  static const Color infoStrong = Color(0xFF1D4ED8);
+  static const Color infoText = Color(0xFF1E3A8A);
+  static const Color successSoft = Color(0xFFF0FDF4);
+  static const Color successBorder = Color(0xFFA7F3D0);
+  static const Color successStrong = Color(0xFF047857);
+  static const Color warningSoft = Color(0xFFFFFBEB);
+  static const Color warningBorder = Color(0xFFFCD34D);
+  static const Color warningStrong = Color(0xFF92400E);
+  static const Color warningText = Color(0xFFA16207);
+  static const Color warningAction = Color(0xFFD97706);
+  static const Color dangerSoft = Color(0xFFFFF1F2);
+  static const Color dangerSoftAlt = Color(0xFFFEF2F2);
+  static const Color dangerBorder = Color(0xFFFCA5A5);
+  static const Color dangerStrong = Color(0xFFDC2626);
+  static const Color dangerText = Color(0xFF991B1B);
 
   // Funding semantic aliases.
   static const Color fundingPrimary = fundexAccent;
