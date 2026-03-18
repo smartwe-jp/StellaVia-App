@@ -11,10 +11,9 @@ import '../../data/adapters/system_device_biometric_authenticator.dart';
 import 'auth_providers.dart';
 
 final identityAuthFeatureEnabledProvider = Provider<bool>((ref) {
-  // Temporarily disabled by default until environment/license is stabilized.
   return const bool.fromEnvironment(
     'ENABLE_IDENTITY_AUTH',
-    defaultValue: false,
+    defaultValue: true,
   );
 });
 
@@ -45,14 +44,14 @@ final identityAuthStateStoreProvider = Provider<IdentityAuthStateStore>((ref) {
 });
 
 final baiduFaceLicenseIdProvider = Provider<String?>((ref) {
-  const value = String.fromEnvironment(
-    'BAIDU_FACE_LICENSE_ID',
-    defaultValue: '',
-  );
-  final normalized = value.trim();
-  if (normalized.isNotEmpty) {
-    return normalized;
-  }
+  // const value = String.fromEnvironment(
+  //   'BAIDU_FACE_LICENSE_ID',
+  //   defaultValue: '',
+  // );
+  // final normalized = value.trim();
+  // if (normalized.isNotEmpty) {
+  //   return normalized;
+  // }
 
   if (kIsWeb) {
     return null;
@@ -60,8 +59,8 @@ final baiduFaceLicenseIdProvider = Provider<String?>((ref) {
 
   // Backward-compatible fallback used in legacy FUNDEX-family apps.
   return switch (defaultTargetPlatform) {
-    TargetPlatform.android => 'gutingjun-googleplay-face-android',
-    TargetPlatform.iOS => 'gutingjun-app-face-ios',
+    TargetPlatform.android => 'stellavia-googleplay-face-android',
+    TargetPlatform.iOS => 'fund-stellavia-face-ios',
     _ => null,
   };
 });

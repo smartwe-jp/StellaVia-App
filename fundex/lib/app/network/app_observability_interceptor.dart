@@ -8,12 +8,14 @@ class AppObservabilityInterceptor extends Interceptor {
     required AppLogger logger,
     required void Function(AppUiMessageKey messageKey) reportErrorMessage,
     this.includeHttpPayloadLog = false,
+    this.includeHttpResponseLog = true,
   }) : _logger = logger,
        _reportErrorMessage = reportErrorMessage;
 
   final AppLogger _logger;
   final void Function(AppUiMessageKey messageKey) _reportErrorMessage;
   final bool includeHttpPayloadLog;
+  final bool includeHttpResponseLog;
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -38,6 +40,10 @@ class AppObservabilityInterceptor extends Interceptor {
     Response<dynamic> response,
     ResponseInterceptorHandler handler,
   ) {
+    if (!includeHttpResponseLog) {
+      handler.next(response);
+      return;
+    }
     final context = <String, Object?>{
       'method': response.requestOptions.method,
       'path': response.requestOptions.path,
@@ -64,7 +70,9 @@ class AppObservabilityInterceptor extends Interceptor {
           'path': err.requestOptions.path,
           'statusCode': failure.statusCode,
           'failureType': failure.type.name,
-          if (includeHttpPayloadLog && err.response?.data != null)
+          if (includeHttpPayloadLog &&
+              includeHttpResponseLog &&
+              err.response?.data != null)
             'responseData': _stringifyForLog(err.response?.data),
         },
       );
@@ -84,7 +92,9 @@ class AppObservabilityInterceptor extends Interceptor {
       context: <String, Object?>{
         'method': err.requestOptions.method,
         'path': err.requestOptions.path,
-        if (includeHttpPayloadLog && err.response?.data != null)
+        if (includeHttpPayloadLog &&
+            includeHttpResponseLog &&
+            err.response?.data != null)
           'responseData': _stringifyForLog(err.response?.data),
       },
     );

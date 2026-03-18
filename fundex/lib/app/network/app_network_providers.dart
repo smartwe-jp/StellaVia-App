@@ -66,6 +66,10 @@ final appApiClusterBaseUrlProvider = Provider.family<String, AppApiCluster>((
 
 final coreHttpClientByClusterProvider =
     Provider.family<CoreHttpClient, AppApiCluster>((ref, cluster) {
+      const enableHttpResponseLog = bool.fromEnvironment(
+        'ENABLE_HTTP_RESPONSE_LOG',
+        defaultValue: true,
+      );
       final baseUrl = ref.watch(appApiClusterBaseUrlProvider(cluster));
       final environment = ref.watch(appEnvironmentProvider);
       final logger = ref.watch(appLoggerProvider);
@@ -83,6 +87,7 @@ final coreHttpClientByClusterProvider =
           logger: logger,
           reportErrorMessage: messageController.showError,
           includeHttpPayloadLog: environment.enableHttpLog,
+          includeHttpResponseLog: enableHttpResponseLog,
         ),
       );
 
@@ -90,7 +95,7 @@ final coreHttpClientByClusterProvider =
         client.dio.interceptors.add(
           LogInterceptor(
             requestBody: true,
-            responseBody: true,
+            responseBody: enableHttpResponseLog,
             logPrint: (Object value) => logger.debug(value.toString()),
           ),
         );
