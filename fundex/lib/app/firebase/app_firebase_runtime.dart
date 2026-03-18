@@ -15,7 +15,8 @@ class AppFirebaseRuntime {
   static const int _apnsTokenPollAttempts = 12;
   static const Duration _apnsTokenPollDelay = Duration(milliseconds: 500);
 
-  static bool _initialized = false;
+  static bool _crashlyticsConfigured = false;
+  static bool _pushConfigured = false;
   static String? _latestFcmToken;
   static final StreamController<String> _tokenController =
       StreamController<String>.broadcast();
@@ -26,14 +27,32 @@ class AppFirebaseRuntime {
   static String? get latestFcmToken => _latestFcmToken;
   static Stream<String> get tokenStream => _tokenController.stream;
 
-  static Future<void> initialize({required AppLogger logger}) async {
-    if (_initialized) {
+  static Future<void> initialize({
+    required AppLogger logger,
+    bool enablePush = true,
+  }) async {
+    await _ensureCrashlyticsConfigured(logger: logger);
+    if (enablePush) {
+      await ensurePushConfigured(logger: logger);
+    }
+  }
+
+  static Future<void> ensurePushConfigured({required AppLogger logger}) async {
+    if (_pushConfigured) {
       return;
     }
-    _initialized = true;
-
-    await _configureCrashlytics(logger: logger);
     await _configurePush(logger: logger);
+    _pushConfigured = true;
+  }
+
+  static Future<void> _ensureCrashlyticsConfigured({
+    required AppLogger logger,
+  }) async {
+    if (_crashlyticsConfigured) {
+      return;
+    }
+    await _configureCrashlytics(logger: logger);
+    _crashlyticsConfigured = true;
   }
 
   static Future<void> _configureCrashlytics({required AppLogger logger}) async {
@@ -82,8 +101,17 @@ class AppFirebaseRuntime {
       'Push permission requested',
       context: <String, Object?>{
         'authorizationStatus': permission.authorizationStatus.name,
+        'soundSetting': permission.sound.name,
+        'alertSetting': permission.alert.name,
+        'badgeSetting': permission.badge.name,
       },
     );
+    if (permission.sound != AppleNotificationSetting.enabled) {
+      logger.warning(
+        'Push sound is not enabled at OS notification settings.',
+        context: <String, Object?>{'soundSetting': permission.sound.name},
+      );
+    }
 
     final canResolveToken =
         permission.authorizationStatus == AuthorizationStatus.authorized ||

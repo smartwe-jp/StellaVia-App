@@ -37,6 +37,7 @@ dependencies:
     path: ../mobile_core_sdk/packages/core_ui_kit
   flutter_bdface_collect:
     path: plugins/flutter_bdface_collect
+  aliyun_push_flutter: ^1.3.4
   firebase_core: ^4.5.0
   firebase_messaging: ^16.1.2
   firebase_crashlytics: ^5.0.8

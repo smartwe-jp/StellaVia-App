@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/presentation/providers/auth_providers.dart';
 import '../network/app_network_providers.dart';
 import '../observability/app_observability_providers.dart';
-import 'app_firebase_runtime.dart';
+import '../push/app_push_runtime_provider.dart';
 import 'push_token_sync_adapters.dart';
 
 final pushDeviceRegistrationApiClientProvider =
@@ -28,6 +28,7 @@ final pushTokenSyncServiceProvider = Provider<PushTokenSyncService>((ref) {
 
 final pushTokenSyncBootstrapProvider = Provider<void>((ref) {
   final service = ref.watch(pushTokenSyncServiceProvider);
+  final pushRuntime = ref.watch(appPushRuntimeProvider);
 
   void updateAuth(AsyncValue<bool> authState) {
     service.updateAuthentication(authState.asData?.value ?? false);
@@ -39,7 +40,7 @@ final pushTokenSyncBootstrapProvider = Provider<void>((ref) {
     updateAuth(next);
   });
 
-  final tokenSubscription = AppFirebaseRuntime.tokenStream.listen(
+  final tokenSubscription = pushRuntime.tokenStream.listen(
     service.enqueueToken,
     onError: (Object error, StackTrace stackTrace) {
       final logger = ref.read(appLoggerProvider);
@@ -52,7 +53,7 @@ final pushTokenSyncBootstrapProvider = Provider<void>((ref) {
   );
   ref.onDispose(tokenSubscription.cancel);
 
-  final latestToken = AppFirebaseRuntime.latestFcmToken;
+  final latestToken = pushRuntime.latestToken;
   if (latestToken != null && latestToken.trim().isNotEmpty) {
     unawaited(
       Future<void>.microtask(() {

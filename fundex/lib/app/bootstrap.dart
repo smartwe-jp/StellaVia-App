@@ -11,6 +11,9 @@ import 'config/app_flavor.dart';
 import 'config/environment_provider.dart';
 import 'firebase/app_firebase_runtime.dart';
 import 'observability/app_observability_providers.dart';
+import 'push/app_push_runtime_factory.dart';
+import 'push/app_push_runtime_provider.dart';
+import 'push/app_push_settings.dart';
 
 bool? _parseOptionalBool(String value) {
   final normalized = value.trim().toLowerCase();
@@ -58,13 +61,22 @@ Future<void> bootstrap({
     loggerName: 'fundex',
   );
 
-  await AppFirebaseRuntime.initialize(logger: logger);
+  final pushSettings = AppPushSettings.fromDartDefine();
+  final pushRuntime = createAppPushRuntime(settings: pushSettings);
+  logger.info(
+    'Push runtime selected.',
+    context: <String, Object?>{'provider': pushSettings.provider.name},
+  );
+
+  await AppFirebaseRuntime.initialize(logger: logger, enablePush: false);
+  await pushRuntime.initialize(logger: logger);
 
   runApp(
     ProviderScope(
       overrides: <Override>[
         appEnvironmentProvider.overrideWithValue(environment),
         appLoggerProvider.overrideWithValue(logger),
+        appPushRuntimeProvider.overrideWithValue(pushRuntime),
       ],
       child: const MemberTemplateApp(),
     ),
