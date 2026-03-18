@@ -34,28 +34,25 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 28, 20, 32),
       children: <Widget>[
         Text(
           title,
-          style: (theme.textTheme.titleMedium ?? const TextStyle()).copyWith(
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-            color: AppColorTokens.fundexText,
-          ),
+          style: appText.sectionTitle.copyWith(color: colors.textPrimary),
         ),
         const SizedBox(height: 18),
         DecoratedBox(
           decoration: BoxDecoration(
-            color: AppColorTokens.fundexBackground,
+            color: colors.surfaceAlt,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
             children: List<Widget>.generate(rows.length, (int index) {
               final row = rows[index];
-              final isHighlighted =
-                  highlightValue != null &&
+              final isHighlighted = highlightValue != null &&
                   row.value.trim() == highlightValue!.trim();
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -70,31 +67,28 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
                           Expanded(
                             child: Text(
                               row.label,
-                              style:
-                                  (theme.textTheme.bodySmall ??
-                                          const TextStyle())
-                                      .copyWith(
-                                        fontSize: 13,
-                                        color:
-                                            AppColorTokens.fundexTextSecondary,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                              style: appText.caption.copyWith(
+                                fontSize: 13,
+                                color: colors.textSecondary,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                           Flexible(
                             child: Text(
                               row.value,
                               textAlign: TextAlign.end,
-                              style:
-                                  (theme.textTheme.bodyMedium ??
-                                          const TextStyle())
-                                      .copyWith(
-                                        fontSize: 14,
-                                        color: isHighlighted
-                                            ? AppColorTokens.fundexViolet
-                                            : AppColorTokens.fundexText,
-                                        fontWeight: FontWeight.w800,
-                                      ),
+                              style: _summaryValueStyle(
+                                appText,
+                                value: row.value,
+                                defaultColor: colors.textPrimary,
+                                highlightColor: colors.communitySecondary,
+                              ).copyWith(
+                                fontSize: 14,
+                                color: isHighlighted
+                                    ? colors.communitySecondary
+                                    : colors.textPrimary,
+                              ),
                             ),
                           ),
                         ],
@@ -115,7 +109,8 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
         const SizedBox(height: 14),
         DecoratedBox(
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 250, 240, 189),
+            color: colors.warningSubtle,
+            border: Border.all(color: colors.warningBorder),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Padding(
@@ -128,12 +123,11 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
                 Expanded(
                   child: RichText(
                     text: TextSpan(
-                      style: (theme.textTheme.bodySmall ?? const TextStyle())
-                          .copyWith(
-                            fontSize: 12,
-                            color: const Color(0xFF92400E),
-                            height: 1.6,
-                          ),
+                      style: appText.caption.copyWith(
+                        fontSize: 12,
+                        color: colors.warningForeground,
+                        height: 1.6,
+                      ),
                       children: <InlineSpan>[
                         TextSpan(
                           text: '$noticeTitle\n',
@@ -154,7 +148,7 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: AppColorTokens.fundexBackground,
+              color: colors.surfaceAlt,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Padding(
@@ -164,13 +158,12 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
                   Expanded(
                     child: Text(
                       agreementLabel,
-                      style: (theme.textTheme.bodySmall ?? const TextStyle())
-                          .copyWith(
-                            fontSize: 12,
-                            color: AppColorTokens.fundexText,
-                            fontWeight: FontWeight.w800,
-                            height: 1.5,
-                          ),
+                      style: appText.bodyStrong.copyWith(
+                        fontSize: 12,
+                        color: colors.textPrimary,
+                        fontWeight: FontWeight.w800,
+                        height: 1.5,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -179,22 +172,18 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
                     width: 20,
                     height: 20,
                     decoration: BoxDecoration(
-                      color: agreed
-                          ? AppColorTokens.fundexAccent
-                          : Colors.white,
+                      color: agreed ? colors.primary : colors.surface,
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(
-                        color: agreed
-                            ? AppColorTokens.fundexAccent
-                            : AppColorTokens.fundexBorder,
+                        color: agreed ? colors.primary : colors.border,
                         width: 2,
                       ),
                     ),
                     child: agreed
-                        ? const Icon(
+                        ? Icon(
                             Icons.check_rounded,
                             size: 12,
-                            color: Colors.white,
+                            color: colors.brandWhite,
                           )
                         : null,
                   ),
@@ -209,16 +198,50 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
           onPressed: onApply,
           isLoading: isSubmitting,
           horizontalPadding: 0,
-          backgroundColor: AppColorTokens.fundexViolet,
-          shadowColor: AppColorTokens.fundexViolet.withValues(alpha: 0.36),
-          textStyle: (theme.textTheme.titleMedium ?? const TextStyle())
-              .copyWith(
-                color: Colors.white,
-                fontSize: 15,
-                fontWeight: FontWeight.w800,
-              ),
+          backgroundColor: colors.communitySecondary,
+          shadowColor: colors.communitySecondary.withValues(alpha: 0.36),
+          textStyle: appText.button.copyWith(
+            color: colors.brandWhite,
+            fontSize: 15,
+            fontWeight: FontWeight.w800,
+          ),
         ),
       ],
     );
   }
+}
+
+TextStyle _summaryValueStyle(
+  AppSemanticTextTheme appText, {
+  required String value,
+  required Color defaultColor,
+  Color? highlightColor,
+}) {
+  final trimmed = value.trim();
+  final looksNumeric = _looksNumericLikeValue(trimmed);
+  final baseStyle = looksNumeric ? appText.numericBody : appText.bodyStrong;
+
+  return baseStyle.copyWith(
+    color: highlightColor ?? defaultColor,
+    fontWeight: FontWeight.w800,
+  );
+}
+
+bool _looksNumericLikeValue(String value) {
+  if (value.isEmpty) {
+    return false;
+  }
+
+  const symbols = '¥%.,/:- ';
+  for (final rune in value.runes) {
+    final character = String.fromCharCode(rune);
+    final isDigit = rune >= 48 && rune <= 57;
+    final isUpper = rune >= 65 && rune <= 90;
+    final isLower = rune >= 97 && rune <= 122;
+    if (isDigit || isUpper || isLower || symbols.contains(character)) {
+      continue;
+    }
+    return false;
+  }
+  return true;
 }

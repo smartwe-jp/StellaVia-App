@@ -45,6 +45,9 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
   @override
   Widget build(BuildContext context) {
     final projectId = widget.projectId;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final detailAsync = ref.watch(fundProjectDetailProvider(projectId));
 
     return detailAsync.when(
@@ -61,10 +64,10 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                 Text(
                   context.l10n.fundListLoadError,
                   textAlign: TextAlign.center,
-                  style:
-                      (Theme.of(context).textTheme.bodyMedium ??
-                              const TextStyle())
-                          .copyWith(color: AppColorTokens.fundexTextSecondary),
+                  style: (theme.textTheme.bodyMedium ?? const TextStyle())
+                      .copyWith(
+                    color: colors.textSecondary,
+                  ),
                 ),
                 const SizedBox(height: UiTokens.spacing12),
                 OutlinedButton(
@@ -115,7 +118,7 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                 onFavoriteTap: () {},
               ),
               Container(
-                color: Colors.white,
+                color: colors.surface,
                 padding: const EdgeInsets.only(top: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,8 +132,7 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                           const SizedBox(height: UiTokens.spacing12),
                           FundProjectDetailYieldHighlightCard(
                             label: context
-                                .l10n
-                                .fundDetailPlannedDistributionRateLabel,
+                                .l10n.fundDetailPlannedDistributionRateLabel,
                             value: viewData.yieldDisplay,
                             disclaimer: context.l10n.fundDetailYieldDisclaimer,
                           ),
@@ -180,18 +182,15 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             FundDetailContentCard(
-                              backgroundColor: AppColorTokens.fundexDangerLight,
-                              borderColor: const Color(0xFFFECACA),
+                              backgroundColor: colors.dangerSoft,
+                              borderColor: colors.dangerBorder,
                               child: Text(
                                 staticContent.riskSection.warning,
-                                style:
-                                    (Theme.of(context).textTheme.bodySmall ??
-                                            const TextStyle())
-                                        .copyWith(
-                                          color: AppColorTokens.fundexDanger,
-                                          fontWeight: FontWeight.w800,
-                                          height: 1.6,
-                                        ),
+                                style: appText.bodyStrong.copyWith(
+                                  color: colors.dangerForeground,
+                                  fontWeight: FontWeight.w800,
+                                  height: 1.6,
+                                ),
                               ),
                             ),
                             const SizedBox(height: UiTokens.spacing8),
@@ -200,27 +199,21 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                                   .map(
                                     (FundDetailRiskItem item) =>
                                         FundDetailDisclosureItemData(
-                                          title: item.title,
-                                          body: item.body,
-                                        ),
+                                      title: item.title,
+                                      body: item.body,
+                                    ),
                                   )
                                   .toList(growable: false),
                             ),
                             if (staticContent
-                                .riskSection
-                                .footnotes
-                                .isNotEmpty) ...<Widget>[
+                                .riskSection.footnotes.isNotEmpty) ...<Widget>[
                               const SizedBox(height: UiTokens.spacing8),
                               Text(
                                 staticContent.riskSection.footnotes.join('\n'),
-                                style:
-                                    (Theme.of(context).textTheme.labelSmall ??
-                                            const TextStyle())
-                                        .copyWith(
-                                          color:
-                                              AppColorTokens.fundexTextTertiary,
-                                          height: 1.6,
-                                        ),
+                                style: appText.meta.copyWith(
+                                  color: colors.textTertiary,
+                                  height: 1.6,
+                                ),
                               ),
                             ],
                           ],
@@ -252,40 +245,31 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                               if (viewData.contractOverviewItems.isNotEmpty ||
                                   viewData.contractScheduleItems.isNotEmpty)
                                 const SizedBox(height: UiTokens.spacing8),
-                              for (
-                                var index = 0;
-                                index < staticContent.legalSections.length;
-                                index++
-                              ) ...<Widget>[
+                              for (var index = 0;
+                                  index < staticContent.legalSections.length;
+                                  index++) ...<Widget>[
                                 if (staticContent
-                                    .legalSections[index]
-                                    .rows
-                                    .isNotEmpty)
+                                    .legalSections[index].rows.isNotEmpty)
                                   FundDetailKeyValueCard(
                                     title: staticContent
-                                        .legalSections[index]
-                                        .title,
-                                    rows: staticContent
-                                        .legalSections[index]
-                                        .rows
-                                        .map(
-                                          (FundDetailLegalRow row) =>
-                                              FundDetailKeyValueRowData(
+                                        .legalSections[index].title,
+                                    rows:
+                                        staticContent.legalSections[index].rows
+                                            .map(
+                                              (FundDetailLegalRow row) =>
+                                                  FundDetailKeyValueRowData(
                                                 label: row.label,
                                                 value: row.value,
                                               ),
-                                        )
-                                        .toList(growable: false),
+                                            )
+                                            .toList(growable: false),
                                   )
                                 else
                                   FundDetailTextCard(
                                     title: staticContent
-                                        .legalSections[index]
-                                        .title,
-                                    body:
-                                        staticContent
-                                            .legalSections[index]
-                                            .body ??
+                                        .legalSections[index].title,
+                                    body: staticContent
+                                            .legalSections[index].body ??
                                         '',
                                   ),
                                 if (index <
@@ -314,14 +298,10 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                                 const SizedBox(height: UiTokens.spacing8),
                               Text(
                                 viewData.operatorMetaText!,
-                                style:
-                                    (Theme.of(context).textTheme.labelSmall ??
-                                            const TextStyle())
-                                        .copyWith(
-                                          color: AppColorTokens
-                                              .fundexTextSecondary,
-                                          height: 1.6,
-                                        ),
+                                style: appText.caption.copyWith(
+                                  color: colors.textSecondary,
+                                  height: 1.6,
+                                ),
                               ),
                             ],
                           ],
@@ -368,14 +348,18 @@ class _FundDetailAchievementBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
-          colors: <Color>[AppColorTokens.fundexAccent, Color(0xFF818CF8)],
+          colors: <Color>[colors.primary, colors.primaryAlt],
         ),
         borderRadius: BorderRadius.circular(UiTokens.radius12),
       ),
@@ -384,18 +368,18 @@ class _FundDetailAchievementBanner extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style:
-                  (Theme.of(context).textTheme.labelMedium ?? const TextStyle())
-                      .copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
+              style: appText.chip.copyWith(
+                color: colors.brandWhite,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
           Text(
             value,
-            style: (Theme.of(context).textTheme.titleLarge ?? const TextStyle())
-                .copyWith(color: Colors.white, fontWeight: FontWeight.w900),
+            style: appText.numericTitle.copyWith(
+              color: colors.brandWhite,
+              fontWeight: FontWeight.w900,
+            ),
           ),
         ],
       ),

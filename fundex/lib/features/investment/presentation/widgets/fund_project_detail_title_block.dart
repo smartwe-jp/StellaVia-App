@@ -21,10 +21,10 @@ class FundProjectDetailTitleBlock extends StatelessWidget {
             style:
                 (Theme.of(context).textTheme.headlineSmall ?? const TextStyle())
                     .copyWith(
-                      color: AppColorTokens.fundexText,
-                      fontWeight: FontWeight.w900,
-                      height: 1.05,
-                    ),
+              color: AppColorTokens.fundexText,
+              fontWeight: FontWeight.w900,
+              height: 1.05,
+            ),
           ),
         if (titleParts.$1 != null) const SizedBox(height: 2),
         Text(
@@ -32,10 +32,10 @@ class FundProjectDetailTitleBlock extends StatelessWidget {
           style:
               (Theme.of(context).textTheme.headlineSmall ?? const TextStyle())
                   .copyWith(
-                    color: AppColorTokens.fundexText,
-                    fontWeight: FontWeight.w900,
-                    height: 1.12,
-                  ),
+            color: AppColorTokens.fundexText,
+            fontWeight: FontWeight.w900,
+            height: 1.12,
+          ),
         ),
       ],
     );
@@ -48,7 +48,9 @@ class FundProjectDetailTitleBlock extends StatelessWidget {
     return (null, title);
   }
 
-  final spaceIndex = normalized.indexOf(RegExp(r'[\s　]'));
+  final spaceIndex = normalized.indexWhere(
+    (String character) => character.trim().isEmpty || character == '　',
+  );
   if (spaceIndex <= 0 || spaceIndex >= normalized.length - 1) {
     return (null, normalized);
   }
@@ -59,4 +61,15 @@ class FundProjectDetailTitleBlock extends StatelessWidget {
     return (null, normalized);
   }
   return (first, second);
+}
+
+extension on String {
+  int indexWhere(bool Function(String character) predicate) {
+    for (var index = 0; index < length; index++) {
+      if (predicate(this[index])) {
+        return index;
+      }
+    }
+    return -1;
+  }
 }

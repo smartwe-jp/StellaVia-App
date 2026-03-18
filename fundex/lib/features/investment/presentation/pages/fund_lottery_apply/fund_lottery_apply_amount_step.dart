@@ -51,16 +51,14 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 28, 20, 32),
       children: <Widget>[
         Text(
           title,
-          style: (theme.textTheme.titleMedium ?? const TextStyle()).copyWith(
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-            color: AppColorTokens.fundexText,
-          ),
+          style: appText.sectionTitle.copyWith(color: colors.textPrimary),
         ),
         const SizedBox(height: 18),
         _BalanceCard(
@@ -72,9 +70,9 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
         const SizedBox(height: 18),
         DecoratedBox(
           decoration: BoxDecoration(
-            color: AppColorTokens.fundexBackground,
+            color: colors.surfaceAlt,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColorTokens.fundexBorder, width: 2),
+            border: Border.all(color: colors.border, width: 2),
           ),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(18, 14, 18, 14),
@@ -83,12 +81,11 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
               children: <Widget>[
                 Text(
                   investmentAmountLabel,
-                  style: (theme.textTheme.bodySmall ?? const TextStyle())
-                      .copyWith(
-                        fontSize: 12,
-                        color: AppColorTokens.fundexTextSecondary,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  style: appText.inputLabel.copyWith(
+                    fontSize: 12,
+                    color: colors.textSecondary,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 //const SizedBox(height: 6),
                 Row(
@@ -97,17 +94,15 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       '¥',
-                      style: (theme.textTheme.titleLarge ?? const TextStyle())
-                          .copyWith(
-                            fontSize: 24,
-                            color: AppColorTokens.fundexTextTertiary,
-                            fontWeight: FontWeight.w700,
-                          ),
+                      style: appText.numericTitle.copyWith(
+                        fontSize: 24,
+                        color: colors.textTertiary,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     //const Spacer(),
                     Expanded(
-                      child: 
-                      TextField(
+                      child: TextField(
                         controller: amountController,
                         textAlign: TextAlign.center,
                         keyboardType: TextInputType.number,
@@ -115,13 +110,11 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
                           FilteringTextInputFormatter.digitsOnly,
                           CurrencyInputFormatter(),
                         ],
-                        style:
-                            (theme.textTheme.headlineSmall ?? const TextStyle())
-                                .copyWith(
-                                  fontSize: 34,
-                                  color: AppColorTokens.fundexText,
-                                  fontWeight: FontWeight.w900,
-                                ),
+                        style: appText.numericHeadline.copyWith(
+                          fontSize: 34,
+                          color: colors.textPrimary,
+                          fontWeight: FontWeight.w900,
+                        ),
                         decoration: const InputDecoration(
                           isDense: true,
                           border: InputBorder.none,
@@ -164,13 +157,13 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
         const SizedBox(height: 18),
         DecoratedBox(
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: <Color>[Color(0xFFF0FDF4), Color(0xFFECFDF5)],
+              colors: <Color>[colors.successSubtle, colors.successSoft],
             ),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFA7F3D0), width: 1.5),
+            border: Border.all(color: colors.successBorder, width: 1.5),
           ),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(14, 22, 14, 22),
@@ -179,32 +172,29 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
               children: <Widget>[
                 Text(
                   estimatedDistributionLabel,
-                  style: (theme.textTheme.bodySmall ?? const TextStyle())
-                      .copyWith(
-                        fontSize: 11,
-                        color: AppColorTokens.fundexTextSecondary,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  style: appText.caption.copyWith(
+                    fontSize: 11,
+                    color: colors.textSecondary,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 RichText(
                   text: TextSpan(
-                    style: (theme.textTheme.headlineSmall ?? const TextStyle())
-                        .copyWith(
-                          color: AppColorTokens.fundexSuccess,
-                          fontSize: 26,
-                          fontWeight: FontWeight.w900,
-                        ),
+                    style: appText.numericHeadline.copyWith(
+                      color: colors.success,
+                      fontSize: 26,
+                      fontWeight: FontWeight.w900,
+                    ),
                     children: <InlineSpan>[
                       TextSpan(text: estimatedDistributionAmount),
                       TextSpan(
                         text: ' $estimatedDistributionSuffix',
-                        style: (theme.textTheme.bodySmall ?? const TextStyle())
-                            .copyWith(
-                              color: AppColorTokens.fundexSuccess,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w800,
-                            ),
+                        style: appText.numericBody.copyWith(
+                          color: colors.success,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                     ],
                   ),
@@ -240,9 +230,11 @@ class _BalanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: AppColorTokens.fundexBackground,
+        color: colors.surfaceAlt,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
@@ -255,22 +247,20 @@ class _BalanceCard extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     label,
-                    style: (theme.textTheme.bodySmall ?? const TextStyle())
-                        .copyWith(
-                          fontSize: 11,
-                          color: AppColorTokens.fundexTextSecondary,
-                          fontWeight: FontWeight.w500,
-                        ),
+                    style: appText.caption.copyWith(
+                      fontSize: 11,
+                      color: colors.textSecondary,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     value,
-                    style: (theme.textTheme.titleLarge ?? const TextStyle())
-                        .copyWith(
-                          fontSize: 19,
-                          fontWeight: FontWeight.w900,
-                          color: AppColorTokens.fundexText,
-                        ),
+                    style: appText.numericTitle.copyWith(
+                      fontSize: 19,
+                      fontWeight: FontWeight.w900,
+                      color: colors.textPrimary,
+                    ),
                   ),
                 ],
               ),
@@ -278,10 +268,8 @@ class _BalanceCard extends StatelessWidget {
             TextButton(
               onPressed: onTap,
               style: TextButton.styleFrom(
-                backgroundColor: AppColorTokens.fundexAccent.withValues(
-                  alpha: 0.18,
-                ),
-                foregroundColor: AppColorTokens.fundexAccent,
+                backgroundColor: colors.primarySubtle,
+                foregroundColor: colors.primary,
                 minimumSize: const Size(74, 30),
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 shape: RoundedRectangleBorder(
@@ -290,8 +278,11 @@ class _BalanceCard extends StatelessWidget {
               ),
               child: Text(
                 actionLabel,
-                style: (theme.textTheme.labelMedium ?? const TextStyle())
-                    .copyWith(fontSize: 12, color: AppColorTokens.fundexAccent, fontWeight: FontWeight.w700),
+                style: appText.chip.copyWith(
+                  fontSize: 12,
+                  color: colors.primary,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ],
@@ -314,35 +305,30 @@ class _QuickAmountChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: selected
-              ? AppColorTokens.fundexAccent.withValues(alpha: 0.12)
-              : Colors.white,
+          color: selected ? colors.primarySubtle : colors.surface,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             width: 1.5,
-            color: selected
-                ? AppColorTokens.fundexAccent
-                : AppColorTokens.fundexBorder,
+            color: selected ? colors.primary : colors.border,
           ),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Text(
             label,
-            style:
-                (Theme.of(context).textTheme.labelMedium ?? const TextStyle())
-                    .copyWith(
-                      fontSize: 12,
-                      color: selected
-                          ? AppColorTokens.fundexAccent
-                          : AppColorTokens.fundexTextSecondary,
-                      fontWeight: FontWeight.w800,
-                    ),
+            style: appText.chip.copyWith(
+              fontSize: 12,
+              color: selected ? colors.primary : colors.textSecondary,
+              fontWeight: FontWeight.w800,
+            ),
           ),
         ),
       ),
@@ -366,11 +352,13 @@ class _BalanceWarningCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: const Color(0xFFFEE2E2),
+        color: colors.dangerSubtle,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFFCA5A5)),
+        border: Border.all(color: colors.dangerBorder),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
@@ -385,11 +373,10 @@ class _BalanceWarningCard extends StatelessWidget {
                 Expanded(
                   child: RichText(
                     text: TextSpan(
-                      style: (theme.textTheme.bodySmall ?? const TextStyle())
-                          .copyWith(
-                            color: AppColorTokens.fundexDanger,
-                            height: 1.6,
-                          ),
+                      style: appText.caption.copyWith(
+                        color: colors.dangerForeground,
+                        height: 1.6,
+                      ),
                       children: <InlineSpan>[
                         TextSpan(
                           text: '$title\n',
@@ -409,17 +396,19 @@ class _BalanceWarningCard extends StatelessWidget {
                 onPressed: onActionTap,
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 42),
-                  foregroundColor: AppColorTokens.fundexDanger,
-                  backgroundColor: AppColorTokens.fundexBackground,
-                  side: const BorderSide(color: AppColorTokens.fundexDanger),
+                  foregroundColor: colors.dangerForeground,
+                  backgroundColor: colors.surface,
+                  side: BorderSide(color: colors.danger),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 child: Text(
                   actionLabel!,
-                  style: (theme.textTheme.labelLarge ?? const TextStyle())
-                      .copyWith(fontWeight: FontWeight.w700),
+                  style: appText.button.copyWith(
+                    color: colors.dangerForeground,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ],

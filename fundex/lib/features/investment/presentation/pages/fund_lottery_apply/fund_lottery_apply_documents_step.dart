@@ -28,23 +28,21 @@ class FundLotteryApplyDocumentsStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 28, 20, 32),
       children: <Widget>[
         Text(
           title,
-          style: (theme.textTheme.titleMedium ?? const TextStyle()).copyWith(
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-            color: AppColorTokens.fundexText,
-          ),
+          style: appText.sectionTitle.copyWith(color: colors.textPrimary),
         ),
         const SizedBox(height: 18),
         Text(
           description,
-          style: (theme.textTheme.bodySmall ?? const TextStyle()).copyWith(
+          style: appText.caption.copyWith(
             fontSize: 12,
-            color: AppColorTokens.fundexTextSecondary,
+            color: colors.textSecondary,
             height: 1.6,
           ),
         ),
@@ -66,7 +64,7 @@ class FundLotteryApplyDocumentsStep extends StatelessWidget {
         const SizedBox(height: 14),
         DecoratedBox(
           decoration: BoxDecoration(
-            color: AppColorTokens.fundexBackground,
+            color: colors.surfaceAlt,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Padding(
@@ -79,12 +77,11 @@ class FundLotteryApplyDocumentsStep extends StatelessWidget {
                 Expanded(
                   child: Text(
                     infoBody,
-                    style: (theme.textTheme.bodySmall ?? const TextStyle())
-                        .copyWith(
-                          fontSize: 11,
-                          color: AppColorTokens.fundexTextSecondary,
-                          height: 1.6,
-                        ),
+                    style: appText.caption.copyWith(
+                      fontSize: 11,
+                      color: colors.textSecondary,
+                      height: 1.6,
+                    ),
                   ),
                 ),
               ],
@@ -96,16 +93,13 @@ class FundLotteryApplyDocumentsStep extends StatelessWidget {
           label: nextButtonLabel,
           onPressed: onNext,
           horizontalPadding: 0,
-          backgroundColor: onNext == null
-              ? const Color(0xFFCBD5E1)
-              : AppColorTokens.fundexAccent,
+          backgroundColor: onNext == null ? colors.disabled : colors.primary,
           disabledOpacity: 1,
-          textStyle: (theme.textTheme.titleMedium ?? const TextStyle())
-              .copyWith(
-                color: Colors.white,
-                fontSize: 15,
-                fontWeight: FontWeight.w800,
-              ),
+          textStyle: appText.button.copyWith(
+            color: colors.brandWhite,
+            fontSize: 15,
+            fontWeight: FontWeight.w800,
+          ),
         ),
       ],
     );
@@ -128,12 +122,14 @@ class _DocumentTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: AppColorTokens.fundexBackground,
+          color: colors.surfaceAlt,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Padding(
@@ -144,13 +140,13 @@ class _DocumentTile extends StatelessWidget {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: AppColorTokens.fundexDangerLight,
+                  color: colors.dangerSubtle,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.description_outlined,
                   size: 18,
-                  color: AppColorTokens.fundexDanger,
+                  color: colors.danger,
                 ),
               ),
               const SizedBox(width: 12),
@@ -160,22 +156,20 @@ class _DocumentTile extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       title,
-                      style: (theme.textTheme.bodySmall ?? const TextStyle())
-                          .copyWith(
-                            fontSize: 13,
-                            color: AppColorTokens.fundexText,
-                            fontWeight: FontWeight.w700,
-                          ),
+                      style: appText.bodyStrong.copyWith(
+                        fontSize: 13,
+                        color: colors.textPrimary,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
-                      style: (theme.textTheme.labelSmall ?? const TextStyle())
-                          .copyWith(
-                            fontSize: 11,
-                            color: AppColorTokens.fundexTextSecondary,
-                            height: 1.5,
-                          ),
+                      style: appText.meta.copyWith(
+                        fontSize: 11,
+                        color: colors.textSecondary,
+                        height: 1.5,
+                      ),
                     ),
                   ],
                 ),
@@ -186,20 +180,18 @@ class _DocumentTile extends StatelessWidget {
                 width: 20,
                 height: 20,
                 decoration: BoxDecoration(
-                  color: checked ? AppColorTokens.fundexAccent : Colors.white,
+                  color: checked ? colors.primary : colors.surface,
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(
-                    color: checked
-                        ? AppColorTokens.fundexAccent
-                        : AppColorTokens.fundexBorder,
+                    color: checked ? colors.primary : colors.border,
                     width: 2,
                   ),
                 ),
                 child: checked
-                    ? const Icon(
+                    ? Icon(
                         Icons.check_rounded,
                         size: 12,
-                        color: Colors.white,
+                        color: colors.brandWhite,
                       )
                     : null,
               ),

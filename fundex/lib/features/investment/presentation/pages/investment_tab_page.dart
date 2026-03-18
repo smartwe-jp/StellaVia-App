@@ -218,63 +218,79 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
     }
   }
 
-  _FundStatusPalette _resolveStatusPalette(int? status) {
+  _FundStatusPalette _resolveStatusPalette(BuildContext context, int? status) {
+    final colors = context.appColors;
     switch (status) {
       case 4:
-        return const _FundStatusPalette(
-          heroGradientColors: <Color>[Color(0xFF064E3B), Color(0xFF047857)],
-          tagBackgroundColor: Color(0xFFDBEAFE),
-          tagForegroundColor: Color(0xFF1D4ED8),
-          amountGradientColors: <Color>[Color(0xFF10B981), Color(0xFF34D399)],
+        return _FundStatusPalette(
+          heroGradientColors: <Color>[colors.infoForeground, colors.primary],
+          tagBackgroundColor: colors.infoSubtle,
+          tagForegroundColor: colors.infoForeground,
+          amountGradientColors: <Color>[colors.info, colors.primaryAlt],
         );
       case 5:
-        return const _FundStatusPalette(
-          heroGradientColors: <Color>[Color(0xFF334155), Color(0xFF475569)],
-          tagBackgroundColor: Color(0xFFE2E8F0),
-          tagForegroundColor: Color(0xFF334155),
-          amountGradientColors: <Color>[Color(0xFF64748B), Color(0xFF94A3B8)],
+        return _FundStatusPalette(
+          heroGradientColors: <Color>[colors.heroMiddle, colors.heroEnd],
+          tagBackgroundColor: colors.surfaceAlt,
+          tagForegroundColor: colors.textSecondary,
+          amountGradientColors: <Color>[
+            colors.textSecondary,
+            colors.heroMiddle
+          ],
         );
       case 1:
-        return const _FundStatusPalette(
-          heroGradientColors: <Color>[Color(0xFF1E3A8A), Color(0xFF2563EB)],
-          tagBackgroundColor: Color(0xFFD1FAE5),
-          tagForegroundColor: Color(0xFF047857),
-          amountGradientColors: <Color>[Color(0xFF2563EB), Color(0xFF3B82F6)],
+        return _FundStatusPalette(
+          heroGradientColors: <Color>[colors.successForeground, colors.success],
+          tagBackgroundColor: colors.successSubtle,
+          tagForegroundColor: colors.successForeground,
+          amountGradientColors: <Color>[
+            colors.success,
+            colors.successForeground
+          ],
         );
       case 0:
-        return const _FundStatusPalette(
-          heroGradientColors: <Color>[Color(0xFF9A3412), Color(0xFFEA580C)],
-          tagBackgroundColor: Color(0xFFFEF3C7),
-          tagForegroundColor: Color(0xFFB45309),
-          amountGradientColors: <Color>[Color(0xFFF59E0B), Color(0xFFFBBF24)],
+        return _FundStatusPalette(
+          heroGradientColors: <Color>[colors.warningForeground, colors.warning],
+          tagBackgroundColor: colors.warningSubtle,
+          tagForegroundColor: colors.warningForeground,
+          amountGradientColors: <Color>[colors.warningAction, colors.warning],
         );
       case 3:
-        return const _FundStatusPalette(
-          heroGradientColors: <Color>[Color(0xFF374151), Color(0xFF4B5563)],
-          tagBackgroundColor: Color(0xFFE2E8F0),
-          tagForegroundColor: Color(0xFF475569),
-          amountGradientColors: <Color>[Color(0xFF64748B), Color(0xFF94A3B8)],
+        return _FundStatusPalette(
+          heroGradientColors: <Color>[colors.heroMiddle, colors.heroEnd],
+          tagBackgroundColor: colors.surfaceAlt,
+          tagForegroundColor: colors.textSecondary,
+          amountGradientColors: <Color>[
+            colors.textSecondary,
+            colors.heroMiddle
+          ],
         );
       case 7:
-        return const _FundStatusPalette(
-          heroGradientColors: <Color>[Color(0xFF14532D), Color(0xFF15803D)],
-          tagBackgroundColor: Color(0xFFD1FAE5),
-          tagForegroundColor: Color(0xFF166534),
-          amountGradientColors: <Color>[Color(0xFF16A34A), Color(0xFF22C55E)],
+        return _FundStatusPalette(
+          heroGradientColors: <Color>[colors.successForeground, colors.success],
+          tagBackgroundColor: colors.successSubtle,
+          tagForegroundColor: colors.successForeground,
+          amountGradientColors: <Color>[
+            colors.successForeground,
+            colors.success
+          ],
         );
       case 2:
-        return const _FundStatusPalette(
-          heroGradientColors: <Color>[Color(0xFF7F1D1D), Color(0xFFB91C1C)],
-          tagBackgroundColor: Color(0xFFFEE2E2),
-          tagForegroundColor: Color(0xFFB91C1C),
-          amountGradientColors: <Color>[Color(0xFFDC2626), Color(0xFFEF4444)],
+        return _FundStatusPalette(
+          heroGradientColors: <Color>[colors.dangerForeground, colors.danger],
+          tagBackgroundColor: colors.dangerSubtle,
+          tagForegroundColor: colors.dangerForeground,
+          amountGradientColors: <Color>[colors.dangerForeground, colors.danger],
         );
       default:
-        return const _FundStatusPalette(
-          heroGradientColors: <Color>[Color(0xFF334155), Color(0xFF475569)],
-          tagBackgroundColor: Color(0xFFE2E8F0),
-          tagForegroundColor: Color(0xFF334155),
-          amountGradientColors: <Color>[Color(0xFF64748B), Color(0xFF94A3B8)],
+        return _FundStatusPalette(
+          heroGradientColors: <Color>[colors.heroMiddle, colors.heroEnd],
+          tagBackgroundColor: colors.surfaceAlt,
+          tagForegroundColor: colors.textSecondary,
+          amountGradientColors: <Color>[
+            colors.textSecondary,
+            colors.heroMiddle
+          ],
         );
     }
   }
@@ -301,8 +317,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
   ) {
     final l10n = context.l10n;
     if (project.projectStatus == 0) {
-      final openDate =
-          _parseDateTime(project.offeringStartDatetime) ??
+      final openDate = _parseDateTime(project.offeringStartDatetime) ??
           _parseDateTime(project.scheduledStartDate);
       if (openDate != null) {
         final text = _formatDateForLocale(
@@ -329,6 +344,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final colors = context.appColors;
     final locale = Localizations.localeOf(context);
     final currencyFormatter = NumberFormat.currency(
       locale: locale.toLanguageTag(),
@@ -341,26 +357,25 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
 
     return Container(
       key: const Key('investment_tab_content'),
-      color: AppColorTokens.fundexBackground,
+      color: colors.background,
       child: Column(
         children: <Widget>[
           Container(
             width: double.infinity,
-            color: Colors.white,
+            color: colors.surface,
             padding: const EdgeInsets.fromLTRB(20, 14, 20, 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
                   l10n.fundListTitle,
-                  style:
-                      (Theme.of(context).textTheme.titleLarge ??
-                              const TextStyle())
-                          .copyWith(
-                            color: AppColorTokens.fundexText,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 18,
-                          ),
+                  style: (Theme.of(context).textTheme.titleLarge ??
+                          const TextStyle())
+                      .copyWith(
+                    color: colors.textPrimary,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 18,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 SingleChildScrollView(
@@ -406,12 +421,11 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                         Text(
                           l10n.fundListLoadError,
                           textAlign: TextAlign.center,
-                          style:
-                              (Theme.of(context).textTheme.bodyMedium ??
-                                      const TextStyle())
-                                  .copyWith(
-                                    color: AppColorTokens.fundexTextSecondary,
-                                  ),
+                          style: (Theme.of(context).textTheme.bodyMedium ??
+                                  const TextStyle())
+                              .copyWith(
+                            color: colors.textSecondary,
+                          ),
                         ),
                         const SizedBox(height: UiTokens.spacing12),
                         OutlinedButton(
@@ -437,12 +451,11 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                           child: Text(
                             l10n.fundListEmpty,
                             textAlign: TextAlign.center,
-                            style:
-                                (Theme.of(context).textTheme.bodyMedium ??
-                                        const TextStyle())
-                                    .copyWith(
-                                      color: AppColorTokens.fundexTextSecondary,
-                                    ),
+                            style: (Theme.of(context).textTheme.bodyMedium ??
+                                    const TextStyle())
+                                .copyWith(
+                              color: colors.textSecondary,
+                            ),
                           ),
                         ),
                       ],
@@ -459,6 +472,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                     itemBuilder: (BuildContext context, int index) {
                       final project = visibleProjects[index];
                       final palette = _resolveStatusPalette(
+                        context,
                         project.projectStatus,
                       );
                       final statusLabel = _resolveStatusLabel(
@@ -471,8 +485,8 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                       );
                       final periodText =
                           (project.investmentPeriod?.trim().isNotEmpty ?? false)
-                          ? project.investmentPeriod!.trim()
-                          : '--';
+                              ? project.investmentPeriod!.trim()
+                              : '--';
 
                       return _FundProjectCard(
                         project: project,
@@ -523,6 +537,10 @@ class _FilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -534,23 +552,17 @@ class _FilterChip extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: selected
-                  ? AppColorTokens.fundexAccent
-                  : AppColorTokens.fundexBorder,
+              color: selected ? colors.primary : colors.border,
               width: 1.5,
             ),
-            color: selected ? AppColorTokens.fundexAccent : Colors.white,
+            color: selected ? colors.primary : colors.surface,
           ),
           child: Text(
             label,
-            style:
-                (Theme.of(context).textTheme.labelMedium ?? const TextStyle())
-                    .copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: selected
-                          ? Colors.white
-                          : AppColorTokens.fundexTextSecondary,
-                    ),
+            style: appText.chip.copyWith(
+              fontWeight: FontWeight.w600,
+              color: selected ? colors.brandWhite : colors.textSecondary,
+            ),
           ),
         ),
       ),
@@ -595,6 +607,9 @@ class _FundProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final cardRadius = BorderRadius.circular(UiTokens.radius16);
 
     return Padding(
@@ -604,17 +619,17 @@ class _FundProjectCard extends StatelessWidget {
           borderRadius: cardRadius,
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
+              color: colors.scrim.withValues(alpha: 0.10),
               blurRadius: 14,
               offset: const Offset(0, 6),
             ),
           ],
         ),
         child: Material(
-          color: Colors.white,
+          color: colors.surface,
           shape: RoundedRectangleBorder(
             borderRadius: cardRadius,
-            side: const BorderSide(color: AppColorTokens.fundexBorder),
+            side: BorderSide(color: colors.border),
           ),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
@@ -642,7 +657,7 @@ class _FundProjectCard extends StatelessWidget {
                               end: Alignment.bottomCenter,
                               colors: <Color>[
                                 Colors.transparent,
-                                Colors.black.withValues(alpha: 0.56),
+                                colors.scrim.withValues(alpha: 0.56),
                               ],
                               stops: const <double>[0.25, 1],
                             ),
@@ -666,18 +681,17 @@ class _FundProjectCard extends StatelessWidget {
                             vertical: 3,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.9),
+                            color: colors.brandWhite.withValues(alpha: 0.9),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
                             volumeText,
-                            style:
-                                (Theme.of(context).textTheme.labelSmall ??
-                                        const TextStyle())
-                                    .copyWith(
-                                      color: AppColorTokens.fundexTextSecondary,
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                            style: (Theme.of(context).textTheme.labelSmall ??
+                                    const TextStyle())
+                                .copyWith(
+                              color: colors.textSecondary,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                       ),
@@ -692,24 +706,23 @@ class _FundProjectCard extends StatelessWidget {
                               project.projectName,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style:
-                                  (Theme.of(context).textTheme.titleLarge ??
-                                          const TextStyle())
-                                      .copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 16,
-                                        height: 1.25,
-                                        shadows: <Shadow>[
-                                          Shadow(
-                                            color: Colors.black.withValues(
-                                              alpha: 0.35,
-                                            ),
-                                            blurRadius: 6,
-                                            offset: const Offset(0, 1),
-                                          ),
-                                        ],
-                                      ),
+                              style: (Theme.of(context).textTheme.titleLarge ??
+                                      const TextStyle())
+                                  .copyWith(
+                                color: colors.onDark,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 16,
+                                height: 1.25,
+                                shadows: <Shadow>[
+                                  Shadow(
+                                    color: colors.scrim.withValues(
+                                      alpha: 0.35,
+                                    ),
+                                    blurRadius: 6,
+                                    offset: const Offset(0, 1),
+                                  ),
+                                ],
+                              ),
                             ),
                             const SizedBox(height: 6),
                             Wrap(
@@ -752,8 +765,11 @@ class _FundProjectCard extends StatelessWidget {
                           ),
                           _PillTag(
                             label: methodLabel,
-                            backgroundColor: AppColorTokens.fundexPinkLight,
-                            foregroundColor: AppColorTokens.fundexPink,
+                            backgroundColor:
+                                colors.communitySecondary.withValues(
+                              alpha: 0.14,
+                            ),
+                            foregroundColor: colors.communitySecondary,
                           ),
                         ],
                       ),
@@ -775,13 +791,12 @@ class _FundProjectCard extends StatelessWidget {
                         child: Text(
                           appliedAmountText,
                           textAlign: TextAlign.center,
-                          style:
-                              (Theme.of(context).textTheme.labelMedium ??
-                                      const TextStyle())
-                                  .copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                          style: (Theme.of(context).textTheme.labelMedium ??
+                                  const TextStyle())
+                              .copyWith(
+                            color: colors.brandWhite,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                       const SizedBox(height: UiTokens.spacing8),
@@ -798,7 +813,8 @@ class _FundProjectCard extends StatelessWidget {
                               child: _CardStatCell(
                                 label: yieldLabel,
                                 value: annualYieldText,
-                                valueColor: AppColorTokens.fundexDanger,
+                                valueColor: colors.danger,
+                                useNumericValueStyle: true,
                               ),
                             ),
                             const SizedBox(
@@ -824,24 +840,17 @@ class _FundProjectCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               locationText,
-                              style:
-                                  (Theme.of(context).textTheme.labelSmall ??
-                                          const TextStyle())
-                                      .copyWith(
-                                        color:
-                                            AppColorTokens.fundexTextTertiary,
-                                      ),
+                              style: appText.meta.copyWith(
+                                color: colors.textTertiary,
+                              ),
                             ),
                           ),
                           Text(
                             viewDetailText,
-                            style:
-                                (Theme.of(context).textTheme.labelMedium ??
-                                        const TextStyle())
-                                    .copyWith(
-                                      color: AppColorTokens.fundexAccent,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                            style: appText.link.copyWith(
+                              color: colors.primary,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ],
                       ),
@@ -865,10 +874,11 @@ class _FavoriteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.appColors;
     return Material(
       color: selected
-          ? AppColorTokens.fundexDangerLight
-          : Colors.white.withValues(alpha: 0.88),
+          ? colors.dangerSubtle
+          : colors.brandWhite.withValues(alpha: 0.88),
       shape: const CircleBorder(),
       child: InkWell(
         customBorder: const CircleBorder(),
@@ -879,9 +889,7 @@ class _FavoriteButton extends StatelessWidget {
           child: Icon(
             selected ? Icons.favorite_rounded : Icons.favorite_border_rounded,
             size: 18,
-            color: selected
-                ? AppColorTokens.fundexDanger
-                : AppColorTokens.fundexTextTertiary,
+            color: selected ? colors.danger : colors.textTertiary,
           ),
         ),
       ),
@@ -897,10 +905,14 @@ class _HeroInfoBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.86),
+        color: colors.brandWhite.withValues(alpha: 0.86),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -908,22 +920,19 @@ class _HeroInfoBubble extends StatelessWidget {
         children: <Widget>[
           Text(
             label,
-            style: (Theme.of(context).textTheme.labelSmall ?? const TextStyle())
-                .copyWith(
-                  fontSize: 8,
-                  color: AppColorTokens.fundexTextTertiary,
-                  height: 1.1,
-                ),
+            style: appText.micro.copyWith(
+              fontSize: 8,
+              color: colors.textTertiary,
+              height: 1.1,
+            ),
           ),
           Text(
             value,
-            style:
-                (Theme.of(context).textTheme.labelMedium ?? const TextStyle())
-                    .copyWith(
-                      color: AppColorTokens.fundexText,
-                      fontWeight: FontWeight.w800,
-                      height: 1.1,
-                    ),
+            style: appText.bodyStrong.copyWith(
+              color: colors.textPrimary,
+              fontWeight: FontWeight.w800,
+              height: 1.1,
+            ),
           ),
         ],
       ),
@@ -954,10 +963,10 @@ class _PillTag extends StatelessWidget {
         label,
         style: (Theme.of(context).textTheme.labelSmall ?? const TextStyle())
             .copyWith(
-              color: foregroundColor,
-              fontSize: 9,
-              fontWeight: FontWeight.w700,
-            ),
+          color: foregroundColor,
+          fontSize: 9,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }
@@ -968,27 +977,33 @@ class _CardStatCell extends StatelessWidget {
     required this.label,
     required this.value,
     this.valueColor = AppColorTokens.fundexText,
+    this.useNumericValueStyle = false,
   });
 
   final String label;
   final String value;
   final Color valueColor;
+  final bool useNumericValueStyle;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Text(
           label,
-          style: (Theme.of(context).textTheme.labelSmall ?? const TextStyle())
-              .copyWith(fontSize: 9, color: AppColorTokens.fundexTextTertiary),
+          style: appText.meta.copyWith(fontSize: 9, color: colors.textTertiary),
         ),
         const SizedBox(height: 2),
         Text(
           value,
-          style: (Theme.of(context).textTheme.titleMedium ?? const TextStyle())
-              .copyWith(color: valueColor, fontWeight: FontWeight.w800),
+          style:
+              (useNumericValueStyle ? appText.numericBody : appText.bodyStrong)
+                  .copyWith(color: valueColor, fontWeight: FontWeight.w800),
         ),
       ],
     );

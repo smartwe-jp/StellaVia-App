@@ -15,16 +15,20 @@ class FundProjectDetailYieldHighlightCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: <Color>[Color(0xFFFEF2F2), Color(0xFFFFF1F2)],
+          colors: <Color>[colors.dangerSubtle, colors.dangerSoft],
         ),
-        border: Border.all(color: const Color(0xFFFECACA), width: 1.5),
+        border: Border.all(color: colors.dangerBorder, width: 1.5),
         borderRadius: BorderRadius.circular(UiTokens.radius16),
       ),
       child: Column(
@@ -33,11 +37,10 @@ class FundProjectDetailYieldHighlightCard extends StatelessWidget {
           Text(
             label,
             textAlign: TextAlign.center,
-            style: (Theme.of(context).textTheme.titleSmall ?? const TextStyle())
-                .copyWith(
-                  color: AppColorTokens.fundexTextSecondary,
-                  fontWeight: FontWeight.w700,
-                ),
+            style: appText.cardTitle.copyWith(
+              color: colors.textSecondary,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           const SizedBox(height: 10),
           _YieldValueText(value: value),
@@ -45,11 +48,10 @@ class FundProjectDetailYieldHighlightCard extends StatelessWidget {
           Text(
             disclaimer,
             textAlign: TextAlign.center,
-            style: (Theme.of(context).textTheme.labelSmall ?? const TextStyle())
-                .copyWith(
-                  color: AppColorTokens.fundexTextTertiary,
-                  height: 1.4,
-                ),
+            style: appText.meta.copyWith(
+              color: colors.textTertiary,
+              height: 1.4,
+            ),
           ),
         ],
       ),
@@ -64,24 +66,22 @@ class _YieldValueText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final parsed = _parseYield(value);
-    final numberStyle =
-        (Theme.of(context).textTheme.displayLarge ?? const TextStyle())
-            .copyWith(
-              color: AppColorTokens.fundexDanger,
-              fontWeight: FontWeight.w900,
-              fontSize: 58,
-              height: 0.95,
-              letterSpacing: -1.2,
-            );
-    final suffixStyle =
-        (Theme.of(context).textTheme.displaySmall ?? const TextStyle())
-            .copyWith(
-              color: AppColorTokens.fundexDanger,
-              fontWeight: FontWeight.w900,
-              fontSize: 24,
-              height: 1.1,
-            );
+    final numberStyle = appText.numericDisplay.copyWith(
+      color: colors.danger,
+      fontSize: 58,
+      height: 0.95,
+      letterSpacing: -1.2,
+    );
+    final suffixStyle = appText.numericTitle.copyWith(
+      color: colors.danger,
+      fontSize: 24,
+      fontWeight: FontWeight.w900,
+      height: 1.1,
+    );
 
     return FittedBox(
       fit: BoxFit.scaleDown,
@@ -106,11 +106,12 @@ class _YieldValueText extends StatelessWidget {
   if (trimmed.isEmpty) {
     return (number: '--', suffix: '');
   }
-  final match = RegExp(r'^([+-]?\d+(?:\.\d+)?)\s*(%)?$').firstMatch(trimmed);
-  if (match == null) {
+  final normalized = trimmed.endsWith('%')
+      ? trimmed.substring(0, trimmed.length - 1).trim()
+      : trimmed;
+  final isNumeric = double.tryParse(normalized) != null;
+  if (!isNumeric) {
     return (number: trimmed, suffix: '');
   }
-  final number = match.group(1) ?? '--';
-  final suffix = match.group(2) ?? '';
-  return (number: number, suffix: suffix);
+  return (number: normalized, suffix: trimmed.endsWith('%') ? '%' : '');
 }

@@ -14,7 +14,7 @@ class FundProjectDetailScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColorTokens.fundexBackground,
+      backgroundColor: context.appColors.background,
       body: body,
       bottomNavigationBar: actionBar,
     );

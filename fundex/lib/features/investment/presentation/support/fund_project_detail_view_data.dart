@@ -89,7 +89,10 @@ class FundProjectDetailViewDataBuilder {
       operatorItems: _buildOperatorItems(context, project),
       documentGroups: _buildDocumentGroups(context, project),
       heroBadges: _buildHeroBadges(context, project),
-      heroGradientColors: _resolveHeroGradientColors(project.projectStatus),
+      heroGradientColors: _resolveHeroGradientColors(
+        context,
+        project.projectStatus,
+      ),
       propertyLocation: propertyLocation,
       propertyCoordinate: propertyCoordinate,
       yieldDisplay: _formatYieldPercent(_resolveYieldRatio(project)),
@@ -160,8 +163,7 @@ List<FundDetailInfoItemData> _buildPropertyInfoItems(
     ),
   ];
 
-  final propertyType =
-      _detailString(project.detailData, const <String>[
+  final propertyType = _detailString(project.detailData, const <String>[
         'propertyType',
         'targetPropertyType',
         'realEstateType',
@@ -174,8 +176,7 @@ List<FundDetailInfoItemData> _buildPropertyInfoItems(
     ),
   );
 
-  final structure =
-      _detailString(project.detailData, const <String>[
+  final structure = _detailString(project.detailData, const <String>[
         'structure',
         'buildingStructure',
       ]) ??
@@ -187,8 +188,7 @@ List<FundDetailInfoItemData> _buildPropertyInfoItems(
     ),
   );
 
-  final builtYear =
-      _detailString(project.detailData, const <String>[
+  final builtYear = _detailString(project.detailData, const <String>[
         'builtYear',
         'builtAt',
         'completionYear',
@@ -237,8 +237,7 @@ _FundContractTables _buildContractTables(
   final overviewItems = <FundDetailInfoItemData>[
     FundDetailInfoItemData(
       label: context.l10n.fundDetailContractTypeLabel,
-      value:
-          _detailString(project.detailData, const <String>[
+      value: _detailString(project.detailData, const <String>[
             'contractType',
             'schemeType',
           ]) ??
@@ -265,8 +264,7 @@ _FundContractTables _buildContractTables(
   );
   final operationStart = _resolveDateText(context, project.scheduledStartDate);
   final operationEnd = _resolveDateText(context, project.scheduledEndDate);
-  final coolingOffText =
-      _detailString(project.detailData, const <String>[
+  final coolingOffText = _detailString(project.detailData, const <String>[
         'coolingOff',
         'coolingOffPeriod',
         'coolingOffPolicy',
@@ -302,22 +300,19 @@ List<FundDetailInfoItemData> _buildOperatorItems(
   FundProject project,
 ) {
   final companyName = project.operatingCompany?.trim() ?? '';
-  final permitNumber =
-      _detailString(project.detailData, const <String>[
+  final permitNumber = _detailString(project.detailData, const <String>[
         'permitNumber',
         'licenseNumber',
         'registrationNumber',
       ]) ??
       '';
-  final representative =
-      _detailString(project.detailData, const <String>[
+  final representative = _detailString(project.detailData, const <String>[
         'representative',
         'representativeName',
         'ceoName',
       ]) ??
       '';
-  final companyAddress =
-      _detailString(project.detailData, const <String>[
+  final companyAddress = _detailString(project.detailData, const <String>[
         'companyAddress',
         'operatorAddress',
         'companyLocation',
@@ -345,20 +340,17 @@ List<FundDetailInfoItemData> _buildOperatorItems(
 }
 
 String _buildOperatorMetaText(BuildContext context, FundProject project) {
-  final capital =
-      _detailString(project.detailData, const <String>[
+  final capital = _detailString(project.detailData, const <String>[
         'capital',
         'capitalAmount',
       ]) ??
       '';
-  final established =
-      _detailString(project.detailData, const <String>[
+  final established = _detailString(project.detailData, const <String>[
         'establishedAt',
         'establishedDate',
       ]) ??
       '';
-  final businessStart =
-      _detailString(project.detailData, const <String>[
+  final businessStart = _detailString(project.detailData, const <String>[
         'businessStartDate',
         'serviceStartDate',
       ]) ??
@@ -375,38 +367,34 @@ List<FundProjectDetailDocumentGroupData> _buildDocumentGroups(
   BuildContext context,
   FundProject project,
 ) {
-  return project.pdfDocuments
-      .map((FundProjectPdfDocument document) {
-        final availablePdfs = _availablePdfUrls(document);
-        final title = _documentGroupTitle(context, document);
-        return FundProjectDetailDocumentGroupData(
-          title: title,
-          items: availablePdfs
-              .asMap()
-              .entries
-              .map((MapEntry<int, FundProjectPdfUrl> entry) {
-                final itemTitle = _documentLinkTitle(
-                  context,
-                  entry.value,
-                  entry.key,
-                );
-                return FundDetailDocumentItemData(
-                  title: itemTitle,
-                  subtitle:
-                      _formatDocumentCreatedAt(context, entry.value) ??
-                      context.l10n.fundDetailDocumentReady,
-                  onTap: () => _openPdfDocument(
-                    context,
-                    groupTitle: title,
-                    linkTitle: itemTitle,
-                    item: entry.value,
-                  ),
-                );
-              })
-              .toList(growable: false),
+  return project.pdfDocuments.map((FundProjectPdfDocument document) {
+    final availablePdfs = _availablePdfUrls(document);
+    final title = _documentGroupTitle(context, document);
+    return FundProjectDetailDocumentGroupData(
+      title: title,
+      items: availablePdfs
+          .asMap()
+          .entries
+          .map((MapEntry<int, FundProjectPdfUrl> entry) {
+        final itemTitle = _documentLinkTitle(
+          context,
+          entry.value,
+          entry.key,
         );
-      })
-      .toList(growable: false);
+        return FundDetailDocumentItemData(
+          title: itemTitle,
+          subtitle: _formatDocumentCreatedAt(context, entry.value) ??
+              context.l10n.fundDetailDocumentReady,
+          onTap: () => _openPdfDocument(
+            context,
+            groupTitle: title,
+            linkTitle: itemTitle,
+            item: entry.value,
+          ),
+        );
+      }).toList(growable: false),
+    );
+  }).toList(growable: false);
 }
 
 List<FundProjectPdfUrl> _availablePdfUrls(FundProjectPdfDocument document) {
@@ -524,86 +512,109 @@ List<FundDetailBadgeData> _buildHeroBadges(
   BuildContext context,
   FundProject project,
 ) {
+  final colors = context.appColors;
   return <FundDetailBadgeData>[
     _buildStatusBadge(context, project.projectStatus),
     FundDetailBadgeData(
       label: _resolveMethodLabel(context, project.offeringMethod),
-      backgroundColor: AppColorTokens.fundexPink.withValues(alpha: 0.88),
-      foregroundColor: Colors.white,
+      backgroundColor: colors.communitySecondary.withValues(alpha: 0.88),
+      foregroundColor: colors.brandWhite,
     ),
   ];
 }
 
 FundDetailBadgeData _buildStatusBadge(BuildContext context, int? status) {
+  final colors = context.appColors;
   switch (status) {
     case 1:
       return FundDetailBadgeData(
         label: context.l10n.fundListStatusOpen,
-        backgroundColor: AppColorTokens.fundexSuccess.withValues(alpha: 0.92),
-        foregroundColor: Colors.white,
+        backgroundColor: colors.success,
+        foregroundColor: colors.brandWhite,
       );
     case 0:
       return FundDetailBadgeData(
         label: context.l10n.fundListStatusUpcoming,
-        backgroundColor: AppColorTokens.fundexWarning.withValues(alpha: 0.92),
-        foregroundColor: Colors.white,
+        backgroundColor: colors.warning,
+        foregroundColor: colors.brandWhite,
       );
     case 4:
       return FundDetailBadgeData(
         label: context.l10n.fundListStatusOperating,
-        backgroundColor: AppColorTokens.fundexAccent.withValues(alpha: 0.92),
-        foregroundColor: Colors.white,
+        backgroundColor: colors.primary,
+        foregroundColor: colors.brandWhite,
       );
     case 5:
       return FundDetailBadgeData(
         label: context.l10n.fundListStatusOperatingEnded,
-        backgroundColor: AppColorTokens.fundexTextSecondary.withValues(
-          alpha: 0.88,
-        ),
-        foregroundColor: Colors.white,
+        backgroundColor: colors.textSecondary.withValues(alpha: 0.88),
+        foregroundColor: colors.brandWhite,
+      );
+    case 7:
+      return FundDetailBadgeData(
+        label: context.l10n.fundListStatusCompleted,
+        backgroundColor: colors.successForeground,
+        foregroundColor: colors.brandWhite,
+      );
+    case 2:
+      return FundDetailBadgeData(
+        label: context.l10n.fundListStatusFailed,
+        backgroundColor: colors.danger,
+        foregroundColor: colors.brandWhite,
       );
     default:
       return FundDetailBadgeData(
         label: context.l10n.fundListStatusUnknown,
-        backgroundColor: AppColorTokens.fundexTextTertiary.withValues(
-          alpha: 0.88,
-        ),
-        foregroundColor: Colors.white,
+        backgroundColor: colors.textTertiary.withValues(alpha: 0.88),
+        foregroundColor: colors.brandWhite,
       );
   }
 }
 
-List<Color> _resolveHeroGradientColors(int? status) {
+List<Color> _resolveHeroGradientColors(BuildContext context, int? status) {
+  final colors = context.appColors;
   switch (status) {
     case 1:
-      return const <Color>[
-        Color(0xFF0F172A),
-        Color(0xFF1E3A8A),
-        Color(0xFF2563EB),
+      return <Color>[
+        colors.successForeground,
+        colors.success,
+        colors.primary,
       ];
     case 0:
-      return const <Color>[
-        Color(0xFF7C2D12),
-        Color(0xFFC2410C),
-        Color(0xFFF97316),
+      return <Color>[
+        colors.warningForeground,
+        colors.warningAction,
+        colors.warning,
       ];
     case 4:
-      return const <Color>[
-        Color(0xFF14532D),
-        Color(0xFF166534),
-        Color(0xFF22C55E),
+      return <Color>[
+        colors.infoForeground,
+        colors.primary,
+        colors.primaryAlt,
       ];
     case 5:
-      return const <Color>[
-        Color(0xFF334155),
-        Color(0xFF475569),
-        Color(0xFF64748B),
+      return <Color>[
+        colors.heroStart,
+        colors.heroMiddle,
+        colors.heroEnd,
+      ];
+    case 7:
+      return <Color>[
+        colors.successForeground,
+        colors.success,
+        colors.primary,
+      ];
+    case 2:
+      return <Color>[
+        colors.dangerForeground,
+        colors.danger,
+        colors.brandAlert,
       ];
     default:
-      return const <Color>[
-        Color(0xFF334155),
-        Color(0xFF475569),
-        Color(0xFF64748B),
+      return <Color>[
+        colors.heroStart,
+        colors.heroMiddle,
+        colors.heroEnd,
       ];
   }
 }
