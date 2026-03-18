@@ -10,6 +10,11 @@ import 'package:fundex/firebase_options.dart';
 class AppFirebaseRuntime {
   AppFirebaseRuntime._();
 
+  static const int _tokenResolveAttempts = 2;
+  static const Duration _tokenResolveRetryDelay = Duration(seconds: 2);
+  static const int _apnsTokenPollAttempts = 12;
+  static const Duration _apnsTokenPollDelay = Duration(milliseconds: 500);
+
   static bool _initialized = false;
   static String? _latestFcmToken;
   static final StreamController<String> _tokenController =
@@ -80,13 +85,15 @@ class AppFirebaseRuntime {
       },
     );
 
+    final canResolveToken =
+        permission.authorizationStatus == AuthorizationStatus.authorized ||
+        permission.authorizationStatus == AuthorizationStatus.provisional;
+
     await messaging.setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,
       sound: true,
     );
-
-    await _resolveAndLogCurrentToken(logger: logger, messaging: messaging);
 
     await _tokenRefreshSubscription?.cancel();
     _tokenRefreshSubscription = messaging.onTokenRefresh.listen(
@@ -106,6 +113,20 @@ class AppFirebaseRuntime {
         );
       },
     );
+
+    if (canResolveToken) {
+      // Do not block startup while waiting APNs token propagation.
+      unawaited(
+        _resolveAndLogCurrentToken(logger: logger, messaging: messaging),
+      );
+    } else {
+      logger.warning(
+        'Skipping FCM token resolve because push permission is not granted.',
+        context: <String, Object?>{
+          'authorizationStatus': permission.authorizationStatus.name,
+        },
+      );
+    }
 
     await _onMessageSubscription?.cancel();
     _onMessageSubscription = FirebaseMessaging.onMessage.listen((
@@ -129,25 +150,96 @@ class AppFirebaseRuntime {
     required AppLogger logger,
     required FirebaseMessaging messaging,
   }) async {
-    try {
-      final token = await messaging.getToken();
-      _latestFcmToken = token;
-      if (token == null || token.isEmpty) {
-        logger.warning('FCM token is unavailable yet');
+    for (int attempt = 1; attempt <= _tokenResolveAttempts; attempt++) {
+      try {
+        if (_isApplePlatform) {
+          final apnsReady = await _waitForApnsToken(
+            logger: logger,
+            messaging: messaging,
+          );
+          if (!apnsReady) {
+            if (attempt == _tokenResolveAttempts) {
+              logger.warning(
+                'APNs token is not ready yet; skip current FCM token resolve attempt.',
+                context: <String, Object?>{'attempt': attempt},
+              );
+              return;
+            }
+            await Future<void>.delayed(_tokenResolveRetryDelay);
+            continue;
+          }
+        }
+
+        final token = await messaging.getToken();
+        _latestFcmToken = token;
+        if (token == null || token.isEmpty) {
+          if (attempt == _tokenResolveAttempts) {
+            logger.warning('FCM token is unavailable yet.');
+            return;
+          }
+          await Future<void>.delayed(_tokenResolveRetryDelay);
+          continue;
+        }
+        _tokenController.add(token);
+        logger.info(
+          'FCM token resolved',
+          context: <String, Object?>{'token': token},
+        );
+        return;
+      } catch (error, stackTrace) {
+        if (_isApnsTokenNotReadyError(error)) {
+          if (attempt == _tokenResolveAttempts) {
+            logger.warning(
+              'FCM token is waiting for APNs token; will rely on onTokenRefresh.',
+            );
+            return;
+          }
+          await Future<void>.delayed(_tokenResolveRetryDelay);
+          continue;
+        }
+        logger.error(
+          'Failed to resolve FCM token',
+          error: error,
+          stackTrace: stackTrace,
+        );
         return;
       }
-      _tokenController.add(token);
-      logger.info(
-        'FCM token resolved',
-        context: <String, Object?>{'token': token},
-      );
-    } catch (error, stackTrace) {
-      logger.error(
-        'Failed to resolve FCM token',
-        error: error,
-        stackTrace: stackTrace,
-      );
     }
+  }
+
+  static bool get _isApplePlatform =>
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.iOS ||
+          defaultTargetPlatform == TargetPlatform.macOS);
+
+  static bool _isApnsTokenNotReadyError(Object error) {
+    if (error is FirebaseException) {
+      return error.plugin == 'firebase_messaging' &&
+          error.code == 'apns-token-not-set';
+    }
+    return error.toString().contains('apns-token-not-set');
+  }
+
+  static Future<bool> _waitForApnsToken({
+    required AppLogger logger,
+    required FirebaseMessaging messaging,
+  }) async {
+    for (int i = 0; i < _apnsTokenPollAttempts; i++) {
+      try {
+        final apnsToken = await messaging.getAPNSToken();
+        if (apnsToken != null && apnsToken.trim().isNotEmpty) {
+          logger.info(
+            'APNs token resolved',
+            context: <String, Object?>{'token': apnsToken},
+          );
+          return true;
+        }
+      } catch (_) {
+        // APNs token not ready is expected at early startup.
+      }
+      await Future<void>.delayed(_apnsTokenPollDelay);
+    }
+    return false;
   }
 
   static Map<String, Object?> _messageContext(RemoteMessage message) {

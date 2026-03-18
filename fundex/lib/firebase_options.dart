@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCq_ZEQHuxR159PjJg7yjXZsvmPwgluEeU',
-    appId: '1:890008046553:android:24d0764597003bdd6a27c8',
+    appId: '1:890008046553:android:922eae2cd0c99d1c6a27c8',
     messagingSenderId: '890008046553',
     projectId: 'stellavia',
     storageBucket: 'stellavia.firebasestorage.app',
@@ -59,10 +59,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDRI7qI-oSRxXHjPU1M-3ULnjMTQ5Zm5wQ',
-    appId: '1:890008046553:ios:4b6ae8e76b060d616a27c8',
+    appId: '1:890008046553:ios:da5f6dcda68907986a27c8',
     messagingSenderId: '890008046553',
     projectId: 'stellavia',
     storageBucket: 'stellavia.firebasestorage.app',
-    iosBundleId: 'com.fundex.app',
+    iosBundleId: 'com.fund.stellavia',
   );
 }
