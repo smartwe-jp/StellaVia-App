@@ -87,7 +87,7 @@ int remindCode = -1;
                         }else{
                             bestImage = faceInfo.cropImageInfo;
                         }
-                        weakSelf.completion(bestImage);
+                        [weakSelf finishWithImage:bestImage];
                     }
                     [weakSelf closeAction];
                 });

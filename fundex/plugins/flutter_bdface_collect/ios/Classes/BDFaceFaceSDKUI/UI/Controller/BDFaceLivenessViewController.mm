@@ -8,6 +8,7 @@
 
 #import "BDFaceLivenessViewController.h"
 #import <IDLFaceSDK/IDLFaceSDK.h>
+#import <exception>
 
 @interface BDFaceLivenessViewController ()
 {
@@ -21,6 +22,20 @@
 @end
 
 @implementation BDFaceLivenessViewController
+
+- (void)handleLivenessInvocationFailure:(NSString *)message {
+    NSLog(@"[flutter_bdface_collect] liveness invocation failed: %@", message);
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (weakSelf.hasFinished) {
+            return;
+        }
+        weakSelf.hasFinished = YES;
+        [weakSelf warningStatus:CommonStatus warning:@"验证失败，请重试"];
+        [weakSelf finishWithImage:NULL];
+        [weakSelf closeAction];
+    });
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -74,6 +89,9 @@
     if (self.hasFinished) {
         return;
     }
+    if (image == nil) {
+        return;
+    }
     
     dispatch_async(dispatch_get_main_queue(), ^{
         self.isAnimating = [self.remindAnimationView isActionAnimating];
@@ -86,7 +104,9 @@
 //    }
     
     __weak typeof(self) weakSelf = self;
-    [[IDLFaceLivenessManager sharedInstance] livenessNormalWithImage:image previewRect:self.previewRect detectRect:self.detectRect completionHandler:^(NSDictionary *images, FaceInfo *faceInfo, LivenessRemindCode remindCode) {
+    @try {
+        try {
+            [[IDLFaceLivenessManager sharedInstance] livenessNormalWithImage:image previewRect:self.previewRect detectRect:self.detectRect completionHandler:^(NSDictionary *images, FaceInfo *faceInfo, LivenessRemindCode remindCode) {
 //        NSLog(@"remindCode = %lu", (unsigned long)remindCode);
 /*
  此注释里的代码用于显示人脸框，调试过程中需要显示人脸款可打开注释
@@ -121,7 +141,7 @@
                         }else{
                             bestImage = faceInfo.cropImageInfo;
                         }
-                        weakSelf.completion(bestImage);
+                        [weakSelf finishWithImage:bestImage];
                     }
                     [weakSelf closeAction];
                 });
@@ -307,6 +327,16 @@
                 break;
         }
     }];
+        } catch (const std::exception& error) {
+            NSString *message = [NSString stringWithFormat:@"std::exception: %s", error.what()];
+            [self handleLivenessInvocationFailure:message];
+        } catch (...) {
+            [self handleLivenessInvocationFailure:@"unknown c++ exception"];
+        }
+    } @catch (NSException *exception) {
+        NSString *message = [NSString stringWithFormat:@"NSException %@: %@", exception.name, exception.reason ?: @""];
+        [self handleLivenessInvocationFailure:message];
+    }
 }
 
 - (void)selfReplayFunction{

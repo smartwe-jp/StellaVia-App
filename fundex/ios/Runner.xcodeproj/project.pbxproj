@@ -18,10 +18,6 @@
 		A7069D1BAC34C71339A4F131 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 02CCC2A1A36E3D573A1F19FE /* GoogleService-Info.plist */; };
 		B1431673021E7591CCD22372 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3598E457609C8A63A94AACA4 /* Pods_Runner.framework */; };
 		BE144D782F67A7C0001C77FD /* idl-license.face-ios in Resources */ = {isa = PBXBuildFile; fileRef = BE144D772F67A7C0001C77FD /* idl-license.face-ios */; };
-		BEA698762F6A7424005F9DFA /* AlicloudELS.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA698752F6A7424005F9DFA /* AlicloudELS.xcframework */; };
-		BEA698772F6A7424005F9DFA /* AlicloudELS.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BEA698752F6A7424005F9DFA /* AlicloudELS.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		BEA698792F6A7433005F9DFA /* CloudPushSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEA698782F6A7433005F9DFA /* CloudPushSDK.xcframework */; };
-		BEA6987A2F6A7433005F9DFA /* CloudPushSDK.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BEA698782F6A7433005F9DFA /* CloudPushSDK.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,21 +29,6 @@
 			remoteInfo = Runner;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				BEA6987A2F6A7433005F9DFA /* CloudPushSDK.xcframework in Embed Frameworks */,
-				BEA698772F6A7424005F9DFA /* AlicloudELS.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		02CCC2A1A36E3D573A1F19FE /* GoogleService-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Runner/GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -111,8 +92,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1431673021E7591CCD22372 /* Pods_Runner.framework in Frameworks */,
-				BEA698792F6A7433005F9DFA /* CloudPushSDK.xcframework in Frameworks */,
-				BEA698762F6A7424005F9DFA /* AlicloudELS.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,7 +228,6 @@
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
-				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				8B7AA9A5D6B0D74D8AB751FD /* [CP] Embed Pods Frameworks */,
 				B5A476B1886D25B4E0EDA99F /* [CP] Copy Pods Resources */,
@@ -749,6 +727,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = "";

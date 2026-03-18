@@ -58,6 +58,7 @@
 @property (nonatomic, readwrite, retain) UIView *timeOutLine2;
 @property (nonatomic, readwrite, retain) UIButton *timeOutRestartButton2;
 @property (nonatomic, readwrite, retain) UILabel *timeOutBackToMainLabel2;
+@property (nonatomic, assign) BOOL didFinishCallback;
 
 
 
@@ -392,6 +393,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     _hasFinished = NO;
+    self.didFinishCallback = NO;
     self.videoCapture.runningStatus = YES;
     [self.videoCapture startSession];
 }
@@ -404,10 +406,20 @@
 - (void)faceProcesss:(UIImage *)image {
 }
 
+- (void)finishWithImage:(FaceCropImageInfo *)bestImage {
+    if (self.didFinishCallback) {
+        return;
+    }
+    self.didFinishCallback = YES;
+    if (self.completion) {
+        self.completion(bestImage);
+    }
+}
+
 - (void)closeAction {
     _hasFinished = YES;
     self.videoCapture.runningStatus = NO;
-    self.completion(NULL);
+    [self finishWithImage:NULL];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -427,7 +439,7 @@
 }
 
 - (IBAction)backToPreView:(UIButton *)sender{
-    self.completion(NULL);
+    [self finishWithImage:NULL];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

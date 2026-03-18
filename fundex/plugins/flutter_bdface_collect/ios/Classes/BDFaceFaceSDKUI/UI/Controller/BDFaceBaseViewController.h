@@ -75,4 +75,7 @@ typedef void (^successCompletion)(FaceCropImageInfo* bestImage);
 
 - (UIImageView *)creatRectangle:(UIImageView *)imageView withRect:(CGRect) rect withcolor:(UIColor *)color;
 
+/// Emit collection result exactly once to avoid duplicate Flutter result calls.
+- (void)finishWithImage:(FaceCropImageInfo *)bestImage;
+
 @end

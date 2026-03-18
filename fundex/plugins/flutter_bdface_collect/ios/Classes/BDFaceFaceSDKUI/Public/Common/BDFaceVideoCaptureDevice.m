@@ -10,6 +10,7 @@
 
 @interface BDFaceVideoCaptureDevice () <AVCaptureVideoDataOutputSampleBufferDelegate> {
     dispatch_queue_t _videoBufferQueue;
+    dispatch_queue_t _sessionControlQueue;
 }
 @property (nonatomic, readwrite, retain) AVCaptureSession *captureSession;
 @property (nonatomic, readwrite, retain) AVCaptureDevice *captureDevice;
@@ -19,6 +20,57 @@
 @end
 
 @implementation BDFaceVideoCaptureDevice
+
+- (void)startSessionInternal {
+    if (self.captureSession.running || self.isSessionBegin) {
+        return;
+    }
+    self.isSessionBegin = YES;
+
+    self.captureDevice = [self cameraWithPosition:self.position];
+
+    NSError *error = nil;
+    self.captureInput = [[AVCaptureDeviceInput alloc] initWithDevice:self.captureDevice error:&error];
+    if (error == nil) {
+        [self.captureSession addInput:self.captureInput];
+    } else {
+        self.isSessionBegin = NO;
+        if ([self.delegate respondsToSelector:@selector(captureError)]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.delegate captureError];
+            });
+        }
+        return;
+    }
+
+    self.videoDataOutput = [[AVCaptureVideoDataOutput alloc] init];
+    self.videoDataOutput.videoSettings = @{(NSString *)kCVPixelBufferPixelFormatTypeKey:@(kCVPixelFormatType_32BGRA)};
+    [self.videoDataOutput setSampleBufferDelegate:self queue:_videoBufferQueue];
+    [self.captureSession addOutput:self.videoDataOutput];
+
+    AVCaptureConnection* connection = [self.videoDataOutput connectionWithMediaType:AVMediaTypeVideo];
+    connection.videoOrientation = AVCaptureVideoOrientationPortrait;
+    [connection setVideoMirrored:YES];
+
+    [self.captureSession startRunning];
+}
+
+- (void)stopSessionInternal {
+    if (!self.captureSession.running && !self.isSessionBegin) {
+        return;
+    }
+
+    self.isSessionBegin = NO;
+    [self.captureSession stopRunning];
+    if (nil != self.captureInput) {
+        [self.captureSession removeInput:self.captureInput];
+    }
+    if (nil != self.videoDataOutput) {
+        [self.captureSession removeOutput:self.videoDataOutput];
+    }
+    self.captureInput = nil;
+    self.videoDataOutput = nil;
+}
 
 - (void)setPosition:(AVCaptureDevicePosition)position {
     if (_position ^ position) {
@@ -33,6 +85,7 @@
     if (self = [super init]) {
         _captureSession = [[AVCaptureSession alloc] init];
         _videoBufferQueue = dispatch_queue_create("video_buffer_handle_queue", NULL);
+        _sessionControlQueue = dispatch_queue_create("video_session_control_queue", DISPATCH_QUEUE_SERIAL);
         _isSessionBegin = NO;
         _position = AVCaptureDevicePositionFront;
     }
@@ -53,39 +106,9 @@
 #if TARGET_OS_SIMULATOR
     NSLog(@"模拟器没有摄像头，此功能只有真机可用");
 #else
-    if (self.captureSession.running) {
-        return;
-    }
-    if (!self.isSessionBegin) {
-        self.isSessionBegin = YES;
-        
-        // 配置相机设备
-        _captureDevice = [self cameraWithPosition:_position];
-        
-        // 初始化输入
-        NSError *error = nil;
-        _captureInput = [[AVCaptureDeviceInput alloc] initWithDevice:_captureDevice error:&error];
-        if (error == nil) {
-            [_captureSession addInput:_captureInput];
-        } else {
-            if ([self.delegate respondsToSelector:@selector(captureError)]) {
-                [self.delegate captureError];
-            }
-        }
-        
-        // 输出设置
-        _videoDataOutput = [[AVCaptureVideoDataOutput alloc] init];
-        _videoDataOutput.videoSettings = @{(NSString *)kCVPixelBufferPixelFormatTypeKey:@(kCVPixelFormatType_32BGRA)};
-        [_videoDataOutput setSampleBufferDelegate:self queue:_videoBufferQueue];
-        [_captureSession addOutput:_videoDataOutput];
-        
-        AVCaptureConnection* connection = [_videoDataOutput connectionWithMediaType:AVMediaTypeVideo];
-        connection.videoOrientation = AVCaptureVideoOrientationPortrait;
-        // 调节摄像头翻转
-        [connection setVideoMirrored:YES];
-//        connection.videoMirrored = (_position == AVCaptureDevicePositionFront);
-        [self.captureSession startRunning];
-    }
+    dispatch_async(_sessionControlQueue, ^{
+        [self startSessionInternal];
+    });
 #endif
 }
 
@@ -93,25 +116,17 @@
 #if TARGET_OS_SIMULATOR
     NSLog(@"模拟器没有摄像头，此功能只有真机可用");
 #else
-    if (!self.captureSession.running) {
-        return;
-    }
-    if(self.isSessionBegin){
-        self.isSessionBegin = NO;
-        [self.captureSession stopRunning];
-        if(nil != self.captureInput){
-            [self.captureSession removeInput:self.captureInput];
-        }
-        if(nil != self.videoDataOutput){
-            [self.captureSession removeOutput:self.videoDataOutput];
-        }
-    }
+    dispatch_async(_sessionControlQueue, ^{
+        [self stopSessionInternal];
+    });
 #endif
 }
 
 - (void)resetSession {
-    [self stopSession];
-    [self startSession];
+    dispatch_async(_sessionControlQueue, ^{
+        [self stopSessionInternal];
+        [self startSessionInternal];
+    });
 }
 
 #pragma mark - AVCaptureVideoDataOutputSampleBufferDelegate
