@@ -182,7 +182,7 @@ Widget _buildPendingApplicationsSection(
           .map(
             (record) => FundMyPageProjectCard(
               title: record.projectName,
-              accentColor: colors.primaryAlt,
+              accentColor: AppColorTokens.fundexViolet,
               trailing: _PendingStatusBadge(
                 label: _resolveApplyStatusLabel(l10n, record),
               ),
@@ -800,18 +800,16 @@ class _PendingStatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
+    final appText = Theme.of(context).appTextTheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: colors.primarySubtle,
+        color: AppColorTokens.fundexVioletLight,
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
         label,
-        style: appText.tableLabel.copyWith(color: colors.primaryAlt),
+        style: appText.tableLabel.copyWith(color: AppColorTokens.fundexViolet),
       ),
     );
   }

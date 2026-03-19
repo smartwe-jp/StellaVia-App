@@ -215,13 +215,18 @@ class FundMyPageProjectCard extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     const cardRadius = BorderRadius.all(Radius.circular(UiTokens.radius16));
+    const innerCardRadius = BorderRadius.all(
+      Radius.circular(UiTokens.radius14),
+    );
     final borderColor = colors.border;
+    final hasAccent = accentColor != null;
+    final leftInset = hasAccent ? 3.0 : 0.0;
 
     return Padding(
       padding: shadowPadding,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: accentColor ?? colors.surface.withValues(alpha: 0),
+          color: accentColor ?? colors.surface,
           borderRadius: cardRadius,
           boxShadow: <BoxShadow>[
             BoxShadow(
@@ -237,19 +242,20 @@ class FundMyPageProjectCard extends StatelessWidget {
           ],
         ),
         child: Material(
-          color: colors.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: cardRadius,
-            side: BorderSide(color: borderColor),
-          ),
+          color: colors.surface.withValues(alpha: 0),
+          borderRadius: cardRadius,
           clipBehavior: Clip.antiAlias,
           child: InkWell(
             borderRadius: cardRadius,
             onTap: onTap,
             child: Container(
-              decoration: BoxDecoration(borderRadius: cardRadius),
-              margin: const EdgeInsets.only(left: 5),
-              padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+              margin: EdgeInsets.only(left: leftInset),
+              decoration: BoxDecoration(
+                color: colors.surface,
+                borderRadius: hasAccent ? innerCardRadius : cardRadius,
+                border: Border.all(color: borderColor),
+              ),
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[

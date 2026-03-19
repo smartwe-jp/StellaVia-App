@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'app_color_tokens.dart';
 import 'app_theme_extensions.dart';
 import 'ui_buttons.dart';
 import 'ui_tokens.dart';
@@ -317,10 +318,14 @@ class FundWalletStandbyBalanceSummaryBox extends StatelessWidget {
     super.key,
     required this.label,
     required this.value,
+    this.actionLabel,
+    this.onTapAction,
   });
 
   final String label;
   final String value;
+  final String? actionLabel;
+  final VoidCallback? onTapAction;
 
   @override
   Widget build(BuildContext context) {
@@ -329,30 +334,66 @@ class FundWalletStandbyBalanceSummaryBox extends StatelessWidget {
     final appText = theme.appTextTheme;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: colors.primary,
+        color: AppColorTokens.fundexAccent,
         borderRadius: BorderRadius.circular(UiTokens.radius16),
       ),
       child: Container(
         margin: const EdgeInsets.only(left: UiTokens.spacing4),
         decoration: BoxDecoration(
-          color: colors.primarySubtle,
+          color: AppColorTokens.fundexAccentSuperLight,
           borderRadius: BorderRadius.circular(UiTokens.radius14),
         ),
-        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+        child: Row(
           children: <Widget>[
-            Text(
-              label,
-              style: appText.bodyStrong.copyWith(color: colors.primary),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              value,
-              style: appText.numericHeadline.copyWith(
-                color: colors.textPrimary,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    label,
+                    style: appText.bodyStrong.copyWith(
+                      color: colors.primary,
+                      height: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    value,
+                    style: appText.numericTitle.copyWith(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w900,
+                      color: AppColorTokens.fundexText,
+                      height: 1,
+                    ),
+                  ),
+                ],
               ),
             ),
+            if (actionLabel != null && onTapAction != null) ...<Widget>[
+              const SizedBox(width: 12),
+              TextButton(
+                onPressed: onTapAction,
+                style: TextButton.styleFrom(
+                  backgroundColor: colors.primarySubtle,
+                  foregroundColor: colors.primary,
+                  minimumSize: const Size(74, 30),
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  visualDensity: const VisualDensity(
+                    horizontal: -2,
+                    vertical: -2,
+                  ),
+                ),
+                child: Text(
+                  actionLabel!,
+                  style: appText.chip.copyWith(color: colors.primary),
+                ),
+              ),
+            ],
           ],
         ),
       ),

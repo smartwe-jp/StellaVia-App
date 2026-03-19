@@ -262,11 +262,11 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     final colors = Theme.of(context).appColors;
     return FundMyPageProjectCard(
       title: record.projectName,
-      accentColor: colors.primaryAlt,
+      accentColor: AppColorTokens.fundexViolet,
       trailing: _StatusBadge(
         label: resolveApplyStatusLabel(l10n, record),
-        backgroundColor: colors.primarySubtle,
-        foregroundColor: colors.primaryAlt,
+        backgroundColor: AppColorTokens.fundexVioletLight,
+        foregroundColor: AppColorTokens.fundexViolet,
       ),
       rows: <FundLabeledValue>[
         FundLabeledValue(
