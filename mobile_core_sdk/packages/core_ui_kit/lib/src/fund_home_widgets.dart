@@ -60,7 +60,7 @@ class FundHomeHeroSummary extends StatelessWidget {
                   gradient: RadialGradient(
                     colors: <Color>[
                       colors.primary.withValues(alpha: 0.2),
-                      Colors.transparent,
+                      colors.primary.withValues(alpha: 0),
                     ],
                   ),
                 ),
@@ -188,15 +188,15 @@ class FundGuestBrowsingBar extends StatelessWidget {
                 _FundGuestActionButton(
                   label: loginLabel,
                   onTap: onLoginTap,
-                  backgroundColor: Colors.white.withValues(alpha: 0.15),
-                  foregroundColor: Colors.white,
+                  backgroundColor: colors.onDark.withValues(alpha: 0.15),
+                  foregroundColor: colors.onDark,
                 ),
                 const SizedBox(width: UiTokens.spacing8),
                 _FundGuestActionButton(
                   label: registerLabel,
                   onTap: onRegisterTap,
                   backgroundColor: ftkTheme.primaryButtonColor,
-                  foregroundColor: Colors.white,
+                  foregroundColor: colors.onDark,
                 ),
               ],
             ),
@@ -226,7 +226,7 @@ class _FundGuestActionButton extends StatelessWidget {
     final appText = theme.appTextTheme;
 
     return Material(
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(10),
@@ -267,15 +267,15 @@ class _FundHeroNotificationButton extends StatelessWidget {
         children: <Widget>[
           Positioned.fill(
             child: Material(
-              color: Colors.white.withValues(alpha: 0.1),
+              color: colors.onDark.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(11),
               child: InkWell(
                 borderRadius: BorderRadius.circular(11),
                 onTap: onTap,
-                child: const Icon(
+                child: Icon(
                   Icons.notifications_none_rounded,
                   size: 20,
-                  color: Colors.white,
+                  color: colors.onDark,
                 ),
               ),
             ),
@@ -569,7 +569,7 @@ class FundReminderCard extends StatelessWidget {
     }
 
     return Material(
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: InkWell(borderRadius: cardRadius, onTap: data.onTap, child: card),
     );
   }
@@ -660,7 +660,7 @@ _FundReminderPalette _paletteFor(BuildContext context, FundReminderTone tone) {
         messageColor: colors.dangerForeground,
         dotColor: colors.danger,
         badgeBackgroundColor: colors.danger,
-        badgeForegroundColor: Colors.white,
+        badgeForegroundColor: colors.onDark,
         progressTrackColor: colors.dangerSubtle,
         progressFillColor: colors.danger,
         actionTextColor: colors.dangerForeground,
@@ -677,7 +677,7 @@ _FundReminderPalette _paletteFor(BuildContext context, FundReminderTone tone) {
         messageColor: colors.warningForeground,
         dotColor: colors.warning,
         badgeBackgroundColor: colors.warning,
-        badgeForegroundColor: Colors.white,
+        badgeForegroundColor: colors.onDark,
         progressTrackColor: colors.warningSubtle,
         progressFillColor: colors.warning,
         actionTextColor: colors.warningAction,
@@ -691,7 +691,7 @@ _FundReminderPalette _paletteFor(BuildContext context, FundReminderTone tone) {
         messageColor: colors.infoForeground,
         dotColor: colors.info,
         badgeBackgroundColor: colors.info,
-        badgeForegroundColor: Colors.white,
+        badgeForegroundColor: colors.onDark,
         progressTrackColor: colors.infoSubtle,
         progressFillColor: colors.info,
         actionTextColor: colors.infoForeground,

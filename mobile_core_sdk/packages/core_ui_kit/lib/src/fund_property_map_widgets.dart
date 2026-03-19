@@ -5,8 +5,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'app_color_tokens.dart';
 import 'app_notice.dart';
+import 'app_theme_extensions.dart';
 import 'ui_tokens.dart';
 
 class FundPropertyCoordinate {
@@ -57,8 +57,11 @@ class FundPropertyMapPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Material(
-      color: const Color(0xFFD8EBF7),
+      color: colors.infoSubtle,
       borderRadius: BorderRadius.circular(UiTokens.radius16),
       child: InkWell(
         onTap: onTap,
@@ -70,11 +73,11 @@ class FundPropertyMapPreviewCard extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.94),
+                color: colors.surface.withValues(alpha: 0.94),
                 borderRadius: BorderRadius.circular(14),
-                boxShadow: const <BoxShadow>[
+                boxShadow: <BoxShadow>[
                   BoxShadow(
-                    color: Color(0x1A0A1628),
+                    color: colors.scrim.withValues(alpha: 0.10),
                     blurRadius: 10,
                     offset: Offset(0, 4),
                   ),
@@ -85,13 +88,7 @@ class FundPropertyMapPreviewCard extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style:
-                    (Theme.of(context).textTheme.titleMedium ??
-                            const TextStyle())
-                        .copyWith(
-                          color: AppColorTokens.fundexAccent,
-                          fontWeight: FontWeight.w900,
-                        ),
+                style: appText.sectionTitle.copyWith(color: colors.primary),
               ),
             ),
           ),
@@ -119,12 +116,13 @@ class FundPropertyMapBottomSheet extends StatefulWidget {
     required FundPropertyCoordinate destination,
     required FundPropertyMapSheetStrings strings,
   }) {
+    final colors = Theme.of(context).appColors;
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       useSafeArea: false,
-      backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withValues(alpha: 0.38),
+      backgroundColor: colors.surface.withValues(alpha: 0),
+      barrierColor: colors.scrim.withValues(alpha: 0.38),
       builder: (BuildContext context) {
         return FractionallySizedBox(
           heightFactor: 0.94,
@@ -150,12 +148,15 @@ class _FundPropertyMapBottomSheetState
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final topPadding = MediaQuery.paddingOf(context).top;
     final destinationLatLng = widget.destination.toLatLng();
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(22)),
       child: ColoredBox(
-        color: Colors.white,
+        color: colors.surface,
         child: Stack(
           children: <Widget>[
             Positioned.fill(
@@ -200,8 +201,10 @@ class _FundPropertyMapBottomSheetState
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 height: 64,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFDDECEF),
-                  border: Border.all(color: const Color(0x26FFFFFF)),
+                  color: colors.infoSubtle,
+                  border: Border.all(
+                    color: colors.surface.withValues(alpha: 0.15),
+                  ),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
@@ -217,15 +220,10 @@ class _FundPropertyMapBottomSheetState
                       ),
                       child: Text(
                         widget.strings.close,
-                        style:
-                            (Theme.of(context).textTheme.headlineSmall ??
-                                    const TextStyle())
-                                .copyWith(
-                                  color: const Color(0xFFE85C24),
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 22,
-                                  letterSpacing: 0.8,
-                                ),
+                        style: appText.pageTitle.copyWith(
+                          color: colors.brandAlert,
+                          letterSpacing: 0.8,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 4),
@@ -236,15 +234,10 @@ class _FundPropertyMapBottomSheetState
                           widget.title,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style:
-                              (Theme.of(context).textTheme.headlineSmall ??
-                                      const TextStyle())
-                                  .copyWith(
-                                    color: const Color(0xFFE85C24),
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 20,
-                                    letterSpacing: 1.6,
-                                  ),
+                          style: appText.sectionTitle.copyWith(
+                            color: colors.brandAlert,
+                            letterSpacing: 1.6,
+                          ),
                         ),
                       ),
                     ),
@@ -401,13 +394,19 @@ class _MapFloatingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Material(
-      color: Colors.white.withValues(alpha: 0.92),
+      color: colors.surface.withValues(alpha: 0.92),
       elevation: 1.5,
-      shadowColor: const Color(0x26000000),
+      shadowColor: colors.scrim.withValues(alpha: 0.15),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
-        side: const BorderSide(color: Color(0x739CB0BF), width: 1),
+        side: BorderSide(
+          color: colors.border.withValues(alpha: 0.72),
+          width: 1,
+        ),
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
@@ -418,18 +417,11 @@ class _MapFloatingActionButton extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Icon(icon, size: 29, color: const Color(0xFF465D6D)),
+              Icon(icon, size: 29, color: colors.textSecondary),
               const SizedBox(height: 3),
               Text(
                 label,
-                style:
-                    (Theme.of(context).textTheme.titleSmall ??
-                            const TextStyle())
-                        .copyWith(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                          color: const Color(0xFF0F172A),
-                        ),
+                style: appText.sectionTitle.copyWith(color: colors.textPrimary),
               ),
             ],
           ),
@@ -444,7 +436,11 @@ class _DestinationMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Icon(Icons.location_pin, size: 40, color: Color(0xFFE74A4A));
+    return Icon(
+      Icons.location_pin,
+      size: 40,
+      color: Theme.of(context).appColors.danger,
+    );
   }
 }
 
@@ -453,14 +449,15 @@ class _CurrentLocationMarker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF2B7FFF),
+        color: colors.primary,
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 2.4),
-        boxShadow: const <BoxShadow>[
+        border: Border.all(color: colors.surface, width: 2.4),
+        boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Color(0x2F000000),
+            color: colors.scrim.withValues(alpha: 0.18),
             blurRadius: 6,
             offset: Offset(0, 2),
           ),

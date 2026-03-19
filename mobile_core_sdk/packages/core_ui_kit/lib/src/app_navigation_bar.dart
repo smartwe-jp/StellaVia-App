@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app_color_tokens.dart';
+import 'app_theme_extensions.dart';
 
 class AppNavigationBar extends StatelessWidget implements PreferredSizeWidget {
   const AppNavigationBar({
@@ -10,7 +10,7 @@ class AppNavigationBar extends StatelessWidget implements PreferredSizeWidget {
     this.trailing,
     this.decoration,
     this.backgroundColor,
-    this.foregroundColor = Colors.white,
+    this.foregroundColor,
     this.height = 64,
     this.horizontalPadding = 20,
     this.bottomSpacing = 0,
@@ -21,7 +21,7 @@ class AppNavigationBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? trailing;
   final Decoration? decoration;
   final Color? backgroundColor;
-  final Color foregroundColor;
+  final Color? foregroundColor;
   final double height;
   final double horizontalPadding;
   final double bottomSpacing;
@@ -32,11 +32,12 @@ class AppNavigationBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final effectiveForegroundColor = foregroundColor ?? colors.onDark;
     final effectiveDecoration =
-        decoration ??
-        BoxDecoration(
-          color: backgroundColor ?? AppColorTokens.fundexPrimaryDark,
-        );
+        decoration ?? BoxDecoration(color: backgroundColor ?? colors.heroStart);
 
     return DecoratedBox(
       decoration: effectiveDecoration,
@@ -58,13 +59,9 @@ class AppNavigationBar extends StatelessWidget implements PreferredSizeWidget {
                 Expanded(
                   child: Text(
                     title,
-                    style:
-                        (Theme.of(context).textTheme.titleMedium ??
-                                const TextStyle())
-                            .copyWith(
-                              color: foregroundColor,
-                              fontWeight: FontWeight.w800,
-                            ),
+                    style: appText.pageTitle.copyWith(
+                      color: effectiveForegroundColor,
+                    ),
                   ),
                 ),
                 if (trailing != null) ...<Widget>[
@@ -87,28 +84,32 @@ class AppNavigationIconButton extends StatelessWidget {
     this.onTap,
     this.size = 32,
     this.borderRadius = 8,
-    this.backgroundColor = const Color(0x26FFFFFF),
-    this.foregroundColor = Colors.white,
+    this.backgroundColor,
+    this.foregroundColor,
   });
 
   final IconData icon;
   final VoidCallback? onTap;
   final double size;
   final double borderRadius;
-  final Color backgroundColor;
-  final Color foregroundColor;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final effectiveBackgroundColor =
+        backgroundColor ?? colors.onDark.withValues(alpha: 0.15);
+    final effectiveForegroundColor = foregroundColor ?? colors.onDark;
     return SizedBox.square(
       dimension: size,
       child: Material(
-        color: backgroundColor,
+        color: effectiveBackgroundColor,
         borderRadius: BorderRadius.circular(borderRadius),
         child: InkWell(
           borderRadius: BorderRadius.circular(borderRadius),
           onTap: onTap,
-          child: Icon(icon, size: 18, color: foregroundColor),
+          child: Icon(icon, size: 18, color: effectiveForegroundColor),
         ),
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app_color_tokens.dart';
+import 'app_theme_extensions.dart';
 
 class AppStepProgressBar extends StatefulWidget {
   const AppStepProgressBar({
@@ -10,9 +10,9 @@ class AppStepProgressBar extends StatefulWidget {
     this.padding = const EdgeInsets.fromLTRB(20, 14, 20, 14),
     this.spacing = 4,
     this.height = 4,
-    this.completedColor = AppColorTokens.fundingPrimary,
-    this.currentColor = AppColorTokens.fundingPrimary,
-    this.pendingColor = const Color(0xFFD9E1EC),
+    this.completedColor,
+    this.currentColor,
+    this.pendingColor,
     this.enablePulse = true,
   }) : assert(stepCount > 0),
        assert(currentStep >= 0),
@@ -23,9 +23,9 @@ class AppStepProgressBar extends StatefulWidget {
   final EdgeInsetsGeometry padding;
   final double spacing;
   final double height;
-  final Color completedColor;
-  final Color currentColor;
-  final Color pendingColor;
+  final Color? completedColor;
+  final Color? currentColor;
+  final Color? pendingColor;
   final bool enablePulse;
 
   @override
@@ -72,6 +72,10 @@ class _AppStepProgressBarState extends State<AppStepProgressBar>
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final completedColor = widget.completedColor ?? colors.primary;
+    final currentColor = widget.currentColor ?? colors.primary;
+    final pendingColor = widget.pendingColor ?? colors.borderSoft;
     return Padding(
       padding: widget.padding,
       child: AnimatedBuilder(
@@ -82,14 +86,14 @@ class _AppStepProgressBarState extends State<AppStepProgressBar>
               final bool isDone = index < widget.currentStep;
               final bool isCurrent = index == widget.currentStep;
               final Color color = isDone
-                  ? widget.completedColor
+                  ? completedColor
                   : isCurrent
                   ? Color.lerp(
-                      widget.currentColor.withValues(alpha: 0.52),
-                      widget.currentColor,
+                      currentColor.withValues(alpha: 0.52),
+                      currentColor,
                       widget.enablePulse ? _pulse.value : 1,
                     )!
-                  : widget.pendingColor;
+                  : pendingColor;
 
               return Expanded(
                 child: Padding(

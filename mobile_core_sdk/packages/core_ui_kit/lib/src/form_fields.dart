@@ -252,6 +252,8 @@ class _BaseInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final hotelTheme = theme.extension<AppFTKTheme>()!;
     final isDark = theme.brightness == Brightness.dark;
     final surfaceColor = theme.colorScheme.surface;
@@ -262,22 +264,18 @@ class _BaseInputField extends StatelessWidget {
       alpha: isDark ? 0.18 : 0.12,
     );
     final iconColor = hotelTheme.primaryButtonColor;
-    final hintStyle = (theme.textTheme.bodyMedium ?? const TextStyle())
-        .copyWith(
-          color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.95),
-          fontWeight: FontWeight.w500,
-        );
-    final textStyle = (theme.textTheme.bodyLarge ?? const TextStyle()).copyWith(
-      fontWeight: FontWeight.w600,
+    final hintStyle = appText.body.copyWith(
+      color: colors.textSecondary.withValues(alpha: 0.95),
     );
+    final textStyle = appText.inputText;
 
     final inputShell = _InputShell(
       enabled: enabled,
       fillColor: fillColor,
       glowColor: hotelTheme.primaryButtonColor.withValues(alpha: 0.16),
       shadowColor: isDark
-          ? Colors.black.withValues(alpha: 0.28)
-          : Colors.black.withValues(alpha: 0.06),
+          ? colors.scrim.withValues(alpha: 0.50)
+          : colors.scrim.withValues(alpha: 0.06),
       defaultBorderColor: isDark
           ? hotelTheme.cardBorderColor.withValues(alpha: 0.88)
           : hotelTheme.cardBorderColor.withValues(alpha: 1),
@@ -354,12 +352,11 @@ class _FieldLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Text(
       labelText,
-      style: (theme.textTheme.labelLarge ?? const TextStyle()).copyWith(
-        fontWeight: FontWeight.w600,
-        color: theme.textTheme.bodySmall?.color,
-      ),
+      style: appText.inputLabel.copyWith(color: colors.textSecondary),
     );
   }
 }

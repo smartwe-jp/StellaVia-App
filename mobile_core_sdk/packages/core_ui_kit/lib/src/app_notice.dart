@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'app_theme_extensions.dart';
+
 enum AppNoticePosition { top, bottom }
 
 class AppNotice {
@@ -94,13 +96,16 @@ class _NoticeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Material(
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: Container(
         constraints: const BoxConstraints(maxWidth: 560),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
-          color: Theme.of(context).primaryColorDark,
+          color: colors.heroStart,
           borderRadius: BorderRadius.circular(12),
           // boxShadow: <BoxShadow>[
           //   BoxShadow(
@@ -117,10 +122,7 @@ class _NoticeCard extends StatelessWidget {
               child: Text(
                 message,
                 textAlign: TextAlign.center,
-                style:
-                    (Theme.of(context).textTheme.titleMedium ??
-                            const TextStyle())
-                        .copyWith(color: Colors.white),
+                style: appText.sectionTitle.copyWith(color: colors.onDark),
               ),
             ),
             if (action != null) ...<Widget>[
@@ -131,7 +133,7 @@ class _NoticeCard extends StatelessWidget {
                   AppNotice.dismissCurrent();
                 },
                 style: TextButton.styleFrom(
-                  foregroundColor: const Color(0xFF93C5FD),
+                  foregroundColor: colors.primarySubtle,
                   visualDensity: const VisualDensity(
                     horizontal: -2,
                     vertical: -2,
@@ -139,7 +141,9 @@ class _NoticeCard extends StatelessWidget {
                 ),
                 child: Text(
                   action!.label,
-                  style: const TextStyle(fontWeight: FontWeight.w700),
+                  style: appText.bodyStrong.copyWith(
+                    color: colors.primarySubtle,
+                  ),
                 ),
               ),
             ],

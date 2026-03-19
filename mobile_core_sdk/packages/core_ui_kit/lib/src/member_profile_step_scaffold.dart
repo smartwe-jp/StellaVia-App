@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'app_theme_extensions.dart';
 import 'member_profile_form_widgets.dart';
 
 class MemberProfileEditStepScaffold extends StatelessWidget {
@@ -29,6 +30,8 @@ class MemberProfileEditStepScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
       child: Column(
@@ -36,18 +39,13 @@ class MemberProfileEditStepScaffold extends StatelessWidget {
         children: <Widget>[
           Text(
             title,
-            style: (theme.textTheme.titleLarge ?? const TextStyle()).copyWith(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: theme.colorScheme.onSurface,
-            ),
+            style: appText.pageTitle.copyWith(color: colors.textPrimary),
           ),
           const SizedBox(height: 4),
           Text(
             description,
-            style: (theme.textTheme.bodySmall ?? const TextStyle()).copyWith(
-              fontSize: 12,
-              color: theme.textTheme.bodySmall?.color?.withValues(alpha: 0.92),
+            style: appText.helper.copyWith(
+              color: colors.textSecondary.withValues(alpha: 0.92),
               height: 1.5,
             ),
           ),
@@ -65,12 +63,9 @@ class MemberProfileEditStepScaffold extends StatelessWidget {
                 onPressed: onSkip,
                 child: Text(
                   skipLabel ?? '',
-                  style: (theme.textTheme.labelLarge ?? const TextStyle())
-                      .copyWith(
-                        fontSize: 13,
-                        color: theme.textTheme.bodySmall?.color,
-                        fontWeight: FontWeight.w600,
-                      ),
+                  style: appText.bodyStrong.copyWith(
+                    color: colors.textSecondary,
+                  ),
                 ),
               ),
             ),

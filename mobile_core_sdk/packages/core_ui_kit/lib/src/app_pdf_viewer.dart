@@ -84,6 +84,7 @@ class _AppPdfViewerPageState extends State<AppPdfViewerPage> {
   bool _hasMainFrameError = false;
   bool _pageLoaded = false;
   int _progress = 0;
+  Color? _lastAppliedBackgroundColor;
 
   Uri get _displayUri {
     if (kIsWeb) {
@@ -103,7 +104,6 @@ class _AppPdfViewerPageState extends State<AppPdfViewerPage> {
     super.initState();
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(Colors.white)
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
@@ -149,6 +149,17 @@ class _AppPdfViewerPageState extends State<AppPdfViewerPage> {
     unawaited(_controller.loadRequest(_displayUri));
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final backgroundColor = Theme.of(context).appColors.surface;
+    if (_lastAppliedBackgroundColor == backgroundColor) {
+      return;
+    }
+    _lastAppliedBackgroundColor = backgroundColor;
+    unawaited(_controller.setBackgroundColor(backgroundColor));
+  }
+
   Future<void> _reload() async {
     setState(() {
       _hasMainFrameError = false;
@@ -173,6 +184,9 @@ class _AppPdfViewerPageState extends State<AppPdfViewerPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title, maxLines: 1, overflow: TextOverflow.ellipsis),
@@ -198,14 +212,14 @@ class _AppPdfViewerPageState extends State<AppPdfViewerPage> {
             WebViewWidget(controller: _controller),
           if (!_hasMainFrameError && !_pageLoaded)
             Container(
-              color: Colors.white.withValues(alpha: 0.94),
+              color: colors.surface.withValues(alpha: 0.94),
               alignment: Alignment.center,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   const CircularProgressIndicator.adaptive(),
                   const SizedBox(height: 12),
-                  Text(widget.texts.loadingLabel),
+                  Text(widget.texts.loadingLabel, style: appText.body),
                 ],
               ),
             ),
@@ -240,6 +254,8 @@ class _PdfLoadErrorPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final appText = theme.appTextTheme;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -252,11 +268,7 @@ class _PdfLoadErrorPanel extends StatelessWidget {
               size: 28,
             ),
             const SizedBox(height: 8),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+            Text(message, textAlign: TextAlign.center, style: appText.body),
             const SizedBox(height: 16),
             Wrap(
               spacing: 8,

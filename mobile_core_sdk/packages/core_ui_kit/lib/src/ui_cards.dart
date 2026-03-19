@@ -30,6 +30,8 @@ class ImageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
     final hotelTheme = Theme.of(context).extension<AppFTKTheme>()!;
     final radius = BorderRadius.circular(hotelTheme.cardCornerRadius);
 
@@ -41,7 +43,7 @@ class ImageCard extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
-            background ?? const _PlaceholderArtwork(),
+            background ?? _PlaceholderArtwork(),
             Align(
               alignment: Alignment.bottomCenter,
               child: IgnorePointer(
@@ -85,7 +87,7 @@ class ImageCard extends StatelessWidget {
                                 Icon(
                                   Icons.location_on_outlined,
                                   size: 13,
-                                  color: Colors.white.withValues(alpha: 0.95),
+                                  color: colors.onDark.withValues(alpha: 0.95),
                                 ),
                                 const SizedBox(width: 2),
                                 Expanded(
@@ -146,6 +148,8 @@ class DealBannerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
     final hotelTheme = Theme.of(context).extension<AppFTKTheme>()!;
     final radius = BorderRadius.circular(hotelTheme.cardCornerRadius);
 
@@ -157,14 +161,7 @@ class DealBannerCard extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
-            background ??
-                const _PlaceholderArtwork(
-                  colors: <Color>[
-                    Color(0xFF77927B),
-                    Color(0xFF3D6D57),
-                    Color(0xFF243D33),
-                  ],
-                ),
+            background ?? _PlaceholderArtwork(),
             Align(
               alignment: Alignment.bottomCenter,
               child: IgnorePointer(
@@ -224,7 +221,7 @@ class DealBannerCard extends StatelessWidget {
                                 Icon(
                                   Icons.location_on_outlined,
                                   size: 13,
-                                  color: Colors.white.withValues(alpha: 0.95),
+                                  color: colors.onDark.withValues(alpha: 0.95),
                                 ),
                                 const SizedBox(width: 2),
                                 Expanded(
@@ -302,12 +299,12 @@ class SurfacePanelCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final hotelTheme = theme.extension<AppFTKTheme>()!;
     final isDark = theme.brightness == Brightness.dark;
-    final titleStyle = (theme.textTheme.titleMedium ?? const TextStyle())
-        .copyWith(fontWeight: FontWeight.w700);
-    final subtitleStyle = (theme.textTheme.bodySmall ?? const TextStyle())
-        .copyWith(color: theme.textTheme.bodySmall?.color);
+    final titleStyle = appText.sectionTitle;
+    final subtitleStyle = appText.helper.copyWith(color: colors.textSecondary);
 
     return Container(
       width: double.infinity,
@@ -396,12 +393,14 @@ class ListItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final hotelTheme = theme.extension<AppFTKTheme>()!;
     final isDark = theme.brightness == Brightness.dark;
     final cardRadius = BorderRadius.circular(UiTokens.radius20);
 
     return Material(
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: InkWell(
         onTap: onTap,
         borderRadius: cardRadius,
@@ -429,15 +428,7 @@ class ListItemCard extends StatelessWidget {
                   child: SizedBox(
                     width: 88,
                     height: 88,
-                    child:
-                        image ??
-                        const _PlaceholderArtwork(
-                          colors: <Color>[
-                            Color(0xFFE8F6FF),
-                            Color(0xFF9DD8FF),
-                            Color(0xFF4E9CDD),
-                          ],
-                        ),
+                    child: image ?? _PlaceholderArtwork(),
                   ),
                 ),
                 const SizedBox(width: UiTokens.spacing12),
@@ -453,10 +444,7 @@ class ListItemCard extends StatelessWidget {
                               title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style:
-                                  (theme.textTheme.titleMedium ??
-                                          const TextStyle())
-                                      .copyWith(fontWeight: FontWeight.w700),
+                              style: appText.sectionTitle,
                             ),
                           ),
                           const SizedBox(width: UiTokens.spacing8),
@@ -477,7 +465,7 @@ class ListItemCard extends StatelessWidget {
                               location,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.bodySmall,
+                              style: appText.helper,
                             ),
                           ),
                         ],
@@ -488,12 +476,9 @@ class ListItemCard extends StatelessWidget {
                           subtitle!,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style:
-                              (theme.textTheme.bodySmall ?? const TextStyle())
-                                  .copyWith(
-                                    color: theme.textTheme.bodySmall?.color
-                                        ?.withValues(alpha: 0.9),
-                                  ),
+                          style: appText.helper.copyWith(
+                            color: colors.textSecondary.withValues(alpha: 0.9),
+                          ),
                         ),
                       ],
                       const SizedBox(height: UiTokens.spacing8),
@@ -501,13 +486,9 @@ class ListItemCard extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             priceText,
-                            style:
-                                (theme.textTheme.titleMedium ??
-                                        const TextStyle())
-                                    .copyWith(
-                                      color: hotelTheme.primaryButtonColor,
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                            style: appText.sectionTitle.copyWith(
+                              color: hotelTheme.primaryButtonColor,
+                            ),
                           ),
                           const Spacer(),
                           trailing ??
@@ -554,6 +535,7 @@ class DetailSummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appText = theme.appTextTheme;
     final hotelTheme = theme.extension<AppFTKTheme>()!;
 
     return SurfacePanelCard(
@@ -580,19 +562,17 @@ class DetailSummaryCard extends StatelessWidget {
             children: <Widget>[
               Text(
                 priceText,
-                style: (theme.textTheme.headlineSmall ?? const TextStyle())
-                    .copyWith(
-                      color: hotelTheme.primaryButtonColor,
-                      fontWeight: FontWeight.w700,
-                    ),
+                style: appText.pageTitle.copyWith(
+                  color: hotelTheme.primaryButtonColor,
+                ),
               ),
               const SizedBox(width: UiTokens.spacing8),
-              Text('/night', style: theme.textTheme.bodySmall),
+              Text('/night', style: appText.helper),
             ],
           ),
           if (description != null) ...<Widget>[
             const SizedBox(height: UiTokens.spacing12),
-            Text(description!, style: theme.textTheme.bodyMedium),
+            Text(description!, style: appText.body),
           ],
           if (tags.isNotEmpty) ...<Widget>[
             const SizedBox(height: UiTokens.spacing12),
@@ -611,12 +591,9 @@ class DetailSummaryCard extends StatelessWidget {
                       ),
                       child: Text(
                         tag,
-                        style:
-                            (theme.textTheme.labelMedium ?? const TextStyle())
-                                .copyWith(
-                                  color: hotelTheme.primaryButtonColor,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                        style: appText.chip.copyWith(
+                          color: hotelTheme.primaryButtonColor,
+                        ),
                       ),
                     ),
                   )
@@ -640,6 +617,7 @@ class _InlineRatingPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appText = Theme.of(context).appTextTheme;
     final hotelTheme = Theme.of(context).extension<AppFTKTheme>()!;
     return PillChip(
       backgroundColor: hotelTheme.primaryButtonColor.withValues(alpha: 0.10),
@@ -656,12 +634,7 @@ class _InlineRatingPill extends StatelessWidget {
           const SizedBox(width: 2),
           Text(
             ratingText,
-            style:
-                (Theme.of(context).textTheme.labelMedium ?? const TextStyle())
-                    .copyWith(
-                      color: hotelTheme.primaryButtonColor,
-                      fontWeight: FontWeight.w700,
-                    ),
+            style: appText.chip.copyWith(color: hotelTheme.primaryButtonColor),
           ),
         ],
       ),
@@ -689,24 +662,22 @@ class _RatingInline extends StatelessWidget {
 }
 
 class _PlaceholderArtwork extends StatelessWidget {
-  const _PlaceholderArtwork({
-    this.colors = const <Color>[
-      Color(0xFFD2E8FF),
-      Color(0xFF79C8FF),
-      Color(0xFF2F82D2),
-    ],
-  });
-
-  final List<Color> colors;
+  const _PlaceholderArtwork();
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).appColors;
+    final palette = <Color>[
+      appColors.heroStart,
+      appColors.heroMiddle,
+      appColors.heroEnd,
+    ];
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: colors,
+          colors: palette,
         ),
       ),
       child: Stack(
@@ -719,7 +690,7 @@ class _PlaceholderArtwork extends StatelessWidget {
               width: 84,
               height: 84,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.16),
+                color: appColors.onDark.withValues(alpha: 0.16),
                 shape: BoxShape.circle,
               ),
             ),
@@ -733,7 +704,7 @@ class _PlaceholderArtwork extends StatelessWidget {
                 width: 170,
                 height: 82,
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.22),
+                  color: appColors.onDark.withValues(alpha: 0.22),
                   borderRadius: BorderRadius.circular(36),
                 ),
               ),
@@ -745,7 +716,7 @@ class _PlaceholderArtwork extends StatelessWidget {
             child: Icon(
               Icons.hotel_rounded,
               size: 24,
-              color: Colors.white.withValues(alpha: 0.85),
+              color: appColors.onDark.withValues(alpha: 0.85),
             ),
           ),
           Positioned(
@@ -754,7 +725,7 @@ class _PlaceholderArtwork extends StatelessWidget {
             child: Icon(
               Icons.waves_rounded,
               size: 34,
-              color: Colors.white.withValues(alpha: 0.88),
+              color: appColors.onDark.withValues(alpha: 0.88),
             ),
           ),
         ],

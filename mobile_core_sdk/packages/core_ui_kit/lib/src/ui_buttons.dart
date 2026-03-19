@@ -47,6 +47,7 @@ class _PrimaryCtaButtonState extends State<PrimaryCtaButton> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
     final appTheme = theme.extension<AppFTKTheme>()!;
     final baseColor = widget.backgroundColor ?? appTheme.primaryButtonColor;
     final baseShadowColor =
@@ -60,9 +61,9 @@ class _PrimaryCtaButtonState extends State<PrimaryCtaButton> {
         ? SizedBox(
             width: widget.loadingIndicatorSize,
             height: widget.loadingIndicatorSize,
-            child: const CircularProgressIndicator(
+            child: CircularProgressIndicator(
               strokeWidth: 2.2,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              valueColor: AlwaysStoppedAnimation<Color>(colors.onDark),
             ),
           )
         : (widget.child ?? Text(widget.label!, style: buttonTextStyle));
@@ -160,12 +161,12 @@ class _CompactActionButtonState extends State<CompactActionButton> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appText = theme.appTextTheme;
     final hotelTheme = theme.extension<AppFTKTheme>()!;
     final baseColor = hotelTheme.primaryButtonColor;
     final isEnabled = widget.onPressed != null && !widget.isLoading;
     final radius = BorderRadius.circular(UiTokens.radius16);
-    final textStyle = (theme.textTheme.labelLarge ?? const TextStyle())
-        .copyWith(color: baseColor, fontWeight: FontWeight.w600);
+    final textStyle = appText.inputLabel.copyWith(color: baseColor);
 
     return SizedBox(
       width: widget.width,
@@ -295,6 +296,7 @@ class AccentSquareIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
     final hotelTheme = Theme.of(context).extension<AppFTKTheme>()!;
     final radius = BorderRadius.circular(9);
 
@@ -318,7 +320,7 @@ class AccentSquareIconButton extends StatelessWidget {
             onTap: onPressed,
             borderRadius: radius,
             child: IconTheme(
-              data: const IconThemeData(color: Colors.white, size: 20),
+              data: IconThemeData(color: colors.onDark, size: 20),
               child: Center(child: icon),
             ),
           ),

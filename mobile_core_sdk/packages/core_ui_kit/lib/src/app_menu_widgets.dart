@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app_color_tokens.dart';
+import 'app_theme_extensions.dart';
 import 'ui_tokens.dart';
 
 class AppMenuSection extends StatelessWidget {
@@ -15,6 +15,9 @@ class AppMenuSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     if (children.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -28,13 +31,10 @@ class AppMenuSection extends StatelessWidget {
             padding: const EdgeInsets.only(left: 4, bottom: 6),
             child: Text(
               title,
-              style:
-                  (Theme.of(context).textTheme.labelSmall ?? const TextStyle())
-                      .copyWith(
-                        color: AppColorTokens.fundexTextTertiary,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 1,
-                      ),
+              style: appText.meta.copyWith(
+                color: colors.textTertiary,
+                letterSpacing: 1,
+              ),
             ),
           ),
           ...children,
@@ -51,8 +51,8 @@ class AppMenuItem extends StatelessWidget {
     required this.label,
     this.onTap,
     this.trailing,
-    this.iconBackgroundColor = const Color(0xFFF1F5F9),
-    this.iconForegroundColor = AppColorTokens.fundexTextSecondary,
+    this.iconBackgroundColor,
+    this.iconForegroundColor,
     this.showChevron = true,
   });
 
@@ -60,18 +60,24 @@ class AppMenuItem extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;
   final Widget? trailing;
-  final Color iconBackgroundColor;
-  final Color iconForegroundColor;
+  final Color? iconBackgroundColor;
+  final Color? iconForegroundColor;
   final bool showChevron;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final effectiveIconBackgroundColor =
+        iconBackgroundColor ?? colors.surfaceAlt;
+    final effectiveIconForegroundColor =
+        iconForegroundColor ?? colors.textSecondary;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 2),
       child: Material(
-        color: theme.colorScheme.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(UiTokens.radius12),
         child: InkWell(
           borderRadius: BorderRadius.circular(UiTokens.radius12),
@@ -80,7 +86,7 @@ class AppMenuItem extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(UiTokens.radius12),
-              border: Border.all(color: AppColorTokens.fundexBorder),
+              border: Border.all(color: colors.border),
             ),
             child: Row(
               children: <Widget>[
@@ -88,20 +94,22 @@ class AppMenuItem extends StatelessWidget {
                   width: 34,
                   height: 34,
                   decoration: BoxDecoration(
-                    color: iconBackgroundColor,
+                    color: effectiveIconBackgroundColor,
                     borderRadius: BorderRadius.circular(9),
                   ),
-                  child: Icon(icon, size: 16, color: iconForegroundColor),
+                  child: Icon(
+                    icon,
+                    size: 16,
+                    color: effectiveIconForegroundColor,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     label,
-                    style: (theme.textTheme.bodyMedium ?? const TextStyle())
-                        .copyWith(
-                          color: AppColorTokens.fundexText,
-                          fontWeight: FontWeight.w600,
-                        ),
+                    style: appText.bodyStrong.copyWith(
+                      color: colors.textPrimary,
+                    ),
                   ),
                 ),
                 if (trailing != null) ...<Widget>[
@@ -109,10 +117,10 @@ class AppMenuItem extends StatelessWidget {
                   if (showChevron) const SizedBox(width: 8),
                 ],
                 if (showChevron)
-                  const Icon(
+                  Icon(
                     Icons.chevron_right_rounded,
                     size: 18,
-                    color: AppColorTokens.fundexTextTertiary,
+                    color: colors.textTertiary,
                   ),
               ],
             ),
