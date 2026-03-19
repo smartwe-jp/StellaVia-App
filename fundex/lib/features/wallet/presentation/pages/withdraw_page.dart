@@ -69,10 +69,13 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
     List<WalletBankAccountInfo> accounts,
     WalletBankAccountInfo selected,
   ) async {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final selectedAccount = await showModalBottomSheet<WalletBankAccountInfo>(
       context: context,
       useSafeArea: true,
-      backgroundColor: Colors.white,
+      backgroundColor: colors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -88,11 +91,7 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
                 padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
                 child: Text(
                   l10n.walletWithdrawSelectSheetTitle,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: AppColorTokens.fundexText,
-                  ),
+                  style: appText.cardTitle,
                 ),
               ),
               Flexible(
@@ -106,28 +105,20 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
                       onTap: () => Navigator.of(sheetContext).pop(account),
                       title: Text(
                         _buildAccountSummary(account),
-                        style: const TextStyle(
-                          color: AppColorTokens.fundexText,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: appText.cardTitle,
                       ),
                       subtitle: Text(
                         '${account.accountType} ${account.accountNumber}',
-                        style: const TextStyle(
-                          color: AppColorTokens.fundexTextSecondary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: appText.bodyMuted,
                       ),
                       trailing: checked
-                          ? const Icon(
+                          ? Icon(
                               Icons.check_circle_rounded,
-                              color: AppColorTokens.fundexAccent,
+                              color: colors.primary,
                             )
-                          : const Icon(
+                          : Icon(
                               Icons.circle_outlined,
-                              color: AppColorTokens.fundexTextTertiary,
+                              color: colors.textTertiary,
                             ),
                     );
                   },
@@ -219,6 +210,9 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final locale = Localizations.localeOf(context).toLanguageTag();
     final currency = NumberFormat.currency(
       locale: locale,
@@ -232,22 +226,21 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
         availableAmountAsync.asData?.value?.firstLevelAccountTotal;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.walletWithdrawTitle,
         height: 52,
-        foregroundColor: AppColorTokens.fundexText,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            bottom: BorderSide(color: AppColorTokens.fundexBorder),
-          ),
+        backgroundColor: colors.surface,
+        foregroundColor: colors.textPrimary,
+        decoration: BoxDecoration(
+          color: colors.surface,
+          border: Border(bottom: BorderSide(color: colors.border)),
         ),
         leading: AppNavigationIconButton(
           icon: Icons.arrow_back_rounded,
           onTap: () => context.pop(),
-          backgroundColor: Colors.transparent,
-          foregroundColor: AppColorTokens.fundexText,
+          backgroundColor: colors.surface.withValues(alpha: 0),
+          foregroundColor: colors.textPrimary,
         ),
       ),
       bottomNavigationBar: SafeArea(
@@ -259,7 +252,7 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
                 onPressed: () => context.push('/wallet/withdrawing'),
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(0, 46),
-                  side: const BorderSide(color: AppColorTokens.fundexBorder),
+                  side: BorderSide(color: colors.border),
                 ),
                 child: Text(l10n.walletWithdrawingAction),
               ),
@@ -270,7 +263,7 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
                 onPressed: () => context.push('/wallet/withdraw/history'),
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size(0, 46),
-                  side: const BorderSide(color: AppColorTokens.fundexBorder),
+                  side: BorderSide(color: colors.border),
                 ),
                 child: Text(l10n.walletWithdrawHistoryAction),
               ),
@@ -287,26 +280,22 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
               Container(
                 padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
                 decoration: BoxDecoration(
-                  color: AppColorTokens.fundexBackground,
+                  color: colors.background,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
                   children: <Widget>[
                     Text(
                       l10n.walletWithdrawAvailableAmountLabel,
-                      style: const TextStyle(
-                        color: AppColorTokens.fundexTextSecondary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
+                      style: appText.caption.copyWith(
+                        color: colors.textSecondary,
                       ),
                     ),
                     const SizedBox(height: 6),
                     Text(
                       currency.format(availableAmount ?? 0),
-                      style: const TextStyle(
-                        color: AppColorTokens.fundexText,
-                        fontSize: 30,
-                        fontWeight: FontWeight.w900,
+                      style: appText.heroMetricSecondary.copyWith(
+                        color: colors.textPrimary,
                       ),
                     ),
                   ],
@@ -384,12 +373,15 @@ class _WithdrawInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
       decoration: BoxDecoration(
-        color: AppColorTokens.fundexBackground,
+        color: colors.background,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColorTokens.fundexBorder),
+        border: Border.all(color: colors.border),
       ),
       child: Column(
         children: <Widget>[
@@ -401,14 +393,7 @@ class _WithdrawInfoCard extends StatelessWidget {
               child: Row(
                 children: <Widget>[
                   Expanded(
-                    child: Text(
-                      destinationLabel,
-                      style: const TextStyle(
-                        color: AppColorTokens.fundexTextSecondary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    child: Text(destinationLabel, style: appText.tableLabel),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -416,42 +401,22 @@ class _WithdrawInfoCard extends StatelessWidget {
                     child: Text(
                       destinationValue,
                       textAlign: TextAlign.right,
-                      style: const TextStyle(
-                        color: AppColorTokens.fundexText,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                      ),
+                      style: appText.tableValue,
                     ),
                   ),
                   const SizedBox(width: 6),
-                  const Icon(
-                    Icons.chevron_right_rounded,
-                    color: AppColorTokens.fundexTextTertiary,
-                  ),
+                  Icon(Icons.chevron_right_rounded, color: colors.textTertiary),
                 ],
               ),
             ),
           ),
-          const Divider(height: 18, color: AppColorTokens.fundexBorder),
+          Divider(height: 18, color: colors.border),
           Row(
             children: <Widget>[
-              Expanded(
-                child: Text(
-                  feeLabel,
-                  style: const TextStyle(
-                    color: AppColorTokens.fundexTextSecondary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+              Expanded(child: Text(feeLabel, style: appText.tableLabel)),
               Text(
                 feeValue,
-                style: const TextStyle(
-                  color: AppColorTokens.fundexDanger,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: appText.tableValue.copyWith(color: colors.danger),
               ),
             ],
           ),
@@ -474,24 +439,25 @@ class _WithdrawEmptyAccountCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
       decoration: BoxDecoration(
-        color: AppColorTokens.fundexDangerLight,
+        color: colors.dangerSubtle,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(
-          color: AppColorTokens.fundexDanger.withValues(alpha: 0.35),
-        ),
+        border: Border.all(color: colors.dangerBorder),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          const Padding(
-            padding: EdgeInsets.only(top: 1),
+          Padding(
+            padding: const EdgeInsets.only(top: 1),
             child: Icon(
               Icons.info_outline_rounded,
               size: 16,
-              color: AppColorTokens.fundexDanger,
+              color: colors.danger,
             ),
           ),
           const SizedBox(width: 8),
@@ -501,10 +467,8 @@ class _WithdrawEmptyAccountCard extends StatelessWidget {
               children: <Widget>[
                 Text(
                   message,
-                  style: const TextStyle(
-                    color: AppColorTokens.fundexDanger,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
+                  style: appText.bodyStrong.copyWith(
+                    color: colors.dangerForeground,
                     height: 1.45,
                   ),
                 ),

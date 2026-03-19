@@ -100,24 +100,25 @@ class _WalletBankAccountAddPageState
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
     final isAdding = ref.watch(walletBankAccountAddingProvider);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.walletBankSettingsAddSheetTitle,
-        foregroundColor: AppColorTokens.fundexText,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            bottom: BorderSide(color: AppColorTokens.fundexBorder),
-          ),
+        backgroundColor: colors.surface,
+        foregroundColor: colors.textPrimary,
+        decoration: BoxDecoration(
+          color: colors.surface,
+          border: Border(bottom: BorderSide(color: colors.border)),
         ),
         leading: AppNavigationIconButton(
           icon: Icons.arrow_back_rounded,
           onTap: () => context.pop(false),
-          backgroundColor: Colors.transparent,
-          foregroundColor: AppColorTokens.fundexText,
+          backgroundColor: colors.surface.withValues(alpha: 0),
+          foregroundColor: colors.textPrimary,
         ),
       ),
       body: MemberProfileEditStepScaffold(

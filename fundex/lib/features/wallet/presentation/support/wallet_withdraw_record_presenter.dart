@@ -29,6 +29,7 @@ String resolveWithdrawTypeLabel(AppLocalizations l10n, int? withdrawType) {
 WalletWithdrawStatusPresentation resolveWithdrawStatusPresentation(
   AppLocalizations l10n,
   WalletWithdrawRecord record,
+  AppSemanticColorTheme colors,
 ) {
   final payStatus = record.payStatus;
   final status = record.status;
@@ -36,8 +37,8 @@ WalletWithdrawStatusPresentation resolveWithdrawStatusPresentation(
   if (isPending) {
     return WalletWithdrawStatusPresentation(
       label: l10n.walletWithdrawRecordStatusPending,
-      backgroundColor: const Color(0xFFFFF4E5),
-      foregroundColor: const Color(0xFFB45309),
+      backgroundColor: colors.warningSubtle,
+      foregroundColor: colors.warningForeground,
     );
   }
 
@@ -45,15 +46,15 @@ WalletWithdrawStatusPresentation resolveWithdrawStatusPresentation(
   if (isDone) {
     return WalletWithdrawStatusPresentation(
       label: l10n.walletWithdrawRecordStatusDone,
-      backgroundColor: const Color(0xFFE8F5E9),
-      foregroundColor: const Color(0xFF2E7D32),
+      backgroundColor: colors.successSubtle,
+      foregroundColor: colors.successForeground,
     );
   }
 
   return WalletWithdrawStatusPresentation(
     label: l10n.walletWithdrawRecordStatusUnknown,
-    backgroundColor: const Color(0xFFE2E8F0),
-    foregroundColor: AppColorTokens.fundexTextSecondary,
+    backgroundColor: colors.surfaceAlt,
+    foregroundColor: colors.textSecondary,
   );
 }
 

@@ -125,13 +125,20 @@ class _RealPersonAuthPageState extends ConsumerState<RealPersonAuthPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Scaffold(
-      backgroundColor: AppColorTokens.fundexBackground,
+      backgroundColor: colors.background,
       appBar: AppNavigationBar(
         title: l10n.identityAuthPageTitle,
+        backgroundColor: colors.surface,
+        foregroundColor: colors.textPrimary,
         leading: AppNavigationIconButton(
           icon: Icons.arrow_back_rounded,
           onTap: () => context.pop(false),
+          backgroundColor: colors.surface.withValues(alpha: 0),
+          foregroundColor: colors.textPrimary,
         ),
       ),
       body: SafeArea(
@@ -143,22 +150,22 @@ class _RealPersonAuthPageState extends ConsumerState<RealPersonAuthPage> {
               Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: colors.surface,
                   borderRadius: BorderRadius.circular(UiTokens.radius16),
-                  border: Border.all(color: AppColorTokens.fundexBorder),
+                  border: Border.all(color: colors.border),
                 ),
                 child: Column(
                   children: <Widget>[
                     Container(
                       width: 64,
                       height: 64,
-                      decoration: const BoxDecoration(
-                        color: AppColorTokens.fundexVioletLight,
+                      decoration: BoxDecoration(
+                        color: colors.primarySubtle,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.verified_user_rounded,
-                        color: AppColorTokens.fundexViolet,
+                        color: colors.primary,
                         size: 30,
                       ),
                     ),
@@ -166,13 +173,7 @@ class _RealPersonAuthPageState extends ConsumerState<RealPersonAuthPage> {
                     Text(
                       l10n.identityAuthPageDescription,
                       textAlign: TextAlign.center,
-                      style:
-                          (Theme.of(context).textTheme.bodyMedium ??
-                                  const TextStyle())
-                              .copyWith(
-                                color: AppColorTokens.fundexTextSecondary,
-                                height: 1.6,
-                              ),
+                      style: appText.bodyMuted.copyWith(height: 1.6),
                     ),
                   ],
                 ),
@@ -185,20 +186,16 @@ class _RealPersonAuthPageState extends ConsumerState<RealPersonAuthPage> {
                     vertical: 10,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColorTokens.fundexDangerLight,
+                    color: colors.dangerSubtle,
                     borderRadius: BorderRadius.circular(UiTokens.radius12),
-                    border: Border.all(color: const Color(0xFFFECACA)),
+                    border: Border.all(color: colors.dangerBorder),
                   ),
                   child: Text(
                     _statusMessage!,
-                    style:
-                        (Theme.of(context).textTheme.bodySmall ??
-                                const TextStyle())
-                            .copyWith(
-                              color: AppColorTokens.fundexDanger,
-                              fontWeight: FontWeight.w600,
-                              height: 1.4,
-                            ),
+                    style: appText.bodyStrong.copyWith(
+                      color: colors.dangerForeground,
+                      height: 1.4,
+                    ),
                   ),
                 ),
               ],

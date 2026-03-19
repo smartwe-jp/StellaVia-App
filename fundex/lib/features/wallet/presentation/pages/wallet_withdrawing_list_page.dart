@@ -14,6 +14,9 @@ class WalletWithdrawingListPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final locale = Localizations.localeOf(context).toLanguageTag();
     final formatter = NumberFormat.currency(
       locale: locale,
@@ -23,12 +26,16 @@ class WalletWithdrawingListPage extends ConsumerWidget {
 
     final asyncRecords = ref.watch(walletWithdrawingListProvider);
     return Scaffold(
-      backgroundColor: AppColorTokens.fundexBackground,
+      backgroundColor: colors.background,
       appBar: AppNavigationBar(
         title: l10n.walletWithdrawingPageTitle,
+        backgroundColor: colors.surface,
+        foregroundColor: colors.textPrimary,
         leading: AppNavigationIconButton(
           icon: Icons.arrow_back_rounded,
           onTap: () => context.pop(),
+          backgroundColor: colors.surface.withValues(alpha: 0),
+          foregroundColor: colors.textPrimary,
         ),
       ),
       body: asyncRecords.when(
@@ -37,9 +44,7 @@ class WalletWithdrawingListPage extends ConsumerWidget {
             return Center(
               child: Text(
                 l10n.walletWithdrawRecordEmpty,
-                style: const TextStyle(
-                  color: AppColorTokens.fundexTextSecondary,
-                ),
+                style: appText.bodyMuted,
               ),
             );
           }

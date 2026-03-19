@@ -35,14 +35,17 @@ class WalletWithdrawRecordCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColorTokens.fundexBorder),
+        border: Border.all(color: colors.border),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: colors.scrim.withValues(alpha: 0.05),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -56,16 +59,7 @@ class WalletWithdrawRecordCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Expanded(
-                  child: Text(
-                    typeLabel,
-                    style: const TextStyle(
-                      color: AppColorTokens.fundexText,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
+                Expanded(child: Text(typeLabel, style: appText.cardTitle)),
                 const SizedBox(width: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -78,11 +72,7 @@ class WalletWithdrawRecordCard extends StatelessWidget {
                   ),
                   child: Text(
                     statusLabel,
-                    style: TextStyle(
-                      color: statusForegroundColor,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w800,
-                    ),
+                    style: appText.micro.copyWith(color: statusForegroundColor),
                   ),
                 ),
               ],
@@ -90,11 +80,7 @@ class WalletWithdrawRecordCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               amountText,
-              style: const TextStyle(
-                color: AppColorTokens.fundexDanger,
-                fontSize: 24,
-                fontWeight: FontWeight.w900,
-              ),
+              style: appText.heroMetricSecondary.copyWith(color: colors.danger),
             ),
             if (details.isNotEmpty) ...<Widget>[
               const SizedBox(height: 10),
@@ -105,11 +91,7 @@ class WalletWithdrawRecordCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         details[index].label,
-                        style: const TextStyle(
-                          color: AppColorTokens.fundexTextSecondary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: appText.tableLabel,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -117,12 +99,9 @@ class WalletWithdrawRecordCard extends StatelessWidget {
                       child: Text(
                         details[index].value,
                         textAlign: TextAlign.right,
-                        style: TextStyle(
+                        style: appText.tableValue.copyWith(
                           color:
-                              details[index].valueColor ??
-                              AppColorTokens.fundexText,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
+                              details[index].valueColor ?? colors.textPrimary,
                         ),
                       ),
                     ),
@@ -135,9 +114,8 @@ class WalletWithdrawRecordCard extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 note!,
-                style: const TextStyle(
-                  color: AppColorTokens.fundexTextTertiary,
-                  fontSize: 11,
+                style: appText.meta.copyWith(
+                  color: colors.textTertiary,
                   height: 1.4,
                 ),
               ),

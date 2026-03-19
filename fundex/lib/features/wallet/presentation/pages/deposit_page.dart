@@ -15,6 +15,9 @@ class DepositPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final locale = Localizations.localeOf(context).toLanguageTag();
     final currency = NumberFormat.currency(
       locale: locale,
@@ -26,22 +29,21 @@ class DepositPage extends ConsumerWidget {
     final isApplyingBankAccount = ref.watch(walletBankAccountApplyingProvider);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.walletDepositTitle,
         height: 52,
-        foregroundColor: AppColorTokens.fundexText,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            bottom: BorderSide(color: AppColorTokens.fundexBorder),
-          ),
+        backgroundColor: colors.surface,
+        foregroundColor: colors.textPrimary,
+        decoration: BoxDecoration(
+          color: colors.surface,
+          border: Border(bottom: BorderSide(color: colors.border)),
         ),
         leading: AppNavigationIconButton(
           icon: Icons.arrow_back_rounded,
           onTap: () => context.pop(),
-          backgroundColor: Colors.transparent,
-          foregroundColor: AppColorTokens.fundexText,
+          backgroundColor: colors.surface.withValues(alpha: 0),
+          foregroundColor: colors.textPrimary,
         ),
       ),
       body: asyncData.when(
@@ -57,7 +59,10 @@ class DepositPage extends ConsumerWidget {
                     isIncome: _parseInflowFlag(item.inOut),
                     formatter: currency,
                   ),
-                  valueColor: _resolveAmountColor(_parseInflowFlag(item.inOut)),
+                  valueColor: _resolveAmountColor(
+                    _parseInflowFlag(item.inOut),
+                    colors: colors,
+                  ),
                 ),
               )
               .toList(growable: false);
@@ -147,10 +152,10 @@ class DepositPage extends ConsumerWidget {
                 onTapAction: () => context.push('/wallet/history'),
                 entries: historyEntries.isEmpty
                     ? <FundWalletBalanceEntry>[
-                        const FundWalletBalanceEntry(
+                        FundWalletBalanceEntry(
                           label: '--',
                           value: '--',
-                          valueColor: AppColorTokens.fundexTextSecondary,
+                          valueColor: colors.textSecondary,
                         ),
                       ]
                     : historyEntries,
@@ -165,10 +170,7 @@ class DepositPage extends ConsumerWidget {
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (_, __) => Center(
-          child: Text(
-            l10n.walletDataLoadError,
-            style: const TextStyle(color: AppColorTokens.fundexTextSecondary),
-          ),
+          child: Text(l10n.walletDataLoadError, style: appText.bodyMuted),
         ),
       ),
     );
@@ -187,11 +189,14 @@ String _formatAmountText({
   return '$sign${formatter.format(amount.abs())}';
 }
 
-Color _resolveAmountColor(bool? isIncome) {
+Color _resolveAmountColor(
+  bool? isIncome, {
+  required AppSemanticColorTheme colors,
+}) {
   if (isIncome == null) {
-    return AppColorTokens.fundexTextSecondary;
+    return colors.textSecondary;
   }
-  return isIncome ? AppColorTokens.fundexSuccess : AppColorTokens.fundexDanger;
+  return isIncome ? colors.success : colors.danger;
 }
 
 bool? _parseInflowFlag(String? inOut) {

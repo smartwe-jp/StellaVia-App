@@ -13,6 +13,9 @@ class WalletHistoryPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final locale = Localizations.localeOf(context).toLanguageTag();
     final currency = NumberFormat.currency(
       locale: locale,
@@ -23,24 +26,23 @@ class WalletHistoryPage extends ConsumerWidget {
     final asyncHistory = ref.watch(walletHistoryProvider);
 
     return Scaffold(
-      backgroundColor: AppColorTokens.fundexBackground,
+      backgroundColor: colors.background,
       appBar: AppNavigationBar(
         title: l10n.walletHistoryTitle,
+        backgroundColor: colors.surface,
+        foregroundColor: colors.textPrimary,
         leading: AppNavigationIconButton(
           icon: Icons.arrow_back_rounded,
           onTap: () => context.pop(),
+          backgroundColor: colors.surface.withValues(alpha: 0),
+          foregroundColor: colors.textPrimary,
         ),
       ),
       body: asyncHistory.when(
         data: (items) {
           if (items.isEmpty) {
             return Center(
-              child: Text(
-                l10n.walletHistoryEmpty,
-                style: const TextStyle(
-                  color: AppColorTokens.fundexTextSecondary,
-                ),
-              ),
+              child: Text(l10n.walletHistoryEmpty, style: appText.bodyMuted),
             );
           }
 
@@ -65,7 +67,10 @@ class WalletHistoryPage extends ConsumerWidget {
                   isIncome: isIncome,
                   formatter: currency,
                 ),
-                amountColor: _resolveAmountColor(isIncome: isIncome),
+                amountColor: _resolveAmountColor(
+                  isIncome: isIncome,
+                  colors: colors,
+                ),
                 directionLabel: _resolveDirectionLabel(
                   isIncome: isIncome,
                   inflowLabel: l10n.walletHistoryInflowLabel,
@@ -114,11 +119,14 @@ bool _isPending(String? businessId) {
   return businessId == null || businessId.trim().isEmpty;
 }
 
-Color _resolveAmountColor({required bool? isIncome}) {
+Color _resolveAmountColor({
+  required bool? isIncome,
+  required AppSemanticColorTheme colors,
+}) {
   if (isIncome == null) {
-    return AppColorTokens.fundexTextSecondary;
+    return colors.textSecondary;
   }
-  return isIncome ? AppColorTokens.fundexSuccess : AppColorTokens.fundexDanger;
+  return isIncome ? colors.success : colors.danger;
 }
 
 String _formatAmountText({

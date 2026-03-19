@@ -41,24 +41,26 @@ class _WalletBankSettingsPageState
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final asyncAccounts = ref.watch(walletBankAccountListProvider);
 
     return Scaffold(
-      backgroundColor: AppColorTokens.fundexBackground,
+      backgroundColor: colors.background,
       appBar: AppNavigationBar(
         title: l10n.menuItemBankSettings,
-        foregroundColor: AppColorTokens.fundexText,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            bottom: BorderSide(color: AppColorTokens.fundexBorder),
-          ),
+        backgroundColor: colors.surface,
+        foregroundColor: colors.textPrimary,
+        decoration: BoxDecoration(
+          color: colors.surface,
+          border: Border(bottom: BorderSide(color: colors.border)),
         ),
         leading: AppNavigationIconButton(
           icon: Icons.arrow_back_rounded,
           onTap: () => context.pop(),
-          backgroundColor: Colors.transparent,
-          foregroundColor: AppColorTokens.fundexText,
+          backgroundColor: colors.surface.withValues(alpha: 0),
+          foregroundColor: colors.textPrimary,
         ),
       ),
       body: asyncAccounts.when(
@@ -71,11 +73,7 @@ class _WalletBankSettingsPageState
               else ...<Widget>[
                 Text(
                   l10n.walletBankSettingsRegisteredTitle,
-                  style: const TextStyle(
-                    color: AppColorTokens.fundexText,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: appText.cardTitle,
                 ),
                 const SizedBox(height: 10),
                 for (final account in accounts)
@@ -110,16 +108,19 @@ class _WalletBankAccountCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColorTokens.fundexBorder),
+        border: Border.all(color: colors.border),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: colors.scrim.withValues(alpha: 0.04),
             blurRadius: 14,
             offset: const Offset(0, 6),
           ),
@@ -130,11 +131,7 @@ class _WalletBankAccountCard extends StatelessWidget {
         children: <Widget>[
           Text(
             account.bankName,
-            style: const TextStyle(
-              color: AppColorTokens.fundexText,
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
+            style: appText.sectionTitle.copyWith(color: colors.textPrimary),
           ),
           const SizedBox(height: 10),
           _WalletBankAccountInfoRow(
@@ -173,37 +170,25 @@ class _WalletBankAccountInfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
         border: isLast
             ? null
-            : const Border(
-                bottom: BorderSide(color: AppColorTokens.fundexBorder),
-              ),
+            : Border(bottom: BorderSide(color: colors.border)),
       ),
       child: Row(
         children: <Widget>[
-          Expanded(
-            child: Text(
-              label,
-              style: const TextStyle(
-                color: AppColorTokens.fundexTextSecondary,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
+          Expanded(child: Text(label, style: appText.tableLabel)),
           const SizedBox(width: 12),
           Flexible(
             child: Text(
               value,
               textAlign: TextAlign.right,
-              style: const TextStyle(
-                color: AppColorTokens.fundexText,
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-              ),
+              style: appText.tableValue,
             ),
           ),
         ],
@@ -220,24 +205,22 @@ class _WalletBankAccountEmptyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColorTokens.fundexBorder),
+        border: Border.all(color: colors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             l10n.walletBankSettingsEmptyMessage,
-            style: const TextStyle(
-              color: AppColorTokens.fundexTextSecondary,
-              fontSize: 13,
-              height: 1.55,
-              fontWeight: FontWeight.w600,
-            ),
+            style: appText.bodyMuted.copyWith(height: 1.55),
           ),
           const SizedBox(height: 14),
           PrimaryCtaButton(
