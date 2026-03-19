@@ -3,10 +3,14 @@
     android:shape="rectangle">
 
     <!-- 填充的颜色 -->
-    <solid android:color="#FFFFFF" />
+    <solid android:color="@color/face_liveness_timeout_dialog_bg" />
 
     <!-- 设置按钮的四个角为弧形 -->
     <!-- android:radius 弧形的半径 -->
-    <corners android:radius="5dip" />
+    <corners
+        android:topLeftRadius="12dp"
+        android:topRightRadius="12dp"
+        android:bottomRightRadius="12dp"
+        android:bottomLeftRadius="12dp"/>
 
 </shape>

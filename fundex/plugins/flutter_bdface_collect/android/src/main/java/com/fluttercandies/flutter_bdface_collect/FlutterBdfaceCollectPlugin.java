@@ -5,15 +5,21 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
-import com.baidu.idl.face.platform.FaceConfig;
-import com.baidu.idl.face.platform.FaceEnvironment;
 import com.baidu.idl.face.platform.FaceSDKManager;
 import com.baidu.idl.face.platform.LivenessTypeEnum;
-import com.baidu.idl.face.platform.listener.IInitCallback;
+import com.baidu.idl.face.platform.model.ImageInfo;
+import com.baidu.idl.facelive.api.FaceLiveManager;
+import com.baidu.idl.facelive.api.callback.InitCallback;
+import com.baidu.idl.facelive.api.entity.FaceLiveConfig;
+import com.baidu.idl.facelive.api.entity.InitOption;
+import com.baidu.idl.facelive.api.entity.LivenessValueModel;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -23,26 +29,27 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 
-/**
- * FlutterBdfaceCollectPlugin
- */
 public class FlutterBdfaceCollectPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
+    static final int COLLECT_REQ_CODE = 19491001;
+    public static final int COLLECT_OK_CODE = 10011949;
+    private static final String CHANNEL_NAME = "com.fluttercandies.bdface_collect";
+    private static final String LICENSE_FILE_NAME = "idl-license.face-android";
+
     private MethodChannel channel;
     private Activity activity;
-    private static final int COLLECT_REQ_CODE = 19491001; /// I love China
-    public static final int COLLECT_OK_CODE = 10011949; /// I love China
-    private static final String channelName = "com.fluttercandies.bdface_collect";
-    private Result result;
-    static String imageCropBase64, imageSrcBase64;
+    private Result pendingResult;
+
+    static String imageCropBase64;
+    static String imageSrcBase64;
 
     @Override
-    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), channelName);
+    public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
+        channel = new MethodChannel(binding.getBinaryMessenger(), CHANNEL_NAME);
         channel.setMethodCallHandler(this);
     }
 
     @Override
-    public void onMethodCall(@NonNull MethodCall call, @NonNull final Result result) {
+    public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         switch (call.method) {
             case MethodConstants.GetPlatformVersion:
                 result.success("Android " + android.os.Build.VERSION.RELEASE);
@@ -58,215 +65,313 @@ public class FlutterBdfaceCollectPlugin implements FlutterPlugin, MethodCallHand
                 break;
             default:
                 result.notImplemented();
+                break;
         }
     }
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        channel.setMethodCallHandler(null);
-        result = null;
+        if (channel != null) {
+            channel.setMethodCallHandler(null);
+        }
+        pendingResult = null;
     }
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         activity = binding.getActivity();
         binding.addActivityResultListener((requestCode, resultCode, data) -> {
-            if (requestCode == COLLECT_REQ_CODE) {
-                if (this.result != null) {
-                    HashMap<String, String> res = null;
-                    if (resultCode == COLLECT_OK_CODE) {
-                        res = new HashMap<>();
-                        res.put("imageCropBase64", imageCropBase64);
-                        res.put("imageSrcBase64", imageSrcBase64);
-                    }
-                    result.success(res);
-                }
-                imageCropBase64 = imageSrcBase64 = null;
-                result = null;
+            if (requestCode != COLLECT_REQ_CODE) {
+                return false;
             }
-            return false;
+            if (pendingResult != null) {
+                HashMap<String, String> response = null;
+                if (resultCode == COLLECT_OK_CODE) {
+                    response = new HashMap<>();
+                    response.put("imageCropBase64", imageCropBase64);
+                    response.put("imageSrcBase64", imageSrcBase64);
+                }
+                pendingResult.success(response);
+            }
+            imageCropBase64 = null;
+            imageSrcBase64 = null;
+            pendingResult = null;
+            return true;
         });
     }
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
         activity = null;
-        result = null;
+        pendingResult = null;
     }
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
         activity = binding.getActivity();
-        result = null;
+        pendingResult = null;
     }
 
     @Override
     public void onDetachedFromActivity() {
         activity = null;
-        result = null;
+        pendingResult = null;
     }
 
-    /// 项目初始化
     private void init(Object arguments, final Result result) {
-        String licenseId = (String) arguments;
-        String licenseFileName = "idl-license.face-android";
-        assert licenseId != null;
-        IInitCallback iInitCallback = new IInitCallback() {
+        if (activity == null) {
+            result.success(formatInitError("NO_ACTIVITY", "activity is null"));
+            return;
+        }
+        String licenseId = arguments instanceof String ? ((String) arguments).trim() : "";
+        if (licenseId.isEmpty()) {
+            result.success(formatInitError("INVALID_ARGUMENT", "licenseId is empty"));
+            return;
+        }
+
+        InitOption option = new InitOption();
+        option.licenseKey = licenseId;
+        option.licenseFileName = LICENSE_FILE_NAME;
+        FaceLiveManager.getInstance().init(activity.getApplicationContext(), option, new InitCallback() {
             @Override
-            public void initSuccess() {
+            public void onSuccess(int resultCode, String resultMsg) {
+                if (activity == null) {
+                    result.success(formatInitError(resultCode, resultMsg));
+                    return;
+                }
                 activity.runOnUiThread(() -> result.success(null));
             }
 
             @Override
-            public void initFailure(int i, String s) {
-                activity.runOnUiThread(() -> result.success("errCode: " + i + ", errMsg: " + s));
+            public void onError(int resultCode, String resultMsg) {
+                if (activity == null) {
+                    result.success(formatInitError(resultCode, resultMsg));
+                    return;
+                }
+                activity.runOnUiThread(() -> result.success(formatInitError(resultCode, resultMsg)));
             }
-        };
-        FaceSDKManager.getInstance().initialize(activity, licenseId, licenseFileName, iInitCallback);
+        });
     }
 
-    /// 采集
     private void collect(Object arguments, final Result result) {
-        @SuppressWarnings("unchecked")
-        HashMap<String, Object> argumentsMap = (HashMap<String, Object>) arguments;
-        int livenessTypeSize = setFaceConfig(argumentsMap);
-        Intent intent;
-        if (livenessTypeSize == 0) {
-            intent = new Intent(activity, FaceDetectActivity.class);
-        } else {
-            intent = new Intent(activity, FaceLivenessActivity.class);
+        if (activity == null) {
+            result.success(errorResult("activity is null"));
+            return;
         }
+        if (pendingResult != null) {
+            result.success(errorResult("collect already in progress"));
+            return;
+        }
+        if (!FaceSDKManager.getInstance().getInitFlag()) {
+            result.success(errorResult("SDK not initialized"));
+            return;
+        }
+        if (!(arguments instanceof Map)) {
+            result.success(errorResult("invalid collect arguments"));
+            return;
+        }
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> argumentsMap = (Map<String, Object>) arguments;
+        boolean useActionLiveness = setFaceConfig(argumentsMap);
+
+        Intent intent = new Intent(
+                activity,
+                useActionLiveness ? FinanceFaceActionLivenessActivity.class : FinanceFaceSilenceLivenessActivity.class
+        );
+        imageCropBase64 = null;
+        imageSrcBase64 = null;
+        pendingResult = result;
         activity.startActivityForResult(intent, COLLECT_REQ_CODE);
-        this.result = result;
     }
 
-    /// SDK 释放
     private void unInit(final Result result) {
-        FaceSDKManager.getInstance().release();
+        FaceLiveManager.getInstance().release();
         result.success(null);
     }
 
-    /// 设置配置
-    private int setFaceConfig(HashMap<String, Object> argumentsMap) {
-        Integer minFaceSize = (Integer) argumentsMap.get("minFaceSize");
-        Double notFace = (Double) argumentsMap.get("notFace");
-        Double brightness = (Double) argumentsMap.get("brightness");
-        Double brightnessMax = (Double) argumentsMap.get("brightnessMax");
-        Double blurness = (Double) argumentsMap.get("blurness");
-        Double occlusionLeftEye = (Double) argumentsMap.get("occlusionLeftEye");
-        Double occlusionRightEye = (Double) argumentsMap.get("occlusionRightEye");
-        Double occlusionNose = (Double) argumentsMap.get("occlusionNose");
-        Double occlusionMouth = (Double) argumentsMap.get("occlusionMouth");
-        Double occlusionLeftContour = (Double) argumentsMap.get("occlusionLeftContour");
-        Double occlusionRightContour = (Double) argumentsMap.get("occlusionRightContour");
-        Double occlusionChin = (Double) argumentsMap.get("occlusionChin");
-        Integer headPitch = (Integer) argumentsMap.get("headPitch");
-        Integer headYaw = (Integer) argumentsMap.get("headYaw");
-        Integer headRoll = (Integer) argumentsMap.get("headRoll");
-        Double eyeClosed = (Double) argumentsMap.get("eyeClosed");
-//        Integer cacheImageNum = (Integer) argumentsMap.get("cacheImageNum");
-        Double scale = (Double) argumentsMap.get("scale");
-        Integer cropHeight = (Integer) argumentsMap.get("cropHeight");
-        Integer cropWidth = (Integer) argumentsMap.get("cropWidth");
-        Double enlargeRatio = (Double) argumentsMap.get("enlargeRatio");
-        Double faceFarRatio = (Double) argumentsMap.get("faceFarRatio");
-        Double faceClosedRatio = (Double) argumentsMap.get("faceClosedRatio");
-        Integer secType = (Integer) argumentsMap.get("secType");
-        @SuppressWarnings("unchecked")
-        List<String> livenessTypes = (List<String>) argumentsMap.get("livenessTypes");
-        Boolean livenessRandom = (Boolean) argumentsMap.get("livenessRandom");
-        Boolean sound = (Boolean) argumentsMap.get("sound");
-        assert minFaceSize != null && notFace != null && brightness != null;
-        assert brightnessMax != null && blurness != null && occlusionLeftEye != null;
-        assert occlusionRightEye != null && occlusionChin != null;
-//        assert occlusionRightEye != null && occlusionChin != null && cacheImageNum != null;
-        assert occlusionNose != null && occlusionMouth != null && eyeClosed != null && sound != null;
-        assert occlusionLeftContour != null && occlusionRightContour != null && secType != null;
-        assert headPitch != null && headYaw != null && headRoll != null;
-        assert scale != null && cropHeight != null && cropWidth != null;
-        assert enlargeRatio != null && faceFarRatio != null && faceClosedRatio != null;
-        assert livenessTypes != null && livenessRandom != null;
+    private boolean setFaceConfig(Map<String, Object> argumentsMap) {
+        FaceLiveConfig config = FaceLiveManager.getInstance().getFaceConfig();
+        if (config == null) {
+            config = new FaceLiveConfig();
+        }
 
-        FaceConfig config = FaceSDKManager.getInstance().getFaceConfig();
-        // 设置 最小人脸阈值
-        config.setMinFaceSize(minFaceSize);
-        // 设置 非人脸阈值
-        config.setNotFaceValue(notFace.floatValue());
-        // 设置 图片最小光照阈值
-        config.setBrightnessValue(brightness.floatValue());
-        // 设置 图片最大光照阈值
-        config.setBrightnessMaxValue(brightnessMax.floatValue());
-        // 设置 图像模糊阈值
-        config.setBlurnessValue(blurness.floatValue());
-        // 设置 左眼遮挡阀值
-        config.setOcclusionLeftEyeValue(occlusionLeftEye.floatValue());
-        // 设置 右眼遮挡阀值
-        config.setOcclusionRightEyeValue(occlusionRightEye.floatValue());
-        // 设置 鼻子遮挡阀值
-        config.setOcclusionNoseValue(occlusionNose.floatValue());
-        // 设置 嘴巴遮挡阀值
-        config.setOcclusionMouthValue(occlusionMouth.floatValue());
-        // 设置 左脸颊遮挡阀值
-        config.setOcclusionLeftContourValue(occlusionLeftContour.floatValue());
-        // 设置 右脸颊遮挡阀值
-        config.setOcclusionRightContourValue(occlusionRightContour.floatValue());
-        // 设置 下巴遮挡阀值
-        config.setOcclusionChinValue(occlusionChin.floatValue());
-        // 设置 低头抬头角度
-        config.setHeadPitchValue(headPitch);
-        // 设置 左右摇头角度
-        config.setHeadYawValue(headYaw);
-        // 设置 偏头角度
-        config.setHeadRollValue(headRoll);
-        // 设置 闭眼阈值
-        config.setEyeClosedValue(eyeClosed.floatValue());
-        // 设置 图片缓存数量
+        config.setMinFaceSize(getInt(argumentsMap, "minFaceSize", 200));
+        config.setNotFaceValue((float) getDouble(argumentsMap, "notFace", 0.6d));
+        config.setBrightnessValue((float) getDouble(argumentsMap, "brightness", 40d));
+        config.setBrightnessMaxValue((float) getDouble(argumentsMap, "brightnessMax", 220d));
+        config.setBlurnessValue((float) getDouble(argumentsMap, "blurness", 0.6d));
+        config.setOcclusionLeftEyeValue((float) getDouble(argumentsMap, "occlusionLeftEye", 0.8d));
+        config.setOcclusionRightEyeValue((float) getDouble(argumentsMap, "occlusionRightEye", 0.8d));
+        config.setOcclusionNoseValue((float) getDouble(argumentsMap, "occlusionNose", 0.8d));
+        config.setOcclusionMouthValue((float) getDouble(argumentsMap, "occlusionMouth", 0.8d));
+        config.setOcclusionLeftContourValue((float) getDouble(argumentsMap, "occlusionLeftContour", 0.8d));
+        config.setOcclusionRightContourValue((float) getDouble(argumentsMap, "occlusionRightContour", 0.8d));
+        config.setOcclusionChinValue((float) getDouble(argumentsMap, "occlusionChin", 0.8d));
+        config.setHeadPitchValue(getInt(argumentsMap, "headPitch", 20));
+        config.setHeadYawValue(getInt(argumentsMap, "headYaw", 18));
+        config.setHeadRollValue(getInt(argumentsMap, "headRoll", 20));
+        config.setEyeClosedValue((float) getDouble(argumentsMap, "eyeClosed", 0.7d));
         config.setCacheImageNum(3);
-//        config.setCacheImageNum(cacheImageNum);
-        // 设置 原图缩放系数
-        config.setScale(scale.floatValue());
-        // 设置 抠图宽高的设定，为了保证好的抠图效果，建议高宽比是4：3
-        config.setCropHeight(cropHeight);
-        config.setCropWidth(cropWidth);
-        // 设置 抠图人脸框与背景比例
-        config.setEnlargeRatio(enlargeRatio.floatValue());
-        // 设置 检测框远近比率
-        config.setFaceFarRatio(faceFarRatio.floatValue());
-        config.setFaceClosedRatio(faceClosedRatio.floatValue());
-        // 设置 加密类型，0：Base64加密，上传时image_sec传false；1：百度加密文件加密，上传时image_sec传true
-        config.setSecType(secType);
-        // 设置 开启提示音
-        config.setSound(sound);
-        // 检测超时设置
-        config.setTimeDetectModule(FaceEnvironment.TIME_DETECT_MODULE);
-        // 设置 动作活体是否随机
-        config.setLivenessRandom(livenessRandom);
-        // 设置 活体动作
-        List<LivenessTypeEnum> livenessTypeEnums = new ArrayList<>();
+        config.setScale((float) getDouble(argumentsMap, "scale", 1d));
+        config.setCropHeight(getInt(argumentsMap, "cropHeight", 640));
+        config.setCropWidth(getInt(argumentsMap, "cropWidth", 480));
+        config.setEnlargeRatio((float) getDouble(argumentsMap, "enlargeRatio", 1.5d));
+        config.setFaceFarRatio((float) getDouble(argumentsMap, "faceFarRatio", 0.4d));
+        config.setFaceClosedRatio((float) getDouble(argumentsMap, "faceClosedRatio", 1d));
+        config.setSound(getBoolean(argumentsMap, "sound", true));
+        config.setLivenessRandom(getBoolean(argumentsMap, "livenessRandom", true));
+        config.setShowResultView(false);
+        config.setOpenRecord(false);
+        config.setIgnoreRecordError(true);
+        config.setSaveVideoWhenError(false);
+        config.setIsShowTimeoutDialog(true);
+        config.setIsOpenColorLive(false);
+        config.setIsOpenDistanceLive(false);
+        setSecTypeIfPossible(config, getInt(argumentsMap, "secType", 0));
+
+        List<LivenessTypeEnum> livenessTypeEnums = mapLivenessTypes(getStringList(argumentsMap, "livenessTypes"));
+        boolean useActionLiveness = !livenessTypeEnums.isEmpty();
+        config.setIsOpenActionLive(useActionLiveness);
+        if (useActionLiveness) {
+            LivenessValueModel model = config.getLivenessValueModel();
+            if (model == null) {
+                model = new LivenessValueModel();
+            }
+            model.actionList.clear();
+            model.actionList.addAll(livenessTypeEnums);
+            model.actionRandomNumber = livenessTypeEnums.size();
+            try {
+                config.setLivenessValueModel(model);
+            } catch (Exception ignored) {
+                // Fall back to the mutated model already attached to the config.
+            }
+        }
+
+        FaceLiveManager.getInstance().setFaceConfig(config);
+        return useActionLiveness;
+    }
+
+    private static void setSecTypeIfPossible(FaceLiveConfig config, int secType) {
+        try {
+            Method method = FaceLiveConfig.class.getSuperclass().getDeclaredMethod("setSecType", int.class);
+            method.setAccessible(true);
+            method.invoke(config, secType);
+        } catch (Exception ignored) {
+            // Ignore because secType is not a public API on the new Android SDK.
+        }
+    }
+
+    private static int getInt(Map<String, Object> argumentsMap, String key, int defaultValue) {
+        Object value = argumentsMap.get(key);
+        return value instanceof Number ? ((Number) value).intValue() : defaultValue;
+    }
+
+    private static double getDouble(Map<String, Object> argumentsMap, String key, double defaultValue) {
+        Object value = argumentsMap.get(key);
+        return value instanceof Number ? ((Number) value).doubleValue() : defaultValue;
+    }
+
+    private static boolean getBoolean(Map<String, Object> argumentsMap, String key, boolean defaultValue) {
+        Object value = argumentsMap.get(key);
+        return value instanceof Boolean ? (Boolean) value : defaultValue;
+    }
+
+    private static List<String> getStringList(Map<String, Object> argumentsMap, String key) {
+        Object value = argumentsMap.get(key);
+        if (!(value instanceof List)) {
+            return Collections.emptyList();
+        }
+        List<?> rawList = (List<?>) value;
+        List<String> stringList = new ArrayList<>();
+        for (Object item : rawList) {
+            if (item instanceof String) {
+                stringList.add((String) item);
+            }
+        }
+        return stringList;
+    }
+
+    private static List<LivenessTypeEnum> mapLivenessTypes(List<String> livenessTypes) {
+        List<LivenessTypeEnum> enums = new ArrayList<>();
         for (String type : livenessTypes) {
             switch (type) {
                 case "Eye":
-                    livenessTypeEnums.add(LivenessTypeEnum.Eye);
+                    enums.add(LivenessTypeEnum.Eye);
                     break;
                 case "Mouth":
-                    livenessTypeEnums.add(LivenessTypeEnum.Mouth);
+                    enums.add(LivenessTypeEnum.Mouth);
                     break;
                 case "HeadLeft":
-                    livenessTypeEnums.add(LivenessTypeEnum.HeadLeft);
+                    enums.add(LivenessTypeEnum.HeadLeft);
                     break;
                 case "HeadRight":
-                    livenessTypeEnums.add(LivenessTypeEnum.HeadRight);
+                    enums.add(LivenessTypeEnum.HeadRight);
                     break;
                 case "HeadUp":
-                    livenessTypeEnums.add(LivenessTypeEnum.HeadUp);
+                    enums.add(LivenessTypeEnum.HeadUp);
                     break;
                 case "HeadDown":
-                    livenessTypeEnums.add(LivenessTypeEnum.HeadDown);
+                    enums.add(LivenessTypeEnum.HeadDown);
+                    break;
+                case "HeadShake":
+                    enums.add(LivenessTypeEnum.HeadShake);
+                    break;
+                case "HeadUpDown":
+                    enums.add(LivenessTypeEnum.HeadUpDown);
+                    break;
+                default:
                     break;
             }
         }
-        config.setLivenessTypeList(livenessTypeEnums);
-        FaceSDKManager.getInstance().setFaceConfig(config);
-        return livenessTypeEnums.size();
+        return enums;
+    }
+
+    static String selectBestImage(Map<String, ImageInfo> imageMap, boolean secureBase64) {
+        if (imageMap == null || imageMap.isEmpty()) {
+            return null;
+        }
+        List<Map.Entry<String, ImageInfo>> entries = new ArrayList<>(imageMap.entrySet());
+        Collections.sort(entries, (left, right) -> Float.compare(extractScore(right.getKey()), extractScore(left.getKey())));
+        ImageInfo imageInfo = entries.get(0).getValue();
+        if (imageInfo == null) {
+            return null;
+        }
+        String value = secureBase64 ? imageInfo.getSecBase64() : imageInfo.getBase64();
+        if (value == null || value.trim().isEmpty()) {
+            value = imageInfo.getBase64();
+        }
+        return value;
+    }
+
+    private static float extractScore(String key) {
+        if (key == null || key.trim().isEmpty()) {
+            return Float.MIN_VALUE;
+        }
+        String[] parts = key.split("_");
+        if (parts.length < 3) {
+            return Float.MIN_VALUE;
+        }
+        try {
+            return Float.parseFloat(parts[2]);
+        } catch (NumberFormatException ignored) {
+            return Float.MIN_VALUE;
+        }
+    }
+
+    private static HashMap<String, String> errorResult(String error) {
+        HashMap<String, String> response = new HashMap<>();
+        response.put("imageCropBase64", "");
+        response.put("imageSrcBase64", "");
+        response.put("error", error == null ? "" : error);
+        return response;
+    }
+
+    private static String formatInitError(int resultCode, String resultMsg) {
+        return "errCode: " + resultCode + ", errMsg: " + resultMsg;
+    }
+
+    private static String formatInitError(String resultCode, String resultMsg) {
+        return "errCode: " + resultCode + ", errMsg: " + resultMsg;
     }
 }
