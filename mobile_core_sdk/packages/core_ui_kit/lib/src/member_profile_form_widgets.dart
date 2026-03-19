@@ -2,13 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import 'app_color_tokens.dart';
-
-const Color _memberProfileFieldFillColor = AppColorTokens.fundexBackground;
-const Color _memberProfileFieldBorderColor = Color(0xFFDCE5EF);
-const Color _memberProfileMutedTextColor = AppColorTokens.fundexTextSecondary;
-const Color _memberProfileCardColor = Colors.white;
-const Color _memberProfileSoftCardColor = Color(0xFFF8FAFC);
+import 'app_theme_extensions.dart';
 
 class MemberProfileTextField extends StatelessWidget {
   const MemberProfileTextField({
@@ -35,6 +29,7 @@ class MemberProfileTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appText = theme.appTextTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -51,12 +46,7 @@ class MemberProfileTextField extends StatelessWidget {
             hintText: hintText,
             suffixIcon: suffixIcon,
           ),
-          style: (theme.textTheme.bodyMedium ?? const TextStyle()).copyWith(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            height: 1.25,
-            color: AppColorTokens.fundexText,
-          ),
+          style: appText.inputText,
         ),
       ],
     );
@@ -80,6 +70,8 @@ class MemberProfileSelectField<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -89,17 +81,13 @@ class MemberProfileSelectField<T> extends StatelessWidget {
           initialValue: value,
           items: items,
           onChanged: onChanged,
-          icon: const Icon(
+          icon: Icon(
             Icons.keyboard_arrow_down_rounded,
-            color: _memberProfileMutedTextColor,
+            color: colors.textSecondary,
           ),
           decoration: _inputDecoration(context: context),
-          style: (theme.textTheme.bodyMedium ?? const TextStyle()).copyWith(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-            color: AppColorTokens.fundexText,
-          ),
-          dropdownColor: _memberProfileCardColor,
+          style: appText.inputText,
+          dropdownColor: colors.surface,
           borderRadius: BorderRadius.circular(12),
         ),
       ],
@@ -218,7 +206,8 @@ class MemberProfileNoticeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final appText = theme.appTextTheme;
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -237,20 +226,14 @@ class MemberProfileNoticeCard extends StatelessWidget {
               children: <Widget>[
                 Text(
                   title,
-                  style: (textTheme.labelLarge ?? const TextStyle()).copyWith(
-                    fontSize: 12,
-                    color: foregroundColor,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: appText.inputLabel.copyWith(color: foregroundColor),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   body,
-                  style: (textTheme.bodySmall ?? const TextStyle()).copyWith(
-                    fontSize: 11,
+                  style: appText.micro.copyWith(
                     color: foregroundColor,
                     height: 1.6,
-                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
@@ -277,11 +260,11 @@ class MemberProfileChoiceChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final primary = theme.colorScheme.primary;
-    final baseTextColor =
-        theme.textTheme.bodyMedium?.color ?? theme.colorScheme.onSurface;
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final primary = colors.primary;
     return Material(
-      color: selected ? primary.withValues(alpha: 0.10) : Colors.white,
+      color: selected ? colors.primarySubtle : colors.surface,
       borderRadius: BorderRadius.circular(10),
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
@@ -291,16 +274,14 @@ class MemberProfileChoiceChip extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: selected ? primary : _memberProfileFieldBorderColor,
+              color: selected ? primary : colors.border,
               width: 1.5,
             ),
           ),
           child: Text(
             label,
-            style: (theme.textTheme.labelSmall ?? const TextStyle()).copyWith(
-              fontSize: 11,
-              color: selected ? primary : baseTextColor.withValues(alpha: 0.82),
-              fontWeight: FontWeight.w700,
+            style: appText.chip.copyWith(
+              color: selected ? primary : colors.textSecondary,
               height: 1.15,
             ),
           ),
@@ -329,16 +310,18 @@ class MemberProfileUploadTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final primary = theme.colorScheme.primary;
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final primary = colors.primary;
     final borderColor = isCompleted
         ? primary.withValues(alpha: 0.85)
-        : theme.colorScheme.outline.withValues(alpha: 0.65);
-    final textMuted =
-        theme.textTheme.bodySmall?.color?.withValues(alpha: 0.9) ??
-        theme.colorScheme.onSurface.withValues(alpha: 0.55);
+        : colors.border;
+    final textMuted = colors.textSecondary;
 
     return Material(
-      color: isCompleted ? primary.withValues(alpha: 0.04) : Colors.transparent,
+      color: isCompleted
+          ? colors.primarySubtle
+          : colors.surface.withValues(alpha: 0),
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
@@ -366,15 +349,16 @@ class MemberProfileUploadTile extends StatelessWidget {
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: (theme.textTheme.titleSmall ?? const TextStyle())
-                      .copyWith(fontSize: 14, fontWeight: FontWeight.w700),
+                  style: appText.cardTitle,
                 ),
                 const SizedBox(height: 4),
                 Text(
                   description,
                   textAlign: TextAlign.center,
-                  style: (theme.textTheme.bodySmall ?? const TextStyle())
-                      .copyWith(fontSize: 12, color: textMuted, height: 1.35),
+                  style: appText.helper.copyWith(
+                    color: textMuted,
+                    height: 1.35,
+                  ),
                 ),
               ],
             ),
@@ -400,9 +384,11 @@ class MemberProfileCheckTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final primary = theme.colorScheme.primary;
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final primary = colors.primary;
     return Material(
-      color: _memberProfileSoftCardColor,
+      color: colors.surfaceAlt,
       borderRadius: BorderRadius.circular(10),
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
@@ -417,35 +403,25 @@ class MemberProfileCheckTile extends StatelessWidget {
                 width: 20,
                 height: 20,
                 decoration: BoxDecoration(
-                  color: value ? primary : Colors.white,
+                  color: value ? primary : colors.surface,
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(
-                    color: value ? primary : _memberProfileFieldBorderColor,
+                    color: value ? primary : colors.border,
                     width: 2,
                   ),
                 ),
                 child: value
-                    ? const Icon(
-                        Icons.check_rounded,
-                        size: 12,
-                        color: Colors.white,
-                      )
+                    ? Icon(Icons.check_rounded, size: 12, color: colors.onDark)
                     : null,
               ),
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   label,
-                  style: (theme.textTheme.bodyMedium ?? const TextStyle())
-                      .copyWith(
-                        fontSize: 13,
-                        height: 1.5,
-                        color:
-                            theme.textTheme.bodyMedium?.color?.withValues(
-                              alpha: 0.88,
-                            ) ??
-                            AppColorTokens.fundexText,
-                      ),
+                  style: appText.body.copyWith(
+                    height: 1.5,
+                    color: colors.textPrimary.withValues(alpha: 0.88),
+                  ),
                 ),
               ),
             ],
@@ -477,27 +453,22 @@ class MemberProfileInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final effectiveTitleColor = titleColor ?? theme.colorScheme.primary;
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final effectiveTitleColor = titleColor ?? colors.primary;
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: backgroundColor ?? _memberProfileSoftCardColor,
+        color: backgroundColor ?? colors.surfaceAlt,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: borderColor ?? _memberProfileFieldBorderColor,
-          width: 1.5,
-        ),
+        border: Border.all(color: borderColor ?? colors.border, width: 1.5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             '${icon ?? ''}${icon == null ? '' : ' '}$title',
-            style: (theme.textTheme.titleSmall ?? const TextStyle()).copyWith(
-              fontSize: 13,
-              color: effectiveTitleColor,
-              fontWeight: FontWeight.w700,
-            ),
+            style: appText.cardTitle.copyWith(color: effectiveTitleColor),
           ),
           const SizedBox(height: 8),
           body,
@@ -519,22 +490,25 @@ class MemberProfilePrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final bool enabled = onPressed != null;
     return DecoratedBox(
       decoration: BoxDecoration(
         gradient: enabled
-            ? const LinearGradient(
+            ? LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: <Color>[Color(0xFF2563EB), Color(0xFF3B82F6)],
+                colors: <Color>[colors.primary, colors.primaryAlt],
               )
             : null,
-        color: enabled ? null : const Color(0xFFCBD5E1),
+        color: enabled ? null : colors.disabled,
         borderRadius: BorderRadius.circular(14),
         boxShadow: enabled
-            ? const <BoxShadow>[
+            ? <BoxShadow>[
                 BoxShadow(
-                  color: Color(0x592563EB),
+                  color: colors.primary.withValues(alpha: 0.35),
                   blurRadius: 16,
                   offset: Offset(0, 4),
                 ),
@@ -552,12 +526,7 @@ class MemberProfilePrimaryButton extends StatelessWidget {
             child: Center(
               child: Text(
                 label,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                  height: 1,
-                ),
+                style: appText.button.copyWith(color: colors.onDark, height: 1),
               ),
             ),
           ),
@@ -580,8 +549,10 @@ class MemberProfileOutlineButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Material(
-      color: _memberProfileCardColor,
+      color: colors.surface,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
@@ -591,18 +562,11 @@ class MemberProfileOutlineButton extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: _memberProfileFieldBorderColor,
-              width: 1.5,
-            ),
+            border: Border.all(color: colors.border, width: 1.5),
           ),
           child: Text(
             label,
-            style: (theme.textTheme.labelLarge ?? const TextStyle()).copyWith(
-              fontSize: 12,
-              color: AppColorTokens.fundexText,
-              fontWeight: FontWeight.w700,
-            ),
+            style: appText.inputLabel.copyWith(color: colors.textPrimary),
           ),
         ),
       ),
@@ -616,28 +580,28 @@ InputDecoration _inputDecoration({
   Widget? suffixIcon,
 }) {
   final theme = Theme.of(context);
+  final colors = theme.appColors;
+  final appText = theme.appTextTheme;
   return InputDecoration(
     hintText: hintText,
-    hintStyle: (theme.textTheme.bodyMedium ?? const TextStyle()).copyWith(
-      fontSize: 14,
-      color: _memberProfileMutedTextColor.withValues(alpha: 0.72),
-      fontWeight: FontWeight.w500,
+    hintStyle: appText.inputText.copyWith(
+      color: colors.textSecondary.withValues(alpha: 0.72),
     ),
     filled: true,
-    fillColor: _memberProfileFieldFillColor,
+    fillColor: colors.background,
     suffixIcon: suffixIcon,
     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
-    enabledBorder: const OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(12)),
-      borderSide: BorderSide(color: _memberProfileFieldBorderColor, width: 1.5),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: const BorderRadius.all(Radius.circular(12)),
+      borderSide: BorderSide(color: colors.border, width: 1.5),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
-      borderSide: BorderSide(color: theme.colorScheme.primary, width: 1.5),
+      borderSide: BorderSide(color: colors.primary, width: 1.5),
     ),
-    border: const OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(12)),
-      borderSide: BorderSide(color: _memberProfileFieldBorderColor, width: 1.5),
+    border: OutlineInputBorder(
+      borderRadius: const BorderRadius.all(Radius.circular(12)),
+      borderSide: BorderSide(color: colors.border, width: 1.5),
     ),
   );
 }
@@ -650,12 +614,12 @@ class _FieldLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Text(
       label,
-      style: (theme.textTheme.labelLarge ?? const TextStyle()).copyWith(
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
-        color: _memberProfileMutedTextColor.withValues(alpha: 0.82),
+      style: appText.inputLabel.copyWith(
+        color: colors.textSecondary.withValues(alpha: 0.82),
       ),
     );
   }

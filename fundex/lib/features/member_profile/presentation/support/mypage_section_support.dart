@@ -196,16 +196,17 @@ DateTime? resolveCoolingOffDeadline(MyPageOrderInquiryRecord record) {
   return DateTime(base.year, base.month, base.day).add(const Duration(days: 8));
 }
 
-Color resolveCoolingOffDeadlineColor(DateTime? deadline) {
+Color resolveCoolingOffDeadlineColor(BuildContext context, DateTime? deadline) {
+  final colors = Theme.of(context).appColors;
   if (deadline == null) {
-    return AppColorTokens.fundexTextSecondary;
+    return colors.textSecondary;
   }
   final today = DateTime.now();
   final todayDate = DateTime(today.year, today.month, today.day);
   final deadlineDate = DateTime(deadline.year, deadline.month, deadline.day);
   return deadlineDate.isBefore(todayDate)
-      ? AppColorTokens.fundexTextSecondary
-      : AppColorTokens.fundexDanger;
+      ? colors.textSecondary
+      : colors.danger;
 }
 
 String formatCoolingOffDeadlineLabel(

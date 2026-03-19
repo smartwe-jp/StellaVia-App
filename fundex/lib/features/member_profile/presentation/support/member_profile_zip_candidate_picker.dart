@@ -1,3 +1,4 @@
+import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/member_profile_region.dart';
@@ -16,6 +17,9 @@ class MemberProfileZipCandidatePicker {
       isScrollControlled: false,
       showDragHandle: true,
       builder: (BuildContext sheetContext) {
+        final theme = Theme.of(sheetContext);
+        final colors = theme.appColors;
+        final appText = theme.appTextTheme;
         return SafeArea(
           top: false,
           child: ConstrainedBox(
@@ -27,13 +31,7 @@ class MemberProfileZipCandidatePicker {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
+                  child: Text(title, style: appText.pageTitle),
                 ),
                 Flexible(
                   child: ListView.separated(
@@ -45,7 +43,7 @@ class MemberProfileZipCandidatePicker {
                       final title = item.displayName;
                       final subtitle = item.roomName.trim();
                       return Material(
-                        color: const Color(0xFFF8FAFC),
+                        color: colors.surfaceAlt,
                         borderRadius: BorderRadius.circular(12),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(12),
@@ -58,22 +56,14 @@ class MemberProfileZipCandidatePicker {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                  title,
-                                  style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
+                                Text(title, style: appText.cardTitle),
                                 if (subtitle.isNotEmpty && subtitle != title)
                                   Padding(
                                     padding: const EdgeInsets.only(top: 3),
                                     child: Text(
                                       subtitle,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xFF64748B),
-                                        fontWeight: FontWeight.w500,
+                                      style: appText.helper.copyWith(
+                                        color: colors.textSecondary,
                                       ),
                                     ),
                                   ),

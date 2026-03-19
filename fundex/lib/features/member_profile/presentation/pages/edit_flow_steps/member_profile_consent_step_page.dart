@@ -26,6 +26,9 @@ class MemberProfileConsentStepPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return MemberProfileEditStepScaffold(
       title: l10n.memberProfileStep6Title,
       description: l10n.memberProfileStep6Description,
@@ -39,17 +42,14 @@ class MemberProfileConsentStepPage extends StatelessWidget {
           MemberProfileInfoCard(
             icon: '📄',
             title: l10n.memberProfileElectronicDeliveryTitle,
-            backgroundColor: const Color(0xFFF0F9FF),
-            borderColor: const Color(0xFFBAE6FD),
+            backgroundColor: colors.infoSoft,
+            borderColor: colors.infoBorder,
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
                   l10n.memberProfileElectronicDeliveryBody,
-                  style:
-                      (Theme.of(context).textTheme.bodySmall ??
-                              const TextStyle())
-                          .copyWith(height: 1.7),
+                  style: appText.helper.copyWith(height: 1.7),
                 ),
                 const SizedBox(height: 10),
                 ...<String>[
@@ -62,24 +62,17 @@ class MemberProfileConsentStepPage extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 8, bottom: 4),
                     child: Text(
                       '• $item',
-                      style:
-                          (Theme.of(context).textTheme.bodySmall ??
-                                  const TextStyle())
-                              .copyWith(height: 1.7),
+                      style: appText.helper.copyWith(height: 1.7),
                     ),
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   l10n.memberProfileElectronicDeliveryFootnote,
-                  style:
-                      (Theme.of(context).textTheme.labelSmall ??
-                              const TextStyle())
-                          .copyWith(
-                            color: Theme.of(context).textTheme.bodySmall?.color
-                                ?.withValues(alpha: 0.86),
-                            height: 1.6,
-                          ),
+                  style: appText.micro.copyWith(
+                    color: colors.textSecondary.withValues(alpha: 0.86),
+                    height: 1.6,
+                  ),
                 ),
               ],
             ),
@@ -94,12 +87,10 @@ class MemberProfileConsentStepPage extends StatelessWidget {
           MemberProfileInfoCard(
             icon: '🛡️',
             title: l10n.memberProfileAntiSocialTitle,
-            titleColor: Theme.of(context).textTheme.titleSmall?.color,
+            titleColor: colors.textPrimary,
             body: Text(
               l10n.memberProfileAntiSocialBody,
-              style:
-                  (Theme.of(context).textTheme.bodySmall ?? const TextStyle())
-                      .copyWith(height: 1.7),
+              style: appText.helper.copyWith(height: 1.7),
             ),
           ),
           const SizedBox(height: 10),

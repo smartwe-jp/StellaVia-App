@@ -18,6 +18,9 @@ class MemberProfileRealPersonAuthStepPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return MemberProfileEditStepScaffold(
       title: l10n.memberProfileStep5RealPersonTitle,
       description: l10n.memberProfileStep5RealPersonDescription,
@@ -29,13 +32,11 @@ class MemberProfileRealPersonAuthStepPage extends StatelessWidget {
           MemberProfileInfoCard(
             icon: '🧑‍🦰',
             title: l10n.identityAuthPageTitle,
-            backgroundColor: const Color(0xFFF0F9FF),
-            borderColor: const Color(0xFFBAE6FD),
+            backgroundColor: colors.infoSoft,
+            borderColor: colors.infoBorder,
             body: Text(
               l10n.identityAuthPageDescription,
-              style:
-                  (Theme.of(context).textTheme.bodySmall ?? const TextStyle())
-                      .copyWith(height: 1.65),
+              style: appText.helper.copyWith(height: 1.65),
             ),
           ),
           if (isProcessing) ...<Widget>[
@@ -45,16 +46,16 @@ class MemberProfileRealPersonAuthStepPage extends StatelessWidget {
           if ((statusMessage?.trim().isNotEmpty ?? false)) ...<Widget>[
             const SizedBox(height: 14),
             MemberProfileNoticeCard(
-              icon: const Icon(
+              icon: Icon(
                 Icons.error_outline_rounded,
                 size: 16,
-                color: Color(0xFFB91C1C),
+                color: colors.dangerForeground,
               ),
               title: l10n.identityAuthVerifyFailed,
               body: statusMessage!.trim(),
-              backgroundColor: const Color(0xFFFFF1F2),
-              borderColor: const Color(0xFFFCA5A5),
-              foregroundColor: const Color(0xFFB91C1C),
+              backgroundColor: colors.dangerSoft,
+              borderColor: colors.dangerBorder,
+              foregroundColor: colors.dangerForeground,
             ),
           ],
         ],

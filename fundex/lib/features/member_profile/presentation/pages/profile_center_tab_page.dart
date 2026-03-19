@@ -18,6 +18,8 @@ class ProfileCenterTabPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
     final locale = Localizations.localeOf(context);
     final localeTag = locale.toLanguageTag();
     final currencyFormatter = NumberFormat.currency(
@@ -48,7 +50,7 @@ class ProfileCenterTabPage extends ConsumerWidget {
     };
 
     return ColoredBox(
-      color: AppColorTokens.fundexBackground,
+      color: colors.background,
       child: RefreshIndicator(
         onRefresh: () => _refreshPage(ref),
         child: ListView(
@@ -93,23 +95,23 @@ class ProfileCenterTabPage extends ConsumerWidget {
                       : _formatCompactCurrency(
                           _sumInvestmentEarnings(investmentRecords),
                         ),
-                  valueColor: AppColorTokens.fundexSuccess,
+                  valueColor: colors.success,
                 ),
               ],
               quickActions: <FundMyPageQuickActionData>[
                 FundMyPageQuickActionData(
-                  icon: const Text('💰', style: TextStyle(fontSize: 16)),
+                  icon: const _QuickActionEmojiIcon(symbol: '💰'),
                   label: l10n.myPageDepositAction,
-                  backgroundColor: const Color(0xFFE0F2FE),
-                  foregroundColor: AppColorTokens.fundexAccent,
+                  backgroundColor: colors.infoSubtle,
+                  foregroundColor: colors.primary,
                   onTap: () => context.push('/wallet/deposit'),
                 ),
                 FundMyPageQuickActionData(
-                  icon: const Text('💸', style: TextStyle(fontSize: 16)),
+                  icon: const _QuickActionEmojiIcon(symbol: '💸'),
                   label: l10n.myPageWithdrawAction,
-                  backgroundColor: AppColorTokens.fundexBackground,
-                  borderColor: AppColorTokens.fundexBorder,
-                  foregroundColor: AppColorTokens.fundexTextSecondary,
+                  backgroundColor: colors.background,
+                  borderColor: colors.border,
+                  foregroundColor: colors.textSecondary,
                   onTap: () => _handleWithdrawTap(context, ref),
                 ),
               ],
@@ -147,7 +149,6 @@ class ProfileCenterTabPage extends ConsumerWidget {
                     width: double.infinity,
                     child: OutlinedButton.icon(
                       onPressed: () => context.push('/wallet/history'),
-                      //icon: const Icon(Icons.receipt_long_outlined),
                       label: Text(l10n.myPageTransactionHistoryAction),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 12),
@@ -155,21 +156,6 @@ class ProfileCenterTabPage extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: UiTokens.spacing32),
-                  // SizedBox(
-                  //   width: double.infinity,
-                  //   child: OutlinedButton.icon(
-                  //     onPressed: () => _logout(context, ref),
-                  //     icon: const Icon(Icons.logout_rounded),
-                  //     label: Text(l10n.homeLogout),
-                  //     style: OutlinedButton.styleFrom(
-                  //       foregroundColor: AppColorTokens.fundexDanger,
-                  //       side: const BorderSide(
-                  //         color: AppColorTokens.fundexDanger,
-                  //       ),
-                  //       padding: const EdgeInsets.symmetric(vertical: 12),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -187,6 +173,7 @@ Widget _buildPendingApplicationsSection(
   required NumberFormat formatter,
 }) {
   final l10n = context.l10n;
+  final colors = Theme.of(context).appColors;
 
   return asyncValue.when(
     data: (records) {
@@ -195,7 +182,7 @@ Widget _buildPendingApplicationsSection(
           .map(
             (record) => FundMyPageProjectCard(
               title: record.projectName,
-              accentColor: AppColorTokens.fundexViolet,
+              accentColor: colors.primaryAlt,
               trailing: _PendingStatusBadge(
                 label: _resolveApplyStatusLabel(l10n, record),
               ),
@@ -213,8 +200,9 @@ Widget _buildPendingApplicationsSection(
                         message: l10n.myPageCancelRequestComingSoon,
                       ),
                       style: _myPageOutlineButtonStyle(
-                        borderColor: AppColorTokens.fundexDanger,
-                        foregroundColor: AppColorTokens.fundexDanger,
+                        context,
+                        borderColor: colors.danger,
+                        foregroundColor: colors.danger,
                       ),
                       child: Text(l10n.myPageCancelRequestAction),
                     )
@@ -264,6 +252,9 @@ Widget _buildCoolingOffSection(
   required String localeTag,
 }) {
   final l10n = context.l10n;
+  final theme = Theme.of(context);
+  final colors = theme.appColors;
+  final appText = theme.appTextTheme;
 
   return asyncValue.when(
     data: (records) {
@@ -283,20 +274,13 @@ Widget _buildCoolingOffSection(
 
             return FundMyPageProjectCard(
               title: record.projectName,
-              accentColor: AppColorTokens.fundexWarning,
+              accentColor: colors.warning,
               trailing: Text(
                 _resolveYieldLabel(
                   project,
                   fallbackRatio: record.investorType?.earningsRadio,
                 ),
-                style:
-                    (Theme.of(context).textTheme.titleMedium ??
-                            const TextStyle())
-                        .copyWith(
-                          color: AppColorTokens.fundexDanger,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w900,
-                        ),
+                style: appText.numericTitle.copyWith(color: colors.danger),
               ),
               rows: <FundLabeledValue>[
                 FundLabeledValue(
@@ -312,7 +296,10 @@ Widget _buildCoolingOffSection(
                 FundLabeledValue(
                   label: l10n.myPageCancelDeadlineLabel,
                   value: deadlineLabel,
-                  valueColor: _resolveCoolingOffDeadlineColor(deadline),
+                  valueColor: _resolveCoolingOffDeadlineColor(
+                    context,
+                    deadline,
+                  ),
                 ),
               ],
               footnote: l10n.myPageCoolingOffFootnote,
@@ -322,8 +309,9 @@ Widget _buildCoolingOffSection(
                   message: l10n.myPageCancelRequestComingSoon,
                 ),
                 style: _myPageOutlineButtonStyle(
-                  borderColor: AppColorTokens.fundexDanger,
-                  foregroundColor: AppColorTokens.fundexDanger,
+                  context,
+                  borderColor: colors.danger,
+                  foregroundColor: colors.danger,
                 ),
                 child: Text(l10n.myPageCancelRequestAction),
               ),
@@ -373,6 +361,7 @@ Widget _buildActiveFundsSection(
   required Map<String, FundProject> fundProjectsById,
 }) {
   final l10n = context.l10n;
+  final colors = Theme.of(context).appColors;
 
   return asyncValue.when(
     data: (records) {
@@ -395,7 +384,7 @@ Widget _buildActiveFundsSection(
                   FundLabeledValue(
                     label: l10n.myPageAccumulatedDistributionLabel,
                     value: _formatCurrency(group.earnings, formatter),
-                    valueColor: AppColorTokens.fundexSuccess,
+                    valueColor: colors.success,
                   ),
                 ],
                 onTap: _buildActiveFundDetailTapHandler(
@@ -625,16 +614,20 @@ DateTime? _resolveCoolingOffDeadline(MyPageOrderInquiryRecord record) {
   return DateTime(base.year, base.month, base.day).add(const Duration(days: 8));
 }
 
-Color _resolveCoolingOffDeadlineColor(DateTime? deadline) {
+Color _resolveCoolingOffDeadlineColor(
+  BuildContext context,
+  DateTime? deadline,
+) {
+  final colors = Theme.of(context).appColors;
   if (deadline == null) {
-    return AppColorTokens.fundexTextSecondary;
+    return colors.textSecondary;
   }
   final today = DateTime.now();
   final todayDate = DateTime(today.year, today.month, today.day);
   final deadlineDate = DateTime(deadline.year, deadline.month, deadline.day);
   return deadlineDate.isBefore(todayDate)
-      ? AppColorTokens.fundexTextSecondary
-      : AppColorTokens.fundexDanger;
+      ? colors.textSecondary
+      : colors.danger;
 }
 
 String _formatCoolingOffDeadlineLabel(
@@ -782,10 +775,12 @@ void _showSnackBar(BuildContext context, {required String message}) {
   AppNotice.show(context, message: message);
 }
 
-ButtonStyle _myPageOutlineButtonStyle({
+ButtonStyle _myPageOutlineButtonStyle(
+  BuildContext context, {
   required Color borderColor,
   required Color foregroundColor,
 }) {
+  final appText = Theme.of(context).appTextTheme;
   return OutlinedButton.styleFrom(
     foregroundColor: foregroundColor,
     side: BorderSide(color: borderColor, width: 1.5),
@@ -794,7 +789,7 @@ ButtonStyle _myPageOutlineButtonStyle({
     minimumSize: const Size(0, 0),
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-    textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+    textStyle: appText.chip,
   );
 }
 
@@ -805,20 +800,18 @@ class _PendingStatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: AppColorTokens.fundexVioletLight,
+        color: colors.primarySubtle,
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
         label,
-        style: (Theme.of(context).textTheme.labelSmall ?? const TextStyle())
-            .copyWith(
-              fontSize: 10,
-              color: AppColorTokens.fundexViolet,
-              fontWeight: FontWeight.w700,
-            ),
+        style: appText.tableLabel.copyWith(color: colors.primaryAlt),
       ),
     );
   }
@@ -837,6 +830,7 @@ class _HeroHeaderActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
     return SizedBox(
       width: 38,
       height: 38,
@@ -845,12 +839,12 @@ class _HeroHeaderActionButton extends StatelessWidget {
         children: <Widget>[
           Positioned.fill(
             child: Material(
-              color: Colors.white.withValues(alpha: 0.12),
+              color: colors.onDark.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(11),
               child: InkWell(
                 borderRadius: BorderRadius.circular(11),
                 onTap: onTap,
-                child: Icon(icon, size: 19, color: Colors.white),
+                child: Icon(icon, size: 19, color: colors.onDark),
               ),
             ),
           ),
@@ -862,17 +856,28 @@ class _HeroHeaderActionButton extends StatelessWidget {
                 width: 8,
                 height: 8,
                 decoration: BoxDecoration(
-                  color: AppColorTokens.fundexDanger,
+                  color: colors.danger,
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppColorTokens.fundexPrimaryDark,
-                    width: 1.5,
-                  ),
+                  border: Border.all(color: colors.heroStart, width: 1.5),
                 ),
               ),
             ),
         ],
       ),
+    );
+  }
+}
+
+class _QuickActionEmojiIcon extends StatelessWidget {
+  const _QuickActionEmojiIcon({required this.symbol});
+
+  final String symbol;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.square(
+      dimension: 16,
+      child: FittedBox(fit: BoxFit.contain, child: Text(symbol)),
     );
   }
 }
@@ -904,11 +909,13 @@ class _SectionStateCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(UiTokens.radius16),
-        border: Border.all(color: AppColorTokens.fundexBorder),
+        border: Border.all(color: colors.border),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
@@ -920,8 +927,7 @@ class _SectionStateCard extends StatelessWidget {
               Text(
                 message!,
                 textAlign: TextAlign.center,
-                style: (theme.textTheme.bodySmall ?? const TextStyle())
-                    .copyWith(color: AppColorTokens.fundexTextSecondary),
+                style: appText.bodyMuted.copyWith(color: colors.textSecondary),
               ),
             ],
             if (actionLabel != null && onActionTap != null) ...<Widget>[

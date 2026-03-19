@@ -30,6 +30,8 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
     return MemberProfileEditStepScaffold(
       title: l10n.memberProfileStep1Title,
       description: l10n.memberProfileStep1Description,
@@ -72,12 +74,15 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
           if (showAgeWarning) ...<Widget>[
             const SizedBox(height: 12),
             MemberProfileNoticeCard(
-              icon: const Text('🚫', style: TextStyle(fontSize: 18)),
+              icon: const SizedBox.square(
+                dimension: 18,
+                child: FittedBox(child: Text('🚫')),
+              ),
               title: l10n.memberProfileUnderageTitle,
               body: l10n.memberProfileUnderageBody,
-              backgroundColor: const Color(0xFFFFF1F2),
-              borderColor: const Color(0xFFFCA5A5),
-              foregroundColor: const Color(0xFFB91C1C),
+              backgroundColor: colors.dangerSoft,
+              borderColor: colors.dangerBorder,
+              foregroundColor: colors.dangerForeground,
             ),
           ],
           const SizedBox(height: 14),

@@ -1056,6 +1056,7 @@ class _MemberProfileEditFlowPageState
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
+    final colors = theme.appColors;
     final stepCount =
         MemberProfileEditStep.values.length - (_isIdentityAuthEnabled ? 0 : 1);
     final currentStepIndex = _isIdentityAuthEnabled
@@ -1076,15 +1077,15 @@ class _MemberProfileEditFlowPageState
         }
       },
       child: Scaffold(
-        backgroundColor: AppColorTokens.fundexBackground,
+        backgroundColor: colors.background,
         appBar: AppNavigationBar(
           title: l10n.memberProfileFlowTitle,
-          backgroundColor: Colors.white,
-          foregroundColor: theme.colorScheme.onSurface,
+          backgroundColor: colors.surface,
+          foregroundColor: colors.textPrimary,
           leading: SizedBox.square(
             dimension: 32,
             child: Material(
-              color: Colors.transparent,
+              type: MaterialType.transparency,
               child: InkWell(
                 borderRadius: BorderRadius.circular(8),
                 onTap: (_isSubmitting || _isUploadingPhoto)
@@ -1095,7 +1096,7 @@ class _MemberProfileEditFlowPageState
                 child: Icon(
                   Icons.arrow_back_rounded,
                   size: 20,
-                  color: theme.colorScheme.onSurface,
+                  color: colors.textPrimary,
                 ),
               ),
             ),
@@ -1106,7 +1107,7 @@ class _MemberProfileEditFlowPageState
             AppStepProgressBar(
               stepCount: stepCount,
               currentStep: currentStepIndex,
-              pendingColor: const Color(0xFFE2E8F0),
+              pendingColor: colors.borderSoft,
             ),
             Expanded(
               child: _isLoading

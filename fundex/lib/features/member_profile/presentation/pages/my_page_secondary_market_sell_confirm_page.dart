@@ -90,6 +90,8 @@ class _MyPageSecondaryMarketSellConfirmPageState
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
     final formatter = NumberFormat.currency(
       locale: Localizations.localeOf(context).toLanguageTag(),
       symbol: '¥',
@@ -102,9 +104,9 @@ class _MyPageSecondaryMarketSellConfirmPageState
         top: false,
         child: Container(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            border: Border(top: BorderSide(color: AppColorTokens.fundexBorder)),
+          decoration: BoxDecoration(
+            color: colors.surface,
+            border: Border(top: BorderSide(color: colors.border)),
           ),
           child: Row(
             children: <Widget>[
@@ -126,10 +128,8 @@ class _MyPageSecondaryMarketSellConfirmPageState
                   fullWidth: false,
                   height: 48,
                   horizontalPadding: 0,
-                  backgroundColor: AppColorTokens.fundexDanger,
-                  shadowColor: AppColorTokens.fundexDanger.withValues(
-                    alpha: 0.5,
-                  ),
+                  backgroundColor: colors.danger,
+                  shadowColor: colors.danger.withValues(alpha: 0.5),
                   threeSideShadow: true,
                 ),
               ),
@@ -238,19 +238,19 @@ class _ResaleSegmentChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(
-        color: selected ? const Color(0xFFE6F6F7) : const Color(0xFFF4F5F7),
+        color: selected ? colors.infoSubtle : colors.surfaceAlt,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
         label,
-        style: TextStyle(
-          color: selected
-              ? AppColorTokens.fundexAccent
-              : AppColorTokens.fundexTextSecondary,
-          fontWeight: FontWeight.w700,
+        style: appText.chip.copyWith(
+          color: selected ? colors.primary : colors.textSecondary,
         ),
       ),
     );
@@ -265,12 +265,15 @@ class _ResaleTableRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(
-          left: BorderSide(color: AppColorTokens.fundexBorder),
-          right: BorderSide(color: AppColorTokens.fundexBorder),
-          bottom: BorderSide(color: AppColorTokens.fundexBorder),
+          left: BorderSide(color: colors.border),
+          right: BorderSide(color: colors.border),
+          bottom: BorderSide(color: colors.border),
         ),
       ),
       child: IntrinsicHeight(
@@ -280,12 +283,9 @@ class _ResaleTableRow extends StatelessWidget {
             Container(
               width: 120,
               padding: const EdgeInsets.all(12),
-              color: const Color(0xFFF7F8FA),
+              color: colors.surfaceAlt,
               alignment: Alignment.centerLeft,
-              child: Text(
-                label,
-                style: const TextStyle(fontWeight: FontWeight.w700),
-              ),
+              child: Text(label, style: appText.bodyStrong),
             ),
             Expanded(
               child: Padding(
@@ -319,29 +319,29 @@ class _PreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final appText = Theme.of(context).appTextTheme;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: const Color(0xFFF6FCFC),
+        color: colors.infoSoft,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFD6ECEC)),
+        border: Border.all(color: colors.infoBorder),
       ),
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
           children: <Widget>[
-            _previewRow(totalLabel, totalValue),
+            _previewRow(context, totalLabel, totalValue),
             const SizedBox(height: 6),
-            _previewRow(feeLabel, feeValue),
+            _previewRow(context, feeLabel, feeValue),
             const SizedBox(height: 8),
             const Divider(height: 1),
             const SizedBox(height: 8),
             _previewRow(
+              context,
               netLabel,
               netValue,
-              valueStyle: const TextStyle(
-                color: AppColorTokens.fundexDanger,
-                fontWeight: FontWeight.w900,
-              ),
+              valueStyle: appText.numericTitle.copyWith(color: colors.danger),
             ),
           ],
         ),
@@ -349,13 +349,20 @@ class _PreviewCard extends StatelessWidget {
     );
   }
 
-  Widget _previewRow(String label, String value, {TextStyle? valueStyle}) {
+  Widget _previewRow(
+    BuildContext context,
+    String label,
+    String value, {
+    TextStyle? valueStyle,
+  }) {
+    final colors = Theme.of(context).appColors;
+    final appText = Theme.of(context).appTextTheme;
     return Row(
       children: <Widget>[
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(color: AppColorTokens.fundexTextSecondary),
+            style: appText.bodyMuted.copyWith(color: colors.textSecondary),
           ),
         ),
         Text(value, style: valueStyle),

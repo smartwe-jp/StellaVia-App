@@ -221,12 +221,15 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     required String message,
     Widget? action,
   }) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return SliverToBoxAdapter(
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(UiTokens.radius16),
-          border: Border.all(color: AppColorTokens.fundexBorder),
+          border: Border.all(color: colors.border),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
@@ -237,9 +240,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
               Text(
                 message,
                 textAlign: TextAlign.center,
-                style:
-                    (Theme.of(context).textTheme.bodySmall ?? const TextStyle())
-                        .copyWith(color: AppColorTokens.fundexTextSecondary),
+                style: appText.bodyMuted.copyWith(color: colors.textSecondary),
               ),
               if (action != null) ...<Widget>[
                 const SizedBox(height: UiTokens.spacing8),
@@ -258,13 +259,14 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     NumberFormat formatter,
   ) {
     final l10n = context.l10n;
+    final colors = Theme.of(context).appColors;
     return FundMyPageProjectCard(
       title: record.projectName,
-      accentColor: AppColorTokens.fundexViolet,
+      accentColor: colors.primaryAlt,
       trailing: _StatusBadge(
         label: resolveApplyStatusLabel(l10n, record),
-        backgroundColor: AppColorTokens.fundexVioletLight,
-        foregroundColor: AppColorTokens.fundexViolet,
+        backgroundColor: colors.primarySubtle,
+        foregroundColor: colors.primaryAlt,
       ),
       rows: <FundLabeledValue>[
         FundLabeledValue(
@@ -280,8 +282,9 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
                 message: l10n.myPageCancelRequestComingSoon,
               ),
               style: _myPageOutlineButtonStyle(
-                borderColor: AppColorTokens.fundexDanger,
-                foregroundColor: AppColorTokens.fundexDanger,
+                context,
+                borderColor: colors.danger,
+                foregroundColor: colors.danger,
               ),
               child: Text(l10n.myPageCancelRequestAction),
             )
@@ -298,24 +301,22 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     required Map<String, FundProject> fundProjectsById,
   }) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final projectId = resolveOrderProjectId(record);
     final project = projectId == null ? null : fundProjectsById[projectId];
     final deadline = resolveCoolingOffDeadline(record);
 
     return FundMyPageProjectCard(
       title: record.projectName,
-      accentColor: AppColorTokens.fundexWarning,
+      accentColor: colors.warning,
       trailing: Text(
         resolveYieldLabel(
           project,
           fallbackRatio: record.investorType?.earningsRadio,
         ),
-        style: (Theme.of(context).textTheme.titleMedium ?? const TextStyle())
-            .copyWith(
-              color: AppColorTokens.fundexDanger,
-              fontSize: 16,
-              fontWeight: FontWeight.w900,
-            ),
+        style: appText.numericTitle.copyWith(color: colors.danger),
       ),
       rows: <FundLabeledValue>[
         FundLabeledValue(
@@ -335,7 +336,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
             deadline,
             localeTag: localeTag,
           ),
-          valueColor: resolveCoolingOffDeadlineColor(deadline),
+          valueColor: resolveCoolingOffDeadlineColor(context, deadline),
         ),
       ],
       footnote: l10n.myPageCoolingOffFootnote,
@@ -343,8 +344,9 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
         onPressed: () =>
             _showSnackBar(context, message: l10n.myPageCancelRequestComingSoon),
         style: _myPageOutlineButtonStyle(
-          borderColor: AppColorTokens.fundexDanger,
-          foregroundColor: AppColorTokens.fundexDanger,
+          context,
+          borderColor: colors.danger,
+          foregroundColor: colors.danger,
         ),
         child: Text(l10n.myPageCancelRequestAction),
       ),
@@ -359,6 +361,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     required Map<String, FundProject> fundProjectsById,
   }) {
     final l10n = context.l10n;
+    final colors = Theme.of(context).appColors;
     final project = fundProjectsById[group.projectId];
     return FundActiveFundCard(
       data: FundActiveFundCardData(
@@ -375,7 +378,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
           FundLabeledValue(
             label: l10n.myPageAccumulatedDistributionLabel,
             value: formatCurrency(group.earnings, formatter),
-            valueColor: AppColorTokens.fundexSuccess,
+            valueColor: colors.success,
           ),
         ],
         onTap: _buildActiveFundTapHandler(context, group.projectId),
@@ -489,10 +492,12 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     AppNotice.show(context, message: message);
   }
 
-  ButtonStyle _myPageOutlineButtonStyle({
+  ButtonStyle _myPageOutlineButtonStyle(
+    BuildContext context, {
     required Color borderColor,
     required Color foregroundColor,
   }) {
+    final appText = Theme.of(context).appTextTheme;
     return OutlinedButton.styleFrom(
       foregroundColor: foregroundColor,
       side: BorderSide(color: borderColor, width: 1.5),
@@ -501,7 +506,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
       minimumSize: const Size(0, 0),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      textStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700),
+      textStyle: appText.chip,
     );
   }
 }
@@ -519,6 +524,7 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appText = Theme.of(context).appTextTheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
@@ -527,12 +533,7 @@ class _StatusBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: (Theme.of(context).textTheme.labelSmall ?? const TextStyle())
-            .copyWith(
-              color: foregroundColor,
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-            ),
+        style: appText.tableLabel.copyWith(color: foregroundColor),
       ),
     );
   }

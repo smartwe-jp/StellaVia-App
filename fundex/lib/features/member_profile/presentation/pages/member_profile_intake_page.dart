@@ -598,7 +598,7 @@ class _MemberProfileIntakePageState
                             const SizedBox(height: UiTokens.spacing12),
                             Text(
                               l10n.profileLastSavedHint,
-                              style: Theme.of(context).textTheme.bodySmall,
+                              style: Theme.of(context).appTextTheme.helper,
                             ),
                           ],
                         ],
@@ -619,7 +619,7 @@ class _MemberProfileIntakePageState
                         subtitle: l10n.profileIncompleteBannerSubtitle,
                         child: Text(
                           l10n.profileIncompleteBannerBody,
-                          style: Theme.of(context).textTheme.bodySmall,
+                          style: Theme.of(context).appTextTheme.helper,
                         ),
                       ),
                     if (_isEditMode && !draft.isComplete)
@@ -674,6 +674,8 @@ class _ProfileStepHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final travelTheme = theme.extension<AppFTKTheme>()!;
 
     return Column(
@@ -694,21 +696,18 @@ class _ProfileStepHeader extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: (isActive || isDone)
                       ? travelTheme.primaryButtonColor
-                      : theme.colorScheme.outline.withValues(alpha: 0.16),
+                      : colors.borderSoft,
                 ),
                 child: Center(
                   child: isDone
-                      ? const Icon(Icons.check, size: 14, color: Colors.white)
+                      ? Icon(Icons.check, size: 14, color: colors.onDark)
                       : Text(
                           '${index + 1}',
-                          style:
-                              (theme.textTheme.labelSmall ?? const TextStyle())
-                                  .copyWith(
-                                    color: isActive
-                                        ? Colors.white
-                                        : theme.colorScheme.onSurfaceVariant,
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                          style: appText.inputLabel.copyWith(
+                            color: isActive
+                                ? colors.onDark
+                                : colors.textSecondary,
+                          ),
                         ),
                 ),
               ),
@@ -721,11 +720,12 @@ class _ProfileStepHeader extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         step.title,
-                        style: (theme.textTheme.labelLarge ?? const TextStyle())
-                            .copyWith(fontWeight: FontWeight.w700),
+                        style: appText.inputLabel.copyWith(
+                          color: colors.textPrimary,
+                        ),
                       ),
                       const SizedBox(height: 2),
-                      Text(step.subtitle, style: theme.textTheme.bodySmall),
+                      Text(step.subtitle, style: appText.helper),
                     ],
                   ),
                 ),
@@ -761,6 +761,8 @@ class _ProfileTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final isMultiline = maxLines > 1;
     return TextField(
       key: key,
@@ -776,11 +778,12 @@ class _ProfileTextField extends StatelessWidget {
         hintText: hintText,
         alignLabelWithHint: isMultiline,
         filled: true,
-        fillColor: theme.colorScheme.surface,
+        fillColor: colors.surface,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(UiTokens.radius16),
         ),
       ),
+      style: appText.inputText,
     );
   }
 }
@@ -798,10 +801,12 @@ class _EmptyDocumentPhotoPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final travelTheme = theme.extension<AppFTKTheme>()!;
 
     return Material(
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: InkWell(
         onTap: isLoading ? null : onTap,
         child: Center(
@@ -822,7 +827,7 @@ class _EmptyDocumentPhotoPlaceholder extends StatelessWidget {
               const SizedBox(height: UiTokens.spacing8),
               Text(
                 l10n.profileDocumentAddPhoto,
-                style: theme.textTheme.labelLarge,
+                style: appText.inputLabel.copyWith(color: colors.textPrimary),
               ),
             ],
           ),
@@ -846,8 +851,10 @@ class _BottomSheetActionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Material(
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(UiTokens.radius16),
@@ -858,15 +865,13 @@ class _BottomSheetActionTile extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(UiTokens.radius16),
-            border: Border.all(
-              color: theme.colorScheme.outline.withValues(alpha: 0.14),
-            ),
+            border: Border.all(color: colors.borderSoft),
           ),
           child: Row(
             children: <Widget>[
               Icon(icon, size: 20),
               const SizedBox(width: UiTokens.spacing8),
-              Expanded(child: Text(label, style: theme.textTheme.bodyMedium)),
+              Expanded(child: Text(label, style: appText.body)),
             ],
           ),
         ),

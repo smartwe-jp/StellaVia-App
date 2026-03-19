@@ -25,6 +25,9 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final localeTag = Localizations.localeOf(context).toLanguageTag();
     final formatter = NumberFormat.currency(
       locale: localeTag,
@@ -63,8 +66,8 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
               title: projectName,
               trailing: _StatusBadge(
                 label: statusLabel,
-                backgroundColor: AppColorTokens.fundexVioletLight,
-                foregroundColor: AppColorTokens.fundexViolet,
+                backgroundColor: colors.primarySubtle,
+                foregroundColor: colors.primaryAlt,
               ),
               rows: <FundLabeledValue>[
                 FundLabeledValue(
@@ -78,7 +81,7 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
                 FundLabeledValue(
                   label: l10n.myPageAccumulatedDistributionLabel,
                   value: formatCurrency(summary.earnings, formatter),
-                  valueColor: AppColorTokens.fundexSuccess,
+                  valueColor: colors.success,
                 ),
                 FundLabeledValue(
                   label: l10n.myPageActiveFundInvestUnitsLabel,
@@ -131,12 +134,7 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
             const SizedBox(height: 12),
             Text(
               l10n.myPageActiveFundBenefitHistoryTitle,
-              style:
-                  (Theme.of(context).textTheme.titleMedium ?? const TextStyle())
-                      .copyWith(
-                        color: AppColorTokens.fundexText,
-                        fontWeight: FontWeight.w800,
-                      ),
+              style: appText.sectionTitle,
             ),
             const SizedBox(height: 8),
             benefitAsync.when(
@@ -177,7 +175,7 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
                                   _resolveNetBenefit(detail),
                                   formatter,
                                 ),
-                                valueColor: AppColorTokens.fundexSuccess,
+                                valueColor: colors.success,
                               ),
                             ],
                             footnote: detail.remark,
@@ -194,8 +192,9 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
                                     )
                                   : null,
                               style: _detailOutlineButtonStyle(
-                                borderColor: AppColorTokens.fundexAccent,
-                                foregroundColor: AppColorTokens.fundexAccent,
+                                context,
+                                borderColor: colors.primary,
+                                foregroundColor: colors.primary,
                               ),
                               child: Text(
                                 detail.withdrawalTime == null
@@ -237,8 +236,8 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
                           earningRatio: summary.earningRatio,
                         ),
                       ),
-                backgroundColor: AppColorTokens.fundexDanger,
-                shadowColor: AppColorTokens.fundexDanger.withValues(alpha: 0.5),
+                backgroundColor: colors.danger,
+                shadowColor: colors.danger.withValues(alpha: 0.5),
                 horizontalPadding: 0,
                 threeSideShadow: true,
               ),
@@ -358,10 +357,12 @@ String _resolveBenefitCardTitle(
   return l10n.myPageActiveFundBenefitHistoryTitle;
 }
 
-ButtonStyle _detailOutlineButtonStyle({
+ButtonStyle _detailOutlineButtonStyle(
+  BuildContext context, {
   required Color borderColor,
   required Color foregroundColor,
 }) {
+  final appText = Theme.of(context).appTextTheme;
   return OutlinedButton.styleFrom(
     foregroundColor: foregroundColor,
     side: BorderSide(color: borderColor, width: 1.4),
@@ -370,7 +371,7 @@ ButtonStyle _detailOutlineButtonStyle({
     minimumSize: const Size(0, 0),
     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-    textStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700),
+    textStyle: appText.chip,
   );
 }
 
@@ -387,6 +388,7 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appText = Theme.of(context).appTextTheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
@@ -395,12 +397,7 @@ class _StatusBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: (Theme.of(context).textTheme.labelSmall ?? const TextStyle())
-            .copyWith(
-              color: foregroundColor,
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-            ),
+        style: appText.tableLabel.copyWith(color: foregroundColor),
       ),
     );
   }
@@ -414,11 +411,14 @@ class _TotalBenefitCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: const Color(0xFFFDF3F3),
+        color: colors.dangerSoft,
         borderRadius: BorderRadius.circular(UiTokens.radius16),
-        border: Border.all(color: const Color(0xFFF6CACA)),
+        border: Border.all(color: colors.dangerBorder),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -426,24 +426,15 @@ class _TotalBenefitCard extends StatelessWidget {
           children: <Widget>[
             Text(
               title,
-              style:
-                  (Theme.of(context).textTheme.titleSmall ?? const TextStyle())
-                      .copyWith(
-                        color: AppColorTokens.fundexTextSecondary,
-                        fontWeight: FontWeight.w700,
-                      ),
+              style: appText.bodyStrong.copyWith(color: colors.textSecondary),
             ),
             const SizedBox(height: 6),
             Text(
               value,
-              style:
-                  (Theme.of(context).textTheme.headlineMedium ??
-                          const TextStyle())
-                      .copyWith(
-                        color: AppColorTokens.fundexDanger,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 0.2,
-                      ),
+              style: appText.numericHeadline.copyWith(
+                color: colors.danger,
+                letterSpacing: 0.2,
+              ),
             ),
           ],
         ),
@@ -461,11 +452,14 @@ class _StateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(UiTokens.radius16),
-        border: Border.all(color: AppColorTokens.fundexBorder),
+        border: Border.all(color: colors.border),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
@@ -474,9 +468,7 @@ class _StateCard extends StatelessWidget {
             Text(
               message,
               textAlign: TextAlign.center,
-              style:
-                  (Theme.of(context).textTheme.bodySmall ?? const TextStyle())
-                      .copyWith(color: AppColorTokens.fundexTextSecondary),
+              style: appText.bodyMuted.copyWith(color: colors.textSecondary),
             ),
             if (actionLabel != null && onActionTap != null) ...<Widget>[
               const SizedBox(height: 8),

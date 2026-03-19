@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app_color_tokens.dart';
+import 'app_theme_extensions.dart';
 import 'fund_home_widgets.dart';
 import 'ui_tokens.dart';
 
@@ -60,20 +60,20 @@ class FundMyPageAssetOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Column(
       children: <Widget>[
         Stack(
           clipBehavior: Clip.none,
           children: <Widget>[
             DecoratedBox(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: <Color>[
-                    AppColorTokens.fundexPrimaryDark,
-                    AppColorTokens.fundexPrimaryDarkDradient,
-                  ],
+                  colors: <Color>[colors.heroStart, colors.heroMiddle],
                 ),
               ),
               child: Padding(
@@ -90,13 +90,9 @@ class FundMyPageAssetOverview extends StatelessWidget {
                           Expanded(
                             child: Text(
                               title!,
-                              style:
-                                  (Theme.of(context).textTheme.titleMedium ??
-                                          const TextStyle())
-                                      .copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w800,
-                                      ),
+                              style: appText.pageTitle.copyWith(
+                                color: colors.onDark,
+                              ),
                             ),
                           )
                         else
@@ -113,39 +109,25 @@ class FundMyPageAssetOverview extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             totalAssetsLabel,
-                            style:
-                                (Theme.of(context).textTheme.labelSmall ??
-                                        const TextStyle())
-                                    .copyWith(
-                                      color: Colors.white.withValues(
-                                        alpha: 0.52,
-                                      ),
-                                    ),
+                            style: appText.caption.copyWith(
+                              color: colors.onDark.withValues(alpha: 0.52),
+                            ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             totalAssetsValue,
-                            style:
-                                (Theme.of(context).textTheme.headlineMedium ??
-                                        const TextStyle())
-                                    .copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w900,
-                                    ),
+                            style: appText.heroMetricPrimary.copyWith(
+                              color: colors.onDark,
+                            ),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             totalAssetsCaption,
                             textAlign: TextAlign.center,
-                            style:
-                                (Theme.of(context).textTheme.labelSmall ??
-                                        const TextStyle())
-                                    .copyWith(
-                                      color: Colors.white.withValues(
-                                        alpha: 0.42,
-                                      ),
-                                      height: 1.3,
-                                    ),
+                            style: appText.micro.copyWith(
+                              color: colors.onDark.withValues(alpha: 0.42),
+                              height: 1.3,
+                            ),
                           ),
                         ],
                       ),
@@ -230,30 +212,32 @@ class FundMyPageProjectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     const cardRadius = BorderRadius.all(Radius.circular(UiTokens.radius16));
-    final borderColor = AppColorTokens.fundexBorder;
+    final borderColor = colors.border;
 
     return Padding(
       padding: shadowPadding,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: accentColor != null ? accentColor : Colors.transparent,
+          color: accentColor ?? colors.surface.withValues(alpha: 0),
           borderRadius: cardRadius,
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
+              color: colors.scrim.withValues(alpha: 0.06),
               blurRadius: 3,
               offset: const Offset(0, 1),
             ),
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
+              color: colors.scrim.withValues(alpha: 0.04),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
           ],
         ),
         child: Material(
-          color: theme.colorScheme.surface,
+          color: colors.surface,
           shape: RoundedRectangleBorder(
             borderRadius: cardRadius,
             side: BorderSide(color: borderColor),
@@ -277,14 +261,10 @@ class FundMyPageProjectCard extends StatelessWidget {
                           title,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style:
-                              (theme.textTheme.bodyMedium ?? const TextStyle())
-                                  .copyWith(
-                                    color: AppColorTokens.fundexText,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w800,
-                                    height: 1.4,
-                                  ),
+                          style: appText.cardTitle.copyWith(
+                            color: colors.textPrimary,
+                            height: 1.4,
+                          ),
                         ),
                       ),
                       if (trailing != null) ...<Widget>[
@@ -300,28 +280,17 @@ class FundMyPageProjectCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             rows[index].label,
-                            style:
-                                (theme.textTheme.labelMedium ??
-                                        const TextStyle())
-                                    .copyWith(
-                                      color: AppColorTokens.fundexTextSecondary,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                            style: appText.tableLabel.copyWith(
+                              color: colors.textSecondary,
+                            ),
                           ),
                         ),
                         const SizedBox(width: UiTokens.spacing8),
                         Text(
                           rows[index].value,
-                          style:
-                              (theme.textTheme.bodySmall ?? const TextStyle())
-                                  .copyWith(
-                                    color:
-                                        rows[index].valueColor ??
-                                        AppColorTokens.fundexText,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w800,
-                                  ),
+                          style: appText.tableValue.copyWith(
+                            color: rows[index].valueColor ?? colors.textPrimary,
+                          ),
                         ),
                       ],
                     ),
@@ -331,12 +300,10 @@ class FundMyPageProjectCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       footnote!,
-                      style: (theme.textTheme.labelSmall ?? const TextStyle())
-                          .copyWith(
-                            color: AppColorTokens.fundexTextTertiary,
-                            fontSize: 11,
-                            height: 1.5,
-                          ),
+                      style: appText.meta.copyWith(
+                        color: colors.textTertiary,
+                        height: 1.5,
+                      ),
                     ),
                   ],
                   if (footer != null) ...<Widget>[
@@ -368,6 +335,8 @@ class _FundMyPageMetricCardState extends State<_FundMyPageMetricCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final enabled = widget.data.onTap != null;
 
     return Padding(
@@ -411,12 +380,12 @@ class _FundMyPageMetricCardState extends State<_FundMyPageMetricCard> {
           curve: Curves.easeOut,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: colors.surface,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColorTokens.fundexBorder),
+              border: Border.all(color: colors.border),
               boxShadow: <BoxShadow>[
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: _pressed ? 0.03 : 0.05),
+                  color: colors.scrim.withValues(alpha: _pressed ? 0.03 : 0.05),
                   blurRadius: _pressed ? 6 : 10,
                   offset: Offset(0, _pressed ? 2 : 4),
                 ),
@@ -434,8 +403,7 @@ class _FundMyPageMetricCardState extends State<_FundMyPageMetricCard> {
                     Text(
                       widget.data.label,
                       textAlign: TextAlign.center,
-                      style: (theme.textTheme.labelSmall ?? const TextStyle())
-                          .copyWith(color: AppColorTokens.fundexTextTertiary),
+                      style: appText.meta.copyWith(color: colors.textTertiary),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -443,13 +411,9 @@ class _FundMyPageMetricCardState extends State<_FundMyPageMetricCard> {
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: (theme.textTheme.titleSmall ?? const TextStyle())
-                          .copyWith(
-                            color:
-                                widget.data.valueColor ??
-                                AppColorTokens.fundexText,
-                            fontWeight: FontWeight.w900,
-                          ),
+                      style: appText.heroMetricSecondary.copyWith(
+                        color: widget.data.valueColor ?? colors.textPrimary,
+                      ),
                     ),
                   ],
                 ),
@@ -470,19 +434,21 @@ class _FundMyPageQuickActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
 
     return Material(
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: data.onTap,
         child: Ink(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           decoration: BoxDecoration(
-            color: data.backgroundColor ?? AppColorTokens.fundexBackground,
+            color: data.backgroundColor ?? colors.background,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: data.borderColor ?? Colors.transparent,
+              color: data.borderColor ?? colors.surface.withValues(alpha: 0),
               width: 1.5,
             ),
           ),
@@ -492,7 +458,7 @@ class _FundMyPageQuickActionButton extends StatelessWidget {
               IconTheme(
                 data: IconThemeData(
                   size: 18,
-                  color: data.foregroundColor ?? AppColorTokens.fundexText,
+                  color: data.foregroundColor ?? colors.textPrimary,
                 ),
                 child: data.icon,
               ),
@@ -501,12 +467,9 @@ class _FundMyPageQuickActionButton extends StatelessWidget {
                 child: Text(
                   data.label,
                   overflow: TextOverflow.ellipsis,
-                  style: (theme.textTheme.labelLarge ?? const TextStyle())
-                      .copyWith(
-                        color:
-                            data.foregroundColor ?? AppColorTokens.fundexText,
-                        fontWeight: FontWeight.w700,
-                      ),
+                  style: appText.button.copyWith(
+                    color: data.foregroundColor ?? colors.textPrimary,
+                  ),
                 ),
               ),
             ],
