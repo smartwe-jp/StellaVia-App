@@ -123,22 +123,22 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final currentThemePreference = ref.watch(appThemePreferenceProvider);
     final currentLanguage = ref.watch(appLanguageProvider);
     final isIdentityAuthEnabled = ref.watch(identityAuthFeatureEnabledProvider);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.menuTitle,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: <Color>[
-              AppColorTokens.fundexPrimaryDark,
-              AppColorTokens.fundexPrimaryDarkDradient,
-            ],
+            colors: <Color>[colors.heroStart, colors.heroMiddle],
           ),
         ),
         leading: AppNavigationIconButton(
@@ -156,15 +156,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               AppMenuItem(
                 icon: Icons.person_rounded,
                 label: l10n.menuItemEditProfile,
-                iconBackgroundColor: const Color(0xFFDBEAFE),
-                iconForegroundColor: AppColorTokens.fundexAccent,
+                iconBackgroundColor: colors.primarySubtle,
+                iconForegroundColor: colors.primary,
                 onTap: () => context.push('/member-profile/edit'),
               ),
               AppMenuItem(
                 icon: Icons.account_balance_wallet_rounded,
                 label: l10n.menuItemBankSettings,
-                iconBackgroundColor: AppColorTokens.fundexSuccessLight,
-                iconForegroundColor: AppColorTokens.fundexSuccess,
+                iconBackgroundColor: colors.successSubtle,
+                iconForegroundColor: colors.success,
                 onTap: () => context.push('/profile/wallet/bank-settings'),
               ),
             ],
@@ -175,15 +175,17 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               AppMenuItem(
                 icon: Icons.lock_rounded,
                 label: l10n.menuItemChangePassword,
-                iconBackgroundColor: const Color(0xFFFEF3C7),
-                iconForegroundColor: AppColorTokens.fundexWarning,
+                iconBackgroundColor: colors.warningSubtle,
+                iconForegroundColor: colors.warning,
                 onTap: () => _showComingSoon(l10n.menuItemChangePassword),
               ),
               AppMenuItem(
                 icon: Icons.verified_user_rounded,
                 label: l10n.menuItemTwoFactor,
-                iconBackgroundColor: AppColorTokens.fundexVioletLight,
-                iconForegroundColor: const Color(0xFF7C3AED),
+                iconBackgroundColor: colors.communitySecondary.withValues(
+                  alpha: 0.16,
+                ),
+                iconForegroundColor: colors.communitySecondary,
                 onTap: () => isIdentityAuthEnabled
                     ? context.push('/auth/real-person')
                     : _showComingSoon(l10n.menuItemTwoFactor),
@@ -196,22 +198,22 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               AppMenuItem(
                 icon: Icons.description_rounded,
                 label: l10n.menuItemAnnualReport,
-                iconBackgroundColor: AppColorTokens.fundexDangerLight,
-                iconForegroundColor: AppColorTokens.fundexDanger,
+                iconBackgroundColor: colors.dangerSubtle,
+                iconForegroundColor: colors.danger,
                 onTap: () => _showComingSoon(l10n.menuItemAnnualReport),
               ),
               AppMenuItem(
                 icon: Icons.article_rounded,
                 label: l10n.menuItemContractList,
-                iconBackgroundColor: const Color(0xFFF1F5F9),
-                iconForegroundColor: AppColorTokens.fundexTextSecondary,
+                iconBackgroundColor: colors.surfaceAlt,
+                iconForegroundColor: colors.textSecondary,
                 onTap: () => _showComingSoon(l10n.menuItemContractList),
               ),
               AppMenuItem(
                 icon: Icons.badge_rounded,
                 label: l10n.menuItemMyNumber,
-                iconBackgroundColor: const Color(0xFFFEF3C7),
-                iconForegroundColor: AppColorTokens.fundexWarning,
+                iconBackgroundColor: colors.warningSubtle,
+                iconForegroundColor: colors.warning,
                 onTap: () => _showComingSoon(l10n.menuItemMyNumber),
               ),
             ],
@@ -222,17 +224,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               AppMenuItem(
                 icon: Icons.dark_mode_rounded,
                 label: l10n.menuItemTheme,
-                iconBackgroundColor: const Color(0xFFEDE9FE),
-                iconForegroundColor: AppColorTokens.fundexViolet,
+                iconBackgroundColor: colors.communitySecondary.withValues(
+                  alpha: 0.16,
+                ),
+                iconForegroundColor: colors.communitySecondary,
                 trailing: Text(
                   _themeLabel(currentThemePreference),
-                  style:
-                      (Theme.of(context).textTheme.bodySmall ??
-                              const TextStyle())
-                          .copyWith(
-                            color: AppColorTokens.fundexTextSecondary,
-                            fontWeight: FontWeight.w600,
-                          ),
+                  style: appText.helper.copyWith(color: colors.textSecondary),
                 ),
                 onTap: () {
                   setState(() {
@@ -246,9 +244,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   padding: const EdgeInsets.fromLTRB(4, 0, 4, 6),
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: colors.surface,
                       borderRadius: BorderRadius.circular(UiTokens.radius16),
-                      border: Border.all(color: AppColorTokens.fundexBorder),
+                      border: Border.all(color: colors.border),
                     ),
                     child: Column(
                       children: AppThemePreference.values
@@ -268,17 +266,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               AppMenuItem(
                 icon: Icons.language_rounded,
                 label: l10n.menuItemLanguage,
-                iconBackgroundColor: const Color(0xFFE0F2FE),
-                iconForegroundColor: AppColorTokens.fundexAccent,
+                iconBackgroundColor: colors.infoSubtle,
+                iconForegroundColor: colors.info,
                 trailing: Text(
                   _languageLabel(currentLanguage),
-                  style:
-                      (Theme.of(context).textTheme.bodySmall ??
-                              const TextStyle())
-                          .copyWith(
-                            color: AppColorTokens.fundexTextSecondary,
-                            fontWeight: FontWeight.w600,
-                          ),
+                  style: appText.helper.copyWith(color: colors.textSecondary),
                 ),
                 onTap: () {
                   setState(() {
@@ -292,9 +284,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   padding: const EdgeInsets.fromLTRB(4, 0, 4, 6),
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: colors.surface,
                       borderRadius: BorderRadius.circular(UiTokens.radius16),
-                      border: Border.all(color: AppColorTokens.fundexBorder),
+                      border: Border.all(color: colors.border),
                     ),
                     child: Column(
                       children: AppLanguage.values
@@ -318,15 +310,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               AppMenuItem(
                 icon: Icons.help_rounded,
                 label: l10n.menuItemFaqHelp,
-                iconBackgroundColor: const Color(0xFFDBEAFE),
-                iconForegroundColor: AppColorTokens.fundexAccent,
+                iconBackgroundColor: colors.primarySubtle,
+                iconForegroundColor: colors.primary,
                 onTap: () => _showComingSoon(l10n.menuItemFaqHelp),
               ),
               AppMenuItem(
                 icon: Icons.chat_bubble_rounded,
                 label: l10n.menuItemChatSupport,
-                iconBackgroundColor: AppColorTokens.fundexSuccessLight,
-                iconForegroundColor: AppColorTokens.fundexSuccess,
+                iconBackgroundColor: colors.successSubtle,
+                iconForegroundColor: colors.success,
                 onTap: () => _showComingSoon(l10n.menuItemChatSupport),
               ),
             ],
@@ -336,9 +328,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             child: Text(
               l10n.menuVersionFootnote,
               textAlign: TextAlign.center,
-              style:
-                  (Theme.of(context).textTheme.labelSmall ?? const TextStyle())
-                      .copyWith(color: AppColorTokens.fundexTextTertiary),
+              style: appText.meta,
             ),
           ),
           OutlinedButton(
@@ -359,12 +349,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             onPressed: _confirmDeleteAccount,
             child: Text(
               l10n.menuDeleteAccountAction,
-              style:
-                  (Theme.of(context).textTheme.bodySmall ?? const TextStyle())
-                      .copyWith(
-                        color: const Color.fromARGB(255, 27, 12, 12),
-                        //decoration: TextDecoration.underline,
-                      ),
+              style: appText.helper.copyWith(color: colors.dangerForeground),
             ),
           ),
         ],
@@ -388,8 +373,11 @@ class _SettingsOptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Material(
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: InkWell(
         onTap: onTap,
         child: Ink(
@@ -397,27 +385,18 @@ class _SettingsOptionTile extends StatelessWidget {
           decoration: BoxDecoration(
             border: isLast
                 ? null
-                : const Border(
-                    bottom: BorderSide(color: AppColorTokens.fundexBorder),
-                  ),
+                : Border(bottom: BorderSide(color: colors.border)),
           ),
           child: Row(
             children: <Widget>[
               Expanded(
                 child: Text(
                   label,
-                  style:
-                      (Theme.of(context).textTheme.bodyMedium ??
-                              const TextStyle())
-                          .copyWith(fontWeight: FontWeight.w600),
+                  style: appText.bodyStrong.copyWith(color: colors.textPrimary),
                 ),
               ),
               if (selected)
-                const Icon(
-                  Icons.check_rounded,
-                  size: 18,
-                  color: AppColorTokens.fundexAccent,
-                ),
+                Icon(Icons.check_rounded, size: 18, color: colors.primary),
             ],
           ),
         ),

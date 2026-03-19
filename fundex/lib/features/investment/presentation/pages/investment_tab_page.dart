@@ -597,7 +597,14 @@ class _FundProjectCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
+    final isDark = theme.brightness == Brightness.dark;
     final cardRadius = BorderRadius.circular(UiTokens.radius16);
+    final heroGlassColor = _resolveHeroGlassSurfaceColor(theme);
+    final heroGlassBorderColor = _resolveHeroGlassBorderColor(theme);
+    final heroGlassPrimaryTextColor = _resolveHeroGlassPrimaryTextColor(theme);
+    final heroGlassSecondaryTextColor = _resolveHeroGlassSecondaryTextColor(
+      theme,
+    );
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(2, 2, 2, 8),
@@ -668,13 +675,14 @@ class _FundProjectCard extends StatelessWidget {
                             vertical: 3,
                           ),
                           decoration: BoxDecoration(
-                            color: colors.brandWhite.withValues(alpha: 0.9),
+                            color: heroGlassColor,
                             borderRadius: BorderRadius.circular(6),
+                            border: Border.all(color: heroGlassBorderColor),
                           ),
                           child: Text(
                             volumeText,
                             style: appText.chip.copyWith(
-                              color: colors.textSecondary,
+                              color: heroGlassSecondaryTextColor,
                             ),
                           ),
                         ),
@@ -691,13 +699,17 @@ class _FundProjectCard extends StatelessWidget {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: appText.cardTitle.copyWith(
-                                color: colors.onDark,
+                                color: colors.onDark.withValues(
+                                  alpha: isDark ? 0.94 : 1,
+                                ),
                                 fontWeight: FontWeight.w800,
                                 fontSize: 16,
                                 height: 1.25,
                                 shadows: <Shadow>[
                                   Shadow(
-                                    color: colors.scrim.withValues(alpha: 0.35),
+                                    color: colors.scrim.withValues(
+                                      alpha: isDark ? 0.52 : 0.35,
+                                    ),
                                     blurRadius: 6,
                                     offset: const Offset(0, 1),
                                   ),
@@ -712,14 +724,26 @@ class _FundProjectCard extends StatelessWidget {
                                 _HeroInfoBubble(
                                   label: yieldLabel,
                                   value: annualYieldText,
+                                  backgroundColor: heroGlassColor,
+                                  borderColor: heroGlassBorderColor,
+                                  labelColor: heroGlassSecondaryTextColor,
+                                  valueColor: heroGlassPrimaryTextColor,
                                 ),
                                 _HeroInfoBubble(
                                   label: periodLabel,
                                   value: periodValueText,
+                                  backgroundColor: heroGlassColor,
+                                  borderColor: heroGlassBorderColor,
+                                  labelColor: heroGlassSecondaryTextColor,
+                                  valueColor: heroGlassPrimaryTextColor,
                                 ),
                                 _HeroInfoBubble(
                                   label: methodTitleLabel,
                                   value: methodLabel,
+                                  backgroundColor: heroGlassColor,
+                                  borderColor: heroGlassBorderColor,
+                                  labelColor: heroGlassSecondaryTextColor,
+                                  valueColor: heroGlassPrimaryTextColor,
                                 ),
                               ],
                             ),
@@ -836,6 +860,36 @@ class _FundProjectCard extends StatelessWidget {
   }
 }
 
+Color _resolveHeroGlassSurfaceColor(ThemeData theme) {
+  final colors = theme.appColors;
+  final authTheme = theme.extension<AppAuthVisualTheme>();
+  final isDark = theme.brightness == Brightness.dark;
+
+  return authTheme?.glassSurfaceColor ??
+      colors.surface.withValues(alpha: isDark ? 0.66 : 0.82);
+}
+
+Color _resolveHeroGlassBorderColor(ThemeData theme) {
+  final authTheme = theme.extension<AppAuthVisualTheme>();
+  final colors = theme.appColors;
+  final isDark = theme.brightness == Brightness.dark;
+
+  return authTheme?.glassBorderColor ??
+      colors.onDark.withValues(alpha: isDark ? 0.16 : 0.10);
+}
+
+Color _resolveHeroGlassPrimaryTextColor(ThemeData theme) {
+  final colors = theme.appColors;
+  final isDark = theme.brightness == Brightness.dark;
+  return isDark ? colors.onDark : colors.textPrimary;
+}
+
+Color _resolveHeroGlassSecondaryTextColor(ThemeData theme) {
+  final colors = theme.appColors;
+  final isDark = theme.brightness == Brightness.dark;
+  return isDark ? colors.onDark.withValues(alpha: 0.76) : colors.textSecondary;
+}
+
 class _FavoriteButton extends StatelessWidget {
   const _FavoriteButton({required this.selected, required this.onTap});
 
@@ -844,11 +898,13 @@ class _FavoriteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = context.appColors;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final isDark = theme.brightness == Brightness.dark;
     return Material(
       color: selected
-          ? colors.dangerSubtle
-          : colors.brandWhite.withValues(alpha: 0.88),
+          ? colors.danger.withValues(alpha: isDark ? 0.26 : 0.16)
+          : _resolveHeroGlassSurfaceColor(theme),
       shape: const CircleBorder(),
       child: InkWell(
         customBorder: const CircleBorder(),
@@ -859,7 +915,9 @@ class _FavoriteButton extends StatelessWidget {
           child: Icon(
             selected ? Icons.favorite_rounded : Icons.favorite_border_rounded,
             size: 18,
-            color: selected ? colors.danger : colors.textTertiary,
+            color: selected
+                ? colors.onDark
+                : _resolveHeroGlassSecondaryTextColor(theme),
           ),
         ),
       ),
@@ -868,39 +926,43 @@ class _FavoriteButton extends StatelessWidget {
 }
 
 class _HeroInfoBubble extends StatelessWidget {
-  const _HeroInfoBubble({required this.label, required this.value});
+  const _HeroInfoBubble({
+    required this.label,
+    required this.value,
+    required this.backgroundColor,
+    required this.borderColor,
+    required this.labelColor,
+    required this.valueColor,
+  });
 
   final String label;
   final String value;
+  final Color backgroundColor;
+  final Color borderColor;
+  final Color labelColor;
+  final Color valueColor;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
+    final appText = Theme.of(context).appTextTheme;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: colors.brandWhite.withValues(alpha: 0.86),
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: borderColor),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
             label,
-            style: appText.micro.copyWith(
-              color: colors.textTertiary,
-              height: 1.1,
-            ),
+            style: appText.micro.copyWith(color: labelColor, height: 1.1),
           ),
           Text(
             value,
-            style: appText.bodyStrong.copyWith(
-              color: colors.textPrimary,
-              height: 1.1,
-            ),
+            style: appText.bodyStrong.copyWith(color: valueColor, height: 1.1),
           ),
         ],
       ),
