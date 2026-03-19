@@ -228,11 +228,7 @@ class _FundPropertyHouseCardState extends State<_FundPropertyHouseCard> {
               ),
               child: Text(
                 '${context.l10n.fundDetailPropertyItemPrefix(widget.index + 1)} $headerTitle',
-                style: appText.button.copyWith(
-                  color: colors.onDark,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w800,
-                ),
+                style: appText.bodyStrong.copyWith(color: colors.onDark),
               ),
             ),
             trailing: Icon(
@@ -388,10 +384,7 @@ class _FundPropertySectionLabel extends StatelessWidget {
         alignment: Alignment.centerLeft,
         child: Text(
           '■ $title',
-          style: appText.chip.copyWith(
-            color: colors.primary,
-            fontWeight: FontWeight.w800,
-          ),
+          style: appText.chip.copyWith(color: colors.primary),
         ),
       ),
     );
@@ -428,7 +421,6 @@ class _FundPropertyInfoRow extends StatelessWidget {
               label,
               style: appText.caption.copyWith(
                 color: colors.textSecondary,
-                fontWeight: FontWeight.w600,
                 height: 1.35,
               ),
             ),
@@ -440,7 +432,6 @@ class _FundPropertyInfoRow extends StatelessWidget {
               textAlign: TextAlign.right,
               style: appText.bodyStrong.copyWith(
                 color: colors.textPrimary,
-                fontWeight: FontWeight.w700,
                 height: 1.45,
               ),
             ),
@@ -659,10 +650,7 @@ class _FundIncomeSchemeTab extends StatelessWidget {
                       const SizedBox(height: 2),
                       Text(
                         context.l10n.fundDetailSchemeDistributedCapitalTitle,
-                        style: appText.cardTitle.copyWith(
-                          color: colors.onDark,
-                          fontWeight: FontWeight.w800,
-                        ),
+                        style: appText.cardTitle.copyWith(color: colors.onDark),
                       ),
                     ],
                   ),
@@ -671,8 +659,6 @@ class _FundIncomeSchemeTab extends StatelessWidget {
                   _valueOrDash(structuredData.distributedCapital, context),
                   style: appText.numericHeadline.copyWith(
                     color: colors.highlightGold,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 20,
                   ),
                 ),
               ],
@@ -724,10 +710,7 @@ class _FundSchemeCard extends StatelessWidget {
               ),
               child: Text(
                 title,
-                style: appText.chip.copyWith(
-                  color: colors.onDark,
-                  fontWeight: FontWeight.w800,
-                ),
+                style: appText.chip.copyWith(color: colors.onDark),
               ),
             ),
             for (final row in rows) _FundSchemeRow(item: row),

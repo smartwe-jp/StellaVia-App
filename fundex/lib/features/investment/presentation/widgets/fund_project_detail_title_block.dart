@@ -16,7 +16,6 @@ class FundProjectDetailTitleBlock extends StatelessWidget {
     final titleParts = _splitProjectTitle(project.projectName);
     final titleStyle = appText.pageTitle.copyWith(
       color: colors.textPrimary,
-      fontWeight: FontWeight.w900,
       height: 1.08,
     );
 

@@ -68,10 +68,8 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
                           Expanded(
                             child: Text(
                               row.label,
-                              style: appText.caption.copyWith(
-                                fontSize: 13,
+                              style: appText.bodyMuted.copyWith(
                                 color: colors.textSecondary,
-                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
@@ -86,7 +84,6 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
                                     defaultColor: colors.textPrimary,
                                     highlightColor: colors.communitySecondary,
                                   ).copyWith(
-                                    fontSize: 14,
                                     color: isHighlighted
                                         ? colors.communitySecondary
                                         : colors.textPrimary,
@@ -122,7 +119,6 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
                   child: RichText(
                     text: TextSpan(
                       style: appText.caption.copyWith(
-                        fontSize: 12,
                         color: colors.warningForeground,
                         height: 1.6,
                       ),
@@ -130,10 +126,8 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
                         TextSpan(
                           text: '$noticeTitle\n',
                           style: appText.caption.copyWith(
-                            fontSize: 12,
                             color: colors.warningForeground,
                             height: 1.6,
-                            fontWeight: FontWeight.w800,
                           ),
                         ),
                         TextSpan(text: noticeBody),
@@ -161,10 +155,8 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
                   Expanded(
                     child: Text(
                       agreementLabel,
-                      style: appText.bodyStrong.copyWith(
-                        fontSize: 12,
+                      style: appText.caption.copyWith(
                         color: colors.textPrimary,
-                        fontWeight: FontWeight.w800,
                         height: 1.5,
                       ),
                     ),
@@ -203,11 +195,7 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
           horizontalPadding: 0,
           backgroundColor: colors.communitySecondary,
           shadowColor: colors.communitySecondary.withValues(alpha: 0.36),
-          textStyle: appText.button.copyWith(
-            color: colors.brandWhite,
-            fontSize: 15,
-            fontWeight: FontWeight.w800,
-          ),
+          textStyle: appText.button.copyWith(color: colors.brandWhite),
         ),
       ],
     );
@@ -224,10 +212,7 @@ TextStyle _summaryValueStyle(
   final looksNumeric = _looksNumericLikeValue(trimmed);
   final baseStyle = looksNumeric ? appText.numericBody : appText.bodyStrong;
 
-  return baseStyle.copyWith(
-    color: highlightColor ?? defaultColor,
-    fontWeight: FontWeight.w800,
-  );
+  return baseStyle.copyWith(color: highlightColor ?? defaultColor);
 }
 
 bool _looksNumericLikeValue(String value) {

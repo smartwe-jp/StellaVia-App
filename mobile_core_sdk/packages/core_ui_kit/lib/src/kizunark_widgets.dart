@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'app_color_tokens.dart';
 import 'app_theme_extensions.dart';
 
 class KizunarkGradientHeader extends StatelessWidget {
@@ -15,17 +14,18 @@ class KizunarkGradientHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(20, 18, 20, 14),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: <Color>[
-            AppColorTokens.kizunarkPrimary,
-            AppColorTokens.kizunarkSecondary,
-          ],
+          colors: <Color>[colors.communityPrimary, colors.communitySecondary],
         ),
       ),
       child: Column(
@@ -33,24 +33,17 @@ class KizunarkGradientHeader extends StatelessWidget {
         children: <Widget>[
           Text(
             title,
-            style:
-                (Theme.of(context).textTheme.headlineSmall ?? const TextStyle())
-                    .copyWith(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: -0.2,
-                    ),
+            style: appText.pageTitle.copyWith(
+              color: colors.onDark,
+              letterSpacing: -0.2,
+            ),
           ),
           const SizedBox(height: 2),
           Text(
             subtitle,
-            style: (Theme.of(context).textTheme.bodySmall ?? const TextStyle())
-                .copyWith(
-                  color: Colors.white.withValues(alpha: 0.6),
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
-                ),
+            style: appText.meta.copyWith(
+              color: colors.onDark.withValues(alpha: 0.6),
+            ),
           ),
         ],
       ),
@@ -70,27 +63,28 @@ class KizunarkNoticeBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: AppColorTokens.kizunarkPrimaryLight,
+        color: colors.communityPrimary.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         child: Row(
           children: <Widget>[
-            Text(icon, style: const TextStyle(fontSize: 12)),
+            Text(icon, style: appText.caption),
             const SizedBox(width: 6),
             Expanded(
               child: Text(
                 label,
-                style:
-                    (Theme.of(context).textTheme.bodySmall ?? const TextStyle())
-                        .copyWith(
-                          color: AppColorTokens.kizunarkPrimary,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                        ),
+                style: appText.caption.copyWith(
+                  color: colors.communityPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ],
@@ -116,11 +110,11 @@ class KizunarkAvatarBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final appText = theme.appTextTheme;
+    final appColors = theme.appColors;
     final colors = gradientColors.isEmpty
-        ? const <Color>[
-            AppColorTokens.kizunarkPrimary,
-            AppColorTokens.kizunarkSecondary,
-          ]
+        ? <Color>[appColors.communityPrimary, appColors.communitySecondary]
         : gradientColors;
     return Container(
       width: size,
@@ -136,12 +130,11 @@ class KizunarkAvatarBadge extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         text,
-        style: (Theme.of(context).textTheme.labelMedium ?? const TextStyle())
-            .copyWith(
-              color: Colors.white,
-              fontSize: fontSize,
-              fontWeight: FontWeight.w800,
-            ),
+        style: appText.chip.copyWith(
+          color: appColors.onDark,
+          fontSize: fontSize,
+          fontWeight: FontWeight.w800,
+        ),
       ),
     );
   }
@@ -195,16 +188,11 @@ class KizunarkComposerCard extends StatelessWidget {
                     minLines: 2,
                     maxLines: 4,
                     onChanged: onChanged,
-                    style: appText.body.copyWith(
-                      fontSize: 13,
-                      color: colors.textPrimary,
-                    ),
+                    style: appText.body.copyWith(color: colors.textPrimary),
                     decoration: InputDecoration(
                       hintText: placeholder,
                       hintStyle: appText.bodyMuted.copyWith(
-                        fontSize: 13,
                         color: colors.textTertiary,
-                        fontWeight: FontWeight.w500,
                       ),
                       border: InputBorder.none,
                       enabledBorder: InputBorder.none,
@@ -261,11 +249,7 @@ class KizunarkFundReferenceChip extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Text(
             label,
-            style: appText.bodyStrong.copyWith(
-              color: colors.primary,
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-            ),
+            style: appText.bodyStrong.copyWith(color: colors.primary),
           ),
         ),
       ),
@@ -353,8 +337,6 @@ class KizunarkPostCard extends StatelessWidget {
                               displayName,
                               style: appText.bodyStrong.copyWith(
                                 color: colors.textPrimary,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
                               ),
                             ),
                             if ((badgeLabel?.isNotEmpty ?? false))
@@ -377,8 +359,6 @@ class KizunarkPostCard extends StatelessWidget {
                                     color:
                                         badgeForegroundColor ??
                                         colors.communityPrimary,
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
                               ),
@@ -388,8 +368,6 @@ class KizunarkPostCard extends StatelessWidget {
                           accountText,
                           style: appText.meta.copyWith(
                             color: colors.textTertiary,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
@@ -403,8 +381,6 @@ class KizunarkPostCard extends StatelessWidget {
                         timeLabel,
                         style: appText.meta.copyWith(
                           color: colors.textTertiary,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
                         ),
                       ),
                       if (trailingAction != null) ...<Widget>[
@@ -420,7 +396,6 @@ class KizunarkPostCard extends StatelessWidget {
                 body,
                 style: appText.body.copyWith(
                   color: colors.textPrimary,
-                  fontSize: 13,
                   height: 1.7,
                 ),
               ),
@@ -443,11 +418,7 @@ class KizunarkPostCard extends StatelessWidget {
                 icon: const Icon(Icons.chat_bubble_outline_rounded, size: 16),
                 label: Text(
                   '$commentCount',
-                  style: appText.caption.copyWith(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    color: colors.textTertiary,
-                  ),
+                  style: appText.caption.copyWith(color: colors.textTertiary),
                 ),
               ),
               if (showReplies && replySection != null) ...<Widget>[
@@ -519,17 +490,14 @@ class KizunarkReplyTile extends StatelessWidget {
                             text: TextSpan(
                               style: appText.caption.copyWith(
                                 color: colors.textPrimary,
-                                fontSize: 11,
                                 fontWeight: FontWeight.w700,
                               ),
                               children: <InlineSpan>[
                                 TextSpan(text: displayName),
                                 TextSpan(
                                   text: '   $timeLabel',
-                                  style: TextStyle(
+                                  style: appText.meta.copyWith(
                                     color: colors.textTertiary,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 10,
                                   ),
                                 ),
                               ],
@@ -563,7 +531,6 @@ class KizunarkReplyTile extends StatelessWidget {
                                 quoteTitle ?? '',
                                 style: appText.caption.copyWith(
                                   color: colors.textPrimary,
-                                  fontSize: 11,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -572,7 +539,6 @@ class KizunarkReplyTile extends StatelessWidget {
                                 quoteBody!,
                                 style: appText.caption.copyWith(
                                   color: colors.textSecondary,
-                                  fontSize: 12,
                                   height: 1.6,
                                 ),
                               ),
@@ -586,7 +552,6 @@ class KizunarkReplyTile extends StatelessWidget {
                       body,
                       style: appText.caption.copyWith(
                         color: colors.textSecondary,
-                        fontSize: 12,
                         height: 1.6,
                       ),
                     ),
@@ -641,15 +606,11 @@ class KizunarkReplyComposer extends StatelessWidget {
                 minLines: 1,
                 maxLines: 2,
                 onChanged: onChanged,
-                style: appText.caption.copyWith(
-                  fontSize: 12,
-                  color: colors.textPrimary,
-                ),
+                style: appText.caption.copyWith(color: colors.textPrimary),
                 decoration: InputDecoration(
                   hintText: placeholder,
                   hintStyle: appText.caption.copyWith(
                     color: colors.textTertiary,
-                    fontSize: 12,
                   ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 12,
@@ -735,7 +696,6 @@ class _KizunarkGradientButton extends StatelessWidget {
                 style: appText.button.copyWith(
                   color: colors.onDark,
                   fontSize: fontSize,
-                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),

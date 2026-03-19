@@ -46,10 +46,7 @@ class _FundProjectDetailDocumentGroupCard extends StatelessWidget {
       children: <Widget>[
         Text(
           group.title,
-          style: appText.cardTitle.copyWith(
-            color: colors.textPrimary,
-            fontWeight: FontWeight.w800,
-          ),
+          style: appText.cardTitle.copyWith(color: colors.textPrimary),
         ),
         const SizedBox(height: 8),
         if (group.items.isEmpty)

@@ -41,7 +41,6 @@ class FundLotteryApplyDocumentsStep extends StatelessWidget {
         Text(
           description,
           style: appText.caption.copyWith(
-            fontSize: 12,
             color: colors.textSecondary,
             height: 1.6,
           ),
@@ -77,8 +76,7 @@ class FundLotteryApplyDocumentsStep extends StatelessWidget {
                 Expanded(
                   child: Text(
                     infoBody,
-                    style: appText.caption.copyWith(
-                      fontSize: 11,
+                    style: appText.meta.copyWith(
                       color: colors.textSecondary,
                       height: 1.6,
                     ),
@@ -95,11 +93,7 @@ class FundLotteryApplyDocumentsStep extends StatelessWidget {
           horizontalPadding: 0,
           backgroundColor: onNext == null ? colors.disabled : colors.primary,
           disabledOpacity: 1,
-          textStyle: appText.button.copyWith(
-            color: colors.brandWhite,
-            fontSize: 15,
-            fontWeight: FontWeight.w800,
-          ),
+          textStyle: appText.button.copyWith(color: colors.brandWhite),
         ),
       ],
     );
@@ -157,16 +151,13 @@ class _DocumentTile extends StatelessWidget {
                     Text(
                       title,
                       style: appText.bodyStrong.copyWith(
-                        fontSize: 13,
                         color: colors.textPrimary,
-                        fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
                       style: appText.meta.copyWith(
-                        fontSize: 11,
                         color: colors.textSecondary,
                         height: 1.5,
                       ),

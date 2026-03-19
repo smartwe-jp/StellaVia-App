@@ -141,11 +141,7 @@ class _FundProjectDetailCommentsSectionState
               minimumSize: const Size.fromHeight(40),
               side: BorderSide(color: colors.communityPrimary),
               foregroundColor: colors.communityPrimary,
-              textStyle: appText.button.copyWith(
-                color: colors.communityPrimary,
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-              ),
+              textStyle: appText.chip.copyWith(color: colors.communityPrimary),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(UiTokens.radius12),
               ),

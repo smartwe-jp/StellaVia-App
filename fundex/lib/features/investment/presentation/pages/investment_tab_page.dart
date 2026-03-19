@@ -371,11 +371,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
               children: <Widget>[
                 Text(
                   l10n.fundListTitle,
-                  style: appText.pageTitle.copyWith(
-                    color: colors.textPrimary,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 18,
-                  ),
+                  style: appText.pageTitle.copyWith(color: colors.textPrimary),
                 ),
                 const SizedBox(height: 10),
                 SingleChildScrollView(
@@ -552,7 +548,6 @@ class _FilterChip extends StatelessWidget {
           child: Text(
             label,
             style: appText.chip.copyWith(
-              fontWeight: FontWeight.w600,
               color: selected ? colors.brandWhite : colors.textSecondary,
             ),
           ),
@@ -680,7 +675,6 @@ class _FundProjectCard extends StatelessWidget {
                             volumeText,
                             style: appText.chip.copyWith(
                               color: colors.textSecondary,
-                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
@@ -777,7 +771,6 @@ class _FundProjectCard extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: appText.button.copyWith(
                             color: colors.brandWhite,
-                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
@@ -827,10 +820,7 @@ class _FundProjectCard extends StatelessWidget {
                           ),
                           Text(
                             viewDetailText,
-                            style: appText.link.copyWith(
-                              color: colors.primary,
-                              fontWeight: FontWeight.w600,
-                            ),
+                            style: appText.link.copyWith(color: colors.primary),
                           ),
                         ],
                       ),
@@ -901,7 +891,6 @@ class _HeroInfoBubble extends StatelessWidget {
           Text(
             label,
             style: appText.micro.copyWith(
-              fontSize: 8,
               color: colors.textTertiary,
               height: 1.1,
             ),
@@ -910,7 +899,6 @@ class _HeroInfoBubble extends StatelessWidget {
             value,
             style: appText.bodyStrong.copyWith(
               color: colors.textPrimary,
-              fontWeight: FontWeight.w800,
               height: 1.1,
             ),
           ),
@@ -941,11 +929,7 @@ class _PillTag extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: context.appTextTheme.micro.copyWith(
-          color: foregroundColor,
-          fontSize: 9,
-          fontWeight: FontWeight.w700,
-        ),
+        style: context.appTextTheme.micro.copyWith(color: foregroundColor),
       ),
     );
   }
@@ -972,19 +956,13 @@ class _CardStatCell extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text(
-          label,
-          style: appText.meta.copyWith(fontSize: 9, color: colors.textTertiary),
-        ),
+        Text(label, style: appText.meta.copyWith(color: colors.textTertiary)),
         const SizedBox(height: 2),
         Text(
           value,
           style:
               (useNumericValueStyle ? appText.numericBody : appText.bodyStrong)
-                  .copyWith(
-                    color: valueColor ?? colors.textPrimary,
-                    fontWeight: FontWeight.w800,
-                  ),
+                  .copyWith(color: valueColor ?? colors.textPrimary),
         ),
       ],
     );

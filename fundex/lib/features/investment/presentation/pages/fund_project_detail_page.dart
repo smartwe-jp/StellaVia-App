@@ -131,7 +131,8 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                           const SizedBox(height: UiTokens.spacing12),
                           FundProjectDetailYieldHighlightCard(
                             label: context
-                                .l10n.fundDetailPlannedDistributionRateLabel,
+                                .l10n
+                                .fundDetailPlannedDistributionRateLabel,
                             value: viewData.yieldDisplay,
                             disclaimer: context.l10n.fundDetailYieldDisclaimer,
                           ),
@@ -187,7 +188,6 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                                 staticContent.riskSection.warning,
                                 style: appText.bodyStrong.copyWith(
                                   color: colors.dangerForeground,
-                                  fontWeight: FontWeight.w800,
                                   height: 1.6,
                                 ),
                               ),
@@ -198,14 +198,16 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                                   .map(
                                     (FundDetailRiskItem item) =>
                                         FundDetailDisclosureItemData(
-                                      title: item.title,
-                                      body: item.body,
-                                    ),
+                                          title: item.title,
+                                          body: item.body,
+                                        ),
                                   )
                                   .toList(growable: false),
                             ),
                             if (staticContent
-                                .riskSection.footnotes.isNotEmpty) ...<Widget>[
+                                .riskSection
+                                .footnotes
+                                .isNotEmpty) ...<Widget>[
                               const SizedBox(height: UiTokens.spacing8),
                               Text(
                                 staticContent.riskSection.footnotes.join('\n'),
@@ -244,31 +246,40 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                               if (viewData.contractOverviewItems.isNotEmpty ||
                                   viewData.contractScheduleItems.isNotEmpty)
                                 const SizedBox(height: UiTokens.spacing8),
-                              for (var index = 0;
-                                  index < staticContent.legalSections.length;
-                                  index++) ...<Widget>[
+                              for (
+                                var index = 0;
+                                index < staticContent.legalSections.length;
+                                index++
+                              ) ...<Widget>[
                                 if (staticContent
-                                    .legalSections[index].rows.isNotEmpty)
+                                    .legalSections[index]
+                                    .rows
+                                    .isNotEmpty)
                                   FundDetailKeyValueCard(
                                     title: staticContent
-                                        .legalSections[index].title,
-                                    rows:
-                                        staticContent.legalSections[index].rows
-                                            .map(
-                                              (FundDetailLegalRow row) =>
-                                                  FundDetailKeyValueRowData(
+                                        .legalSections[index]
+                                        .title,
+                                    rows: staticContent
+                                        .legalSections[index]
+                                        .rows
+                                        .map(
+                                          (FundDetailLegalRow row) =>
+                                              FundDetailKeyValueRowData(
                                                 label: row.label,
                                                 value: row.value,
                                               ),
-                                            )
-                                            .toList(growable: false),
+                                        )
+                                        .toList(growable: false),
                                   )
                                 else
                                   FundDetailTextCard(
                                     title: staticContent
-                                        .legalSections[index].title,
-                                    body: staticContent
-                                            .legalSections[index].body ??
+                                        .legalSections[index]
+                                        .title,
+                                    body:
+                                        staticContent
+                                            .legalSections[index]
+                                            .body ??
                                         '',
                                   ),
                                 if (index <
@@ -367,18 +378,12 @@ class _FundDetailAchievementBanner extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: appText.chip.copyWith(
-                color: colors.onDark,
-                fontWeight: FontWeight.w700,
-              ),
+              style: appText.chip.copyWith(color: colors.onDark),
             ),
           ),
           Text(
             value,
-            style: appText.numericTitle.copyWith(
-              color: colors.onDark,
-              fontWeight: FontWeight.w900,
-            ),
+            style: appText.numericTitle.copyWith(color: colors.onDark),
           ),
         ],
       ),

@@ -76,7 +76,6 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: appText.sectionTitle.copyWith(
                     color: colors.textPrimary,
-                    fontWeight: FontWeight.w800,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -106,14 +105,12 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                           deadlineLabel,
                           style: appText.bodyStrong.copyWith(
                             color: colors.dangerForeground,
-                            fontWeight: FontWeight.w800,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           deadlineValue,
                           style: appText.numericTitle.copyWith(
-                            fontSize: 18,
                             color: colors.danger,
                             fontWeight: FontWeight.w900,
                           ),
@@ -149,7 +146,6 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                                   style: appText.caption.copyWith(
                                     color: colors.warningForeground,
                                     height: 1.6,
-                                    fontWeight: FontWeight.w800,
                                   ),
                                 ),
                                 TextSpan(text: coolingOffBody),
@@ -248,10 +244,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                   ),
                   child: Text(
                     laterButtonLabel,
-                    style: appText.button.copyWith(
-                      color: colors.textPrimary,
-                      fontWeight: FontWeight.w800,
-                    ),
+                    style: appText.button.copyWith(color: colors.textPrimary),
                   ),
                 ),
               ],
@@ -298,9 +291,7 @@ class _CopyButton extends StatelessWidget {
 TextStyle _depositValueStyle(AppSemanticTextTheme appText, String value) {
   final trimmed = value.trim();
   final looksNumeric = _looksNumericLikeValue(trimmed);
-  return (looksNumeric ? appText.numericBody : appText.bodyStrong).copyWith(
-    fontWeight: FontWeight.w800,
-  );
+  return looksNumeric ? appText.numericBody : appText.bodyStrong;
 }
 
 bool _looksNumericLikeValue(String value) {

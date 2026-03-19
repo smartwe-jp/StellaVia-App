@@ -47,10 +47,7 @@ class FundProjectDetailProtectionStructureCard extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Text(
                         '${data.primaryLabel} ${(data.primaryRatio * 100).round()}%',
-                        style: appText.micro.copyWith(
-                          color: colors.onDark,
-                          fontWeight: FontWeight.w800,
-                        ),
+                        style: appText.micro.copyWith(color: colors.onDark),
                       ),
                     ),
                   ),
@@ -61,10 +58,7 @@ class FundProjectDetailProtectionStructureCard extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Text(
                         '${data.secondaryLabel} ${(data.secondaryRatio * 100).round()}%',
-                        style: appText.micro.copyWith(
-                          color: colors.onDark,
-                          fontWeight: FontWeight.w800,
-                        ),
+                        style: appText.micro.copyWith(color: colors.onDark),
                       ),
                     ),
                   ),

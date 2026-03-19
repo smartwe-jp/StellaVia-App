@@ -70,7 +70,6 @@ class FundLotteryApplySubmittedStep extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: appText.sectionTitle.copyWith(
                     color: colors.textPrimary,
-                    fontWeight: FontWeight.w800,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -99,16 +98,13 @@ class FundLotteryApplySubmittedStep extends StatelessWidget {
                           announcementLabel,
                           style: appText.bodyStrong.copyWith(
                             color: colors.communitySecondary,
-                            fontWeight: FontWeight.w800,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           announcementValue,
                           style: appText.numericTitle.copyWith(
-                            fontSize: 18,
                             color: colors.communitySecondary,
-                            fontWeight: FontWeight.w800,
                           ),
                         ),
                       ],
@@ -146,14 +142,10 @@ class FundLotteryApplySubmittedStep extends StatelessWidget {
                                   ),
                                   Text(
                                     row.value,
-                                    style:
-                                        _submittedValueStyle(
-                                          appText,
-                                          row.value,
-                                        ).copyWith(
-                                          color: rightValueColor,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                    style: _submittedValueStyle(
+                                      appText,
+                                      row.value,
+                                    ).copyWith(color: rightValueColor),
                                   ),
                                 ],
                               ),
@@ -215,10 +207,7 @@ class FundLotteryApplySubmittedStep extends StatelessWidget {
                   ),
                   child: Text(
                     demoResultLabel,
-                    style: appText.button.copyWith(
-                      color: colors.textPrimary,
-                      fontWeight: FontWeight.w800,
-                    ),
+                    style: appText.button.copyWith(color: colors.textPrimary),
                   ),
                 ),
               ],
@@ -233,9 +222,7 @@ class FundLotteryApplySubmittedStep extends StatelessWidget {
 TextStyle _submittedValueStyle(AppSemanticTextTheme appText, String value) {
   final trimmed = value.trim();
   final looksNumeric = _looksNumericLikeValue(trimmed);
-  return (looksNumeric ? appText.numericBody : appText.bodyStrong).copyWith(
-    fontWeight: FontWeight.w700,
-  );
+  return looksNumeric ? appText.numericBody : appText.bodyStrong;
 }
 
 bool _looksNumericLikeValue(String value) {

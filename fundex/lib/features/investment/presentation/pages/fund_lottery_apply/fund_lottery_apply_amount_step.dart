@@ -82,9 +82,7 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
                 Text(
                   investmentAmountLabel,
                   style: appText.inputLabel.copyWith(
-                    fontSize: 12,
                     color: colors.textSecondary,
-                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 //const SizedBox(height: 6),
@@ -172,11 +170,7 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
               children: <Widget>[
                 Text(
                   estimatedDistributionLabel,
-                  style: appText.caption.copyWith(
-                    fontSize: 11,
-                    color: colors.textSecondary,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: appText.meta.copyWith(color: colors.textSecondary),
                 ),
                 const SizedBox(height: 4),
                 RichText(
@@ -192,8 +186,6 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
                         text: ' $estimatedDistributionSuffix',
                         style: appText.numericBody.copyWith(
                           color: colors.success,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w800,
                         ),
                       ),
                     ],
@@ -247,11 +239,7 @@ class _BalanceCard extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     label,
-                    style: appText.caption.copyWith(
-                      fontSize: 11,
-                      color: colors.textSecondary,
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: appText.meta.copyWith(color: colors.textSecondary),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -278,11 +266,7 @@ class _BalanceCard extends StatelessWidget {
               ),
               child: Text(
                 actionLabel,
-                style: appText.chip.copyWith(
-                  fontSize: 12,
-                  color: colors.primary,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: appText.chip.copyWith(color: colors.primary),
               ),
             ),
           ],
@@ -325,9 +309,7 @@ class _QuickAmountChip extends StatelessWidget {
           child: Text(
             label,
             style: appText.chip.copyWith(
-              fontSize: 12,
               color: selected ? colors.primary : colors.textSecondary,
-              fontWeight: FontWeight.w800,
             ),
           ),
         ),
@@ -383,7 +365,7 @@ class _BalanceWarningCard extends StatelessWidget {
                           style: appText.caption.copyWith(
                             color: colors.dangerForeground,
                             height: 1.6,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         TextSpan(text: body),
@@ -411,7 +393,6 @@ class _BalanceWarningCard extends StatelessWidget {
                   actionLabel!,
                   style: appText.button.copyWith(
                     color: colors.dangerForeground,
-                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),

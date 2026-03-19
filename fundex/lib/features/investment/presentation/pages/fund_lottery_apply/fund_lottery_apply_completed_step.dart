@@ -59,7 +59,6 @@ class FundLotteryApplyCompletedStep extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: appText.sectionTitle.copyWith(
                     color: colors.textPrimary,
-                    fontWeight: FontWeight.w800,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -89,7 +88,6 @@ class FundLotteryApplyCompletedStep extends StatelessWidget {
                             text: receiptValue,
                             style: appText.bodyStrong.copyWith(
                               color: colors.textPrimary,
-                              fontWeight: FontWeight.w800,
                             ),
                           ),
                         ],
