@@ -79,7 +79,6 @@ class FundHomeHeroSummary extends StatelessWidget {
                         greeting,
                         style: appText.heroSubtitle.copyWith(
                           color: foregroundColor,
-                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
@@ -169,10 +168,7 @@ class FundGuestBrowsingBar extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     title,
-                    style: appText.bodyStrong.copyWith(
-                      color: colors.onDark,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: appText.bodyStrong.copyWith(color: colors.onDark),
                   ),
                   const SizedBox(height: 2),
                   Text(
@@ -242,10 +238,7 @@ class _FundGuestActionButton extends StatelessWidget {
           ),
           child: Text(
             label,
-            style: appText.button.copyWith(
-              color: foregroundColor,
-              fontWeight: FontWeight.w700,
-            ),
+            style: appText.button.copyWith(color: foregroundColor),
           ),
         ),
       ),
@@ -326,8 +319,8 @@ class _FundHeroMetricCard extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final valueStyle = isPrimary
-        ? appText.numericHeadline
-        : appText.numericTitle;
+        ? appText.heroMetricPrimary
+        : appText.heroMetricSecondary;
     final backgroundGradient = isPrimary
         ? <Color>[
             colors.heroMiddle.withValues(alpha: 0.82),
@@ -360,27 +353,15 @@ class _FundHeroMetricCard extends StatelessWidget {
             label,
             style: appText.caption.copyWith(
               color: colors.onDark.withValues(alpha: 0.6),
-              fontWeight: FontWeight.w500,
             ),
           ),
           const SizedBox(height: 2),
-          Text(
-            value,
-            style: valueStyle.copyWith(
-              color: colors.onDark,
-              fontWeight: FontWeight.w800,
-              fontSize: isPrimary ? 26 : 16,
-              height: isPrimary ? 1.1 : 1.2,
-            ),
-          ),
+          Text(value, style: valueStyle.copyWith(color: colors.onDark)),
           if (subtitle != null) ...<Widget>[
             const SizedBox(height: 2),
             Text(
               subtitle!,
-              style: appText.caption.copyWith(
-                color: colors.success,
-                fontWeight: FontWeight.w600,
-              ),
+              style: appText.chip.copyWith(color: colors.success),
             ),
           ],
         ],
@@ -486,10 +467,7 @@ class FundReminderCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   data.title,
-                  style: appText.cardTitle.copyWith(
-                    color: palette.titleColor,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: appText.cardTitle.copyWith(color: palette.titleColor),
                 ),
               ),
               if (data.badgeLabel != null)
@@ -506,7 +484,6 @@ class FundReminderCard extends StatelessWidget {
                     data.badgeLabel!,
                     style: appText.chip.copyWith(
                       color: palette.badgeForegroundColor,
-                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
@@ -579,10 +556,7 @@ class FundReminderCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: Text(
-                  data.actionLabel!,
-                  style: appText.chip.copyWith(fontWeight: FontWeight.w700),
-                ),
+                child: Text(data.actionLabel!, style: appText.chip),
               ),
             ),
           ],
@@ -746,12 +720,7 @@ class FundSectionHeader extends StatelessWidget {
 
     return Row(
       children: <Widget>[
-        Expanded(
-          child: Text(
-            title,
-            style: appText.sectionTitle.copyWith(fontWeight: FontWeight.w700),
-          ),
-        ),
+        Expanded(child: Text(title, style: appText.sectionTitle)),
         if (actionLabel != null)
           TextButton(
             onPressed: onActionTap,
@@ -951,7 +920,6 @@ class FundFeaturedFundCard extends StatelessWidget {
                                         tag.label,
                                         style: appText.micro.copyWith(
                                           color: tag.foregroundColor,
-                                          fontWeight: FontWeight.w700,
                                         ),
                                       ),
                                     ),
@@ -972,9 +940,7 @@ class FundFeaturedFundCard extends StatelessWidget {
                             data.title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: appText.cardTitle.copyWith(
-                              fontWeight: FontWeight.w900,
-                            ),
+                            style: appText.cardTitle,
                           ),
 
                           const SizedBox(height: UiTokens.spacing8),
@@ -996,7 +962,6 @@ class FundFeaturedFundCard extends StatelessWidget {
                                       data.annualYield,
                                       style: appText.numericHeadline.copyWith(
                                         color: colors.danger,
-                                        fontWeight: FontWeight.w900,
                                         height: 1.0,
                                       ),
                                     ),
@@ -1201,19 +1166,13 @@ class FundActiveFundCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Expanded(
-                        child: Text(
-                          data.title,
-                          style: appText.cardTitle.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
+                        child: Text(data.title, style: appText.cardTitle),
                       ),
                       const SizedBox(width: UiTokens.spacing8),
                       Text(
                         data.annualYield,
                         style: appText.numericTitle.copyWith(
                           color: colors.danger,
-                          fontWeight: FontWeight.w800,
                         ),
                       ),
                     ],
@@ -1235,7 +1194,6 @@ class FundActiveFundCard extends StatelessWidget {
                           row.value,
                           style: appText.bodyStrong.copyWith(
                             color: row.valueColor ?? colors.textPrimary,
-                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ],

@@ -81,10 +81,7 @@ class KizunarkNoticeBanner extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: appText.caption.copyWith(
-                  color: colors.communityPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: appText.chip.copyWith(color: colors.communityPrimary),
               ),
             ),
           ],
@@ -133,7 +130,6 @@ class KizunarkAvatarBadge extends StatelessWidget {
         style: appText.chip.copyWith(
           color: appColors.onDark,
           fontSize: fontSize,
-          fontWeight: FontWeight.w800,
         ),
       ),
     );
@@ -488,9 +484,8 @@ class KizunarkReplyTile extends StatelessWidget {
                         Expanded(
                           child: RichText(
                             text: TextSpan(
-                              style: appText.caption.copyWith(
+                              style: appText.bodyStrong.copyWith(
                                 color: colors.textPrimary,
-                                fontWeight: FontWeight.w700,
                               ),
                               children: <InlineSpan>[
                                 TextSpan(text: displayName),
@@ -529,9 +524,8 @@ class KizunarkReplyTile extends StatelessWidget {
                             children: <Widget>[
                               Text(
                                 quoteTitle ?? '',
-                                style: appText.caption.copyWith(
+                                style: appText.bodyStrong.copyWith(
                                   color: colors.textPrimary,
-                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                               const SizedBox(height: 2),

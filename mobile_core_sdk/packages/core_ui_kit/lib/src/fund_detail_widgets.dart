@@ -301,7 +301,6 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
                           badge.label,
                           style: appText.chip.copyWith(
                             color: badge.foregroundColor,
-                            fontWeight: FontWeight.w800,
                           ),
                         ),
                       ),
@@ -342,10 +341,7 @@ class FundDetailSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            title,
-            style: appText.sectionTitle.copyWith(fontWeight: FontWeight.w800),
-          ),
+          Text(title, style: appText.sectionTitle),
           const SizedBox(height: UiTokens.spacing8),
           child,
         ],
@@ -462,10 +458,7 @@ class FundDetailMediaPreview extends StatelessWidget {
                   ),
                   child: Text(
                     overlayLabel!,
-                    style: appText.chip.copyWith(
-                      color: colors.textPrimary,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: appText.chip.copyWith(color: colors.textPrimary),
                   ),
                 ),
               ),
@@ -508,18 +501,12 @@ class FundDetailInfoGrid extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           item.label,
-                          style: appText.caption.copyWith(
+                          style: appText.inputLabel.copyWith(
                             color: colors.textSecondary,
-                            fontWeight: FontWeight.w600,
                           ),
                         ),
                         const SizedBox(height: 4),
-                        Text(
-                          item.value,
-                          style: appText.bodyStrong.copyWith(
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
+                        Text(item.value, style: appText.bodyStrong),
                       ],
                     ),
                   ),
@@ -616,18 +603,8 @@ class _FundDetailTableCell extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
-    final labelStyle = appText.micro.copyWith(
-      fontSize: 10,
-      color: colors.textTertiary,
-      fontWeight: FontWeight.w500,
-      height: 1.2,
-    );
-    final valueStyle = appText.bodyStrong.copyWith(
-      fontSize: 13,
-      color: colors.textPrimary,
-      fontWeight: FontWeight.w700,
-      height: 1.35,
-    );
+    final labelStyle = appText.tableLabel.copyWith(color: colors.textTertiary);
+    final valueStyle = appText.tableValue.copyWith(color: colors.textPrimary);
 
     final child = Padding(
       padding: const EdgeInsets.all(12),
@@ -694,10 +671,7 @@ class FundDetailTextCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            title,
-            style: appText.cardTitle.copyWith(fontWeight: FontWeight.w800),
-          ),
+          Text(title, style: appText.cardTitle),
           const SizedBox(height: 6),
           Text(
             body,
@@ -731,10 +705,7 @@ class FundDetailKeyValueCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            title,
-            style: appText.cardTitle.copyWith(fontWeight: FontWeight.w800),
-          ),
+          Text(title, style: appText.cardTitle),
           const SizedBox(height: 6),
           for (var index = 0; index < rows.length; index++) ...<Widget>[
             Row(
@@ -748,12 +719,7 @@ class FundDetailKeyValueCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: UiTokens.spacing8),
-                Text(
-                  rows[index].value,
-                  style: appText.bodyStrong.copyWith(
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
+                Text(rows[index].value, style: appText.bodyStrong),
               ],
             ),
             if (index < rows.length - 1) const SizedBox(height: 6),
@@ -810,12 +776,7 @@ class FundDetailDocumentList extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              items[index].title,
-                              style: appText.bodyStrong.copyWith(
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
+                            Text(items[index].title, style: appText.bodyStrong),
                             const SizedBox(height: 2),
                             Text(
                               items[index].subtitle,
@@ -1032,10 +993,7 @@ class _DisclosureTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(UiTokens.radius16),
               side: BorderSide(color: colors.border),
             ),
-            title: Text(
-              item.title,
-              style: appText.bodyStrong.copyWith(fontWeight: FontWeight.w700),
-            ),
+            title: Text(item.title, style: appText.bodyStrong),
             children: <Widget>[
               Text(
                 item.body,

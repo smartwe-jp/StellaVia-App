@@ -128,6 +128,18 @@ class AppThemeFactory {
         color: semanticColors.onDark.withValues(alpha: 0.78),
         height: 1.25,
       ),
+      heroMetricPrimary: AppTypographyTokens.numericStyle(
+        size: 26,
+        weight: FontWeight.w800,
+        color: semanticColors.textPrimary,
+        height: 1.1,
+      ),
+      heroMetricSecondary: AppTypographyTokens.numericStyle(
+        size: 16,
+        weight: FontWeight.w800,
+        color: semanticColors.textPrimary,
+        height: 1.2,
+      ),
       pageTitle: AppTypographyTokens.sansStyle(
         size: 18,
         weight: FontWeight.w800,
@@ -251,6 +263,18 @@ class AppThemeFactory {
         weight: FontWeight.w700,
         color: semanticColors.textSecondary,
         height: 1.2,
+      ),
+      tableLabel: AppTypographyTokens.sansStyle(
+        size: 10,
+        weight: FontWeight.w500,
+        color: semanticColors.textTertiary,
+        height: 1.2,
+      ),
+      tableValue: AppTypographyTokens.sansStyle(
+        size: 13,
+        weight: FontWeight.w700,
+        color: semanticColors.textPrimary,
+        height: 1.35,
       ),
     );
 

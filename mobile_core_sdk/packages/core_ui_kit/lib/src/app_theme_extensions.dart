@@ -285,11 +285,7 @@ class AppSemanticColorTheme extends ThemeExtension<AppSemanticColorTheme> {
       heroStart: _lerpColor(heroStart, other.heroStart, t),
       heroMiddle: _lerpColor(heroMiddle, other.heroMiddle, t),
       heroEnd: _lerpColor(heroEnd, other.heroEnd, t),
-      communityPrimary: _lerpColor(
-        communityPrimary,
-        other.communityPrimary,
-        t,
-      ),
+      communityPrimary: _lerpColor(communityPrimary, other.communityPrimary, t),
       communitySecondary: _lerpColor(
         communitySecondary,
         other.communitySecondary,
@@ -315,6 +311,8 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
   const AppSemanticTextTheme({
     required this.heroTitle,
     required this.heroSubtitle,
+    required this.heroMetricPrimary,
+    required this.heroMetricSecondary,
     required this.pageTitle,
     required this.sectionTitle,
     required this.cardTitle,
@@ -335,10 +333,14 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
     required this.numericTitle,
     required this.numericBody,
     required this.numericCaption,
+    required this.tableLabel,
+    required this.tableValue,
   });
 
   final TextStyle heroTitle;
   final TextStyle heroSubtitle;
+  final TextStyle heroMetricPrimary;
+  final TextStyle heroMetricSecondary;
   final TextStyle pageTitle;
   final TextStyle sectionTitle;
   final TextStyle cardTitle;
@@ -359,11 +361,15 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
   final TextStyle numericTitle;
   final TextStyle numericBody;
   final TextStyle numericCaption;
+  final TextStyle tableLabel;
+  final TextStyle tableValue;
 
   @override
   AppSemanticTextTheme copyWith({
     TextStyle? heroTitle,
     TextStyle? heroSubtitle,
+    TextStyle? heroMetricPrimary,
+    TextStyle? heroMetricSecondary,
     TextStyle? pageTitle,
     TextStyle? sectionTitle,
     TextStyle? cardTitle,
@@ -384,10 +390,14 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
     TextStyle? numericTitle,
     TextStyle? numericBody,
     TextStyle? numericCaption,
+    TextStyle? tableLabel,
+    TextStyle? tableValue,
   }) {
     return AppSemanticTextTheme(
       heroTitle: heroTitle ?? this.heroTitle,
       heroSubtitle: heroSubtitle ?? this.heroSubtitle,
+      heroMetricPrimary: heroMetricPrimary ?? this.heroMetricPrimary,
+      heroMetricSecondary: heroMetricSecondary ?? this.heroMetricSecondary,
       pageTitle: pageTitle ?? this.pageTitle,
       sectionTitle: sectionTitle ?? this.sectionTitle,
       cardTitle: cardTitle ?? this.cardTitle,
@@ -408,6 +418,8 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
       numericTitle: numericTitle ?? this.numericTitle,
       numericBody: numericBody ?? this.numericBody,
       numericCaption: numericCaption ?? this.numericCaption,
+      tableLabel: tableLabel ?? this.tableLabel,
+      tableValue: tableValue ?? this.tableValue,
     );
   }
 
@@ -423,6 +435,16 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
     return AppSemanticTextTheme(
       heroTitle: TextStyle.lerp(heroTitle, other.heroTitle, t)!,
       heroSubtitle: TextStyle.lerp(heroSubtitle, other.heroSubtitle, t)!,
+      heroMetricPrimary: TextStyle.lerp(
+        heroMetricPrimary,
+        other.heroMetricPrimary,
+        t,
+      )!,
+      heroMetricSecondary: TextStyle.lerp(
+        heroMetricSecondary,
+        other.heroMetricSecondary,
+        t,
+      )!,
       pageTitle: TextStyle.lerp(pageTitle, other.pageTitle, t)!,
       sectionTitle: TextStyle.lerp(sectionTitle, other.sectionTitle, t)!,
       cardTitle: TextStyle.lerp(cardTitle, other.cardTitle, t)!,
@@ -438,11 +460,7 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
       inputText: TextStyle.lerp(inputText, other.inputText, t)!,
       helper: TextStyle.lerp(helper, other.helper, t)!,
       link: TextStyle.lerp(link, other.link, t)!,
-      numericDisplay: TextStyle.lerp(
-        numericDisplay,
-        other.numericDisplay,
-        t,
-      )!,
+      numericDisplay: TextStyle.lerp(numericDisplay, other.numericDisplay, t)!,
       numericHeadline: TextStyle.lerp(
         numericHeadline,
         other.numericHeadline,
@@ -450,11 +468,9 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
       )!,
       numericTitle: TextStyle.lerp(numericTitle, other.numericTitle, t)!,
       numericBody: TextStyle.lerp(numericBody, other.numericBody, t)!,
-      numericCaption: TextStyle.lerp(
-        numericCaption,
-        other.numericCaption,
-        t,
-      )!,
+      numericCaption: TextStyle.lerp(numericCaption, other.numericCaption, t)!,
+      tableLabel: TextStyle.lerp(tableLabel, other.tableLabel, t)!,
+      tableValue: TextStyle.lerp(tableValue, other.tableValue, t)!,
     );
   }
 }
@@ -717,9 +733,11 @@ class AppFTKTheme extends ThemeExtension<AppFTKTheme> {
           primaryButtonShadowColor ?? this.primaryButtonShadowColor,
       primaryButtonTextStyle:
           primaryButtonTextStyle ?? this.primaryButtonTextStyle,
-      categorySelectedBackgroundColor: categorySelectedBackgroundColor ??
+      categorySelectedBackgroundColor:
+          categorySelectedBackgroundColor ??
           this.categorySelectedBackgroundColor,
-      categorySelectedForegroundColor: categorySelectedForegroundColor ??
+      categorySelectedForegroundColor:
+          categorySelectedForegroundColor ??
           this.categorySelectedForegroundColor,
       categorySelectedLabelStyle:
           categorySelectedLabelStyle ?? this.categorySelectedLabelStyle,
@@ -762,7 +780,8 @@ class AppFTKTheme extends ThemeExtension<AppFTKTheme> {
       photoCountChipTextStyle:
           photoCountChipTextStyle ?? this.photoCountChipTextStyle,
       ratingAccentColor: ratingAccentColor ?? this.ratingAccentColor,
-      hostActionButtonBackgroundColor: hostActionButtonBackgroundColor ??
+      hostActionButtonBackgroundColor:
+          hostActionButtonBackgroundColor ??
           this.hostActionButtonBackgroundColor,
       hostActionButtonShadowColor:
           hostActionButtonShadowColor ?? this.hostActionButtonShadowColor,
