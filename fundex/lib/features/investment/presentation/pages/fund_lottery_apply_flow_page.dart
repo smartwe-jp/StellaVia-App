@@ -18,9 +18,16 @@ import 'fund_lottery_apply/fund_lottery_apply_selected_step.dart';
 import 'fund_lottery_apply/fund_lottery_apply_submitted_step.dart';
 
 class FundLotteryApplyFlowPage extends ConsumerStatefulWidget {
-  const FundLotteryApplyFlowPage({super.key, required this.projectId});
+  const FundLotteryApplyFlowPage({
+    super.key,
+    required this.projectId,
+    this.initialStep = FundLotteryApplyStep.amountInput,
+    this.allowSubmittedResultAdvance = true,
+  });
 
   final String projectId;
+  final FundLotteryApplyStep initialStep;
+  final bool allowSubmittedResultAdvance;
 
   @override
   ConsumerState<FundLotteryApplyFlowPage> createState() =>
@@ -36,7 +43,7 @@ class _FundLotteryApplyFlowPageState
 
   late final TextEditingController _amountController;
 
-  FundLotteryApplyStep _currentStep = FundLotteryApplyStep.amountInput;
+  late FundLotteryApplyStep _currentStep;
   int _amount = 0;
   final Set<int> _checkedDocuments = <int>{};
   bool _agreedToApply = false;
@@ -45,6 +52,7 @@ class _FundLotteryApplyFlowPageState
   @override
   void initState() {
     super.initState();
+    _currentStep = widget.initialStep;
     _amountController = TextEditingController();
     _amountController.addListener(_handleAmountChanged);
   }
@@ -98,7 +106,7 @@ class _FundLotteryApplyFlowPageState
 
   void _goPreviousOrPop() {
     final previous = _currentStep.previous;
-    if (previous == null) {
+    if (previous == null || previous.index < widget.initialStep.index) {
       if (context.canPop()) {
         context.pop();
       } else {
@@ -577,7 +585,10 @@ class _FundLotteryApplyFlowPageState
                             onBackHome: _goHome,
                             demoResultLabel:
                                 l10n.lotteryApplyDemoCheckResultAction,
-                            onDemoCheckResult: _goNextStep,
+                            onDemoCheckResult:
+                                widget.allowSubmittedResultAdvance
+                                ? _goNextStep
+                                : null,
                           ),
                         FundLotteryApplyStep.selected =>
                           FundLotteryApplySelectedStep(

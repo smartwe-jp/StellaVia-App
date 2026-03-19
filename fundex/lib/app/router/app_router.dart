@@ -16,6 +16,7 @@ import '../../features/home/presentation/pages/home_overview_tab_page.dart';
 import '../../features/investment/presentation/pages/fund_project_detail_page.dart';
 import '../../features/investment/presentation/pages/fund_lottery_apply_flow_page.dart';
 import '../../features/investment/presentation/pages/investment_tab_page.dart';
+import '../../features/investment/presentation/support/fund_lottery_apply_step.dart';
 import '../../features/main_shell/presentation/pages/main_shell_page.dart';
 import '../../features/member_profile/presentation/pages/member_profile_edit_flow_page.dart';
 import '../../features/member_profile/presentation/pages/member_profile_intake_page.dart';
@@ -222,7 +223,19 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (BuildContext context, GoRouterState state) {
                       final id = state.pathParameters['id'] ?? '';
-                      return FundLotteryApplyFlowPage(projectId: id);
+                      final initialStep = fundLotteryApplyStepFromQueryValue(
+                        state.uri.queryParameters['step'],
+                      );
+                      final allowSubmittedResultAdvance =
+                          state.uri.queryParameters['allowSubmittedAdvance'] !=
+                          'false';
+                      return FundLotteryApplyFlowPage(
+                        projectId: id,
+                        initialStep:
+                            initialStep ?? FundLotteryApplyStep.amountInput,
+                        allowSubmittedResultAdvance:
+                            allowSubmittedResultAdvance,
+                      );
                     },
                   ),
                 ],

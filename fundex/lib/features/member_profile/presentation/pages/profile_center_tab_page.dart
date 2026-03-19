@@ -8,6 +8,7 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/presentation/support/identity_auth_guard.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
+import '../../../investment/presentation/support/fund_lottery_apply_step.dart';
 import '../../domain/entities/mypage_models.dart';
 import '../providers/mypage_providers.dart';
 import '../support/mypage_section_support.dart';
@@ -207,7 +208,7 @@ Widget _buildPendingApplicationsSection(
                       child: Text(l10n.myPageCancelRequestAction),
                     )
                   : null,
-              onTap: _buildProjectTapHandler(context, record.projectId),
+              onTap: _buildPendingApplyTapHandler(context, record.projectId),
             ),
           )
           .toList(growable: false);
@@ -315,7 +316,7 @@ Widget _buildCoolingOffSection(
                 ),
                 child: Text(l10n.myPageCancelRequestAction),
               ),
-              onTap: _buildProjectTapHandler(context, projectId),
+              onTap: null,
             );
           })
           .toList(growable: false);
@@ -449,11 +450,16 @@ Future<void> _handleWithdrawTap(BuildContext context, WidgetRef ref) async {
   context.push('/wallet/withdraw');
 }
 
-VoidCallback? _buildProjectTapHandler(BuildContext context, String? projectId) {
+VoidCallback? _buildPendingApplyTapHandler(
+  BuildContext context,
+  String? projectId,
+) {
   if (projectId == null || projectId.trim().isEmpty) {
     return null;
   }
-  return () => context.push('/funds/$projectId');
+  return () => context.push(
+    '/funds/$projectId/lottery-apply?step=${FundLotteryApplyStep.submitted.queryValue}&allowSubmittedAdvance=false',
+  );
 }
 
 VoidCallback? _buildActiveFundDetailTapHandler(

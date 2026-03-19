@@ -27,7 +27,7 @@ class FundLotteryApplySubmittedStep extends StatelessWidget {
   final String backHomeLabel;
   final VoidCallback onBackHome;
   final String demoResultLabel;
-  final VoidCallback onDemoCheckResult;
+  final VoidCallback? onDemoCheckResult;
 
   @override
   Widget build(BuildContext context) {
