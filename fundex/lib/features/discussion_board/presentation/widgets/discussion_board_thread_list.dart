@@ -19,6 +19,10 @@ class DiscussionBoardThreadList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     if (state.isLoading && state.threads.isEmpty) {
       return const Padding(
         padding: EdgeInsets.symmetric(vertical: 24),
@@ -31,8 +35,10 @@ class DiscussionBoardThreadList extends StatelessWidget {
         child: Text(
           l10n.kizunarkEmptyState,
           textAlign: TextAlign.center,
-          style: (Theme.of(context).textTheme.bodyMedium ?? const TextStyle())
-              .copyWith(color: AppColorTokens.fundexTextSecondary, height: 1.6),
+          style: appText.bodyMuted.copyWith(
+            color: colors.textSecondary,
+            height: 1.6,
+          ),
         ),
       );
     }

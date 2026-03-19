@@ -25,6 +25,10 @@ class FundProjectDetailProtectionStructureCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return FundDetailContentCard(
       padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
       child: Column(
@@ -39,34 +43,28 @@ class FundProjectDetailProtectionStructureCard extends StatelessWidget {
                   Expanded(
                     flex: (data.primaryRatio * 1000).round().clamp(1, 999),
                     child: Container(
-                      color: AppColorTokens.fundexAccent,
+                      color: colors.primary,
                       alignment: Alignment.center,
                       child: Text(
                         '${data.primaryLabel} ${(data.primaryRatio * 100).round()}%',
-                        style:
-                            (Theme.of(context).textTheme.labelSmall ??
-                                    const TextStyle())
-                                .copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w800,
-                                ),
+                        style: appText.micro.copyWith(
+                          color: colors.onDark,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                     ),
                   ),
                   Expanded(
                     flex: (data.secondaryRatio * 1000).round().clamp(1, 999),
                     child: Container(
-                      color: AppColorTokens.fundexWarning,
+                      color: colors.warning,
                       alignment: Alignment.center,
                       child: Text(
                         '${data.secondaryLabel} ${(data.secondaryRatio * 100).round()}%',
-                        style:
-                            (Theme.of(context).textTheme.labelSmall ??
-                                    const TextStyle())
-                                .copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w800,
-                                ),
+                        style: appText.micro.copyWith(
+                          color: colors.onDark,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                     ),
                   ),
@@ -80,18 +78,12 @@ class FundProjectDetailProtectionStructureCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   data.primaryLabel,
-                  style:
-                      (Theme.of(context).textTheme.labelSmall ??
-                              const TextStyle())
-                          .copyWith(color: AppColorTokens.fundexTextSecondary),
+                  style: appText.caption.copyWith(color: colors.textSecondary),
                 ),
               ),
               Text(
                 data.secondaryLabel,
-                style:
-                    (Theme.of(context).textTheme.labelSmall ??
-                            const TextStyle())
-                        .copyWith(color: AppColorTokens.fundexTextSecondary),
+                style: appText.caption.copyWith(color: colors.textSecondary),
               ),
             ],
           ),

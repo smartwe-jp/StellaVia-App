@@ -10,33 +10,23 @@ class FundProjectDetailTitleBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final titleParts = _splitProjectTitle(project.projectName);
+    final titleStyle = appText.pageTitle.copyWith(
+      color: colors.textPrimary,
+      fontWeight: FontWeight.w900,
+      height: 1.08,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         if (titleParts.$1 != null)
-          Text(
-            titleParts.$1!,
-            style:
-                (Theme.of(context).textTheme.headlineSmall ?? const TextStyle())
-                    .copyWith(
-              color: AppColorTokens.fundexText,
-              fontWeight: FontWeight.w900,
-              height: 1.05,
-            ),
-          ),
+          Text(titleParts.$1!, style: titleStyle.copyWith(height: 1.04)),
         if (titleParts.$1 != null) const SizedBox(height: 2),
-        Text(
-          titleParts.$2,
-          style:
-              (Theme.of(context).textTheme.headlineSmall ?? const TextStyle())
-                  .copyWith(
-            color: AppColorTokens.fundexText,
-            fontWeight: FontWeight.w900,
-            height: 1.12,
-          ),
-        ),
+        Text(titleParts.$2, style: titleStyle),
       ],
     );
   }

@@ -149,7 +149,8 @@ class _FundLotteryApplyFlowPageState
   }
 
   String _resolveLotteryDate(BuildContext context, FundProject project) {
-    final parsed = _parseDate(project.distributionDate) ??
+    final parsed =
+        _parseDate(project.distributionDate) ??
         _parseDate(project.offeringEndDatetime) ??
         _parseDate(project.scheduledStartDate);
     if (parsed == null) {
@@ -378,8 +379,8 @@ class _FundLotteryApplyFlowPageState
           maximumAmount: maximumAmount,
         );
         final exceededMaximum = _amount > maximumAmount;
-        final estimatedDistribution =
-            (_amount * _resolveYield(project) / 100).round();
+        final estimatedDistribution = (_amount * _resolveYield(project) / 100)
+            .round();
         final formatter = _currencyFormatter(context);
         final amountText = formatter.format(_amount);
         final deadline = DateTime.now().add(const Duration(days: 8));
@@ -412,10 +413,10 @@ class _FundLotteryApplyFlowPageState
                   child: InkWell(
                     borderRadius: BorderRadius.circular(8),
                     onTap: _goPreviousOrPop,
-                    child: const Icon(
+                    child: Icon(
                       Icons.arrow_back_rounded,
                       size: 20,
-                      color: AppColorTokens.fundexText,
+                      color: colors.textPrimary,
                     ),
                   ),
                 ),
@@ -457,7 +458,8 @@ class _FundLotteryApplyFlowPageState
                             onQuickAmountTap: _selectQuickAmount,
                             onDepositTap: () =>
                                 _showToast(l10n.myPageDepositComingSoon),
-                            showBalanceWarning: _amount > 0 &&
+                            showBalanceWarning:
+                                _amount > 0 &&
                                 (exceededMaximum || !_isBalanceEnough),
                             balanceWarningTitle: exceededMaximum
                                 ? l10n.lotteryApplyStep1MaximumWarningTitle
@@ -471,7 +473,7 @@ class _FundLotteryApplyFlowPageState
                             onBalanceWarningActionTap: exceededMaximum
                                 ? null
                                 : () =>
-                                    _showToast(l10n.myPageDepositComingSoon),
+                                      _showToast(l10n.myPageDepositComingSoon),
                             estimatedDistributionLabel: l10n
                                 .lotteryApplyStep1EstimatedDistributionLabel,
                             estimatedDistributionAmount: formatter.format(
@@ -543,10 +545,10 @@ class _FundLotteryApplyFlowPageState
                             isSubmitting: _isApplying,
                             onApply: _agreedToApply && !_isApplying
                                 ? () => _submitLotteryApply(
-                                      project: project,
-                                      unitAmount: unitAmount,
-                                      maximumAmount: maximumAmount,
-                                    )
+                                    project: project,
+                                    unitAmount: unitAmount,
+                                    maximumAmount: maximumAmount,
+                                  )
                                 : null,
                           ),
                         FundLotteryApplyStep.submitted =>
@@ -679,6 +681,7 @@ class _FlowErrorScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Scaffold(
       backgroundColor: colors.surface,
       appBar: AppNavigationBar(
@@ -695,8 +698,7 @@ class _FlowErrorScaffold extends StatelessWidget {
               Text(
                 body,
                 textAlign: TextAlign.center,
-                style: (theme.textTheme.bodyMedium ?? const TextStyle())
-                    .copyWith(color: colors.textSecondary),
+                style: appText.bodyMuted.copyWith(color: colors.textSecondary),
               ),
               const SizedBox(height: 12),
               OutlinedButton(onPressed: onRetry, child: Text(retryLabel)),

@@ -2,7 +2,7 @@ import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 
-import 'app_color_tokens.dart';
+import 'app_theme_extensions.dart';
 import 'ui_buttons.dart';
 import 'ui_tokens.dart';
 
@@ -195,10 +195,12 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
   }
 
   Widget _buildPageIndicator(BuildContext context, int imageCount) {
+    final colors = Theme.of(context).appColors;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.35),
+        color: colors.scrim.withValues(alpha: 0.35),
         borderRadius: BorderRadius.circular(999),
       ),
       child: Row(
@@ -212,8 +214,8 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
             height: 6,
             decoration: BoxDecoration(
               color: selected
-                  ? Colors.white
-                  : Colors.white.withValues(alpha: 0.5),
+                  ? colors.onDark
+                  : colors.onDark.withValues(alpha: 0.5),
               borderRadius: BorderRadius.circular(999),
             ),
           );
@@ -224,6 +226,8 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
 
   @override
   Widget build(BuildContext context) {
+    final appText = Theme.of(context).appTextTheme;
+    final colors = Theme.of(context).appColors;
     final topInset = MediaQuery.paddingOf(context).top + 12;
     final images = _normalizedImageUrls;
     final hasIndicator = images.length > 1;
@@ -252,8 +256,8 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: <Color>[
-                  Colors.black.withValues(alpha: 0.12),
-                  Colors.black.withValues(alpha: 0.42),
+                  colors.scrim.withValues(alpha: 0.12),
+                  colors.scrim.withValues(alpha: 0.42),
                 ],
               ),
             ),
@@ -295,13 +299,10 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
                         ),
                         child: Text(
                           badge.label,
-                          style:
-                              (Theme.of(context).textTheme.labelSmall ??
-                                      const TextStyle())
-                                  .copyWith(
-                                    color: badge.foregroundColor,
-                                    fontWeight: FontWeight.w800,
-                                  ),
+                          style: appText.chip.copyWith(
+                            color: badge.foregroundColor,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                       ),
                     )
@@ -335,6 +336,7 @@ class FundDetailSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appText = Theme.of(context).appTextTheme;
     return Padding(
       padding: padding,
       child: Column(
@@ -342,8 +344,7 @@ class FundDetailSection extends StatelessWidget {
         children: <Widget>[
           Text(
             title,
-            style: (Theme.of(context).textTheme.titleSmall ?? const TextStyle())
-                .copyWith(fontWeight: FontWeight.w800),
+            style: appText.sectionTitle.copyWith(fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: UiTokens.spacing8),
           child,
@@ -358,24 +359,25 @@ class FundDetailContentCard extends StatelessWidget {
     super.key,
     required this.child,
     this.padding = const EdgeInsets.all(12),
-    this.backgroundColor = AppColorTokens.fundexBackground,
-    this.borderColor = const Color(0xFFE8EEF5),
+    this.backgroundColor,
+    this.borderColor,
   });
 
   final Widget child;
   final EdgeInsetsGeometry padding;
-  final Color backgroundColor;
-  final Color borderColor;
+  final Color? backgroundColor;
+  final Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
     return Container(
       width: double.infinity,
       padding: padding,
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: backgroundColor ?? colors.surface,
         borderRadius: BorderRadius.circular(UiTokens.radius16),
-        border: Border.all(color: borderColor),
+        border: Border.all(color: borderColor ?? colors.borderSoft),
       ),
       child: child,
     );
@@ -398,6 +400,9 @@ class FundDetailMediaPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return ClipRRect(
       borderRadius: BorderRadius.circular(UiTokens.radius16),
       child: SizedBox(
@@ -407,11 +412,11 @@ class FundDetailMediaPreview extends StatelessWidget {
           fit: StackFit.expand,
           children: <Widget>[
             DecoratedBox(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: <Color>[Color(0xFFEAF1FF), Color(0xFFD9E7FF)],
+                  colors: <Color>[colors.infoSubtle, colors.primarySubtle],
                 ),
               ),
             ),
@@ -437,7 +442,7 @@ class FundDetailMediaPreview extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: <Color>[
                     Colors.transparent,
-                    Colors.black.withValues(alpha: 0.16),
+                    colors.scrim.withValues(alpha: 0.16),
                   ],
                 ),
               ),
@@ -452,18 +457,15 @@ class FundDetailMediaPreview extends StatelessWidget {
                     vertical: 5,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.92),
+                    color: colors.surface.withValues(alpha: 0.92),
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
                     overlayLabel!,
-                    style:
-                        (Theme.of(context).textTheme.labelSmall ??
-                                const TextStyle())
-                            .copyWith(
-                              color: AppColorTokens.fundexText,
-                              fontWeight: FontWeight.w700,
-                            ),
+                    style: appText.chip.copyWith(
+                      color: colors.textPrimary,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
@@ -485,6 +487,9 @@ class FundDetailInfoGrid extends StatelessWidget {
     if (items.isEmpty) {
       return const SizedBox.shrink();
     }
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
@@ -503,21 +508,17 @@ class FundDetailInfoGrid extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           item.label,
-                          style:
-                              (Theme.of(context).textTheme.labelSmall ??
-                                      const TextStyle())
-                                  .copyWith(
-                                    color: AppColorTokens.fundexTextSecondary,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                          style: appText.caption.copyWith(
+                            color: colors.textSecondary,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           item.value,
-                          style:
-                              (Theme.of(context).textTheme.bodyMedium ??
-                                      const TextStyle())
-                                  .copyWith(fontWeight: FontWeight.w800),
+                          style: appText.bodyStrong.copyWith(
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                       ],
                     ),
@@ -535,13 +536,13 @@ class FundDetailInfoTable extends StatelessWidget {
   const FundDetailInfoTable({
     super.key,
     required this.items,
-    this.borderColor = AppColorTokens.fundexBorder,
+    this.borderColor,
     this.columns = 2,
     this.minRowHeight = 0,
   });
 
   final List<FundDetailInfoItemData> items;
-  final Color borderColor;
+  final Color? borderColor;
   final int columns;
   final double minRowHeight;
 
@@ -550,6 +551,8 @@ class FundDetailInfoTable extends StatelessWidget {
     if (items.isEmpty) {
       return const SizedBox.shrink();
     }
+    final colors = Theme.of(context).appColors;
+    final effectiveBorderColor = borderColor ?? colors.border;
 
     final safeColumns = columns < 1 ? 1 : columns;
     final placeholdersNeeded =
@@ -562,17 +565,20 @@ class FundDetailInfoTable extends StatelessWidget {
 
     final radius = BorderRadius.circular(UiTokens.radius16);
     return DecoratedBox(
-      decoration: BoxDecoration(color: borderColor, borderRadius: radius),
+      decoration: BoxDecoration(
+        color: effectiveBorderColor,
+        borderRadius: radius,
+      ),
       child: Padding(
         padding: const EdgeInsets.all(1),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(UiTokens.radius16 - 1),
           child: ColoredBox(
-            color: Colors.white,
+            color: colors.surface,
             child: Table(
               border: TableBorder(
-                horizontalInside: BorderSide(color: borderColor),
-                verticalInside: BorderSide(color: borderColor),
+                horizontalInside: BorderSide(color: effectiveBorderColor),
+                verticalInside: BorderSide(color: effectiveBorderColor),
               ),
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,
               children: List<TableRow>.generate(rowCount, (int rowIndex) {
@@ -607,16 +613,18 @@ class _FundDetailTableCell extends StatelessWidget {
       return SizedBox(height: minHeight <= 0 ? 0 : minHeight);
     }
 
-    final textTheme = Theme.of(context).textTheme;
-    final labelStyle = (textTheme.labelSmall ?? const TextStyle()).copyWith(
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final labelStyle = appText.micro.copyWith(
       fontSize: 10,
-      color: AppColorTokens.fundexTextTertiary,
+      color: colors.textTertiary,
       fontWeight: FontWeight.w500,
       height: 1.2,
     );
-    final valueStyle = (textTheme.bodyMedium ?? const TextStyle()).copyWith(
+    final valueStyle = appText.bodyStrong.copyWith(
       fontSize: 13,
-      color: AppColorTokens.fundexText,
+      color: colors.textPrimary,
       fontWeight: FontWeight.w700,
       height: 1.35,
     );
@@ -679,23 +687,24 @@ class FundDetailTextCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return FundDetailContentCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             title,
-            style: (Theme.of(context).textTheme.labelLarge ?? const TextStyle())
-                .copyWith(fontWeight: FontWeight.w800),
+            style: appText.cardTitle.copyWith(fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 6),
           Text(
             body,
-            style: (Theme.of(context).textTheme.bodySmall ?? const TextStyle())
-                .copyWith(
-                  color: AppColorTokens.fundexTextSecondary,
-                  height: 1.7,
-                ),
+            style: appText.bodyMuted.copyWith(
+              color: colors.textSecondary,
+              height: 1.7,
+            ),
           ),
         ],
       ),
@@ -715,14 +724,16 @@ class FundDetailKeyValueCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return FundDetailContentCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             title,
-            style: (Theme.of(context).textTheme.labelLarge ?? const TextStyle())
-                .copyWith(fontWeight: FontWeight.w800),
+            style: appText.cardTitle.copyWith(fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 6),
           for (var index = 0; index < rows.length; index++) ...<Widget>[
@@ -731,21 +742,17 @@ class FundDetailKeyValueCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     rows[index].label,
-                    style:
-                        (Theme.of(context).textTheme.bodySmall ??
-                                const TextStyle())
-                            .copyWith(
-                              color: AppColorTokens.fundexTextSecondary,
-                            ),
+                    style: appText.bodyMuted.copyWith(
+                      color: colors.textSecondary,
+                    ),
                   ),
                 ),
                 const SizedBox(width: UiTokens.spacing8),
                 Text(
                   rows[index].value,
-                  style:
-                      (Theme.of(context).textTheme.bodySmall ??
-                              const TextStyle())
-                          .copyWith(fontWeight: FontWeight.w800),
+                  style: appText.bodyStrong.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ],
             ),
@@ -767,6 +774,9 @@ class FundDetailDocumentList extends StatelessWidget {
     if (items.isEmpty) {
       return const SizedBox.shrink();
     }
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
 
     return Column(
       children: <Widget>[
@@ -786,14 +796,12 @@ class FundDetailDocumentList extends StatelessWidget {
                         width: 34,
                         height: 34,
                         decoration: BoxDecoration(
-                          color: AppColorTokens.fundexAccent.withValues(
-                            alpha: 0.08,
-                          ),
+                          color: colors.primarySubtle,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.description_outlined,
-                          color: AppColorTokens.fundexAccent,
+                          color: colors.primary,
                           size: 18,
                         ),
                       ),
@@ -804,29 +812,24 @@ class FundDetailDocumentList extends StatelessWidget {
                           children: <Widget>[
                             Text(
                               items[index].title,
-                              style:
-                                  (Theme.of(context).textTheme.bodyMedium ??
-                                          const TextStyle())
-                                      .copyWith(fontWeight: FontWeight.w700),
+                              style: appText.bodyStrong.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                             const SizedBox(height: 2),
                             Text(
                               items[index].subtitle,
-                              style:
-                                  (Theme.of(context).textTheme.labelSmall ??
-                                          const TextStyle())
-                                      .copyWith(
-                                        color:
-                                            AppColorTokens.fundexTextSecondary,
-                                      ),
+                              style: appText.caption.copyWith(
+                                color: colors.textSecondary,
+                              ),
                             ),
                           ],
                         ),
                       ),
                       const SizedBox(width: UiTokens.spacing8),
-                      const Icon(
+                      Icon(
                         Icons.chevron_right_rounded,
-                        color: AppColorTokens.fundexTextTertiary,
+                        color: colors.textTertiary,
                       ),
                     ],
                   ),
@@ -859,12 +862,13 @@ class FundDetailStickyActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.5),
+        color: colors.surface.withValues(alpha: 0.5),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.white,
+            color: colors.surface,
             blurRadius: 10,
             offset: const Offset(0, -12),
           ),
@@ -887,8 +891,8 @@ class FundDetailStickyActionBar extends StatelessWidget {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: <Color>[
-                          Colors.white.withValues(alpha: 0.42),
-                          Colors.white.withValues(alpha: 0),
+                          colors.surface.withValues(alpha: 0.42),
+                          colors.surface.withValues(alpha: 0),
                         ],
                       ),
                     ),
@@ -924,6 +928,7 @@ class _DefaultMediaPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
@@ -933,8 +938,8 @@ class _DefaultMediaPlaceholder extends StatelessWidget {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: <Color>[
-                AppColorTokens.fundexPrimaryDark.withValues(alpha: 0.92),
-                AppColorTokens.fundexAccent.withValues(alpha: 0.82),
+                colors.heroStart.withValues(alpha: 0.92),
+                colors.primary.withValues(alpha: 0.82),
               ],
             ),
           ),
@@ -978,15 +983,16 @@ class _DetailGlassIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
     return Material(
-      color: Colors.black.withValues(alpha: 0.24),
+      color: colors.scrim.withValues(alpha: 0.24),
       borderRadius: BorderRadius.circular(999),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(999),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Icon(icon, color: Colors.white, size: 18),
+          child: Icon(icon, color: colors.onDark, size: 18),
         ),
       ),
     );
@@ -1000,14 +1006,17 @@ class _DisclosureTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return ClipRRect(
       borderRadius: BorderRadius.circular(UiTokens.radius16),
       child: Material(
-        color: AppColorTokens.fundexSurface,
+        color: colors.surface,
         child: Theme(
-          data: Theme.of(context).copyWith(
+          data: theme.copyWith(
             dividerColor: Colors.transparent,
-            splashColor: AppColorTokens.fundexAccent.withValues(alpha: 0.08),
+            splashColor: colors.primary.withValues(alpha: 0.08),
           ),
           child: ExpansionTile(
             tilePadding: const EdgeInsets.symmetric(
@@ -1017,27 +1026,23 @@ class _DisclosureTile extends StatelessWidget {
             childrenPadding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
             collapsedShape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(UiTokens.radius16),
-              side: const BorderSide(color: AppColorTokens.fundexBorder),
+              side: BorderSide(color: colors.border),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(UiTokens.radius16),
-              side: const BorderSide(color: AppColorTokens.fundexBorder),
+              side: BorderSide(color: colors.border),
             ),
             title: Text(
               item.title,
-              style:
-                  (Theme.of(context).textTheme.bodyMedium ?? const TextStyle())
-                      .copyWith(fontWeight: FontWeight.w700),
+              style: appText.bodyStrong.copyWith(fontWeight: FontWeight.w700),
             ),
             children: <Widget>[
               Text(
                 item.body,
-                style:
-                    (Theme.of(context).textTheme.bodySmall ?? const TextStyle())
-                        .copyWith(
-                          color: AppColorTokens.fundexTextSecondary,
-                          height: 1.7,
-                        ),
+                style: appText.bodyMuted.copyWith(
+                  color: colors.textSecondary,
+                  height: 1.7,
+                ),
               ),
             ],
           ),
@@ -1082,11 +1087,12 @@ class _HeroBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.14),
+        color: colors.onDark.withValues(alpha: 0.14),
         borderRadius: BorderRadius.circular(3),
       ),
       child: Column(
@@ -1098,7 +1104,7 @@ class _HeroBlock extends StatelessWidget {
               width: width * 0.28,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.24),
+                color: colors.onDark.withValues(alpha: 0.24),
                 borderRadius: BorderRadius.circular(1),
               ),
             ),

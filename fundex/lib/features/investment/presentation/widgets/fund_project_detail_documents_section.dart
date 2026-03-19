@@ -37,22 +37,26 @@ class _FundProjectDetailDocumentGroupCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
           group.title,
-          style: (Theme.of(context).textTheme.titleSmall ?? const TextStyle())
-              .copyWith(fontWeight: FontWeight.w800),
+          style: appText.cardTitle.copyWith(
+            color: colors.textPrimary,
+            fontWeight: FontWeight.w800,
+          ),
         ),
         const SizedBox(height: 8),
         if (group.items.isEmpty)
           FundDetailContentCard(
             child: Text(
               context.l10n.fundDetailDocumentUnavailable,
-              style:
-                  (Theme.of(context).textTheme.bodySmall ?? const TextStyle())
-                      .copyWith(color: AppColorTokens.fundexTextSecondary),
+              style: appText.bodyMuted.copyWith(color: colors.textSecondary),
             ),
           )
         else

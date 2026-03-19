@@ -65,6 +65,10 @@ class _DetailTabItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
@@ -76,17 +80,11 @@ class _DetailTabItem extends StatelessWidget {
               child: Text(
                 label,
                 textAlign: TextAlign.center,
-                style:
-                    (Theme.of(context).textTheme.titleSmall ??
-                            const TextStyle())
-                        .copyWith(
-                          color: selected
-                              ? AppColorTokens.fundexAccent
-                              : AppColorTokens.fundexTextTertiary,
-                          fontWeight: selected
-                              ? FontWeight.w800
-                              : FontWeight.w600,
-                        ),
+                style: appText.bodyStrong.copyWith(
+                  color: selected ? colors.primary : colors.textTertiary,
+                  fontWeight: selected ? FontWeight.w800 : FontWeight.w700,
+                  height: 1.15,
+                ),
               ),
             ),
             AnimatedContainer(
@@ -95,9 +93,7 @@ class _DetailTabItem extends StatelessWidget {
               height: 3,
               margin: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
-                color: selected
-                    ? AppColorTokens.fundexAccent
-                    : Colors.transparent,
+                color: selected ? colors.primary : Colors.transparent,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -119,6 +115,10 @@ class _FundPropertyOverviewTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     if (structuredData.houseList.isEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -127,10 +127,7 @@ class _FundPropertyOverviewTab extends StatelessWidget {
             FundDetailContentCard(
               child: Text(
                 context.l10n.fundDetailUnknownValue,
-                style:
-                    (Theme.of(context).textTheme.bodyMedium ??
-                            const TextStyle())
-                        .copyWith(color: AppColorTokens.fundexTextSecondary),
+                style: appText.body.copyWith(color: colors.textSecondary),
               ),
             ),
       );
@@ -144,11 +141,10 @@ class _FundPropertyOverviewTab extends StatelessWidget {
         children: <Widget>[
           Text(
             context.l10n.fundDetailPropertyCountHint(houseCount),
-            style: (Theme.of(context).textTheme.labelSmall ?? const TextStyle())
-                .copyWith(
-                  color: AppColorTokens.fundexTextTertiary,
-                  height: 1.5,
-                ),
+            style: appText.micro.copyWith(
+              color: colors.textTertiary,
+              height: 1.5,
+            ),
           ),
           const SizedBox(height: 10),
           for (var index = 0; index < structuredData.houseList.length; index++)
@@ -188,6 +184,9 @@ class _FundPropertyHouseCardState extends State<_FundPropertyHouseCard> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final headerTitle = widget.houseData.propertyName.isNotEmpty
         ? widget.houseData.propertyName
         : context.l10n.fundDetailUnknownValue;
@@ -195,17 +194,17 @@ class _FundPropertyHouseCardState extends State<_FundPropertyHouseCard> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: Material(
-        color: Colors.white,
+        color: colors.surface,
         child: Theme(
-          data: Theme.of(context).copyWith(
+          data: theme.copyWith(
             dividerColor: Colors.transparent,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
           ),
           child: ExpansionTile(
             initiallyExpanded: _expanded,
-            backgroundColor: Colors.white,
-            collapsedBackgroundColor: Colors.white,
+            backgroundColor: colors.surface,
+            collapsedBackgroundColor: colors.surface,
             tilePadding: const EdgeInsets.symmetric(
               horizontal: 14,
               vertical: 2,
@@ -220,27 +219,25 @@ class _FundPropertyHouseCardState extends State<_FundPropertyHouseCard> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
+                gradient: LinearGradient(
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
-                  colors: <Color>[Color(0xFF0EA5E9), Color(0xFF3B82F6)],
+                  colors: <Color>[colors.primary, colors.primaryAlt],
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
                 '${context.l10n.fundDetailPropertyItemPrefix(widget.index + 1)} $headerTitle',
-                style:
-                    (Theme.of(context).textTheme.labelLarge ??
-                            const TextStyle())
-                        .copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                        ),
+                style: appText.button.copyWith(
+                  color: colors.onDark,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
             trailing: Icon(
               _expanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-              color: AppColorTokens.fundexTextSecondary,
+              color: colors.textSecondary,
             ),
             children: <Widget>[
               Padding(
@@ -381,17 +378,20 @@ class _FundPropertySectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return Padding(
       padding: const EdgeInsets.only(top: 7, bottom: 3),
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(
           '■ $title',
-          style: (Theme.of(context).textTheme.labelSmall ?? const TextStyle())
-              .copyWith(
-                color: AppColorTokens.fundexAccent,
-                fontWeight: FontWeight.w800,
-              ),
+          style: appText.chip.copyWith(
+            color: colors.primary,
+            fontWeight: FontWeight.w800,
+          ),
         ),
       ),
     );
@@ -413,6 +413,10 @@ class _FundPropertyInfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     final row = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       child: Row(
@@ -422,12 +426,11 @@ class _FundPropertyInfoRow extends StatelessWidget {
             width: 88,
             child: Text(
               label,
-              style:
-                  (Theme.of(context).textTheme.labelSmall ?? const TextStyle())
-                      .copyWith(
-                        color: AppColorTokens.fundexTextSecondary,
-                        fontWeight: FontWeight.w600,
-                      ),
+              style: appText.caption.copyWith(
+                color: colors.textSecondary,
+                fontWeight: FontWeight.w600,
+                height: 1.35,
+              ),
             ),
           ),
           const SizedBox(width: 10),
@@ -435,13 +438,11 @@ class _FundPropertyInfoRow extends StatelessWidget {
             child: Text(
               _valueOrDash(value, context),
               textAlign: TextAlign.right,
-              style:
-                  (Theme.of(context).textTheme.bodySmall ?? const TextStyle())
-                      .copyWith(
-                        color: AppColorTokens.fundexText,
-                        fontWeight: FontWeight.w700,
-                        height: 1.45,
-                      ),
+              style: appText.bodyStrong.copyWith(
+                color: colors.textPrimary,
+                fontWeight: FontWeight.w700,
+                height: 1.45,
+              ),
             ),
           ),
         ],
@@ -450,11 +451,9 @@ class _FundPropertyInfoRow extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: alternateBackground ? const Color(0xFFFAFBFC) : null,
+        color: alternateBackground ? colors.surfaceAlt : null,
         border: hasDivider
-            ? const Border(
-                bottom: BorderSide(color: Color(0xFFF1F5F9), width: 1),
-              )
+            ? Border(bottom: BorderSide(color: colors.borderSoft, width: 1))
             : null,
       ),
       child: row,
@@ -469,6 +468,10 @@ class _FundIncomeSchemeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -476,16 +479,15 @@ class _FundIncomeSchemeTab extends StatelessWidget {
         children: <Widget>[
           Text(
             context.l10n.fundDetailSchemeMarketEstimateNote,
-            style: (Theme.of(context).textTheme.labelSmall ?? const TextStyle())
-                .copyWith(
-                  color: AppColorTokens.fundexTextTertiary,
-                  height: 1.5,
-                ),
+            style: appText.micro.copyWith(
+              color: colors.textTertiary,
+              height: 1.5,
+            ),
           ),
           const SizedBox(height: 10),
           _FundSchemeCard(
             title: context.l10n.fundDetailSchemeBreakdownTitle,
-            headerBackgroundColor: AppColorTokens.fundexAccent,
+            headerBackgroundColor: colors.primary,
             rows: <_FundSchemeRowData>[
               _FundSchemeRowData(
                 label: context.l10n.fundDetailSchemePropertyPriceLabel,
@@ -494,7 +496,6 @@ class _FundIncomeSchemeTab extends StatelessWidget {
               _FundSchemeRowData(
                 label: context.l10n.fundDetailSchemeTotalInvestmentLabel,
                 value: structuredData.totalInvestment,
-                highlight: true,
                 divider: false,
               ),
             ],
@@ -502,10 +503,10 @@ class _FundIncomeSchemeTab extends StatelessWidget {
           const SizedBox(height: 10),
           _FundSchemeCard(
             title: context.l10n.fundDetailSchemeIncomeTitle,
-            headerGradient: const LinearGradient(
+            headerGradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: <Color>[Color(0xFF3B82F6), Color(0xFF6366F1)],
+              colors: <Color>[colors.primaryAlt, colors.communityPrimary],
             ),
             rows: <_FundSchemeRowData>[
               _FundSchemeRowData(
@@ -519,7 +520,7 @@ class _FundIncomeSchemeTab extends StatelessWidget {
               _FundSchemeRowData(
                 label: context.l10n.fundDetailSchemeIncomeTotalLabel,
                 value: structuredData.totalIncome,
-                highlight: true,
+                tone: _FundSchemeTone.info,
                 divider: false,
               ),
             ],
@@ -527,10 +528,10 @@ class _FundIncomeSchemeTab extends StatelessWidget {
           const SizedBox(height: 10),
           _FundSchemeCard(
             title: context.l10n.fundDetailSchemeExpenseTitle,
-            headerGradient: const LinearGradient(
+            headerGradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: <Color>[Color(0xFFEF4444), Color(0xFFF97316)],
+              colors: <Color>[colors.danger, colors.warning],
             ),
             rows: <_FundSchemeRowData>[
               _FundSchemeRowData(
@@ -626,7 +627,7 @@ class _FundIncomeSchemeTab extends StatelessWidget {
               _FundSchemeRowData(
                 label: context.l10n.fundDetailSchemeExpenseTotalLabel,
                 value: structuredData.totalExpense,
-                highlight: true,
+                tone: _FundSchemeTone.danger,
                 divider: false,
               ),
             ],
@@ -636,10 +637,10 @@ class _FundIncomeSchemeTab extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: <Color>[Color(0xFF1E293B), Color(0xFF334155)],
+                colors: <Color>[colors.heroStart, colors.heroEnd],
               ),
               borderRadius: BorderRadius.circular(16),
             ),
@@ -651,34 +652,28 @@ class _FundIncomeSchemeTab extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         context.l10n.fundDetailSchemeDistributedCapitalFormula,
-                        style:
-                            (Theme.of(context).textTheme.labelSmall ??
-                                    const TextStyle())
-                                .copyWith(color: const Color(0xFF94A3B8)),
+                        style: appText.micro.copyWith(
+                          color: colors.onDark.withValues(alpha: 0.68),
+                        ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         context.l10n.fundDetailSchemeDistributedCapitalTitle,
-                        style:
-                            (Theme.of(context).textTheme.titleSmall ??
-                                    const TextStyle())
-                                .copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w800,
-                                ),
+                        style: appText.cardTitle.copyWith(
+                          color: colors.onDark,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Text(
                   _valueOrDash(structuredData.distributedCapital, context),
-                  style:
-                      (Theme.of(context).textTheme.headlineSmall ??
-                              const TextStyle())
-                          .copyWith(
-                            color: const Color(0xFFFBBF24),
-                            fontWeight: FontWeight.w900,
-                          ),
+                  style: appText.numericHeadline.copyWith(
+                    color: colors.highlightGold,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 20,
+                  ),
                 ),
               ],
             ),
@@ -704,13 +699,17 @@ class _FundSchemeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: const Color(0xFFE2E8F0), width: 1.5),
+          border: Border.all(color: colors.border, width: 1.5),
           borderRadius: BorderRadius.circular(16),
-          color: Colors.white,
+          color: colors.surface,
         ),
         child: Column(
           children: <Widget>[
@@ -719,19 +718,16 @@ class _FundSchemeCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
                 color: headerGradient == null
-                    ? (headerBackgroundColor ?? AppColorTokens.fundexAccent)
+                    ? (headerBackgroundColor ?? colors.primary)
                     : null,
                 gradient: headerGradient,
               ),
               child: Text(
                 title,
-                style:
-                    (Theme.of(context).textTheme.labelLarge ??
-                            const TextStyle())
-                        .copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                        ),
+                style: appText.chip.copyWith(
+                  color: colors.onDark,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ),
             for (final row in rows) _FundSchemeRow(item: row),
@@ -747,15 +743,15 @@ class _FundSchemeRowData {
     required this.label,
     required this.value,
     this.alternateBackground = false,
-    this.highlight = false,
     this.divider = true,
+    this.tone = _FundSchemeTone.normal,
   });
 
   final String label;
   final String value;
   final bool alternateBackground;
-  final bool highlight;
   final bool divider;
+  final _FundSchemeTone tone;
 }
 
 class _FundSchemeRow extends StatelessWidget {
@@ -765,21 +761,40 @@ class _FundSchemeRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final backgroundColor = item.highlight
-        ? const Color(0xFFEFF6FF)
-        : (item.alternateBackground ? const Color(0xFFFAFBFC) : Colors.white);
-    final labelColor = item.highlight
-        ? const Color(0xFF2563EB)
-        : AppColorTokens.fundexTextSecondary;
-    final valueColor = item.highlight
-        ? const Color(0xFF2563EB)
-        : AppColorTokens.fundexText;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
+    final backgroundColor = switch (item.tone) {
+      _FundSchemeTone.info => colors.infoSubtle,
+      _FundSchemeTone.danger => colors.dangerSubtle,
+      _FundSchemeTone.normal =>
+        item.alternateBackground ? colors.surfaceAlt : colors.surface,
+    };
+    final labelColor = switch (item.tone) {
+      _FundSchemeTone.info => colors.primary,
+      _FundSchemeTone.danger => colors.danger,
+      _FundSchemeTone.normal => colors.textSecondary,
+    };
+    final valueColor = switch (item.tone) {
+      _FundSchemeTone.info => colors.primary,
+      _FundSchemeTone.danger => colors.danger,
+      _FundSchemeTone.normal => colors.textPrimary,
+    };
+    final labelWeight = switch (item.tone) {
+      _FundSchemeTone.normal => FontWeight.w600,
+      _FundSchemeTone.info || _FundSchemeTone.danger => FontWeight.w800,
+    };
+    final valueWeight = switch (item.tone) {
+      _FundSchemeTone.normal => FontWeight.w700,
+      _FundSchemeTone.info || _FundSchemeTone.danger => FontWeight.w800,
+    };
 
     return Container(
       decoration: BoxDecoration(
         color: backgroundColor,
         border: item.divider
-            ? const Border(bottom: BorderSide(color: Color(0xFFF1F5F9)))
+            ? Border(bottom: BorderSide(color: colors.borderSoft))
             : null,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -788,19 +803,19 @@ class _FundSchemeRow extends StatelessWidget {
           Expanded(
             child: Text(
               item.label,
-              style:
-                  (Theme.of(context).textTheme.bodySmall ?? const TextStyle())
-                      .copyWith(
-                        color: labelColor,
-                        fontWeight: item.highlight ? FontWeight.w800 : null,
-                      ),
+              style: appText.caption.copyWith(
+                color: labelColor,
+                fontWeight: labelWeight,
+              ),
             ),
           ),
           const SizedBox(width: 12),
           Text(
             _valueOrDash(item.value, context),
-            style: (Theme.of(context).textTheme.bodySmall ?? const TextStyle())
-                .copyWith(color: valueColor, fontWeight: FontWeight.w700),
+            style: appText.numericBody.copyWith(
+              color: valueColor,
+              fontWeight: valueWeight,
+            ),
           ),
         ],
       ),
@@ -815,3 +830,5 @@ String _valueOrDash(String value, BuildContext context) {
   }
   return trimmed;
 }
+
+enum _FundSchemeTone { normal, info, danger }

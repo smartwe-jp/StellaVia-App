@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_color_tokens.dart';
+import 'app_theme_extensions.dart';
 
 class KizunarkGradientHeader extends StatelessWidget {
   const KizunarkGradientHeader({
@@ -168,25 +169,23 @@ class KizunarkComposerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        if (leading != null) ...<Widget>[
-          leading!,
-          const SizedBox(width: 10),
-        ],
+        if (leading != null) ...<Widget>[leading!, const SizedBox(width: 10)],
         Expanded(
           child: Opacity(
             opacity: enabled ? 1 : 0.72,
             child: Container(
               padding: const EdgeInsets.fromLTRB(3, 3, 3, 3),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: colors.surface,
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(
-                  color: AppColorTokens.fundexBorder,
-                  width: 1.5,
-                ),
+                border: Border.all(color: colors.border, width: 1.5),
               ),
               child: Column(
                 children: <Widget>[
@@ -196,23 +195,17 @@ class KizunarkComposerCard extends StatelessWidget {
                     minLines: 2,
                     maxLines: 4,
                     onChanged: onChanged,
-                    style:
-                        (Theme.of(context).textTheme.bodyMedium ??
-                                const TextStyle())
-                            .copyWith(
-                              fontSize: 13,
-                              color: AppColorTokens.fundexText,
-                            ),
+                    style: appText.body.copyWith(
+                      fontSize: 13,
+                      color: colors.textPrimary,
+                    ),
                     decoration: InputDecoration(
                       hintText: placeholder,
-                      hintStyle:
-                          (Theme.of(context).textTheme.bodyMedium ??
-                                  const TextStyle())
-                              .copyWith(
-                                fontSize: 13,
-                                color: AppColorTokens.fundexTextTertiary,
-                                fontWeight: FontWeight.w500,
-                              ),
+                      hintStyle: appText.bodyMuted.copyWith(
+                        fontSize: 13,
+                        color: colors.textTertiary,
+                        fontWeight: FontWeight.w500,
+                      ),
                       border: InputBorder.none,
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
@@ -222,10 +215,8 @@ class KizunarkComposerCard extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.fromLTRB(10, 6, 10, 8),
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        top: BorderSide(color: AppColorTokens.fundexBorder),
-                      ),
+                    decoration: BoxDecoration(
+                      border: Border(top: BorderSide(color: colors.border)),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -255,23 +246,26 @@ class KizunarkFundReferenceChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return GestureDetector(
       onTap: onTap,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: const Color(0xFFDBEAFE),
+          color: colors.infoSubtle,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Text(
             label,
-            style: (Theme.of(context).textTheme.bodyMedium ?? const TextStyle())
-                .copyWith(
-                  color: AppColorTokens.fundexAccent,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                ),
+            style: appText.bodyStrong.copyWith(
+              color: colors.primary,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
       ),
@@ -317,17 +311,21 @@ class KizunarkPostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onLongPress: onLongPress,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColorTokens.fundexBorder),
+          border: Border.all(color: colors.border),
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
+              color: colors.scrim.withValues(alpha: 0.08),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -353,14 +351,11 @@ class KizunarkPostCard extends StatelessWidget {
                           children: <Widget>[
                             Text(
                               displayName,
-                              style:
-                                  (Theme.of(context).textTheme.titleMedium ??
-                                          const TextStyle())
-                                      .copyWith(
-                                        color: AppColorTokens.fundexText,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                              style: appText.bodyStrong.copyWith(
+                                color: colors.textPrimary,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                             if ((badgeLabel?.isNotEmpty ?? false))
                               Container(
@@ -371,35 +366,31 @@ class KizunarkPostCard extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   color:
                                       badgeBackgroundColor ??
-                                      AppColorTokens.kizunarkPrimaryLight,
+                                      colors.communityPrimary.withValues(
+                                        alpha: 0.12,
+                                      ),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Text(
                                   badgeLabel!,
-                                  style:
-                                      (Theme.of(context).textTheme.labelSmall ??
-                                              const TextStyle())
-                                          .copyWith(
-                                            color:
-                                                badgeForegroundColor ??
-                                                AppColorTokens.kizunarkPrimary,
-                                            fontSize: 9,
-                                            fontWeight: FontWeight.w700,
-                                          ),
+                                  style: appText.micro.copyWith(
+                                    color:
+                                        badgeForegroundColor ??
+                                        colors.communityPrimary,
+                                    fontSize: 9,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ),
                           ],
                         ),
                         Text(
                           accountText,
-                          style:
-                              (Theme.of(context).textTheme.labelSmall ??
-                                      const TextStyle())
-                                  .copyWith(
-                                    color: AppColorTokens.fundexTextTertiary,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                          style: appText.meta.copyWith(
+                            color: colors.textTertiary,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ],
                     ),
@@ -410,14 +401,11 @@ class KizunarkPostCard extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         timeLabel,
-                        style:
-                            (Theme.of(context).textTheme.labelSmall ??
-                                    const TextStyle())
-                                .copyWith(
-                                  color: AppColorTokens.fundexTextTertiary,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                        style: appText.meta.copyWith(
+                          color: colors.textTertiary,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       if (trailingAction != null) ...<Widget>[
                         const SizedBox(width: 2),
@@ -430,26 +418,23 @@ class KizunarkPostCard extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 body,
-                style:
-                    (Theme.of(context).textTheme.bodyMedium ??
-                            const TextStyle())
-                        .copyWith(
-                          color: AppColorTokens.fundexText,
-                          fontSize: 13,
-                          height: 1.7,
-                        ),
+                style: appText.body.copyWith(
+                  color: colors.textPrimary,
+                  fontSize: 13,
+                  height: 1.7,
+                ),
               ),
               if (fundReferenceChip != null) ...<Widget>[
                 const SizedBox(height: 10),
                 fundReferenceChip!,
               ],
               const SizedBox(height: 10),
-              const Divider(height: 1, color: AppColorTokens.fundexBorder),
+              Divider(height: 1, color: colors.border),
               const SizedBox(height: 6),
               TextButton.icon(
                 onPressed: onToggleRepliesTap,
                 style: TextButton.styleFrom(
-                  foregroundColor: AppColorTokens.fundexTextTertiary,
+                  foregroundColor: colors.textTertiary,
                   padding: EdgeInsets.zero,
                   minimumSize: const Size(40, 28),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -458,19 +443,16 @@ class KizunarkPostCard extends StatelessWidget {
                 icon: const Icon(Icons.chat_bubble_outline_rounded, size: 16),
                 label: Text(
                   '$commentCount',
-                  style:
-                      (Theme.of(context).textTheme.titleSmall ??
-                              const TextStyle())
-                          .copyWith(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                            color: AppColorTokens.fundexTextTertiary,
-                          ),
+                  style: appText.caption.copyWith(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w700,
+                    color: colors.textTertiary,
+                  ),
                 ),
               ),
               if (showReplies && replySection != null) ...<Widget>[
                 const SizedBox(height: 8),
-                const Divider(height: 1, color: AppColorTokens.fundexBorder),
+                Divider(height: 1, color: colors.border),
                 const SizedBox(height: 10),
                 replySection!,
               ],
@@ -506,12 +488,16 @@ class KizunarkReplyTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onLongPress: onLongPress,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: AppColorTokens.fundexBackground,
+          color: colors.surfaceAlt,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Padding(
@@ -531,20 +517,17 @@ class KizunarkReplyTile extends StatelessWidget {
                         Expanded(
                           child: RichText(
                             text: TextSpan(
-                              style:
-                                  (Theme.of(context).textTheme.labelSmall ??
-                                          const TextStyle())
-                                      .copyWith(
-                                        color: AppColorTokens.fundexText,
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                              style: appText.caption.copyWith(
+                                color: colors.textPrimary,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                              ),
                               children: <InlineSpan>[
                                 TextSpan(text: displayName),
                                 TextSpan(
                                   text: '   $timeLabel',
-                                  style: const TextStyle(
-                                    color: AppColorTokens.fundexTextTertiary,
+                                  style: TextStyle(
+                                    color: colors.textTertiary,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 10,
                                   ),
@@ -562,11 +545,11 @@ class KizunarkReplyTile extends StatelessWidget {
                     if ((quoteBody?.isNotEmpty ?? false)) ...<Widget>[
                       const SizedBox(height: 6),
                       DecoratedBox(
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFF8FAFC),
+                        decoration: BoxDecoration(
+                          color: colors.background,
                           border: Border(
                             left: BorderSide(
-                              color: AppColorTokens.kizunarkPrimary,
+                              color: colors.communityPrimary,
                               width: 3,
                             ),
                           ),
@@ -578,27 +561,20 @@ class KizunarkReplyTile extends StatelessWidget {
                             children: <Widget>[
                               Text(
                                 quoteTitle ?? '',
-                                style:
-                                    (Theme.of(context).textTheme.labelSmall ??
-                                            const TextStyle())
-                                        .copyWith(
-                                          color: AppColorTokens.fundexText,
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w700,
-                                        ),
+                                style: appText.caption.copyWith(
+                                  color: colors.textPrimary,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                               const SizedBox(height: 2),
                               Text(
                                 quoteBody!,
-                                style:
-                                    (Theme.of(context).textTheme.bodySmall ??
-                                            const TextStyle())
-                                        .copyWith(
-                                          color: AppColorTokens
-                                              .fundexTextSecondary,
-                                          fontSize: 12,
-                                          height: 1.6,
-                                        ),
+                                style: appText.caption.copyWith(
+                                  color: colors.textSecondary,
+                                  fontSize: 12,
+                                  height: 1.6,
+                                ),
                               ),
                             ],
                           ),
@@ -608,14 +584,11 @@ class KizunarkReplyTile extends StatelessWidget {
                     const SizedBox(height: 6),
                     Text(
                       body,
-                      style:
-                          (Theme.of(context).textTheme.bodySmall ??
-                                  const TextStyle())
-                              .copyWith(
-                                color: AppColorTokens.fundexTextSecondary,
-                                fontSize: 12,
-                                height: 1.6,
-                              ),
+                      style: appText.caption.copyWith(
+                        color: colors.textSecondary,
+                        fontSize: 12,
+                        height: 1.6,
+                      ),
                     ),
                   ],
                 ),
@@ -648,9 +621,13 @@ class KizunarkReplyComposer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: AppColorTokens.fundexBackground,
+        color: colors.surfaceAlt,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
@@ -664,40 +641,32 @@ class KizunarkReplyComposer extends StatelessWidget {
                 minLines: 1,
                 maxLines: 2,
                 onChanged: onChanged,
-                style:
-                    (Theme.of(context).textTheme.bodySmall ?? const TextStyle())
-                        .copyWith(fontSize: 12),
+                style: appText.caption.copyWith(
+                  fontSize: 12,
+                  color: colors.textPrimary,
+                ),
                 decoration: InputDecoration(
                   hintText: placeholder,
-                  hintStyle:
-                      (Theme.of(context).textTheme.bodySmall ??
-                              const TextStyle())
-                          .copyWith(
-                            color: AppColorTokens.fundexTextTertiary,
-                            fontSize: 12,
-                          ),
+                  hintStyle: appText.caption.copyWith(
+                    color: colors.textTertiary,
+                    fontSize: 12,
+                  ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 12,
                     vertical: 8,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: AppColorTokens.fundexBorder,
-                      width: 1.5,
-                    ),
+                    borderSide: BorderSide(color: colors.border, width: 1.5),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: AppColorTokens.fundexBorder,
-                      width: 1.5,
-                    ),
+                    borderSide: BorderSide(color: colors.border, width: 1.5),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: const BorderSide(
-                      color: AppColorTokens.kizunarkPrimary,
+                    borderSide: BorderSide(
+                      color: colors.communityPrimary,
                       width: 1.5,
                     ),
                   ),
@@ -736,17 +705,18 @@ class _KizunarkGradientButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     return Opacity(
       opacity: onTap == null ? 0.48 : 1,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
+          gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: <Color>[
-              AppColorTokens.kizunarkPrimary,
-              AppColorTokens.kizunarkSecondary,
-            ],
+            colors: <Color>[colors.communityPrimary, colors.communitySecondary],
           ),
           borderRadius: BorderRadius.circular(8),
         ),
@@ -762,14 +732,11 @@ class _KizunarkGradientButton extends StatelessWidget {
               ),
               child: Text(
                 label,
-                style:
-                    (Theme.of(context).textTheme.labelLarge ??
-                            const TextStyle())
-                        .copyWith(
-                          color: Colors.white,
-                          fontSize: fontSize,
-                          fontWeight: FontWeight.w700,
-                        ),
+                style: appText.button.copyWith(
+                  color: colors.onDark,
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ),

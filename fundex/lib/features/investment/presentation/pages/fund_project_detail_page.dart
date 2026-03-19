@@ -64,8 +64,7 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                 Text(
                   context.l10n.fundListLoadError,
                   textAlign: TextAlign.center,
-                  style: (theme.textTheme.bodyMedium ?? const TextStyle())
-                      .copyWith(
+                  style: appText.bodyMuted.copyWith(
                     color: colors.textSecondary,
                   ),
                 ),
@@ -369,7 +368,7 @@ class _FundDetailAchievementBanner extends StatelessWidget {
             child: Text(
               label,
               style: appText.chip.copyWith(
-                color: colors.brandWhite,
+                color: colors.onDark,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -377,7 +376,7 @@ class _FundDetailAchievementBanner extends StatelessWidget {
           Text(
             value,
             style: appText.numericTitle.copyWith(
-              color: colors.brandWhite,
+              color: colors.onDark,
               fontWeight: FontWeight.w900,
             ),
           ),

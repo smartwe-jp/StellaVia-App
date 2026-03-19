@@ -235,7 +235,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
           tagForegroundColor: colors.textSecondary,
           amountGradientColors: <Color>[
             colors.textSecondary,
-            colors.heroMiddle
+            colors.heroMiddle,
           ],
         );
       case 1:
@@ -245,7 +245,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
           tagForegroundColor: colors.successForeground,
           amountGradientColors: <Color>[
             colors.success,
-            colors.successForeground
+            colors.successForeground,
           ],
         );
       case 0:
@@ -262,7 +262,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
           tagForegroundColor: colors.textSecondary,
           amountGradientColors: <Color>[
             colors.textSecondary,
-            colors.heroMiddle
+            colors.heroMiddle,
           ],
         );
       case 7:
@@ -272,7 +272,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
           tagForegroundColor: colors.successForeground,
           amountGradientColors: <Color>[
             colors.successForeground,
-            colors.success
+            colors.success,
           ],
         );
       case 2:
@@ -289,7 +289,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
           tagForegroundColor: colors.textSecondary,
           amountGradientColors: <Color>[
             colors.textSecondary,
-            colors.heroMiddle
+            colors.heroMiddle,
           ],
         );
     }
@@ -317,7 +317,8 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
   ) {
     final l10n = context.l10n;
     if (project.projectStatus == 0) {
-      final openDate = _parseDateTime(project.offeringStartDatetime) ??
+      final openDate =
+          _parseDateTime(project.offeringStartDatetime) ??
           _parseDateTime(project.scheduledStartDate);
       if (openDate != null) {
         final text = _formatDateForLocale(
@@ -345,6 +346,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final colors = context.appColors;
+    final appText = context.appTextTheme;
     final locale = Localizations.localeOf(context);
     final currencyFormatter = NumberFormat.currency(
       locale: locale.toLanguageTag(),
@@ -369,9 +371,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
               children: <Widget>[
                 Text(
                   l10n.fundListTitle,
-                  style: (Theme.of(context).textTheme.titleLarge ??
-                          const TextStyle())
-                      .copyWith(
+                  style: appText.pageTitle.copyWith(
                     color: colors.textPrimary,
                     fontWeight: FontWeight.w800,
                     fontSize: 18,
@@ -402,11 +402,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
               ],
             ),
           ),
-          const Divider(
-            height: 1,
-            thickness: 1,
-            color: AppColorTokens.fundexBorder,
-          ),
+          Divider(height: 1, thickness: 1, color: colors.border),
           Expanded(
             child: asyncProjects.when(
               loading: () =>
@@ -421,9 +417,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                         Text(
                           l10n.fundListLoadError,
                           textAlign: TextAlign.center,
-                          style: (Theme.of(context).textTheme.bodyMedium ??
-                                  const TextStyle())
-                              .copyWith(
+                          style: appText.bodyMuted.copyWith(
                             color: colors.textSecondary,
                           ),
                         ),
@@ -451,9 +445,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                           child: Text(
                             l10n.fundListEmpty,
                             textAlign: TextAlign.center,
-                            style: (Theme.of(context).textTheme.bodyMedium ??
-                                    const TextStyle())
-                                .copyWith(
+                            style: appText.bodyMuted.copyWith(
                               color: colors.textSecondary,
                             ),
                           ),
@@ -485,8 +477,8 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                       );
                       final periodText =
                           (project.investmentPeriod?.trim().isNotEmpty ?? false)
-                              ? project.investmentPeriod!.trim()
-                              : '--';
+                          ? project.investmentPeriod!.trim()
+                          : '--';
 
                       return _FundProjectCard(
                         project: project,
@@ -686,9 +678,7 @@ class _FundProjectCard extends StatelessWidget {
                           ),
                           child: Text(
                             volumeText,
-                            style: (Theme.of(context).textTheme.labelSmall ??
-                                    const TextStyle())
-                                .copyWith(
+                            style: appText.chip.copyWith(
                               color: colors.textSecondary,
                               fontWeight: FontWeight.w700,
                             ),
@@ -706,18 +696,14 @@ class _FundProjectCard extends StatelessWidget {
                               project.projectName,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: (Theme.of(context).textTheme.titleLarge ??
-                                      const TextStyle())
-                                  .copyWith(
+                              style: appText.cardTitle.copyWith(
                                 color: colors.onDark,
                                 fontWeight: FontWeight.w800,
                                 fontSize: 16,
                                 height: 1.25,
                                 shadows: <Shadow>[
                                   Shadow(
-                                    color: colors.scrim.withValues(
-                                      alpha: 0.35,
-                                    ),
+                                    color: colors.scrim.withValues(alpha: 0.35),
                                     blurRadius: 6,
                                     offset: const Offset(0, 1),
                                   ),
@@ -765,10 +751,8 @@ class _FundProjectCard extends StatelessWidget {
                           ),
                           _PillTag(
                             label: methodLabel,
-                            backgroundColor:
-                                colors.communitySecondary.withValues(
-                              alpha: 0.14,
-                            ),
+                            backgroundColor: colors.communitySecondary
+                                .withValues(alpha: 0.14),
                             foregroundColor: colors.communitySecondary,
                           ),
                         ],
@@ -791,9 +775,7 @@ class _FundProjectCard extends StatelessWidget {
                         child: Text(
                           appliedAmountText,
                           textAlign: TextAlign.center,
-                          style: (Theme.of(context).textTheme.labelMedium ??
-                                  const TextStyle())
-                              .copyWith(
+                          style: appText.button.copyWith(
                             color: colors.brandWhite,
                             fontWeight: FontWeight.w700,
                           ),
@@ -802,10 +784,8 @@ class _FundProjectCard extends StatelessWidget {
                       const SizedBox(height: UiTokens.spacing8),
                       Container(
                         padding: const EdgeInsets.only(top: UiTokens.spacing8),
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            top: BorderSide(color: AppColorTokens.fundexBorder),
-                          ),
+                        decoration: BoxDecoration(
+                          border: Border(top: BorderSide(color: colors.border)),
                         ),
                         child: Row(
                           children: <Widget>[
@@ -817,12 +797,12 @@ class _FundProjectCard extends StatelessWidget {
                                 useNumericValueStyle: true,
                               ),
                             ),
-                            const SizedBox(
+                            SizedBox(
                               height: 36,
                               child: VerticalDivider(
                                 width: 16,
                                 thickness: 1,
-                                color: AppColorTokens.fundexBorder,
+                                color: colors.border,
                               ),
                             ),
                             Expanded(
@@ -961,8 +941,7 @@ class _PillTag extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: (Theme.of(context).textTheme.labelSmall ?? const TextStyle())
-            .copyWith(
+        style: context.appTextTheme.micro.copyWith(
           color: foregroundColor,
           fontSize: 9,
           fontWeight: FontWeight.w700,
@@ -976,20 +955,19 @@ class _CardStatCell extends StatelessWidget {
   const _CardStatCell({
     required this.label,
     required this.value,
-    this.valueColor = AppColorTokens.fundexText,
+    this.valueColor,
     this.useNumericValueStyle = false,
   });
 
   final String label;
   final String value;
-  final Color valueColor;
+  final Color? valueColor;
   final bool useNumericValueStyle;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
+    final colors = context.appColors;
+    final appText = context.appTextTheme;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -1003,7 +981,10 @@ class _CardStatCell extends StatelessWidget {
           value,
           style:
               (useNumericValueStyle ? appText.numericBody : appText.bodyStrong)
-                  .copyWith(color: valueColor, fontWeight: FontWeight.w800),
+                  .copyWith(
+                    color: valueColor ?? colors.textPrimary,
+                    fontWeight: FontWeight.w800,
+                  ),
         ),
       ],
     );

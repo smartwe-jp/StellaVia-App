@@ -63,9 +63,11 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                   ),
                   child: const Padding(
                     padding: EdgeInsets.all(12),
-                    child: Text('🎉',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 32)),
+                    child: Text(
+                      '🎉',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 32),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 18),
@@ -132,10 +134,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const Text(
-                          '📋',
-                          style: TextStyle(fontSize: 18),
-                        ),
+                        const Text('📋', style: TextStyle(fontSize: 18)),
                         const SizedBox(width: 8),
                         Expanded(
                           child: RichText(
@@ -147,7 +146,9 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                               children: <InlineSpan>[
                                 TextSpan(
                                   text: '$coolingOffTitle\n',
-                                  style: const TextStyle(
+                                  style: appText.caption.copyWith(
+                                    color: colors.warningForeground,
+                                    height: 1.6,
                                     fontWeight: FontWeight.w800,
                                   ),
                                 ),
@@ -202,9 +203,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                                           style: _depositValueStyle(
                                             appText,
                                             row.value,
-                                          ).copyWith(
-                                            color: colors.textPrimary,
-                                          ),
+                                          ).copyWith(color: colors.textPrimary),
                                         ),
                                         if (row.copyable)
                                           _CopyButton(
@@ -218,10 +217,10 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                               ),
                             ),
                             if (index < depositRows.length - 1)
-                              const Divider(
+                              Divider(
                                 height: 1,
                                 thickness: 1,
-                                color: AppColorTokens.fundexBorder,
+                                color: colors.border,
                               ),
                           ],
                         ),

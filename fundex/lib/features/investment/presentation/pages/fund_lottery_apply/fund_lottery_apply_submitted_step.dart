@@ -48,19 +48,22 @@ class FundLotteryApplySubmittedStep extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Container(
-                    width: 80,
-                    height: 80,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: colors.communitySecondary.withValues(alpha: 0.16),
-                      borderRadius: BorderRadius.circular(40),
+                  width: 80,
+                  height: 80,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: colors.communitySecondary.withValues(alpha: 0.16),
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(1),
+                    child: Text(
+                      '📩',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 40),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(1),
-                      child: Text('📩',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 40)),
-                    )),
+                  ),
+                ),
                 const SizedBox(height: 22),
                 Text(
                   headline,
@@ -143,22 +146,23 @@ class FundLotteryApplySubmittedStep extends StatelessWidget {
                                   ),
                                   Text(
                                     row.value,
-                                    style: _submittedValueStyle(
-                                      appText,
-                                      row.value,
-                                    ).copyWith(
-                                      color: rightValueColor,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                    style:
+                                        _submittedValueStyle(
+                                          appText,
+                                          row.value,
+                                        ).copyWith(
+                                          color: rightValueColor,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                   ),
                                 ],
                               ),
                             ),
                             if (index < rows.length - 1)
-                              const Divider(
+                              Divider(
                                 height: 1,
                                 thickness: 1,
-                                color: AppColorTokens.fundexBorder,
+                                color: colors.border,
                               ),
                           ],
                         ),

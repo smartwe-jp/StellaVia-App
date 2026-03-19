@@ -71,6 +71,9 @@ class _FundProjectDetailCommentsSectionState
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final state = ref.watch(
       discussionBoardControllerProvider(widget.projectId),
     );
@@ -103,14 +106,14 @@ class _FundProjectDetailCommentsSectionState
 
     if (_composerController.text != state.composerText) {
       _composerController.text = state.composerText;
-      _composerController.selection =
-          TextSelection.collapsed(offset: state.composerText.length);
+      _composerController.selection = TextSelection.collapsed(
+        offset: state.composerText.length,
+      );
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-      
         DiscussionBoardThreadList(
           l10n: l10n,
           state: state,
@@ -126,12 +129,8 @@ class _FundProjectDetailCommentsSectionState
               postLabel: l10n.kizunarkPostAction,
               enabled: !state.isPosting,
               onChanged: controller.updateComposerText,
-              onPostTap: () => _submitPost(
-                context,
-                l10n,
-                controller,
-                isAuthenticated,
-              ),
+              onPostTap: () =>
+                  _submitPost(context, l10n, controller, isAuthenticated),
             ),
           ),
         if (widget.onViewMoreTap != null) ...<Widget>[
@@ -140,8 +139,13 @@ class _FundProjectDetailCommentsSectionState
             onPressed: widget.onViewMoreTap,
             style: OutlinedButton.styleFrom(
               minimumSize: const Size.fromHeight(40),
-              side: const BorderSide(color: AppColorTokens.fundexViolet),
-              foregroundColor: AppColorTokens.fundexViolet,
+              side: BorderSide(color: colors.communityPrimary),
+              foregroundColor: colors.communityPrimary,
+              textStyle: appText.button.copyWith(
+                color: colors.communityPrimary,
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(UiTokens.radius12),
               ),

@@ -52,7 +52,8 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
           child: Column(
             children: List<Widget>.generate(rows.length, (int index) {
               final row = rows[index];
-              final isHighlighted = highlightValue != null &&
+              final isHighlighted =
+                  highlightValue != null &&
                   row.value.trim() == highlightValue!.trim();
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -78,28 +79,25 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
                             child: Text(
                               row.value,
                               textAlign: TextAlign.end,
-                              style: _summaryValueStyle(
-                                appText,
-                                value: row.value,
-                                defaultColor: colors.textPrimary,
-                                highlightColor: colors.communitySecondary,
-                              ).copyWith(
-                                fontSize: 14,
-                                color: isHighlighted
-                                    ? colors.communitySecondary
-                                    : colors.textPrimary,
-                              ),
+                              style:
+                                  _summaryValueStyle(
+                                    appText,
+                                    value: row.value,
+                                    defaultColor: colors.textPrimary,
+                                    highlightColor: colors.communitySecondary,
+                                  ).copyWith(
+                                    fontSize: 14,
+                                    color: isHighlighted
+                                        ? colors.communitySecondary
+                                        : colors.textPrimary,
+                                  ),
                             ),
                           ),
                         ],
                       ),
                     ),
                     if (index < rows.length - 1)
-                      const Divider(
-                        height: 1,
-                        thickness: 1,
-                        color: AppColorTokens.fundexBorder,
-                      ),
+                      Divider(height: 1, thickness: 1, color: colors.border),
                   ],
                 ),
               );
@@ -131,7 +129,12 @@ class FundLotteryApplyConfirmStep extends StatelessWidget {
                       children: <InlineSpan>[
                         TextSpan(
                           text: '$noticeTitle\n',
-                          style: const TextStyle(fontWeight: FontWeight.w800),
+                          style: appText.caption.copyWith(
+                            fontSize: 12,
+                            color: colors.warningForeground,
+                            height: 1.6,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                         TextSpan(text: noticeBody),
                       ],

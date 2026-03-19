@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'app_color_tokens.dart';
 import 'app_theme_extensions.dart';
 import 'fund_detail_widgets.dart';
 import 'ui_tokens.dart';
@@ -34,17 +33,16 @@ class FundHomeHeroSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final foregroundColor = Colors.white;
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final foregroundColor = colors.onDark;
 
     return DecoratedBox(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: <Color>[
-            AppColorTokens.fundexPrimaryDark,
-            AppColorTokens.fundexPrimaryDarkDradient,
-          ],
+          colors: <Color>[colors.heroStart, colors.heroMiddle],
         ),
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(28)),
       ),
@@ -61,7 +59,7 @@ class FundHomeHeroSummary extends StatelessWidget {
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: <Color>[
-                      AppColorTokens.fundexAccent.withValues(alpha: 0.2),
+                      colors.primary.withValues(alpha: 0.2),
                       Colors.transparent,
                     ],
                   ),
@@ -79,12 +77,10 @@ class FundHomeHeroSummary extends StatelessWidget {
                     Expanded(
                       child: Text(
                         greeting,
-                        style:
-                            (theme.textTheme.titleMedium ?? const TextStyle())
-                                .copyWith(
-                                  color: foregroundColor,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                        style: appText.heroSubtitle.copyWith(
+                          color: foregroundColor,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                     _FundHeroNotificationButton(
@@ -150,14 +146,16 @@ class FundGuestBrowsingBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final ftkTheme = theme.extension<AppFTKTheme>()!;
 
     return DecoratedBox(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: <Color>[Color(0xFF1E293B), Color(0xFF334155)],
+          colors: <Color>[colors.heroStart, colors.heroMiddle],
         ),
       ),
       child: Padding(
@@ -171,20 +169,18 @@ class FundGuestBrowsingBar extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     title,
-                    style: (theme.textTheme.labelLarge ?? const TextStyle())
-                        .copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                        ),
+                    style: appText.bodyStrong.copyWith(
+                      color: colors.onDark,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     message,
-                    style: (theme.textTheme.bodySmall ?? const TextStyle())
-                        .copyWith(
-                          color: Colors.white.withValues(alpha: 0.72),
-                          height: 1.35,
-                        ),
+                    style: appText.caption.copyWith(
+                      color: colors.onDark.withValues(alpha: 0.72),
+                      height: 1.35,
+                    ),
                   ),
                 ],
               ),
@@ -231,6 +227,7 @@ class _FundGuestActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appText = theme.appTextTheme;
 
     return Material(
       color: Colors.transparent,
@@ -245,7 +242,7 @@ class _FundGuestActionButton extends StatelessWidget {
           ),
           child: Text(
             label,
-            style: (theme.textTheme.labelMedium ?? const TextStyle()).copyWith(
+            style: appText.button.copyWith(
               color: foregroundColor,
               fontWeight: FontWeight.w700,
             ),
@@ -267,6 +264,8 @@ class _FundHeroNotificationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+
     return SizedBox(
       width: 38,
       height: 38,
@@ -296,12 +295,9 @@ class _FundHeroNotificationButton extends StatelessWidget {
                 width: 8,
                 height: 8,
                 decoration: BoxDecoration(
-                  color: AppColorTokens.fundexDanger,
+                  color: colors.danger,
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppColorTokens.fundexPrimaryDark,
-                    width: 1.5,
-                  ),
+                  border: Border.all(color: colors.heroStart, width: 1.5),
                 ),
               ),
             ),
@@ -327,23 +323,23 @@ class _FundHeroMetricCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final valueStyle =
-        (isPrimary
-            ? theme.textTheme.headlineSmall
-            : theme.textTheme.titleLarge) ??
-        const TextStyle();
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final valueStyle = isPrimary
+        ? appText.numericHeadline
+        : appText.numericTitle;
     final backgroundGradient = isPrimary
         ? <Color>[
-            AppColorTokens.fundexPrimaryDarkDradient.withValues(alpha: 0.78),
-            AppColorTokens.fundexAccent.withValues(alpha: 0.30),
+            colors.heroMiddle.withValues(alpha: 0.82),
+            colors.primary.withValues(alpha: 0.30),
           ]
         : <Color>[
-            AppColorTokens.fundexPrimaryDarkAlt.withValues(alpha: 0.30),
-            Colors.white.withValues(alpha: 0.10),
+            colors.heroEnd.withValues(alpha: 0.30),
+            colors.brandWhite.withValues(alpha: 0.10),
           ];
     final borderColor = isPrimary
-        ? AppColorTokens.fundexAccent.withValues(alpha: 0.20)
-        : Colors.white.withValues(alpha: 0.08);
+        ? colors.primary.withValues(alpha: 0.22)
+        : colors.brandWhite.withValues(alpha: 0.1);
 
     return Container(
       width: double.infinity,
@@ -362,8 +358,8 @@ class _FundHeroMetricCard extends StatelessWidget {
         children: <Widget>[
           Text(
             label,
-            style: (theme.textTheme.labelSmall ?? const TextStyle()).copyWith(
-              color: Colors.white.withValues(alpha: 0.6),
+            style: appText.caption.copyWith(
+              color: colors.onDark.withValues(alpha: 0.6),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -371,7 +367,7 @@ class _FundHeroMetricCard extends StatelessWidget {
           Text(
             value,
             style: valueStyle.copyWith(
-              color: Colors.white,
+              color: colors.onDark,
               fontWeight: FontWeight.w800,
               fontSize: isPrimary ? 26 : 16,
               height: isPrimary ? 1.1 : 1.2,
@@ -381,8 +377,8 @@ class _FundHeroMetricCard extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               subtitle!,
-              style: (theme.textTheme.labelSmall ?? const TextStyle()).copyWith(
-                color: AppColorTokens.fundexSuccess,
+              style: appText.caption.copyWith(
+                color: colors.success,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -454,7 +450,9 @@ class FundReminderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final palette = _paletteFor(data.tone);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final palette = _paletteFor(context, data.tone);
     final cardRadius = BorderRadius.circular(UiTokens.radius16);
     final card = Container(
       width: double.infinity,
@@ -488,11 +486,10 @@ class FundReminderCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   data.title,
-                  style: (theme.textTheme.labelLarge ?? const TextStyle())
-                      .copyWith(
-                        color: palette.titleColor,
-                        fontWeight: FontWeight.w700,
-                      ),
+                  style: appText.cardTitle.copyWith(
+                    color: palette.titleColor,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
               if (data.badgeLabel != null)
@@ -507,11 +504,10 @@ class FundReminderCard extends StatelessWidget {
                   ),
                   child: Text(
                     data.badgeLabel!,
-                    style: (theme.textTheme.labelSmall ?? const TextStyle())
-                        .copyWith(
-                          color: palette.badgeForegroundColor,
-                          fontWeight: FontWeight.w700,
-                        ),
+                    style: appText.chip.copyWith(
+                      color: palette.badgeForegroundColor,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
             ],
@@ -521,7 +517,7 @@ class FundReminderCard extends StatelessWidget {
             padding: const EdgeInsets.only(left: 16),
             child: Text(
               data.message,
-              style: (theme.textTheme.bodySmall ?? const TextStyle()).copyWith(
+              style: appText.bodyMuted.copyWith(
                 color: palette.messageColor,
                 height: 1.6,
               ),
@@ -572,7 +568,7 @@ class FundReminderCard extends StatelessWidget {
                     color: palette.actionBorderColor,
                     width: 1.5,
                   ),
-                  backgroundColor: Colors.white,
+                  backgroundColor: colors.surface,
                   minimumSize: const Size(0, 30),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 14,
@@ -585,8 +581,7 @@ class FundReminderCard extends StatelessWidget {
                 ),
                 child: Text(
                   data.actionLabel!,
-                  style: (theme.textTheme.labelSmall ?? const TextStyle())
-                      .copyWith(fontWeight: FontWeight.w700),
+                  style: appText.chip.copyWith(fontWeight: FontWeight.w700),
                 ),
               ),
             ),
@@ -676,49 +671,57 @@ class _FundReminderPalette {
   final Color actionBorderColor;
 }
 
-_FundReminderPalette _paletteFor(FundReminderTone tone) {
+_FundReminderPalette _paletteFor(BuildContext context, FundReminderTone tone) {
+  final colors = Theme.of(context).appColors;
+
   switch (tone) {
     case FundReminderTone.danger:
-      return const _FundReminderPalette(
-        backgroundGradientColors: <Color>[Color(0xFFFEE2E2), Color(0xFFFFF1F2)],
-        borderColor: Color(0xFFFCA5A5),
-        titleColor: Color(0xFFEF4444),
-        messageColor: Color(0xFF991B1B),
-        dotColor: Color(0xFFEF4444),
-        badgeBackgroundColor: Color(0xFFEF4444),
+      return _FundReminderPalette(
+        backgroundGradientColors: <Color>[
+          colors.dangerSubtle,
+          colors.dangerSoft,
+        ],
+        borderColor: colors.dangerBorder,
+        titleColor: colors.danger,
+        messageColor: colors.dangerForeground,
+        dotColor: colors.danger,
+        badgeBackgroundColor: colors.danger,
         badgeForegroundColor: Colors.white,
-        progressTrackColor: Color(0xFFFECACA),
-        progressFillColor: Color(0xFFEF4444),
-        actionTextColor: Color(0xFFDC2626),
-        actionBorderColor: Color(0xFFF87171),
+        progressTrackColor: colors.dangerSubtle,
+        progressFillColor: colors.danger,
+        actionTextColor: colors.dangerForeground,
+        actionBorderColor: colors.dangerBorder,
       );
     case FundReminderTone.warning:
-      return const _FundReminderPalette(
-        backgroundGradientColors: <Color>[Color(0xFFFEF3C7), Color(0xFFFFFBEB)],
-        borderColor: Color(0xFFFCD34D),
-        titleColor: Color(0xFF92400E),
-        messageColor: Color(0xFFA16207),
-        dotColor: Color(0xFFF59E0B),
-        badgeBackgroundColor: Color(0xFFF59E0B),
+      return _FundReminderPalette(
+        backgroundGradientColors: <Color>[
+          colors.warningSubtle,
+          colors.warningSoft,
+        ],
+        borderColor: colors.warningBorder,
+        titleColor: colors.warning,
+        messageColor: colors.warningForeground,
+        dotColor: colors.warning,
+        badgeBackgroundColor: colors.warning,
         badgeForegroundColor: Colors.white,
-        progressTrackColor: Color(0xFFFDE68A),
-        progressFillColor: Color(0xFFF59E0B),
-        actionTextColor: Color(0xFFD97706),
-        actionBorderColor: Color(0xFFF59E0B),
+        progressTrackColor: colors.warningSubtle,
+        progressFillColor: colors.warning,
+        actionTextColor: colors.warningAction,
+        actionBorderColor: colors.warningBorder,
       );
     case FundReminderTone.info:
-      return const _FundReminderPalette(
-        backgroundGradientColors: <Color>[Color(0xFFEFF6FF), Color(0xFFF8FBFF)],
-        borderColor: Color(0xFFBFDBFE),
-        titleColor: Color(0xFF1D4ED8),
-        messageColor: Color(0xFF1E3A8A),
-        dotColor: Color(0xFF2563EB),
-        badgeBackgroundColor: Color(0xFF2563EB),
+      return _FundReminderPalette(
+        backgroundGradientColors: <Color>[colors.infoSubtle, colors.infoSoft],
+        borderColor: colors.infoBorder,
+        titleColor: colors.info,
+        messageColor: colors.infoForeground,
+        dotColor: colors.info,
+        badgeBackgroundColor: colors.info,
         badgeForegroundColor: Colors.white,
-        progressTrackColor: Color(0xFFDBEAFE),
-        progressFillColor: Color(0xFF2563EB),
-        actionTextColor: Color(0xFF1D4ED8),
-        actionBorderColor: Color(0xFF3B82F6),
+        progressTrackColor: colors.infoSubtle,
+        progressFillColor: colors.info,
+        actionTextColor: colors.infoForeground,
+        actionBorderColor: colors.infoBorder,
       );
   }
 }
@@ -738,21 +741,22 @@ class FundSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
 
     return Row(
       children: <Widget>[
         Expanded(
           child: Text(
             title,
-            style: (theme.textTheme.titleMedium ?? const TextStyle()).copyWith(
-              fontWeight: FontWeight.w700,
-            ),
+            style: appText.sectionTitle.copyWith(fontWeight: FontWeight.w700),
           ),
         ),
         if (actionLabel != null)
           TextButton(
             onPressed: onActionTap,
             style: TextButton.styleFrom(
+              foregroundColor: colors.primary,
               visualDensity: const VisualDensity(horizontal: -2, vertical: -2),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             ),
@@ -783,11 +787,7 @@ class FundFeaturedFundCardData {
     required this.progress,
     this.progressLabel,
     this.tags = const <FundFeaturedFundTagData>[],
-    this.artworkGradientColors = const <Color>[
-      Color(0xFF0F172A),
-      Color(0xFF1E3A5F),
-      Color(0xFF2563EB),
-    ],
+    this.artworkGradientColors = const <Color>[],
     this.imageUrls = const <String>[],
     this.onTap,
   });
@@ -883,12 +883,14 @@ class FundFeaturedFundCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final hotelTheme = theme.extension<AppFTKTheme>();
-    final borderColor =
-        hotelTheme?.cardBorderColor.withValues(alpha: 0.9) ??
-        theme.dividerColor.withValues(alpha: 0.8);
-    final shadowColor = hotelTheme?.cardTileShadowColor ?? Colors.black12;
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final borderColor = colors.border;
+    final shadowColor = colors.scrim;
     final cardRadius = BorderRadius.circular(UiTokens.radius16);
+    final artworkGradientColors = data.artworkGradientColors.isEmpty
+        ? <Color>[colors.heroStart, colors.heroMiddle, colors.heroEnd]
+        : data.artworkGradientColors;
 
     return SizedBox(
       width: width,
@@ -900,14 +902,14 @@ class FundFeaturedFundCard extends StatelessWidget {
             borderRadius: cardRadius,
             boxShadow: <BoxShadow>[
               BoxShadow(
-                color: shadowColor.withValues(alpha: 0.1),
+                color: shadowColor.withValues(alpha: 0.07),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),
             ],
           ),
           child: Material(
-            color: theme.colorScheme.surface,
+            color: colors.surface,
             shape: RoundedRectangleBorder(
               borderRadius: cardRadius,
               side: BorderSide(color: borderColor),
@@ -925,7 +927,7 @@ class FundFeaturedFundCard extends StatelessWidget {
                       fit: StackFit.expand,
                       children: <Widget>[
                         FundHeroMediaBackground(
-                          gradientColors: data.artworkGradientColors,
+                          gradientColors: artworkGradientColors,
                           imageUrls: data.imageUrls,
                         ),
                         if (data.tags.isNotEmpty)
@@ -947,14 +949,10 @@ class FundFeaturedFundCard extends StatelessWidget {
                                       ),
                                       child: Text(
                                         tag.label,
-                                        style:
-                                            (theme.textTheme.labelSmall ??
-                                                    const TextStyle())
-                                                .copyWith(
-                                                  color: tag.foregroundColor,
-                                                  fontSize: 9,
-                                                  fontWeight: FontWeight.w700,
-                                                ),
+                                        style: appText.micro.copyWith(
+                                          color: tag.foregroundColor,
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
                                     ),
                                   )
@@ -974,10 +972,9 @@ class FundFeaturedFundCard extends StatelessWidget {
                             data.title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style:
-                                (theme.textTheme.titleSmall ??
-                                        const TextStyle())
-                                    .copyWith(fontWeight: FontWeight.w900),
+                            style: appText.cardTitle.copyWith(
+                              fontWeight: FontWeight.w900,
+                            ),
                           ),
 
                           const SizedBox(height: UiTokens.spacing8),
@@ -990,26 +987,18 @@ class FundFeaturedFundCard extends StatelessWidget {
                                   children: <Widget>[
                                     Text(
                                       yieldLabel,
-                                      style:
-                                          (theme.textTheme.labelSmall ??
-                                                  const TextStyle())
-                                              .copyWith(
-                                                color: AppColorTokens
-                                                    .fundexTextSecondary,
-                                              ),
+                                      style: appText.caption.copyWith(
+                                        color: colors.textSecondary,
+                                      ),
                                     ),
                                     //const SizedBox(height: 2),
                                     Text(
                                       data.annualYield,
-                                      style:
-                                          (theme.textTheme.headlineSmall ??
-                                                  const TextStyle())
-                                              .copyWith(
-                                                color:
-                                                    AppColorTokens.fundexDanger,
-                                                fontWeight: FontWeight.w900,
-                                                height: 1.0,
-                                              ),
+                                      style: appText.numericHeadline.copyWith(
+                                        color: colors.danger,
+                                        fontWeight: FontWeight.w900,
+                                        height: 1.0,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -1018,13 +1007,9 @@ class FundFeaturedFundCard extends StatelessWidget {
                               Text(
                                 data.metadata,
                                 textAlign: TextAlign.end,
-                                style:
-                                    (theme.textTheme.labelSmall ??
-                                            const TextStyle())
-                                        .copyWith(
-                                          color: AppColorTokens
-                                              .fundexTextSecondary,
-                                        ),
+                                style: appText.caption.copyWith(
+                                  color: colors.textSecondary,
+                                ),
                               ),
                             ],
                           ),
@@ -1034,9 +1019,9 @@ class FundFeaturedFundCard extends StatelessWidget {
                             child: LinearProgressIndicator(
                               minHeight: 5,
                               value: data.progress.clamp(0, 1),
-                              backgroundColor: AppColorTokens.fundexBorder,
-                              valueColor: const AlwaysStoppedAnimation<Color>(
-                                AppColorTokens.fundexAccent,
+                              backgroundColor: colors.border,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                colors.primary,
                               ),
                             ),
                           ),
@@ -1044,13 +1029,9 @@ class FundFeaturedFundCard extends StatelessWidget {
                             const SizedBox(height: UiTokens.spacing4),
                             Text(
                               data.progressLabel!,
-                              style:
-                                  (theme.textTheme.labelSmall ??
-                                          const TextStyle())
-                                      .copyWith(
-                                        color:
-                                            AppColorTokens.fundexTextSecondary,
-                                      ),
+                              style: appText.caption.copyWith(
+                                color: colors.textSecondary,
+                              ),
                             ),
                           ],
                         ],
@@ -1183,12 +1164,11 @@ class FundActiveFundCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final hotelTheme = theme.extension<AppFTKTheme>();
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final cardRadius = BorderRadius.circular(UiTokens.radius16);
-    final borderColor =
-        hotelTheme?.cardBorderColor.withValues(alpha: 0.9) ??
-        theme.dividerColor.withValues(alpha: 0.85);
-    final shadowColor = hotelTheme?.cardTileShadowColor ?? Colors.black12;
+    final borderColor = colors.border;
+    final shadowColor = colors.scrim;
 
     return Padding(
       padding: shadowPadding,
@@ -1197,14 +1177,14 @@ class FundActiveFundCard extends StatelessWidget {
           borderRadius: cardRadius,
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: shadowColor.withValues(alpha: 0.09),
+              color: shadowColor.withValues(alpha: 0.065),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
           ],
         ),
         child: Material(
-          color: theme.colorScheme.surface,
+          color: colors.surface,
           shape: RoundedRectangleBorder(
             borderRadius: cardRadius,
             side: BorderSide(color: borderColor),
@@ -1223,19 +1203,18 @@ class FundActiveFundCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           data.title,
-                          style:
-                              (theme.textTheme.titleSmall ?? const TextStyle())
-                                  .copyWith(fontWeight: FontWeight.w700),
+                          style: appText.cardTitle.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                       const SizedBox(width: UiTokens.spacing8),
                       Text(
                         data.annualYield,
-                        style: (theme.textTheme.titleLarge ?? const TextStyle())
-                            .copyWith(
-                              color: AppColorTokens.fundexDanger,
-                              fontWeight: FontWeight.w800,
-                            ),
+                        style: appText.numericTitle.copyWith(
+                          color: colors.danger,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                     ],
                   ),
@@ -1246,24 +1225,18 @@ class FundActiveFundCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             row.label,
-                            style:
-                                (theme.textTheme.bodySmall ?? const TextStyle())
-                                    .copyWith(
-                                      color: AppColorTokens.fundexTextSecondary,
-                                    ),
+                            style: appText.bodyMuted.copyWith(
+                              color: colors.textSecondary,
+                            ),
                           ),
                         ),
                         const SizedBox(width: UiTokens.spacing8),
                         Text(
                           row.value,
-                          style:
-                              (theme.textTheme.bodySmall ?? const TextStyle())
-                                  .copyWith(
-                                    color:
-                                        row.valueColor ??
-                                        AppColorTokens.fundexText,
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                          style: appText.bodyStrong.copyWith(
+                            color: row.valueColor ?? colors.textPrimary,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ],
                     ),
@@ -1276,9 +1249,9 @@ class FundActiveFundCard extends StatelessWidget {
                       child: LinearProgressIndicator(
                         minHeight: 5,
                         value: data.progress!.clamp(0, 1),
-                        backgroundColor: AppColorTokens.fundexBorder,
+                        backgroundColor: colors.border,
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          data.progressColor ?? AppColorTokens.fundexSuccess,
+                          data.progressColor ?? colors.success,
                         ),
                       ),
                     ),

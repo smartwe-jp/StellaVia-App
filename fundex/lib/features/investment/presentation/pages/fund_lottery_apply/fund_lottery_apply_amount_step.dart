@@ -380,7 +380,11 @@ class _BalanceWarningCard extends StatelessWidget {
                       children: <InlineSpan>[
                         TextSpan(
                           text: '$title\n',
-                          style: const TextStyle(fontWeight: FontWeight.w800),
+                          style: appText.caption.copyWith(
+                            color: colors.dangerForeground,
+                            height: 1.6,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                         TextSpan(text: body),
                       ],
