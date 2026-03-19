@@ -39,22 +39,26 @@ class _BottomSheetFrame extends StatelessWidget {
         top: UiTokens.spacing12,
         bottom: UiTokens.spacing16 + MediaQuery.viewInsetsOf(context).bottom,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Container(
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: Theme.of(
-                context,
-              ).colorScheme.onSurface.withValues(alpha: 0.22),
-              borderRadius: BorderRadius.circular(99),
-            ),
-          ),
-          const SizedBox(height: UiTokens.spacing16),
-          child,
-        ],
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.22),
+                  borderRadius: BorderRadius.circular(99),
+                ),
+              ),
+              const SizedBox(height: UiTokens.spacing16),
+              Flexible(fit: FlexFit.loose, child: child),
+            ],
+          );
+        },
       ),
     );
   }

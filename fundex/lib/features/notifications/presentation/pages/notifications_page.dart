@@ -11,6 +11,7 @@ import '../../../auth/presentation/providers/auth_providers.dart';
 import '../providers/notifications_providers.dart';
 import '../state/notifications_state.dart';
 import '../support/notification_item_view_data.dart';
+import '../widgets/notification_detail_sheet.dart';
 import '../widgets/notifications_list_item.dart';
 
 class NotificationsPage extends ConsumerStatefulWidget {
@@ -47,76 +48,18 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
     }
     final detail = opened ?? item;
 
-    await showModalBottomSheet<void>(
+    await AppBottomSheet.showAdaptive<void>(
       context: context,
-      useSafeArea: true,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
       builder: (BuildContext bottomSheetContext) {
         final body = detail.body.trim().isEmpty
             ? l10n.notificationsDetailNoContent
             : detail.body;
-        final maxHeight = MediaQuery.sizeOf(bottomSheetContext).height * 0.82;
-        return SizedBox(
-          height: maxHeight,
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.fromLTRB(20, 14, 20, 12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      if (detail.dateLabel.isNotEmpty)
-                        Text(
-                          detail.dateLabel,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: AppColorTokens.fundexTextTertiary,
-                          ),
-                        ),
-                      if (detail.dateLabel.isNotEmpty)
-                        const SizedBox(height: 8),
-                      Text(
-                        detail.title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: AppColorTokens.fundexText,
-                          height: 1.45,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        body,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: AppColorTokens.fundexTextSecondary,
-                          height: 1.6,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () => Navigator.of(bottomSheetContext).pop(),
-                    child: Text(l10n.notificationsDetailClose),
-                  ),
-                ),
-              ),
-            ],
-          ),
+        return NotificationDetailSheet(
+          detail: detail,
+          body: body,
+          closeLabel: l10n.notificationsDetailClose,
+          linkOpenFailedMessage: l10n.uiErrorRequestFailed,
         );
       },
     );
@@ -183,12 +126,14 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
     final l10n = context.l10n;
     final state = ref.watch(notificationsControllerProvider);
     final controller = ref.read(notificationsControllerProvider.notifier);
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
     final isAuthenticated =
         ref.watch(isAuthenticatedProvider).asData?.value ?? false;
     final items = state.items;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colors.surface,
       body: SafeArea(
         bottom: false,
         child: Column(
@@ -199,7 +144,7 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
             ),
             Expanded(
               child: RefreshIndicator(
-                color: AppColorTokens.fundexDanger,
+                color: colors.danger,
                 onRefresh: () async {
                   if (!isAuthenticated) {
                     return;
@@ -257,6 +202,9 @@ class _NotificationsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 10),
       child: Row(
@@ -264,14 +212,14 @@ class _NotificationsHeader extends StatelessWidget {
           SizedBox.square(
             dimension: 32,
             child: Material(
-              color: Colors.transparent,
+              type: MaterialType.transparency,
               child: InkWell(
                 borderRadius: BorderRadius.circular(16),
                 onTap: onBack,
-                child: const Icon(
+                child: Icon(
                   Icons.arrow_back,
                   size: 20,
-                  color: AppColorTokens.fundexText,
+                  color: colors.textPrimary,
                 ),
               ),
             ),
@@ -280,11 +228,7 @@ class _NotificationsHeader extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
-                color: AppColorTokens.fundexText,
-              ),
+              style: appText.pageTitle.copyWith(color: colors.textPrimary),
             ),
           ),
         ],
@@ -300,28 +244,26 @@ class _NotificationsEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: AppColorTokens.fundexBackground,
-        border: Border.all(color: AppColorTokens.fundexBorder),
+        color: colors.background,
+        border: Border.all(color: colors.border),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(14, 18, 14, 18),
         child: Row(
           children: <Widget>[
-            const Icon(
-              Icons.notifications_none_rounded,
-              color: AppColorTokens.fundexTextTertiary,
-            ),
+            Icon(Icons.notifications_none_rounded, color: colors.textTertiary),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
                 message,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColorTokens.fundexTextSecondary,
+                style: appText.caption.copyWith(
+                  color: colors.textSecondary,
                   height: 1.4,
                 ),
               ),

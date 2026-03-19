@@ -19,20 +19,28 @@ class NotificationsListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final isDark = theme.brightness == Brightness.dark;
     final isUnread = !item.isRead;
     final title = item.title.trim();
+    final unreadBackgroundColor = Color.alphaBlend(
+      (isDark ? colors.primary : colors.info).withValues(
+        alpha: isDark ? 0.16 : 0.07,
+      ),
+      colors.surface,
+    );
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: isUnread ? const Color(0xFFF0F9FF) : Colors.white,
+        color: isUnread ? unreadBackgroundColor : colors.surface,
         border: showDivider
-            ? const Border(
-                bottom: BorderSide(color: AppColorTokens.fundexBorder),
-              )
+            ? Border(bottom: BorderSide(color: colors.border))
             : null,
       ),
       child: Material(
-        color: Colors.transparent,
+        type: MaterialType.transparency,
         child: InkWell(
           onTap: onTap,
           child: Padding(
@@ -49,19 +57,15 @@ class NotificationsListItem extends StatelessWidget {
                           padding: const EdgeInsets.only(bottom: 4),
                           child: Text(
                             item.dateLabel,
-                            style: const TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w500,
-                              color: AppColorTokens.fundexTextTertiary,
+                            style: appText.micro.copyWith(
+                              color: colors.textTertiary,
                             ),
                           ),
                         ),
                       Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          color: AppColorTokens.fundexText,
+                        style: appText.bodyStrong.copyWith(
+                          color: colors.textPrimary,
                           height: 1.45,
                         ),
                       ),
@@ -70,16 +74,19 @@ class NotificationsListItem extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 if (isUpdating)
-                  const SizedBox(
+                  SizedBox(
                     width: 16,
                     height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: colors.primary,
+                    ),
                   )
                 else
-                  const Icon(
+                  Icon(
                     Icons.chevron_right_rounded,
                     size: 18,
-                    color: AppColorTokens.fundexTextTertiary,
+                    color: colors.textTertiary,
                   ),
               ],
             ),
