@@ -990,15 +990,6 @@ class FundFeaturedFundCard extends StatelessWidget {
                               ),
                             ),
                           ),
-                          if (data.progressLabel != null) ...<Widget>[
-                            const SizedBox(height: UiTokens.spacing4),
-                            Text(
-                              data.progressLabel!,
-                              style: appText.caption.copyWith(
-                                color: colors.textSecondary,
-                              ),
-                            ),
-                          ],
                         ],
                       ),
                     ),
