@@ -1741,6 +1741,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletHistoryTitle => '入金履歴';
 
   @override
+  String get walletTransactionHistoryTitle => '取引履歴';
+
+  @override
+  String get walletHistoryFilterAll => 'すべて';
+
+  @override
+  String get walletHistoryFilterDeposit => '入金';
+
+  @override
+  String get walletHistoryFilterWithdraw => '出金';
+
+  @override
   String get walletDedicatedAccountTitle => 'お客様専用の入金口座';
 
   @override
@@ -1764,6 +1776,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get walletStandbyBalanceLabel => '待機資金残高';
+
+  @override
+  String get walletStandbyBalanceHistoryTitle => '待機資金取引履歴';
 
   @override
   String get walletHistorySectionTitle => '最新履歴';

@@ -22,22 +22,19 @@ class FundProjectDetailTabsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: <Widget>[
-              _DetailTabItem(
-                label: context.l10n.fundDetailTabPropertyOverview,
-                selected: selectedIndex == 0,
-                onTap: () => onTabChanged(0),
-              ),
-              _DetailTabItem(
-                label: context.l10n.fundDetailTabIncomeScheme,
-                selected: selectedIndex == 1,
-                onTap: () => onTabChanged(1),
-              ),
-            ],
-          ),
+        AppUnderlinedTabBar<int>(
+          value: selectedIndex,
+          onChanged: onTabChanged,
+          items: <AppUnderlinedTabBarItem<int>>[
+            AppUnderlinedTabBarItem<int>(
+              value: 0,
+              label: context.l10n.fundDetailTabPropertyOverview,
+            ),
+            AppUnderlinedTabBarItem<int>(
+              value: 1,
+              label: context.l10n.fundDetailTabIncomeScheme,
+            ),
+          ],
         ),
         const SizedBox(height: 12),
         if (selectedIndex == 0)
@@ -48,58 +45,6 @@ class FundProjectDetailTabsSection extends StatelessWidget {
         else
           _FundIncomeSchemeTab(structuredData: structuredData),
       ],
-    );
-  }
-}
-
-class _DetailTabItem extends StatelessWidget {
-  const _DetailTabItem({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        behavior: HitTestBehavior.opaque,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                label,
-                textAlign: TextAlign.center,
-                style: appText.bodyStrong.copyWith(
-                  color: selected ? colors.primary : colors.textTertiary,
-                  fontWeight: selected ? FontWeight.w800 : FontWeight.w700,
-                  height: 1.15,
-                ),
-              ),
-            ),
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
-              curve: Curves.easeOut,
-              height: 3,
-              margin: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                color: selected ? colors.primary : Colors.transparent,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

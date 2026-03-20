@@ -3464,6 +3464,30 @@ abstract class AppLocalizations {
   /// **'Deposit History'**
   String get walletHistoryTitle;
 
+  /// No description provided for @walletTransactionHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction History'**
+  String get walletTransactionHistoryTitle;
+
+  /// No description provided for @walletHistoryFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get walletHistoryFilterAll;
+
+  /// No description provided for @walletHistoryFilterDeposit.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit'**
+  String get walletHistoryFilterDeposit;
+
+  /// No description provided for @walletHistoryFilterWithdraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw'**
+  String get walletHistoryFilterWithdraw;
+
   /// No description provided for @walletDedicatedAccountTitle.
   ///
   /// In en, this message translates to:
@@ -3511,6 +3535,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Standby Balance'**
   String get walletStandbyBalanceLabel;
+
+  /// No description provided for @walletStandbyBalanceHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Standby Balance Transaction History'**
+  String get walletStandbyBalanceHistoryTitle;
 
   /// No description provided for @walletHistorySectionTitle.
   ///

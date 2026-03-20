@@ -6,13 +6,22 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/navigation/app_root_route_refresh_scope.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../domain/entities/wallet_account_history.dart';
 import '../providers/wallet_providers.dart';
 
-class WalletHistoryPage extends ConsumerWidget {
+class WalletHistoryPage extends ConsumerStatefulWidget {
   const WalletHistoryPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<WalletHistoryPage> createState() => _WalletHistoryPageState();
+}
+
+class _WalletHistoryPageState extends ConsumerState<WalletHistoryPage> {
+  _WalletHistoryFilter _filter = _WalletHistoryFilter.all;
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = theme.appColors;
@@ -34,7 +43,7 @@ class WalletHistoryPage extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: colors.background,
         appBar: AppNavigationBar(
-          title: l10n.walletHistoryTitle,
+          title: l10n.walletTransactionHistoryTitle,
           backgroundColor: colors.surface,
           foregroundColor: colors.textPrimary,
           leading: AppNavigationIconButton(
@@ -46,46 +55,86 @@ class WalletHistoryPage extends ConsumerWidget {
         ),
         body: asyncHistory.when(
           data: (items) {
-            if (items.isEmpty) {
-              return Center(
-                child: Text(l10n.walletHistoryEmpty, style: appText.bodyMuted),
-              );
-            }
+            final filteredItems = items
+                .where((WalletAccountHistory item) {
+                  switch (_filter) {
+                    case _WalletHistoryFilter.all:
+                      return true;
+                    case _WalletHistoryFilter.deposit:
+                      return _parseInflowFlag(item.inOut) == true;
+                    case _WalletHistoryFilter.withdraw:
+                      return _parseInflowFlag(item.inOut) == false;
+                  }
+                })
+                .toList(growable: false);
 
-            return ListView.builder(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                final item = items[index];
-                final amount = item.amount ?? item.money;
-                final inOut = item.inOut;
-                final isIncome = _parseInflowFlag(inOut);
-                final isPending = _isPending(item.businessId);
-                return FundWalletTransactionCard(
-                  tradeType:
-                      item.tradeType ??
-                      item.typeName ??
-                      l10n.walletHistoryUnknownType,
-                  remark: item.remark ?? '--',
-                  tradeTime: _formatDateText(item.tradeTime ?? item.createTime),
-                  amountText: _formatAmountText(
-                    amount: amount,
-                    isIncome: isIncome,
-                    formatter: currency,
+            return Column(
+              children: <Widget>[
+                AppFilterBar<_WalletHistoryFilter>(
+                  height: 60,
+                  showBottomDivider: true,
+                  backgroundColor: colors.surface,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  value: _filter,
+                  onChanged: (_WalletHistoryFilter value) {
+                    setState(() {
+                      _filter = value;
+                    });
+                  },
+                  items: <AppFilterBarItem<_WalletHistoryFilter>>[
+                    AppFilterBarItem<_WalletHistoryFilter>(
+                      value: _WalletHistoryFilter.all,
+                      label: l10n.walletHistoryFilterAll,
+                    ),
+                    AppFilterBarItem<_WalletHistoryFilter>(
+                      value: _WalletHistoryFilter.deposit,
+                      label: l10n.walletHistoryFilterDeposit,
+                    ),
+                    AppFilterBarItem<_WalletHistoryFilter>(
+                      value: _WalletHistoryFilter.withdraw,
+                      label: l10n.walletHistoryFilterWithdraw,
+                    ),
+                  ],
+                ),
+                
+                const SizedBox(height: 12),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                    children: <Widget>[
+                      if (filteredItems.isEmpty)
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: colors.surface,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: colors.border),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 24,
+                            ),
+                            child: Text(
+                              l10n.walletHistoryEmpty,
+                              textAlign: TextAlign.center,
+                              style: appText.bodyMuted.copyWith(height: 1.6),
+                            ),
+                          ),
+                        )
+                      else
+                        ...filteredItems.map(
+                          (WalletAccountHistory item) => _buildHistoryCard(
+                            context,
+                            item,
+                            l10n: l10n,
+                            colors: colors,
+                            formatter: currency,
+                          ),
+                        ),
+                    ],
                   ),
-                  amountColor: _resolveAmountColor(
-                    isIncome: isIncome,
-                    colors: colors,
-                  ),
-                  directionLabel: _resolveDirectionLabel(
-                    isIncome: isIncome,
-                    inflowLabel: l10n.walletHistoryInflowLabel,
-                    outflowLabel: l10n.walletHistoryOutflowLabel,
-                  ),
-                  isPending: isPending,
-                  pendingLabel: l10n.walletHistoryPendingStatus,
-                );
-              },
+                ),
+              ],
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
@@ -99,7 +148,42 @@ class WalletHistoryPage extends ConsumerWidget {
       ),
     );
   }
+
+  Widget _buildHistoryCard(
+    BuildContext context,
+    WalletAccountHistory item, {
+    required AppLocalizations l10n,
+    required AppSemanticColorTheme colors,
+    required NumberFormat formatter,
+  }) {
+    final isIncome = _parseInflowFlag(item.inOut);
+    return FundWalletTransactionCard(
+      title: _resolveHistoryTitle(l10n, isIncome: isIncome),
+      subtitle: _resolveHistorySubtitle(
+        item,
+        fallback: l10n.walletHistoryUnknownType,
+      ),
+      dateText: _formatDateText(item.tradeTime ?? item.createTime),
+      amountText: _formatAmountText(
+        amount: item.amount ?? item.money,
+        isIncome: isIncome,
+        formatter: formatter,
+      ),
+      amountColor: _resolveHistoryAmountColor(
+        isIncome: isIncome,
+        colors: colors,
+      ),
+      icon: _resolveHistoryIcon(isIncome: isIncome),
+      iconBackgroundColor: _resolveHistoryIconBackground(
+        isIncome: isIncome,
+        colors: colors,
+      ),
+      iconColor: _resolveHistoryIconColor(isIncome: isIncome, colors: colors),
+    );
+  }
 }
+
+enum _WalletHistoryFilter { all, deposit, withdraw }
 
 bool? _parseInflowFlag(String? inOut) {
   final value = inOut?.trim();
@@ -122,20 +206,6 @@ bool? _parseInflowFlag(String? inOut) {
   return null;
 }
 
-bool _isPending(String? businessId) {
-  return businessId == null || businessId.trim().isEmpty;
-}
-
-Color _resolveAmountColor({
-  required bool? isIncome,
-  required AppSemanticColorTheme colors,
-}) {
-  if (isIncome == null) {
-    return colors.textSecondary;
-  }
-  return isIncome ? colors.success : colors.danger;
-}
-
 String _formatAmountText({
   required num? amount,
   required bool? isIncome,
@@ -149,15 +219,64 @@ String _formatAmountText({
   return '$sign${formatter.format(value)}';
 }
 
-String _resolveDirectionLabel({
+String _resolveHistoryTitle(AppLocalizations l10n, {required bool? isIncome}) {
+  if (isIncome == null) {
+    return l10n.walletHistoryUnknownType;
+  }
+  return isIncome
+      ? l10n.walletHistoryFilterDeposit
+      : l10n.walletHistoryFilterWithdraw;
+}
+
+String _resolveHistorySubtitle(
+  WalletAccountHistory item, {
+  required String fallback,
+}) {
+  final candidates = <String?>[item.tradeType, item.typeName, item.remark];
+  for (final candidate in candidates) {
+    final text = candidate?.trim() ?? '';
+    if (text.isNotEmpty) {
+      return text;
+    }
+  }
+  return fallback;
+}
+
+Color _resolveHistoryAmountColor({
   required bool? isIncome,
-  required String inflowLabel,
-  required String outflowLabel,
+  required AppSemanticColorTheme colors,
 }) {
   if (isIncome == null) {
-    return '--';
+    return colors.textSecondary;
   }
-  return isIncome ? inflowLabel : outflowLabel;
+  return isIncome ? colors.success : colors.textPrimary;
+}
+
+IconData _resolveHistoryIcon({required bool? isIncome}) {
+  if (isIncome == null) {
+    return Icons.swap_horiz_rounded;
+  }
+  return isIncome ? Icons.attach_money_rounded : Icons.remove_rounded;
+}
+
+Color _resolveHistoryIconBackground({
+  required bool? isIncome,
+  required AppSemanticColorTheme colors,
+}) {
+  if (isIncome == null) {
+    return colors.surfaceAlt;
+  }
+  return isIncome ? colors.successSubtle : colors.dangerSubtle;
+}
+
+Color _resolveHistoryIconColor({
+  required bool? isIncome,
+  required AppSemanticColorTheme colors,
+}) {
+  if (isIncome == null) {
+    return colors.textSecondary;
+  }
+  return isIncome ? colors.success : colors.danger;
 }
 
 String _formatDateText(String? value) {

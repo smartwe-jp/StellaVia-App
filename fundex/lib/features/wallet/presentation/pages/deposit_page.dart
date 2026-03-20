@@ -158,8 +158,13 @@ class DepositPage extends ConsumerWidget {
                     ),
                   ),
                 const SizedBox(height: 20),
+                FundWalletStandbyBalanceSummaryBox(
+                  label: l10n.walletStandbyBalanceLabel,
+                  value: currency.format(data.standbyBalance ?? 0),
+                ),
+                const SizedBox(height: 20),
                 FundWalletStandbyBalanceCard(
-                  title: '📋 ${l10n.walletStandbyBalanceLabel}',
+                  title: '📋 ${l10n.walletStandbyBalanceHistoryTitle}',
                   actionLabel: l10n.walletHistoryMoreAction,
                   onTapAction: () => context.push('/wallet/history'),
                   entries: historyEntries.isEmpty
@@ -171,11 +176,6 @@ class DepositPage extends ConsumerWidget {
                           ),
                         ]
                       : historyEntries,
-                ),
-                const SizedBox(height: 20),
-                FundWalletStandbyBalanceSummaryBox(
-                  label: l10n.walletStandbyBalanceLabel,
-                  value: currency.format(data.standbyBalance ?? 0),
                 ),
               ],
             );

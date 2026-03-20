@@ -1835,6 +1835,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletHistoryTitle => 'Deposit History';
 
   @override
+  String get walletTransactionHistoryTitle => 'Transaction History';
+
+  @override
+  String get walletHistoryFilterAll => 'All';
+
+  @override
+  String get walletHistoryFilterDeposit => 'Deposit';
+
+  @override
+  String get walletHistoryFilterWithdraw => 'Withdraw';
+
+  @override
   String get walletDedicatedAccountTitle => 'Your Dedicated Deposit Account';
 
   @override
@@ -1858,6 +1870,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletStandbyBalanceLabel => 'Standby Balance';
+
+  @override
+  String get walletStandbyBalanceHistoryTitle =>
+      'Standby Balance Transaction History';
 
   @override
   String get walletHistorySectionTitle => 'Latest History';

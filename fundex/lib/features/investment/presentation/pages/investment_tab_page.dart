@@ -33,12 +33,14 @@ class _FundListFilterOption {
   const _FundListFilterOption({
     required this.filter,
     required this.label,
-    this.isFavoriteStyle = false,
+    this.style = AppFilterBarItemStyle.primary,
+    this.leadingIcon,
   });
 
   final _FundListFilter filter;
   final String label;
-  final bool isFavoriteStyle;
+  final AppFilterBarItemStyle style;
+  final IconData? leadingIcon;
 }
 
 class _FundStatusPalette {
@@ -87,7 +89,8 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
       _FundListFilterOption(
         filter: _FundListFilter.favorites,
         label: l10n.fundListFilterFavorites,
-        isFavoriteStyle: true,
+        style: AppFilterBarItemStyle.accent,
+        leadingIcon: Icons.star_rounded,
       ),
     ];
   }
@@ -364,27 +367,25 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: filterOptions
-                          .map(
-                            (_FundListFilterOption option) => Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: _FilterChip(
+                  AppFilterBar<_FundListFilter>(
+                    padding: EdgeInsets.zero,
+                    value: _selectedFilter,
+                    onChanged: (_FundListFilter value) {
+                      setState(() {
+                        _selectedFilter = value;
+                      });
+                    },
+                    items: filterOptions
+                        .map(
+                          (_FundListFilterOption option) =>
+                              AppFilterBarItem<_FundListFilter>(
+                                value: option.filter,
                                 label: option.label,
-                                selected: option.filter == _selectedFilter,
-                                isFavoriteStyle: option.isFavoriteStyle,
-                                onTap: () {
-                                  setState(() {
-                                    _selectedFilter = option.filter;
-                                  });
-                                },
+                                style: option.style,
+                                leadingIcon: option.leadingIcon,
                               ),
-                            ),
-                          )
-                          .toList(),
-                    ),
+                        )
+                        .toList(growable: false),
                   ),
                 ],
               ),
@@ -521,72 +522,6 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
 Future<void> _refreshInvestmentTab(WidgetRef ref) async {
   ref.invalidate(fundProjectListProvider);
   await ref.refresh(fundProjectListProvider.future).then((_) {});
-}
-
-class _FilterChip extends StatelessWidget {
-  const _FilterChip({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-    this.isFavoriteStyle = false,
-  });
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-  final bool isFavoriteStyle;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(20),
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: isFavoriteStyle
-                  ? colors.warning
-                  : (selected ? colors.primary : colors.border),
-              width: 1.5,
-            ),
-            color: isFavoriteStyle
-                ? (selected ? colors.warningSubtle : colors.surface)
-                : (selected ? colors.primary : colors.surface),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              if (isFavoriteStyle) ...<Widget>[
-                Icon(
-                  Icons.star_rounded,
-                  size: 14,
-                  color: selected ? colors.warningAction : colors.warning,
-                ),
-                const SizedBox(width: 4),
-              ],
-              Text(
-                label,
-                style: appText.chip.copyWith(
-                  color: isFavoriteStyle
-                      ? (selected ? colors.warningAction : colors.warning)
-                      : (selected ? colors.brandWhite : colors.textSecondary),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class _FundProjectCard extends StatelessWidget {

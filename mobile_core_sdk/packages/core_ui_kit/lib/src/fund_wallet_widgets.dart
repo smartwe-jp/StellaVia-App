@@ -533,104 +533,93 @@ class FundWalletHistoryListItem extends StatelessWidget {
 class FundWalletTransactionCard extends StatelessWidget {
   const FundWalletTransactionCard({
     super.key,
-    required this.tradeType,
-    required this.remark,
-    required this.tradeTime,
+    required this.title,
+    required this.subtitle,
+    required this.dateText,
     required this.amountText,
     required this.amountColor,
-    required this.directionLabel,
-    required this.isPending,
-    required this.pendingLabel,
+    required this.icon,
+    required this.iconBackgroundColor,
+    required this.iconColor,
+    this.iconCircular = true,
   });
 
-  final String tradeType;
-  final String remark;
-  final String tradeTime;
+  final String title;
+  final String subtitle;
+  final String dateText;
   final String amountText;
   final Color amountColor;
-  final String directionLabel;
-  final bool isPending;
-  final String pendingLabel;
+  final IconData icon;
+  final Color iconBackgroundColor;
+  final Color iconColor;
+  final bool iconCircular;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
-    final titleColor = isPending ? colors.textTertiary : colors.textPrimary;
-    final bodyColor = isPending ? colors.textTertiary : colors.textSecondary;
-    final cardColor = isPending ? colors.surfaceAlt : colors.surface;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: cardColor,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(UiTokens.radius16),
           border: Border.all(color: colors.border),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: colors.scrim.withValues(alpha: 0.03),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      tradeType,
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: iconBackgroundColor,
+                  borderRadius: BorderRadius.circular(iconCircular ? 18 : 12),
+                ),
+                child: Icon(icon, size: 18, color: iconColor),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: appText.cardTitle.copyWith(color: titleColor),
+                      style: appText.chip.copyWith(
+                        color: colors.textPrimary,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
-                  if (isPending)
-                    _FundWalletStatusChip(
-                      label: pendingLabel,
-                      backgroundColor: colors.surfaceAlt,
-                      textColor: colors.textSecondary,
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: appText.meta.copyWith(
+                        color: colors.textTertiary,
+                        height: 1.4,
+                      ),
                     ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text(
-                remark,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: appText.bodyMuted.copyWith(
-                  color: bodyColor,
-                  height: 1.5,
+                  ],
                 ),
               ),
-              const SizedBox(height: 10),
-              Row(
+              const SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      tradeTime,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: appText.inputLabel.copyWith(color: bodyColor),
-                    ),
-                  ),
-                  _FundWalletStatusChip(
-                    label: directionLabel,
-                    backgroundColor: amountColor.withValues(alpha: 0.12),
-                    textColor: amountColor,
-                  ),
-                  const SizedBox(width: 8),
                   Text(
                     amountText,
-                    style: appText.heroMetricSecondary.copyWith(
-                      color: amountColor,
-                    ),
+                    style: appText.bodyStrong.copyWith(color: amountColor),
+                  ),
+                  Text(
+                    dateText,
+                    style: appText.meta.copyWith(color: colors.textTertiary),
                   ),
                 ],
               ),
@@ -796,32 +785,6 @@ class _FundWalletBalanceHistoryRow extends StatelessWidget {
           Text(value, style: appText.bodyStrong.copyWith(color: valueColor)),
         ],
       ),
-    );
-  }
-}
-
-class _FundWalletStatusChip extends StatelessWidget {
-  const _FundWalletStatusChip({
-    required this.label,
-    required this.backgroundColor,
-    required this.textColor,
-  });
-
-  final String label;
-  final Color backgroundColor;
-  final Color textColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final appText = theme.appTextTheme;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Text(label, style: appText.chip.copyWith(color: textColor)),
     );
   }
 }

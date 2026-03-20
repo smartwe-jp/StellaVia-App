@@ -1729,6 +1729,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletHistoryTitle => '入金记录';
 
   @override
+  String get walletTransactionHistoryTitle => '交易记录';
+
+  @override
+  String get walletHistoryFilterAll => '全部';
+
+  @override
+  String get walletHistoryFilterDeposit => '入金';
+
+  @override
+  String get walletHistoryFilterWithdraw => '出金';
+
+  @override
   String get walletDedicatedAccountTitle => '您的专用入金账户';
 
   @override
@@ -1752,6 +1764,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get walletStandbyBalanceLabel => '待机资金余额';
+
+  @override
+  String get walletStandbyBalanceHistoryTitle => '待机资金交易记录';
 
   @override
   String get walletHistorySectionTitle => '最新记录';
@@ -4317,6 +4332,18 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get walletHistoryTitle => '入金紀錄';
 
   @override
+  String get walletTransactionHistoryTitle => '交易紀錄';
+
+  @override
+  String get walletHistoryFilterAll => '全部';
+
+  @override
+  String get walletHistoryFilterDeposit => '入金';
+
+  @override
+  String get walletHistoryFilterWithdraw => '出金';
+
+  @override
   String get walletDedicatedAccountTitle => '您的專用入金帳戶';
 
   @override
@@ -4340,6 +4367,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletStandbyBalanceLabel => '待機資金餘額';
+
+  @override
+  String get walletStandbyBalanceHistoryTitle => '待機資金交易紀錄';
 
   @override
   String get walletHistorySectionTitle => '最新紀錄';
