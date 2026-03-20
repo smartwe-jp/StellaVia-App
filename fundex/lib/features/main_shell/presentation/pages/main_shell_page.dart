@@ -22,6 +22,7 @@ class MainShellPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
+    final colors = theme.appColors;
     final colorScheme = theme.colorScheme;
     final shellNavigationTheme = theme.extension<AppShellNavigationTheme>()!;
     final currentTabIndex = ref.watch(mainShellCurrentTabIndexProvider);
@@ -43,6 +44,7 @@ class MainShellPage extends ConsumerWidget {
       body: SafeArea(bottom: false, child: navigationShell),
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
+          backgroundColor: colors.surface,
           indicatorColor: colorScheme.primary.withValues(alpha: 0.14),
           iconTheme: WidgetStateProperty.resolveWith<IconThemeData>((
             Set<WidgetState> states,
@@ -67,33 +69,39 @@ class MainShellPage extends ConsumerWidget {
             );
           }),
         ),
-        child: NavigationBar(
-          key: const Key('main_tab_bar'),
-          height: 60,
-          selectedIndex: navigationShell.currentIndex,
-          onDestinationSelected: _onDestinationSelected,
-          destinations: <NavigationDestination>[
-            NavigationDestination(
-              icon: const Icon(Icons.home_rounded),
-              selectedIcon: const Icon(Icons.home_rounded),
-              label: l10n.mainTabHome,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.show_chart_rounded),
-              selectedIcon: const Icon(Icons.show_chart_rounded),
-              label: l10n.mainTabInvestment,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.favorite),
-              selectedIcon: const Icon(Icons.favorite),
-              label: l10n.mainTabKizunark,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.person_rounded),
-              selectedIcon: const Icon(Icons.person_rounded),
-              label: l10n.mainTabProfile,
-            ),
-          ],
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: colors.surface,
+            border: Border(top: BorderSide(color: colors.border)),
+          ),
+          child: NavigationBar(
+            key: const Key('main_tab_bar'),
+            height: 60,
+            selectedIndex: navigationShell.currentIndex,
+            onDestinationSelected: _onDestinationSelected,
+            destinations: <NavigationDestination>[
+              NavigationDestination(
+                icon: const Icon(Icons.home_rounded),
+                selectedIcon: const Icon(Icons.home_rounded),
+                label: l10n.mainTabHome,
+              ),
+              NavigationDestination(
+                icon: const Icon(Icons.show_chart_rounded),
+                selectedIcon: const Icon(Icons.show_chart_rounded),
+                label: l10n.mainTabInvestment,
+              ),
+              NavigationDestination(
+                icon: const Icon(Icons.favorite),
+                selectedIcon: const Icon(Icons.favorite),
+                label: l10n.mainTabKizunark,
+              ),
+              NavigationDestination(
+                icon: const Icon(Icons.person_rounded),
+                selectedIcon: const Icon(Icons.person_rounded),
+                label: l10n.mainTabProfile,
+              ),
+            ],
+          ),
         ),
       ),
     );
