@@ -15,7 +15,8 @@ class UserInvestmentApiPaths {
   static const String myInvestmentList = '/crowdfunding/user/invest/list';
   static const String benefitProject = '/crowdfunding/benefit/project';
   static const String benefitWithdrawal = '/crowdfunding/benefit/withdrawal';
-  static const String secondaryMarketCreate = '/crowdfunding/secondary/market/create';
+  static const String secondaryMarketCreate =
+      '/crowdfunding/secondary/market/create';
 }
 
 class UserInvestmentApiClient {
@@ -30,7 +31,8 @@ class UserInvestmentApiClient {
     this.myInvestmentListPath = UserInvestmentApiPaths.myInvestmentList,
     this.benefitProjectPath = UserInvestmentApiPaths.benefitProject,
     this.benefitWithdrawalPath = UserInvestmentApiPaths.benefitWithdrawal,
-    this.secondaryMarketCreatePath = UserInvestmentApiPaths.secondaryMarketCreate,
+    this.secondaryMarketCreatePath =
+        UserInvestmentApiPaths.secondaryMarketCreate,
   }) : _dioForPath = dioForPath,
        _envelopeCodec = envelopeCodec ?? const LegacyEnvelopeCodec(),
        _pageProfile = pageProfile ?? const LegacyPageProfile();
@@ -86,11 +88,16 @@ class UserInvestmentApiClient {
   Future<List<UserInvestmentApplyRecordDto>> fetchApplyList({
     int startPage = 1,
     int limit = 20,
+    List<int>? statuses,
   }) async {
     final response = await _dioForPath(applyListPath)
         .post<Map<String, dynamic>>(
           applyListPath,
-          data: <String, dynamic>{'startPage': startPage, 'limit': limit},
+          data: <String, dynamic>{
+            'startPage': startPage,
+            'limit': limit,
+            if (statuses != null && statuses.isNotEmpty) 'status': statuses,
+          },
           options: authRequired(true),
         );
 

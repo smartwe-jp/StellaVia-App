@@ -9,6 +9,7 @@ abstract class MyPageRemoteDataSource {
   Future<List<MyPageApplyRecordDto>> fetchApplyList({
     int startPage = 1,
     int limit = 20,
+    List<int>? statuses,
   });
 
   Future<List<MyPageOrderInquiryRecordDto>> fetchOrderInquiryList({
@@ -73,8 +74,13 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
   Future<List<MyPageApplyRecordDto>> fetchApplyList({
     int startPage = 1,
     int limit = 20,
+    List<int>? statuses,
   }) async {
-    return _apiClient.fetchApplyList(startPage: startPage, limit: limit);
+    return _apiClient.fetchApplyList(
+      startPage: startPage,
+      limit: limit,
+      statuses: statuses,
+    );
   }
 
   @override

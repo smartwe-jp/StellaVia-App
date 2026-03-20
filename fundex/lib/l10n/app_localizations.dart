@@ -3878,6 +3878,12 @@ abstract class AppLocalizations {
   /// **'No applications or lottery-waiting items.'**
   String get myPagePendingEmptyState;
 
+  /// No description provided for @myPageApplyHistoryEmptyState.
+  ///
+  /// In en, this message translates to:
+  /// **'No application history yet.'**
+  String get myPageApplyHistoryEmptyState;
+
   /// No description provided for @myPageCoolingOffEmptyState.
   ///
   /// In en, this message translates to:
@@ -3895,6 +3901,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to load this section. Please try again.'**
   String get myPageSectionLoadError;
+
+  /// No description provided for @myPageApplyHistoryListTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Application History'**
+  String get myPageApplyHistoryListTitle;
+
+  /// No description provided for @myPageApplyFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get myPageApplyFilterAll;
+
+  /// No description provided for @myPageApplyFilterApplying.
+  ///
+  /// In en, this message translates to:
+  /// **'Applying'**
+  String get myPageApplyFilterApplying;
+
+  /// No description provided for @myPageApplyFilterPendingConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get myPageApplyFilterPendingConfirmation;
+
+  /// No description provided for @myPageApplyFilterCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get myPageApplyFilterCompleted;
+
+  /// No description provided for @myPageApplyFilterInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid'**
+  String get myPageApplyFilterInvalid;
+
+  /// No description provided for @myPageApplyStatusApplying.
+  ///
+  /// In en, this message translates to:
+  /// **'Applying'**
+  String get myPageApplyStatusApplying;
+
+  /// No description provided for @myPageApplyStatusPendingConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get myPageApplyStatusPendingConfirmation;
+
+  /// No description provided for @myPageApplyStatusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get myPageApplyStatusCompleted;
+
+  /// No description provided for @myPageApplyStatusInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid'**
+  String get myPageApplyStatusInvalid;
+
+  /// No description provided for @myPageApplyConfirmationPendingAtLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending since'**
+  String get myPageApplyConfirmationPendingAtLabel;
+
+  /// No description provided for @myPageApplyCompletedAtLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed at'**
+  String get myPageApplyCompletedAtLabel;
+
+  /// No description provided for @myPageApplyInvalidAtLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalidated at'**
+  String get myPageApplyInvalidAtLabel;
 
   /// No description provided for @myPageApplyStatusUnderReview.
   ///

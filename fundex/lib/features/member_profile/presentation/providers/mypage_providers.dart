@@ -80,6 +80,13 @@ final myPageApplyListProvider =
       return ref.watch(fetchMyPageApplyListUseCaseProvider).call();
     });
 
+final myPagePendingApplyListProvider =
+    FutureProvider.autoDispose<List<MyPageApplyRecord>>((ref) async {
+      return ref
+          .watch(fetchMyPageApplyListUseCaseProvider)
+          .call(statuses: const <int>[0, 2]);
+    });
+
 final myPageAccountStatisticProvider =
     FutureProvider.autoDispose<MyPageAccountStatistic?>((ref) async {
       final isAuthenticated = ref.watch(isAuthenticatedProvider).asData?.value;

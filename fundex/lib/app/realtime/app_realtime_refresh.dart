@@ -12,6 +12,7 @@ void invalidateAuthenticatedRealtimeProviders(WidgetRef ref) {
   ref.invalidate(isMemberProfileCompletedProvider);
   ref.invalidate(myPageAccountStatisticProvider);
   ref.invalidate(myPageApplyListProvider);
+  ref.invalidate(myPagePendingApplyListProvider);
   ref.invalidate(myPageOrderInquiryListProvider);
   ref.invalidate(myPageInvestmentListProvider);
   ref.invalidate(walletDepositPageViewDataProvider);

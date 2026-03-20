@@ -1939,6 +1939,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPagePendingEmptyState => '当前没有申请中或等待抽签的项目。';
 
   @override
+  String get myPageApplyHistoryEmptyState => '当前暂无申购记录。';
+
+  @override
   String get myPageCoolingOffEmptyState => '当前没有处于冷静期内的项目。';
 
   @override
@@ -1946,6 +1949,45 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get myPageSectionLoadError => '该区块加载失败，请重试。';
+
+  @override
+  String get myPageApplyHistoryListTitle => '申购记录列表';
+
+  @override
+  String get myPageApplyFilterAll => '全部';
+
+  @override
+  String get myPageApplyFilterApplying => '申请中';
+
+  @override
+  String get myPageApplyFilterPendingConfirmation => '待确认';
+
+  @override
+  String get myPageApplyFilterCompleted => '已完成';
+
+  @override
+  String get myPageApplyFilterInvalid => '已失效';
+
+  @override
+  String get myPageApplyStatusApplying => '申请中';
+
+  @override
+  String get myPageApplyStatusPendingConfirmation => '待确认';
+
+  @override
+  String get myPageApplyStatusCompleted => '已完成';
+
+  @override
+  String get myPageApplyStatusInvalid => '已失效';
+
+  @override
+  String get myPageApplyConfirmationPendingAtLabel => '待确认时间';
+
+  @override
+  String get myPageApplyCompletedAtLabel => '完成时间';
+
+  @override
+  String get myPageApplyInvalidAtLabel => '失效时间';
 
   @override
   String get myPageApplyStatusUnderReview => '审核中';
@@ -4542,6 +4584,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPagePendingEmptyState => '目前沒有申請中或等待抽籤的項目。';
 
   @override
+  String get myPageApplyHistoryEmptyState => '目前暫無申購記錄。';
+
+  @override
   String get myPageCoolingOffEmptyState => '目前沒有處於冷靜期中的項目。';
 
   @override
@@ -4549,6 +4594,45 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageSectionLoadError => '该区块加载失败，请重试。';
+
+  @override
+  String get myPageApplyHistoryListTitle => '申購記錄列表';
+
+  @override
+  String get myPageApplyFilterAll => '全部';
+
+  @override
+  String get myPageApplyFilterApplying => '申請中';
+
+  @override
+  String get myPageApplyFilterPendingConfirmation => '待確認';
+
+  @override
+  String get myPageApplyFilterCompleted => '已完成';
+
+  @override
+  String get myPageApplyFilterInvalid => '已失效';
+
+  @override
+  String get myPageApplyStatusApplying => '申請中';
+
+  @override
+  String get myPageApplyStatusPendingConfirmation => '待確認';
+
+  @override
+  String get myPageApplyStatusCompleted => '已完成';
+
+  @override
+  String get myPageApplyStatusInvalid => '已失效';
+
+  @override
+  String get myPageApplyConfirmationPendingAtLabel => '待確認時間';
+
+  @override
+  String get myPageApplyCompletedAtLabel => '完成時間';
+
+  @override
+  String get myPageApplyInvalidAtLabel => '失效時間';
 
   @override
   String get myPageApplyStatusUnderReview => '審查中';

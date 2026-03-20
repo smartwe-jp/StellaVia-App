@@ -2058,6 +2058,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'No applications or lottery-waiting items.';
 
   @override
+  String get myPageApplyHistoryEmptyState => 'No application history yet.';
+
+  @override
   String get myPageCoolingOffEmptyState =>
       'No contracts in the cooling-off period.';
 
@@ -2067,6 +2070,45 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get myPageSectionLoadError =>
       'Failed to load this section. Please try again.';
+
+  @override
+  String get myPageApplyHistoryListTitle => 'Application History';
+
+  @override
+  String get myPageApplyFilterAll => 'All';
+
+  @override
+  String get myPageApplyFilterApplying => 'Applying';
+
+  @override
+  String get myPageApplyFilterPendingConfirmation => 'Pending';
+
+  @override
+  String get myPageApplyFilterCompleted => 'Completed';
+
+  @override
+  String get myPageApplyFilterInvalid => 'Invalid';
+
+  @override
+  String get myPageApplyStatusApplying => 'Applying';
+
+  @override
+  String get myPageApplyStatusPendingConfirmation => 'Pending';
+
+  @override
+  String get myPageApplyStatusCompleted => 'Completed';
+
+  @override
+  String get myPageApplyStatusInvalid => 'Invalid';
+
+  @override
+  String get myPageApplyConfirmationPendingAtLabel => 'Pending since';
+
+  @override
+  String get myPageApplyCompletedAtLabel => 'Completed at';
+
+  @override
+  String get myPageApplyInvalidAtLabel => 'Invalidated at';
 
   @override
   String get myPageApplyStatusUnderReview => 'Under review';

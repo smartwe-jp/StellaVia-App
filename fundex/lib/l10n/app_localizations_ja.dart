@@ -1954,6 +1954,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPagePendingEmptyState => '申込中または抽選待ちの案件はありません。';
 
   @override
+  String get myPageApplyHistoryEmptyState => 'お申込み履歴はありません。';
+
+  @override
   String get myPageCoolingOffEmptyState => 'クーリングオフ期間中の案件はありません。';
 
   @override
@@ -1961,6 +1964,45 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get myPageSectionLoadError => 'このセクションの取得に失敗しました。再度お試しください。';
+
+  @override
+  String get myPageApplyHistoryListTitle => 'お申込み履歴一覧';
+
+  @override
+  String get myPageApplyFilterAll => 'すべて';
+
+  @override
+  String get myPageApplyFilterApplying => '申込中';
+
+  @override
+  String get myPageApplyFilterPendingConfirmation => '確認待ち';
+
+  @override
+  String get myPageApplyFilterCompleted => '完了';
+
+  @override
+  String get myPageApplyFilterInvalid => '失効';
+
+  @override
+  String get myPageApplyStatusApplying => '申込中';
+
+  @override
+  String get myPageApplyStatusPendingConfirmation => '確認待ち';
+
+  @override
+  String get myPageApplyStatusCompleted => '完了';
+
+  @override
+  String get myPageApplyStatusInvalid => '失効';
+
+  @override
+  String get myPageApplyConfirmationPendingAtLabel => '確認待ち';
+
+  @override
+  String get myPageApplyCompletedAtLabel => '完了日';
+
+  @override
+  String get myPageApplyInvalidAtLabel => '失効日';
 
   @override
   String get myPageApplyStatusUnderReview => '審査中';

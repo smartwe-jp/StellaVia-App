@@ -25,12 +25,63 @@ enum MyPageSectionType {
   }
 }
 
-List<MyPageApplyRecord> selectPendingApplyRecords(
-  List<MyPageApplyRecord> records,
-) {
+enum MyPageApplyHistoryFilter {
+  all,
+  applying,
+  pendingConfirmation,
+  completed,
+  invalid,
+}
+
+extension MyPageApplyHistoryFilterX on MyPageApplyHistoryFilter {
+  List<int>? get statuses {
+    return switch (this) {
+      MyPageApplyHistoryFilter.all => null,
+      MyPageApplyHistoryFilter.applying => const <int>[0],
+      MyPageApplyHistoryFilter.pendingConfirmation => const <int>[2],
+      MyPageApplyHistoryFilter.completed => const <int>[3],
+      MyPageApplyHistoryFilter.invalid => const <int>[1, 4, 5],
+    };
+  }
+}
+
+List<MyPageApplyRecord> sortApplyRecords(
+  List<MyPageApplyRecord> records, {
+  int? maxItems,
+}) {
   final sorted = [...records]
     ..sort((a, b) => compareByDateDesc(a.applyTime, b.applyTime));
-  return sorted.where((record) => record.status == 0).toList(growable: false);
+  if (maxItems == null) {
+    return sorted;
+  }
+  return sorted.take(maxItems).toList(growable: false);
+}
+
+List<MyPageApplyRecord> filterApplyRecordsByHistoryFilter(
+  List<MyPageApplyRecord> records,
+  MyPageApplyHistoryFilter filter,
+) {
+  final statuses = filter.statuses;
+  if (statuses == null) {
+    return sortApplyRecords(records);
+  }
+  return sortApplyRecords(
+    records.where((record) => statuses.contains(record.status)).toList(),
+  );
+}
+
+String resolveApplyHistoryFilterLabel(
+  AppLocalizations l10n,
+  MyPageApplyHistoryFilter filter,
+) {
+  return switch (filter) {
+    MyPageApplyHistoryFilter.all => l10n.myPageApplyFilterAll,
+    MyPageApplyHistoryFilter.applying => l10n.myPageApplyFilterApplying,
+    MyPageApplyHistoryFilter.pendingConfirmation =>
+      l10n.myPageApplyFilterPendingConfirmation,
+    MyPageApplyHistoryFilter.completed => l10n.myPageApplyFilterCompleted,
+    MyPageApplyHistoryFilter.invalid => l10n.myPageApplyFilterInvalid,
+  };
 }
 
 List<MyPageOrderInquiryRecord> selectCoolingOffRecords(
@@ -79,8 +130,7 @@ List<MyPageInvestmentGroup> groupActiveInvestmentRecords(
 
 String resolveSectionTitle(AppLocalizations l10n, MyPageSectionType type) {
   return switch (type) {
-    MyPageSectionType.pendingApplications =>
-      l10n.myPagePendingApplicationsTitle,
+    MyPageSectionType.pendingApplications => l10n.myPageApplyHistoryListTitle,
     MyPageSectionType.coolingOff => l10n.myPageCoolingOffTitle,
     MyPageSectionType.activeFunds => l10n.myPageOperatingFundsTitle,
   };
@@ -112,13 +162,11 @@ String resolveApplyStatusLabel(
   MyPageApplyRecord record,
 ) {
   return switch (record.status) {
-    0 => l10n.myPageApplyStatusUnderReview,
-    1 => l10n.myPageApplyStatusReviewed,
-    2 => l10n.myPageApplyStatusAwaitingPayment,
-    3 => l10n.myPageApplyStatusPaid,
-    4 => l10n.myPageApplyStatusCancellationReview,
-    5 => l10n.myPageApplyStatusCancelled,
-    _ => l10n.myPageApplyStatusUnderReview,
+    0 => l10n.myPageApplyStatusApplying,
+    2 => l10n.myPageApplyStatusPendingConfirmation,
+    3 => l10n.myPageApplyStatusCompleted,
+    1 || 4 || 5 => l10n.myPageApplyStatusInvalid,
+    _ => l10n.myPageApplyStatusApplying,
   };
 }
 
@@ -133,34 +181,22 @@ FundLabeledValue buildApplySecondaryRow(
           formatDateTimeOrNull(record.applyTime) ??
           l10n.myPageResultAnnouncementTbd,
     ),
-    1 => FundLabeledValue(
-      label: l10n.myPageApplyReviewedAtLabel,
-      value:
-          formatDateTimeOrNull(record.passTime ?? record.applyTime) ??
-          l10n.myPageResultAnnouncementTbd,
-    ),
     2 => FundLabeledValue(
-      label: l10n.myPageApplyPaymentNoticeLabel,
+      label: l10n.myPageApplyConfirmationPendingAtLabel,
       value:
           formatDateTimeOrNull(record.passTime ?? record.applyTime) ??
           l10n.myPageResultAnnouncementTbd,
     ),
     3 => FundLabeledValue(
-      label: l10n.myPageApplyPaidAtLabel,
+      label: l10n.myPageApplyCompletedAtLabel,
       value:
           formatDateTimeOrNull(
             record.actualArrivalTime ?? record.passTime ?? record.applyTime,
           ) ??
           l10n.myPageResultAnnouncementTbd,
     ),
-    4 => FundLabeledValue(
-      label: l10n.myPageApplyCancellationRequestedAtLabel,
-      value:
-          formatDateTimeOrNull(record.passTime ?? record.applyTime) ??
-          l10n.myPageResultAnnouncementTbd,
-    ),
-    5 => FundLabeledValue(
-      label: l10n.myPageApplyCancelledAtLabel,
+    1 || 4 || 5 => FundLabeledValue(
+      label: l10n.myPageApplyInvalidAtLabel,
       value:
           formatDateTimeOrNull(record.passTime ?? record.applyTime) ??
           l10n.myPageResultAnnouncementTbd,
@@ -176,7 +212,7 @@ FundLabeledValue buildApplySecondaryRow(
 
 bool canShowApplyCancelAction(int? status) {
   return switch (status) {
-    0 || 1 || 2 => true,
+    0 || 2 => true,
     _ => false,
   };
 }

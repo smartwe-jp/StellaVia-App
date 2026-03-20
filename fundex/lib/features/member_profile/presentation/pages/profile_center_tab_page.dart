@@ -40,7 +40,7 @@ class ProfileCenterTabPage extends ConsumerWidget {
       accountStatistic?.crowdfundingTotal,
       loanTypeFunds,
     );
-    final applyAsync = ref.watch(myPageApplyListProvider);
+    final applyAsync = ref.watch(myPagePendingApplyListProvider);
     final orderInquiryAsync = ref.watch(myPageOrderInquiryListProvider);
     final investmentAsync = ref.watch(myPageInvestmentListProvider);
     final investmentRecords = investmentAsync.asData?.value;
@@ -183,23 +183,23 @@ Widget _buildPendingApplicationsSection(
 
   return asyncValue.when(
     data: (records) {
-      final displayRecords = _selectPendingApplyRecords(records);
+      final displayRecords = sortApplyRecords(records, maxItems: 3);
       final cards = displayRecords
           .map(
             (record) => FundMyPageProjectCard(
               title: record.projectName,
               accentColor: AppColorTokens.fundexViolet,
               trailing: _PendingStatusBadge(
-                label: _resolveApplyStatusLabel(l10n, record),
+                label: resolveApplyStatusLabel(l10n, record),
               ),
               rows: <FundLabeledValue>[
                 FundLabeledValue(
                   label: l10n.myPageApplyAmountLabel,
                   value: _formatCurrency(record.applyMoney, formatter),
                 ),
-                _buildApplySecondaryRow(l10n, record),
+                buildApplySecondaryRow(l10n, record),
               ],
-              footer: _canShowApplyCancelAction(record.status)
+              footer: canShowApplyCancelAction(record.status)
                   ? OutlinedButton(
                       onPressed: () => _showSnackBar(
                         context,
@@ -242,7 +242,7 @@ Widget _buildPendingApplicationsSection(
         _SectionStateCard(
           message: l10n.myPageSectionLoadError,
           actionLabel: l10n.fundListRetry,
-          onActionTap: () => ref.invalidate(myPageApplyListProvider),
+          onActionTap: () => ref.invalidate(myPagePendingApplyListProvider),
         ),
       ],
     ),
@@ -441,7 +441,7 @@ Future<void> _refreshPage(WidgetRef ref) async {
   await Future.wait<void>(<Future<void>>[
     ref.refresh(fundProjectListProvider.future).then((_) {}),
     ref.refresh(myPageAccountStatisticProvider.future).then((_) {}),
-    ref.refresh(myPageApplyListProvider.future).then((_) {}),
+    ref.refresh(myPagePendingApplyListProvider.future).then((_) {}),
     ref.refresh(myPageOrderInquiryListProvider.future).then((_) {}),
     ref.refresh(myPageInvestmentListProvider.future).then((_) {}),
   ]);
@@ -484,22 +484,6 @@ VoidCallback? _buildActiveFundDetailTapHandler(
   );
 }
 
-List<MyPageApplyRecord> _selectPendingApplyRecords(
-  List<MyPageApplyRecord> records,
-) {
-  final sorted = [...records]
-    ..sort((a, b) => _compareByDateDesc(a.applyTime, b.applyTime));
-  final filtered = sorted
-      .where((record) {
-        return switch (record.status) {
-          0 => true,
-          _ => false,
-        };
-      })
-      .toList(growable: false);
-  return filtered;
-}
-
 List<MyPageOrderInquiryRecord> _selectCoolingOffRecords(
   List<MyPageOrderInquiryRecord> records,
 ) {
@@ -537,77 +521,6 @@ List<_InvestmentGroup> _groupActiveInvestmentRecords(
     (a, b) => _compareDateTimeDesc(a.latestCreateTime, b.latestCreateTime),
   );
   return values;
-}
-
-String _resolveApplyStatusLabel(dynamic l10n, MyPageApplyRecord record) {
-  return switch (record.status) {
-    0 => l10n.myPageApplyStatusUnderReview,
-    1 => l10n.myPageApplyStatusReviewed,
-    2 => l10n.myPageApplyStatusAwaitingPayment,
-    3 => l10n.myPageApplyStatusPaid,
-    4 => l10n.myPageApplyStatusCancellationReview,
-    5 => l10n.myPageApplyStatusCancelled,
-    _ => l10n.myPageApplyStatusUnderReview,
-  };
-}
-
-FundLabeledValue _buildApplySecondaryRow(
-  dynamic l10n,
-  MyPageApplyRecord record,
-) {
-  return switch (record.status) {
-    0 => FundLabeledValue(
-      label: l10n.myPageApplySubmittedAtLabel,
-      value:
-          _formatDateTimeOrNull(record.applyTime) ??
-          l10n.myPageResultAnnouncementTbd,
-    ),
-    1 => FundLabeledValue(
-      label: l10n.myPageApplyReviewedAtLabel,
-      value:
-          _formatDateTimeOrNull(record.passTime ?? record.applyTime) ??
-          l10n.myPageResultAnnouncementTbd,
-    ),
-    2 => FundLabeledValue(
-      label: l10n.myPageApplyPaymentNoticeLabel,
-      value:
-          _formatDateTimeOrNull(record.passTime ?? record.applyTime) ??
-          l10n.myPageResultAnnouncementTbd,
-    ),
-    3 => FundLabeledValue(
-      label: l10n.myPageApplyPaidAtLabel,
-      value:
-          _formatDateTimeOrNull(
-            record.actualArrivalTime ?? record.passTime ?? record.applyTime,
-          ) ??
-          l10n.myPageResultAnnouncementTbd,
-    ),
-    4 => FundLabeledValue(
-      label: l10n.myPageApplyCancellationRequestedAtLabel,
-      value:
-          _formatDateTimeOrNull(record.passTime ?? record.applyTime) ??
-          l10n.myPageResultAnnouncementTbd,
-    ),
-    5 => FundLabeledValue(
-      label: l10n.myPageApplyCancelledAtLabel,
-      value:
-          _formatDateTimeOrNull(record.passTime ?? record.applyTime) ??
-          l10n.myPageResultAnnouncementTbd,
-    ),
-    _ => FundLabeledValue(
-      label: l10n.myPageApplySubmittedAtLabel,
-      value:
-          _formatDateTimeOrNull(record.applyTime) ??
-          l10n.myPageResultAnnouncementTbd,
-    ),
-  };
-}
-
-bool _canShowApplyCancelAction(int? status) {
-  return switch (status) {
-    0 || 1 || 2 => true,
-    _ => false,
-  };
 }
 
 String? _resolveOrderProjectId(MyPageOrderInquiryRecord record) {
@@ -738,14 +651,6 @@ String? _formatDateOrNull(String? raw) {
     return null;
   }
   return DateFormat('yyyy/MM/dd').format(date);
-}
-
-String? _formatDateTimeOrNull(String? raw) {
-  final date = _parseApiDate(raw);
-  if (date == null) {
-    return null;
-  }
-  return DateFormat('yyyy/MM/dd HH:mm').format(date);
 }
 
 DateTime? _parseApiDate(String? raw) {

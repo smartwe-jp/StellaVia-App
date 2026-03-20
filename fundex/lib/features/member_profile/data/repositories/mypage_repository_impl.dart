@@ -19,10 +19,12 @@ class MyPageRepositoryImpl implements MyPageRepository {
   Future<List<MyPageApplyRecord>> fetchApplyList({
     int startPage = 1,
     int limit = 20,
+    List<int>? statuses,
   }) async {
     final dtos = await _remote.fetchApplyList(
       startPage: startPage,
       limit: limit,
+      statuses: statuses,
     );
     return dtos.map((dto) => dto.toEntity()).toList(growable: false);
   }

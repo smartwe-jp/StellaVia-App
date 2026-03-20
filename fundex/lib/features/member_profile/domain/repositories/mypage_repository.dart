@@ -6,6 +6,7 @@ abstract class MyPageRepository {
   Future<List<MyPageApplyRecord>> fetchApplyList({
     int startPage = 1,
     int limit = 20,
+    List<int>? statuses,
   });
 
   Future<List<MyPageOrderInquiryRecord>> fetchOrderInquiryList({

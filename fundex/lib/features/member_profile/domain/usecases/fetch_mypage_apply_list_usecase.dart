@@ -9,7 +9,12 @@ class FetchMyPageApplyListUseCase {
   Future<List<MyPageApplyRecord>> call({
     int startPage = 1,
     int limit = 20,
+    List<int>? statuses,
   }) {
-    return _repository.fetchApplyList(startPage: startPage, limit: limit);
+    return _repository.fetchApplyList(
+      startPage: startPage,
+      limit: limit,
+      statuses: statuses,
+    );
   }
 }

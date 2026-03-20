@@ -38,6 +38,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
   bool _hasMore = true;
   Object? _error;
   int _nextPage = 1;
+  MyPageApplyHistoryFilter _applyFilter = MyPageApplyHistoryFilter.all;
 
   @override
   void initState() {
@@ -154,9 +155,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
 
   int get _visibleItemCount {
     return switch (widget.sectionType) {
-      MyPageSectionType.pendingApplications => selectPendingApplyRecords(
-        _applyRecords,
-      ).length,
+      MyPageSectionType.pendingApplications => _filteredApplyRecords.length,
       MyPageSectionType.coolingOff => selectCoolingOffRecords(
         _orderInquiryRecords,
       ).length,
@@ -169,6 +168,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final colors = Theme.of(context).appColors;
     final localeTag = Localizations.localeOf(context).toLanguageTag();
     final currencyFormatter = NumberFormat.currency(
       locale: localeTag,
@@ -183,27 +183,70 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     };
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(resolveSectionTitle(l10n, widget.sectionType)),
-      ),
-      body: RefreshIndicator(
-        onRefresh: _loadInitial,
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: <Widget>[
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-              sliver: _buildSliverContent(
-                context,
-                formatter: currencyFormatter,
-                localeTag: localeTag,
-                fundProjectsById: projectsById,
-              ),
-            ),
-          ],
+      appBar: AppNavigationBar(
+        title: widget.sectionType == MyPageSectionType.pendingApplications
+            ? l10n.myPageApplyHistoryListTitle
+            : resolveSectionTitle(l10n, widget.sectionType),
+        backgroundColor: colors.surface,
+        foregroundColor: colors.textPrimary,
+        leading: AppNavigationIconButton(
+          icon: Icons.arrow_back_rounded,
+          onTap: () => context.pop(),
+          backgroundColor: colors.surface.withValues(alpha: 0),
+          foregroundColor: colors.textPrimary,
         ),
       ),
+      body: Column(
+        children: <Widget>[
+          if (widget.sectionType == MyPageSectionType.pendingApplications)
+            AppFilterBar<MyPageApplyHistoryFilter>(
+              value: _applyFilter,
+              onChanged: (MyPageApplyHistoryFilter value) {
+                setState(() {
+                  _applyFilter = value;
+                });
+                if (_visibleItemCount == 0 && _hasMore) {
+                  _loadNextPage();
+                }
+              },
+              backgroundColor: colors.surface,
+              showBottomDivider: true,
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+              items: MyPageApplyHistoryFilter.values
+                  .map(
+                    (filter) => AppFilterBarItem<MyPageApplyHistoryFilter>(
+                      value: filter,
+                      label: resolveApplyHistoryFilterLabel(l10n, filter),
+                    ),
+                  )
+                  .toList(growable: false),
+            ),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: _loadInitial,
+              child: CustomScrollView(
+                controller: _scrollController,
+                slivers: <Widget>[
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                    sliver: _buildSliverContent(
+                      context,
+                      formatter: currencyFormatter,
+                      localeTag: localeTag,
+                      fundProjectsById: projectsById,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
+  }
+
+  List<MyPageApplyRecord> get _filteredApplyRecords {
+    return filterApplyRecordsByHistoryFilter(_applyRecords, _applyFilter);
   }
 
   Widget _buildRetryButton(BuildContext context) {
@@ -414,7 +457,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
 
     final children = switch (widget.sectionType) {
       MyPageSectionType.pendingApplications =>
-        selectPendingApplyRecords(_applyRecords)
+        _filteredApplyRecords
             .map((record) => _buildPendingCard(context, record, formatter))
             .toList(growable: false),
       MyPageSectionType.coolingOff =>
@@ -444,7 +487,9 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
 
     if (children.isEmpty) {
       return _buildSliverState(
-        message: resolveSectionEmptyState(l10n, widget.sectionType),
+        message: widget.sectionType == MyPageSectionType.pendingApplications
+            ? l10n.myPageApplyHistoryEmptyState
+            : resolveSectionEmptyState(l10n, widget.sectionType),
       );
     }
 
