@@ -245,6 +245,18 @@ abstract class AppLocalizations {
   /// **'Removed from favorites'**
   String get favoriteRemovedToast;
 
+  /// No description provided for @networkOfflineBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re offline'**
+  String get networkOfflineBannerTitle;
+
+  /// No description provided for @networkOfflineBannerMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll refresh the latest data automatically when the connection returns.'**
+  String get networkOfflineBannerMessage;
+
   /// No description provided for @loginForgotPassword.
   ///
   /// In en, this message translates to:

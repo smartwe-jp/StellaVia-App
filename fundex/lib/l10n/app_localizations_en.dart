@@ -82,6 +82,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get favoriteRemovedToast => 'Removed from favorites';
 
   @override
+  String get networkOfflineBannerTitle => 'You\'re offline';
+
+  @override
+  String get networkOfflineBannerMessage =>
+      'We\'ll refresh the latest data automatically when the connection returns.';
+
+  @override
   String get loginForgotPassword => 'Forgot password';
 
   @override

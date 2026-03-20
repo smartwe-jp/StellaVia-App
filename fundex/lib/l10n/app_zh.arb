@@ -24,6 +24,8 @@
   "imageViewerCloseTooltip": "关闭",
   "favoriteAddedToast": "已加入收藏",
   "favoriteRemovedToast": "已取消收藏",
+  "networkOfflineBannerTitle": "当前无网络",
+  "networkOfflineBannerMessage": "网络恢复后将自动刷新最新数据。",
   "loginForgotPassword": "找回密码",
   "loginFootnote": "面向国际会员设计，兼顾日本市场体验与隐私规范。",
   "loginErrorSendCodeFailed": "验证码发送失败，请稍后重试",

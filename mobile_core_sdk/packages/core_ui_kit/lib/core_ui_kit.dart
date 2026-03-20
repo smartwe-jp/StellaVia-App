@@ -6,6 +6,7 @@ export 'src/app_theme_extensions.dart';
 export 'src/app_dialogs.dart';
 export 'src/app_bottom_sheet.dart';
 export 'src/app_notice.dart';
+export 'src/app_network_status_bar.dart';
 export 'src/app_navigation_bar.dart';
 export 'src/app_image_viewer.dart';
 export 'src/app_pdf_viewer.dart';

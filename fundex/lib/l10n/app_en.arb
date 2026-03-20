@@ -24,6 +24,8 @@
   "imageViewerCloseTooltip": "Close",
   "favoriteAddedToast": "Added to favorites",
   "favoriteRemovedToast": "Removed from favorites",
+  "networkOfflineBannerTitle": "You're offline",
+  "networkOfflineBannerMessage": "We'll refresh the latest data automatically when the connection returns.",
   "loginForgotPassword": "Forgot password",
   "loginFootnote": "Designed for global members with Japan-ready UX and privacy standards.",
   "loginErrorSendCodeFailed": "Unable to send code. Please try again later.",

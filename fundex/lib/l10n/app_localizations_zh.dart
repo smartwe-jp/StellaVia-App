@@ -81,6 +81,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get favoriteRemovedToast => '已取消收藏';
 
   @override
+  String get networkOfflineBannerTitle => '当前无网络';
+
+  @override
+  String get networkOfflineBannerMessage => '网络恢复后将自动刷新最新数据。';
+
+  @override
   String get loginForgotPassword => '找回密码';
 
   @override
@@ -2625,6 +2631,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get favoriteRemovedToast => '已取消收藏';
+
+  @override
+  String get networkOfflineBannerTitle => '目前沒有網路';
+
+  @override
+  String get networkOfflineBannerMessage => '網路恢復後將自動更新最新資料。';
 
   @override
   String get loginForgotPassword => '忘記密碼？';

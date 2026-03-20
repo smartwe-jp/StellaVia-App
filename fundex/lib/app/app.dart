@@ -16,8 +16,10 @@ import 'realtime/app_lifecycle_refresh_scope.dart';
 import 'realtime/app_realtime_refresh.dart';
 import 'router/app_router.dart';
 import 'network/app_network_providers.dart';
+import 'network/app_network_connectivity_providers.dart';
 import 'theme/app_theme_mode_providers.dart';
 import '../features/auth/presentation/providers/auth_providers.dart';
+import '../features/investment/presentation/providers/fund_project_providers.dart';
 import '../features/member_profile/presentation/providers/member_profile_providers.dart';
 
 final GlobalKey<ScaffoldMessengerState> _rootScaffoldMessengerKey =
@@ -76,6 +78,25 @@ class MemberTemplateApp extends ConsumerWidget {
       }
       unawaited(ref.read(authSessionProvider.notifier).markUnauthenticated());
     });
+
+    ref.listen<AsyncValue<AppNetworkAvailability>>(
+      appNetworkAvailabilityProvider,
+      (previous, next) {
+        final previousAvailability = previous?.asData?.value;
+        final nextAvailability = next.asData?.value;
+        if (previousAvailability != AppNetworkAvailability.offline ||
+            nextAvailability != AppNetworkAvailability.online) {
+          return;
+        }
+        ref.invalidate(fundProjectListProvider);
+        final isAuthenticated =
+            ref.read(isAuthenticatedProvider).asData?.value ?? false;
+        if (!isAuthenticated) {
+          return;
+        }
+        invalidateAuthenticatedRealtimeProviders(ref);
+      },
+    );
 
     return MaterialApp.router(
       title: environment.appName,

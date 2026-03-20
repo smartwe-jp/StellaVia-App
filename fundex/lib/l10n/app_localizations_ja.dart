@@ -81,6 +81,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get favoriteRemovedToast => 'お気に入りから削除しました';
 
   @override
+  String get networkOfflineBannerTitle => '現在オフラインです';
+
+  @override
+  String get networkOfflineBannerMessage => '接続が回復すると最新データを自動で更新します。';
+
+  @override
   String get loginForgotPassword => 'パスワードを忘れた場合';
 
   @override

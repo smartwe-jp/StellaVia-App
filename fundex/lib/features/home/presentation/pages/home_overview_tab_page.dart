@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/network/app_network_connectivity_providers.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
@@ -24,6 +25,9 @@ class HomeOverviewTabPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final authState = ref.watch(isAuthenticatedProvider);
+    final networkAvailability =
+        ref.watch(appNetworkAvailabilityProvider).asData?.value ??
+        AppNetworkAvailability.online;
     final isAuthenticated = authState.asData?.value ?? false;
     final currentUser = ref.watch(currentAuthUserProvider).asData?.value;
     final asyncProjects = ref.watch(fundProjectListProvider);
@@ -147,6 +151,11 @@ class HomeOverviewTabPage extends ConsumerWidget {
         key: const Key('home_tab_content'),
         padding: EdgeInsets.zero,
         children: <Widget>[
+          if (networkAvailability == AppNetworkAvailability.offline)
+            AppNetworkStatusBar(
+              title: l10n.networkOfflineBannerTitle,
+              message: l10n.networkOfflineBannerMessage,
+            ),
           topSection,
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 12, 0, 24),

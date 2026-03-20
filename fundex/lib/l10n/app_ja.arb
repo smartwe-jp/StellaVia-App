@@ -24,6 +24,8 @@
   "imageViewerCloseTooltip": "閉じる",
   "favoriteAddedToast": "お気に入りに追加しました",
   "favoriteRemovedToast": "お気に入りから削除しました",
+  "networkOfflineBannerTitle": "現在オフラインです",
+  "networkOfflineBannerMessage": "接続が回復すると最新データを自動で更新します。",
   "loginForgotPassword": "パスワードを忘れた場合",
   "loginFootnote": "日本市場とグローバル利用を意識した、上質で安全なUX設計。",
   "loginErrorSendCodeFailed": "コード送信に失敗しました。後でもう一度お試しください。",
