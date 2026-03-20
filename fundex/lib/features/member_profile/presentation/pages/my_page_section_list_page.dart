@@ -507,7 +507,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
       visualDensity: const VisualDensity(horizontal: -2, vertical: -3),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       minimumSize: const Size(0, 0),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       textStyle: appText.chip,
     );
