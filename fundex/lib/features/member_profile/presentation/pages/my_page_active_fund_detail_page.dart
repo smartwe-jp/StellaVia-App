@@ -373,7 +373,7 @@ ButtonStyle _detailOutlineButtonStyle(
     visualDensity: const VisualDensity(horizontal: -2, vertical: -3),
     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
     minimumSize: const Size(0, 0),
-    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 20),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     textStyle: appText.chip,
   );

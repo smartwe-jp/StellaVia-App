@@ -21,6 +21,7 @@ export 'src/member_profile_form_widgets.dart';
 export 'src/member_profile_step_scaffold.dart';
 export 'src/fund_detail_widgets.dart';
 export 'src/fund_home_widgets.dart';
+export 'src/fund_secondary_market_widgets.dart';
 export 'src/fund_mypage_widgets.dart';
 export 'src/fund_wallet_widgets.dart';
 export 'src/kizunark_widgets.dart';

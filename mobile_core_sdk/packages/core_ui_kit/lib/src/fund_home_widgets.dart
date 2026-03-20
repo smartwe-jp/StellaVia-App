@@ -704,11 +704,13 @@ class FundSectionHeader extends StatelessWidget {
   const FundSectionHeader({
     super.key,
     required this.title,
+    this.leading,
     this.actionLabel,
     this.onActionTap,
   });
 
   final String title;
+  final Widget? leading;
   final String? actionLabel;
   final VoidCallback? onActionTap;
 
@@ -720,7 +722,17 @@ class FundSectionHeader extends StatelessWidget {
 
     return Row(
       children: <Widget>[
-        Expanded(child: Text(title, style: appText.sectionTitle)),
+        Expanded(
+          child: Row(
+            children: <Widget>[
+              if (leading != null) ...<Widget>[
+                leading!,
+                const SizedBox(width: 8),
+              ],
+              Expanded(child: Text(title, style: appText.sectionTitle)),
+            ],
+          ),
+        ),
         if (actionLabel != null)
           TextButton(
             onPressed: onActionTap,
@@ -777,6 +789,7 @@ class FundFeaturedFundCarousel extends StatelessWidget {
     super.key,
     required this.title,
     required this.children,
+    this.leading,
     this.actionLabel,
     this.onActionTap,
     this.height = 260,
@@ -785,6 +798,7 @@ class FundFeaturedFundCarousel extends StatelessWidget {
   });
 
   final String title;
+  final Widget? leading;
   final String? actionLabel;
   final VoidCallback? onActionTap;
   final List<Widget> children;
@@ -805,6 +819,7 @@ class FundFeaturedFundCarousel extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: UiTokens.spacing16),
           child: FundSectionHeader(
             title: title,
+            leading: leading,
             actionLabel: actionLabel,
             onActionTap: onActionTap,
           ),

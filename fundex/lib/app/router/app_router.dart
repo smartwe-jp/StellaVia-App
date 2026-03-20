@@ -17,6 +17,10 @@ import '../../features/home/presentation/pages/home_overview_tab_page.dart';
 import '../../features/investment/presentation/pages/fund_project_detail_page.dart';
 import '../../features/investment/presentation/pages/fund_lottery_apply_flow_page.dart';
 import '../../features/investment/presentation/pages/investment_tab_page.dart';
+import '../../features/investment/presentation/pages/secondary_market_buy_confirm_page.dart';
+import '../../features/investment/presentation/pages/secondary_market_buy_order_page.dart';
+import '../../features/investment/presentation/pages/secondary_market_marketplace_detail_page.dart';
+import '../../features/investment/presentation/pages/secondary_market_marketplace_page.dart';
 import '../../features/investment/presentation/support/fund_lottery_apply_step.dart';
 import '../../features/main_shell/presentation/pages/main_shell_page.dart';
 import '../../features/member_profile/presentation/pages/member_profile_edit_flow_page.dart';
@@ -38,6 +42,7 @@ import '../../features/wallet/presentation/pages/wallet_bank_settings_page.dart'
 import '../../features/wallet/presentation/pages/wallet_history_page.dart';
 import '../../features/wallet/presentation/pages/wallet_withdraw_history_page.dart';
 import '../../features/wallet/presentation/pages/wallet_withdrawing_list_page.dart';
+import '../../features/investment/presentation/support/secondary_market_trade_models.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(
   debugLabel: 'root',
@@ -202,6 +207,27 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 builder: (BuildContext context, GoRouterState state) {
                   return const HomeOverviewTabPage();
                 },
+                routes: <RouteBase>[
+                  GoRoute(
+                    path: 'free-market',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const SecondaryMarketMarketplacePage();
+                    },
+                  ),
+                  GoRoute(
+                    path: 'free-market/:id',
+                    builder: (BuildContext context, GoRouterState state) {
+                      final id = state.pathParameters['id'] ?? '';
+                      final extra = state.extra;
+                      return SecondaryMarketMarketplaceDetailPage(
+                        orderId: id,
+                        initialRecord: extra is MyPageOrderInquiryRecord
+                            ? extra
+                            : null,
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -424,6 +450,47 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             );
           }
           return MyPageSecondaryMarketSellConfirmPage(draft: extra);
+        },
+      ),
+      GoRoute(
+        path: '/free-market',
+        redirect: (BuildContext context, GoRouterState state) {
+          return '/home/free-market';
+        },
+      ),
+      GoRoute(
+        path: '/free-market/:id',
+        redirect: (BuildContext context, GoRouterState state) {
+          final id = state.pathParameters['id'] ?? '';
+          return '/home/free-market/$id';
+        },
+      ),
+      GoRoute(
+        path: '/free-market/:id/buy',
+        builder: (BuildContext context, GoRouterState state) {
+          final extra = state.extra;
+          if (extra is! SecondaryMarketBuySeed) {
+            return const Scaffold(
+              body: Center(child: Text('Invalid secondary market buy context')),
+            );
+          }
+          return SecondaryMarketBuyOrderPage(seed: extra);
+        },
+      ),
+      GoRoute(
+        path: '/free-market/:id/buy/confirm',
+        builder: (BuildContext context, GoRouterState state) {
+          final extra = state.extra;
+          if (extra is! SecondaryMarketBuyDraft) {
+            return const Scaffold(
+              body: Center(
+                child: Text(
+                  'Invalid secondary market buy confirmation context',
+                ),
+              ),
+            );
+          }
+          return SecondaryMarketBuyConfirmPage(draft: extra);
         },
       ),
       GoRoute(

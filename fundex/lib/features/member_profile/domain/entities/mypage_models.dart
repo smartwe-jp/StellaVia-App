@@ -10,6 +10,7 @@ class MyPageInvestorType {
     this.remark,
     this.isOpen,
     this.isOpenType,
+    this.currentAmountApplication,
   });
 
   final String? id;
@@ -22,6 +23,7 @@ class MyPageInvestorType {
   final String? remark;
   final bool? isOpen;
   final int? isOpenType;
+  final int? currentAmountApplication;
 }
 
 class MyPagePdfUrl {
@@ -49,6 +51,7 @@ class MyPagePdfDocument {
 class MyPageApplyRecord {
   const MyPageApplyRecord({
     this.projectId,
+    this.projectRuleId,
     this.secondaryMarketSellId,
     this.fromProcessId,
     this.investorCode,
@@ -67,6 +70,8 @@ class MyPageApplyRecord {
     this.passMoney,
     this.passTime,
     this.actualArrivalTime,
+    this.settlementDate,
+    this.paymentExpiryDate,
     this.investNum,
     this.investMoney,
     this.processId,
@@ -74,6 +79,7 @@ class MyPageApplyRecord {
   });
 
   final String? projectId;
+  final String? projectRuleId;
   final String? secondaryMarketSellId;
   final String? fromProcessId;
   final String? investorCode;
@@ -92,10 +98,48 @@ class MyPageApplyRecord {
   final num? passMoney;
   final String? passTime;
   final String? actualArrivalTime;
+  final String? settlementDate;
+  final String? paymentExpiryDate;
   final int? investNum;
   final num? investMoney;
   final String? processId;
   final num? serviceFee;
+}
+
+class MyPageOrderInquiryApplyResult {
+  const MyPageOrderInquiryApplyResult({
+    this.processId,
+    this.investorType,
+    this.memberId,
+    this.projectId,
+    this.projectRuleId,
+    this.serviceFee,
+    this.sellerServiceFee,
+    this.investNum,
+    this.investMoney,
+    this.investNumValid,
+    this.investMoneyValid,
+    this.status,
+    this.checkTimes,
+    this.createTime,
+    this.withdrawalTime,
+  });
+
+  final String? processId;
+  final String? investorType;
+  final int? memberId;
+  final String? projectId;
+  final String? projectRuleId;
+  final num? serviceFee;
+  final num? sellerServiceFee;
+  final int? investNum;
+  final num? investMoney;
+  final int? investNumValid;
+  final num? investMoneyValid;
+  final int? status;
+  final int? checkTimes;
+  final String? createTime;
+  final String? withdrawalTime;
 }
 
 class MyPageOrderInquiryRecord {
@@ -104,6 +148,7 @@ class MyPageOrderInquiryRecord {
     this.memberId,
     this.fromProcessId,
     this.investorType,
+    this.projectId,
     required this.projectName,
     this.sellNum,
     this.soldNum,
@@ -112,12 +157,15 @@ class MyPageOrderInquiryRecord {
     this.createTime,
     this.updateTime,
     this.pdfDocuments = const <MyPagePdfDocument>[],
+    this.applyList = const <MyPageApplyRecord>[],
+    this.applyResultList = const <MyPageOrderInquiryApplyResult>[],
   });
 
   final String? id;
   final int? memberId;
   final String? fromProcessId;
   final MyPageInvestorType? investorType;
+  final String? projectId;
   final String projectName;
   final int? sellNum;
   final int? soldNum;
@@ -126,6 +174,8 @@ class MyPageOrderInquiryRecord {
   final String? createTime;
   final String? updateTime;
   final List<MyPagePdfDocument> pdfDocuments;
+  final List<MyPageApplyRecord> applyList;
+  final List<MyPageOrderInquiryApplyResult> applyResultList;
 }
 
 class MyPageInvestmentRecord {

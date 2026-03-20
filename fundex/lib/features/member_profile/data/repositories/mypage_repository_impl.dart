@@ -31,12 +31,14 @@ class MyPageRepositoryImpl implements MyPageRepository {
 
   @override
   Future<List<MyPageOrderInquiryRecord>> fetchOrderInquiryList({
-    required int userId,
+    int? userId,
+    String? status,
     int startPage = 1,
     int limit = 20,
   }) async {
     final dtos = await _remote.fetchOrderInquiryList(
       userId: userId,
+      status: status,
       startPage: startPage,
       limit: limit,
     );
@@ -79,5 +81,13 @@ class MyPageRepositoryImpl implements MyPageRepository {
       sellNum: sellNum,
       price: price,
     );
+  }
+
+  @override
+  Future<void> submitSecondaryMarketPurchase({
+    required String id,
+    required int buyNum,
+  }) {
+    return _remote.submitSecondaryMarketPurchase(id: id, buyNum: buyNum);
   }
 }

@@ -13,7 +13,8 @@ abstract class MyPageRemoteDataSource {
   });
 
   Future<List<MyPageOrderInquiryRecordDto>> fetchOrderInquiryList({
-    required int userId,
+    int? userId,
+    String? status,
     int startPage = 1,
     int limit = 20,
   });
@@ -33,6 +34,11 @@ abstract class MyPageRemoteDataSource {
     required String fromProcessId,
     required int sellNum,
     required int price,
+  });
+
+  Future<void> submitSecondaryMarketPurchase({
+    required String id,
+    required int buyNum,
   });
 }
 
@@ -85,12 +91,14 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
 
   @override
   Future<List<MyPageOrderInquiryRecordDto>> fetchOrderInquiryList({
-    required int userId,
+    int? userId,
+    String? status,
     int startPage = 1,
     int limit = 20,
   }) async {
     return _apiClient.fetchOrderInquiryList(
       userId: userId,
+      status: status,
       startPage: startPage,
       limit: limit,
     );
@@ -127,5 +135,13 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
       sellNum: sellNum,
       price: price,
     );
+  }
+
+  @override
+  Future<void> submitSecondaryMarketPurchase({
+    required String id,
+    required int buyNum,
+  }) async {
+    await _apiClient.submitSecondaryMarketPurchase(id: id, buyNum: buyNum);
   }
 }

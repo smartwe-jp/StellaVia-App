@@ -4,6 +4,7 @@ export 'package:company_api_runtime/company_api_runtime.dart'
         UserInvestmentApplyRecordDto,
         UserInvestmentInvestorTypeDto,
         UserInvestmentBenefitDetailDto,
+        UserInvestmentOrderInquiryApplyResultDto,
         UserInvestmentOrderInquiryRecordDto,
         UserInvestmentPdfDocumentDto,
         UserInvestmentProjectBenefitDto,
@@ -16,6 +17,7 @@ import 'package:company_api_runtime/company_api_runtime.dart'
         UserInvestmentApplyRecordDto,
         UserInvestmentInvestorTypeDto,
         UserInvestmentBenefitDetailDto,
+        UserInvestmentOrderInquiryApplyResultDto,
         UserInvestmentOrderInquiryRecordDto,
         UserInvestmentPdfDocumentDto,
         UserInvestmentProjectBenefitDto,
@@ -31,6 +33,8 @@ typedef MyPageInvestorTypeDto = UserInvestmentInvestorTypeDto;
 typedef MyPageBenefitDetailDto = UserInvestmentBenefitDetailDto;
 typedef MyPageProjectBenefitDto = UserInvestmentProjectBenefitDto;
 typedef MyPageOrderInquiryRecordDto = UserInvestmentOrderInquiryRecordDto;
+typedef MyPageOrderInquiryApplyResultDto =
+    UserInvestmentOrderInquiryApplyResultDto;
 typedef MyPagePdfDocumentDto = UserInvestmentPdfDocumentDto;
 typedef MyPagePdfUrlDto = UserInvestmentPdfUrlDto;
 
@@ -59,6 +63,7 @@ extension MyPageInvestorTypeDtoMapper on MyPageInvestorTypeDto {
       remark: remark,
       isOpen: isOpen,
       isOpenType: isOpenType,
+      currentAmountApplication: currentAmountApplication,
     );
   }
 }
@@ -86,6 +91,7 @@ extension MyPageApplyRecordDtoMapper on MyPageApplyRecordDto {
   MyPageApplyRecord toEntity() {
     return MyPageApplyRecord(
       projectId: projectId,
+      projectRuleId: projectRuleId,
       secondaryMarketSellId: secondaryMarketSellId,
       fromProcessId: fromProcessId,
       investorCode: investorCode,
@@ -104,10 +110,35 @@ extension MyPageApplyRecordDtoMapper on MyPageApplyRecordDto {
       passMoney: passMoney,
       passTime: passTime,
       actualArrivalTime: actualArrivalTime,
+      settlementDate: settlementDate,
+      paymentExpiryDate: paymentExpiryDate,
       investNum: investNum,
       investMoney: investMoney,
       processId: processId,
       serviceFee: serviceFee,
+    );
+  }
+}
+
+extension MyPageOrderInquiryApplyResultDtoMapper
+    on MyPageOrderInquiryApplyResultDto {
+  MyPageOrderInquiryApplyResult toEntity() {
+    return MyPageOrderInquiryApplyResult(
+      processId: processId,
+      investorType: investorType,
+      memberId: memberId,
+      projectId: projectId,
+      projectRuleId: projectRuleId,
+      serviceFee: serviceFee,
+      sellerServiceFee: sellerServiceFee,
+      investNum: investNum,
+      investMoney: investMoney,
+      investNumValid: investNumValid,
+      investMoneyValid: investMoneyValid,
+      status: status,
+      checkTimes: checkTimes,
+      createTime: createTime,
+      withdrawalTime: withdrawalTime,
     );
   }
 }
@@ -119,6 +150,7 @@ extension MyPageOrderInquiryRecordDtoMapper on MyPageOrderInquiryRecordDto {
       memberId: memberId,
       fromProcessId: fromProcessId,
       investorType: investorType?.toEntity(),
+      projectId: projectId,
       projectName: projectName,
       sellNum: sellNum,
       soldNum: soldNum,
@@ -128,6 +160,12 @@ extension MyPageOrderInquiryRecordDtoMapper on MyPageOrderInquiryRecordDto {
       updateTime: updateTime,
       pdfDocuments: pdfDocuments
           .map((MyPagePdfDocumentDto item) => item.toEntity())
+          .toList(growable: false),
+      applyList: applyList
+          .map((MyPageApplyRecordDto item) => item.toEntity())
+          .toList(growable: false),
+      applyResultList: applyResultList
+          .map((MyPageOrderInquiryApplyResultDto item) => item.toEntity())
           .toList(growable: false),
     );
   }

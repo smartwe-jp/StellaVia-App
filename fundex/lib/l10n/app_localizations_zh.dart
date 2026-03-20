@@ -611,6 +611,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeEstimatedYieldLabel => '预计年化';
 
   @override
+  String get homeFreeMarketTitle => '自由市场';
+
+  @override
+  String get homeFreeMarketStatusListed => '挂牌中';
+
+  @override
+  String get homeFreeMarketSoldUnitsLabel => '成交口数';
+
+  @override
+  String get homeFreeMarketUnitPriceLabel => '单价';
+
+  @override
+  String get homeFreeMarketEmptyState => '当前没有公开挂牌的自由市场项目。';
+
+  @override
   String get homeTagOpen => '募集中';
 
   @override
@@ -2232,6 +2247,116 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageResaleSubmitFailure => '卖出申请提交失败，请稍后重试。';
 
   @override
+  String get secondaryMarketListLoadError => '自由市场列表加载失败。';
+
+  @override
+  String get secondaryMarketDetailLoadError => '自由市场详情加载失败。';
+
+  @override
+  String get secondaryMarketDetailUnavailable => '未找到该挂牌信息。';
+
+  @override
+  String get secondaryMarketDetailSoldOutMessage => '该挂牌已售罄。';
+
+  @override
+  String get secondaryMarketBuyAction => '购入';
+
+  @override
+  String get secondaryMarketOrderTimeLabel => '订单时间';
+
+  @override
+  String get secondaryMarketInvestorTypeLabel => '出资者种别';
+
+  @override
+  String get secondaryMarketSellUnitsLabel => '挂牌口数';
+
+  @override
+  String get secondaryMarketSoldUnitsLabel => '成交口数';
+
+  @override
+  String get secondaryMarketRemainingUnitsLabel => '剩余口数';
+
+  @override
+  String get secondaryMarketDocumentsTitle => '相关文件';
+
+  @override
+  String get secondaryMarketDocumentPending => '资料准备中';
+
+  @override
+  String get secondaryMarketBuyOrderTitle => '购入订单';
+
+  @override
+  String get secondaryMarketTradeTabBuy => '购入';
+
+  @override
+  String get secondaryMarketTradeTabConfirm => '确认';
+
+  @override
+  String get secondaryMarketBuyOrderMethodLabel => '订单方式';
+
+  @override
+  String get secondaryMarketBuyOrderMethodValue => '购入订单';
+
+  @override
+  String get secondaryMarketBuyAvailableUnitsLabel => '可购入口数';
+
+  @override
+  String get secondaryMarketBuyUnitsLabel => '购入口数';
+
+  @override
+  String get secondaryMarketBuyUnitPriceLabel => '购入单价';
+
+  @override
+  String get secondaryMarketBuyFeeLabel => '购入手续费';
+
+  @override
+  String get secondaryMarketBuyFeeValue => '交易金额的1.65%';
+
+  @override
+  String get secondaryMarketBuyAgreementLabel => '文件确认';
+
+  @override
+  String get secondaryMarketBuyAgreementBody => '我已同意以下文件并确认内容后发起购入申请。';
+
+  @override
+  String get secondaryMarketBuyAgreementSampleLabel => '查看相关文件';
+
+  @override
+  String get secondaryMarketBuyConfirmButton => '去确认';
+
+  @override
+  String get secondaryMarketBuyBackButton => '返回';
+
+  @override
+  String get secondaryMarketBuySubmitButton => '提交购入';
+
+  @override
+  String get secondaryMarketBuyValidationMessage => '请输入购入口数并同意文件确认。';
+
+  @override
+  String get secondaryMarketBuyTotalAmountLabel => '购入总额';
+
+  @override
+  String get secondaryMarketBuyFeeAmountLabel => '手续费';
+
+  @override
+  String get secondaryMarketBuyPaymentAmountLabel => '支付总额';
+
+  @override
+  String get secondaryMarketBuyFinalConfirmTitle => '提示';
+
+  @override
+  String secondaryMarketBuyFinalConfirmMessage(Object price, Object units) {
+    return '确认以单价$price円购买该项目$units口份额吗？';
+  }
+
+  @override
+  String get secondaryMarketBuySubmitSuccess => '已提交购入申请。';
+
+  @override
+  String get secondaryMarketBuySubmitFailure => '购入申请提交失败，请稍后重试。';
+
+  @override
   String get commonNext => '下一步';
 
   @override
@@ -3284,6 +3409,21 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get homeEstimatedYieldLabel => '預期收益率';
+
+  @override
+  String get homeFreeMarketTitle => '自由市場';
+
+  @override
+  String get homeFreeMarketStatusListed => '掛牌中';
+
+  @override
+  String get homeFreeMarketSoldUnitsLabel => '成交口數';
+
+  @override
+  String get homeFreeMarketUnitPriceLabel => '單價';
+
+  @override
+  String get homeFreeMarketEmptyState => '目前沒有公開掛牌的自由市場項目。';
 
   @override
   String get homeTagOpen => '募集中';
@@ -4905,6 +5045,116 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageResaleSubmitFailure => '賣出申請送出失敗，請稍後再試。';
+
+  @override
+  String get secondaryMarketListLoadError => '自由市場列表載入失敗。';
+
+  @override
+  String get secondaryMarketDetailLoadError => '自由市場詳情載入失敗。';
+
+  @override
+  String get secondaryMarketDetailUnavailable => '找不到此掛牌資訊。';
+
+  @override
+  String get secondaryMarketDetailSoldOutMessage => '此掛牌已售罄。';
+
+  @override
+  String get secondaryMarketBuyAction => '購入';
+
+  @override
+  String get secondaryMarketOrderTimeLabel => '訂單時間';
+
+  @override
+  String get secondaryMarketInvestorTypeLabel => '出資者類型';
+
+  @override
+  String get secondaryMarketSellUnitsLabel => '掛牌口數';
+
+  @override
+  String get secondaryMarketSoldUnitsLabel => '成交口數';
+
+  @override
+  String get secondaryMarketRemainingUnitsLabel => '剩餘口數';
+
+  @override
+  String get secondaryMarketDocumentsTitle => '相關文件';
+
+  @override
+  String get secondaryMarketDocumentPending => '資料準備中';
+
+  @override
+  String get secondaryMarketBuyOrderTitle => '購入訂單';
+
+  @override
+  String get secondaryMarketTradeTabBuy => '購入';
+
+  @override
+  String get secondaryMarketTradeTabConfirm => '確認';
+
+  @override
+  String get secondaryMarketBuyOrderMethodLabel => '訂單方式';
+
+  @override
+  String get secondaryMarketBuyOrderMethodValue => '購入訂單';
+
+  @override
+  String get secondaryMarketBuyAvailableUnitsLabel => '可購入口數';
+
+  @override
+  String get secondaryMarketBuyUnitsLabel => '購入口數';
+
+  @override
+  String get secondaryMarketBuyUnitPriceLabel => '購入單價';
+
+  @override
+  String get secondaryMarketBuyFeeLabel => '購入手續費';
+
+  @override
+  String get secondaryMarketBuyFeeValue => '交易金額的1.65%';
+
+  @override
+  String get secondaryMarketBuyAgreementLabel => '文件確認';
+
+  @override
+  String get secondaryMarketBuyAgreementBody => '我已同意以下文件並確認內容後發起購入申請。';
+
+  @override
+  String get secondaryMarketBuyAgreementSampleLabel => '查看相關文件';
+
+  @override
+  String get secondaryMarketBuyConfirmButton => '前往確認';
+
+  @override
+  String get secondaryMarketBuyBackButton => '返回';
+
+  @override
+  String get secondaryMarketBuySubmitButton => '提交購入';
+
+  @override
+  String get secondaryMarketBuyValidationMessage => '請輸入購入口數並同意文件確認。';
+
+  @override
+  String get secondaryMarketBuyTotalAmountLabel => '購入總額';
+
+  @override
+  String get secondaryMarketBuyFeeAmountLabel => '手續費';
+
+  @override
+  String get secondaryMarketBuyPaymentAmountLabel => '支付總額';
+
+  @override
+  String get secondaryMarketBuyFinalConfirmTitle => '提示';
+
+  @override
+  String secondaryMarketBuyFinalConfirmMessage(Object price, Object units) {
+    return '確認以單價$price円購入此專案$units口份額嗎？';
+  }
+
+  @override
+  String get secondaryMarketBuySubmitSuccess => '已送出購入申請。';
+
+  @override
+  String get secondaryMarketBuySubmitFailure => '購入申請送出失敗，請稍後再試。';
 
   @override
   String get commonNext => '下一步';

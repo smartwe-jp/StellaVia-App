@@ -10,7 +10,8 @@ abstract class MyPageRepository {
   });
 
   Future<List<MyPageOrderInquiryRecord>> fetchOrderInquiryList({
-    required int userId,
+    int? userId,
+    String? status,
     int startPage = 1,
     int limit = 20,
   });
@@ -28,5 +29,10 @@ abstract class MyPageRepository {
     required String fromProcessId,
     required int sellNum,
     required int price,
+  });
+
+  Future<void> submitSecondaryMarketPurchase({
+    required String id,
+    required int buyNum,
   });
 }

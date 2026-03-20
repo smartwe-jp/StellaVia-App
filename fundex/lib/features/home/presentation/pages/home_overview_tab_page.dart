@@ -11,6 +11,7 @@ import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
 import '../../../member_profile/domain/entities/member_profile_details.dart';
+import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../support/home_display_name_resolver.dart';
@@ -31,6 +32,9 @@ class HomeOverviewTabPage extends ConsumerWidget {
     final isAuthenticated = authState.asData?.value ?? false;
     final currentUser = ref.watch(currentAuthUserProvider).asData?.value;
     final asyncProjects = ref.watch(fundProjectListProvider);
+    final asyncSecondaryMarketRecords = ref.watch(
+      secondaryMarketMarketplaceListProvider,
+    );
     final asyncMemberProfile = ref.watch(memberProfileDetailsProvider);
     final accountStatistic = ref
         .watch(myPageAccountStatisticProvider)
@@ -38,6 +42,9 @@ class HomeOverviewTabPage extends ConsumerWidget {
         ?.value;
     final memberProfile = asyncMemberProfile.asData?.value;
     final projects = asyncProjects.asData?.value ?? const <FundProject>[];
+    final secondaryMarketRecords =
+        asyncSecondaryMarketRecords.asData?.value ??
+        const <MyPageOrderInquiryRecord>[];
     final locale = Localizations.localeOf(context);
     final currencyFormatter = NumberFormat.currency(
       locale: locale.toLanguageTag(),
@@ -103,6 +110,22 @@ class HomeOverviewTabPage extends ConsumerWidget {
         .map(
           (FundProject project) => FundActiveFundCard(
             data: _buildActiveFundCardData(context, project),
+          ),
+        )
+        .toList(growable: false);
+    final secondaryMarketCards = secondaryMarketRecords
+        .take(4)
+        .map(
+          (MyPageOrderInquiryRecord record) => FundSecondaryMarketCard(
+            fillHeight: true,
+            data: _buildSecondaryMarketCardData(
+              context,
+              record,
+              currencyFormatter,
+            ),
+            yieldLabel: l10n.homeEstimatedYieldLabel,
+            soldUnitsTitle: l10n.homeFreeMarketSoldUnitsLabel,
+            unitPriceTitle: l10n.homeFreeMarketUnitPriceLabel,
           ),
         )
         .toList(growable: false);
@@ -214,6 +237,19 @@ class HomeOverviewTabPage extends ConsumerWidget {
                     onActionTap: () => context.go('/funds'),
                     children: featuredFundCards,
                   ),
+                if (secondaryMarketCards.isNotEmpty)
+                  FundFeaturedFundCarousel(
+                    title: l10n.homeFreeMarketTitle,
+                    leading: Icon(
+                      Icons.storefront_rounded,
+                      size: 18,
+                      color: Theme.of(context).appColors.warningAction,
+                    ),
+                    actionLabel: l10n.homeViewAllAction,
+                    onActionTap: () => context.push('/home/free-market'),
+                    height: 220,
+                    children: secondaryMarketCards,
+                  ),
                 if (activeFundCards.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -240,10 +276,12 @@ Future<void> _refreshHomeOverviewTab(WidgetRef ref) async {
   ref.invalidate(fundProjectListProvider);
   ref.invalidate(memberProfileDetailsProvider);
   ref.invalidate(myPageAccountStatisticProvider);
+  ref.invalidate(secondaryMarketMarketplaceListProvider);
   await Future.wait<void>(<Future<void>>[
     ref.refresh(fundProjectListProvider.future).then((_) {}),
     ref.refresh(memberProfileDetailsProvider.future).then((_) {}),
     ref.refresh(myPageAccountStatisticProvider.future).then((_) {}),
+    ref.refresh(secondaryMarketMarketplaceListProvider.future).then((_) {}),
   ]);
 }
 
@@ -311,6 +349,37 @@ FundActiveFundCardData _buildActiveFundCardData(
     progress: _normalizeProgress(project.achievementRate),
     progressColor: AppColorTokens.fundexSuccess,
     onTap: () => context.push('/funds/${project.id}'),
+  );
+}
+
+FundSecondaryMarketCardData _buildSecondaryMarketCardData(
+  BuildContext context,
+  MyPageOrderInquiryRecord record,
+  NumberFormat currencyFormatter,
+) {
+  final theme = Theme.of(context);
+  final colors = theme.appColors;
+  final investorCode = record.investorType?.investorCode?.trim();
+  final sellNum = record.sellNum ?? 0;
+  final soldNum = record.soldNum ?? 0;
+  final progress = sellNum <= 0 ? 0.0 : soldNum / sellNum;
+  final orderId = record.id?.trim();
+
+  return FundSecondaryMarketCardData(
+    title: record.projectName,
+    statusLabel: context.l10n.homeFreeMarketStatusListed,
+    statusBackgroundColor: colors.warningSubtle,
+    statusForegroundColor: colors.warningAction,
+    annualYield: _formatYieldPercent(record.investorType?.earningsRadio),
+    investorTypeLabel: investorCode != null && investorCode.isNotEmpty
+        ? investorCode
+        : '--',
+    soldUnitsLabel: '${soldNum.toString()} / ${sellNum.toString()}口',
+    unitPriceLabel: _formatCurrencyValue(record.price, currencyFormatter),
+    progress: progress.clamp(0, 1),
+    onTap: orderId == null || orderId.isEmpty
+        ? null
+        : () => context.push('/home/free-market/$orderId', extra: record),
   );
 }
 

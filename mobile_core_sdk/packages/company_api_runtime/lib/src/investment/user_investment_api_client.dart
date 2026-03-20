@@ -17,6 +17,8 @@ class UserInvestmentApiPaths {
   static const String benefitWithdrawal = '/crowdfunding/benefit/withdrawal';
   static const String secondaryMarketCreate =
       '/crowdfunding/secondary/market/create';
+  static const String secondaryMarketPurchase =
+      '/crowdfunding/user/applySecondartMarket';
 }
 
 class UserInvestmentApiClient {
@@ -33,6 +35,8 @@ class UserInvestmentApiClient {
     this.benefitWithdrawalPath = UserInvestmentApiPaths.benefitWithdrawal,
     this.secondaryMarketCreatePath =
         UserInvestmentApiPaths.secondaryMarketCreate,
+    this.secondaryMarketPurchasePath =
+        UserInvestmentApiPaths.secondaryMarketPurchase,
   }) : _dioForPath = dioForPath,
        _envelopeCodec = envelopeCodec ?? const LegacyEnvelopeCodec(),
        _pageProfile = pageProfile ?? const LegacyPageProfile();
@@ -49,6 +53,7 @@ class UserInvestmentApiClient {
   final String benefitProjectPath;
   final String benefitWithdrawalPath;
   final String secondaryMarketCreatePath;
+  final String secondaryMarketPurchasePath;
 
   Future<UserInvestmentAccountStatisticDto> fetchAccountStatistic() async {
     final response = await _dioForPath(accountStatisticPath)
@@ -115,7 +120,8 @@ class UserInvestmentApiClient {
   }
 
   Future<List<UserInvestmentOrderInquiryRecordDto>> fetchOrderInquiryList({
-    required int userId,
+    int? userId,
+    String? status,
     int startPage = 1,
     int limit = 20,
   }) async {
@@ -125,7 +131,9 @@ class UserInvestmentApiClient {
           data: <String, dynamic>{
             'startPage': startPage,
             'limit': limit,
-            'userId': userId,
+            if (userId != null) 'userId': userId,
+            if (status != null && status.trim().isNotEmpty)
+              'status': status.trim(),
           },
           options: authRequired(true),
         );
@@ -227,6 +235,24 @@ class UserInvestmentApiClient {
     _envelopeCodec.assertSuccessIfEnvelope(
       _envelopeCodec.toJsonMap(response.data),
       fallbackMessage: 'Failed to create secondary market sell order.',
+      requireTruthyData: false,
+    );
+  }
+
+  Future<void> submitSecondaryMarketPurchase({
+    required String id,
+    required int buyNum,
+  }) async {
+    final response = await _dioForPath(secondaryMarketPurchasePath)
+        .post<Map<String, dynamic>>(
+          secondaryMarketPurchasePath,
+          data: <String, dynamic>{'buyNum': buyNum.toString(), 'id': id},
+          options: authRequired(true),
+        );
+
+    _envelopeCodec.assertSuccessIfEnvelope(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to submit secondary market purchase.',
       requireTruthyData: false,
     );
   }

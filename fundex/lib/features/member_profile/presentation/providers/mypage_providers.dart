@@ -13,6 +13,7 @@ import '../../domain/usecases/fetch_mypage_order_inquiry_list_usecase.dart';
 import '../../domain/usecases/fetch_mypage_project_benefit_usecase.dart';
 import '../../domain/usecases/submit_mypage_benefit_withdrawal_usecase.dart';
 import '../../domain/usecases/submit_mypage_secondary_market_create_usecase.dart';
+import '../../domain/usecases/submit_mypage_secondary_market_purchase_usecase.dart';
 
 final myPageRemoteDataSourceProvider = Provider<MyPageRemoteDataSource>((ref) {
   return MyPageRemoteDataSourceImpl(
@@ -75,6 +76,13 @@ final submitMyPageSecondaryMarketCreateUseCaseProvider =
       );
     });
 
+final submitMyPageSecondaryMarketPurchaseUseCaseProvider =
+    Provider<SubmitMyPageSecondaryMarketPurchaseUseCase>((ref) {
+      return SubmitMyPageSecondaryMarketPurchaseUseCase(
+        ref.watch(myPageRepositoryProvider),
+      );
+    });
+
 final myPageApplyListProvider =
     FutureProvider.autoDispose<List<MyPageApplyRecord>>((ref) async {
       return ref.watch(fetchMyPageApplyListUseCaseProvider).call();
@@ -108,6 +116,18 @@ final myPageOrderInquiryListProvider =
       return ref
           .watch(fetchMyPageOrderInquiryListUseCaseProvider)
           .call(userId: userId);
+    });
+
+final secondaryMarketMarketplaceListProvider =
+    FutureProvider.autoDispose<List<MyPageOrderInquiryRecord>>((ref) async {
+      final isAuthenticated =
+          ref.watch(isAuthenticatedProvider).asData?.value ?? false;
+      if (!isAuthenticated) {
+        return const <MyPageOrderInquiryRecord>[];
+      }
+      return ref
+          .watch(fetchMyPageOrderInquiryListUseCaseProvider)
+          .call(startPage: 1, limit: 20, status: 'VALID');
     });
 
 final myPageInvestmentListProvider =

@@ -657,6 +657,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeEstimatedYieldLabel => 'Est. yield';
 
   @override
+  String get homeFreeMarketTitle => 'Flea Market';
+
+  @override
+  String get homeFreeMarketStatusListed => 'Listed';
+
+  @override
+  String get homeFreeMarketSoldUnitsLabel => 'Matched Units';
+
+  @override
+  String get homeFreeMarketUnitPriceLabel => 'Unit Price';
+
+  @override
+  String get homeFreeMarketEmptyState =>
+      'There are no public flea market listings right now.';
+
+  @override
   String get homeTagOpen => 'Open';
 
   @override
@@ -2361,6 +2377,124 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get myPageResaleSubmitFailure =>
       'Failed to submit the sell order. Please try again later.';
+
+  @override
+  String get secondaryMarketListLoadError =>
+      'Failed to load the flea market listings.';
+
+  @override
+  String get secondaryMarketDetailLoadError =>
+      'Failed to load the flea market detail.';
+
+  @override
+  String get secondaryMarketDetailUnavailable =>
+      'The listing could not be found.';
+
+  @override
+  String get secondaryMarketDetailSoldOutMessage =>
+      'This listing has already sold out.';
+
+  @override
+  String get secondaryMarketBuyAction => 'Buy';
+
+  @override
+  String get secondaryMarketOrderTimeLabel => 'Order Time';
+
+  @override
+  String get secondaryMarketInvestorTypeLabel => 'Investor Type';
+
+  @override
+  String get secondaryMarketSellUnitsLabel => 'Listed Units';
+
+  @override
+  String get secondaryMarketSoldUnitsLabel => 'Matched Units';
+
+  @override
+  String get secondaryMarketRemainingUnitsLabel => 'Remaining Units';
+
+  @override
+  String get secondaryMarketDocumentsTitle => 'Related Documents';
+
+  @override
+  String get secondaryMarketDocumentPending => 'Preparing';
+
+  @override
+  String get secondaryMarketBuyOrderTitle => 'Buy Order';
+
+  @override
+  String get secondaryMarketTradeTabBuy => 'Buy';
+
+  @override
+  String get secondaryMarketTradeTabConfirm => 'Confirm';
+
+  @override
+  String get secondaryMarketBuyOrderMethodLabel => 'Order Method';
+
+  @override
+  String get secondaryMarketBuyOrderMethodValue => 'Buy Order';
+
+  @override
+  String get secondaryMarketBuyAvailableUnitsLabel => 'Available Units';
+
+  @override
+  String get secondaryMarketBuyUnitsLabel => 'Buy Units';
+
+  @override
+  String get secondaryMarketBuyUnitPriceLabel => 'Unit Price';
+
+  @override
+  String get secondaryMarketBuyFeeLabel => 'Fee';
+
+  @override
+  String get secondaryMarketBuyFeeValue => '1.65% of transaction amount';
+
+  @override
+  String get secondaryMarketBuyAgreementLabel => 'Document Confirmation';
+
+  @override
+  String get secondaryMarketBuyAgreementBody =>
+      'I agree to the following documents and submit the purchase request.';
+
+  @override
+  String get secondaryMarketBuyAgreementSampleLabel =>
+      'Review related document';
+
+  @override
+  String get secondaryMarketBuyConfirmButton => 'Continue';
+
+  @override
+  String get secondaryMarketBuyBackButton => 'Back';
+
+  @override
+  String get secondaryMarketBuySubmitButton => 'Submit Buy Order';
+
+  @override
+  String get secondaryMarketBuyValidationMessage =>
+      'Enter the buy units and agree to the document confirmation.';
+
+  @override
+  String get secondaryMarketBuyTotalAmountLabel => 'Purchase Total';
+
+  @override
+  String get secondaryMarketBuyFeeAmountLabel => 'Fee';
+
+  @override
+  String get secondaryMarketBuyPaymentAmountLabel => 'Total Payment';
+
+  @override
+  String get secondaryMarketBuyFinalConfirmTitle => 'Notice';
+
+  @override
+  String secondaryMarketBuyFinalConfirmMessage(Object price, Object units) {
+    return 'Confirm purchasing $units units of this project at $price yen per unit?';
+  }
+
+  @override
+  String get secondaryMarketBuySubmitSuccess => 'Purchase order submitted.';
+
+  @override
+  String get secondaryMarketBuySubmitFailure =>
+      'Failed to submit the purchase order. Please try again later.';
 
   @override
   String get commonNext => 'Next';

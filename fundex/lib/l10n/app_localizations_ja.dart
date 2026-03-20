@@ -616,6 +616,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeEstimatedYieldLabel => '想定利回り';
 
   @override
+  String get homeFreeMarketTitle => 'フリーマーケット';
+
+  @override
+  String get homeFreeMarketStatusListed => '出品中';
+
+  @override
+  String get homeFreeMarketSoldUnitsLabel => '約定口数';
+
+  @override
+  String get homeFreeMarketUnitPriceLabel => '販売単価';
+
+  @override
+  String get homeFreeMarketEmptyState => '現在公開中のフリーマーケット案件はありません。';
+
+  @override
   String get homeTagOpen => '募集中';
 
   @override
@@ -2246,6 +2261,118 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get myPageResaleSubmitFailure => '売却申込の送信に失敗しました。しばらくしてから再度お試しください。';
+
+  @override
+  String get secondaryMarketListLoadError => 'フリーマーケット一覧の読み込みに失敗しました。';
+
+  @override
+  String get secondaryMarketDetailLoadError => 'フリーマーケット詳細の読み込みに失敗しました。';
+
+  @override
+  String get secondaryMarketDetailUnavailable => '対象の出品情報が見つかりませんでした。';
+
+  @override
+  String get secondaryMarketDetailSoldOutMessage => 'この出品はすでに売り切れています。';
+
+  @override
+  String get secondaryMarketBuyAction => '購入';
+
+  @override
+  String get secondaryMarketOrderTimeLabel => '注文時間';
+
+  @override
+  String get secondaryMarketInvestorTypeLabel => '出資者種別';
+
+  @override
+  String get secondaryMarketSellUnitsLabel => '販売口数';
+
+  @override
+  String get secondaryMarketSoldUnitsLabel => '約定口数';
+
+  @override
+  String get secondaryMarketRemainingUnitsLabel => '残口数';
+
+  @override
+  String get secondaryMarketDocumentsTitle => '関連書面';
+
+  @override
+  String get secondaryMarketDocumentPending => '資料準備中';
+
+  @override
+  String get secondaryMarketBuyOrderTitle => '購入注文';
+
+  @override
+  String get secondaryMarketTradeTabBuy => '購入';
+
+  @override
+  String get secondaryMarketTradeTabConfirm => '確認';
+
+  @override
+  String get secondaryMarketBuyOrderMethodLabel => '注文方法';
+
+  @override
+  String get secondaryMarketBuyOrderMethodValue => '購入注文';
+
+  @override
+  String get secondaryMarketBuyAvailableUnitsLabel => '購入可能口数';
+
+  @override
+  String get secondaryMarketBuyUnitsLabel => '購入口数';
+
+  @override
+  String get secondaryMarketBuyUnitPriceLabel => '購入単価';
+
+  @override
+  String get secondaryMarketBuyFeeLabel => '購入手数料';
+
+  @override
+  String get secondaryMarketBuyFeeValue => '取引金額の1.65%';
+
+  @override
+  String get secondaryMarketBuyAgreementLabel => '書面確認';
+
+  @override
+  String get secondaryMarketBuyAgreementBody =>
+      '以下の書面に同意し、内容を承諾したうえで購入申込を行います。';
+
+  @override
+  String get secondaryMarketBuyAgreementSampleLabel => '関連書面を確認する';
+
+  @override
+  String get secondaryMarketBuyConfirmButton => '確認へ';
+
+  @override
+  String get secondaryMarketBuyBackButton => '戻る';
+
+  @override
+  String get secondaryMarketBuySubmitButton => '購入申込';
+
+  @override
+  String get secondaryMarketBuyValidationMessage => '購入口数を入力し、書面確認に同意してください。';
+
+  @override
+  String get secondaryMarketBuyTotalAmountLabel => '購入総額';
+
+  @override
+  String get secondaryMarketBuyFeeAmountLabel => '手数料';
+
+  @override
+  String get secondaryMarketBuyPaymentAmountLabel => 'お支払い金額';
+
+  @override
+  String get secondaryMarketBuyFinalConfirmTitle => 'ヒント';
+
+  @override
+  String secondaryMarketBuyFinalConfirmMessage(Object price, Object units) {
+    return '単価$price円でこのプロジェクトの持分$units口を購入することを確認しますか？';
+  }
+
+  @override
+  String get secondaryMarketBuySubmitSuccess => '購入申込を送信しました。';
+
+  @override
+  String get secondaryMarketBuySubmitFailure =>
+      '購入申込の送信に失敗しました。しばらくしてから再度お試しください。';
 
   @override
   String get commonNext => '次へ';

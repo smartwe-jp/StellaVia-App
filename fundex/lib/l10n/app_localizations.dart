@@ -1289,6 +1289,36 @@ abstract class AppLocalizations {
   /// **'Est. yield'**
   String get homeEstimatedYieldLabel;
 
+  /// No description provided for @homeFreeMarketTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Flea Market'**
+  String get homeFreeMarketTitle;
+
+  /// No description provided for @homeFreeMarketStatusListed.
+  ///
+  /// In en, this message translates to:
+  /// **'Listed'**
+  String get homeFreeMarketStatusListed;
+
+  /// No description provided for @homeFreeMarketSoldUnitsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Matched Units'**
+  String get homeFreeMarketSoldUnitsLabel;
+
+  /// No description provided for @homeFreeMarketUnitPriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit Price'**
+  String get homeFreeMarketUnitPriceLabel;
+
+  /// No description provided for @homeFreeMarketEmptyState.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no public flea market listings right now.'**
+  String get homeFreeMarketEmptyState;
+
   /// No description provided for @homeTagOpen.
   ///
   /// In en, this message translates to:
@@ -4435,6 +4465,222 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to submit the sell order. Please try again later.'**
   String get myPageResaleSubmitFailure;
+
+  /// No description provided for @secondaryMarketListLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load the flea market listings.'**
+  String get secondaryMarketListLoadError;
+
+  /// No description provided for @secondaryMarketDetailLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load the flea market detail.'**
+  String get secondaryMarketDetailLoadError;
+
+  /// No description provided for @secondaryMarketDetailUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The listing could not be found.'**
+  String get secondaryMarketDetailUnavailable;
+
+  /// No description provided for @secondaryMarketDetailSoldOutMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing has already sold out.'**
+  String get secondaryMarketDetailSoldOutMessage;
+
+  /// No description provided for @secondaryMarketBuyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy'**
+  String get secondaryMarketBuyAction;
+
+  /// No description provided for @secondaryMarketOrderTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Time'**
+  String get secondaryMarketOrderTimeLabel;
+
+  /// No description provided for @secondaryMarketInvestorTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Investor Type'**
+  String get secondaryMarketInvestorTypeLabel;
+
+  /// No description provided for @secondaryMarketSellUnitsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Listed Units'**
+  String get secondaryMarketSellUnitsLabel;
+
+  /// No description provided for @secondaryMarketSoldUnitsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Matched Units'**
+  String get secondaryMarketSoldUnitsLabel;
+
+  /// No description provided for @secondaryMarketRemainingUnitsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining Units'**
+  String get secondaryMarketRemainingUnitsLabel;
+
+  /// No description provided for @secondaryMarketDocumentsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Related Documents'**
+  String get secondaryMarketDocumentsTitle;
+
+  /// No description provided for @secondaryMarketDocumentPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing'**
+  String get secondaryMarketDocumentPending;
+
+  /// No description provided for @secondaryMarketBuyOrderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Order'**
+  String get secondaryMarketBuyOrderTitle;
+
+  /// No description provided for @secondaryMarketTradeTabBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy'**
+  String get secondaryMarketTradeTabBuy;
+
+  /// No description provided for @secondaryMarketTradeTabConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get secondaryMarketTradeTabConfirm;
+
+  /// No description provided for @secondaryMarketBuyOrderMethodLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Method'**
+  String get secondaryMarketBuyOrderMethodLabel;
+
+  /// No description provided for @secondaryMarketBuyOrderMethodValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Order'**
+  String get secondaryMarketBuyOrderMethodValue;
+
+  /// No description provided for @secondaryMarketBuyAvailableUnitsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Units'**
+  String get secondaryMarketBuyAvailableUnitsLabel;
+
+  /// No description provided for @secondaryMarketBuyUnitsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Units'**
+  String get secondaryMarketBuyUnitsLabel;
+
+  /// No description provided for @secondaryMarketBuyUnitPriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit Price'**
+  String get secondaryMarketBuyUnitPriceLabel;
+
+  /// No description provided for @secondaryMarketBuyFeeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee'**
+  String get secondaryMarketBuyFeeLabel;
+
+  /// No description provided for @secondaryMarketBuyFeeValue.
+  ///
+  /// In en, this message translates to:
+  /// **'1.65% of transaction amount'**
+  String get secondaryMarketBuyFeeValue;
+
+  /// No description provided for @secondaryMarketBuyAgreementLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Document Confirmation'**
+  String get secondaryMarketBuyAgreementLabel;
+
+  /// No description provided for @secondaryMarketBuyAgreementBody.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the following documents and submit the purchase request.'**
+  String get secondaryMarketBuyAgreementBody;
+
+  /// No description provided for @secondaryMarketBuyAgreementSampleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Review related document'**
+  String get secondaryMarketBuyAgreementSampleLabel;
+
+  /// No description provided for @secondaryMarketBuyConfirmButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get secondaryMarketBuyConfirmButton;
+
+  /// No description provided for @secondaryMarketBuyBackButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get secondaryMarketBuyBackButton;
+
+  /// No description provided for @secondaryMarketBuySubmitButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Buy Order'**
+  String get secondaryMarketBuySubmitButton;
+
+  /// No description provided for @secondaryMarketBuyValidationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the buy units and agree to the document confirmation.'**
+  String get secondaryMarketBuyValidationMessage;
+
+  /// No description provided for @secondaryMarketBuyTotalAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase Total'**
+  String get secondaryMarketBuyTotalAmountLabel;
+
+  /// No description provided for @secondaryMarketBuyFeeAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee'**
+  String get secondaryMarketBuyFeeAmountLabel;
+
+  /// No description provided for @secondaryMarketBuyPaymentAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Payment'**
+  String get secondaryMarketBuyPaymentAmountLabel;
+
+  /// No description provided for @secondaryMarketBuyFinalConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notice'**
+  String get secondaryMarketBuyFinalConfirmTitle;
+
+  /// No description provided for @secondaryMarketBuyFinalConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm purchasing {units} units of this project at {price} yen per unit?'**
+  String secondaryMarketBuyFinalConfirmMessage(Object price, Object units);
+
+  /// No description provided for @secondaryMarketBuySubmitSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase order submitted.'**
+  String get secondaryMarketBuySubmitSuccess;
+
+  /// No description provided for @secondaryMarketBuySubmitFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to submit the purchase order. Please try again later.'**
+  String get secondaryMarketBuySubmitFailure;
 
   /// No description provided for @commonNext.
   ///

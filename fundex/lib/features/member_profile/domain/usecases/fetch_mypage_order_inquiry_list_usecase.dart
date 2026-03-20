@@ -7,12 +7,14 @@ class FetchMyPageOrderInquiryListUseCase {
   final MyPageRepository _repository;
 
   Future<List<MyPageOrderInquiryRecord>> call({
-    required int userId,
+    int? userId,
+    String? status,
     int startPage = 1,
     int limit = 20,
   }) {
     return _repository.fetchOrderInquiryList(
       userId: userId,
+      status: status,
       startPage: startPage,
       limit: limit,
     );

@@ -38,6 +38,7 @@ class UserInvestmentInvestorTypeDto {
     this.remark,
     this.isOpen,
     this.isOpenType,
+    this.currentAmountApplication,
   });
 
   factory UserInvestmentInvestorTypeDto.fromJson(Map<String, dynamic> json) {
@@ -52,6 +53,7 @@ class UserInvestmentInvestorTypeDto {
       remark: _stringOrNull(json['remark']),
       isOpen: _boolOrNull(json['isOpen']),
       isOpenType: _intOrNull(json['isOpenType']),
+      currentAmountApplication: _intOrNull(json['currentAmountApplication']),
     );
   }
 
@@ -65,6 +67,7 @@ class UserInvestmentInvestorTypeDto {
   final String? remark;
   final bool? isOpen;
   final int? isOpenType;
+  final int? currentAmountApplication;
 }
 
 class UserInvestmentPdfUrlDto {
@@ -116,6 +119,7 @@ class UserInvestmentPdfDocumentDto {
 class UserInvestmentApplyRecordDto {
   const UserInvestmentApplyRecordDto({
     this.projectId,
+    this.projectRuleId,
     this.secondaryMarketSellId,
     this.fromProcessId,
     this.investorCode,
@@ -134,6 +138,8 @@ class UserInvestmentApplyRecordDto {
     this.passMoney,
     this.passTime,
     this.actualArrivalTime,
+    this.settlementDate,
+    this.paymentExpiryDate,
     this.investNum,
     this.investMoney,
     this.processId,
@@ -144,6 +150,7 @@ class UserInvestmentApplyRecordDto {
     return UserInvestmentApplyRecordDto(
       projectId:
           _stringOrNull(json['projectId']) ?? _stringOrNull(json['projecId']),
+      projectRuleId: _stringOrNull(json['projectRuleId']),
       secondaryMarketSellId: _stringOrNull(json['secondaryMarketSellId']),
       fromProcessId: _stringOrNull(json['fromProcessId']),
       investorCode: _stringOrNull(json['investorCode']),
@@ -161,11 +168,13 @@ class UserInvestmentApplyRecordDto {
       applyMoney: _numOrNull(json['applyMoney']),
       feeRatio: _doubleOrNull(json['feeRatio']),
       sellerFeeRatio: _doubleOrNull(json['sellerFeeRatio']),
-      applyTime: _stringOrNull(json['applyTime']),
+      applyTime: _dateTimeOrNull(json['applyTime']),
       passNum: _intOrNull(json['passNum']),
       passMoney: _numOrNull(json['passMoney']),
-      passTime: _stringOrNull(json['passTime']),
-      actualArrivalTime: _stringOrNull(json['actualArrivalTime']),
+      passTime: _dateTimeOrNull(json['passTime']),
+      actualArrivalTime: _dateTimeOrNull(json['actualArrivalTime']),
+      settlementDate: _dateTimeOrNull(json['settlementDate']),
+      paymentExpiryDate: _dateTimeOrNull(json['paymentExpiryDate']),
       investNum: _intOrNull(json['investNum']),
       investMoney: _numOrNull(json['investMoney']),
       processId: _stringOrNull(json['processId']),
@@ -174,6 +183,7 @@ class UserInvestmentApplyRecordDto {
   }
 
   final String? projectId;
+  final String? projectRuleId;
   final String? secondaryMarketSellId;
   final String? fromProcessId;
   final String? investorCode;
@@ -192,10 +202,70 @@ class UserInvestmentApplyRecordDto {
   final num? passMoney;
   final String? passTime;
   final String? actualArrivalTime;
+  final String? settlementDate;
+  final String? paymentExpiryDate;
   final int? investNum;
   final num? investMoney;
   final String? processId;
   final num? serviceFee;
+}
+
+class UserInvestmentOrderInquiryApplyResultDto {
+  const UserInvestmentOrderInquiryApplyResultDto({
+    this.processId,
+    this.investorType,
+    this.memberId,
+    this.projectId,
+    this.projectRuleId,
+    this.serviceFee,
+    this.sellerServiceFee,
+    this.investNum,
+    this.investMoney,
+    this.investNumValid,
+    this.investMoneyValid,
+    this.status,
+    this.checkTimes,
+    this.createTime,
+    this.withdrawalTime,
+  });
+
+  factory UserInvestmentOrderInquiryApplyResultDto.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return UserInvestmentOrderInquiryApplyResultDto(
+      processId: _stringOrNull(json['processId']),
+      investorType: _stringOrNull(json['investorType']),
+      memberId: _intOrNull(json['memberId']),
+      projectId: _stringOrNull(json['projectId']),
+      projectRuleId: _stringOrNull(json['projectRuleId']),
+      serviceFee: _numOrNull(json['serviceFee']),
+      sellerServiceFee: _numOrNull(json['sellerServiceFee']),
+      investNum: _intOrNull(json['investNum']),
+      investMoney: _numOrNull(json['investMoney']),
+      investNumValid: _intOrNull(json['investNumValid']),
+      investMoneyValid: _numOrNull(json['investMoneyValid']),
+      status: _intOrNull(json['status']),
+      checkTimes: _intOrNull(json['checkTimes']),
+      createTime: _dateTimeOrNull(json['createTime']),
+      withdrawalTime: _dateTimeOrNull(json['withdrawalTime']),
+    );
+  }
+
+  final String? processId;
+  final String? investorType;
+  final int? memberId;
+  final String? projectId;
+  final String? projectRuleId;
+  final num? serviceFee;
+  final num? sellerServiceFee;
+  final int? investNum;
+  final num? investMoney;
+  final int? investNumValid;
+  final num? investMoneyValid;
+  final int? status;
+  final int? checkTimes;
+  final String? createTime;
+  final String? withdrawalTime;
 }
 
 class UserInvestmentOrderInquiryRecordDto {
@@ -204,6 +274,7 @@ class UserInvestmentOrderInquiryRecordDto {
     this.memberId,
     this.fromProcessId,
     this.investorType,
+    this.projectId,
     required this.projectName,
     this.sellNum,
     this.soldNum,
@@ -212,6 +283,8 @@ class UserInvestmentOrderInquiryRecordDto {
     this.createTime,
     this.updateTime,
     this.pdfDocuments = const <UserInvestmentPdfDocumentDto>[],
+    this.applyList = const <UserInvestmentApplyRecordDto>[],
+    this.applyResultList = const <UserInvestmentOrderInquiryApplyResultDto>[],
   });
 
   factory UserInvestmentOrderInquiryRecordDto.fromJson(
@@ -226,17 +299,31 @@ class UserInvestmentOrderInquiryRecordDto {
           : UserInvestmentInvestorTypeDto.fromJson(
               _toJsonMap(json['investorType']),
             ),
+      projectId: _stringOrNull(json['projectId']),
       projectName: _stringOrNull(json['projectName']) ?? '',
       sellNum: _intOrNull(json['sellNum']),
       soldNum: _intOrNull(json['soldNum']),
       price: _numOrNull(json['price']),
       status: _stringOrNull(json['status']),
-      createTime: _stringOrNull(json['createTime']),
-      updateTime: _stringOrNull(json['updateTime']),
+      createTime: _dateTimeOrNull(json['createTime']),
+      updateTime: _dateTimeOrNull(json['updateTime']),
       pdfDocuments: _toList(json['pdfs'])
           .map(
             (dynamic item) =>
                 UserInvestmentPdfDocumentDto.fromJson(_toJsonMap(item)),
+          )
+          .toList(growable: false),
+      applyList: _toList(json['applyList'])
+          .map(
+            (dynamic item) =>
+                UserInvestmentApplyRecordDto.fromJson(_toJsonMap(item)),
+          )
+          .toList(growable: false),
+      applyResultList: _toList(json['applyResultList'])
+          .map(
+            (dynamic item) => UserInvestmentOrderInquiryApplyResultDto.fromJson(
+              _toJsonMap(item),
+            ),
           )
           .toList(growable: false),
     );
@@ -246,6 +333,7 @@ class UserInvestmentOrderInquiryRecordDto {
   final int? memberId;
   final String? fromProcessId;
   final UserInvestmentInvestorTypeDto? investorType;
+  final String? projectId;
   final String projectName;
   final int? sellNum;
   final int? soldNum;
@@ -254,6 +342,8 @@ class UserInvestmentOrderInquiryRecordDto {
   final String? createTime;
   final String? updateTime;
   final List<UserInvestmentPdfDocumentDto> pdfDocuments;
+  final List<UserInvestmentApplyRecordDto> applyList;
+  final List<UserInvestmentOrderInquiryApplyResultDto> applyResultList;
 }
 
 class UserInvestmentRecordDto {
@@ -502,4 +592,82 @@ bool? _boolOrNull(Object? value) {
     return false;
   }
   return null;
+}
+
+String? _dateTimeOrNull(Object? value) {
+  if (value == null) {
+    return null;
+  }
+  if (value is num) {
+    final absolute = value.abs();
+    final milliseconds = absolute < 100000000000
+        ? value.toInt() * 1000
+        : value.toInt();
+    return _formatApiDateTime(
+      DateTime.fromMillisecondsSinceEpoch(milliseconds),
+    );
+  }
+
+  final map = _toNullableJsonMap(value);
+  if (map != null) {
+    final year = _intOrNull(map['year']);
+    final month =
+        _intOrNull(map['monthValue']) ??
+        _monthNameToNumber(_stringOrNull(map['month']));
+    final day = _intOrNull(map['dayOfMonth']);
+    if (year != null && month != null && day != null) {
+      final dateTime = DateTime(
+        year,
+        month,
+        day,
+        _intOrNull(map['hour']) ?? 0,
+        _intOrNull(map['minute']) ?? 0,
+        _intOrNull(map['second']) ?? 0,
+      );
+      return _formatApiDateTime(dateTime);
+    }
+    return null;
+  }
+
+  return _stringOrNull(value);
+}
+
+int? _monthNameToNumber(String? value) {
+  switch (value?.trim().toUpperCase()) {
+    case 'JANUARY':
+      return 1;
+    case 'FEBRUARY':
+      return 2;
+    case 'MARCH':
+      return 3;
+    case 'APRIL':
+      return 4;
+    case 'MAY':
+      return 5;
+    case 'JUNE':
+      return 6;
+    case 'JULY':
+      return 7;
+    case 'AUGUST':
+      return 8;
+    case 'SEPTEMBER':
+      return 9;
+    case 'OCTOBER':
+      return 10;
+    case 'NOVEMBER':
+      return 11;
+    case 'DECEMBER':
+      return 12;
+  }
+  return null;
+}
+
+String _formatApiDateTime(DateTime value) {
+  final year = value.year.toString().padLeft(4, '0');
+  final month = value.month.toString().padLeft(2, '0');
+  final day = value.day.toString().padLeft(2, '0');
+  final hour = value.hour.toString().padLeft(2, '0');
+  final minute = value.minute.toString().padLeft(2, '0');
+  final second = value.second.toString().padLeft(2, '0');
+  return '$year-$month-$day $hour:$minute:$second';
 }

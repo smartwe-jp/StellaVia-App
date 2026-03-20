@@ -218,7 +218,8 @@ bool canShowApplyCancelAction(int? status) {
 }
 
 String? resolveOrderProjectId(MyPageOrderInquiryRecord record) {
-  return record.investorType?.projectId ??
+  return record.projectId ??
+      record.investorType?.projectId ??
       (record.pdfDocuments.isNotEmpty
           ? record.pdfDocuments.first.projectId
           : null);
