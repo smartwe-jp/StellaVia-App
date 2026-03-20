@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/navigation/app_root_route_refresh_scope.dart';
+import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../domain/entities/wallet_bank_account_info.dart';
 import '../providers/wallet_providers.dart';
 
@@ -31,11 +32,17 @@ class _WalletBankSettingsPageState
         return;
       }
       AppNotice.show(context, message: l10n.walletBankSettingsAddSuccess);
-    } catch (_) {
+    } catch (error) {
       if (!mounted) {
         return;
       }
-      AppNotice.show(context, message: l10n.walletBankSettingsAddFailure);
+      AppNotice.show(
+        context,
+        message: resolveAppRequestErrorMessage(
+          error,
+          l10n.walletBankSettingsAddFailure,
+        ),
+      );
     }
   }
 

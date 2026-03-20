@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../../auth/presentation/support/identity_auth_guard.dart';
 import '../providers/mypage_providers.dart';
 import '../support/mypage_secondary_market_models.dart';
@@ -73,11 +74,17 @@ class _MyPageSecondaryMarketSellConfirmPageState
       }
       AppNotice.show(context, message: l10n.myPageResaleSubmitSuccess);
       context.go('/profile/my/secondary-market');
-    } catch (_) {
+    } catch (error) {
       if (!mounted) {
         return;
       }
-      AppNotice.show(context, message: l10n.myPageResaleSubmitFailure);
+      AppNotice.show(
+        context,
+        message: resolveAppRequestErrorMessage(
+          error,
+          l10n.myPageResaleSubmitFailure,
+        ),
+      );
     } finally {
       if (mounted) {
         setState(() {

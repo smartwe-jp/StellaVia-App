@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../data/datasources/notifications_local_data_source.dart';
 import '../../data/datasources/notifications_remote_data_source.dart';
 import '../state/notifications_state.dart';
@@ -75,11 +76,11 @@ class NotificationsController extends StateNotifier<NotificationsState> {
         unreadCount: fallbackUnread,
         clearError: true,
       );
-    } catch (_) {
+    } catch (error) {
       state = state.copyWith(
         isLoading: false,
         isRefreshing: false,
-        errorMessage: 'notifications_load_failed',
+        errorMessage: resolveAppRequestErrorMessage(error, ''),
       );
     }
   }
@@ -131,12 +132,12 @@ class NotificationsController extends StateNotifier<NotificationsState> {
             current.key == updated.key,
         orElse: () => updated,
       );
-    } catch (_) {
+    } catch (error) {
       final nextKeys = Set<String>.from(state.updatingNoticeKeys)
         ..remove(item.key);
       state = state.copyWith(
         updatingNoticeKeys: nextKeys,
-        errorMessage: 'notifications_check_failed',
+        errorMessage: resolveAppRequestErrorMessage(error, ''),
       );
       return item;
     }

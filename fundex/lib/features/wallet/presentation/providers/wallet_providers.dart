@@ -112,23 +112,19 @@ final walletWithdrawingListProvider =
 
 final walletDepositPageViewDataProvider =
     FutureProvider.autoDispose<WalletDepositPageViewData>((ref) async {
+      final account = await ref
+          .watch(fetchWalletBankAccountInfoUseCaseProvider)
+          .call();
       WalletDedicatedBankInfo? bankInfo;
-      try {
-        final account = await ref
-            .watch(fetchWalletBankAccountInfoUseCaseProvider)
-            .call();
-        if (account != null) {
-          bankInfo = WalletDedicatedBankInfo(
-            bankName: account.bankName,
-            branchName: account.branchName,
-            accountType: account.accountType,
-            accountNumber: account.accountNumber,
-            accountHolder: account.accountHolder,
-            expireTime: account.expireTime,
-          );
-        }
-      } catch (_) {
-        bankInfo = null;
+      if (account != null) {
+        bankInfo = WalletDedicatedBankInfo(
+          bankName: account.bankName,
+          branchName: account.branchName,
+          accountType: account.accountType,
+          accountNumber: account.accountNumber,
+          accountHolder: account.accountHolder,
+          expireTime: account.expireTime,
+        );
       }
 
       List<WalletAccountHistory> history = const <WalletAccountHistory>[];

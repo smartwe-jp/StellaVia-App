@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/navigation/app_root_route_refresh_scope.dart';
+import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../providers/wallet_providers.dart';
 
@@ -18,7 +19,6 @@ class DepositPage extends ConsumerWidget {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = theme.appColors;
-    final appText = theme.appTextTheme;
     final locale = Localizations.localeOf(context).toLanguageTag();
     final currency = NumberFormat.currency(
       locale: locale,
@@ -105,11 +105,14 @@ class DepositPage extends ConsumerWidget {
                                   message: l10n.walletBankAccountApplySuccess,
                                 );
                               }
-                            } catch (_) {
+                            } catch (error) {
                               if (context.mounted) {
                                 AppNotice.show(
                                   context,
-                                  message: l10n.walletBankAccountApplyFailure,
+                                  message: resolveAppRequestErrorMessage(
+                                    error,
+                                    l10n.walletBankAccountApplyFailure,
+                                  ),
                                 );
                               }
                             } finally {
@@ -178,9 +181,55 @@ class DepositPage extends ConsumerWidget {
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (_, __) => Center(
-            child: Text(l10n.walletDataLoadError, style: appText.bodyMuted),
+          error: (error, __) => _DepositPageLoadError(
+            message: resolveAppRequestErrorMessage(
+              error,
+              l10n.walletDataLoadError,
+            ),
+            retryLabel: l10n.fundListRetry,
+            onRetry: () {
+              ref.invalidate(walletDepositPageViewDataProvider);
+            },
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DepositPageLoadError extends StatelessWidget {
+  const _DepositPageLoadError({
+    required this.message,
+    required this.retryLabel,
+    required this.onRetry,
+  });
+
+  final String message;
+  final String retryLabel;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Icon(Icons.wifi_off_rounded, size: 28, color: colors.textSecondary),
+            const SizedBox(height: 12),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: appText.bodyMuted.copyWith(color: colors.textSecondary),
+            ),
+            const SizedBox(height: 16),
+            OutlinedButton(onPressed: onRetry, child: Text(retryLabel)),
+          ],
         ),
       ),
     );

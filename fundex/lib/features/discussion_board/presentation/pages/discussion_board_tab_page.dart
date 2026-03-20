@@ -147,12 +147,10 @@ class _DiscussionBoardTabPageState
     if (!mounted) {
       return;
     }
-    AppNotice.show(
-      context,
-      message: success
-          ? l10n.kizunarkDeleteSuccessNotice
-          : l10n.kizunarkDeleteFailedNotice,
-    );
+    if (!success) {
+      return;
+    }
+    AppNotice.show(context, message: l10n.kizunarkDeleteSuccessNotice);
   }
 
   Future<void> _copyMessageBody(String body) async {
@@ -210,6 +208,24 @@ class _DiscussionBoardTabPageState
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<String?>(
+      discussionBoardControllerProvider(
+        null,
+      ).select((DiscussionBoardState state) => state.errorMessage),
+      (previous, next) {
+        if (next == null || previous == next || !mounted) {
+          return;
+        }
+        AppNotice.show(
+          context,
+          message: next.trim().isNotEmpty
+              ? next
+              : context.l10n.uiErrorRequestFailed,
+        );
+        ref.read(discussionBoardControllerProvider(null).notifier).clearError();
+      },
+    );
+
     ref.listen<AsyncValue<bool>>(isAuthenticatedProvider, (previous, next) {
       final previousValue = previous?.asData?.value;
       final nextValue = next.asData?.value;

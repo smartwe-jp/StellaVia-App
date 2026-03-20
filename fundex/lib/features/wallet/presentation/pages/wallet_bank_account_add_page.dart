@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../domain/entities/wallet_bank_account_draft.dart';
 import '../providers/wallet_providers.dart';
 
@@ -87,11 +88,17 @@ class _WalletBankAccountAddPageState
         return;
       }
       context.pop(true);
-    } catch (_) {
+    } catch (error) {
       if (!mounted) {
         return;
       }
-      AppNotice.show(context, message: l10n.walletBankSettingsAddFailure);
+      AppNotice.show(
+        context,
+        message: resolveAppRequestErrorMessage(
+          error,
+          l10n.walletBankSettingsAddFailure,
+        ),
+      );
     } finally {
       ref.read(walletBankAccountAddingProvider.notifier).state = false;
     }

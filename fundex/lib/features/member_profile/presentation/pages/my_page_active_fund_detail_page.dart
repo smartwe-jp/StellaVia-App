@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/support/identity_auth_guard.dart';
 import '../../domain/entities/mypage_models.dart';
@@ -307,7 +308,10 @@ Future<void> _confirmBenefitWithdrawal(
     }
     AppNotice.show(
       context,
-      message: context.l10n.myPageActiveFundWithdrawFailure,
+      message: resolveAppRequestErrorMessage(
+        error,
+        context.l10n.myPageActiveFundWithdrawFailure,
+      ),
     );
   }
 }

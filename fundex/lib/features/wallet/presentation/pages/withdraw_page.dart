@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/navigation/app_root_route_refresh_scope.dart';
+import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../domain/entities/wallet_bank_account_info.dart';
 import '../../domain/entities/wallet_withdraw_apply_draft.dart';
@@ -196,11 +197,17 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
       }
       AppNotice.show(context, message: l10n.walletWithdrawSubmitSuccess);
       ref.invalidate(walletWithdrawingListProvider);
-    } catch (_) {
+    } catch (error) {
       if (!mounted) {
         return;
       }
-      AppNotice.show(context, message: l10n.walletWithdrawSubmitFailure);
+      AppNotice.show(
+        context,
+        message: resolveAppRequestErrorMessage(
+          error,
+          l10n.walletWithdrawSubmitFailure,
+        ),
+      );
     } finally {
       if (mounted) {
         ref.read(walletWithdrawSubmittingProvider.notifier).state = false;

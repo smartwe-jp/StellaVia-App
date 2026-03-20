@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../domain/usecases/delete_discussion_comment_usecase.dart';
 import '../../domain/usecases/load_discussion_threads_usecase.dart';
 import '../../domain/usecases/submit_discussion_post_usecase.dart';
@@ -54,12 +55,12 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
         hasMore: threads.isNotEmpty,
         clearError: true,
       );
-    } catch (_) {
+    } catch (error) {
       state = state.copyWith(
         isLoading: false,
         isRefreshing: false,
         isLoadingMore: false,
-        errorMessage: 'failed_to_load_threads',
+        errorMessage: resolveAppRequestErrorMessage(error, ''),
       );
     }
   }
@@ -100,10 +101,10 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
         hasMore: true,
         clearError: true,
       );
-    } catch (_) {
+    } catch (error) {
       state = state.copyWith(
         isLoadingMore: false,
-        errorMessage: 'failed_to_load_threads',
+        errorMessage: resolveAppRequestErrorMessage(error, ''),
       );
     }
   }
@@ -157,10 +158,10 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
         clearError: true,
       );
       return true;
-    } catch (_) {
+    } catch (error) {
       state = state.copyWith(
         isPosting: false,
-        errorMessage: 'failed_to_submit_post',
+        errorMessage: resolveAppRequestErrorMessage(error, ''),
       );
       return false;
     }
@@ -208,12 +209,12 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
         clearError: true,
       );
       return true;
-    } catch (_) {
+    } catch (error) {
       final nextSubmitting = Set<String>.from(state.replySubmittingThreadIds)
         ..remove(threadId);
       state = state.copyWith(
         replySubmittingThreadIds: nextSubmitting,
-        errorMessage: 'failed_to_submit_reply',
+        errorMessage: resolveAppRequestErrorMessage(error, ''),
       );
       return false;
     }
@@ -241,15 +242,22 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
         clearError: true,
       );
       return true;
-    } catch (_) {
+    } catch (error) {
       final nextDeleting = Set<String>.from(state.deletingCommentIds)
         ..remove(normalized);
       state = state.copyWith(
         deletingCommentIds: nextDeleting,
-        errorMessage: 'failed_to_delete_comment',
+        errorMessage: resolveAppRequestErrorMessage(error, ''),
       );
       return false;
     }
+  }
+
+  void clearError() {
+    if (state.errorMessage == null) {
+      return;
+    }
+    state = state.copyWith(clearError: true);
   }
 
   List<DiscussionThread> _mergeThreadsById(

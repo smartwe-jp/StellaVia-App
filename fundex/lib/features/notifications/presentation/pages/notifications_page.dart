@@ -114,11 +114,16 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
         }
         final isAuthenticated =
             ref.read(isAuthenticatedProvider).asData?.value ?? false;
-        if (!isAuthenticated && next == 'notifications_load_failed') {
+        if (!isAuthenticated) {
           ref.read(notificationsControllerProvider.notifier).clearError();
           return;
         }
-        AppNotice.show(context, message: context.l10n.uiErrorRequestFailed);
+        AppNotice.show(
+          context,
+          message: next.trim().isNotEmpty
+              ? next
+              : context.l10n.uiErrorRequestFailed,
+        );
         ref.read(notificationsControllerProvider.notifier).clearError();
       },
     );
