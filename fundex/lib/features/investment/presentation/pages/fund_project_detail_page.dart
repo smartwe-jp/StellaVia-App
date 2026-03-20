@@ -42,6 +42,27 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
     context.push('/funds/$projectId/lottery-apply');
   }
 
+  Future<void> _openImageViewer(
+    BuildContext context,
+    List<String> imageUrls,
+    int initialIndex,
+  ) {
+    return openAppImageViewer(
+      context,
+      initialIndex: initialIndex,
+      items: imageUrls
+          .map((String url) => AppImageViewerItem(source: url))
+          .toList(growable: false),
+      texts: AppImageViewerTexts(
+        loadingLabel: context.l10n.imageViewerLoadingLabel,
+        loadFailedLabel: context.l10n.imageViewerLoadFailedLabel,
+        retryLabel: context.l10n.imageViewerRetryLabel,
+        invalidSourceNotice: context.l10n.imageViewerInvalidSourceNotice,
+        closeTooltip: context.l10n.imageViewerCloseTooltip,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final projectId = widget.projectId;
@@ -80,6 +101,10 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
         ),
       ),
       data: (FundProject project) {
+        final normalizedPhotoUrls = project.photos
+            .map((String url) => url.trim())
+            .where((String url) => url.isNotEmpty)
+            .toList(growable: false);
         final locale = Localizations.localeOf(context);
         final int? discussionProjectId = int.tryParse(projectId);
         final staticContentAsync = ref.watch(
@@ -106,7 +131,9 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
               FundDetailHeroHeader(
                 gradientColors: viewData.heroGradientColors,
                 badges: viewData.heroBadges,
-                imageUrls: project.photos,
+                imageUrls: normalizedPhotoUrls,
+                onImageTap: (int index) =>
+                    _openImageViewer(context, normalizedPhotoUrls, index),
                 onBackTap: () {
                   if (context.canPop()) {
                     context.pop();

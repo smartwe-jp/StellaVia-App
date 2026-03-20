@@ -59,6 +59,7 @@ class FundHeroMediaBackground extends StatefulWidget {
     this.imageUrls = const <String>[],
     this.pageController,
     this.onPageChanged,
+    this.onImageTap,
     this.autoPlay = true,
     this.autoPlayInterval = const Duration(seconds: 4),
   });
@@ -67,6 +68,7 @@ class FundHeroMediaBackground extends StatefulWidget {
   final List<String> imageUrls;
   final PageController? pageController;
   final ValueChanged<int>? onPageChanged;
+  final ValueChanged<int>? onImageTap;
   final bool autoPlay;
   final Duration autoPlayInterval;
 
@@ -228,29 +230,35 @@ class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground>
           }
         },
         itemBuilder: (BuildContext context, int index) {
-          return Stack(
-            fit: StackFit.expand,
-            children: <Widget>[
-              _FundDetailHeroFallbackBackground(
-                gradientColors: widget.gradientColors,
-              ),
-              Image.network(
-                images[index],
-                fit: BoxFit.cover,
-                loadingBuilder:
-                    (
-                      BuildContext context,
-                      Widget child,
-                      ImageChunkEvent? loadingProgress,
-                    ) {
-                      if (loadingProgress == null) {
-                        return child;
-                      }
-                      return const SizedBox.shrink();
-                    },
-                errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-              ),
-            ],
+          return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: widget.onImageTap == null
+                ? null
+                : () => widget.onImageTap!(index),
+            child: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                _FundDetailHeroFallbackBackground(
+                  gradientColors: widget.gradientColors,
+                ),
+                Image.network(
+                  images[index],
+                  fit: BoxFit.cover,
+                  loadingBuilder:
+                      (
+                        BuildContext context,
+                        Widget child,
+                        ImageChunkEvent? loadingProgress,
+                      ) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return const SizedBox.shrink();
+                      },
+                  errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                ),
+              ],
+            ),
           );
         },
       ),
@@ -264,6 +272,7 @@ class FundDetailHeroHeader extends StatefulWidget {
     required this.gradientColors,
     required this.badges,
     this.imageUrls = const <String>[],
+    this.onImageTap,
     this.onBackTap,
     this.onFavoriteTap,
     this.isFavorite = false,
@@ -273,6 +282,7 @@ class FundDetailHeroHeader extends StatefulWidget {
   final List<Color> gradientColors;
   final List<FundDetailBadgeData> badges;
   final List<String> imageUrls;
+  final ValueChanged<int>? onImageTap;
   final VoidCallback? onBackTap;
   final VoidCallback? onFavoriteTap;
   final bool isFavorite;
@@ -368,6 +378,7 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
             gradientColors: widget.gradientColors,
             imageUrls: images,
             pageController: _pageController,
+            onImageTap: widget.onImageTap,
             onPageChanged: (int index) {
               if (_currentIndex == index) {
                 return;

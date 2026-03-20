@@ -61,6 +61,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pdfViewerOpenExternalFailedNotice => 'Unable to open PDF.';
 
   @override
+  String get imageViewerLoadingLabel => 'Loading image...';
+
+  @override
+  String get imageViewerLoadFailedLabel => 'Failed to load image.';
+
+  @override
+  String get imageViewerRetryLabel => 'Retry';
+
+  @override
+  String get imageViewerInvalidSourceNotice => 'Invalid image source.';
+
+  @override
+  String get imageViewerCloseTooltip => 'Close';
+
+  @override
   String get loginForgotPassword => 'Forgot password';
 
   @override

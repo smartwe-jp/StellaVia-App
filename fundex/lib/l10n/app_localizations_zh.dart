@@ -60,6 +60,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get pdfViewerOpenExternalFailedNotice => '无法打开 PDF。';
 
   @override
+  String get imageViewerLoadingLabel => '正在加载图片...';
+
+  @override
+  String get imageViewerLoadFailedLabel => '图片加载失败。';
+
+  @override
+  String get imageViewerRetryLabel => '重试';
+
+  @override
+  String get imageViewerInvalidSourceNotice => '图片链接无效。';
+
+  @override
+  String get imageViewerCloseTooltip => '关闭';
+
+  @override
   String get loginForgotPassword => '找回密码';
 
   @override
@@ -2580,6 +2595,21 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get pdfViewerOpenExternalFailedNotice => '無法開啟 PDF。';
+
+  @override
+  String get imageViewerLoadingLabel => '正在載入圖片...';
+
+  @override
+  String get imageViewerLoadFailedLabel => '圖片載入失敗。';
+
+  @override
+  String get imageViewerRetryLabel => '重試';
+
+  @override
+  String get imageViewerInvalidSourceNotice => '圖片連結無效。';
+
+  @override
+  String get imageViewerCloseTooltip => '關閉';
 
   @override
   String get loginForgotPassword => '忘記密碼？';

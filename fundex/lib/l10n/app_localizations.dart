@@ -203,6 +203,36 @@ abstract class AppLocalizations {
   /// **'Unable to open PDF.'**
   String get pdfViewerOpenExternalFailedNotice;
 
+  /// No description provided for @imageViewerLoadingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading image...'**
+  String get imageViewerLoadingLabel;
+
+  /// No description provided for @imageViewerLoadFailedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load image.'**
+  String get imageViewerLoadFailedLabel;
+
+  /// No description provided for @imageViewerRetryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get imageViewerRetryLabel;
+
+  /// No description provided for @imageViewerInvalidSourceNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid image source.'**
+  String get imageViewerInvalidSourceNotice;
+
+  /// No description provided for @imageViewerCloseTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get imageViewerCloseTooltip;
+
   /// No description provided for @loginForgotPassword.
   ///
   /// In en, this message translates to:
