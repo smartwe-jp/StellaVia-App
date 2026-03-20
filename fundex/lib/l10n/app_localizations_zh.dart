@@ -2160,7 +2160,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileStep1Title => 'Step 1：基本信息';
 
   @override
-  String get memberProfileStep1Description => '请输入姓名与联系方式';
+  String get memberProfileStep1Description => '请输入姓、名、片假名、罗马字姓名与联系方式';
 
   @override
   String get memberProfileNameKanjiLabel => '姓名';
@@ -2173,6 +2173,42 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get memberProfileNameKanaHint => 'タナカ タロウ';
+
+  @override
+  String get memberProfileFamilyNameLabel => '姓';
+
+  @override
+  String get memberProfileFamilyNameHint => '田中';
+
+  @override
+  String get memberProfileGivenNameLabel => '名';
+
+  @override
+  String get memberProfileGivenNameHint => '太郎';
+
+  @override
+  String get memberProfileFamilyNameKanaLabel => '姓（片假名）';
+
+  @override
+  String get memberProfileFamilyNameKanaHint => 'タナカ';
+
+  @override
+  String get memberProfileGivenNameKanaLabel => '名（片假名）';
+
+  @override
+  String get memberProfileGivenNameKanaHint => 'タロウ';
+
+  @override
+  String get memberProfileFamilyNameRomanLabel => '姓（罗马字）';
+
+  @override
+  String get memberProfileFamilyNameRomanHint => 'TANAKA';
+
+  @override
+  String get memberProfileGivenNameRomanLabel => '名（罗马字）';
+
+  @override
+  String get memberProfileGivenNameRomanHint => 'TARO';
 
   @override
   String get memberProfileBirthdayLabel => '出生日期';
@@ -4712,7 +4748,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileStep1Title => 'Step 1：基本信息';
 
   @override
-  String get memberProfileStep1Description => '請輸入姓名及聯絡方式';
+  String get memberProfileStep1Description => '請輸入姓、名、片假名、羅馬字姓名與聯絡方式';
 
   @override
   String get memberProfileNameKanjiLabel => '姓名（漢字）';
@@ -4725,6 +4761,42 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get memberProfileNameKanaHint => 'タナカ タロウ';
+
+  @override
+  String get memberProfileFamilyNameLabel => '姓';
+
+  @override
+  String get memberProfileFamilyNameHint => '田中';
+
+  @override
+  String get memberProfileGivenNameLabel => '名';
+
+  @override
+  String get memberProfileGivenNameHint => '太郎';
+
+  @override
+  String get memberProfileFamilyNameKanaLabel => '姓（片假名）';
+
+  @override
+  String get memberProfileFamilyNameKanaHint => 'タナカ';
+
+  @override
+  String get memberProfileGivenNameKanaLabel => '名（片假名）';
+
+  @override
+  String get memberProfileGivenNameKanaHint => 'タロウ';
+
+  @override
+  String get memberProfileFamilyNameRomanLabel => '姓（羅馬字）';
+
+  @override
+  String get memberProfileFamilyNameRomanHint => 'TANAKA';
+
+  @override
+  String get memberProfileGivenNameRomanLabel => '名（羅馬字）';
+
+  @override
+  String get memberProfileGivenNameRomanHint => 'TARO';
 
   @override
   String get memberProfileBirthdayLabel => '出生日期';

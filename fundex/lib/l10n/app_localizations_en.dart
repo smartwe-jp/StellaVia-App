@@ -2291,7 +2291,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get memberProfileStep1Description =>
-      'Enter your name and contact information.';
+      'Enter your family name, given name, phonetic name, romanized name, and contact information.';
 
   @override
   String get memberProfileNameKanjiLabel => 'Full name';
@@ -2304,6 +2304,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get memberProfileNameKanaHint => 'TANAKA TARO';
+
+  @override
+  String get memberProfileFamilyNameLabel => 'Family name';
+
+  @override
+  String get memberProfileFamilyNameHint => 'Tanaka';
+
+  @override
+  String get memberProfileGivenNameLabel => 'Given name';
+
+  @override
+  String get memberProfileGivenNameHint => 'Taro';
+
+  @override
+  String get memberProfileFamilyNameKanaLabel => 'Family name (Kana)';
+
+  @override
+  String get memberProfileFamilyNameKanaHint => 'TANAKA';
+
+  @override
+  String get memberProfileGivenNameKanaLabel => 'Given name (Kana)';
+
+  @override
+  String get memberProfileGivenNameKanaHint => 'TARO';
+
+  @override
+  String get memberProfileFamilyNameRomanLabel => 'Family name (Roman)';
+
+  @override
+  String get memberProfileFamilyNameRomanHint => 'TANAKA';
+
+  @override
+  String get memberProfileGivenNameRomanLabel => 'Given name (Roman)';
+
+  @override
+  String get memberProfileGivenNameRomanHint => 'TARO';
 
   @override
   String get memberProfileBirthdayLabel => 'Date of birth';

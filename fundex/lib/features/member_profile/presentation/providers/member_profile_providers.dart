@@ -14,6 +14,7 @@ import '../../domain/usecases/load_member_profile_details_usecase.dart';
 import '../../domain/usecases/mark_member_profile_skipped_usecase.dart';
 import '../../domain/usecases/save_member_profile_details_usecase.dart';
 import '../../domain/usecases/submit_member_profile_usecase.dart';
+import '../../domain/usecases/sync_member_profile_from_remote_usecase.dart';
 import '../../domain/usecases/upload_member_profile_photo_usecase.dart';
 import '../support/profile_document_image_picker.dart';
 
@@ -54,6 +55,13 @@ final loadMemberProfileDetailsUseCaseProvider =
 final saveMemberProfileDetailsUseCaseProvider =
     Provider<SaveMemberProfileDetailsUseCase>((ref) {
       return SaveMemberProfileDetailsUseCase(
+        ref.watch(memberProfileRepositoryProvider),
+      );
+    });
+
+final syncMemberProfileFromRemoteUseCaseProvider =
+    Provider<SyncMemberProfileFromRemoteUseCase>((ref) {
+      return SyncMemberProfileFromRemoteUseCase(
         ref.watch(memberProfileRepositoryProvider),
       );
     });

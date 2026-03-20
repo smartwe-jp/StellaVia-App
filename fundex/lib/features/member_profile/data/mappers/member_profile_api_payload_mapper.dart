@@ -22,25 +22,31 @@ class MemberProfileApiPayloadMapper {
       fallbackGivenName,
       authUser?.firstName ?? '',
     ]);
+    final familyNameEn = _firstNonEmpty(<String>[
+      profile.familyNameEn,
+      authUser?.lastNameEn ?? '',
+      familyName,
+    ]);
+    final givenNameEn = _firstNonEmpty(<String>[
+      profile.givenNameEn,
+      authUser?.firstNameEn ?? '',
+      givenName,
+    ]);
+    final katakana = _firstNonEmpty(<String>[
+      _joinNonEmpty(<String?>[profile.familyNameKana, profile.givenNameKana]),
+      profile.katakana,
+      authUser?.katakana ?? '',
+    ]);
 
     final bank = _buildBankPayload(profile: profile, authUser: authUser);
 
     return <String, dynamic>{
       'baseInfo': <String, dynamic>{
-        'firstName': familyName,
-        'lastName': givenName,
-        'firstNameEn': _firstNonEmpty(<String>[
-          authUser?.firstNameEn ?? '',
-          familyName,
-        ]),
-        'lastNameEn': _firstNonEmpty(<String>[
-          authUser?.lastNameEn ?? '',
-          givenName,
-        ]),
-        'katakana': _firstNonEmpty(<String>[
-          profile.katakana,
-          authUser?.katakana ?? '',
-        ]),
+        'firstName': givenName,
+        'lastName': familyName,
+        'firstNameEn': givenNameEn,
+        'lastNameEn': familyNameEn,
+        'katakana': katakana,
         'birthday': _normalizeBirthday(
           _firstNonEmpty(<String>[
             profile.birthday ?? '',

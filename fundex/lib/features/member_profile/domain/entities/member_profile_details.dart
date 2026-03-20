@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'member_profile_details.freezed.dart';
 
 @freezed
-class MemberProfileDetails with _$MemberProfileDetails {
+abstract class MemberProfileDetails with _$MemberProfileDetails {
   const MemberProfileDetails._();
 
   static const int flowStepCount = 6;
@@ -11,6 +11,10 @@ class MemberProfileDetails with _$MemberProfileDetails {
   const factory MemberProfileDetails({
     @Default('') String familyName,
     @Default('') String givenName,
+    @Default('') String familyNameKana,
+    @Default('') String givenNameKana,
+    @Default('') String familyNameEn,
+    @Default('') String givenNameEn,
     @Default('') String nameKanji,
     @Default('') String katakana,
     @Default('') String address,
@@ -77,6 +81,10 @@ class MemberProfileDetails with _$MemberProfileDetails {
   bool get hasAnyInput =>
       familyName.trim().isNotEmpty ||
       givenName.trim().isNotEmpty ||
+      familyNameKana.trim().isNotEmpty ||
+      givenNameKana.trim().isNotEmpty ||
+      familyNameEn.trim().isNotEmpty ||
+      givenNameEn.trim().isNotEmpty ||
       nameKanji.trim().isNotEmpty ||
       katakana.trim().isNotEmpty ||
       address.trim().isNotEmpty ||
@@ -109,6 +117,10 @@ class MemberProfileDetails with _$MemberProfileDetails {
   MemberProfileDetails mergeWithSeed({
     String? familyName,
     String? givenName,
+    String? familyNameKana,
+    String? givenNameKana,
+    String? familyNameEn,
+    String? givenNameEn,
     String? nameKanji,
     String? katakana,
     String? address,
@@ -129,6 +141,10 @@ class MemberProfileDetails with _$MemberProfileDetails {
     return copyWith(
       familyName: mergeString(this.familyName, familyName),
       givenName: mergeString(this.givenName, givenName),
+      familyNameKana: mergeString(this.familyNameKana, familyNameKana),
+      givenNameKana: mergeString(this.givenNameKana, givenNameKana),
+      familyNameEn: mergeString(this.familyNameEn, familyNameEn),
+      givenNameEn: mergeString(this.givenNameEn, givenNameEn),
       nameKanji: mergeString(this.nameKanji, nameKanji),
       katakana: mergeString(this.katakana, katakana),
       address: mergeString(this.address, address),
@@ -141,8 +157,12 @@ class MemberProfileDetails with _$MemberProfileDetails {
   }
 
   bool get _isBasicInfoStepComplete =>
-      nameKanji.trim().isNotEmpty &&
-      katakana.trim().isNotEmpty &&
+      (familyName.trim().isNotEmpty || nameKanji.trim().isNotEmpty) &&
+      (givenName.trim().isNotEmpty || nameKanji.trim().isNotEmpty) &&
+      (familyNameKana.trim().isNotEmpty || katakana.trim().isNotEmpty) &&
+      (givenNameKana.trim().isNotEmpty || katakana.trim().isNotEmpty) &&
+      familyNameEn.trim().isNotEmpty &&
+      givenNameEn.trim().isNotEmpty &&
       (birthday?.trim().isNotEmpty ?? false) &&
       phone.trim().isNotEmpty;
 

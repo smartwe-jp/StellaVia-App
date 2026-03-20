@@ -4,6 +4,7 @@ import '../../domain/constants/member_profile_upload_markers.dart';
 
 abstract class MemberProfileRemoteDataSource {
   Future<List<MemberProfileRegionDto>> fetchRegionsByZip({required String zip});
+  Future<Map<String, dynamic>> fetchCurrentMemberProfilePayload();
 
   Future<String> uploadPhoto({
     required String filePath,
@@ -32,15 +33,31 @@ class MemberProfileRemoteDataSourceImpl
                          ))
                      .dioForPath,
              envelopeCodec: envelopeCodec,
-           );
+           ),
+       _authApiClient = AuthApiClient(
+         dioForPath:
+             (clusterRouter ??
+                     ApiClusterRouter.fromClients(
+                       oaClient: oaClient,
+                       memberClient: memberClient,
+                     ))
+                 .dioForPath,
+         envelopeCodec: envelopeCodec,
+       );
 
   final MemberProfileApiClient _apiClient;
+  final AuthApiClient _authApiClient;
 
   @override
   Future<List<MemberProfileRegionDto>> fetchRegionsByZip({
     required String zip,
   }) async {
     return _apiClient.fetchRegionsByZip(zip: zip);
+  }
+
+  @override
+  Future<Map<String, dynamic>> fetchCurrentMemberProfilePayload() async {
+    return _authApiClient.fetchCurrentUserPayload();
   }
 
   @override

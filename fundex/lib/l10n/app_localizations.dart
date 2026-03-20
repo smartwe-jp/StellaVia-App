@@ -4295,7 +4295,7 @@ abstract class AppLocalizations {
   /// No description provided for @memberProfileStep1Description.
   ///
   /// In en, this message translates to:
-  /// **'Enter your name and contact information.'**
+  /// **'Enter your family name, given name, phonetic name, romanized name, and contact information.'**
   String get memberProfileStep1Description;
 
   /// No description provided for @memberProfileNameKanjiLabel.
@@ -4321,6 +4321,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'TANAKA TARO'**
   String get memberProfileNameKanaHint;
+
+  /// No description provided for @memberProfileFamilyNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Family name'**
+  String get memberProfileFamilyNameLabel;
+
+  /// No description provided for @memberProfileFamilyNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tanaka'**
+  String get memberProfileFamilyNameHint;
+
+  /// No description provided for @memberProfileGivenNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Given name'**
+  String get memberProfileGivenNameLabel;
+
+  /// No description provided for @memberProfileGivenNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Taro'**
+  String get memberProfileGivenNameHint;
+
+  /// No description provided for @memberProfileFamilyNameKanaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Family name (Kana)'**
+  String get memberProfileFamilyNameKanaLabel;
+
+  /// No description provided for @memberProfileFamilyNameKanaHint.
+  ///
+  /// In en, this message translates to:
+  /// **'TANAKA'**
+  String get memberProfileFamilyNameKanaHint;
+
+  /// No description provided for @memberProfileGivenNameKanaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Given name (Kana)'**
+  String get memberProfileGivenNameKanaLabel;
+
+  /// No description provided for @memberProfileGivenNameKanaHint.
+  ///
+  /// In en, this message translates to:
+  /// **'TARO'**
+  String get memberProfileGivenNameKanaHint;
+
+  /// No description provided for @memberProfileFamilyNameRomanLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Family name (Roman)'**
+  String get memberProfileFamilyNameRomanLabel;
+
+  /// No description provided for @memberProfileFamilyNameRomanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'TANAKA'**
+  String get memberProfileFamilyNameRomanHint;
+
+  /// No description provided for @memberProfileGivenNameRomanLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Given name (Roman)'**
+  String get memberProfileGivenNameRomanLabel;
+
+  /// No description provided for @memberProfileGivenNameRomanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'TARO'**
+  String get memberProfileGivenNameRomanHint;
 
   /// No description provided for @memberProfileBirthdayLabel.
   ///

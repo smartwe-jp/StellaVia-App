@@ -6,11 +6,15 @@ part of 'member_profile_details_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$MemberProfileDetailsDtoImpl _$$MemberProfileDetailsDtoImplFromJson(
+_MemberProfileDetailsDto _$MemberProfileDetailsDtoFromJson(
   Map<String, dynamic> json,
-) => _$MemberProfileDetailsDtoImpl(
+) => _MemberProfileDetailsDto(
   familyName: json['familyName'] as String? ?? '',
   givenName: json['givenName'] as String? ?? '',
+  familyNameKana: json['familyNameKana'] as String? ?? '',
+  givenNameKana: json['givenNameKana'] as String? ?? '',
+  familyNameEn: json['familyNameEn'] as String? ?? '',
+  givenNameEn: json['givenNameEn'] as String? ?? '',
   nameKanji: json['nameKanji'] as String? ?? '',
   katakana: json['katakana'] as String? ?? '',
   address: json['address'] as String? ?? '',
@@ -57,11 +61,15 @@ _$MemberProfileDetailsDtoImpl _$$MemberProfileDetailsDtoImplFromJson(
       : DateTime.parse(json['lastSkippedAt'] as String),
 );
 
-Map<String, dynamic> _$$MemberProfileDetailsDtoImplToJson(
-  _$MemberProfileDetailsDtoImpl instance,
+Map<String, dynamic> _$MemberProfileDetailsDtoToJson(
+  _MemberProfileDetailsDto instance,
 ) => <String, dynamic>{
   'familyName': instance.familyName,
   'givenName': instance.givenName,
+  'familyNameKana': instance.familyNameKana,
+  'givenNameKana': instance.givenNameKana,
+  'familyNameEn': instance.familyNameEn,
+  'givenNameEn': instance.givenNameEn,
   'nameKanji': instance.nameKanji,
   'katakana': instance.katakana,
   'address': instance.address,

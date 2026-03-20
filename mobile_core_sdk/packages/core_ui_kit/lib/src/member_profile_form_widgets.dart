@@ -1,8 +1,265 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'app_theme_extensions.dart';
+
+class MemberProfileInputFormatters {
+  const MemberProfileInputFormatters._();
+
+  static final TextInputFormatter katakanaOnly = _KanaNormalizeFormatter();
+
+  static final TextInputFormatter romanNameOnly = _RomanNameFormatter();
+}
+
+class _KanaNormalizeFormatter extends TextInputFormatter {
+  static final RegExp _allowed = RegExp(r'[ァ-ヶー・ヴヷ-ヺヽヾ゛゜ 　]');
+  static const Map<String, String> _halfWidthSingleMap = <String, String>{
+    'ｱ': 'ア',
+    'ｲ': 'イ',
+    'ｳ': 'ウ',
+    'ｴ': 'エ',
+    'ｵ': 'オ',
+    'ｧ': 'ァ',
+    'ｨ': 'ィ',
+    'ｩ': 'ゥ',
+    'ｪ': 'ェ',
+    'ｫ': 'ォ',
+    'ｶ': 'カ',
+    'ｷ': 'キ',
+    'ｸ': 'ク',
+    'ｹ': 'ケ',
+    'ｺ': 'コ',
+    'ｻ': 'サ',
+    'ｼ': 'シ',
+    'ｽ': 'ス',
+    'ｾ': 'セ',
+    'ｿ': 'ソ',
+    'ﾀ': 'タ',
+    'ﾁ': 'チ',
+    'ﾂ': 'ツ',
+    'ﾃ': 'テ',
+    'ﾄ': 'ト',
+    'ｯ': 'ッ',
+    'ﾅ': 'ナ',
+    'ﾆ': 'ニ',
+    'ﾇ': 'ヌ',
+    'ﾈ': 'ネ',
+    'ﾉ': 'ノ',
+    'ﾊ': 'ハ',
+    'ﾋ': 'ヒ',
+    'ﾌ': 'フ',
+    'ﾍ': 'ヘ',
+    'ﾎ': 'ホ',
+    'ﾏ': 'マ',
+    'ﾐ': 'ミ',
+    'ﾑ': 'ム',
+    'ﾒ': 'メ',
+    'ﾓ': 'モ',
+    'ﾔ': 'ヤ',
+    'ﾕ': 'ユ',
+    'ﾖ': 'ヨ',
+    'ｬ': 'ャ',
+    'ｭ': 'ュ',
+    'ｮ': 'ョ',
+    'ﾗ': 'ラ',
+    'ﾘ': 'リ',
+    'ﾙ': 'ル',
+    'ﾚ': 'レ',
+    'ﾛ': 'ロ',
+    'ﾜ': 'ワ',
+    'ｦ': 'ヲ',
+    'ﾝ': 'ン',
+    'ｰ': 'ー',
+    '･': '・',
+    ' ': ' ',
+    '　': '　',
+  };
+  static const Map<String, String> _halfWidthDakutenMap = <String, String>{
+    'ｳ': 'ヴ',
+    'ｶ': 'ガ',
+    'ｷ': 'ギ',
+    'ｸ': 'グ',
+    'ｹ': 'ゲ',
+    'ｺ': 'ゴ',
+    'ｻ': 'ザ',
+    'ｼ': 'ジ',
+    'ｽ': 'ズ',
+    'ｾ': 'ゼ',
+    'ｿ': 'ゾ',
+    'ﾀ': 'ダ',
+    'ﾁ': 'ヂ',
+    'ﾂ': 'ヅ',
+    'ﾃ': 'デ',
+    'ﾄ': 'ド',
+    'ﾊ': 'バ',
+    'ﾋ': 'ビ',
+    'ﾌ': 'ブ',
+    'ﾍ': 'ベ',
+    'ﾎ': 'ボ',
+    'ﾜ': 'ヷ',
+    'ｦ': 'ヺ',
+  };
+  static const Map<String, String> _halfWidthHandakutenMap = <String, String>{
+    'ﾊ': 'パ',
+    'ﾋ': 'ピ',
+    'ﾌ': 'プ',
+    'ﾍ': 'ペ',
+    'ﾎ': 'ポ',
+  };
+  static const String _dakuten = 'ﾞ';
+  static const String _handakuten = 'ﾟ';
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final String text = _normalizeText(newValue.text);
+    final int baseOffset = _normalizedOffset(
+      rawText: newValue.text,
+      rawOffset: newValue.selection.baseOffset,
+    );
+    final int extentOffset = _normalizedOffset(
+      rawText: newValue.text,
+      rawOffset: newValue.selection.extentOffset,
+    );
+    return newValue.copyWith(
+      text: text,
+      selection: TextSelection(
+        baseOffset: baseOffset.clamp(0, text.length),
+        extentOffset: extentOffset.clamp(0, text.length),
+      ),
+      composing: TextRange.empty,
+    );
+  }
+
+  int _normalizedOffset({required String rawText, required int rawOffset}) {
+    final int clampedOffset = math.max(0, math.min(rawOffset, rawText.length));
+    return _normalizeText(rawText.substring(0, clampedOffset)).length;
+  }
+
+  String _normalizeText(String rawText) {
+    final StringBuffer buffer = StringBuffer();
+
+    for (int index = 0; index < rawText.length;) {
+      final _KanaToken token = _normalizeKanaToken(rawText, index);
+      index += token.consumedLength;
+      if (token.value.isNotEmpty && _allowed.hasMatch(token.value)) {
+        buffer.write(token.value);
+      }
+    }
+    return buffer.toString();
+  }
+
+  _KanaToken _normalizeKanaToken(String rawText, int startIndex) {
+    final String char = rawText[startIndex];
+    if (char == _dakuten || char == _handakuten) {
+      return const _KanaToken(value: '', consumedLength: 1);
+    }
+
+    final int codePoint = char.codeUnitAt(0);
+    if (codePoint >= 0x3041 && codePoint <= 0x3096) {
+      return _KanaToken(
+        value: String.fromCharCode(codePoint + 0x60),
+        consumedLength: 1,
+      );
+    }
+    if (codePoint >= 0x309D && codePoint <= 0x309E) {
+      return _KanaToken(
+        value: String.fromCharCode(codePoint + 0x60),
+        consumedLength: 1,
+      );
+    }
+
+    final String? next = startIndex + 1 < rawText.length
+        ? rawText[startIndex + 1]
+        : null;
+    if (next == _dakuten) {
+      final mapped = _halfWidthDakutenMap[char];
+      if (mapped != null) {
+        return _KanaToken(value: mapped, consumedLength: 2);
+      }
+    }
+    if (next == _handakuten) {
+      final mapped = _halfWidthHandakutenMap[char];
+      if (mapped != null) {
+        return _KanaToken(value: mapped, consumedLength: 2);
+      }
+    }
+
+    final mapped = _halfWidthSingleMap[char];
+    if (mapped != null) {
+      return _KanaToken(value: mapped, consumedLength: 1);
+    }
+
+    return _KanaToken(value: char, consumedLength: 1);
+  }
+}
+
+class _RomanNameFormatter extends TextInputFormatter {
+  static final RegExp _allowed = RegExp(r'[A-Z ]');
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final String text = _normalizeText(newValue.text);
+    final int baseOffset = _normalizedOffset(
+      rawText: newValue.text,
+      rawOffset: newValue.selection.baseOffset,
+    );
+    final int extentOffset = _normalizedOffset(
+      rawText: newValue.text,
+      rawOffset: newValue.selection.extentOffset,
+    );
+    return newValue.copyWith(
+      text: text,
+      selection: TextSelection(
+        baseOffset: baseOffset.clamp(0, text.length),
+        extentOffset: extentOffset.clamp(0, text.length),
+      ),
+      composing: TextRange.empty,
+    );
+  }
+
+  int _normalizedOffset({required String rawText, required int rawOffset}) {
+    final int clampedOffset = math.max(0, math.min(rawOffset, rawText.length));
+    return _normalizeText(rawText.substring(0, clampedOffset)).length;
+  }
+
+  String _normalizeText(String rawText) {
+    final StringBuffer buffer = StringBuffer();
+    bool previousWasSpace = false;
+
+    for (int index = 0; index < rawText.length; index += 1) {
+      final String normalizedChar = rawText[index].toUpperCase();
+      if (!_allowed.hasMatch(normalizedChar)) {
+        continue;
+      }
+      if (normalizedChar == ' ') {
+        if (buffer.isEmpty || previousWasSpace) {
+          continue;
+        }
+        previousWasSpace = true;
+        buffer.write(normalizedChar);
+        continue;
+      }
+      previousWasSpace = false;
+      buffer.write(normalizedChar);
+    }
+    return buffer.toString();
+  }
+}
+
+class _KanaToken {
+  const _KanaToken({required this.value, required this.consumedLength});
+
+  final String value;
+  final int consumedLength;
+}
 
 class MemberProfileTextField extends StatelessWidget {
   const MemberProfileTextField({
@@ -15,6 +272,7 @@ class MemberProfileTextField extends StatelessWidget {
     this.maxLines = 1,
     this.suffixIcon,
     this.onTap,
+    this.inputFormatters,
   });
 
   final String label;
@@ -25,6 +283,7 @@ class MemberProfileTextField extends StatelessWidget {
   final int maxLines;
   final Widget? suffixIcon;
   final VoidCallback? onTap;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +300,7 @@ class MemberProfileTextField extends StatelessWidget {
           readOnly: readOnly,
           maxLines: maxLines,
           onTap: onTap,
+          inputFormatters: inputFormatters,
           decoration: _inputDecoration(
             context: context,
             hintText: hintText,
@@ -180,6 +440,61 @@ class MemberProfileBankAccountFormSection extends StatelessWidget {
           label: accountHolderLabel,
           controller: accountHolderController,
           hintText: accountHolderHintText,
+        ),
+      ],
+    );
+  }
+}
+
+class MemberProfileDualTextFieldRow extends StatelessWidget {
+  const MemberProfileDualTextFieldRow({
+    super.key,
+    required this.startLabel,
+    required this.startController,
+    required this.endLabel,
+    required this.endController,
+    this.startHintText,
+    this.endHintText,
+    this.startKeyboardType,
+    this.endKeyboardType,
+    this.startInputFormatters,
+    this.endInputFormatters,
+  });
+
+  final String startLabel;
+  final TextEditingController startController;
+  final String endLabel;
+  final TextEditingController endController;
+  final String? startHintText;
+  final String? endHintText;
+  final TextInputType? startKeyboardType;
+  final TextInputType? endKeyboardType;
+  final List<TextInputFormatter>? startInputFormatters;
+  final List<TextInputFormatter>? endInputFormatters;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Expanded(
+          child: MemberProfileTextField(
+            label: startLabel,
+            controller: startController,
+            hintText: startHintText,
+            keyboardType: startKeyboardType,
+            inputFormatters: startInputFormatters,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: MemberProfileTextField(
+            label: endLabel,
+            controller: endController,
+            hintText: endHintText,
+            keyboardType: endKeyboardType,
+            inputFormatters: endInputFormatters,
+          ),
         ),
       ],
     );

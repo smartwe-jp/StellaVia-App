@@ -70,6 +70,11 @@ class MemberTemplateApp extends ConsumerWidget {
         return;
       }
       invalidateAuthenticatedRealtimeProviders(ref);
+      unawaited(() async {
+        await ref.read(syncMemberProfileFromRemoteUseCaseProvider).call();
+        ref.invalidate(memberProfileDetailsProvider);
+        ref.invalidate(isMemberProfileCompletedProvider);
+      }());
     });
 
     ref.listen<int>(appNetworkAuthFailureSignalProvider, (previous, next) {

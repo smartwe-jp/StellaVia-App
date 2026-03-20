@@ -36,8 +36,12 @@ class MemberProfileEditFlowPage extends ConsumerStatefulWidget {
 
 class _MemberProfileEditFlowPageState
     extends ConsumerState<MemberProfileEditFlowPage> {
-  late final TextEditingController _nameKanjiController;
-  late final TextEditingController _nameKanaController;
+  late final TextEditingController _familyNameController;
+  late final TextEditingController _givenNameController;
+  late final TextEditingController _familyNameKanaController;
+  late final TextEditingController _givenNameKanaController;
+  late final TextEditingController _familyNameRomanController;
+  late final TextEditingController _givenNameRomanController;
   late final TextEditingController _birthdayController;
   late final TextEditingController _phoneController;
   late final TextEditingController _postalCodeController;
@@ -81,8 +85,12 @@ class _MemberProfileEditFlowPageState
   @override
   void initState() {
     super.initState();
-    _nameKanjiController = TextEditingController();
-    _nameKanaController = TextEditingController();
+    _familyNameController = TextEditingController();
+    _givenNameController = TextEditingController();
+    _familyNameKanaController = TextEditingController();
+    _givenNameKanaController = TextEditingController();
+    _familyNameRomanController = TextEditingController();
+    _givenNameRomanController = TextEditingController();
     _birthdayController = TextEditingController();
     _phoneController = TextEditingController();
     _postalCodeController = TextEditingController();
@@ -98,8 +106,12 @@ class _MemberProfileEditFlowPageState
   @override
   void dispose() {
     _unregisterTextFieldListeners();
-    _nameKanjiController.dispose();
-    _nameKanaController.dispose();
+    _familyNameController.dispose();
+    _givenNameController.dispose();
+    _familyNameKanaController.dispose();
+    _givenNameKanaController.dispose();
+    _familyNameRomanController.dispose();
+    _givenNameRomanController.dispose();
     _birthdayController.dispose();
     _phoneController.dispose();
     _postalCodeController.dispose();
@@ -125,8 +137,12 @@ class _MemberProfileEditFlowPageState
 
   List<TextEditingController> get _trackedTextControllers =>
       <TextEditingController>[
-        _nameKanjiController,
-        _nameKanaController,
+        _familyNameController,
+        _givenNameController,
+        _familyNameKanaController,
+        _givenNameKanaController,
+        _familyNameRomanController,
+        _givenNameRomanController,
         _birthdayController,
         _phoneController,
         _postalCodeController,
@@ -153,20 +169,12 @@ class _MemberProfileEditFlowPageState
           .read(currentAuthUserProvider.future)
           .catchError((Object _) => null);
 
-      final String savedNameKanji = savedProfile?.nameKanji.trim() ?? '';
-      final String legacyNameKanji = _joinNonEmpty(<String?>[
-        savedProfile?.familyName,
-        savedProfile?.givenName,
-      ]);
-      final String authNameKanji = _joinNonEmpty(<String?>[
-        authUser?.lastName,
-        authUser?.firstName,
-      ]);
-      final String nameKanji = _firstNonEmpty(<String>[
-        savedNameKanji,
-        legacyNameKanji,
-        authNameKanji,
-      ]);
+      final (String legacyFamilyName, String legacyGivenName) =
+          _splitJapaneseName(savedProfile?.nameKanji ?? '');
+      final (String legacyFamilyNameKana, String legacyGivenNameKana) =
+          _splitJapaneseName(savedProfile?.katakana ?? '');
+      final (String authFamilyNameKana, String authGivenNameKana) =
+          _splitJapaneseName(authUser?.katakana ?? '');
       final Map<String, dynamic>? authBank = authUser?.bank;
 
       if (!mounted) {
@@ -174,10 +182,33 @@ class _MemberProfileEditFlowPageState
       }
 
       setState(() {
-        _nameKanjiController.text = nameKanji;
-        _nameKanaController.text = _firstNonEmpty(<String>[
-          savedProfile?.katakana ?? '',
-          authUser?.katakana ?? '',
+        _familyNameController.text = _firstNonEmpty(<String>[
+          savedProfile?.familyName ?? '',
+          legacyFamilyName,
+          authUser?.lastName ?? '',
+        ]);
+        _givenNameController.text = _firstNonEmpty(<String>[
+          savedProfile?.givenName ?? '',
+          legacyGivenName,
+          authUser?.firstName ?? '',
+        ]);
+        _familyNameKanaController.text = _firstNonEmpty(<String>[
+          savedProfile?.familyNameKana ?? '',
+          legacyFamilyNameKana,
+          authFamilyNameKana,
+        ]);
+        _givenNameKanaController.text = _firstNonEmpty(<String>[
+          savedProfile?.givenNameKana ?? '',
+          legacyGivenNameKana,
+          authGivenNameKana,
+        ]);
+        _familyNameRomanController.text = _firstNonEmpty(<String>[
+          savedProfile?.familyNameEn ?? '',
+          authUser?.lastNameEn ?? '',
+        ]);
+        _givenNameRomanController.text = _firstNonEmpty(<String>[
+          savedProfile?.givenNameEn ?? '',
+          authUser?.firstNameEn ?? '',
         ]);
         _phoneController.text = savedProfile?.phone.trim().isNotEmpty == true
             ? savedProfile!.phone.trim()
@@ -741,8 +772,12 @@ class _MemberProfileEditFlowPageState
   }
 
   bool get _isBasicInfoStepReady =>
-      _isFilled(_nameKanjiController.text) &&
-      _isFilled(_nameKanaController.text) &&
+      _isFilled(_familyNameController.text) &&
+      _isFilled(_givenNameController.text) &&
+      _isFilled(_familyNameKanaController.text) &&
+      _isFilled(_givenNameKanaController.text) &&
+      _isFilled(_familyNameRomanController.text) &&
+      _isFilled(_givenNameRomanController.text) &&
       _isFilled(_birthdayController.text) &&
       _isFilled(_phoneController.text);
 
@@ -792,10 +827,18 @@ class _MemberProfileEditFlowPageState
     DateTime? completedAtOverride,
     required int editingStep,
   }) {
-    final String normalizedNameKanji = _nameKanjiController.text.trim();
-    final (String familyName, String givenName) = _splitJapaneseName(
-      normalizedNameKanji,
-    );
+    final String familyName = _familyNameController.text.trim();
+    final String givenName = _givenNameController.text.trim();
+    final String familyNameKana = _familyNameKanaController.text.trim();
+    final String givenNameKana = _givenNameKanaController.text.trim();
+    final String normalizedNameKanji = _joinNonEmpty(<String?>[
+      familyName,
+      givenName,
+    ]);
+    final String normalizedKatakana = _joinNonEmpty(<String?>[
+      familyNameKana,
+      givenNameKana,
+    ]);
     final String cityAddress = _cityAddressController.text.trim();
     final String composedAddress = _composeAddress(
       prefectureCode: _prefecture,
@@ -805,8 +848,12 @@ class _MemberProfileEditFlowPageState
     return MemberProfileDetails(
       familyName: familyName,
       givenName: givenName,
+      familyNameKana: familyNameKana,
+      givenNameKana: givenNameKana,
+      familyNameEn: _familyNameRomanController.text.trim(),
+      givenNameEn: _givenNameRomanController.text.trim(),
       nameKanji: normalizedNameKanji,
-      katakana: _nameKanaController.text.trim(),
+      katakana: normalizedKatakana,
       address: composedAddress,
       birthday: _emptyToNull(_birthdayController.text),
       zipCode: _postalCodeController.text.trim(),
@@ -1133,8 +1180,12 @@ class _MemberProfileEditFlowPageState
       case MemberProfileEditStep.basicInfo:
         final bool isActionEnabled = _canProceedFromCurrentStep;
         return MemberProfileBasicInfoStepPage(
-          nameKanjiController: _nameKanjiController,
-          nameKanaController: _nameKanaController,
+          familyNameController: _familyNameController,
+          givenNameController: _givenNameController,
+          familyNameKanaController: _familyNameKanaController,
+          givenNameKanaController: _givenNameKanaController,
+          familyNameRomanController: _familyNameRomanController,
+          givenNameRomanController: _givenNameRomanController,
           birthdayController: _birthdayController,
           phoneController: _phoneController,
           showAgeWarning: _showAgeWarning,

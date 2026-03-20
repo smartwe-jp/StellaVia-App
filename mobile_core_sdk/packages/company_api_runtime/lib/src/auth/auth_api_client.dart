@@ -175,6 +175,14 @@ class AuthApiClient {
   }
 
   Future<AuthUserDto?> fetchCurrentUser() async {
+    final normalizedPayload = await fetchCurrentUserPayload();
+    if (normalizedPayload.isEmpty) {
+      return null;
+    }
+    return AuthUserDto.tryFromCurrentUserPayload(normalizedPayload);
+  }
+
+  Future<Map<String, dynamic>> fetchCurrentUserPayload() async {
     final response = await _dioForPath(crowdfundingUserIndexPath)
         .get<Map<String, dynamic>>(
           crowdfundingUserIndexPath,
@@ -186,14 +194,11 @@ class AuthApiClient {
       fallbackMessage: 'Failed to load current user profile.',
     );
     if (payload.isEmpty) {
-      return null;
+      return const <String, dynamic>{};
     }
 
     final normalizedPayload = _normalizeCurrentUserPayload(payload);
-    if (normalizedPayload.isEmpty) {
-      return null;
-    }
-    return AuthUserDto.tryFromCurrentUserPayload(normalizedPayload);
+    return normalizedPayload;
   }
 
   Future<void> registerApply({

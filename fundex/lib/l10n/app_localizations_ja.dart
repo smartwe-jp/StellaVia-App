@@ -2176,7 +2176,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfileStep1Title => 'Step 1：基本情報';
 
   @override
-  String get memberProfileStep1Description => '氏名・連絡先を入力してください';
+  String get memberProfileStep1Description => '姓・名、フリガナ、ローマ字氏名、連絡先を入力してください';
 
   @override
   String get memberProfileNameKanjiLabel => '氏名（漢字）';
@@ -2189,6 +2189,42 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get memberProfileNameKanaHint => 'タナカ タロウ';
+
+  @override
+  String get memberProfileFamilyNameLabel => '姓（漢字）';
+
+  @override
+  String get memberProfileFamilyNameHint => '田中';
+
+  @override
+  String get memberProfileGivenNameLabel => '名（漢字）';
+
+  @override
+  String get memberProfileGivenNameHint => '太郎';
+
+  @override
+  String get memberProfileFamilyNameKanaLabel => '姓（カナ）';
+
+  @override
+  String get memberProfileFamilyNameKanaHint => 'タナカ';
+
+  @override
+  String get memberProfileGivenNameKanaLabel => '名（カナ）';
+
+  @override
+  String get memberProfileGivenNameKanaHint => 'タロウ';
+
+  @override
+  String get memberProfileFamilyNameRomanLabel => '姓（ローマ字）';
+
+  @override
+  String get memberProfileFamilyNameRomanHint => 'TANAKA';
+
+  @override
+  String get memberProfileGivenNameRomanLabel => '名（ローマ字）';
+
+  @override
+  String get memberProfileGivenNameRomanHint => 'TARO';
 
   @override
   String get memberProfileBirthdayLabel => '生年月日';

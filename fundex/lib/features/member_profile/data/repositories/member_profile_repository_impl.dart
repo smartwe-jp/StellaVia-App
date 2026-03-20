@@ -5,6 +5,7 @@ import '../../domain/repositories/member_profile_repository.dart';
 import '../datasources/member_profile_local_data_source.dart';
 import '../datasources/member_profile_remote_data_source.dart';
 import '../mappers/member_profile_api_payload_mapper.dart';
+import '../mappers/member_profile_current_user_payload_mapper.dart';
 import '../models/member_profile_details_dto.dart';
 import '../models/member_profile_region_dto.dart';
 
@@ -46,6 +47,20 @@ class MemberProfileRepositoryImpl implements MemberProfileRepository {
       await _local.saveProfile(MemberProfileDetailsDto.fromEntity(profile));
     } catch (_) {
       // Keep member profile features available even when local cache fails.
+    }
+  }
+
+  @override
+  Future<void> syncLocalProfileFromRemote() async {
+    try {
+      final payload = await _remote.fetchCurrentMemberProfilePayload();
+      final profile = MemberProfileCurrentUserPayloadMapper.toEntity(payload);
+      if (profile == null) {
+        return;
+      }
+      await _local.saveProfile(MemberProfileDetailsDto.fromEntity(profile));
+    } catch (_) {
+      // Keep auth flow and local draft access available on transient sync failures.
     }
   }
 

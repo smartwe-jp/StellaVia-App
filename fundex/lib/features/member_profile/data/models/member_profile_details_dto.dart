@@ -6,12 +6,16 @@ part 'member_profile_details_dto.freezed.dart';
 part 'member_profile_details_dto.g.dart';
 
 @freezed
-class MemberProfileDetailsDto with _$MemberProfileDetailsDto {
+abstract class MemberProfileDetailsDto with _$MemberProfileDetailsDto {
   const MemberProfileDetailsDto._();
 
   const factory MemberProfileDetailsDto({
     @Default('') String familyName,
     @Default('') String givenName,
+    @Default('') String familyNameKana,
+    @Default('') String givenNameKana,
+    @Default('') String familyNameEn,
+    @Default('') String givenNameEn,
     @Default('') String nameKanji,
     @Default('') String katakana,
     @Default('') String address,
@@ -54,6 +58,10 @@ class MemberProfileDetailsDto with _$MemberProfileDetailsDto {
     return MemberProfileDetailsDto(
       familyName: entity.familyName,
       givenName: entity.givenName,
+      familyNameKana: entity.familyNameKana,
+      givenNameKana: entity.givenNameKana,
+      familyNameEn: entity.familyNameEn,
+      givenNameEn: entity.givenNameEn,
       nameKanji: entity.nameKanji,
       katakana: entity.katakana,
       address: entity.address,
@@ -94,6 +102,10 @@ class MemberProfileDetailsDto with _$MemberProfileDetailsDto {
     return MemberProfileDetails(
       familyName: familyName,
       givenName: givenName,
+      familyNameKana: familyNameKana,
+      givenNameKana: givenNameKana,
+      familyNameEn: familyNameEn,
+      givenNameEn: givenNameEn,
       nameKanji: nameKanji,
       katakana: katakana,
       address: address,

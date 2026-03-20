@@ -23,6 +23,9 @@ class _FakeMemberProfileRepository implements MemberProfileRepository {
   }
 
   @override
+  Future<void> syncLocalProfileFromRemote() async {}
+
+  @override
   Future<List<MemberProfileRegion>> fetchRegionsByZip({
     required String zip,
   }) async {

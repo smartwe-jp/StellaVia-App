@@ -1,13 +1,18 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../../../app/localization/app_localizations_ext.dart';
 
 class MemberProfileBasicInfoStepPage extends StatelessWidget {
   const MemberProfileBasicInfoStepPage({
     super.key,
-    required this.nameKanjiController,
-    required this.nameKanaController,
+    required this.familyNameController,
+    required this.givenNameController,
+    required this.familyNameKanaController,
+    required this.givenNameKanaController,
+    required this.familyNameRomanController,
+    required this.givenNameRomanController,
     required this.birthdayController,
     required this.phoneController,
     required this.showAgeWarning,
@@ -17,8 +22,12 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
     this.onSkip,
   });
 
-  final TextEditingController nameKanjiController;
-  final TextEditingController nameKanaController;
+  final TextEditingController familyNameController;
+  final TextEditingController givenNameController;
+  final TextEditingController familyNameKanaController;
+  final TextEditingController givenNameKanaController;
+  final TextEditingController familyNameRomanController;
+  final TextEditingController givenNameRomanController;
   final TextEditingController birthdayController;
   final TextEditingController phoneController;
   final bool showAgeWarning;
@@ -38,28 +47,49 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
       primaryButtonLabel: l10n.commonNext,
       onPrimaryPressed: onNext,
       primaryButtonEnabled: primaryButtonEnabled,
+      showSkip: false,
       skipLabel: l10n.commonSkipChevron,
       onSkip: onSkip,
       child: Column(
         children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: MemberProfileTextField(
-                  label: l10n.memberProfileNameKanjiLabel,
-                  controller: nameKanjiController,
-                  hintText: l10n.memberProfileNameKanjiHint,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: MemberProfileTextField(
-                  label: l10n.memberProfileNameKanaLabel,
-                  controller: nameKanaController,
-                  hintText: l10n.memberProfileNameKanaHint,
-                ),
-              ),
+          MemberProfileDualTextFieldRow(
+            startLabel: l10n.memberProfileFamilyNameLabel,
+            startController: familyNameController,
+            startHintText: l10n.memberProfileFamilyNameHint,
+            endLabel: l10n.memberProfileGivenNameLabel,
+            endController: givenNameController,
+            endHintText: l10n.memberProfileGivenNameHint,
+          ),
+          const SizedBox(height: 14),
+          MemberProfileDualTextFieldRow(
+            startLabel: l10n.memberProfileFamilyNameKanaLabel,
+            startController: familyNameKanaController,
+            startHintText: l10n.memberProfileFamilyNameKanaHint,
+            startInputFormatters: <TextInputFormatter>[
+              MemberProfileInputFormatters.katakanaOnly,
+            ],
+            endLabel: l10n.memberProfileGivenNameKanaLabel,
+            endController: givenNameKanaController,
+            endHintText: l10n.memberProfileGivenNameKanaHint,
+            endInputFormatters: <TextInputFormatter>[
+              MemberProfileInputFormatters.katakanaOnly,
+            ],
+          ),
+          const SizedBox(height: 14),
+          MemberProfileDualTextFieldRow(
+            startLabel: l10n.memberProfileFamilyNameRomanLabel,
+            startController: familyNameRomanController,
+            startHintText: l10n.memberProfileFamilyNameRomanHint,
+            startKeyboardType: TextInputType.name,
+            startInputFormatters: <TextInputFormatter>[
+              MemberProfileInputFormatters.romanNameOnly,
+            ],
+            endLabel: l10n.memberProfileGivenNameRomanLabel,
+            endController: givenNameRomanController,
+            endHintText: l10n.memberProfileGivenNameRomanHint,
+            endKeyboardType: TextInputType.name,
+            endInputFormatters: <TextInputFormatter>[
+              MemberProfileInputFormatters.romanNameOnly,
             ],
           ),
           const SizedBox(height: 14),
