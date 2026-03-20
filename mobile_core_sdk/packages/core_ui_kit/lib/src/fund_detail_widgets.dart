@@ -75,10 +75,14 @@ class FundHeroMediaBackground extends StatefulWidget {
       _FundHeroMediaBackgroundState();
 }
 
-class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground> {
+class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground>
+    with WidgetsBindingObserver {
   PageController? _internalController;
   Timer? _autoPlayTimer;
   int _currentIndex = 0;
+  bool _isPointerInteracting = false;
+  bool _isAppActive = true;
+  bool _isRouteVisible = true;
 
   List<String> get _normalizedImageUrls => widget.imageUrls
       .map((String url) => url.trim())
@@ -92,6 +96,21 @@ class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    final lifecycleState = WidgetsBinding.instance.lifecycleState;
+    _isAppActive =
+        lifecycleState == null || lifecycleState == AppLifecycleState.resumed;
+    _configureAutoPlay();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final isRouteVisible = ModalRoute.of(context)?.isCurrent ?? true;
+    if (_isRouteVisible == isRouteVisible) {
+      return;
+    }
+    _isRouteVisible = isRouteVisible;
     _configureAutoPlay();
   }
 
@@ -110,23 +129,46 @@ class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground> {
     }
   }
 
-  void _configureAutoPlay() {
-    _autoPlayTimer?.cancel();
-    if (!widget.autoPlay || _normalizedImageUrls.length <= 1) {
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final isAppActive = state == AppLifecycleState.resumed;
+    if (_isAppActive == isAppActive) {
       return;
     }
-    _autoPlayTimer = Timer.periodic(widget.autoPlayInterval, (_) {
-      _animateToNextPage();
-    });
+    _isAppActive = isAppActive;
+    _configureAutoPlay();
+  }
+
+  bool get _shouldAutoPlay =>
+      widget.autoPlay &&
+      _normalizedImageUrls.length > 1 &&
+      !_isPointerInteracting &&
+      _isAppActive &&
+      _isRouteVisible;
+
+  void _configureAutoPlay() {
+    _autoPlayTimer?.cancel();
+    _autoPlayTimer = null;
+    if (!_shouldAutoPlay) {
+      return;
+    }
+    _autoPlayTimer = Timer(widget.autoPlayInterval, _handleAutoPlayTick);
   }
 
   void _pauseAutoPlay() {
-    _autoPlayTimer?.cancel();
-    _autoPlayTimer = null;
+    _isPointerInteracting = true;
+    _configureAutoPlay();
   }
 
   void _resumeAutoPlay() {
-    if (_autoPlayTimer != null) {
+    _isPointerInteracting = false;
+    _configureAutoPlay();
+  }
+
+  Future<void> _handleAutoPlayTick() async {
+    _autoPlayTimer = null;
+    await _animateToNextPage();
+    if (!mounted) {
       return;
     }
     _configureAutoPlay();
@@ -156,6 +198,7 @@ class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground> {
   @override
   void dispose() {
     _autoPlayTimer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     _internalController?.dispose();
     super.dispose();
   }
@@ -180,6 +223,9 @@ class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground> {
         onPageChanged: (int index) {
           _currentIndex = index;
           widget.onPageChanged?.call(index);
+          if (!_isPointerInteracting) {
+            _configureAutoPlay();
+          }
         },
         itemBuilder: (BuildContext context, int index) {
           return Stack(
