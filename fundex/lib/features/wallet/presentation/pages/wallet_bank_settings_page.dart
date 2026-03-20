@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/navigation/app_root_route_refresh_scope.dart';
 import '../../domain/entities/wallet_bank_account_info.dart';
 import '../providers/wallet_providers.dart';
 
@@ -46,53 +47,59 @@ class _WalletBankSettingsPageState
     final appText = theme.appTextTheme;
     final asyncAccounts = ref.watch(walletBankAccountListProvider);
 
-    return Scaffold(
-      backgroundColor: colors.background,
-      appBar: AppNavigationBar(
-        title: l10n.menuItemBankSettings,
-        backgroundColor: colors.surface,
-        foregroundColor: colors.textPrimary,
-        decoration: BoxDecoration(
-          color: colors.surface,
-          border: Border(bottom: BorderSide(color: colors.border)),
-        ),
-        leading: AppNavigationIconButton(
-          icon: Icons.arrow_back_rounded,
-          onTap: () => context.pop(),
-          backgroundColor: colors.surface.withValues(alpha: 0),
+    return AppRootRouteRefreshScope(
+      onRefresh: (WidgetRef ref) async {
+        ref.invalidate(walletBankAccountListProvider);
+        await ref.refresh(walletBankAccountListProvider.future).then((_) {});
+      },
+      child: Scaffold(
+        backgroundColor: colors.background,
+        appBar: AppNavigationBar(
+          title: l10n.menuItemBankSettings,
+          backgroundColor: colors.surface,
           foregroundColor: colors.textPrimary,
+          decoration: BoxDecoration(
+            color: colors.surface,
+            border: Border(bottom: BorderSide(color: colors.border)),
+          ),
+          leading: AppNavigationIconButton(
+            icon: Icons.arrow_back_rounded,
+            onTap: () => context.pop(),
+            backgroundColor: colors.surface.withValues(alpha: 0),
+            foregroundColor: colors.textPrimary,
+          ),
         ),
-      ),
-      body: asyncAccounts.when(
-        data: (List<WalletBankAccountInfo> accounts) {
-          return ListView(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 28),
-            children: <Widget>[
-              if (accounts.isEmpty)
-                _WalletBankAccountEmptyCard(onAdd: _openAddBankAccountPage)
-              else ...<Widget>[
-                Text(
-                  l10n.walletBankSettingsRegisteredTitle,
-                  style: appText.cardTitle,
-                ),
-                const SizedBox(height: 10),
-                for (final account in accounts)
-                  _WalletBankAccountCard(account: account),
-                const SizedBox(height: 18),
-                PrimaryCtaButton(
-                  label: l10n.walletBankSettingsAddAction,
-                  fullWidth: true,
-                  onPressed: _openAddBankAccountPage,
-                ),
+        body: asyncAccounts.when(
+          data: (List<WalletBankAccountInfo> accounts) {
+            return ListView(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 28),
+              children: <Widget>[
+                if (accounts.isEmpty)
+                  _WalletBankAccountEmptyCard(onAdd: _openAddBankAccountPage)
+                else ...<Widget>[
+                  Text(
+                    l10n.walletBankSettingsRegisteredTitle,
+                    style: appText.cardTitle,
+                  ),
+                  const SizedBox(height: 10),
+                  for (final account in accounts)
+                    _WalletBankAccountCard(account: account),
+                  const SizedBox(height: 18),
+                  PrimaryCtaButton(
+                    label: l10n.walletBankSettingsAddAction,
+                    fullWidth: true,
+                    onPressed: _openAddBankAccountPage,
+                  ),
+                ],
               ],
-            ],
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, __) => Center(
-          child: TextButton(
-            onPressed: () => ref.invalidate(walletBankAccountListProvider),
-            child: Text(l10n.fundListRetry),
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (_, __) => Center(
+            child: TextButton(
+              onPressed: () => ref.invalidate(walletBankAccountListProvider),
+              child: Text(l10n.fundListRetry),
+            ),
           ),
         ),
       ),

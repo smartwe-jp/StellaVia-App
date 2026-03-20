@@ -9,6 +9,7 @@ import '../../../auth/presentation/support/identity_auth_guard.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../investment/presentation/support/fund_lottery_apply_step.dart';
+import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
 import '../../domain/entities/mypage_models.dart';
 import '../providers/mypage_providers.dart';
 import '../support/mypage_section_support.dart';
@@ -50,117 +51,121 @@ class ProfileCenterTabPage extends ConsumerWidget {
       for (final project in fundProjects) project.id: project,
     };
 
-    return ColoredBox(
-      color: colors.background,
-      child: RefreshIndicator(
-        onRefresh: () => _refreshPage(ref),
-        child: ListView(
-          key: const Key('profile_tab_content'),
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            FundMyPageAssetOverview(
-              totalAssetsLabel: l10n.myPageTotalAssetsLabel,
-              totalAssetsValue: _formatCurrency(
-                totalAssetsExcludingLoan,
-                currencyFormatter,
-              ),
-              totalAssetsCaption: l10n.myPageTotalAssetsCaption,
-              leading: _HeroHeaderActionButton(
-                icon: Icons.notifications_none_rounded,
-                showDot: true,
-                onTap: () => context.push('/profile/notifications'),
-              ),
-              trailing: _HeroHeaderActionButton(
-                icon: Icons.menu_rounded,
-                onTap: () => context.push('/profile/settings'),
-              ),
-              metrics: <FundMyPageMetricData>[
-                FundMyPageMetricData(
-                  label: l10n.myPageMetricOperating,
-                  value: _formatCompactCurrency(operatingAssetsExcludingLoan),
-                  onTap: () => context.push(
-                    '/profile/my/section-list?type=${MyPageSectionType.activeFunds.queryValue}',
-                  ),
+    return MainShellTabRefreshScope(
+      tabIndex: 3,
+      onRefresh: _refreshPage,
+      child: ColoredBox(
+        color: colors.background,
+        child: RefreshIndicator(
+          onRefresh: () => _refreshPage(ref),
+          child: ListView(
+            key: const Key('profile_tab_content'),
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              FundMyPageAssetOverview(
+                totalAssetsLabel: l10n.myPageTotalAssetsLabel,
+                totalAssetsValue: _formatCurrency(
+                  totalAssetsExcludingLoan,
+                  currencyFormatter,
                 ),
-                FundMyPageMetricData(
-                  label: l10n.myPageMetricStandby,
-                  value: _formatCompactCurrency(
-                    accountStatistic?.firstLevelAccountTotal,
-                  ),
-                  onTap: () => context.push('/wallet/deposit'),
+                totalAssetsCaption: l10n.myPageTotalAssetsCaption,
+                leading: _HeroHeaderActionButton(
+                  icon: Icons.notifications_none_rounded,
+                  showDot: true,
+                  onTap: () => context.push('/profile/notifications'),
                 ),
-                FundMyPageMetricData(
-                  label: l10n.myPageMetricAccumulatedDistribution,
-                  value: investmentRecords == null
-                      ? '--'
-                      : _formatCompactCurrency(
-                          _sumInvestmentEarnings(investmentRecords),
-                        ),
-                  valueColor: colors.success,
+                trailing: _HeroHeaderActionButton(
+                  icon: Icons.menu_rounded,
+                  onTap: () => context.push('/profile/settings'),
                 ),
-              ],
-              quickActions: <FundMyPageQuickActionData>[
-                FundMyPageQuickActionData(
-                  icon: const _QuickActionEmojiIcon(symbol: '💰'),
-                  label: l10n.myPageDepositAction,
-                  backgroundColor: colors.infoSubtle,
-                  foregroundColor: colors.primary,
-                  onTap: () => context.push('/wallet/deposit'),
-                ),
-                FundMyPageQuickActionData(
-                  icon: const _QuickActionEmojiIcon(symbol: '💸'),
-                  label: l10n.myPageWithdrawAction,
-                  backgroundColor: colors.background,
-                  borderColor: colors.border,
-                  foregroundColor: colors.textSecondary,
-                  onTap: () => _handleWithdrawTap(context, ref),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _buildPendingApplicationsSection(
-                    context,
-                    ref,
-                    asyncValue: applyAsync,
-                    formatter: currencyFormatter,
-                  ),
-                  const SizedBox(height: UiTokens.spacing12),
-                  _buildCoolingOffSection(
-                    context,
-                    ref,
-                    asyncValue: orderInquiryAsync,
-                    formatter: currencyFormatter,
-                    fundProjectsById: fundProjectsById,
-                    localeTag: localeTag,
-                  ),
-                  const SizedBox(height: UiTokens.spacing12),
-                  _buildActiveFundsSection(
-                    context,
-                    ref,
-                    asyncValue: investmentAsync,
-                    formatter: currencyFormatter,
-                    fundProjectsById: fundProjectsById,
-                  ),
-                  const SizedBox(height: UiTokens.spacing32),
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton.icon(
-                      onPressed: () => context.push('/wallet/history'),
-                      label: Text(l10n.myPageTransactionHistoryAction),
-                      style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                      ),
+                metrics: <FundMyPageMetricData>[
+                  FundMyPageMetricData(
+                    label: l10n.myPageMetricOperating,
+                    value: _formatCompactCurrency(operatingAssetsExcludingLoan),
+                    onTap: () => context.push(
+                      '/profile/my/section-list?type=${MyPageSectionType.activeFunds.queryValue}',
                     ),
                   ),
-                  const SizedBox(height: UiTokens.spacing32),
+                  FundMyPageMetricData(
+                    label: l10n.myPageMetricStandby,
+                    value: _formatCompactCurrency(
+                      accountStatistic?.firstLevelAccountTotal,
+                    ),
+                    onTap: () => context.push('/wallet/deposit'),
+                  ),
+                  FundMyPageMetricData(
+                    label: l10n.myPageMetricAccumulatedDistribution,
+                    value: investmentRecords == null
+                        ? '--'
+                        : _formatCompactCurrency(
+                            _sumInvestmentEarnings(investmentRecords),
+                          ),
+                    valueColor: colors.success,
+                  ),
+                ],
+                quickActions: <FundMyPageQuickActionData>[
+                  FundMyPageQuickActionData(
+                    icon: const _QuickActionEmojiIcon(symbol: '💰'),
+                    label: l10n.myPageDepositAction,
+                    backgroundColor: colors.infoSubtle,
+                    foregroundColor: colors.primary,
+                    onTap: () => context.push('/wallet/deposit'),
+                  ),
+                  FundMyPageQuickActionData(
+                    icon: const _QuickActionEmojiIcon(symbol: '💸'),
+                    label: l10n.myPageWithdrawAction,
+                    backgroundColor: colors.background,
+                    borderColor: colors.border,
+                    foregroundColor: colors.textSecondary,
+                    onTap: () => _handleWithdrawTap(context, ref),
+                  ),
                 ],
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _buildPendingApplicationsSection(
+                      context,
+                      ref,
+                      asyncValue: applyAsync,
+                      formatter: currencyFormatter,
+                    ),
+                    const SizedBox(height: UiTokens.spacing12),
+                    _buildCoolingOffSection(
+                      context,
+                      ref,
+                      asyncValue: orderInquiryAsync,
+                      formatter: currencyFormatter,
+                      fundProjectsById: fundProjectsById,
+                      localeTag: localeTag,
+                    ),
+                    const SizedBox(height: UiTokens.spacing12),
+                    _buildActiveFundsSection(
+                      context,
+                      ref,
+                      asyncValue: investmentAsync,
+                      formatter: currencyFormatter,
+                      fundProjectsById: fundProjectsById,
+                    ),
+                    const SizedBox(height: UiTokens.spacing32),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: () => context.push('/wallet/history'),
+                        label: Text(l10n.myPageTransactionHistoryAction),
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: UiTokens.spacing32),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

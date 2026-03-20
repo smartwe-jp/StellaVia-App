@@ -12,6 +12,8 @@ import 'firebase/push_token_sync_providers.dart';
 import 'localization/app_locale_providers.dart';
 import 'observability/app_observability_providers.dart';
 import 'observability/app_ui_message_localizer.dart';
+import 'realtime/app_lifecycle_refresh_scope.dart';
+import 'realtime/app_realtime_refresh.dart';
 import 'router/app_router.dart';
 import 'network/app_network_providers.dart';
 import 'theme/app_theme_mode_providers.dart';
@@ -65,8 +67,7 @@ class MemberTemplateApp extends ConsumerWidget {
         ref.invalidate(isMemberProfileCompletedProvider);
         return;
       }
-      ref.invalidate(memberProfileDetailsProvider);
-      ref.invalidate(isMemberProfileCompletedProvider);
+      invalidateAuthenticatedRealtimeProviders(ref);
     });
 
     ref.listen<int>(appNetworkAuthFailureSignalProvider, (previous, next) {
@@ -90,8 +91,10 @@ class MemberTemplateApp extends ConsumerWidget {
           brightness,
         ).copyWith(statusBarColor: statusBarColor);
         SystemChrome.setSystemUIOverlayStyle(statusBarOverlayStyle);
-        final appChild = _GlobalKeyboardDismissLayer(
-          child: child ?? const SizedBox.shrink(),
+        final appChild = AppLifecycleRefreshScope(
+          child: _GlobalKeyboardDismissLayer(
+            child: child ?? const SizedBox.shrink(),
+          ),
         );
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: statusBarOverlayStyle,

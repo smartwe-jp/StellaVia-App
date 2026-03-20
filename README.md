@@ -10,8 +10,8 @@ The scaffolds are intentionally minimal but runnable as a starting point for mig
 
 ## Tooling baseline
 
-- Flutter: `3.35.1`
-- Dart: `3.9.0`
+- Flutter: `3.41.4`
+- Dart: `3.11.0`
 - Version manager: `fvm`
 
 Use `fvm` prefix for all Flutter/Dart commands in both repos.

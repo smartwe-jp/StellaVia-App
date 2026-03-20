@@ -88,29 +88,30 @@ final walletBankAccountApplyingProvider = StateProvider<bool>((ref) => false);
 final walletBankAccountAddingProvider = StateProvider<bool>((ref) => false);
 final walletWithdrawSubmittingProvider = StateProvider<bool>((ref) => false);
 
-final walletHistoryProvider = FutureProvider<List<WalletAccountHistory>>((ref) {
-  return ref
-      .watch(fetchWalletAccountHistoryUseCaseProvider)
-      .call(accountType: 0);
-});
+final walletHistoryProvider =
+    FutureProvider.autoDispose<List<WalletAccountHistory>>((ref) {
+      return ref
+          .watch(fetchWalletAccountHistoryUseCaseProvider)
+          .call(accountType: 0);
+    });
 
 final walletBankAccountListProvider =
-    FutureProvider<List<WalletBankAccountInfo>>((ref) {
+    FutureProvider.autoDispose<List<WalletBankAccountInfo>>((ref) {
       return ref.watch(fetchWalletBankAccountListUseCaseProvider).call();
     });
 
 final walletWithdrawHistoryProvider =
-    FutureProvider<List<WalletWithdrawRecord>>((ref) {
+    FutureProvider.autoDispose<List<WalletWithdrawRecord>>((ref) {
       return ref.watch(fetchWalletWithdrawHistoryUseCaseProvider).call();
     });
 
 final walletWithdrawingListProvider =
-    FutureProvider<List<WalletWithdrawRecord>>((ref) {
+    FutureProvider.autoDispose<List<WalletWithdrawRecord>>((ref) {
       return ref.watch(fetchWalletWithdrawingListUseCaseProvider).call();
     });
 
 final walletDepositPageViewDataProvider =
-    FutureProvider<WalletDepositPageViewData>((ref) async {
+    FutureProvider.autoDispose<WalletDepositPageViewData>((ref) async {
       WalletDedicatedBankInfo? bankInfo;
       try {
         final account = await ref

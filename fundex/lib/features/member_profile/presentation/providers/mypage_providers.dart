@@ -75,26 +75,24 @@ final submitMyPageSecondaryMarketCreateUseCaseProvider =
       );
     });
 
-final myPageApplyListProvider = FutureProvider<List<MyPageApplyRecord>>((
-  ref,
-) async {
-  return ref.watch(fetchMyPageApplyListUseCaseProvider).call();
-});
+final myPageApplyListProvider =
+    FutureProvider.autoDispose<List<MyPageApplyRecord>>((ref) async {
+      return ref.watch(fetchMyPageApplyListUseCaseProvider).call();
+    });
 
-final myPageAccountStatisticProvider = FutureProvider<MyPageAccountStatistic?>((
-  ref,
-) async {
-  final isAuthenticated = ref.watch(isAuthenticatedProvider).asData?.value;
-  if (isAuthenticated != true) {
-    return null;
-  }
+final myPageAccountStatisticProvider =
+    FutureProvider.autoDispose<MyPageAccountStatistic?>((ref) async {
+      final isAuthenticated = ref.watch(isAuthenticatedProvider).asData?.value;
+      if (isAuthenticated != true) {
+        return null;
+      }
 
-  await ref.watch(currentAuthUserProvider.future);
-  return ref.watch(fetchMyPageAccountStatisticUseCaseProvider).call();
-});
+      await ref.watch(currentAuthUserProvider.future);
+      return ref.watch(fetchMyPageAccountStatisticUseCaseProvider).call();
+    });
 
 final myPageOrderInquiryListProvider =
-    FutureProvider<List<MyPageOrderInquiryRecord>>((ref) async {
+    FutureProvider.autoDispose<List<MyPageOrderInquiryRecord>>((ref) async {
       final user = await ref.watch(currentAuthUserProvider.future);
       final userId = user?.userId;
       if (userId == null) {
@@ -106,15 +104,12 @@ final myPageOrderInquiryListProvider =
     });
 
 final myPageInvestmentListProvider =
-    FutureProvider<List<MyPageInvestmentRecord>>((ref) async {
+    FutureProvider.autoDispose<List<MyPageInvestmentRecord>>((ref) async {
       return ref.watch(fetchMyPageInvestmentListUseCaseProvider).call();
     });
 
-final myPageProjectBenefitProvider =
-    FutureProvider.family<MyPageProjectBenefit, String>((
-      ref,
-      String projectId,
-    ) async {
+final myPageProjectBenefitProvider = FutureProvider.autoDispose
+    .family<MyPageProjectBenefit, String>((ref, String projectId) async {
       return ref
           .watch(fetchMyPageProjectBenefitUseCaseProvider)
           .call(projectId: projectId);

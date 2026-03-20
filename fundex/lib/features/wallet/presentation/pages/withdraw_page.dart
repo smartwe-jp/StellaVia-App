@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/navigation/app_root_route_refresh_scope.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../domain/entities/wallet_bank_account_info.dart';
 import '../../domain/entities/wallet_withdraw_apply_draft.dart';
@@ -225,130 +226,140 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
     final availableAmount =
         availableAmountAsync.asData?.value?.firstLevelAccountTotal;
 
-    return Scaffold(
-      backgroundColor: colors.surface,
-      appBar: AppNavigationBar(
-        title: l10n.walletWithdrawTitle,
-        height: 52,
+    return AppRootRouteRefreshScope(
+      onRefresh: (WidgetRef ref) async {
+        ref.invalidate(walletBankAccountListProvider);
+        ref.invalidate(myPageAccountStatisticProvider);
+        await Future.wait<void>(<Future<void>>[
+          ref.refresh(walletBankAccountListProvider.future).then((_) {}),
+          ref.refresh(myPageAccountStatisticProvider.future).then((_) {}),
+        ]);
+      },
+      child: Scaffold(
         backgroundColor: colors.surface,
-        foregroundColor: colors.textPrimary,
-        decoration: BoxDecoration(
-          color: colors.surface,
-          border: Border(bottom: BorderSide(color: colors.border)),
-        ),
-        leading: AppNavigationIconButton(
-          icon: Icons.arrow_back_rounded,
-          onTap: () => context.pop(),
-          backgroundColor: colors.surface.withValues(alpha: 0),
+        appBar: AppNavigationBar(
+          title: l10n.walletWithdrawTitle,
+          height: 52,
+          backgroundColor: colors.surface,
           foregroundColor: colors.textPrimary,
+          decoration: BoxDecoration(
+            color: colors.surface,
+            border: Border(bottom: BorderSide(color: colors.border)),
+          ),
+          leading: AppNavigationIconButton(
+            icon: Icons.arrow_back_rounded,
+            onTap: () => context.pop(),
+            backgroundColor: colors.surface.withValues(alpha: 0),
+            foregroundColor: colors.textPrimary,
+          ),
         ),
-      ),
-      bottomNavigationBar: SafeArea(
-        minimum: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () => context.push('/wallet/withdrawing'),
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(0, 46),
-                  side: BorderSide(color: colors.border),
-                ),
-                child: Text(l10n.walletWithdrawingAction),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () => context.push('/wallet/withdraw/history'),
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(0, 46),
-                  side: BorderSide(color: colors.border),
-                ),
-                child: Text(l10n.walletWithdrawHistoryAction),
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: accountsAsync.when(
-        data: (accounts) {
-          final selected = _resolveSelectedAccount(accounts);
-          return ListView(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+        bottomNavigationBar: SafeArea(
+          minimum: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+          child: Row(
             children: <Widget>[
-              Container(
-                padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
-                decoration: BoxDecoration(
-                  color: colors.background,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Text(
-                      l10n.walletWithdrawAvailableAmountLabel,
-                      style: appText.caption.copyWith(
-                        color: colors.textSecondary,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      currency.format(availableAmount ?? 0),
-                      style: appText.heroMetricSecondary.copyWith(
-                        color: colors.textPrimary,
-                      ),
-                    ),
-                  ],
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => context.push('/wallet/withdrawing'),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(0, 46),
+                    side: BorderSide(color: colors.border),
+                  ),
+                  child: Text(l10n.walletWithdrawingAction),
                 ),
               ),
-              const SizedBox(height: 16),
-              MemberProfileTextField(
-                label: l10n.walletWithdrawAmountLabel,
-                controller: _amountController,
-                hintText: l10n.walletWithdrawAmountHint,
-                keyboardType: TextInputType.number,
-              ),
-              const SizedBox(height: 16),
-              _WithdrawInfoCard(
-                destinationLabel: l10n.walletWithdrawDestinationLabel,
-                destinationValue: selected == null
-                    ? l10n.walletWithdrawSelectDestination
-                    : _buildAccountSummary(selected),
-                feeLabel: l10n.walletWithdrawFeeLabel,
-                feeValue: '¥145',
-                onTapDestination: () {
-                  if (accounts.isEmpty) {
-                    _openAddBankAccountPage();
-                    return;
-                  }
-                  _openDestinationSelector(context, accounts, selected!);
-                },
-              ),
-              if (accounts.isEmpty) ...<Widget>[
-                const SizedBox(height: 12),
-                _WithdrawEmptyAccountCard(
-                  message: l10n.walletWithdrawNeedAccountMessage,
-                  actionLabel: l10n.walletWithdrawNeedAccountAction,
-                  onTap: _openAddBankAccountPage,
+              const SizedBox(width: 10),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => context.push('/wallet/withdraw/history'),
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(0, 46),
+                    side: BorderSide(color: colors.border),
+                  ),
+                  child: Text(l10n.walletWithdrawHistoryAction),
                 ),
-              ],
-              const SizedBox(height: 20),
-              PrimaryCtaButton(
-                label: l10n.walletWithdrawSubmitAction,
-                fullWidth: true,
-                isLoading: isSubmitting,
-                onPressed: isSubmitting
-                    ? null
-                    : () => _submitWithdraw(selected: selected),
               ),
             ],
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, __) => Center(
-          child: TextButton(
-            onPressed: () => ref.invalidate(walletBankAccountListProvider),
-            child: Text(l10n.fundListRetry),
+          ),
+        ),
+        body: accountsAsync.when(
+          data: (accounts) {
+            final selected = _resolveSelectedAccount(accounts);
+            return ListView(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+                  decoration: BoxDecoration(
+                    color: colors.background,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        l10n.walletWithdrawAvailableAmountLabel,
+                        style: appText.caption.copyWith(
+                          color: colors.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        currency.format(availableAmount ?? 0),
+                        style: appText.heroMetricSecondary.copyWith(
+                          color: colors.textPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                MemberProfileTextField(
+                  label: l10n.walletWithdrawAmountLabel,
+                  controller: _amountController,
+                  hintText: l10n.walletWithdrawAmountHint,
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 16),
+                _WithdrawInfoCard(
+                  destinationLabel: l10n.walletWithdrawDestinationLabel,
+                  destinationValue: selected == null
+                      ? l10n.walletWithdrawSelectDestination
+                      : _buildAccountSummary(selected),
+                  feeLabel: l10n.walletWithdrawFeeLabel,
+                  feeValue: '¥145',
+                  onTapDestination: () {
+                    if (accounts.isEmpty) {
+                      _openAddBankAccountPage();
+                      return;
+                    }
+                    _openDestinationSelector(context, accounts, selected!);
+                  },
+                ),
+                if (accounts.isEmpty) ...<Widget>[
+                  const SizedBox(height: 12),
+                  _WithdrawEmptyAccountCard(
+                    message: l10n.walletWithdrawNeedAccountMessage,
+                    actionLabel: l10n.walletWithdrawNeedAccountAction,
+                    onTap: _openAddBankAccountPage,
+                  ),
+                ],
+                const SizedBox(height: 20),
+                PrimaryCtaButton(
+                  label: l10n.walletWithdrawSubmitAction,
+                  fullWidth: true,
+                  isLoading: isSubmitting,
+                  onPressed: isSubmitting
+                      ? null
+                      : () => _submitWithdraw(selected: selected),
+                ),
+              ],
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (_, __) => Center(
+            child: TextButton(
+              onPressed: () => ref.invalidate(walletBankAccountListProvider),
+              child: Text(l10n.fundListRetry),
+            ),
           ),
         ),
       ),

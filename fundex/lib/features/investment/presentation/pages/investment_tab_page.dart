@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/fund_project.dart';
+import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
 import '../providers/fund_project_favorite_providers.dart';
 import '../providers/fund_project_providers.dart';
 
@@ -341,172 +342,185 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
     final asyncProjects = ref.watch(fundProjectListProvider);
     final filterOptions = _buildFilterOptions(context);
 
-    return Container(
-      key: const Key('investment_tab_content'),
-      color: colors.background,
-      child: Column(
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            color: colors.surface,
-            padding: const EdgeInsets.fromLTRB(20, 14, 20, 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  l10n.fundListTitle,
-                  style: appText.pageTitle.copyWith(color: colors.textPrimary),
-                ),
-                const SizedBox(height: 10),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: filterOptions
-                        .map(
-                          (_FundListFilterOption option) => Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: _FilterChip(
-                              label: option.label,
-                              selected: option.filter == _selectedFilter,
-                              isFavoriteStyle: option.isFavoriteStyle,
-                              onTap: () {
-                                setState(() {
-                                  _selectedFilter = option.filter;
-                                });
-                              },
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Divider(height: 1, thickness: 1, color: colors.border),
-          Expanded(
-            child: asyncProjects.when(
-              loading: () =>
-                  const Center(child: CircularProgressIndicator.adaptive()),
-              error: (Object error, StackTrace stackTrace) {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text(
-                          l10n.fundListLoadError,
-                          textAlign: TextAlign.center,
-                          style: appText.bodyMuted.copyWith(
-                            color: colors.textSecondary,
-                          ),
-                        ),
-                        const SizedBox(height: UiTokens.spacing12),
-                        OutlinedButton(
-                          onPressed: () =>
-                              ref.invalidate(fundProjectListProvider),
-                          child: Text(l10n.fundListRetry),
-                        ),
-                      ],
+    return MainShellTabRefreshScope(
+      tabIndex: 1,
+      onRefresh: _refreshInvestmentTab,
+      child: Container(
+        key: const Key('investment_tab_content'),
+        color: colors.background,
+        child: Column(
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              color: colors.surface,
+              padding: const EdgeInsets.fromLTRB(20, 14, 20, 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    l10n.fundListTitle,
+                    style: appText.pageTitle.copyWith(
+                      color: colors.textPrimary,
                     ),
                   ),
-                );
-              },
-              data: (List<FundProject> projects) {
-                final visibleProjects = _applyFilter(
-                  projects,
-                  favoriteProjectIds,
-                );
-                if (visibleProjects.isEmpty) {
-                  return RefreshIndicator(
-                    onRefresh: _refreshProjects,
-                    child: ListView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 80, 20, 20),
-                          child: Text(
-                            l10n.fundListEmpty,
+                  const SizedBox(height: 10),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: filterOptions
+                          .map(
+                            (_FundListFilterOption option) => Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: _FilterChip(
+                                label: option.label,
+                                selected: option.filter == _selectedFilter,
+                                isFavoriteStyle: option.isFavoriteStyle,
+                                onTap: () {
+                                  setState(() {
+                                    _selectedFilter = option.filter;
+                                  });
+                                },
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(height: 1, thickness: 1, color: colors.border),
+            Expanded(
+              child: asyncProjects.when(
+                loading: () =>
+                    const Center(child: CircularProgressIndicator.adaptive()),
+                error: (Object error, StackTrace stackTrace) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            l10n.fundListLoadError,
                             textAlign: TextAlign.center,
                             style: appText.bodyMuted.copyWith(
                               color: colors.textSecondary,
                             ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: UiTokens.spacing12),
+                          OutlinedButton(
+                            onPressed: () =>
+                                ref.invalidate(fundProjectListProvider),
+                            child: Text(l10n.fundListRetry),
+                          ),
+                        ],
+                      ),
                     ),
                   );
-                }
+                },
+                data: (List<FundProject> projects) {
+                  final visibleProjects = _applyFilter(
+                    projects,
+                    favoriteProjectIds,
+                  );
+                  if (visibleProjects.isEmpty) {
+                    return RefreshIndicator(
+                      onRefresh: _refreshProjects,
+                      child: ListView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 80, 20, 20),
+                            child: Text(
+                              l10n.fundListEmpty,
+                              textAlign: TextAlign.center,
+                              style: appText.bodyMuted.copyWith(
+                                color: colors.textSecondary,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
 
-                return RefreshIndicator(
-                  onRefresh: _refreshProjects,
-                  child: ListView.separated(
-                    padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
-                    itemCount: visibleProjects.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 16),
-                    itemBuilder: (BuildContext context, int index) {
-                      final project = visibleProjects[index];
-                      final projectId = project.id.trim();
-                      final palette = _resolveStatusPalette(
-                        context,
-                        project.projectStatus,
-                      );
-                      final statusLabel = _resolveStatusLabel(
-                        context,
-                        project.projectStatus,
-                      );
-                      final methodLabel = _resolveMethodLabel(
-                        context,
-                        project.offeringMethod,
-                      );
-                      final periodText =
-                          (project.investmentPeriod?.trim().isNotEmpty ?? false)
-                          ? project.investmentPeriod!.trim()
-                          : '--';
-
-                      return _FundProjectCard(
-                        project: project,
-                        isFavorite: favoriteProjectIds.contains(projectId),
-                        palette: palette,
-                        statusLabel: statusLabel,
-                        methodLabel: methodLabel,
-                        yieldLabel: l10n.fundListYieldLabel,
-                        periodLabel: l10n.fundListPeriodLabel,
-                        methodTitleLabel: l10n.fundListMethodLabel,
-                        appliedAmountText: _resolveAmountBannerText(
+                  return RefreshIndicator(
+                    onRefresh: _refreshProjects,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
+                      itemCount: visibleProjects.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 16),
+                      itemBuilder: (BuildContext context, int index) {
+                        final project = visibleProjects[index];
+                        final projectId = project.id.trim();
+                        final palette = _resolveStatusPalette(
                           context,
-                          project,
-                          currencyFormatter,
-                        ),
-                        annualYieldText: _formatYieldPercent(
-                          project.expectedDistributionRatioMax ??
-                              project.expectedDistributionRatioMin,
-                        ),
-                        periodValueText: periodText,
-                        locationText: _resolveLocationHint(project),
-                        viewDetailText: l10n.fundListViewDetail,
-                        volumeText: _resolveVolumeLabel(context, project),
-                        onFavoriteTap: () {
-                          ref
-                              .read(
-                                fundProjectFavoritesControllerProvider.notifier,
-                              )
-                              .toggleFavorite(projectId);
-                        },
-                        favoriteAddedMessage: favoriteAddedMessage,
-                        favoriteRemovedMessage: favoriteRemovedMessage,
-                      );
-                    },
-                  ),
-                );
-              },
+                          project.projectStatus,
+                        );
+                        final statusLabel = _resolveStatusLabel(
+                          context,
+                          project.projectStatus,
+                        );
+                        final methodLabel = _resolveMethodLabel(
+                          context,
+                          project.offeringMethod,
+                        );
+                        final periodText =
+                            (project.investmentPeriod?.trim().isNotEmpty ??
+                                false)
+                            ? project.investmentPeriod!.trim()
+                            : '--';
+
+                        return _FundProjectCard(
+                          project: project,
+                          isFavorite: favoriteProjectIds.contains(projectId),
+                          palette: palette,
+                          statusLabel: statusLabel,
+                          methodLabel: methodLabel,
+                          yieldLabel: l10n.fundListYieldLabel,
+                          periodLabel: l10n.fundListPeriodLabel,
+                          methodTitleLabel: l10n.fundListMethodLabel,
+                          appliedAmountText: _resolveAmountBannerText(
+                            context,
+                            project,
+                            currencyFormatter,
+                          ),
+                          annualYieldText: _formatYieldPercent(
+                            project.expectedDistributionRatioMax ??
+                                project.expectedDistributionRatioMin,
+                          ),
+                          periodValueText: periodText,
+                          locationText: _resolveLocationHint(project),
+                          viewDetailText: l10n.fundListViewDetail,
+                          volumeText: _resolveVolumeLabel(context, project),
+                          onFavoriteTap: () {
+                            ref
+                                .read(
+                                  fundProjectFavoritesControllerProvider
+                                      .notifier,
+                                )
+                                .toggleFavorite(projectId);
+                          },
+                          favoriteAddedMessage: favoriteAddedMessage,
+                          favoriteRemovedMessage: favoriteRemovedMessage,
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+}
+
+Future<void> _refreshInvestmentTab(WidgetRef ref) async {
+  ref.invalidate(fundProjectListProvider);
+  await ref.refresh(fundProjectListProvider.future).then((_) {});
 }
 
 class _FilterChip extends StatelessWidget {

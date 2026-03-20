@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/navigation/app_root_route_refresh_scope.dart';
 import '../providers/wallet_providers.dart';
 
 class WalletHistoryPage extends ConsumerWidget {
@@ -25,68 +26,74 @@ class WalletHistoryPage extends ConsumerWidget {
 
     final asyncHistory = ref.watch(walletHistoryProvider);
 
-    return Scaffold(
-      backgroundColor: colors.background,
-      appBar: AppNavigationBar(
-        title: l10n.walletHistoryTitle,
-        backgroundColor: colors.surface,
-        foregroundColor: colors.textPrimary,
-        leading: AppNavigationIconButton(
-          icon: Icons.arrow_back_rounded,
-          onTap: () => context.pop(),
-          backgroundColor: colors.surface.withValues(alpha: 0),
+    return AppRootRouteRefreshScope(
+      onRefresh: (WidgetRef ref) async {
+        ref.invalidate(walletHistoryProvider);
+        await ref.refresh(walletHistoryProvider.future).then((_) {});
+      },
+      child: Scaffold(
+        backgroundColor: colors.background,
+        appBar: AppNavigationBar(
+          title: l10n.walletHistoryTitle,
+          backgroundColor: colors.surface,
           foregroundColor: colors.textPrimary,
+          leading: AppNavigationIconButton(
+            icon: Icons.arrow_back_rounded,
+            onTap: () => context.pop(),
+            backgroundColor: colors.surface.withValues(alpha: 0),
+            foregroundColor: colors.textPrimary,
+          ),
         ),
-      ),
-      body: asyncHistory.when(
-        data: (items) {
-          if (items.isEmpty) {
-            return Center(
-              child: Text(l10n.walletHistoryEmpty, style: appText.bodyMuted),
-            );
-          }
-
-          return ListView.builder(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              final item = items[index];
-              final amount = item.amount ?? item.money;
-              final inOut = item.inOut;
-              final isIncome = _parseInflowFlag(inOut);
-              final isPending = _isPending(item.businessId);
-              return FundWalletTransactionCard(
-                tradeType:
-                    item.tradeType ??
-                    item.typeName ??
-                    l10n.walletHistoryUnknownType,
-                remark: item.remark ?? '--',
-                tradeTime: _formatDateText(item.tradeTime ?? item.createTime),
-                amountText: _formatAmountText(
-                  amount: amount,
-                  isIncome: isIncome,
-                  formatter: currency,
-                ),
-                amountColor: _resolveAmountColor(
-                  isIncome: isIncome,
-                  colors: colors,
-                ),
-                directionLabel: _resolveDirectionLabel(
-                  isIncome: isIncome,
-                  inflowLabel: l10n.walletHistoryInflowLabel,
-                  outflowLabel: l10n.walletHistoryOutflowLabel,
-                ),
-                isPending: isPending,
-                pendingLabel: l10n.walletHistoryPendingStatus,
+        body: asyncHistory.when(
+          data: (items) {
+            if (items.isEmpty) {
+              return Center(
+                child: Text(l10n.walletHistoryEmpty, style: appText.bodyMuted),
               );
-            },
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, __) => Center(
-          child: TextButton(
-            onPressed: () => ref.invalidate(walletHistoryProvider),
-            child: Text(l10n.fundListRetry),
+            }
+
+            return ListView.builder(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                final item = items[index];
+                final amount = item.amount ?? item.money;
+                final inOut = item.inOut;
+                final isIncome = _parseInflowFlag(inOut);
+                final isPending = _isPending(item.businessId);
+                return FundWalletTransactionCard(
+                  tradeType:
+                      item.tradeType ??
+                      item.typeName ??
+                      l10n.walletHistoryUnknownType,
+                  remark: item.remark ?? '--',
+                  tradeTime: _formatDateText(item.tradeTime ?? item.createTime),
+                  amountText: _formatAmountText(
+                    amount: amount,
+                    isIncome: isIncome,
+                    formatter: currency,
+                  ),
+                  amountColor: _resolveAmountColor(
+                    isIncome: isIncome,
+                    colors: colors,
+                  ),
+                  directionLabel: _resolveDirectionLabel(
+                    isIncome: isIncome,
+                    inflowLabel: l10n.walletHistoryInflowLabel,
+                    outflowLabel: l10n.walletHistoryOutflowLabel,
+                  ),
+                  isPending: isPending,
+                  pendingLabel: l10n.walletHistoryPendingStatus,
+                );
+              },
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (_, __) => Center(
+            child: TextButton(
+              onPressed: () => ref.invalidate(walletHistoryProvider),
+              child: Text(l10n.fundListRetry),
+            ),
           ),
         ),
       ),

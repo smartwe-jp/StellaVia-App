@@ -8,6 +8,7 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
+import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
 import '../../../member_profile/domain/entities/member_profile_details.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
@@ -139,85 +140,102 @@ class HomeOverviewTabPage extends ConsumerWidget {
       ),
     };
 
-    return ListView(
-      key: const Key('home_tab_content'),
-      padding: EdgeInsets.zero,
-      children: <Widget>[
-        topSection,
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 12, 0, 24),
-          child: Column(
-            spacing: UiTokens.spacing16,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              if (isAuthenticated)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: UiTokens.spacing16,
+    return MainShellTabRefreshScope(
+      tabIndex: 0,
+      onRefresh: _refreshHomeOverviewTab,
+      child: ListView(
+        key: const Key('home_tab_content'),
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          topSection,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 12, 0, 24),
+            child: Column(
+              spacing: UiTokens.spacing16,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                if (isAuthenticated)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: UiTokens.spacing16,
+                    ),
+                    child: FundReminderFeed(items: reminders),
                   ),
-                  child: FundReminderFeed(items: reminders),
-                ),
-              if (asyncProjects.isLoading && projects.isEmpty)
-                const Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: UiTokens.spacing16),
-                    child: CircularProgressIndicator.adaptive(),
-                  ),
-                ),
-              if (loadError != null && projects.isEmpty)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: UiTokens.spacing16,
-                  ),
-                  child: Center(
-                    child: Column(
-                      children: <Widget>[
-                        Text(
-                          l10n.fundListLoadError,
-                          textAlign: TextAlign.center,
-                          style:
-                              (Theme.of(context).textTheme.bodyMedium ??
-                                      const TextStyle())
-                                  .copyWith(
-                                    color: AppColorTokens.fundexTextSecondary,
-                                  ),
-                        ),
-                        const SizedBox(height: UiTokens.spacing12),
-                        OutlinedButton(
-                          onPressed: () =>
-                              ref.invalidate(fundProjectListProvider),
-                          child: Text(l10n.fundListRetry),
-                        ),
-                      ],
+                if (asyncProjects.isLoading && projects.isEmpty)
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: UiTokens.spacing16,
+                      ),
+                      child: CircularProgressIndicator.adaptive(),
                     ),
                   ),
-                ),
-              if (featuredFundCards.isNotEmpty)
-                FundFeaturedFundCarousel(
-                  title: l10n.homeFeaturedFundsTitle,
-                  actionLabel: l10n.homeViewAllAction,
-                  onActionTap: () => context.go('/funds'),
-                  children: featuredFundCards,
-                ),
-              if (activeFundCards.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: UiTokens.spacing16,
+                if (loadError != null && projects.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: UiTokens.spacing16,
+                    ),
+                    child: Center(
+                      child: Column(
+                        children: <Widget>[
+                          Text(
+                            l10n.fundListLoadError,
+                            textAlign: TextAlign.center,
+                            style:
+                                (Theme.of(context).textTheme.bodyMedium ??
+                                        const TextStyle())
+                                    .copyWith(
+                                      color: AppColorTokens.fundexTextSecondary,
+                                    ),
+                          ),
+                          const SizedBox(height: UiTokens.spacing12),
+                          OutlinedButton(
+                            onPressed: () =>
+                                ref.invalidate(fundProjectListProvider),
+                            child: Text(l10n.fundListRetry),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  child: FundSectionList(
-                    title: l10n.homeActiveFundsTitle,
+                if (featuredFundCards.isNotEmpty)
+                  FundFeaturedFundCarousel(
+                    title: l10n.homeFeaturedFundsTitle,
                     actionLabel: l10n.homeViewAllAction,
                     onActionTap: () => context.go('/funds'),
-                    initialVisibleCount: 3,
-                    children: activeFundCards,
+                    children: featuredFundCards,
                   ),
-                ),
-            ],
+                if (activeFundCards.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: UiTokens.spacing16,
+                    ),
+                    child: FundSectionList(
+                      title: l10n.homeActiveFundsTitle,
+                      actionLabel: l10n.homeViewAllAction,
+                      onActionTap: () => context.go('/funds'),
+                      initialVisibleCount: 3,
+                      children: activeFundCards,
+                    ),
+                  ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
+}
+
+Future<void> _refreshHomeOverviewTab(WidgetRef ref) async {
+  ref.invalidate(fundProjectListProvider);
+  ref.invalidate(memberProfileDetailsProvider);
+  ref.invalidate(myPageAccountStatisticProvider);
+  await Future.wait<void>(<Future<void>>[
+    ref.refresh(fundProjectListProvider.future).then((_) {}),
+    ref.refresh(memberProfileDetailsProvider.future).then((_) {}),
+    ref.refresh(myPageAccountStatisticProvider.future).then((_) {}),
+  ]);
 }
 
 bool _isMemberProfileFlowComplete(

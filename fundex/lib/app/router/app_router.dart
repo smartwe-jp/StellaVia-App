@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../pages/hotel_design_showcase_page.dart';
 import '../pages/splash_page.dart';
+import '../navigation/app_route_observers.dart';
 import '../../features/auth/presentation/providers/auth_providers.dart';
 import '../../features/auth/presentation/pages/auth_entry_page.dart';
 import '../../features/auth/presentation/pages/auth_mode_pages.dart';
@@ -104,6 +105,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
     initialLocation: '/splash',
+    observers: <NavigatorObserver>[appRootRouteObserver],
     refreshListenable: refreshNotifier,
     redirect: (BuildContext context, GoRouterState state) {
       final authState = ref.read(isAuthenticatedProvider);
