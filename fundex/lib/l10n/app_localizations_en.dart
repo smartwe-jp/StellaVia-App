@@ -76,6 +76,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get imageViewerCloseTooltip => 'Close';
 
   @override
+  String get favoriteAddedToast => 'Added to favorites';
+
+  @override
+  String get favoriteRemovedToast => 'Removed from favorites';
+
+  @override
   String get loginForgotPassword => 'Forgot password';
 
   @override
@@ -717,6 +723,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fundListFilterUpcoming => 'Upcoming';
+
+  @override
+  String get fundListFilterFavorites => 'Favorites';
 
   @override
   String get fundListFilterClosed => 'Closed';

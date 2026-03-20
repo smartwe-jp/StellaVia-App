@@ -75,6 +75,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get imageViewerCloseTooltip => '关闭';
 
   @override
+  String get favoriteAddedToast => '已加入收藏';
+
+  @override
+  String get favoriteRemovedToast => '已取消收藏';
+
+  @override
   String get loginForgotPassword => '找回密码';
 
   @override
@@ -669,6 +675,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get fundListFilterUpcoming => '募集前';
+
+  @override
+  String get fundListFilterFavorites => '收藏';
 
   @override
   String get fundListFilterClosed => '募集结束';
@@ -2612,6 +2621,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get imageViewerCloseTooltip => '關閉';
 
   @override
+  String get favoriteAddedToast => '已加入收藏';
+
+  @override
+  String get favoriteRemovedToast => '已取消收藏';
+
+  @override
   String get loginForgotPassword => '忘記密碼？';
 
   @override
@@ -3206,6 +3221,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get fundListFilterUpcoming => '即將募集';
+
+  @override
+  String get fundListFilterFavorites => '收藏';
 
   @override
   String get fundListFilterClosed => '募集結束';

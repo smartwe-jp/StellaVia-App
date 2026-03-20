@@ -6,47 +6,38 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/fund_project.dart';
+import '../providers/fund_project_favorite_providers.dart';
 import '../providers/fund_project_providers.dart';
 
-enum _FundListFilter {
-  all,
-  operating,
-  operatingEnded,
-  opening,
-  upcoming,
-  recruitmentClosed,
-  recruitmentCompleted,
-  recruitmentFailed,
-}
+enum _FundListFilter { all, opening, upcoming, operating, favorites }
 
 extension on _FundListFilter {
   int? get projectStatusCode {
     switch (this) {
       case _FundListFilter.all:
         return null;
-      case _FundListFilter.operating:
-        return 4;
-      case _FundListFilter.operatingEnded:
-        return 5;
       case _FundListFilter.opening:
         return 1;
       case _FundListFilter.upcoming:
         return 0;
-      case _FundListFilter.recruitmentClosed:
-        return 3;
-      case _FundListFilter.recruitmentCompleted:
-        return 7;
-      case _FundListFilter.recruitmentFailed:
-        return 2;
+      case _FundListFilter.operating:
+        return 4;
+      case _FundListFilter.favorites:
+        return null;
     }
   }
 }
 
 class _FundListFilterOption {
-  const _FundListFilterOption({required this.filter, required this.label});
+  const _FundListFilterOption({
+    required this.filter,
+    required this.label,
+    this.isFavoriteStyle = false,
+  });
 
   final _FundListFilter filter;
   final String label;
+  final bool isFavoriteStyle;
 }
 
 class _FundStatusPalette {
@@ -72,7 +63,6 @@ class InvestmentTabPage extends ConsumerStatefulWidget {
 
 class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
   _FundListFilter _selectedFilter = _FundListFilter.all;
-  final Set<String> _favoriteIds = <String>{};
 
   List<_FundListFilterOption> _buildFilterOptions(BuildContext context) {
     final l10n = context.l10n;
@@ -80,14 +70,6 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
       _FundListFilterOption(
         filter: _FundListFilter.all,
         label: l10n.fundListFilterAll,
-      ),
-      _FundListFilterOption(
-        filter: _FundListFilter.operating,
-        label: l10n.fundListFilterOperating,
-      ),
-      _FundListFilterOption(
-        filter: _FundListFilter.operatingEnded,
-        label: l10n.fundListFilterOperatingEnded,
       ),
       _FundListFilterOption(
         filter: _FundListFilter.opening,
@@ -98,16 +80,13 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
         label: l10n.fundListFilterUpcoming,
       ),
       _FundListFilterOption(
-        filter: _FundListFilter.recruitmentClosed,
-        label: l10n.fundListFilterClosed,
+        filter: _FundListFilter.operating,
+        label: l10n.fundListFilterOperating,
       ),
       _FundListFilterOption(
-        filter: _FundListFilter.recruitmentCompleted,
-        label: l10n.fundListFilterCompleted,
-      ),
-      _FundListFilterOption(
-        filter: _FundListFilter.recruitmentFailed,
-        label: l10n.fundListFilterFailed,
+        filter: _FundListFilter.favorites,
+        label: l10n.fundListFilterFavorites,
+        isFavoriteStyle: true,
       ),
     ];
   }
@@ -117,7 +96,17 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
     await ref.read(fundProjectListProvider.future);
   }
 
-  List<FundProject> _applyFilter(List<FundProject> projects) {
+  List<FundProject> _applyFilter(
+    List<FundProject> projects,
+    Set<String> favoriteIds,
+  ) {
+    if (_selectedFilter == _FundListFilter.favorites) {
+      return projects
+          .where(
+            (FundProject project) => favoriteIds.contains(project.id.trim()),
+          )
+          .toList(growable: false);
+    }
     final statusCode = _selectedFilter.projectStatusCode;
     if (statusCode == null) {
       return projects;
@@ -125,16 +114,6 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
     return projects
         .where((FundProject project) => project.projectStatus == statusCode)
         .toList(growable: false);
-  }
-
-  void _toggleFavorite(String projectId) {
-    setState(() {
-      if (_favoriteIds.contains(projectId)) {
-        _favoriteIds.remove(projectId);
-      } else {
-        _favoriteIds.add(projectId);
-      }
-    });
   }
 
   String _formatCurrency(int? amount, NumberFormat formatter) {
@@ -353,6 +332,11 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
       symbol: '¥',
       decimalDigits: 0,
     );
+    final favoriteAddedMessage = l10n.favoriteAddedToast;
+    final favoriteRemovedMessage = l10n.favoriteRemovedToast;
+    final favoriteProjectIds = ref.watch(
+      fundProjectFavoritesControllerProvider,
+    );
 
     final asyncProjects = ref.watch(fundProjectListProvider);
     final filterOptions = _buildFilterOptions(context);
@@ -384,6 +368,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                             child: _FilterChip(
                               label: option.label,
                               selected: option.filter == _selectedFilter,
+                              isFavoriteStyle: option.isFavoriteStyle,
                               onTap: () {
                                 setState(() {
                                   _selectedFilter = option.filter;
@@ -429,7 +414,10 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                 );
               },
               data: (List<FundProject> projects) {
-                final visibleProjects = _applyFilter(projects);
+                final visibleProjects = _applyFilter(
+                  projects,
+                  favoriteProjectIds,
+                );
                 if (visibleProjects.isEmpty) {
                   return RefreshIndicator(
                     onRefresh: _refreshProjects,
@@ -459,6 +447,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                     separatorBuilder: (_, __) => const SizedBox(height: 16),
                     itemBuilder: (BuildContext context, int index) {
                       final project = visibleProjects[index];
+                      final projectId = project.id.trim();
                       final palette = _resolveStatusPalette(
                         context,
                         project.projectStatus,
@@ -478,7 +467,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
 
                       return _FundProjectCard(
                         project: project,
-                        isFavorite: _favoriteIds.contains(project.id),
+                        isFavorite: favoriteProjectIds.contains(projectId),
                         palette: palette,
                         statusLabel: statusLabel,
                         methodLabel: methodLabel,
@@ -498,7 +487,15 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                         locationText: _resolveLocationHint(project),
                         viewDetailText: l10n.fundListViewDetail,
                         volumeText: _resolveVolumeLabel(context, project),
-                        onFavoriteTap: () => _toggleFavorite(project.id),
+                        onFavoriteTap: () {
+                          ref
+                              .read(
+                                fundProjectFavoritesControllerProvider.notifier,
+                              )
+                              .toggleFavorite(projectId);
+                        },
+                        favoriteAddedMessage: favoriteAddedMessage,
+                        favoriteRemovedMessage: favoriteRemovedMessage,
                       );
                     },
                   ),
@@ -517,11 +514,13 @@ class _FilterChip extends StatelessWidget {
     required this.label,
     required this.selected,
     required this.onTap,
+    this.isFavoriteStyle = false,
   });
 
   final String label;
   final bool selected;
   final VoidCallback onTap;
+  final bool isFavoriteStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -540,16 +539,35 @@ class _FilterChip extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: selected ? colors.primary : colors.border,
+              color: isFavoriteStyle
+                  ? colors.warning
+                  : (selected ? colors.primary : colors.border),
               width: 1.5,
             ),
-            color: selected ? colors.primary : colors.surface,
+            color: isFavoriteStyle
+                ? (selected ? colors.warningSubtle : colors.surface)
+                : (selected ? colors.primary : colors.surface),
           ),
-          child: Text(
-            label,
-            style: appText.chip.copyWith(
-              color: selected ? colors.brandWhite : colors.textSecondary,
-            ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              if (isFavoriteStyle) ...<Widget>[
+                Icon(
+                  Icons.star_rounded,
+                  size: 14,
+                  color: selected ? colors.warningAction : colors.warning,
+                ),
+                const SizedBox(width: 4),
+              ],
+              Text(
+                label,
+                style: appText.chip.copyWith(
+                  color: isFavoriteStyle
+                      ? (selected ? colors.warningAction : colors.warning)
+                      : (selected ? colors.brandWhite : colors.textSecondary),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -574,6 +592,8 @@ class _FundProjectCard extends StatelessWidget {
     required this.viewDetailText,
     required this.volumeText,
     required this.onFavoriteTap,
+    required this.favoriteAddedMessage,
+    required this.favoriteRemovedMessage,
   });
 
   final FundProject project;
@@ -591,6 +611,8 @@ class _FundProjectCard extends StatelessWidget {
   final String viewDetailText;
   final String volumeText;
   final VoidCallback onFavoriteTap;
+  final String favoriteAddedMessage;
+  final String favoriteRemovedMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -661,9 +683,11 @@ class _FundProjectCard extends StatelessWidget {
                       Positioned(
                         left: 10,
                         top: 10,
-                        child: _FavoriteButton(
+                        child: FundFavoriteButton(
                           selected: isFavorite,
                           onTap: onFavoriteTap,
+                          selectedToastMessage: favoriteAddedMessage,
+                          unselectedToastMessage: favoriteRemovedMessage,
                         ),
                       ),
                       Positioned(
@@ -888,41 +912,6 @@ Color _resolveHeroGlassSecondaryTextColor(ThemeData theme) {
   final colors = theme.appColors;
   final isDark = theme.brightness == Brightness.dark;
   return isDark ? colors.onDark.withValues(alpha: 0.76) : colors.textSecondary;
-}
-
-class _FavoriteButton extends StatelessWidget {
-  const _FavoriteButton({required this.selected, required this.onTap});
-
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final isDark = theme.brightness == Brightness.dark;
-    return Material(
-      color: selected
-          ? colors.danger.withValues(alpha: isDark ? 0.26 : 0.16)
-          : _resolveHeroGlassSurfaceColor(theme),
-      shape: const CircleBorder(),
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: onTap,
-        child: SizedBox(
-          width: 34,
-          height: 34,
-          child: Icon(
-            selected ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-            size: 18,
-            color: selected
-                ? colors.onDark
-                : _resolveHeroGlassSecondaryTextColor(theme),
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class _HeroInfoBubble extends StatelessWidget {

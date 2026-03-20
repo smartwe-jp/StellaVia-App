@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/presentation/support/identity_auth_guard.dart';
 import '../../domain/entities/fund_project.dart';
+import '../providers/fund_project_favorite_providers.dart';
 import '../providers/fund_project_providers.dart';
 import '../support/fund_detail_static_content.dart';
 import '../support/fund_project_detail_structured_data.dart';
@@ -70,6 +71,11 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final detailAsync = ref.watch(fundProjectDetailProvider(projectId));
+    final favoriteProjectIds = ref.watch(
+      fundProjectFavoritesControllerProvider,
+    );
+    final favoriteAddedMessage = context.l10n.favoriteAddedToast;
+    final favoriteRemovedMessage = context.l10n.favoriteRemovedToast;
 
     return detailAsync.when(
       loading: () => const FundProjectDetailScaffold(
@@ -101,6 +107,10 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
         ),
       ),
       data: (FundProject project) {
+        final favoriteProjectId = project.id.trim().isEmpty
+            ? projectId
+            : project.id;
+        final isFavorite = favoriteProjectIds.contains(favoriteProjectId);
         final normalizedPhotoUrls = project.photos
             .map((String url) => url.trim())
             .where((String url) => url.isNotEmpty)
@@ -141,7 +151,14 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                   }
                   context.go('/funds');
                 },
-                onFavoriteTap: () {},
+                isFavorite: isFavorite,
+                onFavoriteTap: () {
+                  ref
+                      .read(fundProjectFavoritesControllerProvider.notifier)
+                      .toggleFavorite(favoriteProjectId);
+                },
+                favoriteAddedMessage: favoriteAddedMessage,
+                favoriteRemovedMessage: favoriteRemovedMessage,
               ),
               Container(
                 color: colors.surface,

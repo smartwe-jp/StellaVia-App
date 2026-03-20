@@ -96,10 +96,12 @@ class HotelDesignShowcasePage extends StatelessWidget {
                   onPressed: () {},
                 ),
                 const SizedBox(width: 10),
-                CircleIconButton(
-                  icon: const Icon(Icons.favorite_border_rounded),
+                FundFavoriteButton(
+                  selected: false,
+                  onTap: () {},
+                  style: FundFavoriteButtonStyle.overlay,
                   size: 38,
-                  onPressed: () {},
+                  iconSize: 20,
                 ),
                 const Spacer(),
                 AccentSquareIconButton(
@@ -332,10 +334,12 @@ class HotelDesignShowcasePage extends StatelessWidget {
                         onPressed: () {},
                       ),
                       const SizedBox(width: 8),
-                      CircleIconButton(
-                        icon: const Icon(Icons.favorite_border_rounded),
+                      FundFavoriteButton(
+                        selected: false,
+                        onTap: () {},
+                        style: FundFavoriteButtonStyle.overlay,
                         size: 38,
-                        onPressed: () {},
+                        iconSize: 20,
                       ),
                     ],
                   ),

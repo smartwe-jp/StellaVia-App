@@ -11,6 +11,7 @@ export 'src/app_image_viewer.dart';
 export 'src/app_pdf_viewer.dart';
 export 'src/app_step_progress_bar.dart';
 export 'src/app_menu_widgets.dart';
+export 'src/fund_favorite_button.dart';
 export 'src/ui_buttons.dart';
 export 'src/ui_cards.dart';
 export 'src/member_profile_form_widgets.dart';

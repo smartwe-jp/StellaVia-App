@@ -4,6 +4,7 @@ import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
 
 import 'app_theme_extensions.dart';
+import 'fund_favorite_button.dart';
 import 'ui_buttons.dart';
 import 'ui_tokens.dart';
 
@@ -276,6 +277,8 @@ class FundDetailHeroHeader extends StatefulWidget {
     this.onBackTap,
     this.onFavoriteTap,
     this.isFavorite = false,
+    this.favoriteAddedMessage,
+    this.favoriteRemovedMessage,
     this.height = 260,
   });
 
@@ -286,6 +289,8 @@ class FundDetailHeroHeader extends StatefulWidget {
   final VoidCallback? onBackTap;
   final VoidCallback? onFavoriteTap;
   final bool isFavorite;
+  final String? favoriteAddedMessage;
+  final String? favoriteRemovedMessage;
   final double height;
 
   @override
@@ -413,9 +418,12 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
           Positioned(
             top: topInset,
             right: 12,
-            child: _DetailGlassIconButton(
-              icon: widget.isFavorite ? Icons.favorite : Icons.favorite_border,
+            child: FundFavoriteButton(
+              selected: widget.isFavorite,
               onTap: widget.onFavoriteTap,
+              style: FundFavoriteButtonStyle.overlay,
+              selectedToastMessage: widget.favoriteAddedMessage,
+              unselectedToastMessage: widget.favoriteRemovedMessage,
             ),
           ),
           if (widget.badges.isNotEmpty)

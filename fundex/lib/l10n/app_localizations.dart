@@ -233,6 +233,18 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get imageViewerCloseTooltip;
 
+  /// No description provided for @favoriteAddedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to favorites'**
+  String get favoriteAddedToast;
+
+  /// No description provided for @favoriteRemovedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from favorites'**
+  String get favoriteRemovedToast;
+
   /// No description provided for @loginForgotPassword.
   ///
   /// In en, this message translates to:
@@ -1408,6 +1420,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Upcoming'**
   String get fundListFilterUpcoming;
+
+  /// No description provided for @fundListFilterFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get fundListFilterFavorites;
 
   /// No description provided for @fundListFilterClosed.
   ///
