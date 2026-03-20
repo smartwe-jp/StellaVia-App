@@ -1671,6 +1671,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageCoolingOffTitle => '🗓️クーリングオフ期間中（契約成立）';
 
   @override
+  String get myPageOrderInquirySectionTitle => '売却注文照会';
+
+  @override
+  String get myPageOrderInquiryListTitle => '注文照会';
+
+  @override
   String get myPageOperatingFundsTitle => '📊 運用中ファンド';
 
   @override
@@ -1707,6 +1713,24 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageInvestmentAmountLabel => '投資額';
 
   @override
+  String get myPageOrderTimeLabel => '注文時間';
+
+  @override
+  String get myPageOrderInvestorTypeLabel => '出資者種別';
+
+  @override
+  String get myPageOrderUnitsLabel => '注文数量 / 約定数量';
+
+  @override
+  String get myPageOrderUnitPriceLabel => '注文単価';
+
+  @override
+  String get myPageOrderInquiryStatusExecuting => '実行中';
+
+  @override
+  String get myPageOrderInquiryStatusPending => '確認待ち';
+
+  @override
   String get myPageAccumulatedDistributionLabel => '累計分配金';
 
   @override
@@ -1721,6 +1745,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get myPageCancelRequestAction => '解約申請';
+
+  @override
+  String get myPageCancelOrderAction => '取消注文';
 
   @override
   String get myPageCancelRequestComingSoon => 'キャンセル申請機能は次の実装で接続します。';
@@ -1952,6 +1979,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get myPagePendingEmptyState => '申込中または抽選待ちの案件はありません。';
+
+  @override
+  String get myPageOrderInquiryEmptyState => '注文照会はありません。';
 
   @override
   String get myPageApplyHistoryEmptyState => 'お申込み履歴はありません。';

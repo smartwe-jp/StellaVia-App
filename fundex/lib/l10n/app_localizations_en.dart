@@ -1760,6 +1760,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageCoolingOffTitle => '⏰ Cooling-off Period';
 
   @override
+  String get myPageOrderInquirySectionTitle => 'Sell Order Inquiry';
+
+  @override
+  String get myPageOrderInquiryListTitle => 'Order Inquiry';
+
+  @override
   String get myPageOperatingFundsTitle => '📊 Active Funds';
 
   @override
@@ -1797,6 +1803,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageInvestmentAmountLabel => 'Investment amount';
 
   @override
+  String get myPageOrderTimeLabel => 'Order time';
+
+  @override
+  String get myPageOrderInvestorTypeLabel => 'Investor type';
+
+  @override
+  String get myPageOrderUnitsLabel => 'Ordered / Filled units';
+
+  @override
+  String get myPageOrderUnitPriceLabel => 'Order unit price';
+
+  @override
+  String get myPageOrderInquiryStatusExecuting => 'Active';
+
+  @override
+  String get myPageOrderInquiryStatusPending => 'Pending';
+
+  @override
   String get myPageAccumulatedDistributionLabel => 'Total distributions';
 
   @override
@@ -1811,6 +1835,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myPageCancelRequestAction => 'Cancel';
+
+  @override
+  String get myPageCancelOrderAction => 'Cancel order';
 
   @override
   String get myPageCancelRequestComingSoon =>
@@ -2056,6 +2083,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get myPagePendingEmptyState =>
       'No applications or lottery-waiting items.';
+
+  @override
+  String get myPageOrderInquiryEmptyState => 'No order inquiries.';
 
   @override
   String get myPageApplyHistoryEmptyState => 'No application history yet.';

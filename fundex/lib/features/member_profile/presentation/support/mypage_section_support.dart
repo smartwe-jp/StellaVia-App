@@ -131,7 +131,7 @@ List<MyPageInvestmentGroup> groupActiveInvestmentRecords(
 String resolveSectionTitle(AppLocalizations l10n, MyPageSectionType type) {
   return switch (type) {
     MyPageSectionType.pendingApplications => l10n.myPageApplyHistoryListTitle,
-    MyPageSectionType.coolingOff => l10n.myPageCoolingOffTitle,
+    MyPageSectionType.coolingOff => l10n.myPageOrderInquiryListTitle,
     MyPageSectionType.activeFunds => l10n.myPageOperatingFundsTitle,
   };
 }
@@ -139,7 +139,7 @@ String resolveSectionTitle(AppLocalizations l10n, MyPageSectionType type) {
 String resolveSectionEmptyState(AppLocalizations l10n, MyPageSectionType type) {
   return switch (type) {
     MyPageSectionType.pendingApplications => l10n.myPagePendingEmptyState,
-    MyPageSectionType.coolingOff => l10n.myPageCoolingOffEmptyState,
+    MyPageSectionType.coolingOff => l10n.myPageOrderInquiryEmptyState,
     MyPageSectionType.activeFunds => l10n.myPageOperatingFundsEmptyState,
   };
 }
@@ -275,6 +275,51 @@ String resolveYieldLabel(FundProject? project, {double? fallbackRatio}) {
   return formatYieldPercent(ratio);
 }
 
+String resolveOrderInquiryStatusLabel(
+  AppLocalizations l10n,
+  MyPageOrderInquiryRecord record,
+) {
+  return (record.status?.trim().toUpperCase() == 'VALID')
+      ? l10n.myPageOrderInquiryStatusExecuting
+      : l10n.myPageOrderInquiryStatusPending;
+}
+
+Color resolveOrderInquiryStatusForegroundColor(
+  BuildContext context,
+  MyPageOrderInquiryRecord record,
+) {
+  final colors = Theme.of(context).appColors;
+  return (record.status?.trim().toUpperCase() == 'VALID')
+      ? colors.warningAction
+      : colors.textSecondary;
+}
+
+Color resolveOrderInquiryStatusBackgroundColor(
+  BuildContext context,
+  MyPageOrderInquiryRecord record,
+) {
+  final colors = Theme.of(context).appColors;
+  return (record.status?.trim().toUpperCase() == 'VALID')
+      ? colors.warningSubtle
+      : colors.surfaceAlt;
+}
+
+String formatOrderInvestorTypeLabel(MyPageOrderInquiryRecord record) {
+  final investorCode = record.investorType?.investorCode?.trim();
+  final ratio = record.investorType?.earningsRadio;
+  final ratioLabel = formatYieldPercent(ratio);
+  if (investorCode != null && investorCode.isNotEmpty) {
+    return ratio != null ? '$investorCode  $ratioLabel' : investorCode;
+  }
+  return ratioLabel;
+}
+
+String formatOrderUnitsLabel(MyPageOrderInquiryRecord record) {
+  final sellNum = record.sellNum?.toString() ?? '--';
+  final soldNum = record.soldNum?.toString() ?? '--';
+  return '$sellNum / $soldNum口';
+}
+
 String formatYieldPercent(double? ratio) {
   if (ratio == null) {
     return '--';
@@ -297,6 +342,14 @@ String? formatDateOrNull(String? raw) {
     return null;
   }
   return DateFormat('yyyy/MM/dd').format(date);
+}
+
+String? formatDateTimeWithSlashOrNull(String? raw) {
+  final date = parseApiDate(raw);
+  if (date == null) {
+    return null;
+  }
+  return DateFormat('yyyy/MM/dd HH:mm').format(date);
 }
 
 String? formatDateTimeOrNull(String? raw) {

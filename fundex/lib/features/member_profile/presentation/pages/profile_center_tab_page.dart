@@ -138,8 +138,6 @@ class ProfileCenterTabPage extends ConsumerWidget {
                       ref,
                       asyncValue: orderInquiryAsync,
                       formatter: currencyFormatter,
-                      fundProjectsById: fundProjectsById,
-                      localeTag: localeTag,
                     ),
                     const SizedBox(height: UiTokens.spacing12),
                     _buildActiveFundsSection(
@@ -254,61 +252,50 @@ Widget _buildCoolingOffSection(
   WidgetRef ref, {
   required AsyncValue<List<MyPageOrderInquiryRecord>> asyncValue,
   required NumberFormat formatter,
-  required Map<String, FundProject> fundProjectsById,
-  required String localeTag,
 }) {
   final l10n = context.l10n;
   final theme = Theme.of(context);
   final colors = theme.appColors;
-  final appText = theme.appTextTheme;
 
   return asyncValue.when(
     data: (records) {
       final displayRecords = _selectCoolingOffRecords(records);
       final cards = displayRecords
           .map((record) {
-            final projectId = _resolveOrderProjectId(record);
-            final project = projectId == null
-                ? null
-                : fundProjectsById[projectId];
-            final deadline = _resolveCoolingOffDeadline(record);
-            final deadlineLabel = _formatCoolingOffDeadlineLabel(
-              context,
-              deadline,
-              localeTag: localeTag,
-            );
-
             return FundMyPageProjectCard(
               title: record.projectName,
               accentColor: colors.warning,
-              trailing: Text(
-                _resolveYieldLabel(
-                  project,
-                  fallbackRatio: record.investorType?.earningsRadio,
+              trailing: _PendingStatusBadge(
+                label: resolveOrderInquiryStatusLabel(l10n, record),
+                backgroundColor: resolveOrderInquiryStatusBackgroundColor(
+                  context,
+                  record,
                 ),
-                style: appText.numericTitle.copyWith(color: colors.danger),
+                foregroundColor: resolveOrderInquiryStatusForegroundColor(
+                  context,
+                  record,
+                ),
               ),
               rows: <FundLabeledValue>[
                 FundLabeledValue(
-                  label: l10n.myPageInvestmentAmountLabel,
-                  value: _formatCurrency(record.price, formatter),
-                ),
-                FundLabeledValue(
-                  label: l10n.myPageDocumentDeliveryDateLabel,
+                  label: l10n.myPageOrderTimeLabel,
                   value:
-                      _formatDateOrNull(record.createTime) ??
+                      formatDateTimeWithSlashOrNull(record.createTime) ??
                       l10n.myPageResultAnnouncementTbd,
                 ),
                 FundLabeledValue(
-                  label: l10n.myPageCancelDeadlineLabel,
-                  value: deadlineLabel,
-                  valueColor: _resolveCoolingOffDeadlineColor(
-                    context,
-                    deadline,
-                  ),
+                  label: l10n.myPageOrderInvestorTypeLabel,
+                  value: formatOrderInvestorTypeLabel(record),
+                ),
+                FundLabeledValue(
+                  label: l10n.myPageOrderUnitsLabel,
+                  value: formatOrderUnitsLabel(record),
+                ),
+                FundLabeledValue(
+                  label: l10n.myPageOrderUnitPriceLabel,
+                  value: _formatCurrency(record.price, formatter),
                 ),
               ],
-              footnote: l10n.myPageCoolingOffFootnote,
               footer: OutlinedButton(
                 onPressed: () => _showSnackBar(
                   context,
@@ -319,7 +306,7 @@ Widget _buildCoolingOffSection(
                   borderColor: colors.danger,
                   foregroundColor: colors.danger,
                 ),
-                child: Text(l10n.myPageCancelRequestAction),
+                child: Text(l10n.myPageCancelOrderAction),
               ),
               onTap: null,
             );
@@ -327,7 +314,7 @@ Widget _buildCoolingOffSection(
           .toList(growable: false);
 
       return FundSectionList(
-        title: l10n.myPageCoolingOffTitle,
+        title: l10n.myPageOrderInquirySectionTitle,
         initialVisibleCount: cards.isEmpty ? 1 : 3,
         actionLabel: l10n.homeViewAllAction,
         onActionTap: () => context.push(
@@ -335,18 +322,18 @@ Widget _buildCoolingOffSection(
         ),
         children: cards.isEmpty
             ? <Widget>[
-                _SectionStateCard(message: l10n.myPageCoolingOffEmptyState),
+                _SectionStateCard(message: l10n.myPageOrderInquiryEmptyState),
               ]
             : cards,
       );
     },
     loading: () => FundSectionList(
-      title: l10n.myPageCoolingOffTitle,
+      title: l10n.myPageOrderInquirySectionTitle,
       initialVisibleCount: 1,
       children: const <Widget>[_SectionLoadingCard()],
     ),
     error: (_, __) => FundSectionList(
-      title: l10n.myPageCoolingOffTitle,
+      title: l10n.myPageOrderInquirySectionTitle,
       initialVisibleCount: 1,
       children: <Widget>[
         _SectionStateCard(
@@ -530,54 +517,6 @@ String? _resolveOrderProjectId(MyPageOrderInquiryRecord record) {
           : null);
 }
 
-DateTime? _resolveCoolingOffDeadline(MyPageOrderInquiryRecord record) {
-  final base = _parseApiDate(record.createTime);
-  if (base == null) {
-    return null;
-  }
-  return DateTime(base.year, base.month, base.day).add(const Duration(days: 8));
-}
-
-Color _resolveCoolingOffDeadlineColor(
-  BuildContext context,
-  DateTime? deadline,
-) {
-  final colors = Theme.of(context).appColors;
-  if (deadline == null) {
-    return colors.textSecondary;
-  }
-  final today = DateTime.now();
-  final todayDate = DateTime(today.year, today.month, today.day);
-  final deadlineDate = DateTime(deadline.year, deadline.month, deadline.day);
-  return deadlineDate.isBefore(todayDate)
-      ? colors.textSecondary
-      : colors.danger;
-}
-
-String _formatCoolingOffDeadlineLabel(
-  BuildContext context,
-  DateTime? deadline, {
-  required String localeTag,
-}) {
-  if (deadline == null) {
-    return context.l10n.myPageResultAnnouncementTbd;
-  }
-
-  final dateText = DateFormat('M/d', localeTag).format(deadline);
-  final now = DateTime.now();
-  final today = DateTime(now.year, now.month, now.day);
-  final deadlineDate = DateTime(deadline.year, deadline.month, deadline.day);
-  final remainingDays = deadlineDate.difference(today).inDays;
-
-  if (remainingDays >= 0) {
-    return context.l10n.myPageCoolingOffDeadlineRemaining(
-      dateText,
-      remainingDays,
-    );
-  }
-  return context.l10n.myPageCoolingOffDeadlineExpired(dateText);
-}
-
 String _resolveYieldLabel(FundProject? project, {double? fallbackRatio}) {
   final ratio =
       project?.expectedDistributionRatioMax ??
@@ -645,14 +584,6 @@ String _formatCompactNumber(double value) {
   return value.toStringAsFixed(1);
 }
 
-String? _formatDateOrNull(String? raw) {
-  final date = _parseApiDate(raw);
-  if (date == null) {
-    return null;
-  }
-  return DateFormat('yyyy/MM/dd').format(date);
-}
-
 DateTime? _parseApiDate(String? raw) {
   if (raw == null || raw.trim().isEmpty) {
     return null;
@@ -710,9 +641,15 @@ ButtonStyle _myPageOutlineButtonStyle(
 }
 
 class _PendingStatusBadge extends StatelessWidget {
-  const _PendingStatusBadge({required this.label});
+  const _PendingStatusBadge({
+    required this.label,
+    this.backgroundColor = AppColorTokens.fundexVioletLight,
+    this.foregroundColor = AppColorTokens.fundexViolet,
+  });
 
   final String label;
+  final Color backgroundColor;
+  final Color foregroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -720,12 +657,12 @@ class _PendingStatusBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: AppColorTokens.fundexVioletLight,
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
         label,
-        style: appText.tableLabel.copyWith(color: AppColorTokens.fundexViolet),
+        style: appText.tableLabel.copyWith(color: foregroundColor),
       ),
     );
   }

@@ -232,7 +232,6 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
                     sliver: _buildSliverContent(
                       context,
                       formatter: currencyFormatter,
-                      localeTag: localeTag,
                       fundProjectsById: projectsById,
                     ),
                   ),
@@ -340,50 +339,46 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
   Widget _buildCoolingOffCard(
     BuildContext context,
     MyPageOrderInquiryRecord record,
-    NumberFormat formatter, {
-    required String localeTag,
-    required Map<String, FundProject> fundProjectsById,
-  }) {
+    NumberFormat formatter,
+  ) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    final projectId = resolveOrderProjectId(record);
-    final project = projectId == null ? null : fundProjectsById[projectId];
-    final deadline = resolveCoolingOffDeadline(record);
 
     return FundMyPageProjectCard(
       title: record.projectName,
       accentColor: colors.warning,
-      trailing: Text(
-        resolveYieldLabel(
-          project,
-          fallbackRatio: record.investorType?.earningsRadio,
+      trailing: _StatusBadge(
+        label: resolveOrderInquiryStatusLabel(l10n, record),
+        backgroundColor: resolveOrderInquiryStatusBackgroundColor(
+          context,
+          record,
         ),
-        style: appText.numericTitle.copyWith(color: colors.danger),
+        foregroundColor: resolveOrderInquiryStatusForegroundColor(
+          context,
+          record,
+        ),
       ),
       rows: <FundLabeledValue>[
         FundLabeledValue(
-          label: l10n.myPageInvestmentAmountLabel,
-          value: formatCurrency(record.price, formatter),
-        ),
-        FundLabeledValue(
-          label: l10n.myPageDocumentDeliveryDateLabel,
+          label: l10n.myPageOrderTimeLabel,
           value:
-              formatDateOrNull(record.createTime) ??
+              formatDateTimeWithSlashOrNull(record.createTime) ??
               l10n.myPageResultAnnouncementTbd,
         ),
         FundLabeledValue(
-          label: l10n.myPageCancelDeadlineLabel,
-          value: formatCoolingOffDeadlineLabel(
-            l10n,
-            deadline,
-            localeTag: localeTag,
-          ),
-          valueColor: resolveCoolingOffDeadlineColor(context, deadline),
+          label: l10n.myPageOrderInvestorTypeLabel,
+          value: formatOrderInvestorTypeLabel(record),
+        ),
+        FundLabeledValue(
+          label: l10n.myPageOrderUnitsLabel,
+          value: formatOrderUnitsLabel(record),
+        ),
+        FundLabeledValue(
+          label: l10n.myPageOrderUnitPriceLabel,
+          value: formatCurrency(record.price, formatter),
         ),
       ],
-      footnote: l10n.myPageCoolingOffFootnote,
       footer: OutlinedButton(
         onPressed: () =>
             _showSnackBar(context, message: l10n.myPageCancelRequestComingSoon),
@@ -392,7 +387,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
           borderColor: colors.danger,
           foregroundColor: colors.danger,
         ),
-        child: Text(l10n.myPageCancelRequestAction),
+        child: Text(l10n.myPageCancelOrderAction),
       ),
       onTap: null,
     );
@@ -433,7 +428,6 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
   Widget _buildSliverContent(
     BuildContext context, {
     required NumberFormat formatter,
-    required String localeTag,
     required Map<String, FundProject> fundProjectsById,
   }) {
     final l10n = context.l10n;
@@ -462,15 +456,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
             .toList(growable: false),
       MyPageSectionType.coolingOff =>
         selectCoolingOffRecords(_orderInquiryRecords)
-            .map(
-              (record) => _buildCoolingOffCard(
-                context,
-                record,
-                formatter,
-                localeTag: localeTag,
-                fundProjectsById: fundProjectsById,
-              ),
-            )
+            .map((record) => _buildCoolingOffCard(context, record, formatter))
             .toList(growable: false),
       MyPageSectionType.activeFunds =>
         groupActiveInvestmentRecords(_investmentRecords)

@@ -3326,6 +3326,18 @@ abstract class AppLocalizations {
   /// **'⏰ Cooling-off Period'**
   String get myPageCoolingOffTitle;
 
+  /// No description provided for @myPageOrderInquirySectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell Order Inquiry'**
+  String get myPageOrderInquirySectionTitle;
+
+  /// No description provided for @myPageOrderInquiryListTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Inquiry'**
+  String get myPageOrderInquiryListTitle;
+
   /// No description provided for @myPageOperatingFundsTitle.
   ///
   /// In en, this message translates to:
@@ -3398,6 +3410,42 @@ abstract class AppLocalizations {
   /// **'Investment amount'**
   String get myPageInvestmentAmountLabel;
 
+  /// No description provided for @myPageOrderTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Order time'**
+  String get myPageOrderTimeLabel;
+
+  /// No description provided for @myPageOrderInvestorTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Investor type'**
+  String get myPageOrderInvestorTypeLabel;
+
+  /// No description provided for @myPageOrderUnitsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Ordered / Filled units'**
+  String get myPageOrderUnitsLabel;
+
+  /// No description provided for @myPageOrderUnitPriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Order unit price'**
+  String get myPageOrderUnitPriceLabel;
+
+  /// No description provided for @myPageOrderInquiryStatusExecuting.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get myPageOrderInquiryStatusExecuting;
+
+  /// No description provided for @myPageOrderInquiryStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get myPageOrderInquiryStatusPending;
+
   /// No description provided for @myPageAccumulatedDistributionLabel.
   ///
   /// In en, this message translates to:
@@ -3427,6 +3475,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get myPageCancelRequestAction;
+
+  /// No description provided for @myPageCancelOrderAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel order'**
+  String get myPageCancelOrderAction;
 
   /// No description provided for @myPageCancelRequestComingSoon.
   ///
@@ -3877,6 +3931,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No applications or lottery-waiting items.'**
   String get myPagePendingEmptyState;
+
+  /// No description provided for @myPageOrderInquiryEmptyState.
+  ///
+  /// In en, this message translates to:
+  /// **'No order inquiries.'**
+  String get myPageOrderInquiryEmptyState;
 
   /// No description provided for @myPageApplyHistoryEmptyState.
   ///

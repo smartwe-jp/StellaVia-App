@@ -1660,6 +1660,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageCoolingOffTitle => '⏰ 冷静期中（合同已成立）';
 
   @override
+  String get myPageOrderInquirySectionTitle => '卖却订单照会';
+
+  @override
+  String get myPageOrderInquiryListTitle => '订单照会';
+
+  @override
   String get myPageOperatingFundsTitle => '📊 运用中基金';
 
   @override
@@ -1696,6 +1702,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageInvestmentAmountLabel => '投资金额';
 
   @override
+  String get myPageOrderTimeLabel => '订单时间';
+
+  @override
+  String get myPageOrderInvestorTypeLabel => '出资者种别';
+
+  @override
+  String get myPageOrderUnitsLabel => '订单数量 / 约定数量';
+
+  @override
+  String get myPageOrderUnitPriceLabel => '订单单价';
+
+  @override
+  String get myPageOrderInquiryStatusExecuting => '执行中';
+
+  @override
+  String get myPageOrderInquiryStatusPending => '待确认';
+
+  @override
   String get myPageAccumulatedDistributionLabel => '累计分配金';
 
   @override
@@ -1709,6 +1733,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get myPageCancelRequestAction => '解约申请';
+
+  @override
+  String get myPageCancelOrderAction => '取消订单';
 
   @override
   String get myPageCancelRequestComingSoon => '取消申请流程会在后续实现中接入。';
@@ -1937,6 +1964,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get myPagePendingEmptyState => '当前没有申请中或等待抽签的项目。';
+
+  @override
+  String get myPageOrderInquiryEmptyState => '当前没有订单照会。';
 
   @override
   String get myPageApplyHistoryEmptyState => '当前暂无申购记录。';
@@ -4305,6 +4335,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageCoolingOffTitle => '⏰ 冷靜期中（合約已成立）';
 
   @override
+  String get myPageOrderInquirySectionTitle => '賣卻訂單照會';
+
+  @override
+  String get myPageOrderInquiryListTitle => '訂單照會';
+
+  @override
   String get myPageOperatingFundsTitle => '📊 運用中基金';
 
   @override
@@ -4341,6 +4377,24 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageInvestmentAmountLabel => '投资金额';
 
   @override
+  String get myPageOrderTimeLabel => '訂單時間';
+
+  @override
+  String get myPageOrderInvestorTypeLabel => '出資者種別';
+
+  @override
+  String get myPageOrderUnitsLabel => '訂單數量 / 約定數量';
+
+  @override
+  String get myPageOrderUnitPriceLabel => '訂單單價';
+
+  @override
+  String get myPageOrderInquiryStatusExecuting => '執行中';
+
+  @override
+  String get myPageOrderInquiryStatusPending => '待確認';
+
+  @override
   String get myPageAccumulatedDistributionLabel => '累计分配金';
 
   @override
@@ -4354,6 +4408,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageCancelRequestAction => '終止合約';
+
+  @override
+  String get myPageCancelOrderAction => '取消訂單';
 
   @override
   String get myPageCancelRequestComingSoon => '取消申请流程会在后续实现中接入。';
@@ -4582,6 +4639,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPagePendingEmptyState => '目前沒有申請中或等待抽籤的項目。';
+
+  @override
+  String get myPageOrderInquiryEmptyState => '目前沒有訂單照會。';
 
   @override
   String get myPageApplyHistoryEmptyState => '目前暫無申購記錄。';
