@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
@@ -58,12 +59,16 @@ class FundHeroMediaBackground extends StatefulWidget {
     this.imageUrls = const <String>[],
     this.pageController,
     this.onPageChanged,
+    this.autoPlay = true,
+    this.autoPlayInterval = const Duration(seconds: 4),
   });
 
   final List<Color> gradientColors;
   final List<String> imageUrls;
   final PageController? pageController;
   final ValueChanged<int>? onPageChanged;
+  final bool autoPlay;
+  final Duration autoPlayInterval;
 
   @override
   State<FundHeroMediaBackground> createState() =>
@@ -72,6 +77,8 @@ class FundHeroMediaBackground extends StatefulWidget {
 
 class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground> {
   PageController? _internalController;
+  Timer? _autoPlayTimer;
+  int _currentIndex = 0;
 
   List<String> get _normalizedImageUrls => widget.imageUrls
       .map((String url) => url.trim())
@@ -83,7 +90,72 @@ class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _configureAutoPlay();
+  }
+
+  @override
+  void didUpdateWidget(covariant FundHeroMediaBackground oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.autoPlay != widget.autoPlay ||
+        oldWidget.autoPlayInterval != widget.autoPlayInterval ||
+        oldWidget.pageController != widget.pageController ||
+        oldWidget.imageUrls != widget.imageUrls) {
+      final imageCount = _normalizedImageUrls.length;
+      if (_currentIndex >= imageCount) {
+        _currentIndex = 0;
+      }
+      _configureAutoPlay();
+    }
+  }
+
+  void _configureAutoPlay() {
+    _autoPlayTimer?.cancel();
+    if (!widget.autoPlay || _normalizedImageUrls.length <= 1) {
+      return;
+    }
+    _autoPlayTimer = Timer.periodic(widget.autoPlayInterval, (_) {
+      _animateToNextPage();
+    });
+  }
+
+  void _pauseAutoPlay() {
+    _autoPlayTimer?.cancel();
+    _autoPlayTimer = null;
+  }
+
+  void _resumeAutoPlay() {
+    if (_autoPlayTimer != null) {
+      return;
+    }
+    _configureAutoPlay();
+  }
+
+  Future<void> _animateToNextPage() async {
+    final images = _normalizedImageUrls;
+    if (!mounted || images.length <= 1) {
+      return;
+    }
+    final controller = _effectiveController;
+    if (!controller.hasClients) {
+      return;
+    }
+    final nextIndex = (_currentIndex + 1) % images.length;
+    try {
+      await controller.animateToPage(
+        nextIndex,
+        duration: const Duration(milliseconds: 420),
+        curve: Curves.easeInOutCubic,
+      );
+    } catch (_) {
+      // Ignore transient page controller lifecycle failures during disposal.
+    }
+  }
+
+  @override
   void dispose() {
+    _autoPlayTimer?.cancel();
     _internalController?.dispose();
     super.dispose();
   }
@@ -97,36 +169,45 @@ class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground> {
       );
     }
 
-    return PageView.builder(
-      controller: _effectiveController,
-      itemCount: images.length,
-      onPageChanged: widget.onPageChanged,
-      itemBuilder: (BuildContext context, int index) {
-        return Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            _FundDetailHeroFallbackBackground(
-              gradientColors: widget.gradientColors,
-            ),
-            Image.network(
-              images[index],
-              fit: BoxFit.cover,
-              loadingBuilder:
-                  (
-                    BuildContext context,
-                    Widget child,
-                    ImageChunkEvent? loadingProgress,
-                  ) {
-                    if (loadingProgress == null) {
-                      return child;
-                    }
-                    return const SizedBox.shrink();
-                  },
-              errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-            ),
-          ],
-        );
-      },
+    return Listener(
+      onPointerDown: (_) => _pauseAutoPlay(),
+      onPointerUp: (_) => _resumeAutoPlay(),
+      onPointerCancel: (_) => _resumeAutoPlay(),
+      child: PageView.builder(
+        controller: _effectiveController,
+        physics: const PageScrollPhysics(),
+        itemCount: images.length,
+        onPageChanged: (int index) {
+          _currentIndex = index;
+          widget.onPageChanged?.call(index);
+        },
+        itemBuilder: (BuildContext context, int index) {
+          return Stack(
+            fit: StackFit.expand,
+            children: <Widget>[
+              _FundDetailHeroFallbackBackground(
+                gradientColors: widget.gradientColors,
+              ),
+              Image.network(
+                images[index],
+                fit: BoxFit.cover,
+                loadingBuilder:
+                    (
+                      BuildContext context,
+                      Widget child,
+                      ImageChunkEvent? loadingProgress,
+                    ) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return const SizedBox.shrink();
+                    },
+                errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }
@@ -250,15 +331,17 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
               });
             },
           ),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: <Color>[
-                  colors.scrim.withValues(alpha: 0.12),
-                  colors.scrim.withValues(alpha: 0.42),
-                ],
+          IgnorePointer(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: <Color>[
+                    colors.scrim.withValues(alpha: 0.12),
+                    colors.scrim.withValues(alpha: 0.42),
+                  ],
+                ),
               ),
             ),
           ),
@@ -283,29 +366,31 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
               left: 16,
               right: 16,
               bottom: 16,
-              child: Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: widget.badges
-                    .map(
-                      (FundDetailBadgeData badge) => Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-                        decoration: BoxDecoration(
-                          color: badge.backgroundColor,
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                        child: Text(
-                          badge.label,
-                          style: appText.chip.copyWith(
-                            color: badge.foregroundColor,
+              child: IgnorePointer(
+                child: Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: widget.badges
+                      .map(
+                        (FundDetailBadgeData badge) => Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            color: badge.backgroundColor,
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          child: Text(
+                            badge.label,
+                            style: appText.chip.copyWith(
+                              color: badge.foregroundColor,
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                    .toList(growable: false),
+                      )
+                      .toList(growable: false),
+                ),
               ),
             ),
           if (hasIndicator)
@@ -313,7 +398,11 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
               left: 0,
               right: 0,
               bottom: widget.badges.isEmpty ? 14 : 48,
-              child: Center(child: _buildPageIndicator(context, images.length)),
+              child: IgnorePointer(
+                child: Center(
+                  child: _buildPageIndicator(context, images.length),
+                ),
+              ),
             ),
         ],
       ),
