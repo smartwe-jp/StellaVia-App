@@ -653,7 +653,7 @@
   "myPageDocumentDeliveryDateLabel": "書面交付日",
   "myPageCancelDeadlineLabel": "取消期限",
   "myPageCoolingOffFootnote": "※ 契約締結時交付書面を受領した日の翌日から8日間はクーリングオフ（無条件解除）が可能です。",
-  "myPageCancelRequestAction": "解約申請",
+  "myPageCancelRequestAction": "キャンセル",
   "myPageCancelOrderAction": "取消注文",
   "myPageCancelRequestComingSoon": "キャンセル申請機能は次の実装で接続します。",
   "myPageDepositComingSoon": "入金画面は次の実装で接続します。",

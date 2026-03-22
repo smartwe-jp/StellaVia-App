@@ -1759,7 +1759,7 @@ class AppLocalizationsJa extends AppLocalizations {
       '※ 契約締結時交付書面を受領した日の翌日から8日間はクーリングオフ（無条件解除）が可能です。';
 
   @override
-  String get myPageCancelRequestAction => '解約申請';
+  String get myPageCancelRequestAction => 'キャンセル';
 
   @override
   String get myPageCancelOrderAction => '取消注文';

@@ -1747,7 +1747,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageCoolingOffFootnote => '※ 自收到合同成立时交付书面的次日起 8 日内，可无条件解除合同。';
 
   @override
-  String get myPageCancelRequestAction => '解约申请';
+  String get myPageCancelRequestAction => '取消订单';
 
   @override
   String get myPageCancelOrderAction => '取消订单';
@@ -4666,7 +4666,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageCoolingOffFootnote => '※ 自收到合同成立时交付书面的次日起 8 日内，可无条件解除合同。';
 
   @override
-  String get myPageCancelRequestAction => '終止合約';
+  String get myPageCancelRequestAction => '取消合約';
 
   @override
   String get myPageCancelOrderAction => '取消訂單';

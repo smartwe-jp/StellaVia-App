@@ -653,7 +653,7 @@
   "myPageDocumentDeliveryDateLabel": "书面交付日",
   "myPageCancelDeadlineLabel": "取消期限",
   "myPageCoolingOffFootnote": "※ 自收到合同成立时交付书面的次日起 8 日内，可无条件解除合同。",
-  "myPageCancelRequestAction": "解约申请",
+  "myPageCancelRequestAction": "取消订单",
   "myPageCancelOrderAction": "取消订单",
   "myPageCancelRequestComingSoon": "取消申请流程会在后续实现中接入。",
   "myPageDepositComingSoon": "入金页面会在后续实现中接入。",
