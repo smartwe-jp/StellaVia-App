@@ -123,6 +123,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
               record,
               currencyFormatter,
             ),
+            actionLabel: l10n.secondaryMarketBuyAction,
             yieldLabel: l10n.homeEstimatedYieldLabel,
             soldUnitsTitle: l10n.homeFreeMarketSoldUnitsLabel,
             unitPriceTitle: l10n.homeFreeMarketUnitPriceLabel,
@@ -247,7 +248,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
                     ),
                     actionLabel: l10n.homeViewAllAction,
                     onActionTap: () => context.push('/home/free-market'),
-                    height: 220,
+                    height: 260,
                     children: secondaryMarketCards,
                   ),
                 if (activeFundCards.isNotEmpty)

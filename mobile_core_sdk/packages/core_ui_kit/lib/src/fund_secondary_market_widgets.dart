@@ -33,6 +33,7 @@ class FundSecondaryMarketCard extends StatelessWidget {
   const FundSecondaryMarketCard({
     super.key,
     required this.data,
+    required this.actionLabel,
     required this.yieldLabel,
     required this.soldUnitsTitle,
     required this.unitPriceTitle,
@@ -42,6 +43,7 @@ class FundSecondaryMarketCard extends StatelessWidget {
   });
 
   final FundSecondaryMarketCardData data;
+  final String actionLabel;
   final String yieldLabel;
   final String soldUnitsTitle;
   final String unitPriceTitle;
@@ -204,13 +206,22 @@ class FundSecondaryMarketCard extends StatelessWidget {
             value: data.unitPriceLabel,
           ),
           if (fillHeight) const Spacer() else const SizedBox(height: 12),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(3),
-            child: LinearProgressIndicator(
-              minHeight: 5,
-              value: data.progress.clamp(0, 1),
-              backgroundColor: colors.border,
-              valueColor: AlwaysStoppedAnimation<Color>(colors.warning),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: data.onTap,
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size.fromHeight(38),
+                side: BorderSide(color: colors.warningAction),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                foregroundColor: colors.warningAction,
+                backgroundColor: colors.warningSubtle.withValues(alpha: 0.28),
+                textStyle: appText.button,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+              ),
+              child: Text(actionLabel),
             ),
           ),
         ],

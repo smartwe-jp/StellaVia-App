@@ -241,6 +241,7 @@ class _SecondaryMarketMarketplacePageState
               _records[index],
               formatter,
             ),
+            actionLabel: l10n.secondaryMarketBuyAction,
             yieldLabel: l10n.homeEstimatedYieldLabel,
             soldUnitsTitle: l10n.homeFreeMarketSoldUnitsLabel,
             unitPriceTitle: l10n.homeFreeMarketUnitPriceLabel,
