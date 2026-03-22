@@ -463,15 +463,31 @@
   "fundDetailUnavailableAction": "当前不可申请",
   "fundDetailApplyComingSoonToast": "申购流程会在下一步实现中接入。",
   "lotteryApplyFlowTitle": "抽签申请",
-  "lotteryApplyStep1Title": "1. 输入出资金额",
+  "lotteryApplyStep1Title": "1. 输入申购口数",
   "lotteryApplyStep1BalanceLabel": "💰 待机资金余额",
   "lotteryApplyStep1DepositAction": "去入金",
-  "lotteryApplyStep1AmountLabel": "出资金额（1口 = 10万日元）",
-  "lotteryApplyStep1AmountLabelWithRules": "出资金额（1口 = {unitAmount} / 上限 {maxAmount}）",
+  "lotteryApplyStep1AmountLabel": "申购口数（1口 = 10万日元）",
+  "lotteryApplyStep1AmountLabelWithRules": "申购口数（1口 = {unitAmount} / 上限 {maxAmount}）",
   "@lotteryApplyStep1AmountLabelWithRules": {
     "placeholders": {
       "unitAmount": {},
       "maxAmount": {}
+    }
+  },
+  "lotteryApplyStep1UnitPriceLabel": "每口金额",
+  "lotteryApplyStep1UnitCountLabel": "申购口数",
+  "lotteryApplyStep1UnitSuffix": "口",
+  "lotteryApplyStep1TotalAmountLabel": "申购总额",
+  "lotteryApplyStep1MaximumUnitsNotice": "最多只能申购 {maxUnits} 口。",
+  "@lotteryApplyStep1MaximumUnitsNotice": {
+    "placeholders": {
+      "maxUnits": {}
+    }
+  },
+  "lotteryApplyStep1MinimumUnitsNotice": "最少申购 {minUnits} 口。",
+  "@lotteryApplyStep1MinimumUnitsNotice": {
+    "placeholders": {
+      "minUnits": {}
     }
   },
   "lotteryApplyStep1BalanceWarningTitle": "待机资金不足",

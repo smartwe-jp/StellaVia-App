@@ -1322,7 +1322,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lotteryApplyFlowTitle => 'Lottery Application';
 
   @override
-  String get lotteryApplyStep1Title => '1. Enter investment amount';
+  String get lotteryApplyStep1Title => '1. Enter units';
 
   @override
   String get lotteryApplyStep1BalanceLabel => '💰 Standby cash balance';
@@ -1332,14 +1332,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lotteryApplyStep1AmountLabel =>
-      'Investment amount (1 unit = ¥100,000)';
+      'Units to apply (1 unit = ¥100,000)';
 
   @override
   String lotteryApplyStep1AmountLabelWithRules(
     Object unitAmount,
     Object maxAmount,
   ) {
-    return 'Investment amount (1 unit = $unitAmount / max $maxAmount)';
+    return 'Units to apply (1 unit = $unitAmount / max $maxAmount)';
+  }
+
+  @override
+  String get lotteryApplyStep1UnitPriceLabel => 'Price per unit';
+
+  @override
+  String get lotteryApplyStep1UnitCountLabel => 'Units';
+
+  @override
+  String get lotteryApplyStep1UnitSuffix => 'units';
+
+  @override
+  String get lotteryApplyStep1TotalAmountLabel => 'Order total';
+
+  @override
+  String lotteryApplyStep1MaximumUnitsNotice(Object maxUnits) {
+    return 'You can apply for up to $maxUnits units.';
+  }
+
+  @override
+  String lotteryApplyStep1MinimumUnitsNotice(Object minUnits) {
+    return 'The minimum order is $minUnits unit.';
   }
 
   @override

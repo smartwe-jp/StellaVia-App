@@ -2540,7 +2540,7 @@ abstract class AppLocalizations {
   /// No description provided for @lotteryApplyStep1Title.
   ///
   /// In en, this message translates to:
-  /// **'1. Enter investment amount'**
+  /// **'1. Enter units'**
   String get lotteryApplyStep1Title;
 
   /// No description provided for @lotteryApplyStep1BalanceLabel.
@@ -2558,17 +2558,53 @@ abstract class AppLocalizations {
   /// No description provided for @lotteryApplyStep1AmountLabel.
   ///
   /// In en, this message translates to:
-  /// **'Investment amount (1 unit = ¥100,000)'**
+  /// **'Units to apply (1 unit = ¥100,000)'**
   String get lotteryApplyStep1AmountLabel;
 
   /// No description provided for @lotteryApplyStep1AmountLabelWithRules.
   ///
   /// In en, this message translates to:
-  /// **'Investment amount (1 unit = {unitAmount} / max {maxAmount})'**
+  /// **'Units to apply (1 unit = {unitAmount} / max {maxAmount})'**
   String lotteryApplyStep1AmountLabelWithRules(
     Object unitAmount,
     Object maxAmount,
   );
+
+  /// No description provided for @lotteryApplyStep1UnitPriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Price per unit'**
+  String get lotteryApplyStep1UnitPriceLabel;
+
+  /// No description provided for @lotteryApplyStep1UnitCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Units'**
+  String get lotteryApplyStep1UnitCountLabel;
+
+  /// No description provided for @lotteryApplyStep1UnitSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'units'**
+  String get lotteryApplyStep1UnitSuffix;
+
+  /// No description provided for @lotteryApplyStep1TotalAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Order total'**
+  String get lotteryApplyStep1TotalAmountLabel;
+
+  /// No description provided for @lotteryApplyStep1MaximumUnitsNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'You can apply for up to {maxUnits} units.'**
+  String lotteryApplyStep1MaximumUnitsNotice(Object maxUnits);
+
+  /// No description provided for @lotteryApplyStep1MinimumUnitsNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'The minimum order is {minUnits} unit.'**
+  String lotteryApplyStep1MinimumUnitsNotice(Object minUnits);
 
   /// No description provided for @lotteryApplyStep1BalanceWarningTitle.
   ///

@@ -1255,7 +1255,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get lotteryApplyFlowTitle => '抽選申込';
 
   @override
-  String get lotteryApplyStep1Title => '① 出資金額を入力';
+  String get lotteryApplyStep1Title => '① 申込口数を入力';
 
   @override
   String get lotteryApplyStep1BalanceLabel => '💰 待機資金残高';
@@ -1264,14 +1264,36 @@ class AppLocalizationsJa extends AppLocalizations {
   String get lotteryApplyStep1DepositAction => '入金する';
 
   @override
-  String get lotteryApplyStep1AmountLabel => '出資金額（1口 = 10万円）';
+  String get lotteryApplyStep1AmountLabel => '申込口数（1口 = 10万円）';
 
   @override
   String lotteryApplyStep1AmountLabelWithRules(
     Object unitAmount,
     Object maxAmount,
   ) {
-    return '出資金額（1口 = $unitAmount / 上限 $maxAmount）';
+    return '申込口数（1口 = $unitAmount / 上限 $maxAmount）';
+  }
+
+  @override
+  String get lotteryApplyStep1UnitPriceLabel => '1口あたり';
+
+  @override
+  String get lotteryApplyStep1UnitCountLabel => '申込口数';
+
+  @override
+  String get lotteryApplyStep1UnitSuffix => '口';
+
+  @override
+  String get lotteryApplyStep1TotalAmountLabel => '申込総額';
+
+  @override
+  String lotteryApplyStep1MaximumUnitsNotice(Object maxUnits) {
+    return '最大 $maxUnits口まで申込できます。';
+  }
+
+  @override
+  String lotteryApplyStep1MinimumUnitsNotice(Object minUnits) {
+    return '最小申込口数は $minUnits口です。';
   }
 
   @override

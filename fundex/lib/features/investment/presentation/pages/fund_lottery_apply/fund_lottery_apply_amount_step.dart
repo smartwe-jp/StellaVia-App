@@ -10,10 +10,15 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
     required this.balanceValue,
     required this.depositActionLabel,
     required this.investmentAmountLabel,
-    required this.amountController,
-    required this.quickAmounts,
-    required this.selectedAmount,
-    required this.onQuickAmountTap,
+    required this.unitPriceLabel,
+    required this.unitPriceValue,
+    required this.unitCountLabel,
+    required this.unitCountController,
+    required this.onDecreaseUnits,
+    required this.onIncreaseUnits,
+    required this.unitSuffix,
+    required this.totalAmountLabel,
+    required this.totalAmountValue,
     required this.onDepositTap,
     required this.estimatedDistributionLabel,
     required this.estimatedDistributionAmount,
@@ -32,10 +37,15 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
   final String balanceValue;
   final String depositActionLabel;
   final String investmentAmountLabel;
-  final TextEditingController amountController;
-  final List<int> quickAmounts;
-  final int selectedAmount;
-  final ValueChanged<int> onQuickAmountTap;
+  final String unitPriceLabel;
+  final String unitPriceValue;
+  final String unitCountLabel;
+  final TextEditingController unitCountController;
+  final VoidCallback? onDecreaseUnits;
+  final VoidCallback? onIncreaseUnits;
+  final String unitSuffix;
+  final String totalAmountLabel;
+  final String totalAmountValue;
   final VoidCallback onDepositTap;
   final String estimatedDistributionLabel;
   final String estimatedDistributionAmount;
@@ -85,63 +95,126 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
                     color: colors.textSecondary,
                   ),
                 ),
-                //const SizedBox(height: 6),
+                const SizedBox(height: 14),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      '¥',
-                      style: appText.numericTitle.copyWith(
-                        fontSize: 24,
-                        color: colors.textTertiary,
+                      unitPriceLabel,
+                      style: appText.meta.copyWith(color: colors.textSecondary),
+                    ),
+                    const Spacer(),
+                    Text(
+                      unitPriceValue,
+                      style: appText.numericBody.copyWith(
                         fontWeight: FontWeight.w700,
+                        color: colors.primary,
                       ),
                     ),
-                    //const Spacer(),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    _UnitAdjustButton(
+                      icon: Icons.remove_rounded,
+                      onTap: onDecreaseUnits,
+                    ),
+                    const SizedBox(width: 12),
                     Expanded(
-                      child: TextField(
-                        controller: amountController,
-                        textAlign: TextAlign.center,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly,
-                          CurrencyInputFormatter(),
-                        ],
-                        style: appText.numericHeadline.copyWith(
-                          fontSize: 34,
-                          color: colors.textPrimary,
-                          fontWeight: FontWeight.w900,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: colors.surface,
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(color: colors.border, width: 1.5),
                         ),
-                        decoration: const InputDecoration(
-                          isDense: true,
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          filled: false,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(14, 4, 14, 4),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                unitCountLabel,
+                                style: appText.meta.copyWith(
+                                  color: colors.textSecondary,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: <Widget>[
+                                  Flexible(
+                                    child: TextField(
+                                      controller: unitCountController,
+                                      textAlign: TextAlign.center,
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly,
+                                      ],
+                                      style: appText.numericHeadline.copyWith(
+                                        fontSize: 28,
+                                        color: colors.textPrimary,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                      decoration: const InputDecoration(
+                                        isDense: true,
+                                        border: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        filled: false,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 6),
+                                    child: Text(
+                                      unitSuffix,
+                                      style: appText.numericBody.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: colors.textSecondary,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    //const Spacer(),
+                    const SizedBox(width: 12),
+                    _UnitAdjustButton(
+                      icon: Icons.add_rounded,
+                      onTap: onIncreaseUnits,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Divider(color: colors.borderSoft, height: 1),
+                const SizedBox(height: 14),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      totalAmountLabel,
+                      style: appText.bodyMuted.copyWith(
+                        color: colors.textSecondary,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      totalAmountValue,
+                      style: appText.numericTitle.copyWith(
+                        color: colors.textPrimary,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
                   ],
                 ),
               ],
             ),
           ),
-        ),
-        const SizedBox(height: 18),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: quickAmounts
-              .map(
-                (int amount) => _QuickAmountChip(
-                  label: _formatQuickAmount(amount),
-                  selected: selectedAmount == amount,
-                  onTap: () => onQuickAmountTap(amount),
-                ),
-              )
-              .toList(growable: false),
         ),
         if (showBalanceWarning) ...<Widget>[
           const SizedBox(height: 14),
@@ -202,6 +275,35 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
           horizontalPadding: 0,
         ),
       ],
+    );
+  }
+}
+
+class _UnitAdjustButton extends StatelessWidget {
+  const _UnitAdjustButton({required this.icon, required this.onTap});
+
+  final IconData icon;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    return SizedBox.square(
+      dimension: 52,
+      child: OutlinedButton(
+        onPressed: onTap,
+        style: OutlinedButton.styleFrom(
+          padding: EdgeInsets.zero,
+          backgroundColor: colors.surface,
+          foregroundColor: colors.textPrimary,
+          side: BorderSide(color: colors.border, width: 1.5),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
+        child: Icon(icon, size: 22),
+      ),
     );
   }
 }
@@ -270,48 +372,6 @@ class _BalanceCard extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _QuickAmountChip extends StatelessWidget {
-  const _QuickAmountChip({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(10),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: selected ? colors.primarySubtle : colors.surface,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            width: 1.5,
-            color: selected ? colors.primary : colors.border,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Text(
-            label,
-            style: appText.chip.copyWith(
-              color: selected ? colors.primary : colors.textSecondary,
-            ),
-          ),
         ),
       ),
     );
@@ -402,11 +462,4 @@ class _BalanceWarningCard extends StatelessWidget {
       ),
     );
   }
-}
-
-String _formatQuickAmount(int amount) {
-  if (amount % 10000 == 0) {
-    return '${amount ~/ 10000}万';
-  }
-  return amount.toString();
 }

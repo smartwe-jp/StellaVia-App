@@ -36,15 +36,17 @@ class FundLotteryApplyFlowPage extends ConsumerStatefulWidget {
 
 class _FundLotteryApplyFlowPageState
     extends ConsumerState<FundLotteryApplyFlowPage> {
+  static const int _minimumUnits = 1;
   static const int _defaultUnitAmount = 100000;
   static const int _defaultMaxMultiplier = 10;
   static const int _mockStandbyBalance = 650000;
-  static const List<int> _quickAmountMultipliers = <int>[1, 3, 5, 10];
 
-  late final TextEditingController _amountController;
+  late final TextEditingController _unitsController;
 
   late FundLotteryApplyStep _currentStep;
-  int _amount = 0;
+  int _selectedUnits = _minimumUnits;
+  int _currentMaximumUnits = _defaultMaxMultiplier;
+  bool _isSyncingUnitsController = false;
   final Set<int> _checkedDocuments = <int>{};
   bool _agreedToApply = false;
   bool _isApplying = false;
@@ -53,38 +55,92 @@ class _FundLotteryApplyFlowPageState
   void initState() {
     super.initState();
     _currentStep = widget.initialStep;
-    _amountController = TextEditingController();
-    _amountController.addListener(_handleAmountChanged);
+    _unitsController = TextEditingController(text: _minimumUnits.toString());
+    _unitsController.addListener(_handleUnitsChanged);
   }
 
   @override
   void dispose() {
-    _amountController
-      ..removeListener(_handleAmountChanged)
+    _unitsController
+      ..removeListener(_handleUnitsChanged)
       ..dispose();
     super.dispose();
   }
 
-  void _handleAmountChanged() {
-    final digits = _amountController.text.runes
+  void _handleUnitsChanged() {
+    if (_isSyncingUnitsController) {
+      return;
+    }
+    final digits = _unitsController.text.runes
         .where((int rune) => rune >= 48 && rune <= 57)
         .map(String.fromCharCode)
         .join();
-    final parsed = int.tryParse(digits) ?? 0;
-    if (_amount == parsed || !mounted) {
+    final parsed = int.tryParse(digits) ?? _minimumUnits;
+    if (digits.isEmpty || parsed < _minimumUnits) {
+      _showToast(
+        context.l10n.lotteryApplyStep1MinimumUnitsNotice(
+          _minimumUnits.toString(),
+        ),
+      );
+      _setSelectedUnits(_minimumUnits);
+      return;
+    }
+    if (parsed > _currentMaximumUnits) {
+      _showToast(
+        context.l10n.lotteryApplyStep1MaximumUnitsNotice(
+          _currentMaximumUnits.toString(),
+        ),
+      );
+      _setSelectedUnits(_currentMaximumUnits);
+      return;
+    }
+    if (_selectedUnits == parsed || !mounted) {
       return;
     }
     setState(() {
-      _amount = parsed;
+      _selectedUnits = parsed;
     });
   }
 
-  void _selectQuickAmount(int amount) {
-    final formatted = CurrencyInputFormatter.formatCurrency(amount.toString());
-    _amountController.value = TextEditingValue(
-      text: formatted,
-      selection: TextSelection.collapsed(offset: formatted.length),
+  void _setSelectedUnits(int units) {
+    final normalized = units < _minimumUnits ? _minimumUnits : units;
+    final text = normalized.toString();
+    _isSyncingUnitsController = true;
+    _unitsController.value = TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
     );
+    _isSyncingUnitsController = false;
+    if (!mounted || _selectedUnits == normalized) {
+      return;
+    }
+    setState(() {
+      _selectedUnits = normalized;
+    });
+  }
+
+  void _incrementUnits() {
+    if (_selectedUnits >= _currentMaximumUnits) {
+      _showToast(
+        context.l10n.lotteryApplyStep1MaximumUnitsNotice(
+          _currentMaximumUnits.toString(),
+        ),
+      );
+      return;
+    }
+    _setSelectedUnits(_selectedUnits + 1);
+  }
+
+  void _decrementUnits() {
+    if (_selectedUnits <= _minimumUnits) {
+      _showToast(
+        context.l10n.lotteryApplyStep1MinimumUnitsNotice(
+          _minimumUnits.toString(),
+        ),
+      );
+      return;
+    }
+    _setSelectedUnits(_selectedUnits - 1);
   }
 
   void _goToStep(FundLotteryApplyStep step) {
@@ -127,8 +183,6 @@ class _FundLotteryApplyFlowPageState
     }
     AppNotice.show(context, message: message);
   }
-
-  bool get _isBalanceEnough => _amount <= _mockStandbyBalance;
 
   bool _canProceedStep2(int requiredCount) =>
       _checkedDocuments.length == requiredCount;
@@ -237,49 +291,35 @@ class _FundLotteryApplyFlowPageState
     return rawMaximum;
   }
 
-  List<int> _buildQuickAmounts({
-    required int unitAmount,
-    required int maximumAmount,
-  }) {
-    final values = <int>{};
-    for (final multiplier in _quickAmountMultipliers) {
-      final value = unitAmount * multiplier;
-      if (value <= maximumAmount) {
-        values.add(value);
-      }
-    }
-
-    if (values.isEmpty && unitAmount <= maximumAmount) {
-      values.add(unitAmount);
-    }
-
-    final sorted = values.toList(growable: false)..sort();
-    return sorted;
-  }
-
   bool _isAmountInAllowedRange({
+    required int units,
     required int unitAmount,
     required int maximumAmount,
   }) {
-    return _amount > 0 && _amount % unitAmount == 0 && _amount <= maximumAmount;
+    final totalAmount = units * unitAmount;
+    return units > 0 && totalAmount > 0 && totalAmount <= maximumAmount;
   }
 
-  bool _canProceedStep1({required int unitAmount, required int maximumAmount}) {
+  bool _canProceedStep1({
+    required int units,
+    required int unitAmount,
+    required int maximumAmount,
+  }) {
     return _isAmountInAllowedRange(
-          unitAmount: unitAmount,
-          maximumAmount: maximumAmount,
-        ) &&
-        _isBalanceEnough;
+      units: units,
+      unitAmount: unitAmount,
+      maximumAmount: maximumAmount,
+    );
   }
 
   String _buildAmountLabel(
     BuildContext context, {
     required int unitAmount,
-    required int maximumAmount,
+    required int maximumUnits,
   }) {
     return context.l10n.lotteryApplyStep1AmountLabelWithRules(
       _formatCurrency(context, unitAmount),
-      _formatCurrency(context, maximumAmount),
+      '${maximumUnits.toString()}${context.l10n.lotteryApplyStep1UnitSuffix}',
     );
   }
 
@@ -295,6 +335,7 @@ class _FundLotteryApplyFlowPageState
 
   Future<void> _submitLotteryApply({
     required FundProject project,
+    required int units,
     required int unitAmount,
     required int maximumAmount,
   }) async {
@@ -303,13 +344,14 @@ class _FundLotteryApplyFlowPageState
     }
 
     if (!_isAmountInAllowedRange(
+      units: units,
       unitAmount: unitAmount,
       maximumAmount: maximumAmount,
     )) {
       return;
     }
 
-    final units = _amount ~/ unitAmount;
+    final totalAmount = units * unitAmount;
     if (units <= 0) {
       return;
     }
@@ -321,7 +363,7 @@ class _FundLotteryApplyFlowPageState
     try {
       await ref
           .read(submitFundLotteryApplyUseCaseProvider)
-          .call(projectId: project.id, units: units, amount: _amount);
+          .call(projectId: project.id, units: units, amount: totalAmount);
       if (!mounted) {
         return;
       }
@@ -340,18 +382,34 @@ class _FundLotteryApplyFlowPageState
     }
   }
 
-  List<FundLotteryDocumentItem> _buildRequiredDocuments(BuildContext context) {
-    final l10n = context.l10n;
-    return <FundLotteryDocumentItem>[
-      FundLotteryDocumentItem(
-        title: l10n.lotteryApplyDocumentPreContractTitle,
-        subtitle: l10n.lotteryApplyDocumentPreContractSubtitle,
-      ),
-      FundLotteryDocumentItem(
-        title: l10n.lotteryApplyDocumentAgreementTitle,
-        subtitle: l10n.lotteryApplyDocumentAgreementSubtitle,
-      ),
-    ];
+  List<FundLotteryDocumentGroup> _buildRequiredDocuments(
+    BuildContext context,
+    FundProject project,
+  ) {
+    var selectionIndex = 0;
+    return project.pdfDocuments.map((FundProjectPdfDocument document) {
+      final groupTitle = _documentGroupTitle(context, document);
+      final items = _availablePdfUrls(document).asMap().entries.map((
+        MapEntry<int, FundProjectPdfUrl> entry,
+      ) {
+        final itemTitle = _documentLinkTitle(context, entry.value, entry.key);
+        final item = FundLotteryDocumentItem(
+          selectionIndex: selectionIndex++,
+          title: itemTitle,
+          subtitle:
+              _formatDocumentCreatedAt(context, entry.value) ??
+              context.l10n.fundDetailDocumentReady,
+          onOpen: () => _openPdfDocument(
+            context,
+            groupTitle: groupTitle,
+            linkTitle: itemTitle,
+            item: entry.value,
+          ),
+        );
+        return item;
+      }).toList(growable: false);
+      return FundLotteryDocumentGroup(title: groupTitle, items: items);
+    }).toList(growable: false);
   }
 
   @override
@@ -378,19 +436,21 @@ class _FundLotteryApplyFlowPageState
         final lotteryDate = _resolveLotteryDate(context, project);
         final unitAmount = _resolveUnitAmount(project);
         final maximumAmount = _resolveMaximumAmount(project, unitAmount);
-        final quickAmounts = _buildQuickAmounts(
-          unitAmount: unitAmount,
-          maximumAmount: maximumAmount,
-        );
+        final resolvedMaximumUnits = (maximumAmount ~/ unitAmount) <= 0
+            ? _minimumUnits
+            : (maximumAmount ~/ unitAmount);
+        _currentMaximumUnits = resolvedMaximumUnits;
+        final totalAmount = _selectedUnits * unitAmount;
         final canProceedStep1 = _canProceedStep1(
+          units: _selectedUnits,
           unitAmount: unitAmount,
           maximumAmount: maximumAmount,
         );
-        final exceededMaximum = _amount > maximumAmount;
-        final estimatedDistribution = (_amount * _resolveYield(project) / 100)
-            .round();
+        final exceededMaximum = totalAmount > maximumAmount;
+        final estimatedDistribution =
+            (totalAmount * _resolveYield(project) / 100).round();
         final formatter = _currencyFormatter(context);
-        final amountText = formatter.format(_amount);
+        final amountText = formatter.format(totalAmount);
         final deadline = DateTime.now().add(const Duration(days: 8));
         final deadlineAt = DateTime(
           deadline.year,
@@ -399,7 +459,12 @@ class _FundLotteryApplyFlowPageState
           23,
           59,
         );
-        final requiredDocuments = _buildRequiredDocuments(context);
+        final requiredDocuments = _buildRequiredDocuments(context, project);
+        final requiredDocumentCount = requiredDocuments.fold<int>(
+          0,
+          (int total, FundLotteryDocumentGroup group) =>
+              total + group.items.length,
+        );
 
         return PopScope<void>(
           canPop: _currentStep.isFirst,
@@ -458,30 +523,33 @@ class _FundLotteryApplyFlowPageState
                             investmentAmountLabel: _buildAmountLabel(
                               context,
                               unitAmount: unitAmount,
-                              maximumAmount: maximumAmount,
+                              maximumUnits: resolvedMaximumUnits,
                             ),
-                            amountController: _amountController,
-                            quickAmounts: quickAmounts,
-                            selectedAmount: _amount,
-                            onQuickAmountTap: _selectQuickAmount,
+                            unitPriceLabel:
+                                l10n.lotteryApplyStep1UnitPriceLabel,
+                            unitPriceValue: _formatCurrency(
+                              context,
+                              unitAmount,
+                            ),
+                            unitCountLabel:
+                                l10n.lotteryApplyStep1UnitCountLabel,
+                            unitCountController: _unitsController,
+                            onDecreaseUnits: _decrementUnits,
+                            onIncreaseUnits: _incrementUnits,
+                            unitSuffix: l10n.lotteryApplyStep1UnitSuffix,
+                            totalAmountLabel:
+                                l10n.lotteryApplyStep1TotalAmountLabel,
+                            totalAmountValue: amountText,
                             onDepositTap: () =>
                                 _showToast(l10n.myPageDepositComingSoon),
                             showBalanceWarning:
-                                _amount > 0 &&
-                                (exceededMaximum || !_isBalanceEnough),
-                            balanceWarningTitle: exceededMaximum
-                                ? l10n.lotteryApplyStep1MaximumWarningTitle
-                                : l10n.lotteryApplyStep1BalanceWarningTitle,
-                            balanceWarningBody: exceededMaximum
-                                ? l10n.lotteryApplyStep1MaximumWarningBody
-                                : l10n.lotteryApplyStep1BalanceWarningBody,
-                            balanceWarningActionLabel: exceededMaximum
-                                ? null
-                                : l10n.lotteryApplyStep1BalanceWarningAction,
-                            onBalanceWarningActionTap: exceededMaximum
-                                ? null
-                                : () =>
-                                      _showToast(l10n.myPageDepositComingSoon),
+                                totalAmount > 0 && exceededMaximum,
+                            balanceWarningTitle:
+                                l10n.lotteryApplyStep1MaximumWarningTitle,
+                            balanceWarningBody:
+                                l10n.lotteryApplyStep1MaximumWarningBody,
+                            balanceWarningActionLabel: null,
+                            onBalanceWarningActionTap: null,
                             estimatedDistributionLabel: l10n
                                 .lotteryApplyStep1EstimatedDistributionLabel,
                             estimatedDistributionAmount: formatter.format(
@@ -496,7 +564,7 @@ class _FundLotteryApplyFlowPageState
                           FundLotteryApplyDocumentsStep(
                             title: l10n.lotteryApplyStep2Title,
                             description: l10n.lotteryApplyStep2Description,
-                            documents: requiredDocuments,
+                            documentGroups: requiredDocuments,
                             checkedIndexes: _checkedDocuments,
                             onToggleDocument: (int index) {
                               setState(() {
@@ -509,7 +577,7 @@ class _FundLotteryApplyFlowPageState
                             },
                             infoBody: l10n.lotteryApplyStep2InfoBody,
                             nextButtonLabel: l10n.lotteryApplyStep2NextAction,
-                            onNext: _canProceedStep2(requiredDocuments.length)
+                            onNext: _canProceedStep2(requiredDocumentCount)
                                 ? _goNextStep
                                 : null,
                           ),
@@ -554,6 +622,7 @@ class _FundLotteryApplyFlowPageState
                             onApply: _agreedToApply && !_isApplying
                                 ? () => _submitLotteryApply(
                                     project: project,
+                                    units: _selectedUnits,
                                     unitAmount: unitAmount,
                                     maximumAmount: maximumAmount,
                                   )
@@ -719,4 +788,82 @@ class _FlowErrorScaffold extends StatelessWidget {
       ),
     );
   }
+}
+
+List<FundProjectPdfUrl> _availablePdfUrls(FundProjectPdfDocument document) {
+  final list = <FundProjectPdfUrl>[];
+  for (final item in document.urls) {
+    final url = item.url?.trim();
+    if (url != null && url.isNotEmpty) {
+      list.add(item);
+    }
+  }
+  return List<FundProjectPdfUrl>.unmodifiable(list);
+}
+
+String _documentGroupTitle(
+  BuildContext context,
+  FundProjectPdfDocument document,
+) {
+  final title = document.description?.trim();
+  if (title != null && title.isNotEmpty) {
+    return title;
+  }
+  return context.l10n.fundDetailDocumentsTitle;
+}
+
+String _documentLinkTitle(
+  BuildContext context,
+  FundProjectPdfUrl item,
+  int index,
+) {
+  final name = item.name?.trim();
+  if (name != null && name.isNotEmpty) {
+    return name;
+  }
+  return context.l10n.fundDetailDocumentPickerItem(index + 1);
+}
+
+String? _formatDocumentCreatedAt(BuildContext context, FundProjectPdfUrl item) {
+  final raw = item.createTime?.trim();
+  if (raw == null || raw.isEmpty) {
+    return null;
+  }
+  final parsed = DateTime.tryParse(raw);
+  if (parsed == null) {
+    return raw;
+  }
+  final formatter = DateFormat.yMd(
+    Localizations.localeOf(context).toLanguageTag(),
+  ).add_Hm();
+  return formatter.format(parsed.toLocal());
+}
+
+void _openPdfDocument(
+  BuildContext context, {
+  required String groupTitle,
+  required String linkTitle,
+  required FundProjectPdfUrl item,
+}) {
+  final selectedUrl = item.url?.trim();
+  if (selectedUrl == null || selectedUrl.isEmpty) {
+    return;
+  }
+  final l10n = context.l10n;
+  final viewerTexts = AppPdfViewerTexts(
+    pageTitle: l10n.pdfViewerPageTitle,
+    openExternalTooltip: l10n.pdfViewerOpenExternalTooltip,
+    openExternalLabel: l10n.pdfViewerOpenExternalLabel,
+    loadingLabel: l10n.pdfViewerLoadingLabel,
+    loadFailedLabel: l10n.pdfViewerLoadFailedLabel,
+    retryLabel: l10n.fundListRetry,
+    invalidUrlNotice: l10n.pdfViewerInvalidUrlNotice,
+    openExternalFailedNotice: l10n.pdfViewerOpenExternalFailedNotice,
+  );
+  openAppPdfViewer(
+    context,
+    url: selectedUrl,
+    title: linkTitle.isNotEmpty ? linkTitle : groupTitle,
+    texts: viewerTexts,
+  );
 }

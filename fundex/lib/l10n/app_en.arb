@@ -463,15 +463,31 @@
   "fundDetailUnavailableAction": "Unavailable now",
   "fundDetailApplyComingSoonToast": "The application flow will be connected in the next implementation.",
   "lotteryApplyFlowTitle": "Lottery Application",
-  "lotteryApplyStep1Title": "1. Enter investment amount",
+  "lotteryApplyStep1Title": "1. Enter units",
   "lotteryApplyStep1BalanceLabel": "💰 Standby cash balance",
   "lotteryApplyStep1DepositAction": "Deposit",
-  "lotteryApplyStep1AmountLabel": "Investment amount (1 unit = ¥100,000)",
-  "lotteryApplyStep1AmountLabelWithRules": "Investment amount (1 unit = {unitAmount} / max {maxAmount})",
+  "lotteryApplyStep1AmountLabel": "Units to apply (1 unit = ¥100,000)",
+  "lotteryApplyStep1AmountLabelWithRules": "Units to apply (1 unit = {unitAmount} / max {maxAmount})",
   "@lotteryApplyStep1AmountLabelWithRules": {
     "placeholders": {
       "unitAmount": {},
       "maxAmount": {}
+    }
+  },
+  "lotteryApplyStep1UnitPriceLabel": "Price per unit",
+  "lotteryApplyStep1UnitCountLabel": "Units",
+  "lotteryApplyStep1UnitSuffix": "units",
+  "lotteryApplyStep1TotalAmountLabel": "Order total",
+  "lotteryApplyStep1MaximumUnitsNotice": "You can apply for up to {maxUnits} units.",
+  "@lotteryApplyStep1MaximumUnitsNotice": {
+    "placeholders": {
+      "maxUnits": {}
+    }
+  },
+  "lotteryApplyStep1MinimumUnitsNotice": "The minimum order is {minUnits} unit.",
+  "@lotteryApplyStep1MinimumUnitsNotice": {
+    "placeholders": {
+      "minUnits": {}
     }
   },
   "lotteryApplyStep1BalanceWarningTitle": "Insufficient standby cash",

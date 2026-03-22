@@ -1250,7 +1250,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get lotteryApplyFlowTitle => '抽签申请';
 
   @override
-  String get lotteryApplyStep1Title => '1. 输入出资金额';
+  String get lotteryApplyStep1Title => '1. 输入申购口数';
 
   @override
   String get lotteryApplyStep1BalanceLabel => '💰 待机资金余额';
@@ -1259,14 +1259,36 @@ class AppLocalizationsZh extends AppLocalizations {
   String get lotteryApplyStep1DepositAction => '去入金';
 
   @override
-  String get lotteryApplyStep1AmountLabel => '出资金额（1口 = 10万日元）';
+  String get lotteryApplyStep1AmountLabel => '申购口数（1口 = 10万日元）';
 
   @override
   String lotteryApplyStep1AmountLabelWithRules(
     Object unitAmount,
     Object maxAmount,
   ) {
-    return '出资金额（1口 = $unitAmount / 上限 $maxAmount）';
+    return '申购口数（1口 = $unitAmount / 上限 $maxAmount）';
+  }
+
+  @override
+  String get lotteryApplyStep1UnitPriceLabel => '每口金额';
+
+  @override
+  String get lotteryApplyStep1UnitCountLabel => '申购口数';
+
+  @override
+  String get lotteryApplyStep1UnitSuffix => '口';
+
+  @override
+  String get lotteryApplyStep1TotalAmountLabel => '申购总额';
+
+  @override
+  String lotteryApplyStep1MaximumUnitsNotice(Object maxUnits) {
+    return '最多只能申购 $maxUnits 口。';
+  }
+
+  @override
+  String lotteryApplyStep1MinimumUnitsNotice(Object minUnits) {
+    return '最少申购 $minUnits 口。';
   }
 
   @override
@@ -4173,7 +4195,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get lotteryApplyFlowTitle => '抽籤申請';
 
   @override
-  String get lotteryApplyStep1Title => '1. 輸入出資金額';
+  String get lotteryApplyStep1Title => '1. 輸入申購口數';
 
   @override
   String get lotteryApplyStep1BalanceLabel => '💰 待機資金餘額';
@@ -4182,14 +4204,36 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get lotteryApplyStep1DepositAction => '去入金';
 
   @override
-  String get lotteryApplyStep1AmountLabel => '出資金額（1口 = 10萬日圓）';
+  String get lotteryApplyStep1AmountLabel => '申購口數（1口 = 10萬日圓）';
 
   @override
   String lotteryApplyStep1AmountLabelWithRules(
     Object unitAmount,
     Object maxAmount,
   ) {
-    return '出資金額（1口 = $unitAmount / 上限 $maxAmount）';
+    return '申購口數（1口 = $unitAmount / 上限 $maxAmount）';
+  }
+
+  @override
+  String get lotteryApplyStep1UnitPriceLabel => '每口金額';
+
+  @override
+  String get lotteryApplyStep1UnitCountLabel => '申購口數';
+
+  @override
+  String get lotteryApplyStep1UnitSuffix => '口';
+
+  @override
+  String get lotteryApplyStep1TotalAmountLabel => '申購總額';
+
+  @override
+  String lotteryApplyStep1MaximumUnitsNotice(Object maxUnits) {
+    return '最多只能申購 $maxUnits 口。';
+  }
+
+  @override
+  String lotteryApplyStep1MinimumUnitsNotice(Object minUnits) {
+    return '最少申購 $minUnits 口。';
   }
 
   @override

@@ -1,8 +1,22 @@
 class FundLotteryDocumentItem {
-  const FundLotteryDocumentItem({required this.title, required this.subtitle});
+  const FundLotteryDocumentItem({
+    required this.selectionIndex,
+    required this.title,
+    required this.subtitle,
+    this.onOpen,
+  });
 
+  final int selectionIndex;
   final String title;
   final String subtitle;
+  final void Function()? onOpen;
+}
+
+class FundLotteryDocumentGroup {
+  const FundLotteryDocumentGroup({required this.title, required this.items});
+
+  final String title;
+  final List<FundLotteryDocumentItem> items;
 }
 
 class FundLotterySummaryRow {

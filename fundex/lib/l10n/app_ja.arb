@@ -463,15 +463,31 @@
   "fundDetailUnavailableAction": "現在申込できません",
   "fundDetailApplyComingSoonToast": "申込フローは次の実装で接続します。",
   "lotteryApplyFlowTitle": "抽選申込",
-  "lotteryApplyStep1Title": "① 出資金額を入力",
+  "lotteryApplyStep1Title": "① 申込口数を入力",
   "lotteryApplyStep1BalanceLabel": "💰 待機資金残高",
   "lotteryApplyStep1DepositAction": "入金する",
-  "lotteryApplyStep1AmountLabel": "出資金額（1口 = 10万円）",
-  "lotteryApplyStep1AmountLabelWithRules": "出資金額（1口 = {unitAmount} / 上限 {maxAmount}）",
+  "lotteryApplyStep1AmountLabel": "申込口数（1口 = 10万円）",
+  "lotteryApplyStep1AmountLabelWithRules": "申込口数（1口 = {unitAmount} / 上限 {maxAmount}）",
   "@lotteryApplyStep1AmountLabelWithRules": {
     "placeholders": {
       "unitAmount": {},
       "maxAmount": {}
+    }
+  },
+  "lotteryApplyStep1UnitPriceLabel": "1口あたり",
+  "lotteryApplyStep1UnitCountLabel": "申込口数",
+  "lotteryApplyStep1UnitSuffix": "口",
+  "lotteryApplyStep1TotalAmountLabel": "申込総額",
+  "lotteryApplyStep1MaximumUnitsNotice": "最大 {maxUnits}口まで申込できます。",
+  "@lotteryApplyStep1MaximumUnitsNotice": {
+    "placeholders": {
+      "maxUnits": {}
+    }
+  },
+  "lotteryApplyStep1MinimumUnitsNotice": "最小申込口数は {minUnits}口です。",
+  "@lotteryApplyStep1MinimumUnitsNotice": {
+    "placeholders": {
+      "minUnits": {}
     }
   },
   "lotteryApplyStep1BalanceWarningTitle": "待機資金が不足しています",
