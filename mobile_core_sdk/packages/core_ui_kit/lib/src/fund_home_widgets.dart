@@ -976,7 +976,7 @@ class FundFeaturedFundCard extends StatelessWidget {
                                     Text(
                                       data.annualYield,
                                       style: appText.numericHeadline.copyWith(
-                                        color: colors.danger,
+                                        color: colors.success,
                                         height: 1.0,
                                       ),
                                     ),
@@ -1178,7 +1178,7 @@ class FundActiveFundCard extends StatelessWidget {
                       Text(
                         data.annualYield,
                         style: appText.numericTitle.copyWith(
-                          color: colors.danger,
+                          color: colors.success,
                         ),
                       ),
                     ],

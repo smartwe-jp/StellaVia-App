@@ -26,9 +26,9 @@ class FundProjectDetailYieldHighlightCard extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: <Color>[colors.dangerSubtle, colors.dangerSoft],
+          colors: <Color>[colors.successSubtle, colors.successSoft],
         ),
-        border: Border.all(color: colors.dangerBorder, width: 1.5),
+        border: Border.all(color: colors.successBorder, width: 1.5),
         borderRadius: BorderRadius.circular(UiTokens.radius16),
       ),
       child: Column(
@@ -71,13 +71,13 @@ class _YieldValueText extends StatelessWidget {
     final appText = theme.appTextTheme;
     final parsed = _parseYield(value);
     final numberStyle = appText.numericDisplay.copyWith(
-      color: colors.danger,
+      color: colors.success,
       fontSize: 58,
       height: 0.95,
       letterSpacing: -1.2,
     );
     final suffixStyle = appText.numericTitle.copyWith(
-      color: colors.danger,
+      color: colors.success,
       fontSize: 24,
       fontWeight: FontWeight.w900,
       height: 1.1,

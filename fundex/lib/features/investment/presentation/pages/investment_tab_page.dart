@@ -783,7 +783,7 @@ class _FundProjectCard extends StatelessWidget {
                               child: _CardStatCell(
                                 label: yieldLabel,
                                 value: annualYieldText,
-                                valueColor: colors.danger,
+                                valueColor: colors.success,
                                 useNumericValueStyle: true,
                               ),
                             ),

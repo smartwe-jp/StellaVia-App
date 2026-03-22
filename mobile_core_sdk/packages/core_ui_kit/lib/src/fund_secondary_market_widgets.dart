@@ -173,7 +173,7 @@ class FundSecondaryMarketCard extends StatelessWidget {
                     Text(
                       data.annualYield,
                       style: appText.numericHeadline.copyWith(
-                        color: colors.danger,
+                        color: colors.success,
                         height: 1.0,
                       ),
                     ),
