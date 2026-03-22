@@ -86,8 +86,8 @@ class MainShellPage extends ConsumerWidget {
                 label: l10n.mainTabHome,
               ),
               NavigationDestination(
-                icon: const Icon(Icons.show_chart_rounded),
-                selectedIcon: const Icon(Icons.show_chart_rounded),
+                icon: const Icon(Icons.insert_chart_outlined_outlined),
+                selectedIcon: const Icon(Icons.insert_chart_outlined_outlined),
                 label: l10n.mainTabInvestment,
               ),
               NavigationDestination(
