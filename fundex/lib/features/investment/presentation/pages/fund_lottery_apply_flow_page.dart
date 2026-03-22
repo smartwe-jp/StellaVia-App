@@ -48,6 +48,7 @@ class _FundLotteryApplyFlowPageState
   int _currentMaximumUnits = _defaultMaxMultiplier;
   bool _isSyncingUnitsController = false;
   final Set<int> _checkedDocuments = <int>{};
+  final Set<int> _openedDocuments = <int>{};
   bool _agreedToApply = false;
   bool _isApplying = false;
 
@@ -392,19 +393,27 @@ class _FundLotteryApplyFlowPageState
       final items = _availablePdfUrls(document).asMap().entries.map((
         MapEntry<int, FundProjectPdfUrl> entry,
       ) {
+        final currentSelectionIndex = selectionIndex++;
         final itemTitle = _documentLinkTitle(context, entry.value, entry.key);
         final item = FundLotteryDocumentItem(
-          selectionIndex: selectionIndex++,
+          selectionIndex: currentSelectionIndex,
           title: itemTitle,
           subtitle:
               _formatDocumentCreatedAt(context, entry.value) ??
               context.l10n.fundDetailDocumentReady,
-          onOpen: () => _openPdfDocument(
-            context,
-            groupTitle: groupTitle,
-            linkTitle: itemTitle,
-            item: entry.value,
-          ),
+          onOpen: () {
+            if (mounted) {
+              setState(() {
+                _openedDocuments.add(currentSelectionIndex);
+              });
+            }
+            _openPdfDocument(
+              context,
+              groupTitle: groupTitle,
+              linkTitle: itemTitle,
+              item: entry.value,
+            );
+          },
         );
         return item;
       }).toList(growable: false);
@@ -566,7 +575,14 @@ class _FundLotteryApplyFlowPageState
                             description: l10n.lotteryApplyStep2Description,
                             documentGroups: requiredDocuments,
                             checkedIndexes: _checkedDocuments,
+                            openedIndexes: _openedDocuments,
                             onToggleDocument: (int index) {
+                              if (!_openedDocuments.contains(index)) {
+                                _showToast(
+                                  l10n.lotteryApplyStep2OpenDocumentFirstNotice,
+                                );
+                                return;
+                              }
                               setState(() {
                                 if (_checkedDocuments.contains(index)) {
                                   _checkedDocuments.remove(index);

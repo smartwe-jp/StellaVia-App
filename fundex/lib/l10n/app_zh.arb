@@ -500,6 +500,7 @@
   "lotteryApplyStep1NextAction": "下一步：确认书面",
   "lotteryApplyStep2Title": "2. 确认合同书面",
   "lotteryApplyStep2Description": "以下书面是投资判断所需内容，请全部确认后勾选。",
+  "lotteryApplyStep2OpenDocumentFirstNotice": "请先打开并查看文档。",
   "lotteryApplyDocumentPreContractTitle": "合同缔结前交付书面",
   "lotteryApplyDocumentPreContractSubtitle": "PDF 12页｜包含重要事项与风险说明",
   "lotteryApplyDocumentAgreementTitle": "匿名组合合同条款",

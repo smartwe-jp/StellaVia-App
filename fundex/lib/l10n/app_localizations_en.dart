@@ -1400,6 +1400,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'These documents are required for your investment decision. Please review and check all items.';
 
   @override
+  String get lotteryApplyStep2OpenDocumentFirstNotice =>
+      'Please open and review the document first.';
+
+  @override
   String get lotteryApplyDocumentPreContractTitle =>
       'Pre-contract disclosure document';
 

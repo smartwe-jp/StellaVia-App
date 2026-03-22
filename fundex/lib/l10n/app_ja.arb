@@ -500,6 +500,7 @@
   "lotteryApplyStep1NextAction": "次へ：書面確認",
   "lotteryApplyStep2Title": "② 契約書面の確認",
   "lotteryApplyStep2Description": "投資判断に必要な書面です。すべてご確認のうえ、チェックしてください。",
+  "lotteryApplyStep2OpenDocumentFirstNotice": "先に書面を開いてご確認ください。",
   "lotteryApplyDocumentPreContractTitle": "契約締結前交付書面",
   "lotteryApplyDocumentPreContractSubtitle": "PDF 12ページ ｜ 重要事項・リスク説明を含む",
   "lotteryApplyDocumentAgreementTitle": "匿名組合契約約款",

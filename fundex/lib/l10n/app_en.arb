@@ -500,6 +500,7 @@
   "lotteryApplyStep1NextAction": "Next: Documents",
   "lotteryApplyStep2Title": "2. Review contract documents",
   "lotteryApplyStep2Description": "These documents are required for your investment decision. Please review and check all items.",
+  "lotteryApplyStep2OpenDocumentFirstNotice": "Please open and review the document first.",
   "lotteryApplyDocumentPreContractTitle": "Pre-contract disclosure document",
   "lotteryApplyDocumentPreContractSubtitle": "PDF 12 pages | Includes key terms and risk notes",
   "lotteryApplyDocumentAgreementTitle": "Silent partnership terms",

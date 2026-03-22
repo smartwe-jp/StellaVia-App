@@ -500,6 +500,7 @@
   "lotteryApplyStep1NextAction": "下一步：確認書面",
   "lotteryApplyStep2Title": "2. 確認合約書面",
   "lotteryApplyStep2Description": "以下書面為投資判斷所需內容，請全部確認後再勾選。",
+  "lotteryApplyStep2OpenDocumentFirstNotice": "請先開啟並查看文件。",
   "lotteryApplyDocumentPreContractTitle": "締約前交付書面",
   "lotteryApplyDocumentPreContractSubtitle": "PDF 12頁｜包含重要事項與風險說明",
   "lotteryApplyDocumentAgreementTitle": "匿名組合契約條款",

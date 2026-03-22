@@ -11,6 +11,7 @@ class FundLotteryApplyDocumentsStep extends StatelessWidget {
     required this.description,
     required this.documentGroups,
     required this.checkedIndexes,
+    required this.openedIndexes,
     required this.onToggleDocument,
     required this.infoBody,
     required this.nextButtonLabel,
@@ -21,6 +22,7 @@ class FundLotteryApplyDocumentsStep extends StatelessWidget {
   final String description;
   final List<FundLotteryDocumentGroup> documentGroups;
   final Set<int> checkedIndexes;
+  final Set<int> openedIndexes;
   final ValueChanged<int> onToggleDocument;
   final String infoBody;
   final String nextButtonLabel;
@@ -55,6 +57,7 @@ class FundLotteryApplyDocumentsStep extends StatelessWidget {
             child: _DocumentGroupSection(
               group: documentGroups[groupIndex],
               checkedIndexes: checkedIndexes,
+              openedIndexes: openedIndexes,
               onToggleDocument: onToggleDocument,
             ),
           ),
@@ -102,11 +105,13 @@ class _DocumentGroupSection extends StatelessWidget {
   const _DocumentGroupSection({
     required this.group,
     required this.checkedIndexes,
+    required this.openedIndexes,
     required this.onToggleDocument,
   });
 
   final FundLotteryDocumentGroup group;
   final Set<int> checkedIndexes;
+  final Set<int> openedIndexes;
   final ValueChanged<int> onToggleDocument;
 
   @override
@@ -140,6 +145,9 @@ class _DocumentGroupSection extends StatelessWidget {
                   checked: checkedIndexes.contains(
                     group.items[index].selectionIndex,
                   ),
+                  canCheck: openedIndexes.contains(
+                    group.items[index].selectionIndex,
+                  ),
                   onTap: () =>
                       onToggleDocument(group.items[index].selectionIndex),
                   onOpen: group.items[index].onOpen,
@@ -159,6 +167,7 @@ class _DocumentTile extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.checked,
+    required this.canCheck,
     required this.onTap,
     this.onOpen,
   });
@@ -166,6 +175,7 @@ class _DocumentTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final bool checked;
+  final bool canCheck;
   final VoidCallback onTap;
   final VoidCallback? onOpen;
 
@@ -268,10 +278,18 @@ class _DocumentTile extends StatelessWidget {
                   width: 20,
                   height: 20,
                   decoration: BoxDecoration(
-                    color: checked ? colors.primary : colors.surface,
+                    color: checked
+                        ? colors.primary
+                        : canCheck
+                        ? colors.surface
+                        : colors.surfaceAlt,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(
-                      color: checked ? colors.primary : colors.border,
+                      color: checked
+                          ? colors.primary
+                          : canCheck
+                          ? colors.border
+                          : colors.disabled,
                       width: 2,
                     ),
                   ),

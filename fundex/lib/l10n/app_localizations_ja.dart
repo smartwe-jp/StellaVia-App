@@ -1330,6 +1330,9 @@ class AppLocalizationsJa extends AppLocalizations {
       '投資判断に必要な書面です。すべてご確認のうえ、チェックしてください。';
 
   @override
+  String get lotteryApplyStep2OpenDocumentFirstNotice => '先に書面を開いてご確認ください。';
+
+  @override
   String get lotteryApplyDocumentPreContractTitle => '契約締結前交付書面';
 
   @override

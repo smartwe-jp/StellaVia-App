@@ -2666,6 +2666,12 @@ abstract class AppLocalizations {
   /// **'These documents are required for your investment decision. Please review and check all items.'**
   String get lotteryApplyStep2Description;
 
+  /// No description provided for @lotteryApplyStep2OpenDocumentFirstNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Please open and review the document first.'**
+  String get lotteryApplyStep2OpenDocumentFirstNotice;
+
   /// No description provided for @lotteryApplyDocumentPreContractTitle.
   ///
   /// In en, this message translates to:

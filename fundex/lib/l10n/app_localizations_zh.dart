@@ -1324,6 +1324,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get lotteryApplyStep2Description => '以下书面是投资判断所需内容，请全部确认后勾选。';
 
   @override
+  String get lotteryApplyStep2OpenDocumentFirstNotice => '请先打开并查看文档。';
+
+  @override
   String get lotteryApplyDocumentPreContractTitle => '合同缔结前交付书面';
 
   @override
@@ -4267,6 +4270,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get lotteryApplyStep2Description => '以下書面為投資判斷所需內容，請全部確認後再勾選。';
+
+  @override
+  String get lotteryApplyStep2OpenDocumentFirstNotice => '請先開啟並查看文件。';
 
   @override
   String get lotteryApplyDocumentPreContractTitle => '締約前交付書面';
