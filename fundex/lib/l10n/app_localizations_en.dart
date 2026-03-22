@@ -2413,10 +2413,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String get secondaryMarketRemainingUnitsLabel => 'Remaining Units';
 
   @override
+  String get secondaryMarketCompletionRateLabel => 'Fill Rate';
+
+  @override
+  String get secondaryMarketPricePerUnitCaption => 'Per unit';
+
+  @override
+  String get secondaryMarketOverviewTitle => 'Order Overview';
+
+  @override
+  String get secondaryMarketUpdateTimeLabel => 'Updated At';
+
+  @override
+  String get secondaryMarketOrderIdLabel => 'Order ID';
+
+  @override
+  String get secondaryMarketActivityTitle => 'Market Activity';
+
+  @override
+  String get secondaryMarketApplicationsCountLabel => 'Applications';
+
+  @override
+  String get secondaryMarketDealsCountLabel => 'Deals';
+
+  @override
+  String get secondaryMarketLatestApplicationLabel => 'Latest Application';
+
+  @override
+  String get secondaryMarketLatestDealLabel => 'Latest Deal';
+
+  @override
   String get secondaryMarketDocumentsTitle => 'Related Documents';
 
   @override
   String get secondaryMarketDocumentPending => 'Preparing';
+
+  @override
+  String get secondaryMarketDocumentOpenAction => 'Open Document';
 
   @override
   String get secondaryMarketBuyOrderTitle => 'Buy Order';

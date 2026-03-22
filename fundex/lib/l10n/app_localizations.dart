@@ -4526,6 +4526,66 @@ abstract class AppLocalizations {
   /// **'Remaining Units'**
   String get secondaryMarketRemainingUnitsLabel;
 
+  /// No description provided for @secondaryMarketCompletionRateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill Rate'**
+  String get secondaryMarketCompletionRateLabel;
+
+  /// No description provided for @secondaryMarketPricePerUnitCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'Per unit'**
+  String get secondaryMarketPricePerUnitCaption;
+
+  /// No description provided for @secondaryMarketOverviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Overview'**
+  String get secondaryMarketOverviewTitle;
+
+  /// No description provided for @secondaryMarketUpdateTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated At'**
+  String get secondaryMarketUpdateTimeLabel;
+
+  /// No description provided for @secondaryMarketOrderIdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Order ID'**
+  String get secondaryMarketOrderIdLabel;
+
+  /// No description provided for @secondaryMarketActivityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Market Activity'**
+  String get secondaryMarketActivityTitle;
+
+  /// No description provided for @secondaryMarketApplicationsCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Applications'**
+  String get secondaryMarketApplicationsCountLabel;
+
+  /// No description provided for @secondaryMarketDealsCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Deals'**
+  String get secondaryMarketDealsCountLabel;
+
+  /// No description provided for @secondaryMarketLatestApplicationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest Application'**
+  String get secondaryMarketLatestApplicationLabel;
+
+  /// No description provided for @secondaryMarketLatestDealLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest Deal'**
+  String get secondaryMarketLatestDealLabel;
+
   /// No description provided for @secondaryMarketDocumentsTitle.
   ///
   /// In en, this message translates to:
@@ -4537,6 +4597,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Preparing'**
   String get secondaryMarketDocumentPending;
+
+  /// No description provided for @secondaryMarketDocumentOpenAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Document'**
+  String get secondaryMarketDocumentOpenAction;
 
   /// No description provided for @secondaryMarketBuyOrderTitle.
   ///

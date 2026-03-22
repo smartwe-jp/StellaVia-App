@@ -2293,10 +2293,43 @@ class AppLocalizationsJa extends AppLocalizations {
   String get secondaryMarketRemainingUnitsLabel => '残口数';
 
   @override
+  String get secondaryMarketCompletionRateLabel => '成約率';
+
+  @override
+  String get secondaryMarketPricePerUnitCaption => '1口あたり';
+
+  @override
+  String get secondaryMarketOverviewTitle => '取引概要';
+
+  @override
+  String get secondaryMarketUpdateTimeLabel => '更新時間';
+
+  @override
+  String get secondaryMarketOrderIdLabel => '注文ID';
+
+  @override
+  String get secondaryMarketActivityTitle => 'マーケット動向';
+
+  @override
+  String get secondaryMarketApplicationsCountLabel => '申込件数';
+
+  @override
+  String get secondaryMarketDealsCountLabel => '成立件数';
+
+  @override
+  String get secondaryMarketLatestApplicationLabel => '最新申込';
+
+  @override
+  String get secondaryMarketLatestDealLabel => '最新成立';
+
+  @override
   String get secondaryMarketDocumentsTitle => '関連書面';
 
   @override
   String get secondaryMarketDocumentPending => '資料準備中';
+
+  @override
+  String get secondaryMarketDocumentOpenAction => '閲覧する';
 
   @override
   String get secondaryMarketBuyOrderTitle => '購入注文';

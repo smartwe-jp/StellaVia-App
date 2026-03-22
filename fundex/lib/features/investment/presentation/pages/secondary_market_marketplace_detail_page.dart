@@ -7,7 +7,9 @@ import 'package:intl/intl.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
+import '../support/secondary_market_marketplace_presenter.dart';
 import '../support/secondary_market_trade_support.dart';
+import '../widgets/secondary_market_marketplace_detail_sections.dart';
 
 class SecondaryMarketMarketplaceDetailPage extends ConsumerWidget {
   const SecondaryMarketMarketplaceDetailPage({
@@ -86,7 +88,7 @@ class SecondaryMarketMarketplaceDetailPage extends ConsumerWidget {
                 child: Center(child: CircularProgressIndicator.adaptive()),
               )
             else if (record == null)
-              _StateCard(
+              SecondaryMarketMarketplaceStateCard(
                 message: asyncMarketplace.hasError
                     ? l10n.secondaryMarketDetailLoadError
                     : l10n.secondaryMarketDetailUnavailable,
@@ -96,71 +98,113 @@ class SecondaryMarketMarketplaceDetailPage extends ConsumerWidget {
                 },
               )
             else ...<Widget>[
-              FundMyPageProjectCard(
+              SecondaryMarketDetailHeroCard(
+                marketLabel: l10n.homeFreeMarketTitle,
                 title: record.projectName,
-                trailing: _StatusBadge(
-                  label: l10n.homeFreeMarketStatusListed,
-                  backgroundColor: colors.warningSubtle,
-                  foregroundColor: colors.warningAction,
+                statusLabel: l10n.homeFreeMarketStatusListed,
+                statusBackgroundColor: colors.warningSubtle,
+                statusForegroundColor: colors.warningAction,
+                investorTypeLabel: buildSecondaryMarketInvestorTypeDisplay(
+                  record,
                 ),
-                rows: <FundLabeledValue>[
-                  FundLabeledValue(
-                    label: l10n.secondaryMarketOrderTimeLabel,
-                    value:
-                        _formatDateTime(record.createTime) ??
-                        l10n.myPageResultAnnouncementTbd,
-                  ),
-                  FundLabeledValue(
-                    label: l10n.secondaryMarketInvestorTypeLabel,
-                    value: _buildInvestorTypeLabel(record),
-                  ),
-                  FundLabeledValue(
-                    label: l10n.secondaryMarketSellUnitsLabel,
-                    value:
-                        '${record.sellNum ?? 0}${l10n.myPageResaleUnitsSuffix}',
-                  ),
-                  FundLabeledValue(
-                    label: l10n.secondaryMarketSoldUnitsLabel,
-                    value:
-                        '${record.soldNum ?? 0}${l10n.myPageResaleUnitsSuffix}',
-                  ),
-                  FundLabeledValue(
-                    label: l10n.secondaryMarketRemainingUnitsLabel,
-                    value:
-                        '${remainingUnitsForSecondaryMarketRecord(record)}${l10n.myPageResaleUnitsSuffix}',
-                    valueColor: colors.primary,
-                  ),
-                  FundLabeledValue(
-                    label: l10n.secondaryMarketBuyUnitPriceLabel,
-                    value:
-                        '${formatter.format(record.price ?? 0)} ${l10n.myPageResaleYenSuffix}',
-                  ),
-                ],
+                unitPriceLabel: formatter.format(record.price ?? 0),
+                unitPriceCaption: l10n.secondaryMarketPricePerUnitCaption,
+                remainingUnitsLabel:
+                    '${formatSecondaryMarketRemainingUnits(record)}${l10n.myPageResaleUnitsSuffix}',
+                remainingUnitsCaption: l10n.secondaryMarketRemainingUnitsLabel,
+                listedUnitsLabel:
+                    '${l10n.secondaryMarketSellUnitsLabel}\n${record.sellNum ?? 0}${l10n.myPageResaleUnitsSuffix}',
+                soldUnitsLabel:
+                    '${l10n.secondaryMarketSoldUnitsLabel}\n${record.soldNum ?? 0}${l10n.myPageResaleUnitsSuffix}',
+                completionRateLabel:
+                    '${l10n.secondaryMarketCompletionRateLabel}\n${formatSecondaryMarketCompletionRate(record)}',
+                orderTimeLabel:
+                    formatSecondaryMarketDateTime(record.createTime) ??
+                    l10n.myPageResultAnnouncementTbd,
+              ),
+              const SizedBox(height: 14),
+              SecondaryMarketDetailSectionCard(
+                title: l10n.secondaryMarketOverviewTitle,
+                child: Column(
+                  children: <Widget>[
+                    SecondaryMarketDetailInfoRow(
+                      label: l10n.secondaryMarketOrderTimeLabel,
+                      value:
+                          formatSecondaryMarketDateTime(record.createTime) ??
+                          l10n.myPageResultAnnouncementTbd,
+                    ),
+                    const Divider(height: 1),
+                    SecondaryMarketDetailInfoRow(
+                      label: l10n.secondaryMarketUpdateTimeLabel,
+                      value:
+                          formatSecondaryMarketDateTime(record.updateTime) ??
+                          l10n.myPageResultAnnouncementTbd,
+                    ),
+                    const Divider(height: 1),
+                    SecondaryMarketDetailInfoRow(
+                      label: l10n.secondaryMarketInvestorTypeLabel,
+                      value: buildSecondaryMarketInvestorTypeDisplay(record),
+                    ),
+                    const Divider(height: 1),
+                    SecondaryMarketDetailInfoRow(
+                      label: l10n.secondaryMarketOrderIdLabel,
+                      value: record.id ?? '--',
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
+              SecondaryMarketDetailSectionCard(
+                title: l10n.secondaryMarketActivityTitle,
+                child: SecondaryMarketDetailActivityGrid(
+                  applicationCount:
+                      '${l10n.secondaryMarketApplicationsCountLabel} ${countSecondaryMarketApplications(record)}件',
+                  dealCount:
+                      '${l10n.secondaryMarketDealsCountLabel} ${countSecondaryMarketDeals(record)}件',
+                  latestApplication:
+                      '${l10n.secondaryMarketLatestApplicationLabel}  ${resolveLatestSecondaryMarketApplicationTime(record) ?? l10n.myPageResultAnnouncementTbd}',
+                  latestDeal:
+                      '${l10n.secondaryMarketLatestDealLabel}  ${resolveLatestSecondaryMarketDealTime(record) ?? l10n.myPageResultAnnouncementTbd}',
+                ),
               ),
               if (record.pdfDocuments.isNotEmpty) ...<Widget>[
-                const SizedBox(height: 8),
-                FundMyPageProjectCard(
+                const SizedBox(height: 14),
+                SecondaryMarketDetailSectionCard(
                   title: l10n.secondaryMarketDocumentsTitle,
-                  rows: record.pdfDocuments
-                      .map(
-                        (item) => FundLabeledValue(
-                          label: item.description ?? '--',
-                          value: item.urls.isEmpty
-                              ? l10n.secondaryMarketDocumentPending
-                              : item.urls.first.url ??
-                                    l10n.secondaryMarketDocumentPending,
-                        ),
-                      )
-                      .toList(growable: false),
+                  child: SecondaryMarketDetailDocumentsList(
+                    items: record.pdfDocuments
+                        .map(
+                          (item) => SecondaryMarketDetailDocumentItemData(
+                            title: item.description ?? '--',
+                            subtitle: _firstValidDocumentUrl(item) == null
+                                ? l10n.secondaryMarketDocumentPending
+                                : l10n.secondaryMarketDocumentOpenAction,
+                            available: _firstValidDocumentUrl(item) != null,
+                            onTap: _firstValidDocumentUrl(item) == null
+                                ? null
+                                : () => _openDocument(
+                                    context,
+                                    title:
+                                        item.description ??
+                                        l10n.secondaryMarketDocumentsTitle,
+                                    url: _firstValidDocumentUrl(item)!,
+                                  ),
+                          ),
+                        )
+                        .toList(growable: false),
+                  ),
                 ),
               ],
               if (remainingUnitsForSecondaryMarketRecord(record) <=
                   0) ...<Widget>[
-                const SizedBox(height: 12),
-                Text(
-                  l10n.secondaryMarketDetailSoldOutMessage,
-                  style: appText.bodyMuted.copyWith(
-                    color: colors.textSecondary,
+                const SizedBox(height: 14),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Text(
+                    l10n.secondaryMarketDetailSoldOutMessage,
+                    style: appText.bodyMuted.copyWith(
+                      color: colors.textSecondary,
+                    ),
                   ),
                 ),
               ],
@@ -184,92 +228,37 @@ class SecondaryMarketMarketplaceDetailPage extends ConsumerWidget {
     }
     return null;
   }
-}
 
-class _StateCard extends StatelessWidget {
-  const _StateCard({required this.message, this.actionLabel, this.onActionTap});
+  static String? _firstValidDocumentUrl(MyPagePdfDocument document) {
+    for (final url in document.urls) {
+      final value = url.url?.trim();
+      if (value != null && value.isNotEmpty) {
+        return value;
+      }
+    }
+    return null;
+  }
 
-  final String message;
-  final String? actionLabel;
-  final VoidCallback? onActionTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).appColors;
-    final appText = Theme.of(context).appTextTheme;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colors.border),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: <Widget>[
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: appText.bodyMuted.copyWith(color: colors.textSecondary),
-            ),
-            if (actionLabel != null && onActionTap != null) ...<Widget>[
-              const SizedBox(height: 12),
-              OutlinedButton(onPressed: onActionTap, child: Text(actionLabel!)),
-            ],
-          ],
-        ),
+  static void _openDocument(
+    BuildContext context, {
+    required String title,
+    required String url,
+  }) {
+    final l10n = context.l10n;
+    openAppPdfViewer(
+      context,
+      url: url,
+      title: title,
+      texts: AppPdfViewerTexts(
+        pageTitle: l10n.pdfViewerPageTitle,
+        openExternalTooltip: l10n.pdfViewerOpenExternalTooltip,
+        openExternalLabel: l10n.pdfViewerOpenExternalLabel,
+        loadingLabel: l10n.pdfViewerLoadingLabel,
+        loadFailedLabel: l10n.pdfViewerLoadFailedLabel,
+        retryLabel: l10n.fundListRetry,
+        invalidUrlNotice: l10n.pdfViewerInvalidUrlNotice,
+        openExternalFailedNotice: l10n.pdfViewerOpenExternalFailedNotice,
       ),
     );
   }
-}
-
-class _StatusBadge extends StatelessWidget {
-  const _StatusBadge({
-    required this.label,
-    required this.backgroundColor,
-    required this.foregroundColor,
-  });
-
-  final String label;
-  final Color backgroundColor;
-  final Color foregroundColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final appText = Theme.of(context).appTextTheme;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(label, style: appText.chip.copyWith(color: foregroundColor)),
-    );
-  }
-}
-
-String _buildInvestorTypeLabel(MyPageOrderInquiryRecord record) {
-  final code = record.investorType?.investorCode?.trim();
-  final ratio = record.investorType?.earningsRadio;
-  final ratioText = ratio == null
-      ? '--'
-      : '${(ratio * 100).toStringAsFixed(ratio * 100 % 1 == 0 ? 0 : 1)}%';
-  if (code == null || code.isEmpty) {
-    return ratioText;
-  }
-  return '$code  $ratioText';
-}
-
-String? _formatDateTime(String? raw) {
-  if (raw == null || raw.trim().isEmpty) {
-    return null;
-  }
-  final normalized = raw.trim().replaceAll(' ', 'T');
-  final date = DateTime.tryParse(normalized);
-  if (date == null) {
-    return null;
-  }
-  return DateFormat('yyyy/MM/dd HH:mm').format(date);
 }

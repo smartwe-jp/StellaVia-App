@@ -2277,10 +2277,43 @@ class AppLocalizationsZh extends AppLocalizations {
   String get secondaryMarketRemainingUnitsLabel => '剩余口数';
 
   @override
+  String get secondaryMarketCompletionRateLabel => '成交率';
+
+  @override
+  String get secondaryMarketPricePerUnitCaption => '每1口';
+
+  @override
+  String get secondaryMarketOverviewTitle => '交易概览';
+
+  @override
+  String get secondaryMarketUpdateTimeLabel => '更新时间';
+
+  @override
+  String get secondaryMarketOrderIdLabel => '订单ID';
+
+  @override
+  String get secondaryMarketActivityTitle => '市场动态';
+
+  @override
+  String get secondaryMarketApplicationsCountLabel => '申请件数';
+
+  @override
+  String get secondaryMarketDealsCountLabel => '成交件数';
+
+  @override
+  String get secondaryMarketLatestApplicationLabel => '最新申请';
+
+  @override
+  String get secondaryMarketLatestDealLabel => '最新成交';
+
+  @override
   String get secondaryMarketDocumentsTitle => '相关文件';
 
   @override
   String get secondaryMarketDocumentPending => '资料准备中';
+
+  @override
+  String get secondaryMarketDocumentOpenAction => '查看文件';
 
   @override
   String get secondaryMarketBuyOrderTitle => '购入订单';
@@ -5077,10 +5110,43 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get secondaryMarketRemainingUnitsLabel => '剩餘口數';
 
   @override
+  String get secondaryMarketCompletionRateLabel => '成交率';
+
+  @override
+  String get secondaryMarketPricePerUnitCaption => '每1口';
+
+  @override
+  String get secondaryMarketOverviewTitle => '交易概覽';
+
+  @override
+  String get secondaryMarketUpdateTimeLabel => '更新時間';
+
+  @override
+  String get secondaryMarketOrderIdLabel => '訂單ID';
+
+  @override
+  String get secondaryMarketActivityTitle => '市場動態';
+
+  @override
+  String get secondaryMarketApplicationsCountLabel => '申請件數';
+
+  @override
+  String get secondaryMarketDealsCountLabel => '成交件數';
+
+  @override
+  String get secondaryMarketLatestApplicationLabel => '最新申請';
+
+  @override
+  String get secondaryMarketLatestDealLabel => '最新成交';
+
+  @override
   String get secondaryMarketDocumentsTitle => '相關文件';
 
   @override
   String get secondaryMarketDocumentPending => '資料準備中';
+
+  @override
+  String get secondaryMarketDocumentOpenAction => '查看文件';
 
   @override
   String get secondaryMarketBuyOrderTitle => '購入訂單';
