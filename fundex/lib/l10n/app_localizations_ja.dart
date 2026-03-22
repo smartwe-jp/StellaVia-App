@@ -2384,6 +2384,55 @@ class AppLocalizationsJa extends AppLocalizations {
   String get secondaryMarketBuyValidationMessage => '購入口数を入力し、書面確認に同意してください。';
 
   @override
+  String get secondaryMarketBuyFlowInputTitle => '購入内容を入力';
+
+  @override
+  String get secondaryMarketBuyFlowInputSubtitle =>
+      '数量と書面確認を済ませて、次の確認ステップへ進みます。';
+
+  @override
+  String get secondaryMarketBuyFlowConfirmTitle => '購入内容を最終確認';
+
+  @override
+  String get secondaryMarketBuyFlowConfirmSubtitle =>
+      '内容に問題がなければ、このまま購入申込を送信してください。';
+
+  @override
+  String get secondaryMarketBuyQuantityHint => '購入したい口数を選択してください。';
+
+  @override
+  String get secondaryMarketBuyQuickMax => 'MAX';
+
+  @override
+  String get secondaryMarketBuyLiveEstimateTitle => '金額シミュレーション';
+
+  @override
+  String get secondaryMarketBuyLiveEstimateFormulaLabel => '現在の注文内容';
+
+  @override
+  String get secondaryMarketBuySummarySectionTitle => 'お支払い予定';
+
+  @override
+  String get secondaryMarketBuyAgreementSectionTitle => '書面と確認事項';
+
+  @override
+  String get secondaryMarketBuyStickyAmountLabel => '予定支払額';
+
+  @override
+  String get secondaryMarketBuyReviewSectionTitle => 'ご注文内容';
+
+  @override
+  String get secondaryMarketBuyReviewHint =>
+      '内容をご確認のうえ、問題がなければこのまま申込を確定してください。';
+
+  @override
+  String get secondaryMarketBuyFinalNoticeTitle => '最終確認後に購入申込を送信します';
+
+  @override
+  String get secondaryMarketBuyFinalNoticeBody =>
+      '送信後は申込内容に基づいて購入処理が進みます。数量と支払予定額をもう一度ご確認ください。';
+
+  @override
   String get secondaryMarketBuyTotalAmountLabel => '購入総額';
 
   @override

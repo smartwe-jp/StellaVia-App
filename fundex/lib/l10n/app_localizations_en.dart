@@ -2506,6 +2506,58 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enter the buy units and agree to the document confirmation.';
 
   @override
+  String get secondaryMarketBuyFlowInputTitle => 'Enter Order Details';
+
+  @override
+  String get secondaryMarketBuyFlowInputSubtitle =>
+      'Set the quantity and review the documents before continuing.';
+
+  @override
+  String get secondaryMarketBuyFlowConfirmTitle => 'Final Review';
+
+  @override
+  String get secondaryMarketBuyFlowConfirmSubtitle =>
+      'If everything looks correct, submit the purchase request from this screen.';
+
+  @override
+  String get secondaryMarketBuyQuantityHint =>
+      'Choose how many units you want to purchase.';
+
+  @override
+  String get secondaryMarketBuyQuickMax => 'MAX';
+
+  @override
+  String get secondaryMarketBuyLiveEstimateTitle => 'Live Estimate';
+
+  @override
+  String get secondaryMarketBuyLiveEstimateFormulaLabel => 'Current order';
+
+  @override
+  String get secondaryMarketBuySummarySectionTitle => 'Payment Summary';
+
+  @override
+  String get secondaryMarketBuyAgreementSectionTitle =>
+      'Documents & Confirmation';
+
+  @override
+  String get secondaryMarketBuyStickyAmountLabel => 'Estimated Payment';
+
+  @override
+  String get secondaryMarketBuyReviewSectionTitle => 'Order Review';
+
+  @override
+  String get secondaryMarketBuyReviewHint =>
+      'Review the details one last time before sending the purchase request.';
+
+  @override
+  String get secondaryMarketBuyFinalNoticeTitle =>
+      'The purchase request will be sent after this final check';
+
+  @override
+  String get secondaryMarketBuyFinalNoticeBody =>
+      'Once submitted, the purchase process will proceed based on this order. Please review the quantity and estimated payment carefully.';
+
+  @override
   String get secondaryMarketBuyTotalAmountLabel => 'Purchase Total';
 
   @override

@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../support/secondary_market_trade_models.dart';
-import '../support/secondary_market_trade_widgets.dart';
+import '../widgets/secondary_market_buy_flow_sections.dart';
 
 class SecondaryMarketBuyOrderPage extends ConsumerStatefulWidget {
   const SecondaryMarketBuyOrderPage({super.key, required this.seed});
@@ -47,6 +47,33 @@ class _SecondaryMarketBuyOrderPageState
         buyUnits != null &&
         buyUnits > 0 &&
         buyUnits <= widget.seed.availableUnits;
+  }
+
+  void _setBuyUnits(int value) {
+    final clamped = value.clamp(0, widget.seed.availableUnits);
+    final text = clamped.toString();
+    _buyUnitsController.value = TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
+    setState(() {});
+  }
+
+  void _increaseUnits() {
+    final current = _buyUnits ?? 0;
+    if (current >= widget.seed.availableUnits) {
+      return;
+    }
+    _setBuyUnits(current + 1);
+  }
+
+  void _decreaseUnits() {
+    final current = _buyUnits ?? 0;
+    if (current <= 1) {
+      _setBuyUnits(0);
+      return;
+    }
+    _setBuyUnits(current - 1);
   }
 
   String? get _sampleDocumentUrl {
@@ -107,7 +134,6 @@ class _SecondaryMarketBuyOrderPageState
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = theme.appColors;
-    final appText = theme.appTextTheme;
     final formatter = NumberFormat.currency(
       locale: Localizations.localeOf(context).toLanguageTag(),
       symbol: '¥',
@@ -125,154 +151,93 @@ class _SecondaryMarketBuyOrderPageState
       agreed: _agreed,
       sampleDocumentUrl: _sampleDocumentUrl,
     );
+    final formulaValue =
+        '${_buyUnits ?? 0}${l10n.myPageResaleUnitsSuffix} × ${formatter.format(widget.seed.unitPrice)}';
 
     return Scaffold(
+      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.secondaryMarketBuyOrderTitle,
         leading: AppNavigationIconButton(
           icon: Icons.arrow_back_rounded,
           onTap: () => context.pop(),
-          backgroundColor: colors.surface.withValues(alpha: 0),
-          foregroundColor: colors.textPrimary,
         ),
       ),
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-          decoration: BoxDecoration(
-            color: colors.surface,
-            border: Border(top: BorderSide(color: colors.border)),
-          ),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () => Navigator.of(context).maybePop(),
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(48),
-                  ),
-                  child: Text(l10n.walletBankSettingsCancelAction),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: PrimaryCtaButton(
-                  label: l10n.secondaryMarketBuyConfirmButton,
-                  onPressed: _isValid ? _goConfirm : null,
-                  fullWidth: false,
-                  height: 48,
-                  horizontalPadding: 0,
-                ),
-              ),
-            ],
-          ),
-        ),
+      bottomNavigationBar: SecondaryMarketTradeStickyActionBar(
+        amountLabel: l10n.secondaryMarketBuyStickyAmountLabel,
+        amountValue: formatter.format(preview.paymentAmount),
+        helperText: _isValid ? null : l10n.secondaryMarketBuyValidationMessage,
+        primaryLabel: l10n.secondaryMarketBuyConfirmButton,
+        onPrimaryPressed: _isValid ? _goConfirm : null,
+        primaryBackgroundColor: colors.primary,
+        primaryShadowColor: colors.primary.withValues(alpha: 0.32),
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          SecondaryMarketSegmentHeader(
-            current: SecondaryMarketTradeStep.order,
-            orderLabel: l10n.secondaryMarketTradeTabBuy,
-            confirmLabel: l10n.secondaryMarketTradeTabConfirm,
-          ),
-          const SizedBox(height: 12),
-          SecondaryMarketTableRow(
-            label: l10n.myPageResaleFundNameLabel,
-            value: Text(
-              widget.seed.projectName,
-              style: appText.bodyStrong.copyWith(color: colors.primary),
-            ),
-          ),
-          SecondaryMarketTableRow(
-            label: l10n.myPageResaleInvestorTypeLabel,
-            value: Text(
-              buildSecondaryMarketInvestorTypeText(
-                investorCode: widget.seed.investorCode,
-                earningRatio: widget.seed.earningRatio,
-                fallbackBuilder: l10n.myPageResaleInvestorTypeFallback,
-                fixedYieldBuilder: l10n.myPageResaleFixedYieldLabel,
-              ),
-            ),
-          ),
-          SecondaryMarketTableRow(
-            label: l10n.secondaryMarketBuyOrderMethodLabel,
-            value: Text(l10n.secondaryMarketBuyOrderMethodValue),
-          ),
-          SecondaryMarketTableRow(
-            label: l10n.secondaryMarketBuyAvailableUnitsLabel,
-            value: Text(widget.seed.availableUnits.toString()),
-          ),
-          SecondaryMarketTableRow(
-            label: l10n.secondaryMarketBuyUnitsLabel,
-            value: SecondaryMarketUnitInputField(
-              controller: _buyUnitsController,
-              unitLabel: l10n.myPageResaleUnitsSuffix,
-              onChanged: (_) => setState(() {}),
-            ),
-          ),
-          SecondaryMarketTableRow(
-            label: l10n.secondaryMarketBuyUnitPriceLabel,
-            value: Text(
-              '${formatter.format(widget.seed.unitPrice)} ${l10n.myPageResaleYenSuffix}',
-            ),
-          ),
-          SecondaryMarketTableRow(
-            label: l10n.secondaryMarketBuyFeeLabel,
-            value: Text(l10n.secondaryMarketBuyFeeValue),
-          ),
-          SecondaryMarketTableRow(
-            label: l10n.secondaryMarketBuyAgreementLabel,
-            value: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          SecondaryMarketTradePinnedTitleBar(title: widget.seed.projectName),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
               children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Checkbox(
-                      value: _agreed,
-                      onChanged: (value) {
-                        setState(() {
-                          _agreed = value ?? false;
-                        });
-                      },
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Text(l10n.secondaryMarketBuyAgreementBody),
-                      ),
-                    ),
-                  ],
+                SecondaryMarketTradeFlowHeader(
+                  currentStep: 0,
+                  title: l10n.secondaryMarketBuyFlowInputTitle,
+                  subtitle: l10n.secondaryMarketBuyFlowInputSubtitle,
+                  orderLabel: l10n.secondaryMarketTradeTabBuy,
+                  confirmLabel: l10n.secondaryMarketTradeTabConfirm,
                 ),
-                if (_sampleDocumentUrl != null)
-                  TextButton(
-                    onPressed: () =>
-                        _openSampleDocument(context, _sampleDocumentUrl!),
-                    child: Text(l10n.secondaryMarketBuyAgreementSampleLabel),
-                  ),
+                const SizedBox(height: 14),
+                SecondaryMarketTradeQuantityCard(
+                  title: l10n.secondaryMarketBuyUnitsLabel,
+                  subtitle: l10n.secondaryMarketBuyQuantityHint,
+                  availabilityLabel: l10n.secondaryMarketBuyAvailableUnitsLabel,
+                  formulaLabel: l10n.secondaryMarketBuyLiveEstimateFormulaLabel,
+                  formulaValue: formulaValue,
+                  totalLabel: l10n.secondaryMarketBuyTotalAmountLabel,
+                  totalValue: formatter.format(preview.totalAmount),
+                  feeLabel: l10n.secondaryMarketBuyFeeAmountLabel,
+                  feeValue: formatter.format(preview.feeAmount),
+                  paymentLabel: l10n.secondaryMarketBuyPaymentAmountLabel,
+                  paymentValue: formatter.format(preview.paymentAmount),
+                  controller: _buyUnitsController,
+                  selectedUnits: _buyUnits ?? 0,
+                  availableUnits: widget.seed.availableUnits,
+                  unitLabel: l10n.myPageResaleUnitsSuffix,
+                  maxChipLabel: l10n.secondaryMarketBuyQuickMax,
+                  onChanged: (_) => setState(() {}),
+                  onDecrease: widget.seed.availableUnits > 0
+                      ? _decreaseUnits
+                      : null,
+                  onIncrease: widget.seed.availableUnits > 0
+                      ? _increaseUnits
+                      : null,
+                  onSelectPreset: _setBuyUnits,
+                  enabled: widget.seed.availableUnits > 0,
+                ),
+                const SizedBox(height: 14),
+                SecondaryMarketTradeAgreementCard(
+                  title: l10n.secondaryMarketBuyAgreementSectionTitle,
+                  body: l10n.secondaryMarketBuyAgreementBody,
+                  agreed: _agreed,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _agreed = value;
+                    });
+                  },
+                  documentLabel: l10n.secondaryMarketBuyAgreementSampleLabel,
+                  documentActionLabel: _sampleDocumentUrl == null
+                      ? l10n.secondaryMarketDocumentPending
+                      : l10n.secondaryMarketDocumentOpenAction,
+                  documentAvailable: _sampleDocumentUrl != null,
+                  onOpenDocument: _sampleDocumentUrl == null
+                      ? null
+                      : () => _openSampleDocument(context, _sampleDocumentUrl!),
+                ),
+                const SizedBox(height: 112),
               ],
             ),
           ),
-          const SizedBox(height: 12),
-          SecondaryMarketPreviewCard(
-            totalLabel: l10n.secondaryMarketBuyTotalAmountLabel,
-            feeLabel: l10n.secondaryMarketBuyFeeAmountLabel,
-            netLabel: l10n.secondaryMarketBuyPaymentAmountLabel,
-            totalValue: formatter.format(preview.totalAmount),
-            feeValue: formatter.format(preview.feeAmount),
-            netValue: formatter.format(preview.paymentAmount),
-            highlightColor: colors.primary,
-          ),
-          if (!_isValid)
-            Padding(
-              padding: const EdgeInsets.only(top: 12),
-              child: Text(
-                l10n.secondaryMarketBuyValidationMessage,
-                style: appText.caption.copyWith(color: colors.danger),
-              ),
-            ),
         ],
       ),
     );

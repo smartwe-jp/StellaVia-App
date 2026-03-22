@@ -38,13 +38,9 @@ class SecondaryMarketMarketplaceDetailPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppNavigationBar(
         title: l10n.homeFreeMarketTitle,
-        backgroundColor: colors.surface,
-        foregroundColor: colors.textPrimary,
         leading: AppNavigationIconButton(
           icon: Icons.arrow_back_rounded,
           onTap: () => context.pop(),
-          backgroundColor: colors.surface.withValues(alpha: 0),
-          foregroundColor: colors.textPrimary,
         ),
       ),
       bottomNavigationBar: record == null

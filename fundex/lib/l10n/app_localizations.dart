@@ -4706,6 +4706,96 @@ abstract class AppLocalizations {
   /// **'Enter the buy units and agree to the document confirmation.'**
   String get secondaryMarketBuyValidationMessage;
 
+  /// No description provided for @secondaryMarketBuyFlowInputTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Order Details'**
+  String get secondaryMarketBuyFlowInputTitle;
+
+  /// No description provided for @secondaryMarketBuyFlowInputSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set the quantity and review the documents before continuing.'**
+  String get secondaryMarketBuyFlowInputSubtitle;
+
+  /// No description provided for @secondaryMarketBuyFlowConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Final Review'**
+  String get secondaryMarketBuyFlowConfirmTitle;
+
+  /// No description provided for @secondaryMarketBuyFlowConfirmSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'If everything looks correct, submit the purchase request from this screen.'**
+  String get secondaryMarketBuyFlowConfirmSubtitle;
+
+  /// No description provided for @secondaryMarketBuyQuantityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how many units you want to purchase.'**
+  String get secondaryMarketBuyQuantityHint;
+
+  /// No description provided for @secondaryMarketBuyQuickMax.
+  ///
+  /// In en, this message translates to:
+  /// **'MAX'**
+  String get secondaryMarketBuyQuickMax;
+
+  /// No description provided for @secondaryMarketBuyLiveEstimateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Live Estimate'**
+  String get secondaryMarketBuyLiveEstimateTitle;
+
+  /// No description provided for @secondaryMarketBuyLiveEstimateFormulaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current order'**
+  String get secondaryMarketBuyLiveEstimateFormulaLabel;
+
+  /// No description provided for @secondaryMarketBuySummarySectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Summary'**
+  String get secondaryMarketBuySummarySectionTitle;
+
+  /// No description provided for @secondaryMarketBuyAgreementSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents & Confirmation'**
+  String get secondaryMarketBuyAgreementSectionTitle;
+
+  /// No description provided for @secondaryMarketBuyStickyAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated Payment'**
+  String get secondaryMarketBuyStickyAmountLabel;
+
+  /// No description provided for @secondaryMarketBuyReviewSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Review'**
+  String get secondaryMarketBuyReviewSectionTitle;
+
+  /// No description provided for @secondaryMarketBuyReviewHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Review the details one last time before sending the purchase request.'**
+  String get secondaryMarketBuyReviewHint;
+
+  /// No description provided for @secondaryMarketBuyFinalNoticeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The purchase request will be sent after this final check'**
+  String get secondaryMarketBuyFinalNoticeTitle;
+
+  /// No description provided for @secondaryMarketBuyFinalNoticeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Once submitted, the purchase process will proceed based on this order. Please review the quantity and estimated payment carefully.'**
+  String get secondaryMarketBuyFinalNoticeBody;
+
   /// No description provided for @secondaryMarketBuyTotalAmountLabel.
   ///
   /// In en, this message translates to:

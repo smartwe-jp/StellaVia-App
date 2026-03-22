@@ -2367,6 +2367,52 @@ class AppLocalizationsZh extends AppLocalizations {
   String get secondaryMarketBuyValidationMessage => '请输入购入口数并同意文件确认。';
 
   @override
+  String get secondaryMarketBuyFlowInputTitle => '填写购入内容';
+
+  @override
+  String get secondaryMarketBuyFlowInputSubtitle => '先完成数量选择与文件确认，再进入下一步确认。';
+
+  @override
+  String get secondaryMarketBuyFlowConfirmTitle => '最终确认购入内容';
+
+  @override
+  String get secondaryMarketBuyFlowConfirmSubtitle => '确认内容无误后，可直接在本页提交购入申请。';
+
+  @override
+  String get secondaryMarketBuyQuantityHint => '请选择想要购入的口数。';
+
+  @override
+  String get secondaryMarketBuyQuickMax => 'MAX';
+
+  @override
+  String get secondaryMarketBuyLiveEstimateTitle => '金额试算';
+
+  @override
+  String get secondaryMarketBuyLiveEstimateFormulaLabel => '当前订单内容';
+
+  @override
+  String get secondaryMarketBuySummarySectionTitle => '预计支付';
+
+  @override
+  String get secondaryMarketBuyAgreementSectionTitle => '文件与确认事项';
+
+  @override
+  String get secondaryMarketBuyStickyAmountLabel => '预计支付额';
+
+  @override
+  String get secondaryMarketBuyReviewSectionTitle => '订单内容';
+
+  @override
+  String get secondaryMarketBuyReviewHint => '请再次确认订单细节，确认无误后再提交购入申请。';
+
+  @override
+  String get secondaryMarketBuyFinalNoticeTitle => '完成最终确认后将发送购入申请';
+
+  @override
+  String get secondaryMarketBuyFinalNoticeBody =>
+      '提交后会根据本次订单内容进入购入处理，请再次确认口数与预计支付金额。';
+
+  @override
   String get secondaryMarketBuyTotalAmountLabel => '购入总额';
 
   @override
@@ -5198,6 +5244,52 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get secondaryMarketBuyValidationMessage => '請輸入購入口數並同意文件確認。';
+
+  @override
+  String get secondaryMarketBuyFlowInputTitle => '填寫購入內容';
+
+  @override
+  String get secondaryMarketBuyFlowInputSubtitle => '先完成數量選擇與文件確認，再進入下一步確認。';
+
+  @override
+  String get secondaryMarketBuyFlowConfirmTitle => '最終確認購入內容';
+
+  @override
+  String get secondaryMarketBuyFlowConfirmSubtitle => '確認內容無誤後，可直接在本頁提交購入申請。';
+
+  @override
+  String get secondaryMarketBuyQuantityHint => '請選擇想要購入的口數。';
+
+  @override
+  String get secondaryMarketBuyQuickMax => 'MAX';
+
+  @override
+  String get secondaryMarketBuyLiveEstimateTitle => '金額試算';
+
+  @override
+  String get secondaryMarketBuyLiveEstimateFormulaLabel => '目前訂單內容';
+
+  @override
+  String get secondaryMarketBuySummarySectionTitle => '預計支付';
+
+  @override
+  String get secondaryMarketBuyAgreementSectionTitle => '文件與確認事項';
+
+  @override
+  String get secondaryMarketBuyStickyAmountLabel => '預計支付額';
+
+  @override
+  String get secondaryMarketBuyReviewSectionTitle => '訂單內容';
+
+  @override
+  String get secondaryMarketBuyReviewHint => '請再次確認訂單細節，確認無誤後再提交購入申請。';
+
+  @override
+  String get secondaryMarketBuyFinalNoticeTitle => '完成最終確認後將送出購入申請';
+
+  @override
+  String get secondaryMarketBuyFinalNoticeBody =>
+      '提交後會依照本次訂單內容進入購入處理，請再次確認口數與預計支付金額。';
 
   @override
   String get secondaryMarketBuyTotalAmountLabel => '購入總額';
