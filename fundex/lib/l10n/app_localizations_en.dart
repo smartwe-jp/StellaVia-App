@@ -2939,6 +2939,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memberProfilePhotoUploadSuccess => 'Photo uploaded successfully.';
 
   @override
+  String get memberProfileSelfieUploadBypassedNotice =>
+      'Selfie upload is not supported in the test environment, so you can continue to the next step.';
+
+  @override
   String get occupationEmployee => 'Company employee';
 
   @override

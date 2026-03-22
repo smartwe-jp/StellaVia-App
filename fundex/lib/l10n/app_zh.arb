@@ -1035,6 +1035,7 @@
   "memberProfileAgreeAndComplete": "全部同意并完成登记",
   "memberProfileCompletedToast": "本人信息登记已完成。",
   "memberProfilePhotoUploadSuccess": "上传成功。",
+  "memberProfileSelfieUploadBypassedNotice": "测试环境暂不支持自拍上传，当前可直接继续下一步。",
   "occupationEmployee": "公司职员",
   "occupationSelfEmployed": "个体经营",
   "occupationPublicServant": "公务员",

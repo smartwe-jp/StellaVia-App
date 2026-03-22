@@ -2761,6 +2761,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfilePhotoUploadSuccess => '上传成功。';
 
   @override
+  String get memberProfileSelfieUploadBypassedNotice =>
+      '测试环境暂不支持自拍上传，当前可直接继续下一步。';
+
+  @override
   String get occupationEmployee => '公司职员';
 
   @override
@@ -5678,6 +5682,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get memberProfilePhotoUploadSuccess => '上傳成功。';
+
+  @override
+  String get memberProfileSelfieUploadBypassedNotice =>
+      '測試環境暫不支援自拍上傳，目前可直接繼續下一步。';
 
   @override
   String get occupationEmployee => '公司职员';

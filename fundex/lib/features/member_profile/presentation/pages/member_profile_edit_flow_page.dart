@@ -399,6 +399,20 @@ class _MemberProfileEditFlowPageState
       if (!mounted) {
         return;
       }
+      if (!isDocument) {
+        setState(() {
+          _selfiePhotoPath = selfieUploadCompletedMarker;
+        });
+        await _persistDraft();
+        if (!mounted) {
+          return;
+        }
+        AppNotice.show(
+          context,
+          message: context.l10n.memberProfileSelfieUploadBypassedNotice,
+        );
+        return;
+      }
       AppNotice.show(
         context,
         message: _resolveSubmitErrorMessage(

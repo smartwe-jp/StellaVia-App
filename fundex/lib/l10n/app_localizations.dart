@@ -5474,6 +5474,12 @@ abstract class AppLocalizations {
   /// **'Photo uploaded successfully.'**
   String get memberProfilePhotoUploadSuccess;
 
+  /// No description provided for @memberProfileSelfieUploadBypassedNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Selfie upload is not supported in the test environment, so you can continue to the next step.'**
+  String get memberProfileSelfieUploadBypassedNotice;
+
   /// No description provided for @occupationEmployee.
   ///
   /// In en, this message translates to:

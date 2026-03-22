@@ -1035,6 +1035,7 @@
   "memberProfileAgreeAndComplete": "Agree to all and complete registration",
   "memberProfileCompletedToast": "Profile information registration is complete.",
   "memberProfilePhotoUploadSuccess": "Photo uploaded successfully.",
+  "memberProfileSelfieUploadBypassedNotice": "Selfie upload is not supported in the test environment, so you can continue to the next step.",
   "occupationEmployee": "Company employee",
   "occupationSelfEmployed": "Self-employed",
   "occupationPublicServant": "Public servant",

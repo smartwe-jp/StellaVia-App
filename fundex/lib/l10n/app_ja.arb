@@ -1035,6 +1035,7 @@
   "memberProfileAgreeAndComplete": "すべてに同意して登録を完了する",
   "memberProfileCompletedToast": "本人情報の登録が完了しました。",
   "memberProfilePhotoUploadSuccess": "画像をアップロードしました。",
+  "memberProfileSelfieUploadBypassedNotice": "テスト環境では自撮り画像のアップロードが未対応のため、このまま次へ進めます。",
   "occupationEmployee": "会社員",
   "occupationSelfEmployed": "自営業",
   "occupationPublicServant": "公務員",

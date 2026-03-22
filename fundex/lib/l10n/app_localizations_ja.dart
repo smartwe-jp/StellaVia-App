@@ -2785,6 +2785,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfilePhotoUploadSuccess => '画像をアップロードしました。';
 
   @override
+  String get memberProfileSelfieUploadBypassedNotice =>
+      'テスト環境では自撮り画像のアップロードが未対応のため、このまま次へ進めます。';
+
+  @override
   String get occupationEmployee => '会社員';
 
   @override
