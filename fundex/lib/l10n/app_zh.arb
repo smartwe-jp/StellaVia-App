@@ -327,6 +327,8 @@
   "menuSectionSupport": "支持",
   "menuItemTheme": "主题",
   "menuItemEditProfile": "编辑会员资料",
+  "memberProfileOverviewTitle": "会员基本情报",
+  "commonEditText": "编辑",
   "menuItemBankSettings": "银行账户设置",
   "menuItemChangePassword": "修改密码",
   "menuItemTwoFactor": "双重认证",

@@ -916,6 +916,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get menuItemEditProfile => '会員情報の編集';
 
   @override
+  String get memberProfileOverviewTitle => '会員基本情報';
+
+  @override
+  String get commonEditText => '編集';
+
+  @override
   String get menuItemBankSettings => '銀行口座設定';
 
   @override

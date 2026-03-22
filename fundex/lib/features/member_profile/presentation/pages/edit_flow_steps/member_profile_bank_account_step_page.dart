@@ -13,6 +13,9 @@ class MemberProfileBankAccountStepPage extends StatelessWidget {
     required this.accountNumberController,
     required this.accountHolderController,
     this.primaryButtonEnabled = true,
+    this.titleOverride,
+    this.descriptionOverride,
+    this.primaryButtonLabelOverride,
     this.onAccountTypeChanged,
     this.onNext,
   });
@@ -24,6 +27,9 @@ class MemberProfileBankAccountStepPage extends StatelessWidget {
   final TextEditingController accountNumberController;
   final TextEditingController accountHolderController;
   final bool primaryButtonEnabled;
+  final String? titleOverride;
+  final String? descriptionOverride;
+  final String? primaryButtonLabelOverride;
   final ValueChanged<String?>? onAccountTypeChanged;
   final VoidCallback? onNext;
 
@@ -31,9 +37,10 @@ class MemberProfileBankAccountStepPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return MemberProfileEditStepScaffold(
-      title: l10n.memberProfileStep5Title,
-      description: l10n.memberProfileStep5Description,
-      primaryButtonLabel: l10n.memberProfileNextConsent,
+      title: titleOverride ?? l10n.memberProfileStep5Title,
+      description: descriptionOverride ?? l10n.memberProfileStep5Description,
+      primaryButtonLabel:
+          primaryButtonLabelOverride ?? l10n.memberProfileNextConsent,
       onPrimaryPressed: onNext,
       primaryButtonEnabled: primaryButtonEnabled,
       child: MemberProfileBankAccountFormSection(

@@ -327,6 +327,8 @@
   "menuSectionSupport": "客服支援",
   "menuItemTheme": "主題",
   "menuItemEditProfile": "編輯會員資訊",
+  "memberProfileOverviewTitle": "會員基本情報",
+  "commonEditText": "編輯",
   "menuItemBankSettings": "銀行帳戶設定",
   "menuItemChangePassword": "變更密碼",
   "menuItemTwoFactor": "雙重驗證",

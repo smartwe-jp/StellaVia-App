@@ -911,6 +911,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get menuItemEditProfile => '编辑会员资料';
 
   @override
+  String get memberProfileOverviewTitle => '会员基本情报';
+
+  @override
+  String get commonEditText => '编辑';
+
+  @override
   String get menuItemBankSettings => '银行账户设置';
 
   @override
@@ -3857,6 +3863,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get menuItemEditProfile => '編輯會員資訊';
+
+  @override
+  String get memberProfileOverviewTitle => '會員基本情報';
+
+  @override
+  String get commonEditText => '編輯';
 
   @override
   String get menuItemBankSettings => '銀行帳戶設定';

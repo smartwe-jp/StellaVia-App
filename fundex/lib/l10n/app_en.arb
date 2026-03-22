@@ -327,6 +327,8 @@
   "menuSectionSupport": "Support",
   "menuItemTheme": "Theme",
   "menuItemEditProfile": "Edit member profile",
+  "memberProfileOverviewTitle": "Member Profile",
+  "commonEditText": "Edit",
   "menuItemBankSettings": "Bank account settings",
   "menuItemChangePassword": "Change password",
   "menuItemTwoFactor": "Two-factor authentication",

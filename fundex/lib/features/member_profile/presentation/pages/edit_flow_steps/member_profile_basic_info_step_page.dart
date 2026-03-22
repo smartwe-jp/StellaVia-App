@@ -17,6 +17,9 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
     required this.phoneController,
     required this.showAgeWarning,
     this.primaryButtonEnabled = true,
+    this.titleOverride,
+    this.descriptionOverride,
+    this.primaryButtonLabelOverride,
     this.onBirthdayTap,
     this.onNext,
     this.onSkip,
@@ -32,6 +35,9 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
   final TextEditingController phoneController;
   final bool showAgeWarning;
   final bool primaryButtonEnabled;
+  final String? titleOverride;
+  final String? descriptionOverride;
+  final String? primaryButtonLabelOverride;
   final VoidCallback? onBirthdayTap;
   final VoidCallback? onNext;
   final VoidCallback? onSkip;
@@ -42,9 +48,9 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     return MemberProfileEditStepScaffold(
-      title: l10n.memberProfileStep1Title,
-      description: l10n.memberProfileStep1Description,
-      primaryButtonLabel: l10n.commonNext,
+      title: titleOverride ?? l10n.memberProfileStep1Title,
+      description: descriptionOverride ?? l10n.memberProfileStep1Description,
+      primaryButtonLabel: primaryButtonLabelOverride ?? l10n.commonNext,
       onPrimaryPressed: onNext,
       primaryButtonEnabled: primaryButtonEnabled,
       showSkip: false,

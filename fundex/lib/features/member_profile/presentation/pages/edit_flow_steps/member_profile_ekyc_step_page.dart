@@ -11,6 +11,9 @@ class MemberProfileEkycStepPage extends StatelessWidget {
     required this.documentUploaded,
     required this.selfieUploaded,
     this.primaryButtonEnabled = true,
+    this.titleOverride,
+    this.descriptionOverride,
+    this.primaryButtonLabelOverride,
     this.onDocumentTypeChanged,
     this.onUploadDocument,
     this.onUploadSelfie,
@@ -22,6 +25,9 @@ class MemberProfileEkycStepPage extends StatelessWidget {
   final bool documentUploaded;
   final bool selfieUploaded;
   final bool primaryButtonEnabled;
+  final String? titleOverride;
+  final String? descriptionOverride;
+  final String? primaryButtonLabelOverride;
   final ValueChanged<String?>? onDocumentTypeChanged;
   final VoidCallback? onUploadDocument;
   final VoidCallback? onUploadSelfie;
@@ -31,9 +37,9 @@ class MemberProfileEkycStepPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return MemberProfileEditStepScaffold(
-      title: l10n.memberProfileStep4Title,
-      description: l10n.memberProfileStep4Description,
-      primaryButtonLabel: l10n.commonNext,
+      title: titleOverride ?? l10n.memberProfileStep4Title,
+      description: descriptionOverride ?? l10n.memberProfileStep4Description,
+      primaryButtonLabel: primaryButtonLabelOverride ?? l10n.commonNext,
       onPrimaryPressed: onNext,
       primaryButtonEnabled: primaryButtonEnabled,
       child: Column(

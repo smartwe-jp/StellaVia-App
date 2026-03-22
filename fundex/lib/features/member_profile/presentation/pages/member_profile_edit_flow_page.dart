@@ -22,12 +22,27 @@ import '../pages/edit_flow_steps/member_profile_real_person_auth_step_page.dart'
 import '../pages/edit_flow_steps/member_profile_suitability_step_page.dart';
 import '../providers/member_profile_providers.dart';
 import '../support/member_profile_edit_step.dart';
+import '../support/member_profile_edit_step_presenter.dart';
 import '../support/member_profile_option_item.dart';
 import '../support/profile_document_image_picker.dart';
 import '../support/member_profile_zip_candidate_picker.dart';
 
+enum _MemberProfileEditFlowMode { flow, section }
+
 class MemberProfileEditFlowPage extends ConsumerStatefulWidget {
-  const MemberProfileEditFlowPage({super.key});
+  const MemberProfileEditFlowPage({super.key})
+    : _mode = _MemberProfileEditFlowMode.flow,
+      initialStep = null;
+
+  const MemberProfileEditFlowPage.section({
+    super.key,
+    required this.initialStep,
+  }) : _mode = _MemberProfileEditFlowMode.section;
+
+  final _MemberProfileEditFlowMode _mode;
+  final MemberProfileEditStep? initialStep;
+
+  bool get isSingleSectionMode => _mode == _MemberProfileEditFlowMode.section;
 
   @override
   ConsumerState<MemberProfileEditFlowPage> createState() =>
@@ -82,9 +97,16 @@ class _MemberProfileEditFlowPageState
   bool get _isIdentityAuthEnabled =>
       ref.read(identityAuthFeatureEnabledProvider);
 
+  bool get _isSingleSectionMode => widget.isSingleSectionMode;
+
   @override
   void initState() {
     super.initState();
+    if (_isSingleSectionMode) {
+      _currentStep = _normalizeStepForIdentityAuth(
+        widget.initialStep ?? MemberProfileEditStep.basicInfo,
+      );
+    }
     _familyNameController = TextEditingController();
     _givenNameController = TextEditingController();
     _familyNameKanaController = TextEditingController();
@@ -295,7 +317,11 @@ class _MemberProfileEditFlowPageState
               0,
               MemberProfileEditStep.values.length - 1,
             )];
-        _currentStep = _normalizeStepForIdentityAuth(resolvedStep);
+        _currentStep = _isSingleSectionMode
+            ? _normalizeStepForIdentityAuth(
+                widget.initialStep ?? MemberProfileEditStep.basicInfo,
+              )
+            : _normalizeStepForIdentityAuth(resolvedStep);
         _isLoading = false;
       });
     } catch (_) {
@@ -598,6 +624,65 @@ class _MemberProfileEditFlowPageState
       return;
     }
     AppNotice.show(context, message: l10n.memberProfileCompletedToast);
+    context.pop();
+  }
+
+  Future<void> _saveCurrentSection() async {
+    if (_isSubmitting || _isUploadingPhoto || _isRunningRealPersonAuth) {
+      return;
+    }
+    if (!_canProceedFromCurrentStep) {
+      return;
+    }
+    if (_isIdentityAuthEnabled &&
+        _currentStep == MemberProfileEditStep.realPersonAuth) {
+      final verified = await _runRealPersonAuthStep();
+      if (!verified) {
+        return;
+      }
+    }
+    if (!mounted) {
+      return;
+    }
+
+    final l10n = context.l10n;
+    setState(() {
+      _isSubmitting = true;
+    });
+
+    try {
+      final draft = _buildDraft(
+        completedAtOverride: _completedAt,
+        editingStep: _currentStep.index,
+      );
+      final shouldSubmitRemotely =
+          _completedAt != null || draft.isEditFlowComplete;
+      final shouldMarkCompleted = draft.isEditFlowComplete && _completedAt == null;
+      if (shouldSubmitRemotely) {
+        await ref.read(submitMemberProfileUseCaseProvider).call(draft);
+      }
+      await _persistDraft(markCompleted: shouldMarkCompleted);
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      AppNotice.show(
+        context,
+        message: _resolveSubmitErrorMessage(error, l10n.uiErrorRequestFailed),
+      );
+      return;
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
+    }
+
+    if (!mounted) {
+      return;
+    }
+    AppNotice.show(context, message: l10n.profileSavedSnackbar);
     context.pop();
   }
 
@@ -905,6 +990,14 @@ class _MemberProfileEditFlowPageState
     return _fundSource == 'warn' || _fundSource == 'ng';
   }
 
+  String get _stepTitle =>
+      memberProfileEditStepTitle(context.l10n, _currentStep, plain: true);
+
+  String get _stepDescription =>
+      memberProfileEditStepDescription(context.l10n, _currentStep);
+
+  String get _primaryActionLabel => context.l10n.profileSaveButton;
+
   String get _fundSourceWarningBody {
     final l10n = context.l10n;
     return _fundSource == 'ng'
@@ -1127,9 +1220,10 @@ class _MemberProfileEditFlowPageState
               : _currentStep.index);
 
     return PopScope<void>(
-      canPop: _currentStep.isFirst,
+      canPop: _isSingleSectionMode || _currentStep.isFirst,
       onPopInvokedWithResult: (bool didPop, void _) {
         if (!didPop &&
+            !_isSingleSectionMode &&
             !_currentStep.isFirst &&
             !_isSubmitting &&
             !_isUploadingPhoto &&
@@ -1140,7 +1234,9 @@ class _MemberProfileEditFlowPageState
       child: Scaffold(
         backgroundColor: colors.background,
         appBar: AppNavigationBar(
-          title: l10n.memberProfileFlowTitle,
+          title: _isSingleSectionMode
+              ? l10n.menuItemEditProfile
+              : l10n.memberProfileFlowTitle,
           backgroundColor: colors.surface,
           foregroundColor: colors.textPrimary,
           leading: SizedBox.square(
@@ -1153,6 +1249,8 @@ class _MemberProfileEditFlowPageState
                     ? null
                     : _isRunningRealPersonAuth
                     ? null
+                    : _isSingleSectionMode
+                    ? () => context.pop()
                     : _goPreviousStep,
                 child: Icon(
                   Icons.arrow_back_rounded,
@@ -1165,11 +1263,12 @@ class _MemberProfileEditFlowPageState
         ),
         body: Column(
           children: <Widget>[
-            AppStepProgressBar(
-              stepCount: stepCount,
-              currentStep: currentStepIndex,
-              pendingColor: colors.borderSoft,
-            ),
+            if (!_isSingleSectionMode)
+              AppStepProgressBar(
+                stepCount: stepCount,
+                currentStep: currentStepIndex,
+                pendingColor: colors.borderSoft,
+              ),
             Expanded(
               child: _isLoading
                   ? const Center(child: CircularProgressIndicator())
@@ -1215,9 +1314,18 @@ class _MemberProfileEditFlowPageState
           phoneController: _phoneController,
           showAgeWarning: _showAgeWarning,
           primaryButtonEnabled: isActionEnabled,
+          titleOverride: _isSingleSectionMode ? _stepTitle : null,
+          descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
+          primaryButtonLabelOverride: _isSingleSectionMode
+              ? _primaryActionLabel
+              : null,
           onBirthdayTap: _pickBirthday,
-          onNext: _goNextStep,
-          onSkip: isActionEnabled ? _goNextStep : null,
+          onNext: _isSingleSectionMode ? _saveCurrentSection : _goNextStep,
+          onSkip: _isSingleSectionMode
+              ? null
+              : isActionEnabled
+              ? _goNextStep
+              : null,
         );
       case MemberProfileEditStep.addressInfo:
         final bool isActionEnabled = _canProceedFromCurrentStep;
@@ -1227,6 +1335,11 @@ class _MemberProfileEditFlowPageState
           cityAddressController: _cityAddressController,
           prefectureItems: _prefectureItems(context),
           primaryButtonEnabled: isActionEnabled,
+          titleOverride: _isSingleSectionMode ? _stepTitle : null,
+          descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
+          primaryButtonLabelOverride: _isSingleSectionMode
+              ? _primaryActionLabel
+              : null,
           onPrefectureChanged: (String? value) {
             setState(() {
               _prefecture = value;
@@ -1235,8 +1348,12 @@ class _MemberProfileEditFlowPageState
           onAddressSearch: _isAddressSearching
               ? null
               : _searchAddressByPostalCode,
-          onNext: _goNextStep,
-          onSkip: isActionEnabled ? _goNextStep : null,
+          onNext: _isSingleSectionMode ? _saveCurrentSection : _goNextStep,
+          onSkip: _isSingleSectionMode
+              ? null
+              : isActionEnabled
+              ? _goNextStep
+              : null,
         );
       case MemberProfileEditStep.suitability:
         return MemberProfileSuitabilityStepPage(
@@ -1257,6 +1374,11 @@ class _MemberProfileEditFlowPageState
           showFundSourceWarning: _showFundSourceWarning,
           fundSourceWarningBody: _fundSourceWarningBody,
           primaryButtonEnabled: _canProceedFromCurrentStep,
+          titleOverride: _isSingleSectionMode ? _stepTitle : null,
+          descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
+          primaryButtonLabelOverride: _isSingleSectionMode
+              ? _primaryActionLabel
+              : null,
           onOccupationChanged: (String? value) {
             setState(() {
               _occupation = value;
@@ -1296,7 +1418,7 @@ class _MemberProfileEditFlowPageState
               }
             });
           },
-          onNext: _goNextStep,
+          onNext: _isSingleSectionMode ? _saveCurrentSection : _goNextStep,
         );
       case MemberProfileEditStep.ekyc:
         return MemberProfileEkycStepPage(
@@ -1308,6 +1430,11 @@ class _MemberProfileEditFlowPageState
               _canProceedFromCurrentStep &&
               !_isUploadingPhoto &&
               !_isSubmitting,
+          titleOverride: _isSingleSectionMode ? _stepTitle : null,
+          descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
+          primaryButtonLabelOverride: _isSingleSectionMode
+              ? _primaryActionLabel
+              : null,
           onDocumentTypeChanged: (String? value) {
             setState(() {
               _documentType = value;
@@ -1323,7 +1450,7 @@ class _MemberProfileEditFlowPageState
               : _isRunningRealPersonAuth
               ? null
               : () => _pickAndSaveImage(isDocument: false),
-          onNext: _goNextStep,
+          onNext: _isSingleSectionMode ? _saveCurrentSection : _goNextStep,
         );
       case MemberProfileEditStep.realPersonAuth:
         if (!_isIdentityAuthEnabled) {
@@ -1351,18 +1478,28 @@ class _MemberProfileEditFlowPageState
           accountNumberController: _accountNumberController,
           accountHolderController: _accountHolderController,
           primaryButtonEnabled: _canProceedFromCurrentStep,
+          titleOverride: _isSingleSectionMode ? _stepTitle : null,
+          descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
+          primaryButtonLabelOverride: _isSingleSectionMode
+              ? _primaryActionLabel
+              : null,
           onAccountTypeChanged: (String? value) {
             setState(() {
               _accountType = _normalizeAccountType(value);
             });
           },
-          onNext: _goNextStep,
+          onNext: _isSingleSectionMode ? _saveCurrentSection : _goNextStep,
         );
       case MemberProfileEditStep.consent:
         return MemberProfileConsentStepPage(
           electronicConsent: _electronicConsent,
           antiSocialConsent: _antiSocialConsent,
           privacyConsent: _privacyConsent,
+          titleOverride: _isSingleSectionMode ? _stepTitle : null,
+          descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
+          primaryButtonLabelOverride: _isSingleSectionMode
+              ? _primaryActionLabel
+              : null,
           onElectronicConsentChanged: (bool value) {
             setState(() {
               _electronicConsent = value;
@@ -1380,6 +1517,8 @@ class _MemberProfileEditFlowPageState
           },
           onComplete: (_isSubmitting || _isRunningRealPersonAuth)
               ? null
+              : _isSingleSectionMode
+              ? _saveCurrentSection
               : _completeFlow,
         );
     }

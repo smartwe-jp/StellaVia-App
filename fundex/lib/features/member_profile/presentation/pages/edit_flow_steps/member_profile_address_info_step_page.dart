@@ -11,6 +11,9 @@ class MemberProfileAddressInfoStepPage extends StatelessWidget {
     required this.cityAddressController,
     required this.prefectureItems,
     this.primaryButtonEnabled = true,
+    this.titleOverride,
+    this.descriptionOverride,
+    this.primaryButtonLabelOverride,
     this.onPrefectureChanged,
     this.onAddressSearch,
     this.onNext,
@@ -22,6 +25,9 @@ class MemberProfileAddressInfoStepPage extends StatelessWidget {
   final TextEditingController cityAddressController;
   final List<DropdownMenuItem<String>> prefectureItems;
   final bool primaryButtonEnabled;
+  final String? titleOverride;
+  final String? descriptionOverride;
+  final String? primaryButtonLabelOverride;
   final ValueChanged<String?>? onPrefectureChanged;
   final VoidCallback? onAddressSearch;
   final VoidCallback? onNext;
@@ -31,9 +37,9 @@ class MemberProfileAddressInfoStepPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return MemberProfileEditStepScaffold(
-      title: l10n.memberProfileStep2Title,
-      description: l10n.memberProfileStep2Description,
-      primaryButtonLabel: l10n.commonNext,
+      title: titleOverride ?? l10n.memberProfileStep2Title,
+      description: descriptionOverride ?? l10n.memberProfileStep2Description,
+      primaryButtonLabel: primaryButtonLabelOverride ?? l10n.commonNext,
       onPrimaryPressed: onNext,
       primaryButtonEnabled: primaryButtonEnabled,
       skipLabel: l10n.commonSkipChevron,

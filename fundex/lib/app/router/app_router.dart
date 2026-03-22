@@ -25,6 +25,7 @@ import '../../features/investment/presentation/support/fund_lottery_apply_step.d
 import '../../features/main_shell/presentation/pages/main_shell_page.dart';
 import '../../features/member_profile/presentation/pages/member_profile_edit_flow_page.dart';
 import '../../features/member_profile/presentation/pages/member_profile_intake_page.dart';
+import '../../features/member_profile/presentation/pages/member_profile_overview_page.dart';
 import '../../features/member_profile/presentation/pages/my_page_active_fund_detail_page.dart';
 import '../../features/member_profile/presentation/pages/my_page_secondary_market_sell_confirm_page.dart';
 import '../../features/member_profile/presentation/pages/my_page_secondary_market_sell_order_page.dart';
@@ -34,6 +35,7 @@ import '../../features/member_profile/presentation/pages/profile_center_tab_page
 import '../../features/member_profile/domain/entities/mypage_models.dart';
 import '../../features/member_profile/presentation/support/mypage_secondary_market_models.dart';
 import '../../features/member_profile/presentation/support/mypage_section_support.dart';
+import '../../features/member_profile/presentation/support/member_profile_edit_step.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/wallet/presentation/pages/deposit_page.dart';
 import '../../features/wallet/presentation/pages/withdraw_page.dart';
@@ -528,8 +530,22 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/member-profile/edit',
         builder: (BuildContext context, GoRouterState state) {
-          return const MemberProfileEditFlowPage();
+          return const MemberProfileOverviewPage();
         },
+        routes: <RouteBase>[
+          GoRoute(
+            path: 'section/:section',
+            builder: (BuildContext context, GoRouterState state) {
+              final rawStep = state.pathParameters['section'];
+              final step =
+                  memberProfileEditStepFromRouteValue(rawStep) ??
+                  MemberProfileEditStep.basicInfo;
+              return MemberProfileEditFlowPage.section(
+                initialStep: step,
+              );
+            },
+          ),
+        ],
       ),
       GoRoute(
         path: '/design-showcase/hotel',

@@ -24,6 +24,9 @@ class MemberProfileSuitabilityStepPage extends StatelessWidget {
     required this.showFundSourceWarning,
     required this.fundSourceWarningBody,
     this.primaryButtonEnabled = true,
+    this.titleOverride,
+    this.descriptionOverride,
+    this.primaryButtonLabelOverride,
     this.onOccupationChanged,
     this.onAnnualIncomeChanged,
     this.onFinancialAssetsChanged,
@@ -51,6 +54,9 @@ class MemberProfileSuitabilityStepPage extends StatelessWidget {
   final bool showFundSourceWarning;
   final String fundSourceWarningBody;
   final bool primaryButtonEnabled;
+  final String? titleOverride;
+  final String? descriptionOverride;
+  final String? primaryButtonLabelOverride;
   final ValueChanged<String?>? onOccupationChanged;
   final ValueChanged<String?>? onAnnualIncomeChanged;
   final ValueChanged<String?>? onFinancialAssetsChanged;
@@ -67,9 +73,9 @@ class MemberProfileSuitabilityStepPage extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     return MemberProfileEditStepScaffold(
-      title: l10n.memberProfileStep3Title,
-      description: l10n.memberProfileStep3Description,
-      primaryButtonLabel: l10n.commonNext,
+      title: titleOverride ?? l10n.memberProfileStep3Title,
+      description: descriptionOverride ?? l10n.memberProfileStep3Description,
+      primaryButtonLabel: primaryButtonLabelOverride ?? l10n.commonNext,
       onPrimaryPressed: onNext,
       primaryButtonEnabled: primaryButtonEnabled,
       child: Column(

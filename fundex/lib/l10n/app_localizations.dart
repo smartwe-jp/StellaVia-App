@@ -1877,6 +1877,18 @@ abstract class AppLocalizations {
   /// **'Edit member profile'**
   String get menuItemEditProfile;
 
+  /// No description provided for @memberProfileOverviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Member Profile'**
+  String get memberProfileOverviewTitle;
+
+  /// No description provided for @commonEditText.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get commonEditText;
+
   /// No description provided for @menuItemBankSettings.
   ///
   /// In en, this message translates to:

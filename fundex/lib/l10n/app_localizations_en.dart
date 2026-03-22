@@ -968,6 +968,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemEditProfile => 'Edit member profile';
 
   @override
+  String get memberProfileOverviewTitle => 'Member Profile';
+
+  @override
+  String get commonEditText => 'Edit';
+
+  @override
   String get menuItemBankSettings => 'Bank account settings';
 
   @override

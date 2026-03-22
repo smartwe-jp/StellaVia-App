@@ -145,27 +145,30 @@ class SecondaryMarketTradePinnedTitleBar extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.surface,
-        border: Border(bottom: BorderSide(color: colors.borderSoft)),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: colors.scrim.withValues(alpha: 0.03),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-        child: Text(
-          title,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: appText.pageTitle.copyWith(
-            color: colors.textPrimary,
-            height: 1.3,
+    return SizedBox(
+      width: double.infinity,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: colors.surface,
+          border: Border(bottom: BorderSide(color: colors.borderSoft)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: colors.scrim.withValues(alpha: 0.03),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+          child: Text(
+            title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: appText.pageTitle.copyWith(
+              color: colors.textPrimary,
+              height: 1.3,
+            ),
           ),
         ),
       ),

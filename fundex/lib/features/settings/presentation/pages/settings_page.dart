@@ -172,13 +172,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           AppMenuSection(
             title: l10n.menuSectionSecurity,
             children: <Widget>[
-              AppMenuItem(
-                icon: Icons.lock_rounded,
-                label: l10n.menuItemChangePassword,
-                iconBackgroundColor: colors.warningSubtle,
-                iconForegroundColor: colors.warning,
-                onTap: () => _showComingSoon(l10n.menuItemChangePassword),
-              ),
+              // AppMenuItem(
+              //   icon: Icons.lock_rounded,
+              //   label: l10n.menuItemChangePassword,
+              //   iconBackgroundColor: colors.warningSubtle,
+              //   iconForegroundColor: colors.warning,
+              //   onTap: () => _showComingSoon(l10n.menuItemChangePassword),
+              // ),
               AppMenuItem(
                 icon: Icons.verified_user_rounded,
                 label: l10n.menuItemTwoFactor,
@@ -209,13 +209,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 iconForegroundColor: colors.textSecondary,
                 onTap: () => _showComingSoon(l10n.menuItemContractList),
               ),
-              AppMenuItem(
-                icon: Icons.badge_rounded,
-                label: l10n.menuItemMyNumber,
-                iconBackgroundColor: colors.warningSubtle,
-                iconForegroundColor: colors.warning,
-                onTap: () => _showComingSoon(l10n.menuItemMyNumber),
-              ),
+              // AppMenuItem(
+              //   icon: Icons.badge_rounded,
+              //   label: l10n.menuItemMyNumber,
+              //   iconBackgroundColor: colors.warningSubtle,
+              //   iconForegroundColor: colors.warning,
+              //   onTap: () => _showComingSoon(l10n.menuItemMyNumber),
+              // ),
             ],
           ),
           AppMenuSection(

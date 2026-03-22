@@ -9,6 +9,9 @@ class MemberProfileConsentStepPage extends StatelessWidget {
     required this.electronicConsent,
     required this.antiSocialConsent,
     required this.privacyConsent,
+    this.titleOverride,
+    this.descriptionOverride,
+    this.primaryButtonLabelOverride,
     this.onElectronicConsentChanged,
     this.onAntiSocialConsentChanged,
     this.onPrivacyConsentChanged,
@@ -18,6 +21,9 @@ class MemberProfileConsentStepPage extends StatelessWidget {
   final bool electronicConsent;
   final bool antiSocialConsent;
   final bool privacyConsent;
+  final String? titleOverride;
+  final String? descriptionOverride;
+  final String? primaryButtonLabelOverride;
   final ValueChanged<bool>? onElectronicConsentChanged;
   final ValueChanged<bool>? onAntiSocialConsentChanged;
   final ValueChanged<bool>? onPrivacyConsentChanged;
@@ -30,9 +36,10 @@ class MemberProfileConsentStepPage extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     return MemberProfileEditStepScaffold(
-      title: l10n.memberProfileStep6Title,
-      description: l10n.memberProfileStep6Description,
-      primaryButtonLabel: l10n.memberProfileAgreeAndComplete,
+      title: titleOverride ?? l10n.memberProfileStep6Title,
+      description: descriptionOverride ?? l10n.memberProfileStep6Description,
+      primaryButtonLabel:
+          primaryButtonLabelOverride ?? l10n.memberProfileAgreeAndComplete,
       primaryButtonEnabled:
           electronicConsent && antiSocialConsent && privacyConsent,
       onPrimaryPressed: onComplete,

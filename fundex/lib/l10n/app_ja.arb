@@ -327,6 +327,8 @@
   "menuSectionSupport": "サポート",
   "menuItemTheme": "テーマ",
   "menuItemEditProfile": "会員情報の編集",
+  "memberProfileOverviewTitle": "会員基本情報",
+  "commonEditText": "編集",
   "menuItemBankSettings": "銀行口座設定",
   "menuItemChangePassword": "パスワード変更",
   "menuItemTwoFactor": "二段階認証",
