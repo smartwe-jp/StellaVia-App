@@ -270,11 +270,13 @@ class MyPageProjectBenefit {
   const MyPageProjectBenefit({
     this.projectName,
     this.balanceTotal,
+    this.balanceTotalHistorical,
     this.details = const <MyPageBenefitDetail>[],
   });
 
   final String? projectName;
   final num? balanceTotal;
+  final num? balanceTotalHistorical;
   final List<MyPageBenefitDetail> details;
 }
 

@@ -48,11 +48,7 @@ class SecondaryMarketMarketplaceDetailPage extends ConsumerWidget {
           : SafeArea(
               top: false,
               child: Container(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                decoration: BoxDecoration(
-                  color: colors.surface,
-                  border: Border(top: BorderSide(color: colors.border)),
-                ),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                 child: PrimaryCtaButton(
                   label: l10n.secondaryMarketBuyAction,
                   onPressed: canBuySecondaryMarketRecord(record)
@@ -149,20 +145,20 @@ class SecondaryMarketMarketplaceDetailPage extends ConsumerWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 14),
-              SecondaryMarketDetailSectionCard(
-                title: l10n.secondaryMarketActivityTitle,
-                child: SecondaryMarketDetailActivityGrid(
-                  applicationCount:
-                      '${l10n.secondaryMarketApplicationsCountLabel} ${countSecondaryMarketApplications(record)}件',
-                  dealCount:
-                      '${l10n.secondaryMarketDealsCountLabel} ${countSecondaryMarketDeals(record)}件',
-                  latestApplication:
-                      '${l10n.secondaryMarketLatestApplicationLabel}  ${resolveLatestSecondaryMarketApplicationTime(record) ?? l10n.myPageResultAnnouncementTbd}',
-                  latestDeal:
-                      '${l10n.secondaryMarketLatestDealLabel}  ${resolveLatestSecondaryMarketDealTime(record) ?? l10n.myPageResultAnnouncementTbd}',
-                ),
-              ),
+              //const SizedBox(height: 14),
+              // SecondaryMarketDetailSectionCard(
+              //   title: l10n.secondaryMarketActivityTitle,
+              //   child: SecondaryMarketDetailActivityGrid(
+              //     applicationCount:
+              //         '${l10n.secondaryMarketApplicationsCountLabel} ${countSecondaryMarketApplications(record)}件',
+              //     dealCount:
+              //         '${l10n.secondaryMarketDealsCountLabel} ${countSecondaryMarketDeals(record)}件',
+              //     latestApplication:
+              //         '${l10n.secondaryMarketLatestApplicationLabel}  ${resolveLatestSecondaryMarketApplicationTime(record) ?? l10n.myPageResultAnnouncementTbd}',
+              //     latestDeal:
+              //         '${l10n.secondaryMarketLatestDealLabel}  ${resolveLatestSecondaryMarketDealTime(record) ?? l10n.myPageResultAnnouncementTbd}',
+              //   ),
+              // ),
               if (record.pdfDocuments.isNotEmpty) ...<Widget>[
                 const SizedBox(height: 14),
                 SecondaryMarketDetailSectionCard(

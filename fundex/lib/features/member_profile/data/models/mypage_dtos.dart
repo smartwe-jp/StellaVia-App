@@ -228,6 +228,7 @@ extension MyPageProjectBenefitDtoMapper on MyPageProjectBenefitDto {
     return MyPageProjectBenefit(
       projectName: projectName,
       balanceTotal: balanceTotal,
+      balanceTotalHistorical: balanceTotalHistorical,
       details: details
           .map((MyPageBenefitDetailDto item) => item.toEntity())
           .toList(growable: false),

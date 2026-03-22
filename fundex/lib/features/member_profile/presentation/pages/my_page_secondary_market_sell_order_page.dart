@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/config/environment_provider.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../investment/presentation/widgets/secondary_market_buy_flow_sections.dart';
 import '../support/mypage_secondary_market_models.dart';
 
 class MyPageSecondaryMarketSellOrderPage extends ConsumerStatefulWidget {
@@ -20,12 +21,19 @@ class MyPageSecondaryMarketSellOrderPage extends ConsumerStatefulWidget {
 
 class _MyPageSecondaryMarketSellOrderPageState
     extends ConsumerState<MyPageSecondaryMarketSellOrderPage> {
-  final TextEditingController _sellUnitsController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController(
-    text: '1000000',
-  );
+  late final TextEditingController _sellUnitsController;
+  late final TextEditingController _priceController;
 
   bool _agreed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _sellUnitsController = TextEditingController(
+      text: widget.seed.availableUnits > 0 ? '1' : '0',
+    );
+    _priceController = TextEditingController(text: '1000000');
+  }
 
   @override
   void dispose() {
@@ -50,13 +58,43 @@ class _MyPageSecondaryMarketSellOrderPageState
         price > 0;
   }
 
-  void _openContractSample(BuildContext context) {
+  void _setSellUnits(int value) {
+    final clamped = value.clamp(0, widget.seed.availableUnits);
+    final text = clamped.toString();
+    _sellUnitsController.value = TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
+    setState(() {});
+  }
+
+  void _increaseUnits() {
+    final current = _sellUnits ?? 0;
+    if (current >= widget.seed.availableUnits) {
+      return;
+    }
+    _setSellUnits(current + 1);
+  }
+
+  void _decreaseUnits() {
+    final current = _sellUnits ?? 0;
+    if (current <= 1) {
+      _setSellUnits(0);
+      return;
+    }
+    _setSellUnits(current - 1);
+  }
+
+  String get _sampleDocumentUrl {
     final oaApiBaseUrl = ref.read(oaApiBaseUrlProvider);
-    final url = _buildSampleContractUrl(oaApiBaseUrl);
+    return _buildSampleContractUrl(oaApiBaseUrl);
+  }
+
+  void _openContractSample(BuildContext context) {
     final l10n = context.l10n;
     openAppPdfViewer(
       context,
-      url: url,
+      url: _sampleDocumentUrl,
       title: l10n.myPageResaleAgreementSampleLabel,
       texts: AppPdfViewerTexts(
         pageTitle: l10n.pdfViewerPageTitle,
@@ -94,7 +132,6 @@ class _MyPageSecondaryMarketSellOrderPageState
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = theme.appColors;
-    final appText = theme.appTextTheme;
     final formatter = NumberFormat.currency(
       locale: Localizations.localeOf(context).toLanguageTag(),
       symbol: '¥',
@@ -111,163 +148,100 @@ class _MyPageSecondaryMarketSellOrderPageState
       earningRatio: widget.seed.earningRatio,
       agreed: _agreed,
     );
+    final formulaValue =
+        '${_sellUnits ?? 0}${l10n.myPageResaleUnitsSuffix} × ${formatter.format(_price ?? 0)}';
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.myPageResaleOrderTitle)),
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-          decoration: BoxDecoration(
-            color: colors.surface,
-            border: Border(top: BorderSide(color: colors.border)),
-          ),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () => Navigator.of(context).maybePop(),
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(48),
-                  ),
-                  child: Text(l10n.walletBankSettingsCancelAction),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: PrimaryCtaButton(
-                  label: l10n.myPageResaleConfirmButton,
-                  onPressed: _isValid ? _goConfirm : null,
-                  fullWidth: false,
-                  height: 48,
-                  horizontalPadding: 0,
-                ),
-              ),
-            ],
-          ),
+      backgroundColor: colors.surface,
+      appBar: AppNavigationBar(
+        title: l10n.myPageResaleOrderTitle,
+        leading: AppNavigationIconButton(
+          icon: Icons.arrow_back_rounded,
+          onTap: () => context.pop(),
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+      bottomNavigationBar: SecondaryMarketTradeStickyActionBar(
+        amountLabel: l10n.myPageResaleNetAmountLabel,
+        amountValue: formatter.format(draftPreview.netAmount),
+        helperText: _isValid ? null : l10n.myPageResaleValidationMessage,
+        primaryLabel: l10n.myPageResaleConfirmButton,
+        onPrimaryPressed: _isValid ? _goConfirm : null,
+        primaryBackgroundColor: colors.danger,
+        primaryShadowColor: colors.danger.withValues(alpha: 0.36),
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          _ResaleSegmentHeader(
-            current: _ResaleStep.order,
-            orderLabel: l10n.myPageResaleTabOrder,
-            confirmLabel: l10n.myPageResaleTabConfirm,
-          ),
-          const SizedBox(height: 12),
-          _ResaleTableRow(
-            label: l10n.myPageResaleFundNameLabel,
-            value: Text(
-              widget.seed.projectName,
-              style: appText.bodyStrong.copyWith(color: colors.primary),
-            ),
-          ),
-          _ResaleTableRow(
-            label: l10n.myPageResaleInvestorTypeLabel,
-            value: Text(
-              _buildInvestorTypeText(
-                l10n,
-                investorCode: widget.seed.investorCode,
-                earningRatio: widget.seed.earningRatio,
-              ),
-            ),
-          ),
-          _ResaleTableRow(
-            label: l10n.myPageResaleOrderMethodLabel,
-            value: Text(l10n.myPageResaleOrderMethodValue),
-          ),
-          _ResaleTableRow(
-            label: l10n.myPageResaleAvailableUnitsLabel,
-            value: Text(widget.seed.availableUnits.toString()),
-          ),
-          _ResaleTableRow(
-            label: l10n.myPageResaleSellUnitsLabel,
-            value: _UnitInputField(
-              controller: _sellUnitsController,
-              unitLabel: l10n.myPageResaleUnitsSuffix,
-              onChanged: (_) => setState(() {}),
-            ),
-          ),
-          _ResaleTableRow(
-            label: l10n.myPageResaleUnitPriceLabel,
-            value: _UnitInputField(
-              controller: _priceController,
-              unitLabel: l10n.myPageResaleYenSuffix,
-              onChanged: (_) => setState(() {}),
-            ),
-          ),
-          _ResaleTableRow(
-            label: l10n.myPageResaleFeeLabel,
-            value: Text(l10n.myPageResaleFeeValue),
-          ),
-          _ResaleTableRow(
-            label: l10n.myPageResaleAgreementLabel,
-            value: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          SecondaryMarketTradePinnedTitleBar(title: widget.seed.projectName),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
               children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Checkbox(
-                      value: _agreed,
-                      onChanged: (value) {
-                        setState(() {
-                          _agreed = value ?? false;
-                        });
-                      },
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Text(l10n.myPageResaleAgreementBody),
-                      ),
-                    ),
-                  ],
+                SecondaryMarketTradeFlowHeader(
+                  currentStep: 0,
+                  title: l10n.myPageResaleFlowOrderTitle,
+                  subtitle: l10n.myPageResaleFlowOrderSubtitle,
+                  orderLabel: l10n.myPageResaleTabOrder,
+                  confirmLabel: l10n.secondaryMarketTradeTabConfirm,
                 ),
-                TextButton(
-                  onPressed: () => _openContractSample(context),
-                  child: Text(l10n.myPageResaleAgreementSampleLabel),
+                const SizedBox(height: 14),
+                SecondaryMarketTradeSellEntryCard(
+                  title: l10n.myPageResaleSellUnitsLabel,
+                  subtitle: l10n.myPageResaleQuantityHint,
+                  availabilityLabel: l10n.myPageResaleAvailableUnitsLabel,
+                  priceLabel: l10n.myPageResaleUnitPriceLabel,
+                  formulaLabel: l10n.myPageResaleLiveEstimateFormulaLabel,
+                  formulaValue: formulaValue,
+                  totalLabel: l10n.myPageResaleTotalAmountLabel,
+                  totalValue: formatter.format(draftPreview.totalAmount),
+                  feeLabel: l10n.myPageResaleFeeAmountLabel,
+                  feeValue: formatter.format(draftPreview.feeAmount),
+                  netLabel: l10n.myPageResaleNetAmountLabel,
+                  netValue: formatter.format(draftPreview.netAmount),
+                  quantityController: _sellUnitsController,
+                  priceController: _priceController,
+                  selectedUnits: _sellUnits ?? 0,
+                  availableUnits: widget.seed.availableUnits,
+                  unitLabel: l10n.myPageResaleUnitsSuffix,
+                  priceUnitLabel: l10n.myPageResaleYenSuffix,
+                  maxChipLabel: l10n.myPageResaleQuickMax,
+                  onQuantityChanged: (_) => setState(() {}),
+                  onPriceChanged: (_) => setState(() {}),
+                  onDecrease: widget.seed.availableUnits > 0
+                      ? _decreaseUnits
+                      : null,
+                  onIncrease: widget.seed.availableUnits > 0
+                      ? _increaseUnits
+                      : null,
+                  onSelectPreset: _setSellUnits,
+                  enabled: widget.seed.availableUnits > 0,
+                  validationMessage: _isValid
+                      ? null
+                      : l10n.myPageResaleValidationMessage,
                 ),
+                const SizedBox(height: 14),
+                SecondaryMarketTradeAgreementCard(
+                  title: l10n.myPageResaleAgreementSectionTitle,
+                  body: l10n.myPageResaleAgreementBody,
+                  agreed: _agreed,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _agreed = value;
+                    });
+                  },
+                  documentLabel: l10n.myPageResaleAgreementSampleLabel,
+                  documentActionLabel: l10n.secondaryMarketDocumentOpenAction,
+                  documentAvailable: true,
+                  onOpenDocument: () => _openContractSample(context),
+                ),
+                const SizedBox(height: 112),
               ],
             ),
           ),
-          const SizedBox(height: 12),
-          _PreviewCard(
-            totalLabel: l10n.myPageResaleTotalAmountLabel,
-            feeLabel: l10n.myPageResaleFeeAmountLabel,
-            netLabel: l10n.myPageResaleNetAmountLabel,
-            totalValue: formatter.format(draftPreview.totalAmount),
-            feeValue: formatter.format(draftPreview.feeAmount),
-            netValue: formatter.format(draftPreview.netAmount),
-          ),
-          if (!_isValid)
-            Padding(
-              padding: const EdgeInsets.only(top: 12),
-              child: Text(
-                l10n.myPageResaleValidationMessage,
-                style: appText.caption.copyWith(color: colors.danger),
-              ),
-            ),
         ],
       ),
     );
   }
-}
-
-String _buildInvestorTypeText(
-  dynamic l10n, {
-  required String? investorCode,
-  required double? earningRatio,
-}) {
-  final code = investorCode?.trim();
-  final ratio = earningRatio == null
-      ? '--'
-      : '${(earningRatio * 100).toStringAsFixed(2)}%';
-  if (code == null || code.isEmpty) {
-    return l10n.myPageResaleInvestorTypeFallback(ratio);
-  }
-  return '$code\n${l10n.myPageResaleFixedYieldLabel(ratio)}';
 }
 
 String _buildSampleContractUrl(String oaApiBaseUrl) {
@@ -278,220 +252,4 @@ String _buildSampleContractUrl(String oaApiBaseUrl) {
   final origin =
       '${uri.scheme}://${uri.host}${uri.hasPort ? ':${uri.port}' : ''}';
   return '$origin/keiyakusho.pdf';
-}
-
-enum _ResaleStep { order, confirm }
-
-class _ResaleSegmentHeader extends StatelessWidget {
-  const _ResaleSegmentHeader({
-    required this.current,
-    required this.orderLabel,
-    required this.confirmLabel,
-  });
-
-  final _ResaleStep current;
-  final String orderLabel;
-  final String confirmLabel;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        _ResaleSegmentChip(
-          label: orderLabel,
-          selected: current == _ResaleStep.order,
-        ),
-        const SizedBox(width: 8),
-        _ResaleSegmentChip(
-          label: confirmLabel,
-          selected: current == _ResaleStep.confirm,
-        ),
-      ],
-    );
-  }
-}
-
-class _ResaleSegmentChip extends StatelessWidget {
-  const _ResaleSegmentChip({required this.label, required this.selected});
-
-  final String label;
-  final bool selected;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-      decoration: BoxDecoration(
-        color: selected ? colors.infoSubtle : colors.surfaceAlt,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        label,
-        style: appText.chip.copyWith(
-          color: selected ? colors.primary : colors.textSecondary,
-        ),
-      ),
-    );
-  }
-}
-
-class _ResaleTableRow extends StatelessWidget {
-  const _ResaleTableRow({required this.label, required this.value});
-
-  final String label;
-  final Widget value;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          left: BorderSide(color: colors.border),
-          right: BorderSide(color: colors.border),
-          bottom: BorderSide(color: colors.border),
-        ),
-      ),
-      child: IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Container(
-              width: 120,
-              padding: const EdgeInsets.all(12),
-              color: colors.surfaceAlt,
-              alignment: Alignment.centerLeft,
-              child: Text(label, style: appText.bodyStrong),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Align(alignment: Alignment.centerLeft, child: value),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _UnitInputField extends StatelessWidget {
-  const _UnitInputField({
-    required this.controller,
-    required this.unitLabel,
-    required this.onChanged,
-  });
-
-  final TextEditingController controller;
-  final String unitLabel;
-  final ValueChanged<String> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).appColors;
-    final appText = Theme.of(context).appTextTheme;
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: TextField(
-            controller: controller,
-            keyboardType: TextInputType.number,
-            onChanged: onChanged,
-            decoration: InputDecoration(
-              isDense: true,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 12,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          unitLabel,
-          style: appText.bodyMuted.copyWith(color: colors.textSecondary),
-        ),
-      ],
-    );
-  }
-}
-
-class _PreviewCard extends StatelessWidget {
-  const _PreviewCard({
-    required this.totalLabel,
-    required this.feeLabel,
-    required this.netLabel,
-    required this.totalValue,
-    required this.feeValue,
-    required this.netValue,
-  });
-
-  final String totalLabel;
-  final String feeLabel;
-  final String netLabel;
-  final String totalValue;
-  final String feeValue;
-  final String netValue;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).appColors;
-    final appText = Theme.of(context).appTextTheme;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.infoSoft,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: colors.infoBorder),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          children: <Widget>[
-            _previewRow(context, totalLabel, totalValue),
-            const SizedBox(height: 6),
-            _previewRow(context, feeLabel, feeValue),
-            const SizedBox(height: 8),
-            const Divider(height: 1),
-            const SizedBox(height: 8),
-            _previewRow(
-              context,
-              netLabel,
-              netValue,
-              valueStyle: appText.numericTitle.copyWith(color: colors.danger),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _previewRow(
-    BuildContext context,
-    String label,
-    String value, {
-    TextStyle? valueStyle,
-  }) {
-    final colors = Theme.of(context).appColors;
-    final appText = Theme.of(context).appTextTheme;
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: Text(
-            label,
-            style: appText.bodyMuted.copyWith(color: colors.textSecondary),
-          ),
-        ),
-        Text(value, style: valueStyle),
-      ],
-    );
-  }
 }

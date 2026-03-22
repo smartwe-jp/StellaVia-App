@@ -135,10 +135,7 @@ class SecondaryMarketTradeFlowHeader extends StatelessWidget {
 }
 
 class SecondaryMarketTradePinnedTitleBar extends StatelessWidget {
-  const SecondaryMarketTradePinnedTitleBar({
-    super.key,
-    required this.title,
-  });
+  const SecondaryMarketTradePinnedTitleBar({super.key, required this.title});
 
   final String title;
 
@@ -548,14 +545,15 @@ class SecondaryMarketTradeHeroCard extends StatelessWidget {
                   Row(
                     children: metrics
                         .map(
-                          (SecondaryMarketTradeMetricItemData metric) => Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                right: metric == metrics.last ? 0 : 10,
+                          (SecondaryMarketTradeMetricItemData metric) =>
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    right: metric == metrics.last ? 0 : 10,
+                                  ),
+                                  child: _MetricCard(metric: metric),
+                                ),
                               ),
-                              child: _MetricCard(metric: metric),
-                            ),
-                          ),
                         )
                         .toList(growable: false),
                   ),
@@ -731,7 +729,9 @@ class SecondaryMarketTradeQuantityCard extends StatelessWidget {
                             border: InputBorder.none,
                             hintText: '0',
                             hintStyle: appText.numericTitle.copyWith(
-                              color: colors.textSecondary.withValues(alpha: 0.45),
+                              color: colors.textSecondary.withValues(
+                                alpha: 0.45,
+                              ),
                             ),
                           ),
                         ),
@@ -758,14 +758,16 @@ class SecondaryMarketTradeQuantityCard extends StatelessWidget {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: presets.map((int value) {
-              final bool isMax = value == availableUnits;
-              return _QuickSelectChip(
-                label: isMax ? maxChipLabel : '$value$unitLabel',
-                selected: selectedUnits == value,
-                onTap: enabled ? () => onSelectPreset(value) : null,
-              );
-            }).toList(growable: false),
+            children: presets
+                .map((int value) {
+                  final bool isMax = value == availableUnits;
+                  return _QuickSelectChip(
+                    label: isMax ? maxChipLabel : '$value$unitLabel',
+                    selected: selectedUnits == value,
+                    onTap: enabled ? () => onSelectPreset(value) : null,
+                  );
+                })
+                .toList(growable: false),
           ),
           const SizedBox(height: 14),
           Container(
@@ -869,6 +871,339 @@ class SecondaryMarketTradeQuantityCard extends StatelessWidget {
                       ),
                       Text(
                         paymentValue,
+                        style: appText.numericTitle.copyWith(
+                          color: colors.onDark,
+                          height: 1.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (validationMessage != null) ...<Widget>[
+            const SizedBox(height: 12),
+            Text(
+              validationMessage!,
+              style: appText.caption.copyWith(color: colors.danger),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class SecondaryMarketTradeSellEntryCard extends StatelessWidget {
+  const SecondaryMarketTradeSellEntryCard({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.availabilityLabel,
+    required this.priceLabel,
+    required this.formulaLabel,
+    required this.formulaValue,
+    required this.totalLabel,
+    required this.totalValue,
+    required this.feeLabel,
+    required this.feeValue,
+    required this.netLabel,
+    required this.netValue,
+    required this.quantityController,
+    required this.priceController,
+    required this.selectedUnits,
+    required this.availableUnits,
+    required this.unitLabel,
+    required this.priceUnitLabel,
+    required this.maxChipLabel,
+    required this.onQuantityChanged,
+    required this.onPriceChanged,
+    required this.onDecrease,
+    required this.onIncrease,
+    required this.onSelectPreset,
+    this.enabled = true,
+    this.validationMessage,
+  });
+
+  final String title;
+  final String subtitle;
+  final String availabilityLabel;
+  final String priceLabel;
+  final String formulaLabel;
+  final String formulaValue;
+  final String totalLabel;
+  final String totalValue;
+  final String feeLabel;
+  final String feeValue;
+  final String netLabel;
+  final String netValue;
+  final TextEditingController quantityController;
+  final TextEditingController priceController;
+  final int selectedUnits;
+  final int availableUnits;
+  final String unitLabel;
+  final String priceUnitLabel;
+  final String maxChipLabel;
+  final ValueChanged<String> onQuantityChanged;
+  final ValueChanged<String> onPriceChanged;
+  final VoidCallback? onDecrease;
+  final VoidCallback? onIncrease;
+  final ValueChanged<int> onSelectPreset;
+  final bool enabled;
+  final String? validationMessage;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final presets = <int>{
+      1,
+      if (availableUnits >= 5) 5,
+      if (availableUnits >= 10) 10,
+      availableUnits,
+    }.where((int value) => value > 0).toList(growable: false);
+
+    return SecondaryMarketTradePanelCard(
+      title: title,
+      subtitle: subtitle,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              _QuantityAdjustButton(
+                icon: Icons.remove_rounded,
+                onTap: enabled ? onDecrease : null,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: colors.surfaceAlt,
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(color: colors.border),
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: TextField(
+                          controller: quantityController,
+                          enabled: enabled,
+                          onChanged: onQuantityChanged,
+                          keyboardType: TextInputType.number,
+                          textAlign: TextAlign.center,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          style: appText.numericTitle.copyWith(
+                            color: colors.textPrimary,
+                          ),
+                          decoration: InputDecoration(
+                            isDense: true,
+                            border: InputBorder.none,
+                            hintText: '0',
+                            hintStyle: appText.numericTitle.copyWith(
+                              color: colors.textSecondary.withValues(
+                                alpha: 0.45,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        unitLabel,
+                        style: appText.bodyStrong.copyWith(
+                          color: colors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              _QuantityAdjustButton(
+                icon: Icons.add_rounded,
+                onTap: enabled ? onIncrease : null,
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: presets
+                .map((int value) {
+                  final bool isMax = value == availableUnits;
+                  return _QuickSelectChip(
+                    label: isMax ? maxChipLabel : '$value$unitLabel',
+                    selected: selectedUnits == value,
+                    onTap: enabled ? () => onSelectPreset(value) : null,
+                  );
+                })
+                .toList(growable: false),
+          ),
+          const SizedBox(height: 14),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+            decoration: BoxDecoration(
+              color: colors.surfaceAlt,
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: colors.border),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  priceLabel,
+                  style: appText.caption.copyWith(color: colors.textSecondary),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextField(
+                        controller: priceController,
+                        enabled: enabled,
+                        onChanged: onPriceChanged,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        style: appText.numericTitle.copyWith(
+                          color: colors.textPrimary,
+                        ),
+                        decoration: InputDecoration(
+                          isDense: true,
+                          border: InputBorder.none,
+                          hintText: '0',
+                          hintStyle: appText.numericTitle.copyWith(
+                            color: colors.textSecondary.withValues(alpha: 0.45),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      priceUnitLabel,
+                      style: appText.bodyStrong.copyWith(
+                        color: colors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            decoration: BoxDecoration(
+              color: colors.infoSoft,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: colors.infoBorder),
+            ),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.inventory_2_outlined,
+                  size: 18,
+                  color: colors.primary,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    '$availableUnits$unitLabel',
+                    style: appText.bodyStrong.copyWith(
+                      color: colors.textPrimary,
+                    ),
+                  ),
+                ),
+                Text(
+                  availabilityLabel,
+                  style: appText.caption.copyWith(color: colors.textSecondary),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: <Color>[
+                  colors.primarySubtle.withValues(alpha: 0.54),
+                  colors.surface,
+                  colors.warningSubtle.withValues(alpha: 0.66),
+                ],
+              ),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: colors.borderSoft),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  formulaLabel,
+                  style: appText.caption.copyWith(color: colors.textSecondary),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  formulaValue,
+                  style: appText.numericTitle.copyWith(
+                    color: colors.textPrimary,
+                    height: 1.0,
+                  ),
+                ),
+                const SizedBox(height: 14),
+                Divider(height: 1, color: colors.borderSoft),
+                const SizedBox(height: 14),
+                _InfoRow(
+                  row: SecondaryMarketTradeInfoRowData(
+                    label: totalLabel,
+                    value: totalValue,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _InfoRow(
+                  row: SecondaryMarketTradeInfoRowData(
+                    label: feeLabel,
+                    value: feeValue,
+                  ),
+                ),
+                const SizedBox(height: 14),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 14,
+                  ),
+                  decoration: BoxDecoration(
+                    color: colors.danger,
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          netLabel,
+                          style: appText.caption.copyWith(
+                            color: colors.onDark.withValues(alpha: 0.78),
+                          ),
+                        ),
+                      ),
+                      Text(
+                        netValue,
                         style: appText.numericTitle.copyWith(
                           color: colors.onDark,
                           height: 1.0,
@@ -1145,10 +1480,7 @@ class SecondaryMarketTradeFinalNoticeCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
               alignment: Alignment.center,
-              child: Icon(
-                Icons.verified_user_rounded,
-                color: colors.onDark,
-              ),
+              child: Icon(Icons.verified_user_rounded, color: colors.onDark),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -1202,7 +1534,9 @@ class SecondaryMarketTradeReviewCard extends StatelessWidget {
             .entries
             .map((MapEntry<int, SecondaryMarketTradeInfoRowData> entry) {
               return Padding(
-                padding: EdgeInsets.only(bottom: entry.key == rows.length - 1 ? 0 : 14),
+                padding: EdgeInsets.only(
+                  bottom: entry.key == rows.length - 1 ? 0 : 14,
+                ),
                 child: _InfoRow(row: entry.value),
               );
             })
@@ -1401,10 +1735,7 @@ class _HeroChip extends StatelessWidget {
         children: <Widget>[
           Icon(icon, size: 14, color: foregroundColor),
           const SizedBox(width: 6),
-          Text(
-            label,
-            style: appText.micro.copyWith(color: textColor),
-          ),
+          Text(label, style: appText.micro.copyWith(color: textColor)),
         ],
       ),
     );
@@ -1590,9 +1921,8 @@ class _InfoRow extends StatelessWidget {
           child: Text(
             row.value,
             textAlign: TextAlign.end,
-            style: (row.emphasized ? appText.bodyStrong : appText.body).copyWith(
-              color: colors.textPrimary,
-            ),
+            style: (row.emphasized ? appText.bodyStrong : appText.body)
+                .copyWith(color: colors.textPrimary),
           ),
         ),
       ],

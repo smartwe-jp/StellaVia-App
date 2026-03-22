@@ -12,6 +12,7 @@ import '../../domain/entities/mypage_models.dart';
 import '../providers/mypage_providers.dart';
 import '../support/mypage_secondary_market_models.dart';
 import '../support/mypage_section_support.dart';
+import '../widgets/mypage_active_fund_detail_sections.dart';
 
 class MyPageActiveFundDetailPage extends ConsumerWidget {
   const MyPageActiveFundDetailPage({
@@ -57,66 +58,109 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
     final canShowResale = summary.projectStatus == 4;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.myPageActiveFundDetailTitle)),
+      backgroundColor: colors.surface,
+      appBar: AppNavigationBar(
+        title: l10n.myPageActiveFundDetailTitle,
+        leading: AppNavigationIconButton(
+          icon: Icons.arrow_back_rounded,
+          onTap: () => context.pop(),
+        ),
+      ),
+      bottomNavigationBar: 
+      canShowResale ?
+      SafeArea(
+              top: false,
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                child: 
+                PrimaryCtaButton(
+                  label: l10n.myPageResaleTabOrder,
+                  onPressed: summary.processId == null
+                      ? null
+                      : () => context.push(
+                          '/my/secondary-market/sell',
+                          extra: MyPageSecondaryMarketSellSeed(
+                            projectId: projectId,
+                            projectName: projectName,
+                            fromProcessId: summary.processId!,
+                            availableUnits: summary.investNumRemaining ?? 0,
+                            investorCode: summary.investorCode,
+                            earningRatio: summary.earningRatio,
+                          ),
+                        ),
+                  backgroundColor: colors.danger,
+                  shadowColor: colors.danger.withValues(alpha: 0.5),
+                  horizontalPadding: 0,
+                  threeSideShadow: true,
+                ))):
+                null,
+            
       body: RefreshIndicator(
         onRefresh: () => _refresh(ref, projectId: projectId),
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
           children: <Widget>[
-            FundMyPageProjectCard(
+            ActiveFundOverviewHeroCard(
               title: projectName,
-              trailing: _StatusBadge(
-                label: statusLabel,
-                backgroundColor: colors.primarySubtle,
-                foregroundColor: colors.primaryAlt,
+              statusLabel: statusLabel,
+              statusBackgroundColor: colors.primarySubtle,
+              statusForegroundColor: colors.primaryAlt,
+              totalBenefitLabel: l10n.myPageActiveFundTotalBenefitLabel,
+              totalBenefitValue: formatCurrency(
+                benefitData?.balanceTotal ?? summary.earnings,
+                formatter,
               ),
-              rows: <FundLabeledValue>[
-                FundLabeledValue(
+              totalHistoricalBenefitLabel:
+                  l10n.myPageAccumulatedDistributionLabel,
+              totalHistoricalBenefitValue: formatCurrency(
+                benefitData?.balanceTotalHistorical ?? summary.earnings,
+                formatter,
+              ),
+              primaryMetrics: <ActiveFundOverviewMetricData>[
+                ActiveFundOverviewMetricData(
                   label: l10n.myPageInvestmentAmountLabel,
                   value: formatCurrency(summary.investMoney, formatter),
                 ),
-                FundLabeledValue(
+                ActiveFundOverviewMetricData(
                   label: l10n.myPageActiveFundValidInvestmentAmountLabel,
                   value: formatCurrency(summary.investMoneyValid, formatter),
                 ),
-                FundLabeledValue(
-                  label: l10n.myPageAccumulatedDistributionLabel,
-                  value: formatCurrency(summary.earnings, formatter),
-                  valueColor: colors.success,
-                ),
-                FundLabeledValue(
+              ],
+              secondaryMetrics: <ActiveFundOverviewMetricData>[
+                ActiveFundOverviewMetricData(
                   label: l10n.myPageActiveFundInvestUnitsLabel,
                   value: _formatCount(summary.investNum),
                 ),
-                FundLabeledValue(
+                ActiveFundOverviewMetricData(
                   label: l10n.myPageActiveFundValidUnitsLabel,
                   value: _formatCount(summary.investNumValid),
                 ),
-                FundLabeledValue(
+                ActiveFundOverviewMetricData(
                   label: l10n.myPageActiveFundRemainingUnitsLabel,
                   value: _formatCount(summary.investNumRemaining),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
-            FundMyPageProjectCard(
+            const SizedBox(height: 14),
+            ActiveFundInfoCard(
               title: l10n.myPageActiveFundMetaTitle,
-              rows: <FundLabeledValue>[
-                FundLabeledValue(
+              rows: <ActiveFundInfoRowData>[
+                ActiveFundInfoRowData(
                   label: l10n.myPageActiveFundProcessIdLabel,
                   value: summary.processId ?? '--',
                 ),
-                FundLabeledValue(
+                ActiveFundInfoRowData(
                   label: l10n.myPageActiveFundInvestorCodeLabel,
                   value: summary.investorCode ?? '--',
+                  emphasized: true,
                 ),
-                FundLabeledValue(
+                ActiveFundInfoRowData(
                   label: l10n.myPageActiveFundAppliedAtLabel,
                   value:
                       formatDateTimeOrNull(summary.createTime) ??
                       l10n.myPageResultAnnouncementTbd,
                 ),
-                FundLabeledValue(
+                ActiveFundInfoRowData(
                   label: l10n.myPageActiveFundWithdrawnAtLabel,
                   value:
                       formatDateTimeOrNull(summary.withdrawalTime) ??
@@ -124,15 +168,8 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
-            _TotalBenefitCard(
-              title: l10n.myPageActiveFundTotalBenefitLabel,
-              value: formatCurrency(
-                benefitData?.balanceTotal ?? summary.earnings,
-                formatter,
-              ),
-            ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 14),
+
             Text(
               l10n.myPageActiveFundBenefitHistoryTitle,
               style: appText.sectionTitle,
@@ -152,35 +189,27 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
                       .map(
                         (detail) => Padding(
                           padding: const EdgeInsets.only(bottom: 8),
-                          child: FundMyPageProjectCard(
+                          child: ActiveFundBenefitHistoryCard(
                             title: _resolveBenefitCardTitle(
                               l10n,
                               detail,
                               localeTag: localeTag,
                             ),
-                            rows: <FundLabeledValue>[
-                              FundLabeledValue(
-                                label: l10n.myPageActiveFundBenefitAmountLabel,
-                                value: formatCurrency(
-                                  detail.benefit,
-                                  formatter,
-                                ),
-                              ),
-                              FundLabeledValue(
-                                label: l10n.myPageActiveFundTaxLabel,
-                                value: formatCurrency(detail.tax, formatter),
-                              ),
-                              FundLabeledValue(
-                                label: l10n.myPageActiveFundNetBenefitLabel,
-                                value: formatCurrency(
-                                  _resolveNetBenefit(detail),
-                                  formatter,
-                                ),
-                                valueColor: colors.success,
-                              ),
-                            ],
+                            benefitLabel:
+                                l10n.myPageActiveFundBenefitAmountLabel,
+                            benefitValue: formatCurrency(
+                              detail.benefit,
+                              formatter,
+                            ),
+                            taxLabel: l10n.myPageActiveFundTaxLabel,
+                            taxValue: formatCurrency(detail.tax, formatter),
+                            netLabel: l10n.myPageActiveFundNetBenefitLabel,
+                            netValue: formatCurrency(
+                              _resolveNetBenefit(detail),
+                              formatter,
+                            ),
                             footnote: detail.remark,
-                            footer: OutlinedButton(
+                            action: OutlinedButton(
                               onPressed:
                                   detail.withdrawalTime == null &&
                                       detail.id != null &&
@@ -220,29 +249,7 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
                     ref.invalidate(myPageProjectBenefitProvider(projectId)),
               ),
             ),
-            if (canShowResale) ...<Widget>[
-              const SizedBox(height: 12),
-              PrimaryCtaButton(
-                label: l10n.myPageActiveFundResaleAction,
-                onPressed: summary.processId == null
-                    ? null
-                    : () => context.push(
-                        '/my/secondary-market/sell',
-                        extra: MyPageSecondaryMarketSellSeed(
-                          projectId: projectId,
-                          projectName: projectName,
-                          fromProcessId: summary.processId!,
-                          availableUnits: summary.investNumRemaining ?? 0,
-                          investorCode: summary.investorCode,
-                          earningRatio: summary.earningRatio,
-                        ),
-                      ),
-                backgroundColor: colors.danger,
-                shadowColor: colors.danger.withValues(alpha: 0.5),
-                horizontalPadding: 0,
-                threeSideShadow: true,
-              ),
-            ],
+            
           ],
         ),
       ),
@@ -377,74 +384,6 @@ ButtonStyle _detailOutlineButtonStyle(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     textStyle: appText.chip,
   );
-}
-
-class _StatusBadge extends StatelessWidget {
-  const _StatusBadge({
-    required this.label,
-    required this.backgroundColor,
-    required this.foregroundColor,
-  });
-
-  final String label;
-  final Color backgroundColor;
-  final Color foregroundColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final appText = Theme.of(context).appTextTheme;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Text(
-        label,
-        style: appText.tableLabel.copyWith(color: foregroundColor),
-      ),
-    );
-  }
-}
-
-class _TotalBenefitCard extends StatelessWidget {
-  const _TotalBenefitCard({required this.title, required this.value});
-
-  final String title;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.dangerSoft,
-        borderRadius: BorderRadius.circular(UiTokens.radius16),
-        border: Border.all(color: colors.dangerBorder),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: Column(
-          children: <Widget>[
-            Text(
-              title,
-              style: appText.bodyStrong.copyWith(color: colors.textSecondary),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              value,
-              style: appText.numericHeadline.copyWith(
-                color: colors.danger,
-                letterSpacing: 0.2,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class _StateCard extends StatelessWidget {

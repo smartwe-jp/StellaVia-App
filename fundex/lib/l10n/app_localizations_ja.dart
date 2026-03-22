@@ -2239,6 +2239,47 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageResaleYenSuffix => '円';
 
   @override
+  String get myPageResaleFlowOrderTitle => '売却内容を入力';
+
+  @override
+  String get myPageResaleFlowOrderSubtitle => '口数と売却単価、書面確認を済ませて次の確認ステップへ進みます。';
+
+  @override
+  String get myPageResaleFlowConfirmTitle => '売却内容を最終確認';
+
+  @override
+  String get myPageResaleFlowConfirmSubtitle => '内容に問題がなければ、このまま売却注文を送信してください。';
+
+  @override
+  String get myPageResaleQuantityHint => '売却したい口数と売却単価を入力してください。';
+
+  @override
+  String get myPageResaleQuickMax => 'MAX';
+
+  @override
+  String get myPageResaleLiveEstimateFormulaLabel => '現在の注文内容';
+
+  @override
+  String get myPageResaleAgreementSectionTitle => '書面と確認事項';
+
+  @override
+  String get myPageResaleReviewSectionTitle => 'ご注文内容';
+
+  @override
+  String get myPageResaleReviewHint =>
+      '出品条件と受取予定額をご確認のうえ、問題がなければこのまま注文を確定してください。';
+
+  @override
+  String get myPageResaleSummarySectionTitle => '受取予定';
+
+  @override
+  String get myPageResaleFinalNoticeTitle => '最終確認後に売却注文を送信します';
+
+  @override
+  String get myPageResaleFinalNoticeBody =>
+      '送信後は注文内容に基づいて出品処理が進みます。口数、単価、受取予定額をもう一度ご確認ください。';
+
+  @override
   String myPageResaleFixedYieldLabel(Object ratio) {
     return '固定$ratio収益率';
   }

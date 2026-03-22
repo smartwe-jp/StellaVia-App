@@ -2354,6 +2354,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageResaleYenSuffix => 'JPY';
 
   @override
+  String get myPageResaleFlowOrderTitle => 'Enter resale details';
+
+  @override
+  String get myPageResaleFlowOrderSubtitle =>
+      'Set the quantity, asking price, and document confirmation before moving to the review step.';
+
+  @override
+  String get myPageResaleFlowConfirmTitle => 'Review resale details';
+
+  @override
+  String get myPageResaleFlowConfirmSubtitle =>
+      'If everything looks right, submit the sell order from this screen.';
+
+  @override
+  String get myPageResaleQuantityHint =>
+      'Enter the quantity and unit price you want to list.';
+
+  @override
+  String get myPageResaleQuickMax => 'MAX';
+
+  @override
+  String get myPageResaleLiveEstimateFormulaLabel => 'Current order estimate';
+
+  @override
+  String get myPageResaleAgreementSectionTitle => 'Documents and confirmations';
+
+  @override
+  String get myPageResaleReviewSectionTitle => 'Order details';
+
+  @override
+  String get myPageResaleReviewHint =>
+      'Review the listing conditions and expected proceeds before you place the order.';
+
+  @override
+  String get myPageResaleSummarySectionTitle => 'Expected proceeds';
+
+  @override
+  String get myPageResaleFinalNoticeTitle =>
+      'The sell order will be sent after final confirmation';
+
+  @override
+  String get myPageResaleFinalNoticeBody =>
+      'Once submitted, the listing will proceed with these details. Please review the quantity, price, and expected proceeds one more time.';
+
+  @override
   String myPageResaleFixedYieldLabel(Object ratio) {
     return 'Fixed $ratio yield';
   }

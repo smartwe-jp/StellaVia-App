@@ -2223,6 +2223,46 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageResaleYenSuffix => '円';
 
   @override
+  String get myPageResaleFlowOrderTitle => '填写卖出内容';
+
+  @override
+  String get myPageResaleFlowOrderSubtitle => '先完成口数、卖出单价与书面确认，再进入最终确认步骤。';
+
+  @override
+  String get myPageResaleFlowConfirmTitle => '最终确认卖出内容';
+
+  @override
+  String get myPageResaleFlowConfirmSubtitle => '确认无误后，即可从此页提交卖出委托。';
+
+  @override
+  String get myPageResaleQuantityHint => '请输入想卖出的口数和卖出单价。';
+
+  @override
+  String get myPageResaleQuickMax => 'MAX';
+
+  @override
+  String get myPageResaleLiveEstimateFormulaLabel => '当前委托试算';
+
+  @override
+  String get myPageResaleAgreementSectionTitle => '书面与确认事项';
+
+  @override
+  String get myPageResaleReviewSectionTitle => '订单内容';
+
+  @override
+  String get myPageResaleReviewHint => '请确认挂牌条件与预计到账金额，确认无误后再提交。';
+
+  @override
+  String get myPageResaleSummarySectionTitle => '预计到账';
+
+  @override
+  String get myPageResaleFinalNoticeTitle => '最终确认后将提交卖出委托';
+
+  @override
+  String get myPageResaleFinalNoticeBody =>
+      '提交后将按当前内容进入挂牌流程。请再次确认口数、单价与预计到账金额。';
+
+  @override
   String myPageResaleFixedYieldLabel(Object ratio) {
     return '固定$ratio收益率';
   }
@@ -5100,6 +5140,46 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageResaleYenSuffix => '円';
+
+  @override
+  String get myPageResaleFlowOrderTitle => '填寫賣出內容';
+
+  @override
+  String get myPageResaleFlowOrderSubtitle => '先完成口數、賣出單價與書面確認，再進入最終確認步驟。';
+
+  @override
+  String get myPageResaleFlowConfirmTitle => '最終確認賣出內容';
+
+  @override
+  String get myPageResaleFlowConfirmSubtitle => '確認無誤後，即可從此頁提交賣出委託。';
+
+  @override
+  String get myPageResaleQuantityHint => '請輸入想賣出的口數與賣出單價。';
+
+  @override
+  String get myPageResaleQuickMax => 'MAX';
+
+  @override
+  String get myPageResaleLiveEstimateFormulaLabel => '目前委託試算';
+
+  @override
+  String get myPageResaleAgreementSectionTitle => '書面與確認事項';
+
+  @override
+  String get myPageResaleReviewSectionTitle => '訂單內容';
+
+  @override
+  String get myPageResaleReviewHint => '請確認掛牌條件與預計入帳金額，確認無誤後再送出。';
+
+  @override
+  String get myPageResaleSummarySectionTitle => '預計入帳';
+
+  @override
+  String get myPageResaleFinalNoticeTitle => '最終確認後將送出賣出委託';
+
+  @override
+  String get myPageResaleFinalNoticeBody =>
+      '送出後將依目前內容進入掛牌流程。請再次確認口數、單價與預計入帳金額。';
 
   @override
   String myPageResaleFixedYieldLabel(Object ratio) {

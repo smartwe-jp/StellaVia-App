@@ -490,6 +490,7 @@ class UserInvestmentProjectBenefitDto {
   const UserInvestmentProjectBenefitDto({
     this.projectName,
     this.balanceTotal,
+    this.balanceTotalHistorical,
     this.details = const <UserInvestmentBenefitDetailDto>[],
   });
 
@@ -497,6 +498,7 @@ class UserInvestmentProjectBenefitDto {
     return UserInvestmentProjectBenefitDto(
       projectName: _stringOrNull(json['projectName']),
       balanceTotal: _numOrNull(json['balanceTotal']),
+      balanceTotalHistorical: _numOrNull(json['balanceTotalHistorical']),
       details: _toList(json['details'])
           .map(
             (dynamic item) =>
@@ -508,6 +510,7 @@ class UserInvestmentProjectBenefitDto {
 
   final String? projectName;
   final num? balanceTotal;
+  final num? balanceTotalHistorical;
   final List<UserInvestmentBenefitDetailDto> details;
 }
 

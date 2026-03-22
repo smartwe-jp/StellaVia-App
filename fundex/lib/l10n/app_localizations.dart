@@ -4430,6 +4430,84 @@ abstract class AppLocalizations {
   /// **'JPY'**
   String get myPageResaleYenSuffix;
 
+  /// No description provided for @myPageResaleFlowOrderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter resale details'**
+  String get myPageResaleFlowOrderTitle;
+
+  /// No description provided for @myPageResaleFlowOrderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set the quantity, asking price, and document confirmation before moving to the review step.'**
+  String get myPageResaleFlowOrderSubtitle;
+
+  /// No description provided for @myPageResaleFlowConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review resale details'**
+  String get myPageResaleFlowConfirmTitle;
+
+  /// No description provided for @myPageResaleFlowConfirmSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'If everything looks right, submit the sell order from this screen.'**
+  String get myPageResaleFlowConfirmSubtitle;
+
+  /// No description provided for @myPageResaleQuantityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the quantity and unit price you want to list.'**
+  String get myPageResaleQuantityHint;
+
+  /// No description provided for @myPageResaleQuickMax.
+  ///
+  /// In en, this message translates to:
+  /// **'MAX'**
+  String get myPageResaleQuickMax;
+
+  /// No description provided for @myPageResaleLiveEstimateFormulaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current order estimate'**
+  String get myPageResaleLiveEstimateFormulaLabel;
+
+  /// No description provided for @myPageResaleAgreementSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents and confirmations'**
+  String get myPageResaleAgreementSectionTitle;
+
+  /// No description provided for @myPageResaleReviewSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Order details'**
+  String get myPageResaleReviewSectionTitle;
+
+  /// No description provided for @myPageResaleReviewHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Review the listing conditions and expected proceeds before you place the order.'**
+  String get myPageResaleReviewHint;
+
+  /// No description provided for @myPageResaleSummarySectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected proceeds'**
+  String get myPageResaleSummarySectionTitle;
+
+  /// No description provided for @myPageResaleFinalNoticeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The sell order will be sent after final confirmation'**
+  String get myPageResaleFinalNoticeTitle;
+
+  /// No description provided for @myPageResaleFinalNoticeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Once submitted, the listing will proceed with these details. Please review the quantity, price, and expected proceeds one more time.'**
+  String get myPageResaleFinalNoticeBody;
+
   /// No description provided for @myPageResaleFixedYieldLabel.
   ///
   /// In en, this message translates to:
