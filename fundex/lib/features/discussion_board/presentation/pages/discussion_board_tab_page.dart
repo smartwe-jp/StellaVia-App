@@ -264,56 +264,65 @@ class _DiscussionBoardTabPageState
       );
     }
 
-    return RefreshIndicator(
-      onRefresh: () => controller.refreshThreads(),
-      child: ListView(
-        key: const Key('discussion_tab_content'),
-        controller: _scrollController,
-        physics: const AlwaysScrollableScrollPhysics(
-          parent: BouncingScrollPhysics(),
+    return Column(
+      children: <Widget>[
+        KizunarkGradientHeader(
+          title: l10n.mainTabKizunark,
+          subtitle: l10n.kizunarkSubtitle,
         ),
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          KizunarkGradientHeader(
-            title: l10n.mainTabKizunark,
-            subtitle: l10n.kizunarkSubtitle,
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-            child: KizunarkNoticeBanner(label: l10n.kizunarkInvestorOnlyNotice),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-            child: KizunarkComposerCard(
-              leading: KizunarkAvatarBadge(
-                text: _resolveAvatarText(currentUser),
-                gradientColors: const <Color>[
-                  AppColorTokens.kizunarkPrimary,
-                  AppColorTokens.kizunarkSecondary,
-                ],
-                size: 32,
-                fontSize: 13,
+        Expanded(
+          child: RefreshIndicator(
+            onRefresh: () => controller.refreshThreads(),
+            child: ListView(
+              key: const Key('discussion_tab_content'),
+              controller: _scrollController,
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
               ),
-              controller: _composerController,
-              placeholder: l10n.kizunarkComposePlaceholder,
-              postLabel: l10n.kizunarkPostAction,
-              enabled: !state.isPosting && isAuthenticated,
-              onChanged: controller.updateComposerText,
-              onPostTap: () => _submitPost(isAuthenticated: isAuthenticated),
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                  child: KizunarkNoticeBanner(
+                    label: l10n.kizunarkInvestorOnlyNotice,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                  child: KizunarkComposerCard(
+                    leading: KizunarkAvatarBadge(
+                      text: _resolveAvatarText(currentUser),
+                      gradientColors: const <Color>[
+                        AppColorTokens.kizunarkPrimary,
+                        AppColorTokens.kizunarkSecondary,
+                      ],
+                      size: 32,
+                      fontSize: 13,
+                    ),
+                    controller: _composerController,
+                    placeholder: l10n.kizunarkComposePlaceholder,
+                    postLabel: l10n.kizunarkPostAction,
+                    enabled: !state.isPosting && isAuthenticated,
+                    onChanged: controller.updateComposerText,
+                    onPostTap: () =>
+                        _submitPost(isAuthenticated: isAuthenticated),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+                  child: _buildFeedSection(
+                    l10n: l10n,
+                    state: state,
+                    controller: controller,
+                    isAuthenticated: isAuthenticated,
+                    currentUserId: currentUserId,
+                  ),
+                ),
+              ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-            child: _buildFeedSection(
-              l10n: l10n,
-              state: state,
-              controller: controller,
-              isAuthenticated: isAuthenticated,
-              currentUserId: currentUserId,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
