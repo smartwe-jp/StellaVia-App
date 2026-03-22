@@ -62,3 +62,13 @@ flutter:
   uses-material-design: true
   assets:
     - assets/content/
+  fonts:
+    - family: Noto Sans JP
+      fonts:
+        - asset: assets/fonts/NotoSansJP.ttf
+    - family: Noto Sans SC
+      fonts:
+        - asset: assets/fonts/NotoSansSC.ttf
+    - family: Noto Sans TC
+      fonts:
+        - asset: assets/fonts/NotoSansTC.ttf

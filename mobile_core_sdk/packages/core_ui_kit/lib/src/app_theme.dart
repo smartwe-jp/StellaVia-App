@@ -10,12 +10,12 @@ import 'ui_tokens.dart';
 class AppThemeFactory {
   const AppThemeFactory._();
 
-  static ThemeData light() {
-    return _build(Brightness.light);
+  static ThemeData light({Locale? locale}) {
+    return _build(Brightness.light, locale: locale);
   }
 
-  static ThemeData dark() {
-    return _build(Brightness.dark);
+  static ThemeData dark({Locale? locale}) {
+    return _build(Brightness.dark, locale: locale);
   }
 
   static Color statusBarColorFor(Brightness brightness) {
@@ -40,7 +40,7 @@ class AppThemeFactory {
     );
   }
 
-  static ThemeData _build(Brightness brightness) {
+  static ThemeData _build(Brightness brightness, {Locale? locale}) {
     final isDark = brightness == Brightness.dark;
     final background = isDark
         ? AppColorTokens.darkBackground
@@ -54,8 +54,36 @@ class AppThemeFactory {
     final outline = isDark
         ? AppColorTokens.darkBorder
         : AppColorTokens.lightBorder;
-    final textTheme = AppTypographyTokens.textTheme(brightness);
+    final textTheme = AppTypographyTokens.textTheme(brightness, locale: locale);
     final contentMuted = onSurface.withValues(alpha: 0.72);
+    TextStyle sans({
+      required double size,
+      required FontWeight weight,
+      required Color color,
+      double? height,
+      double? letterSpacing,
+    }) => AppTypographyTokens.sansStyle(
+      size: size,
+      weight: weight,
+      color: color,
+      locale: locale,
+      height: height,
+      letterSpacing: letterSpacing,
+    );
+    TextStyle numeric({
+      required double size,
+      required FontWeight weight,
+      required Color color,
+      double? height,
+      double? letterSpacing,
+    }) => AppTypographyTokens.numericStyle(
+      size: size,
+      weight: weight,
+      color: color,
+      locale: locale,
+      height: height,
+      letterSpacing: letterSpacing,
+    );
     final semanticColors = AppSemanticColorTheme(
       brandPrimary: AppColorTokens.brandPrimary,
       brandPrimaryDark: AppColorTokens.brandPrimaryDark,
@@ -116,161 +144,161 @@ class AppThemeFactory {
       scrim: Colors.black.withValues(alpha: isDark ? 0.56 : 0.36),
     );
     final semanticTextTheme = AppSemanticTextTheme(
-      heroTitle: AppTypographyTokens.sansStyle(
+      heroTitle: sans(
         size: 24,
         weight: FontWeight.w800,
         color: semanticColors.onDark,
         height: 1.16,
       ),
-      heroSubtitle: AppTypographyTokens.sansStyle(
+      heroSubtitle: sans(
         size: 16,
         weight: FontWeight.w600,
         color: semanticColors.onDark.withValues(alpha: 0.78),
         height: 1.25,
       ),
-      heroMetricPrimary: AppTypographyTokens.numericStyle(
+      heroMetricPrimary: numeric(
         size: 26,
         weight: FontWeight.w800,
         color: semanticColors.textPrimary,
         height: 1.1,
       ),
-      heroMetricSecondary: AppTypographyTokens.numericStyle(
+      heroMetricSecondary: numeric(
         size: 16,
         weight: FontWeight.w800,
         color: semanticColors.textPrimary,
         height: 1.2,
       ),
-      pageTitle: AppTypographyTokens.sansStyle(
+      pageTitle: sans(
         size: 18,
         weight: FontWeight.w800,
         color: semanticColors.textPrimary,
         height: 1.24,
       ),
-      sectionTitle: AppTypographyTokens.sansStyle(
+      sectionTitle: sans(
         size: 15,
         weight: FontWeight.w700,
         color: semanticColors.textPrimary,
         height: 1.2,
       ),
-      cardTitle: AppTypographyTokens.sansStyle(
+      cardTitle: sans(
         size: 14,
         weight: FontWeight.w700,
         color: semanticColors.textPrimary,
         height: 1.28,
       ),
-      body: AppTypographyTokens.sansStyle(
+      body: sans(
         size: 13,
         weight: FontWeight.w400,
         color: semanticColors.textPrimary,
         height: 1.54,
       ),
-      bodyStrong: AppTypographyTokens.sansStyle(
+      bodyStrong: sans(
         size: 13,
         weight: FontWeight.w700,
         color: semanticColors.textPrimary,
         height: 1.46,
       ),
-      bodyMuted: AppTypographyTokens.sansStyle(
+      bodyMuted: sans(
         size: 13,
         weight: FontWeight.w400,
         color: semanticColors.textSecondary,
         height: 1.54,
       ),
-      caption: AppTypographyTokens.sansStyle(
+      caption: sans(
         size: 12,
         weight: FontWeight.w400,
         color: semanticColors.textSecondary,
         height: 1.5,
       ),
-      meta: AppTypographyTokens.sansStyle(
+      meta: sans(
         size: 10,
         weight: FontWeight.w500,
         color: semanticColors.textTertiary,
         height: 1.2,
         letterSpacing: 0.1,
       ),
-      micro: AppTypographyTokens.sansStyle(
+      micro: sans(
         size: 9,
         weight: FontWeight.w700,
         color: semanticColors.textTertiary,
         height: 1.22,
         letterSpacing: 0.1,
       ),
-      button: AppTypographyTokens.sansStyle(
+      button: sans(
         size: 15,
         weight: FontWeight.w800,
         color: semanticColors.textPrimary,
         height: 1.2,
         letterSpacing: 0.1,
       ),
-      chip: AppTypographyTokens.sansStyle(
+      chip: sans(
         size: 12,
         weight: FontWeight.w600,
         color: semanticColors.textPrimary,
         height: 1.2,
         letterSpacing: 0.1,
       ),
-      inputLabel: AppTypographyTokens.sansStyle(
+      inputLabel: sans(
         size: 12,
         weight: FontWeight.w600,
         color: semanticColors.textSecondary,
         height: 1.3,
       ),
-      inputText: AppTypographyTokens.sansStyle(
+      inputText: sans(
         size: 14,
         weight: FontWeight.w400,
         color: semanticColors.textPrimary,
         height: 1.42,
       ),
-      helper: AppTypographyTokens.sansStyle(
+      helper: sans(
         size: 12,
         weight: FontWeight.w400,
         color: semanticColors.textSecondary,
         height: 1.45,
       ),
-      link: AppTypographyTokens.sansStyle(
+      link: sans(
         size: 12,
         weight: FontWeight.w700,
         color: semanticColors.primary,
         height: 1.3,
       ),
-      numericDisplay: AppTypographyTokens.numericStyle(
+      numericDisplay: numeric(
         size: 44,
         weight: FontWeight.w900,
         color: semanticColors.textPrimary,
         height: 1.04,
       ),
-      numericHeadline: AppTypographyTokens.numericStyle(
+      numericHeadline: numeric(
         size: 32,
         weight: FontWeight.w900,
         color: semanticColors.textPrimary,
         height: 1.08,
       ),
-      numericTitle: AppTypographyTokens.numericStyle(
+      numericTitle: numeric(
         size: 20,
         weight: FontWeight.w800,
         color: semanticColors.textPrimary,
         height: 1.1,
       ),
-      numericBody: AppTypographyTokens.numericStyle(
+      numericBody: numeric(
         size: 14,
         weight: FontWeight.w700,
         color: semanticColors.textPrimary,
         height: 1.2,
       ),
-      numericCaption: AppTypographyTokens.numericStyle(
+      numericCaption: numeric(
         size: 10,
         weight: FontWeight.w700,
         color: semanticColors.textSecondary,
         height: 1.2,
       ),
-      tableLabel: AppTypographyTokens.sansStyle(
+      tableLabel: sans(
         size: 10,
         weight: FontWeight.w500,
         color: semanticColors.textTertiary,
         height: 1.2,
       ),
-      tableValue: AppTypographyTokens.sansStyle(
+      tableValue: sans(
         size: 13,
         weight: FontWeight.w700,
         color: semanticColors.textPrimary,

@@ -53,10 +53,34 @@ class AppTypographyTokens {
   // Preserve the old public name for compatibility with existing imports.
   static const List<String> fallbackFamily = sansFamilyFallback;
 
+  static String primaryContentFamilyForLocale(Locale? locale) {
+    if (locale == null) {
+      return supportedContentFamilies.first;
+    }
+
+    final languageCode = locale.languageCode.toLowerCase();
+    final scriptCode = locale.scriptCode?.toLowerCase();
+    final countryCode = locale.countryCode?.toUpperCase();
+
+    if (languageCode == 'zh') {
+      if (scriptCode == 'hant' ||
+          countryCode == 'TW' ||
+          countryCode == 'HK' ||
+          countryCode == 'MO') {
+        return 'Noto Sans TC';
+      }
+      return 'Noto Sans SC';
+    }
+
+    // Product requirement uses Noto Sans JP for both Japanese and English UI.
+    return 'Noto Sans JP';
+  }
+
   static TextStyle sansStyle({
     required double size,
     required FontWeight weight,
     required Color color,
+    Locale? locale,
     double? height,
     double? letterSpacing,
   }) {
@@ -64,6 +88,7 @@ class AppTypographyTokens {
       size: size,
       weight: weight,
       color: color,
+      fontFamily: primaryContentFamilyForLocale(locale),
       height: height,
       letterSpacing: letterSpacing,
       fontFamilyFallback: sansFamilyFallback,
@@ -74,6 +99,7 @@ class AppTypographyTokens {
     required double size,
     required FontWeight weight,
     required Color color,
+    Locale? locale,
     double? height,
     double? letterSpacing,
   }) {
@@ -81,6 +107,7 @@ class AppTypographyTokens {
       size: size,
       weight: weight,
       color: color,
+      fontFamily: primaryContentFamilyForLocale(locale),
       height: height,
       letterSpacing: letterSpacing,
       fontFamilyFallback: numericFamilyFallback,
@@ -91,6 +118,7 @@ class AppTypographyTokens {
     required double size,
     required FontWeight weight,
     required Color color,
+    required String fontFamily,
     required List<String> fontFamilyFallback,
     double? height,
     double? letterSpacing,
@@ -101,14 +129,16 @@ class AppTypographyTokens {
       height: height,
       letterSpacing: letterSpacing,
       color: color,
+      fontFamily: fontFamily,
       fontFamilyFallback: fontFamilyFallback,
     );
   }
 
-  static TextTheme textTheme(Brightness brightness) {
+  static TextTheme textTheme(Brightness brightness, {Locale? locale}) {
     final isDark = brightness == Brightness.dark;
-    final onSurface =
-        isDark ? AppColorTokens.darkOnSurface : AppColorTokens.lightOnSurface;
+    final onSurface = isDark
+        ? AppColorTokens.darkOnSurface
+        : AppColorTokens.lightOnSurface;
     final muted = isDark ? AppColorTokens.darkMuted : AppColorTokens.lightMuted;
 
     return TextTheme(
@@ -116,78 +146,91 @@ class AppTypographyTokens {
         size: 44,
         weight: FontWeight.w900,
         color: onSurface,
+        locale: locale,
         height: 1.04,
       ),
       displayMedium: numericStyle(
         size: 32,
         weight: FontWeight.w900,
         color: onSurface,
+        locale: locale,
         height: 1.08,
       ),
       displaySmall: sansStyle(
         size: 24,
         weight: FontWeight.w700,
         color: onSurface,
+        locale: locale,
         height: 1.16,
       ),
       headlineLarge: sansStyle(
         size: 28,
         weight: FontWeight.w800,
         color: onSurface,
+        locale: locale,
         height: 1.14,
       ),
       headlineMedium: sansStyle(
         size: 24,
         weight: FontWeight.w700,
         color: onSurface,
+        locale: locale,
         height: 1.2,
       ),
       headlineSmall: sansStyle(
         size: 20,
         weight: FontWeight.w700,
         color: onSurface,
+        locale: locale,
         height: 1.24,
       ),
       titleLarge: sansStyle(
         size: 18,
         weight: FontWeight.w700,
         color: onSurface,
+        locale: locale,
         height: 1.28,
       ),
       titleMedium: sansStyle(
         size: 16,
         weight: FontWeight.w700,
         color: onSurface,
+        locale: locale,
         height: 1.3,
       ),
       titleSmall: sansStyle(
         size: 14,
         weight: FontWeight.w700,
         color: onSurface,
+        locale: locale,
         height: 1.32,
       ),
       bodyLarge: sansStyle(
         size: 16,
         weight: FontWeight.w400,
         color: onSurface,
+        locale: locale,
         height: 1.5,
       ),
       bodyMedium: sansStyle(
         size: 14,
         weight: FontWeight.w400,
         color: onSurface,
+        locale: locale,
         height: 1.5,
       ),
       bodySmall: sansStyle(
         size: 12,
         weight: FontWeight.w400,
         color: muted,
+        locale: locale,
         height: 1.5,
       ),
       labelLarge: sansStyle(
         size: 15,
         weight: FontWeight.w700,
         color: onSurface,
+        locale: locale,
         height: 1.2,
         letterSpacing: 0.1,
       ),
@@ -195,6 +238,7 @@ class AppTypographyTokens {
         size: 12,
         weight: FontWeight.w700,
         color: onSurface,
+        locale: locale,
         height: 1.2,
         letterSpacing: 0.2,
       ),
@@ -202,6 +246,7 @@ class AppTypographyTokens {
         size: 10,
         weight: FontWeight.w600,
         color: muted,
+        locale: locale,
         height: 1.2,
         letterSpacing: 0.2,
       ),

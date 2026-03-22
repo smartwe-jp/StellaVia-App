@@ -153,8 +153,8 @@ class MemberTemplateApp extends ConsumerWidget {
       locale: locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: AppThemeFactory.light(),
-      darkTheme: AppThemeFactory.dark(),
+      theme: AppThemeFactory.light(locale: locale),
+      darkTheme: AppThemeFactory.dark(locale: locale),
       themeMode: themeMode,
     );
   }

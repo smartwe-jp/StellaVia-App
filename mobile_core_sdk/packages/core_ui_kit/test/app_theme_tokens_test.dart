@@ -4,10 +4,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('supports the required JP, EN, SC, and TC content fonts', () {
-    expect(
-      AppTypographyTokens.supportedContentFamilies,
-      const <String>['Noto Sans JP', 'Noto Sans SC', 'Noto Sans TC'],
-    );
+    expect(AppTypographyTokens.supportedContentFamilies, const <String>[
+      'Noto Sans JP',
+      'Noto Sans SC',
+      'Noto Sans TC',
+    ]);
     expect(
       AppTypographyTokens.sansFamilyFallback,
       containsAll(<String>['Noto Sans JP', 'Noto Sans SC', 'Noto Sans TC']),
@@ -31,6 +32,45 @@ void main() {
     expect(theme.textTheme.labelSmall, isNotNull);
     expect(theme.textTheme.displayLarge, isNotNull);
     expect(
-        semanticText!.numericHeadline.fontFamilyFallback, contains('DM Sans'));
+      semanticText!.numericHeadline.fontFamilyFallback,
+      contains('DM Sans'),
+    );
+  });
+
+  test('resolves locale-aware primary content families', () {
+    expect(
+      AppTypographyTokens.primaryContentFamilyForLocale(const Locale('ja')),
+      'Noto Sans JP',
+    );
+    expect(
+      AppTypographyTokens.primaryContentFamilyForLocale(const Locale('en')),
+      'Noto Sans JP',
+    );
+    expect(
+      AppTypographyTokens.primaryContentFamilyForLocale(const Locale('zh')),
+      'Noto Sans SC',
+    );
+    expect(
+      AppTypographyTokens.primaryContentFamilyForLocale(
+        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
+      ),
+      'Noto Sans TC',
+    );
+  });
+
+  test('theme text styles use locale-specific primary families', () {
+    final jaTheme = AppThemeFactory.light(locale: const Locale('ja'));
+    final scTheme = AppThemeFactory.light(locale: const Locale('zh'));
+    final tcTheme = AppThemeFactory.light(
+      locale: const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
+    );
+
+    expect(jaTheme.textTheme.titleLarge?.fontFamily, 'Noto Sans JP');
+    expect(scTheme.textTheme.titleLarge?.fontFamily, 'Noto Sans SC');
+    expect(tcTheme.textTheme.titleLarge?.fontFamily, 'Noto Sans TC');
+    expect(
+      jaTheme.extension<AppSemanticTextTheme>()?.pageTitle.fontFamily,
+      'Noto Sans JP',
+    );
   });
 }
