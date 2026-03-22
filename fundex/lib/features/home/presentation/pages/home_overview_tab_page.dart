@@ -171,103 +171,107 @@ class HomeOverviewTabPage extends ConsumerWidget {
     return MainShellTabRefreshScope(
       tabIndex: 0,
       onRefresh: _refreshHomeOverviewTab,
-      child: ListView(
-        key: const Key('home_tab_content'),
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          if (networkAvailability == AppNetworkAvailability.offline)
-            AppNetworkStatusBar(
-              title: l10n.networkOfflineBannerTitle,
-              message: l10n.networkOfflineBannerMessage,
-            ),
-          topSection,
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 12, 0, 24),
-            child: Column(
-              spacing: UiTokens.spacing16,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                if (isAuthenticated)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: UiTokens.spacing16,
-                    ),
-                    child: FundReminderFeed(items: reminders),
-                  ),
-                if (asyncProjects.isLoading && projects.isEmpty)
-                  const Center(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: UiTokens.spacing16,
+      child: RefreshIndicator(
+        onRefresh: () => _refreshHomeOverviewTab(ref),
+        child: ListView(
+          key: const Key('home_tab_content'),
+          padding: EdgeInsets.zero,
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: <Widget>[
+            if (networkAvailability == AppNetworkAvailability.offline)
+              AppNetworkStatusBar(
+                title: l10n.networkOfflineBannerTitle,
+                message: l10n.networkOfflineBannerMessage,
+              ),
+            topSection,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 12, 0, 24),
+              child: Column(
+                spacing: UiTokens.spacing16,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  if (isAuthenticated)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: UiTokens.spacing16,
                       ),
-                      child: CircularProgressIndicator.adaptive(),
+                      child: FundReminderFeed(items: reminders),
                     ),
-                  ),
-                if (loadError != null && projects.isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: UiTokens.spacing16,
-                    ),
-                    child: Center(
-                      child: Column(
-                        children: <Widget>[
-                          Text(
-                            l10n.fundListLoadError,
-                            textAlign: TextAlign.center,
-                            style:
-                                (Theme.of(context).textTheme.bodyMedium ??
-                                        const TextStyle())
-                                    .copyWith(
-                                      color: AppColorTokens.fundexTextSecondary,
-                                    ),
-                          ),
-                          const SizedBox(height: UiTokens.spacing12),
-                          OutlinedButton(
-                            onPressed: () =>
-                                ref.invalidate(fundProjectListProvider),
-                            child: Text(l10n.fundListRetry),
-                          ),
-                        ],
+                  if (asyncProjects.isLoading && projects.isEmpty)
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: UiTokens.spacing16,
+                        ),
+                        child: CircularProgressIndicator.adaptive(),
                       ),
                     ),
-                  ),
-                if (featuredFundCards.isNotEmpty)
-                  FundFeaturedFundCarousel(
-                    title: l10n.homeFeaturedFundsTitle,
-                    actionLabel: l10n.homeViewAllAction,
-                    onActionTap: () => context.go('/funds'),
-                    children: featuredFundCards,
-                  ),
-                if (secondaryMarketCards.isNotEmpty)
-                  FundFeaturedFundCarousel(
-                    title: l10n.homeFreeMarketTitle,
-                    leading: Icon(
-                      Icons.storefront_rounded,
-                      size: 18,
-                      color: Theme.of(context).appColors.warningAction,
+                  if (loadError != null && projects.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: UiTokens.spacing16,
+                      ),
+                      child: Center(
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              l10n.fundListLoadError,
+                              textAlign: TextAlign.center,
+                              style:
+                                  (Theme.of(context).textTheme.bodyMedium ??
+                                          const TextStyle())
+                                      .copyWith(
+                                        color: AppColorTokens.fundexTextSecondary,
+                                      ),
+                            ),
+                            const SizedBox(height: UiTokens.spacing12),
+                            OutlinedButton(
+                              onPressed: () =>
+                                  ref.invalidate(fundProjectListProvider),
+                              child: Text(l10n.fundListRetry),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    actionLabel: l10n.homeViewAllAction,
-                    onActionTap: () => context.push('/home/free-market'),
-                    height: 260,
-                    children: secondaryMarketCards,
-                  ),
-                if (activeFundCards.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: UiTokens.spacing16,
-                    ),
-                    child: FundSectionList(
-                      title: l10n.homeActiveFundsTitle,
+                  if (featuredFundCards.isNotEmpty)
+                    FundFeaturedFundCarousel(
+                      title: l10n.homeFeaturedFundsTitle,
                       actionLabel: l10n.homeViewAllAction,
                       onActionTap: () => context.go('/funds'),
-                      initialVisibleCount: 3,
-                      children: activeFundCards,
+                      children: featuredFundCards,
                     ),
-                  ),
-              ],
+                  if (secondaryMarketCards.isNotEmpty)
+                    FundFeaturedFundCarousel(
+                      title: l10n.homeFreeMarketTitle,
+                      leading: Icon(
+                        Icons.storefront_rounded,
+                        size: 18,
+                        color: Theme.of(context).appColors.warningAction,
+                      ),
+                      actionLabel: l10n.homeViewAllAction,
+                      onActionTap: () => context.push('/home/free-market'),
+                      height: 260,
+                      children: secondaryMarketCards,
+                    ),
+                  if (activeFundCards.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: UiTokens.spacing16,
+                      ),
+                      child: FundSectionList(
+                        title: l10n.homeActiveFundsTitle,
+                        actionLabel: l10n.homeViewAllAction,
+                        onActionTap: () => context.go('/funds'),
+                        initialVisibleCount: 3,
+                        children: activeFundCards,
+                      ),
+                    ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
