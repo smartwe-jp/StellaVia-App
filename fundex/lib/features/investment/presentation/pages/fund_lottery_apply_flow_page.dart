@@ -16,6 +16,7 @@ import 'fund_lottery_apply/fund_lottery_apply_confirm_step.dart';
 import 'fund_lottery_apply/fund_lottery_apply_documents_step.dart';
 import 'fund_lottery_apply/fund_lottery_apply_selected_step.dart';
 import 'fund_lottery_apply/fund_lottery_apply_submitted_step.dart';
+import '../../../member_profile/presentation/support/mypage_section_support.dart';
 
 class FundLotteryApplyFlowPage extends ConsumerStatefulWidget {
   const FundLotteryApplyFlowPage({
@@ -180,6 +181,12 @@ class _FundLotteryApplyFlowPageState
 
   void _goHome() {
     context.go('/home');
+  }
+
+  void _goToMyPageApplyingList() {
+    context.go(
+      '/profile/my/section-list?type=${MyPageSectionType.pendingApplications.queryValue}&filter=${MyPageApplyHistoryFilter.applying.queryValue}',
+    );
   }
 
   void _showToast(String message) {
@@ -680,6 +687,11 @@ class _FundLotteryApplyFlowPageState
                                 value: amountText,
                               ),
                               FundLotterySummaryRow(
+                                label: l10n.lotteryApplyStep1UnitCountLabel,
+                                value:
+                                    '${_selectedUnits.toString()}${l10n.lotteryApplyStep1UnitSuffix}',
+                              ),
+                              FundLotterySummaryRow(
                                 label: l10n.fundListMethodLabel,
                                 value: l10n.homeTagLottery,
                               ),
@@ -691,7 +703,7 @@ class _FundLotteryApplyFlowPageState
                                 l10n.lotteryApplyDemoCheckResultAction,
                             onDemoCheckResult:
                                 widget.allowSubmittedResultAdvance
-                                ? _goNextStep
+                                ? _goToMyPageApplyingList
                                 : null,
                           ),
                         FundLotteryApplyStep.selected =>
@@ -728,6 +740,7 @@ class _FundLotteryApplyFlowPageState
                             reportDepositButtonLabel:
                                 l10n.lotteryApplyReportDepositAction,
                             onReportDeposit: _goNextStep,
+                            onJumpDeposit: () => context.push('/wallet/deposit'),
                             laterButtonLabel:
                                 l10n.lotteryApplyLaterDepositAction,
                             onLaterDeposit: _goHome,

@@ -318,10 +318,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                       final sectionType = MyPageSectionType.fromQueryValue(
                         state.uri.queryParameters['type'],
                       );
+                      final applyFilter =
+                          MyPageApplyHistoryFilterX.fromQueryValue(
+                            state.uri.queryParameters['filter'],
+                          );
                       return MyPageSectionListPage(
                         sectionType:
                             sectionType ??
                             MyPageSectionType.pendingApplications,
+                        initialApplyFilter:
+                            applyFilter ?? MyPageApplyHistoryFilter.all,
                       );
                     },
                   ),

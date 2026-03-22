@@ -15,6 +15,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
     required this.depositRows,
     required this.reportDepositButtonLabel,
     required this.onReportDeposit,
+    required this.onJumpDeposit,
     required this.laterButtonLabel,
     required this.onLaterDeposit,
     required this.copyButtonLabel,
@@ -29,6 +30,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
   final String coolingOffBody;
   final List<FundLotteryDepositRow> depositRows;
   final String reportDepositButtonLabel;
+  final VoidCallback onJumpDeposit;
   final VoidCallback onReportDeposit;
   final String laterButtonLabel;
   final VoidCallback onLaterDeposit;
@@ -87,76 +89,76 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                     height: 1.7,
                   ),
                 ),
-                const SizedBox(height: 12),
-                Container(
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: colors.dangerSoft,
-                    border: Border.all(color: colors.dangerBorder),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          deadlineLabel,
-                          style: appText.bodyStrong.copyWith(
-                            color: colors.dangerForeground,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          deadlineValue,
-                          style: appText.numericTitle.copyWith(
-                            color: colors.danger,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: colors.warningSubtle,
-                    border: Border.all(color: colors.warningBorder),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        const Text('📋', style: TextStyle(fontSize: 18)),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: RichText(
-                            text: TextSpan(
-                              style: appText.caption.copyWith(
-                                color: colors.warningForeground,
-                                height: 1.6,
-                              ),
-                              children: <InlineSpan>[
-                                TextSpan(
-                                  text: '$coolingOffTitle\n',
-                                  style: appText.caption.copyWith(
-                                    color: colors.warningForeground,
-                                    height: 1.6,
-                                  ),
-                                ),
-                                TextSpan(text: coolingOffBody),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                //const SizedBox(height: 12),
+                // Container(
+                //   width: double.infinity,
+                //   alignment: Alignment.center,
+                //   decoration: BoxDecoration(
+                //     color: colors.dangerSoft,
+                //     border: Border.all(color: colors.dangerBorder),
+                //     borderRadius: BorderRadius.circular(12),
+                //   ),
+                //   child: Padding(
+                //     padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+                //     child: Column(
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       children: <Widget>[
+                //         Text(
+                //           deadlineLabel,
+                //           style: appText.bodyStrong.copyWith(
+                //             color: colors.dangerForeground,
+                //           ),
+                //         ),
+                //         const SizedBox(height: 4),
+                //         Text(
+                //           deadlineValue,
+                //           style: appText.numericTitle.copyWith(
+                //             color: colors.danger,
+                //             fontWeight: FontWeight.w900,
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                // const SizedBox(height: 12),
+                // DecoratedBox(
+                //   decoration: BoxDecoration(
+                //     color: colors.warningSubtle,
+                //     border: Border.all(color: colors.warningBorder),
+                //     borderRadius: BorderRadius.circular(12),
+                //   ),
+                //   child: Padding(
+                //     padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+                //     child: Row(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: <Widget>[
+                //         const Text('📋', style: TextStyle(fontSize: 18)),
+                //         const SizedBox(width: 8),
+                //         Expanded(
+                //           child: RichText(
+                //             text: TextSpan(
+                //               style: appText.caption.copyWith(
+                //                 color: colors.warningForeground,
+                //                 height: 1.6,
+                //               ),
+                //               children: <InlineSpan>[
+                //                 TextSpan(
+                //                   text: '$coolingOffTitle\n',
+                //                   style: appText.caption.copyWith(
+                //                     color: colors.warningForeground,
+                //                     height: 1.6,
+                //                   ),
+                //                 ),
+                //                 TextSpan(text: coolingOffBody),
+                //               ],
+                //             ),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(height: 12),
                 DecoratedBox(
                   decoration: BoxDecoration(
@@ -223,6 +225,12 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                       );
                     }),
                   ),
+                ),
+                const SizedBox(height: 16),
+                PrimaryCtaButton(
+                  label: reportDepositButtonLabel,
+                  onPressed: onJumpDeposit,
+                  horizontalPadding: 0,
                 ),
                 const SizedBox(height: 16),
                 PrimaryCtaButton(

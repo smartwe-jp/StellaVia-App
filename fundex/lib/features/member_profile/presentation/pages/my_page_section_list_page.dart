@@ -14,9 +14,14 @@ import '../providers/mypage_providers.dart';
 import '../support/mypage_section_support.dart';
 
 class MyPageSectionListPage extends ConsumerStatefulWidget {
-  const MyPageSectionListPage({super.key, required this.sectionType});
+  const MyPageSectionListPage({
+    super.key,
+    required this.sectionType,
+    this.initialApplyFilter = MyPageApplyHistoryFilter.all,
+  });
 
   final MyPageSectionType sectionType;
+  final MyPageApplyHistoryFilter initialApplyFilter;
 
   @override
   ConsumerState<MyPageSectionListPage> createState() =>
@@ -38,11 +43,12 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
   bool _hasMore = true;
   Object? _error;
   int _nextPage = 1;
-  MyPageApplyHistoryFilter _applyFilter = MyPageApplyHistoryFilter.all;
+  late MyPageApplyHistoryFilter _applyFilter;
 
   @override
   void initState() {
     super.initState();
+    _applyFilter = widget.initialApplyFilter;
     _scrollController.addListener(_handleScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadInitial();

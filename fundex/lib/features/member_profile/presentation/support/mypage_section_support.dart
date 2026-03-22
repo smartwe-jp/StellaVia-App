@@ -34,6 +34,16 @@ enum MyPageApplyHistoryFilter {
 }
 
 extension MyPageApplyHistoryFilterX on MyPageApplyHistoryFilter {
+  String get queryValue {
+    return switch (this) {
+      MyPageApplyHistoryFilter.all => 'all',
+      MyPageApplyHistoryFilter.applying => 'applying',
+      MyPageApplyHistoryFilter.pendingConfirmation => 'pending',
+      MyPageApplyHistoryFilter.completed => 'completed',
+      MyPageApplyHistoryFilter.invalid => 'invalid',
+    };
+  }
+
   List<int>? get statuses {
     return switch (this) {
       MyPageApplyHistoryFilter.all => null,
@@ -42,6 +52,15 @@ extension MyPageApplyHistoryFilterX on MyPageApplyHistoryFilter {
       MyPageApplyHistoryFilter.completed => const <int>[3],
       MyPageApplyHistoryFilter.invalid => const <int>[1, 4, 5],
     };
+  }
+
+  static MyPageApplyHistoryFilter? fromQueryValue(String? value) {
+    for (final filter in MyPageApplyHistoryFilter.values) {
+      if (filter.queryValue == value) {
+        return filter;
+      }
+    }
+    return null;
   }
 }
 

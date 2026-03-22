@@ -1403,7 +1403,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get lotteryApplyBackHomeAction => 'ホームに戻る';
 
   @override
-  String get lotteryApplyDemoCheckResultAction => '（デモ）抽選結果を確認する →';
+  String get lotteryApplyDemoCheckResultAction => '抽選結果を確認する →';
 
   @override
   String get lotteryApplyStep5Headline => '当選のお知らせ';

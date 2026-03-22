@@ -527,7 +527,7 @@
   "lotteryApplyApplicationNumberLabel": "申込番号",
   "lotteryApplyStep4HintBody": "当選した場合、8日以内にご入金ください（クーリングオフ期間を含みます）。落選の場合はお手続き不要です。※ 募集人数未達の場合も先着順に審査し、抽選を実施します。",
   "lotteryApplyBackHomeAction": "ホームに戻る",
-  "lotteryApplyDemoCheckResultAction": "（デモ）抽選結果を確認する →",
+  "lotteryApplyDemoCheckResultAction": "抽選結果を確認する →",
   "lotteryApplyStep5Headline": "当選のお知らせ",
   "lotteryApplyStep5Body": "「{projectName}」の抽選に当選しました。下記の入金期限までに指定口座へお振込みください。",
   "@lotteryApplyStep5Body": {
