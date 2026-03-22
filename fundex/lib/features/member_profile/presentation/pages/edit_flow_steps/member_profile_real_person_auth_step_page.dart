@@ -41,7 +41,11 @@ class MemberProfileRealPersonAuthStepPage extends StatelessWidget {
           ),
           if (isProcessing) ...<Widget>[
             const SizedBox(height: 14),
-            const LinearProgressIndicator(minHeight: 3),
+            LinearProgressIndicator(
+              minHeight: 3,
+              color: colors.primary,
+              backgroundColor: colors.borderSoft,
+            ),
           ],
           if ((statusMessage?.trim().isNotEmpty ?? false)) ...<Widget>[
             const SizedBox(height: 14),

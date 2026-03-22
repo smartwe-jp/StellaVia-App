@@ -1163,6 +1163,17 @@ class _MemberProfileEditFlowPageState
                       duration: const Duration(milliseconds: 220),
                       switchInCurve: Curves.easeOutCubic,
                       switchOutCurve: Curves.easeInCubic,
+                      layoutBuilder:
+                          (
+                            Widget? currentChild,
+                            List<Widget> previousChildren,
+                          ) => Stack(
+                            alignment: Alignment.topCenter,
+                            children: <Widget>[
+                              ...previousChildren,
+                              if (currentChild != null) currentChild,
+                            ],
+                          ),
                       child: KeyedSubtree(
                         key: ValueKey<MemberProfileEditStep>(_currentStep),
                         child: _buildStep(context),

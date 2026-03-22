@@ -116,6 +116,10 @@ class _KanaNormalizeFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
+    if (newValue.composing.isValid && !newValue.composing.isCollapsed) {
+      return newValue;
+    }
+
     final String text = _normalizeText(newValue.text);
     final int baseOffset = _normalizedOffset(
       rawText: newValue.text,
@@ -206,6 +210,10 @@ class _RomanNameFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
+    if (newValue.composing.isValid && !newValue.composing.isCollapsed) {
+      return newValue;
+    }
+
     final String text = _normalizeText(newValue.text);
     final int baseOffset = _normalizedOffset(
       rawText: newValue.text,
@@ -627,23 +635,33 @@ class MemberProfileUploadTile extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
+    final isDark = theme.brightness == Brightness.dark;
     final primary = colors.primary;
-    final borderColor = isCompleted
-        ? primary.withValues(alpha: 0.85)
+    final completedBackgroundColor = isCompleted
+        ? (isDark ? primary.withValues(alpha: 0.16) : colors.primarySubtle)
+        : colors.surface.withValues(alpha: 0);
+    final completedBorderColor = isCompleted
+        ? (isDark
+              ? primary.withValues(alpha: 0.72)
+              : primary.withValues(alpha: 0.85))
         : colors.border;
-    final textMuted = colors.textSecondary;
+    final titleColor = isCompleted
+        ? (isDark ? colors.onDark : colors.primary)
+        : colors.textPrimary;
+    final descriptionColor = isCompleted
+        ? (isDark ? colors.onDark.withValues(alpha: 0.74) : colors.primaryAlt)
+        : colors.textSecondary;
+    final iconColor = isCompleted ? primary : colors.textSecondary;
 
     return Material(
-      color: isCompleted
-          ? colors.primarySubtle
-          : colors.surface.withValues(alpha: 0),
+      color: completedBackgroundColor,
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: onTap,
         child: CustomPaint(
           painter: _RoundedDashedBorderPainter(
-            color: borderColor,
+            color: completedBorderColor,
             radius: 16,
             strokeWidth: 2,
             gap: 6,
@@ -658,20 +676,20 @@ class MemberProfileUploadTile extends StatelessWidget {
                 Icon(
                   isCompleted ? Icons.check_circle_rounded : icon,
                   size: 44,
-                  color: isCompleted ? primary : textMuted,
+                  color: iconColor,
                 ),
                 const SizedBox(height: 10),
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: appText.cardTitle,
+                  style: appText.cardTitle.copyWith(color: titleColor),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   description,
                   textAlign: TextAlign.center,
                   style: appText.helper.copyWith(
-                    color: textMuted,
+                    color: descriptionColor,
                     height: 1.35,
                   ),
                 ),
