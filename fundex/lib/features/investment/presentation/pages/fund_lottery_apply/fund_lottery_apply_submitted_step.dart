@@ -81,36 +81,36 @@ class FundLotteryApplySubmittedStep extends StatelessWidget {
                     height: 1.7,
                   ),
                 ),
-                const SizedBox(height: 18),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: colors.communitySecondary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: colors.communitySecondary),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          announcementLabel,
-                          style: appText.bodyStrong.copyWith(
-                            color: colors.communitySecondary,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          announcementValue,
-                          style: appText.numericTitle.copyWith(
-                            color: colors.communitySecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // const SizedBox(height: 18),
+                // Container(
+                //   width: double.infinity,
+                //   decoration: BoxDecoration(
+                //     color: colors.communitySecondary.withValues(alpha: 0.12),
+                //     borderRadius: BorderRadius.circular(12),
+                //     border: Border.all(color: colors.communitySecondary),
+                //   ),
+                //   child: Padding(
+                //     padding: const EdgeInsets.fromLTRB(12, 14, 12, 14),
+                //     child: Column(
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       children: <Widget>[
+                //         Text(
+                //           announcementLabel,
+                //           style: appText.bodyStrong.copyWith(
+                //             color: colors.communitySecondary,
+                //           ),
+                //         ),
+                //         const SizedBox(height: 4),
+                //         Text(
+                //           announcementValue,
+                //           style: appText.numericTitle.copyWith(
+                //             color: colors.communitySecondary,
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(height: 18),
                 DecoratedBox(
                   decoration: BoxDecoration(

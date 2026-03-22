@@ -36,6 +36,10 @@ class FundLotteryApplyFlowPage extends ConsumerStatefulWidget {
 
 class _FundLotteryApplyFlowPageState
     extends ConsumerState<FundLotteryApplyFlowPage> {
+  static const String _identityVerificationBypassSourceMessage =
+      'あなたの身分証明書がないか、期限切れになっているため、正常に操作できません。身分証明書の情報を更新してください。';
+  static const String _identityVerificationBypassNotice =
+      'テスト環境のため、このまま次へ進みます。';
   static const int _minimumUnits = 1;
   static const int _defaultUnitAmount = 100000;
   static const int _defaultMaxMultiplier = 10;
@@ -188,17 +192,6 @@ class _FundLotteryApplyFlowPageState
   bool _canProceedStep2(int requiredCount) =>
       _checkedDocuments.length == requiredCount;
 
-  String _buildApplicationNumber() {
-    final rolling = widget.projectId.codeUnits.fold<int>(0, (
-      int accumulator,
-      int unit,
-    ) {
-      return (accumulator * 31 + unit) % 100000;
-    });
-    final monthText = DateFormat('yyyy-MM').format(DateTime.now());
-    return 'FDX-$monthText-${rolling.toString().padLeft(5, '0')}';
-  }
-
   NumberFormat _currencyFormatter(BuildContext context) {
     return NumberFormat.currency(
       locale: Localizations.localeOf(context).toLanguageTag(),
@@ -325,13 +318,30 @@ class _FundLotteryApplyFlowPageState
   }
 
   String _resolveApplyErrorMessage(BuildContext context, Object error) {
-    if (error is StateError) {
-      final message = error.message.toString().trim();
-      if (message.isNotEmpty) {
-        return message;
-      }
+    final message = _extractApplyErrorMessage(error);
+    if (message != null) {
+      return message;
     }
     return context.l10n.lotteryApplySubmitFailedFallback;
+  }
+
+  String? _extractApplyErrorMessage(Object error) {
+    if (error is! StateError) {
+      return null;
+    }
+    final message = error.message.toString().trim();
+    if (message.isEmpty) {
+      return null;
+    }
+    return message;
+  }
+
+  bool _shouldBypassIdentityVerificationError(Object error) {
+    final message = _extractApplyErrorMessage(error);
+    if (message == null) {
+      return false;
+    }
+    return message.contains(_identityVerificationBypassSourceMessage);
   }
 
   Future<void> _submitLotteryApply({
@@ -371,6 +381,11 @@ class _FundLotteryApplyFlowPageState
       _goNextStep();
     } catch (error) {
       if (!mounted) {
+        return;
+      }
+      if (_shouldBypassIdentityVerificationError(error)) {
+        _showToast(_identityVerificationBypassNotice);
+        _goNextStep();
         return;
       }
       _showToast(_resolveApplyErrorMessage(context, error));
@@ -437,7 +452,6 @@ class _FundLotteryApplyFlowPageState
             ref.invalidate(fundProjectDetailProvider(widget.projectId)),
       ),
       data: (FundProject project) {
-        final applicationNumber = _buildApplicationNumber();
         final projectName = project.projectName.trim().isEmpty
             ? l10n.fundDetailUnknownValue
             : project.projectName.trim();
@@ -619,6 +633,11 @@ class _FundLotteryApplyFlowPageState
                                 value: l10n.homeTagLottery,
                               ),
                               FundLotterySummaryRow(
+                                label: l10n.lotteryApplyStep1UnitCountLabel,
+                                value:
+                                    '${_selectedUnits.toString()}${l10n.lotteryApplyStep1UnitSuffix}',
+                              ),
+                              FundLotterySummaryRow(
                                 label: l10n.fundDetailLotteryDateLabel,
                                 value: lotteryDate,
                               ),
@@ -653,8 +672,8 @@ class _FundLotteryApplyFlowPageState
                             announcementValue: lotteryDate,
                             rows: <FundLotterySummaryRow>[
                               FundLotterySummaryRow(
-                                label: l10n.lotteryApplyApplicationNumberLabel,
-                                value: applicationNumber,
+                                label: l10n.lotteryApplyFundNameLabel,
+                                value: projectName,
                               ),
                               FundLotterySummaryRow(
                                 label: l10n.lotteryApplyInvestmentAmountLabel,
@@ -723,7 +742,7 @@ class _FundLotteryApplyFlowPageState
                             headline: l10n.lotteryApplyStep6Headline,
                             body: l10n.lotteryApplyStep6Body,
                             receiptLabel: l10n.lotteryApplyReceiptLabel,
-                            receiptValue: applicationNumber,
+                            receiptValue: projectName,
                             backHomeLabel: l10n.lotteryApplyBackHomeAction,
                             onBackHome: _goHome,
                           ),
