@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
-import '../../../auth/presentation/support/identity_auth_guard.dart';
 import '../../domain/entities/fund_project.dart';
 import '../providers/fund_project_favorite_providers.dart';
 import '../providers/fund_project_providers.dart';
@@ -31,15 +30,7 @@ class FundProjectDetailPage extends ConsumerStatefulWidget {
 class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
   int _selectedDetailTabIndex = 0;
 
-  Future<void> _handleLotteryApplyTap(String projectId) async {
-    final allowed = await ensureSensitiveActionAuthorized(
-      context,
-      ref,
-      identifyGroupId: projectId,
-    );
-    if (!mounted || !allowed) {
-      return;
-    }
+  void _handleLotteryApplyTap(String projectId) {
     context.push('/funds/$projectId/lottery-apply');
   }
 
