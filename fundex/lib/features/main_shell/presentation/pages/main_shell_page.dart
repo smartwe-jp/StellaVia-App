@@ -70,35 +70,44 @@ class MainShellPage extends ConsumerWidget {
           }),
         ),
         child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: colors.surface,
-            border: Border(top: BorderSide(color: colors.border)),
-          ),
-          child: NavigationBar(
-            key: const Key('main_tab_bar'),
-            height: 60,
-            selectedIndex: navigationShell.currentIndex,
-            onDestinationSelected: _onDestinationSelected,
-            destinations: <NavigationDestination>[
-              NavigationDestination(
-                icon: const Icon(Icons.home_rounded),
-                selectedIcon: const Icon(Icons.home_rounded),
-                label: l10n.mainTabHome,
+          decoration: BoxDecoration(color: colors.surface),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                height: 1,
+                width: double.infinity,
+                color: colors.border,
               ),
-              NavigationDestination(
-                icon: const Icon(Icons.insert_chart_outlined_outlined),
-                selectedIcon: const Icon(Icons.insert_chart_outlined_outlined),
-                label: l10n.mainTabInvestment,
-              ),
-              NavigationDestination(
-                icon: const Icon(Icons.favorite),
-                selectedIcon: const Icon(Icons.favorite),
-                label: l10n.mainTabKizunark,
-              ),
-              NavigationDestination(
-                icon: const Icon(Icons.person_rounded),
-                selectedIcon: const Icon(Icons.person_rounded),
-                label: l10n.mainTabProfile,
+              NavigationBar(
+                key: const Key('main_tab_bar'),
+                height: 60,
+                selectedIndex: navigationShell.currentIndex,
+                onDestinationSelected: _onDestinationSelected,
+                destinations: <NavigationDestination>[
+                  NavigationDestination(
+                    icon: const Icon(Icons.home_rounded),
+                    selectedIcon: const Icon(Icons.home_rounded),
+                    label: l10n.mainTabHome,
+                  ),
+                  NavigationDestination(
+                    icon: const Icon(Icons.insert_chart_outlined_outlined),
+                    selectedIcon: const Icon(
+                      Icons.insert_chart_outlined_outlined,
+                    ),
+                    label: l10n.mainTabInvestment,
+                  ),
+                  NavigationDestination(
+                    icon: const Icon(Icons.favorite),
+                    selectedIcon: const Icon(Icons.favorite),
+                    label: l10n.mainTabKizunark,
+                  ),
+                  NavigationDestination(
+                    icon: const Icon(Icons.person_rounded),
+                    selectedIcon: const Icon(Icons.person_rounded),
+                    label: l10n.mainTabProfile,
+                  ),
+                ],
               ),
             ],
           ),
