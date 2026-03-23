@@ -308,7 +308,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 label: l10n.menuItemFaqHelp,
                 iconBackgroundColor: colors.primarySubtle,
                 iconForegroundColor: colors.primary,
-                onTap: () => _showComingSoon(l10n.menuItemFaqHelp),
+                onTap: () => context.push('/profile/settings/faq'),
               ),
               AppMenuItem(
                 icon: Icons.chat_bubble_rounded,
@@ -316,6 +316,22 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 iconBackgroundColor: colors.successSubtle,
                 iconForegroundColor: colors.success,
                 onTap: () => _showComingSoon(l10n.menuItemChatSupport),
+              ),
+              AppMenuItem(
+                icon: Icons.email_rounded,
+                label: l10n.menuItemContactUs,
+                iconBackgroundColor: colors.infoSubtle,
+                iconForegroundColor: colors.info,
+                onTap: () => context.push('/profile/settings/contact'),
+              ),
+              AppMenuItem(
+                icon: Icons.business_rounded,
+                label: l10n.menuItemOperatingCompany,
+                iconBackgroundColor: colors.communitySecondary.withValues(
+                  alpha: 0.12,
+                ),
+                iconForegroundColor: colors.communitySecondary,
+                onTap: () => context.push('/profile/settings/company'),
               ),
             ],
           ),

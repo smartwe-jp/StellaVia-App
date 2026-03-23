@@ -14,7 +14,6 @@ import '../../../member_profile/domain/entities/member_profile_details.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
-import '../../../member_profile/presentation/support/member_profile_edit_step.dart';
 import '../support/home_display_name_resolver.dart';
 
 const Set<int> _featuredProjectStatuses = <int>{0, 1};
@@ -67,9 +66,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
           badgeLabel: l10n.homeReminderProfileBadge,
           segmentCount: MemberProfileDetails.flowStepCount,
           completedSegmentCount: memberProfile?.completedFlowStepCount ?? 0,
-          onTap: () => context.push(
-            '/member-profile/onboarding',
-          ),
+          onTap: () => context.push('/member-profile/onboarding'),
         ),
     ];
 
@@ -215,7 +212,8 @@ class HomeOverviewTabPage extends ConsumerWidget {
                                   (Theme.of(context).textTheme.bodyMedium ??
                                           const TextStyle())
                                       .copyWith(
-                                        color: AppColorTokens.fundexTextSecondary,
+                                        color:
+                                            AppColorTokens.fundexTextSecondary,
                                       ),
                             ),
                             const SizedBox(height: UiTokens.spacing12),

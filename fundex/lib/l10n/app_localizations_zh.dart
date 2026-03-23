@@ -72,6 +72,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get imageViewerInvalidSourceNotice => '图片链接无效。';
 
   @override
+  String get webViewerLoadingLabel => '正在加载页面...';
+
+  @override
+  String get webViewerLoadFailedLabel => '页面加载失败。';
+
+  @override
+  String get webViewerInvalidUrlNotice => '页面链接无效。';
+
+  @override
   String get imageViewerCloseTooltip => '关闭';
 
   @override
@@ -1021,6 +1030,138 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get menuItemChatSupport => '聊天支持';
+
+  @override
+  String get menuItemContactUs => '联系我们';
+
+  @override
+  String get menuItemOperatingCompany => '关于运营公司';
+
+  @override
+  String get settingsContactTitle => '联系我们';
+
+  @override
+  String get settingsContactDescription => '如果您有任何问题或意见，欢迎通过以下表单与我们联系。';
+
+  @override
+  String get settingsContactNameLabel => '姓名';
+
+  @override
+  String get settingsContactKanaLabel => '片假名';
+
+  @override
+  String get settingsContactKanaFamilySegment => '姓';
+
+  @override
+  String get settingsContactKanaGivenSegment => '名';
+
+  @override
+  String get settingsContactEmailLabel => '邮箱地址';
+
+  @override
+  String get settingsContactEmailHint => 'example@mail.com';
+
+  @override
+  String get settingsContactCategoryLabel => '咨询类别';
+
+  @override
+  String get settingsContactCategoryPlaceholder => '请选择';
+
+  @override
+  String get settingsContactCategoryInvestment => '关于出资与投资';
+
+  @override
+  String get settingsContactCategoryAccount => '关于账户与登录';
+
+  @override
+  String get settingsContactCategoryWallet => '关于分配金与入出金';
+
+  @override
+  String get settingsContactCategoryEkyc => '关于身份验证（eKYC）';
+
+  @override
+  String get settingsContactCategoryOther => '其他';
+
+  @override
+  String get settingsContactMessageLabel => '咨询内容';
+
+  @override
+  String get settingsContactMessageHint => '请输入您的咨询内容';
+
+  @override
+  String get settingsContactSubmitAction => '发送';
+
+  @override
+  String get settingsContactSubmitSuccess => '已收到您的咨询。';
+
+  @override
+  String get settingsContactPhoneSectionTitle => '电话咨询';
+
+  @override
+  String get settingsContactPhoneHours => '受理时间：工作日 10:00～18:00（周末及节假日除外）';
+
+  @override
+  String get settingsContactCallFailed => '无法打开电话应用。';
+
+  @override
+  String get settingsContactValidationName => '请输入姓和名。';
+
+  @override
+  String get settingsContactValidationKana => '请输入片假名姓名。';
+
+  @override
+  String get settingsContactValidationEmail => '请输入有效的邮箱地址。';
+
+  @override
+  String get settingsContactValidationCategory => '请选择咨询类别。';
+
+  @override
+  String get settingsContactValidationMessage => '请输入咨询内容。';
+
+  @override
+  String get settingsOperatingCompanyTitle => '运营公司';
+
+  @override
+  String get settingsCompanyTradeNameLabel => '商号';
+
+  @override
+  String get settingsCompanyLicenseNumberLabel => '许可编号';
+
+  @override
+  String get settingsCompanyLicenseTypeLabel => '许可类型';
+
+  @override
+  String get settingsCompanyRepresentativeLabel => '代表者';
+
+  @override
+  String get settingsCompanyHeadOfficeLabel => '总部';
+
+  @override
+  String get settingsCompanyTelLabel => '电话';
+
+  @override
+  String get settingsCompanyEstablishedLabel => '成立时间';
+
+  @override
+  String get settingsCompanyBusinessLabel => '主要业务';
+
+  @override
+  String get settingsCompanyManagerLabel => '业务管理者';
+
+  @override
+  String get settingsCompanyRelatedLinksTitle => '相关链接';
+
+  @override
+  String get settingsCompanyLinkTerms => '使用条款';
+
+  @override
+  String get settingsCompanyLinkPrivacy => '隐私政策';
+
+  @override
+  String get settingsCompanyLinkSolicitation => '招揽方针';
+
+  @override
+  String get settingsCompanyLinkAntiSocial => '反社会势力对应';
 
   @override
   String get menuVersionFootnote => 'StellaVia v1.0.0 ・ 不动产特定共同事业 第XXX号';
@@ -3096,6 +3237,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get imageViewerInvalidSourceNotice => '圖片連結無效。';
 
   @override
+  String get webViewerLoadingLabel => '正在載入頁面...';
+
+  @override
+  String get webViewerLoadFailedLabel => '頁面載入失敗。';
+
+  @override
+  String get webViewerInvalidUrlNotice => '頁面連結無效。';
+
+  @override
   String get imageViewerCloseTooltip => '關閉';
 
   @override
@@ -4045,6 +4195,138 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get menuItemChatSupport => '線上客服';
+
+  @override
+  String get menuItemContactUs => '聯絡我們';
+
+  @override
+  String get menuItemOperatingCompany => '關於營運公司';
+
+  @override
+  String get settingsContactTitle => '聯絡我們';
+
+  @override
+  String get settingsContactDescription => '如果您有任何問題或意見，歡迎透過以下表單與我們聯絡。';
+
+  @override
+  String get settingsContactNameLabel => '姓名';
+
+  @override
+  String get settingsContactKanaLabel => '片假名';
+
+  @override
+  String get settingsContactKanaFamilySegment => '姓';
+
+  @override
+  String get settingsContactKanaGivenSegment => '名';
+
+  @override
+  String get settingsContactEmailLabel => '電子郵件地址';
+
+  @override
+  String get settingsContactEmailHint => 'example@mail.com';
+
+  @override
+  String get settingsContactCategoryLabel => '諮詢類別';
+
+  @override
+  String get settingsContactCategoryPlaceholder => '請選擇';
+
+  @override
+  String get settingsContactCategoryInvestment => '關於出資與投資';
+
+  @override
+  String get settingsContactCategoryAccount => '關於帳號與登入';
+
+  @override
+  String get settingsContactCategoryWallet => '關於分配金與入出金';
+
+  @override
+  String get settingsContactCategoryEkyc => '關於身分驗證（eKYC）';
+
+  @override
+  String get settingsContactCategoryOther => '其他';
+
+  @override
+  String get settingsContactMessageLabel => '諮詢內容';
+
+  @override
+  String get settingsContactMessageHint => '請輸入您的諮詢內容';
+
+  @override
+  String get settingsContactSubmitAction => '送出';
+
+  @override
+  String get settingsContactSubmitSuccess => '已收到您的諮詢。';
+
+  @override
+  String get settingsContactPhoneSectionTitle => '電話諮詢';
+
+  @override
+  String get settingsContactPhoneHours => '受理時間：平日 10:00～18:00（週末及國定假日除外）';
+
+  @override
+  String get settingsContactCallFailed => '無法開啟電話應用程式。';
+
+  @override
+  String get settingsContactValidationName => '請輸入姓與名。';
+
+  @override
+  String get settingsContactValidationKana => '請輸入片假名姓名。';
+
+  @override
+  String get settingsContactValidationEmail => '請輸入有效的電子郵件地址。';
+
+  @override
+  String get settingsContactValidationCategory => '請選擇諮詢類別。';
+
+  @override
+  String get settingsContactValidationMessage => '請輸入諮詢內容。';
+
+  @override
+  String get settingsOperatingCompanyTitle => '營運公司';
+
+  @override
+  String get settingsCompanyTradeNameLabel => '商號';
+
+  @override
+  String get settingsCompanyLicenseNumberLabel => '許可編號';
+
+  @override
+  String get settingsCompanyLicenseTypeLabel => '許可類型';
+
+  @override
+  String get settingsCompanyRepresentativeLabel => '代表者';
+
+  @override
+  String get settingsCompanyHeadOfficeLabel => '總公司';
+
+  @override
+  String get settingsCompanyTelLabel => '電話';
+
+  @override
+  String get settingsCompanyEstablishedLabel => '成立時間';
+
+  @override
+  String get settingsCompanyBusinessLabel => '主要業務';
+
+  @override
+  String get settingsCompanyManagerLabel => '業務管理者';
+
+  @override
+  String get settingsCompanyRelatedLinksTitle => '相關連結';
+
+  @override
+  String get settingsCompanyLinkTerms => '使用條款';
+
+  @override
+  String get settingsCompanyLinkPrivacy => '隱私權政策';
+
+  @override
+  String get settingsCompanyLinkSolicitation => '招攬方針';
+
+  @override
+  String get settingsCompanyLinkAntiSocial => '反社會勢力對應';
 
   @override
   String get menuVersionFootnote => 'StellaVia v1.0.0 ・ 不動產特定共同事業 第XXX號';

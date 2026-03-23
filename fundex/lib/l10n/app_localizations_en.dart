@@ -73,6 +73,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get imageViewerInvalidSourceNotice => 'Invalid image source.';
 
   @override
+  String get webViewerLoadingLabel => 'Loading page...';
+
+  @override
+  String get webViewerLoadFailedLabel => 'Failed to load page.';
+
+  @override
+  String get webViewerInvalidUrlNotice => 'Invalid page URL.';
+
+  @override
   String get imageViewerCloseTooltip => 'Close';
 
   @override
@@ -1083,6 +1092,146 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get menuItemChatSupport => 'Chat support';
+
+  @override
+  String get menuItemContactUs => 'Contact us';
+
+  @override
+  String get menuItemOperatingCompany => 'About the operator';
+
+  @override
+  String get settingsContactTitle => 'Contact us';
+
+  @override
+  String get settingsContactDescription =>
+      'If you have any questions or feedback, please feel free to contact us using the form below.';
+
+  @override
+  String get settingsContactNameLabel => 'Full name';
+
+  @override
+  String get settingsContactKanaLabel => 'Phonetic name';
+
+  @override
+  String get settingsContactKanaFamilySegment => 'SEI';
+
+  @override
+  String get settingsContactKanaGivenSegment => 'MEI';
+
+  @override
+  String get settingsContactEmailLabel => 'Email address';
+
+  @override
+  String get settingsContactEmailHint => 'example@mail.com';
+
+  @override
+  String get settingsContactCategoryLabel => 'Inquiry category';
+
+  @override
+  String get settingsContactCategoryPlaceholder => 'Please select';
+
+  @override
+  String get settingsContactCategoryInvestment => 'About investment';
+
+  @override
+  String get settingsContactCategoryAccount => 'About account or login';
+
+  @override
+  String get settingsContactCategoryWallet =>
+      'About distributions or deposits and withdrawals';
+
+  @override
+  String get settingsContactCategoryEkyc =>
+      'About identity verification (eKYC)';
+
+  @override
+  String get settingsContactCategoryOther => 'Other';
+
+  @override
+  String get settingsContactMessageLabel => 'Message';
+
+  @override
+  String get settingsContactMessageHint => 'Please enter your inquiry';
+
+  @override
+  String get settingsContactSubmitAction => 'Send';
+
+  @override
+  String get settingsContactSubmitSuccess => 'Your inquiry has been received.';
+
+  @override
+  String get settingsContactPhoneSectionTitle => 'Phone inquiries';
+
+  @override
+  String get settingsContactPhoneHours =>
+      'Business hours: Weekdays 10:00–18:00 (excluding weekends and holidays)';
+
+  @override
+  String get settingsContactCallFailed => 'Could not open the phone app.';
+
+  @override
+  String get settingsContactValidationName =>
+      'Please enter your family name and given name.';
+
+  @override
+  String get settingsContactValidationKana =>
+      'Please enter your phonetic name.';
+
+  @override
+  String get settingsContactValidationEmail =>
+      'Please enter a valid email address.';
+
+  @override
+  String get settingsContactValidationCategory =>
+      'Please select an inquiry category.';
+
+  @override
+  String get settingsContactValidationMessage => 'Please enter your message.';
+
+  @override
+  String get settingsOperatingCompanyTitle => 'Operating company';
+
+  @override
+  String get settingsCompanyTradeNameLabel => 'Trade name';
+
+  @override
+  String get settingsCompanyLicenseNumberLabel => 'License number';
+
+  @override
+  String get settingsCompanyLicenseTypeLabel => 'License type';
+
+  @override
+  String get settingsCompanyRepresentativeLabel => 'Representative';
+
+  @override
+  String get settingsCompanyHeadOfficeLabel => 'Head office';
+
+  @override
+  String get settingsCompanyTelLabel => 'TEL';
+
+  @override
+  String get settingsCompanyEstablishedLabel => 'Established';
+
+  @override
+  String get settingsCompanyBusinessLabel => 'Main business';
+
+  @override
+  String get settingsCompanyManagerLabel => 'Business manager';
+
+  @override
+  String get settingsCompanyRelatedLinksTitle => 'Related links';
+
+  @override
+  String get settingsCompanyLinkTerms => 'Terms of use';
+
+  @override
+  String get settingsCompanyLinkPrivacy => 'Privacy policy';
+
+  @override
+  String get settingsCompanyLinkSolicitation => 'Solicitation policy';
+
+  @override
+  String get settingsCompanyLinkAntiSocial => 'Anti-social forces policy';
 
   @override
   String get menuVersionFootnote =>

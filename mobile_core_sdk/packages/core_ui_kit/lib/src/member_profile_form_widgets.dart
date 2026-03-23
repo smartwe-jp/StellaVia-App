@@ -269,6 +269,41 @@ class _KanaToken {
   final int consumedLength;
 }
 
+class MemberProfileFieldLabel extends StatelessWidget {
+  const MemberProfileFieldLabel({
+    super.key,
+    required this.label,
+    this.isRequired = false,
+    this.color,
+  });
+
+  final String label;
+  final bool isRequired;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final effectiveColor =
+        color ?? colors.textSecondary.withValues(alpha: 0.82);
+    return RichText(
+      text: TextSpan(
+        style: appText.inputLabel.copyWith(color: effectiveColor),
+        children: <InlineSpan>[
+          if (isRequired)
+            TextSpan(
+              text: '* ',
+              style: appText.inputLabel.copyWith(color: colors.danger),
+            ),
+          TextSpan(text: label),
+        ],
+      ),
+    );
+  }
+}
+
 class MemberProfileTextField extends StatelessWidget {
   const MemberProfileTextField({
     super.key,
@@ -281,6 +316,8 @@ class MemberProfileTextField extends StatelessWidget {
     this.suffixIcon,
     this.onTap,
     this.inputFormatters,
+    this.isRequired = false,
+    this.labelColor,
   });
 
   final String label;
@@ -292,6 +329,8 @@ class MemberProfileTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final VoidCallback? onTap;
   final List<TextInputFormatter>? inputFormatters;
+  final bool isRequired;
+  final Color? labelColor;
 
   @override
   Widget build(BuildContext context) {
@@ -300,7 +339,11 @@ class MemberProfileTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _FieldLabel(label: label),
+        MemberProfileFieldLabel(
+          label: label,
+          isRequired: isRequired,
+          color: labelColor,
+        ),
         const SizedBox(height: 6),
         TextField(
           controller: controller,
@@ -309,7 +352,7 @@ class MemberProfileTextField extends StatelessWidget {
           maxLines: maxLines,
           onTap: onTap,
           inputFormatters: inputFormatters,
-          decoration: _inputDecoration(
+          decoration: memberProfileInputDecoration(
             context: context,
             hintText: hintText,
             suffixIcon: suffixIcon,
@@ -328,12 +371,16 @@ class MemberProfileSelectField<T> extends StatelessWidget {
     required this.value,
     required this.items,
     this.onChanged,
+    this.isRequired = false,
+    this.labelColor,
   });
 
   final String label;
   final T? value;
   final List<DropdownMenuItem<T>> items;
   final ValueChanged<T?>? onChanged;
+  final bool isRequired;
+  final Color? labelColor;
 
   @override
   Widget build(BuildContext context) {
@@ -343,7 +390,11 @@ class MemberProfileSelectField<T> extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _FieldLabel(label: label),
+        MemberProfileFieldLabel(
+          label: label,
+          isRequired: isRequired,
+          color: labelColor,
+        ),
         const SizedBox(height: 6),
         DropdownButtonFormField<T>(
           initialValue: value,
@@ -353,7 +404,7 @@ class MemberProfileSelectField<T> extends StatelessWidget {
             Icons.keyboard_arrow_down_rounded,
             color: colors.textSecondary,
           ),
-          decoration: _inputDecoration(context: context),
+          decoration: memberProfileInputDecoration(context: context),
           style: appText.inputText,
           dropdownColor: colors.surface,
           borderRadius: BorderRadius.circular(12),
@@ -503,6 +554,78 @@ class MemberProfileDualTextFieldRow extends StatelessWidget {
             keyboardType: endKeyboardType,
             inputFormatters: endInputFormatters,
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class MemberProfileSegmentedDualTextFieldRow extends StatelessWidget {
+  const MemberProfileSegmentedDualTextFieldRow({
+    super.key,
+    required this.label,
+    required this.startSegmentLabel,
+    required this.startController,
+    required this.endSegmentLabel,
+    required this.endController,
+    this.startHintText,
+    this.endHintText,
+    this.startKeyboardType,
+    this.endKeyboardType,
+    this.startInputFormatters,
+    this.endInputFormatters,
+    this.isRequired = false,
+    this.labelColor,
+  });
+
+  final String label;
+  final String startSegmentLabel;
+  final TextEditingController startController;
+  final String endSegmentLabel;
+  final TextEditingController endController;
+  final String? startHintText;
+  final String? endHintText;
+  final TextInputType? startKeyboardType;
+  final TextInputType? endKeyboardType;
+  final List<TextInputFormatter>? startInputFormatters;
+  final List<TextInputFormatter>? endInputFormatters;
+  final bool isRequired;
+  final Color? labelColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        MemberProfileFieldLabel(
+          label: label,
+          isRequired: isRequired,
+          color: labelColor,
+        ),
+        const SizedBox(height: 6),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: _SegmentedTextField(
+                segmentLabel: startSegmentLabel,
+                controller: startController,
+                hintText: startHintText,
+                keyboardType: startKeyboardType,
+                inputFormatters: startInputFormatters,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: _SegmentedTextField(
+                segmentLabel: endSegmentLabel,
+                controller: endController,
+                hintText: endHintText,
+                keyboardType: endKeyboardType,
+                inputFormatters: endInputFormatters,
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -907,7 +1030,7 @@ class MemberProfileOutlineButton extends StatelessWidget {
   }
 }
 
-InputDecoration _inputDecoration({
+InputDecoration memberProfileInputDecoration({
   required BuildContext context,
   String? hintText,
   Widget? suffixIcon,
@@ -939,20 +1062,70 @@ InputDecoration _inputDecoration({
   );
 }
 
-class _FieldLabel extends StatelessWidget {
-  const _FieldLabel({required this.label});
+class _SegmentedTextField extends StatelessWidget {
+  const _SegmentedTextField({
+    required this.segmentLabel,
+    required this.controller,
+    this.hintText,
+    this.keyboardType,
+    this.inputFormatters,
+  });
 
-  final String label;
+  final String segmentLabel;
+  final TextEditingController controller;
+  final String? hintText;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
-    return Text(
-      label,
-      style: appText.inputLabel.copyWith(
-        color: colors.textSecondary.withValues(alpha: 0.82),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colors.border, width: 1.5),
+      ),
+      child: Row(
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            decoration: BoxDecoration(
+              color: colors.surfaceAlt,
+              border: Border(right: BorderSide(color: colors.border)),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10.5),
+                bottomLeft: Radius.circular(10.5),
+              ),
+            ),
+            child: Text(
+              segmentLabel,
+              style: appText.micro.copyWith(color: colors.textSecondary),
+            ),
+          ),
+          Expanded(
+            child: TextField(
+              controller: controller,
+              keyboardType: keyboardType,
+              inputFormatters: inputFormatters,
+              decoration: InputDecoration(
+                isDense: true,
+                hintText: hintText,
+                hintStyle: appText.inputText.copyWith(
+                  color: colors.textSecondary.withValues(alpha: 0.72),
+                ),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 10,
+                ),
+              ),
+              style: appText.inputText,
+            ),
+          ),
+        ],
       ),
     );
   }

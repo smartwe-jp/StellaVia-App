@@ -24,7 +24,6 @@ import '../../features/investment/presentation/pages/secondary_market_marketplac
 import '../../features/investment/presentation/support/fund_lottery_apply_step.dart';
 import '../../features/main_shell/presentation/pages/main_shell_page.dart';
 import '../../features/member_profile/presentation/pages/member_profile_edit_flow_page.dart';
-import '../../features/member_profile/presentation/pages/member_profile_intake_page.dart';
 import '../../features/member_profile/presentation/pages/member_profile_overview_page.dart';
 import '../../features/member_profile/presentation/pages/my_page_active_fund_detail_page.dart';
 import '../../features/member_profile/presentation/pages/my_page_secondary_market_sell_confirm_page.dart';
@@ -38,6 +37,9 @@ import '../../features/member_profile/presentation/support/mypage_section_suppor
 import '../../features/member_profile/presentation/support/member_profile_edit_step.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/settings_face_verification_page.dart';
+import '../../features/settings/presentation/pages/settings_contact_page.dart';
+import '../../features/settings/presentation/pages/settings_faq_page.dart';
+import '../../features/settings/presentation/pages/settings_operating_company_page.dart';
 import '../../features/settings/presentation/pages/settings_phone_verification_page.dart';
 import '../../features/settings/presentation/pages/settings_two_factor_page.dart';
 import '../../features/wallet/presentation/pages/deposit_page.dart';
@@ -301,13 +303,36 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     },
                     routes: <RouteBase>[
                       GoRoute(
+                        path: 'faq',
+                        parentNavigatorKey: _rootNavigatorKey,
+                        builder: (BuildContext context, GoRouterState state) {
+                          return const SettingsFaqPage();
+                        },
+                      ),
+                      GoRoute(
+                        path: 'contact',
+                        parentNavigatorKey: _rootNavigatorKey,
+                        builder: (BuildContext context, GoRouterState state) {
+                          return const SettingsContactPage();
+                        },
+                      ),
+                      GoRoute(
+                        path: 'company',
+                        parentNavigatorKey: _rootNavigatorKey,
+                        builder: (BuildContext context, GoRouterState state) {
+                          return const SettingsOperatingCompanyPage();
+                        },
+                      ),
+                      GoRoute(
                         path: 'two-factor',
+                        parentNavigatorKey: _rootNavigatorKey,
                         builder: (BuildContext context, GoRouterState state) {
                           return const SettingsTwoFactorPage();
                         },
                         routes: <RouteBase>[
                           GoRoute(
                             path: 'phone',
+                            parentNavigatorKey: _rootNavigatorKey,
                             builder:
                                 (BuildContext context, GoRouterState state) {
                                   return const SettingsPhoneVerificationPage();
@@ -315,6 +340,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                           ),
                           GoRoute(
                             path: 'face',
+                            parentNavigatorKey: _rootNavigatorKey,
                             builder:
                                 (BuildContext context, GoRouterState state) {
                                   return const SettingsFaceVerificationPage();
@@ -332,6 +358,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   ),
                   GoRoute(
                     path: 'wallet/bank-settings',
+                    parentNavigatorKey: _rootNavigatorKey,
                     builder: (BuildContext context, GoRouterState state) {
                       return const WalletBankSettingsPage();
                     },

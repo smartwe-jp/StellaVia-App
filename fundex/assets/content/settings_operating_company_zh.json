@@ -1,0 +1,34 @@
+{
+  "tradeName": "Stella Asset 株式会社",
+  "licenseNumber": "不动产特定共同事业\n大阪府知事许可 第22号",
+  "licenseType": "第1号事业、第2号事业及电子交易业务",
+  "representative": "代表取締役　谷中　譲",
+  "headOffice": "大阪府大阪市北区天满2-1-12",
+  "tel": "06-6940-4777",
+  "established": "2012年12月11日",
+  "business": "不动产特定共同事业、电商等业务",
+  "manager": "濑户口 爱\n公认不动产咨询大师",
+  "copyright": "© 株式会社Stella Asset 版权所有",
+  "links": [
+    {
+      "title": "使用条款",
+      "icon": "📄",
+      "url": "https://testoa.gutingjun.com/terms_conditions.pdf"
+    },
+    {
+      "title": "隐私政策",
+      "icon": "🔒",
+      "url": "https://testoa.gutingjun.com/personal_information.pdf"
+    },
+    {
+      "title": "招揽方针",
+      "icon": "📋",
+      "url": "https://testoa.gutingjun.com/solicitation_policy.pdf"
+    },
+    {
+      "title": "反社会势力应对方针",
+      "icon": "🛡️",
+      "url": "https://testoa.gutingjun.com/antisocialrule.pdf"
+    }
+  ]
+}

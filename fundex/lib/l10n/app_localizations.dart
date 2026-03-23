@@ -227,6 +227,24 @@ abstract class AppLocalizations {
   /// **'Invalid image source.'**
   String get imageViewerInvalidSourceNotice;
 
+  /// No description provided for @webViewerLoadingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading page...'**
+  String get webViewerLoadingLabel;
+
+  /// No description provided for @webViewerLoadFailedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load page.'**
+  String get webViewerLoadFailedLabel;
+
+  /// No description provided for @webViewerInvalidUrlNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid page URL.'**
+  String get webViewerInvalidUrlNotice;
+
   /// No description provided for @imageViewerCloseTooltip.
   ///
   /// In en, this message translates to:
@@ -2092,6 +2110,270 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Chat support'**
   String get menuItemChatSupport;
+
+  /// No description provided for @menuItemContactUs.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact us'**
+  String get menuItemContactUs;
+
+  /// No description provided for @menuItemOperatingCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'About the operator'**
+  String get menuItemOperatingCompany;
+
+  /// No description provided for @settingsContactTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact us'**
+  String get settingsContactTitle;
+
+  /// No description provided for @settingsContactDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'If you have any questions or feedback, please feel free to contact us using the form below.'**
+  String get settingsContactDescription;
+
+  /// No description provided for @settingsContactNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name'**
+  String get settingsContactNameLabel;
+
+  /// No description provided for @settingsContactKanaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phonetic name'**
+  String get settingsContactKanaLabel;
+
+  /// No description provided for @settingsContactKanaFamilySegment.
+  ///
+  /// In en, this message translates to:
+  /// **'SEI'**
+  String get settingsContactKanaFamilySegment;
+
+  /// No description provided for @settingsContactKanaGivenSegment.
+  ///
+  /// In en, this message translates to:
+  /// **'MEI'**
+  String get settingsContactKanaGivenSegment;
+
+  /// No description provided for @settingsContactEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email address'**
+  String get settingsContactEmailLabel;
+
+  /// No description provided for @settingsContactEmailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'example@mail.com'**
+  String get settingsContactEmailHint;
+
+  /// No description provided for @settingsContactCategoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Inquiry category'**
+  String get settingsContactCategoryLabel;
+
+  /// No description provided for @settingsContactCategoryPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select'**
+  String get settingsContactCategoryPlaceholder;
+
+  /// No description provided for @settingsContactCategoryInvestment.
+  ///
+  /// In en, this message translates to:
+  /// **'About investment'**
+  String get settingsContactCategoryInvestment;
+
+  /// No description provided for @settingsContactCategoryAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'About account or login'**
+  String get settingsContactCategoryAccount;
+
+  /// No description provided for @settingsContactCategoryWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'About distributions or deposits and withdrawals'**
+  String get settingsContactCategoryWallet;
+
+  /// No description provided for @settingsContactCategoryEkyc.
+  ///
+  /// In en, this message translates to:
+  /// **'About identity verification (eKYC)'**
+  String get settingsContactCategoryEkyc;
+
+  /// No description provided for @settingsContactCategoryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get settingsContactCategoryOther;
+
+  /// No description provided for @settingsContactMessageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get settingsContactMessageLabel;
+
+  /// No description provided for @settingsContactMessageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your inquiry'**
+  String get settingsContactMessageHint;
+
+  /// No description provided for @settingsContactSubmitAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get settingsContactSubmitAction;
+
+  /// No description provided for @settingsContactSubmitSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Your inquiry has been received.'**
+  String get settingsContactSubmitSuccess;
+
+  /// No description provided for @settingsContactPhoneSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone inquiries'**
+  String get settingsContactPhoneSectionTitle;
+
+  /// No description provided for @settingsContactPhoneHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Business hours: Weekdays 10:00–18:00 (excluding weekends and holidays)'**
+  String get settingsContactPhoneHours;
+
+  /// No description provided for @settingsContactCallFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the phone app.'**
+  String get settingsContactCallFailed;
+
+  /// No description provided for @settingsContactValidationName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your family name and given name.'**
+  String get settingsContactValidationName;
+
+  /// No description provided for @settingsContactValidationKana.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your phonetic name.'**
+  String get settingsContactValidationKana;
+
+  /// No description provided for @settingsContactValidationEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email address.'**
+  String get settingsContactValidationEmail;
+
+  /// No description provided for @settingsContactValidationCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select an inquiry category.'**
+  String get settingsContactValidationCategory;
+
+  /// No description provided for @settingsContactValidationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your message.'**
+  String get settingsContactValidationMessage;
+
+  /// No description provided for @settingsOperatingCompanyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Operating company'**
+  String get settingsOperatingCompanyTitle;
+
+  /// No description provided for @settingsCompanyTradeNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Trade name'**
+  String get settingsCompanyTradeNameLabel;
+
+  /// No description provided for @settingsCompanyLicenseNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'License number'**
+  String get settingsCompanyLicenseNumberLabel;
+
+  /// No description provided for @settingsCompanyLicenseTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'License type'**
+  String get settingsCompanyLicenseTypeLabel;
+
+  /// No description provided for @settingsCompanyRepresentativeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Representative'**
+  String get settingsCompanyRepresentativeLabel;
+
+  /// No description provided for @settingsCompanyHeadOfficeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Head office'**
+  String get settingsCompanyHeadOfficeLabel;
+
+  /// No description provided for @settingsCompanyTelLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'TEL'**
+  String get settingsCompanyTelLabel;
+
+  /// No description provided for @settingsCompanyEstablishedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Established'**
+  String get settingsCompanyEstablishedLabel;
+
+  /// No description provided for @settingsCompanyBusinessLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Main business'**
+  String get settingsCompanyBusinessLabel;
+
+  /// No description provided for @settingsCompanyManagerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Business manager'**
+  String get settingsCompanyManagerLabel;
+
+  /// No description provided for @settingsCompanyRelatedLinksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Related links'**
+  String get settingsCompanyRelatedLinksTitle;
+
+  /// No description provided for @settingsCompanyLinkTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of use'**
+  String get settingsCompanyLinkTerms;
+
+  /// No description provided for @settingsCompanyLinkPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy policy'**
+  String get settingsCompanyLinkPrivacy;
+
+  /// No description provided for @settingsCompanyLinkSolicitation.
+  ///
+  /// In en, this message translates to:
+  /// **'Solicitation policy'**
+  String get settingsCompanyLinkSolicitation;
+
+  /// No description provided for @settingsCompanyLinkAntiSocial.
+  ///
+  /// In en, this message translates to:
+  /// **'Anti-social forces policy'**
+  String get settingsCompanyLinkAntiSocial;
 
   /// No description provided for @menuVersionFootnote.
   ///

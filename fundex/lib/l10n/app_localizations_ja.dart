@@ -72,6 +72,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get imageViewerInvalidSourceNotice => '画像ソースが無効です。';
 
   @override
+  String get webViewerLoadingLabel => 'ページを読み込んでいます…';
+
+  @override
+  String get webViewerLoadFailedLabel => 'ページの読み込みに失敗しました。';
+
+  @override
+  String get webViewerInvalidUrlNotice => 'ページのURLが無効です。';
+
+  @override
   String get imageViewerCloseTooltip => '閉じる';
 
   @override
@@ -1027,6 +1036,139 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get menuItemChatSupport => 'チャットサポート';
+
+  @override
+  String get menuItemContactUs => 'お問い合わせ';
+
+  @override
+  String get menuItemOperatingCompany => '運営会社について';
+
+  @override
+  String get settingsContactTitle => 'お問い合わせ';
+
+  @override
+  String get settingsContactDescription =>
+      'ご質問・ご意見がございましたら、以下のフォームよりお気軽にお問い合わせください。';
+
+  @override
+  String get settingsContactNameLabel => '氏名（姓名）';
+
+  @override
+  String get settingsContactKanaLabel => 'フリガナ';
+
+  @override
+  String get settingsContactKanaFamilySegment => 'セイ';
+
+  @override
+  String get settingsContactKanaGivenSegment => 'メイ';
+
+  @override
+  String get settingsContactEmailLabel => 'メールアドレス';
+
+  @override
+  String get settingsContactEmailHint => 'example@mail.com';
+
+  @override
+  String get settingsContactCategoryLabel => 'お問い合わせカテゴリ';
+
+  @override
+  String get settingsContactCategoryPlaceholder => '選択してください';
+
+  @override
+  String get settingsContactCategoryInvestment => '出資・投資について';
+
+  @override
+  String get settingsContactCategoryAccount => 'アカウント・ログインについて';
+
+  @override
+  String get settingsContactCategoryWallet => '分配金・入出金について';
+
+  @override
+  String get settingsContactCategoryEkyc => '本人確認（eKYC）について';
+
+  @override
+  String get settingsContactCategoryOther => 'その他';
+
+  @override
+  String get settingsContactMessageLabel => 'お問い合わせ内容';
+
+  @override
+  String get settingsContactMessageHint => 'お問い合わせ内容をご記入ください';
+
+  @override
+  String get settingsContactSubmitAction => '送信';
+
+  @override
+  String get settingsContactSubmitSuccess => 'お問い合わせを受け付けました。';
+
+  @override
+  String get settingsContactPhoneSectionTitle => 'お電話でのお問い合わせ';
+
+  @override
+  String get settingsContactPhoneHours => '受付時間：平日 10:00〜18:00（土日祝除く）';
+
+  @override
+  String get settingsContactCallFailed => '電話アプリを起動できませんでした。';
+
+  @override
+  String get settingsContactValidationName => '姓と名を入力してください。';
+
+  @override
+  String get settingsContactValidationKana => 'フリガナを入力してください。';
+
+  @override
+  String get settingsContactValidationEmail => '有効なメールアドレスを入力してください。';
+
+  @override
+  String get settingsContactValidationCategory => 'お問い合わせカテゴリを選択してください。';
+
+  @override
+  String get settingsContactValidationMessage => 'お問い合わせ内容を入力してください。';
+
+  @override
+  String get settingsOperatingCompanyTitle => '運営会社';
+
+  @override
+  String get settingsCompanyTradeNameLabel => '商号';
+
+  @override
+  String get settingsCompanyLicenseNumberLabel => '許可番号';
+
+  @override
+  String get settingsCompanyLicenseTypeLabel => '許可種別';
+
+  @override
+  String get settingsCompanyRepresentativeLabel => '代表者';
+
+  @override
+  String get settingsCompanyHeadOfficeLabel => '本社';
+
+  @override
+  String get settingsCompanyTelLabel => 'TEL';
+
+  @override
+  String get settingsCompanyEstablishedLabel => '設立';
+
+  @override
+  String get settingsCompanyBusinessLabel => '主な事業';
+
+  @override
+  String get settingsCompanyManagerLabel => '業務管理者';
+
+  @override
+  String get settingsCompanyRelatedLinksTitle => '関連リンク';
+
+  @override
+  String get settingsCompanyLinkTerms => '利用規約';
+
+  @override
+  String get settingsCompanyLinkPrivacy => 'プライバシーポリシー';
+
+  @override
+  String get settingsCompanyLinkSolicitation => '勧誘方針';
+
+  @override
+  String get settingsCompanyLinkAntiSocial => '反社会勢力への対応';
 
   @override
   String get menuVersionFootnote => 'StellaVia v1.0.0 ・ 不動産特定共同事業 第XXX号';

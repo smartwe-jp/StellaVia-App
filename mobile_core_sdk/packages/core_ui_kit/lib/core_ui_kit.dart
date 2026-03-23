@@ -12,6 +12,7 @@ export 'src/app_navigation_bar.dart';
 export 'src/app_underlined_tab_bar.dart';
 export 'src/app_image_viewer.dart';
 export 'src/app_pdf_viewer.dart';
+export 'src/app_web_viewer.dart';
 export 'src/app_step_progress_bar.dart';
 export 'src/app_menu_widgets.dart';
 export 'src/fund_favorite_button.dart';
