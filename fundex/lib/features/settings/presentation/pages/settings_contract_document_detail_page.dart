@@ -163,104 +163,20 @@ class _ProjectHeaderCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: <Color>[
-            colors.heroStart.withValues(alpha: 0.18),
-            colors.heroMiddle.withValues(alpha: 0.10),
+            colors.highlightGold.withValues(alpha: 0.92),
+            colors.warningSoft.withValues(alpha: 0.90),
           ],
         ),
         borderRadius: BorderRadius.circular(UiTokens.radius20),
-        border: Border.all(color: colors.border),
+        border: Border.all(color: colors.warningBorder),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              project.projectName,
-              style: appText.pageTitle.copyWith(color: colors.textPrimary),
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              children: <Widget>[
-                _HeaderMetric(
-                  icon: Icons.picture_as_pdf_outlined,
-                  value: project.availablePdfCount.toString(),
-                  label: context.l10n.settingsContractListPdfCount(
-                    project.availablePdfCount,
-                  ),
-                ),
-                _HeaderMetric(
-                  icon: Icons.library_books_outlined,
-                  value: project.documents.length.toString(),
-                  label: context.l10n.settingsContractListDocumentTypeCount(
-                    project.documents.length,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _HeaderMetric extends StatelessWidget {
-  const _HeaderMetric({
-    required this.icon,
-    required this.value,
-    required this.label,
-  });
-
-  final IconData icon;
-  final String value;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    return ConstrainedBox(
-      constraints: const BoxConstraints(minWidth: 132),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: colors.surface,
-          borderRadius: BorderRadius.circular(UiTokens.radius16),
-          border: Border.all(color: colors.borderSoft),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Icon(icon, size: 18, color: colors.primary),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      value,
-                      style: appText.cardTitle.copyWith(
-                        color: colors.textPrimary,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      label,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: appText.helper.copyWith(
-                        color: colors.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+        padding: const EdgeInsets.fromLTRB(18, 20, 18, 20),
+        child: Text(
+          project.projectName,
+          style: appText.pageTitle.copyWith(
+            color: colors.textPrimary,
+            height: 1.25,
           ),
         ),
       ),

@@ -163,12 +163,6 @@ class _ContractProjectCard extends StatelessWidget {
                               project.availablePdfCount,
                             ),
                           ),
-                          _ProjectMetaChip(
-                            icon: Icons.library_books_outlined,
-                            label: l10n.settingsContractListDocumentTypeCount(
-                              project.documents.length,
-                            ),
-                          ),
                         ],
                       ),
                       const SizedBox(height: 10),
