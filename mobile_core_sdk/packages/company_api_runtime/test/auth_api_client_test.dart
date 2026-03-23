@@ -39,6 +39,51 @@ Dio _buildDio(Future<ResponseBody> Function(RequestOptions options) handler) {
 }
 
 void main() {
+  group('AuthApiClient phone change online', () {
+    test('sendOnlinePhoneChangeCode uses POST with query parameters', () async {
+      final dio = _buildDio((options) async {
+        expect(options.method, equals('POST'));
+        expect(options.path, equals(AuthApiPaths.changePhoneOnlineSend));
+        expect(options.extra['auth_required'], isTrue);
+        expect(
+          options.queryParameters,
+          equals(<String, dynamic>{'bizId': '81', 'mobile': '09085309521'}),
+        );
+        return _jsonOk('{"code":0,"msg":"success","data":null}');
+      });
+      final api = AuthApiClient(dioForPath: (_) => dio);
+
+      await api.sendOnlinePhoneChangeCode(mobile: '09085309521', bizId: '81');
+    });
+
+    test(
+      'verifyOnlinePhoneChangeCode uses POST with query parameters',
+      () async {
+        final dio = _buildDio((options) async {
+          expect(options.method, equals('POST'));
+          expect(options.path, equals(AuthApiPaths.changePhoneOnlineCheck));
+          expect(options.extra['auth_required'], isTrue);
+          expect(
+            options.queryParameters,
+            equals(<String, dynamic>{
+              'bizId': '81',
+              'mobile': '09085309521',
+              'code': '336044',
+            }),
+          );
+          return _jsonOk('{"code":0,"msg":"success","data":null}');
+        });
+        final api = AuthApiClient(dioForPath: (_) => dio);
+
+        await api.verifyOnlinePhoneChangeCode(
+          mobile: '09085309521',
+          bizId: '81',
+          code: '336044',
+        );
+      },
+    );
+  });
+
   group('AuthApiClient /member/login/index', () {
     test(
       'fetchMemberLoginIndexStatus posts full device payload and parses flags',

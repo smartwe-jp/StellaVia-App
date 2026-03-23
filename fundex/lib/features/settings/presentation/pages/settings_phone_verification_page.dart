@@ -200,8 +200,6 @@ class _SettingsPhoneVerificationPageState
       backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.settingsPhoneVerificationTitle,
-        backgroundColor: colors.surface,
-        foregroundColor: colors.textPrimary,
         leading: AppNavigationIconButton(
           icon: Icons.arrow_back_rounded,
           onTap: () => context.pop(),

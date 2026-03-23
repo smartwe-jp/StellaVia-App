@@ -975,14 +975,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsPhoneVerificationSuccess => '手机号认证完成。';
 
   @override
-  String get settingsFaceVerificationDescription => '上传证件照片或自拍后，会自动启动人脸识别。';
+  String get settingsFaceVerificationDescription =>
+      '作为安全中心的人脸认证设置，会在当前设备启用人脸认证。设置完成后，可用于敏感操作时的身份确认。';
 
   @override
-  String get settingsFaceVerificationUploadTitle => '上传证件或自拍';
+  String get settingsFaceVerificationUploadTitle => '上传自拍照';
 
   @override
   String get settingsFaceVerificationUploadDescription =>
-      '上传完成后会自动打开人脸识别，也可以在本页手动再次执行。';
+      '上传用于本人确认的自拍照后，会自动启动人脸识别，也可以在本页手动再次执行。';
+
+  @override
+  String get settingsFaceVerificationSelfieTitle => '本人确认自拍照';
+
+  @override
+  String get settingsFaceVerificationSelfieDescription =>
+      '请正对镜头拍摄，并确保完整面部清晰可见。';
 
   @override
   String get menuItemAnnualReport => '年度交易报告书';
@@ -3988,14 +3996,22 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get settingsPhoneVerificationSuccess => '手機號碼驗證完成。';
 
   @override
-  String get settingsFaceVerificationDescription => '上傳證件照片或自拍後，會自動啟動人臉辨識。';
+  String get settingsFaceVerificationDescription =>
+      '作為安全中心的人臉驗證設定，會在目前裝置啟用人臉驗證。設定完成後，可用於敏感操作時的身分確認。';
 
   @override
-  String get settingsFaceVerificationUploadTitle => '上傳證件或自拍';
+  String get settingsFaceVerificationUploadTitle => '上傳自拍照';
 
   @override
   String get settingsFaceVerificationUploadDescription =>
-      '上傳完成後會自動開啟人臉辨識，也可以在本頁手動再次執行。';
+      '上傳用於本人確認的自拍照後，會自動啟動人臉辨識，也可以在本頁手動再次執行。';
+
+  @override
+  String get settingsFaceVerificationSelfieTitle => '本人確認自拍照';
+
+  @override
+  String get settingsFaceVerificationSelfieDescription =>
+      '請正對鏡頭拍攝，並確保完整臉部清晰可見。';
 
   @override
   String get menuItemAnnualReport => '年度交易報告';

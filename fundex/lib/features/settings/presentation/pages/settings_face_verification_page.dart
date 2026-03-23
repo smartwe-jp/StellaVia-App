@@ -22,24 +22,18 @@ class SettingsFaceVerificationPage extends ConsumerStatefulWidget {
 
 class _SettingsFaceVerificationPageState
     extends ConsumerState<SettingsFaceVerificationPage> {
-  String? _documentPhotoPath;
   String? _selfiePhotoPath;
   String? _statusMessage;
   bool _isUploadingPhoto = false;
   bool _isRunningVerification = false;
   bool _isVerified = false;
 
-  bool _isPhotoUploaded(String? path) {
-    final normalized = path?.trim() ?? '';
-    return normalized.isNotEmpty;
-  }
-
   bool _isSelfieUploaded(String? path) {
     final normalized = path?.trim() ?? '';
     return normalized.isNotEmpty;
   }
 
-  Future<void> _pickAndUploadImage({required bool isDocument}) async {
+  Future<void> _pickAndUploadSelfie() async {
     if (_isUploadingPhoto || _isRunningVerification) {
       return;
     }
@@ -93,16 +87,12 @@ class _SettingsFaceVerificationPageState
     try {
       final uploadedUrl = await ref
           .read(uploadMemberProfilePhotoUseCaseProvider)
-          .call(filePath: path.trim(), isSelfie: !isDocument);
+          .call(filePath: path.trim(), isSelfie: true);
       if (!mounted) {
         return;
       }
       setState(() {
-        if (isDocument) {
-          _documentPhotoPath = uploadedUrl.trim();
-        } else {
-          _selfiePhotoPath = uploadedUrl.trim();
-        }
+        _selfiePhotoPath = uploadedUrl.trim();
       });
       ref.invalidate(memberProfileDetailsProvider);
       AppNotice.show(
@@ -114,18 +104,15 @@ class _SettingsFaceVerificationPageState
       if (!mounted) {
         return;
       }
-      if (!isDocument) {
-        setState(() {
-          _selfiePhotoPath = selfieUploadCompletedMarker;
-        });
-        AppNotice.show(
-          context,
-          message: context.l10n.memberProfileSelfieUploadBypassedNotice,
-        );
-        await _startVerification();
-        return;
-      }
-      AppNotice.show(context, message: context.l10n.uiErrorRequestFailed);
+      setState(() {
+        _selfiePhotoPath = selfieUploadCompletedMarker;
+      });
+      AppNotice.show(
+        context,
+        message: context.l10n.memberProfileSelfieUploadBypassedNotice,
+      );
+      await _startVerification();
+      return;
     } finally {
       if (mounted) {
         setState(() {
@@ -258,9 +245,6 @@ class _SettingsFaceVerificationPageState
     final verifiedAsync = ref.watch(settingsRealPersonVerifiedProvider);
 
     final profile = profileAsync.asData?.value;
-    final documentUploaded =
-        _isPhotoUploaded(_documentPhotoPath) ||
-        _isPhotoUploaded(profile?.idDocumentPhotoPath);
     final selfieUploaded =
         _isSelfieUploaded(_selfiePhotoPath) ||
         _isSelfieUploaded(profile?.selfiePhotoPath);
@@ -270,13 +254,9 @@ class _SettingsFaceVerificationPageState
       backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.settingsFaceVerificationTitle,
-        backgroundColor: colors.surface,
-        foregroundColor: colors.textPrimary,
         leading: AppNavigationIconButton(
           icon: Icons.arrow_back_rounded,
           onTap: () => context.pop(),
-          backgroundColor: colors.surface.withValues(alpha: 0),
-          foregroundColor: colors.textPrimary,
         ),
       ),
       body: ListView(
@@ -363,23 +343,13 @@ class _SettingsFaceVerificationPageState
                 ),
                 const SizedBox(height: 16),
                 MemberProfileUploadTile(
-                  icon: Icons.camera_alt_outlined,
-                  title: l10n.memberProfilePhotoDocumentTitle,
-                  description: l10n.memberProfilePhotoDocumentDescription,
-                  isCompleted: documentUploaded,
-                  onTap: (_isUploadingPhoto || _isRunningVerification)
-                      ? null
-                      : () => _pickAndUploadImage(isDocument: true),
-                ),
-                const SizedBox(height: 14),
-                MemberProfileUploadTile(
                   icon: Icons.person_outline_rounded,
-                  title: l10n.memberProfileSelfieTitle,
-                  description: l10n.memberProfileSelfieDescription,
+                  title: l10n.settingsFaceVerificationSelfieTitle,
+                  description: l10n.settingsFaceVerificationSelfieDescription,
                   isCompleted: selfieUploaded,
                   onTap: (_isUploadingPhoto || _isRunningVerification)
                       ? null
-                      : () => _pickAndUploadImage(isDocument: false),
+                      : _pickAndUploadSelfie,
                 ),
               ],
             ),

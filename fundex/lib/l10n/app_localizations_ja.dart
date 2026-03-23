@@ -982,14 +982,21 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get settingsFaceVerificationDescription =>
-      '書類または自撮り写真をアップロードすると、そのまま顔認証を開始します。';
+      'セキュリティ設定として、この端末で顔認証を有効にします。登録後は重要操作時の本人確認に利用されます。';
 
   @override
-  String get settingsFaceVerificationUploadTitle => '書類と自撮り写真のアップロード';
+  String get settingsFaceVerificationUploadTitle => '自撮り写真のアップロード';
 
   @override
   String get settingsFaceVerificationUploadDescription =>
-      'いずれかのアップロード完了後に、自動で顔認証が起動します。必要に応じて再実行もできます。';
+      '本人確認用の自撮り写真をアップロードすると、自動で顔認証を開始します。必要に応じて再実行もできます。';
+
+  @override
+  String get settingsFaceVerificationSelfieTitle => '本人確認用の自撮り写真';
+
+  @override
+  String get settingsFaceVerificationSelfieDescription =>
+      '正面を向いて、顔全体がはっきり写るように撮影してください。';
 
   @override
   String get menuItemAnnualReport => '年間取引報告書';

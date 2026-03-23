@@ -29,13 +29,9 @@ class SettingsTwoFactorPage extends ConsumerWidget {
       backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.menuItemTwoFactor,
-        backgroundColor: colors.surface,
-        foregroundColor: colors.textPrimary,
         leading: AppNavigationIconButton(
           icon: Icons.arrow_back_rounded,
           onTap: () => context.pop(),
-          backgroundColor: colors.surface.withValues(alpha: 0),
-          foregroundColor: colors.textPrimary,
         ),
       ),
       body: ListView(

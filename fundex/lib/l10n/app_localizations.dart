@@ -2006,20 +2006,32 @@ abstract class AppLocalizations {
   /// No description provided for @settingsFaceVerificationDescription.
   ///
   /// In en, this message translates to:
-  /// **'After uploading a document photo or selfie, face verification will start automatically.'**
+  /// **'Enable face verification on this device as a security measure. After setup, it will be used to confirm your identity for sensitive actions.'**
   String get settingsFaceVerificationDescription;
 
   /// No description provided for @settingsFaceVerificationUploadTitle.
   ///
   /// In en, this message translates to:
-  /// **'Upload document or selfie'**
+  /// **'Upload a selfie'**
   String get settingsFaceVerificationUploadTitle;
 
   /// No description provided for @settingsFaceVerificationUploadDescription.
   ///
   /// In en, this message translates to:
-  /// **'Face verification starts automatically after an upload finishes. You can also retry it manually.'**
+  /// **'Upload a selfie for identity verification and face verification will start automatically. You can also retry it manually.'**
   String get settingsFaceVerificationUploadDescription;
+
+  /// No description provided for @settingsFaceVerificationSelfieTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Selfie for identity verification'**
+  String get settingsFaceVerificationSelfieTitle;
+
+  /// No description provided for @settingsFaceVerificationSelfieDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Face the camera directly and make sure your full face is clearly visible.'**
+  String get settingsFaceVerificationSelfieDescription;
 
   /// No description provided for @menuItemAnnualReport.
   ///

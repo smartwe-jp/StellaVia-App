@@ -153,7 +153,7 @@ class AuthApiClient {
     required String bizId,
   }) async {
     final response = await _dioForPath(changePhoneOnlineSendPath)
-        .get<Map<String, dynamic>>(
+        .post<Map<String, dynamic>>(
           changePhoneOnlineSendPath,
           queryParameters: <String, dynamic>{
             'bizId': bizId.trim(),
@@ -161,7 +161,7 @@ class AuthApiClient {
           },
           options: authRequired(true),
         );
-    _assertLegacyBoolSuccessIfPresent(
+    _assertEnvelopeSuccessAllowZero(
       _envelopeCodec.toJsonMap(response.data),
       fallbackMessage: 'Failed to send phone verification code.',
     );
@@ -173,7 +173,7 @@ class AuthApiClient {
     required String code,
   }) async {
     final response = await _dioForPath(changePhoneOnlineCheckPath)
-        .get<Map<String, dynamic>>(
+        .post<Map<String, dynamic>>(
           changePhoneOnlineCheckPath,
           queryParameters: <String, dynamic>{
             'bizId': bizId.trim(),
@@ -182,7 +182,7 @@ class AuthApiClient {
           },
           options: authRequired(true),
         );
-    _assertLegacyBoolSuccessIfPresent(
+    _assertEnvelopeSuccessAllowZero(
       _envelopeCodec.toJsonMap(response.data),
       fallbackMessage: 'Failed to verify phone code.',
     );
@@ -253,7 +253,7 @@ class AuthApiClient {
         );
 
     final payload = _envelopeCodec.toJsonMap(response.data);
-    _envelopeCodec.assertSuccessIfEnvelope(
+    _assertEnvelopeSuccessAllowZero(
       payload,
       fallbackMessage: 'Failed to register push device.',
     );
@@ -469,6 +469,24 @@ class AuthApiClient {
       fallbackMessage: fallbackMessage,
       requireTruthyData: true,
     );
+  }
+
+  void _assertEnvelopeSuccessAllowZero(
+    Map<String, dynamic> payload, {
+    required String fallbackMessage,
+  }) {
+    if (payload.isEmpty || !_envelopeCodec.looksLikeEnvelope(payload)) {
+      return;
+    }
+
+    final code = payload['code']?.toString().trim() ?? '';
+    final isSuccess = code == '0' || code == '200';
+    if (isSuccess) {
+      return;
+    }
+
+    final message = _toNormalizedString(payload['msg']);
+    throw StateError(message ?? fallbackMessage);
   }
 
   Map<String, dynamic> _extractTokenPayload(

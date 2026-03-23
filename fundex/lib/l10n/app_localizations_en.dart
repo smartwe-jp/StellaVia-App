@@ -1037,14 +1037,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsFaceVerificationDescription =>
-      'After uploading a document photo or selfie, face verification will start automatically.';
+      'Enable face verification on this device as a security measure. After setup, it will be used to confirm your identity for sensitive actions.';
 
   @override
-  String get settingsFaceVerificationUploadTitle => 'Upload document or selfie';
+  String get settingsFaceVerificationUploadTitle => 'Upload a selfie';
 
   @override
   String get settingsFaceVerificationUploadDescription =>
-      'Face verification starts automatically after an upload finishes. You can also retry it manually.';
+      'Upload a selfie for identity verification and face verification will start automatically. You can also retry it manually.';
+
+  @override
+  String get settingsFaceVerificationSelfieTitle =>
+      'Selfie for identity verification';
+
+  @override
+  String get settingsFaceVerificationSelfieDescription =>
+      'Face the camera directly and make sure your full face is clearly visible.';
 
   @override
   String get menuItemAnnualReport => 'Annual transaction report';
