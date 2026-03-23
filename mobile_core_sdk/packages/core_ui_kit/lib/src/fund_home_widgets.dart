@@ -1054,6 +1054,7 @@ class FundSectionList extends StatefulWidget {
     super.key,
     required this.title,
     required this.children,
+    this.leading,
     this.actionLabel,
     this.onActionTap,
     this.showMoreLabel,
@@ -1065,6 +1066,7 @@ class FundSectionList extends StatefulWidget {
 
   final String title;
   final List<Widget> children;
+  final Widget? leading;
   final String? actionLabel;
   final VoidCallback? onActionTap;
   final String? showMoreLabel;
@@ -1099,6 +1101,7 @@ class _FundSectionListState extends State<FundSectionList> {
       children: <Widget>[
         FundSectionHeader(
           title: widget.title,
+          leading: widget.leading,
           actionLabel: widget.actionLabel,
           onActionTap: widget.onActionTap,
         ),

@@ -34,6 +34,15 @@ abstract class MyPageRepository {
     required int price,
   });
 
+  Future<void> submitSecondaryMarketModify({
+    required String id,
+    required String fromProcessId,
+    required int sellNum,
+    required int price,
+    required String status,
+    int thisTimeSoldNum = 0,
+  });
+
   Future<void> submitSecondaryMarketPurchase({
     required String id,
     required int buyNum,

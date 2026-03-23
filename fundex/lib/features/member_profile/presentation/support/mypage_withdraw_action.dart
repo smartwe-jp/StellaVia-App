@@ -6,11 +6,12 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../providers/mypage_providers.dart';
 
-Future<bool> confirmAndSubmitMyPageWithdraw(
-  BuildContext context,
-  WidgetRef ref, {
-  required String processId,
+const String _defaultApplyWithdrawRemark = 'キャンセル';
+
+Future<bool> _confirmAndSubmitAction(
+  BuildContext context, {
   required String confirmBody,
+  required Future<void> Function() submit,
   Future<void> Function()? onSuccessRefresh,
 }) async {
   final l10n = context.l10n;
@@ -36,9 +37,7 @@ Future<bool> confirmAndSubmitMyPageWithdraw(
   }
 
   try {
-    await ref
-        .read(submitMyPageUserWithdrawUseCaseProvider)
-        .call(processId: processId);
+    await submit();
     if (!context.mounted) {
       return false;
     }
@@ -57,4 +56,49 @@ Future<bool> confirmAndSubmitMyPageWithdraw(
     );
     return false;
   }
+}
+
+Future<bool> confirmAndSubmitMyPageWithdraw(
+  BuildContext context,
+  WidgetRef ref, {
+  required String processId,
+  required String confirmBody,
+  Future<void> Function()? onSuccessRefresh,
+}) {
+  return _confirmAndSubmitAction(
+    context,
+    confirmBody: confirmBody,
+    onSuccessRefresh: onSuccessRefresh,
+    submit: () => ref
+        .read(submitMyPageUserWithdrawUseCaseProvider)
+        .call(processId: processId, remark: _defaultApplyWithdrawRemark),
+  );
+}
+
+Future<bool> confirmAndSubmitMyPageSecondaryMarketInvalidate(
+  BuildContext context,
+  WidgetRef ref, {
+  required String id,
+  required String fromProcessId,
+  required int sellNum,
+  required int price,
+  required int thisTimeSoldNum,
+  required String confirmBody,
+  Future<void> Function()? onSuccessRefresh,
+}) {
+  return _confirmAndSubmitAction(
+    context,
+    confirmBody: confirmBody,
+    onSuccessRefresh: onSuccessRefresh,
+    submit: () => ref
+        .read(submitMyPageSecondaryMarketModifyUseCaseProvider)
+        .call(
+          id: id,
+          fromProcessId: fromProcessId,
+          sellNum: sellNum,
+          price: price,
+          status: 'INVALID',
+          thisTimeSoldNum: thisTimeSoldNum,
+        ),
+  );
 }

@@ -15,11 +15,20 @@ import '../providers/mypage_providers.dart';
 import '../support/mypage_section_support.dart';
 import '../support/mypage_withdraw_action.dart';
 
-class ProfileCenterTabPage extends ConsumerWidget {
+class ProfileCenterTabPage extends ConsumerStatefulWidget {
   const ProfileCenterTabPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProfileCenterTabPage> createState() =>
+      _ProfileCenterTabPageState();
+}
+
+class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
+  final Set<String> _hiddenOrderInquiryIds = <String>{};
+
+  @override
+  Widget build(BuildContext context) {
+    final ref = this.ref;
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = theme.appColors;
@@ -54,11 +63,11 @@ class ProfileCenterTabPage extends ConsumerWidget {
 
     return MainShellTabRefreshScope(
       tabIndex: 3,
-      onRefresh: _refreshPage,
+      onRefresh: (_) => _refreshPage(),
       child: ColoredBox(
         color: colors.background,
         child: RefreshIndicator(
-          onRefresh: () => _refreshPage(ref),
+          onRefresh: _refreshPage,
           child: ListView(
             key: const Key('profile_tab_content'),
             padding: EdgeInsets.zero,
@@ -126,41 +135,15 @@ class ProfileCenterTabPage extends ConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    _buildPendingApplicationsSection(
-                      context,
-                      ref,
-                      asyncValue: applyAsync,
-                      formatter: currencyFormatter,
-                    ),
-                    const SizedBox(height: UiTokens.spacing12),
-                    _buildCoolingOffSection(
-                      context,
-                      ref,
-                      asyncValue: orderInquiryAsync,
-                      formatter: currencyFormatter,
-                    ),
-                    const SizedBox(height: UiTokens.spacing12),
-                    _buildActiveFundsSection(
-                      context,
-                      ref,
-                      asyncValue: investmentAsync,
-                      formatter: currencyFormatter,
-                      fundProjectsById: fundProjectsById,
-                    ),
-                    const SizedBox(height: UiTokens.spacing32),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed: () => context.push('/wallet/history'),
-                        label: Text(l10n.myPageTransactionHistoryAction),
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: UiTokens.spacing32),
-                  ],
+                  children: _buildSectionChildren(
+                    context,
+                    ref,
+                    applyAsync: applyAsync,
+                    orderInquiryAsync: orderInquiryAsync,
+                    investmentAsync: investmentAsync,
+                    currencyFormatter: currencyFormatter,
+                    fundProjectsById: fundProjectsById,
+                  ),
                 ),
               ),
             ],
@@ -168,6 +151,120 @@ class ProfileCenterTabPage extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _refreshPage() async {
+    setState(() {
+      _hiddenOrderInquiryIds.clear();
+    });
+    await refreshProfileCenterTabPage(ref);
+  }
+
+  Future<void> _hideOrderInquiryRecord(String orderId) async {
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _hiddenOrderInquiryIds.add(orderId);
+    });
+  }
+
+  Future<void> _handleOrderWithdraw(
+    BuildContext context,
+    WidgetRef ref,
+    MyPageOrderInquiryRecord record,
+  ) async {
+    final processId = resolveOrderInquiryWithdrawProcessId(record);
+    final orderId = record.id?.trim();
+    final sellNum = record.sellNum;
+    final price = record.price?.toInt();
+    if (processId == null ||
+        orderId == null ||
+        sellNum == null ||
+        price == null) {
+      return;
+    }
+    await confirmAndSubmitMyPageSecondaryMarketInvalidate(
+      context,
+      ref,
+      id: orderId,
+      fromProcessId: processId,
+      sellNum: sellNum,
+      price: price,
+      thisTimeSoldNum: record.soldNum ?? 0,
+      confirmBody: context.l10n.myPageWithdrawOrderConfirmBody,
+      onSuccessRefresh: () => _hideOrderInquiryRecord(orderId),
+    );
+  }
+
+  List<Widget> _buildSectionChildren(
+    BuildContext context,
+    WidgetRef ref, {
+    required AsyncValue<List<MyPageApplyRecord>> applyAsync,
+    required AsyncValue<List<MyPageOrderInquiryRecord>> orderInquiryAsync,
+    required AsyncValue<List<MyPageInvestmentRecord>> investmentAsync,
+    required NumberFormat currencyFormatter,
+    required Map<String, FundProject> fundProjectsById,
+  }) {
+    final children = <Widget>[];
+
+    if (_shouldShowHomePendingSection(applyAsync)) {
+      children.add(
+        _buildPendingApplicationsSection(
+          context,
+          ref,
+          asyncValue: applyAsync,
+          formatter: currencyFormatter,
+        ),
+      );
+    }
+
+    if (_shouldShowHomeOrderInquirySection(
+      orderInquiryAsync,
+      _hiddenOrderInquiryIds,
+    )) {
+      if (children.isNotEmpty) {
+        children.add(const SizedBox(height: UiTokens.spacing12));
+      }
+      children.add(
+        _buildCoolingOffSection(
+          context,
+          ref,
+          asyncValue: orderInquiryAsync,
+          formatter: currencyFormatter,
+          hiddenOrderInquiryIds: _hiddenOrderInquiryIds,
+          onWithdrawTap: (record) => _handleOrderWithdraw(context, ref, record),
+        ),
+      );
+    }
+
+    if (children.isNotEmpty) {
+      children.add(const SizedBox(height: UiTokens.spacing12));
+    }
+    children.add(
+      _buildActiveFundsSection(
+        context,
+        ref,
+        asyncValue: investmentAsync,
+        formatter: currencyFormatter,
+        fundProjectsById: fundProjectsById,
+      ),
+    );
+    children.add(const SizedBox(height: UiTokens.spacing32));
+    children.add(
+      SizedBox(
+        width: double.infinity,
+        child: OutlinedButton.icon(
+          onPressed: () => context.push('/wallet/history'),
+          label: Text(context.l10n.myPageTransactionHistoryAction),
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+          ),
+        ),
+      ),
+    );
+    children.add(const SizedBox(height: UiTokens.spacing32));
+    return children;
   }
 }
 
@@ -222,9 +319,7 @@ Widget _buildPendingApplicationsSection(
         onActionTap: () => context.push(
           '/profile/my/section-list?type=${MyPageSectionType.pendingApplications.queryValue}',
         ),
-        children: cards.isEmpty
-            ? <Widget>[_SectionStateCard(message: l10n.myPagePendingEmptyState)]
-            : cards,
+        children: cards.isEmpty ? const <Widget>[] : cards,
       );
     },
     loading: () => FundSectionList(
@@ -251,6 +346,8 @@ Widget _buildCoolingOffSection(
   WidgetRef ref, {
   required AsyncValue<List<MyPageOrderInquiryRecord>> asyncValue,
   required NumberFormat formatter,
+  required Set<String> hiddenOrderInquiryIds,
+  required Future<void> Function(MyPageOrderInquiryRecord record) onWithdrawTap,
 }) {
   final l10n = context.l10n;
   final theme = Theme.of(context);
@@ -258,7 +355,10 @@ Widget _buildCoolingOffSection(
 
   return asyncValue.when(
     data: (records) {
-      final displayRecords = _selectCoolingOffRecords(records);
+      final visibleRecords = records
+          .where((record) => !hiddenOrderInquiryIds.contains(record.id))
+          .toList(growable: false);
+      final displayRecords = _selectCoolingOffRecords(visibleRecords);
       final cards = displayRecords
           .map((record) {
             return FundMyPageProjectCard(
@@ -297,14 +397,13 @@ Widget _buildCoolingOffSection(
               ],
               footer: canSubmitOrderInquiryWithdraw(record)
                   ? OutlinedButton(
-                      onPressed: () =>
-                          _handleOrderWithdraw(context, ref, record),
+                      onPressed: () => onWithdrawTap(record),
                       style: _myPageOutlineButtonStyle(
                         context,
                         borderColor: colors.danger,
                         foregroundColor: colors.danger,
                       ),
-                      child: Text(l10n.myPageCancelOrderAction),
+                      child: Text(l10n.myPageCancelRequestAction),
                     )
                   : null,
               onTap: null,
@@ -314,16 +413,13 @@ Widget _buildCoolingOffSection(
 
       return FundSectionList(
         title: l10n.myPageOrderInquirySectionTitle,
+        leading: const _OrderInquirySectionLeadingIcon(),
         initialVisibleCount: cards.isEmpty ? 1 : 3,
         actionLabel: l10n.homeViewAllAction,
         onActionTap: () => context.push(
           '/profile/my/section-list?type=${MyPageSectionType.coolingOff.queryValue}',
         ),
-        children: cards.isEmpty
-            ? <Widget>[
-                _SectionStateCard(message: l10n.myPageOrderInquiryEmptyState),
-              ]
-            : cards,
+        children: cards.isEmpty ? const <Widget>[] : cards,
       );
     },
     loading: () => FundSectionList(
@@ -422,7 +518,7 @@ Widget _buildActiveFundsSection(
   );
 }
 
-Future<void> _refreshPage(WidgetRef ref) async {
+Future<void> refreshProfileCenterTabPage(WidgetRef ref) async {
   ref.invalidate(fundProjectListProvider);
   await Future.wait<void>(<Future<void>>[
     ref.refresh(fundProjectListProvider.future).then((_) {}),
@@ -455,25 +551,7 @@ Future<void> _handleApplyWithdraw(
     ref,
     processId: processId,
     confirmBody: context.l10n.myPageWithdrawApplyConfirmBody,
-    onSuccessRefresh: () => _refreshPage(ref),
-  );
-}
-
-Future<void> _handleOrderWithdraw(
-  BuildContext context,
-  WidgetRef ref,
-  MyPageOrderInquiryRecord record,
-) async {
-  final processId = resolveOrderInquiryWithdrawProcessId(record);
-  if (processId == null) {
-    return;
-  }
-  await confirmAndSubmitMyPageWithdraw(
-    context,
-    ref,
-    processId: processId,
-    confirmBody: context.l10n.myPageWithdrawOrderConfirmBody,
-    onSuccessRefresh: () => _refreshPage(ref),
+    onSuccessRefresh: () => refreshProfileCenterTabPage(ref),
   );
 }
 
@@ -771,6 +849,51 @@ class _SectionLoadingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return const _SectionStateCard(
       indicator: CircularProgressIndicator.adaptive(strokeWidth: 2),
+    );
+  }
+}
+
+bool _shouldShowHomePendingSection(
+  AsyncValue<List<MyPageApplyRecord>> asyncValue,
+) {
+  return asyncValue.when(
+    data: (records) => records.isNotEmpty,
+    loading: () => true,
+    error: (_, __) => true,
+  );
+}
+
+bool _shouldShowHomeOrderInquirySection(
+  AsyncValue<List<MyPageOrderInquiryRecord>> asyncValue,
+  Set<String> hiddenOrderInquiryIds,
+) {
+  return asyncValue.when(
+    data: (records) {
+      final visibleRecords = records
+          .where((record) => !hiddenOrderInquiryIds.contains(record.id))
+          .toList(growable: false);
+      return _selectCoolingOffRecords(visibleRecords).isNotEmpty;
+    },
+    loading: () => true,
+    error: (_, __) => true,
+  );
+}
+
+class _OrderInquirySectionLeadingIcon extends StatelessWidget {
+  const _OrderInquirySectionLeadingIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    return Container(
+      width: 28,
+      height: 28,
+      decoration: BoxDecoration(
+        color: colors.warningSubtle,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: colors.warning.withValues(alpha: 0.2)),
+      ),
+      child: Icon(Icons.receipt_long_rounded, size: 16, color: colors.warning),
     );
   }
 }

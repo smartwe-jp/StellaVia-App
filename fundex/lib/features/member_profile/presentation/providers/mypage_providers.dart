@@ -13,6 +13,7 @@ import '../../domain/usecases/fetch_mypage_order_inquiry_list_usecase.dart';
 import '../../domain/usecases/fetch_mypage_project_benefit_usecase.dart';
 import '../../domain/usecases/submit_mypage_benefit_withdrawal_usecase.dart';
 import '../../domain/usecases/submit_mypage_secondary_market_create_usecase.dart';
+import '../../domain/usecases/submit_mypage_secondary_market_modify_usecase.dart';
 import '../../domain/usecases/submit_mypage_secondary_market_purchase_usecase.dart';
 import '../../domain/usecases/submit_mypage_user_withdraw_usecase.dart';
 
@@ -80,6 +81,13 @@ final submitMyPageSecondaryMarketCreateUseCaseProvider =
 final submitMyPageSecondaryMarketPurchaseUseCaseProvider =
     Provider<SubmitMyPageSecondaryMarketPurchaseUseCase>((ref) {
       return SubmitMyPageSecondaryMarketPurchaseUseCase(
+        ref.watch(myPageRepositoryProvider),
+      );
+    });
+
+final submitMyPageSecondaryMarketModifyUseCaseProvider =
+    Provider<SubmitMyPageSecondaryMarketModifyUseCase>((ref) {
+      return SubmitMyPageSecondaryMarketModifyUseCase(
         ref.watch(myPageRepositoryProvider),
       );
     });

@@ -39,6 +39,15 @@ abstract class MyPageRemoteDataSource {
     required int price,
   });
 
+  Future<void> submitSecondaryMarketModify({
+    required String id,
+    required String fromProcessId,
+    required int sellNum,
+    required int price,
+    required String status,
+    int thisTimeSoldNum = 0,
+  });
+
   Future<void> submitSecondaryMarketPurchase({
     required String id,
     required int buyNum,
@@ -147,6 +156,25 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
       fromProcessId: fromProcessId,
       sellNum: sellNum,
       price: price,
+    );
+  }
+
+  @override
+  Future<void> submitSecondaryMarketModify({
+    required String id,
+    required String fromProcessId,
+    required int sellNum,
+    required int price,
+    required String status,
+    int thisTimeSoldNum = 0,
+  }) async {
+    await _apiClient.submitSecondaryMarketModify(
+      id: id,
+      fromProcessId: fromProcessId,
+      sellNum: sellNum,
+      price: price,
+      status: status,
+      thisTimeSoldNum: thisTimeSoldNum,
     );
   }
 

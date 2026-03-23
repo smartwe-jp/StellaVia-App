@@ -237,11 +237,15 @@ bool canShowApplyCancelAction(int? status) {
 }
 
 String? resolveApplyWithdrawProcessId(MyPageApplyRecord record) {
-  final raw = record.fromProcessId?.trim();
-  if (raw == null || raw.isEmpty) {
+  final processId = record.processId?.trim();
+  if (processId != null && processId.isNotEmpty) {
+    return processId;
+  }
+  final fallback = record.fromProcessId?.trim();
+  if (fallback == null || fallback.isEmpty) {
     return null;
   }
-  return raw;
+  return fallback;
 }
 
 bool canSubmitApplyWithdraw(MyPageApplyRecord record) {
@@ -258,7 +262,10 @@ String? resolveOrderInquiryWithdrawProcessId(MyPageOrderInquiryRecord record) {
 }
 
 bool canSubmitOrderInquiryWithdraw(MyPageOrderInquiryRecord record) {
-  return resolveOrderInquiryWithdrawProcessId(record) != null;
+  final orderId = record.id?.trim();
+  return resolveOrderInquiryWithdrawProcessId(record) != null &&
+      orderId != null &&
+      orderId.isNotEmpty;
 }
 
 String? resolveOrderProjectId(MyPageOrderInquiryRecord record) {

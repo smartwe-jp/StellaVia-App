@@ -91,6 +91,25 @@ class MyPageRepositoryImpl implements MyPageRepository {
   }
 
   @override
+  Future<void> submitSecondaryMarketModify({
+    required String id,
+    required String fromProcessId,
+    required int sellNum,
+    required int price,
+    required String status,
+    int thisTimeSoldNum = 0,
+  }) {
+    return _remote.submitSecondaryMarketModify(
+      id: id,
+      fromProcessId: fromProcessId,
+      sellNum: sellNum,
+      price: price,
+      status: status,
+      thisTimeSoldNum: thisTimeSoldNum,
+    );
+  }
+
+  @override
   Future<void> submitSecondaryMarketPurchase({
     required String id,
     required int buyNum,

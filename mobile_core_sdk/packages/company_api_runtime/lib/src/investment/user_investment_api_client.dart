@@ -20,6 +20,8 @@ class UserInvestmentApiPaths {
   static const String benefitWithdrawal = '/crowdfunding/benefit/withdrawal';
   static const String secondaryMarketCreate =
       '/crowdfunding/secondary/market/create';
+  static const String secondaryMarketModify =
+      '/crowdfunding/secondary/market/modify';
   static const String secondaryMarketPurchase =
       '/crowdfunding/user/applySecondartMarket';
 }
@@ -41,6 +43,8 @@ class UserInvestmentApiClient {
     this.benefitWithdrawalPath = UserInvestmentApiPaths.benefitWithdrawal,
     this.secondaryMarketCreatePath =
         UserInvestmentApiPaths.secondaryMarketCreate,
+    this.secondaryMarketModifyPath =
+        UserInvestmentApiPaths.secondaryMarketModify,
     this.secondaryMarketPurchasePath =
         UserInvestmentApiPaths.secondaryMarketPurchase,
   }) : _dioForPath = dioForPath,
@@ -61,6 +65,7 @@ class UserInvestmentApiClient {
   final String benefitProjectPath;
   final String benefitWithdrawalPath;
   final String secondaryMarketCreatePath;
+  final String secondaryMarketModifyPath;
   final String secondaryMarketPurchasePath;
 
   Future<UserInvestmentAccountStatisticDto> fetchAccountStatistic() async {
@@ -267,6 +272,35 @@ class UserInvestmentApiClient {
     _envelopeCodec.assertSuccessIfEnvelope(
       _envelopeCodec.toJsonMap(response.data),
       fallbackMessage: 'Failed to create secondary market sell order.',
+      requireTruthyData: false,
+    );
+  }
+
+  Future<void> submitSecondaryMarketModify({
+    required String id,
+    required String fromProcessId,
+    required int sellNum,
+    required int price,
+    required String status,
+    int thisTimeSoldNum = 0,
+  }) async {
+    final response = await _dioForPath(secondaryMarketModifyPath)
+        .post<Map<String, dynamic>>(
+          secondaryMarketModifyPath,
+          data: <String, dynamic>{
+            'id': id,
+            'fromProcessId': fromProcessId,
+            'sellNum': sellNum,
+            'price': price,
+            'status': status,
+            'thisTimeSoldNum': thisTimeSoldNum,
+          },
+          options: authRequired(true),
+        );
+
+    _envelopeCodec.assertSuccessIfEnvelope(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to modify secondary market order.',
       requireTruthyData: false,
     );
   }

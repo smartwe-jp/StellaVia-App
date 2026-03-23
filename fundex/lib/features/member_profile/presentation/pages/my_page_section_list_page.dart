@@ -33,6 +33,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
   static const int _pageSize = 20;
 
   final ScrollController _scrollController = ScrollController();
+  final Set<String> _hiddenOrderInquiryIds = <String>{};
   final List<MyPageApplyRecord> _applyRecords = <MyPageApplyRecord>[];
   final List<MyPageOrderInquiryRecord> _orderInquiryRecords =
       <MyPageOrderInquiryRecord>[];
@@ -86,6 +87,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
       _error = null;
       _nextPage = 1;
       _applyRecords.clear();
+      _hiddenOrderInquiryIds.clear();
       _orderInquiryRecords.clear();
       _investmentRecords.clear();
     });
@@ -164,7 +166,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     return switch (widget.sectionType) {
       MyPageSectionType.pendingApplications => _filteredApplyRecords.length,
       MyPageSectionType.coolingOff => selectCoolingOffRecords(
-        _orderInquiryRecords,
+        _visibleOrderInquiryRecords,
       ).length,
       MyPageSectionType.activeFunds => groupActiveInvestmentRecords(
         _investmentRecords,
@@ -253,6 +255,12 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
 
   List<MyPageApplyRecord> get _filteredApplyRecords {
     return filterApplyRecordsByHistoryFilter(_applyRecords, _applyFilter);
+  }
+
+  List<MyPageOrderInquiryRecord> get _visibleOrderInquiryRecords {
+    return _orderInquiryRecords
+        .where((record) => !_hiddenOrderInquiryIds.contains(record.id))
+        .toList(growable: false);
   }
 
   Widget _buildRetryButton(BuildContext context) {
@@ -460,7 +468,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
             .map((record) => _buildPendingCard(context, record, formatter))
             .toList(growable: false),
       MyPageSectionType.coolingOff =>
-        selectCoolingOffRecords(_orderInquiryRecords)
+        selectCoolingOffRecords(_visibleOrderInquiryRecords)
             .map((record) => _buildCoolingOffCard(context, record, formatter))
             .toList(growable: false),
       MyPageSectionType.activeFunds =>
@@ -534,6 +542,15 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     await _loadInitial();
   }
 
+  Future<void> _hideOrderInquiryRecord(String orderId) async {
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _hiddenOrderInquiryIds.add(orderId);
+    });
+  }
+
   Future<void> _handleApplyWithdraw(MyPageApplyRecord record) async {
     final processId = resolveApplyWithdrawProcessId(record);
     if (processId == null) {
@@ -550,15 +567,25 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
 
   Future<void> _handleOrderWithdraw(MyPageOrderInquiryRecord record) async {
     final processId = resolveOrderInquiryWithdrawProcessId(record);
-    if (processId == null) {
+    final orderId = record.id?.trim();
+    final sellNum = record.sellNum;
+    final price = record.price?.toInt();
+    if (processId == null ||
+        orderId == null ||
+        sellNum == null ||
+        price == null) {
       return;
     }
-    await confirmAndSubmitMyPageWithdraw(
+    await confirmAndSubmitMyPageSecondaryMarketInvalidate(
       context,
       ref,
-      processId: processId,
+      id: orderId,
+      fromProcessId: processId,
+      sellNum: sellNum,
+      price: price,
+      thisTimeSoldNum: record.soldNum ?? 0,
       confirmBody: context.l10n.myPageWithdrawOrderConfirmBody,
-      onSuccessRefresh: _refreshAfterWithdraw,
+      onSuccessRefresh: () => _hideOrderInquiryRecord(orderId),
     );
   }
 
