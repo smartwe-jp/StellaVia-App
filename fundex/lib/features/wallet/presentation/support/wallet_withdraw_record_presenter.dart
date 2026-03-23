@@ -31,24 +31,40 @@ WalletWithdrawStatusPresentation resolveWithdrawStatusPresentation(
   WalletWithdrawRecord record,
   AppSemanticColorTheme colors,
 ) {
-  final payStatus = record.payStatus;
   final status = record.status;
-  final isPending = payStatus == 0 || status == 0;
-  if (isPending) {
-    return WalletWithdrawStatusPresentation(
-      label: l10n.walletWithdrawRecordStatusPending,
-      backgroundColor: colors.warningSubtle,
-      foregroundColor: colors.warningForeground,
-    );
-  }
-
-  final isDone = payStatus == 1 || status == 1;
-  if (isDone) {
-    return WalletWithdrawStatusPresentation(
-      label: l10n.walletWithdrawRecordStatusDone,
-      backgroundColor: colors.successSubtle,
-      foregroundColor: colors.successForeground,
-    );
+  if (status != null) {
+    return switch (status) {
+      0 => WalletWithdrawStatusPresentation(
+        label: l10n.walletWithdrawRecordStatusUnpaid,
+        backgroundColor: colors.warningSubtle,
+        foregroundColor: colors.warningForeground,
+      ),
+      1 => WalletWithdrawStatusPresentation(
+        label: l10n.walletWithdrawRecordStatusPaid,
+        backgroundColor: colors.successSubtle,
+        foregroundColor: colors.successForeground,
+      ),
+      2 => WalletWithdrawStatusPresentation(
+        label: l10n.walletWithdrawRecordStatusFailedUnconfirmed,
+        backgroundColor: colors.dangerSubtle,
+        foregroundColor: colors.dangerForeground,
+      ),
+      3 => WalletWithdrawStatusPresentation(
+        label: l10n.walletWithdrawRecordStatusFailedConfirmed,
+        backgroundColor: colors.dangerSoft,
+        foregroundColor: colors.dangerForeground,
+      ),
+      4 => WalletWithdrawStatusPresentation(
+        label: l10n.walletWithdrawRecordStatusRevoked,
+        backgroundColor: colors.surfaceAlt,
+        foregroundColor: colors.textSecondary,
+      ),
+      _ => WalletWithdrawStatusPresentation(
+        label: l10n.walletWithdrawRecordStatusUnknown,
+        backgroundColor: colors.surfaceAlt,
+        foregroundColor: colors.textSecondary,
+      ),
+    };
   }
 
   return WalletWithdrawStatusPresentation(

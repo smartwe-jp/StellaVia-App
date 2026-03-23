@@ -2269,6 +2269,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletWithdrawRecordStatusDone => '已完成';
 
   @override
+  String get walletWithdrawRecordStatusUnpaid => '未打款';
+
+  @override
+  String get walletWithdrawRecordStatusPaid => '已打款';
+
+  @override
+  String get walletWithdrawRecordStatusFailedUnconfirmed => '打款失败未确认';
+
+  @override
+  String get walletWithdrawRecordStatusFailedConfirmed => '打款失败已确认';
+
+  @override
+  String get walletWithdrawRecordStatusRevoked => '未打款撤回';
+
+  @override
   String get walletWithdrawRecordStatusUnknown => '状态未知';
 
   @override
@@ -5484,6 +5499,21 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletWithdrawRecordStatusDone => '已完成';
+
+  @override
+  String get walletWithdrawRecordStatusUnpaid => '未打款';
+
+  @override
+  String get walletWithdrawRecordStatusPaid => '已打款';
+
+  @override
+  String get walletWithdrawRecordStatusFailedUnconfirmed => '打款失敗未確認';
+
+  @override
+  String get walletWithdrawRecordStatusFailedConfirmed => '打款失敗已確認';
+
+  @override
+  String get walletWithdrawRecordStatusRevoked => '未打款撤回';
 
   @override
   String get walletWithdrawRecordStatusUnknown => '狀態未知';

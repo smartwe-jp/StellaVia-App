@@ -2286,6 +2286,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletWithdrawRecordStatusDone => '完了';
 
   @override
+  String get walletWithdrawRecordStatusUnpaid => '未送金';
+
+  @override
+  String get walletWithdrawRecordStatusPaid => '送金済み';
+
+  @override
+  String get walletWithdrawRecordStatusFailedUnconfirmed => '送金失敗・未確認';
+
+  @override
+  String get walletWithdrawRecordStatusFailedConfirmed => '送金失敗・確認済み';
+
+  @override
+  String get walletWithdrawRecordStatusRevoked => '未送金・撤回';
+
+  @override
   String get walletWithdrawRecordStatusUnknown => '状態不明';
 
   @override

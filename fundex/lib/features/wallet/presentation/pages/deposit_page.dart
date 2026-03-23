@@ -41,17 +41,9 @@ class DepositPage extends ConsumerWidget {
         appBar: AppNavigationBar(
           title: l10n.walletDepositTitle,
           height: 52,
-          backgroundColor: colors.surface,
-          foregroundColor: colors.textPrimary,
-          decoration: BoxDecoration(
-            color: colors.surface,
-            border: Border(bottom: BorderSide(color: colors.border)),
-          ),
           leading: AppNavigationIconButton(
             icon: Icons.arrow_back_rounded,
             onTap: () => context.pop(),
-            backgroundColor: colors.surface.withValues(alpha: 0),
-            foregroundColor: colors.textPrimary,
           ),
         ),
         body: asyncData.when(

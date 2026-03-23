@@ -2410,6 +2410,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletWithdrawRecordStatusDone => 'Completed';
 
   @override
+  String get walletWithdrawRecordStatusUnpaid => 'Unpaid';
+
+  @override
+  String get walletWithdrawRecordStatusPaid => 'Paid';
+
+  @override
+  String get walletWithdrawRecordStatusFailedUnconfirmed =>
+      'Payout failed / unconfirmed';
+
+  @override
+  String get walletWithdrawRecordStatusFailedConfirmed =>
+      'Payout failed / confirmed';
+
+  @override
+  String get walletWithdrawRecordStatusRevoked => 'Revoked before payout';
+
+  @override
   String get walletWithdrawRecordStatusUnknown => 'Unknown';
 
   @override

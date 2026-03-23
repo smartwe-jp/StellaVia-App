@@ -220,7 +220,6 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = theme.appColors;
-    final appText = theme.appTextTheme;
     final locale = Localizations.localeOf(context).toLanguageTag();
     final currency = NumberFormat.currency(
       locale: locale,
@@ -247,45 +246,9 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
         appBar: AppNavigationBar(
           title: l10n.walletWithdrawTitle,
           height: 52,
-          backgroundColor: colors.surface,
-          foregroundColor: colors.textPrimary,
-          decoration: BoxDecoration(
-            color: colors.surface,
-            border: Border(bottom: BorderSide(color: colors.border)),
-          ),
           leading: AppNavigationIconButton(
             icon: Icons.arrow_back_rounded,
             onTap: () => context.pop(),
-            backgroundColor: colors.surface.withValues(alpha: 0),
-            foregroundColor: colors.textPrimary,
-          ),
-        ),
-        bottomNavigationBar: SafeArea(
-          minimum: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () => context.push('/wallet/withdrawing'),
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size(0, 46),
-                    side: BorderSide(color: colors.border),
-                  ),
-                  child: Text(l10n.walletWithdrawingAction),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () => context.push('/wallet/withdraw/history'),
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size(0, 46),
-                    side: BorderSide(color: colors.border),
-                  ),
-                  child: Text(l10n.walletWithdrawHistoryAction),
-                ),
-              ),
-            ],
           ),
         ),
         body: accountsAsync.when(
@@ -294,29 +257,10 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
             return ListView(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
               children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
-                  decoration: BoxDecoration(
-                    color: colors.background,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        l10n.walletWithdrawAvailableAmountLabel,
-                        style: appText.caption.copyWith(
-                          color: colors.textSecondary,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        currency.format(availableAmount ?? 0),
-                        style: appText.heroMetricSecondary.copyWith(
-                          color: colors.textPrimary,
-                        ),
-                      ),
-                    ],
-                  ),
+                _WithdrawBalanceHeroCard(
+                  label: l10n.walletWithdrawAvailableAmountLabel,
+                  value: currency.format(availableAmount ?? 0),
+                  onTapHistory: () => context.push('/wallet/withdraw/history'),
                 ),
                 const SizedBox(height: 16),
                 MemberProfileTextField(
@@ -369,6 +313,133 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _WithdrawBalanceHeroCard extends StatelessWidget {
+  const _WithdrawBalanceHeroCard({
+    required this.label,
+    required this.value,
+    required this.onTapHistory,
+  });
+
+  final String label;
+  final String value;
+  final VoidCallback onTapHistory;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final foregroundColor = colors.onDark;
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(22),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[colors.heroStart, colors.heroMiddle],
+        ),
+        border: Border.all(color: colors.border),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: colors.scrim.withValues(alpha: 0.12),
+            blurRadius: 18,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+            top: -34,
+            right: -34,
+            child: IgnorePointer(
+              child: Container(
+                width: 170,
+                height: 170,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: <Color>[
+                      colors.primary.withValues(alpha: 0.22),
+                      colors.primary.withValues(alpha: 0),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            label,
+                            style: appText.caption.copyWith(
+                              color: foregroundColor.withValues(alpha: 0.82),
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            value,
+                            style: appText.heroMetricSecondary.copyWith(
+                              color: foregroundColor,
+                              height: 1.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: colors.surface.withValues(alpha: 0.14),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: colors.surface.withValues(alpha: 0.22),
+                        ),
+                      ),
+                      child: IconButton(
+                        onPressed: onTapHistory,
+                        tooltip: context.l10n.walletWithdrawHistoryAction,
+                        icon: Icon(
+                          Icons.history_rounded,
+                          color: foregroundColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                Container(
+                  height: 1,
+                  color: colors.surface.withValues(alpha: 0.16),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  context.l10n.walletWithdrawTitle,
+                  style: appText.bodySemi.copyWith(
+                    color: foregroundColor.withValues(alpha: 0.82),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

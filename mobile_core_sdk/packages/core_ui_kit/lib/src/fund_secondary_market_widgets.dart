@@ -56,7 +56,30 @@ class FundSecondaryMarketCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
+    final isDark = theme.brightness == Brightness.dark;
     final cardRadius = BorderRadius.circular(UiTokens.radius16);
+    final headerGradientColors = isDark
+        ? <Color>[
+            Color.alphaBlend(
+              colors.warningSoft.withValues(alpha: 0.38),
+              colors.surfaceAlt,
+            ),
+            Color.alphaBlend(
+              colors.primarySoft.withValues(alpha: 0.24),
+              colors.surface,
+            ),
+          ]
+        : <Color>[colors.primarySubtle, colors.warningSubtle];
+    final defaultStatusBackground = isDark
+        ? Color.alphaBlend(
+            colors.warningSoft.withValues(alpha: 0.30),
+            colors.surfaceAlt,
+          )
+        : colors.primarySubtle;
+    final defaultStatusForeground = isDark
+        ? colors.warningForeground
+        : colors.primary;
+    final headerTitleColor = isDark ? colors.onDark : colors.textPrimary;
 
     return SizedBox(
       width: width,
@@ -93,10 +116,7 @@ class FundSecondaryMarketCard extends StatelessWidget {
                       gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: <Color>[
-                          colors.primarySubtle,
-                          colors.warningSubtle,
-                        ],
+                        colors: headerGradientColors,
                       ),
                     ),
                     child: Column(
@@ -109,17 +129,15 @@ class FundSecondaryMarketCard extends StatelessWidget {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color:
-                                  data.statusBackgroundColor ??
-                                  colors.primarySubtle,
+                              color: data.statusBackgroundColor ??
+                                  defaultStatusBackground,
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
                               data.statusLabel!,
                               style: appText.micro.copyWith(
-                                color:
-                                    data.statusForegroundColor ??
-                                    colors.primary,
+                                color: data.statusForegroundColor ??
+                                    defaultStatusForeground,
                               ),
                             ),
                           ),
@@ -129,7 +147,9 @@ class FundSecondaryMarketCard extends StatelessWidget {
                           data.title,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: appText.cardTitle,
+                          style: appText.cardTitle.copyWith(
+                            color: headerTitleColor,
+                          ),
                         ),
                       ],
                     ),

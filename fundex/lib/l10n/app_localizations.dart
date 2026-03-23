@@ -4514,6 +4514,36 @@ abstract class AppLocalizations {
   /// **'Completed'**
   String get walletWithdrawRecordStatusDone;
 
+  /// No description provided for @walletWithdrawRecordStatusUnpaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpaid'**
+  String get walletWithdrawRecordStatusUnpaid;
+
+  /// No description provided for @walletWithdrawRecordStatusPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get walletWithdrawRecordStatusPaid;
+
+  /// No description provided for @walletWithdrawRecordStatusFailedUnconfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Payout failed / unconfirmed'**
+  String get walletWithdrawRecordStatusFailedUnconfirmed;
+
+  /// No description provided for @walletWithdrawRecordStatusFailedConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Payout failed / confirmed'**
+  String get walletWithdrawRecordStatusFailedConfirmed;
+
+  /// No description provided for @walletWithdrawRecordStatusRevoked.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoked before payout'**
+  String get walletWithdrawRecordStatusRevoked;
+
   /// No description provided for @walletWithdrawRecordStatusUnknown.
   ///
   /// In en, this message translates to:
