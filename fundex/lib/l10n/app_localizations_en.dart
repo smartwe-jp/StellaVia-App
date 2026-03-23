@@ -2116,6 +2116,28 @@ class AppLocalizationsEn extends AppLocalizations {
       'Cancellation flow will be connected in a later implementation.';
 
   @override
+  String get myPageWithdrawConfirmTitle => 'Withdraw this request?';
+
+  @override
+  String get myPageWithdrawApplyConfirmBody =>
+      'This application will be withdrawn. Do you want to continue?';
+
+  @override
+  String get myPageWithdrawOrderConfirmBody =>
+      'This resale order will be withdrawn. Do you want to continue?';
+
+  @override
+  String get myPageWithdrawConfirmAction => 'Withdraw';
+
+  @override
+  String get myPageWithdrawSuccess =>
+      'Your withdrawal request has been accepted.';
+
+  @override
+  String get myPageWithdrawFailure =>
+      'Failed to withdraw. Please try again later.';
+
+  @override
   String get myPageDepositComingSoon =>
       'Deposit page will be connected in a later implementation.';
 

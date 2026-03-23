@@ -192,6 +192,12 @@ class AppThemeFactory {
         color: semanticColors.textPrimary,
         height: 1.54,
       ),
+      bodySemi: sans(
+        size: 13,
+        weight: FontWeight.w500,
+        color: semanticColors.textPrimary,
+        height: 1.5,
+      ),
       bodyStrong: sans(
         size: 13,
         weight: FontWeight.w700,
@@ -302,6 +308,12 @@ class AppThemeFactory {
         size: 13,
         weight: FontWeight.w700,
         color: semanticColors.textPrimary,
+        height: 1.35,
+      ),
+      cellValue: sans(
+        size: 16,
+        weight: FontWeight.w700,
+        color: semanticColors.textTertiary,
         height: 1.35,
       ),
     );

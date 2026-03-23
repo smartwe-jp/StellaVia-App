@@ -138,63 +138,70 @@ class _SettingsOperatingCompanyPageState
               }
 
               final content = snapshot.data!;
+              final cardRadius = BorderRadius.circular(UiTokens.radius16);
               return ListView(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
                 children: <Widget>[
                   Container(
                     decoration: BoxDecoration(
                       color: colors.surface,
-                      borderRadius: BorderRadius.circular(UiTokens.radius16),
+                      borderRadius: cardRadius,
+                    ),
+                    foregroundDecoration: BoxDecoration(
+                      borderRadius: cardRadius,
                       border: Border.all(color: colors.border),
                     ),
-                    child: Column(
-                      children: <Widget>[
-                        _CompanyInfoRow(
-                          label: l10n.settingsCompanyTradeNameLabel,
-                          value: content.tradeName,
-                        ),
-                        _CompanyInfoRow(
-                          label: l10n.settingsCompanyLicenseNumberLabel,
-                          value: content.licenseNumber,
-                        ),
-                        _CompanyInfoRow(
-                          label: l10n.settingsCompanyLicenseTypeLabel,
-                          value: content.licenseType,
-                        ),
-                        _CompanyInfoRow(
-                          label: l10n.settingsCompanyRepresentativeLabel,
-                          value: content.representative,
-                        ),
-                        _CompanyInfoRow(
-                          label: l10n.settingsCompanyHeadOfficeLabel,
-                          value: content.headOffice,
-                        ),
-                        _CompanyInfoRow(
-                          label: l10n.settingsCompanyTelLabel,
-                          value: content.tel,
-                          valueColor: colors.primary,
-                          onTap: () => _callPhone(context, content.tel),
-                        ),
-                        _CompanyInfoRow(
-                          label: l10n.settingsCompanyEstablishedLabel,
-                          value: content.established,
-                        ),
-                        _CompanyInfoRow(
-                          label: l10n.settingsCompanyBusinessLabel,
-                          value: content.business,
-                        ),
-                        _CompanyInfoRow(
-                          label: l10n.settingsCompanyManagerLabel,
-                          value: content.manager,
-                          isLast: true,
-                        ),
-                      ],
+                    child: ClipRRect(
+                      borderRadius: cardRadius,
+                      child: Column(
+                        children: <Widget>[
+                          _CompanyInfoRow(
+                            label: l10n.settingsCompanyTradeNameLabel,
+                            value: content.tradeName,
+                          ),
+                          _CompanyInfoRow(
+                            label: l10n.settingsCompanyLicenseNumberLabel,
+                            value: content.licenseNumber,
+                          ),
+                          _CompanyInfoRow(
+                            label: l10n.settingsCompanyLicenseTypeLabel,
+                            value: content.licenseType,
+                          ),
+                          _CompanyInfoRow(
+                            label: l10n.settingsCompanyRepresentativeLabel,
+                            value: content.representative,
+                          ),
+                          _CompanyInfoRow(
+                            label: l10n.settingsCompanyHeadOfficeLabel,
+                            value: content.headOffice,
+                          ),
+                          _CompanyInfoRow(
+                            label: l10n.settingsCompanyTelLabel,
+                            value: content.tel,
+                            valueColor: colors.primary,
+                            onTap: () => _callPhone(context, content.tel),
+                          ),
+                          _CompanyInfoRow(
+                            label: l10n.settingsCompanyEstablishedLabel,
+                            value: content.established,
+                          ),
+                          _CompanyInfoRow(
+                            label: l10n.settingsCompanyBusinessLabel,
+                            value: content.business,
+                          ),
+                          _CompanyInfoRow(
+                            label: l10n.settingsCompanyManagerLabel,
+                            value: content.manager,
+                            isLast: true,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
                   Text(
                     l10n.settingsCompanyRelatedLinksTitle,
-                    style: appText.inputLabel.copyWith(
+                    style: appText.sectionTitle.copyWith(
                       color: colors.textPrimary,
                     ),
                   ),
@@ -247,7 +254,7 @@ class _CompanyInfoRow extends StatelessWidget {
     final appText = theme.appTextTheme;
     final valueWidget = Text(
       value,
-      style: appText.helper.copyWith(
+      style: appText.bodySemi.copyWith(
         color: valueColor ?? colors.textSecondary,
         height: 1.6,
       ),
@@ -274,7 +281,9 @@ class _CompanyInfoRow extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   label,
-                  style: appText.inputLabel.copyWith(color: colors.textPrimary),
+                  style: appText.bodyStrong.copyWith(
+                    color: colors.textPrimary,
+                  ),
                 ),
               ),
             ),
@@ -336,7 +345,9 @@ class _CompanyLinkTile extends StatelessWidget {
               Expanded(
                 child: Text(
                   label,
-                  style: appText.helper.copyWith(color: colors.textSecondary),
+                  style: appText.bodySemi.copyWith(
+                    color: colors.textPrimary,
+                  ),
                 ),
               ),
               Icon(

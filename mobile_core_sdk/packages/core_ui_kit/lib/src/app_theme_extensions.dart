@@ -317,6 +317,7 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
     required this.sectionTitle,
     required this.cardTitle,
     required this.body,
+    required this.bodySemi,
     required this.bodyStrong,
     required this.bodyMuted,
     required this.caption,
@@ -335,6 +336,7 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
     required this.numericCaption,
     required this.tableLabel,
     required this.tableValue,
+    required this.cellValue,
   });
 
   final TextStyle heroTitle;
@@ -345,6 +347,7 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
   final TextStyle sectionTitle;
   final TextStyle cardTitle;
   final TextStyle body;
+  final TextStyle bodySemi;
   final TextStyle bodyStrong;
   final TextStyle bodyMuted;
   final TextStyle caption;
@@ -363,6 +366,7 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
   final TextStyle numericCaption;
   final TextStyle tableLabel;
   final TextStyle tableValue;
+  final TextStyle cellValue;
 
   @override
   AppSemanticTextTheme copyWith({
@@ -374,6 +378,7 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
     TextStyle? sectionTitle,
     TextStyle? cardTitle,
     TextStyle? body,
+    TextStyle? bodySemi,
     TextStyle? bodyStrong,
     TextStyle? bodyMuted,
     TextStyle? caption,
@@ -392,6 +397,7 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
     TextStyle? numericCaption,
     TextStyle? tableLabel,
     TextStyle? tableValue,
+    TextStyle? cellValue,
   }) {
     return AppSemanticTextTheme(
       heroTitle: heroTitle ?? this.heroTitle,
@@ -402,6 +408,7 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
       sectionTitle: sectionTitle ?? this.sectionTitle,
       cardTitle: cardTitle ?? this.cardTitle,
       body: body ?? this.body,
+      bodySemi: bodySemi ?? this.bodySemi,
       bodyStrong: bodyStrong ?? this.bodyStrong,
       bodyMuted: bodyMuted ?? this.bodyMuted,
       caption: caption ?? this.caption,
@@ -420,6 +427,7 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
       numericCaption: numericCaption ?? this.numericCaption,
       tableLabel: tableLabel ?? this.tableLabel,
       tableValue: tableValue ?? this.tableValue,
+      cellValue: cellValue ?? this.cellValue,
     );
   }
 
@@ -449,6 +457,7 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
       sectionTitle: TextStyle.lerp(sectionTitle, other.sectionTitle, t)!,
       cardTitle: TextStyle.lerp(cardTitle, other.cardTitle, t)!,
       body: TextStyle.lerp(body, other.body, t)!,
+      bodySemi: TextStyle.lerp(bodySemi, other.bodySemi, t)!,
       bodyStrong: TextStyle.lerp(bodyStrong, other.bodyStrong, t)!,
       bodyMuted: TextStyle.lerp(bodyMuted, other.bodyMuted, t)!,
       caption: TextStyle.lerp(caption, other.caption, t)!,
@@ -471,6 +480,7 @@ class AppSemanticTextTheme extends ThemeExtension<AppSemanticTextTheme> {
       numericCaption: TextStyle.lerp(numericCaption, other.numericCaption, t)!,
       tableLabel: TextStyle.lerp(tableLabel, other.tableLabel, t)!,
       tableValue: TextStyle.lerp(tableValue, other.tableValue, t)!,
+      cellValue: TextStyle.lerp(cellValue, other.cellValue, t)!,
     );
   }
 }

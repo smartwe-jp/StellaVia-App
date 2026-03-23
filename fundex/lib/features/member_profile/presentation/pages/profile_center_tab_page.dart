@@ -13,6 +13,7 @@ import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.da
 import '../../domain/entities/mypage_models.dart';
 import '../providers/mypage_providers.dart';
 import '../support/mypage_section_support.dart';
+import '../support/mypage_withdraw_action.dart';
 
 class ProfileCenterTabPage extends ConsumerWidget {
   const ProfileCenterTabPage({super.key});
@@ -197,12 +198,10 @@ Widget _buildPendingApplicationsSection(
                 ),
                 buildApplySecondaryRow(l10n, record),
               ],
-              footer: canShowApplyCancelAction(record.status)
+              footer: canSubmitApplyWithdraw(record)
                   ? OutlinedButton(
-                      onPressed: () => _showSnackBar(
-                        context,
-                        message: l10n.myPageCancelRequestComingSoon,
-                      ),
+                      onPressed: () =>
+                          _handleApplyWithdraw(context, ref, record),
                       style: _myPageOutlineButtonStyle(
                         context,
                         borderColor: colors.danger,
@@ -296,18 +295,18 @@ Widget _buildCoolingOffSection(
                   value: _formatCurrency(record.price, formatter),
                 ),
               ],
-              footer: OutlinedButton(
-                onPressed: () => _showSnackBar(
-                  context,
-                  message: l10n.myPageCancelRequestComingSoon,
-                ),
-                style: _myPageOutlineButtonStyle(
-                  context,
-                  borderColor: colors.danger,
-                  foregroundColor: colors.danger,
-                ),
-                child: Text(l10n.myPageCancelOrderAction),
-              ),
+              footer: canSubmitOrderInquiryWithdraw(record)
+                  ? OutlinedButton(
+                      onPressed: () =>
+                          _handleOrderWithdraw(context, ref, record),
+                      style: _myPageOutlineButtonStyle(
+                        context,
+                        borderColor: colors.danger,
+                        foregroundColor: colors.danger,
+                      ),
+                      child: Text(l10n.myPageCancelOrderAction),
+                    )
+                  : null,
               onTap: null,
             );
           })
@@ -440,6 +439,42 @@ Future<void> _handleWithdrawTap(BuildContext context, WidgetRef ref) async {
     return;
   }
   context.push('/wallet/withdraw');
+}
+
+Future<void> _handleApplyWithdraw(
+  BuildContext context,
+  WidgetRef ref,
+  MyPageApplyRecord record,
+) async {
+  final processId = resolveApplyWithdrawProcessId(record);
+  if (processId == null) {
+    return;
+  }
+  await confirmAndSubmitMyPageWithdraw(
+    context,
+    ref,
+    processId: processId,
+    confirmBody: context.l10n.myPageWithdrawApplyConfirmBody,
+    onSuccessRefresh: () => _refreshPage(ref),
+  );
+}
+
+Future<void> _handleOrderWithdraw(
+  BuildContext context,
+  WidgetRef ref,
+  MyPageOrderInquiryRecord record,
+) async {
+  final processId = resolveOrderInquiryWithdrawProcessId(record);
+  if (processId == null) {
+    return;
+  }
+  await confirmAndSubmitMyPageWithdraw(
+    context,
+    ref,
+    processId: processId,
+    confirmBody: context.l10n.myPageWithdrawOrderConfirmBody,
+    onSuccessRefresh: () => _refreshPage(ref),
+  );
 }
 
 VoidCallback? _buildPendingApplyTapHandler(
@@ -616,10 +651,6 @@ int _compareDateTimeDesc(DateTime? left, DateTime? right) {
     return -1;
   }
   return right.compareTo(left);
-}
-
-void _showSnackBar(BuildContext context, {required String message}) {
-  AppNotice.show(context, message: message);
 }
 
 ButtonStyle _myPageOutlineButtonStyle(

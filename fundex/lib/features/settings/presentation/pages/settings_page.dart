@@ -226,7 +226,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 iconForegroundColor: colors.communitySecondary,
                 trailing: Text(
                   _themeLabel(currentThemePreference),
-                  style: appText.helper.copyWith(color: colors.textSecondary),
+                  style: appText.cellValue,
                 ),
                 onTap: () {
                   setState(() {
@@ -266,7 +266,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 iconForegroundColor: colors.info,
                 trailing: Text(
                   _languageLabel(currentLanguage),
-                  style: appText.helper.copyWith(color: colors.textSecondary),
+                  style: appText.cellValue,
                 ),
                 onTap: () {
                   setState(() {

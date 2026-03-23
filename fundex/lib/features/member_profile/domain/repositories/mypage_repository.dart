@@ -9,6 +9,8 @@ abstract class MyPageRepository {
     List<int>? statuses,
   });
 
+  Future<void> submitUserWithdraw({required String processId, String? remark});
+
   Future<List<MyPageOrderInquiryRecord>> fetchOrderInquiryList({
     int? userId,
     String? status,

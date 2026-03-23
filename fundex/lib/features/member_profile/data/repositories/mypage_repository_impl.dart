@@ -30,6 +30,11 @@ class MyPageRepositoryImpl implements MyPageRepository {
   }
 
   @override
+  Future<void> submitUserWithdraw({required String processId, String? remark}) {
+    return _remote.submitUserWithdraw(processId: processId, remark: remark);
+  }
+
+  @override
   Future<List<MyPageOrderInquiryRecord>> fetchOrderInquiryList({
     int? userId,
     String? status,

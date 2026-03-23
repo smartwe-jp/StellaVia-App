@@ -2012,6 +2012,24 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageCancelRequestComingSoon => 'キャンセル申請機能は次の実装で接続します。';
 
   @override
+  String get myPageWithdrawConfirmTitle => '撤回しますか？';
+
+  @override
+  String get myPageWithdrawApplyConfirmBody => 'この申込を撤回します。よろしいですか？';
+
+  @override
+  String get myPageWithdrawOrderConfirmBody => 'この売却注文を撤回します。よろしいですか？';
+
+  @override
+  String get myPageWithdrawConfirmAction => '撤回する';
+
+  @override
+  String get myPageWithdrawSuccess => '撤回を受け付けました。';
+
+  @override
+  String get myPageWithdrawFailure => '撤回に失敗しました。時間をおいて再度お試しください。';
+
+  @override
   String get myPageDepositComingSoon => '入金画面は次の実装で接続します。';
 
   @override

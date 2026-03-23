@@ -3986,6 +3986,42 @@ abstract class AppLocalizations {
   /// **'Cancellation flow will be connected in a later implementation.'**
   String get myPageCancelRequestComingSoon;
 
+  /// No description provided for @myPageWithdrawConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw this request?'**
+  String get myPageWithdrawConfirmTitle;
+
+  /// No description provided for @myPageWithdrawApplyConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This application will be withdrawn. Do you want to continue?'**
+  String get myPageWithdrawApplyConfirmBody;
+
+  /// No description provided for @myPageWithdrawOrderConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This resale order will be withdrawn. Do you want to continue?'**
+  String get myPageWithdrawOrderConfirmBody;
+
+  /// No description provided for @myPageWithdrawConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw'**
+  String get myPageWithdrawConfirmAction;
+
+  /// No description provided for @myPageWithdrawSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Your withdrawal request has been accepted.'**
+  String get myPageWithdrawSuccess;
+
+  /// No description provided for @myPageWithdrawFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to withdraw. Please try again later.'**
+  String get myPageWithdrawFailure;
+
   /// No description provided for @myPageDepositComingSoon.
   ///
   /// In en, this message translates to:

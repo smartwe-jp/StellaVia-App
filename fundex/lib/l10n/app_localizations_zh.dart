@@ -1998,6 +1998,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageCancelRequestComingSoon => '取消申请流程会在后续实现中接入。';
 
   @override
+  String get myPageWithdrawConfirmTitle => '确认撤回？';
+
+  @override
+  String get myPageWithdrawApplyConfirmBody => '将撤回这笔申请，是否继续？';
+
+  @override
+  String get myPageWithdrawOrderConfirmBody => '将撤回这笔转卖订单，是否继续？';
+
+  @override
+  String get myPageWithdrawConfirmAction => '确认撤回';
+
+  @override
+  String get myPageWithdrawSuccess => '已受理撤回申请。';
+
+  @override
+  String get myPageWithdrawFailure => '撤回失败，请稍后重试。';
+
+  @override
   String get myPageDepositComingSoon => '入金页面会在后续实现中接入。';
 
   @override
@@ -5161,6 +5179,24 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageCancelRequestComingSoon => '取消申请流程会在后续实现中接入。';
+
+  @override
+  String get myPageWithdrawConfirmTitle => '確認撤回？';
+
+  @override
+  String get myPageWithdrawApplyConfirmBody => '將撤回這筆申請，是否繼續？';
+
+  @override
+  String get myPageWithdrawOrderConfirmBody => '將撤回這筆轉賣訂單，是否繼續？';
+
+  @override
+  String get myPageWithdrawConfirmAction => '確認撤回';
+
+  @override
+  String get myPageWithdrawSuccess => '已受理撤回申請。';
+
+  @override
+  String get myPageWithdrawFailure => '撤回失敗，請稍後重試。';
 
   @override
   String get myPageDepositComingSoon => '入金页面会在后续实现中接入。';

@@ -12,6 +12,7 @@ import '../../../investment/presentation/support/fund_lottery_apply_step.dart';
 import '../../domain/entities/mypage_models.dart';
 import '../providers/mypage_providers.dart';
 import '../support/mypage_section_support.dart';
+import '../support/mypage_withdraw_action.dart';
 
 class MyPageSectionListPage extends ConsumerStatefulWidget {
   const MyPageSectionListPage({
@@ -324,12 +325,9 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
         ),
         buildApplySecondaryRow(l10n, record),
       ],
-      footer: canShowApplyCancelAction(record.status)
+      footer: canSubmitApplyWithdraw(record)
           ? OutlinedButton(
-              onPressed: () => _showSnackBar(
-                context,
-                message: l10n.myPageCancelRequestComingSoon,
-              ),
+              onPressed: () => _handleApplyWithdraw(record),
               style: _myPageOutlineButtonStyle(
                 context,
                 borderColor: colors.danger,
@@ -385,16 +383,17 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
           value: formatCurrency(record.price, formatter),
         ),
       ],
-      footer: OutlinedButton(
-        onPressed: () =>
-            _showSnackBar(context, message: l10n.myPageCancelRequestComingSoon),
-        style: _myPageOutlineButtonStyle(
-          context,
-          borderColor: colors.danger,
-          foregroundColor: colors.danger,
-        ),
-        child: Text(l10n.myPageCancelOrderAction),
-      ),
+      footer: canSubmitOrderInquiryWithdraw(record)
+          ? OutlinedButton(
+              onPressed: () => _handleOrderWithdraw(record),
+              style: _myPageOutlineButtonStyle(
+                context,
+                borderColor: colors.danger,
+                foregroundColor: colors.danger,
+              ),
+              child: Text(l10n.myPageCancelOrderAction),
+            )
+          : null,
       onTap: null,
     );
   }
@@ -528,8 +527,39 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
         context.push('/profile/my/active-funds/$projectId', extra: records);
   }
 
-  void _showSnackBar(BuildContext context, {required String message}) {
-    AppNotice.show(context, message: message);
+  Future<void> _refreshAfterWithdraw() async {
+    ref.invalidate(myPageApplyListProvider);
+    ref.invalidate(myPagePendingApplyListProvider);
+    ref.invalidate(myPageOrderInquiryListProvider);
+    await _loadInitial();
+  }
+
+  Future<void> _handleApplyWithdraw(MyPageApplyRecord record) async {
+    final processId = resolveApplyWithdrawProcessId(record);
+    if (processId == null) {
+      return;
+    }
+    await confirmAndSubmitMyPageWithdraw(
+      context,
+      ref,
+      processId: processId,
+      confirmBody: context.l10n.myPageWithdrawApplyConfirmBody,
+      onSuccessRefresh: _refreshAfterWithdraw,
+    );
+  }
+
+  Future<void> _handleOrderWithdraw(MyPageOrderInquiryRecord record) async {
+    final processId = resolveOrderInquiryWithdrawProcessId(record);
+    if (processId == null) {
+      return;
+    }
+    await confirmAndSubmitMyPageWithdraw(
+      context,
+      ref,
+      processId: processId,
+      confirmBody: context.l10n.myPageWithdrawOrderConfirmBody,
+      onSuccessRefresh: _refreshAfterWithdraw,
+    );
   }
 
   ButtonStyle _myPageOutlineButtonStyle(

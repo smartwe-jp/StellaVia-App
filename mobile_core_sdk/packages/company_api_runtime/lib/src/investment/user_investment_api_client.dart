@@ -11,6 +11,7 @@ class UserInvestmentApiPaths {
   static const String accountStatistic = '/member/login/account-statistic';
   static const String apply = '/crowdfunding/user/apply';
   static const String applyList = '/crowdfunding/user/apply/list';
+  static const String userWithdraw = '/crowdfunding/user/withdraw';
   static const String orderInquiryPage = '/crowdfunding/secondary/market/page';
   static const String offlineOrderInquiryPage =
       '/crowdfunding/offline/secondary/market/page';
@@ -31,6 +32,7 @@ class UserInvestmentApiClient {
     this.accountStatisticPath = UserInvestmentApiPaths.accountStatistic,
     this.applyPath = UserInvestmentApiPaths.apply,
     this.applyListPath = UserInvestmentApiPaths.applyList,
+    this.userWithdrawPath = UserInvestmentApiPaths.userWithdraw,
     this.orderInquiryPagePath = UserInvestmentApiPaths.orderInquiryPage,
     this.offlineOrderInquiryPagePath =
         UserInvestmentApiPaths.offlineOrderInquiryPage,
@@ -52,6 +54,7 @@ class UserInvestmentApiClient {
   final String accountStatisticPath;
   final String applyPath;
   final String applyListPath;
+  final String userWithdrawPath;
   final String orderInquiryPagePath;
   final String offlineOrderInquiryPagePath;
   final String myInvestmentListPath;
@@ -122,6 +125,28 @@ class UserInvestmentApiClient {
               UserInvestmentApplyRecordDto.fromJson(row),
         )
         .toList(growable: false);
+  }
+
+  Future<void> submitUserWithdraw({
+    required String processId,
+    String? remark,
+  }) async {
+    final response = await _dioForPath(userWithdrawPath)
+        .post<Map<String, dynamic>>(
+          userWithdrawPath,
+          data: <String, dynamic>{
+            'processId': processId,
+            if (remark != null && remark.trim().isNotEmpty)
+              'remark': remark.trim(),
+          },
+          options: authRequired(true),
+        );
+
+    _envelopeCodec.assertSuccessIfEnvelope(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to submit user withdraw request.',
+      requireTruthyData: false,
+    );
   }
 
   Future<List<UserInvestmentOrderInquiryRecordDto>> fetchOrderInquiryList({

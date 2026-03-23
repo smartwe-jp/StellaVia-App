@@ -12,6 +12,8 @@ abstract class MyPageRemoteDataSource {
     List<int>? statuses,
   });
 
+  Future<void> submitUserWithdraw({required String processId, String? remark});
+
   Future<List<MyPageOrderInquiryRecordDto>> fetchOrderInquiryList({
     int? userId,
     String? status,
@@ -88,6 +90,14 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
       limit: limit,
       statuses: statuses,
     );
+  }
+
+  @override
+  Future<void> submitUserWithdraw({
+    required String processId,
+    String? remark,
+  }) async {
+    await _apiClient.submitUserWithdraw(processId: processId, remark: remark);
   }
 
   @override

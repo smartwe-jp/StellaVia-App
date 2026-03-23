@@ -31,7 +31,7 @@ class AppMenuSection extends StatelessWidget {
             padding: const EdgeInsets.only(left: 4, bottom: 6),
             child: Text(
               title,
-              style: appText.meta.copyWith(
+              style: appText.bodyStrong.copyWith(
                 color: colors.textTertiary,
                 letterSpacing: 1,
               ),
@@ -107,7 +107,7 @@ class AppMenuItem extends StatelessWidget {
                 Expanded(
                   child: Text(
                     label,
-                    style: appText.bodyStrong.copyWith(
+                    style: appText.cardTitle.copyWith(
                       color: colors.textPrimary,
                     ),
                   ),

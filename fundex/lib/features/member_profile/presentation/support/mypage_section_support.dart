@@ -236,6 +236,31 @@ bool canShowApplyCancelAction(int? status) {
   };
 }
 
+String? resolveApplyWithdrawProcessId(MyPageApplyRecord record) {
+  final raw = record.fromProcessId?.trim();
+  if (raw == null || raw.isEmpty) {
+    return null;
+  }
+  return raw;
+}
+
+bool canSubmitApplyWithdraw(MyPageApplyRecord record) {
+  return canShowApplyCancelAction(record.status) &&
+      resolveApplyWithdrawProcessId(record) != null;
+}
+
+String? resolveOrderInquiryWithdrawProcessId(MyPageOrderInquiryRecord record) {
+  final raw = record.fromProcessId?.trim();
+  if (raw == null || raw.isEmpty) {
+    return null;
+  }
+  return raw;
+}
+
+bool canSubmitOrderInquiryWithdraw(MyPageOrderInquiryRecord record) {
+  return resolveOrderInquiryWithdrawProcessId(record) != null;
+}
+
 String? resolveOrderProjectId(MyPageOrderInquiryRecord record) {
   return record.projectId ??
       record.investorType?.projectId ??
