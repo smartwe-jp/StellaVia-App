@@ -310,13 +310,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 iconForegroundColor: colors.primary,
                 onTap: () => context.push('/profile/settings/faq'),
               ),
-              AppMenuItem(
-                icon: Icons.chat_bubble_rounded,
-                label: l10n.menuItemChatSupport,
-                iconBackgroundColor: colors.successSubtle,
-                iconForegroundColor: colors.success,
-                onTap: () => _showComingSoon(l10n.menuItemChatSupport),
-              ),
+              // AppMenuItem(
+              //   icon: Icons.chat_bubble_rounded,
+              //   label: l10n.menuItemChatSupport,
+              //   iconBackgroundColor: colors.successSubtle,
+              //   iconForegroundColor: colors.success,
+              //   onTap: () => _showComingSoon(l10n.menuItemChatSupport),
+              // ),
               AppMenuItem(
                 icon: Icons.email_rounded,
                 label: l10n.menuItemContactUs,
