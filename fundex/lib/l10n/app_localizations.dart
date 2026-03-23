@@ -4448,6 +4448,12 @@ abstract class AppLocalizations {
   /// **'Withdraw History'**
   String get walletWithdrawHistoryPageTitle;
 
+  /// No description provided for @walletWithdrawHistoryFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get walletWithdrawHistoryFilterAll;
+
   /// No description provided for @walletWithdrawRecordEmpty.
   ///
   /// In en, this message translates to:

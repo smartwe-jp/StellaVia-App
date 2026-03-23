@@ -2236,6 +2236,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletWithdrawHistoryPageTitle => '出金记录';
 
   @override
+  String get walletWithdrawHistoryFilterAll => '全部';
+
+  @override
   String get walletWithdrawRecordEmpty => '暂无可显示的出金记录。';
 
   @override
@@ -5466,6 +5469,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletWithdrawHistoryPageTitle => '出金紀錄';
+
+  @override
+  String get walletWithdrawHistoryFilterAll => '全部';
 
   @override
   String get walletWithdrawRecordEmpty => '目前沒有可顯示的出金紀錄。';

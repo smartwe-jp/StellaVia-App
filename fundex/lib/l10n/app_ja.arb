@@ -836,6 +836,7 @@
   "walletWithdrawHistoryAction": "出金履歴",
   "walletWithdrawingPageTitle": "出金中一覧",
   "walletWithdrawHistoryPageTitle": "出金履歴",
+  "walletWithdrawHistoryFilterAll": "すべて",
   "walletWithdrawRecordEmpty": "表示できる出金記録がありません。",
   "walletWithdrawRecordFeeLabel": "手数料",
   "walletWithdrawRecordApplyTimeLabel": "申請日時",

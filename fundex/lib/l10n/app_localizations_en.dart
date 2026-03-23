@@ -2377,6 +2377,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletWithdrawHistoryPageTitle => 'Withdraw History';
 
   @override
+  String get walletWithdrawHistoryFilterAll => 'All';
+
+  @override
   String get walletWithdrawRecordEmpty => 'No withdrawal records available.';
 
   @override

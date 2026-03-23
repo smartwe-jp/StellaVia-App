@@ -836,6 +836,7 @@
   "walletWithdrawHistoryAction": "Withdraw History",
   "walletWithdrawingPageTitle": "Withdrawing List",
   "walletWithdrawHistoryPageTitle": "Withdraw History",
+  "walletWithdrawHistoryFilterAll": "All",
   "walletWithdrawRecordEmpty": "No withdrawal records available.",
   "walletWithdrawRecordFeeLabel": "Fee",
   "walletWithdrawRecordApplyTimeLabel": "Applied at",

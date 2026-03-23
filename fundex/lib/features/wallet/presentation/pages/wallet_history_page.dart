@@ -44,13 +44,9 @@ class _WalletHistoryPageState extends ConsumerState<WalletHistoryPage> {
         backgroundColor: colors.background,
         appBar: AppNavigationBar(
           title: l10n.walletTransactionHistoryTitle,
-          backgroundColor: colors.surface,
-          foregroundColor: colors.textPrimary,
           leading: AppNavigationIconButton(
             icon: Icons.arrow_back_rounded,
             onTap: () => context.pop(),
-            backgroundColor: colors.surface.withValues(alpha: 0),
-            foregroundColor: colors.textPrimary,
           ),
         ),
         body: asyncHistory.when(

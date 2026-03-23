@@ -2253,6 +2253,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletWithdrawHistoryPageTitle => '出金履歴';
 
   @override
+  String get walletWithdrawHistoryFilterAll => 'すべて';
+
+  @override
   String get walletWithdrawRecordEmpty => '表示できる出金記録がありません。';
 
   @override

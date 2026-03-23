@@ -836,6 +836,7 @@
   "walletWithdrawHistoryAction": "出金紀錄",
   "walletWithdrawingPageTitle": "出金中列表",
   "walletWithdrawHistoryPageTitle": "出金紀錄",
+  "walletWithdrawHistoryFilterAll": "全部",
   "walletWithdrawRecordEmpty": "目前沒有可顯示的出金紀錄。",
   "walletWithdrawRecordFeeLabel": "手續費",
   "walletWithdrawRecordApplyTimeLabel": "申請時間",
