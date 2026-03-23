@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
 
-import 'push_device_registration_api_client.dart';
-
 abstract class PushTokenSyncLogger {
   const PushTokenSyncLogger();
 
@@ -18,12 +16,17 @@ abstract class PushTokenSyncLogger {
 
 class PushTokenSyncService {
   PushTokenSyncService({
-    required PushDeviceRegistrationApiClient apiClient,
+    required Future<void> Function({
+      required String deviceId,
+      required int deviceType,
+      required String version,
+    })
+    registerDevice,
     required PushTokenSyncLogger logger,
     required Future<String> Function() appVersionResolver,
     required int Function() deviceTypeResolver,
     List<Duration>? retryDelays,
-  }) : _apiClient = apiClient,
+  }) : _registerDevice = registerDevice,
        _logger = logger,
        _appVersionResolver = appVersionResolver,
        _deviceTypeResolver = deviceTypeResolver,
@@ -38,7 +41,12 @@ class PushTokenSyncService {
              Duration(minutes: 5),
            ];
 
-  final PushDeviceRegistrationApiClient _apiClient;
+  final Future<void> Function({
+    required String deviceId,
+    required int deviceType,
+    required String version,
+  })
+  _registerDevice;
   final PushTokenSyncLogger _logger;
   final Future<String> Function() _appVersionResolver;
   final int Function() _deviceTypeResolver;
@@ -120,7 +128,7 @@ class PushTokenSyncService {
     _isSyncing = true;
     try {
       final version = await _appVersionResolver();
-      await _apiClient.registerDevice(
+      await _registerDevice(
         deviceId: token,
         deviceType: _deviceTypeResolver(),
         version: version,

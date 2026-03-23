@@ -1907,6 +1907,120 @@ abstract class AppLocalizations {
   /// **'Two-factor authentication'**
   String get menuItemTwoFactor;
 
+  /// No description provided for @settingsTwoFactorDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage phone verification and real-person verification status for sensitive actions.'**
+  String get settingsTwoFactorDescription;
+
+  /// No description provided for @settingsPhoneVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone verification'**
+  String get settingsPhoneVerificationTitle;
+
+  /// No description provided for @settingsFaceVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Face verification'**
+  String get settingsFaceVerificationTitle;
+
+  /// No description provided for @settingsVerificationStatusVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get settingsVerificationStatusVerified;
+
+  /// No description provided for @settingsVerificationStatusUnverified.
+  ///
+  /// In en, this message translates to:
+  /// **'Not verified'**
+  String get settingsVerificationStatusUnverified;
+
+  /// No description provided for @settingsVerificationPhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified number'**
+  String get settingsVerificationPhoneLabel;
+
+  /// No description provided for @settingsVerificationLastUpdatedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Last verified'**
+  String get settingsVerificationLastUpdatedLabel;
+
+  /// No description provided for @settingsPhoneVerificationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a one-time code to your registered phone number and update verification status on this device.'**
+  String get settingsPhoneVerificationDescription;
+
+  /// No description provided for @settingsCurrentPhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current phone number'**
+  String get settingsCurrentPhoneLabel;
+
+  /// No description provided for @settingsPhoneUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No phone number registered.'**
+  String get settingsPhoneUnavailable;
+
+  /// No description provided for @settingsPhoneVerificationPhoneMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Register a phone number in your member profile first.'**
+  String get settingsPhoneVerificationPhoneMissing;
+
+  /// No description provided for @settingsPhoneAutoFillHint.
+  ///
+  /// In en, this message translates to:
+  /// **'On supported devices, the SMS verification code can appear as an autofill suggestion.'**
+  String get settingsPhoneAutoFillHint;
+
+  /// No description provided for @settingsPhoneVerifyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify phone number'**
+  String get settingsPhoneVerifyAction;
+
+  /// No description provided for @settingsPhoneCodeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the verification code first.'**
+  String get settingsPhoneCodeRequired;
+
+  /// No description provided for @settingsPhoneCodeSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification code sent.'**
+  String get settingsPhoneCodeSent;
+
+  /// No description provided for @settingsPhoneVerificationSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone verification completed.'**
+  String get settingsPhoneVerificationSuccess;
+
+  /// No description provided for @settingsFaceVerificationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'After uploading a document photo or selfie, face verification will start automatically.'**
+  String get settingsFaceVerificationDescription;
+
+  /// No description provided for @settingsFaceVerificationUploadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload document or selfie'**
+  String get settingsFaceVerificationUploadTitle;
+
+  /// No description provided for @settingsFaceVerificationUploadDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Face verification starts automatically after an upload finishes. You can also retry it manually.'**
+  String get settingsFaceVerificationUploadDescription;
+
   /// No description provided for @menuItemAnnualReport.
   ///
   /// In en, this message translates to:

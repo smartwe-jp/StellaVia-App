@@ -23,6 +23,11 @@ class AuthApiPaths {
   static const String createRegisterEmailCode =
       '/member/user/createRegisterEmailCode';
   static const String registerApply = '/member/user/registerApply';
+  static const String changePhoneOnlineSend =
+      '/member/change/phone/online/send';
+  static const String changePhoneOnlineCheck =
+      '/member/change/phone/online/check';
+  static const String memberLoginIndex = '/member/login/index';
   static const String oauthToken = '/uaa/oauth/token';
   static const String crowdfundingUserIndex = '/crowdfunding/user/index-new';
 }
@@ -38,6 +43,9 @@ class AuthApiClient {
     this.createRegisterMobileCodePath = AuthApiPaths.createRegisterMobileCode,
     this.createRegisterEmailCodePath = AuthApiPaths.createRegisterEmailCode,
     this.registerApplyPath = AuthApiPaths.registerApply,
+    this.changePhoneOnlineSendPath = AuthApiPaths.changePhoneOnlineSend,
+    this.changePhoneOnlineCheckPath = AuthApiPaths.changePhoneOnlineCheck,
+    this.memberLoginIndexPath = AuthApiPaths.memberLoginIndex,
     this.oauthTokenPath = AuthApiPaths.oauthToken,
     this.crowdfundingUserIndexPath = AuthApiPaths.crowdfundingUserIndex,
   }) : _dioForPath = dioForPath,
@@ -57,6 +65,9 @@ class AuthApiClient {
   final String createRegisterMobileCodePath;
   final String createRegisterEmailCodePath;
   final String registerApplyPath;
+  final String changePhoneOnlineSendPath;
+  final String changePhoneOnlineCheckPath;
+  final String memberLoginIndexPath;
   final String oauthTokenPath;
   final String crowdfundingUserIndexPath;
 
@@ -134,6 +145,117 @@ class AuthApiClient {
     _assertLegacyBoolSuccessIfPresent(
       _envelopeCodec.toJsonMap(response.data),
       fallbackMessage: 'Failed to send registration code.',
+    );
+  }
+
+  Future<void> sendOnlinePhoneChangeCode({
+    required String mobile,
+    required String bizId,
+  }) async {
+    final response = await _dioForPath(changePhoneOnlineSendPath)
+        .get<Map<String, dynamic>>(
+          changePhoneOnlineSendPath,
+          queryParameters: <String, dynamic>{
+            'bizId': bizId.trim(),
+            'mobile': mobile.trim(),
+          },
+          options: authRequired(true),
+        );
+    _assertLegacyBoolSuccessIfPresent(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to send phone verification code.',
+    );
+  }
+
+  Future<void> verifyOnlinePhoneChangeCode({
+    required String mobile,
+    required String bizId,
+    required String code,
+  }) async {
+    final response = await _dioForPath(changePhoneOnlineCheckPath)
+        .get<Map<String, dynamic>>(
+          changePhoneOnlineCheckPath,
+          queryParameters: <String, dynamic>{
+            'bizId': bizId.trim(),
+            'mobile': mobile.trim(),
+            'code': code.trim(),
+          },
+          options: authRequired(true),
+        );
+    _assertLegacyBoolSuccessIfPresent(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to verify phone code.',
+    );
+  }
+
+  Future<AuthMemberLoginIndexDto?> fetchMemberLoginIndexStatus({
+    required String deviceId,
+    required int deviceType,
+    required String version,
+    String app = 'STELLAVIA',
+  }) async {
+    final normalizedDeviceId = deviceId.trim();
+    final normalizedVersion = version.trim();
+    final normalizedApp = app.trim();
+    if (normalizedDeviceId.isEmpty ||
+        normalizedVersion.isEmpty ||
+        normalizedApp.isEmpty) {
+      return null;
+    }
+
+    final response = await _dioForPath(memberLoginIndexPath)
+        .post<Map<String, dynamic>>(
+          memberLoginIndexPath,
+          data: _buildMemberLoginIndexPayload(
+            app: normalizedApp,
+            deviceId: normalizedDeviceId,
+            deviceType: deviceType,
+            version: normalizedVersion,
+          ),
+          options: authRequired(true),
+        );
+
+    final payload = _extractEnvelopeDataPayloadAllowZero(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load member verification status.',
+    );
+    if (payload.isEmpty) {
+      return null;
+    }
+    return AuthMemberLoginIndexDto.fromJson(payload);
+  }
+
+  Future<void> updateLoginDevice({
+    required String deviceId,
+    required int deviceType,
+    required String version,
+    String app = 'STELLAVIA',
+  }) async {
+    final normalizedDeviceId = deviceId.trim();
+    final normalizedVersion = version.trim();
+    final normalizedApp = app.trim();
+    if (normalizedDeviceId.isEmpty ||
+        normalizedVersion.isEmpty ||
+        normalizedApp.isEmpty) {
+      return;
+    }
+
+    final response = await _dioForPath(memberLoginIndexPath)
+        .post<Map<String, dynamic>>(
+          memberLoginIndexPath,
+          data: _buildMemberLoginIndexPayload(
+            app: normalizedApp,
+            deviceId: normalizedDeviceId,
+            deviceType: deviceType,
+            version: normalizedVersion,
+          ),
+          options: authRequired(true),
+        );
+
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    _envelopeCodec.assertSuccessIfEnvelope(
+      payload,
+      fallbackMessage: 'Failed to register push device.',
     );
   }
 
@@ -305,6 +427,20 @@ class AuthApiClient {
 
   bool _isEmailAccount(String account) => account.contains('@');
 
+  Map<String, dynamic> _buildMemberLoginIndexPayload({
+    required String app,
+    required String deviceId,
+    required int deviceType,
+    required String version,
+  }) {
+    return <String, dynamic>{
+      'app': app,
+      'deviceId': deviceId,
+      'deviceType': deviceType,
+      'version': version,
+    };
+  }
+
   String _normalizedIntlCode(String? intlCode) {
     final value = intlCode?.trim();
     return (value == null || value.isEmpty) ? defaultIntlCode : value;
@@ -369,6 +505,27 @@ class AuthApiClient {
       payload,
       fallbackMessage: fallbackMessage,
     );
+  }
+
+  Map<String, dynamic> _extractEnvelopeDataPayloadAllowZero(
+    Map<String, dynamic> payload, {
+    required String fallbackMessage,
+  }) {
+    if (payload.isEmpty) {
+      return payload;
+    }
+    if (!_envelopeCodec.looksLikeEnvelope(payload)) {
+      return payload;
+    }
+
+    final code = payload['code']?.toString().trim() ?? '';
+    final isSuccess = code == '0' || code == '200';
+    if (!isSuccess) {
+      final message = _toNormalizedString(payload['msg']);
+      throw StateError(message ?? fallbackMessage);
+    }
+
+    return _toJsonMap(payload['data']);
   }
 
   Map<String, dynamic> _normalizeCurrentUserPayload(

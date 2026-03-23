@@ -39,79 +39,77 @@ Dio _buildDio(Future<ResponseBody> Function(RequestOptions options) handler) {
 }
 
 void main() {
-  group('PushDeviceRegistrationApiClient', () {
+  group('AuthApiClient /member/login/index', () {
     test(
-      'registerDevice posts payload and accepts envelope code 200',
+      'fetchMemberLoginIndexStatus posts full device payload and parses flags',
       () async {
         final dio = _buildDio((options) async {
           expect(options.method, equals('POST'));
-          expect(
-            options.path,
-            equals(PushDeviceRegistrationApiPaths.registerDevice),
-          );
+          expect(options.path, equals(AuthApiPaths.memberLoginIndex));
           expect(options.extra['auth_required'], isTrue);
           expect(
             options.data,
             equals(<String, dynamic>{
-              'deviceId': 'fcm-token-value',
+              'app': 'STELLAVIA',
+              'deviceId': 'device-abc',
               'deviceType': 1,
               'version': '1.2.3',
             }),
           );
-          return _jsonOk('{"code":200,"msg":"success","data":{}}');
+          return _jsonOk(
+            '{"code":0,"msg":"success","data":{"mobileAuth":1,"verificationStatus":0,"currentDeviceVerificationStatus":1,"ownerName":"张三"}}',
+          );
         });
-        final api = PushDeviceRegistrationApiClient(dioForPath: (_) => dio);
+        final api = AuthApiClient(dioForPath: (_) => dio);
 
-        await api.registerDevice(
-          deviceId: 'fcm-token-value',
+        final result = await api.fetchMemberLoginIndexStatus(
+          deviceId: 'device-abc',
           deviceType: 1,
           version: '1.2.3',
         );
+
+        expect(result, isNotNull);
+        expect(result!.isPhoneVerified, isTrue);
+        expect(result.isRealPersonVerified, isFalse);
+        expect(result.isCurrentDeviceVerified, isTrue);
+        expect(result.ownerName, equals('张三'));
       },
     );
 
-    test('registerDevice accepts envelope code 0', () async {
+    test('updateLoginDevice posts device payload with app', () async {
       final dio = _buildDio((options) async {
         expect(options.method, equals('POST'));
-        return _jsonOk('{"code":0,"msg":"success","data":{}}');
+        expect(options.path, equals(AuthApiPaths.memberLoginIndex));
+        expect(options.extra['auth_required'], isTrue);
+        expect(
+          options.data,
+          equals(<String, dynamic>{
+            'app': 'STELLAVIA',
+            'deviceId': 'fcm-token-value',
+            'deviceType': 1,
+            'version': '1.2.3',
+          }),
+        );
+        return _jsonOk('{"code":200,"msg":"success","data":{}}');
       });
-      final api = PushDeviceRegistrationApiClient(dioForPath: (_) => dio);
+      final api = AuthApiClient(dioForPath: (_) => dio);
 
-      await api.registerDevice(
-        deviceId: 'another-token',
-        deviceType: 0,
-        version: '2.0.0',
+      await api.updateLoginDevice(
+        deviceId: 'fcm-token-value',
+        deviceType: 1,
+        version: '1.2.3',
       );
     });
 
-    test(
-      'registerDevice throws when envelope code indicates failure',
-      () async {
-        final dio = _buildDio((_) async {
-          return _jsonOk('{"code":500,"msg":"failed","data":null}');
-        });
-        final api = PushDeviceRegistrationApiClient(dioForPath: (_) => dio);
-
-        expect(
-          () => api.registerDevice(
-            deviceId: 'token-x',
-            deviceType: 0,
-            version: '1.0.0',
-          ),
-          throwsA(isA<StateError>()),
-        );
-      },
-    );
-
-    test('registerDevice skips request when deviceId is blank', () async {
+    test('updateLoginDevice skips request when deviceId is blank', () async {
       var called = false;
       final dio = _buildDio((_) async {
         called = true;
-        return _jsonOk('{"code":200,"msg":"success","data":{}}');
+        return _jsonOk();
       });
-      final api = PushDeviceRegistrationApiClient(dioForPath: (_) => dio);
+      final api = AuthApiClient(dioForPath: (_) => dio);
 
-      await api.registerDevice(
+      await api.updateLoginDevice(
         deviceId: '   ',
         deviceType: 0,
         version: '1.0.0',

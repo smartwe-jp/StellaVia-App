@@ -72,6 +72,51 @@ class AuthIdentityAuthStateStore implements IdentityAuthStateStore {
     }
   }
 
+  Future<void> syncRemoteSnapshot(IdentityAuthSnapshot snapshot) async {
+    final storageKey = await _resolveStorageKey();
+    if (storageKey == null) {
+      return;
+    }
+
+    final existing = await _readRawPayload(storageKey);
+    final preservedUpdatedAt = existing['updatedAt']?.toString().trim();
+    final payload = <String, dynamic>{
+      'realPersonVerified': snapshot.realPersonVerified,
+      'currentDeviceBiometricEnabled': snapshot.currentDeviceBiometricEnabled,
+      if (preservedUpdatedAt != null && preservedUpdatedAt.isNotEmpty)
+        'updatedAt': preservedUpdatedAt,
+    };
+
+    try {
+      await _largeDataStore.put<String>(storageKey, jsonEncode(payload));
+    } catch (_) {
+      // Keep auth flows available even when local snapshot write fails.
+    }
+  }
+
+  Future<DateTime?> readLastUpdatedAt() async {
+    final storageKey = await _resolveStorageKey();
+    if (storageKey == null) {
+      return null;
+    }
+
+    try {
+      final payload = await _readRawPayload(storageKey);
+      final rawUpdatedAt = payload['updatedAt']?.toString().trim() ?? '';
+      if (rawUpdatedAt.isEmpty) {
+        return null;
+      }
+      return DateTime.tryParse(rawUpdatedAt)?.toLocal();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>> _readRawPayload(String storageKey) async {
+    final raw = await _largeDataStore.get<dynamic>(storageKey);
+    return _toJsonMap(raw);
+  }
+
   Future<String?> _resolveStorageKey() async {
     final user = await _authLocalDataSource.readCurrentUser();
     if (user == null) {

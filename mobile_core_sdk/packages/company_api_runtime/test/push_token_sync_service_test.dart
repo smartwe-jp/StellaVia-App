@@ -1,34 +1,7 @@
 import 'dart:async';
 
 import 'package:company_api_runtime/company_api_runtime.dart';
-import 'package:core_network/core_network.dart';
 import 'package:test/test.dart';
-
-class _FakePushDeviceRegistrationApiClient
-    extends PushDeviceRegistrationApiClient {
-  _FakePushDeviceRegistrationApiClient({required this.onRegister})
-    : super(dioForPath: (_) => Dio());
-
-  final Future<void> Function({
-    required String deviceId,
-    required int deviceType,
-    required String version,
-  })
-  onRegister;
-
-  @override
-  Future<void> registerDevice({
-    required String deviceId,
-    required int deviceType,
-    required String version,
-  }) {
-    return onRegister(
-      deviceId: deviceId,
-      deviceType: deviceType,
-      version: version,
-    );
-  }
-}
 
 class _FakePushLogger extends PushTokenSyncLogger {
   final List<String> infos = <String>[];
@@ -62,20 +35,18 @@ void main() {
       final calls = <Map<String, Object?>>[];
       final logger = _FakePushLogger();
       final service = PushTokenSyncService(
-        apiClient: _FakePushDeviceRegistrationApiClient(
-          onRegister:
-              ({
-                required String deviceId,
-                required int deviceType,
-                required String version,
-              }) async {
-                calls.add(<String, Object?>{
-                  'deviceId': deviceId,
-                  'deviceType': deviceType,
-                  'version': version,
-                });
-              },
-        ),
+        registerDevice:
+            ({
+              required String deviceId,
+              required int deviceType,
+              required String version,
+            }) async {
+              calls.add(<String, Object?>{
+                'deviceId': deviceId,
+                'deviceType': deviceType,
+                'version': version,
+              });
+            },
         logger: logger,
         appVersionResolver: () async => '1.2.3',
         deviceTypeResolver: () => 1,
@@ -102,22 +73,20 @@ void main() {
       final logger = _FakePushLogger();
       final completer = Completer<void>();
       final service = PushTokenSyncService(
-        apiClient: _FakePushDeviceRegistrationApiClient(
-          onRegister:
-              ({
-                required String deviceId,
-                required int deviceType,
-                required String version,
-              }) async {
-                attempt += 1;
-                if (attempt == 1) {
-                  throw StateError('temporary failure');
-                }
-                if (!completer.isCompleted) {
-                  completer.complete();
-                }
-              },
-        ),
+        registerDevice:
+            ({
+              required String deviceId,
+              required int deviceType,
+              required String version,
+            }) async {
+              attempt += 1;
+              if (attempt == 1) {
+                throw StateError('temporary failure');
+              }
+              if (!completer.isCompleted) {
+                completer.complete();
+              }
+            },
         logger: logger,
         appVersionResolver: () async => '2.0.0',
         deviceTypeResolver: () => 0,

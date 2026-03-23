@@ -15,5 +15,4 @@ export 'src/member_profile/member_profile_api_client.dart';
 export 'src/member_profile/member_profile_region_dto.dart';
 export 'src/notice/notice_api_client.dart';
 export 'src/notice/notice_dtos.dart';
-export 'src/push/push_device_registration_api_client.dart';
 export 'src/push/push_token_sync_service.dart';

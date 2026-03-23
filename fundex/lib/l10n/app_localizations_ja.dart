@@ -931,6 +931,67 @@ class AppLocalizationsJa extends AppLocalizations {
   String get menuItemTwoFactor => '二段階認証';
 
   @override
+  String get settingsTwoFactorDescription => '重要な操作に備えて、電話番号認証と本人確認の状態を管理します。';
+
+  @override
+  String get settingsPhoneVerificationTitle => '電話番号認証';
+
+  @override
+  String get settingsFaceVerificationTitle => '本人確認';
+
+  @override
+  String get settingsVerificationStatusVerified => '認証済み';
+
+  @override
+  String get settingsVerificationStatusUnverified => '未認証';
+
+  @override
+  String get settingsVerificationPhoneLabel => '認証済み番号';
+
+  @override
+  String get settingsVerificationLastUpdatedLabel => '最終認証';
+
+  @override
+  String get settingsPhoneVerificationDescription =>
+      '登録済みの電話番号にワンタイムコードを送信して、この端末での認証状態を更新します。';
+
+  @override
+  String get settingsCurrentPhoneLabel => '現在の電話番号';
+
+  @override
+  String get settingsPhoneUnavailable => '電話番号が未登録です。';
+
+  @override
+  String get settingsPhoneVerificationPhoneMissing => '先に会員情報から電話番号を登録してください。';
+
+  @override
+  String get settingsPhoneAutoFillHint =>
+      'SMSに含まれる認証コードは、対応端末では自動入力候補として表示されます。';
+
+  @override
+  String get settingsPhoneVerifyAction => '電話番号を認証';
+
+  @override
+  String get settingsPhoneCodeRequired => '認証コードを入力してください。';
+
+  @override
+  String get settingsPhoneCodeSent => '認証コードを送信しました。';
+
+  @override
+  String get settingsPhoneVerificationSuccess => '電話番号認証が完了しました。';
+
+  @override
+  String get settingsFaceVerificationDescription =>
+      '書類または自撮り写真をアップロードすると、そのまま顔認証を開始します。';
+
+  @override
+  String get settingsFaceVerificationUploadTitle => '書類と自撮り写真のアップロード';
+
+  @override
+  String get settingsFaceVerificationUploadDescription =>
+      'いずれかのアップロード完了後に、自動で顔認証が起動します。必要に応じて再実行もできます。';
+
+  @override
   String get menuItemAnnualReport => '年間取引報告書';
 
   @override

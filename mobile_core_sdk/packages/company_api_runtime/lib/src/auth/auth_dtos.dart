@@ -91,6 +91,75 @@ class AuthUserDto with _$AuthUserDto {
   }
 }
 
+class AuthMemberLoginIndexDto {
+  const AuthMemberLoginIndexDto({
+    required this.currentDeviceVerificationStatus,
+    required this.email,
+    required this.emailAccept,
+    required this.emailAuth,
+    required this.infoReceiveStatus,
+    required this.legalPersonStatus,
+    required this.memberLevel,
+    required this.mobileAuth,
+    required this.ownerId,
+    required this.ownerName,
+    required this.verificationStatus,
+  });
+
+  factory AuthMemberLoginIndexDto.fromJson(Map<String, dynamic> json) {
+    return AuthMemberLoginIndexDto(
+      currentDeviceVerificationStatus: json['currentDeviceVerificationStatus'],
+      email: _normalizedOptionalString(json['email']),
+      emailAccept: json['emailAccept'],
+      emailAuth: json['emailAuth'],
+      infoReceiveStatus: _intOrNull(json['infoReceiveStatus']),
+      legalPersonStatus: json['legalPersonStatus'],
+      memberLevel: _intOrNull(json['memberLevel']),
+      mobileAuth: json['mobileAuth'],
+      ownerId: _intOrNull(json['ownerId']),
+      ownerName: _normalizedOptionalString(json['ownerName']),
+      verificationStatus: json['verificationStatus'],
+    );
+  }
+
+  final Object? currentDeviceVerificationStatus;
+  final String? email;
+  final Object? emailAccept;
+  final Object? emailAuth;
+  final int? infoReceiveStatus;
+  final Object? legalPersonStatus;
+  final int? memberLevel;
+  final Object? mobileAuth;
+  final int? ownerId;
+  final String? ownerName;
+  final Object? verificationStatus;
+
+  bool get isPhoneVerified => _isVerifiedFlag(mobileAuth);
+  bool get isRealPersonVerified => _isVerifiedFlag(verificationStatus);
+  bool get isCurrentDeviceVerified =>
+      _isVerifiedFlag(currentDeviceVerificationStatus);
+
+  static bool _isVerifiedFlag(Object? value) {
+    if (value == null) {
+      return false;
+    }
+    if (value is bool) {
+      return value;
+    }
+    if (value is num) {
+      return value.toInt() == 1;
+    }
+    final normalized = value.toString().trim().toLowerCase();
+    if (normalized.isEmpty) {
+      return false;
+    }
+    if (normalized == 'true') {
+      return true;
+    }
+    return int.tryParse(normalized) == 1;
+  }
+}
+
 @freezed
 class AuthLoginResultDto with _$AuthLoginResultDto {
   const factory AuthLoginResultDto({

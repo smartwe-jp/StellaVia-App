@@ -165,6 +165,7 @@ class VerificationCodeField extends StatelessWidget {
     this.inputKey,
     this.sendButtonKey,
     this.buttonWidth = 126,
+    this.autofillHints = const <String>[AutofillHints.oneTimeCode],
   });
 
   final TextEditingController controller;
@@ -178,6 +179,7 @@ class VerificationCodeField extends StatelessWidget {
   final Key? inputKey;
   final Key? sendButtonKey;
   final double buttonWidth;
+  final Iterable<String> autofillHints;
 
   @override
   Widget build(BuildContext context) {
@@ -199,6 +201,7 @@ class VerificationCodeField extends StatelessWidget {
                 enabled: enabled,
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.done,
+                autofillHints: autofillHints,
                 leadingIcon: Icons.sms_outlined,
                 onChanged: onChanged,
               ),

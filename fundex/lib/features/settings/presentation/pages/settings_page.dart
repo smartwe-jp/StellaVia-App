@@ -7,7 +7,6 @@ import '../../../../app/localization/app_locale_providers.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/theme/app_theme_mode_providers.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
-import '../../../auth/presentation/providers/identity_auth_sdk_providers.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -128,7 +127,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final appText = theme.appTextTheme;
     final currentThemePreference = ref.watch(appThemePreferenceProvider);
     final currentLanguage = ref.watch(appLanguageProvider);
-    final isIdentityAuthEnabled = ref.watch(identityAuthFeatureEnabledProvider);
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -186,9 +184,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   alpha: 0.16,
                 ),
                 iconForegroundColor: colors.communitySecondary,
-                onTap: () => isIdentityAuthEnabled
-                    ? context.push('/auth/real-person')
-                    : _showComingSoon(l10n.menuItemTwoFactor),
+                onTap: () => context.push('/profile/settings/two-factor'),
               ),
             ],
           ),

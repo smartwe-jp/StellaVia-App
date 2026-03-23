@@ -926,6 +926,65 @@ class AppLocalizationsZh extends AppLocalizations {
   String get menuItemTwoFactor => '双重认证';
 
   @override
+  String get settingsTwoFactorDescription => '用于管理手机号认证与人脸认证状态，保护高敏感操作。';
+
+  @override
+  String get settingsPhoneVerificationTitle => '手机号认证';
+
+  @override
+  String get settingsFaceVerificationTitle => '人脸认证';
+
+  @override
+  String get settingsVerificationStatusVerified => '已认证';
+
+  @override
+  String get settingsVerificationStatusUnverified => '未认证';
+
+  @override
+  String get settingsVerificationPhoneLabel => '已认证号码';
+
+  @override
+  String get settingsVerificationLastUpdatedLabel => '最近认证';
+
+  @override
+  String get settingsPhoneVerificationDescription =>
+      '向当前已登记手机号发送一次性验证码，并在本设备更新认证状态。';
+
+  @override
+  String get settingsCurrentPhoneLabel => '当前手机号';
+
+  @override
+  String get settingsPhoneUnavailable => '尚未登记手机号。';
+
+  @override
+  String get settingsPhoneVerificationPhoneMissing => '请先到会员资料中登记手机号。';
+
+  @override
+  String get settingsPhoneAutoFillHint => '在支持的设备上，短信验证码会作为自动填充候选显示。';
+
+  @override
+  String get settingsPhoneVerifyAction => '认证手机号';
+
+  @override
+  String get settingsPhoneCodeRequired => '请先输入验证码。';
+
+  @override
+  String get settingsPhoneCodeSent => '验证码已发送。';
+
+  @override
+  String get settingsPhoneVerificationSuccess => '手机号认证完成。';
+
+  @override
+  String get settingsFaceVerificationDescription => '上传证件照片或自拍后，会自动启动人脸识别。';
+
+  @override
+  String get settingsFaceVerificationUploadTitle => '上传证件或自拍';
+
+  @override
+  String get settingsFaceVerificationUploadDescription =>
+      '上传完成后会自动打开人脸识别，也可以在本页手动再次执行。';
+
+  @override
   String get menuItemAnnualReport => '年度交易报告书';
 
   @override
@@ -3878,6 +3937,65 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get menuItemTwoFactor => '雙重驗證';
+
+  @override
+  String get settingsTwoFactorDescription => '用於管理手機號碼驗證與人臉驗證狀態，保護高敏感操作。';
+
+  @override
+  String get settingsPhoneVerificationTitle => '手機號碼驗證';
+
+  @override
+  String get settingsFaceVerificationTitle => '人臉驗證';
+
+  @override
+  String get settingsVerificationStatusVerified => '已驗證';
+
+  @override
+  String get settingsVerificationStatusUnverified => '未驗證';
+
+  @override
+  String get settingsVerificationPhoneLabel => '已驗證號碼';
+
+  @override
+  String get settingsVerificationLastUpdatedLabel => '最近驗證';
+
+  @override
+  String get settingsPhoneVerificationDescription =>
+      '向目前已登記的手機號碼發送一次性驗證碼，並在本裝置更新驗證狀態。';
+
+  @override
+  String get settingsCurrentPhoneLabel => '目前手機號碼';
+
+  @override
+  String get settingsPhoneUnavailable => '尚未登記手機號碼。';
+
+  @override
+  String get settingsPhoneVerificationPhoneMissing => '請先到會員資料中登記手機號碼。';
+
+  @override
+  String get settingsPhoneAutoFillHint => '在支援的裝置上，簡訊驗證碼會作為自動填寫候選顯示。';
+
+  @override
+  String get settingsPhoneVerifyAction => '驗證手機號碼';
+
+  @override
+  String get settingsPhoneCodeRequired => '請先輸入驗證碼。';
+
+  @override
+  String get settingsPhoneCodeSent => '驗證碼已發送。';
+
+  @override
+  String get settingsPhoneVerificationSuccess => '手機號碼驗證完成。';
+
+  @override
+  String get settingsFaceVerificationDescription => '上傳證件照片或自拍後，會自動啟動人臉辨識。';
+
+  @override
+  String get settingsFaceVerificationUploadTitle => '上傳證件或自拍';
+
+  @override
+  String get settingsFaceVerificationUploadDescription =>
+      '上傳完成後會自動開啟人臉辨識，也可以在本頁手動再次執行。';
 
   @override
   String get menuItemAnnualReport => '年度交易報告';

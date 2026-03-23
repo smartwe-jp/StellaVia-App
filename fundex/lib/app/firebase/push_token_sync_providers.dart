@@ -9,16 +9,25 @@ import '../observability/app_observability_providers.dart';
 import '../push/app_push_runtime_provider.dart';
 import 'push_token_sync_adapters.dart';
 
-final pushDeviceRegistrationApiClientProvider =
-    Provider<PushDeviceRegistrationApiClient>((ref) {
-      final router = ref.watch(apiClusterRouterProvider);
-      return PushDeviceRegistrationApiClient(dioForPath: router.dioForPath);
-    });
+final pushAuthApiClientProvider = Provider<AuthApiClient>((ref) {
+  final router = ref.watch(apiClusterRouterProvider);
+  return AuthApiClient(dioForPath: router.dioForPath);
+});
 
 final pushTokenSyncServiceProvider = Provider<PushTokenSyncService>((ref) {
   final pushRuntime = ref.watch(appPushRuntimeProvider);
+  final authApiClient = ref.watch(pushAuthApiClientProvider);
   final service = PushTokenSyncService(
-    apiClient: ref.watch(pushDeviceRegistrationApiClientProvider),
+    registerDevice:
+        ({
+          required String deviceId,
+          required int deviceType,
+          required String version,
+        }) => authApiClient.updateLoginDevice(
+          deviceId: deviceId,
+          deviceType: deviceType,
+          version: version,
+        ),
     logger: AppPushTokenSyncLogger(
       ref.watch(appLoggerProvider),
       providerName: pushRuntime.providerName,

@@ -983,6 +983,70 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemTwoFactor => 'Two-factor authentication';
 
   @override
+  String get settingsTwoFactorDescription =>
+      'Manage phone verification and real-person verification status for sensitive actions.';
+
+  @override
+  String get settingsPhoneVerificationTitle => 'Phone verification';
+
+  @override
+  String get settingsFaceVerificationTitle => 'Face verification';
+
+  @override
+  String get settingsVerificationStatusVerified => 'Verified';
+
+  @override
+  String get settingsVerificationStatusUnverified => 'Not verified';
+
+  @override
+  String get settingsVerificationPhoneLabel => 'Verified number';
+
+  @override
+  String get settingsVerificationLastUpdatedLabel => 'Last verified';
+
+  @override
+  String get settingsPhoneVerificationDescription =>
+      'Send a one-time code to your registered phone number and update verification status on this device.';
+
+  @override
+  String get settingsCurrentPhoneLabel => 'Current phone number';
+
+  @override
+  String get settingsPhoneUnavailable => 'No phone number registered.';
+
+  @override
+  String get settingsPhoneVerificationPhoneMissing =>
+      'Register a phone number in your member profile first.';
+
+  @override
+  String get settingsPhoneAutoFillHint =>
+      'On supported devices, the SMS verification code can appear as an autofill suggestion.';
+
+  @override
+  String get settingsPhoneVerifyAction => 'Verify phone number';
+
+  @override
+  String get settingsPhoneCodeRequired => 'Enter the verification code first.';
+
+  @override
+  String get settingsPhoneCodeSent => 'Verification code sent.';
+
+  @override
+  String get settingsPhoneVerificationSuccess =>
+      'Phone verification completed.';
+
+  @override
+  String get settingsFaceVerificationDescription =>
+      'After uploading a document photo or selfie, face verification will start automatically.';
+
+  @override
+  String get settingsFaceVerificationUploadTitle => 'Upload document or selfie';
+
+  @override
+  String get settingsFaceVerificationUploadDescription =>
+      'Face verification starts automatically after an upload finishes. You can also retry it manually.';
+
+  @override
   String get menuItemAnnualReport => 'Annual transaction report';
 
   @override

@@ -37,6 +37,9 @@ import '../../features/member_profile/presentation/support/mypage_secondary_mark
 import '../../features/member_profile/presentation/support/mypage_section_support.dart';
 import '../../features/member_profile/presentation/support/member_profile_edit_step.dart';
 import '../../features/settings/presentation/pages/settings_page.dart';
+import '../../features/settings/presentation/pages/settings_face_verification_page.dart';
+import '../../features/settings/presentation/pages/settings_phone_verification_page.dart';
+import '../../features/settings/presentation/pages/settings_two_factor_page.dart';
 import '../../features/wallet/presentation/pages/deposit_page.dart';
 import '../../features/wallet/presentation/pages/withdraw_page.dart';
 import '../../features/wallet/presentation/pages/wallet_bank_account_add_page.dart';
@@ -296,6 +299,30 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     builder: (BuildContext context, GoRouterState state) {
                       return const SettingsPage();
                     },
+                    routes: <RouteBase>[
+                      GoRoute(
+                        path: 'two-factor',
+                        builder: (BuildContext context, GoRouterState state) {
+                          return const SettingsTwoFactorPage();
+                        },
+                        routes: <RouteBase>[
+                          GoRoute(
+                            path: 'phone',
+                            builder:
+                                (BuildContext context, GoRouterState state) {
+                                  return const SettingsPhoneVerificationPage();
+                                },
+                          ),
+                          GoRoute(
+                            path: 'face',
+                            builder:
+                                (BuildContext context, GoRouterState state) {
+                                  return const SettingsFaceVerificationPage();
+                                },
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                   GoRoute(
                     path: 'notifications',
