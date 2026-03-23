@@ -999,6 +999,9 @@ class AppLocalizationsJa extends AppLocalizations {
       '正面を向いて、顔全体がはっきり写るように撮影してください。';
 
   @override
+  String get settingsFaceVerificationReverifyAction => '再認証';
+
+  @override
   String get menuItemAnnualReport => '年間取引報告書';
 
   @override

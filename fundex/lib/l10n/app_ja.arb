@@ -353,6 +353,7 @@
   "settingsFaceVerificationUploadDescription": "本人確認用の自撮り写真をアップロードすると、自動で顔認証を開始します。必要に応じて再実行もできます。",
   "settingsFaceVerificationSelfieTitle": "本人確認用の自撮り写真",
   "settingsFaceVerificationSelfieDescription": "正面を向いて、顔全体がはっきり写るように撮影してください。",
+  "settingsFaceVerificationReverifyAction": "再認証",
   "menuItemAnnualReport": "年間取引報告書",
   "menuItemContractList": "契約書面一覧",
   "menuItemMyNumber": "マイナンバー管理",

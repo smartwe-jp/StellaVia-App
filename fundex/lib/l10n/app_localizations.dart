@@ -2033,6 +2033,12 @@ abstract class AppLocalizations {
   /// **'Face the camera directly and make sure your full face is clearly visible.'**
   String get settingsFaceVerificationSelfieDescription;
 
+  /// No description provided for @settingsFaceVerificationReverifyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify again'**
+  String get settingsFaceVerificationReverifyAction;
+
   /// No description provided for @menuItemAnnualReport.
   ///
   /// In en, this message translates to:

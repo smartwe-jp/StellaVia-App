@@ -547,12 +547,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/member-profile/onboarding',
         builder: (BuildContext context, GoRouterState state) {
-          final query = state.uri.queryParameters;
-          return MemberProfileIntakePage.onboarding(
-            nextRoute: query['next'],
-            seedPhone: query['phone'],
-            seedEmail: query['email'],
-          );
+          return const MemberProfileEditFlowPage();
         },
       ),
       GoRoute(

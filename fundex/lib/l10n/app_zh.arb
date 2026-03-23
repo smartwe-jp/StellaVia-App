@@ -353,6 +353,7 @@
   "settingsFaceVerificationUploadDescription": "上传用于本人确认的自拍照后，会自动启动人脸识别，也可以在本页手动再次执行。",
   "settingsFaceVerificationSelfieTitle": "本人确认自拍照",
   "settingsFaceVerificationSelfieDescription": "请正对镜头拍摄，并确保完整面部清晰可见。",
+  "settingsFaceVerificationReverifyAction": "重新认证",
   "menuItemAnnualReport": "年度交易报告书",
   "menuItemContractList": "合同文档列表",
   "menuItemMyNumber": "My Number 管理",

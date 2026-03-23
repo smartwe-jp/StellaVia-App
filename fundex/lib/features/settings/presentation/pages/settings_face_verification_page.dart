@@ -27,6 +27,7 @@ class _SettingsFaceVerificationPageState
   bool _isUploadingPhoto = false;
   bool _isRunningVerification = false;
   bool _isVerified = false;
+  bool _isReverificationMode = false;
 
   bool _isSelfieUploaded(String? path) {
     final normalized = path?.trim() ?? '';
@@ -94,12 +95,11 @@ class _SettingsFaceVerificationPageState
       setState(() {
         _selfiePhotoPath = uploadedUrl.trim();
       });
-      ref.invalidate(memberProfileDetailsProvider);
       AppNotice.show(
         context,
         message: context.l10n.memberProfilePhotoUploadSuccess,
       );
-      await _startVerification();
+      await _startVerification(forceLiveness: true);
     } catch (error) {
       if (!mounted) {
         return;
@@ -111,7 +111,7 @@ class _SettingsFaceVerificationPageState
         context,
         message: context.l10n.memberProfileSelfieUploadBypassedNotice,
       );
-      await _startVerification();
+      await _startVerification(forceLiveness: true);
       return;
     } finally {
       if (mounted) {
@@ -122,7 +122,7 @@ class _SettingsFaceVerificationPageState
     }
   }
 
-  Future<void> _startVerification() async {
+  Future<void> _startVerification({bool forceLiveness = false}) async {
     if (_isRunningVerification) {
       return;
     }
@@ -134,26 +134,29 @@ class _SettingsFaceVerificationPageState
     });
 
     try {
-      final coordinator = ref.read(identityAuthCoordinatorProvider);
-      final decision = await coordinator.evaluate(
-        entryPoint: IdentityAuthEntryPoint.securityCenterRealPerson,
-      );
-      if (!mounted) {
-        return;
-      }
-
-      if (decision.action == IdentityAuthAction.none) {
-        setState(() {
-          _isVerified = true;
-        });
-        ref.invalidate(settingsRemoteVerificationStatusProvider);
-        ref.invalidate(settingsRealPersonVerifiedProvider);
-        ref.invalidate(settingsRealPersonVerificationUpdatedAtProvider);
-        AppNotice.show(context, message: l10n.identityAuthAlreadyVerified);
-        return;
-      }
-
       final collector = ref.read(identityAuthLivenessCollectorProvider);
+      final coordinator = ref.read(identityAuthCoordinatorProvider);
+      if (!forceLiveness) {
+        final decision = await coordinator.evaluate(
+          entryPoint: IdentityAuthEntryPoint.securityCenterRealPerson,
+        );
+        if (!mounted) {
+          return;
+        }
+
+        if (decision.action == IdentityAuthAction.none) {
+          setState(() {
+            _isVerified = true;
+            _isReverificationMode = false;
+          });
+          ref.invalidate(settingsRemoteVerificationStatusProvider);
+          ref.invalidate(settingsRealPersonVerifiedProvider);
+          ref.invalidate(settingsRealPersonVerificationUpdatedAtProvider);
+          AppNotice.show(context, message: l10n.identityAuthAlreadyVerified);
+          return;
+        }
+      }
+
       if (collector == null) {
         final message = resolveIdentityAuthMessage(
           l10n,
@@ -195,6 +198,7 @@ class _SettingsFaceVerificationPageState
       if (result.verified) {
         setState(() {
           _isVerified = true;
+          _isReverificationMode = false;
         });
         ref.invalidate(settingsRemoteVerificationStatusProvider);
         ref.invalidate(settingsRealPersonVerifiedProvider);
@@ -241,14 +245,13 @@ class _SettingsFaceVerificationPageState
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final l10n = context.l10n;
-    final profileAsync = ref.watch(memberProfileDetailsProvider);
     final verifiedAsync = ref.watch(settingsRealPersonVerifiedProvider);
-
-    final profile = profileAsync.asData?.value;
-    final selfieUploaded =
-        _isSelfieUploaded(_selfiePhotoPath) ||
-        _isSelfieUploaded(profile?.selfiePhotoPath);
+    final selfieUploaded = _isSelfieUploaded(_selfiePhotoPath);
     final verified = _isVerified || (verifiedAsync.asData?.value == true);
+    final showUploadSection = !verified || _isReverificationMode;
+    final ctaLabel = verified && !_isReverificationMode
+        ? l10n.settingsFaceVerificationReverifyAction
+        : l10n.identityAuthStartAction;
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -316,44 +319,46 @@ class _SettingsFaceVerificationPageState
               ],
             ),
           ),
-          const SizedBox(height: 18),
-          Container(
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              color: colors.surface,
-              borderRadius: BorderRadius.circular(UiTokens.radius16),
-              border: Border.all(color: colors.border),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  l10n.settingsFaceVerificationUploadTitle,
-                  style: appText.sectionTitle.copyWith(
-                    color: colors.textPrimary,
+          if (showUploadSection) ...<Widget>[
+            const SizedBox(height: 18),
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: BoxDecoration(
+                color: colors.surface,
+                borderRadius: BorderRadius.circular(UiTokens.radius16),
+                border: Border.all(color: colors.border),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    l10n.settingsFaceVerificationUploadTitle,
+                    style: appText.sectionTitle.copyWith(
+                      color: colors.textPrimary,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  l10n.settingsFaceVerificationUploadDescription,
-                  style: appText.body.copyWith(
-                    color: colors.textSecondary,
-                    height: 1.55,
+                  const SizedBox(height: 8),
+                  Text(
+                    l10n.settingsFaceVerificationUploadDescription,
+                    style: appText.body.copyWith(
+                      color: colors.textSecondary,
+                      height: 1.55,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                MemberProfileUploadTile(
-                  icon: Icons.person_outline_rounded,
-                  title: l10n.settingsFaceVerificationSelfieTitle,
-                  description: l10n.settingsFaceVerificationSelfieDescription,
-                  isCompleted: selfieUploaded,
-                  onTap: (_isUploadingPhoto || _isRunningVerification)
-                      ? null
-                      : _pickAndUploadSelfie,
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  MemberProfileUploadTile(
+                    icon: Icons.person_outline_rounded,
+                    title: l10n.settingsFaceVerificationSelfieTitle,
+                    description: l10n.settingsFaceVerificationSelfieDescription,
+                    isCompleted: selfieUploaded,
+                    onTap: (_isUploadingPhoto || _isRunningVerification)
+                        ? null
+                        : _pickAndUploadSelfie,
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
           if (_statusMessage != null) ...<Widget>[
             const SizedBox(height: 16),
             Container(
@@ -378,10 +383,19 @@ class _SettingsFaceVerificationPageState
           ],
           const SizedBox(height: 20),
           PrimaryCtaButton(
-            label: l10n.identityAuthStartAction,
+            label: ctaLabel,
             onPressed: _isUploadingPhoto || _isRunningVerification
                 ? null
-                : _startVerification,
+                : () {
+                    if (verified && !_isReverificationMode) {
+                      setState(() {
+                        _isReverificationMode = true;
+                        _statusMessage = null;
+                      });
+                      return;
+                    }
+                    _startVerification(forceLiveness: _isReverificationMode);
+                  },
             isLoading: _isRunningVerification,
           ),
         ],

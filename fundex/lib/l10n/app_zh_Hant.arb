@@ -353,6 +353,7 @@
   "settingsFaceVerificationUploadDescription": "上傳用於本人確認的自拍照後，會自動啟動人臉辨識，也可以在本頁手動再次執行。",
   "settingsFaceVerificationSelfieTitle": "本人確認自拍照",
   "settingsFaceVerificationSelfieDescription": "請正對鏡頭拍攝，並確保完整臉部清晰可見。",
+  "settingsFaceVerificationReverifyAction": "重新驗證",
   "menuItemAnnualReport": "年度交易報告",
   "menuItemContractList": "契約書面一覽",
   "menuItemMyNumber": "My Number 管理",

@@ -353,6 +353,7 @@
   "settingsFaceVerificationUploadDescription": "Upload a selfie for identity verification and face verification will start automatically. You can also retry it manually.",
   "settingsFaceVerificationSelfieTitle": "Selfie for identity verification",
   "settingsFaceVerificationSelfieDescription": "Face the camera directly and make sure your full face is clearly visible.",
+  "settingsFaceVerificationReverifyAction": "Verify again",
   "menuItemAnnualReport": "Annual transaction report",
   "menuItemContractList": "Contract document list",
   "menuItemMyNumber": "My Number management",

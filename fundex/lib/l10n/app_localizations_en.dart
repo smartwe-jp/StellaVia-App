@@ -1055,6 +1055,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Face the camera directly and make sure your full face is clearly visible.';
 
   @override
+  String get settingsFaceVerificationReverifyAction => 'Verify again';
+
+  @override
   String get menuItemAnnualReport => 'Annual transaction report';
 
   @override

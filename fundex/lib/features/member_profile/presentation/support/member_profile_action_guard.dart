@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../providers/member_profile_providers.dart';
+import 'member_profile_edit_step.dart';
 
 class MemberProfileActionGuard {
   const MemberProfileActionGuard(this._ref);
@@ -52,7 +53,9 @@ class MemberProfileActionGuard {
     }
 
     if (result == true) {
-      context.push('/member-profile/edit');
+      context.push(
+        '/member-profile/onboarding',
+      );
     }
     return false;
   }

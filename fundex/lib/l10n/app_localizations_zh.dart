@@ -993,6 +993,9 @@ class AppLocalizationsZh extends AppLocalizations {
       '请正对镜头拍摄，并确保完整面部清晰可见。';
 
   @override
+  String get settingsFaceVerificationReverifyAction => '重新认证';
+
+  @override
   String get menuItemAnnualReport => '年度交易报告书';
 
   @override
@@ -4012,6 +4015,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String get settingsFaceVerificationSelfieDescription =>
       '請正對鏡頭拍攝，並確保完整臉部清晰可見。';
+
+  @override
+  String get settingsFaceVerificationReverifyAction => '重新驗證';
 
   @override
   String get menuItemAnnualReport => '年度交易報告';
