@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 
@@ -82,9 +83,16 @@ class _SecondaryMarketMarketplacePageState
     });
 
     try {
+      final isAuthenticated =
+          ref.read(isAuthenticatedProvider).asData?.value ?? false;
       final records = await ref
           .read(fetchMyPageOrderInquiryListUseCaseProvider)
-          .call(startPage: _nextPage, limit: _pageSize, status: 'VALID');
+          .call(
+            startPage: _nextPage,
+            limit: _pageSize,
+            status: 'VALID',
+            publicAccess: !isAuthenticated,
+          );
       final existingIds = _records.map((item) => item.id).toSet();
       _records.addAll(
         records.where((item) => !existingIds.contains(item.id)).toList(),

@@ -5,7 +5,6 @@ import '../datasources/discussion_board_remote_data_source.dart';
 import '../models/discussion_comment_dto.dart';
 import '../../domain/entities/discussion_board_models.dart';
 import '../../domain/repositories/discussion_board_repository.dart';
-import '../../presentation/support/discussion_board_mock_seed.dart';
 
 class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
   DiscussionBoardRepositoryImpl({
@@ -37,15 +36,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
       if (cached.isNotEmpty) {
         return cached;
       }
-
-      if (projectId != null) {
-        return const <DiscussionThread>[];
-      }
-
-      final seeded = buildDiscussionBoardMockSeed();
-      await _local.saveThreads(seeded);
-      final persisted = await _local.readThreads();
-      return persisted.isNotEmpty ? persisted : seeded;
+      return const <DiscussionThread>[];
     }
   }
 

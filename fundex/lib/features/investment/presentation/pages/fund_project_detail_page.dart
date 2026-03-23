@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../domain/entities/fund_project.dart';
 import '../providers/fund_project_favorite_providers.dart';
 import '../providers/fund_project_providers.dart';
@@ -30,7 +31,14 @@ class FundProjectDetailPage extends ConsumerStatefulWidget {
 class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
   int _selectedDetailTabIndex = 0;
 
-  void _handleLotteryApplyTap(String projectId) {
+  void _handleLotteryApplyTap(
+    String projectId, {
+    required bool isAuthenticated,
+  }) {
+    if (!isAuthenticated) {
+      context.push('/login');
+      return;
+    }
     context.push('/funds/$projectId/lottery-apply');
   }
 
@@ -62,6 +70,8 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final detailAsync = ref.watch(fundProjectDetailProvider(projectId));
+    final isAuthenticated =
+        ref.watch(isAuthenticatedProvider).asData?.value ?? false;
     final favoriteProjectIds = ref.watch(
       fundProjectFavoritesControllerProvider,
     );
@@ -124,7 +134,10 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
           actionBar: FundDetailStickyActionBar(
             label: viewData.actionLabel,
             enabled: viewData.actionEnabled,
-            onTap: () => _handleLotteryApplyTap(projectId),
+            onTap: () => _handleLotteryApplyTap(
+              projectId,
+              isAuthenticated: isAuthenticated,
+            ),
           ),
           body: ListView(
             padding: EdgeInsets.zero,
@@ -362,14 +375,16 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                         ),
                       ),
                     ],
-                    const SizedBox(height: 18),
-                    FundDetailSection(
-                      title: context.l10n.fundDetailCommentsTitle,
-                      child: FundProjectDetailCommentsSection(
-                        projectId: discussionProjectId,
-                        onViewMoreTap: () => context.go('/discussion-board'),
+                    if (isAuthenticated) ...<Widget>[
+                      const SizedBox(height: 18),
+                      FundDetailSection(
+                        title: context.l10n.fundDetailCommentsTitle,
+                        child: FundProjectDetailCommentsSection(
+                          projectId: discussionProjectId,
+                          onViewMoreTap: () => context.go('/discussion-board'),
+                        ),
                       ),
-                    ),
+                    ],
                     const SizedBox(height: 86),
                   ],
                 ),

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../support/secondary_market_marketplace_presenter.dart';
@@ -33,6 +34,8 @@ class SecondaryMarketMarketplaceDetailPage extends ConsumerWidget {
       decimalDigits: 0,
     );
     final asyncMarketplace = ref.watch(secondaryMarketMarketplaceListProvider);
+    final isAuthenticated =
+        ref.watch(isAuthenticatedProvider).asData?.value ?? false;
     final record = initialRecord ?? _findRecord(asyncMarketplace.asData?.value);
 
     return Scaffold(
@@ -52,10 +55,16 @@ class SecondaryMarketMarketplaceDetailPage extends ConsumerWidget {
                 child: PrimaryCtaButton(
                   label: l10n.secondaryMarketBuyAction,
                   onPressed: canBuySecondaryMarketRecord(record)
-                      ? () => context.push(
-                          '/free-market/${record.id}/buy',
-                          extra: buildSecondaryMarketBuySeed(record),
-                        )
+                      ? () {
+                          if (!isAuthenticated) {
+                            context.push('/login');
+                            return;
+                          }
+                          context.push(
+                            '/free-market/${record.id}/buy',
+                            extra: buildSecondaryMarketBuySeed(record),
+                          );
+                        }
                       : null,
                   backgroundColor: colors.primary,
                   shadowColor: colors.primary.withValues(alpha: 0.45),

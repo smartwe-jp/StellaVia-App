@@ -11,12 +11,14 @@ class FetchMyPageOrderInquiryListUseCase {
     String? status,
     int startPage = 1,
     int limit = 20,
+    bool publicAccess = false,
   }) {
     return _repository.fetchOrderInquiryList(
       userId: userId,
       status: status,
       startPage: startPage,
       limit: limit,
+      publicAccess: publicAccess,
     );
   }
 }

@@ -35,12 +35,14 @@ class MyPageRepositoryImpl implements MyPageRepository {
     String? status,
     int startPage = 1,
     int limit = 20,
+    bool publicAccess = false,
   }) async {
     final dtos = await _remote.fetchOrderInquiryList(
       userId: userId,
       status: status,
       startPage: startPage,
       limit: limit,
+      publicAccess: publicAccess,
     );
     return dtos.map((dto) => dto.toEntity()).toList(growable: false);
   }

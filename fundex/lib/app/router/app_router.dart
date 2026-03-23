@@ -56,9 +56,10 @@ String? resolveAuthRedirect({
 }) {
   final isGuestAccessibleRoute =
       location == '/home' ||
+      location == '/home/free-market' ||
+      location.startsWith('/home/free-market/') ||
       location == '/funds' ||
-      location.startsWith('/funds/') ||
-      location == '/discussion-board';
+      location.startsWith('/funds/');
   final isSplash = location == '/splash';
   final isLogin =
       location == '/login' ||
@@ -540,9 +541,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               final step =
                   memberProfileEditStepFromRouteValue(rawStep) ??
                   MemberProfileEditStep.basicInfo;
-              return MemberProfileEditFlowPage.section(
-                initialStep: step,
-              );
+              return MemberProfileEditFlowPage.section(initialStep: step);
             },
           ),
         ],

@@ -122,12 +122,14 @@ final secondaryMarketMarketplaceListProvider =
     FutureProvider.autoDispose<List<MyPageOrderInquiryRecord>>((ref) async {
       final isAuthenticated =
           ref.watch(isAuthenticatedProvider).asData?.value ?? false;
-      if (!isAuthenticated) {
-        return const <MyPageOrderInquiryRecord>[];
-      }
       return ref
           .watch(fetchMyPageOrderInquiryListUseCaseProvider)
-          .call(startPage: 1, limit: 20, status: 'VALID');
+          .call(
+            startPage: 1,
+            limit: 20,
+            status: 'VALID',
+            publicAccess: !isAuthenticated,
+          );
     });
 
 final myPageInvestmentListProvider =

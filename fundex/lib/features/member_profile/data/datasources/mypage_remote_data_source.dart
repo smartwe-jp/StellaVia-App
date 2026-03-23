@@ -17,6 +17,7 @@ abstract class MyPageRemoteDataSource {
     String? status,
     int startPage = 1,
     int limit = 20,
+    bool publicAccess = false,
   });
 
   Future<List<MyPageInvestmentRecordDto>> fetchInvestmentList({
@@ -95,12 +96,14 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
     String? status,
     int startPage = 1,
     int limit = 20,
+    bool publicAccess = false,
   }) async {
     return _apiClient.fetchOrderInquiryList(
       userId: userId,
       status: status,
       startPage: startPage,
       limit: limit,
+      publicAccess: publicAccess,
     );
   }
 

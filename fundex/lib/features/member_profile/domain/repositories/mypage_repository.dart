@@ -14,6 +14,7 @@ abstract class MyPageRepository {
     String? status,
     int startPage = 1,
     int limit = 20,
+    bool publicAccess = false,
   });
 
   Future<List<MyPageInvestmentRecord>> fetchInvestmentList({

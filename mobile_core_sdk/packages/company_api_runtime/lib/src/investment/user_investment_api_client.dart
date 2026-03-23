@@ -12,6 +12,8 @@ class UserInvestmentApiPaths {
   static const String apply = '/crowdfunding/user/apply';
   static const String applyList = '/crowdfunding/user/apply/list';
   static const String orderInquiryPage = '/crowdfunding/secondary/market/page';
+  static const String offlineOrderInquiryPage =
+      '/crowdfunding/offline/secondary/market/page';
   static const String myInvestmentList = '/crowdfunding/user/invest/list';
   static const String benefitProject = '/crowdfunding/benefit/project';
   static const String benefitWithdrawal = '/crowdfunding/benefit/withdrawal';
@@ -30,6 +32,8 @@ class UserInvestmentApiClient {
     this.applyPath = UserInvestmentApiPaths.apply,
     this.applyListPath = UserInvestmentApiPaths.applyList,
     this.orderInquiryPagePath = UserInvestmentApiPaths.orderInquiryPage,
+    this.offlineOrderInquiryPagePath =
+        UserInvestmentApiPaths.offlineOrderInquiryPage,
     this.myInvestmentListPath = UserInvestmentApiPaths.myInvestmentList,
     this.benefitProjectPath = UserInvestmentApiPaths.benefitProject,
     this.benefitWithdrawalPath = UserInvestmentApiPaths.benefitWithdrawal,
@@ -49,6 +53,7 @@ class UserInvestmentApiClient {
   final String applyPath;
   final String applyListPath;
   final String orderInquiryPagePath;
+  final String offlineOrderInquiryPagePath;
   final String myInvestmentListPath;
   final String benefitProjectPath;
   final String benefitWithdrawalPath;
@@ -124,19 +129,21 @@ class UserInvestmentApiClient {
     String? status,
     int startPage = 1,
     int limit = 20,
+    bool publicAccess = false,
   }) async {
-    final response = await _dioForPath(orderInquiryPagePath)
-        .post<Map<String, dynamic>>(
-          orderInquiryPagePath,
-          data: <String, dynamic>{
-            'startPage': startPage,
-            'limit': limit,
-            if (userId != null) 'userId': userId,
-            if (status != null && status.trim().isNotEmpty)
-              'status': status.trim(),
-          },
-          options: authRequired(true),
-        );
+    final path = publicAccess
+        ? offlineOrderInquiryPagePath
+        : orderInquiryPagePath;
+    final response = await _dioForPath(path).post<Map<String, dynamic>>(
+      path,
+      data: <String, dynamic>{
+        'startPage': startPage,
+        'limit': limit,
+        if (userId != null) 'userId': userId,
+        if (status != null && status.trim().isNotEmpty) 'status': status.trim(),
+      },
+      options: authRequired(!publicAccess),
+    );
 
     final rows = _envelopeCodec.extractPagedRows(
       _envelopeCodec.toJsonMap(response.data),
