@@ -396,6 +396,26 @@
   "settingsContactValidationCategory": "请选择咨询类别。",
   "settingsContactValidationMessage": "请输入咨询内容。",
   "settingsOperatingCompanyTitle": "运营公司",
+  "settingsContractListDescription": "可查看已出资项目对应的合同文档与报告书。",
+  "settingsContractListEmptyState": "暂无可显示的合同文档。",
+  "settingsContractListPdfCount": "PDF {count}件",
+  "@settingsContractListPdfCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "settingsContractListDocumentTypeCount": "文档 {count}类",
+  "@settingsContractListDocumentTypeCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "settingsContractListLatestUpdatedLabel": "最近更新",
+  "settingsContractListPendingLabel": "PDF 准备中",
+  "settingsContractDetailTitle": "合同文档",
+  "settingsContractDetailRelatedFilesTitle": "相关 PDF",
+  "settingsContractDetailMissingProject": "未找到该合同文档信息。",
+  "settingsContractDetailNoPdfAvailable": "暂时没有可查看的 PDF。",
   "settingsCompanyTradeNameLabel": "商号",
   "settingsCompanyLicenseNumberLabel": "许可编号",
   "settingsCompanyLicenseTypeLabel": "许可类型",

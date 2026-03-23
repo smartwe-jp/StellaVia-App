@@ -396,6 +396,26 @@
   "settingsContactValidationCategory": "お問い合わせカテゴリを選択してください。",
   "settingsContactValidationMessage": "お問い合わせ内容を入力してください。",
   "settingsOperatingCompanyTitle": "運営会社",
+  "settingsContractListDescription": "出資済みプロジェクトごとの契約書面と報告書を確認できます。",
+  "settingsContractListEmptyState": "表示できる契約書面はありません。",
+  "settingsContractListPdfCount": "PDF {count}件",
+  "@settingsContractListPdfCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "settingsContractListDocumentTypeCount": "書面 {count}種",
+  "@settingsContractListDocumentTypeCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "settingsContractListLatestUpdatedLabel": "最終更新",
+  "settingsContractListPendingLabel": "PDF準備中",
+  "settingsContractDetailTitle": "契約書面",
+  "settingsContractDetailRelatedFilesTitle": "関連PDF",
+  "settingsContractDetailMissingProject": "契約書面情報が見つかりません。",
+  "settingsContractDetailNoPdfAvailable": "閲覧できるPDFはまだありません。",
   "settingsCompanyTradeNameLabel": "商号",
   "settingsCompanyLicenseNumberLabel": "許可番号",
   "settingsCompanyLicenseTypeLabel": "許可種別",

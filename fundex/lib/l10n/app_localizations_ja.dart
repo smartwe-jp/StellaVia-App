@@ -1129,6 +1129,40 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsOperatingCompanyTitle => '運営会社';
 
   @override
+  String get settingsContractListDescription => '出資済みプロジェクトごとの契約書面と報告書を確認できます。';
+
+  @override
+  String get settingsContractListEmptyState => '表示できる契約書面はありません。';
+
+  @override
+  String settingsContractListPdfCount(Object count) {
+    return 'PDF $count件';
+  }
+
+  @override
+  String settingsContractListDocumentTypeCount(Object count) {
+    return '書面 $count種';
+  }
+
+  @override
+  String get settingsContractListLatestUpdatedLabel => '最終更新';
+
+  @override
+  String get settingsContractListPendingLabel => 'PDF準備中';
+
+  @override
+  String get settingsContractDetailTitle => '契約書面';
+
+  @override
+  String get settingsContractDetailRelatedFilesTitle => '関連PDF';
+
+  @override
+  String get settingsContractDetailMissingProject => '契約書面情報が見つかりません。';
+
+  @override
+  String get settingsContractDetailNoPdfAvailable => '閲覧できるPDFはまだありません。';
+
+  @override
   String get settingsCompanyTradeNameLabel => '商号';
 
   @override

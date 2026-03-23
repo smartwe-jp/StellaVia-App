@@ -116,6 +116,33 @@ class UserInvestmentPdfDocumentDto {
   final List<UserInvestmentPdfUrlDto> urls;
 }
 
+class UserInvestmentContractProjectPdfDto {
+  const UserInvestmentContractProjectPdfDto({
+    this.projectId,
+    required this.projectName,
+    this.documents = const <UserInvestmentPdfDocumentDto>[],
+  });
+
+  factory UserInvestmentContractProjectPdfDto.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return UserInvestmentContractProjectPdfDto(
+      projectId: _stringOrNull(json['projectId']),
+      projectName: _stringOrNull(json['projectName']) ?? '',
+      documents: _toList(json['list'])
+          .map(
+            (dynamic item) =>
+                UserInvestmentPdfDocumentDto.fromJson(_toJsonMap(item)),
+          )
+          .toList(growable: false),
+    );
+  }
+
+  final String? projectId;
+  final String projectName;
+  final List<UserInvestmentPdfDocumentDto> documents;
+}
+
 class UserInvestmentApplyRecordDto {
   const UserInvestmentApplyRecordDto({
     this.projectId,

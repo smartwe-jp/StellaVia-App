@@ -16,6 +16,7 @@ class UserInvestmentApiPaths {
   static const String offlineOrderInquiryPage =
       '/crowdfunding/offline/secondary/market/page';
   static const String myInvestmentList = '/crowdfunding/user/invest/list';
+  static const String userInvestPdf = '/crowdfunding/user/invest/pdf';
   static const String benefitProject = '/crowdfunding/benefit/project';
   static const String benefitWithdrawal = '/crowdfunding/benefit/withdrawal';
   static const String secondaryMarketCreate =
@@ -39,6 +40,7 @@ class UserInvestmentApiClient {
     this.offlineOrderInquiryPagePath =
         UserInvestmentApiPaths.offlineOrderInquiryPage,
     this.myInvestmentListPath = UserInvestmentApiPaths.myInvestmentList,
+    this.userInvestPdfPath = UserInvestmentApiPaths.userInvestPdf,
     this.benefitProjectPath = UserInvestmentApiPaths.benefitProject,
     this.benefitWithdrawalPath = UserInvestmentApiPaths.benefitWithdrawal,
     this.secondaryMarketCreatePath =
@@ -62,6 +64,7 @@ class UserInvestmentApiClient {
   final String orderInquiryPagePath;
   final String offlineOrderInquiryPagePath;
   final String myInvestmentListPath;
+  final String userInvestPdfPath;
   final String benefitProjectPath;
   final String benefitWithdrawalPath;
   final String secondaryMarketCreatePath;
@@ -207,6 +210,30 @@ class UserInvestmentApiClient {
     return rows
         .map(
           (Map<String, dynamic> row) => UserInvestmentRecordDto.fromJson(row),
+        )
+        .toList(growable: false);
+  }
+
+  Future<List<UserInvestmentContractProjectPdfDto>> fetchInvestPdfList({
+    int startPage = 1,
+    int limit = 300,
+  }) async {
+    final response = await _dioForPath(userInvestPdfPath)
+        .post<Map<String, dynamic>>(
+          userInvestPdfPath,
+          data: <String, dynamic>{'startPage': startPage, 'limit': limit},
+          options: authRequired(true),
+        );
+
+    final rows = _envelopeCodec.extractPagedRows(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load contract document list.',
+      pageProfile: _pageProfile,
+    );
+    return rows
+        .map(
+          (Map<String, dynamic> row) =>
+              UserInvestmentContractProjectPdfDto.fromJson(row),
         )
         .toList(growable: false);
   }

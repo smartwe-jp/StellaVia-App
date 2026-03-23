@@ -203,7 +203,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 label: l10n.menuItemContractList,
                 iconBackgroundColor: colors.surfaceAlt,
                 iconForegroundColor: colors.textSecondary,
-                onTap: () => _showComingSoon(l10n.menuItemContractList),
+                onTap: () => context.push('/profile/settings/contracts'),
               ),
               // AppMenuItem(
               //   icon: Icons.badge_rounded,

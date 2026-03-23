@@ -396,6 +396,26 @@
   "settingsContactValidationCategory": "請選擇諮詢類別。",
   "settingsContactValidationMessage": "請輸入諮詢內容。",
   "settingsOperatingCompanyTitle": "營運公司",
+  "settingsContractListDescription": "可查看已出資專案對應的契約書面與報告書。",
+  "settingsContractListEmptyState": "暫無可顯示的契約書面。",
+  "settingsContractListPdfCount": "PDF {count}件",
+  "@settingsContractListPdfCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "settingsContractListDocumentTypeCount": "書面 {count}類",
+  "@settingsContractListDocumentTypeCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "settingsContractListLatestUpdatedLabel": "最近更新",
+  "settingsContractListPendingLabel": "PDF 準備中",
+  "settingsContractDetailTitle": "契約書面",
+  "settingsContractDetailRelatedFilesTitle": "相關 PDF",
+  "settingsContractDetailMissingProject": "找不到此契約書面資訊。",
+  "settingsContractDetailNoPdfAvailable": "目前沒有可查看的 PDF。",
   "settingsCompanyTradeNameLabel": "商號",
   "settingsCompanyLicenseNumberLabel": "許可編號",
   "settingsCompanyLicenseTypeLabel": "許可類型",

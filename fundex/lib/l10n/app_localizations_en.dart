@@ -1192,6 +1192,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsOperatingCompanyTitle => 'Operating company';
 
   @override
+  String get settingsContractListDescription =>
+      'Review contract documents and reports for your invested projects.';
+
+  @override
+  String get settingsContractListEmptyState =>
+      'No contract documents available.';
+
+  @override
+  String settingsContractListPdfCount(Object count) {
+    return '$count PDFs';
+  }
+
+  @override
+  String settingsContractListDocumentTypeCount(Object count) {
+    return '$count document types';
+  }
+
+  @override
+  String get settingsContractListLatestUpdatedLabel => 'Last updated';
+
+  @override
+  String get settingsContractListPendingLabel => 'PDF pending';
+
+  @override
+  String get settingsContractDetailTitle => 'Contract documents';
+
+  @override
+  String get settingsContractDetailRelatedFilesTitle => 'Related PDFs';
+
+  @override
+  String get settingsContractDetailMissingProject =>
+      'Contract document details could not be found.';
+
+  @override
+  String get settingsContractDetailNoPdfAvailable =>
+      'There are no PDFs available yet.';
+
+  @override
   String get settingsCompanyTradeNameLabel => 'Trade name';
 
   @override

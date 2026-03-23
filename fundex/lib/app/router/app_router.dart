@@ -38,10 +38,13 @@ import '../../features/member_profile/presentation/support/member_profile_edit_s
 import '../../features/settings/presentation/pages/settings_page.dart';
 import '../../features/settings/presentation/pages/settings_face_verification_page.dart';
 import '../../features/settings/presentation/pages/settings_contact_page.dart';
+import '../../features/settings/presentation/pages/settings_contract_document_detail_page.dart';
+import '../../features/settings/presentation/pages/settings_contract_documents_page.dart';
 import '../../features/settings/presentation/pages/settings_faq_page.dart';
 import '../../features/settings/presentation/pages/settings_operating_company_page.dart';
 import '../../features/settings/presentation/pages/settings_phone_verification_page.dart';
 import '../../features/settings/presentation/pages/settings_two_factor_page.dart';
+import '../../features/settings/presentation/support/settings_contract_document_models.dart';
 import '../../features/wallet/presentation/pages/deposit_page.dart';
 import '../../features/wallet/presentation/pages/withdraw_page.dart';
 import '../../features/wallet/presentation/pages/wallet_bank_account_add_page.dart';
@@ -302,6 +305,32 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                       return const SettingsPage();
                     },
                     routes: <RouteBase>[
+                      GoRoute(
+                        path: 'contracts',
+                        parentNavigatorKey: _rootNavigatorKey,
+                        builder: (BuildContext context, GoRouterState state) {
+                          return const SettingsContractDocumentsPage();
+                        },
+                        routes: <RouteBase>[
+                          GoRoute(
+                            path: ':projectKey',
+                            parentNavigatorKey: _rootNavigatorKey,
+                            builder:
+                                (BuildContext context, GoRouterState state) {
+                                  final projectKey =
+                                      state.pathParameters['projectKey'] ?? '';
+                                  final extra = state.extra;
+                                  return SettingsContractDocumentDetailPage(
+                                    projectKey: projectKey,
+                                    initialProject:
+                                        extra is SettingsContractProject
+                                        ? extra
+                                        : null,
+                                  );
+                                },
+                          ),
+                        ],
+                      ),
                       GoRoute(
                         path: 'faq',
                         parentNavigatorKey: _rootNavigatorKey,

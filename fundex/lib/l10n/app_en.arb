@@ -396,6 +396,26 @@
   "settingsContactValidationCategory": "Please select an inquiry category.",
   "settingsContactValidationMessage": "Please enter your message.",
   "settingsOperatingCompanyTitle": "Operating company",
+  "settingsContractListDescription": "Review contract documents and reports for your invested projects.",
+  "settingsContractListEmptyState": "No contract documents available.",
+  "settingsContractListPdfCount": "{count} PDFs",
+  "@settingsContractListPdfCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "settingsContractListDocumentTypeCount": "{count} document types",
+  "@settingsContractListDocumentTypeCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "settingsContractListLatestUpdatedLabel": "Last updated",
+  "settingsContractListPendingLabel": "PDF pending",
+  "settingsContractDetailTitle": "Contract documents",
+  "settingsContractDetailRelatedFilesTitle": "Related PDFs",
+  "settingsContractDetailMissingProject": "Contract document details could not be found.",
+  "settingsContractDetailNoPdfAvailable": "There are no PDFs available yet.",
   "settingsCompanyTradeNameLabel": "Trade name",
   "settingsCompanyLicenseNumberLabel": "License number",
   "settingsCompanyLicenseTypeLabel": "License type",

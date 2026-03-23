@@ -1122,6 +1122,40 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsOperatingCompanyTitle => '运营公司';
 
   @override
+  String get settingsContractListDescription => '可查看已出资项目对应的合同文档与报告书。';
+
+  @override
+  String get settingsContractListEmptyState => '暂无可显示的合同文档。';
+
+  @override
+  String settingsContractListPdfCount(Object count) {
+    return 'PDF $count件';
+  }
+
+  @override
+  String settingsContractListDocumentTypeCount(Object count) {
+    return '文档 $count类';
+  }
+
+  @override
+  String get settingsContractListLatestUpdatedLabel => '最近更新';
+
+  @override
+  String get settingsContractListPendingLabel => 'PDF 准备中';
+
+  @override
+  String get settingsContractDetailTitle => '合同文档';
+
+  @override
+  String get settingsContractDetailRelatedFilesTitle => '相关 PDF';
+
+  @override
+  String get settingsContractDetailMissingProject => '未找到该合同文档信息。';
+
+  @override
+  String get settingsContractDetailNoPdfAvailable => '暂时没有可查看的 PDF。';
+
+  @override
   String get settingsCompanyTradeNameLabel => '商号';
 
   @override
@@ -4303,6 +4337,40 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get settingsOperatingCompanyTitle => '營運公司';
+
+  @override
+  String get settingsContractListDescription => '可查看已出資專案對應的契約書面與報告書。';
+
+  @override
+  String get settingsContractListEmptyState => '暫無可顯示的契約書面。';
+
+  @override
+  String settingsContractListPdfCount(Object count) {
+    return 'PDF $count件';
+  }
+
+  @override
+  String settingsContractListDocumentTypeCount(Object count) {
+    return '書面 $count類';
+  }
+
+  @override
+  String get settingsContractListLatestUpdatedLabel => '最近更新';
+
+  @override
+  String get settingsContractListPendingLabel => 'PDF 準備中';
+
+  @override
+  String get settingsContractDetailTitle => '契約書面';
+
+  @override
+  String get settingsContractDetailRelatedFilesTitle => '相關 PDF';
+
+  @override
+  String get settingsContractDetailMissingProject => '找不到此契約書面資訊。';
+
+  @override
+  String get settingsContractDetailNoPdfAvailable => '目前沒有可查看的 PDF。';
 
   @override
   String get settingsCompanyTradeNameLabel => '商號';

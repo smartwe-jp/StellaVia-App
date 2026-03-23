@@ -2291,6 +2291,66 @@ abstract class AppLocalizations {
   /// **'Operating company'**
   String get settingsOperatingCompanyTitle;
 
+  /// No description provided for @settingsContractListDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Review contract documents and reports for your invested projects.'**
+  String get settingsContractListDescription;
+
+  /// No description provided for @settingsContractListEmptyState.
+  ///
+  /// In en, this message translates to:
+  /// **'No contract documents available.'**
+  String get settingsContractListEmptyState;
+
+  /// No description provided for @settingsContractListPdfCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} PDFs'**
+  String settingsContractListPdfCount(Object count);
+
+  /// No description provided for @settingsContractListDocumentTypeCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} document types'**
+  String settingsContractListDocumentTypeCount(Object count);
+
+  /// No description provided for @settingsContractListLatestUpdatedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated'**
+  String get settingsContractListLatestUpdatedLabel;
+
+  /// No description provided for @settingsContractListPendingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF pending'**
+  String get settingsContractListPendingLabel;
+
+  /// No description provided for @settingsContractDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract documents'**
+  String get settingsContractDetailTitle;
+
+  /// No description provided for @settingsContractDetailRelatedFilesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Related PDFs'**
+  String get settingsContractDetailRelatedFilesTitle;
+
+  /// No description provided for @settingsContractDetailMissingProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract document details could not be found.'**
+  String get settingsContractDetailMissingProject;
+
+  /// No description provided for @settingsContractDetailNoPdfAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no PDFs available yet.'**
+  String get settingsContractDetailNoPdfAvailable;
+
   /// No description provided for @settingsCompanyTradeNameLabel.
   ///
   /// In en, this message translates to:
