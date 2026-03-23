@@ -859,6 +859,7 @@
   "myPageApplyHistoryEmptyState": "目前暫無申購記錄。",
   "myPageCoolingOffEmptyState": "目前沒有處於冷靜期中的項目。",
   "myPageOperatingFundsEmptyState": "目前沒有運用中的基金。",
+  "myPageOperatingFundsEmptyAction": "去申請",
   "myPageSectionLoadError": "该区块加载失败，请重试。",
   "myPageApplyHistoryListTitle": "申購記錄列表",
   "myPageApplyFilterAll": "全部",

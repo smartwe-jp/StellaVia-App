@@ -491,7 +491,10 @@ Widget _buildActiveFundsSection(
         actionLabel: l10n.homeViewAllAction,
         children: cards.isEmpty
             ? <Widget>[
-                _SectionStateCard(message: l10n.myPageOperatingFundsEmptyState),
+                _SectionStateCard(
+                  actionLabel: l10n.myPageOperatingFundsEmptyAction,
+                  onActionTap: () => context.go('/funds'),
+                ),
               ]
             : cards,
         onActionTap: () => context.push(

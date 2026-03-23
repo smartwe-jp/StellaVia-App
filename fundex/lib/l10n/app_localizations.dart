@@ -4586,6 +4586,12 @@ abstract class AppLocalizations {
   /// **'No operating funds yet.'**
   String get myPageOperatingFundsEmptyState;
 
+  /// No description provided for @myPageOperatingFundsEmptyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse funds'**
+  String get myPageOperatingFundsEmptyAction;
+
   /// No description provided for @myPageSectionLoadError.
   ///
   /// In en, this message translates to:

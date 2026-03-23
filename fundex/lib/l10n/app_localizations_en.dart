@@ -2450,6 +2450,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageOperatingFundsEmptyState => 'No operating funds yet.';
 
   @override
+  String get myPageOperatingFundsEmptyAction => 'Browse funds';
+
+  @override
   String get myPageSectionLoadError =>
       'Failed to load this section. Please try again.';
 

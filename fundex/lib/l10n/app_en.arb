@@ -859,6 +859,7 @@
   "myPageApplyHistoryEmptyState": "No application history yet.",
   "myPageCoolingOffEmptyState": "No contracts in the cooling-off period.",
   "myPageOperatingFundsEmptyState": "No operating funds yet.",
+  "myPageOperatingFundsEmptyAction": "Browse funds",
   "myPageSectionLoadError": "Failed to load this section. Please try again.",
   "myPageApplyHistoryListTitle": "Application History",
   "myPageApplyFilterAll": "All",

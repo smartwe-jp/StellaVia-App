@@ -859,6 +859,7 @@
   "myPageApplyHistoryEmptyState": "お申込み履歴はありません。",
   "myPageCoolingOffEmptyState": "クーリングオフ期間中の案件はありません。",
   "myPageOperatingFundsEmptyState": "運用中のファンドはありません。",
+  "myPageOperatingFundsEmptyAction": "ファンド一覧へ",
   "myPageSectionLoadError": "このセクションの取得に失敗しました。再度お試しください。",
   "myPageApplyHistoryListTitle": "お申込み履歴一覧",
   "myPageApplyFilterAll": "すべて",

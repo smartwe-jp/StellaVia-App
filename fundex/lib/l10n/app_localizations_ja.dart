@@ -2322,6 +2322,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageOperatingFundsEmptyState => '運用中のファンドはありません。';
 
   @override
+  String get myPageOperatingFundsEmptyAction => 'ファンド一覧へ';
+
+  @override
   String get myPageSectionLoadError => 'このセクションの取得に失敗しました。再度お試しください。';
 
   @override
