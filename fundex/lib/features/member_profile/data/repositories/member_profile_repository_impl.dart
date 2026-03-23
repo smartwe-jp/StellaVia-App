@@ -53,15 +53,162 @@ class MemberProfileRepositoryImpl implements MemberProfileRepository {
   @override
   Future<void> syncLocalProfileFromRemote() async {
     try {
+      final existingProfile = await readLocalProfile();
       final payload = await _remote.fetchCurrentMemberProfilePayload();
-      final profile = MemberProfileCurrentUserPayloadMapper.toEntity(payload);
-      if (profile == null) {
+      final remoteProfile = MemberProfileCurrentUserPayloadMapper.toEntity(
+        payload,
+      );
+      if (remoteProfile == null) {
         return;
       }
+      final profile = _mergeRemoteProfileWithLocal(
+        remoteProfile: remoteProfile,
+        localProfile: existingProfile,
+      );
       await _local.saveProfile(MemberProfileDetailsDto.fromEntity(profile));
     } catch (_) {
       // Keep auth flow and local draft access available on transient sync failures.
     }
+  }
+
+  MemberProfileDetails _mergeRemoteProfileWithLocal({
+    required MemberProfileDetails remoteProfile,
+    required MemberProfileDetails? localProfile,
+  }) {
+    if (localProfile == null) {
+      return remoteProfile;
+    }
+
+    String mergeString(String remote, String local) {
+      final normalizedRemote = remote.trim();
+      if (normalizedRemote.isNotEmpty) {
+        return normalizedRemote;
+      }
+      return local.trim();
+    }
+
+    String? mergeNullableString(String? remote, String? local) {
+      final normalizedRemote = remote?.trim() ?? '';
+      if (normalizedRemote.isNotEmpty) {
+        return normalizedRemote;
+      }
+      final normalizedLocal = local?.trim() ?? '';
+      return normalizedLocal.isEmpty ? null : normalizedLocal;
+    }
+
+    return remoteProfile.copyWith(
+      familyName: mergeString(remoteProfile.familyName, localProfile.familyName),
+      givenName: mergeString(remoteProfile.givenName, localProfile.givenName),
+      familyNameKana: mergeString(
+        remoteProfile.familyNameKana,
+        localProfile.familyNameKana,
+      ),
+      givenNameKana: mergeString(
+        remoteProfile.givenNameKana,
+        localProfile.givenNameKana,
+      ),
+      familyNameEn: mergeString(
+        remoteProfile.familyNameEn,
+        localProfile.familyNameEn,
+      ),
+      givenNameEn: mergeString(
+        remoteProfile.givenNameEn,
+        localProfile.givenNameEn,
+      ),
+      nameKanji: mergeString(remoteProfile.nameKanji, localProfile.nameKanji),
+      katakana: mergeString(remoteProfile.katakana, localProfile.katakana),
+      address: mergeString(remoteProfile.address, localProfile.address),
+      birthday: mergeNullableString(
+        remoteProfile.birthday,
+        localProfile.birthday,
+      ),
+      zipCode: mergeString(remoteProfile.zipCode, localProfile.zipCode),
+      prefectureCode: mergeString(
+        remoteProfile.prefectureCode,
+        localProfile.prefectureCode,
+      ),
+      cityAddress: mergeString(
+        remoteProfile.cityAddress,
+        localProfile.cityAddress,
+      ),
+      phoneIntlCode: mergeString(
+        remoteProfile.phoneIntlCode,
+        localProfile.phoneIntlCode,
+      ),
+      phone: mergeString(remoteProfile.phone, localProfile.phone),
+      email: mergeString(remoteProfile.email, localProfile.email),
+      occupationCode: mergeString(
+        remoteProfile.occupationCode,
+        localProfile.occupationCode,
+      ),
+      annualIncomeCode: mergeString(
+        remoteProfile.annualIncomeCode,
+        localProfile.annualIncomeCode,
+      ),
+      financialAssetsCode: mergeString(
+        remoteProfile.financialAssetsCode,
+        localProfile.financialAssetsCode,
+      ),
+      investmentExperienceCodes: remoteProfile.investmentExperienceCodes.isNotEmpty
+          ? remoteProfile.investmentExperienceCodes
+          : localProfile.investmentExperienceCodes,
+      investmentPurposeCode: mergeString(
+        remoteProfile.investmentPurposeCode,
+        localProfile.investmentPurposeCode,
+      ),
+      fundSourceCode: mergeString(
+        remoteProfile.fundSourceCode,
+        localProfile.fundSourceCode,
+      ),
+      riskToleranceCode: mergeString(
+        remoteProfile.riskToleranceCode,
+        localProfile.riskToleranceCode,
+      ),
+      ekycDocumentType: mergeString(
+        remoteProfile.ekycDocumentType,
+        localProfile.ekycDocumentType,
+      ),
+      idDocumentPhotoPath: mergeNullableString(
+        remoteProfile.idDocumentPhotoPath,
+        localProfile.idDocumentPhotoPath,
+      ),
+      idDocumentBackPhotoPath: mergeNullableString(
+        remoteProfile.idDocumentBackPhotoPath,
+        localProfile.idDocumentBackPhotoPath,
+      ),
+      selfiePhotoPath: mergeNullableString(
+        remoteProfile.selfiePhotoPath,
+        localProfile.selfiePhotoPath,
+      ),
+      bankName: mergeString(remoteProfile.bankName, localProfile.bankName),
+      branchBankName: mergeString(
+        remoteProfile.branchBankName,
+        localProfile.branchBankName,
+      ),
+      bankNumber: mergeString(remoteProfile.bankNumber, localProfile.bankNumber),
+      bankAccountType: mergeString(
+        remoteProfile.bankAccountType,
+        localProfile.bankAccountType,
+      ),
+      bankAccountOwnerName: mergeString(
+        remoteProfile.bankAccountOwnerName,
+        localProfile.bankAccountOwnerName,
+      ),
+      electronicDeliveryConsent:
+          remoteProfile.electronicDeliveryConsent ||
+          localProfile.electronicDeliveryConsent,
+      antiSocialForcesConsent:
+          remoteProfile.antiSocialForcesConsent ||
+          localProfile.antiSocialForcesConsent,
+      privacyPolicyConsent:
+          remoteProfile.privacyPolicyConsent || localProfile.privacyPolicyConsent,
+      lastEditingStep: remoteProfile.lastEditingStep > localProfile.lastEditingStep
+          ? remoteProfile.lastEditingStep
+          : localProfile.lastEditingStep,
+      completedAt: localProfile.completedAt ?? remoteProfile.completedAt,
+      lastSkippedAt: localProfile.lastSkippedAt ?? remoteProfile.lastSkippedAt,
+      lastUpdatedAt: remoteProfile.lastUpdatedAt ?? localProfile.lastUpdatedAt,
+    );
   }
 
   @override
