@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../settings/presentation/support/settings_operating_company_content.dart';
 import '../../domain/entities/fund_project.dart';
 import '../widgets/fund_project_detail_protection_structure_card.dart';
 
@@ -58,6 +59,7 @@ class FundProjectDetailViewDataBuilder {
   static FundProjectDetailViewData build({
     required BuildContext context,
     required FundProject project,
+    SettingsOperatingCompanyContent? operatingCompanyContent,
   }) {
     final locale = Localizations.localeOf(context);
     final currencyFormatter = NumberFormat.currency(
@@ -86,7 +88,11 @@ class FundProjectDetailViewDataBuilder {
       ),
       contractOverviewItems: contractTables.overviewItems,
       contractScheduleItems: contractTables.scheduleItems,
-      operatorItems: _buildOperatorItems(context, project),
+      operatorItems: _buildOperatorItems(
+        context,
+        project,
+        operatingCompanyContent: operatingCompanyContent,
+      ),
       documentGroups: _buildDocumentGroups(context, project),
       heroBadges: _buildHeroBadges(context, project),
       heroGradientColors: _resolveHeroGradientColors(
@@ -98,7 +104,11 @@ class FundProjectDetailViewDataBuilder {
       yieldDisplay: _formatYieldPercent(_resolveYieldRatio(project)),
       actionLabel: _resolveActionLabel(context, project),
       actionEnabled: _isActionEnabled(project),
-      operatorMetaText: _buildOperatorMetaText(context, project),
+      operatorMetaText: _buildOperatorMetaText(
+        context,
+        project,
+        operatingCompanyContent: operatingCompanyContent,
+      ),
       protectionStructure: _buildProtectionStructure(context, project),
     );
   }
@@ -163,7 +173,8 @@ List<FundDetailInfoItemData> _buildPropertyInfoItems(
     ),
   ];
 
-  final propertyType = _detailString(project.detailData, const <String>[
+  final propertyType =
+      _detailString(project.detailData, const <String>[
         'propertyType',
         'targetPropertyType',
         'realEstateType',
@@ -176,7 +187,8 @@ List<FundDetailInfoItemData> _buildPropertyInfoItems(
     ),
   );
 
-  final structure = _detailString(project.detailData, const <String>[
+  final structure =
+      _detailString(project.detailData, const <String>[
         'structure',
         'buildingStructure',
       ]) ??
@@ -188,7 +200,8 @@ List<FundDetailInfoItemData> _buildPropertyInfoItems(
     ),
   );
 
-  final builtYear = _detailString(project.detailData, const <String>[
+  final builtYear =
+      _detailString(project.detailData, const <String>[
         'builtYear',
         'builtAt',
         'completionYear',
@@ -237,7 +250,8 @@ _FundContractTables _buildContractTables(
   final overviewItems = <FundDetailInfoItemData>[
     FundDetailInfoItemData(
       label: context.l10n.fundDetailContractTypeLabel,
-      value: _detailString(project.detailData, const <String>[
+      value:
+          _detailString(project.detailData, const <String>[
             'contractType',
             'schemeType',
           ]) ??
@@ -264,7 +278,8 @@ _FundContractTables _buildContractTables(
   );
   final operationStart = _resolveDateText(context, project.scheduledStartDate);
   final operationEnd = _resolveDateText(context, project.scheduledEndDate);
-  final coolingOffText = _detailString(project.detailData, const <String>[
+  final coolingOffText =
+      _detailString(project.detailData, const <String>[
         'coolingOff',
         'coolingOffPeriod',
         'coolingOffPolicy',
@@ -297,104 +312,196 @@ _FundContractTables _buildContractTables(
 
 List<FundDetailInfoItemData> _buildOperatorItems(
   BuildContext context,
-  FundProject project,
-) {
-  final companyName = project.operatingCompany?.trim() ?? '';
-  final permitNumber = _detailString(project.detailData, const <String>[
-        'permitNumber',
-        'licenseNumber',
-        'registrationNumber',
-      ]) ??
-      '';
-  final representative = _detailString(project.detailData, const <String>[
-        'representative',
-        'representativeName',
-        'ceoName',
-      ]) ??
-      '';
-  final companyAddress = _detailString(project.detailData, const <String>[
-        'companyAddress',
-        'operatorAddress',
-        'companyLocation',
-      ]) ??
-      '';
+  FundProject project, {
+  SettingsOperatingCompanyContent? operatingCompanyContent,
+}) {
+  final companyName = _firstNonBlank(<String?>[
+    operatingCompanyContent?.tradeName,
+    project.operatingCompany,
+  ]);
+  final permitNumber = _firstNonBlank(<String?>[
+    operatingCompanyContent?.licenseNumber,
+    _detailString(project.detailData, const <String>[
+      'permitNumber',
+      'licenseNumber',
+      'registrationNumber',
+    ]),
+  ]);
+  final representative = _firstNonBlank(<String?>[
+    operatingCompanyContent?.representative,
+    _detailString(project.detailData, const <String>[
+      'representative',
+      'representativeName',
+      'ceoName',
+    ]),
+  ]);
+  final companyAddress = _firstNonBlank(<String?>[
+    operatingCompanyContent?.headOffice,
+    _detailString(project.detailData, const <String>[
+      'companyAddress',
+      'operatorAddress',
+      'companyLocation',
+    ]),
+  ]);
 
   return <FundDetailInfoItemData>[
-    FundDetailInfoItemData(
-      label: context.l10n.fundDetailOperatorCompanyLabel,
-      value: companyName,
-    ),
-    FundDetailInfoItemData(
-      label: context.l10n.fundDetailPermitNumberLabel,
-      value: permitNumber,
-    ),
-    FundDetailInfoItemData(
-      label: context.l10n.fundDetailRepresentativeLabel,
-      value: representative,
-    ),
-    FundDetailInfoItemData(
-      label: context.l10n.fundDetailCompanyAddressLabel,
-      value: companyAddress,
-    ),
-  ];
+        FundDetailInfoItemData(
+          label: context.l10n.fundDetailOperatorCompanyLabel,
+          value: companyName,
+        ),
+        FundDetailInfoItemData(
+          label: context.l10n.fundDetailPermitNumberLabel,
+          value: permitNumber,
+        ),
+        FundDetailInfoItemData(
+          label: context.l10n.fundDetailRepresentativeLabel,
+          value: representative,
+        ),
+        FundDetailInfoItemData(
+          label: context.l10n.fundDetailCompanyAddressLabel,
+          value: companyAddress,
+        ),
+      ]
+      .where((FundDetailInfoItemData item) => item.value.trim().isNotEmpty)
+      .toList(growable: false);
 }
 
-String _buildOperatorMetaText(BuildContext context, FundProject project) {
+String? _buildOperatorMetaText(
+  BuildContext context,
+  FundProject project, {
+  SettingsOperatingCompanyContent? operatingCompanyContent,
+}) {
   final capital = _detailString(project.detailData, const <String>[
-        'capital',
-        'capitalAmount',
-      ]) ??
-      '';
-  final established = _detailString(project.detailData, const <String>[
-        'establishedAt',
-        'establishedDate',
-      ]) ??
-      '';
+    'capital',
+    'capitalAmount',
+  ]);
+  final established = _firstNonBlank(<String?>[
+    operatingCompanyContent?.established,
+    _detailString(project.detailData, const <String>[
+      'establishedAt',
+      'establishedDate',
+    ]),
+  ]);
   final businessStart = _detailString(project.detailData, const <String>[
-        'businessStartDate',
-        'serviceStartDate',
-      ]) ??
-      '';
+    'businessStartDate',
+    'serviceStartDate',
+  ]);
+  final licenseType = _firstNonBlank(<String?>[
+    operatingCompanyContent?.licenseType,
+    _detailString(project.detailData, const <String>[
+      'licenseType',
+      'permitType',
+      'registrationType',
+    ]),
+  ]);
+  final business = _firstNonBlank(<String?>[
+    operatingCompanyContent?.business,
+    _detailString(project.detailData, const <String>[
+      'business',
+      'businessDescription',
+    ]),
+  ]);
+  final manager = _firstNonBlank(<String?>[
+    operatingCompanyContent?.manager,
+    _detailString(project.detailData, const <String>[
+      'manager',
+      'businessManager',
+      'operationManager',
+    ]),
+  ]);
+  final tel = _firstNonBlank(<String?>[
+    operatingCompanyContent?.tel,
+    _detailString(project.detailData, const <String>[
+      'tel',
+      'telephone',
+      'phone',
+      'contactPhone',
+    ]),
+  ]);
 
-  return <String>[
-    '${context.l10n.fundDetailOperatorCapitalLabel}：$capital',
-    '${context.l10n.fundDetailOperatorEstablishedLabel}：$established',
-    '${context.l10n.fundDetailOperatorBusinessStartLabel}：$businessStart',
-  ].join(' ・ ');
+  final lines = <String?>[
+    _buildOperatorMetaLine(
+      context.l10n.settingsCompanyLicenseTypeLabel,
+      licenseType,
+    ),
+    _buildOperatorMetaLine(
+      context.l10n.fundDetailOperatorCapitalLabel,
+      capital,
+    ),
+    _buildOperatorMetaLine(
+      context.l10n.fundDetailOperatorEstablishedLabel,
+      established,
+    ),
+    _buildOperatorMetaLine(
+      context.l10n.fundDetailOperatorBusinessStartLabel,
+      businessStart,
+    ),
+    _buildOperatorMetaLine(context.l10n.settingsCompanyBusinessLabel, business),
+    _buildOperatorMetaLine(context.l10n.settingsCompanyManagerLabel, manager),
+    _buildOperatorMetaLine(context.l10n.settingsCompanyTelLabel, tel),
+  ].whereType<String>().toList(growable: false);
+
+  if (lines.isEmpty) {
+    return null;
+  }
+
+  return lines.join('\n');
+}
+
+String? _buildOperatorMetaLine(String label, String? value) {
+  final trimmed = value?.trim();
+  if (trimmed == null || trimmed.isEmpty) {
+    return null;
+  }
+  return '$label：$trimmed';
+}
+
+String _firstNonBlank(Iterable<String?> candidates) {
+  for (final candidate in candidates) {
+    final trimmed = candidate?.trim();
+    if (trimmed != null && trimmed.isNotEmpty) {
+      return trimmed;
+    }
+  }
+  return '';
 }
 
 List<FundProjectDetailDocumentGroupData> _buildDocumentGroups(
   BuildContext context,
   FundProject project,
 ) {
-  return project.pdfDocuments.map((FundProjectPdfDocument document) {
-    final availablePdfs = _availablePdfUrls(document);
-    final title = _documentGroupTitle(context, document);
-    return FundProjectDetailDocumentGroupData(
-      title: title,
-      items: availablePdfs
-          .asMap()
-          .entries
-          .map((MapEntry<int, FundProjectPdfUrl> entry) {
-        final itemTitle = _documentLinkTitle(
-          context,
-          entry.value,
-          entry.key,
+  return project.pdfDocuments
+      .map((FundProjectPdfDocument document) {
+        final availablePdfs = _availablePdfUrls(document);
+        final title = _documentGroupTitle(context, document);
+        return FundProjectDetailDocumentGroupData(
+          title: title,
+          items: availablePdfs
+              .asMap()
+              .entries
+              .map((MapEntry<int, FundProjectPdfUrl> entry) {
+                final itemTitle = _documentLinkTitle(
+                  context,
+                  entry.value,
+                  entry.key,
+                );
+                return FundDetailDocumentItemData(
+                  title: itemTitle,
+                  subtitle:
+                      _formatDocumentCreatedAt(context, entry.value) ??
+                      context.l10n.fundDetailDocumentReady,
+                  onTap: () => _openPdfDocument(
+                    context,
+                    groupTitle: title,
+                    linkTitle: itemTitle,
+                    item: entry.value,
+                  ),
+                );
+              })
+              .toList(growable: false),
         );
-        return FundDetailDocumentItemData(
-          title: itemTitle,
-          subtitle: _formatDocumentCreatedAt(context, entry.value) ??
-              context.l10n.fundDetailDocumentReady,
-          onTap: () => _openPdfDocument(
-            context,
-            groupTitle: title,
-            linkTitle: itemTitle,
-            item: entry.value,
-          ),
-        );
-      }).toList(growable: false),
-    );
-  }).toList(growable: false);
+      })
+      .toList(growable: false);
 }
 
 List<FundProjectPdfUrl> _availablePdfUrls(FundProjectPdfDocument document) {
@@ -575,11 +682,7 @@ List<Color> _resolveHeroGradientColors(BuildContext context, int? status) {
   final colors = context.appColors;
   switch (status) {
     case 1:
-      return <Color>[
-        colors.successForeground,
-        colors.success,
-        colors.primary,
-      ];
+      return <Color>[colors.successForeground, colors.success, colors.primary];
     case 0:
       return <Color>[
         colors.warningForeground,
@@ -587,35 +690,15 @@ List<Color> _resolveHeroGradientColors(BuildContext context, int? status) {
         colors.warning,
       ];
     case 4:
-      return <Color>[
-        colors.infoForeground,
-        colors.primary,
-        colors.primaryAlt,
-      ];
+      return <Color>[colors.infoForeground, colors.primary, colors.primaryAlt];
     case 5:
-      return <Color>[
-        colors.heroStart,
-        colors.heroMiddle,
-        colors.heroEnd,
-      ];
+      return <Color>[colors.heroStart, colors.heroMiddle, colors.heroEnd];
     case 7:
-      return <Color>[
-        colors.successForeground,
-        colors.success,
-        colors.primary,
-      ];
+      return <Color>[colors.successForeground, colors.success, colors.primary];
     case 2:
-      return <Color>[
-        colors.dangerForeground,
-        colors.danger,
-        colors.brandAlert,
-      ];
+      return <Color>[colors.dangerForeground, colors.danger, colors.brandAlert];
     default:
-      return <Color>[
-        colors.heroStart,
-        colors.heroMiddle,
-        colors.heroEnd,
-      ];
+      return <Color>[colors.heroStart, colors.heroMiddle, colors.heroEnd];
   }
 }
 

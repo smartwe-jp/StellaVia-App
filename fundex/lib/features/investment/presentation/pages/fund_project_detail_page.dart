@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../../settings/presentation/providers/settings_content_providers.dart';
 import '../../domain/entities/fund_project.dart';
 import '../providers/fund_project_favorite_providers.dart';
 import '../providers/fund_project_providers.dart';
@@ -121,13 +122,19 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
         final staticContentAsync = ref.watch(
           fundDetailStaticContentProvider(locale.toLanguageTag()),
         );
+        final operatingCompanyContentAsync = ref.watch(
+          settingsOperatingCompanyContentProvider(locale.toLanguageTag()),
+        );
         final staticContent = staticContentAsync.asData?.value;
+        final operatingCompanyContent =
+            operatingCompanyContentAsync.asData?.value;
         final structuredDetail = FundProjectDetailStructuredData.fromMap(
           project.detailData,
         );
         final viewData = FundProjectDetailViewDataBuilder.build(
           context: context,
           project: project,
+          operatingCompanyContent: operatingCompanyContent,
         );
 
         return FundProjectDetailScaffold(
