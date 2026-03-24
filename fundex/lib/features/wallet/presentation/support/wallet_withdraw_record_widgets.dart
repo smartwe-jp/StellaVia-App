@@ -64,7 +64,7 @@ class WalletWithdrawRecordCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
-                    vertical: 4,
+                    vertical: 6,
                   ),
                   decoration: BoxDecoration(
                     color: statusBackgroundColor,
@@ -72,7 +72,7 @@ class WalletWithdrawRecordCard extends StatelessWidget {
                   ),
                   child: Text(
                     statusLabel,
-                    style: appText.bodySemi.copyWith(color: statusForegroundColor),
+                    style: appText.micro.copyWith(color: statusForegroundColor),
                   ),
                 ),
               ],
