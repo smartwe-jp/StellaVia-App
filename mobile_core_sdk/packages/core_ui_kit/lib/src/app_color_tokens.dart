@@ -62,19 +62,20 @@ class AppColorTokens {
   static const Color lightSurfaceAlt = fundexSurfaceAlt;
   static const Color lightBorderSoft = fundexBorderSoft;
 
-  // Dark palette derived from FUNDEX brand tones.
-  static const Color darkBackground = fundexPrimaryDark;
-  static const Color darkSurface = fundexPrimaryDarkAlt;
-  static const Color darkSurfaceAlt = Color(0xFF1B2433);
+  // Dark palette intentionally stays in a deeper navy family so the
+  // brand blue can remain an accent instead of taking over the whole UI.
+  static const Color darkBackground = Color(0xFF0A1628);
+  static const Color darkSurface = Color(0xFF101A2A);
+  static const Color darkSurfaceAlt = Color(0xFF15253B);
   static const Color darkOnSurface = Color(0xFFF8FAFC);
   static const Color darkMuted = Color(0xFF94A3B8);
-  static const Color darkBorder = Color(0xFF334155);
-  static const Color darkBorderSoft = Color(0xFF475569);
+  static const Color darkBorder = Color(0xFF2B3F57);
+  static const Color darkBorderSoft = Color(0xFF3E536D);
 
   // System UI status bar palette.
   // Keep light/dark entries separated for future adjustments; currently same.
   static const Color statusBarBackgroundLight = fundexPrimaryDark;
-  static const Color statusBarBackgroundDark = fundexPrimaryDark;
+  static const Color statusBarBackgroundDark = darkBackground;
 
   static const Color danger = fundexDanger;
   static const Color warning = fundexWarning;
