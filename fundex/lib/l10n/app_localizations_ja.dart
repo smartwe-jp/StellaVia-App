@@ -616,7 +616,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeReminderCoolingOffAction => '取消手続き';
 
   @override
-  String get homeFeaturedFundsTitle => '🔥 注目ファンド';
+  String get homeFeaturedFundsTitle => '注目ファンド';
 
   @override
   String get homeViewAllAction => '一覧を見る';
@@ -649,7 +649,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeTagUpcoming => '募集前';
 
   @override
-  String get homeActiveFundsTitle => '📊 運用中ファンド';
+  String get homeActiveFundsTitle => '運用中ファンド';
 
   @override
   String get homeInvestedAmountLabel => '投資額';
@@ -1958,10 +1958,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageWithdrawAction => '出金';
 
   @override
-  String get myPagePendingApplicationsTitle => '📩 申込中・抽選待ち';
+  String get myPagePendingApplicationsTitle => '申込中・抽選待ち';
 
   @override
-  String get myPageCoolingOffTitle => '🗓️クーリングオフ期間中（契約成立）';
+  String get myPageCoolingOffTitle => 'クーリングオフ期間中（契約成立）';
 
   @override
   String get myPageOrderInquirySectionTitle => '売却注文照会';
@@ -1970,10 +1970,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageOrderInquiryListTitle => '注文照会';
 
   @override
-  String get myPageOperatingFundsTitle => '📊 運用中ファンド';
+  String get myPageOperatingFundsTitle => '運用中ファンド';
 
   @override
-  String get myPageTransactionHistoryAction => '📋 取引履歴を見る';
+  String get myPageTransactionHistoryAction => '取引履歴を見る';
 
   @override
   String get myPageApplyAmountLabel => '申込金額';

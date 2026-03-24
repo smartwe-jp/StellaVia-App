@@ -1292,7 +1292,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeFeaturedFundsTitle.
   ///
   /// In en, this message translates to:
-  /// **'🔥 Featured Funds'**
+  /// **'Featured Funds'**
   String get homeFeaturedFundsTitle;
 
   /// No description provided for @homeViewAllAction.
@@ -1358,7 +1358,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeActiveFundsTitle.
   ///
   /// In en, this message translates to:
-  /// **'📊 Active Funds'**
+  /// **'Active Funds'**
   String get homeActiveFundsTitle;
 
   /// No description provided for @homeInvestedAmountLabel.
@@ -3875,13 +3875,13 @@ abstract class AppLocalizations {
   /// No description provided for @myPagePendingApplicationsTitle.
   ///
   /// In en, this message translates to:
-  /// **'📩 Pending Applications'**
+  /// **'Pending Applications'**
   String get myPagePendingApplicationsTitle;
 
   /// No description provided for @myPageCoolingOffTitle.
   ///
   /// In en, this message translates to:
-  /// **'⏰ Cooling-off Period'**
+  /// **'Cooling-off Period'**
   String get myPageCoolingOffTitle;
 
   /// No description provided for @myPageOrderInquirySectionTitle.
@@ -3899,13 +3899,13 @@ abstract class AppLocalizations {
   /// No description provided for @myPageOperatingFundsTitle.
   ///
   /// In en, this message translates to:
-  /// **'📊 Active Funds'**
+  /// **'Active Funds'**
   String get myPageOperatingFundsTitle;
 
   /// No description provided for @myPageTransactionHistoryAction.
   ///
   /// In en, this message translates to:
-  /// **'📋 Transaction History'**
+  /// **'Transaction History'**
   String get myPageTransactionHistoryAction;
 
   /// No description provided for @myPageApplyAmountLabel.

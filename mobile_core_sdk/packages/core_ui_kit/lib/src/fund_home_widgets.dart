@@ -729,7 +729,7 @@ class FundSectionHeader extends StatelessWidget {
                 leading!,
                 const SizedBox(width: 8),
               ],
-              Expanded(child: Text(title, style: appText.sectionTitle)),
+              Expanded(child: Text(title, style: appText.heroMetricSecondary)),
             ],
           ),
         ),
@@ -741,7 +741,7 @@ class FundSectionHeader extends StatelessWidget {
               visualDensity: const VisualDensity(horizontal: -2, vertical: -2),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             ),
-            child: Text(actionLabel!),
+            child: Text(actionLabel ?? '', style: appText.bodyStrong.copyWith(color: colors.primary)),
           ),
       ],
     );

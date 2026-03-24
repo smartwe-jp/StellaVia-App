@@ -413,7 +413,7 @@ Widget _buildCoolingOffSection(
 
       return FundSectionList(
         title: l10n.myPageOrderInquirySectionTitle,
-        leading: const _OrderInquirySectionLeadingIcon(),
+        //leading: const _OrderInquirySectionLeadingIcon(),
         initialVisibleCount: cards.isEmpty ? 1 : 3,
         actionLabel: l10n.homeViewAllAction,
         onActionTap: () => context.push(

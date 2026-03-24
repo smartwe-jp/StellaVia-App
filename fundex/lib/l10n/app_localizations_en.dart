@@ -657,7 +657,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeReminderCoolingOffAction => 'Cancel contract';
 
   @override
-  String get homeFeaturedFundsTitle => '🔥 Featured Funds';
+  String get homeFeaturedFundsTitle => 'Featured Funds';
 
   @override
   String get homeViewAllAction => 'View All';
@@ -691,7 +691,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeTagUpcoming => 'Upcoming';
 
   @override
-  String get homeActiveFundsTitle => '📊 Active Funds';
+  String get homeActiveFundsTitle => 'Active Funds';
 
   @override
   String get homeInvestedAmountLabel => 'Investment amount';
@@ -2064,10 +2064,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageWithdrawAction => 'Withdraw';
 
   @override
-  String get myPagePendingApplicationsTitle => '📩 Pending Applications';
+  String get myPagePendingApplicationsTitle => 'Pending Applications';
 
   @override
-  String get myPageCoolingOffTitle => '⏰ Cooling-off Period';
+  String get myPageCoolingOffTitle => 'Cooling-off Period';
 
   @override
   String get myPageOrderInquirySectionTitle => 'Sell Order Inquiry';
@@ -2076,10 +2076,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageOrderInquiryListTitle => 'Order Inquiry';
 
   @override
-  String get myPageOperatingFundsTitle => '📊 Active Funds';
+  String get myPageOperatingFundsTitle => 'Active Funds';
 
   @override
-  String get myPageTransactionHistoryAction => '📋 Transaction History';
+  String get myPageTransactionHistoryAction => 'Transaction History';
 
   @override
   String get myPageApplyAmountLabel => 'Application amount';

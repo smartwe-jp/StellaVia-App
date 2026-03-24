@@ -611,7 +611,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeReminderCoolingOffAction => '办理取消';
 
   @override
-  String get homeFeaturedFundsTitle => '🔥 注目基金';
+  String get homeFeaturedFundsTitle => '注目基金';
 
   @override
   String get homeViewAllAction => '查看全部';
@@ -644,7 +644,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeTagUpcoming => '募集前';
 
   @override
-  String get homeActiveFundsTitle => '📊 运用中基金';
+  String get homeActiveFundsTitle => '运用中基金';
 
   @override
   String get homeInvestedAmountLabel => '投资金额';
@@ -1945,10 +1945,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageWithdrawAction => '出金';
 
   @override
-  String get myPagePendingApplicationsTitle => '📩 申请中・抽签等待中';
+  String get myPagePendingApplicationsTitle => '申请中・抽签等待中';
 
   @override
-  String get myPageCoolingOffTitle => '⏰ 冷静期中（合同已成立）';
+  String get myPageCoolingOffTitle => '冷静期中（合同已成立）';
 
   @override
   String get myPageOrderInquirySectionTitle => '卖却订单照会';
@@ -1957,10 +1957,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageOrderInquiryListTitle => '订单照会';
 
   @override
-  String get myPageOperatingFundsTitle => '📊 运用中基金';
+  String get myPageOperatingFundsTitle => '运用中基金';
 
   @override
-  String get myPageTransactionHistoryAction => '📋 查看交易记录';
+  String get myPageTransactionHistoryAction => '查看交易记录';
 
   @override
   String get myPageApplyAmountLabel => '申请金额';
@@ -3849,7 +3849,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeReminderCoolingOffAction => '取消手續';
 
   @override
-  String get homeFeaturedFundsTitle => '🔥 精選基金';
+  String get homeFeaturedFundsTitle => '精選基金';
 
   @override
   String get homeViewAllAction => '查看全部';
@@ -3882,7 +3882,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeTagUpcoming => '募集前';
 
   @override
-  String get homeActiveFundsTitle => '📊 运用中基金';
+  String get homeActiveFundsTitle => '運用中基金';
 
   @override
   String get homeInvestedAmountLabel => '出資額';
@@ -5183,10 +5183,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageWithdrawAction => '出金';
 
   @override
-  String get myPagePendingApplicationsTitle => '📩 申請中・抽籤等待中';
+  String get myPagePendingApplicationsTitle => '申請中・抽籤等待中';
 
   @override
-  String get myPageCoolingOffTitle => '⏰ 冷靜期中（合約已成立）';
+  String get myPageCoolingOffTitle => '冷靜期中（合約已成立）';
 
   @override
   String get myPageOrderInquirySectionTitle => '賣卻訂單照會';
@@ -5195,10 +5195,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageOrderInquiryListTitle => '訂單照會';
 
   @override
-  String get myPageOperatingFundsTitle => '📊 運用中基金';
+  String get myPageOperatingFundsTitle => '運用中基金';
 
   @override
-  String get myPageTransactionHistoryAction => '📋 查看交易紀錄';
+  String get myPageTransactionHistoryAction => '查看交易紀錄';
 
   @override
   String get myPageApplyAmountLabel => '申請金額';

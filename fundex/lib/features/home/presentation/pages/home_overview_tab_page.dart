@@ -236,11 +236,11 @@ class HomeOverviewTabPage extends ConsumerWidget {
                   if (secondaryMarketCards.isNotEmpty)
                     FundFeaturedFundCarousel(
                       title: l10n.homeFreeMarketTitle,
-                      leading: Icon(
-                        Icons.storefront_rounded,
-                        size: 18,
-                        color: Theme.of(context).appColors.warningAction,
-                      ),
+                      // leading: Icon(
+                      //   Icons.storefront_rounded,
+                      //   size: 18,
+                      //   color: Theme.of(context).appColors.warningAction,
+                      // ),
                       actionLabel: l10n.homeViewAllAction,
                       onActionTap: () => context.push('/home/free-market'),
                       height: 262,
