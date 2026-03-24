@@ -106,8 +106,13 @@ class MainShellPage extends ConsumerWidget {
                     label: l10n.mainTabInvestment,
                   ),
                   NavigationDestination(
-                    icon: const Icon(Icons.favorite),
-                    selectedIcon: const Icon(Icons.favorite),
+                    icon: const _KizunarkTabAssetIcon(
+                      assetPath: 'assets/images/kizunark.tab.normal.png',
+                      useInactiveTintInLight: true,
+                    ),
+                    selectedIcon: const _KizunarkTabAssetIcon(
+                      assetPath: 'assets/images/kizunark.tab.select.png',
+                    ),
                     label: l10n.mainTabKizunark,
                   ),
                   NavigationDestination(
@@ -121,6 +126,32 @@ class MainShellPage extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _KizunarkTabAssetIcon extends StatelessWidget {
+  const _KizunarkTabAssetIcon({
+    required this.assetPath,
+    this.useInactiveTintInLight = false,
+  });
+
+  final String assetPath;
+  final bool useInactiveTintInLight;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final shouldTint =
+        useInactiveTintInLight && theme.brightness == Brightness.light;
+    return Image.asset(
+      assetPath,
+      width: 28,
+      height: 28,
+      fit: BoxFit.contain,
+      color: shouldTint ? colors.textSecondary : null,
+      colorBlendMode: shouldTint ? BlendMode.srcIn : null,
     );
   }
 }
