@@ -21,6 +21,7 @@ import 'theme/app_theme_mode_providers.dart';
 import '../features/auth/presentation/providers/auth_providers.dart';
 import '../features/investment/presentation/providers/fund_project_providers.dart';
 import '../features/member_profile/presentation/providers/member_profile_providers.dart';
+import '../features/settings/presentation/providers/settings_content_providers.dart';
 
 final GlobalKey<ScaffoldMessengerState> _rootScaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
@@ -146,6 +147,7 @@ class MemberTemplateApp extends ConsumerWidget {
                   ),
                 ],
               ),
+              const _LocalizedSettingsContentBootstrap(),
             ],
           ),
         );
@@ -157,6 +159,20 @@ class MemberTemplateApp extends ConsumerWidget {
       darkTheme: AppThemeFactory.dark(locale: locale),
       themeMode: themeMode,
     );
+  }
+}
+
+class _LocalizedSettingsContentBootstrap extends ConsumerWidget {
+  const _LocalizedSettingsContentBootstrap();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final localeTag =
+        Localizations.maybeLocaleOf(context)?.toLanguageTag() ??
+        WidgetsBinding.instance.platformDispatcher.locale.toLanguageTag();
+
+    ref.watch(settingsOperatingCompanyContentProvider(localeTag));
+    return const SizedBox.shrink();
   }
 }
 

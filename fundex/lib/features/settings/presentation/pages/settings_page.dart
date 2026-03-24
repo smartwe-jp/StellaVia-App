@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/config/environment_provider.dart';
 import '../../../../app/localization/app_locale_providers.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/theme/app_theme_mode_providers.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
+import '../providers/settings_content_providers.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -119,16 +121,58 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     };
   }
 
+  String _buildFooterText({
+    required String fallback,
+    required String appName,
+    required String? version,
+    required String? licenseNumber,
+  }) {
+    final trimmedAppName = appName.trim();
+    final trimmedVersion = version?.trim() ?? '';
+    final compactLicenseNumber =
+        licenseNumber?.replaceAll(RegExp(r'\s+'), ' ').trim() ?? '';
+
+    final appInfo = switch ((trimmedAppName.isEmpty, trimmedVersion.isEmpty)) {
+      (false, false) => '$trimmedAppName v$trimmedVersion',
+      (false, true) => trimmedAppName,
+      (true, false) => 'v$trimmedVersion',
+      _ => '',
+    };
+
+    if (appInfo.isEmpty && compactLicenseNumber.isEmpty) {
+      return fallback;
+    }
+    if (appInfo.isEmpty) {
+      return compactLicenseNumber;
+    }
+    if (compactLicenseNumber.isEmpty) {
+      return appInfo;
+    }
+    return '$appInfo ・ $compactLicenseNumber';
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
+    final environment = ref.watch(appEnvironmentProvider);
     final currentThemePreference = ref.watch(appThemePreferenceProvider);
     final currentLanguage = ref.watch(appLanguageProvider);
     final isAuthenticated =
         ref.watch(isAuthenticatedProvider).asData?.value ?? false;
+    final localeTag = Localizations.localeOf(context).toLanguageTag();
+    final appVersionAsync = ref.watch(settingsAppVersionProvider);
+    final operatingCompanyAsync = ref.watch(
+      settingsOperatingCompanyContentProvider(localeTag),
+    );
+    final footerText = _buildFooterText(
+      fallback: l10n.menuVersionFootnote,
+      appName: environment.appName,
+      version: appVersionAsync.asData?.value,
+      licenseNumber: operatingCompanyAsync.asData?.value.licenseNumber,
+    );
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -332,7 +376,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           Padding(
             padding: const EdgeInsets.only(top: 8, bottom: 20),
             child: Text(
-              l10n.menuVersionFootnote,
+              footerText,
               textAlign: TextAlign.center,
               style: appText.meta,
             ),
