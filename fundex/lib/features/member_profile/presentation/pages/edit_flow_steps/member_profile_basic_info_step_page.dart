@@ -110,10 +110,6 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
           if (showAgeWarning) ...<Widget>[
             const SizedBox(height: 12),
             MemberProfileNoticeCard(
-              icon: const SizedBox.square(
-                dimension: 18,
-                child: FittedBox(child: Text('🚫')),
-              ),
               title: l10n.memberProfileUnderageTitle,
               body: l10n.memberProfileUnderageBody,
               backgroundColor: colors.dangerSoft,

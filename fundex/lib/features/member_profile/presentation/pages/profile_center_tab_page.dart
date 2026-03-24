@@ -115,14 +115,12 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                 ],
                 quickActions: <FundMyPageQuickActionData>[
                   FundMyPageQuickActionData(
-                    icon: const _QuickActionEmojiIcon(symbol: '💰'),
                     label: l10n.myPageDepositAction,
                     backgroundColor: colors.infoSubtle,
                     foregroundColor: colors.primary,
                     onTap: () => context.push('/wallet/deposit'),
                   ),
                   FundMyPageQuickActionData(
-                    icon: const _QuickActionEmojiIcon(symbol: '💸'),
                     label: l10n.myPageWithdrawAction,
                     backgroundColor: colors.background,
                     borderColor: colors.border,
@@ -831,20 +829,6 @@ class _HeroHeaderActionButton extends StatelessWidget {
   }
 }
 
-class _QuickActionEmojiIcon extends StatelessWidget {
-  const _QuickActionEmojiIcon({required this.symbol});
-
-  final String symbol;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox.square(
-      dimension: 16,
-      child: FittedBox(fit: BoxFit.contain, child: Text(symbol)),
-    );
-  }
-}
-
 class _SectionLoadingCard extends StatelessWidget {
   const _SectionLoadingCard();
 
@@ -880,25 +864,6 @@ bool _shouldShowHomeOrderInquirySection(
     loading: () => true,
     error: (_, __) => true,
   );
-}
-
-class _OrderInquirySectionLeadingIcon extends StatelessWidget {
-  const _OrderInquirySectionLeadingIcon();
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).appColors;
-    return Container(
-      width: 28,
-      height: 28,
-      decoration: BoxDecoration(
-        color: colors.warningSubtle,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: colors.warning.withValues(alpha: 0.2)),
-      ),
-      child: Icon(Icons.receipt_long_rounded, size: 16, color: colors.warning),
-    );
-  }
 }
 
 class _SectionStateCard extends StatelessWidget {

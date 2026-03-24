@@ -299,6 +299,31 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   leadingIcon: Icons.alternate_email_rounded,
                                   keyboardType: TextInputType.emailAddress,
                                   textInputAction: TextInputAction.next,
+                                  trailing: Tooltip(
+                                    message: _sendCodeButtonLabel(
+                                      l10n.loginSendCode,
+                                    ),
+                                    child: AppNavigationIconButton(
+                                      key: const Key(
+                                        'login_account_send_code_button',
+                                      ),
+                                      icon: Icons.send_rounded,
+                                      size: 34,
+                                      borderRadius: 10,
+                                      backgroundColor: theme.appColors.primary
+                                          .withValues(
+                                            alpha: canSendCode ? 0.12 : 0.06,
+                                          ),
+                                      foregroundColor: canSendCode
+                                          ? theme.appColors.primary
+                                          : theme.appColors.primary.withValues(
+                                              alpha: 0.4,
+                                            ),
+                                      onTap: canSendCode
+                                          ? () => _handleSendCode(controller)
+                                          : null,
+                                    ),
+                                  ),
                                   onChanged: (String value) =>
                                       _onAccountChanged(value, controller),
                                 )
@@ -478,7 +503,7 @@ class _LoginHeroHeader extends StatelessWidget {
                     ],
                   ),
                   child: Icon(
-                    Icons.home_rounded,
+                    Icons.star,
                     color: heroForegroundColor,
                     size: 30,
                   ),

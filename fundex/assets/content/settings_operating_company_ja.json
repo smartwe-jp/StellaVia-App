@@ -12,22 +12,22 @@
   "links": [
     {
       "title": "利用規約",
-      "icon": "📄",
+      "icon": "",
       "url": "https://testoa.gutingjun.com/terms_conditions.pdf"
     },
     {
       "title": "プライバシーポリシー",
-      "icon": "🔒",
+      "icon": "",
       "url": "https://testoa.gutingjun.com/personal_information.pdf"
     },
     {
       "title": "勧誘方針",
-      "icon": "📋",
+      "icon": "",
       "url": "https://testoa.gutingjun.com/solicitation_policy.pdf"
     },
     {
       "title": "反社会勢力への対応",
-      "icon": "🛡️",
+      "icon": "",
       "url": "https://testoa.gutingjun.com/antisocialrule.pdf"
     }
   ]

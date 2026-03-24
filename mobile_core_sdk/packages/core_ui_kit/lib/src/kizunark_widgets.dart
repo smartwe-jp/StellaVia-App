@@ -55,11 +55,11 @@ class KizunarkNoticeBanner extends StatelessWidget {
   const KizunarkNoticeBanner({
     super.key,
     required this.label,
-    this.icon = '🔒',
+    this.icon,
   });
 
   final String label;
-  final String icon;
+  final String? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +76,10 @@ class KizunarkNoticeBanner extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         child: Row(
           children: <Widget>[
-            Text(icon, style: appText.caption),
-            const SizedBox(width: 6),
+            if (icon?.trim().isNotEmpty ?? false) ...<Widget>[
+              Text(icon!, style: appText.caption),
+              const SizedBox(width: 6),
+            ],
             Expanded(
               child: Text(
                 label,

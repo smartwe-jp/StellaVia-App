@@ -47,7 +47,6 @@ class MemberProfileConsentStepPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           MemberProfileInfoCard(
-            icon: '📄',
             title: l10n.memberProfileElectronicDeliveryTitle,
             backgroundColor: colors.infoSoft,
             borderColor: colors.infoBorder,
@@ -92,7 +91,6 @@ class MemberProfileConsentStepPage extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           MemberProfileInfoCard(
-            icon: '🛡️',
             title: l10n.memberProfileAntiSocialTitle,
             titleColor: colors.textPrimary,
             body: Text(

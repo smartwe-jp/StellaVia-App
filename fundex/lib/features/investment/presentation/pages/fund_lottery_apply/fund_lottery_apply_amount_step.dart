@@ -410,8 +410,6 @@ class _BalanceWarningCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text('⚠️'),
-                const SizedBox(width: 8),
                 Expanded(
                   child: RichText(
                     text: TextSpan(

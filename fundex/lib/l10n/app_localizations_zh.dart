@@ -567,7 +567,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String homeWelcomeUser(Object name) {
-    return '欢迎回来，$name 👋';
+    return '欢迎回来，$name';
   }
 
   @override
@@ -803,7 +803,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get kizunarkSubtitle => '投资者社区';
 
   @override
-  String get kizunarkInvestorOnlyNotice => '🔒 仅限投资者发文及留言';
+  String get kizunarkInvestorOnlyNotice => '仅限投资者发文及留言';
 
   @override
   String get kizunarkComposePlaceholder => '分享你的投资观点...';
@@ -1310,7 +1310,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailYieldDisclaimer => '※ 为预估值，不保证收益';
 
   @override
-  String get fundDetailKeyFactsTitle => '📌 基本信息';
+  String get fundDetailKeyFactsTitle => '基本信息';
 
   @override
   String get fundDetailFundTotalLabel => '募集金额';
@@ -1325,7 +1325,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailLotteryDateLabel => '抽签日';
 
   @override
-  String get fundDetailPreferredStructureTitle => '🛡️ 优先/劣后结构';
+  String get fundDetailPreferredStructureTitle => '优先/劣后结构';
 
   @override
   String get fundDetailSeniorInvestmentLabel => '优先出资';
@@ -1334,7 +1334,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailJuniorInvestmentLabel => '劣后出资';
 
   @override
-  String get fundDetailPropertyInfoTitle => '📍 物件信息';
+  String get fundDetailPropertyInfoTitle => '物件信息';
 
   @override
   String get fundDetailLocationLabel => '所在地';
@@ -1379,7 +1379,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailMapUnavailable => '无法获取地图信息。';
 
   @override
-  String get fundDetailContractOverviewTitle => '📋 合同概要（法定记载事项）';
+  String get fundDetailContractOverviewTitle => '合同概要（法定记载事项）';
 
   @override
   String get fundDetailContractTypeLabel => '合同形式';
@@ -1406,7 +1406,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailOperationEndLabel => '预计运用结束日';
 
   @override
-  String get fundDetailOperatorInfoTitle => '🏢 运营方信息';
+  String get fundDetailOperatorInfoTitle => '运营方信息';
 
   @override
   String get fundDetailOperatorCompanyLabel => '运营公司';
@@ -1430,7 +1430,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailOperatorBusinessStartLabel => '事业开始申报';
 
   @override
-  String get fundDetailDocumentsTitle => '📄 相关书面';
+  String get fundDetailDocumentsTitle => '相关书面';
 
   @override
   String get fundDetailDocumentReady => '点击查看';
@@ -1455,7 +1455,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailPropertyPreviewBadge => '物件预览';
 
   @override
-  String get fundDetailCommentsTitle => '💬 投资者声音（KIZUNARK）';
+  String get fundDetailCommentsTitle => '投资者声音（KIZUNARK）';
 
   @override
   String get fundDetailCommentsPlaceholder => '评论功能本次暂不实现，后续只接 UI 行为。';
@@ -1477,10 +1477,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailCommentsPreviewReplyCount => '3';
 
   @override
-  String get fundDetailCommentsMoreAction => '💜 在 KIZUNARK 查看更多';
+  String get fundDetailCommentsMoreAction => '在 KIZUNARK 查看更多';
 
   @override
-  String get fundDetailFinancialStatusAction => '📊 查看运营方财务状况 →';
+  String get fundDetailFinancialStatusAction => '查看运营方财务状况 →';
 
   @override
   String get fundDetailFinancialStatusToast => '财务状况页面会在后续实现中接入。';
@@ -1504,7 +1504,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get lotteryApplyStep1Title => '1. 输入申购口数';
 
   @override
-  String get lotteryApplyStep1BalanceLabel => '💰 待机资金余额';
+  String get lotteryApplyStep1BalanceLabel => '待机资金余额';
 
   @override
   String get lotteryApplyStep1DepositAction => '去入金';
@@ -1550,7 +1550,7 @@ class AppLocalizationsZh extends AppLocalizations {
       '当前余额不足以覆盖申请金额，请先完成入金后再继续申请。';
 
   @override
-  String get lotteryApplyStep1BalanceWarningAction => '💰 前往入金页';
+  String get lotteryApplyStep1BalanceWarningAction => '前往入金页';
 
   @override
   String get lotteryApplyStep1MaximumWarningTitle => '超过可申请上限';
@@ -1617,7 +1617,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get lotteryApplyAgreementLabel => '我已确认以上内容，并同意进行抽签申请。';
 
   @override
-  String get lotteryApplySubmitAction => '🎲 申请抽签';
+  String get lotteryApplySubmitAction => '申请抽签';
 
   @override
   String get lotteryApplySubmitFailedFallback => '抽签申请失败，请稍后重试。';
@@ -1631,7 +1631,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get lotteryApplyResultAnnouncementDateLabel => '🗓️ 结果公布日';
+  String get lotteryApplyResultAnnouncementDateLabel => '结果公布日';
 
   @override
   String get lotteryApplyApplicationNumberLabel => '申请编号';
@@ -1655,7 +1655,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get lotteryApplyDeadlineLabel => '⏰ 入金期限（含8天冷静期）';
+  String get lotteryApplyDeadlineLabel => '入金期限（含8天冷静期）';
 
   @override
   String get lotteryApplyCoolingOffTitle => '关于冷静期';
@@ -1734,13 +1734,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailPlannedDistributionRateLabel => '预计分配率（税前）';
 
   @override
-  String get fundDetailAchievementRateLabel => '📊 募集达成率';
+  String get fundDetailAchievementRateLabel => '募集达成率';
 
   @override
-  String get fundDetailTabPropertyOverview => '📍 物件概要';
+  String get fundDetailTabPropertyOverview => '物件概要';
 
   @override
-  String get fundDetailTabIncomeScheme => '📊 预计收支方案';
+  String get fundDetailTabIncomeScheme => '预计收支方案';
 
   @override
   String fundDetailPropertyCountHint(int count) {
@@ -1828,10 +1828,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailSchemeBreakdownTitle => '出资金额构成';
 
   @override
-  String get fundDetailSchemeIncomeTitle => '📈 收入';
+  String get fundDetailSchemeIncomeTitle => '收入';
 
   @override
-  String get fundDetailSchemeExpenseTitle => '📉 支出';
+  String get fundDetailSchemeExpenseTitle => '支出';
 
   @override
   String get fundDetailSchemePropertyPriceLabel => '物件价格';
@@ -3805,7 +3805,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String homeWelcomeUser(Object name) {
-    return '欢迎回来，$name 👋';
+    return '欢迎回来，$name';
   }
 
   @override
@@ -4041,7 +4041,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get kizunarkSubtitle => '投資者社群';
 
   @override
-  String get kizunarkInvestorOnlyNotice => '🔒 僅限投資者發文及留言';
+  String get kizunarkInvestorOnlyNotice => '僅限投資者發文及留言';
 
   @override
   String get kizunarkComposePlaceholder => '分享你的投資觀點...';
@@ -4548,7 +4548,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailYieldDisclaimer => '※ 为预估值，不保证收益';
 
   @override
-  String get fundDetailKeyFactsTitle => '📌 基本信息';
+  String get fundDetailKeyFactsTitle => '基本信息';
 
   @override
   String get fundDetailFundTotalLabel => '募集金额';
@@ -4563,7 +4563,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailLotteryDateLabel => '抽签日';
 
   @override
-  String get fundDetailPreferredStructureTitle => '🛡️ 优先/劣后结构';
+  String get fundDetailPreferredStructureTitle => '优先/劣后结构';
 
   @override
   String get fundDetailSeniorInvestmentLabel => '优先出资';
@@ -4572,7 +4572,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailJuniorInvestmentLabel => '劣后出资';
 
   @override
-  String get fundDetailPropertyInfoTitle => '📍 物件信息';
+  String get fundDetailPropertyInfoTitle => '物件信息';
 
   @override
   String get fundDetailLocationLabel => '所在地';
@@ -4617,7 +4617,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailMapUnavailable => '無法取得地圖資訊。';
 
   @override
-  String get fundDetailContractOverviewTitle => '📋 合同概要（法定记载事项）';
+  String get fundDetailContractOverviewTitle => '合同概要（法定记载事项）';
 
   @override
   String get fundDetailContractTypeLabel => '合同形式';
@@ -4644,7 +4644,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailOperationEndLabel => '预计运用结束日';
 
   @override
-  String get fundDetailOperatorInfoTitle => '🏢 运营方信息';
+  String get fundDetailOperatorInfoTitle => '运营方信息';
 
   @override
   String get fundDetailOperatorCompanyLabel => '运营公司';
@@ -4668,7 +4668,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailOperatorBusinessStartLabel => '事業開始申報';
 
   @override
-  String get fundDetailDocumentsTitle => '📄 相关书面';
+  String get fundDetailDocumentsTitle => '相关书面';
 
   @override
   String get fundDetailDocumentReady => '点击查看';
@@ -4693,7 +4693,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailPropertyPreviewBadge => '物件预览';
 
   @override
-  String get fundDetailCommentsTitle => '💬 投資者聲音（KIZUNARK）';
+  String get fundDetailCommentsTitle => '投資者聲音（KIZUNARK）';
 
   @override
   String get fundDetailCommentsPlaceholder => '评论功能本次暂不实现，后续只接 UI 行为。';
@@ -4715,10 +4715,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailCommentsPreviewReplyCount => '3';
 
   @override
-  String get fundDetailCommentsMoreAction => '💜 在 KIZUNARK 查看更多';
+  String get fundDetailCommentsMoreAction => '在 KIZUNARK 查看更多';
 
   @override
-  String get fundDetailFinancialStatusAction => '📊 查看运营方财务状况 →';
+  String get fundDetailFinancialStatusAction => '查看运营方财务状况 →';
 
   @override
   String get fundDetailFinancialStatusToast => '财务状况页面会在后续实现中接入。';
@@ -4742,7 +4742,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get lotteryApplyStep1Title => '1. 輸入申購口數';
 
   @override
-  String get lotteryApplyStep1BalanceLabel => '💰 待機資金餘額';
+  String get lotteryApplyStep1BalanceLabel => '待機資金餘額';
 
   @override
   String get lotteryApplyStep1DepositAction => '去入金';
@@ -4788,7 +4788,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
       '目前餘額不足以覆蓋申請金額，請先完成入金後再繼續申請。';
 
   @override
-  String get lotteryApplyStep1BalanceWarningAction => '💰 前往入金頁';
+  String get lotteryApplyStep1BalanceWarningAction => '前往入金頁';
 
   @override
   String get lotteryApplyStep1MaximumWarningTitle => '超過可申請上限';
@@ -4855,7 +4855,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get lotteryApplyAgreementLabel => '我已確認以上內容，並同意進行抽籤申請。';
 
   @override
-  String get lotteryApplySubmitAction => '🎲 申請抽籤';
+  String get lotteryApplySubmitAction => '申請抽籤';
 
   @override
   String get lotteryApplySubmitFailedFallback => '抽籤申請失敗，請稍後再試。';
@@ -4869,7 +4869,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get lotteryApplyResultAnnouncementDateLabel => '🗓️ 結果公布日';
+  String get lotteryApplyResultAnnouncementDateLabel => '結果公布日';
 
   @override
   String get lotteryApplyApplicationNumberLabel => '申請編號';
@@ -4893,7 +4893,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get lotteryApplyDeadlineLabel => '⏰ 入金期限（含8天冷靜期）';
+  String get lotteryApplyDeadlineLabel => '入金期限（含8天冷靜期）';
 
   @override
   String get lotteryApplyCoolingOffTitle => '關於冷靜期';
@@ -4972,13 +4972,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailPlannedDistributionRateLabel => '預計分配率（稅前）';
 
   @override
-  String get fundDetailAchievementRateLabel => '📊 募集達成率';
+  String get fundDetailAchievementRateLabel => '募集達成率';
 
   @override
-  String get fundDetailTabPropertyOverview => '📍 物件概要';
+  String get fundDetailTabPropertyOverview => '物件概要';
 
   @override
-  String get fundDetailTabIncomeScheme => '📊 預計收支方案';
+  String get fundDetailTabIncomeScheme => '預計收支方案';
 
   @override
   String fundDetailPropertyCountHint(int count) {
@@ -5066,10 +5066,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailSchemeBreakdownTitle => '出資金額構成';
 
   @override
-  String get fundDetailSchemeIncomeTitle => '📈 收入';
+  String get fundDetailSchemeIncomeTitle => '收入';
 
   @override
-  String get fundDetailSchemeExpenseTitle => '📉 支出';
+  String get fundDetailSchemeExpenseTitle => '支出';
 
   @override
   String get fundDetailSchemePropertyPriceLabel => '物件價格';

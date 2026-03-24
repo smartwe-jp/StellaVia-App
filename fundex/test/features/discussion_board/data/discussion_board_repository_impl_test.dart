@@ -126,7 +126,7 @@ void main() {
       expect(threads.first.commentCount, 1);
       expect(threads.first.replies, hasLength(1));
       expect(threads.first.replies.first.id, '102');
-      expect(threads.first.fundReferenceLabel, '🏠 プレミアムレジデンス赤坂 →');
+      expect(threads.first.fundReferenceLabel, 'プレミアムレジデンス赤坂 →');
       expect(local.storage, hasLength(1));
     });
 

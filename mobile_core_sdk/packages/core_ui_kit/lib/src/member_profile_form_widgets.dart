@@ -635,15 +635,15 @@ class MemberProfileSegmentedDualTextFieldRow extends StatelessWidget {
 class MemberProfileNoticeCard extends StatelessWidget {
   const MemberProfileNoticeCard({
     super.key,
-    required this.icon,
     required this.title,
     required this.body,
     required this.backgroundColor,
     required this.borderColor,
     required this.foregroundColor,
+    this.icon,
   });
 
-  final Widget icon;
+  final Widget? icon;
   final String title;
   final String body;
   final Color backgroundColor;
@@ -664,8 +664,10 @@ class MemberProfileNoticeCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(padding: const EdgeInsets.only(top: 1), child: icon),
-          const SizedBox(width: 8),
+          if (icon != null) ...<Widget>[
+            Padding(padding: const EdgeInsets.only(top: 1), child: icon!),
+            const SizedBox(width: 8),
+          ],
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -912,6 +914,7 @@ class MemberProfileInfoCard extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final effectiveTitleColor = titleColor ?? colors.primary;
+    final iconPrefix = (icon?.trim().isNotEmpty ?? false) ? '${icon!} ' : '';
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -923,7 +926,7 @@ class MemberProfileInfoCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            '${icon ?? ''}${icon == null ? '' : ' '}$title',
+            '$iconPrefix$title',
             style: appText.cardTitle.copyWith(color: effectiveTitleColor),
           ),
           const SizedBox(height: 8),

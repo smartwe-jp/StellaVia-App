@@ -337,7 +337,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
     if (name.isEmpty) {
       return null;
     }
-    return '🏠 $name →';
+    return '$name →';
   }
 
   String _formatTimeLabel(String rawTime) {

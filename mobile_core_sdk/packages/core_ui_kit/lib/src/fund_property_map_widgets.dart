@@ -84,7 +84,7 @@ class FundPropertyMapPreviewCard extends StatelessWidget {
                 ],
               ),
               child: Text(
-                '📍 $addressLabel',
+                addressLabel,
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

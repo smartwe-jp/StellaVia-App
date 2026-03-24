@@ -146,10 +146,6 @@ class MemberProfileSuitabilityStepPage extends StatelessWidget {
           if (showFundSourceWarning) ...<Widget>[
             const SizedBox(height: 12),
             MemberProfileNoticeCard(
-              icon: const SizedBox.square(
-                dimension: 18,
-                child: FittedBox(child: Text('⚠️')),
-              ),
               title: l10n.memberProfileFundSourceWarningTitle,
               body: fundSourceWarningBody,
               backgroundColor: colors.dangerSoft,

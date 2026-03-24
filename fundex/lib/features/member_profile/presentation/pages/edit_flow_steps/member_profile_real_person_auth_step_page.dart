@@ -30,7 +30,6 @@ class MemberProfileRealPersonAuthStepPage extends StatelessWidget {
       child: Column(
         children: <Widget>[
           MemberProfileInfoCard(
-            icon: '🧑‍🦰',
             title: l10n.identityAuthPageTitle,
             backgroundColor: colors.infoSoft,
             borderColor: colors.infoBorder,

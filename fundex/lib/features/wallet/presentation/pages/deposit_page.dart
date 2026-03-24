@@ -72,7 +72,7 @@ class DepositPage extends ConsumerWidget {
               children: <Widget>[
                 if (bankInfo == null)
                   FundWalletBankAccountApplyCard(
-                    title: '🏦 ${l10n.walletDedicatedAccountTitle}',
+                    title: l10n.walletDedicatedAccountTitle,
                     description: l10n.walletBankAccountMissingDescription,
                     actionLabel: l10n.walletBankAccountApplyAction,
                     isApplying: isApplyingBankAccount,
@@ -120,7 +120,7 @@ class DepositPage extends ConsumerWidget {
                   )
                 else
                   FundDedicatedDepositAccountCard(
-                    title: '🏦 ${l10n.walletDedicatedAccountTitle}',
+                    title: l10n.walletDedicatedAccountTitle,
                     bankNameLabel: l10n.walletBankNameLabel,
                     bankNameValue: bankInfo.bankName,
                     branchNameLabel: l10n.walletBranchNameLabel,
@@ -156,7 +156,7 @@ class DepositPage extends ConsumerWidget {
                 ),
                 const SizedBox(height: 20),
                 FundWalletStandbyBalanceCard(
-                  title: '📋 ${l10n.walletStandbyBalanceHistoryTitle}',
+                  title: l10n.walletStandbyBalanceHistoryTitle,
                   actionLabel: l10n.walletHistoryMoreAction,
                   onTapAction: () => context.push('/wallet/history'),
                   entries: historyEntries.isEmpty

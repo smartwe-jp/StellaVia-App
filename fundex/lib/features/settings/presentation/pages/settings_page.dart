@@ -127,6 +127,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final appText = theme.appTextTheme;
     final currentThemePreference = ref.watch(appThemePreferenceProvider);
     final currentLanguage = ref.watch(appLanguageProvider);
+    final isAuthenticated =
+        ref.watch(isAuthenticatedProvider).asData?.value ?? false;
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -148,72 +150,60 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         key: const Key('settings_tab_content'),
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 40),
         children: <Widget>[
-          AppMenuSection(
-            title: l10n.menuSectionAccount,
-            children: <Widget>[
-              AppMenuItem(
-                icon: Icons.person_rounded,
-                label: l10n.menuItemEditProfile,
-                iconBackgroundColor: colors.primarySubtle,
-                iconForegroundColor: colors.primary,
-                onTap: () => context.push('/member-profile/edit'),
-              ),
-              AppMenuItem(
-                icon: Icons.account_balance_wallet_rounded,
-                label: l10n.menuItemBankSettings,
-                iconBackgroundColor: colors.successSubtle,
-                iconForegroundColor: colors.success,
-                onTap: () => context.push('/profile/wallet/bank-settings'),
-              ),
-            ],
-          ),
-          AppMenuSection(
-            title: l10n.menuSectionSecurity,
-            children: <Widget>[
-              // AppMenuItem(
-              //   icon: Icons.lock_rounded,
-              //   label: l10n.menuItemChangePassword,
-              //   iconBackgroundColor: colors.warningSubtle,
-              //   iconForegroundColor: colors.warning,
-              //   onTap: () => _showComingSoon(l10n.menuItemChangePassword),
-              // ),
-              AppMenuItem(
-                icon: Icons.verified_user_rounded,
-                label: l10n.menuItemTwoFactor,
-                iconBackgroundColor: colors.communitySecondary.withValues(
-                  alpha: 0.16,
+          if (isAuthenticated) ...<Widget>[
+            AppMenuSection(
+              title: l10n.menuSectionAccount,
+              children: <Widget>[
+                AppMenuItem(
+                  icon: Icons.person_rounded,
+                  label: l10n.menuItemEditProfile,
+                  iconBackgroundColor: colors.primarySubtle,
+                  iconForegroundColor: colors.primary,
+                  onTap: () => context.push('/member-profile/edit'),
                 ),
-                iconForegroundColor: colors.communitySecondary,
-                onTap: () => context.push('/profile/settings/two-factor'),
-              ),
-            ],
-          ),
-          AppMenuSection(
-            title: l10n.menuSectionDocsTax,
-            children: <Widget>[
-              AppMenuItem(
-                icon: Icons.description_rounded,
-                label: l10n.menuItemAnnualReport,
-                iconBackgroundColor: colors.dangerSubtle,
-                iconForegroundColor: colors.danger,
-                onTap: () => _showComingSoon(l10n.menuItemAnnualReport),
-              ),
-              AppMenuItem(
-                icon: Icons.article_rounded,
-                label: l10n.menuItemContractList,
-                iconBackgroundColor: colors.surfaceAlt,
-                iconForegroundColor: colors.textSecondary,
-                onTap: () => context.push('/profile/settings/contracts'),
-              ),
-              // AppMenuItem(
-              //   icon: Icons.badge_rounded,
-              //   label: l10n.menuItemMyNumber,
-              //   iconBackgroundColor: colors.warningSubtle,
-              //   iconForegroundColor: colors.warning,
-              //   onTap: () => _showComingSoon(l10n.menuItemMyNumber),
-              // ),
-            ],
-          ),
+                AppMenuItem(
+                  icon: Icons.account_balance_wallet_rounded,
+                  label: l10n.menuItemBankSettings,
+                  iconBackgroundColor: colors.successSubtle,
+                  iconForegroundColor: colors.success,
+                  onTap: () => context.push('/profile/wallet/bank-settings'),
+                ),
+              ],
+            ),
+            AppMenuSection(
+              title: l10n.menuSectionSecurity,
+              children: <Widget>[
+                AppMenuItem(
+                  icon: Icons.verified_user_rounded,
+                  label: l10n.menuItemTwoFactor,
+                  iconBackgroundColor: colors.communitySecondary.withValues(
+                    alpha: 0.16,
+                  ),
+                  iconForegroundColor: colors.communitySecondary,
+                  onTap: () => context.push('/profile/settings/two-factor'),
+                ),
+              ],
+            ),
+            AppMenuSection(
+              title: l10n.menuSectionDocsTax,
+              children: <Widget>[
+                AppMenuItem(
+                  icon: Icons.description_rounded,
+                  label: l10n.menuItemAnnualReport,
+                  iconBackgroundColor: colors.dangerSubtle,
+                  iconForegroundColor: colors.danger,
+                  onTap: () => _showComingSoon(l10n.menuItemAnnualReport),
+                ),
+                AppMenuItem(
+                  icon: Icons.article_rounded,
+                  label: l10n.menuItemContractList,
+                  iconBackgroundColor: colors.surfaceAlt,
+                  iconForegroundColor: colors.textSecondary,
+                  onTap: () => context.push('/profile/settings/contracts'),
+                ),
+              ],
+            ),
+          ],
           AppMenuSection(
             title: l10n.menuSectionPreferences,
             children: <Widget>[
@@ -343,27 +333,29 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               style: appText.meta,
             ),
           ),
-          OutlinedButton(
-            onPressed: _isLoggingOut ? null : _logout,
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 12),
+          if (isAuthenticated) ...<Widget>[
+            OutlinedButton(
+              onPressed: _isLoggingOut ? null : _logout,
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+              child: _isLoggingOut
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(l10n.homeLogout),
             ),
-            child: _isLoggingOut
-                ? const SizedBox(
-                    width: 16,
-                    height: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : Text(l10n.homeLogout),
-          ),
-          const SizedBox(height: 10),
-          TextButton(
-            onPressed: _confirmDeleteAccount,
-            child: Text(
-              l10n.menuDeleteAccountAction,
-              style: appText.helper.copyWith(color: colors.dangerForeground),
+            const SizedBox(height: 10),
+            TextButton(
+              onPressed: _confirmDeleteAccount,
+              child: Text(
+                l10n.menuDeleteAccountAction,
+                style: appText.helper.copyWith(color: colors.dangerForeground),
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );

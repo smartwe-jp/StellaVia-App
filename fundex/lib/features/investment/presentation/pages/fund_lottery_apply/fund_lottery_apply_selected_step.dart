@@ -55,24 +55,6 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16, 20, 16, 18),
             child: Column(
               children: <Widget>[
-                Container(
-                  width: 80,
-                  height: 80,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: colors.successSubtle,
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Text(
-                      '🎉',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 32),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 18),
                 Text(
                   headline,
                   textAlign: TextAlign.center,
@@ -133,7 +115,6 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                 //     child: Row(
                 //       crossAxisAlignment: CrossAxisAlignment.start,
                 //       children: <Widget>[
-                //         const Text('📋', style: TextStyle(fontSize: 18)),
                 //         const SizedBox(width: 8),
                 //         Expanded(
                 //           child: RichText(

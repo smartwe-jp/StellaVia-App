@@ -1208,7 +1208,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeWelcomeUser.
   ///
   /// In en, this message translates to:
-  /// **'Welcome back, {name} 👋'**
+  /// **'Welcome back, {name}'**
   String homeWelcomeUser(Object name);
 
   /// No description provided for @homeHeroTotalAssetsAmountLabel.
@@ -1664,7 +1664,7 @@ abstract class AppLocalizations {
   /// No description provided for @kizunarkInvestorOnlyNotice.
   ///
   /// In en, this message translates to:
-  /// **'🔒 Only verified investors can post & comment'**
+  /// **'Only verified investors can post & comment'**
   String get kizunarkInvestorOnlyNotice;
 
   /// No description provided for @kizunarkComposePlaceholder.
@@ -2654,7 +2654,7 @@ abstract class AppLocalizations {
   /// No description provided for @fundDetailKeyFactsTitle.
   ///
   /// In en, this message translates to:
-  /// **'📌 Key facts'**
+  /// **'Key facts'**
   String get fundDetailKeyFactsTitle;
 
   /// No description provided for @fundDetailFundTotalLabel.
@@ -2684,7 +2684,7 @@ abstract class AppLocalizations {
   /// No description provided for @fundDetailPreferredStructureTitle.
   ///
   /// In en, this message translates to:
-  /// **'🛡️ Senior/Junior Structure'**
+  /// **'Senior/Junior Structure'**
   String get fundDetailPreferredStructureTitle;
 
   /// No description provided for @fundDetailSeniorInvestmentLabel.
@@ -2702,7 +2702,7 @@ abstract class AppLocalizations {
   /// No description provided for @fundDetailPropertyInfoTitle.
   ///
   /// In en, this message translates to:
-  /// **'📍 Property details'**
+  /// **'Property details'**
   String get fundDetailPropertyInfoTitle;
 
   /// No description provided for @fundDetailLocationLabel.
@@ -2792,7 +2792,7 @@ abstract class AppLocalizations {
   /// No description provided for @fundDetailContractOverviewTitle.
   ///
   /// In en, this message translates to:
-  /// **'📋 Contract Summary'**
+  /// **'Contract Summary'**
   String get fundDetailContractOverviewTitle;
 
   /// No description provided for @fundDetailContractTypeLabel.
@@ -2846,7 +2846,7 @@ abstract class AppLocalizations {
   /// No description provided for @fundDetailOperatorInfoTitle.
   ///
   /// In en, this message translates to:
-  /// **'🏢 Operator information'**
+  /// **'Operator information'**
   String get fundDetailOperatorInfoTitle;
 
   /// No description provided for @fundDetailOperatorCompanyLabel.
@@ -2894,7 +2894,7 @@ abstract class AppLocalizations {
   /// No description provided for @fundDetailDocumentsTitle.
   ///
   /// In en, this message translates to:
-  /// **'📄 Related documents'**
+  /// **'Related documents'**
   String get fundDetailDocumentsTitle;
 
   /// No description provided for @fundDetailDocumentReady.
@@ -2936,7 +2936,7 @@ abstract class AppLocalizations {
   /// No description provided for @fundDetailCommentsTitle.
   ///
   /// In en, this message translates to:
-  /// **'💬 Investor voices (KIZUNARK)'**
+  /// **'Investor voices (KIZUNARK)'**
   String get fundDetailCommentsTitle;
 
   /// No description provided for @fundDetailCommentsPlaceholder.
@@ -2978,13 +2978,13 @@ abstract class AppLocalizations {
   /// No description provided for @fundDetailCommentsMoreAction.
   ///
   /// In en, this message translates to:
-  /// **'💜 View more in KIZUNARK'**
+  /// **'View more in KIZUNARK'**
   String get fundDetailCommentsMoreAction;
 
   /// No description provided for @fundDetailFinancialStatusAction.
   ///
   /// In en, this message translates to:
-  /// **'📊 View operator financial status →'**
+  /// **'View operator financial status →'**
   String get fundDetailFinancialStatusAction;
 
   /// No description provided for @fundDetailFinancialStatusToast.
@@ -3032,7 +3032,7 @@ abstract class AppLocalizations {
   /// No description provided for @lotteryApplyStep1BalanceLabel.
   ///
   /// In en, this message translates to:
-  /// **'💰 Standby cash balance'**
+  /// **'Standby cash balance'**
   String get lotteryApplyStep1BalanceLabel;
 
   /// No description provided for @lotteryApplyStep1DepositAction.
@@ -3107,7 +3107,7 @@ abstract class AppLocalizations {
   /// No description provided for @lotteryApplyStep1BalanceWarningAction.
   ///
   /// In en, this message translates to:
-  /// **'💰 Go to deposit'**
+  /// **'Go to deposit'**
   String get lotteryApplyStep1BalanceWarningAction;
 
   /// No description provided for @lotteryApplyStep1MaximumWarningTitle.
@@ -3239,7 +3239,7 @@ abstract class AppLocalizations {
   /// No description provided for @lotteryApplySubmitAction.
   ///
   /// In en, this message translates to:
-  /// **'🎲 Submit lottery application'**
+  /// **'Submit lottery application'**
   String get lotteryApplySubmitAction;
 
   /// No description provided for @lotteryApplySubmitFailedFallback.
@@ -3263,7 +3263,7 @@ abstract class AppLocalizations {
   /// No description provided for @lotteryApplyResultAnnouncementDateLabel.
   ///
   /// In en, this message translates to:
-  /// **'🗓️ Result announcement date'**
+  /// **'Result announcement date'**
   String get lotteryApplyResultAnnouncementDateLabel;
 
   /// No description provided for @lotteryApplyApplicationNumberLabel.
@@ -3305,7 +3305,7 @@ abstract class AppLocalizations {
   /// No description provided for @lotteryApplyDeadlineLabel.
   ///
   /// In en, this message translates to:
-  /// **'⏰ Payment deadline (includes 8-day cooling-off)'**
+  /// **'Payment deadline (includes 8-day cooling-off)'**
   String get lotteryApplyDeadlineLabel;
 
   /// No description provided for @lotteryApplyCoolingOffTitle.
@@ -3461,19 +3461,19 @@ abstract class AppLocalizations {
   /// No description provided for @fundDetailAchievementRateLabel.
   ///
   /// In en, this message translates to:
-  /// **'📊 Funding achievement rate'**
+  /// **'Funding achievement rate'**
   String get fundDetailAchievementRateLabel;
 
   /// No description provided for @fundDetailTabPropertyOverview.
   ///
   /// In en, this message translates to:
-  /// **'📍 Property overview'**
+  /// **'Property overview'**
   String get fundDetailTabPropertyOverview;
 
   /// No description provided for @fundDetailTabIncomeScheme.
   ///
   /// In en, this message translates to:
-  /// **'📊 Income scheme'**
+  /// **'Income scheme'**
   String get fundDetailTabIncomeScheme;
 
   /// No description provided for @fundDetailPropertyCountHint.
@@ -3641,13 +3641,13 @@ abstract class AppLocalizations {
   /// No description provided for @fundDetailSchemeIncomeTitle.
   ///
   /// In en, this message translates to:
-  /// **'📈 Income'**
+  /// **'Income'**
   String get fundDetailSchemeIncomeTitle;
 
   /// No description provided for @fundDetailSchemeExpenseTitle.
   ///
   /// In en, this message translates to:
-  /// **'📉 Expenses'**
+  /// **'Expenses'**
   String get fundDetailSchemeExpenseTitle;
 
   /// No description provided for @fundDetailSchemePropertyPriceLabel.

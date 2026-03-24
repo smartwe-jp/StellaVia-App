@@ -149,13 +149,22 @@ class HomeOverviewTabPage extends ConsumerWidget {
         showNotificationDot: true,
         onNotificationTap: () => context.push('/profile/notifications'),
       ),
-      _ => FundGuestBrowsingBar(
-        title: l10n.homeGuestBrowsingTitle,
-        message: l10n.homeGuestBrowsingBody,
-        loginLabel: l10n.loginSubmit,
-        registerLabel: l10n.loginCreateAccount,
-        onLoginTap: () => context.push('/login'),
-        onRegisterTap: () => context.push('/login?openRegister=1'),
+      _ => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          _HomeGuestTopBar(
+            title: l10n.splashBrandName,
+            onSettingsTap: () => context.push('/profile/settings'),
+          ),
+          FundGuestBrowsingBar(
+            title: l10n.homeGuestBrowsingTitle,
+            message: l10n.homeGuestBrowsingBody,
+            loginLabel: l10n.loginSubmit,
+            registerLabel: l10n.loginCreateAccount,
+            onLoginTap: () => context.push('/login'),
+            onRegisterTap: () => context.push('/login?openRegister=1'),
+          ),
+        ],
       ),
     };
 
@@ -261,6 +270,47 @@ class HomeOverviewTabPage extends ConsumerWidget {
                     ),
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeGuestTopBar extends StatelessWidget {
+  const _HomeGuestTopBar({required this.title, this.onSettingsTap});
+
+  final String title;
+  final VoidCallback? onSettingsTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[colors.heroStart, colors.heroMiddle],
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Text(
+                title,
+                style: appText.pageTitle.copyWith(color: colors.onDark),
+              ),
+            ),
+            AppNavigationIconButton(
+              icon: Icons.menu,
+              onTap: onSettingsTap,
             ),
           ],
         ),

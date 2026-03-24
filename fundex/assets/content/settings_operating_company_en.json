@@ -12,22 +12,22 @@
   "links": [
     {
       "title": "Terms of Use",
-      "icon": "📄",
+      "icon": "",
       "url": "https://testoa.gutingjun.com/terms_conditions.pdf"
     },
     {
       "title": "Privacy Policy",
-      "icon": "🔒",
+      "icon": "",
       "url": "https://testoa.gutingjun.com/personal_information.pdf"
     },
     {
       "title": "Solicitation Policy",
-      "icon": "📋",
+      "icon": "",
       "url": "https://testoa.gutingjun.com/solicitation_policy.pdf"
     },
     {
       "title": "Anti-Social Forces Policy",
-      "icon": "🛡️",
+      "icon": "",
       "url": "https://testoa.gutingjun.com/antisocialrule.pdf"
     }
   ]

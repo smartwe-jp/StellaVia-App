@@ -72,8 +72,6 @@ class FundLotteryApplyDocumentsStep extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text('💡'),
-                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     infoBody,

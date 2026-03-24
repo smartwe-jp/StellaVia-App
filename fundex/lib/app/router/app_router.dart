@@ -67,7 +67,11 @@ String? resolveAuthRedirect({
       location == '/home/free-market' ||
       location.startsWith('/home/free-market/') ||
       location == '/funds' ||
-      location.startsWith('/funds/');
+      location.startsWith('/funds/') ||
+      location == '/profile/settings' ||
+      location == '/profile/settings/faq' ||
+      location == '/profile/settings/contact' ||
+      location == '/profile/settings/company';
   final isSplash = location == '/splash';
   final isLogin =
       location == '/login' ||

@@ -340,8 +340,10 @@ class _CompanyLinkTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           child: Row(
             children: <Widget>[
-              Text(icon),
-              const SizedBox(width: 10),
+              if (icon.trim().isNotEmpty) ...<Widget>[
+                Text(icon),
+                const SizedBox(width: 10),
+              ],
               Expanded(
                 child: Text(
                   label,

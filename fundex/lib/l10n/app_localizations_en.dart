@@ -612,7 +612,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String homeWelcomeUser(Object name) {
-    return 'Welcome back, $name 👋';
+    return 'Welcome back, $name';
   }
 
   @override
@@ -856,7 +856,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get kizunarkInvestorOnlyNotice =>
-      '🔒 Only verified investors can post & comment';
+      'Only verified investors can post & comment';
 
   @override
   String get kizunarkComposePlaceholder => 'Share your investment thoughts...';
@@ -1393,7 +1393,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundDetailYieldDisclaimer => '※ Estimated, not guaranteed';
 
   @override
-  String get fundDetailKeyFactsTitle => '📌 Key facts';
+  String get fundDetailKeyFactsTitle => 'Key facts';
 
   @override
   String get fundDetailFundTotalLabel => 'Fund size';
@@ -1408,7 +1408,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundDetailLotteryDateLabel => 'Lottery date';
 
   @override
-  String get fundDetailPreferredStructureTitle => '🛡️ Senior/Junior Structure';
+  String get fundDetailPreferredStructureTitle => 'Senior/Junior Structure';
 
   @override
   String get fundDetailSeniorInvestmentLabel => 'Preferred';
@@ -1417,7 +1417,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundDetailJuniorInvestmentLabel => 'Subordinated';
 
   @override
-  String get fundDetailPropertyInfoTitle => '📍 Property details';
+  String get fundDetailPropertyInfoTitle => 'Property details';
 
   @override
   String get fundDetailLocationLabel => 'Location';
@@ -1464,7 +1464,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundDetailMapUnavailable => 'Unable to load map data.';
 
   @override
-  String get fundDetailContractOverviewTitle => '📋 Contract Summary';
+  String get fundDetailContractOverviewTitle => 'Contract Summary';
 
   @override
   String get fundDetailContractTypeLabel => 'Contract type';
@@ -1491,7 +1491,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundDetailOperationEndLabel => 'Planned end date';
 
   @override
-  String get fundDetailOperatorInfoTitle => '🏢 Operator information';
+  String get fundDetailOperatorInfoTitle => 'Operator information';
 
   @override
   String get fundDetailOperatorCompanyLabel => 'Operator';
@@ -1515,7 +1515,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundDetailOperatorBusinessStartLabel => 'Business start filing';
 
   @override
-  String get fundDetailDocumentsTitle => '📄 Related documents';
+  String get fundDetailDocumentsTitle => 'Related documents';
 
   @override
   String get fundDetailDocumentReady => 'Tap to review';
@@ -1540,7 +1540,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundDetailPropertyPreviewBadge => 'Property preview';
 
   @override
-  String get fundDetailCommentsTitle => '💬 Investor voices (KIZUNARK)';
+  String get fundDetailCommentsTitle => 'Investor voices (KIZUNARK)';
 
   @override
   String get fundDetailCommentsPlaceholder =>
@@ -1563,11 +1563,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundDetailCommentsPreviewReplyCount => '3';
 
   @override
-  String get fundDetailCommentsMoreAction => '💜 View more in KIZUNARK';
+  String get fundDetailCommentsMoreAction => 'View more in KIZUNARK';
 
   @override
   String get fundDetailFinancialStatusAction =>
-      '📊 View operator financial status →';
+      'View operator financial status →';
 
   @override
   String get fundDetailFinancialStatusToast =>
@@ -1593,7 +1593,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lotteryApplyStep1Title => '1. Enter units';
 
   @override
-  String get lotteryApplyStep1BalanceLabel => '💰 Standby cash balance';
+  String get lotteryApplyStep1BalanceLabel => 'Standby cash balance';
 
   @override
   String get lotteryApplyStep1DepositAction => 'Deposit';
@@ -1641,7 +1641,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your balance is lower than the selected amount. Please deposit first, then continue the application.';
 
   @override
-  String get lotteryApplyStep1BalanceWarningAction => '💰 Go to deposit';
+  String get lotteryApplyStep1BalanceWarningAction => 'Go to deposit';
 
   @override
   String get lotteryApplyStep1MaximumWarningTitle => 'Exceeded maximum limit';
@@ -1718,7 +1718,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'I have reviewed the above details and agree to proceed with the lottery application.';
 
   @override
-  String get lotteryApplySubmitAction => '🎲 Submit lottery application';
+  String get lotteryApplySubmitAction => 'Submit lottery application';
 
   @override
   String get lotteryApplySubmitFailedFallback =>
@@ -1734,7 +1734,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lotteryApplyResultAnnouncementDateLabel =>
-      '🗓️ Result announcement date';
+      'Result announcement date';
 
   @override
   String get lotteryApplyApplicationNumberLabel => 'Application number';
@@ -1760,7 +1760,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lotteryApplyDeadlineLabel =>
-      '⏰ Payment deadline (includes 8-day cooling-off)';
+      'Payment deadline (includes 8-day cooling-off)';
 
   @override
   String get lotteryApplyCoolingOffTitle => 'About cooling-off';
@@ -1841,13 +1841,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Planned distribution rate (before tax)';
 
   @override
-  String get fundDetailAchievementRateLabel => '📊 Funding achievement rate';
+  String get fundDetailAchievementRateLabel => 'Funding achievement rate';
 
   @override
-  String get fundDetailTabPropertyOverview => '📍 Property overview';
+  String get fundDetailTabPropertyOverview => 'Property overview';
 
   @override
-  String get fundDetailTabIncomeScheme => '📊 Income scheme';
+  String get fundDetailTabIncomeScheme => 'Income scheme';
 
   @override
   String fundDetailPropertyCountHint(int count) {
@@ -1939,10 +1939,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundDetailSchemeBreakdownTitle => 'Investment breakdown';
 
   @override
-  String get fundDetailSchemeIncomeTitle => '📈 Income';
+  String get fundDetailSchemeIncomeTitle => 'Income';
 
   @override
-  String get fundDetailSchemeExpenseTitle => '📉 Expenses';
+  String get fundDetailSchemeExpenseTitle => 'Expenses';
 
   @override
   String get fundDetailSchemePropertyPriceLabel => 'Property price';

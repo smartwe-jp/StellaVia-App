@@ -105,27 +105,12 @@ class FundDedicatedDepositAccountCard extends StatelessWidget {
                   horizontal: UiTokens.spacing12,
                   vertical: 10,
                 ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 1),
-                      child: SizedBox.square(
-                        dimension: 12,
-                        child: FittedBox(child: Text('💡')),
-                      ),
-                    ),
-                    const SizedBox(width: UiTokens.spacing8),
-                    Expanded(
-                      child: Text(
-                        helperMessage,
-                        style: appText.meta.copyWith(
-                          color: colors.primary,
-                          height: 1.6,
-                        ),
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  helperMessage,
+                  style: appText.meta.copyWith(
+                    color: colors.primary,
+                    height: 1.6,
+                  ),
                 ),
               ),
             ),
@@ -141,23 +126,12 @@ class FundDedicatedDepositAccountCard extends StatelessWidget {
                     horizontal: UiTokens.spacing12,
                     vertical: 10,
                   ),
-                  child: Row(
-                    children: <Widget>[
-                      SizedBox.square(
-                        dimension: 12,
-                        child: FittedBox(child: Text('⏰')),
-                      ),
-                      const SizedBox(width: UiTokens.spacing8),
-                      Expanded(
-                        child: Text(
-                          expirationMessage!,
-                          style: appText.micro.copyWith(
-                            color: colors.warning,
-                            height: 1.45,
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    expirationMessage!,
+                    style: appText.micro.copyWith(
+                      color: colors.warning,
+                      height: 1.45,
+                    ),
                   ),
                 ),
               ),

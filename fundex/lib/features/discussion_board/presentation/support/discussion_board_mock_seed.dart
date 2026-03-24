@@ -81,7 +81,7 @@ List<DiscussionThread> buildDiscussionBoardMockSeed() {
       timeLabel: '2時間前',
       body: '赤坂のレジデンス案件、立地が最高ですね。港区の賃貸需要を考えると稼働率は安定しそう。利回り8.5%は魅力的です。',
       createdAtIso: '2026-03-05T10:00:00Z',
-      fundReferenceLabel: '🏠 プレミアムレジデンス赤坂 →',
+      fundReferenceLabel: 'プレミアムレジデンス赤坂 →',
       fundReferenceId: 'mock-fund-1',
       commentCount: 3,
       replies: <DiscussionReply>[
@@ -117,7 +117,7 @@ List<DiscussionThread> buildDiscussionBoardMockSeed() {
       author: takahashi,
       timeLabel: '5時間前',
       body:
-          '先月の分配金が入金されました！オフィスビル案件、予定通りの利回りで安定運用中 📈 不動産クラファン始めて半年ですが、銀行預金とは比べものにならないリターンです。',
+          '先月の分配金が入金されました！オフィスビル案件、予定通りの利回りで安定運用中。不動産クラファン始めて半年ですが、銀行預金とは比べものにならないリターンです。',
       createdAtIso: '2026-03-05T07:00:00Z',
       commentCount: 5,
       replies: <DiscussionReply>[
@@ -144,7 +144,7 @@ List<DiscussionThread> buildDiscussionBoardMockSeed() {
       body:
           '京都の町家ホテル案件が気になります。インバウンド需要回復中、東山区の立地は最高。利回り10%は高めですが、観光需要リスクもありますね。皆さんどう思いますか？',
       createdAtIso: '2026-03-04T09:00:00Z',
-      fundReferenceLabel: '🏠 町家リノベーションホテル →',
+      fundReferenceLabel: '町家リノベーションホテル →',
       fundReferenceId: 'mock-fund-2',
       commentCount: 2,
       replies: <DiscussionReply>[
@@ -173,7 +173,7 @@ List<DiscussionThread> buildDiscussionBoardMockSeed() {
       author: nakamura,
       timeLabel: '2日前',
       body:
-          '不動産クラファン初心者です🔰 優先劣後構造の仕組みを理解して安心しました。まずは10万円から！先輩方、アドバイスお願いします 🙏',
+          '不動産クラファン初心者です。優先劣後構造の仕組みを理解して安心しました。まずは10万円から。先輩方、アドバイスお願いします。',
       createdAtIso: '2026-03-03T10:00:00Z',
       commentCount: 12,
       replies: <DiscussionReply>[

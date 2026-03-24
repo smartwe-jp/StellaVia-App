@@ -20,17 +20,17 @@ class FundMyPageMetricData {
 
 class FundMyPageQuickActionData {
   const FundMyPageQuickActionData({
-    required this.icon,
     required this.label,
     this.onTap,
+    this.icon,
     this.backgroundColor,
     this.foregroundColor,
     this.borderColor,
   });
 
-  final Widget icon;
   final String label;
   final VoidCallback? onTap;
+  final Widget? icon;
   final Color? backgroundColor;
   final Color? foregroundColor;
   final Color? borderColor;
@@ -461,14 +461,16 @@ class _FundMyPageQuickActionButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              IconTheme(
-                data: IconThemeData(
-                  size: 18,
-                  color: data.foregroundColor ?? colors.textPrimary,
+              if (data.icon != null) ...<Widget>[
+                IconTheme(
+                  data: IconThemeData(
+                    size: 18,
+                    color: data.foregroundColor ?? colors.textPrimary,
+                  ),
+                  child: data.icon!,
                 ),
-                child: data.icon,
-              ),
-              const SizedBox(width: 8),
+                const SizedBox(width: 8),
+              ],
               Flexible(
                 child: Text(
                   data.label,

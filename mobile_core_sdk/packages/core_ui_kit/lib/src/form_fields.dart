@@ -17,6 +17,7 @@ class EmailTextField extends StatelessWidget {
     this.leadingIcon = Icons.alternate_email_rounded,
     this.textInputAction,
     this.autofillHints = const <String>[AutofillHints.email],
+    this.trailing,
   });
 
   final TextEditingController controller;
@@ -29,6 +30,7 @@ class EmailTextField extends StatelessWidget {
   final IconData leadingIcon;
   final TextInputAction? textInputAction;
   final Iterable<String> autofillHints;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +44,7 @@ class EmailTextField extends StatelessWidget {
       textInputAction: textInputAction,
       autofillHints: autofillHints,
       leadingIcon: leadingIcon,
+      trailing: trailing,
       onChanged: onChanged,
     );
   }
@@ -59,6 +62,7 @@ class PhoneTextField extends StatelessWidget {
     this.leadingIcon = Icons.phone_iphone_rounded,
     this.textInputAction,
     this.autofillHints = const <String>[AutofillHints.telephoneNumber],
+    this.trailing,
   });
 
   final TextEditingController controller;
@@ -70,6 +74,7 @@ class PhoneTextField extends StatelessWidget {
   final IconData leadingIcon;
   final TextInputAction? textInputAction;
   final Iterable<String> autofillHints;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +88,7 @@ class PhoneTextField extends StatelessWidget {
       textInputAction: textInputAction,
       autofillHints: autofillHints,
       leadingIcon: leadingIcon,
+      trailing: trailing,
       onChanged: onChanged,
     );
   }
