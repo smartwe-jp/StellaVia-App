@@ -269,6 +269,8 @@ class _DiscussionBoardTabPageState
         KizunarkGradientHeader(
           title: l10n.mainTabKizunark,
           subtitle: l10n.kizunarkSubtitle,
+          titleLightAssetPath: 'assets/images/kizunark.nav.light.png',
+          titleDarkAssetPath: 'assets/images/kizunark.nav.dark.png',
         ),
         Expanded(
           child: RefreshIndicator(

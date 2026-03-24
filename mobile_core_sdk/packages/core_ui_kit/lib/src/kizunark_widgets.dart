@@ -7,42 +7,66 @@ class KizunarkGradientHeader extends StatelessWidget {
     super.key,
     required this.title,
     required this.subtitle,
+    this.titleLightAssetPath,
+    this.titleDarkAssetPath,
   });
 
   final String title;
   final String subtitle;
+  final String? titleLightAssetPath;
+  final String? titleDarkAssetPath;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
+    final isDark = theme.brightness == Brightness.dark;
+    final titleAssetPath = isDark ? titleDarkAssetPath : titleLightAssetPath;
 
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(20, 18, 20, 14),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: <Color>[colors.communityPrimary, colors.communitySecondary],
-        ),
+        color: colors.surface,
+        border: Border(bottom: BorderSide(color: colors.borderSoft)),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: colors.scrim.withValues(alpha: 0.03),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            title,
-            style: appText.pageTitle.copyWith(
-              color: colors.onDark,
-              letterSpacing: -0.2,
+          if (titleAssetPath?.trim().isNotEmpty ?? false)
+            Semantics(
+              label: title,
+              child: ExcludeSemantics(
+                child: Image.asset(
+                  titleAssetPath!,
+                  height: 44,
+                  fit: BoxFit.contain,
+                  alignment: Alignment.centerLeft,
+                ),
+              ),
+            )
+          else
+            Text(
+              title,
+              style: appText.pageTitle.copyWith(
+                color: colors.textPrimary,
+                letterSpacing: -0.2,
+              ),
             ),
-          ),
           const SizedBox(height: 2),
+          if (!(titleAssetPath?.trim().isNotEmpty ?? false))
           Text(
             subtitle,
             style: appText.meta.copyWith(
-              color: colors.onDark.withValues(alpha: 0.6),
+              color: colors.textSecondary,
             ),
           ),
         ],

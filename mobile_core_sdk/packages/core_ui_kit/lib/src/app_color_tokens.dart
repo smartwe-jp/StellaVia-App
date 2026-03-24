@@ -33,9 +33,9 @@ class AppColorTokens {
   static const Color fundexVioletLight = Color(0xFFEDE9FE);
   static const Color fundexPink = Color(0xFFEC4899);
   static const Color fundexPinkLight = Color(0xFFFCE7F3);
-  static const Color kizunarkPrimary = Color(0xFF6366F1);
-  static const Color kizunarkSecondary = Color(0xFF8B5CF6);
-  static const Color kizunarkPrimaryLight = Color(0xFFEDE9FE);
+  static const Color kizunarkPrimary = brandPrimary;
+  static const Color kizunarkSecondary = brandPrimaryBright;
+  static const Color kizunarkPrimaryLight = fundexAccentSuperLight;
   static const Color fundexBackground = Color(0xFFF8FBFD);
   static const Color fundexSurface = brandWhite;
   static const Color fundexSurfaceAlt = Color(0xFFFBFCFD);

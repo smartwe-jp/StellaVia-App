@@ -134,16 +134,20 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.menuTitle,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: <Color>[colors.heroStart, colors.heroMiddle],
-          ),
-        ),
+        // decoration: BoxDecoration(
+        //   gradient: LinearGradient(
+        //     begin: Alignment.topLeft,
+        //     end: Alignment.bottomRight,
+        //     colors: <Color>[colors.heroStart, colors.heroMiddle],
+        //   ),
+        // ),
+        backgroundColor: colors.surface,
+        foregroundColor: colors.textPrimary,
         leading: AppNavigationIconButton(
           icon: Icons.arrow_back_rounded,
           onTap: () => context.pop(),
+          backgroundColor: colors.surface.withValues(alpha: 0),
+          foregroundColor: colors.textPrimary,
         ),
       ),
       body: ListView(
