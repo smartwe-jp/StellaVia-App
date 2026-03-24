@@ -396,7 +396,7 @@ class _WithdrawBalanceHeroCard extends StatelessWidget {
                           const SizedBox(height: 10),
                           Text(
                             value,
-                            style: appText.heroMetricSecondary.copyWith(
+                            style: appText.heroMetricPrimary.copyWith(
                               color: foregroundColor,
                               height: 1.0,
                             ),
@@ -430,12 +430,6 @@ class _WithdrawBalanceHeroCard extends StatelessWidget {
                   color: colors.surface.withValues(alpha: 0.16),
                 ),
                 const SizedBox(height: 12),
-                Text(
-                  context.l10n.walletWithdrawTitle,
-                  style: appText.bodySemi.copyWith(
-                    color: foregroundColor.withValues(alpha: 0.82),
-                  ),
-                ),
               ],
             ),
           ),

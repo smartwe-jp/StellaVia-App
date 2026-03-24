@@ -243,7 +243,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
                       ),
                       actionLabel: l10n.homeViewAllAction,
                       onActionTap: () => context.push('/home/free-market'),
-                      height: 260,
+                      height: 262,
                       children: secondaryMarketCards,
                     ),
                   if (activeFundCards.isNotEmpty)

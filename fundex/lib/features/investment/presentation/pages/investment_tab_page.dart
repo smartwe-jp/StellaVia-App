@@ -961,7 +961,7 @@ class _CardStatCell extends StatelessWidget {
         Text(
           value,
           style:
-              (useNumericValueStyle ? appText.numericBody : appText.bodyStrong)
+              (useNumericValueStyle ? appText.sectionTitle : appText.sectionTitle)
                   .copyWith(color: valueColor ?? colors.textPrimary),
         ),
       ],

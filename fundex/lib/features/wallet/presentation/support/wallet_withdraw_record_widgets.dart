@@ -72,7 +72,7 @@ class WalletWithdrawRecordCard extends StatelessWidget {
                   ),
                   child: Text(
                     statusLabel,
-                    style: appText.micro.copyWith(color: statusForegroundColor),
+                    style: appText.bodySemi.copyWith(color: statusForegroundColor),
                   ),
                 ),
               ],

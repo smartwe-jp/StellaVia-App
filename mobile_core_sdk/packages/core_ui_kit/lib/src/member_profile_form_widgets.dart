@@ -1062,7 +1062,7 @@ InputDecoration memberProfileInputDecoration({
   );
 }
 
-class _SegmentedTextField extends StatelessWidget {
+class _SegmentedTextField extends StatefulWidget {
   const _SegmentedTextField({
     required this.segmentLabel,
     required this.controller,
@@ -1078,54 +1078,94 @@ class _SegmentedTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
 
   @override
+  State<_SegmentedTextField> createState() => _SegmentedTextFieldState();
+}
+
+class _SegmentedTextFieldState extends State<_SegmentedTextField> {
+  late final FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode()..addListener(_handleFocusChanged);
+  }
+
+  @override
+  void dispose() {
+    _focusNode
+      ..removeListener(_handleFocusChanged)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _handleFocusChanged() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
-    return DecoratedBox(
+    final borderRadius = BorderRadius.circular(12);
+    final borderColor = _focusNode.hasFocus ? colors.primary : colors.border;
+
+    return Container(
       decoration: BoxDecoration(
         color: colors.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: colors.border, width: 1.5),
+        borderRadius: borderRadius,
       ),
-      child: Row(
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            decoration: BoxDecoration(
-              color: colors.surfaceAlt,
-              border: Border(right: BorderSide(color: colors.border)),
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10.5),
-                bottomLeft: Radius.circular(10.5),
-              ),
-            ),
-            child: Text(
-              segmentLabel,
-              style: appText.micro.copyWith(color: colors.textSecondary),
-            ),
-          ),
-          Expanded(
-            child: TextField(
-              controller: controller,
-              keyboardType: keyboardType,
-              inputFormatters: inputFormatters,
-              decoration: InputDecoration(
-                isDense: true,
-                hintText: hintText,
-                hintStyle: appText.inputText.copyWith(
-                  color: colors.textSecondary.withValues(alpha: 0.72),
+      foregroundDecoration: BoxDecoration(
+        borderRadius: borderRadius,
+        border: Border.all(color: borderColor, width: 1.5),
+      ),
+      child: ClipRRect(
+        borderRadius: borderRadius,
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  color: colors.surfaceAlt,
+                  border: Border(right: BorderSide(color: colors.border)),
                 ),
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 10,
+                alignment: Alignment.center,
+                child: Text(
+                  widget.segmentLabel,
+                  style: appText.micro.copyWith(color: colors.textSecondary),
                 ),
               ),
-              style: appText.inputText,
-            ),
+              Expanded(
+                child: TextField(
+                  focusNode: _focusNode,
+                  controller: widget.controller,
+                  keyboardType: widget.keyboardType,
+                  inputFormatters: widget.inputFormatters,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    hintText: widget.hintText,
+                    hintStyle: appText.inputText.copyWith(
+                      color: colors.textSecondary.withValues(alpha: 0.72),
+                    ),
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 10,
+                    ),
+                  ),
+                  style: appText.inputText,
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
