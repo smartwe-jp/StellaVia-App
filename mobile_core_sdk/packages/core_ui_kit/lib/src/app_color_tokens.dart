@@ -12,19 +12,21 @@ class AppColorTokens {
   static const Color brandNeutral = Color(0xFFE7E7E7);
   static const Color brandWhite = Color(0xFFFFFFFF);
 
-  // FUNDEX core palette (from demo source)
-  static const Color fundexPrimaryDark = Color(0xFF0A1628);
-  static const Color fundexPrimaryDarkDradient = Color(0xFF1E3A5F);
-  static const Color fundexPrimaryDarkAlt = Color(0xFF142240);
-  static const Color fundexAccent = Color(0xFF2563EB);
-  static const Color fundexAccentLight = Color(0xFFDBEAFE);
-  static const Color fundexAccentSuperLight = Color(0xFFEFF6FF);
-  static const Color fundexAccentDradient = Color(0xFF60A5FA);
-  static const Color fundexAccentAlt = Color(0xFF3B82F6);
+  // Legacy FUNDEX aliases remapped to the current corporate palette.
+  // Keep these names for compatibility so the app can switch brand colors
+  // from a single file instead of touching component code.
+  static const Color fundexPrimaryDark = brandPrimaryDark;
+  static const Color fundexPrimaryDarkDradient = brandPrimary;
+  static const Color fundexPrimaryDarkAlt = Color(0xFF04457F);
+  static const Color fundexAccent = brandPrimary;
+  static const Color fundexAccentLight = Color(0xFFD6EAF9);
+  static const Color fundexAccentSuperLight = Color(0xFFF2F8FD);
+  static const Color fundexAccentDradient = brandPrimaryBright;
+  static const Color fundexAccentAlt = brandPrimaryBright;
   static const Color fundexSuccess = Color(0xFF10B981);
   static const Color fundexSuccessLight = Color(0xFFD1FAE5);
-  static const Color fundexDanger = Color(0xFFEF4444);
-  static const Color fundexDangerLight = Color(0xFFFEE2E2);
+  static const Color fundexDanger = brandAlert;
+  static const Color fundexDangerLight = Color(0xFFFFECEB);
   static const Color fundexWarning = Color(0xFFF59E0B);
   static const Color fundexWarningLight = Color(0xFFFEF3C7);
   static const Color fundexViolet = Color(0xFF8B5CF6);
@@ -34,11 +36,11 @@ class AppColorTokens {
   static const Color kizunarkPrimary = Color(0xFF6366F1);
   static const Color kizunarkSecondary = Color(0xFF8B5CF6);
   static const Color kizunarkPrimaryLight = Color(0xFFEDE9FE);
-  static const Color fundexBackground = Color(0xFFF8FAFC);
-  static const Color fundexSurface = Color(0xFFFFFFFF);
-  static const Color fundexSurfaceAlt = Color(0xFFFAFBFC);
-  static const Color fundexBorder = Color(0xFFE2E8F0);
-  static const Color fundexBorderSoft = Color(0xFFF1F5F9);
+  static const Color fundexBackground = Color(0xFFF8FBFD);
+  static const Color fundexSurface = brandWhite;
+  static const Color fundexSurfaceAlt = Color(0xFFFBFCFD);
+  static const Color fundexBorder = brandNeutral;
+  static const Color fundexBorderSoft = Color(0xFFF3F3F3);
   static const Color fundexText = Color(0xFF0F172A);
   static const Color fundexTextSecondary = Color(0xFF475569);
   static const Color fundexTextTertiary = Color(0xFF94A3B8);

@@ -316,7 +316,7 @@ FundFeaturedFundCardData _buildFeaturedFundCardData(
       statusTag,
       if (methodTag != null) methodTag,
     ],
-    artworkGradientColors: _featuredArtworkGradientColors(status),
+    artworkGradientColors: _featuredArtworkGradientColors(context, status),
     imageUrls: project.photos,
     onTap: () => context.push('/funds/${project.id}'),
   );
@@ -426,31 +426,33 @@ FundFeaturedFundTagData? _buildMethodTag(
   );
 }
 
-List<Color> _featuredArtworkGradientColors(int? status) {
+List<Color> _featuredArtworkGradientColors(BuildContext context, int? status) {
+  final colors = Theme.of(context).appColors;
+
   switch (status) {
     case 1:
-      return const <Color>[
-        Color(0xFF0F172A),
-        Color(0xFF1E3A8A),
-        Color(0xFF2563EB),
+      return <Color>[
+        colors.brandPrimaryDark,
+        colors.primary,
+        colors.brandPrimaryBright,
       ];
     case 0:
-      return const <Color>[
-        Color(0xFF7C2D12),
-        Color(0xFFC2410C),
-        Color(0xFFF97316),
+      return <Color>[
+        colors.warningForeground,
+        colors.warning,
+        colors.warningAction,
       ];
     case 4:
-      return const <Color>[
-        Color(0xFF14532D),
-        Color(0xFF166534),
-        Color(0xFF22C55E),
+      return <Color>[
+        colors.successForeground,
+        colors.success,
+        colors.successBorder,
       ];
     default:
-      return const <Color>[
-        Color(0xFF334155),
-        Color(0xFF475569),
-        Color(0xFF64748B),
+      return <Color>[
+        colors.textSecondary,
+        colors.textSecondary.withValues(alpha: 0.84),
+        colors.textTertiary,
       ];
   }
 }

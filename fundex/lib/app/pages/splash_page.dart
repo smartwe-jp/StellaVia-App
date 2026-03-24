@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -94,20 +95,23 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
     final l10n = context.l10n;
     final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final onDark = colors.onDark;
 
     return Scaffold(
       key: const Key('splash_page'),
       body: DecoratedBox(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment(-0.65, -1),
-            end: Alignment(0.85, 1),
+            begin: const Alignment(-0.65, -1),
+            end: const Alignment(0.85, 1),
             colors: <Color>[
-              Color(0xFF0A1628),
-              Color(0xFF1E3A5F),
-              Color(0xFF0A1628),
+              colors.heroStart,
+              colors.heroMiddle,
+              colors.heroEnd,
             ],
-            stops: <double>[0, 0.5, 1],
+            stops: const <double>[0, 0.5, 1],
           ),
         ),
         child: SafeArea(
@@ -121,43 +125,44 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
+                      gradient: LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: <Color>[Color(0xFF2563EB), Color(0xFF60A5FA)],
+                        colors: <Color>[
+                          colors.brandPrimary,
+                          colors.brandPrimaryBright,
+                        ],
                       ),
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: const <BoxShadow>[
+                      boxShadow: <BoxShadow>[
                         BoxShadow(
-                          color: Color(0x662563EB),
+                          color: colors.primary.withValues(alpha: 0.36),
                           blurRadius: 32,
-                          offset: Offset(0, 8),
+                          offset: const Offset(0, 8),
                         ),
                       ],
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.star_rounded,
                       size: 44,
-                      color: Colors.white,
+                      color: onDark,
                     ),
                   ),
                 ),
                 const SizedBox(height: 24),
                 Text(
                   l10n.splashBrandName,
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    color: Colors.white,
+                  style: appText.heroTitle.copyWith(
+                    color: onDark,
                     fontSize: 28,
-                    fontWeight: FontWeight.w800,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   l10n.splashBrandSlogan,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.white.withValues(alpha: 0.7),
+                  style: appText.bodySemi.copyWith(
+                    color: onDark.withValues(alpha: 0.72),
                     fontSize: 12,
-                    fontWeight: FontWeight.w500,
                     letterSpacing: 0.5,
                   ),
                   textAlign: TextAlign.center,
@@ -165,10 +170,9 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                 const SizedBox(height: 4),
                 Text(
                   l10n.splashTagline,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.white.withValues(alpha: 0.4),
+                  style: appText.bodySemi.copyWith(
+                    color: onDark.withValues(alpha: 0.42),
                     fontSize: 11,
-                    fontWeight: FontWeight.w500,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -185,19 +189,21 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                           fit: StackFit.expand,
                           children: <Widget>[
                             Container(
-                              color: Colors.white.withValues(alpha: 0.1),
+                              color: onDark.withValues(alpha: 0.18),
                             ),
                             FractionallySizedBox(
                               widthFactor: _progressController.value,
                               alignment: Alignment.centerLeft,
-                              child: const DecoratedBox(
+                              child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                     begin: Alignment.centerLeft,
                                     end: Alignment.centerRight,
                                     colors: <Color>[
-                                      Color(0xFF2563EB),
-                                      Color(0xFF60A5FA),
+                                      colors.brandPrimaryBright.withValues(
+                                        alpha: 0.92,
+                                      ),
+                                      onDark.withValues(alpha: 0.92),
                                     ],
                                   ),
                                 ),

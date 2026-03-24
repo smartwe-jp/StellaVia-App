@@ -54,6 +54,8 @@ class AppThemeFactory {
     final outline = isDark
         ? AppColorTokens.darkBorder
         : AppColorTokens.lightBorder;
+    Color overlay(Color foreground, Color base, double opacity) =>
+        Color.alphaBlend(foreground.withValues(alpha: opacity), base);
     final textTheme = AppTypographyTokens.textTheme(brightness, locale: locale);
     final contentMuted = onSurface.withValues(alpha: 0.72);
     TextStyle sans({
@@ -92,31 +94,111 @@ class AppThemeFactory {
       brandAlert: AppColorTokens.brandAlert,
       brandNeutral: AppColorTokens.brandNeutral,
       brandWhite: AppColorTokens.brandWhite,
-      primary: AppColorTokens.fundexAccent,
-      primaryAlt: AppColorTokens.fundexAccentAlt,
-      primarySoft: AppColorTokens.fundexAccentLight,
-      primarySubtle: AppColorTokens.fundexAccentSuperLight,
+      primary: isDark
+          ? AppColorTokens.brandPrimaryBright
+          : AppColorTokens.fundexAccent,
+      primaryAlt: isDark
+          ? AppColorTokens.brandPrimary
+          : AppColorTokens.fundexAccentAlt,
+      primarySoft: isDark
+          ? overlay(
+              AppColorTokens.brandPrimaryBright,
+              AppColorTokens.darkSurfaceAlt,
+              0.24,
+            )
+          : AppColorTokens.fundexAccentLight,
+      primarySubtle: isDark
+          ? overlay(
+              AppColorTokens.brandPrimary,
+              AppColorTokens.darkSurface,
+              0.16,
+            )
+          : AppColorTokens.fundexAccentSuperLight,
       success: AppColorTokens.fundexSuccess,
-      successSubtle: AppColorTokens.fundexSuccessLight,
-      successSoft: AppColorTokens.successSoft,
-      successBorder: AppColorTokens.successBorder,
-      successForeground: AppColorTokens.successStrong,
+      successSubtle: isDark
+          ? overlay(
+              AppColorTokens.fundexSuccess,
+              AppColorTokens.darkSurface,
+              0.14,
+            )
+          : AppColorTokens.fundexSuccessLight,
+      successSoft: isDark
+          ? overlay(
+              AppColorTokens.fundexSuccess,
+              AppColorTokens.darkSurfaceAlt,
+              0.22,
+            )
+          : AppColorTokens.successSoft,
+      successBorder: isDark
+          ? AppColorTokens.fundexSuccess.withValues(alpha: 0.52)
+          : AppColorTokens.successBorder,
+      successForeground: isDark
+          ? AppColorTokens.fundexSuccessLight
+          : AppColorTokens.successStrong,
       warning: AppColorTokens.fundexWarning,
-      warningSubtle: AppColorTokens.fundexWarningLight,
-      warningSoft: AppColorTokens.warningSoft,
-      warningBorder: AppColorTokens.warningBorder,
-      warningForeground: AppColorTokens.warningStrong,
+      warningSubtle: isDark
+          ? overlay(
+              AppColorTokens.fundexWarning,
+              AppColorTokens.darkSurface,
+              0.14,
+            )
+          : AppColorTokens.fundexWarningLight,
+      warningSoft: isDark
+          ? overlay(
+              AppColorTokens.fundexWarning,
+              AppColorTokens.darkSurfaceAlt,
+              0.22,
+            )
+          : AppColorTokens.warningSoft,
+      warningBorder: isDark
+          ? AppColorTokens.fundexWarning.withValues(alpha: 0.56)
+          : AppColorTokens.warningBorder,
+      warningForeground: isDark
+          ? AppColorTokens.warningBorder
+          : AppColorTokens.warningStrong,
       warningAction: AppColorTokens.warningAction,
       danger: AppColorTokens.fundexDanger,
-      dangerSubtle: AppColorTokens.fundexDangerLight,
-      dangerSoft: AppColorTokens.dangerSoft,
-      dangerBorder: AppColorTokens.dangerBorder,
-      dangerForeground: AppColorTokens.dangerText,
-      info: AppColorTokens.info,
-      infoSubtle: AppColorTokens.infoLight,
-      infoSoft: AppColorTokens.infoSoft,
-      infoBorder: AppColorTokens.infoBorder,
-      infoForeground: AppColorTokens.infoText,
+      dangerSubtle: isDark
+          ? overlay(
+              AppColorTokens.fundexDanger,
+              AppColorTokens.darkSurface,
+              0.14,
+            )
+          : AppColorTokens.fundexDangerLight,
+      dangerSoft: isDark
+          ? overlay(
+              AppColorTokens.fundexDanger,
+              AppColorTokens.darkSurfaceAlt,
+              0.22,
+            )
+          : AppColorTokens.dangerSoft,
+      dangerBorder: isDark
+          ? AppColorTokens.fundexDanger.withValues(alpha: 0.56)
+          : AppColorTokens.dangerBorder,
+      dangerForeground: isDark
+          ? AppColorTokens.dangerBorder
+          : AppColorTokens.dangerText,
+      info: isDark ? AppColorTokens.brandPrimaryBright : AppColorTokens.info,
+      infoSubtle: isDark
+          ? overlay(
+              AppColorTokens.brandPrimaryBright,
+              AppColorTokens.darkSurface,
+              0.14,
+            )
+          : AppColorTokens.infoLight,
+      infoSoft: isDark
+          ? overlay(
+              AppColorTokens.brandPrimaryBright,
+              AppColorTokens.darkSurfaceAlt,
+              0.22,
+            )
+          : AppColorTokens.infoSoft,
+      infoBorder: isDark
+          ? AppColorTokens.brandPrimaryBright.withValues(alpha: 0.56)
+          : AppColorTokens.infoBorder,
+      infoForeground: isDark
+          ? AppColorTokens.infoBorder
+          : AppColorTokens.infoText,
       heroStart: AppColorTokens.fundexPrimaryDark,
       heroMiddle: AppColorTokens.fundexPrimaryDarkDradient,
       heroEnd: AppColorTokens.fundexPrimaryDarkAlt,
