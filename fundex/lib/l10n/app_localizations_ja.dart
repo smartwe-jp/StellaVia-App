@@ -1332,6 +1332,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get fundDetailLotteryDateLabel => '抽選日';
 
   @override
+  String get fundDetailOfferingTargetsLabel => '募集対象';
+
+  @override
   String get fundDetailPreferredStructureTitle => '優先劣後構造';
 
   @override

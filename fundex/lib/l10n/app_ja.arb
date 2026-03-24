@@ -483,6 +483,7 @@
   "fundDetailMinimumInvestmentLabel": "最低投資額",
   "fundDetailDividendLabel": "配当",
   "fundDetailLotteryDateLabel": "抽選日",
+  "fundDetailOfferingTargetsLabel": "募集対象",
   "fundDetailPreferredStructureTitle": "優先劣後構造",
   "fundDetailSeniorInvestmentLabel": "優先出資",
   "fundDetailJuniorInvestmentLabel": "劣後出資",

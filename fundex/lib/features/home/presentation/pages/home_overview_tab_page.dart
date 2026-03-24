@@ -9,6 +9,7 @@ import '../../../../app/network/app_network_connectivity_providers.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
+import '../../../investment/presentation/support/fund_project_yield_display.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
 import '../../../member_profile/domain/entities/member_profile_details.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
@@ -28,7 +29,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
     final authState = ref.watch(isAuthenticatedProvider);
     final networkAvailability =
         ref.watch(appNetworkAvailabilityProvider).asData?.value ??
-        AppNetworkAvailability.online;
+            AppNetworkAvailability.online;
     final isAuthenticated = authState.asData?.value ?? false;
     final currentUser = ref.watch(currentAuthUserProvider).asData?.value;
     final asyncProjects = ref.watch(fundProjectListProvider);
@@ -36,14 +37,11 @@ class HomeOverviewTabPage extends ConsumerWidget {
       secondaryMarketMarketplaceListProvider,
     );
     final asyncMemberProfile = ref.watch(memberProfileDetailsProvider);
-    final accountStatistic = ref
-        .watch(myPageAccountStatisticProvider)
-        .asData
-        ?.value;
+    final accountStatistic =
+        ref.watch(myPageAccountStatisticProvider).asData?.value;
     final memberProfile = asyncMemberProfile.asData?.value;
     final projects = asyncProjects.asData?.value ?? const <FundProject>[];
-    final secondaryMarketRecords =
-        asyncSecondaryMarketRecords.asData?.value ??
+    final secondaryMarketRecords = asyncSecondaryMarketRecords.asData?.value ??
         const <MyPageOrderInquiryRecord>[];
     final locale = Localizations.localeOf(context);
     final currencyFormatter = NumberFormat.currency(
@@ -126,46 +124,46 @@ class HomeOverviewTabPage extends ConsumerWidget {
     final topSection = switch ((authState.isLoading, isAuthenticated)) {
       (true, _) => const SizedBox(height: UiTokens.spacing12),
       (_, true) => FundHomeHeroSummary(
-        greeting: l10n.homeWelcomeUser(
-          resolveHomeDisplayName(
-            locale: Localizations.localeOf(context),
-            user: currentUser,
+          greeting: l10n.homeWelcomeUser(
+            resolveHomeDisplayName(
+              locale: Localizations.localeOf(context),
+              user: currentUser,
+            ),
           ),
+          totalAssetsLabel: l10n.homeHeroTotalAssetsAmountLabel,
+          totalAssetsValue: _formatCurrencyValue(
+            accountStatistic?.total,
+            currencyFormatter,
+          ),
+          totalAssetsDelta: l10n.homeHeroMonthlyDelta,
+          activeInvestmentLabel: l10n.homeHeroActiveInvestmentLabel,
+          activeInvestmentValue: _formatCompactCurrencyValue(
+            accountStatistic?.crowdfundingTotal,
+          ),
+          totalDividendsLabel: l10n.homeHeroCashLabel,
+          totalDividendsValue: _formatCompactCurrencyValue(
+            accountStatistic?.firstLevelAccountTotal,
+          ),
+          showNotificationDot: true,
+          onNotificationTap: () => context.push('/profile/notifications'),
         ),
-        totalAssetsLabel: l10n.homeHeroTotalAssetsAmountLabel,
-        totalAssetsValue: _formatCurrencyValue(
-          accountStatistic?.total,
-          currencyFormatter,
-        ),
-        totalAssetsDelta: l10n.homeHeroMonthlyDelta,
-        activeInvestmentLabel: l10n.homeHeroActiveInvestmentLabel,
-        activeInvestmentValue: _formatCompactCurrencyValue(
-          accountStatistic?.crowdfundingTotal,
-        ),
-        totalDividendsLabel: l10n.homeHeroCashLabel,
-        totalDividendsValue: _formatCompactCurrencyValue(
-          accountStatistic?.firstLevelAccountTotal,
-        ),
-        showNotificationDot: true,
-        onNotificationTap: () => context.push('/profile/notifications'),
-      ),
       _ => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          _HomeGuestTopBar(
-            title: l10n.splashBrandName,
-            onSettingsTap: () => context.push('/profile/settings'),
-          ),
-          FundGuestBrowsingBar(
-            title: l10n.homeGuestBrowsingTitle,
-            message: l10n.homeGuestBrowsingBody,
-            loginLabel: l10n.loginSubmit,
-            registerLabel: l10n.loginCreateAccount,
-            onLoginTap: () => context.push('/login'),
-            onRegisterTap: () => context.push('/login?openRegister=1'),
-          ),
-        ],
-      ),
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            _HomeGuestTopBar(
+              title: l10n.splashBrandName,
+              onSettingsTap: () => context.push('/profile/settings'),
+            ),
+            FundGuestBrowsingBar(
+              title: l10n.homeGuestBrowsingTitle,
+              message: l10n.homeGuestBrowsingBody,
+              loginLabel: l10n.loginSubmit,
+              registerLabel: l10n.loginCreateAccount,
+              onLoginTap: () => context.push('/login'),
+              onRegisterTap: () => context.push('/login?openRegister=1'),
+            ),
+          ],
+        ),
     };
 
     return MainShellTabRefreshScope(
@@ -217,13 +215,11 @@ class HomeOverviewTabPage extends ConsumerWidget {
                             Text(
                               l10n.fundListLoadError,
                               textAlign: TextAlign.center,
-                              style:
-                                  (Theme.of(context).textTheme.bodyMedium ??
-                                          const TextStyle())
-                                      .copyWith(
-                                        color:
-                                            AppColorTokens.fundexTextSecondary,
-                                      ),
+                              style: (Theme.of(context).textTheme.bodyMedium ??
+                                      const TextStyle())
+                                  .copyWith(
+                                color: AppColorTokens.fundexTextSecondary,
+                              ),
                             ),
                             const SizedBox(height: UiTokens.spacing12),
                             OutlinedButton(
@@ -354,11 +350,7 @@ FundFeaturedFundCardData _buildFeaturedFundCardData(
 
   return FundFeaturedFundCardData(
     title: project.projectName,
-    annualYield: _formatYieldPercent(
-      project.expectedDistributionRatioMax ??
-          project.expectedDistributionRatioMin ??
-          project.investorTypes.firstOrNull?.earningsRadio,
-    ),
+    annualYield: resolveFundProjectYieldDisplay(project),
     metadata: metadata,
     progress: _normalizeProgress(project.achievementRate),
     progressLabel: _buildProgressLabel(context, project, currencyFormatter),
@@ -378,11 +370,7 @@ FundActiveFundCardData _buildActiveFundCardData(
 ) {
   return FundActiveFundCardData(
     title: project.projectName,
-    annualYield: _formatYieldPercent(
-      project.expectedDistributionRatioMax ??
-          project.expectedDistributionRatioMin ??
-          project.investorTypes.firstOrNull?.earningsRadio,
-    ),
+    annualYield: resolveFundProjectYieldDisplay(project),
     rows: <FundLabeledValue>[
       FundLabeledValue(
         label: context.l10n.fundListPeriodLabel,
@@ -418,9 +406,8 @@ FundSecondaryMarketCardData _buildSecondaryMarketCardData(
     statusBackgroundColor: colors.warningSubtle,
     statusForegroundColor: colors.warningAction,
     annualYield: _formatYieldPercent(record.investorType?.earningsRadio),
-    investorTypeLabel: investorCode != null && investorCode.isNotEmpty
-        ? investorCode
-        : '--',
+    investorTypeLabel:
+        investorCode != null && investorCode.isNotEmpty ? investorCode : '--',
     soldUnitsLabel: '${soldNum.toString()} / ${sellNum.toString()}口',
     unitPriceLabel: _formatCurrencyValue(record.price, currencyFormatter),
     progress: progress.clamp(0, 1),
@@ -525,8 +512,7 @@ String _buildProgressLabel(
   NumberFormat currencyFormatter,
 ) {
   if (project.projectStatus == 0) {
-    final openDate =
-        _parseDateTime(project.offeringStartDatetime) ??
+    final openDate = _parseDateTime(project.offeringStartDatetime) ??
         _parseDateTime(project.scheduledStartDate);
     if (openDate != null) {
       return context.l10n.fundListOpenStartAt(
@@ -592,12 +578,7 @@ String _resolveStatusLabel(BuildContext context, int? status) {
 }
 
 String _formatYieldPercent(double? ratio) {
-  if (ratio == null) {
-    return '--';
-  }
-  final percentage = ratio > 1 ? ratio : ratio * 100;
-  final hasFraction = percentage % 1 != 0;
-  return '${percentage.toStringAsFixed(hasFraction ? 1 : 0)}%';
+  return formatFundYieldPercent(ratio);
 }
 
 double _normalizeProgress(double? ratio) {
@@ -673,8 +654,4 @@ String _formatDateForLocale(DateTime value, Locale locale) {
     return DateFormat.yMd('zh').format(value);
   }
   return DateFormat.yMMMd(locale.toLanguageTag()).format(value);
-}
-
-extension<T> on List<T> {
-  T? get firstOrNull => isEmpty ? null : first;
 }

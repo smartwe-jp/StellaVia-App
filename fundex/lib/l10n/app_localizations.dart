@@ -2681,6 +2681,12 @@ abstract class AppLocalizations {
   /// **'Lottery date'**
   String get fundDetailLotteryDateLabel;
 
+  /// No description provided for @fundDetailOfferingTargetsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Offering targets'**
+  String get fundDetailOfferingTargetsLabel;
+
   /// No description provided for @fundDetailPreferredStructureTitle.
   ///
   /// In en, this message translates to:

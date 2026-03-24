@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../settings/presentation/support/settings_operating_company_content.dart';
 import '../../domain/entities/fund_project.dart';
+import 'fund_project_yield_display.dart';
 import '../widgets/fund_project_detail_protection_structure_card.dart';
 
 class FundProjectDetailViewData {
@@ -101,7 +102,7 @@ class FundProjectDetailViewDataBuilder {
       ),
       propertyLocation: propertyLocation,
       propertyCoordinate: propertyCoordinate,
-      yieldDisplay: _formatYieldPercent(_resolveYieldRatio(project)),
+      yieldDisplay: resolveFundProjectYieldDisplay(project),
       actionLabel: _resolveActionLabel(context, project),
       actionEnabled: _isActionEnabled(project),
       operatorMetaText: _buildOperatorMetaText(
@@ -148,12 +149,12 @@ List<FundDetailInfoItemData> _buildPrimaryInfoItems(
     );
   }
 
-  final lotteryDateText = _resolveLotteryDateText(context, project);
-  if (lotteryDateText != null) {
+  final offeringTargetsText = _resolveOfferingTargetsText(project);
+  if (offeringTargetsText != null) {
     items.add(
       FundDetailInfoItemData(
-        label: context.l10n.fundDetailLotteryDateLabel,
-        value: lotteryDateText,
+        label: context.l10n.fundDetailOfferingTargetsLabel,
+        value: offeringTargetsText,
       ),
     );
   }
@@ -173,8 +174,7 @@ List<FundDetailInfoItemData> _buildPropertyInfoItems(
     ),
   ];
 
-  final propertyType =
-      _detailString(project.detailData, const <String>[
+  final propertyType = _detailString(project.detailData, const <String>[
         'propertyType',
         'targetPropertyType',
         'realEstateType',
@@ -187,8 +187,7 @@ List<FundDetailInfoItemData> _buildPropertyInfoItems(
     ),
   );
 
-  final structure =
-      _detailString(project.detailData, const <String>[
+  final structure = _detailString(project.detailData, const <String>[
         'structure',
         'buildingStructure',
       ]) ??
@@ -200,8 +199,7 @@ List<FundDetailInfoItemData> _buildPropertyInfoItems(
     ),
   );
 
-  final builtYear =
-      _detailString(project.detailData, const <String>[
+  final builtYear = _detailString(project.detailData, const <String>[
         'builtYear',
         'builtAt',
         'completionYear',
@@ -250,8 +248,7 @@ _FundContractTables _buildContractTables(
   final overviewItems = <FundDetailInfoItemData>[
     FundDetailInfoItemData(
       label: context.l10n.fundDetailContractTypeLabel,
-      value:
-          _detailString(project.detailData, const <String>[
+      value: _detailString(project.detailData, const <String>[
             'contractType',
             'schemeType',
           ]) ??
@@ -278,8 +275,7 @@ _FundContractTables _buildContractTables(
   );
   final operationStart = _resolveDateText(context, project.scheduledStartDate);
   final operationEnd = _resolveDateText(context, project.scheduledEndDate);
-  final coolingOffText =
-      _detailString(project.detailData, const <String>[
+  final coolingOffText = _detailString(project.detailData, const <String>[
         'coolingOff',
         'coolingOffPeriod',
         'coolingOffPolicy',
@@ -345,23 +341,23 @@ List<FundDetailInfoItemData> _buildOperatorItems(
   ]);
 
   return <FundDetailInfoItemData>[
-        FundDetailInfoItemData(
-          label: context.l10n.fundDetailOperatorCompanyLabel,
-          value: companyName,
-        ),
-        FundDetailInfoItemData(
-          label: context.l10n.fundDetailPermitNumberLabel,
-          value: permitNumber,
-        ),
-        FundDetailInfoItemData(
-          label: context.l10n.fundDetailRepresentativeLabel,
-          value: representative,
-        ),
-        FundDetailInfoItemData(
-          label: context.l10n.fundDetailCompanyAddressLabel,
-          value: companyAddress,
-        ),
-      ]
+    FundDetailInfoItemData(
+      label: context.l10n.fundDetailOperatorCompanyLabel,
+      value: companyName,
+    ),
+    FundDetailInfoItemData(
+      label: context.l10n.fundDetailPermitNumberLabel,
+      value: permitNumber,
+    ),
+    FundDetailInfoItemData(
+      label: context.l10n.fundDetailRepresentativeLabel,
+      value: representative,
+    ),
+    FundDetailInfoItemData(
+      label: context.l10n.fundDetailCompanyAddressLabel,
+      value: companyAddress,
+    ),
+  ]
       .where((FundDetailInfoItemData item) => item.value.trim().isNotEmpty)
       .toList(growable: false);
 }
@@ -470,38 +466,34 @@ List<FundProjectDetailDocumentGroupData> _buildDocumentGroups(
   BuildContext context,
   FundProject project,
 ) {
-  return project.pdfDocuments
-      .map((FundProjectPdfDocument document) {
-        final availablePdfs = _availablePdfUrls(document);
-        final title = _documentGroupTitle(context, document);
-        return FundProjectDetailDocumentGroupData(
-          title: title,
-          items: availablePdfs
-              .asMap()
-              .entries
-              .map((MapEntry<int, FundProjectPdfUrl> entry) {
-                final itemTitle = _documentLinkTitle(
-                  context,
-                  entry.value,
-                  entry.key,
-                );
-                return FundDetailDocumentItemData(
-                  title: itemTitle,
-                  subtitle:
-                      _formatDocumentCreatedAt(context, entry.value) ??
-                      context.l10n.fundDetailDocumentReady,
-                  onTap: () => _openPdfDocument(
-                    context,
-                    groupTitle: title,
-                    linkTitle: itemTitle,
-                    item: entry.value,
-                  ),
-                );
-              })
-              .toList(growable: false),
+  return project.pdfDocuments.map((FundProjectPdfDocument document) {
+    final availablePdfs = _availablePdfUrls(document);
+    final title = _documentGroupTitle(context, document);
+    return FundProjectDetailDocumentGroupData(
+      title: title,
+      items: availablePdfs
+          .asMap()
+          .entries
+          .map((MapEntry<int, FundProjectPdfUrl> entry) {
+        final itemTitle = _documentLinkTitle(
+          context,
+          entry.value,
+          entry.key,
         );
-      })
-      .toList(growable: false);
+        return FundDetailDocumentItemData(
+          title: itemTitle,
+          subtitle: _formatDocumentCreatedAt(context, entry.value) ??
+              context.l10n.fundDetailDocumentReady,
+          onTap: () => _openPdfDocument(
+            context,
+            groupTitle: title,
+            linkTitle: itemTitle,
+            item: entry.value,
+          ),
+        );
+      }).toList(growable: false),
+    );
+  }).toList(growable: false);
 }
 
 List<FundProjectPdfUrl> _availablePdfUrls(FundProjectPdfDocument document) {
@@ -780,16 +772,6 @@ String? _resolveDividendText(BuildContext context, FundProject project) {
   return null;
 }
 
-String? _resolveLotteryDateText(BuildContext context, FundProject project) {
-  if (!_resolveMethodLabel(
-    context,
-    project.offeringMethod,
-  ).contains(context.l10n.fundListMethodLottery)) {
-    return null;
-  }
-  return _resolveDateText(context, project.offeringEndDatetime);
-}
-
 String? _resolveLocationText(FundProject project) {
   final direct = _detailString(project.detailData, const <String>[
     'location',
@@ -943,21 +925,23 @@ String _formatCurrency(int? amount, NumberFormat formatter) {
   return formatter.format(amount);
 }
 
-String _formatYieldPercent(double? ratio) {
-  if (ratio == null) {
-    return '--';
+String? _resolveOfferingTargetsText(FundProject project) {
+  final codes = project.investorTypes
+      .where((FundProjectInvestorType item) => item.isOpen == true)
+      .map((FundProjectInvestorType item) => item.investorCode?.trim() ?? '')
+      .where((String value) => value.isNotEmpty)
+      .toList(growable: false);
+  if (codes.isEmpty) {
+    return null;
   }
-  final percentage = ratio > 1 ? ratio : ratio * 100;
-  final hasFraction = percentage % 1 != 0;
-  return '${percentage.toStringAsFixed(hasFraction ? 1 : 0)}%';
-}
 
-double? _resolveYieldRatio(FundProject project) {
-  return project.expectedDistributionRatioMax ??
-      project.expectedDistributionRatioMin ??
-      project.investorTypes.firstWhereOrNull((FundProjectInvestorType item) {
-        return item.earningsRadio != null && item.earningsRadio! > 0;
-      })?.earningsRadio;
+  final uniqueCodes = <String>[];
+  for (final code in codes) {
+    if (!uniqueCodes.contains(code)) {
+      uniqueCodes.add(code);
+    }
+  }
+  return uniqueCodes.join(' / ');
 }
 
 String? _resolveDateRangeText(
@@ -1052,15 +1036,4 @@ double? _detailDouble(Map<String, Object?> data, List<String> keys) {
     }
   }
   return null;
-}
-
-extension<T> on Iterable<T> {
-  T? firstWhereOrNull(bool Function(T element) test) {
-    for (final element in this) {
-      if (test(element)) {
-        return element;
-      }
-    }
-    return null;
-  }
 }

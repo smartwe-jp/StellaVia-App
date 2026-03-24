@@ -1408,6 +1408,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundDetailLotteryDateLabel => 'Lottery date';
 
   @override
+  String get fundDetailOfferingTargetsLabel => 'Offering targets';
+
+  @override
   String get fundDetailPreferredStructureTitle => 'Senior/Junior Structure';
 
   @override

@@ -9,6 +9,7 @@ import '../../domain/entities/fund_project.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
 import '../providers/fund_project_favorite_providers.dart';
 import '../providers/fund_project_providers.dart';
+import '../support/fund_project_yield_display.dart';
 
 enum _FundListFilter { all, opening, upcoming, operating, favorites }
 
@@ -125,15 +126,6 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
       return '-';
     }
     return formatter.format(amount);
-  }
-
-  String _formatYieldPercent(double? ratio) {
-    if (ratio == null) {
-      return '--';
-    }
-    final percentage = ratio > 1 ? ratio : ratio * 100;
-    final hasFraction = percentage % 1 != 0;
-    return '${percentage.toStringAsFixed(hasFraction ? 1 : 0)}%';
   }
 
   String _formatProgressPercent(double? ratio) {
@@ -300,8 +292,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
   ) {
     final l10n = context.l10n;
     if (project.projectStatus == 0) {
-      final openDate =
-          _parseDateTime(project.offeringStartDatetime) ??
+      final openDate = _parseDateTime(project.offeringStartDatetime) ??
           _parseDateTime(project.scheduledStartDate);
       if (openDate != null) {
         final text = _formatDateForLocale(
@@ -379,11 +370,11 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                         .map(
                           (_FundListFilterOption option) =>
                               AppFilterBarItem<_FundListFilter>(
-                                value: option.filter,
-                                label: option.label,
-                                style: option.style,
-                                leadingIcon: option.leadingIcon,
-                              ),
+                            value: option.filter,
+                            label: option.label,
+                            style: option.style,
+                            leadingIcon: option.leadingIcon,
+                          ),
                         )
                         .toList(growable: false),
                   ),
@@ -469,9 +460,9 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                         );
                         final periodText =
                             (project.investmentPeriod?.trim().isNotEmpty ??
-                                false)
-                            ? project.investmentPeriod!.trim()
-                            : '--';
+                                    false)
+                                ? project.investmentPeriod!.trim()
+                                : '--';
 
                         return _FundProjectCard(
                           project: project,
@@ -487,9 +478,8 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                             project,
                             currencyFormatter,
                           ),
-                          annualYieldText: _formatYieldPercent(
-                            project.expectedDistributionRatioMax ??
-                                project.expectedDistributionRatioMin,
+                          annualYieldText: resolveFundProjectYieldDisplay(
+                            project,
                           ),
                           periodValueText: periodText,
                           locationText: _resolveLocationHint(project),
@@ -960,9 +950,10 @@ class _CardStatCell extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           value,
-          style:
-              (useNumericValueStyle ? appText.sectionTitle : appText.sectionTitle)
-                  .copyWith(color: valueColor ?? colors.textPrimary),
+          style: (useNumericValueStyle
+                  ? appText.sectionTitle
+                  : appText.sectionTitle)
+              .copyWith(color: valueColor ?? colors.textPrimary),
         ),
       ],
     );

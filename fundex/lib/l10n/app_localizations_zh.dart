@@ -1325,6 +1325,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailLotteryDateLabel => '抽签日';
 
   @override
+  String get fundDetailOfferingTargetsLabel => '募集对象';
+
+  @override
   String get fundDetailPreferredStructureTitle => '优先/劣后结构';
 
   @override
@@ -4561,6 +4564,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get fundDetailLotteryDateLabel => '抽签日';
+
+  @override
+  String get fundDetailOfferingTargetsLabel => '募集對象';
 
   @override
   String get fundDetailPreferredStructureTitle => '优先/劣后结构';

@@ -8,6 +8,157 @@ import 'package:fundex/l10n/app_localizations.dart';
 
 void main() {
   testWidgets(
+    'uses open investor types for offering targets and yield range',
+    (WidgetTester tester) async {
+      const project = FundProject(
+        id: 'project-open',
+        projectName: 'Open Fund',
+        expectedDistributionRatioMin: 0.01,
+        expectedDistributionRatioMax: 0.02,
+        investorTypes: <FundProjectInvestorType>[
+          FundProjectInvestorType(
+            investorCode: '優先出資者A',
+            earningsRadio: 0.08,
+            isOpen: true,
+          ),
+          FundProjectInvestorType(
+            investorCode: '優先出資者B',
+            earningsRadio: 0.04,
+            isOpen: true,
+          ),
+          FundProjectInvestorType(
+            investorCode: '任意組合員',
+            earningsRadio: 0.12,
+            isOpen: false,
+          ),
+        ],
+      );
+
+      late FundProjectDetailViewData viewData;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('ja'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: AppThemeFactory.light(locale: const Locale('ja')),
+          home: Builder(
+            builder: (BuildContext context) {
+              viewData = FundProjectDetailViewDataBuilder.build(
+                context: context,
+                project: project,
+              );
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+      );
+
+      expect(viewData.yieldDisplay, '4%～8%');
+      expect(
+        viewData.infoItems.any(
+          (FundDetailInfoItemData item) =>
+              item.label == '募集対象' && item.value == '優先出資者A / 優先出資者B',
+        ),
+        isTrue,
+      );
+    },
+  );
+
+  testWidgets(
+    'falls back to expected distribution range when no open investor type exists',
+    (WidgetTester tester) async {
+      const project = FundProject(
+        id: 'project-closed',
+        projectName: 'Closed Fund',
+        expectedDistributionRatioMin: 0.01,
+        expectedDistributionRatioMax: 0.02,
+        investorTypes: <FundProjectInvestorType>[
+          FundProjectInvestorType(
+            investorCode: '優先出資者A',
+            earningsRadio: 0.08,
+            isOpen: false,
+          ),
+        ],
+      );
+
+      late FundProjectDetailViewData viewData;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('ja'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: AppThemeFactory.light(locale: const Locale('ja')),
+          home: Builder(
+            builder: (BuildContext context) {
+              viewData = FundProjectDetailViewDataBuilder.build(
+                context: context,
+                project: project,
+              );
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+      );
+
+      expect(viewData.yieldDisplay, '1%～2%');
+      expect(
+        viewData.infoItems.any(
+          (FundDetailInfoItemData item) => item.label == '募集対象',
+        ),
+        isFalse,
+      );
+    },
+  );
+
+  testWidgets(
+    'shows a single yield when only one open investor type exists',
+    (WidgetTester tester) async {
+      const project = FundProject(
+        id: 'project-single-open',
+        projectName: 'Single Open Fund',
+        expectedDistributionRatioMin: 0.01,
+        expectedDistributionRatioMax: 0.02,
+        investorTypes: <FundProjectInvestorType>[
+          FundProjectInvestorType(
+            investorCode: '優先出資者A',
+            earningsRadio: 0.06,
+            isOpen: true,
+          ),
+          FundProjectInvestorType(
+            investorCode: '任意組合員',
+            earningsRadio: 0.10,
+            isOpen: false,
+          ),
+        ],
+      );
+
+      late FundProjectDetailViewData viewData;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('ja'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: AppThemeFactory.light(locale: const Locale('ja')),
+          home: Builder(
+            builder: (BuildContext context) {
+              viewData = FundProjectDetailViewDataBuilder.build(
+                context: context,
+                project: project,
+              );
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+      );
+
+      expect(viewData.yieldDisplay, '6%');
+    },
+  );
+
+  testWidgets(
     'uses operating company content for fund detail operator information',
     (WidgetTester tester) async {
       const project = FundProject(

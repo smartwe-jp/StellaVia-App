@@ -483,6 +483,7 @@
   "fundDetailMinimumInvestmentLabel": "Minimum investment",
   "fundDetailDividendLabel": "Distribution",
   "fundDetailLotteryDateLabel": "Lottery date",
+  "fundDetailOfferingTargetsLabel": "Offering targets",
   "fundDetailPreferredStructureTitle": "Senior/Junior Structure",
   "fundDetailSeniorInvestmentLabel": "Preferred",
   "fundDetailJuniorInvestmentLabel": "Subordinated",

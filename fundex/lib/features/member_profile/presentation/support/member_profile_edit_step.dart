@@ -32,28 +32,29 @@ extension MemberProfileEditStepX on MemberProfileEditStep {
     return MemberProfileEditStep.values[current - 1];
   }
 
-  bool get appearsInOverview => this != MemberProfileEditStep.realPersonAuth;
+  bool get appearsInOverview => memberProfileOverviewSteps.contains(this);
 
   String get routeValue => switch (this) {
-    MemberProfileEditStep.basicInfo => 'basic-info',
-    MemberProfileEditStep.addressInfo => 'address-info',
-    MemberProfileEditStep.suitability => 'suitability',
-    MemberProfileEditStep.ekyc => 'ekyc',
-    MemberProfileEditStep.realPersonAuth => 'real-person-auth',
-    MemberProfileEditStep.bankAccount => 'bank-account',
-    MemberProfileEditStep.consent => 'consent',
-  };
+        MemberProfileEditStep.basicInfo => 'basic-info',
+        MemberProfileEditStep.addressInfo => 'address-info',
+        MemberProfileEditStep.suitability => 'suitability',
+        MemberProfileEditStep.ekyc => 'ekyc',
+        MemberProfileEditStep.realPersonAuth => 'real-person-auth',
+        MemberProfileEditStep.bankAccount => 'bank-account',
+        MemberProfileEditStep.consent => 'consent',
+      };
 }
 
 const List<MemberProfileEditStep> memberProfileOverviewSteps =
     <MemberProfileEditStep>[
-      MemberProfileEditStep.basicInfo,
-      MemberProfileEditStep.addressInfo,
-      MemberProfileEditStep.suitability,
-      MemberProfileEditStep.ekyc,
-      MemberProfileEditStep.bankAccount,
-      MemberProfileEditStep.consent,
-    ];
+  MemberProfileEditStep.basicInfo,
+  MemberProfileEditStep.addressInfo,
+  MemberProfileEditStep.suitability,
+  MemberProfileEditStep.ekyc,
+  MemberProfileEditStep.realPersonAuth,
+  MemberProfileEditStep.bankAccount,
+  MemberProfileEditStep.consent,
+];
 
 MemberProfileEditStep? memberProfileEditStepFromRouteValue(String? raw) {
   return switch (raw?.trim()) {
