@@ -105,11 +105,12 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                   ),
                   FundMyPageMetricData(
                     label: l10n.myPageMetricAccumulatedDistribution,
-                    value: investmentRecords == null
-                        ? '--'
-                        : _formatCompactCurrency(
-                            _sumInvestmentEarnings(investmentRecords),
-                          ),
+                    value: _formatCompactCurrency(
+                      accountStatistic?.crowdfundingDistributedBenefit ??
+                          (investmentRecords == null
+                              ? null
+                              : _sumInvestmentEarnings(investmentRecords)),
+                    ),
                     valueColor: colors.success,
                   ),
                 ],

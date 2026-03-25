@@ -285,13 +285,19 @@ class MyPageAccountStatistic {
     this.userId,
     this.total,
     this.crowdfundingTotal,
+    this.crowdfundingDistributedBenefit,
     this.financialTotal,
     this.firstLevelAccountTotal,
+    this.takingAmt,
+    this.takingFee,
   });
 
   final int? userId;
   final num? total;
   final num? crowdfundingTotal;
+  final num? crowdfundingDistributedBenefit;
   final num? financialTotal;
   final num? firstLevelAccountTotal;
+  final num? takingAmt;
+  final num? takingFee;
 }

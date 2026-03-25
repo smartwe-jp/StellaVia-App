@@ -3,8 +3,11 @@ class UserInvestmentAccountStatisticDto {
     this.userId,
     this.total,
     this.crowdfundingTotal,
+    this.crowdfundingDistributedBenefit,
     this.financialTotal,
     this.firstLevelAccountTotal,
+    this.takingAmt,
+    this.takingFee,
   });
 
   factory UserInvestmentAccountStatisticDto.fromJson(
@@ -14,16 +17,24 @@ class UserInvestmentAccountStatisticDto {
       userId: _intOrNull(json['userId']),
       total: _numOrNull(json['total']),
       crowdfundingTotal: _numOrNull(json['crowdfundingTotal']),
+      crowdfundingDistributedBenefit: _numOrNull(
+        json['crowdfundingDistributedBenefit'],
+      ),
       financialTotal: _numOrNull(json['financialTotal']),
       firstLevelAccountTotal: _numOrNull(json['firstLevelAccountTotal']),
+      takingAmt: _numOrNull(json['takingAmt']),
+      takingFee: _numOrNull(json['takingFee']),
     );
   }
 
   final int? userId;
   final num? total;
   final num? crowdfundingTotal;
+  final num? crowdfundingDistributedBenefit;
   final num? financialTotal;
   final num? firstLevelAccountTotal;
+  final num? takingAmt;
+  final num? takingFee;
 }
 
 class UserInvestmentInvestorTypeDto {

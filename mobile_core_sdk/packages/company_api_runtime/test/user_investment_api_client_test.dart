@@ -46,7 +46,7 @@ void main() {
         expect(options.path, equals(UserInvestmentApiPaths.accountStatistic));
         expect(options.extra['auth_required'], isTrue);
         return _jsonOk(
-          '{"msg":"success","code":200,"data":{"userId":125530,"total":"98767523","crowdfundingTotal":"89703200","financialTotal":"9054667","firstLevelAccountTotal":"9656"}}',
+          '{"msg":"success","code":200,"data":{"userId":125530,"total":"89859954","crowdfundingTotal":"89703200","crowdfundingDistributedBenefit":"572781","firstLevelAccountTotal":"156754","takingAmt":"50000","takingFee":"10000"}}',
         );
       });
       final api = UserInvestmentApiClient(dioForPath: (_) => dio);
@@ -54,10 +54,13 @@ void main() {
       final row = await api.fetchAccountStatistic();
 
       expect(row.userId, equals(125530));
-      expect(row.total, equals(98767523));
+      expect(row.total, equals(89859954));
       expect(row.crowdfundingTotal, equals(89703200));
-      expect(row.financialTotal, equals(9054667));
-      expect(row.firstLevelAccountTotal, equals(9656));
+      expect(row.crowdfundingDistributedBenefit, equals(572781));
+      expect(row.financialTotal, isNull);
+      expect(row.firstLevelAccountTotal, equals(156754));
+      expect(row.takingAmt, equals(50000));
+      expect(row.takingFee, equals(10000));
     });
 
     test('fetchApplyList posts payload and parses rows envelope', () async {

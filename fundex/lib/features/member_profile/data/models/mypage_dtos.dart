@@ -44,8 +44,11 @@ extension MyPageAccountStatisticDtoMapper on MyPageAccountStatisticDto {
       userId: userId,
       total: total,
       crowdfundingTotal: crowdfundingTotal,
+      crowdfundingDistributedBenefit: crowdfundingDistributedBenefit,
       financialTotal: financialTotal,
       firstLevelAccountTotal: firstLevelAccountTotal,
+      takingAmt: takingAmt,
+      takingFee: takingFee,
     );
   }
 }
