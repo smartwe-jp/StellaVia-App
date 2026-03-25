@@ -371,6 +371,7 @@
   "settingsCurrentPhoneLabel": "Current phone number",
   "settingsPhoneUnavailable": "No phone number registered.",
   "settingsPhoneVerificationPhoneMissing": "Register a phone number in your member profile first.",
+  "settingsPhoneVerificationInputDescription": "Enter the phone number to use for verification and send a one-time code.",
   "settingsPhoneAutoFillHint": "On supported devices, the SMS verification code can appear as an autofill suggestion.",
   "settingsPhoneVerifyAction": "Verify phone number",
   "settingsPhoneCodeRequired": "Enter the verification code first.",

@@ -60,7 +60,6 @@ class _MemberProfileEditFlowPageState
   late final TextEditingController _familyNameRomanController;
   late final TextEditingController _givenNameRomanController;
   late final TextEditingController _birthdayController;
-  late final TextEditingController _phoneController;
   late final TextEditingController _postalCodeController;
   late final TextEditingController _cityAddressController;
   late final TextEditingController _bankNameController;
@@ -80,6 +79,7 @@ class _MemberProfileEditFlowPageState
   String? _documentType = 'drivers_license';
   String? _accountType = 'ordinary';
   String _phoneIntlCode = '81';
+  String _phone = '';
   String _email = '';
   String? _documentPhotoPath;
   String? _documentBackPhotoPath;
@@ -117,7 +117,6 @@ class _MemberProfileEditFlowPageState
     _familyNameRomanController = TextEditingController();
     _givenNameRomanController = TextEditingController();
     _birthdayController = TextEditingController();
-    _phoneController = TextEditingController();
     _postalCodeController = TextEditingController();
     _cityAddressController = TextEditingController();
     _bankNameController = TextEditingController();
@@ -139,7 +138,6 @@ class _MemberProfileEditFlowPageState
     _familyNameRomanController.dispose();
     _givenNameRomanController.dispose();
     _birthdayController.dispose();
-    _phoneController.dispose();
     _postalCodeController.dispose();
     _cityAddressController.dispose();
     _bankNameController.dispose();
@@ -170,7 +168,6 @@ class _MemberProfileEditFlowPageState
         _familyNameRomanController,
         _givenNameRomanController,
         _birthdayController,
-        _phoneController,
         _postalCodeController,
         _cityAddressController,
         _bankNameController,
@@ -296,7 +293,7 @@ class _MemberProfileEditFlowPageState
           savedProfile?.givenNameEn ?? '',
           authUser?.firstNameEn ?? '',
         ]);
-        _phoneController.text = savedProfile?.phone.trim().isNotEmpty == true
+        _phone = savedProfile?.phone.trim().isNotEmpty == true
             ? savedProfile!.phone.trim()
             : (authUser?.phone?.trim().isNotEmpty == true
                   ? authUser!.phone!.trim()
@@ -967,8 +964,7 @@ class _MemberProfileEditFlowPageState
       _isFilled(_givenNameKanaController.text) &&
       _isFilled(_familyNameRomanController.text) &&
       _isFilled(_givenNameRomanController.text) &&
-      _isFilled(_birthdayController.text) &&
-      _isFilled(_phoneController.text);
+      _isFilled(_birthdayController.text);
 
   bool get _isAddressInfoStepReady =>
       _isFilled(_postalCodeController.text) &&
@@ -1075,7 +1071,7 @@ class _MemberProfileEditFlowPageState
       prefectureCode: _prefecture ?? '',
       cityAddress: cityAddress,
       phoneIntlCode: _phoneIntlCode,
-      phone: _phoneController.text.trim(),
+      phone: _phone,
       email: _email,
       occupationCode: _occupation ?? '',
       annualIncomeCode: _annualIncome ?? '',
@@ -1427,7 +1423,6 @@ class _MemberProfileEditFlowPageState
           familyNameRomanController: _familyNameRomanController,
           givenNameRomanController: _givenNameRomanController,
           birthdayController: _birthdayController,
-          phoneController: _phoneController,
           showAgeWarning: _showAgeWarning,
           primaryButtonEnabled: isActionEnabled,
           titleOverride: _isSingleSectionMode ? _stepTitle : null,

@@ -1011,6 +1011,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsPhoneVerificationPhoneMissing => '先に会員情報から電話番号を登録してください。';
 
   @override
+  String get settingsPhoneVerificationInputDescription =>
+      '認証に使用する電話番号を入力して、ワンタイムコードを送信してください。';
+
+  @override
   String get settingsPhoneAutoFillHint =>
       'SMSに含まれる認証コードは、対応端末では自動入力候補として表示されます。';
 

@@ -2057,6 +2057,12 @@ abstract class AppLocalizations {
   /// **'Register a phone number in your member profile first.'**
   String get settingsPhoneVerificationPhoneMissing;
 
+  /// No description provided for @settingsPhoneVerificationInputDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the phone number to use for verification and send a one-time code.'**
+  String get settingsPhoneVerificationInputDescription;
+
   /// No description provided for @settingsPhoneAutoFillHint.
   ///
   /// In en, this message translates to:

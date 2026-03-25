@@ -11,7 +11,14 @@ import '../providers/fund_project_favorite_providers.dart';
 import '../providers/fund_project_providers.dart';
 import '../support/fund_project_yield_display.dart';
 
-enum _FundListFilter { all, opening, upcoming, operating, favorites }
+enum _FundListFilter {
+  all,
+  opening,
+  completed,
+  operating,
+  operatingEnded,
+  favorites,
+}
 
 extension on _FundListFilter {
   int? get projectStatusCode {
@@ -20,10 +27,12 @@ extension on _FundListFilter {
         return null;
       case _FundListFilter.opening:
         return 1;
-      case _FundListFilter.upcoming:
-        return 0;
+      case _FundListFilter.completed:
+        return 7;
       case _FundListFilter.operating:
         return 4;
+      case _FundListFilter.operatingEnded:
+        return 5;
       case _FundListFilter.favorites:
         return null;
     }
@@ -80,12 +89,16 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
         label: l10n.fundListFilterOpen,
       ),
       _FundListFilterOption(
-        filter: _FundListFilter.upcoming,
-        label: l10n.fundListFilterUpcoming,
+        filter: _FundListFilter.completed,
+        label: l10n.fundListFilterCompleted,
       ),
       _FundListFilterOption(
         filter: _FundListFilter.operating,
         label: l10n.fundListFilterOperating,
+      ),
+      _FundListFilterOption(
+        filter: _FundListFilter.operatingEnded,
+        label: l10n.fundListFilterOperatingEnded,
       ),
       _FundListFilterOption(
         filter: _FundListFilter.favorites,

@@ -156,10 +156,6 @@ class _MemberProfileOverviewPageState
                                 ),
                               ),
                               _OverviewFieldRow(
-                                label: l10n.memberProfilePhoneLabel,
-                                value: _displayValue(profile.phone, l10n),
-                              ),
-                              _OverviewFieldRow(
                                 label: l10n.profileEmailLabel,
                                 value: _displayValue(profile.email, l10n),
                                 isLast: true,

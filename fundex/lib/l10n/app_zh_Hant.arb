@@ -371,6 +371,7 @@
   "settingsCurrentPhoneLabel": "目前手機號碼",
   "settingsPhoneUnavailable": "尚未登記手機號碼。",
   "settingsPhoneVerificationPhoneMissing": "請先到會員資料中登記手機號碼。",
+  "settingsPhoneVerificationInputDescription": "請輸入用於驗證的手機號碼，並發送一次性驗證碼。",
   "settingsPhoneAutoFillHint": "在支援的裝置上，簡訊驗證碼會作為自動填寫候選顯示。",
   "settingsPhoneVerifyAction": "驗證手機號碼",
   "settingsPhoneCodeRequired": "請先輸入驗證碼。",

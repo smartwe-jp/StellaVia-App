@@ -138,6 +138,14 @@ final settingsVerifiedPhoneNumberProvider = FutureProvider.autoDispose<String?>(
       return null;
     }
 
+    final snapshot = await ref.watch(
+      settingsPhoneVerificationSnapshotProvider.future,
+    );
+    final localPhone = snapshot.verifiedPhone?.trim() ?? '';
+    if (localPhone.isNotEmpty) {
+      return localPhone;
+    }
+
     final remoteStatus = await ref
         .watch(settingsRemoteVerificationStatusProvider.future)
         .catchError((Object _) {
@@ -146,14 +154,6 @@ final settingsVerifiedPhoneNumberProvider = FutureProvider.autoDispose<String?>(
     final currentPhone = _resolvePhone(user);
     if (remoteStatus?.isPhoneVerified == true) {
       return currentPhone.isEmpty ? null : currentPhone;
-    }
-
-    final snapshot = await ref.watch(
-      settingsPhoneVerificationSnapshotProvider.future,
-    );
-    final localPhone = snapshot.verifiedPhone?.trim() ?? '';
-    if (localPhone.isNotEmpty) {
-      return localPhone;
     }
     if (snapshot.verified && currentPhone.isNotEmpty) {
       return currentPhone;

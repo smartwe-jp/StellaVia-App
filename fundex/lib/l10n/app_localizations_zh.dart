@@ -1006,6 +1006,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsPhoneVerificationPhoneMissing => '请先到会员资料中登记手机号。';
 
   @override
+  String get settingsPhoneVerificationInputDescription =>
+      '请输入用于认证的手机号，并发送一次性验证码。';
+
+  @override
   String get settingsPhoneAutoFillHint => '在支持的设备上，短信验证码会作为自动填充候选显示。';
 
   @override
@@ -4427,6 +4431,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get settingsPhoneVerificationPhoneMissing => '請先到會員資料中登記手機號碼。';
+
+  @override
+  String get settingsPhoneVerificationInputDescription =>
+      '請輸入用於驗證的手機號碼，並發送一次性驗證碼。';
 
   @override
   String get settingsPhoneAutoFillHint => '在支援的裝置上，簡訊驗證碼會作為自動填寫候選顯示。';

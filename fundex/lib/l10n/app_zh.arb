@@ -371,6 +371,7 @@
   "settingsCurrentPhoneLabel": "当前手机号",
   "settingsPhoneUnavailable": "尚未登记手机号。",
   "settingsPhoneVerificationPhoneMissing": "请先到会员资料中登记手机号。",
+  "settingsPhoneVerificationInputDescription": "请输入用于认证的手机号，并发送一次性验证码。",
   "settingsPhoneAutoFillHint": "在支持的设备上，短信验证码会作为自动填充候选显示。",
   "settingsPhoneVerifyAction": "认证手机号",
   "settingsPhoneCodeRequired": "请先输入验证码。",

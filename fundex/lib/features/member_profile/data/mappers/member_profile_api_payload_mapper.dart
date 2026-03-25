@@ -52,17 +52,6 @@ class MemberProfileApiPayloadMapper {
             authUser?.birthday ?? '',
           ]),
         ),
-        'intlTelCode': _parseIntlCode(
-          _firstNonEmpty(<String>[
-            profile.phoneIntlCode,
-            authUser?.intlTelCode ?? '',
-          ]),
-        ),
-        'phone': _firstNonEmpty(<String>[
-          profile.phone,
-          authUser?.phone ?? '',
-          authUser?.mobile ?? '',
-        ]),
         'zipCode': _firstNonEmpty(<String>[
           profile.zipCode,
           authUser?.zipCode ?? '',
@@ -241,11 +230,6 @@ class MemberProfileApiPayloadMapper {
       return null;
     }
     return int.tryParse(value.toString());
-  }
-
-  static int _parseIntlCode(String value) {
-    final digits = value.replaceAll(RegExp(r'[^0-9]'), '');
-    return int.tryParse(digits) ?? 81;
   }
 
   static String _normalizeBirthday(String value) {

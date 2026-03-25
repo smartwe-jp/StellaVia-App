@@ -116,13 +116,16 @@ class SettingsTwoFactorLocalDataSourceImpl
     }
 
     final existing = await readPhoneVerificationSnapshot();
+    final existingPhone = existing.verifiedPhone?.trim() ?? '';
     final normalizedPhone = phone?.trim();
+    final resolvedPhone = existingPhone.isNotEmpty
+        ? existingPhone
+        : (normalizedPhone?.isNotEmpty ?? false)
+        ? normalizedPhone
+        : null;
     final payload = <String, dynamic>{
       'verified': true,
-      if (normalizedPhone != null && normalizedPhone.isNotEmpty)
-        'verifiedPhone': normalizedPhone
-      else if ((existing.verifiedPhone?.trim().isNotEmpty ?? false))
-        'verifiedPhone': existing.verifiedPhone!.trim(),
+      if (resolvedPhone != null) 'verifiedPhone': resolvedPhone,
       if ((existing.updatedAtIso?.trim().isNotEmpty ?? false))
         'updatedAt': existing.updatedAtIso!.trim(),
     };

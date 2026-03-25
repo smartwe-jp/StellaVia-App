@@ -92,7 +92,6 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       zipCode.trim().isNotEmpty ||
       prefectureCode.trim().isNotEmpty ||
       cityAddress.trim().isNotEmpty ||
-      phone.trim().isNotEmpty ||
       email.trim().isNotEmpty ||
       occupationCode.trim().isNotEmpty ||
       annualIncomeCode.trim().isNotEmpty ||
@@ -163,8 +162,7 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       (givenNameKana.trim().isNotEmpty || katakana.trim().isNotEmpty) &&
       familyNameEn.trim().isNotEmpty &&
       givenNameEn.trim().isNotEmpty &&
-      (birthday?.trim().isNotEmpty ?? false) &&
-      phone.trim().isNotEmpty;
+      (birthday?.trim().isNotEmpty ?? false);
 
   bool get _isAddressInfoStepComplete =>
       zipCode.trim().isNotEmpty &&

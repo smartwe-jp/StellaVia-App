@@ -1068,6 +1068,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Register a phone number in your member profile first.';
 
   @override
+  String get settingsPhoneVerificationInputDescription =>
+      'Enter the phone number to use for verification and send a one-time code.';
+
+  @override
   String get settingsPhoneAutoFillHint =>
       'On supported devices, the SMS verification code can appear as an autofill suggestion.';
 

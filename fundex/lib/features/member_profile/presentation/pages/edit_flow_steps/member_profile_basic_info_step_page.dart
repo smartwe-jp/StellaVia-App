@@ -14,7 +14,6 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
     required this.familyNameRomanController,
     required this.givenNameRomanController,
     required this.birthdayController,
-    required this.phoneController,
     required this.showAgeWarning,
     this.primaryButtonEnabled = true,
     this.titleOverride,
@@ -32,7 +31,6 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
   final TextEditingController familyNameRomanController;
   final TextEditingController givenNameRomanController;
   final TextEditingController birthdayController;
-  final TextEditingController phoneController;
   final bool showAgeWarning;
   final bool primaryButtonEnabled;
   final String? titleOverride;
@@ -117,13 +115,6 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
               foregroundColor: colors.dangerForeground,
             ),
           ],
-          const SizedBox(height: 14),
-          MemberProfileTextField(
-            label: l10n.memberProfilePhoneLabel,
-            controller: phoneController,
-            hintText: l10n.memberProfilePhoneHint,
-            keyboardType: TextInputType.phone,
-          ),
         ],
       ),
     );
