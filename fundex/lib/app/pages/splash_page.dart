@@ -4,11 +4,11 @@ import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../localization/app_localizations_ext.dart';
-
 const Duration _minimumSplashDuration = Duration(milliseconds: 2500);
 const Duration _progressFillDuration = Duration(milliseconds: 2000);
 const Duration _logoPulseDuration = Duration(milliseconds: 2000);
+const String _brandLockupAssetPath =
+    'assets/images/stellavia.logoAndText.light.png';
 
 String resolveSplashNavigationTarget() {
   return '/home';
@@ -93,10 +93,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     _scheduleNavigation();
 
-    final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = theme.appColors;
-    final appText = theme.appTextTheme;
     final onDark = colors.onDark;
 
     return Scaffold(
@@ -121,60 +119,22 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
               children: <Widget>[
                 ScaleTransition(
                   scale: _logoScaleAnimation,
-                  child: Container(
-                    width: 80,
-                    height: 80,
+                  child: DecoratedBox(
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: <Color>[
-                          colors.brandPrimary,
-                          colors.brandPrimaryBright,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(20),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
-                          color: colors.primary.withValues(alpha: 0.36),
-                          blurRadius: 32,
-                          offset: const Offset(0, 8),
+                          color: onDark.withValues(alpha: 0.12),
+                          blurRadius: 28,
+                          offset: const Offset(0, 12),
                         ),
                       ],
                     ),
-                    child: Icon(
-                      Icons.star_rounded,
-                      size: 44,
-                      color: onDark,
+                    child: Image.asset(
+                      _brandLockupAssetPath,
+                      width: 154,
+                      fit: BoxFit.contain,
                     ),
                   ),
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  l10n.splashBrandName,
-                  style: appText.heroTitle.copyWith(
-                    color: onDark,
-                    fontSize: 28,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  l10n.splashBrandSlogan,
-                  style: appText.bodySemi.copyWith(
-                    color: onDark.withValues(alpha: 0.72),
-                    fontSize: 12,
-                    letterSpacing: 0.5,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  l10n.splashTagline,
-                  style: appText.bodySemi.copyWith(
-                    color: onDark.withValues(alpha: 0.42),
-                    fontSize: 11,
-                  ),
-                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 48),
                 SizedBox(

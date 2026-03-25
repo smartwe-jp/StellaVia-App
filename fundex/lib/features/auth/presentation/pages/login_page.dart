@@ -13,6 +13,9 @@ import '../state/auth_state.dart';
 
 enum _LoginChannel { mobile, email }
 
+const String _loginBrandLockupAssetPath =
+    'assets/images/stellavia.logoAndText.light.png';
+
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key, this.openRegisterOnEnter = false});
 
@@ -235,7 +238,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           child: Column(
             children: <Widget>[
               _LoginHeroHeader(
-                title: l10n.splashBrandName,
                 subtitle: l10n.loginTitle,
                 onClose: _continueWithoutLogin,
               ),
@@ -433,34 +435,35 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
 class _LoginHeroHeader extends StatelessWidget {
   const _LoginHeroHeader({
-    required this.title,
     required this.subtitle,
     required this.onClose,
   });
 
-  final String title;
   final String subtitle;
   final VoidCallback onClose;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final authTheme = theme.extension<AppAuthVisualTheme>();
-    final heroGradientColors =
-        authTheme?.loginHeroGradientColors ??
-        <Color>[
-          theme.colorScheme.primary,
-          theme.colorScheme.primaryContainer,
-          theme.colorScheme.primary.withValues(alpha: 0.82),
-        ];
-    final heroLogoGradientColors =
-        authTheme?.loginHeroLogoGradientColors ??
-        <Color>[theme.colorScheme.primary, theme.colorScheme.tertiary];
-    final heroLogoShadowColor =
-        authTheme?.loginHeroLogoShadowColor ??
-        theme.colorScheme.primary.withValues(alpha: 0.42);
-    final heroForegroundColor =
-        authTheme?.loginHeroForegroundColor ?? theme.colorScheme.onPrimary;
+    final colors = theme.appColors;
+    final isDark = theme.brightness == Brightness.dark;
+    final heroGradientColors = isDark
+        ? <Color>[
+            Color.alphaBlend(
+              colors.brandPrimaryDark.withValues(alpha: 0.34),
+              colors.surface,
+            ),
+            Color.alphaBlend(
+              colors.brandPrimary.withValues(alpha: 0.24),
+              colors.surfaceAlt,
+            ),
+            Color.alphaBlend(
+              colors.brandPrimaryBright.withValues(alpha: 0.18),
+              colors.surface,
+            ),
+          ]
+        : <Color>[colors.heroStart, colors.heroMiddle, colors.heroEnd];
+    final heroForegroundColor = colors.onDark;
 
     return SizedBox(
       width: double.infinity,
@@ -484,39 +487,23 @@ class _LoginHeroHeader extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
-                  width: 56,
-                  height: 56,
+                DecoratedBox(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: heroLogoGradientColors,
-                    ),
-                    borderRadius: BorderRadius.circular(14),
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                        color: heroLogoShadowColor,
-                        blurRadius: 24,
-                        offset: const Offset(0, 6),
+                        color: heroForegroundColor.withValues(alpha: 0.12),
+                        blurRadius: 28,
+                        offset: const Offset(0, 10),
                       ),
                     ],
                   ),
-                  child: Icon(
-                    Icons.star,
-                    color: heroForegroundColor,
-                    size: 30,
+                  child: Image.asset(
+                    _loginBrandLockupAssetPath,
+                    width: 132,
+                    fit: BoxFit.contain,
                   ),
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  title,
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    color: heroForegroundColor,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 4),
                 Text(
                   subtitle,
                   style: theme.textTheme.bodyMedium?.copyWith(
@@ -540,7 +527,7 @@ class _LoginHeroHeader extends StatelessWidget {
                   width: 32,
                   height: 32,
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.15),
+                    color: heroForegroundColor.withValues(alpha: 0.14),
                     shape: BoxShape.circle,
                   ),
                   child: Tooltip(

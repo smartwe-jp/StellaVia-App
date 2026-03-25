@@ -1,7 +1,8 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../app/localization/app_localizations_ext.dart';
+const String _authBrandLockupAssetPath =
+    'assets/images/stellavia.logoAndText.light.png';
 
 class AuthVisualScaffold extends StatelessWidget {
   const AuthVisualScaffold({
@@ -86,9 +87,10 @@ class AuthVisualScaffold extends StatelessWidget {
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                            Text(
-                              context.l10n.splashBrandName,
-                              style: authTheme.brandLabelStyle,
+                            Image.asset(
+                              _authBrandLockupAssetPath,
+                              width: 148,
+                              fit: BoxFit.contain,
                             ),
                             const Spacer(),
                             PillChip(

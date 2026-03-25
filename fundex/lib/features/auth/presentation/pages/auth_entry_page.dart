@@ -4,6 +4,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 
+const String _heroBrandLockupAssetPath =
+    'assets/images/stellavia.logoAndText.light.png';
+
 class AuthEntryPage extends StatelessWidget {
   const AuthEntryPage({super.key});
 
@@ -163,12 +166,7 @@ class _AuthMarketingEntryScaffold extends StatelessWidget {
                         const SizedBox(height: 120),
                         //icon or image
                         //_HeroMediaCard(imageUrl: imageUrl),
-                        const Center(
-                          child: _HeroLogoCard(
-                            logoUrl:
-                                'https://testoa.gutingjun.com/img/logo.803cfc19.png',
-                          ),
-                        ),
+                        const Center(child: _HeroLogoCard()),
 
                         const SizedBox(height: 80),
                         Text(
@@ -236,41 +234,25 @@ class _AuthMarketingEntryScaffold extends StatelessWidget {
 }
 
 class _HeroLogoCard extends StatelessWidget {
-  const _HeroLogoCard({required this.logoUrl});
-
-  final String logoUrl;
+  const _HeroLogoCard();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final panelColor = theme.colorScheme.surface.withValues(
-      alpha: isDark ? 0.94 : 0.98,
-    );
-    return Container(
-      padding: const EdgeInsets.all(12),
-      width: 128,
-      height: 128,
+    return DecoratedBox(
       decoration: BoxDecoration(
-        color: panelColor,
-        borderRadius: BorderRadius.circular(18),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: panelColor.withValues(alpha: 0.4),
-            blurRadius: 12,
-            offset: const Offset(0, 3),
+            color: theme.colorScheme.onPrimary.withValues(alpha: 0.12),
+            blurRadius: 28,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
-      child: Image.network(
-        logoUrl,
-        errorBuilder: (context, error, stackTrace) {
-          return Icon(
-            Icons.hotel_class_rounded,
-            size: 28,
-            color: theme.colorScheme.onPrimary.withValues(alpha: 0.86),
-          );
-        },
+      child: Image.asset(
+        _heroBrandLockupAssetPath,
+        width: 220,
+        fit: BoxFit.contain,
       ),
     );
   }
