@@ -9,7 +9,10 @@ void main() {
         groupId: '  ',
       );
 
-      expect(request.toJson(), <String, dynamic>{'photo': 'photo-base64'});
+      expect(request.toJson(), <String, dynamic>{
+        'photo': 'photo-base64',
+        'app': 'STELLAVIA',
+      });
     });
 
     test('includes groupId when provided', () {
@@ -20,6 +23,7 @@ void main() {
 
       expect(request.toJson(), <String, dynamic>{
         'photo': 'photo-base64',
+        'app': 'STELLAVIA',
         'groupId': 'group-a',
       });
     });
