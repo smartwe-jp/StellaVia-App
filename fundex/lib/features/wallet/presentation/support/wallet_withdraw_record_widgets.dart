@@ -23,6 +23,8 @@ class WalletWithdrawRecordCard extends StatelessWidget {
     required this.amountText,
     required this.details,
     this.note,
+    this.headerAction,
+    this.footer,
   });
 
   final String typeLabel;
@@ -32,6 +34,8 @@ class WalletWithdrawRecordCard extends StatelessWidget {
   final String amountText;
   final List<WalletWithdrawRecordDetailRow> details;
   final String? note;
+  final Widget? headerAction;
+  final Widget? footer;
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +61,10 @@ class WalletWithdrawRecordCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Expanded(child: Text(typeLabel, style: appText.cardTitle)),
-                const SizedBox(width: 8),
+                const Spacer(),
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
@@ -72,7 +76,9 @@ class WalletWithdrawRecordCard extends StatelessWidget {
                   ),
                   child: Text(
                     statusLabel,
-                    style: appText.micro.copyWith(color: statusForegroundColor),
+                    style: appText.micro.copyWith(
+                      color: statusForegroundColor,
+                    ),
                   ),
                 ),
               ],
@@ -118,6 +124,18 @@ class WalletWithdrawRecordCard extends StatelessWidget {
                   color: colors.textTertiary,
                   height: 1.4,
                 ),
+              ),
+            ],
+            if (footer != null) ...<Widget>[
+              const SizedBox(height: 12),
+              footer!,
+            ],
+
+            if (headerAction != null) ...[
+              const SizedBox(width: 8),
+              Container(
+                alignment: Alignment.centerRight,
+                child: headerAction!,
               ),
             ],
           ],

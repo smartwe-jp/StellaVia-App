@@ -2242,10 +2242,66 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletWithdrawSubmitAction => '出金申請';
 
   @override
+  String get walletWithdrawConfirmTitle => '出金内容を確認';
+
+  @override
+  String get walletWithdrawEstimatedArrivalLabel => '着金予定日';
+
+  @override
+  String get walletWithdrawEstimatedArrivalValue => '1-3営業日';
+
+  @override
+  String get walletWithdrawNetAmountLabel => '実際の着金額';
+
+  @override
+  String get walletWithdrawCodeSentTargetLabel => '認証コードの送信先';
+
+  @override
+  String get walletWithdrawConfirmHint =>
+      '確認すると、ご登録の電話番号へ認証コードを送信します。本人確認を完了してください。';
+
+  @override
+  String get walletWithdrawConfirmSendCodeAction => '確認してコードを送信';
+
+  @override
+  String get walletWithdrawBackEditAction => '戻って修正';
+
+  @override
+  String get walletWithdrawVerificationHint => 'コード認証が完了すると、この内容で出金申請を送信します。';
+
+  @override
+  String get walletWithdrawCodeSent => '認証コードを送信しました。';
+
+  @override
+  String get walletWithdrawCodeRequired => '6桁の認証コードを入力してください。';
+
+  @override
+  String get walletWithdrawVerifyTitle => '本人確認';
+
+  @override
+  String walletWithdrawCountdownLabel(Object seconds) {
+    return '$seconds秒後に再送できます';
+  }
+
+  @override
+  String get walletWithdrawResendReady => '認証コードを再送できます';
+
+  @override
+  String walletWithdrawVerifyAmountHint(Object amount) {
+    return '認証が完了すると、$amount の出金申請を送信します。';
+  }
+
+  @override
+  String get walletWithdrawVerifySubmitAction => '認証して送信';
+
+  @override
   String get walletWithdrawSubmitPending => '出金機能は次の実装で接続します。';
 
   @override
   String get walletWithdrawAmountInvalid => '有効な出金金額を入力してください。';
+
+  @override
+  String get walletWithdrawInsufficientBalance => '出金金額と手数料を含めた残高が不足しています。';
 
   @override
   String get walletWithdrawSelectAccountFirst => '出金先口座を選択してください。';
@@ -2255,6 +2311,24 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get walletWithdrawSubmitFailure => '出金申請の送信に失敗しました。時間をおいて再度お試しください。';
+
+  @override
+  String get walletWithdrawCancelAction => 'キャンセル';
+
+  @override
+  String get walletWithdrawCancelConfirmTitle => '出金申請を取消しますか？';
+
+  @override
+  String get walletWithdrawCancelConfirmBody => '未送金の出金申請を取消します。よろしいですか？';
+
+  @override
+  String get walletWithdrawCancelConfirmAction => '取消する';
+
+  @override
+  String get walletWithdrawCancelSuccess => '出金申請を取消しました。';
+
+  @override
+  String get walletWithdrawCancelFailure => '出金申請の取消に失敗しました。時間をおいて再度お試しください。';
 
   @override
   String get walletWithdrawingAction => '出金中';
@@ -2305,7 +2379,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletWithdrawRecordStatusDone => '完了';
 
   @override
-  String get walletWithdrawRecordStatusUnpaid => '未送金';
+  String get walletWithdrawRecordStatusUnpaid => '送金中';
 
   @override
   String get walletWithdrawRecordStatusPaid => '送金済み';
@@ -2317,7 +2391,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletWithdrawRecordStatusFailedConfirmed => '送金失敗・確認済み';
 
   @override
-  String get walletWithdrawRecordStatusRevoked => '未送金・撤回';
+  String get walletWithdrawRecordStatusRevoked => 'キャンセル';
 
   @override
   String get walletWithdrawRecordStatusUnknown => '状態不明';

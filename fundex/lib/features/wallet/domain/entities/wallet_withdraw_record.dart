@@ -1,6 +1,8 @@
 class WalletWithdrawRecord {
   const WalletWithdrawRecord({
     this.withdrawId,
+    this.memberId,
+    this.processId,
     this.amount,
     this.cost,
     this.withdrawType,
@@ -18,6 +20,8 @@ class WalletWithdrawRecord {
   });
 
   final String? withdrawId;
+  final int? memberId;
+  final String? processId;
   final num? amount;
   final num? cost;
   final int? withdrawType;

@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/navigation/app_root_route_refresh_scope.dart';
+import '../../../../app/support/app_request_error_message_resolver.dart';
+import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../domain/entities/wallet_withdraw_record.dart';
 import '../providers/wallet_providers.dart';
 import '../support/wallet_withdraw_record_list_item.dart';
@@ -21,6 +23,64 @@ class WalletWithdrawHistoryPage extends ConsumerStatefulWidget {
 class _WalletWithdrawHistoryPageState
     extends ConsumerState<WalletWithdrawHistoryPage> {
   _WalletWithdrawHistoryFilter _filter = _WalletWithdrawHistoryFilter.all;
+  final Set<String> _cancellingIds = <String>{};
+
+  Future<void> _cancelWithdraw(WalletWithdrawRecord record) async {
+    final withdrawId = record.withdrawId?.trim() ?? '';
+    if (withdrawId.isEmpty || _cancellingIds.contains(withdrawId)) {
+      return;
+    }
+    final l10n = context.l10n;
+    final shouldCancel = await AppDialogs.showAdaptiveAlert<bool>(
+      context: context,
+      title: l10n.walletWithdrawCancelConfirmTitle,
+      message: l10n.walletWithdrawCancelConfirmBody,
+      actions: <AppDialogAction<bool>>[
+        AppDialogAction<bool>(
+          label: l10n.walletBankSettingsCancelAction,
+          value: false,
+        ),
+        AppDialogAction<bool>(
+          label: l10n.walletWithdrawCancelConfirmAction,
+          value: true,
+          isDestructive: true,
+        ),
+      ],
+    );
+    if (shouldCancel != true || !mounted) {
+      return;
+    }
+    setState(() {
+      _cancellingIds.add(withdrawId);
+    });
+    try {
+      await ref.read(cancelWalletWithdrawUseCaseProvider).call(record);
+      if (!mounted) {
+        return;
+      }
+      AppNotice.show(context, message: l10n.walletWithdrawCancelSuccess);
+      ref.invalidate(walletWithdrawHistoryProvider);
+      ref.invalidate(walletWithdrawingListProvider);
+      ref.invalidate(myPageAccountStatisticProvider);
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      AppNotice.show(
+        context,
+        message: resolveAppRequestErrorMessage(
+          error,
+          l10n.walletWithdrawCancelFailure,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _cancellingIds.remove(withdrawId);
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +116,16 @@ class _WalletWithdrawHistoryPageState
                 .where(
                   (WalletWithdrawRecord record) => switch (_filter) {
                     _WalletWithdrawHistoryFilter.all => true,
-                    _WalletWithdrawHistoryFilter.status0 => record.status == 0,
-                    _WalletWithdrawHistoryFilter.status1 => record.status == 1,
-                    _WalletWithdrawHistoryFilter.status2 => record.status == 2,
-                    _WalletWithdrawHistoryFilter.status3 => record.status == 3,
-                    _WalletWithdrawHistoryFilter.status4 => record.status == 4,
+                    _WalletWithdrawHistoryFilter.status0 =>
+                      (record.payStatus ?? record.status) == 0,
+                    _WalletWithdrawHistoryFilter.status1 =>
+                      (record.payStatus ?? record.status) == 1,
+                    _WalletWithdrawHistoryFilter.status2 =>
+                      (record.payStatus ?? record.status) == 2,
+                    _WalletWithdrawHistoryFilter.status3 =>
+                      (record.payStatus ?? record.status) == 3,
+                    _WalletWithdrawHistoryFilter.status4 =>
+                      (record.payStatus ?? record.status) == 4,
                   },
                 )
                 .toList(growable: false);
@@ -140,6 +205,12 @@ class _WalletWithdrawHistoryPageState
                                 record: record,
                                 formatter: formatter,
                                 showPaidTime: true,
+                                onCancel: record.payStatus == 0
+                                    ? () => _cancelWithdraw(record)
+                                    : null,
+                                isCancelling: _cancellingIds.contains(
+                                  record.withdrawId?.trim() ?? '',
+                                ),
                               );
                             },
                             separatorBuilder: (_, __) =>

@@ -9,12 +9,16 @@ class UserWalletApiPaths {
   const UserWalletApiPaths._();
 
   static const String accountHistory = '/member/wx/account/history';
-  static const String withdrawApply = '/member/wx/account/withdraw/apply';
-  static const String withdrawHistory = '/member/wx/account/withdraw/history';
+  static const String withdrawApply = '/member/wx/account/withdraw/apply-v1';
+  static const String withdrawCancel = '/member/wx/account/withdraw/cancel';
+  static const String withdrawCost = '/member/wx/account/withdraw/cost';
+  static const String withdrawApplySendCode =
+      '/member/wx/account/withdraw-apply-send-code';
+  static const String withdrawHistory = '/member/wx/account/withdraw-list';
   static const String withdrawingList = '/member/wx/account/withdrawing/list';
   static const String bankAccountApply = '/member/bank-account/apply';
   static const String bankAccountInfo = '/member/bank-account/info';
-  static const String bankAccountStatus = '/member/bank-account/status';
+  static const String bankAccountList = '/member/bank/list';
   static const String bankAccountAdd = '/member/bank-account/add';
 }
 
@@ -24,11 +28,14 @@ class UserWalletApiClient {
     LegacyEnvelopeCodec? envelopeCodec,
     this.accountHistoryPath = UserWalletApiPaths.accountHistory,
     this.withdrawApplyPath = UserWalletApiPaths.withdrawApply,
+    this.withdrawCancelPath = UserWalletApiPaths.withdrawCancel,
+    this.withdrawCostPath = UserWalletApiPaths.withdrawCost,
+    this.withdrawApplySendCodePath = UserWalletApiPaths.withdrawApplySendCode,
     this.withdrawHistoryPath = UserWalletApiPaths.withdrawHistory,
     this.withdrawingListPath = UserWalletApiPaths.withdrawingList,
     this.bankAccountApplyPath = UserWalletApiPaths.bankAccountApply,
     this.bankAccountInfoPath = UserWalletApiPaths.bankAccountInfo,
-    this.bankAccountStatusPath = UserWalletApiPaths.bankAccountStatus,
+    this.bankAccountListPath = UserWalletApiPaths.bankAccountList,
     this.bankAccountAddPath = UserWalletApiPaths.bankAccountAdd,
   }) : _dioForPath = dioForPath,
        _envelopeCodec =
@@ -42,11 +49,14 @@ class UserWalletApiClient {
 
   final String accountHistoryPath;
   final String withdrawApplyPath;
+  final String withdrawCancelPath;
+  final String withdrawCostPath;
+  final String withdrawApplySendCodePath;
   final String withdrawHistoryPath;
   final String withdrawingListPath;
   final String bankAccountApplyPath;
   final String bankAccountInfoPath;
-  final String bankAccountStatusPath;
+  final String bankAccountListPath;
   final String bankAccountAddPath;
 
   /// 0: all records, 1: CNY, 2: USD
@@ -90,10 +100,62 @@ class UserWalletApiClient {
     );
   }
 
+  Future<void> cancelWithdraw(UserWalletWithdrawCancelRequestDto request) async {
+    final response = await _dioForPath(withdrawCancelPath)
+        .put<Map<String, dynamic>>(
+          withdrawCancelPath,
+          data: request.toJson(),
+          options: authRequired(true),
+        );
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    if (payload.isEmpty) {
+      return;
+    }
+    _envelopeCodec.assertSuccessIfEnvelope(
+      payload,
+      fallbackMessage: 'Failed to cancel withdraw request.',
+    );
+  }
+
+  Future<num> fetchWithdrawCost({required Object bankId}) async {
+    final response = await _dioForPath(withdrawCostPath).get<Map<String, dynamic>>(
+      withdrawCostPath,
+      queryParameters: <String, dynamic>{'bankId': bankId},
+      options: authRequired(true),
+    );
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    if (payload.isEmpty) {
+      return 0;
+    }
+    _envelopeCodec.assertSuccessIfEnvelope(
+      payload,
+      fallbackMessage: 'Failed to load withdraw cost.',
+    );
+    return _asNumOrZero(payload['data']);
+  }
+
+  Future<void> sendWithdrawApplyCode() async {
+    final response = await _dioForPath(withdrawApplySendCodePath)
+        .get<Map<String, dynamic>>(
+          withdrawApplySendCodePath,
+          options: authRequired(true),
+        );
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    if (payload.isEmpty) {
+      return;
+    }
+    _envelopeCodec.assertSuccessIfEnvelope(
+      payload,
+      fallbackMessage: 'Failed to send withdraw verification code.',
+      requireTruthyData: true,
+    );
+  }
+
   Future<List<UserWalletWithdrawRecordDto>> fetchWithdrawHistory() async {
     final response = await _dioForPath(withdrawHistoryPath)
-        .get<Map<String, dynamic>>(
+        .post<Map<String, dynamic>>(
           withdrawHistoryPath,
+          data: <String, dynamic>{'startPage': '1', 'limit': '10'},
           options: authRequired(true),
         );
     return _extractRows(
@@ -115,10 +177,9 @@ class UserWalletApiClient {
   }
 
   Future<List<UserWalletBankAccountPoolDto>> fetchBankAccountList() async {
-    final response = await _dioForPath(bankAccountStatusPath)
+    final response = await _dioForPath(bankAccountListPath)
         .get<Map<String, dynamic>>(
-          bankAccountStatusPath,
-          queryParameters: const <String, dynamic>{'status': 1},
+          bankAccountListPath,
           options: authRequired(true),
         );
     return _extractRows(
@@ -227,5 +288,15 @@ class UserWalletApiClient {
       return _envelopeCodec.toJsonMapList(payload['list']);
     }
     return _envelopeCodec.toJsonMapList(payload);
+  }
+
+  num _asNumOrZero(dynamic value) {
+    if (value == null) {
+      return 0;
+    }
+    if (value is num) {
+      return value;
+    }
+    return num.tryParse(value.toString()) ?? 0;
   }
 }

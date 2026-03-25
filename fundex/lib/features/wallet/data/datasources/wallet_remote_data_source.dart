@@ -19,7 +19,13 @@ abstract class WalletRemoteDataSource {
 
   Future<void> addBankAccount(WalletBankAccountAddRequestDto request);
 
+  Future<void> sendWithdrawApplyCode();
+
   Future<void> applyWithdraw(WalletWithdrawApplyRequestDto request);
+
+  Future<void> cancelWithdraw(WalletWithdrawCancelRequestDto request);
+
+  Future<num> fetchWithdrawCost({required Object bankId});
 
   Future<List<WalletWithdrawRecordDto>> fetchWithdrawHistory();
 
@@ -81,8 +87,23 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   }
 
   @override
+  Future<void> sendWithdrawApplyCode() {
+    return _apiClient.sendWithdrawApplyCode();
+  }
+
+  @override
   Future<void> applyWithdraw(WalletWithdrawApplyRequestDto request) {
     return _apiClient.applyWithdraw(request);
+  }
+
+  @override
+  Future<void> cancelWithdraw(WalletWithdrawCancelRequestDto request) {
+    return _apiClient.cancelWithdraw(request);
+  }
+
+  @override
+  Future<num> fetchWithdrawCost({required Object bankId}) {
+    return _apiClient.fetchWithdrawCost(bankId: bankId);
   }
 
   @override

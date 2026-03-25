@@ -4418,6 +4418,102 @@ abstract class AppLocalizations {
   /// **'Submit Withdraw Request'**
   String get walletWithdrawSubmitAction;
 
+  /// No description provided for @walletWithdrawConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Withdraw Details'**
+  String get walletWithdrawConfirmTitle;
+
+  /// No description provided for @walletWithdrawEstimatedArrivalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated arrival'**
+  String get walletWithdrawEstimatedArrivalLabel;
+
+  /// No description provided for @walletWithdrawEstimatedArrivalValue.
+  ///
+  /// In en, this message translates to:
+  /// **'1-3 business days'**
+  String get walletWithdrawEstimatedArrivalValue;
+
+  /// No description provided for @walletWithdrawNetAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Net amount received'**
+  String get walletWithdrawNetAmountLabel;
+
+  /// No description provided for @walletWithdrawCodeSentTargetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification code will be sent to'**
+  String get walletWithdrawCodeSentTargetLabel;
+
+  /// No description provided for @walletWithdrawConfirmHint.
+  ///
+  /// In en, this message translates to:
+  /// **'After confirmation, a verification code will be sent to your registered phone. Please complete identity verification.'**
+  String get walletWithdrawConfirmHint;
+
+  /// No description provided for @walletWithdrawConfirmSendCodeAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm and send code'**
+  String get walletWithdrawConfirmSendCodeAction;
+
+  /// No description provided for @walletWithdrawBackEditAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to edit'**
+  String get walletWithdrawBackEditAction;
+
+  /// No description provided for @walletWithdrawVerificationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Once verification succeeds, this withdrawal request will be submitted.'**
+  String get walletWithdrawVerificationHint;
+
+  /// No description provided for @walletWithdrawCodeSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification code sent.'**
+  String get walletWithdrawCodeSent;
+
+  /// No description provided for @walletWithdrawCodeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit verification code.'**
+  String get walletWithdrawCodeRequired;
+
+  /// No description provided for @walletWithdrawVerifyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification'**
+  String get walletWithdrawVerifyTitle;
+
+  /// No description provided for @walletWithdrawCountdownLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'You can resend in {seconds}s'**
+  String walletWithdrawCountdownLabel(Object seconds);
+
+  /// No description provided for @walletWithdrawResendReady.
+  ///
+  /// In en, this message translates to:
+  /// **'You can resend the verification code now'**
+  String get walletWithdrawResendReady;
+
+  /// No description provided for @walletWithdrawVerifyAmountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'After verification, a withdrawal request for {amount} will be submitted.'**
+  String walletWithdrawVerifyAmountHint(Object amount);
+
+  /// No description provided for @walletWithdrawVerifySubmitAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify and submit'**
+  String get walletWithdrawVerifySubmitAction;
+
   /// No description provided for @walletWithdrawSubmitPending.
   ///
   /// In en, this message translates to:
@@ -4429,6 +4525,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter a valid withdrawal amount.'**
   String get walletWithdrawAmountInvalid;
+
+  /// No description provided for @walletWithdrawInsufficientBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Your balance is not enough to cover the withdrawal amount and fee.'**
+  String get walletWithdrawInsufficientBalance;
 
   /// No description provided for @walletWithdrawSelectAccountFirst.
   ///
@@ -4447,6 +4549,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to submit the withdrawal request. Please try again later.'**
   String get walletWithdrawSubmitFailure;
+
+  /// No description provided for @walletWithdrawCancelAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get walletWithdrawCancelAction;
+
+  /// No description provided for @walletWithdrawCancelConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel this withdrawal request?'**
+  String get walletWithdrawCancelConfirmTitle;
+
+  /// No description provided for @walletWithdrawCancelConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This unpaid withdrawal request will be cancelled. Do you want to continue?'**
+  String get walletWithdrawCancelConfirmBody;
+
+  /// No description provided for @walletWithdrawCancelConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm cancel'**
+  String get walletWithdrawCancelConfirmAction;
+
+  /// No description provided for @walletWithdrawCancelSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal request cancelled.'**
+  String get walletWithdrawCancelSuccess;
+
+  /// No description provided for @walletWithdrawCancelFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to cancel the withdrawal request. Please try again later.'**
+  String get walletWithdrawCancelFailure;
 
   /// No description provided for @walletWithdrawingAction.
   ///
@@ -4547,7 +4685,7 @@ abstract class AppLocalizations {
   /// No description provided for @walletWithdrawRecordStatusUnpaid.
   ///
   /// In en, this message translates to:
-  /// **'Unpaid'**
+  /// **'Processing payout'**
   String get walletWithdrawRecordStatusUnpaid;
 
   /// No description provided for @walletWithdrawRecordStatusPaid.
@@ -4571,7 +4709,7 @@ abstract class AppLocalizations {
   /// No description provided for @walletWithdrawRecordStatusRevoked.
   ///
   /// In en, this message translates to:
-  /// **'Revoked before payout'**
+  /// **'Cancelled'**
   String get walletWithdrawRecordStatusRevoked;
 
   /// No description provided for @walletWithdrawRecordStatusUnknown.

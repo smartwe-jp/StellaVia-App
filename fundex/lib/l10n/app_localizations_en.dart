@@ -2363,12 +2363,73 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletWithdrawSubmitAction => 'Submit Withdraw Request';
 
   @override
+  String get walletWithdrawConfirmTitle => 'Confirm Withdraw Details';
+
+  @override
+  String get walletWithdrawEstimatedArrivalLabel => 'Estimated arrival';
+
+  @override
+  String get walletWithdrawEstimatedArrivalValue => '1-3 business days';
+
+  @override
+  String get walletWithdrawNetAmountLabel => 'Net amount received';
+
+  @override
+  String get walletWithdrawCodeSentTargetLabel =>
+      'Verification code will be sent to';
+
+  @override
+  String get walletWithdrawConfirmHint =>
+      'After confirmation, a verification code will be sent to your registered phone. Please complete identity verification.';
+
+  @override
+  String get walletWithdrawConfirmSendCodeAction => 'Confirm and send code';
+
+  @override
+  String get walletWithdrawBackEditAction => 'Back to edit';
+
+  @override
+  String get walletWithdrawVerificationHint =>
+      'Once verification succeeds, this withdrawal request will be submitted.';
+
+  @override
+  String get walletWithdrawCodeSent => 'Verification code sent.';
+
+  @override
+  String get walletWithdrawCodeRequired =>
+      'Enter the 6-digit verification code.';
+
+  @override
+  String get walletWithdrawVerifyTitle => 'Verification';
+
+  @override
+  String walletWithdrawCountdownLabel(Object seconds) {
+    return 'You can resend in ${seconds}s';
+  }
+
+  @override
+  String get walletWithdrawResendReady =>
+      'You can resend the verification code now';
+
+  @override
+  String walletWithdrawVerifyAmountHint(Object amount) {
+    return 'After verification, a withdrawal request for $amount will be submitted.';
+  }
+
+  @override
+  String get walletWithdrawVerifySubmitAction => 'Verify and submit';
+
+  @override
   String get walletWithdrawSubmitPending =>
       'Withdraw API will be connected in a later implementation.';
 
   @override
   String get walletWithdrawAmountInvalid =>
       'Please enter a valid withdrawal amount.';
+
+  @override
+  String get walletWithdrawInsufficientBalance =>
+      'Your balance is not enough to cover the withdrawal amount and fee.';
 
   @override
   String get walletWithdrawSelectAccountFirst =>
@@ -2380,6 +2441,27 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get walletWithdrawSubmitFailure =>
       'Failed to submit the withdrawal request. Please try again later.';
+
+  @override
+  String get walletWithdrawCancelAction => 'Cancel';
+
+  @override
+  String get walletWithdrawCancelConfirmTitle =>
+      'Cancel this withdrawal request?';
+
+  @override
+  String get walletWithdrawCancelConfirmBody =>
+      'This unpaid withdrawal request will be cancelled. Do you want to continue?';
+
+  @override
+  String get walletWithdrawCancelConfirmAction => 'Confirm cancel';
+
+  @override
+  String get walletWithdrawCancelSuccess => 'Withdrawal request cancelled.';
+
+  @override
+  String get walletWithdrawCancelFailure =>
+      'Failed to cancel the withdrawal request. Please try again later.';
 
   @override
   String get walletWithdrawingAction => 'Withdrawing';
@@ -2430,7 +2512,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletWithdrawRecordStatusDone => 'Completed';
 
   @override
-  String get walletWithdrawRecordStatusUnpaid => 'Unpaid';
+  String get walletWithdrawRecordStatusUnpaid => 'Processing payout';
 
   @override
   String get walletWithdrawRecordStatusPaid => 'Paid';
@@ -2444,7 +2526,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Payout failed / confirmed';
 
   @override
-  String get walletWithdrawRecordStatusRevoked => 'Revoked before payout';
+  String get walletWithdrawRecordStatusRevoked => 'Cancelled';
 
   @override
   String get walletWithdrawRecordStatusUnknown => 'Unknown';

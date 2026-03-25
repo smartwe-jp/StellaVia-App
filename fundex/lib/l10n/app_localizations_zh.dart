@@ -2225,10 +2225,65 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletWithdrawSubmitAction => '提交出金申请';
 
   @override
+  String get walletWithdrawConfirmTitle => '确认提现信息';
+
+  @override
+  String get walletWithdrawEstimatedArrivalLabel => '预计到账日';
+
+  @override
+  String get walletWithdrawEstimatedArrivalValue => '1-3个工作日';
+
+  @override
+  String get walletWithdrawNetAmountLabel => '实际到账';
+
+  @override
+  String get walletWithdrawCodeSentTargetLabel => '验证码将发送至';
+
+  @override
+  String get walletWithdrawConfirmHint => '点击确认后将向您的手机发送验证码，请完成身份验证。';
+
+  @override
+  String get walletWithdrawConfirmSendCodeAction => '确认，发送验证码';
+
+  @override
+  String get walletWithdrawBackEditAction => '返回修改';
+
+  @override
+  String get walletWithdrawVerificationHint => '验证码校验通过后，将按当前内容提交本次提现申请。';
+
+  @override
+  String get walletWithdrawCodeSent => '验证码已发送。';
+
+  @override
+  String get walletWithdrawCodeRequired => '请输入6位验证码。';
+
+  @override
+  String get walletWithdrawVerifyTitle => '身份验证';
+
+  @override
+  String walletWithdrawCountdownLabel(Object seconds) {
+    return '$seconds秒后可重新发送';
+  }
+
+  @override
+  String get walletWithdrawResendReady => '现在可以重新发送验证码';
+
+  @override
+  String walletWithdrawVerifyAmountHint(Object amount) {
+    return '验证成功后，将提交 $amount 提现申请。';
+  }
+
+  @override
+  String get walletWithdrawVerifySubmitAction => '验证并提交';
+
+  @override
   String get walletWithdrawSubmitPending => '出金功能将在后续接入。';
 
   @override
   String get walletWithdrawAmountInvalid => '请输入有效的出金金额。';
+
+  @override
+  String get walletWithdrawInsufficientBalance => '当前余额不足以覆盖出金金额与手续费。';
 
   @override
   String get walletWithdrawSelectAccountFirst => '请选择出金账户。';
@@ -2238,6 +2293,24 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get walletWithdrawSubmitFailure => '出金申请提交失败，请稍后重试。';
+
+  @override
+  String get walletWithdrawCancelAction => '取消';
+
+  @override
+  String get walletWithdrawCancelConfirmTitle => '确定取消提现吗？';
+
+  @override
+  String get walletWithdrawCancelConfirmBody => '将取消这笔未打款的出金申请，是否继续？';
+
+  @override
+  String get walletWithdrawCancelConfirmAction => '确认取消';
+
+  @override
+  String get walletWithdrawCancelSuccess => '出金申请已取消。';
+
+  @override
+  String get walletWithdrawCancelFailure => '取消出金申请失败，请稍后重试。';
 
   @override
   String get walletWithdrawingAction => '出金中';
@@ -2288,7 +2361,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletWithdrawRecordStatusDone => '已完成';
 
   @override
-  String get walletWithdrawRecordStatusUnpaid => '未打款';
+  String get walletWithdrawRecordStatusUnpaid => '打款中';
 
   @override
   String get walletWithdrawRecordStatusPaid => '已打款';
@@ -2300,7 +2373,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletWithdrawRecordStatusFailedConfirmed => '打款失败已确认';
 
   @override
-  String get walletWithdrawRecordStatusRevoked => '未打款撤回';
+  String get walletWithdrawRecordStatusRevoked => '已取消';
 
   @override
   String get walletWithdrawRecordStatusUnknown => '状态未知';
@@ -5479,10 +5552,65 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get walletWithdrawSubmitAction => '提交出金申請';
 
   @override
+  String get walletWithdrawConfirmTitle => '確認提現資訊';
+
+  @override
+  String get walletWithdrawEstimatedArrivalLabel => '預計到帳日';
+
+  @override
+  String get walletWithdrawEstimatedArrivalValue => '1-3個工作日';
+
+  @override
+  String get walletWithdrawNetAmountLabel => '實際到帳';
+
+  @override
+  String get walletWithdrawCodeSentTargetLabel => '驗證碼將發送至';
+
+  @override
+  String get walletWithdrawConfirmHint => '點擊確認後將向您的手機發送驗證碼，請完成身分驗證。';
+
+  @override
+  String get walletWithdrawConfirmSendCodeAction => '確認，發送驗證碼';
+
+  @override
+  String get walletWithdrawBackEditAction => '返回修改';
+
+  @override
+  String get walletWithdrawVerificationHint => '驗證碼驗證通過後，將依目前內容送出本次提現申請。';
+
+  @override
+  String get walletWithdrawCodeSent => '驗證碼已發送。';
+
+  @override
+  String get walletWithdrawCodeRequired => '請輸入6位驗證碼。';
+
+  @override
+  String get walletWithdrawVerifyTitle => '身分驗證';
+
+  @override
+  String walletWithdrawCountdownLabel(Object seconds) {
+    return '$seconds秒後可重新發送';
+  }
+
+  @override
+  String get walletWithdrawResendReady => '現在可以重新發送驗證碼';
+
+  @override
+  String walletWithdrawVerifyAmountHint(Object amount) {
+    return '驗證成功後，將提交 $amount 提現申請。';
+  }
+
+  @override
+  String get walletWithdrawVerifySubmitAction => '驗證並提交';
+
+  @override
   String get walletWithdrawSubmitPending => '出金功能將於後續接入。';
 
   @override
   String get walletWithdrawAmountInvalid => '請輸入有效的出金金額。';
+
+  @override
+  String get walletWithdrawInsufficientBalance => '目前餘額不足以覆蓋出金金額與手續費。';
 
   @override
   String get walletWithdrawSelectAccountFirst => '請先選擇出金帳戶。';
@@ -5492,6 +5620,24 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletWithdrawSubmitFailure => '出金申請送出失敗，請稍後再試。';
+
+  @override
+  String get walletWithdrawCancelAction => '取消';
+
+  @override
+  String get walletWithdrawCancelConfirmTitle => '確定取消提現嗎？';
+
+  @override
+  String get walletWithdrawCancelConfirmBody => '將取消這筆未打款的出金申請，是否繼續？';
+
+  @override
+  String get walletWithdrawCancelConfirmAction => '確認取消';
+
+  @override
+  String get walletWithdrawCancelSuccess => '出金申請已取消。';
+
+  @override
+  String get walletWithdrawCancelFailure => '取消出金申請失敗，請稍後再試。';
 
   @override
   String get walletWithdrawingAction => '出金中';
@@ -5542,7 +5688,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get walletWithdrawRecordStatusDone => '已完成';
 
   @override
-  String get walletWithdrawRecordStatusUnpaid => '未打款';
+  String get walletWithdrawRecordStatusUnpaid => '打款中';
 
   @override
   String get walletWithdrawRecordStatusPaid => '已打款';
@@ -5554,7 +5700,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get walletWithdrawRecordStatusFailedConfirmed => '打款失敗已確認';
 
   @override
-  String get walletWithdrawRecordStatusRevoked => '未打款撤回';
+  String get walletWithdrawRecordStatusRevoked => '已取消';
 
   @override
   String get walletWithdrawRecordStatusUnknown => '狀態未知';

@@ -13,11 +13,15 @@ class WalletWithdrawRecordListItem extends StatelessWidget {
     required this.record,
     required this.formatter,
     required this.showPaidTime,
+    this.onCancel,
+    this.isCancelling = false,
   });
 
   final WalletWithdrawRecord record;
   final NumberFormat formatter;
   final bool showPaidTime;
+  final VoidCallback? onCancel;
+  final bool isCancelling;
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +73,40 @@ class WalletWithdrawRecordListItem extends StatelessWidget {
       amountText: formatWalletCurrency(formatter, record.amount),
       details: rows,
       note: record.remark,
+      headerAction: _buildHeaderAction(context),
+    );
+  }
+
+  Widget? _buildHeaderAction(BuildContext context) {
+    if (record.payStatus != 0 || onCancel == null) {
+      return null;
+    }
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    return OutlinedButton(
+      onPressed: isCancelling ? null : onCancel,
+      style: OutlinedButton.styleFrom(
+        foregroundColor: colors.danger,
+        side: BorderSide(color: colors.dangerBorder),
+        minimumSize: const Size(0, 32),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+      ),
+      child: isCancelling
+          ? SizedBox(
+              width: 14,
+              height: 14,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(colors.danger),
+              ),
+            )
+          : Text(
+              context.l10n.walletWithdrawCancelAction,
+              style: appText.micro.copyWith(color: colors.danger),
+            ),
     );
   }
 }

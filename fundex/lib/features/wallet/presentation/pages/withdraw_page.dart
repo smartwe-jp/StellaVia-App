@@ -6,11 +6,11 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/navigation/app_root_route_refresh_scope.dart';
-import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../domain/entities/wallet_bank_account_info.dart';
 import '../../domain/entities/wallet_withdraw_apply_draft.dart';
 import '../providers/wallet_providers.dart';
+import '../support/wallet_withdraw_confirm_models.dart';
 
 class WithdrawPage extends ConsumerStatefulWidget {
   const WithdrawPage({super.key});
@@ -26,13 +26,21 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
   @override
   void initState() {
     super.initState();
-    _amountController = TextEditingController();
+    _amountController = TextEditingController()..addListener(_handleAmountChanged);
   }
 
   @override
   void dispose() {
+    _amountController.removeListener(_handleAmountChanged);
     _amountController.dispose();
     super.dispose();
+  }
+
+  void _handleAmountChanged() {
+    if (!mounted) {
+      return;
+    }
+    setState(() {});
   }
 
   WalletBankAccountInfo? _resolveSelectedAccount(
@@ -161,8 +169,29 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
     return num.tryParse(sanitized);
   }
 
-  Future<void> _submitWithdraw({
+  bool _canSubmitWithdraw({
     required WalletBankAccountInfo? selected,
+    required num? availableAmount,
+    required num? feeAmount,
+  }) {
+    final amount = _parseAmountOrNull();
+    if (amount == null || amount <= 0) {
+      return false;
+    }
+    if (feeAmount == null) {
+      return false;
+    }
+    if (availableAmount != null && amount + feeAmount > availableAmount) {
+      return false;
+    }
+    final selectedId = selected?.id?.trim();
+    return selectedId != null && selectedId.isNotEmpty;
+  }
+
+  Future<void> _openWithdrawConfirmPage({
+    required WalletBankAccountInfo? selected,
+    required num? availableAmount,
+    required num? feeAmount,
   }) async {
     final l10n = context.l10n;
     final amount = _parseAmountOrNull();
@@ -176,43 +205,35 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
       AppNotice.show(context, message: l10n.walletWithdrawSelectAccountFirst);
       return;
     }
+    if (feeAmount == null) {
+      return;
+    }
+    if (availableAmount != null && amount + feeAmount > availableAmount) {
+      AppNotice.show(context, message: l10n.walletWithdrawInsufficientBalance);
+      return;
+    }
 
     final bankIdRaw = selected.id!.trim();
     final parsedBankId = int.tryParse(bankIdRaw);
     final bankId = parsedBankId ?? bankIdRaw;
-
-    ref.read(walletWithdrawSubmittingProvider.notifier).state = true;
-    try {
-      await ref
-          .read(submitWalletWithdrawApplyUseCaseProvider)
-          .call(
-            WalletWithdrawApplyDraft(
-              amount: amount,
-              bankId: bankId,
-              withdrawType: 0,
-            ),
-          );
-      if (!mounted) {
-        return;
-      }
-      AppNotice.show(context, message: l10n.walletWithdrawSubmitSuccess);
-      ref.invalidate(walletWithdrawingListProvider);
-    } catch (error) {
-      if (!mounted) {
-        return;
-      }
-      AppNotice.show(
-        context,
-        message: resolveAppRequestErrorMessage(
-          error,
-          l10n.walletWithdrawSubmitFailure,
+    final submitted = await context.push<bool>(
+      '/wallet/withdraw/confirm',
+      extra: WalletWithdrawConfirmSeed(
+        draft: WalletWithdrawApplyDraft(
+          amount: amount,
+          bankId: bankId,
+          withdrawType: 0,
         ),
-      );
-    } finally {
-      if (mounted) {
-        ref.read(walletWithdrawSubmittingProvider.notifier).state = false;
-      }
+        account: selected,
+      ),
+    );
+    if (!mounted || submitted != true) {
+      return;
     }
+    _amountController.clear();
+    ref.invalidate(walletWithdrawingListProvider);
+    ref.invalidate(walletWithdrawHistoryProvider);
+    ref.invalidate(myPageAccountStatisticProvider);
   }
 
   @override
@@ -227,7 +248,6 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
       decimalDigits: 0,
     );
     final accountsAsync = ref.watch(walletBankAccountListProvider);
-    final isSubmitting = ref.watch(walletWithdrawSubmittingProvider);
     final availableAmountAsync = ref.watch(myPageAccountStatisticProvider);
     final availableAmount =
         availableAmountAsync.asData?.value?.firstLevelAccountTotal;
@@ -254,6 +274,22 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
         body: accountsAsync.when(
           data: (accounts) {
             final selected = _resolveSelectedAccount(accounts);
+            final selectedBankId = selected?.id?.trim();
+            final feeAsync =
+                selectedBankId == null || selectedBankId.isEmpty
+                ? const AsyncData<num>(0)
+                : ref.watch(walletWithdrawCostProvider(selectedBankId));
+            final feeValueText = feeAsync.when(
+              data: (num fee) => currency.format(fee),
+              loading: () => '--',
+              error: (_, __) => '--',
+            );
+            final feeValue = feeAsync.asData?.value;
+            final canSubmit = _canSubmitWithdraw(
+              selected: selected,
+              availableAmount: availableAmount,
+              feeAmount: feeValue,
+            );
             return ListView(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
               children: <Widget>[
@@ -276,7 +312,7 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
                       ? l10n.walletWithdrawSelectDestination
                       : _buildAccountSummary(selected),
                   feeLabel: l10n.walletWithdrawFeeLabel,
-                  feeValue: '¥145',
+                  feeValue: feeValueText,
                   onTapDestination: () {
                     if (accounts.isEmpty) {
                       _openAddBankAccountPage();
@@ -297,10 +333,13 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
                 PrimaryCtaButton(
                   label: l10n.walletWithdrawSubmitAction,
                   fullWidth: true,
-                  isLoading: isSubmitting,
-                  onPressed: isSubmitting
+                  onPressed: !canSubmit
                       ? null
-                      : () => _submitWithdraw(selected: selected),
+                      : () => _openWithdrawConfirmPage(
+                          selected: selected,
+                          availableAmount: availableAmount,
+                          feeAmount: feeValue,
+                        ),
                 ),
               ],
             );

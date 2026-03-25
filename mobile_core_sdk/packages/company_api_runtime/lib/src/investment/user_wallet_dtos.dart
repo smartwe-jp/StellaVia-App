@@ -72,10 +72,14 @@ class UserWalletBankAccountPoolDto {
     return UserWalletBankAccountPoolDto(
       id: _stringOrNull(json['id']),
       bankName: _stringOrNull(json['bankName']),
-      branchName: _stringOrNull(json['branchName']),
-      accountType: _stringOrNull(json['accountType']),
-      accountNumber: _stringOrNull(json['accountNumber']),
-      accountName: _stringOrNull(json['accountName']),
+      branchName: _stringOrNull(json['branchName'] ?? json['branchBankName']),
+      accountType: _stringOrNull(
+        json['accountType'] ?? json['bankAccountType'],
+      ),
+      accountNumber: _stringOrNull(json['accountNumber'] ?? json['bankNumber']),
+      accountName: _stringOrNull(
+        json['accountName'] ?? json['bankAccountOwnerName'],
+      ),
       version: _intOrNull(json['version']),
     );
   }
@@ -161,6 +165,7 @@ class UserWalletWithdrawApplyRequestDto {
     required this.bankId,
     this.bookCrashAddress,
     this.bookDate,
+    this.code,
     this.withdrawType = 0,
   });
 
@@ -168,6 +173,7 @@ class UserWalletWithdrawApplyRequestDto {
   final Object bankId;
   final String? bookCrashAddress;
   final String? bookDate;
+  final String? code;
   final int withdrawType;
 
   Map<String, dynamic> toJson() {
@@ -176,6 +182,57 @@ class UserWalletWithdrawApplyRequestDto {
       'bankId': bankId,
       'bookCrashAddress': _stringOrNull(bookCrashAddress),
       'bookDate': _stringOrNull(bookDate),
+      'code': _stringOrNull(code),
+      'withdrawType': withdrawType,
+    }..removeWhere((_, dynamic value) => value == null);
+  }
+}
+
+class UserWalletWithdrawCancelRequestDto {
+  const UserWalletWithdrawCancelRequestDto({
+    required this.withdrawId,
+    this.amount,
+    this.bankName,
+    this.bankNumber,
+    this.bookDate,
+    this.branchBankName,
+    this.cost,
+    this.memberId,
+    this.payRemark,
+    this.payStatus,
+    this.payTime,
+    this.withdrawDesc,
+    this.withdrawType,
+  });
+
+  final Object withdrawId;
+  final num? amount;
+  final String? bankName;
+  final String? bankNumber;
+  final String? bookDate;
+  final String? branchBankName;
+  final num? cost;
+  final int? memberId;
+  final String? payRemark;
+  final int? payStatus;
+  final String? payTime;
+  final String? withdrawDesc;
+  final int? withdrawType;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'withdrawId': withdrawId,
+      'amount': amount,
+      'bankName': _stringOrNull(bankName),
+      'bankNumber': _stringOrNull(bankNumber),
+      'bookDate': _stringOrNull(bookDate),
+      'branchBankName': _stringOrNull(branchBankName),
+      'cost': cost,
+      'memberId': memberId,
+      'payRemark': _stringOrNull(payRemark),
+      'payStatus': payStatus,
+      'payTime': _stringOrNull(payTime),
+      'withdrawDesc': _stringOrNull(withdrawDesc),
       'withdrawType': withdrawType,
     }..removeWhere((_, dynamic value) => value == null);
   }
@@ -184,6 +241,8 @@ class UserWalletWithdrawApplyRequestDto {
 class UserWalletWithdrawRecordDto {
   const UserWalletWithdrawRecordDto({
     this.withdrawId,
+    this.memberId,
+    this.processId,
     this.amount,
     this.cost,
     this.withdrawType,
@@ -201,26 +260,35 @@ class UserWalletWithdrawRecordDto {
   });
 
   factory UserWalletWithdrawRecordDto.fromJson(Map<String, dynamic> json) {
+    final payStatus = _intOrNull(json['payStatus'] ?? json['status']);
     return UserWalletWithdrawRecordDto(
       withdrawId: _stringOrNull(json['withdrawId'] ?? json['id']),
-      amount: _numOrNull(json['amount']),
-      cost: _numOrNull(json['cost'] ?? json['serviceFee']),
+      memberId: _intOrNull(json['memberId']),
+      processId: _stringOrNull(json['processId']),
+      amount: _numOrNull(json['amount'] ?? json['applyAmount']),
+      cost: _numOrNull(
+        json['cost'] ?? json['serviceFee'] ?? json['withdrawCost'],
+      ),
       withdrawType: _intOrNull(json['withdrawType']),
       applyTime: _stringOrNull(json['applyTime']),
-      bookDate: _stringOrNull(json['bookDate']),
+      bookDate: _stringOrNull(json['bookDate'] ?? json['bookCrashDate']),
       bankNumber: _stringOrNull(json['bankNumber']),
       bankName: _stringOrNull(json['bankName']),
-      bankBranch: _stringOrNull(json['branchName'] ?? json['bankBranch']),
-      payStatus: _intOrNull(json['payStatus']),
-      status: _intOrNull(json['status']),
-      remark: _stringOrNull(json['remark']),
-      payTime: _stringOrNull(json['payTime']),
+      bankBranch: _stringOrNull(
+        json['branchName'] ?? json['bankBranch'] ?? json['branchBankName'],
+      ),
+      payStatus: payStatus,
+      status: payStatus,
+      remark: _stringOrNull(json['remark'] ?? json['payRemark']),
+      payTime: _stringOrNull(json['payTime'] ?? json['confirmPayTime']),
       updateTime: _stringOrNull(json['updateTime']),
       createTime: _stringOrNull(json['createTime']),
     );
   }
 
   final String? withdrawId;
+  final int? memberId;
+  final String? processId;
   final num? amount;
   final num? cost;
   final int? withdrawType;

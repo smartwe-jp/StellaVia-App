@@ -13,8 +13,11 @@ import '../../domain/usecases/apply_wallet_bank_account_usecase.dart';
 import '../../domain/usecases/fetch_wallet_bank_account_list_usecase.dart';
 import '../../domain/usecases/fetch_wallet_bank_account_info_usecase.dart';
 import '../../domain/usecases/fetch_wallet_account_history_usecase.dart';
+import '../../domain/usecases/cancel_wallet_withdraw_usecase.dart';
+import '../../domain/usecases/fetch_wallet_withdraw_cost_usecase.dart';
 import '../../domain/usecases/fetch_wallet_withdraw_history_usecase.dart';
 import '../../domain/usecases/fetch_wallet_withdrawing_list_usecase.dart';
+import '../../domain/usecases/send_wallet_withdraw_apply_code_usecase.dart';
 import '../../domain/usecases/submit_wallet_withdraw_apply_usecase.dart';
 import '../support/wallet_view_data.dart';
 
@@ -70,6 +73,25 @@ final submitWalletWithdrawApplyUseCaseProvider =
       );
     });
 
+final cancelWalletWithdrawUseCaseProvider =
+    Provider<CancelWalletWithdrawUseCase>((ref) {
+      return CancelWalletWithdrawUseCase(ref.watch(walletRepositoryProvider));
+    });
+
+final fetchWalletWithdrawCostUseCaseProvider =
+    Provider<FetchWalletWithdrawCostUseCase>((ref) {
+      return FetchWalletWithdrawCostUseCase(
+        ref.watch(walletRepositoryProvider),
+      );
+    });
+
+final sendWalletWithdrawApplyCodeUseCaseProvider =
+    Provider<SendWalletWithdrawApplyCodeUseCase>((ref) {
+      return SendWalletWithdrawApplyCodeUseCase(
+        ref.watch(walletRepositoryProvider),
+      );
+    });
+
 final fetchWalletWithdrawHistoryUseCaseProvider =
     Provider<FetchWalletWithdrawHistoryUseCase>((ref) {
       return FetchWalletWithdrawHistoryUseCase(
@@ -98,6 +120,13 @@ final walletHistoryProvider =
 final walletBankAccountListProvider =
     FutureProvider.autoDispose<List<WalletBankAccountInfo>>((ref) {
       return ref.watch(fetchWalletBankAccountListUseCaseProvider).call();
+    });
+
+final walletWithdrawCostProvider = FutureProvider.autoDispose
+    .family<num, String>((ref, bankId) {
+      return ref
+          .watch(fetchWalletWithdrawCostUseCaseProvider)
+          .call(bankId: bankId);
     });
 
 final walletWithdrawHistoryProvider =

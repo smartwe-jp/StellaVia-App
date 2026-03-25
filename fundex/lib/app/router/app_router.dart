@@ -47,11 +47,14 @@ import '../../features/settings/presentation/pages/settings_two_factor_page.dart
 import '../../features/settings/presentation/support/settings_contract_document_models.dart';
 import '../../features/wallet/presentation/pages/deposit_page.dart';
 import '../../features/wallet/presentation/pages/withdraw_page.dart';
+import '../../features/wallet/presentation/pages/wallet_withdraw_confirm_page.dart';
+import '../../features/wallet/presentation/pages/wallet_withdraw_verify_page.dart';
 import '../../features/wallet/presentation/pages/wallet_bank_account_add_page.dart';
 import '../../features/wallet/presentation/pages/wallet_bank_settings_page.dart';
 import '../../features/wallet/presentation/pages/wallet_history_page.dart';
 import '../../features/wallet/presentation/pages/wallet_withdraw_history_page.dart';
 import '../../features/wallet/presentation/pages/wallet_withdrawing_list_page.dart';
+import '../../features/wallet/presentation/support/wallet_withdraw_confirm_models.dart';
 import '../../features/investment/presentation/support/secondary_market_trade_models.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(
@@ -478,6 +481,26 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/wallet/withdraw',
         builder: (BuildContext context, GoRouterState state) {
           return const WithdrawPage();
+        },
+      ),
+      GoRoute(
+        path: '/wallet/withdraw/confirm',
+        builder: (BuildContext context, GoRouterState state) {
+          final seed = state.extra;
+          if (seed is! WalletWithdrawConfirmSeed) {
+            return const WithdrawPage();
+          }
+          return WalletWithdrawConfirmPage(seed: seed);
+        },
+      ),
+      GoRoute(
+        path: '/wallet/withdraw/confirm/verify',
+        builder: (BuildContext context, GoRouterState state) {
+          final seed = state.extra;
+          if (seed is! WalletWithdrawConfirmSeed) {
+            return const WithdrawPage();
+          }
+          return WalletWithdrawVerifyPage(seed: seed);
         },
       ),
       GoRoute(

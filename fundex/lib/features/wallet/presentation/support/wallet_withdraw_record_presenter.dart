@@ -31,7 +31,7 @@ WalletWithdrawStatusPresentation resolveWithdrawStatusPresentation(
   WalletWithdrawRecord record,
   AppSemanticColorTheme colors,
 ) {
-  final status = record.status;
+  final status = record.payStatus ?? record.status;
   if (status != null) {
     return switch (status) {
       0 => WalletWithdrawStatusPresentation(

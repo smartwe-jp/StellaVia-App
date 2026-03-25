@@ -106,6 +106,108 @@ void main() {
       expect(info, isNull);
     });
 
+    test('fetchBankAccountList sends GET and maps new member bank list fields',
+        () async {
+      final dio = _buildDio((options) async {
+        expect(options.method, equals('GET'));
+        expect(options.path, equals(UserWalletApiPaths.bankAccountList));
+        expect(options.queryParameters, isEmpty);
+        expect(options.extra['auth_required'], isTrue);
+        return _jsonOk(
+          '{"msg":"success","code":0,"data":[{"bankName":"みずほ銀行","branchBankName":"渋谷支店","bankAccountType":1,"bankNumber":"1234567","bankAccountOwnerName":"ヤマダ タロウ","id":82828}]}',
+        );
+      });
+      final api = UserWalletApiClient(dioForPath: (_) => dio);
+
+      final rows = await api.fetchBankAccountList();
+
+      expect(rows, hasLength(1));
+      expect(rows.first.id, equals('82828'));
+      expect(rows.first.bankName, equals('みずほ銀行'));
+      expect(rows.first.branchName, equals('渋谷支店'));
+      expect(rows.first.accountType, equals('1'));
+      expect(rows.first.accountNumber, equals('1234567'));
+      expect(rows.first.accountName, equals('ヤマダ タロウ'));
+    });
+
+    test('fetchWithdrawCost sends GET with bankId query', () async {
+      final dio = _buildDio((options) async {
+        expect(options.method, equals('GET'));
+        expect(options.path, equals(UserWalletApiPaths.withdrawCost));
+        expect(
+          options.queryParameters,
+          equals(<String, dynamic>{'bankId': '82828'}),
+        );
+        expect(options.extra['auth_required'], isTrue);
+        return _jsonOk('{"msg":"success","code":0,"data":15}');
+      });
+      final api = UserWalletApiClient(dioForPath: (_) => dio);
+
+      final cost = await api.fetchWithdrawCost(bankId: '82828');
+
+      expect(cost, equals(15));
+    });
+
+    test('fetchWithdrawHistory sends POST and maps withdraw-list fields',
+        () async {
+      final dio = _buildDio((options) async {
+        expect(options.method, equals('POST'));
+        expect(options.path, equals(UserWalletApiPaths.withdrawHistory));
+        expect(options.extra['auth_required'], isTrue);
+        expect(options.data, equals(<String, dynamic>{
+          'startPage': '1',
+          'limit': '10',
+        }));
+        return _jsonOk(
+          '{"msg":"success","code":200,"data":{"total":1,"limit":10,"currentPage":1,"rows":[{"withdrawId":"465110732059508736","memberId":125530,"processId":"2737333","withdrawType":0,"bookCrashDate":null,"applyTime":"2026-03-23","withdrawCost":10000,"applyAmount":50000,"bankName":"Peoplebank","branchBankName":"Zhdjd","bankNumber":"5484848467","confirmPayTime":null,"payStatus":2,"payRemark":"审核中"}]}}',
+        );
+      });
+      final api = UserWalletApiClient(dioForPath: (_) => dio);
+
+      final rows = await api.fetchWithdrawHistory();
+
+      expect(rows, hasLength(1));
+      expect(rows.first.withdrawId, equals('465110732059508736'));
+      expect(rows.first.memberId, equals(125530));
+      expect(rows.first.processId, equals('2737333'));
+      expect(rows.first.amount, equals(50000));
+      expect(rows.first.cost, equals(10000));
+      expect(rows.first.bankName, equals('Peoplebank'));
+      expect(rows.first.bankBranch, equals('Zhdjd'));
+      expect(rows.first.bankNumber, equals('5484848467'));
+      expect(rows.first.payStatus, equals(2));
+      expect(rows.first.status, equals(2));
+      expect(rows.first.remark, equals('审核中'));
+    });
+
+    test('cancelWithdraw sends PUT with withdraw detail body', () async {
+      final dio = _buildDio((options) async {
+        expect(options.method, equals('PUT'));
+        expect(options.path, equals(UserWalletApiPaths.withdrawCancel));
+        expect(options.extra['auth_required'], isTrue);
+        expect(options.data, isA<Map<String, dynamic>>());
+        final body = options.data as Map<String, dynamic>;
+        expect(body['withdrawId'], equals('123456'));
+        expect(body['payStatus'], equals(0));
+        expect(body['amount'], equals(5000));
+        expect(body['cost'], equals(10));
+        expect(body['bankNumber'], equals('1234567'));
+        return _jsonOk('{"msg":"success","code":200,"data":true}');
+      });
+      final api = UserWalletApiClient(dioForPath: (_) => dio);
+
+      await api.cancelWithdraw(
+        const UserWalletWithdrawCancelRequestDto(
+          withdrawId: '123456',
+          amount: 5000,
+          bankNumber: '1234567',
+          cost: 10,
+          payStatus: 0,
+          withdrawType: 0,
+        ),
+      );
+    });
+
     test('applyBankAccount sends GET and checks success envelope', () async {
       final dio = _buildDio((options) async {
         expect(options.method, equals('GET'));
