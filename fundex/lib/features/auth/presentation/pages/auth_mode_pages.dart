@@ -13,6 +13,9 @@ import '../support/code_send_cooldown.dart';
 import '../support/intl_code_picker_field.dart';
 import '../state/auth_state.dart';
 
+const String _registerTermsConditionsPdfUrl =
+    'https://testoa.gutingjun.com/terms_conditions.pdf';
+
 enum _AuthAccountMode { mobile, email }
 
 class MobileLoginMethodPage extends StatelessWidget {
@@ -300,6 +303,27 @@ class _AuthMethodLoginPageState extends ConsumerState<_AuthMethodLoginPage> {
                       labelText: l10n.registerMobileAccountLabel,
                       hintText: l10n.registerMobileAccountLabel,
                       leadingIcon: Icons.phone_iphone_rounded,
+                      trailing: Tooltip(
+                        message: _sendCodeButtonLabel(l10n.loginSendCode),
+                        child: AppNavigationIconButton(
+                          key: const Key(
+                            'login_mobile_account_send_code_button',
+                          ),
+                          icon: Icons.send_rounded,
+                          size: 34,
+                          borderRadius: 10,
+                          backgroundColor: Theme.of(context).appColors.primary
+                              .withValues(alpha: canSendCode ? 0.12 : 0.06),
+                          foregroundColor: canSendCode
+                              ? Theme.of(context).appColors.primary
+                              : Theme.of(context).appColors.primary.withValues(
+                                  alpha: 0.4,
+                                ),
+                          onTap: canSendCode
+                              ? () => _handleSendCode(controller)
+                              : null,
+                        ),
+                      ),
                       textInputAction: TextInputAction.next,
                       onChanged: (String value) =>
                           _onAccountChanged(value, controller),
@@ -464,25 +488,10 @@ class _AuthMethodRegisterPageState
 
   Future<void> _showPolicySheet() {
     final l10n = context.l10n;
-    return AppBottomSheet.showAdaptive<void>(
-      context: context,
-      builder: (BuildContext sheetContext) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              l10n.registerPolicyTitle,
-              style: Theme.of(sheetContext).textTheme.titleLarge,
-            ),
-            const SizedBox(height: UiTokens.spacing12),
-            Text(
-              l10n.registerPolicyDescription,
-              style: Theme.of(sheetContext).textTheme.bodyMedium,
-            ),
-          ],
-        );
-      },
+    return openAppPdfViewer(
+      context,
+      url: _registerTermsConditionsPdfUrl,
+      title: l10n.registerPolicyTitle,
     );
   }
 

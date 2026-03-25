@@ -9,6 +9,9 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../providers/auth_providers.dart';
 import '../support/code_send_cooldown.dart';
 
+const String _registerTermsConditionsPdfUrl =
+    'https://testoa.gutingjun.com/terms_conditions.pdf';
+
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
 
@@ -80,25 +83,10 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
   Future<void> _showPolicySheet() {
     final l10n = context.l10n;
-    return AppBottomSheet.showAdaptive<void>(
-      context: context,
-      builder: (BuildContext sheetContext) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              l10n.registerPolicyTitle,
-              style: Theme.of(sheetContext).textTheme.titleLarge,
-            ),
-            const SizedBox(height: UiTokens.spacing12),
-            Text(
-              l10n.registerPolicyDescription,
-              style: Theme.of(sheetContext).textTheme.bodyMedium,
-            ),
-          ],
-        );
-      },
+    return openAppPdfViewer(
+      context,
+      url: _registerTermsConditionsPdfUrl,
+      title: l10n.registerPolicyTitle,
     );
   }
 
