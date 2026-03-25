@@ -310,6 +310,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get profileSavedSnackbar => '詳細情報をローカルに保存しました。';
 
   @override
+  String get memberProfileAutoSavedToast => '保存しました。';
+
+  @override
+  String get memberProfileDraftImportTitle => '保存済みの入力内容があります';
+
+  @override
+  String get memberProfileDraftImportMessage => '前回保存した入力内容を読み込みますか？';
+
+  @override
+  String get memberProfileDraftImportAction => '読み込む';
+
+  @override
+  String get memberProfileDraftImportSkipAction => '読み込まない';
+
+  @override
   String get profileIntakeValidationTitle => '入力未完了';
 
   @override

@@ -6,7 +6,7 @@ class MemberProfileApiPayloadMapper {
 
   static Map<String, dynamic> toSaveMemberInfoRequest({
     required MemberProfileDetails profile,
-    required String documentFrontImage,
+    String? documentFrontImage,
     String? documentBackImage,
     AuthUserDto? authUser,
   }) {
@@ -40,8 +40,7 @@ class MemberProfileApiPayloadMapper {
 
     final bank = _buildBankPayload(profile: profile, authUser: authUser);
 
-    return <String, dynamic>{
-      'baseInfo': <String, dynamic>{
+    final baseInfo = <String, dynamic>{
         'firstName': givenName,
         'lastName': familyName,
         'firstNameEn': givenNameEn,
@@ -83,29 +82,25 @@ class MemberProfileApiPayloadMapper {
           authUser?.taxcountry ?? '',
           '日本',
         ]),
-        'bank': bank,
-      },
-      'identityVerification': <String, dynamic>{
-        'documentType': _mapDocumentType(profile.ekycDocumentType),
-        'documentFrontImage': documentFrontImage,
-        'documentBackImage': (documentBackImage?.trim().isNotEmpty ?? false)
-            ? documentBackImage!.trim()
-            : documentFrontImage,
-      },
-      'suitabilityRequest': <String, dynamic>{
-        'occupation': _mapOccupation(profile.occupationCode),
-        'annualIncome': _mapAnnualIncome(profile.annualIncomeCode),
-        'financialAssets': _mapFinancialAssets(profile.financialAssetsCode),
-        'investmentExperiences': _mapInvestmentExperiences(
-          profile.investmentExperienceCodes,
-        ),
-        'investmentPurpose': _mapInvestmentPurpose(
-          profile.investmentPurposeCode,
-        ),
-        'natureOfFunds': _mapNatureOfFunds(profile.fundSourceCode),
-        'riskTolerance': _mapRiskTolerance(profile.riskToleranceCode),
-      },
-    };
+      };
+    if (bank.isNotEmpty) {
+      baseInfo['bank'] = bank;
+    }
+
+    final payload = <String, dynamic>{'baseInfo': baseInfo};
+    final identityVerification = _buildIdentityVerificationPayload(
+      profile: profile,
+      documentFrontImage: documentFrontImage,
+      documentBackImage: documentBackImage,
+    );
+    if (identityVerification.isNotEmpty) {
+      payload['identityVerification'] = identityVerification;
+    }
+    final suitabilityRequest = _buildSuitabilityRequest(profile);
+    if (suitabilityRequest.isNotEmpty) {
+      payload['suitabilityRequest'] = suitabilityRequest;
+    }
+    return payload;
   }
 
   static Map<String, dynamic> _buildBankPayload({
@@ -115,25 +110,107 @@ class MemberProfileApiPayloadMapper {
     final Map<String, dynamic> payload = <String, dynamic>{
       if (authUser?.bank != null) ...Map<String, dynamic>.from(authUser!.bank!),
     };
-    payload['bankName'] = _firstNonEmpty(<String>[
+    final bankName = _firstNonEmpty(<String>[
       profile.bankName,
       _readBankString(authUser?.bank, 'bankName'),
     ]);
-    payload['branchBankName'] = _firstNonEmpty(<String>[
+    if (bankName.isNotEmpty) {
+      payload['bankName'] = bankName;
+    }
+    final branchBankName = _firstNonEmpty(<String>[
       profile.branchBankName,
       _readBankString(authUser?.bank, 'branchBankName'),
     ]);
-    payload['bankNumber'] = _firstNonEmpty(<String>[
+    if (branchBankName.isNotEmpty) {
+      payload['branchBankName'] = branchBankName;
+    }
+    final bankNumber = _firstNonEmpty(<String>[
       profile.bankNumber,
       _readBankString(authUser?.bank, 'bankNumber'),
     ]);
-    payload['bankAccountOwnerName'] = _firstNonEmpty(<String>[
+    if (bankNumber.isNotEmpty) {
+      payload['bankNumber'] = bankNumber;
+    }
+    final bankAccountOwnerName = _firstNonEmpty(<String>[
       profile.bankAccountOwnerName,
       _readBankString(authUser?.bank, 'bankAccountOwnerName'),
     ]);
-    payload['bankAccountType'] = _mapBankAccountType(profile.bankAccountType);
-    payload['bankType'] = _readBankInt(authUser?.bank, 'bankType') ?? 0;
-    payload['liveType'] = _readBankInt(authUser?.bank, 'liveType') ?? 0;
+    if (bankAccountOwnerName.isNotEmpty) {
+      payload['bankAccountOwnerName'] = bankAccountOwnerName;
+    }
+    final bankAccountType = _mapBankAccountTypeOrNull(profile.bankAccountType);
+    if (bankAccountType != null) {
+      payload['bankAccountType'] = bankAccountType;
+    }
+    final bankType = _readBankInt(authUser?.bank, 'bankType');
+    if (bankType != null) {
+      payload['bankType'] = bankType;
+    }
+    final liveType = _readBankInt(authUser?.bank, 'liveType');
+    if (liveType != null) {
+      payload['liveType'] = liveType;
+    }
+    payload.removeWhere((_, dynamic value) {
+      if (value == null) {
+        return true;
+      }
+      if (value is String) {
+        return value.trim().isEmpty;
+      }
+      return false;
+    });
+    if (payload.isNotEmpty && !payload.containsKey('bankType')) {
+      payload['bankType'] = 0;
+    }
+    return payload;
+  }
+
+  static Map<String, dynamic> _buildIdentityVerificationPayload({
+    required MemberProfileDetails profile,
+    String? documentFrontImage,
+    String? documentBackImage,
+  }) {
+    final normalizedFrontImage = documentFrontImage?.trim() ?? '';
+    if (normalizedFrontImage.isEmpty) {
+      return const <String, dynamic>{};
+    }
+    final normalizedBackImage = documentBackImage?.trim() ?? '';
+    return <String, dynamic>{
+      'documentType': _mapDocumentType(profile.ekycDocumentType),
+      'documentFrontImage': normalizedFrontImage,
+      'documentBackImage': normalizedBackImage.isNotEmpty
+          ? normalizedBackImage
+          : normalizedFrontImage,
+    };
+  }
+
+  static Map<String, dynamic> _buildSuitabilityRequest(
+    MemberProfileDetails profile,
+  ) {
+    final occupation = _mapOccupationOrNull(profile.occupationCode);
+    final annualIncome = _mapAnnualIncomeOrNull(profile.annualIncomeCode);
+    final financialAssets = _mapFinancialAssetsOrNull(
+      profile.financialAssetsCode,
+    );
+    final investmentExperiences = _mapInvestmentExperiencesOrNull(
+      profile.investmentExperienceCodes,
+    );
+    final investmentPurpose = _mapInvestmentPurposeOrNull(
+      profile.investmentPurposeCode,
+    );
+    final natureOfFunds = _mapNatureOfFundsOrNull(profile.fundSourceCode);
+    final riskTolerance = _mapRiskToleranceOrNull(profile.riskToleranceCode);
+
+    final payload = <String, dynamic>{
+      'occupation': occupation,
+      'annualIncome': annualIncome,
+      'financialAssets': financialAssets,
+      'investmentExperiences': investmentExperiences,
+      'investmentPurpose': investmentPurpose,
+      'natureOfFunds': natureOfFunds,
+      'riskTolerance': riskTolerance,
+    }..removeWhere((_, dynamic value) => value == null);
+
     return payload;
   }
 
@@ -234,6 +311,14 @@ class MemberProfileApiPayloadMapper {
     }
   }
 
+  static int? _mapBankAccountTypeOrNull(String raw) {
+    final normalized = raw.trim();
+    if (normalized.isEmpty) {
+      return null;
+    }
+    return _mapBankAccountType(normalized);
+  }
+
   static String _mapOccupation(String raw) {
     const map = <String, String>{
       'employee': 'COMPANY_EMPLOYEE',
@@ -322,6 +407,62 @@ class MemberProfileApiPayloadMapper {
       return mapped.where((value) => value != 'NONE').toList(growable: false);
     }
     return mapped;
+  }
+
+  static String? _mapOccupationOrNull(String raw) {
+    final normalized = raw.trim();
+    if (normalized.isEmpty) {
+      return null;
+    }
+    return _mapOccupation(normalized);
+  }
+
+  static String? _mapAnnualIncomeOrNull(String raw) {
+    final normalized = raw.trim();
+    if (normalized.isEmpty) {
+      return null;
+    }
+    return _mapAnnualIncome(normalized);
+  }
+
+  static String? _mapFinancialAssetsOrNull(String raw) {
+    final normalized = raw.trim();
+    if (normalized.isEmpty) {
+      return null;
+    }
+    return _mapFinancialAssets(normalized);
+  }
+
+  static String? _mapInvestmentPurposeOrNull(String raw) {
+    final normalized = raw.trim();
+    if (normalized.isEmpty) {
+      return null;
+    }
+    return _mapInvestmentPurpose(normalized);
+  }
+
+  static String? _mapNatureOfFundsOrNull(String raw) {
+    final normalized = raw.trim();
+    if (normalized.isEmpty) {
+      return null;
+    }
+    return _mapNatureOfFunds(normalized);
+  }
+
+  static String? _mapRiskToleranceOrNull(String raw) {
+    final normalized = raw.trim();
+    if (normalized.isEmpty) {
+      return null;
+    }
+    return _mapRiskTolerance(normalized);
+  }
+
+  static List<String>? _mapInvestmentExperiencesOrNull(List<String> values) {
+    if (values.isEmpty) {
+      return null;
+    }
+    final mapped = _mapInvestmentExperiences(values);
+    return mapped.isEmpty ? null : mapped;
   }
 
   static String _mapEnum(

@@ -10,20 +10,25 @@ abstract class MemberProfileLocalDataSource {
   Future<MemberProfileDetailsDto?> readProfile();
   Future<void> saveProfile(MemberProfileDetailsDto profile);
   Future<void> clearProfile();
+  Future<MemberProfileDetailsDto?> readOnboardingDraft();
+  Future<void> saveOnboardingDraft(MemberProfileDetailsDto profile);
+  Future<void> clearOnboardingDraft();
 }
 
 class MemberProfileLocalDataSourceImpl implements MemberProfileLocalDataSource {
   MemberProfileLocalDataSourceImpl(this._largeDataStore, this._authLocal);
 
   static const String _profileKeyPrefix = 'member_profile.details';
+  static const String _onboardingDraftKeyPrefix =
+      'member_profile.onboarding_draft';
 
   final LargeDataStore _largeDataStore;
   final AuthLocalDataSource _authLocal;
 
-  Future<String> _resolveProfileKey() async {
+  Future<String> _resolveStorageKey(String prefix) async {
     final AuthUserDto? user = await _authLocal.readCurrentUser();
     final String userScopedKey = _resolveUserStorageKey(user);
-    return '$_profileKeyPrefix.$userScopedKey';
+    return '$prefix.$userScopedKey';
   }
 
   String _resolveUserStorageKey(AuthUserDto? user) {
@@ -57,7 +62,7 @@ class MemberProfileLocalDataSourceImpl implements MemberProfileLocalDataSource {
   @override
   Future<void> clearProfile() async {
     try {
-      final key = await _resolveProfileKey();
+      final key = await _resolveStorageKey(_profileKeyPrefix);
       await _largeDataStore.delete(key);
     } catch (_) {
       // Local profile cache should not block user flows.
@@ -65,9 +70,28 @@ class MemberProfileLocalDataSourceImpl implements MemberProfileLocalDataSource {
   }
 
   @override
-  Future<MemberProfileDetailsDto?> readProfile() async {
+  Future<void> clearOnboardingDraft() async {
     try {
-      final key = await _resolveProfileKey();
+      final key = await _resolveStorageKey(_onboardingDraftKeyPrefix);
+      await _largeDataStore.delete(key);
+    } catch (_) {
+      // Local onboarding draft cache should not block user flows.
+    }
+  }
+
+  @override
+  Future<MemberProfileDetailsDto?> readProfile() async {
+    return _read(_profileKeyPrefix);
+  }
+
+  @override
+  Future<MemberProfileDetailsDto?> readOnboardingDraft() async {
+    return _read(_onboardingDraftKeyPrefix);
+  }
+
+  Future<MemberProfileDetailsDto?> _read(String prefix) async {
+    try {
+      final key = await _resolveStorageKey(prefix);
       final rawValue = await _largeDataStore.get<dynamic>(key);
       if (rawValue == null) {
         return null;
@@ -105,8 +129,17 @@ class MemberProfileLocalDataSourceImpl implements MemberProfileLocalDataSource {
 
   @override
   Future<void> saveProfile(MemberProfileDetailsDto profile) async {
+    await _save(profile, _profileKeyPrefix);
+  }
+
+  @override
+  Future<void> saveOnboardingDraft(MemberProfileDetailsDto profile) async {
+    await _save(profile, _onboardingDraftKeyPrefix);
+  }
+
+  Future<void> _save(MemberProfileDetailsDto profile, String prefix) async {
     try {
-      final key = await _resolveProfileKey();
+      final key = await _resolveStorageKey(prefix);
       await _largeDataStore.put<String>(key, jsonEncode(profile.toJson()));
     } catch (_) {
       // Keep profile intake flow usable even when local storage write fails.

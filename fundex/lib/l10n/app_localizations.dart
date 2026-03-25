@@ -695,6 +695,36 @@ abstract class AppLocalizations {
   /// **'Profile details saved locally.'**
   String get profileSavedSnackbar;
 
+  /// No description provided for @memberProfileAutoSavedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved.'**
+  String get memberProfileAutoSavedToast;
+
+  /// No description provided for @memberProfileDraftImportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved profile draft found'**
+  String get memberProfileDraftImportTitle;
+
+  /// No description provided for @memberProfileDraftImportMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to import the saved draft from your last session?'**
+  String get memberProfileDraftImportMessage;
+
+  /// No description provided for @memberProfileDraftImportAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get memberProfileDraftImportAction;
+
+  /// No description provided for @memberProfileDraftImportSkipAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Not now'**
+  String get memberProfileDraftImportSkipAction;
+
   /// No description provided for @profileIntakeValidationTitle.
   ///
   /// In en, this message translates to:

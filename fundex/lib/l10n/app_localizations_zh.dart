@@ -307,6 +307,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get profileSavedSnackbar => '详细资料已保存到本地。';
 
   @override
+  String get memberProfileAutoSavedToast => '已保存。';
+
+  @override
+  String get memberProfileDraftImportTitle => '检测到已保存的录入资料';
+
+  @override
+  String get memberProfileDraftImportMessage => '是否导入上次保存的录入内容？';
+
+  @override
+  String get memberProfileDraftImportAction => '导入';
+
+  @override
+  String get memberProfileDraftImportSkipAction => '暂不导入';
+
+  @override
   String get profileIntakeValidationTitle => '资料未完成';
 
   @override
@@ -3707,6 +3722,21 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get profileSavedSnackbar => '详细资料已保存到本地。';
+
+  @override
+  String get memberProfileAutoSavedToast => '已保存。';
+
+  @override
+  String get memberProfileDraftImportTitle => '偵測到已保存的錄入資料';
+
+  @override
+  String get memberProfileDraftImportMessage => '是否匯入上次保存的錄入內容？';
+
+  @override
+  String get memberProfileDraftImportAction => '匯入';
+
+  @override
+  String get memberProfileDraftImportSkipAction => '暫不匯入';
 
   @override
   String get profileIntakeValidationTitle => '资料未完成';

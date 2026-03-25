@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -93,6 +95,7 @@ class _MemberProfileEditFlowPageState
   bool _isAddressSearching = false;
   bool _isRunningRealPersonAuth = false;
   String? _realPersonAuthStatusMessage;
+  Timer? _onboardingDraftSaveTimer;
 
   bool get _isIdentityAuthEnabled =>
       ref.read(identityAuthFeatureEnabledProvider);
@@ -127,6 +130,7 @@ class _MemberProfileEditFlowPageState
 
   @override
   void dispose() {
+    _onboardingDraftSaveTimer?.cancel();
     _unregisterTextFieldListeners();
     _familyNameController.dispose();
     _givenNameController.dispose();
@@ -180,16 +184,76 @@ class _MemberProfileEditFlowPageState
       return;
     }
     setState(() {});
+    _scheduleOnboardingDraftSave();
+  }
+
+  void _applyUserChange(VoidCallback change) {
+    if (!mounted) {
+      return;
+    }
+    setState(change);
+    _scheduleOnboardingDraftSave();
+  }
+
+  void _scheduleOnboardingDraftSave() {
+    if (_isSingleSectionMode || _isLoading) {
+      return;
+    }
+    _onboardingDraftSaveTimer?.cancel();
+    _onboardingDraftSaveTimer = Timer(const Duration(milliseconds: 700), () {
+      unawaited(_persistOnboardingDraft(showNotice: true));
+    });
+  }
+
+  Future<bool> _shouldImportOnboardingDraft(
+    MemberProfileDetails? onboardingDraft,
+  ) async {
+    if (_isSingleSectionMode || onboardingDraft == null || !mounted) {
+      return false;
+    }
+    if (!onboardingDraft.hasAnyInput) {
+      return false;
+    }
+    final l10n = context.l10n;
+    final shouldImport = await AppDialogs.showAdaptiveAlert<bool>(
+      context: context,
+      title: l10n.memberProfileDraftImportTitle,
+      message: l10n.memberProfileDraftImportMessage,
+      actions: <AppDialogAction<bool>>[
+        AppDialogAction<bool>(
+          label: l10n.memberProfileDraftImportSkipAction,
+          value: false,
+        ),
+        AppDialogAction<bool>(
+          label: l10n.memberProfileDraftImportAction,
+          value: true,
+          isDefaultAction: true,
+        ),
+      ],
+    );
+    return shouldImport ?? false;
   }
 
   Future<void> _loadInitialData() async {
     try {
-      final MemberProfileDetails? savedProfile = await ref
+      if (_isSingleSectionMode) {
+        await ref.read(syncMemberProfileFromRemoteUseCaseProvider).call();
+      }
+      final MemberProfileDetails? officialProfile = await ref
           .read(loadMemberProfileDetailsUseCaseProvider)
           .call();
+      final MemberProfileDetails? onboardingDraft = _isSingleSectionMode
+          ? null
+          : await ref.read(memberProfileRepositoryProvider).readOnboardingDraft();
       final AuthUser? authUser = await ref
           .read(currentAuthUserProvider.future)
           .catchError((Object _) => null);
+      final bool shouldImportDraft = await _shouldImportOnboardingDraft(
+        onboardingDraft,
+      );
+      final MemberProfileDetails? savedProfile = shouldImportDraft
+          ? onboardingDraft
+          : officialProfile;
 
       final (String legacyFamilyName, String legacyGivenName) =
           _splitJapaneseName(savedProfile?.nameKanji ?? '');
@@ -349,7 +413,7 @@ class _MemberProfileEditFlowPageState
       _birthday = picked;
       _birthdayController.text = _formatDate(picked);
     });
-    await _persistDraft();
+    await _persistOnboardingDraft(showNotice: true);
   }
 
   Future<void> _pickAndSaveImage({required bool isDocument}) async {
@@ -413,7 +477,7 @@ class _MemberProfileEditFlowPageState
           _selfiePhotoPath = uploadedUrl.trim();
         }
       });
-      await _persistDraft();
+      await _persistOnboardingDraft(showNotice: false);
       if (!mounted) {
         return;
       }
@@ -429,7 +493,7 @@ class _MemberProfileEditFlowPageState
         setState(() {
           _selfiePhotoPath = selfieUploadCompletedMarker;
         });
-        await _persistDraft();
+        await _persistOnboardingDraft(showNotice: false);
         if (!mounted) {
           return;
         }
@@ -501,7 +565,7 @@ class _MemberProfileEditFlowPageState
       }
 
       _applyResolvedAddress(selected.displayName);
-      await _persistDraft();
+      await _persistOnboardingDraft(showNotice: true);
     } catch (error) {
       if (!mounted) {
         return;
@@ -553,25 +617,47 @@ class _MemberProfileEditFlowPageState
         return;
       }
     }
-    await _persistDraft();
     if (!mounted) {
       return;
     }
-    final MemberProfileEditStep? next = _nextStep(_currentStep);
-    if (next == null) {
-      return;
-    }
+
+    final l10n = context.l10n;
     setState(() {
-      _currentStep = next;
+      _isSubmitting = true;
     });
-    await _persistDraft();
+
+    try {
+      final MemberProfileEditStep? next = _nextStep(_currentStep);
+      if (next == null) {
+        return;
+      }
+      setState(() {
+        _currentStep = next;
+      });
+      await _persistOnboardingDraft(showNotice: false);
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      AppNotice.show(
+        context,
+        message: _resolveSubmitErrorMessage(error, l10n.uiErrorRequestFailed),
+      );
+      return;
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
+    }
   }
 
   Future<void> _goPreviousStep() async {
     if (_isSubmitting || _isUploadingPhoto || _isRunningRealPersonAuth) {
       return;
     }
-    await _persistDraft();
+    await _persistOnboardingDraft(showNotice: false);
     if (!mounted) {
       return;
     }
@@ -583,7 +669,7 @@ class _MemberProfileEditFlowPageState
     setState(() {
       _currentStep = previous;
     });
-    await _persistDraft();
+    await _persistOnboardingDraft(showNotice: false);
   }
 
   Future<void> _completeFlow() async {
@@ -602,7 +688,8 @@ class _MemberProfileEditFlowPageState
       );
       await ref.read(submitMemberProfileUseCaseProvider).call(profileToSubmit);
       _completedAt = DateTime.now().toUtc();
-      await _persistDraft(markCompleted: true);
+      await _persistOfficialProfile(markCompleted: true);
+      await ref.read(memberProfileRepositoryProvider).clearOnboardingDraft();
     } catch (error) {
       if (!mounted) {
         return;
@@ -660,8 +747,11 @@ class _MemberProfileEditFlowPageState
       final shouldMarkCompleted = draft.isEditFlowComplete && _completedAt == null;
       if (shouldSubmitRemotely) {
         await ref.read(submitMemberProfileUseCaseProvider).call(draft);
+        await ref.read(syncMemberProfileFromRemoteUseCaseProvider).call();
+        _invalidateOfficialProfileProviders();
+      } else {
+        await _persistOfficialProfile(markCompleted: shouldMarkCompleted);
       }
-      await _persistDraft(markCompleted: shouldMarkCompleted);
     } catch (error) {
       if (!mounted) {
         return;
@@ -909,7 +999,13 @@ class _MemberProfileEditFlowPageState
   bool get _isConsentStepReady =>
       _electronicConsent && _antiSocialConsent && _privacyConsent;
 
-  Future<void> _persistDraft({bool markCompleted = false}) async {
+  void _invalidateOfficialProfileProviders() {
+    ref.invalidate(memberProfileDetailsProvider);
+    ref.invalidate(isMemberProfileCompletedProvider);
+  }
+
+  Future<void> _persistOfficialProfile({bool markCompleted = false}) async {
+    _onboardingDraftSaveTimer?.cancel();
     final MemberProfileDetails profile = _buildDraft(
       completedAtOverride: markCompleted
           ? DateTime.now().toUtc()
@@ -917,9 +1013,29 @@ class _MemberProfileEditFlowPageState
       editingStep: _currentStep.index,
     );
     await ref.read(saveMemberProfileDetailsUseCaseProvider).call(profile);
-    ref.invalidate(memberProfileDetailsProvider);
-    ref.invalidate(isMemberProfileCompletedProvider);
+    _invalidateOfficialProfileProviders();
     _completedAt = profile.completedAt;
+  }
+
+  Future<void> _persistOnboardingDraft({
+    bool markCompleted = false,
+    required bool showNotice,
+  }) async {
+    if (_isSingleSectionMode) {
+      return;
+    }
+    _onboardingDraftSaveTimer?.cancel();
+    final MemberProfileDetails profile = _buildDraft(
+      completedAtOverride: markCompleted
+          ? DateTime.now().toUtc()
+          : _completedAt,
+      editingStep: _currentStep.index,
+    );
+    await ref.read(memberProfileRepositoryProvider).saveOnboardingDraft(profile);
+    _completedAt = profile.completedAt;
+    if (showNotice && mounted) {
+      AppNotice.show(context, message: context.l10n.memberProfileAutoSavedToast);
+    }
   }
 
   MemberProfileDetails _buildDraft({
@@ -1341,7 +1457,7 @@ class _MemberProfileEditFlowPageState
               ? _primaryActionLabel
               : null,
           onPrefectureChanged: (String? value) {
-            setState(() {
+            _applyUserChange(() {
               _prefecture = value;
             });
           },
@@ -1380,37 +1496,37 @@ class _MemberProfileEditFlowPageState
               ? _primaryActionLabel
               : null,
           onOccupationChanged: (String? value) {
-            setState(() {
+            _applyUserChange(() {
               _occupation = value;
             });
           },
           onAnnualIncomeChanged: (String? value) {
-            setState(() {
+            _applyUserChange(() {
               _annualIncome = value;
             });
           },
           onFinancialAssetsChanged: (String? value) {
-            setState(() {
+            _applyUserChange(() {
               _financialAssets = value;
             });
           },
           onInvestmentPurposeChanged: (String? value) {
-            setState(() {
+            _applyUserChange(() {
               _investmentPurpose = value;
             });
           },
           onFundSourceChanged: (String? value) {
-            setState(() {
+            _applyUserChange(() {
               _fundSource = value;
             });
           },
           onRiskToleranceChanged: (String? value) {
-            setState(() {
+            _applyUserChange(() {
               _riskTolerance = value;
             });
           },
           onToggleExperience: (String value) {
-            setState(() {
+            _applyUserChange(() {
               if (_selectedExperiences.contains(value)) {
                 _selectedExperiences.remove(value);
               } else {
@@ -1436,7 +1552,7 @@ class _MemberProfileEditFlowPageState
               ? _primaryActionLabel
               : null,
           onDocumentTypeChanged: (String? value) {
-            setState(() {
+            _applyUserChange(() {
               _documentType = value;
             });
           },
@@ -1484,7 +1600,7 @@ class _MemberProfileEditFlowPageState
               ? _primaryActionLabel
               : null,
           onAccountTypeChanged: (String? value) {
-            setState(() {
+            _applyUserChange(() {
               _accountType = _normalizeAccountType(value);
             });
           },
@@ -1501,17 +1617,17 @@ class _MemberProfileEditFlowPageState
               ? _primaryActionLabel
               : null,
           onElectronicConsentChanged: (bool value) {
-            setState(() {
+            _applyUserChange(() {
               _electronicConsent = value;
             });
           },
           onAntiSocialConsentChanged: (bool value) {
-            setState(() {
+            _applyUserChange(() {
               _antiSocialConsent = value;
             });
           },
           onPrivacyConsentChanged: (bool value) {
-            setState(() {
+            _applyUserChange(() {
               _privacyConsent = value;
             });
           },

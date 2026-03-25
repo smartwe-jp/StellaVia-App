@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/navigation/app_root_route_refresh_scope.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
+import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 import '../../domain/entities/wallet_bank_account_info.dart';
 import '../../domain/entities/wallet_withdraw_apply_draft.dart';
 import '../providers/wallet_providers.dart';
@@ -254,6 +255,7 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
     );
     final accountsAsync = ref.watch(walletBankAccountListProvider);
     final availableAmountAsync = ref.watch(myPageAccountStatisticProvider);
+    final phoneVerifiedAsync = ref.watch(settingsPhoneVerifiedProvider);
     final availableAmount =
         availableAmountAsync.asData?.value?.firstLevelAccountTotal;
 
@@ -295,6 +297,7 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
               availableAmount: availableAmount,
               feeAmount: feeValue,
             );
+            final bool? phoneVerified = phoneVerifiedAsync.asData?.value;
             return ListView(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
               children: <Widget>[
@@ -304,48 +307,61 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
                   onTapHistory: () => context.push('/wallet/withdraw/history'),
                 ),
                 const SizedBox(height: 16),
-                MemberProfileTextField(
-                  label: l10n.walletWithdrawAmountLabel,
-                  controller: _amountController,
-                  hintText: l10n.walletWithdrawAmountHint,
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 16),
-                _WithdrawInfoCard(
-                  destinationLabel: l10n.walletWithdrawDestinationLabel,
-                  destinationValue: selected == null
-                      ? l10n.walletWithdrawSelectDestination
-                      : _buildAccountSummary(selected),
-                  feeLabel: l10n.walletWithdrawFeeLabel,
-                  feeValue: feeValueText,
-                  onTapDestination: () {
-                    if (accounts.isEmpty) {
-                      _openAddBankAccountPage();
-                      return;
-                    }
-                    _openDestinationSelector(context, accounts, selected!);
-                  },
-                ),
-                if (accounts.isEmpty) ...<Widget>[
-                  const SizedBox(height: 12),
-                  _WithdrawEmptyAccountCard(
-                    message: l10n.walletWithdrawNeedAccountMessage,
-                    actionLabel: l10n.walletWithdrawNeedAccountAction,
-                    onTap: _openAddBankAccountPage,
+                if (phoneVerifiedAsync.isLoading)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 24),
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                else if (phoneVerified != true)
+                  _WithdrawPhoneVerificationGateCard(
+                    message: l10n.walletWithdrawPhoneVerificationRequiredMessage,
+                    actionLabel: l10n.walletWithdrawPhoneVerificationRequiredAction,
+                    onTap: () => context.push('/profile/settings/two-factor/phone'),
+                  )
+                else ...<Widget>[
+                  MemberProfileTextField(
+                    label: l10n.walletWithdrawAmountLabel,
+                    controller: _amountController,
+                    hintText: l10n.walletWithdrawAmountHint,
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 16),
+                  _WithdrawInfoCard(
+                    destinationLabel: l10n.walletWithdrawDestinationLabel,
+                    destinationValue: selected == null
+                        ? l10n.walletWithdrawSelectDestination
+                        : _buildAccountSummary(selected),
+                    feeLabel: l10n.walletWithdrawFeeLabel,
+                    feeValue: feeValueText,
+                    onTapDestination: () {
+                      if (accounts.isEmpty) {
+                        _openAddBankAccountPage();
+                        return;
+                      }
+                      _openDestinationSelector(context, accounts, selected!);
+                    },
+                  ),
+                  if (accounts.isEmpty) ...<Widget>[
+                    const SizedBox(height: 12),
+                    _WithdrawEmptyAccountCard(
+                      message: l10n.walletWithdrawNeedAccountMessage,
+                      actionLabel: l10n.walletWithdrawNeedAccountAction,
+                      onTap: _openAddBankAccountPage,
+                    ),
+                  ],
+                  const SizedBox(height: 20),
+                  PrimaryCtaButton(
+                    label: l10n.walletWithdrawSubmitAction,
+                    fullWidth: true,
+                    onPressed: !canSubmit
+                        ? null
+                        : () => _openWithdrawConfirmPage(
+                            selected: selected,
+                            availableAmount: availableAmount,
+                            feeAmount: feeValue,
+                          ),
                   ),
                 ],
-                const SizedBox(height: 20),
-                PrimaryCtaButton(
-                  label: l10n.walletWithdrawSubmitAction,
-                  fullWidth: true,
-                  onPressed: !canSubmit
-                      ? null
-                      : () => _openWithdrawConfirmPage(
-                          selected: selected,
-                          availableAmount: availableAmount,
-                          feeAmount: feeValue,
-                        ),
-                ),
               ],
             );
           },
@@ -357,6 +373,68 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _WithdrawPhoneVerificationGateCard extends StatelessWidget {
+  const _WithdrawPhoneVerificationGateCard({
+    required this.message,
+    required this.actionLabel,
+    required this.onTap,
+  });
+
+  final String message;
+  final String actionLabel;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
+      decoration: BoxDecoration(
+        color: colors.surfaceAlt,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: colors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: colors.infoSubtle,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(Icons.sms_rounded, color: colors.info),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  message,
+                  style: appText.body.copyWith(
+                    color: colors.textPrimary,
+                    height: 1.6,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          PrimaryCtaButton(
+            label: actionLabel,
+            fullWidth: true,
+            onPressed: onTap,
+          ),
+        ],
       ),
     );
   }

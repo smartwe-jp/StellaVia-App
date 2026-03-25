@@ -51,9 +51,36 @@ class MemberProfileRepositoryImpl implements MemberProfileRepository {
   }
 
   @override
+  Future<MemberProfileDetails?> readOnboardingDraft() async {
+    try {
+      final dto = await _local.readOnboardingDraft();
+      return dto?.toEntity();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Future<void> saveOnboardingDraft(MemberProfileDetails profile) async {
+    try {
+      await _local.saveOnboardingDraft(MemberProfileDetailsDto.fromEntity(profile));
+    } catch (_) {
+      // Keep onboarding draft flow available even when local cache fails.
+    }
+  }
+
+  @override
+  Future<void> clearOnboardingDraft() async {
+    try {
+      await _local.clearOnboardingDraft();
+    } catch (_) {
+      // Local onboarding draft cache should not block user flows.
+    }
+  }
+
+  @override
   Future<void> syncLocalProfileFromRemote() async {
     try {
-      final existingProfile = await readLocalProfile();
       final payload = await _remote.fetchCurrentMemberProfilePayload();
       final remoteProfile = MemberProfileCurrentUserPayloadMapper.toEntity(
         payload,
@@ -61,154 +88,10 @@ class MemberProfileRepositoryImpl implements MemberProfileRepository {
       if (remoteProfile == null) {
         return;
       }
-      final profile = _mergeRemoteProfileWithLocal(
-        remoteProfile: remoteProfile,
-        localProfile: existingProfile,
-      );
-      await _local.saveProfile(MemberProfileDetailsDto.fromEntity(profile));
+      await _local.saveProfile(MemberProfileDetailsDto.fromEntity(remoteProfile));
     } catch (_) {
       // Keep auth flow and local draft access available on transient sync failures.
     }
-  }
-
-  MemberProfileDetails _mergeRemoteProfileWithLocal({
-    required MemberProfileDetails remoteProfile,
-    required MemberProfileDetails? localProfile,
-  }) {
-    if (localProfile == null) {
-      return remoteProfile;
-    }
-
-    String mergeString(String remote, String local) {
-      final normalizedRemote = remote.trim();
-      if (normalizedRemote.isNotEmpty) {
-        return normalizedRemote;
-      }
-      return local.trim();
-    }
-
-    String? mergeNullableString(String? remote, String? local) {
-      final normalizedRemote = remote?.trim() ?? '';
-      if (normalizedRemote.isNotEmpty) {
-        return normalizedRemote;
-      }
-      final normalizedLocal = local?.trim() ?? '';
-      return normalizedLocal.isEmpty ? null : normalizedLocal;
-    }
-
-    return remoteProfile.copyWith(
-      familyName: mergeString(remoteProfile.familyName, localProfile.familyName),
-      givenName: mergeString(remoteProfile.givenName, localProfile.givenName),
-      familyNameKana: mergeString(
-        remoteProfile.familyNameKana,
-        localProfile.familyNameKana,
-      ),
-      givenNameKana: mergeString(
-        remoteProfile.givenNameKana,
-        localProfile.givenNameKana,
-      ),
-      familyNameEn: mergeString(
-        remoteProfile.familyNameEn,
-        localProfile.familyNameEn,
-      ),
-      givenNameEn: mergeString(
-        remoteProfile.givenNameEn,
-        localProfile.givenNameEn,
-      ),
-      nameKanji: mergeString(remoteProfile.nameKanji, localProfile.nameKanji),
-      katakana: mergeString(remoteProfile.katakana, localProfile.katakana),
-      address: mergeString(remoteProfile.address, localProfile.address),
-      birthday: mergeNullableString(
-        remoteProfile.birthday,
-        localProfile.birthday,
-      ),
-      zipCode: mergeString(remoteProfile.zipCode, localProfile.zipCode),
-      prefectureCode: mergeString(
-        remoteProfile.prefectureCode,
-        localProfile.prefectureCode,
-      ),
-      cityAddress: mergeString(
-        remoteProfile.cityAddress,
-        localProfile.cityAddress,
-      ),
-      phoneIntlCode: mergeString(
-        remoteProfile.phoneIntlCode,
-        localProfile.phoneIntlCode,
-      ),
-      phone: mergeString(remoteProfile.phone, localProfile.phone),
-      email: mergeString(remoteProfile.email, localProfile.email),
-      occupationCode: mergeString(
-        remoteProfile.occupationCode,
-        localProfile.occupationCode,
-      ),
-      annualIncomeCode: mergeString(
-        remoteProfile.annualIncomeCode,
-        localProfile.annualIncomeCode,
-      ),
-      financialAssetsCode: mergeString(
-        remoteProfile.financialAssetsCode,
-        localProfile.financialAssetsCode,
-      ),
-      investmentExperienceCodes: remoteProfile.investmentExperienceCodes.isNotEmpty
-          ? remoteProfile.investmentExperienceCodes
-          : localProfile.investmentExperienceCodes,
-      investmentPurposeCode: mergeString(
-        remoteProfile.investmentPurposeCode,
-        localProfile.investmentPurposeCode,
-      ),
-      fundSourceCode: mergeString(
-        remoteProfile.fundSourceCode,
-        localProfile.fundSourceCode,
-      ),
-      riskToleranceCode: mergeString(
-        remoteProfile.riskToleranceCode,
-        localProfile.riskToleranceCode,
-      ),
-      ekycDocumentType: mergeString(
-        remoteProfile.ekycDocumentType,
-        localProfile.ekycDocumentType,
-      ),
-      idDocumentPhotoPath: mergeNullableString(
-        remoteProfile.idDocumentPhotoPath,
-        localProfile.idDocumentPhotoPath,
-      ),
-      idDocumentBackPhotoPath: mergeNullableString(
-        remoteProfile.idDocumentBackPhotoPath,
-        localProfile.idDocumentBackPhotoPath,
-      ),
-      selfiePhotoPath: mergeNullableString(
-        remoteProfile.selfiePhotoPath,
-        localProfile.selfiePhotoPath,
-      ),
-      bankName: mergeString(remoteProfile.bankName, localProfile.bankName),
-      branchBankName: mergeString(
-        remoteProfile.branchBankName,
-        localProfile.branchBankName,
-      ),
-      bankNumber: mergeString(remoteProfile.bankNumber, localProfile.bankNumber),
-      bankAccountType: mergeString(
-        remoteProfile.bankAccountType,
-        localProfile.bankAccountType,
-      ),
-      bankAccountOwnerName: mergeString(
-        remoteProfile.bankAccountOwnerName,
-        localProfile.bankAccountOwnerName,
-      ),
-      electronicDeliveryConsent:
-          remoteProfile.electronicDeliveryConsent ||
-          localProfile.electronicDeliveryConsent,
-      antiSocialForcesConsent:
-          remoteProfile.antiSocialForcesConsent ||
-          localProfile.antiSocialForcesConsent,
-      privacyPolicyConsent:
-          remoteProfile.privacyPolicyConsent || localProfile.privacyPolicyConsent,
-      lastEditingStep: remoteProfile.lastEditingStep > localProfile.lastEditingStep
-          ? remoteProfile.lastEditingStep
-          : localProfile.lastEditingStep,
-      completedAt: localProfile.completedAt ?? remoteProfile.completedAt,
-      lastSkippedAt: localProfile.lastSkippedAt ?? remoteProfile.lastSkippedAt,
-      lastUpdatedAt: remoteProfile.lastUpdatedAt ?? localProfile.lastUpdatedAt,
-    );
   }
 
   @override
@@ -229,15 +112,13 @@ class MemberProfileRepositoryImpl implements MemberProfileRepository {
   @override
   Future<void> submitProfile(MemberProfileDetails profile) async {
     final authUser = await _authLocal.readCurrentUser();
-    final frontUrl = _requireRemotePhotoUrl(
-      profile.idDocumentPhotoPath,
-      fallbackMessage: 'Please upload an ID document photo.',
-    );
-    if (frontUrl == null) {
-      throw StateError('Please upload an ID document photo.');
-    }
+    final frontUrl =
+        _optionalRemotePhotoUrl(profile.idDocumentPhotoPath) ??
+        _optionalRemotePhotoUrl(authUser?.frontUrl);
     final backUrl =
-        _optionalRemotePhotoUrl(profile.idDocumentBackPhotoPath) ?? frontUrl;
+        _optionalRemotePhotoUrl(profile.idDocumentBackPhotoPath) ??
+        _optionalRemotePhotoUrl(authUser?.backUrl) ??
+        frontUrl;
     final payload = MemberProfileApiPayloadMapper.toSaveMemberInfoRequest(
       profile: profile,
       documentFrontImage: frontUrl,
@@ -245,20 +126,6 @@ class MemberProfileRepositoryImpl implements MemberProfileRepository {
       authUser: authUser,
     );
     await _remote.saveMemberInfo(payload: payload);
-  }
-
-  String? _requireRemotePhotoUrl(
-    String? pathOrUrl, {
-    required String fallbackMessage,
-  }) {
-    final normalized = pathOrUrl?.trim() ?? '';
-    if (normalized.isEmpty) {
-      return null;
-    }
-    if (_isRemoteUrl(normalized)) {
-      return normalized;
-    }
-    throw StateError(fallbackMessage);
   }
 
   bool _isRemoteUrl(String value) {

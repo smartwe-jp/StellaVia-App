@@ -329,6 +329,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSavedSnackbar => 'Profile details saved locally.';
 
   @override
+  String get memberProfileAutoSavedToast => 'Saved.';
+
+  @override
+  String get memberProfileDraftImportTitle => 'Saved profile draft found';
+
+  @override
+  String get memberProfileDraftImportMessage =>
+      'Do you want to import the saved draft from your last session?';
+
+  @override
+  String get memberProfileDraftImportAction => 'Import';
+
+  @override
+  String get memberProfileDraftImportSkipAction => 'Not now';
+
+  @override
   String get profileIntakeValidationTitle => 'Incomplete profile details';
 
   @override
