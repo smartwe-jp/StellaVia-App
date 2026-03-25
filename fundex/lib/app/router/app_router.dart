@@ -50,6 +50,7 @@ import '../../features/wallet/presentation/pages/withdraw_page.dart';
 import '../../features/wallet/presentation/pages/wallet_withdraw_confirm_page.dart';
 import '../../features/wallet/presentation/pages/wallet_withdraw_verify_page.dart';
 import '../../features/wallet/presentation/pages/wallet_bank_account_add_page.dart';
+import '../../features/wallet/presentation/pages/wallet_overseas_bank_account_add_page.dart';
 import '../../features/wallet/presentation/pages/wallet_bank_settings_page.dart';
 import '../../features/wallet/presentation/pages/wallet_history_page.dart';
 import '../../features/wallet/presentation/pages/wallet_withdraw_history_page.dart';
@@ -513,6 +514,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/wallet/bank-settings/add',
         builder: (BuildContext context, GoRouterState state) {
           return const WalletBankAccountAddPage();
+        },
+      ),
+      GoRoute(
+        path: '/wallet/bank-settings/add/overseas',
+        builder: (BuildContext context, GoRouterState state) {
+          return const WalletOverseasBankAccountAddPage();
         },
       ),
       GoRoute(

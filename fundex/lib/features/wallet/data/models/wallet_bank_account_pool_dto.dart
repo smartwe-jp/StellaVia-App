@@ -27,10 +27,20 @@ extension WalletBankAccountDraftMapper on WalletBankAccountDraft {
   WalletBankAccountAddRequestDto toDto() {
     return WalletBankAccountAddRequestDto(
       bankName: bankName.trim(),
+      bankType: bankType,
       branchName: branchName.trim(),
-      accountType: accountType.trim(),
+      branchBankName: branchName.trim(),
+      branchBankNumber: branchNumber?.trim(),
+      accountType: accountType?.trim(),
       accountNumber: accountNumber.trim(),
+      bankNumber: accountNumber.trim(),
       accountName: accountHolder.trim(),
+      bankAccountOwnerName: accountHolder.trim(),
+      bankAccountOwnerAddress: accountHolderAddress?.trim(),
+      bankAccountOwnerNationality: accountHolderNationality?.trim(),
+      bankAccountSwiftCode: swiftCode?.trim(),
+      bankCountry: bankCountry?.trim(),
+      branchBankAddress: branchAddress?.trim(),
     );
   }
 }

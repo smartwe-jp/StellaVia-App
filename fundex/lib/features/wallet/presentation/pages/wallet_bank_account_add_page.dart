@@ -27,10 +27,13 @@ class _WalletBankAccountAddPageState
   @override
   void initState() {
     super.initState();
-    _bankNameController = TextEditingController();
-    _branchNameController = TextEditingController();
-    _accountNumberController = TextEditingController();
-    _accountHolderController = TextEditingController();
+    _bankNameController = TextEditingController()..addListener(_handleChanged);
+    _branchNameController = TextEditingController()
+      ..addListener(_handleChanged);
+    _accountNumberController = TextEditingController()
+      ..addListener(_handleChanged);
+    _accountHolderController = TextEditingController()
+      ..addListener(_handleChanged);
   }
 
   @override
@@ -40,6 +43,12 @@ class _WalletBankAccountAddPageState
     _accountNumberController.dispose();
     _accountHolderController.dispose();
     super.dispose();
+  }
+
+  void _handleChanged() {
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   bool _isFilled(String value) => value.trim().isNotEmpty;
@@ -76,7 +85,7 @@ class _WalletBankAccountAddPageState
       await ref
           .read(addWalletBankAccountUseCaseProvider)
           .call(
-            WalletBankAccountDraft(
+            WalletBankAccountDraft.domestic(
               bankName: _bankNameController.text.trim(),
               branchName: _branchNameController.text.trim(),
               accountType: _accountType ?? _accountTypeOrdinary,
@@ -134,27 +143,49 @@ class _WalletBankAccountAddPageState
         primaryButtonLabel: l10n.walletBankSettingsAddAction,
         primaryButtonEnabled: !isAdding && _canSubmit,
         onPrimaryPressed: isAdding ? null : _submit,
-        child: MemberProfileBankAccountFormSection(
-          bankNameLabel: l10n.memberProfileBankNameLabel,
-          bankNameController: _bankNameController,
-          bankNameHintText: l10n.memberProfileBankNameHint,
-          branchNameLabel: l10n.memberProfileBranchLabel,
-          branchNameController: _branchNameController,
-          branchNameHintText: l10n.memberProfileBranchHint,
-          accountTypeLabel: l10n.memberProfileAccountTypeLabel,
-          accountType: _accountType,
-          accountTypeItems: _accountTypeItems(context),
-          onAccountTypeChanged: (String? value) {
-            setState(() {
-              _accountType = value;
-            });
-          },
-          accountNumberLabel: l10n.memberProfileAccountNumberLabel,
-          accountNumberController: _accountNumberController,
-          accountNumberHintText: l10n.memberProfileAccountNumberHint,
-          accountHolderLabel: l10n.memberProfileAccountHolderLabel,
-          accountHolderController: _accountHolderController,
-          accountHolderHintText: l10n.memberProfileAccountHolderHint,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            MemberProfileBankAccountFormSection(
+              bankNameLabel: l10n.memberProfileBankNameLabel,
+              bankNameController: _bankNameController,
+              bankNameHintText: l10n.memberProfileBankNameHint,
+              branchNameLabel: l10n.memberProfileBranchLabel,
+              branchNameController: _branchNameController,
+              branchNameHintText: l10n.memberProfileBranchHint,
+              accountTypeLabel: l10n.memberProfileAccountTypeLabel,
+              accountType: _accountType,
+              accountTypeItems: _accountTypeItems(context),
+              onAccountTypeChanged: (String? value) {
+                setState(() {
+                  _accountType = value;
+                });
+              },
+              accountNumberLabel: l10n.memberProfileAccountNumberLabel,
+              accountNumberController: _accountNumberController,
+              accountNumberHintText: l10n.memberProfileAccountNumberHint,
+              accountHolderLabel: l10n.memberProfileAccountHolderLabel,
+              accountHolderController: _accountHolderController,
+              accountHolderHintText: l10n.memberProfileAccountHolderHint,
+            ),
+            const SizedBox(height: 18),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+              decoration: BoxDecoration(
+                color: colors.warningSubtle,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: colors.warningBorder),
+              ),
+              child: Text(
+                l10n.walletBankSettingsDomesticTip,
+                style: theme.appTextTheme.body.copyWith(
+                  color: colors.warningForeground,
+                  height: 1.5,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

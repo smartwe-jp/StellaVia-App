@@ -8,6 +8,7 @@ import '../../../../app/navigation/app_root_route_refresh_scope.dart';
 import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../domain/entities/wallet_bank_account_info.dart';
 import '../providers/wallet_providers.dart';
+import '../support/wallet_bank_account_add_entry.dart';
 
 class WalletBankSettingsPage extends ConsumerStatefulWidget {
   const WalletBankSettingsPage({super.key});
@@ -21,7 +22,11 @@ class _WalletBankSettingsPageState
     extends ConsumerState<WalletBankSettingsPage> {
   Future<void> _openAddBankAccountPage() async {
     final l10n = context.l10n;
-    final added = await context.push<bool>('/wallet/bank-settings/add');
+    final entry = await showWalletBankAccountAddEntrySheet(context);
+    if (!mounted || entry == null) {
+      return;
+    }
+    final added = await context.push<bool>(walletBankAccountAddRouteForEntry(entry));
     if (!mounted || added != true) {
       return;
     }

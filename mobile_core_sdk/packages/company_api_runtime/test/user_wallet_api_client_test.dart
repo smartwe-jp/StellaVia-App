@@ -219,5 +219,78 @@ void main() {
 
       await api.applyBankAccount();
     });
+
+    test('addBankAccount sends POST with domestic payload', () async {
+      final dio = _buildDio((options) async {
+        expect(options.method, equals('POST'));
+        expect(options.path, equals(UserWalletApiPaths.bankAccountAdd));
+        expect(options.extra['auth_required'], isTrue);
+        final body = options.data as Map<String, dynamic>;
+        expect(body['bankType'], equals(0));
+        expect(body['bankName'], equals('みずほ銀行'));
+        expect(body['branchName'], equals('渋谷支店'));
+        expect(body['branchBankName'], equals('渋谷支店'));
+        expect(body['accountType'], equals('ordinary'));
+        expect(body['bankAccountType'], equals('ordinary'));
+        expect(body['accountNumber'], equals('1234567'));
+        expect(body['bankNumber'], equals('1234567'));
+        expect(body['accountName'], equals('ヤマダ タロウ'));
+        expect(body['bankAccountOwnerName'], equals('ヤマダ タロウ'));
+        return _jsonOk('{"msg":"success","code":200,"data":true}');
+      });
+      final api = UserWalletApiClient(dioForPath: (_) => dio);
+
+      await api.addBankAccount(
+        const UserWalletBankAccountAddRequestDto(
+          bankName: 'みずほ銀行',
+          bankType: 0,
+          branchName: '渋谷支店',
+          accountType: 'ordinary',
+          accountNumber: '1234567',
+          accountName: 'ヤマダ タロウ',
+        ),
+      );
+    });
+
+    test('addBankAccount sends POST with overseas payload', () async {
+      final dio = _buildDio((options) async {
+        expect(options.method, equals('POST'));
+        expect(options.path, equals(UserWalletApiPaths.bankAccountAdd));
+        expect(options.extra['auth_required'], isTrue);
+        final body = options.data as Map<String, dynamic>;
+        expect(body['bankType'], equals(1));
+        expect(body['bankName'], equals('Peoplebank'));
+        expect(body['branchName'], equals('Zhdjd'));
+        expect(body['branchBankName'], equals('Zhdjd'));
+        expect(body['branchBankNumber'], equals('001'));
+        expect(body['accountNumber'], equals('5484848467'));
+        expect(body['bankNumber'], equals('5484848467'));
+        expect(body['accountName'], equals('Diaowen'));
+        expect(body['bankAccountOwnerName'], equals('Diaowen'));
+        expect(body['bankAccountOwnerAddress'], equals('大阪'));
+        expect(body['bankAccountOwnerNationality'], equals('中国'));
+        expect(body['bankAccountSwiftCode'], equals('AAAABBCCDDD'));
+        expect(body['bankCountry'], equals('日本'));
+        expect(body['branchBankAddress'], equals('東京都千代田区'));
+        return _jsonOk('{"msg":"success","code":200,"data":true}');
+      });
+      final api = UserWalletApiClient(dioForPath: (_) => dio);
+
+      await api.addBankAccount(
+        const UserWalletBankAccountAddRequestDto(
+          bankName: 'Peoplebank',
+          bankType: 1,
+          branchName: 'Zhdjd',
+          branchBankNumber: '001',
+          accountNumber: '5484848467',
+          accountName: 'Diaowen',
+          bankAccountOwnerAddress: '大阪',
+          bankAccountOwnerNationality: '中国',
+          bankAccountSwiftCode: 'AAAABBCCDDD',
+          bankCountry: '日本',
+          branchBankAddress: '東京都千代田区',
+        ),
+      );
+    });
   });
 }

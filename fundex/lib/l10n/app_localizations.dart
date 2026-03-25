@@ -4310,6 +4310,36 @@ abstract class AppLocalizations {
   /// **'Enter the bank account information used for transfers.'**
   String get walletBankSettingsAddSheetDescription;
 
+  /// No description provided for @walletBankSettingsAddEntrySheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an account type'**
+  String get walletBankSettingsAddEntrySheetTitle;
+
+  /// No description provided for @walletBankSettingsAddDomesticOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank in Japan'**
+  String get walletBankSettingsAddDomesticOption;
+
+  /// No description provided for @walletBankSettingsAddOverseasOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank outside Japan'**
+  String get walletBankSettingsAddOverseasOption;
+
+  /// No description provided for @walletBankSettingsOverseasAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Overseas Bank Account'**
+  String get walletBankSettingsOverseasAddTitle;
+
+  /// No description provided for @walletBankSettingsOverseasAddDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the overseas bank account information used for transfers.'**
+  String get walletBankSettingsOverseasAddDescription;
+
   /// No description provided for @walletBankSettingsCancelAction.
   ///
   /// In en, this message translates to:
@@ -4333,6 +4363,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please fill in all fields.'**
   String get walletBankSettingsRequiredError;
+
+  /// No description provided for @walletBankSettingsDomesticTip.
+  ///
+  /// In en, this message translates to:
+  /// **'The withdrawal fee for domestic bank accounts is JPY 1,000.'**
+  String get walletBankSettingsDomesticTip;
+
+  /// No description provided for @walletBankSettingsBranchNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Branch number'**
+  String get walletBankSettingsBranchNumberLabel;
+
+  /// No description provided for @walletBankSettingsBranchNumberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'001'**
+  String get walletBankSettingsBranchNumberHint;
+
+  /// No description provided for @walletBankSettingsOverseasAccountHolderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Account holder name'**
+  String get walletBankSettingsOverseasAccountHolderLabel;
+
+  /// No description provided for @walletBankSettingsOverseasAccountHolderHint.
+  ///
+  /// In en, this message translates to:
+  /// **'DIAOWEN'**
+  String get walletBankSettingsOverseasAccountHolderHint;
+
+  /// No description provided for @walletBankSettingsOwnerAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Account holder address'**
+  String get walletBankSettingsOwnerAddressLabel;
+
+  /// No description provided for @walletBankSettingsOwnerAddressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Osaka...'**
+  String get walletBankSettingsOwnerAddressHint;
+
+  /// No description provided for @walletBankSettingsOwnerNationalityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Account holder nationality'**
+  String get walletBankSettingsOwnerNationalityLabel;
+
+  /// No description provided for @walletBankSettingsOwnerNationalityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'China'**
+  String get walletBankSettingsOwnerNationalityHint;
+
+  /// No description provided for @walletBankSettingsSwiftCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'SWIFT / BIC'**
+  String get walletBankSettingsSwiftCodeLabel;
+
+  /// No description provided for @walletBankSettingsSwiftCodeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'AAAABBCCDDD'**
+  String get walletBankSettingsSwiftCodeHint;
+
+  /// No description provided for @walletBankSettingsBankCountryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank country'**
+  String get walletBankSettingsBankCountryLabel;
+
+  /// No description provided for @walletBankSettingsBankCountryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Japan'**
+  String get walletBankSettingsBankCountryHint;
+
+  /// No description provided for @walletBankSettingsBranchAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Branch address'**
+  String get walletBankSettingsBranchAddressLabel;
+
+  /// No description provided for @walletBankSettingsBranchAddressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokyo...'**
+  String get walletBankSettingsBranchAddressHint;
+
+  /// No description provided for @walletBankSettingsOverseasTip.
+  ///
+  /// In en, this message translates to:
+  /// **'The withdrawal fee for overseas bank accounts is JPY 10,000.'**
+  String get walletBankSettingsOverseasTip;
 
   /// No description provided for @walletBankAccountExpireNotice.
   ///
@@ -6253,6 +6379,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Profile information registration is complete.'**
   String get memberProfileCompletedToast;
+
+  /// No description provided for @memberProfileSavingProgressMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading and saving...'**
+  String get memberProfileSavingProgressMessage;
 
   /// No description provided for @memberProfilePhotoUploadSuccess.
   ///

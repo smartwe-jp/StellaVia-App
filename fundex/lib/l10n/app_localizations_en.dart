@@ -2306,6 +2306,22 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enter the bank account information used for transfers.';
 
   @override
+  String get walletBankSettingsAddEntrySheetTitle => 'Choose an account type';
+
+  @override
+  String get walletBankSettingsAddDomesticOption => 'Bank in Japan';
+
+  @override
+  String get walletBankSettingsAddOverseasOption => 'Bank outside Japan';
+
+  @override
+  String get walletBankSettingsOverseasAddTitle => 'Add Overseas Bank Account';
+
+  @override
+  String get walletBankSettingsOverseasAddDescription =>
+      'Enter the overseas bank account information used for transfers.';
+
+  @override
   String get walletBankSettingsCancelAction => 'Cancel';
 
   @override
@@ -2317,6 +2333,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletBankSettingsRequiredError => 'Please fill in all fields.';
+
+  @override
+  String get walletBankSettingsDomesticTip =>
+      'The withdrawal fee for domestic bank accounts is JPY 1,000.';
+
+  @override
+  String get walletBankSettingsBranchNumberLabel => 'Branch number';
+
+  @override
+  String get walletBankSettingsBranchNumberHint => '001';
+
+  @override
+  String get walletBankSettingsOverseasAccountHolderLabel =>
+      'Account holder name';
+
+  @override
+  String get walletBankSettingsOverseasAccountHolderHint => 'DIAOWEN';
+
+  @override
+  String get walletBankSettingsOwnerAddressLabel => 'Account holder address';
+
+  @override
+  String get walletBankSettingsOwnerAddressHint => 'Osaka...';
+
+  @override
+  String get walletBankSettingsOwnerNationalityLabel =>
+      'Account holder nationality';
+
+  @override
+  String get walletBankSettingsOwnerNationalityHint => 'China';
+
+  @override
+  String get walletBankSettingsSwiftCodeLabel => 'SWIFT / BIC';
+
+  @override
+  String get walletBankSettingsSwiftCodeHint => 'AAAABBCCDDD';
+
+  @override
+  String get walletBankSettingsBankCountryLabel => 'Bank country';
+
+  @override
+  String get walletBankSettingsBankCountryHint => 'Japan';
+
+  @override
+  String get walletBankSettingsBranchAddressLabel => 'Branch address';
+
+  @override
+  String get walletBankSettingsBranchAddressHint => 'Tokyo...';
+
+  @override
+  String get walletBankSettingsOverseasTip =>
+      'The withdrawal fee for overseas bank accounts is JPY 10,000.';
 
   @override
   String walletBankAccountExpireNotice(Object date) {
@@ -3382,6 +3450,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get memberProfileCompletedToast =>
       'Profile information registration is complete.';
+
+  @override
+  String get memberProfileSavingProgressMessage => 'Uploading and saving...';
 
   @override
   String get memberProfilePhotoUploadSuccess => 'Photo uploaded successfully.';

@@ -96,26 +96,61 @@ class UserWalletBankAccountPoolDto {
 class UserWalletBankAccountAddRequestDto {
   const UserWalletBankAccountAddRequestDto({
     required this.bankName,
-    required this.branchName,
-    required this.accountType,
-    required this.accountNumber,
-    required this.accountName,
+    required this.bankType,
+    this.branchName,
+    this.branchBankName,
+    this.branchBankNumber,
+    this.accountType,
+    this.accountNumber,
+    this.bankNumber,
+    this.accountName,
+    this.bankAccountOwnerName,
+    this.bankAccountOwnerAddress,
+    this.bankAccountOwnerNationality,
+    this.bankAccountSwiftCode,
+    this.bankCountry,
+    this.branchBankAddress,
   });
 
   final String bankName;
-  final String branchName;
-  final String accountType;
-  final String accountNumber;
-  final String accountName;
+  final int bankType;
+  final String? branchName;
+  final String? branchBankName;
+  final String? branchBankNumber;
+  final String? accountType;
+  final String? accountNumber;
+  final String? bankNumber;
+  final String? accountName;
+  final String? bankAccountOwnerName;
+  final String? bankAccountOwnerAddress;
+  final String? bankAccountOwnerNationality;
+  final String? bankAccountSwiftCode;
+  final String? bankCountry;
+  final String? branchBankAddress;
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'bankName': bankName.trim(),
-      'branchName': branchName.trim(),
-      'accountType': accountType.trim(),
-      'accountNumber': accountNumber.trim(),
-      'accountName': accountName.trim(),
-    };
+      'bankType': bankType,
+      'branchName': _stringOrNull(branchName ?? branchBankName),
+      'branchBankName': _stringOrNull(branchBankName ?? branchName),
+      'branchBankNumber': _stringOrNull(branchBankNumber),
+      'accountType': _stringOrNull(accountType),
+      'bankAccountType': _stringOrNull(accountType),
+      'accountNumber': _stringOrNull(accountNumber ?? bankNumber),
+      'bankNumber': _stringOrNull(bankNumber ?? accountNumber),
+      'accountName': _stringOrNull(accountName ?? bankAccountOwnerName),
+      'bankAccountOwnerName': _stringOrNull(
+        bankAccountOwnerName ?? accountName,
+      ),
+      'bankAccountOwnerAddress': _stringOrNull(bankAccountOwnerAddress),
+      'bankAccountOwnerNationality': _stringOrNull(
+        bankAccountOwnerNationality,
+      ),
+      'bankAccountSwiftCode': _stringOrNull(bankAccountSwiftCode),
+      'bankCountry': _stringOrNull(bankCountry),
+      'branchBankAddress': _stringOrNull(branchBankAddress),
+    }..removeWhere((_, dynamic value) => value == null);
   }
 }
 

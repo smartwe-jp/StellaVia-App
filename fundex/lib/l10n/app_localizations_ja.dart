@@ -2186,6 +2186,22 @@ class AppLocalizationsJa extends AppLocalizations {
       '振込先として利用する銀行口座情報を入力してください。';
 
   @override
+  String get walletBankSettingsAddEntrySheetTitle => '追加する口座を選択';
+
+  @override
+  String get walletBankSettingsAddDomesticOption => '日本国内銀行';
+
+  @override
+  String get walletBankSettingsAddOverseasOption => '日本以外の銀行';
+
+  @override
+  String get walletBankSettingsOverseasAddTitle => '海外銀行口座を追加';
+
+  @override
+  String get walletBankSettingsOverseasAddDescription =>
+      '日本以外の銀行口座情報を入力してください。';
+
+  @override
   String get walletBankSettingsCancelAction => 'キャンセル';
 
   @override
@@ -2196,6 +2212,54 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get walletBankSettingsRequiredError => 'すべての項目を入力してください。';
+
+  @override
+  String get walletBankSettingsDomesticTip => '国内口座からの出金手数料は 1,000 円です。';
+
+  @override
+  String get walletBankSettingsBranchNumberLabel => '支店番号';
+
+  @override
+  String get walletBankSettingsBranchNumberHint => '001';
+
+  @override
+  String get walletBankSettingsOverseasAccountHolderLabel => '口座名義';
+
+  @override
+  String get walletBankSettingsOverseasAccountHolderHint => 'DIAOWEN';
+
+  @override
+  String get walletBankSettingsOwnerAddressLabel => '口座名義人住所';
+
+  @override
+  String get walletBankSettingsOwnerAddressHint => '大阪府大阪市...';
+
+  @override
+  String get walletBankSettingsOwnerNationalityLabel => '口座名義人国籍';
+
+  @override
+  String get walletBankSettingsOwnerNationalityHint => '中国';
+
+  @override
+  String get walletBankSettingsSwiftCodeLabel => 'SWIFT / BIC';
+
+  @override
+  String get walletBankSettingsSwiftCodeHint => 'AAAABBCCDDD';
+
+  @override
+  String get walletBankSettingsBankCountryLabel => '銀行所在国';
+
+  @override
+  String get walletBankSettingsBankCountryHint => '日本';
+
+  @override
+  String get walletBankSettingsBranchAddressLabel => '支店住所';
+
+  @override
+  String get walletBankSettingsBranchAddressHint => '東京都千代田区...';
+
+  @override
+  String get walletBankSettingsOverseasTip => '海外口座からの出金手数料は 10,000 円です。';
 
   @override
   String walletBankAccountExpireNotice(Object date) {
@@ -3196,6 +3260,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get memberProfileCompletedToast => '本人情報の登録が完了しました。';
+
+  @override
+  String get memberProfileSavingProgressMessage => 'アップロード保存中...';
 
   @override
   String get memberProfilePhotoUploadSuccess => '画像をアップロードしました。';

@@ -2169,6 +2169,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletBankSettingsAddSheetDescription => '请输入用于收付款的银行账户信息。';
 
   @override
+  String get walletBankSettingsAddEntrySheetTitle => '请选择账户类型';
+
+  @override
+  String get walletBankSettingsAddDomesticOption => '日本国内银行';
+
+  @override
+  String get walletBankSettingsAddOverseasOption => '日本以外的银行';
+
+  @override
+  String get walletBankSettingsOverseasAddTitle => '添加海外银行账户';
+
+  @override
+  String get walletBankSettingsOverseasAddDescription => '请输入日本以外银行账户的信息。';
+
+  @override
   String get walletBankSettingsCancelAction => '取消';
 
   @override
@@ -2179,6 +2194,54 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get walletBankSettingsRequiredError => '请填写全部字段。';
+
+  @override
+  String get walletBankSettingsDomesticTip => '日本国内账户出金手续费为 1,000 日元。';
+
+  @override
+  String get walletBankSettingsBranchNumberLabel => '分行编号';
+
+  @override
+  String get walletBankSettingsBranchNumberHint => '001';
+
+  @override
+  String get walletBankSettingsOverseasAccountHolderLabel => '账户名义';
+
+  @override
+  String get walletBankSettingsOverseasAccountHolderHint => 'DIAOWEN';
+
+  @override
+  String get walletBankSettingsOwnerAddressLabel => '账户名义人地址';
+
+  @override
+  String get walletBankSettingsOwnerAddressHint => '大阪府大阪市...';
+
+  @override
+  String get walletBankSettingsOwnerNationalityLabel => '账户名义人国籍';
+
+  @override
+  String get walletBankSettingsOwnerNationalityHint => '中国';
+
+  @override
+  String get walletBankSettingsSwiftCodeLabel => 'SWIFT / BIC';
+
+  @override
+  String get walletBankSettingsSwiftCodeHint => 'AAAABBCCDDD';
+
+  @override
+  String get walletBankSettingsBankCountryLabel => '银行所在国';
+
+  @override
+  String get walletBankSettingsBankCountryHint => '日本';
+
+  @override
+  String get walletBankSettingsBranchAddressLabel => '分行地址';
+
+  @override
+  String get walletBankSettingsBranchAddressHint => '东京都千代田区...';
+
+  @override
+  String get walletBankSettingsOverseasTip => '海外账户出金手续费为 10,000 日元。';
 
   @override
   String walletBankAccountExpireNotice(Object date) {
@@ -3169,6 +3232,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get memberProfileCompletedToast => '本人信息登记已完成。';
+
+  @override
+  String get memberProfileSavingProgressMessage => '上传保存中...';
 
   @override
   String get memberProfilePhotoUploadSuccess => '上传成功。';
@@ -5505,6 +5571,21 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get walletBankSettingsAddSheetDescription => '請輸入用於收付款的銀行帳戶資訊。';
 
   @override
+  String get walletBankSettingsAddEntrySheetTitle => '請選擇帳戶類型';
+
+  @override
+  String get walletBankSettingsAddDomesticOption => '日本國內銀行';
+
+  @override
+  String get walletBankSettingsAddOverseasOption => '日本以外的銀行';
+
+  @override
+  String get walletBankSettingsOverseasAddTitle => '新增海外銀行帳戶';
+
+  @override
+  String get walletBankSettingsOverseasAddDescription => '請輸入日本以外銀行帳戶的資訊。';
+
+  @override
   String get walletBankSettingsCancelAction => '取消';
 
   @override
@@ -5515,6 +5596,54 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletBankSettingsRequiredError => '請填寫所有欄位。';
+
+  @override
+  String get walletBankSettingsDomesticTip => '日本國內帳戶出金手續費為 1,000 日圓。';
+
+  @override
+  String get walletBankSettingsBranchNumberLabel => '分行編號';
+
+  @override
+  String get walletBankSettingsBranchNumberHint => '001';
+
+  @override
+  String get walletBankSettingsOverseasAccountHolderLabel => '帳戶名義';
+
+  @override
+  String get walletBankSettingsOverseasAccountHolderHint => 'DIAOWEN';
+
+  @override
+  String get walletBankSettingsOwnerAddressLabel => '帳戶名義人地址';
+
+  @override
+  String get walletBankSettingsOwnerAddressHint => '大阪府大阪市...';
+
+  @override
+  String get walletBankSettingsOwnerNationalityLabel => '帳戶名義人國籍';
+
+  @override
+  String get walletBankSettingsOwnerNationalityHint => '中國';
+
+  @override
+  String get walletBankSettingsSwiftCodeLabel => 'SWIFT / BIC';
+
+  @override
+  String get walletBankSettingsSwiftCodeHint => 'AAAABBCCDDD';
+
+  @override
+  String get walletBankSettingsBankCountryLabel => '銀行所在國';
+
+  @override
+  String get walletBankSettingsBankCountryHint => '日本';
+
+  @override
+  String get walletBankSettingsBranchAddressLabel => '分行地址';
+
+  @override
+  String get walletBankSettingsBranchAddressHint => '東京都千代田區...';
+
+  @override
+  String get walletBankSettingsOverseasTip => '海外帳戶出金手續費為 10,000 日圓。';
 
   @override
   String walletBankAccountExpireNotice(Object date) {
@@ -6505,6 +6634,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get memberProfileCompletedToast => '本人信息登记已完成。';
+
+  @override
+  String get memberProfileSavingProgressMessage => '上傳保存中...';
 
   @override
   String get memberProfilePhotoUploadSuccess => '上傳成功。';

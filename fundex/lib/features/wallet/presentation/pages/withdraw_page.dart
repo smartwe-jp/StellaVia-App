@@ -10,6 +10,7 @@ import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../domain/entities/wallet_bank_account_info.dart';
 import '../../domain/entities/wallet_withdraw_apply_draft.dart';
 import '../providers/wallet_providers.dart';
+import '../support/wallet_bank_account_add_entry.dart';
 import '../support/wallet_withdraw_confirm_models.dart';
 
 class WithdrawPage extends ConsumerStatefulWidget {
@@ -149,7 +150,11 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
   }
 
   Future<void> _openAddBankAccountPage() async {
-    final added = await context.push<bool>('/wallet/bank-settings/add');
+    final entry = await showWalletBankAccountAddEntrySheet(context);
+    if (!mounted || entry == null) {
+      return;
+    }
+    final added = await context.push<bool>(walletBankAccountAddRouteForEntry(entry));
     if (!mounted || added != true) {
       return;
     }
