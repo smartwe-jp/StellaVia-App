@@ -2306,6 +2306,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletWithdrawNeedAccountAction => '添加出金账户';
 
   @override
+  String get walletWithdrawPhoneVerificationRequiredMessage => '出金前需要先完成手机号认证。';
+
+  @override
+  String get walletWithdrawPhoneVerificationRequiredAction => '前往手机号认证';
+
+  @override
   String get walletWithdrawSelectSheetTitle => '选择汇款账户';
 
   @override
@@ -5721,6 +5727,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletWithdrawNeedAccountAction => '新增出金帳戶';
+
+  @override
+  String get walletWithdrawPhoneVerificationRequiredMessage => '出金前需要先完成手機號認證。';
+
+  @override
+  String get walletWithdrawPhoneVerificationRequiredAction => '前往手機號認證';
 
   @override
   String get walletWithdrawSelectSheetTitle => '選擇匯款帳戶';

@@ -872,6 +872,8 @@
   "walletWithdrawSelectDestination": "請選擇匯款帳戶",
   "walletWithdrawNeedAccountMessage": "尚未登記出金帳戶，請先新增。",
   "walletWithdrawNeedAccountAction": "新增出金帳戶",
+  "walletWithdrawPhoneVerificationRequiredMessage": "出金前需要先完成手機號認證。",
+  "walletWithdrawPhoneVerificationRequiredAction": "前往手機號認證",
   "walletWithdrawSelectSheetTitle": "選擇匯款帳戶",
   "walletWithdrawSubmitAction": "提交出金申請",
   "walletWithdrawConfirmTitle": "確認提現資訊",

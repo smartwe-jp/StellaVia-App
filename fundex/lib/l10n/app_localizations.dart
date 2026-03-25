@@ -4580,6 +4580,18 @@ abstract class AppLocalizations {
   /// **'Add withdrawal account'**
   String get walletWithdrawNeedAccountAction;
 
+  /// No description provided for @walletWithdrawPhoneVerificationRequiredMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone verification is required before you can submit a withdrawal.'**
+  String get walletWithdrawPhoneVerificationRequiredMessage;
+
+  /// No description provided for @walletWithdrawPhoneVerificationRequiredAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to phone verification'**
+  String get walletWithdrawPhoneVerificationRequiredAction;
+
   /// No description provided for @walletWithdrawSelectSheetTitle.
   ///
   /// In en, this message translates to:

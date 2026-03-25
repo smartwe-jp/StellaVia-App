@@ -872,6 +872,8 @@
   "walletWithdrawSelectDestination": "请选择汇款账户",
   "walletWithdrawNeedAccountMessage": "尚未登记出金账户，请先添加。",
   "walletWithdrawNeedAccountAction": "添加出金账户",
+  "walletWithdrawPhoneVerificationRequiredMessage": "出金前需要先完成手机号认证。",
+  "walletWithdrawPhoneVerificationRequiredAction": "前往手机号认证",
   "walletWithdrawSelectSheetTitle": "选择汇款账户",
   "walletWithdrawSubmitAction": "提交出金申请",
   "walletWithdrawConfirmTitle": "确认提现信息",

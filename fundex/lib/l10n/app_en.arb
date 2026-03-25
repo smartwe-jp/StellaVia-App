@@ -872,6 +872,8 @@
   "walletWithdrawSelectDestination": "Select destination",
   "walletWithdrawNeedAccountMessage": "No withdrawal bank account is registered. Please add one first.",
   "walletWithdrawNeedAccountAction": "Add withdrawal account",
+  "walletWithdrawPhoneVerificationRequiredMessage": "Phone verification is required before you can submit a withdrawal.",
+  "walletWithdrawPhoneVerificationRequiredAction": "Go to phone verification",
   "walletWithdrawSelectSheetTitle": "Select transfer destination",
   "walletWithdrawSubmitAction": "Submit Withdraw Request",
   "walletWithdrawConfirmTitle": "Confirm Withdraw Details",

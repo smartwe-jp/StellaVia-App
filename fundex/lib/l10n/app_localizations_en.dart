@@ -2451,6 +2451,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletWithdrawNeedAccountAction => 'Add withdrawal account';
 
   @override
+  String get walletWithdrawPhoneVerificationRequiredMessage =>
+      'Phone verification is required before you can submit a withdrawal.';
+
+  @override
+  String get walletWithdrawPhoneVerificationRequiredAction =>
+      'Go to phone verification';
+
+  @override
   String get walletWithdrawSelectSheetTitle => 'Select transfer destination';
 
   @override

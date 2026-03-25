@@ -2324,6 +2324,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletWithdrawNeedAccountAction => '出金口座を追加';
 
   @override
+  String get walletWithdrawPhoneVerificationRequiredMessage =>
+      '出金するには、先に電話認証を完了してください。';
+
+  @override
+  String get walletWithdrawPhoneVerificationRequiredAction => '電話認証へ進む';
+
+  @override
   String get walletWithdrawSelectSheetTitle => '振込先を選択';
 
   @override
