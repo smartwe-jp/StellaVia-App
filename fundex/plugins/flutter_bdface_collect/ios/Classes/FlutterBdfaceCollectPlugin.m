@@ -52,7 +52,11 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
   }
 
   if (licenseId.length == 0) {
-    result(@"licenseId不能为空");
+    result([self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                  chinese:@"licenseId不能为空"
+                                  english:@"licenseId is required"
+                       traditionalChinese:@"licenseId 不可為空"
+                                 japanese:@"licenseId は必須です"]);
     return;
   }
 
@@ -62,6 +66,10 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
       [[BDFaceBaseKitUICustomConfigItem alloc] initWithUIConfig];
   BDFaceBaseKitLivenessTipCustomConfigItem *tipConfig =
       [[BDFaceBaseKitLivenessTipCustomConfigItem alloc] initWithLivenessTipConfig];
+  NSString *localeCode = [self currentLivenessLocaleCode];
+
+  [self applyLocalizationToParamsConfig:paramsConfig localeCode:localeCode];
+  [self applyLocalizationToTipConfig:tipConfig localeCode:localeCode];
 
   [[BDFaceBaseKitManager sharedInstance] setFaceSdkCustomParamsConfig:paramsConfig];
   [[BDFaceBaseKitManager sharedInstance] setFaceSdkCustomUIConfig:uiConfig];
@@ -93,25 +101,49 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
 
 - (void)collect:(NSDictionary *)faceConfigMap result:(FlutterResult)result {
   if (![faceConfigMap isKindOfClass:[NSDictionary class]]) {
-    result(@{@"error" : @"采集参数无效"});
+    result(@{
+      @"error" : [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                        chinese:@"采集参数无效"
+                                        english:@"Invalid collect arguments"
+                             traditionalChinese:@"採集參數無效"
+                                       japanese:@"収集パラメータが無効です"]
+    });
     return;
   }
 
   if (!self.didInitSdk) {
-    result(@{@"error" : @"SDK未初始化"});
+    result(@{
+      @"error" : [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                        chinese:@"SDK未初始化"
+                                        english:@"SDK not initialized"
+                             traditionalChinese:@"SDK 尚未初始化"
+                                       japanese:@"SDK が初期化されていません"]
+    });
     return;
   }
 
   dispatch_async(dispatch_get_main_queue(), ^{
     UIViewController *topController = [self topViewController];
     if (topController == nil) {
-      result(@{@"error" : @"无法获取当前页面"});
+      result(@{
+        @"error" : [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                          chinese:@"无法获取当前页面"
+                                          english:@"Unable to resolve the current page"
+                               traditionalChinese:@"無法取得目前頁面"
+                                         japanese:@"現在の画面を取得できません"]
+      });
       return;
     }
 
     BDFaceBaseKitParamsCustomConfigItem *paramsConfig =
         [self paramsConfigFromFaceConfig:faceConfigMap];
+    NSString *localeCode = [self currentLivenessLocaleCode];
+    BDFaceBaseKitLivenessTipCustomConfigItem *tipConfig =
+        [[BDFaceBaseKitLivenessTipCustomConfigItem alloc] initWithLivenessTipConfig];
+    [self applyLocalizationToParamsConfig:paramsConfig localeCode:localeCode];
+    [self applyLocalizationToTipConfig:tipConfig localeCode:localeCode];
     [[BDFaceBaseKitManager sharedInstance] setFaceSdkCustomParamsConfig:paramsConfig];
+    [[BDFaceBaseKitManager sharedInstance] setFaceSdkCustomLivenessTipConfig:tipConfig];
 
     __block BOOL didReturnResult = NO;
     [[BDFaceBaseKitManager sharedInstance]
@@ -133,7 +165,13 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
                                 if (payload != nil) {
                                   result(payload);
                                 } else {
-                                  result(@{@"error" : @"采集成功但未获取到图片数据"});
+                                  result(@{
+                                    @"error" : [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                                                      chinese:@"采集成功但未获取到图片数据"
+                                                                      english:@"Collection succeeded but no image data was returned"
+                                                           traditionalChinese:@"採集成功，但未取得圖片資料"
+                                                                     japanese:@"収集は成功しましたが、画像データを取得できませんでした"]
+                                  });
                                 }
                                 return;
                               }
@@ -239,6 +277,256 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
   return config;
 }
 
+- (NSString *)currentLivenessLocaleCode {
+  NSString *identifier = [[[NSLocale preferredLanguages] firstObject] lowercaseString];
+  if (identifier.length == 0) {
+    return @"en";
+  }
+  if ([identifier hasPrefix:@"ja"]) {
+    return @"ja";
+  }
+  if ([self isTraditionalChineseIdentifier:identifier]) {
+    return @"zh-Hant";
+  }
+  if ([identifier hasPrefix:@"zh"]) {
+    return @"zh-Hans";
+  }
+  return @"en";
+}
+
+- (BOOL)isTraditionalChineseIdentifier:(NSString *)identifier {
+  return [identifier hasPrefix:@"zh-hant"] || [identifier hasPrefix:@"zh-tw"] ||
+         [identifier hasPrefix:@"zh-hk"] || [identifier hasPrefix:@"zh-mo"];
+}
+
+- (NSString *)localizedStringForLocale:(NSString *)localeCode
+                               chinese:(NSString *)chinese
+                               english:(NSString *)english
+                    traditionalChinese:(NSString *)traditionalChinese
+                              japanese:(NSString *)japanese {
+  if ([localeCode isEqualToString:@"ja"]) {
+    return japanese;
+  }
+  if ([localeCode isEqualToString:@"zh-Hant"]) {
+    return traditionalChinese;
+  }
+  if ([localeCode isEqualToString:@"en"]) {
+    return english;
+  }
+  return chinese;
+}
+
+- (void)applyLocalizationToParamsConfig:(BDFaceBaseKitParamsCustomConfigItem *)config
+                             localeCode:(NSString *)localeCode {
+  config.isShowLanguageSwitch = NO;
+  config.liveness_languageType =
+      [localeCode isEqualToString:@"ja"] || [localeCode isEqualToString:@"en"] ? @"EN" : @"ZH_CN";
+}
+
+- (void)applyLocalizationToTipConfig:(BDFaceBaseKitLivenessTipCustomConfigItem *)tipConfig
+                          localeCode:(NSString *)localeCode {
+  tipConfig.faceLivenessZoomInText = [self localizedStringForLocale:localeCode
+                                                            chinese:@"请将脸部靠近屏幕"
+                                                            english:@"Please move your face closer to the screen"
+                                                 traditionalChinese:@"請將臉部靠近螢幕"
+                                                           japanese:@"顔を画面に近づけてください"];
+  tipConfig.faceLivenessZoomOutText = [self localizedStringForLocale:localeCode
+                                                             chinese:@"请将脸部远离屏幕"
+                                                             english:@"Please move your face away from the screen"
+                                                  traditionalChinese:@"請將臉部遠離螢幕"
+                                                            japanese:@"顔を画面から離してください"];
+  tipConfig.faceLivenessHeadUpText = [self localizedStringForLocale:localeCode
+                                                            chinese:@"请略微抬头"
+                                                            english:@"Tilt your head slightly upwards"
+                                                 traditionalChinese:@"請略微抬頭"
+                                                           japanese:@"少し上を向いてください"];
+  tipConfig.faceLivenessHeadDownText = [self localizedStringForLocale:localeCode
+                                                              chinese:@"请略微低头"
+                                                              english:@"Tilt your head slightly downwards"
+                                                   traditionalChinese:@"請略微低頭"
+                                                             japanese:@"少し下を向いてください"];
+  tipConfig.faceLivenessHeadLeftText = [self localizedStringForLocale:localeCode
+                                                              chinese:@"请略微向左转头"
+                                                              english:@"Please turn your head slightly to the left"
+                                                   traditionalChinese:@"請略微向左轉頭"
+                                                             japanese:@"少し左を向いてください"];
+  tipConfig.faceLivenessHeadRightText = [self localizedStringForLocale:localeCode
+                                                               chinese:@"请略微向右转头"
+                                                               english:@"Please turn your head slightly to the right"
+                                                    traditionalChinese:@"請略微向右轉頭"
+                                                              japanese:@"少し右を向いてください"];
+  tipConfig.faceLivenessLeftEyeOccludedText = [self localizedStringForLocale:localeCode
+                                                                      chinese:@"左眼有遮挡"
+                                                                      english:@"Left eye obstructed"
+                                                           traditionalChinese:@"左眼有遮擋"
+                                                                     japanese:@"左目が隠れています"];
+  tipConfig.faceLivenessRightEyeOccludedText = [self localizedStringForLocale:localeCode
+                                                                       chinese:@"右眼有遮挡"
+                                                                       english:@"Right eye obstructed"
+                                                            traditionalChinese:@"右眼有遮擋"
+                                                                      japanese:@"右目が隠れています"];
+  tipConfig.faceLivenessNoseOccludedText = [self localizedStringForLocale:localeCode
+                                                                   chinese:@"鼻子有遮挡"
+                                                                   english:@"Nose obstructed"
+                                                        traditionalChinese:@"鼻子有遮擋"
+                                                                  japanese:@"鼻が隠れています"];
+  tipConfig.faceLivenessMouthOccludedText = [self localizedStringForLocale:localeCode
+                                                                    chinese:@"嘴部有遮挡"
+                                                                    english:@"Mouth obstructed"
+                                                         traditionalChinese:@"嘴部有遮擋"
+                                                                   japanese:@"口元が隠れています"];
+  tipConfig.faceLivenessLeftCheekOccludedText = [self localizedStringForLocale:localeCode
+                                                                        chinese:@"左脸颊有遮挡"
+                                                                        english:@"Left cheek obstructed"
+                                                             traditionalChinese:@"左臉頰有遮擋"
+                                                                       japanese:@"左頬が隠れています"];
+  tipConfig.faceLivenessRightCheekOccludedText = [self localizedStringForLocale:localeCode
+                                                                         chinese:@"右脸颊有遮挡"
+                                                                         english:@"Right cheek obstructed"
+                                                              traditionalChinese:@"右臉頰有遮擋"
+                                                                        japanese:@"右頬が隠れています"];
+  tipConfig.faceLivenessChinOccludedText = [self localizedStringForLocale:localeCode
+                                                                   chinese:@"下巴有遮挡"
+                                                                   english:@"Chin obstructed"
+                                                        traditionalChinese:@"下巴有遮擋"
+                                                                  japanese:@"あごが隠れています"];
+  tipConfig.faceLivenessIlliumPoorText = [self localizedStringForLocale:localeCode
+                                                                chinese:@"请使环境光线再亮些"
+                                                                english:@"Please brighten the ambient light"
+                                                     traditionalChinese:@"環境光線過暗，請調整"
+                                                               japanese:@"周囲が暗すぎます。明るくしてください"];
+  tipConfig.faceLivenessIlliumMuchText = [self localizedStringForLocale:localeCode
+                                                                chinese:@"请使环境光线再暗些"
+                                                                english:@"Please dim the ambient light"
+                                                     traditionalChinese:@"環境光線過亮，請調整"
+                                                               japanese:@"周囲が明るすぎます。調整してください"];
+  tipConfig.faceLivenessblurredText = [self localizedStringForLocale:localeCode
+                                                             chinese:@"请握稳手机，视线正对屏幕"
+                                                             english:@"Please hold your phone steady and look directly at the screen"
+                                                  traditionalChinese:@"請握穩手機，視線正對螢幕"
+                                                            japanese:@"スマートフォンをしっかり持ち、画面を正面から見てください"];
+  tipConfig.faceLivenessLeftEyeNotOpenText = [self localizedStringForLocale:localeCode
+                                                                     chinese:@"左眼未睁开"
+                                                                     english:@"Your left eye is not open"
+                                                          traditionalChinese:@"左眼未睜開"
+                                                                    japanese:@"左目が開いていません"];
+  tipConfig.faceLivenessRightEyeNotOpenText = [self localizedStringForLocale:localeCode
+                                                                      chinese:@"右眼未睁开"
+                                                                      english:@"Your right eye is not open"
+                                                           traditionalChinese:@"右眼未睜開"
+                                                                     japanese:@"右目が開いていません"];
+  tipConfig.faceLivenessActionEyeText = [self localizedStringForLocale:localeCode
+                                                               chinese:@"眨眨眼"
+                                                               english:@"Blink slowly"
+                                                    traditionalChinese:@"眨眨眼"
+                                                              japanese:@"まばたきしてください"];
+  tipConfig.faceLivenessActionMouthText = [self localizedStringForLocale:localeCode
+                                                                 chinese:@"张张嘴"
+                                                                 english:@"Open your mouth"
+                                                      traditionalChinese:@"張張嘴"
+                                                                japanese:@"口を開けてください"];
+  tipConfig.faceLivenessActionHeadLeftText = [self localizedStringForLocale:localeCode
+                                                                    chinese:@"请向左缓慢转头"
+                                                                    english:@"Slowly turn your head to the left"
+                                                         traditionalChinese:@"請緩慢向左轉頭"
+                                                                   japanese:@"ゆっくり左を向いてください"];
+  tipConfig.faceLivenessActionHeadRightText = [self localizedStringForLocale:localeCode
+                                                                     chinese:@"请向右缓慢转头"
+                                                                     english:@"Slowly turn your head to the right"
+                                                          traditionalChinese:@"請緩慢向右轉頭"
+                                                                    japanese:@"ゆっくり右を向いてください"];
+  tipConfig.faceLivenessActionHeadUpText = [self localizedStringForLocale:localeCode
+                                                                  chinese:@"请缓慢抬头"
+                                                                  english:@"Slowly raise your head"
+                                                       traditionalChinese:@"請緩慢抬頭"
+                                                                 japanese:@"ゆっくり上を向いてください"];
+  tipConfig.faceLivenessActionHeadDownText = [self localizedStringForLocale:localeCode
+                                                                    chinese:@"请缓慢低头"
+                                                                    english:@"Slowly lower your head"
+                                                         traditionalChinese:@"請緩慢低頭"
+                                                                   japanese:@"ゆっくり下を向いてください"];
+  tipConfig.faceLivenessActionUpDownText = [self localizedStringForLocale:localeCode
+                                                                  chinese:@"上下点头"
+                                                                  english:@"Nod your head"
+                                                       traditionalChinese:@"點點頭"
+                                                                 japanese:@"うなずいてください"];
+  tipConfig.faceLivenessActionYawText = [self localizedStringForLocale:localeCode
+                                                               chinese:@"左右摇头"
+                                                               english:@"Shake your head"
+                                                    traditionalChinese:@"左右搖頭"
+                                                              japanese:@"首を左右に振ってください"];
+  tipConfig.faceLivenessScreenWillFlash = [self localizedStringForLocale:localeCode
+                                                                 chinese:@"屏幕即将闪烁，请保持正脸"
+                                                                 english:@"The screen will flicker, please keep your face straight"
+                                                      traditionalChinese:@"螢幕即將閃爍，請保持正臉"
+                                                                japanese:@"画面が点滅します。正面を向いたままにしてください"];
+  tipConfig.faceLivenessScreenColorChanging = [self localizedStringForLocale:localeCode
+                                                                      chinese:@"变光中，请保持正脸"
+                                                                      english:@"Light is changing, please keep your face straight"
+                                                           traditionalChinese:@"變光中，請保持正臉"
+                                                                     japanese:@"画面の光が変化します。正面を向いたままにしてください"];
+  tipConfig.faceLivenessCompletionText = [self localizedStringForLocale:localeCode
+                                                                chinese:@"非常好"
+                                                                english:@"Very good"
+                                                     traditionalChinese:@"非常好"
+                                                               japanese:@"とても良いです"];
+  tipConfig.faceLivenessMovetoFrameText = [self localizedStringForLocale:localeCode
+                                                                 chinese:@"把脸移入框内"
+                                                                 english:@"Move your face into the frame"
+                                                      traditionalChinese:@"請把臉移入框內"
+                                                                japanese:@"顔を枠内に入れてください"];
+  tipConfig.faceLivenessFacialFaceCorrectionText = [self localizedStringForLocale:localeCode
+                                                                           chinese:@"请调整人脸"
+                                                                           english:@"Please adjust your facial posture"
+                                                                traditionalChinese:@"請調整臉部姿態"
+                                                                          japanese:@"顔の向きを調整してください"];
+  tipConfig.faceLivenessVerifyFailedText = [self localizedStringForLocale:localeCode
+                                                                  chinese:@"验证失败"
+                                                                  english:@"Validation failed"
+                                                       traditionalChinese:@"驗證失敗"
+                                                                 japanese:@"認証に失敗しました"];
+  tipConfig.faceLivenessKeepFace = [self localizedStringForLocale:localeCode
+                                                          chinese:@"请保持正脸"
+                                                          english:@"Please keep facing the screen"
+                                               traditionalChinese:@"請保持正臉"
+                                                         japanese:@"正面を向いたままにしてください"];
+  tipConfig.faceLivenessFaceCovered = [self localizedStringForLocale:localeCode
+                                                             chinese:@"脸部有遮挡"
+                                                             english:@"Face obstructed"
+                                                  traditionalChinese:@"臉部有遮擋"
+                                                            japanese:@"顔が隠れています"];
+  tipConfig.faceLivenessFaceMoreThan = [self localizedStringForLocale:localeCode
+                                                              chinese:@"检测多个人脸"
+                                                              english:@"Please ensure only one person is in the frame"
+                                                   traditionalChinese:@"檢測到多個人臉"
+                                                             japanese:@"1人だけ写るようにしてください"];
+  tipConfig.faceLivenessKeepStillText = [self localizedStringForLocale:localeCode
+                                                               chinese:@"请保持不动"
+                                                               english:@"Please keep facing the screen"
+                                                    traditionalChinese:@"請保持不動"
+                                                              japanese:@"動かないでください"];
+  tipConfig.faceLivenessLittleZoomInText = [self localizedStringForLocale:localeCode
+                                                                  chinese:@"请略微靠近"
+                                                                  english:@"Please approach slightly"
+                                                       traditionalChinese:@"請稍微靠近一些"
+                                                                 japanese:@"もう少し近づいてください"];
+  tipConfig.faceLivenessLittleZoomOutText = [self localizedStringForLocale:localeCode
+                                                                   chinese:@"请略微远离"
+                                                                   english:@"Please stay slightly away"
+                                                        traditionalChinese:@"請稍微遠離一些"
+                                                                  japanese:@"もう少し離れてください"];
+  tipConfig.faceLivenessForFaceSlowMoveText = [self localizedStringForLocale:localeCode
+                                                                     chinese:@"将采集远景，请缓慢移动远离"
+                                                                     english:@"To collect distant views, please move slowly away"
+                                                          traditionalChinese:@"即將採集遠景，請緩慢移動並遠離"
+                                                                    japanese:@"遠景を収集します。ゆっくり離れてください"];
+  tipConfig.faceLivenessNearFaceSlowMoveText = [self localizedStringForLocale:localeCode
+                                                                      chinese:@"将采集近景，请缓慢移动靠近"
+                                                                      english:@"Close up will be collected, please move slowly to get closer"
+                                                           traditionalChinese:@"即將採集近景，請緩慢移動並靠近"
+                                                                     japanese:@"近景を収集します。ゆっくり近づいてください"];
+}
+
 - (NSNumber *)nativeActionForCode:(NSString *)typeStr {
   if (![typeStr isKindOfClass:[NSString class]]) {
     return nil;
@@ -266,6 +554,11 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
 }
 
 - (NSDictionary *)payloadFromSdkResult:(NSDictionary *)sdkResult {
+
+  //print the sdkResult for debugging
+  NSLog(@"SDK Result: %@", sdkResult);
+
+
   NSDictionary *payload = [self payloadFromContainer:sdkResult];
   if (payload != nil) {
     return payload;
@@ -296,8 +589,14 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
     return nil;
   }
 
-  NSString *imageSrcBase64 = [self stringForKey:@"originalImageEncryptStr" inObject:container];
-  NSString *imageCropBase64 = [self stringForKey:@"cropImageWithBlackEncryptStr" inObject:container];
+  NSString *imageSrcBase64 = [self resolvedBase64ValueForObject:container
+                                                   encryptedKey:@"originalImageEncryptStr"
+                                                      plainKey:@"originalImageStr"
+                                                      imageKeys:@[@"originalImage", @"originImage"]];
+  NSString *imageCropBase64 = [self resolvedBase64ValueForObject:container
+                                                    encryptedKey:@"cropImageWithBlackEncryptStr"
+                                                       plainKey:@"cropImageWithBlackStr"
+                                                       imageKeys:@[@"cropImageWithBlack", @"cropImage"]];
   if (imageSrcBase64.length > 0 || imageCropBase64.length > 0) {
     return @{
       @"imageCropBase64" : imageCropBase64 ?: @"",
@@ -321,6 +620,74 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
   }
 
   return nil;
+}
+
+- (NSString *)resolvedBase64ValueForObject:(id)object
+                              encryptedKey:(NSString *)encryptedKey
+                                  plainKey:(NSString *)plainKey
+                                  imageKeys:(NSArray<NSString *> *)imageKeys {
+  NSString *encrypted = [self stringForKey:encryptedKey inObject:object];
+  if (encrypted.length > 0) {
+    return encrypted;
+  }
+
+  NSString *plain = [self stringForKey:plainKey inObject:object];
+  if (plain.length > 0) {
+    return plain;
+  }
+
+  for (NSString *imageKey in imageKeys) {
+    NSString *value = [self base64StringFromValue:[self valueForKey:imageKey inObject:object]];
+    if (value.length > 0) {
+      return value;
+    }
+  }
+
+  return nil;
+}
+
+- (NSString *)base64StringFromValue:(id)value {
+  if (value == nil || value == [NSNull null]) {
+    return nil;
+  }
+
+  if ([value isKindOfClass:[NSString class]]) {
+    NSString *text = [(NSString *)value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    return text.length > 0 ? text : nil;
+  }
+
+  if ([value isKindOfClass:[NSArray class]]) {
+    for (id item in (NSArray *)value) {
+      NSString *nested = [self base64StringFromValue:item];
+      if (nested.length > 0) {
+        return nested;
+      }
+    }
+    return nil;
+  }
+
+  if ([value isKindOfClass:[UIImage class]]) {
+    return [self base64StringFromImage:(UIImage *)value];
+  }
+
+  return nil;
+}
+
+- (NSString *)base64StringFromImage:(UIImage *)image {
+  if (image == nil) {
+    return nil;
+  }
+
+  NSData *jpegData = UIImageJPEGRepresentation(image, 0.9);
+  if (jpegData == nil || jpegData.length == 0) {
+    NSData *pngData = UIImagePNGRepresentation(image);
+    if (pngData == nil || pngData.length == 0) {
+      return nil;
+    }
+    return [pngData base64EncodedStringWithOptions:0];
+  }
+
+  return [jpegData base64EncodedStringWithOptions:0];
 }
 
 - (id)valueForKey:(NSString *)key inObject:(id)object {
@@ -385,43 +752,109 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
     case BDFaceInitOK:
       return @"";
     case BDFaceLICENSE_LOCAL_FILE_ERROR:
-      return @"license文件读取失败";
+      return [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                    chinese:@"license文件读取失败"
+                                    english:@"Failed to read the license file"
+                         traditionalChinese:@"讀取 license 檔案失敗"
+                                   japanese:@"license ファイルの読み込みに失敗しました"];
     case BDFaceLICENSE_KEY_CHECK_ERROR:
-      return @"licenseId或加密Key校验失败";
+      return [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                    chinese:@"licenseId或加密Key校验失败"
+                                    english:@"licenseId or encrypt key verification failed"
+                         traditionalChinese:@"licenseId 或加密 Key 驗證失敗"
+                                   japanese:@"licenseId または暗号化キーの検証に失敗しました"];
     case BDFaceLICENSE_FUNCTION_CHECK_ERROR:
-      return @"当前license未开通采集能力";
+      return [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                    chinese:@"当前license未开通采集能力"
+                                    english:@"The current license does not include collection capability"
+                         traditionalChinese:@"目前 license 未開通採集能力"
+                                   japanese:@"現在の license では収集機能が有効になっていません"];
     case BDFaceLICENSE_TIME_EXPIRED:
-      return @"license已过期";
+      return [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                    chinese:@"license已过期"
+                                    english:@"The license has expired"
+                         traditionalChinese:@"license 已過期"
+                                   japanese:@"license の有効期限が切れています"];
     default:
-      return [NSString stringWithFormat:@"初始化失败(%ld)", (long)code];
+      return [NSString stringWithFormat:[self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                                               chinese:@"初始化失败(%ld)"
+                                                               english:@"Initialization failed (%ld)"
+                                                    traditionalChinese:@"初始化失敗（%ld）"
+                                                              japanese:@"初期化に失敗しました（%ld）"],
+                                        (long)code];
   }
 }
 
 - (NSString *)collectErrorMessageForCode:(BDFaceCompletionStatusCode)code {
   switch (code) {
     case BDFaceStatusSDKNotInit:
-      return @"SDK未初始化";
+      return [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                    chinese:@"SDK未初始化"
+                                    english:@"SDK not initialized"
+                         traditionalChinese:@"SDK 尚未初始化"
+                                   japanese:@"SDK が初期化されていません"];
     case BDFaceStatusSDKNotLoad:
-      return @"SDK未加载";
+      return [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                    chinese:@"SDK未加载"
+                                    english:@"SDK not loaded"
+                         traditionalChinese:@"SDK 尚未載入"
+                                   japanese:@"SDK が読み込まれていません"];
     case BDFaceStatusCameraError:
-      return @"没有相机权限";
+      return [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                    chinese:@"没有相机权限"
+                                    english:@"Camera permission is missing"
+                         traditionalChinese:@"沒有相機權限"
+                                   japanese:@"カメラ権限がありません"];
     case BDFaceStatusNetworkError:
-      return @"网络异常";
+      return [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                    chinese:@"网络异常"
+                                    english:@"Network error"
+                         traditionalChinese:@"網路異常"
+                                   japanese:@"ネットワークエラーです"];
     case BDFaceStatusTimeout:
-      return @"采集超时";
+      return [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                    chinese:@"采集超时"
+                                    english:@"Collection timed out"
+                         traditionalChinese:@"採集逾時"
+                                   japanese:@"収集がタイムアウトしました"];
     case BDFaceStatusCropImageError:
-      return @"抠图失败";
+      return [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                    chinese:@"抠图失败"
+                                    english:@"Failed to crop the image"
+                         traditionalChinese:@"擷取圖片失敗"
+                                   japanese:@"画像の切り出しに失敗しました"];
     case BDFaceStatusDetectSilentNoPass:
     case BDFaceStatusLivenessSilentNoPass:
-      return @"活体检测未通过";
+      return [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                    chinese:@"活体检测未通过"
+                                    english:@"Liveness detection did not pass"
+                         traditionalChinese:@"活體檢測未通過"
+                                   japanese:@"生体検知に失敗しました"];
     case BDFaceStatusLivenessActionNotMatch:
-      return @"动作不匹配";
+      return [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                    chinese:@"动作不匹配"
+                                    english:@"Action does not match"
+                         traditionalChinese:@"動作不匹配"
+                                   japanese:@"動作が一致しません"];
     case BDFaceStatusVideoRecordingFail:
-      return @"视频录制失败";
+      return [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                    chinese:@"视频录制失败"
+                                    english:@"Video recording failed"
+                         traditionalChinese:@"影片錄製失敗"
+                                   japanese:@"動画の録画に失敗しました"];
     case BDFaceStatusResultFail:
-      return @"图片结果构建失败";
+      return [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                    chinese:@"图片结果构建失败"
+                                    english:@"Failed to build the image result"
+                         traditionalChinese:@"建立圖片結果失敗"
+                                   japanese:@"画像結果の生成に失敗しました"];
     default:
-      return [NSString stringWithFormat:@"采集失败(%ld)", (long)code];
+      return [NSString stringWithFormat:[self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                                               chinese:@"采集失败(%ld)"
+                                                               english:@"Collection failed (%ld)"
+                                                    traditionalChinese:@"採集失敗（%ld）"
+                                                              japanese:@"収集に失敗しました（%ld）"],
+                                        (long)code];
   }
 }
 
