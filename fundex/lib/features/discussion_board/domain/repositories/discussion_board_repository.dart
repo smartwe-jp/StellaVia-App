@@ -9,6 +9,8 @@ abstract class DiscussionBoardRepository {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    int? linkedProjectId,
+    String? linkedProjectName,
   });
 
   Future<List<DiscussionThread>> submitReply({

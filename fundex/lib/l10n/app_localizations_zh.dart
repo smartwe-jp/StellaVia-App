@@ -809,6 +809,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get kizunarkComposePlaceholder => '分享你的投资观点...';
 
   @override
+  String get kizunarkAssociateFundAction => '关联FUND';
+
+  @override
+  String get kizunarkAssociateFundSheetTitle => '选择关联的FUND';
+
+  @override
+  String get kizunarkAssociateFundEmpty => '当前没有可关联的运用中FUND。';
+
+  @override
   String get kizunarkPostAction => '发布';
 
   @override
@@ -4134,6 +4143,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get kizunarkComposePlaceholder => '分享你的投資觀點...';
+
+  @override
+  String get kizunarkAssociateFundAction => '關聯FUND';
+
+  @override
+  String get kizunarkAssociateFundSheetTitle => '選擇關聯的FUND';
+
+  @override
+  String get kizunarkAssociateFundEmpty => '目前沒有可關聯的運用中FUND。';
 
   @override
   String get kizunarkPostAction => '發佈';

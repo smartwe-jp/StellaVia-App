@@ -47,13 +47,16 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    int? linkedProjectId,
+    String? linkedProjectName,
   }) async {
     final trimmed = content.trim();
     if (trimmed.isEmpty) {
       return loadThreads();
     }
     final postedAtUtc = DateTime.now().toUtc();
-    await _remote.sendComment(content: trimmed, projectId: projectId);
+    final effectiveProjectId = linkedProjectId ?? projectId;
+    await _remote.sendComment(content: trimmed, projectId: effectiveProjectId);
     final refreshed = await _refreshFirstPageAfterMutation();
     if (_containsRecentlyPostedThread(
       refreshed,
@@ -69,6 +72,8 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
       fallbackName: fallbackName,
       fallbackHandle: fallbackHandle,
       fallbackBadgeLabel: fallbackBadgeLabel,
+      linkedProjectId: effectiveProjectId,
+      linkedProjectName: linkedProjectName,
       postedAtUtc: postedAtUtc,
     );
     final merged = _prependOptimisticThread(
@@ -508,6 +513,8 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    required int? linkedProjectId,
+    required String? linkedProjectName,
     required DateTime postedAtUtc,
   }) {
     final authorName = fallbackName.trim().isEmpty
@@ -536,7 +543,16 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
       createdAtIso: postedAtUtc.toIso8601String(),
       commentCount: 0,
       replies: const <DiscussionReply>[],
-      fundReferenceId: projectId?.toString(),
+      fundReferenceLabel: _buildLinkedFundReferenceLabel(linkedProjectName),
+      fundReferenceId: linkedProjectId?.toString(),
     );
+  }
+
+  String? _buildLinkedFundReferenceLabel(String? projectName) {
+    final trimmed = projectName?.trim() ?? '';
+    if (trimmed.isEmpty) {
+      return null;
+    }
+    return '$trimmed →';
   }
 }

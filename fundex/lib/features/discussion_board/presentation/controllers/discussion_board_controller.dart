@@ -134,6 +134,8 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    int? linkedProjectId,
+    String? linkedProjectName,
   }) async {
     final content = state.composerText.trim();
     if (content.isEmpty || state.isPosting) {
@@ -148,6 +150,8 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
         fallbackName: fallbackName,
         fallbackHandle: fallbackHandle,
         fallbackBadgeLabel: fallbackBadgeLabel,
+        linkedProjectId: linkedProjectId,
+        linkedProjectName: linkedProjectName,
       );
       state = state.copyWith(
         isPosting: false,

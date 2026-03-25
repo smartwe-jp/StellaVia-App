@@ -814,6 +814,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get kizunarkComposePlaceholder => '投資の話題を共有しよう...';
 
   @override
+  String get kizunarkAssociateFundAction => '関連ファンド';
+
+  @override
+  String get kizunarkAssociateFundSheetTitle => '関連するファンドを選択';
+
+  @override
+  String get kizunarkAssociateFundEmpty => '関連できる運用中のファンドがありません。';
+
+  @override
   String get kizunarkPostAction => '投稿';
 
   @override

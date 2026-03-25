@@ -166,6 +166,7 @@ class KizunarkComposerCard extends StatefulWidget {
   const KizunarkComposerCard({
     super.key,
     this.leading,
+    this.footerLeading,
     required this.controller,
     required this.placeholder,
     required this.postLabel,
@@ -175,6 +176,7 @@ class KizunarkComposerCard extends StatefulWidget {
   });
 
   final Widget? leading;
+  final Widget? footerLeading;
   final TextEditingController controller;
   final String placeholder;
   final String postLabel;
@@ -267,8 +269,14 @@ class _KizunarkComposerCardState extends State<KizunarkComposerCard> {
                       border: Border(top: BorderSide(color: colors.border)),
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
+                        if (widget.footerLeading != null)
+                          Flexible(child: widget.footerLeading!)
+                        else
+                          const SizedBox.shrink(),
+                        if (widget.footerLeading != null)
+                          const SizedBox(width: 12),
                         _KizunarkGradientButton(
                           label: widget.postLabel,
                           onTap: widget.enabled ? widget.onPostTap : null,

@@ -862,6 +862,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kizunarkComposePlaceholder => 'Share your investment thoughts...';
 
   @override
+  String get kizunarkAssociateFundAction => 'Link Fund';
+
+  @override
+  String get kizunarkAssociateFundSheetTitle => 'Select a Fund to Link';
+
+  @override
+  String get kizunarkAssociateFundEmpty =>
+      'No active funds are available to link.';
+
+  @override
   String get kizunarkPostAction => 'Post';
 
   @override

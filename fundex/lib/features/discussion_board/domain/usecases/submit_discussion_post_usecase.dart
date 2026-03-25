@@ -12,6 +12,8 @@ class SubmitDiscussionPostUseCase {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    int? linkedProjectId,
+    String? linkedProjectName,
   }) {
     return _repository.submitPost(
       content: content,
@@ -19,6 +21,8 @@ class SubmitDiscussionPostUseCase {
       fallbackName: fallbackName,
       fallbackHandle: fallbackHandle,
       fallbackBadgeLabel: fallbackBadgeLabel,
+      linkedProjectId: linkedProjectId,
+      linkedProjectName: linkedProjectName,
     );
   }
 }

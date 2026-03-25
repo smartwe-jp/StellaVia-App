@@ -1673,6 +1673,24 @@ abstract class AppLocalizations {
   /// **'Share your investment thoughts...'**
   String get kizunarkComposePlaceholder;
 
+  /// No description provided for @kizunarkAssociateFundAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Link Fund'**
+  String get kizunarkAssociateFundAction;
+
+  /// No description provided for @kizunarkAssociateFundSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a Fund to Link'**
+  String get kizunarkAssociateFundSheetTitle;
+
+  /// No description provided for @kizunarkAssociateFundEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No active funds are available to link.'**
+  String get kizunarkAssociateFundEmpty;
+
   /// No description provided for @kizunarkPostAction.
   ///
   /// In en, this message translates to:
