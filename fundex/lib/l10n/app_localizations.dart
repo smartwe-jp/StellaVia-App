@@ -1697,6 +1697,18 @@ abstract class AppLocalizations {
   /// **'Just now'**
   String get kizunarkJustNow;
 
+  /// No description provided for @kizunarkTimeMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}m ago'**
+  String kizunarkTimeMinutesAgo(int count);
+
+  /// No description provided for @kizunarkTimeHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count}h ago'**
+  String kizunarkTimeHoursAgo(int count);
+
   /// No description provided for @kizunarkFallbackDisplayName.
   ///
   /// In en, this message translates to:
@@ -1792,6 +1804,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please sign in to post and comment.'**
   String get kizunarkLoginRequiredToPost;
+
+  /// No description provided for @kizunarkGuestLoginPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in or create an account to comment.'**
+  String get kizunarkGuestLoginPrompt;
 
   /// No description provided for @kizunarkEmptyState.
   ///
@@ -3839,7 +3857,7 @@ abstract class AppLocalizations {
   /// No description provided for @myPageTotalAssetsCaption.
   ///
   /// In en, this message translates to:
-  /// **'Operating + standby cash + distributions + lending'**
+  /// **'Operating + standby cash + distributions'**
   String get myPageTotalAssetsCaption;
 
   /// No description provided for @myPageMetricOperating.

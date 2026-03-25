@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../controllers/discussion_board_controller.dart';
 import '../state/discussion_board_state.dart';
+import '../support/discussion_board_time_label.dart';
 
 class DiscussionBoardThreadList extends StatelessWidget {
   const DiscussionBoardThreadList({
@@ -62,7 +63,11 @@ class DiscussionBoardThreadList extends StatelessWidget {
                         fontSize: 10,
                       ),
                       displayName: reply.author.displayName,
-                      timeLabel: reply.timeLabel,
+                      timeLabel: buildDiscussionBoardTimeLabel(
+                        context,
+                        createdAtIso: reply.createdAtIso,
+                        fallbackLabel: reply.timeLabel,
+                      ),
                       body: reply.body,
                       quoteTitle: reply.quote?.sourceText,
                       quoteBody: reply.quote?.body,
@@ -95,7 +100,11 @@ class DiscussionBoardThreadList extends StatelessWidget {
                 badgeForegroundColor: Color(
                   thread.author.badge.foregroundColorValue,
                 ),
-                timeLabel: thread.timeLabel,
+                timeLabel: buildDiscussionBoardTimeLabel(
+                  context,
+                  createdAtIso: thread.createdAtIso,
+                  fallbackLabel: thread.timeLabel,
+                ),
                 body: thread.body,
                 commentCount: thread.commentCount,
                 onToggleRepliesTap: () => controller.toggleReplies(thread.id),

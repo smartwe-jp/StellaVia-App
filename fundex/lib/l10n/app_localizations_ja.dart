@@ -826,6 +826,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get kizunarkJustNow => 'たった今';
 
   @override
+  String kizunarkTimeMinutesAgo(int count) {
+    return '$count分前';
+  }
+
+  @override
+  String kizunarkTimeHoursAgo(int count) {
+    return '$count時間前';
+  }
+
+  @override
   String get kizunarkFallbackDisplayName => '投資家**';
 
   @override
@@ -872,6 +882,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get kizunarkLoginRequiredToPost => '投稿・コメントにはログインが必要です';
+
+  @override
+  String get kizunarkGuestLoginPrompt => 'コメントするには、ログインまたは新規登録してください。';
 
   @override
   String get kizunarkEmptyState => 'まだ投稿がありません。最初の話題を投稿しましょう。';
@@ -1940,7 +1953,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageTotalAssetsLabel => '総資産額';
 
   @override
-  String get myPageTotalAssetsCaption => '運用中 + 待機資金 + 分配金 + 貸付型';
+  String get myPageTotalAssetsCaption => '運用中 + 待機資金 + 分配金';
 
   @override
   String get myPageMetricOperating => '運用中';

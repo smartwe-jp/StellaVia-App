@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -11,6 +12,7 @@ import '../../../auth/presentation/providers/auth_providers.dart';
 import '../controllers/discussion_board_controller.dart';
 import '../providers/discussion_board_providers.dart';
 import '../state/discussion_board_state.dart';
+import '../support/discussion_board_time_label.dart';
 
 class DiscussionBoardTabPage extends ConsumerStatefulWidget {
   const DiscussionBoardTabPage({super.key});
@@ -291,24 +293,31 @@ class _DiscussionBoardTabPageState
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                  child: KizunarkComposerCard(
-                    leading: KizunarkAvatarBadge(
-                      text: _resolveAvatarText(currentUser),
-                      gradientColors: const <Color>[
-                        AppColorTokens.kizunarkPrimary,
-                        AppColorTokens.kizunarkSecondary,
-                      ],
-                      size: 32,
-                      fontSize: 13,
-                    ),
-                    controller: _composerController,
-                    placeholder: l10n.kizunarkComposePlaceholder,
-                    postLabel: l10n.kizunarkPostAction,
-                    enabled: !state.isPosting && isAuthenticated,
-                    onChanged: controller.updateComposerText,
-                    onPostTap: () =>
-                        _submitPost(isAuthenticated: isAuthenticated),
-                  ),
+                  child: isAuthenticated
+                      ? KizunarkComposerCard(
+                          leading: KizunarkAvatarBadge(
+                            text: _resolveAvatarText(currentUser),
+                            gradientColors: const <Color>[
+                              AppColorTokens.kizunarkPrimary,
+                              AppColorTokens.kizunarkSecondary,
+                            ],
+                            size: 32,
+                            fontSize: 13,
+                          ),
+                          controller: _composerController,
+                          placeholder: l10n.kizunarkComposePlaceholder,
+                          postLabel: l10n.kizunarkPostAction,
+                          enabled: !state.isPosting && isAuthenticated,
+                          onChanged: controller.updateComposerText,
+                          onPostTap: () =>
+                              _submitPost(isAuthenticated: isAuthenticated),
+                        )
+                      : _KizunarkGuestPrompt(
+                          message: l10n.kizunarkGuestLoginPrompt,
+                          onLoginTap: () => context.push('/login'),
+                          onRegisterTap: () =>
+                              context.push('/login?openRegister=1'),
+                        ),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
@@ -390,7 +399,11 @@ class _DiscussionBoardTabPageState
                       fontSize: 10,
                     ),
                     displayName: reply.author.displayName,
-                    timeLabel: reply.timeLabel,
+                    timeLabel: buildDiscussionBoardTimeLabel(
+                      context,
+                      createdAtIso: reply.createdAtIso,
+                      fallbackLabel: reply.timeLabel,
+                    ),
                     body: reply.body,
                     quoteTitle: reply.quote?.sourceText,
                     quoteBody: reply.quote?.body,
@@ -410,18 +423,19 @@ class _DiscussionBoardTabPageState
           final replySection = Column(
             children: <Widget>[
               ...replies,
-              KizunarkReplyComposer(
-                controller: replyController,
-                placeholder: l10n.kizunarkReplyPlaceholder,
-                sendLabel: l10n.kizunarkReplySendAction,
-                enabled:
-                    !state.replySubmittingThreadIds.contains(thread.id) &&
-                    isAuthenticated,
-                onChanged: (String value) =>
-                    controller.updateReplyDraft(thread.id, value),
-                onSendTap: () =>
-                    _submitReply(thread.id, isAuthenticated: isAuthenticated),
-              ),
+              if (isAuthenticated)
+                KizunarkReplyComposer(
+                  controller: replyController,
+                  placeholder: l10n.kizunarkReplyPlaceholder,
+                  sendLabel: l10n.kizunarkReplySendAction,
+                  enabled:
+                      !state.replySubmittingThreadIds.contains(thread.id) &&
+                      isAuthenticated,
+                  onChanged: (String value) =>
+                      controller.updateReplyDraft(thread.id, value),
+                  onSendTap: () =>
+                      _submitReply(thread.id, isAuthenticated: isAuthenticated),
+                ),
             ],
           );
 
@@ -445,7 +459,11 @@ class _DiscussionBoardTabPageState
               badgeForegroundColor: Color(
                 thread.author.badge.foregroundColorValue,
               ),
-              timeLabel: thread.timeLabel,
+              timeLabel: buildDiscussionBoardTimeLabel(
+                context,
+                createdAtIso: thread.createdAtIso,
+                fallbackLabel: thread.timeLabel,
+              ),
               body: thread.body,
               fundReferenceChip: thread.fundReferenceLabel == null
                   ? null
@@ -486,6 +504,60 @@ class _DiscussionBoardTabPageState
             ),
           ),
       ],
+    );
+  }
+}
+
+class _KizunarkGuestPrompt extends StatelessWidget {
+  const _KizunarkGuestPrompt({
+    required this.message,
+    required this.onLoginTap,
+    required this.onRegisterTap,
+  });
+
+  final String message;
+  final VoidCallback onLoginTap;
+  final VoidCallback onRegisterTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final l10n = context.l10n;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: colors.border),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              message,
+              style: appText.body.copyWith(color: colors.textSecondary),
+            ),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 12,
+              runSpacing: 6,
+              children: <Widget>[
+                TextButton(
+                  onPressed: onLoginTap,
+                  child: Text(l10n.loginTitle),
+                ),
+                TextButton(
+                  onPressed: onRegisterTap,
+                  child: Text(l10n.loginCreateAccount),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

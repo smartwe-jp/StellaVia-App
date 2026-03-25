@@ -297,6 +297,22 @@
   "kizunarkReplyPlaceholder": "输入评论...",
   "kizunarkReplySendAction": "发送",
   "kizunarkJustNow": "刚刚",
+  "kizunarkTimeMinutesAgo": "{count}分钟前",
+  "@kizunarkTimeMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkTimeHoursAgo": "{count}小时前",
+  "@kizunarkTimeHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "kizunarkFallbackDisplayName": "投资者**",
   "kizunarkFallbackHandle": "user***@",
   "kizunarkInvestorBadge": "投资者",
@@ -313,6 +329,7 @@
   "kizunarkCopySuccessNotice": "消息已复制。",
   "kizunarkMenuCancelAction": "取消",
   "kizunarkLoginRequiredToPost": "发帖和评论需要先登录",
+  "kizunarkGuestLoginPrompt": "如需评论，请登录或注册。",
   "kizunarkEmptyState": "还没有帖子，来发起第一条讨论吧。",
   "investmentTabHeadline": "投资相关模块（框架）",
   "investmentTabSubtitle": "后续承接产品列表、持仓、申购赎回、账单等能力。",
@@ -729,7 +746,7 @@
   "fundDetailSchemeDistributedCapitalTitle": "可分配原资",
   "myPageTitle": "我的页面",
   "myPageTotalAssetsLabel": "总资产",
-  "myPageTotalAssetsCaption": "运用中 + 待机资金 + 分配金 + 借贷型",
+  "myPageTotalAssetsCaption": "运用中 + 待机资金 + 分配金",
   "myPageMetricOperating": "运用中",
   "myPageMetricStandby": "待机资金",
   "myPageMetricAccumulatedDistribution": "累计分配",

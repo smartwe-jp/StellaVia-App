@@ -297,6 +297,22 @@
   "kizunarkReplyPlaceholder": "Write a comment...",
   "kizunarkReplySendAction": "Send",
   "kizunarkJustNow": "Just now",
+  "kizunarkTimeMinutesAgo": "{count}m ago",
+  "@kizunarkTimeMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkTimeHoursAgo": "{count}h ago",
+  "@kizunarkTimeHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "kizunarkFallbackDisplayName": "Investor**",
   "kizunarkFallbackHandle": "usr***@",
   "kizunarkInvestorBadge": "Investor",
@@ -313,6 +329,7 @@
   "kizunarkCopySuccessNotice": "Message copied.",
   "kizunarkMenuCancelAction": "Cancel",
   "kizunarkLoginRequiredToPost": "Please sign in to post and comment.",
+  "kizunarkGuestLoginPrompt": "Sign in or create an account to comment.",
   "kizunarkEmptyState": "No posts yet. Start the first discussion.",
   "investmentTabHeadline": "Investment Module (Framework)",
   "investmentTabSubtitle": "Products, portfolio, subscriptions/redemptions, and statements will be added here.",
@@ -729,7 +746,7 @@
   "fundDetailSchemeDistributedCapitalTitle": "Distributable capital",
   "myPageTitle": "My Page",
   "myPageTotalAssetsLabel": "Total assets",
-  "myPageTotalAssetsCaption": "Operating + standby cash + distributions + lending",
+  "myPageTotalAssetsCaption": "Operating + standby cash + distributions",
   "myPageMetricOperating": "Operating",
   "myPageMetricStandby": "Standby cash",
   "myPageMetricAccumulatedDistribution": "Total distributions",

@@ -699,6 +699,25 @@ class _AuthMethodRegisterPageState
                       labelText: l10n.registerEmailAccountLabel,
                       hintText: l10n.registerEmailAccountLabel,
                       leadingIcon: Icons.alternate_email_rounded,
+                      trailing: Tooltip(
+                        message: _sendCodeButtonLabel(l10n.registerSendCode),
+                        child: AppNavigationIconButton(
+                          key: const Key(
+                            'register_account_send_code_button',
+                          ),
+                          icon: Icons.send_rounded,
+                          size: 34,
+                          borderRadius: 10,
+                          backgroundColor: Theme.of(context).appColors.primary
+                              .withValues(alpha: _canSendCode ? 0.12 : 0.06),
+                          foregroundColor: _canSendCode
+                              ? Theme.of(context).appColors.primary
+                              : Theme.of(context).appColors.primary.withValues(
+                                  alpha: 0.4,
+                                ),
+                          onTap: _canSendCode ? _sendCode : null,
+                        ),
+                      ),
                       onChanged: (_) => setState(() {}),
                     )
                   : PhoneTextField(

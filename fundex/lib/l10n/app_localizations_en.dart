@@ -874,6 +874,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kizunarkJustNow => 'Just now';
 
   @override
+  String kizunarkTimeMinutesAgo(int count) {
+    return '${count}m ago';
+  }
+
+  @override
+  String kizunarkTimeHoursAgo(int count) {
+    return '${count}h ago';
+  }
+
+  @override
   String get kizunarkFallbackDisplayName => 'Investor**';
 
   @override
@@ -921,6 +931,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get kizunarkLoginRequiredToPost =>
       'Please sign in to post and comment.';
+
+  @override
+  String get kizunarkGuestLoginPrompt =>
+      'Sign in or create an account to comment.';
 
   @override
   String get kizunarkEmptyState => 'No posts yet. Start the first discussion.';
@@ -2046,7 +2060,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myPageTotalAssetsCaption =>
-      'Operating + standby cash + distributions + lending';
+      'Operating + standby cash + distributions';
 
   @override
   String get myPageMetricOperating => 'Operating';

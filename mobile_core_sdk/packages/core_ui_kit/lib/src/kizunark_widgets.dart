@@ -162,7 +162,7 @@ class KizunarkAvatarBadge extends StatelessWidget {
   }
 }
 
-class KizunarkComposerCard extends StatelessWidget {
+class KizunarkComposerCard extends StatefulWidget {
   const KizunarkComposerCard({
     super.key,
     this.leading,
@@ -183,38 +183,76 @@ class KizunarkComposerCard extends StatelessWidget {
   final ValueChanged<String>? onChanged;
 
   @override
+  State<KizunarkComposerCard> createState() => _KizunarkComposerCardState();
+}
+
+class _KizunarkComposerCardState extends State<KizunarkComposerCard> {
+  late final FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode()..addListener(_handleFocusChanged);
+  }
+
+  @override
+  void dispose() {
+    _focusNode
+      ..removeListener(_handleFocusChanged)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _handleFocusChanged() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
+    final isFocused = _focusNode.hasFocus;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        if (leading != null) ...<Widget>[leading!, const SizedBox(width: 10)],
+        if (widget.leading != null) ...<Widget>[
+          widget.leading!,
+          const SizedBox(width: 10),
+        ],
         Expanded(
           child: Opacity(
-            opacity: enabled ? 1 : 0.72,
+            opacity: widget.enabled ? 1 : 0.72,
             child: Container(
               padding: const EdgeInsets.fromLTRB(3, 3, 3, 3),
               decoration: BoxDecoration(
                 color: colors.surface,
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: colors.border, width: 1.5),
+                border: Border.all(
+                  color: isFocused ? colors.communityPrimary : colors.border,
+                  width: isFocused ? 1.8 : 1.5,
+                ),
               ),
               child: Column(
                 children: <Widget>[
                   TextField(
-                    controller: controller,
-                    enabled: enabled,
+                    controller: widget.controller,
+                    enabled: widget.enabled,
+                    focusNode: _focusNode,
                     minLines: 2,
                     maxLines: 4,
-                    onChanged: onChanged,
-                    style: appText.body.copyWith(color: colors.textPrimary),
+                    onChanged: widget.onChanged,
+                    style: appText.inputText.copyWith(
+                      color: colors.textPrimary,
+                    ),
                     decoration: InputDecoration(
-                      hintText: placeholder,
-                      hintStyle: appText.bodyMuted.copyWith(
+                      hintText: widget.placeholder,
+                      hintStyle: appText.inputText.copyWith(
                         color: colors.textTertiary,
+                        fontWeight: FontWeight.w400,
                       ),
                       border: InputBorder.none,
                       enabledBorder: InputBorder.none,
@@ -232,8 +270,8 @@ class KizunarkComposerCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         _KizunarkGradientButton(
-                          label: postLabel,
-                          onTap: enabled ? onPostTap : null,
+                          label: widget.postLabel,
+                          onTap: widget.enabled ? widget.onPostTap : null,
                         ),
                       ],
                     ),
@@ -416,9 +454,9 @@ class KizunarkPostCard extends StatelessWidget {
               const SizedBox(height: 10),
               Text(
                 body,
-                style: appText.body.copyWith(
+                style: appText.inputText.copyWith(
                   color: colors.textPrimary,
-                  height: 1.7,
+                  height: 1.62,
                 ),
               ),
               if (fundReferenceChip != null) ...<Widget>[
@@ -557,7 +595,7 @@ class KizunarkReplyTile extends StatelessWidget {
                               const SizedBox(height: 2),
                               Text(
                                 quoteBody!,
-                                style: appText.caption.copyWith(
+                                style: appText.bodyMuted.copyWith(
                                   color: colors.textSecondary,
                                   height: 1.6,
                                 ),
@@ -570,7 +608,7 @@ class KizunarkReplyTile extends StatelessWidget {
                     const SizedBox(height: 6),
                     Text(
                       body,
-                      style: appText.caption.copyWith(
+                      style: appText.body.copyWith(
                         color: colors.textSecondary,
                         height: 1.6,
                       ),
@@ -626,11 +664,12 @@ class KizunarkReplyComposer extends StatelessWidget {
                 minLines: 1,
                 maxLines: 2,
                 onChanged: onChanged,
-                style: appText.caption.copyWith(color: colors.textPrimary),
+                style: appText.inputText.copyWith(color: colors.textPrimary),
                 decoration: InputDecoration(
                   hintText: placeholder,
-                  hintStyle: appText.caption.copyWith(
+                  hintStyle: appText.inputText.copyWith(
                     color: colors.textTertiary,
+                    fontWeight: FontWeight.w400,
                   ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 12,

@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
-import '../../../auth/presentation/providers/auth_providers.dart';
 import '../providers/main_shell_providers.dart';
 
 class MainShellPage extends ConsumerWidget {
@@ -13,12 +12,6 @@ class MainShellPage extends ConsumerWidget {
   final StatefulNavigationShell navigationShell;
 
   void _onDestinationSelected(BuildContext context, WidgetRef ref, int index) {
-    final isAuthenticated =
-        ref.read(isAuthenticatedProvider).asData?.value ?? false;
-    if (index == 2 && !isAuthenticated) {
-      context.push('/login');
-      return;
-    }
     navigationShell.goBranch(
       index,
       initialLocation: index == navigationShell.currentIndex,

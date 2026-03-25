@@ -66,6 +66,7 @@ String? resolveAuthRedirect({
       location == '/home' ||
       location == '/home/free-market' ||
       location.startsWith('/home/free-market/') ||
+      location == '/discussion-board' ||
       location == '/funds' ||
       location.startsWith('/funds/') ||
       location == '/profile/settings' ||

@@ -821,6 +821,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get kizunarkJustNow => '刚刚';
 
   @override
+  String kizunarkTimeMinutesAgo(int count) {
+    return '$count分钟前';
+  }
+
+  @override
+  String kizunarkTimeHoursAgo(int count) {
+    return '$count小时前';
+  }
+
+  @override
   String get kizunarkFallbackDisplayName => '投资者**';
 
   @override
@@ -867,6 +877,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get kizunarkLoginRequiredToPost => '发帖和评论需要先登录';
+
+  @override
+  String get kizunarkGuestLoginPrompt => '如需评论，请登录或注册。';
 
   @override
   String get kizunarkEmptyState => '还没有帖子，来发起第一条讨论吧。';
@@ -1927,7 +1940,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageTotalAssetsLabel => '总资产';
 
   @override
-  String get myPageTotalAssetsCaption => '运用中 + 待机资金 + 分配金 + 借贷型';
+  String get myPageTotalAssetsCaption => '运用中 + 待机资金 + 分配金';
 
   @override
   String get myPageMetricOperating => '运用中';
@@ -4062,6 +4075,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get kizunarkJustNow => '剛剛';
 
   @override
+  String kizunarkTimeMinutesAgo(int count) {
+    return '$count分鐘前';
+  }
+
+  @override
+  String kizunarkTimeHoursAgo(int count) {
+    return '$count小時前';
+  }
+
+  @override
   String get kizunarkFallbackDisplayName => '投資者**';
 
   @override
@@ -4108,6 +4131,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get kizunarkLoginRequiredToPost => '發文與留言需要先登入';
+
+  @override
+  String get kizunarkGuestLoginPrompt => '如需留言，請登入或註冊。';
 
   @override
   String get kizunarkEmptyState => '還沒有貼文，來發起第一則討論吧。';
@@ -5168,7 +5194,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageTotalAssetsLabel => '總資產';
 
   @override
-  String get myPageTotalAssetsCaption => '运用中 + 待机资金 + 分配金 + 借贷型';
+  String get myPageTotalAssetsCaption => '运用中 + 待机资金 + 分配金';
 
   @override
   String get myPageMetricOperating => '运用中';

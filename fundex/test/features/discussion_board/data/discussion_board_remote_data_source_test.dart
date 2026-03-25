@@ -57,7 +57,10 @@ CoreHttpClient _buildClient(
 void main() {
   group('DiscussionBoardRemoteDataSourceImpl', () {
     test('comment endpoints should include crowdfunding prefix', () {
-      expect(DiscussionBoardApiPaths.commentPage, '/crowdfunding/comment/page');
+      expect(
+        DiscussionBoardApiPaths.commentPage,
+        '/crowdfunding/offline/comment-page',
+      );
       expect(DiscussionBoardApiPaths.commentSend, '/crowdfunding/comment/send');
       expect(
         DiscussionBoardApiPaths.commentDelete,
@@ -69,7 +72,7 @@ void main() {
       final client = _buildClient((options) async {
         expect(options.method, 'POST');
         expect(options.path, DiscussionBoardApiPaths.commentPage);
-        expect(options.extra['auth_required'], true);
+        expect(options.extra['auth_required'], false);
         expect(options.data, <String, dynamic>{
           'startPage': 1,
           'limit': 50,

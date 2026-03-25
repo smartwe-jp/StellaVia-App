@@ -333,7 +333,7 @@ class AppThemeFactory {
         height: 1.3,
       ),
       inputText: sans(
-        size: 15,
+        size: 14,
         weight: FontWeight.w500,
         color: semanticColors.textPrimary,
         height: 1.42,

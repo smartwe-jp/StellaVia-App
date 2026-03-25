@@ -297,6 +297,22 @@
   "kizunarkReplyPlaceholder": "コメントを入力...",
   "kizunarkReplySendAction": "送信",
   "kizunarkJustNow": "たった今",
+  "kizunarkTimeMinutesAgo": "{count}分前",
+  "@kizunarkTimeMinutesAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkTimeHoursAgo": "{count}時間前",
+  "@kizunarkTimeHoursAgo": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "kizunarkFallbackDisplayName": "投資家**",
   "kizunarkFallbackHandle": "user***@",
   "kizunarkInvestorBadge": "投資家",
@@ -313,6 +329,7 @@
   "kizunarkCopySuccessNotice": "メッセージをコピーしました。",
   "kizunarkMenuCancelAction": "キャンセル",
   "kizunarkLoginRequiredToPost": "投稿・コメントにはログインが必要です",
+  "kizunarkGuestLoginPrompt": "コメントするには、ログインまたは新規登録してください。",
   "kizunarkEmptyState": "まだ投稿がありません。最初の話題を投稿しましょう。",
   "investmentTabHeadline": "投資関連モジュール（枠組み）",
   "investmentTabSubtitle": "商品一覧、保有、申込/解約、明細などを今後実装します。",
@@ -729,7 +746,7 @@
   "fundDetailSchemeDistributedCapitalTitle": "分配原資",
   "myPageTitle": "マイページ",
   "myPageTotalAssetsLabel": "総資産額",
-  "myPageTotalAssetsCaption": "運用中 + 待機資金 + 分配金 + 貸付型",
+  "myPageTotalAssetsCaption": "運用中 + 待機資金 + 分配金",
   "myPageMetricOperating": "運用中",
   "myPageMetricStandby": "待機資金",
   "myPageMetricAccumulatedDistribution": "累計分配",

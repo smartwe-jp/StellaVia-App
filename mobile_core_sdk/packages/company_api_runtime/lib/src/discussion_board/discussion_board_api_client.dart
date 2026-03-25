@@ -6,7 +6,7 @@ import 'discussion_comment_dto.dart';
 class DiscussionBoardApiPaths {
   const DiscussionBoardApiPaths._();
 
-  static const String commentPage = '/crowdfunding/comment/page';
+  static const String commentPage = '/crowdfunding/offline/comment-page';
   static const String commentSend = '/crowdfunding/comment/send';
   static const String commentDelete = '/crowdfunding/comment/delete';
 }
@@ -39,7 +39,7 @@ class DiscussionBoardApiClient {
     final response = await _client.dio.post<Map<String, dynamic>>(
       commentPagePath,
       data: payload,
-      options: authRequired(true),
+      options: authRequired(false),
     );
 
     final rows = _envelopeCodec.extractPagedRows(
