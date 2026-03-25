@@ -120,19 +120,19 @@ class _FundProjectDetailCommentsSectionState
           controller: controller,
         ),
         const SizedBox(height: 16),
-        if (isAuthenticated)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-            child: KizunarkComposerCard(
-              controller: _composerController,
-              placeholder: l10n.kizunarkComposePlaceholder,
-              postLabel: l10n.kizunarkPostAction,
-              enabled: !state.isPosting,
-              onChanged: controller.updateComposerText,
-              onPostTap: () =>
-                  _submitPost(context, l10n, controller, isAuthenticated),
-            ),
-          ),
+        // if (isAuthenticated)
+        //   Padding(
+        //     padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+        //     child: KizunarkComposerCard(
+        //       controller: _composerController,
+        //       placeholder: l10n.kizunarkComposePlaceholder,
+        //       postLabel: l10n.kizunarkPostAction,
+        //       enabled: !state.isPosting,
+        //       onChanged: controller.updateComposerText,
+        //       onPostTap: () =>
+        //           _submitPost(context, l10n, controller, isAuthenticated),
+        //     ),
+        //   ),
         if (widget.onViewMoreTap != null) ...<Widget>[
           const SizedBox(height: 8),
           OutlinedButton(
