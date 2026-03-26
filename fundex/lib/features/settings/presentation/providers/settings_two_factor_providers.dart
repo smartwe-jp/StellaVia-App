@@ -127,7 +127,9 @@ final settingsPhoneVerifiedProvider = FutureProvider.autoDispose<bool>((
   return snapshot.verified;
 });
 
-final settingsEmailVerifiedProvider = FutureProvider.autoDispose<bool>((ref) async {
+final settingsEmailVerifiedProvider = FutureProvider.autoDispose<bool>((
+  ref,
+) async {
   final user = await ref.watch(currentAuthUserProvider.future).catchError((
     Object _,
   ) {
@@ -135,6 +137,14 @@ final settingsEmailVerifiedProvider = FutureProvider.autoDispose<bool>((ref) asy
   });
   if (user == null) {
     return false;
+  }
+
+  // /crowdfunding/user/index-new is the source of truth here:
+  // status == 0 means email is not bound yet; any other value is treated
+  // as already verified/bound.
+  final emailBindingStatus = user.status;
+  if (emailBindingStatus != null) {
+    return emailBindingStatus != 0;
   }
 
   final remoteStatus = await ref

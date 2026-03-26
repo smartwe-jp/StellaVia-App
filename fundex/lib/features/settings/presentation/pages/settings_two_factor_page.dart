@@ -72,6 +72,8 @@ class SettingsTwoFactorPage extends ConsumerWidget {
                   verifiedValueLabel: l10n.settingsVerificationEmailLabel,
                   verifiedValue: verifiedEmail.asData?.value,
                   verifiedAt: emailVerifiedAt.asData?.value,
+                  showVerifiedValueLabel: false,
+                  showVerifiedAt: false,
                   isLoading:
                       emailVerified.isLoading ||
                       verifiedEmail.isLoading ||
@@ -127,6 +129,8 @@ class _VerificationStatusText extends StatelessWidget {
     this.verifiedValueLabel,
     this.verifiedValue,
     required this.verifiedAt,
+    this.showVerifiedValueLabel = true,
+    this.showVerifiedAt = true,
     required this.isLoading,
   });
 
@@ -134,6 +138,8 @@ class _VerificationStatusText extends StatelessWidget {
   final String? verifiedValueLabel;
   final String? verifiedValue;
   final DateTime? verifiedAt;
+  final bool showVerifiedValueLabel;
+  final bool showVerifiedAt;
   final bool isLoading;
 
   @override
@@ -163,14 +169,15 @@ class _VerificationStatusText extends StatelessWidget {
             color: verified ? colors.success : colors.textSecondary,
           ),
         ),
-        if (verified &&
-            (verifiedValueLabel?.trim().isNotEmpty ?? false) &&
-            (verifiedValue?.trim().isNotEmpty ?? false))
+        if (verified && (verifiedValue?.trim().isNotEmpty ?? false))
           Text(
-            '${verifiedValueLabel!.trim()} ${verifiedValue!.trim()}',
+            showVerifiedValueLabel &&
+                    (verifiedValueLabel?.trim().isNotEmpty ?? false)
+                ? '${verifiedValueLabel!.trim()} ${verifiedValue!.trim()}'
+                : verifiedValue!.trim(),
             style: appText.micro.copyWith(color: colors.textSecondary),
           ),
-        if (verified && verifiedAt != null)
+        if (showVerifiedAt && verified && verifiedAt != null)
           Text(
             '${l10n.settingsVerificationLastUpdatedLabel} ${_formatDateTime(verifiedAt!)}',
             style: appText.micro.copyWith(color: colors.textTertiary),

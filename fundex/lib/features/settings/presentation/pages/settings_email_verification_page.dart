@@ -19,7 +19,7 @@ class SettingsEmailVerificationPage extends ConsumerStatefulWidget {
 
 class _SettingsEmailVerificationPageState
     extends ConsumerState<SettingsEmailVerificationPage> {
-  static final RegExp _emailRegExp = RegExp(r'^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
+  static final RegExp _emailRegExp = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
 
   late final TextEditingController _emailController;
   late final TextEditingController _codeController;
