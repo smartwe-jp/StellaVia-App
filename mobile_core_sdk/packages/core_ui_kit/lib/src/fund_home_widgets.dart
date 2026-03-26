@@ -10,7 +10,7 @@ class FundHomeHeroSummary extends StatelessWidget {
     required this.greeting,
     required this.totalAssetsLabel,
     required this.totalAssetsValue,
-    required this.totalAssetsDelta,
+    this.totalAssetsDelta,
     required this.activeInvestmentLabel,
     required this.activeInvestmentValue,
     required this.totalDividendsLabel,
@@ -22,7 +22,7 @@ class FundHomeHeroSummary extends StatelessWidget {
   final String greeting;
   final String totalAssetsLabel;
   final String totalAssetsValue;
-  final String totalAssetsDelta;
+  final String? totalAssetsDelta;
   final String activeInvestmentLabel;
   final String activeInvestmentValue;
   final String totalDividendsLabel;
@@ -741,7 +741,10 @@ class FundSectionHeader extends StatelessWidget {
               visualDensity: const VisualDensity(horizontal: -2, vertical: -2),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             ),
-            child: Text(actionLabel ?? '', style: appText.bodyStrong.copyWith(color: colors.primary)),
+            child: Text(
+              actionLabel ?? '',
+              style: appText.bodyStrong.copyWith(color: colors.primary),
+            ),
           ),
       ],
     );

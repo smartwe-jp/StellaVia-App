@@ -183,7 +183,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
           accountStatistic?.total,
           currencyFormatter,
         ),
-        totalAssetsDelta: l10n.homeHeroMonthlyDelta,
+        totalAssetsDelta: null,
         activeInvestmentLabel: l10n.homeHeroActiveInvestmentLabel,
         activeInvestmentValue: _formatCompactCurrencyValue(
           accountStatistic?.crowdfundingTotal,
