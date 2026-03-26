@@ -16,6 +16,7 @@ import '../../../member_profile/domain/entities/member_profile_details.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
+import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 import '../support/home_display_name_resolver.dart';
 
 const Set<int> _featuredProjectStatuses = <int>{0, 1};
@@ -30,7 +31,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
     final authState = ref.watch(isAuthenticatedProvider);
     final networkAvailability =
         ref.watch(appNetworkAvailabilityProvider).asData?.value ??
-            AppNetworkAvailability.online;
+        AppNetworkAvailability.online;
     final isAuthenticated = authState.asData?.value ?? false;
     final currentUser = ref.watch(currentAuthUserProvider).asData?.value;
     final asyncProjects = ref.watch(fundProjectListProvider);
@@ -38,11 +39,18 @@ class HomeOverviewTabPage extends ConsumerWidget {
       secondaryMarketMarketplaceListProvider,
     );
     final asyncMemberProfile = ref.watch(memberProfileDetailsProvider);
-    final accountStatistic =
-        ref.watch(myPageAccountStatisticProvider).asData?.value;
+    final asyncVerificationStatus = ref.watch(
+      settingsRemoteVerificationStatusProvider,
+    );
+    final accountStatistic = ref
+        .watch(myPageAccountStatisticProvider)
+        .asData
+        ?.value;
     final memberProfile = asyncMemberProfile.asData?.value;
+    final verificationStatus = asyncVerificationStatus.asData?.value;
     final projects = asyncProjects.asData?.value ?? const <FundProject>[];
-    final secondaryMarketRecords = asyncSecondaryMarketRecords.asData?.value ??
+    final secondaryMarketRecords =
+        asyncSecondaryMarketRecords.asData?.value ??
         const <MyPageOrderInquiryRecord>[];
     final locale = Localizations.localeOf(context);
     final currencyFormatter = NumberFormat.currency(
@@ -52,6 +60,45 @@ class HomeOverviewTabPage extends ConsumerWidget {
     );
 
     final reminders = <FundReminderData>[
+      if ((currentUser?.status ?? -1) == 0)
+        FundReminderData(
+          leading: Icon(
+            Icons.alternate_email_rounded,
+            size: 18,
+            color: Theme.of(context).appColors.warningAction,
+          ),
+          title: l10n.homeReminderEmailVerificationTitle,
+          message: l10n.homeReminderEmailVerificationBody,
+          tone: FundReminderTone.warning,
+          badgeLabel: l10n.homeReminderProfileBadge,
+          onTap: () => context.push('/profile/settings/two-factor/email'),
+        ),
+      if (verificationStatus?.isPhoneVerified == false)
+        FundReminderData(
+          leading: Icon(
+            Icons.sms_outlined,
+            size: 18,
+            color: Theme.of(context).appColors.warningAction,
+          ),
+          title: l10n.homeReminderPhoneVerificationTitle,
+          message: l10n.homeReminderPhoneVerificationBody,
+          tone: FundReminderTone.warning,
+          badgeLabel: l10n.homeReminderProfileBadge,
+          onTap: () => context.push('/profile/settings/two-factor/phone'),
+        ),
+      if (verificationStatus?.isRealPersonVerified == false)
+        FundReminderData(
+          leading: const Icon(
+            Icons.verified_user_outlined,
+            size: 18,
+            color: Color(0xFFFBBF24),
+          ),
+          title: l10n.homeReminderRealPersonVerificationTitle,
+          message: l10n.homeReminderRealPersonVerificationBody,
+          tone: FundReminderTone.danger,
+          badgeLabel: l10n.homeReminderProfileBadge,
+          onTap: () => context.push('/profile/settings/two-factor/face'),
+        ),
       if (_shouldShowMemberProfileReminder(currentUser))
         FundReminderData(
           leading: const Icon(
@@ -125,46 +172,46 @@ class HomeOverviewTabPage extends ConsumerWidget {
     final topSection = switch ((authState.isLoading, isAuthenticated)) {
       (true, _) => const SizedBox(height: UiTokens.spacing12),
       (_, true) => FundHomeHeroSummary(
-          greeting: l10n.homeWelcomeUser(
-            resolveHomeDisplayName(
-              locale: Localizations.localeOf(context),
-              user: currentUser,
-            ),
+        greeting: l10n.homeWelcomeUser(
+          resolveHomeDisplayName(
+            locale: Localizations.localeOf(context),
+            user: currentUser,
           ),
-          totalAssetsLabel: l10n.homeHeroTotalAssetsAmountLabel,
-          totalAssetsValue: _formatCurrencyValue(
-            accountStatistic?.total,
-            currencyFormatter,
-          ),
-          totalAssetsDelta: l10n.homeHeroMonthlyDelta,
-          activeInvestmentLabel: l10n.homeHeroActiveInvestmentLabel,
-          activeInvestmentValue: _formatCompactCurrencyValue(
-            accountStatistic?.crowdfundingTotal,
-          ),
-          totalDividendsLabel: l10n.homeHeroCashLabel,
-          totalDividendsValue: _formatCompactCurrencyValue(
-            accountStatistic?.firstLevelAccountTotal,
-          ),
-          showNotificationDot: true,
-          onNotificationTap: () => context.push('/profile/notifications'),
         ),
+        totalAssetsLabel: l10n.homeHeroTotalAssetsAmountLabel,
+        totalAssetsValue: _formatCurrencyValue(
+          accountStatistic?.total,
+          currencyFormatter,
+        ),
+        totalAssetsDelta: l10n.homeHeroMonthlyDelta,
+        activeInvestmentLabel: l10n.homeHeroActiveInvestmentLabel,
+        activeInvestmentValue: _formatCompactCurrencyValue(
+          accountStatistic?.crowdfundingTotal,
+        ),
+        totalDividendsLabel: l10n.homeHeroCashLabel,
+        totalDividendsValue: _formatCompactCurrencyValue(
+          accountStatistic?.firstLevelAccountTotal,
+        ),
+        showNotificationDot: true,
+        onNotificationTap: () => context.push('/profile/notifications'),
+      ),
       _ => Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            _HomeGuestTopBar(
-              title: l10n.splashBrandName,
-              onSettingsTap: () => context.push('/profile/settings'),
-            ),
-            FundGuestBrowsingBar(
-              title: l10n.homeGuestBrowsingTitle,
-              message: l10n.homeGuestBrowsingBody,
-              loginLabel: l10n.loginSubmit,
-              registerLabel: l10n.loginCreateAccount,
-              onLoginTap: () => context.push('/login'),
-              onRegisterTap: () => context.push('/login?openRegister=1'),
-            ),
-          ],
-        ),
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          _HomeGuestTopBar(
+            title: l10n.splashBrandName,
+            onSettingsTap: () => context.push('/profile/settings'),
+          ),
+          FundGuestBrowsingBar(
+            title: l10n.homeGuestBrowsingTitle,
+            message: l10n.homeGuestBrowsingBody,
+            loginLabel: l10n.loginSubmit,
+            registerLabel: l10n.loginCreateAccount,
+            onLoginTap: () => context.push('/login'),
+            onRegisterTap: () => context.push('/login?openRegister=1'),
+          ),
+        ],
+      ),
     };
 
     return MainShellTabRefreshScope(
@@ -216,11 +263,13 @@ class HomeOverviewTabPage extends ConsumerWidget {
                             Text(
                               l10n.fundListLoadError,
                               textAlign: TextAlign.center,
-                              style: (Theme.of(context).textTheme.bodyMedium ??
-                                      const TextStyle())
-                                  .copyWith(
-                                color: AppColorTokens.fundexTextSecondary,
-                              ),
+                              style:
+                                  (Theme.of(context).textTheme.bodyMedium ??
+                                          const TextStyle())
+                                      .copyWith(
+                                        color:
+                                            AppColorTokens.fundexTextSecondary,
+                                      ),
                             ),
                             const SizedBox(height: UiTokens.spacing12),
                             OutlinedButton(
@@ -305,10 +354,7 @@ class _HomeGuestTopBar extends StatelessWidget {
                 style: appText.pageTitle.copyWith(color: colors.onDark),
               ),
             ),
-            AppNavigationIconButton(
-              icon: Icons.menu,
-              onTap: onSettingsTap,
-            ),
+            AppNavigationIconButton(icon: Icons.menu, onTap: onSettingsTap),
           ],
         ),
       ),
@@ -405,8 +451,9 @@ FundSecondaryMarketCardData _buildSecondaryMarketCardData(
     statusBackgroundColor: colors.warningSubtle,
     statusForegroundColor: colors.warningAction,
     annualYield: _formatYieldPercent(record.investorType?.earningsRadio),
-    investorTypeLabel:
-        investorCode != null && investorCode.isNotEmpty ? investorCode : '--',
+    investorTypeLabel: investorCode != null && investorCode.isNotEmpty
+        ? investorCode
+        : '--',
     soldUnitsLabel: '${soldNum.toString()} / ${sellNum.toString()}口',
     unitPriceLabel: _formatCurrencyValue(record.price, currencyFormatter),
     progress: progress.clamp(0, 1),
@@ -511,7 +558,8 @@ String _buildProgressLabel(
   NumberFormat currencyFormatter,
 ) {
   if (project.projectStatus == 0) {
-    final openDate = _parseDateTime(project.offeringStartDatetime) ??
+    final openDate =
+        _parseDateTime(project.offeringStartDatetime) ??
         _parseDateTime(project.scheduledStartDate);
     if (openDate != null) {
       return context.l10n.fundListOpenStartAt(

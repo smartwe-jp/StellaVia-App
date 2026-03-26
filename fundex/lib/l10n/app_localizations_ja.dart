@@ -618,6 +618,27 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeReminderProfileBadge => '要対応';
 
   @override
+  String get homeReminderEmailVerificationTitle => 'メールアドレス確認';
+
+  @override
+  String get homeReminderEmailVerificationBody =>
+      'このアカウントはメールアドレスがないため、メールアドレスを入力して確認してください';
+
+  @override
+  String get homeReminderPhoneVerificationTitle => '電話番号認証';
+
+  @override
+  String get homeReminderPhoneVerificationBody =>
+      'このアカウントは電話番号認証が未完了です。電話番号を入力して認証してください';
+
+  @override
+  String get homeReminderRealPersonVerificationTitle => '本人確認';
+
+  @override
+  String get homeReminderRealPersonVerificationBody =>
+      'このアカウントは本人確認が未完了です。本人確認を完了してください';
+
+  @override
   String get homeReminderCoolingOffTitle => 'クーリングオフ期間中';
 
   @override
@@ -3217,6 +3238,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfilePhotoDocumentDescription => 'タップしてカメラを起動';
 
   @override
+  String get memberProfilePhotoDocumentFrontTitle => '書類を撮影（表面）';
+
+  @override
+  String get memberProfilePhotoDocumentFrontDescription => 'タップして表面をアップロード';
+
+  @override
+  String get memberProfilePhotoDocumentBackTitle => '書類を撮影（裏面）';
+
+  @override
+  String get memberProfilePhotoDocumentBackDescription => 'タップして裏面をアップロード';
+
+  @override
   String get memberProfileSelfieTitle => '自撮り写真を撮影';
 
   @override
@@ -3233,7 +3266,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get memberProfileStep5RealPersonDescription =>
-      'セルフィーアップロード後、顔のライブ認証を行ってください';
+      '自撮り写真をアップロードし、顔のライブ認証を行ってください';
 
   @override
   String get memberProfileStep5RealPersonSelfieRequired =>

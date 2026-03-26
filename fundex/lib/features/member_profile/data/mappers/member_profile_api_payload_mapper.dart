@@ -160,16 +160,14 @@ class MemberProfileApiPayloadMapper {
     String? documentBackImage,
   }) {
     final normalizedFrontImage = documentFrontImage?.trim() ?? '';
-    if (normalizedFrontImage.isEmpty) {
+    final normalizedBackImage = documentBackImage?.trim() ?? '';
+    if (normalizedFrontImage.isEmpty || normalizedBackImage.isEmpty) {
       return const <String, dynamic>{};
     }
-    final normalizedBackImage = documentBackImage?.trim() ?? '';
     return <String, dynamic>{
       'documentType': _mapDocumentType(profile.ekycDocumentType),
       'documentFrontImage': normalizedFrontImage,
-      'documentBackImage': normalizedBackImage.isNotEmpty
-          ? normalizedBackImage
-          : normalizedFrontImage,
+      'documentBackImage': normalizedBackImage,
     };
   }
 

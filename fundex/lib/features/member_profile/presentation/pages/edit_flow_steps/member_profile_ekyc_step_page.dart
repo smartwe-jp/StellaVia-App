@@ -8,29 +8,29 @@ class MemberProfileEkycStepPage extends StatelessWidget {
     super.key,
     required this.documentType,
     required this.documentTypeItems,
-    required this.documentUploaded,
-    required this.selfieUploaded,
+    required this.documentFrontUploaded,
+    required this.documentBackUploaded,
     this.primaryButtonEnabled = true,
     this.titleOverride,
     this.descriptionOverride,
     this.primaryButtonLabelOverride,
     this.onDocumentTypeChanged,
-    this.onUploadDocument,
-    this.onUploadSelfie,
+    this.onUploadDocumentFront,
+    this.onUploadDocumentBack,
     this.onNext,
   });
 
   final String? documentType;
   final List<DropdownMenuItem<String>> documentTypeItems;
-  final bool documentUploaded;
-  final bool selfieUploaded;
+  final bool documentFrontUploaded;
+  final bool documentBackUploaded;
   final bool primaryButtonEnabled;
   final String? titleOverride;
   final String? descriptionOverride;
   final String? primaryButtonLabelOverride;
   final ValueChanged<String?>? onDocumentTypeChanged;
-  final VoidCallback? onUploadDocument;
-  final VoidCallback? onUploadSelfie;
+  final VoidCallback? onUploadDocumentFront;
+  final VoidCallback? onUploadDocumentBack;
   final VoidCallback? onNext;
 
   @override
@@ -53,18 +53,18 @@ class MemberProfileEkycStepPage extends StatelessWidget {
           const SizedBox(height: 14),
           MemberProfileUploadTile(
             icon: Icons.camera_alt_outlined,
-            title: l10n.memberProfilePhotoDocumentTitle,
-            description: l10n.memberProfilePhotoDocumentDescription,
-            isCompleted: documentUploaded,
-            onTap: onUploadDocument,
+            title: l10n.memberProfilePhotoDocumentFrontTitle,
+            description: l10n.memberProfilePhotoDocumentFrontDescription,
+            isCompleted: documentFrontUploaded,
+            onTap: onUploadDocumentFront,
           ),
           const SizedBox(height: 14),
           MemberProfileUploadTile(
-            icon: Icons.person_outline_rounded,
-            title: l10n.memberProfileSelfieTitle,
-            description: l10n.memberProfileSelfieDescription,
-            isCompleted: selfieUploaded,
-            onTap: onUploadSelfie,
+            icon: Icons.flip_to_back_outlined,
+            title: l10n.memberProfilePhotoDocumentBackTitle,
+            description: l10n.memberProfilePhotoDocumentBackDescription,
+            isCompleted: documentBackUploaded,
+            onTap: onUploadDocumentBack,
           ),
         ],
       ),

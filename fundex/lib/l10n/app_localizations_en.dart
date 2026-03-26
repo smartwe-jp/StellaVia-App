@@ -660,6 +660,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeReminderProfileBadge => 'Action needed';
 
   @override
+  String get homeReminderEmailVerificationTitle => 'Email verification';
+
+  @override
+  String get homeReminderEmailVerificationBody =>
+      'This account has no email address yet. Please enter and verify your email address.';
+
+  @override
+  String get homeReminderPhoneVerificationTitle => 'Phone verification';
+
+  @override
+  String get homeReminderPhoneVerificationBody =>
+      'Phone verification is not complete for this account. Please verify your phone number.';
+
+  @override
+  String get homeReminderRealPersonVerificationTitle => 'Identity verification';
+
+  @override
+  String get homeReminderRealPersonVerificationBody =>
+      'Real-person verification is not complete for this account. Please complete identity verification.';
+
+  @override
   String get homeReminderCoolingOffTitle => 'Cooling-off period in progress';
 
   @override
@@ -3395,6 +3416,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memberProfilePhotoDocumentDescription => 'Tap to open the camera';
 
   @override
+  String get memberProfilePhotoDocumentFrontTitle => 'Photo ID (Front)';
+
+  @override
+  String get memberProfilePhotoDocumentFrontDescription =>
+      'Tap to upload the front side';
+
+  @override
+  String get memberProfilePhotoDocumentBackTitle => 'Photo ID (Back)';
+
+  @override
+  String get memberProfilePhotoDocumentBackDescription =>
+      'Tap to upload the back side';
+
+  @override
   String get memberProfileSelfieTitle => 'Take a selfie photo';
 
   @override
@@ -3414,7 +3449,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get memberProfileStep5RealPersonDescription =>
-      'After uploading your selfie, complete the live face verification.';
+      'Upload your selfie, then complete the live face verification.';
 
   @override
   String get memberProfileStep5RealPersonSelfieRequired =>

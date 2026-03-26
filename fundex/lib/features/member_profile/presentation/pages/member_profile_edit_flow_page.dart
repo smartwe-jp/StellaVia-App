@@ -31,6 +31,8 @@ import '../support/member_profile_zip_candidate_picker.dart';
 
 enum _MemberProfileEditFlowMode { flow, section }
 
+enum _ProfilePhotoTarget { documentFront, documentBack, selfie }
+
 class MemberProfileEditFlowPage extends ConsumerStatefulWidget {
   const MemberProfileEditFlowPage({super.key})
     : _mode = _MemberProfileEditFlowMode.flow,
@@ -53,6 +55,13 @@ class MemberProfileEditFlowPage extends ConsumerStatefulWidget {
 
 class _MemberProfileEditFlowPageState
     extends ConsumerState<MemberProfileEditFlowPage> {
+  static const _ProfilePhotoTarget _documentFrontPhotoTarget =
+      _ProfilePhotoTarget.documentFront;
+  static const _ProfilePhotoTarget _documentBackPhotoTarget =
+      _ProfilePhotoTarget.documentBack;
+  static const _ProfilePhotoTarget _selfiePhotoTarget =
+      _ProfilePhotoTarget.selfie;
+
   late final TextEditingController _familyNameController;
   late final TextEditingController _givenNameController;
   late final TextEditingController _familyNameKanaController;
@@ -413,7 +422,9 @@ class _MemberProfileEditFlowPageState
     await _persistOnboardingDraft(showNotice: true);
   }
 
-  Future<void> _pickAndSaveImage({required bool isDocument}) async {
+  Future<void> _pickAndSaveImage({
+    required _ProfilePhotoTarget target,
+  }) async {
     if (_isUploadingPhoto || _isSubmitting || _isRunningRealPersonAuth) {
       return;
     }
@@ -457,19 +468,22 @@ class _MemberProfileEditFlowPageState
     if (!mounted || path == null || path.trim().isEmpty) {
       return;
     }
+    bool shouldAutoStartRealPersonAuth = false;
     setState(() {
       _isUploadingPhoto = true;
     });
     try {
       final uploadedUrl = await ref
           .read(uploadMemberProfilePhotoUseCaseProvider)
-          .call(filePath: path.trim(), isSelfie: !isDocument);
+          .call(filePath: path.trim(), isSelfie: target == _selfiePhotoTarget);
       if (!mounted) {
         return;
       }
       setState(() {
-        if (isDocument) {
+        if (target == _documentFrontPhotoTarget) {
           _documentPhotoPath = uploadedUrl.trim();
+        } else if (target == _documentBackPhotoTarget) {
+          _documentBackPhotoPath = uploadedUrl.trim();
         } else {
           _selfiePhotoPath = uploadedUrl.trim();
         }
@@ -482,11 +496,15 @@ class _MemberProfileEditFlowPageState
         context,
         message: context.l10n.memberProfilePhotoUploadSuccess,
       );
+      shouldAutoStartRealPersonAuth =
+          target == _selfiePhotoTarget &&
+          _currentStep == MemberProfileEditStep.realPersonAuth &&
+          _isIdentityAuthEnabled;
     } catch (error) {
       if (!mounted) {
         return;
       }
-      if (!isDocument) {
+      if (target == _selfiePhotoTarget) {
         setState(() {
           _selfiePhotoPath = selfieUploadCompletedMarker;
         });
@@ -498,21 +516,28 @@ class _MemberProfileEditFlowPageState
           context,
           message: context.l10n.memberProfileSelfieUploadBypassedNotice,
         );
-        return;
+        shouldAutoStartRealPersonAuth =
+            _currentStep == MemberProfileEditStep.realPersonAuth &&
+            _isIdentityAuthEnabled;
+      } else {
+        AppNotice.show(
+          context,
+          message: _resolveSubmitErrorMessage(
+            error,
+            context.l10n.uiErrorRequestFailed,
+          ),
+        );
       }
-      AppNotice.show(
-        context,
-        message: _resolveSubmitErrorMessage(
-          error,
-          context.l10n.uiErrorRequestFailed,
-        ),
-      );
     } finally {
       if (mounted) {
         setState(() {
           _isUploadingPhoto = false;
         });
       }
+    }
+
+    if (shouldAutoStartRealPersonAuth && mounted) {
+      await _runRealPersonAuthStep();
     }
   }
 
@@ -618,36 +643,17 @@ class _MemberProfileEditFlowPageState
       return;
     }
 
-    final l10n = context.l10n;
-    setState(() {
-      _isSubmitting = true;
-    });
+    await _advanceToNextStep();
+  }
 
-    try {
-      final MemberProfileEditStep? next = _nextStep(_currentStep);
-      if (next == null) {
-        return;
-      }
-      setState(() {
-        _currentStep = next;
-      });
-      await _persistOnboardingDraft(showNotice: false);
-    } catch (error) {
-      if (!mounted) {
-        return;
-      }
-      AppNotice.show(
-        context,
-        message: _resolveSubmitErrorMessage(error, l10n.uiErrorRequestFailed),
-      );
+  Future<void> _skipRealPersonAuthStep() async {
+    if (_isSubmitting || _isUploadingPhoto || _isRunningRealPersonAuth) {
       return;
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isSubmitting = false;
-        });
-      }
     }
+    if (_currentStep != MemberProfileEditStep.realPersonAuth) {
+      return;
+    }
+    await _advanceToNextStep();
   }
 
   Future<void> _goPreviousStep() async {
@@ -932,7 +938,8 @@ class _MemberProfileEditFlowPageState
   MemberProfileEditStep _normalizeStepForIdentityAuth(
     MemberProfileEditStep step,
   ) {
-    if (!_isIdentityAuthEnabled &&
+    if (!_isSingleSectionMode &&
+        !_isIdentityAuthEnabled &&
         step == MemberProfileEditStep.realPersonAuth) {
       return MemberProfileEditStep.bankAccount;
     }
@@ -983,7 +990,7 @@ class _MemberProfileEditFlowPageState
   bool get _isEkycStepReady =>
       _isFilled(_documentType) &&
       _isRemoteImageUrl(_documentPhotoPath) &&
-      _isSelfieUploaded(_selfiePhotoPath);
+      _isRemoteImageUrl(_documentBackPhotoPath);
 
   bool get _isBankAccountStepReady =>
       _isFilled(_bankNameController.text) &&
@@ -994,6 +1001,39 @@ class _MemberProfileEditFlowPageState
 
   bool get _isConsentStepReady =>
       _electronicConsent && _antiSocialConsent && _privacyConsent;
+
+  Future<void> _advanceToNextStep() async {
+    final l10n = context.l10n;
+    setState(() {
+      _isSubmitting = true;
+    });
+
+    try {
+      final MemberProfileEditStep? next = _nextStep(_currentStep);
+      if (next == null) {
+        return;
+      }
+      setState(() {
+        _currentStep = next;
+      });
+      await _persistOnboardingDraft(showNotice: false);
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      AppNotice.show(
+        context,
+        message: _resolveSubmitErrorMessage(error, l10n.uiErrorRequestFailed),
+      );
+      return;
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
+    }
+  }
 
   void _invalidateOfficialProfileProviders() {
     ref.invalidate(memberProfileDetailsProvider);
@@ -1535,8 +1575,8 @@ class _MemberProfileEditFlowPageState
         return MemberProfileEkycStepPage(
           documentType: _documentType,
           documentTypeItems: _simpleItems(_documentTypeOptions(context)),
-          documentUploaded: _isRemoteImageUrl(_documentPhotoPath),
-          selfieUploaded: _isSelfieUploaded(_selfiePhotoPath),
+          documentFrontUploaded: _isRemoteImageUrl(_documentPhotoPath),
+          documentBackUploaded: _isRemoteImageUrl(_documentBackPhotoPath),
           primaryButtonEnabled:
               _canProceedFromCurrentStep &&
               !_isUploadingPhoto &&
@@ -1551,26 +1591,48 @@ class _MemberProfileEditFlowPageState
               _documentType = value;
             });
           },
-          onUploadDocument: (_isSubmitting || _isUploadingPhoto)
+          onUploadDocumentFront: (_isSubmitting || _isUploadingPhoto)
               ? null
               : _isRunningRealPersonAuth
               ? null
-              : () => _pickAndSaveImage(isDocument: true),
-          onUploadSelfie: (_isSubmitting || _isUploadingPhoto)
+              : () => _pickAndSaveImage(target: _documentFrontPhotoTarget),
+          onUploadDocumentBack: (_isSubmitting || _isUploadingPhoto)
               ? null
               : _isRunningRealPersonAuth
               ? null
-              : () => _pickAndSaveImage(isDocument: false),
+              : () => _pickAndSaveImage(target: _documentBackPhotoTarget),
           onNext: _isSingleSectionMode ? _saveCurrentSection : _goNextStep,
         );
       case MemberProfileEditStep.realPersonAuth:
-        if (!_isIdentityAuthEnabled) {
+        if (!_isIdentityAuthEnabled && !_isSingleSectionMode) {
           return const SizedBox.shrink();
         }
         return MemberProfileRealPersonAuthStepPage(
           isProcessing: _isRunningRealPersonAuth,
+          selfieUploaded: _isSelfieUploaded(_selfiePhotoPath),
+          primaryButtonEnabled:
+              _canProceedFromCurrentStep &&
+              !_isUploadingPhoto &&
+              !_isSubmitting &&
+              !_isRunningRealPersonAuth,
+          showSkip: !_isSingleSectionMode,
+          titleOverride: _isSingleSectionMode ? _stepTitle : null,
+          descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
+          primaryButtonLabelOverride: _isSingleSectionMode
+              ? _primaryActionLabel
+              : null,
           statusMessage: _realPersonAuthStatusMessage,
-          onStartVerification: _isRunningRealPersonAuth ? null : _goNextStep,
+          onUploadSelfie: (_isSubmitting || _isUploadingPhoto)
+              ? null
+              : _isRunningRealPersonAuth
+              ? null
+              : () => _pickAndSaveImage(target: _selfiePhotoTarget),
+          onStartVerification: _isRunningRealPersonAuth
+              ? null
+              : _isSingleSectionMode
+              ? _saveCurrentSection
+              : _goNextStep,
+          onSkip: _skipRealPersonAuthStep,
         );
       case MemberProfileEditStep.bankAccount:
         final accountTypeItems = _simpleItems(_accountTypeOptions(context));

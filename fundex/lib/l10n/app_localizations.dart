@@ -1295,6 +1295,42 @@ abstract class AppLocalizations {
   /// **'Action needed'**
   String get homeReminderProfileBadge;
 
+  /// No description provided for @homeReminderEmailVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Email verification'**
+  String get homeReminderEmailVerificationTitle;
+
+  /// No description provided for @homeReminderEmailVerificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This account has no email address yet. Please enter and verify your email address.'**
+  String get homeReminderEmailVerificationBody;
+
+  /// No description provided for @homeReminderPhoneVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone verification'**
+  String get homeReminderPhoneVerificationTitle;
+
+  /// No description provided for @homeReminderPhoneVerificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone verification is not complete for this account. Please verify your phone number.'**
+  String get homeReminderPhoneVerificationBody;
+
+  /// No description provided for @homeReminderRealPersonVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Identity verification'**
+  String get homeReminderRealPersonVerificationTitle;
+
+  /// No description provided for @homeReminderRealPersonVerificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Real-person verification is not complete for this account. Please complete identity verification.'**
+  String get homeReminderRealPersonVerificationBody;
+
   /// No description provided for @homeReminderCoolingOffTitle.
   ///
   /// In en, this message translates to:
@@ -6290,6 +6326,30 @@ abstract class AppLocalizations {
   /// **'Tap to open the camera'**
   String get memberProfilePhotoDocumentDescription;
 
+  /// No description provided for @memberProfilePhotoDocumentFrontTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo ID (Front)'**
+  String get memberProfilePhotoDocumentFrontTitle;
+
+  /// No description provided for @memberProfilePhotoDocumentFrontDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to upload the front side'**
+  String get memberProfilePhotoDocumentFrontDescription;
+
+  /// No description provided for @memberProfilePhotoDocumentBackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo ID (Back)'**
+  String get memberProfilePhotoDocumentBackTitle;
+
+  /// No description provided for @memberProfilePhotoDocumentBackDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to upload the back side'**
+  String get memberProfilePhotoDocumentBackDescription;
+
   /// No description provided for @memberProfileSelfieTitle.
   ///
   /// In en, this message translates to:
@@ -6323,7 +6383,7 @@ abstract class AppLocalizations {
   /// No description provided for @memberProfileStep5RealPersonDescription.
   ///
   /// In en, this message translates to:
-  /// **'After uploading your selfie, complete the live face verification.'**
+  /// **'Upload your selfie, then complete the live face verification.'**
   String get memberProfileStep5RealPersonDescription;
 
   /// No description provided for @memberProfileStep5RealPersonSelfieRequired.

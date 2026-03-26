@@ -613,6 +613,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeReminderProfileBadge => '待处理';
 
   @override
+  String get homeReminderEmailVerificationTitle => '邮箱认证';
+
+  @override
+  String get homeReminderEmailVerificationBody => '该账户尚未绑定邮箱，请输入邮箱地址并完成认证。';
+
+  @override
+  String get homeReminderPhoneVerificationTitle => '手机号认证';
+
+  @override
+  String get homeReminderPhoneVerificationBody => '该账户尚未完成手机号认证，请输入手机号并完成认证。';
+
+  @override
+  String get homeReminderRealPersonVerificationTitle => '本人认证';
+
+  @override
+  String get homeReminderRealPersonVerificationBody => '该账户尚未完成本人认证，请先完成人脸认证。';
+
+  @override
   String get homeReminderCoolingOffTitle => 'クーリングオフ期间中';
 
   @override
@@ -3187,6 +3205,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfilePhotoDocumentDescription => '点击打开相机';
 
   @override
+  String get memberProfilePhotoDocumentFrontTitle => '拍摄文件正面';
+
+  @override
+  String get memberProfilePhotoDocumentFrontDescription => '点击上传正面照片';
+
+  @override
+  String get memberProfilePhotoDocumentBackTitle => '拍摄文件反面';
+
+  @override
+  String get memberProfilePhotoDocumentBackDescription => '点击上传反面照片';
+
+  @override
   String get memberProfileSelfieTitle => '拍摄自拍照';
 
   @override
@@ -3202,7 +3232,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileStep5RealPersonTitle => 'Step 5：实人认证（人脸活体）';
 
   @override
-  String get memberProfileStep5RealPersonDescription => '请在自拍照上传完成后进行人脸活体核验';
+  String get memberProfileStep5RealPersonDescription => '请先上传自拍照，再进行人脸活体核验';
 
   @override
   String get memberProfileStep5RealPersonSelfieRequired => '请先完成自拍照上传。';
@@ -4074,6 +4104,24 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get homeReminderProfileBadge => '待處理';
+
+  @override
+  String get homeReminderEmailVerificationTitle => '電子郵件認證';
+
+  @override
+  String get homeReminderEmailVerificationBody => '此帳戶尚未綁定電子郵件，請輸入電子郵件地址並完成認證。';
+
+  @override
+  String get homeReminderPhoneVerificationTitle => '手機認證';
+
+  @override
+  String get homeReminderPhoneVerificationBody => '此帳戶尚未完成手機認證，請輸入手機號碼並完成認證。';
+
+  @override
+  String get homeReminderRealPersonVerificationTitle => '本人認證';
+
+  @override
+  String get homeReminderRealPersonVerificationBody => '此帳戶尚未完成本人認證，請先完成人臉認證。';
 
   @override
   String get homeReminderCoolingOffTitle => '冷靜期中';
@@ -6652,6 +6700,18 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfilePhotoDocumentDescription => '點擊開啟相機';
 
   @override
+  String get memberProfilePhotoDocumentFrontTitle => '拍攝文件正面';
+
+  @override
+  String get memberProfilePhotoDocumentFrontDescription => '點擊上傳正面照片';
+
+  @override
+  String get memberProfilePhotoDocumentBackTitle => '拍攝文件反面';
+
+  @override
+  String get memberProfilePhotoDocumentBackDescription => '點擊上傳反面照片';
+
+  @override
   String get memberProfileSelfieTitle => '拍攝自拍照';
 
   @override
@@ -6667,7 +6727,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileStep5RealPersonTitle => 'Step 5：真人認證（活體）';
 
   @override
-  String get memberProfileStep5RealPersonDescription => '請先完成自拍照上傳，再進行人臉活體核驗';
+  String get memberProfileStep5RealPersonDescription => '請先上傳自拍照，再進行人臉活體核驗';
 
   @override
   String get memberProfileStep5RealPersonSelfieRequired => '請先完成自拍照上傳。';

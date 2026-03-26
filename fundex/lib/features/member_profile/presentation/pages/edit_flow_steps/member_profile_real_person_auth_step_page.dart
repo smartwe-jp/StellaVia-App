@@ -7,13 +7,29 @@ class MemberProfileRealPersonAuthStepPage extends StatelessWidget {
   const MemberProfileRealPersonAuthStepPage({
     super.key,
     required this.isProcessing,
+    required this.selfieUploaded,
+    this.primaryButtonEnabled = true,
+    this.showSkip = false,
+    this.titleOverride,
+    this.descriptionOverride,
+    this.primaryButtonLabelOverride,
     this.statusMessage,
+    this.onUploadSelfie,
     this.onStartVerification,
+    this.onSkip,
   });
 
   final bool isProcessing;
+  final bool selfieUploaded;
+  final bool primaryButtonEnabled;
+  final bool showSkip;
+  final String? titleOverride;
+  final String? descriptionOverride;
+  final String? primaryButtonLabelOverride;
   final String? statusMessage;
+  final VoidCallback? onUploadSelfie;
   final VoidCallback? onStartVerification;
+  final VoidCallback? onSkip;
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +38,26 @@ class MemberProfileRealPersonAuthStepPage extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     return MemberProfileEditStepScaffold(
-      title: l10n.memberProfileStep5RealPersonTitle,
-      description: l10n.memberProfileStep5RealPersonDescription,
-      primaryButtonLabel: l10n.identityAuthStartAction,
+      title: titleOverride ?? l10n.memberProfileStep5RealPersonTitle,
+      description:
+          descriptionOverride ?? l10n.memberProfileStep5RealPersonDescription,
+      primaryButtonLabel:
+          primaryButtonLabelOverride ?? l10n.identityAuthStartAction,
       onPrimaryPressed: onStartVerification,
-      primaryButtonEnabled: !isProcessing,
+      primaryButtonEnabled: primaryButtonEnabled,
+      showSkip: showSkip,
+      skipLabel: l10n.commonSkipChevron,
+      onSkip: onSkip,
       child: Column(
         children: <Widget>[
+          MemberProfileUploadTile(
+            icon: Icons.person_outline_rounded,
+            title: l10n.memberProfileSelfieTitle,
+            description: l10n.memberProfileSelfieDescription,
+            isCompleted: selfieUploaded,
+            onTap: onUploadSelfie,
+          ),
+          const SizedBox(height: 14),
           MemberProfileInfoCard(
             title: l10n.identityAuthPageTitle,
             backgroundColor: colors.infoSoft,

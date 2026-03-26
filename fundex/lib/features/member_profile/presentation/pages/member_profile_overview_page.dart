@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../investment/presentation/widgets/secondary_market_buy_flow_sections.dart';
-import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 import '../../domain/entities/member_profile_details.dart';
 import '../providers/member_profile_providers.dart';
 import '../support/member_profile_edit_step.dart';
@@ -62,17 +61,6 @@ class _MemberProfileOverviewPageState
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final detailsAsync = ref.watch(memberProfileDetailsProvider);
-    final faceVerifiedAsync = ref.watch(settingsRealPersonVerifiedProvider);
-    final faceVerifiedAtAsync = ref.watch(
-      settingsRealPersonVerificationUpdatedAtProvider,
-    );
-    final faceVerified = faceVerifiedAsync.asData?.value == true;
-    final faceVerifiedAt = faceVerifiedAtAsync.asData?.value;
-    final faceVerificationStatus = faceVerifiedAsync.asData == null
-        ? '-'
-        : faceVerified
-            ? l10n.settingsVerificationStatusVerified
-            : l10n.settingsVerificationStatusUnverified;
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -297,7 +285,8 @@ class _MemberProfileOverviewPageState
                                 ),
                               ),
                               _OverviewFieldRow(
-                                label: l10n.memberProfilePhotoDocumentTitle,
+                                label:
+                                    l10n.memberProfilePhotoDocumentFrontTitle,
                                 value: _statusValue(
                                   (profile.idDocumentPhotoPath
                                           ?.trim()
@@ -307,42 +296,15 @@ class _MemberProfileOverviewPageState
                                 ),
                               ),
                               _OverviewFieldRow(
-                                label: l10n.memberProfileSelfieTitle,
+                                label:
+                                    l10n.memberProfilePhotoDocumentBackTitle,
                                 value: _statusValue(
-                                  (profile.selfiePhotoPath?.trim().isNotEmpty ??
+                                  (profile.idDocumentBackPhotoPath
+                                          ?.trim()
+                                          .isNotEmpty ??
                                       false),
                                   l10n,
                                 ),
-                                isLast: true,
-                              ),
-                            ],
-                          ),
-                          _MemberProfileOverviewSection(
-                            icon: Icons.face_retouching_natural_outlined,
-                            title: memberProfileEditStepTitle(
-                              l10n,
-                              MemberProfileEditStep.realPersonAuth,
-                              plain: true,
-                            ),
-                            onEdit: () => _openSection(
-                              MemberProfileEditStep.realPersonAuth,
-                            ),
-                            children: <Widget>[
-                              _OverviewFieldRow(
-                                label: l10n.settingsFaceVerificationTitle,
-                                value: faceVerificationStatus,
-                                valueColor: faceVerificationStatus == '-'
-                                    ? colors.textSecondary
-                                    : faceVerified
-                                        ? colors.success
-                                        : colors.textPrimary,
-                              ),
-                              _OverviewFieldRow(
-                                label:
-                                    l10n.settingsVerificationLastUpdatedLabel,
-                                value: faceVerifiedAt == null
-                                    ? '-'
-                                    : _formatDateTime(faceVerifiedAt),
                                 isLast: true,
                               ),
                             ],
@@ -367,16 +329,6 @@ class _MemberProfileOverviewPageState
 
   void _openSection(MemberProfileEditStep step) {
     context.push('/member-profile/edit/section/${step.routeValue}');
-  }
-
-  String _formatDateTime(DateTime value) {
-    final local = value.toLocal();
-    final year = local.year.toString().padLeft(4, '0');
-    final month = local.month.toString().padLeft(2, '0');
-    final day = local.day.toString().padLeft(2, '0');
-    final hour = local.hour.toString().padLeft(2, '0');
-    final minute = local.minute.toString().padLeft(2, '0');
-    return '$year/$month/$day $hour:$minute';
   }
 }
 
@@ -452,13 +404,11 @@ class _OverviewFieldRow extends StatelessWidget {
     required this.label,
     required this.value,
     this.isLast = false,
-    this.valueColor,
   });
 
   final String label;
   final String value;
   final bool isLast;
-  final Color? valueColor;
 
   @override
   Widget build(BuildContext context) {
@@ -492,7 +442,7 @@ class _OverviewFieldRow extends StatelessWidget {
             child: Text(
               value,
               style: appText.body.copyWith(
-                color: valueColor ?? colors.textPrimary,
+                color: colors.textPrimary,
                 height: 1.6,
               ),
             ),
