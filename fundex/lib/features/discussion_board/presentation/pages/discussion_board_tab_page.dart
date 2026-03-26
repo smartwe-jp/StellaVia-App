@@ -185,19 +185,22 @@ class _DiscussionBoardTabPageState
   }
 
   Future<void> _showComposerFundPicker() async {
-    final selectedFund = await AppBottomSheet.showAdaptive<_SelectedComposerFund>(
-      context: context,
-      builder: (BuildContext bottomSheetContext) {
-        return _ComposerFundPickerSheet(
-          currentSelection: _selectedComposerFund,
+    final selectedFund =
+        await AppBottomSheet.showAdaptive<_SelectedComposerFund>(
+          context: context,
+          builder: (BuildContext bottomSheetContext) {
+            return _ComposerFundPickerSheet(
+              currentSelection: _selectedComposerFund,
+            );
+          },
         );
-      },
-    );
     if (!mounted || selectedFund == null) {
       return;
     }
     setState(() {
-      _selectedComposerFund = selectedFund.isClearSelection ? null : selectedFund;
+      _selectedComposerFund = selectedFund.isClearSelection
+          ? null
+          : selectedFund;
     });
   }
 
@@ -584,10 +587,7 @@ class _KizunarkGuestPrompt extends StatelessWidget {
               spacing: 12,
               runSpacing: 6,
               children: <Widget>[
-                TextButton(
-                  onPressed: onLoginTap,
-                  child: Text(l10n.loginTitle),
-                ),
+                TextButton(onPressed: onLoginTap, child: Text(l10n.loginTitle)),
                 TextButton(
                   onPressed: onRegisterTap,
                   child: Text(l10n.loginCreateAccount),
@@ -666,9 +666,9 @@ class _ComposerFundPickerButton extends StatelessWidget {
 }
 
 class _ComposerFundPickerSheet extends ConsumerWidget {
-  const _ComposerFundPickerSheet({
-    required this.currentSelection,
-  });
+  const _ComposerFundPickerSheet({required this.currentSelection});
+
+  static const double _mainShellTabBarHeight = 61;
 
   final _SelectedComposerFund? currentSelection;
 
@@ -678,13 +678,17 @@ class _ComposerFundPickerSheet extends ConsumerWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final l10n = context.l10n;
+    final mediaQuery = MediaQuery.of(context);
+    final availableHeight =
+        mediaQuery.size.height -
+        _mainShellTabBarHeight -
+        mediaQuery.padding.bottom;
+    final sheetHeight = availableHeight * 0.5;
 
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.sizeOf(context).height * 0.74,
-      ),
+    return SizedBox(
+      height: sheetHeight,
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
@@ -693,104 +697,111 @@ class _ComposerFundPickerSheet extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
           Flexible(
-            child: ref.watch(myPageInvestmentListProvider).when(
-              data: (records) {
-                final groups = _groupComposerFundRecords(records);
-                if (groups.isEmpty) {
-                  return Center(
+            child: ref
+                .watch(myPageInvestmentListProvider)
+                .when(
+                  data: (records) {
+                    final groups = _groupComposerFundRecords(records);
+                    if (groups.isEmpty) {
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 24,
+                          ),
+                          child: Text(
+                            l10n.kizunarkAssociateFundEmpty,
+                            textAlign: TextAlign.center,
+                            style: appText.body.copyWith(
+                              color: colors.textSecondary,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+
+                    final currencyFormatter = NumberFormat.currency(
+                      locale: Localizations.localeOf(context).toLanguageTag(),
+                      symbol: '¥',
+                      decimalDigits: 0,
+                    );
+
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: groups.length,
+                      separatorBuilder: (_, _) => const SizedBox(height: 10),
+                      itemBuilder: (BuildContext context, int index) {
+                        final group = groups[index];
+                        final isSelected =
+                            currentSelection?.projectId == group.projectId;
+                        return _ComposerFundPickerCard(
+                          data: FundActiveFundCardData(
+                            title: group.projectName,
+                            annualYield: _formatYieldPercent(
+                              group.earningRatio,
+                            ),
+                            rows: <FundLabeledValue>[
+                              FundLabeledValue(
+                                label: l10n.myPageInvestmentAmountLabel,
+                                value: currencyFormatter.format(
+                                  group.investMoney,
+                                ),
+                              ),
+                              FundLabeledValue(
+                                label: l10n.myPageAccumulatedDistributionLabel,
+                                value: currencyFormatter.format(group.earnings),
+                                valueColor: colors.success,
+                              ),
+                            ],
+                          ),
+                          isSelected: isSelected,
+                          onTap: () {
+                            Navigator.of(context).pop(
+                              isSelected
+                                  ? const _SelectedComposerFund.clear()
+                                  : _SelectedComposerFund(
+                                      projectId: group.projectId,
+                                      projectName: group.projectName,
+                                    ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                  loading: () => const Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24),
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
+                  ),
+                  error: (_, __) => Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
                         vertical: 24,
                       ),
-                      child: Text(
-                        l10n.kizunarkAssociateFundEmpty,
-                        textAlign: TextAlign.center,
-                        style: appText.body.copyWith(
-                          color: colors.textSecondary,
-                        ),
-                      ),
-                    ),
-                  );
-                }
-
-                final currencyFormatter = NumberFormat.currency(
-                  locale: Localizations.localeOf(context).toLanguageTag(),
-                  symbol: '¥',
-                  decimalDigits: 0,
-                );
-
-                return ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: groups.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 10),
-                  itemBuilder: (BuildContext context, int index) {
-                    final group = groups[index];
-                    final isSelected =
-                        currentSelection?.projectId == group.projectId;
-                    return _ComposerFundPickerCard(
-                      data: FundActiveFundCardData(
-                        title: group.projectName,
-                        annualYield: _formatYieldPercent(group.earningRatio),
-                        rows: <FundLabeledValue>[
-                          FundLabeledValue(
-                            label: l10n.myPageInvestmentAmountLabel,
-                            value: currencyFormatter.format(group.investMoney),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text(
+                            l10n.myPageSectionLoadError,
+                            textAlign: TextAlign.center,
+                            style: appText.body.copyWith(
+                              color: colors.textSecondary,
+                            ),
                           ),
-                          FundLabeledValue(
-                            label: l10n.myPageAccumulatedDistributionLabel,
-                            value: currencyFormatter.format(group.earnings),
-                            valueColor: colors.success,
+                          const SizedBox(height: 10),
+                          OutlinedButton(
+                            onPressed: () =>
+                                ref.invalidate(myPageInvestmentListProvider),
+                            child: Text(l10n.fundListRetry),
                           ),
                         ],
                       ),
-                      isSelected: isSelected,
-                      onTap: () {
-                        Navigator.of(context).pop(
-                          isSelected
-                              ? const _SelectedComposerFund.clear()
-                              : _SelectedComposerFund(
-                                  projectId: group.projectId,
-                                  projectName: group.projectName,
-                                ),
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-              loading: () => const Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 24),
-                  child: CircularProgressIndicator.adaptive(),
-                ),
-              ),
-              error: (_, __) => Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 24,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(
-                        l10n.myPageSectionLoadError,
-                        textAlign: TextAlign.center,
-                        style: appText.body.copyWith(
-                          color: colors.textSecondary,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      OutlinedButton(
-                        onPressed: () => ref.invalidate(myPageInvestmentListProvider),
-                        child: Text(l10n.fundListRetry),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
           ),
         ],
       ),
@@ -881,7 +892,8 @@ List<_ComposerFundGroup> _groupComposerFundRecords(
       .map((accumulator) => accumulator.build())
       .toList(growable: false);
   values.sort(
-    (a, b) => _compareComposerDateTimeDesc(a.latestCreateTime, b.latestCreateTime),
+    (a, b) =>
+        _compareComposerDateTimeDesc(a.latestCreateTime, b.latestCreateTime),
   );
   return values;
 }
@@ -937,9 +949,7 @@ class _SelectedComposerFund {
     required this.projectName,
   });
 
-  const _SelectedComposerFund.clear()
-    : projectId = '',
-      projectName = '';
+  const _SelectedComposerFund.clear() : projectId = '', projectName = '';
 
   final String projectId;
   final String projectName;
