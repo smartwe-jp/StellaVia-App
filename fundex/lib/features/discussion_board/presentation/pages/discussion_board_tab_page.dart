@@ -665,7 +665,7 @@ class _ComposerFundPickerButton extends StatelessWidget {
   }
 }
 
-class _ComposerFundPickerSheet extends ConsumerWidget {
+class _ComposerFundPickerSheet extends ConsumerStatefulWidget {
   const _ComposerFundPickerSheet({required this.currentSelection});
 
   static const double _mainShellTabBarHeight = 61;
@@ -673,7 +673,55 @@ class _ComposerFundPickerSheet extends ConsumerWidget {
   final _SelectedComposerFund? currentSelection;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_ComposerFundPickerSheet> createState() =>
+      _ComposerFundPickerSheetState();
+}
+
+class _ComposerFundPickerSheetState
+    extends ConsumerState<_ComposerFundPickerSheet> {
+  final Map<String, GlobalKey> _itemKeys = <String, GlobalKey>{};
+  String? _lastAutoScrolledProjectId;
+
+  GlobalKey _keyForProject(String projectId) {
+    return _itemKeys.putIfAbsent(
+      projectId,
+      () => GlobalKey(debugLabel: 'composer-fund-$projectId'),
+    );
+  }
+
+  void _scheduleScrollToSelected(
+    List<_ComposerFundGroup> groups,
+    String? projectId,
+  ) {
+    if (projectId == null || projectId.isEmpty) {
+      return;
+    }
+    if (_lastAutoScrolledProjectId == projectId) {
+      return;
+    }
+    if (!groups.any((group) => group.projectId == projectId)) {
+      return;
+    }
+    _lastAutoScrolledProjectId = projectId;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      final targetContext = _itemKeys[projectId]?.currentContext;
+      if (targetContext == null) {
+        return;
+      }
+      Scrollable.ensureVisible(
+        targetContext,
+        alignment: 0.18,
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
@@ -681,7 +729,7 @@ class _ComposerFundPickerSheet extends ConsumerWidget {
     final mediaQuery = MediaQuery.of(context);
     final availableHeight =
         mediaQuery.size.height -
-        _mainShellTabBarHeight -
+        _ComposerFundPickerSheet._mainShellTabBarHeight -
         mediaQuery.padding.bottom;
     final sheetHeight = availableHeight * 0.5;
 
@@ -702,6 +750,10 @@ class _ComposerFundPickerSheet extends ConsumerWidget {
                 .when(
                   data: (records) {
                     final groups = _groupComposerFundRecords(records);
+                    _scheduleScrollToSelected(
+                      groups,
+                      widget.currentSelection?.projectId,
+                    );
                     if (groups.isEmpty) {
                       return Center(
                         child: Padding(
@@ -733,8 +785,10 @@ class _ComposerFundPickerSheet extends ConsumerWidget {
                       itemBuilder: (BuildContext context, int index) {
                         final group = groups[index];
                         final isSelected =
-                            currentSelection?.projectId == group.projectId;
+                            widget.currentSelection?.projectId ==
+                            group.projectId;
                         return _ComposerFundPickerCard(
+                          key: _keyForProject(group.projectId),
                           data: FundActiveFundCardData(
                             title: group.projectName,
                             annualYield: _formatYieldPercent(
@@ -811,6 +865,7 @@ class _ComposerFundPickerSheet extends ConsumerWidget {
 
 class _ComposerFundPickerCard extends StatelessWidget {
   const _ComposerFundPickerCard({
+    super.key,
     required this.data,
     required this.isSelected,
     required this.onTap,
