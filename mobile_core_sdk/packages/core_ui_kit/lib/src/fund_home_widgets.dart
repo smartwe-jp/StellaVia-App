@@ -617,6 +617,94 @@ class FundSegmentedProgressBar extends StatelessWidget {
   }
 }
 
+class _FundGradientProgressBar extends StatelessWidget {
+  const _FundGradientProgressBar({
+    required this.value,
+    required this.minHeight,
+    required this.trackColor,
+    required this.gradientColors,
+    required this.borderRadius,
+  });
+
+  final double value;
+  final double minHeight;
+  final Color trackColor;
+  final List<Color> gradientColors;
+  final BorderRadius borderRadius;
+
+  @override
+  Widget build(BuildContext context) {
+    final normalizedValue = value.clamp(0, 1).toDouble();
+    final startColor = gradientColors.isNotEmpty
+        ? gradientColors.first
+        : trackColor;
+    final endColor = gradientColors.length > 1
+        ? gradientColors.last
+        : startColor;
+    final blueShift = _resolveBlueShift(normalizedValue);
+    final visibility =
+        0.32 + (0.68 * Curves.easeOutCubic.transform(normalizedValue));
+    final shiftedGradientColors = <Color>[
+      Color.lerp(startColor, endColor, blueShift * 0.58) ?? startColor,
+      Color.lerp(startColor, endColor, blueShift) ?? endColor,
+    ];
+    final effectiveGradientColors = shiftedGradientColors
+        .map(
+          (Color color) => Color.lerp(trackColor, color, visibility) ?? color,
+        )
+        .toList(growable: false);
+
+    return ClipRRect(
+      borderRadius: borderRadius,
+      child: SizedBox(
+        height: minHeight,
+        child: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            ColoredBox(color: trackColor),
+            FractionallySizedBox(
+              alignment: Alignment.centerLeft,
+              widthFactor: normalizedValue,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(colors: effectiveGradientColors),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  double _resolveBlueShift(double normalizedValue) {
+    if (normalizedValue <= 0.20) {
+      return 0.00;
+    }
+    if (normalizedValue <= 0.40) {
+      return _lerpWindow(normalizedValue, 0.20, 0.40, 0.00, 0.22);
+    }
+    if (normalizedValue <= 0.60) {
+      return _lerpWindow(normalizedValue, 0.40, 0.60, 0.22, 0.46);
+    }
+    if (normalizedValue <= 0.80) {
+      return _lerpWindow(normalizedValue, 0.60, 0.80, 0.46, 0.72);
+    }
+    return _lerpWindow(normalizedValue, 0.80, 1.00, 0.72, 0.96);
+  }
+
+  double _lerpWindow(
+    double value,
+    double start,
+    double end,
+    double startOutput,
+    double endOutput,
+  ) {
+    final t = ((value - start) / (end - start)).clamp(0, 1).toDouble();
+    return startOutput + ((endOutput - startOutput) * t);
+  }
+}
+
 class _FundReminderPalette {
   const _FundReminderPalette({
     required this.backgroundGradientColors,
@@ -997,16 +1085,15 @@ class FundFeaturedFundCard extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: UiTokens.spacing4),
-                          ClipRRect(
+                          _FundGradientProgressBar(
+                            value: data.progress,
+                            minHeight: 5,
+                            trackColor: colors.border,
+                            gradientColors: <Color>[
+                              colors.success,
+                              colors.primary,
+                            ],
                             borderRadius: BorderRadius.circular(3),
-                            child: LinearProgressIndicator(
-                              minHeight: 5,
-                              value: data.progress.clamp(0, 1),
-                              backgroundColor: colors.border,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                colors.primary,
-                              ),
-                            ),
                           ),
                         ],
                       ),
@@ -1214,16 +1301,15 @@ class FundActiveFundCard extends StatelessWidget {
                   ],
                   if (data.progress != null) ...<Widget>[
                     const SizedBox(height: UiTokens.spacing8),
-                    ClipRRect(
+                    _FundGradientProgressBar(
+                      value: data.progress!,
+                      minHeight: 5,
+                      trackColor: colors.border,
+                      gradientColors: <Color>[
+                        data.progressColor ?? colors.success,
+                        colors.primary,
+                      ],
                       borderRadius: BorderRadius.circular(2),
-                      child: LinearProgressIndicator(
-                        minHeight: 5,
-                        value: data.progress!.clamp(0, 1),
-                        backgroundColor: colors.border,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          data.progressColor ?? colors.success,
-                        ),
-                      ),
                     ),
                   ],
                 ],

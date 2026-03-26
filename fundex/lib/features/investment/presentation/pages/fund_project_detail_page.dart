@@ -210,6 +210,7 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                           value: _formatAchievementRate(
                             project.achievementRate,
                           ),
+                          achievementRate: project.achievementRate,
                         ),
                       ),
                     ],
@@ -408,16 +409,22 @@ class _FundDetailAchievementBanner extends StatelessWidget {
   const _FundDetailAchievementBanner({
     required this.label,
     required this.value,
+    required this.achievementRate,
   });
 
   final String label;
   final String value;
+  final double? achievementRate;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
+    final palette = _resolveAchievementBannerPalette(
+      colors: colors,
+      achievementRate: achievementRate,
+    );
 
     return Container(
       width: double.infinity,
@@ -426,8 +433,9 @@ class _FundDetailAchievementBanner extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
-          colors: <Color>[colors.primary, colors.primaryAlt],
+          colors: palette.gradientColors,
         ),
+        border: Border.all(color: palette.borderColor),
         borderRadius: BorderRadius.circular(UiTokens.radius12),
       ),
       child: Row(
@@ -435,17 +443,89 @@ class _FundDetailAchievementBanner extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: appText.chip.copyWith(color: colors.onDark),
+              style: appText.chip.copyWith(color: palette.foregroundColor),
             ),
           ),
           Text(
             value,
-            style: appText.numericTitle.copyWith(color: colors.onDark),
+            style: appText.numericTitle.copyWith(
+              color: palette.foregroundColor,
+            ),
           ),
         ],
       ),
     );
   }
+}
+
+class _AchievementBannerPalette {
+  const _AchievementBannerPalette({
+    required this.gradientColors,
+    required this.foregroundColor,
+    required this.borderColor,
+  });
+
+  final List<Color> gradientColors;
+  final Color foregroundColor;
+  final Color borderColor;
+}
+
+_AchievementBannerPalette _resolveAchievementBannerPalette({
+  required AppSemanticColorTheme colors,
+  required double? achievementRate,
+}) {
+  final normalizedValue = (achievementRate ?? 0).clamp(0, 1).toDouble();
+  final trackColor = colors.surfaceAlt;
+  final visibility =
+      0.36 + (0.64 * Curves.easeOutCubic.transform(normalizedValue));
+  final blueShift = _resolveAchievementBlueShift(normalizedValue);
+  final shiftedGradientColors = <Color>[
+    Color.lerp(colors.success, colors.primary, blueShift * 0.58) ??
+        colors.success,
+    Color.lerp(colors.success, colors.primary, blueShift) ?? colors.primary,
+  ];
+  final effectiveGradientColors = shiftedGradientColors
+      .map((Color color) => Color.lerp(trackColor, color, visibility) ?? color)
+      .toList(growable: false);
+  final foregroundColor = normalizedValue >= 0.62
+      ? colors.onDark
+      : colors.textPrimary;
+  final borderColor =
+      Color.lerp(colors.border, effectiveGradientColors.last, 0.42) ??
+      colors.border;
+
+  return _AchievementBannerPalette(
+    gradientColors: effectiveGradientColors,
+    foregroundColor: foregroundColor,
+    borderColor: borderColor,
+  );
+}
+
+double _resolveAchievementBlueShift(double normalizedValue) {
+  if (normalizedValue <= 0.20) {
+    return 0.00;
+  }
+  if (normalizedValue <= 0.40) {
+    return _lerpAchievementWindow(normalizedValue, 0.20, 0.40, 0.00, 0.22);
+  }
+  if (normalizedValue <= 0.60) {
+    return _lerpAchievementWindow(normalizedValue, 0.40, 0.60, 0.22, 0.46);
+  }
+  if (normalizedValue <= 0.80) {
+    return _lerpAchievementWindow(normalizedValue, 0.60, 0.80, 0.46, 0.72);
+  }
+  return _lerpAchievementWindow(normalizedValue, 0.80, 1.00, 0.72, 0.96);
+}
+
+double _lerpAchievementWindow(
+  double value,
+  double start,
+  double end,
+  double startOutput,
+  double endOutput,
+) {
+  final t = ((value - start) / (end - start)).clamp(0, 1).toDouble();
+  return startOutput + ((endOutput - startOutput) * t);
 }
 
 String _formatAchievementRate(double? value) {

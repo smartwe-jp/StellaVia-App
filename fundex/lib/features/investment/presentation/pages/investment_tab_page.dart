@@ -573,6 +573,10 @@ class _FundProjectCard extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final isDark = theme.brightness == Brightness.dark;
+    final achievementPalette = _resolveAchievementBarPalette(
+      colors: colors,
+      achievementRate: project.achievementRate,
+    );
     final cardRadius = BorderRadius.circular(UiTokens.radius16);
     final heroGlassColor = _resolveHeroGlassSurfaceColor(theme);
     final heroGlassBorderColor = _resolveHeroGlassBorderColor(theme);
@@ -764,14 +768,17 @@ class _FundProjectCard extends StatelessWidget {
                           gradient: LinearGradient(
                             begin: Alignment.centerLeft,
                             end: Alignment.centerRight,
-                            colors: palette.amountGradientColors,
+                            colors: achievementPalette.gradientColors,
+                          ),
+                          border: Border.all(
+                            color: achievementPalette.borderColor,
                           ),
                         ),
                         child: Text(
                           appliedAmountText,
                           textAlign: TextAlign.center,
                           style: appText.button.copyWith(
-                            color: colors.brandWhite,
+                            color: achievementPalette.foregroundColor,
                           ),
                         ),
                       ),
@@ -835,6 +842,76 @@ class _FundProjectCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class _AchievementBarPalette {
+  const _AchievementBarPalette({
+    required this.gradientColors,
+    required this.foregroundColor,
+    required this.borderColor,
+  });
+
+  final List<Color> gradientColors;
+  final Color foregroundColor;
+  final Color borderColor;
+}
+
+_AchievementBarPalette _resolveAchievementBarPalette({
+  required AppSemanticColorTheme colors,
+  required double? achievementRate,
+}) {
+  final normalizedValue = (achievementRate ?? 0).clamp(0, 1).toDouble();
+  final trackColor = colors.surfaceAlt;
+  final visibility =
+      0.36 + (0.64 * Curves.easeOutCubic.transform(normalizedValue));
+  final blueShift = _resolveAchievementBlueShift(normalizedValue);
+  final shiftedGradientColors = <Color>[
+    Color.lerp(colors.success, colors.primary, blueShift * 0.58) ??
+        colors.success,
+    Color.lerp(colors.success, colors.primary, blueShift) ?? colors.primary,
+  ];
+  final effectiveGradientColors = shiftedGradientColors
+      .map((Color color) => Color.lerp(trackColor, color, visibility) ?? color)
+      .toList(growable: false);
+  final foregroundColor = normalizedValue >= 0.62
+      ? colors.onDark
+      : colors.textPrimary;
+  final borderColor =
+      Color.lerp(colors.border, effectiveGradientColors.last, 0.42) ??
+      colors.border;
+
+  return _AchievementBarPalette(
+    gradientColors: effectiveGradientColors,
+    foregroundColor: foregroundColor,
+    borderColor: borderColor,
+  );
+}
+
+double _resolveAchievementBlueShift(double normalizedValue) {
+  if (normalizedValue <= 0.20) {
+    return 0.00;
+  }
+  if (normalizedValue <= 0.40) {
+    return _lerpAchievementWindow(normalizedValue, 0.20, 0.40, 0.00, 0.22);
+  }
+  if (normalizedValue <= 0.60) {
+    return _lerpAchievementWindow(normalizedValue, 0.40, 0.60, 0.22, 0.46);
+  }
+  if (normalizedValue <= 0.80) {
+    return _lerpAchievementWindow(normalizedValue, 0.60, 0.80, 0.46, 0.72);
+  }
+  return _lerpAchievementWindow(normalizedValue, 0.80, 1.00, 0.72, 0.96);
+}
+
+double _lerpAchievementWindow(
+  double value,
+  double start,
+  double end,
+  double startOutput,
+  double endOutput,
+) {
+  final t = ((value - start) / (end - start)).clamp(0, 1).toDouble();
+  return startOutput + ((endOutput - startOutput) * t);
 }
 
 Color _resolveHeroGlassSurfaceColor(ThemeData theme) {

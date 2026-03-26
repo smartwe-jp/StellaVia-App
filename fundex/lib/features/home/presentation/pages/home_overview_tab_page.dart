@@ -413,21 +413,29 @@ FundActiveFundCardData _buildActiveFundCardData(
   BuildContext context,
   FundProject project,
 ) {
+  final locale = Localizations.localeOf(context);
+  final currencyFormatter = NumberFormat.currency(
+    locale: locale.toLanguageTag(),
+    symbol: '¥',
+    decimalDigits: 0,
+  );
+  final nextDistributionDate = _parseDateTime(project.distributionDate);
+
   return FundActiveFundCardData(
     title: project.projectName,
     annualYield: resolveFundProjectYieldDisplay(project),
     rows: <FundLabeledValue>[
       FundLabeledValue(
-        label: context.l10n.fundListPeriodLabel,
-        value: _resolvePeriodText(project),
+        label: context.l10n.fundDetailFundTotalLabel,
+        value: _formatCurrency(project.amountApplication, currencyFormatter),
       ),
       FundLabeledValue(
-        label: context.l10n.fundListMethodLabel,
-        value: _resolveMethodLabel(context, project.offeringMethod),
+        label: context.l10n.homeNextDividendLabel,
+        value: nextDistributionDate == null
+            ? context.l10n.myPageResultAnnouncementTbd
+            : _formatDateForLocale(nextDistributionDate, locale),
       ),
     ],
-    progress: _normalizeProgress(project.achievementRate),
-    progressColor: AppColorTokens.fundexSuccess,
     onTap: () => context.push('/funds/${project.id}'),
   );
 }
@@ -464,32 +472,55 @@ FundSecondaryMarketCardData _buildSecondaryMarketCardData(
 }
 
 FundFeaturedFundTagData _buildStatusTag(BuildContext context, int? status) {
+  final palette = _resolveFeaturedStatusPalette(context, status);
   switch (status) {
+    case 7:
+      return FundFeaturedFundTagData(
+        label: context.l10n.fundListStatusCompleted,
+        backgroundColor: palette.tagBackgroundColor,
+        foregroundColor: palette.tagForegroundColor,
+      );
+    case 5:
+      return FundFeaturedFundTagData(
+        label: context.l10n.fundListStatusOperatingEnded,
+        backgroundColor: palette.tagBackgroundColor,
+        foregroundColor: palette.tagForegroundColor,
+      );
     case 1:
       return FundFeaturedFundTagData(
         label: context.l10n.fundListStatusOpen,
-        backgroundColor: AppColorTokens.fundexSuccess.withValues(alpha: 0.92),
-        foregroundColor: Colors.white,
+        backgroundColor: palette.tagBackgroundColor,
+        foregroundColor: palette.tagForegroundColor,
       );
     case 0:
       return FundFeaturedFundTagData(
         label: context.l10n.fundListStatusUpcoming,
-        backgroundColor: AppColorTokens.fundexWarning.withValues(alpha: 0.92),
-        foregroundColor: Colors.white,
+        backgroundColor: palette.tagBackgroundColor,
+        foregroundColor: palette.tagForegroundColor,
       );
     case 4:
       return FundFeaturedFundTagData(
         label: context.l10n.fundListStatusOperating,
-        backgroundColor: AppColorTokens.fundexAccent.withValues(alpha: 0.88),
-        foregroundColor: Colors.white,
+        backgroundColor: palette.tagBackgroundColor,
+        foregroundColor: palette.tagForegroundColor,
+      );
+    case 3:
+      return FundFeaturedFundTagData(
+        label: context.l10n.fundListStatusClosed,
+        backgroundColor: palette.tagBackgroundColor,
+        foregroundColor: palette.tagForegroundColor,
+      );
+    case 2:
+      return FundFeaturedFundTagData(
+        label: context.l10n.fundListStatusFailed,
+        backgroundColor: palette.tagBackgroundColor,
+        foregroundColor: palette.tagForegroundColor,
       );
     default:
       return FundFeaturedFundTagData(
         label: context.l10n.fundListStatusUnknown,
-        backgroundColor: AppColorTokens.fundexTextSecondary.withValues(
-          alpha: 0.88,
-        ),
-        foregroundColor: Colors.white,
+        backgroundColor: palette.tagBackgroundColor,
+        foregroundColor: palette.tagForegroundColor,
       );
   }
 }
@@ -510,34 +541,77 @@ FundFeaturedFundTagData? _buildMethodTag(
 }
 
 List<Color> _featuredArtworkGradientColors(BuildContext context, int? status) {
+  return _resolveFeaturedStatusPalette(context, status).gradientColors;
+}
+
+_FeaturedFundStatusPalette _resolveFeaturedStatusPalette(
+  BuildContext context,
+  int? status,
+) {
   final colors = Theme.of(context).appColors;
 
   switch (status) {
-    case 1:
-      return <Color>[
-        colors.brandPrimaryDark,
-        colors.primary,
-        colors.brandPrimaryBright,
-      ];
-    case 0:
-      return <Color>[
-        colors.warningForeground,
-        colors.warning,
-        colors.warningAction,
-      ];
     case 4:
-      return <Color>[
-        colors.successForeground,
-        colors.success,
-        colors.successBorder,
-      ];
+      return _FeaturedFundStatusPalette(
+        gradientColors: <Color>[colors.infoForeground, colors.primary],
+        tagBackgroundColor: colors.infoSubtle,
+        tagForegroundColor: colors.infoForeground,
+      );
+    case 5:
+      return _FeaturedFundStatusPalette(
+        gradientColors: <Color>[colors.heroMiddle, colors.heroEnd],
+        tagBackgroundColor: colors.surfaceAlt,
+        tagForegroundColor: colors.textSecondary,
+      );
+    case 1:
+      return _FeaturedFundStatusPalette(
+        gradientColors: <Color>[colors.successForeground, colors.success],
+        tagBackgroundColor: colors.successSubtle,
+        tagForegroundColor: colors.successForeground,
+      );
+    case 0:
+      return _FeaturedFundStatusPalette(
+        gradientColors: <Color>[colors.warningForeground, colors.warning],
+        tagBackgroundColor: colors.warningSubtle,
+        tagForegroundColor: colors.warningForeground,
+      );
+    case 3:
+      return _FeaturedFundStatusPalette(
+        gradientColors: <Color>[colors.heroMiddle, colors.heroEnd],
+        tagBackgroundColor: colors.surfaceAlt,
+        tagForegroundColor: colors.textSecondary,
+      );
+    case 7:
+      return _FeaturedFundStatusPalette(
+        gradientColors: <Color>[colors.successForeground, colors.success],
+        tagBackgroundColor: colors.successSubtle,
+        tagForegroundColor: colors.successForeground,
+      );
+    case 2:
+      return _FeaturedFundStatusPalette(
+        gradientColors: <Color>[colors.dangerForeground, colors.danger],
+        tagBackgroundColor: colors.dangerSubtle,
+        tagForegroundColor: colors.dangerForeground,
+      );
     default:
-      return <Color>[
-        colors.textSecondary,
-        colors.textSecondary.withValues(alpha: 0.84),
-        colors.textTertiary,
-      ];
+      return _FeaturedFundStatusPalette(
+        gradientColors: <Color>[colors.heroMiddle, colors.heroEnd],
+        tagBackgroundColor: colors.surfaceAlt,
+        tagForegroundColor: colors.textSecondary,
+      );
   }
+}
+
+class _FeaturedFundStatusPalette {
+  const _FeaturedFundStatusPalette({
+    required this.gradientColors,
+    required this.tagBackgroundColor,
+    required this.tagForegroundColor,
+  });
+
+  final List<Color> gradientColors;
+  final Color tagBackgroundColor;
+  final Color tagForegroundColor;
 }
 
 String _buildFeaturedMetadata(BuildContext context, FundProject project) {
@@ -576,14 +650,6 @@ String _buildProgressLabel(
     amount,
     _formatProgressPercent(project.achievementRate),
   );
-}
-
-String _resolvePeriodText(FundProject project) {
-  final period = project.investmentPeriod?.trim();
-  if (period != null && period.isNotEmpty) {
-    return period;
-  }
-  return '--';
 }
 
 String _resolveMethodLabel(BuildContext context, String? offeringMethod) {

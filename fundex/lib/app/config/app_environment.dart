@@ -90,9 +90,9 @@ class EnvironmentFactory {
         return const AppEnvironment(
           flavor: AppFlavor.prod,
           appName: 'StellaVia',
-          memberApiBaseUrl: 'https://new.gutingjun.com/api',
+          memberApiBaseUrl: 'https://stellavia.co.jp/api',
           hotelApiBaseUrl: 'https://hotel.gutingjun.com/api',
-          oaApiBaseUrl: 'https://oa.gutingjun.com/api',
+          oaApiBaseUrl: 'https://stellavia.co.jp/api',
           enableHttpLog: false,
         );
     }
