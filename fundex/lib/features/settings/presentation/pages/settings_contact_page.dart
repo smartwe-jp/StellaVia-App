@@ -74,11 +74,11 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
     final authKana = _splitName(user?.katakana);
     _familyNameController.text = _firstNonEmpty(<String>[
       profile?.familyName ?? '',
-      user?.lastName ?? '',
+      user?.firstName ?? '',
     ]);
     _givenNameController.text = _firstNonEmpty(<String>[
       profile?.givenName ?? '',
-      user?.firstName ?? '',
+      user?.lastName ?? '',
     ]);
     _familyNameKanaController.text = _firstNonEmpty(<String>[
       profile?.familyNameKana ?? '',

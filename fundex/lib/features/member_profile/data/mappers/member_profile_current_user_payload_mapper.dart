@@ -19,12 +19,12 @@ class MemberProfileCurrentUserPayloadMapper {
     final bank = authUser?.bank ?? _jsonMap(payload['bank']);
 
     final familyName = _firstNonEmpty(<String>[
-      _string(payload['lastName']),
-      authUser?.lastName ?? '',
-    ]);
-    final givenName = _firstNonEmpty(<String>[
       _string(payload['firstName']),
       authUser?.firstName ?? '',
+    ]);
+    final givenName = _firstNonEmpty(<String>[
+      _string(payload['lastName']),
+      authUser?.lastName ?? '',
     ]);
     final (String familyNameKana, String givenNameKana) = _splitName(
       _firstNonEmpty(<String>[
@@ -56,12 +56,12 @@ class MemberProfileCurrentUserPayloadMapper {
       familyNameKana: familyNameKana,
       givenNameKana: givenNameKana,
       familyNameEn: _firstNonEmpty(<String>[
-        _string(payload['lastNameEn']),
-        authUser?.lastNameEn ?? '',
-      ]),
-      givenNameEn: _firstNonEmpty(<String>[
         _string(payload['firstNameEn']),
         authUser?.firstNameEn ?? '',
+      ]),
+      givenNameEn: _firstNonEmpty(<String>[
+        _string(payload['lastNameEn']),
+        authUser?.lastNameEn ?? '',
       ]),
       nameKanji: _joinNonEmpty(<String>[familyName, givenName]),
       katakana: _joinNonEmpty(<String>[familyNameKana, givenNameKana]),

@@ -15,21 +15,21 @@ class MemberProfileApiPayloadMapper {
     final familyName = _firstNonEmpty(<String>[
       profile.familyName,
       fallbackFamilyName,
-      authUser?.lastName ?? '',
+      authUser?.firstName ?? '',
     ]);
     final givenName = _firstNonEmpty(<String>[
       profile.givenName,
       fallbackGivenName,
-      authUser?.firstName ?? '',
+      authUser?.lastName ?? '',
     ]);
     final familyNameEn = _firstNonEmpty(<String>[
       profile.familyNameEn,
-      authUser?.lastNameEn ?? '',
+      authUser?.firstNameEn ?? '',
       familyName,
     ]);
     final givenNameEn = _firstNonEmpty(<String>[
       profile.givenNameEn,
-      authUser?.firstNameEn ?? '',
+      authUser?.lastNameEn ?? '',
       givenName,
     ]);
     final katakana = _firstNonEmpty(<String>[
@@ -41,37 +41,34 @@ class MemberProfileApiPayloadMapper {
     final bank = _buildBankPayload(profile: profile, authUser: authUser);
 
     final baseInfo = <String, dynamic>{
-        'firstName': givenName,
-        'lastName': familyName,
-        'firstNameEn': givenNameEn,
-        'lastNameEn': familyNameEn,
-        'katakana': katakana,
-        'birthday': _normalizeBirthday(
-          _firstNonEmpty(<String>[
-            profile.birthday ?? '',
-            authUser?.birthday ?? '',
-          ]),
-        ),
-        'zipCode': _firstNonEmpty(<String>[
-          profile.zipCode,
-          authUser?.zipCode ?? '',
+      'firstName': familyName,
+      'lastName': givenName,
+      'firstNameEn': familyNameEn,
+      'lastNameEn': givenNameEn,
+      'katakana': katakana,
+      'birthday': _normalizeBirthday(
+        _firstNonEmpty(<String>[
+          profile.birthday ?? '',
+          authUser?.birthday ?? '',
         ]),
-        'address': _firstNonEmpty(<String>[
-          profile.address,
-          _joinNonEmpty(<String?>[profile.prefectureCode, profile.cityAddress]),
-          authUser?.address ?? '',
-        ]),
-        'sex': authUser?.sex ?? 1,
-        'liveJp': authUser?.liveJp ?? 1,
-        'nationality': _firstNonEmpty(<String>[
-          authUser?.nationality ?? '',
-          '日本',
-        ]),
-        'taxcountry': _firstNonEmpty(<String>[
-          authUser?.taxcountry ?? '',
-          '日本',
-        ]),
-      };
+      ),
+      'zipCode': _firstNonEmpty(<String>[
+        profile.zipCode,
+        authUser?.zipCode ?? '',
+      ]),
+      'address': _firstNonEmpty(<String>[
+        profile.address,
+        _joinNonEmpty(<String?>[profile.prefectureCode, profile.cityAddress]),
+        authUser?.address ?? '',
+      ]),
+      'sex': authUser?.sex ?? 1,
+      'liveJp': authUser?.liveJp ?? 1,
+      'nationality': _firstNonEmpty(<String>[
+        authUser?.nationality ?? '',
+        '日本',
+      ]),
+      'taxcountry': _firstNonEmpty(<String>[authUser?.taxcountry ?? '', '日本']),
+    };
     if (bank.isNotEmpty) {
       baseInfo['bank'] = bank;
     }

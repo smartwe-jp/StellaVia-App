@@ -19,7 +19,7 @@ String resolveHomeDisplayName({
 String _resolveJapaneseDisplayName(AuthUser? user) {
   final baseName =
       _firstNonBlank(<String?>[
-        user?.lastName,
+        user?.firstName,
         user?.katakana,
         user?.username,
         user?.email,
@@ -34,7 +34,7 @@ String _resolveJapaneseDisplayName(AuthUser? user) {
 String _resolveChineseDisplayName(AuthUser? user) {
   final baseName =
       _firstNonBlank(<String?>[
-        user?.lastName,
+        user?.firstName,
         user?.username,
         user?.email,
         user?.mobile,
@@ -52,9 +52,9 @@ String _resolveChineseDisplayName(AuthUser? user) {
 String _resolveEnglishDisplayName(AuthUser? user) {
   final baseName =
       _firstNonBlank(<String?>[
-        user?.lastNameEn,
-        user?.lastName,
         user?.firstNameEn,
+        user?.firstName,
+        user?.lastNameEn,
         user?.username,
         user?.email,
         user?.mobile,
@@ -71,7 +71,7 @@ String _resolveEnglishDisplayName(AuthUser? user) {
 
 String _resolveGenericDisplayName(AuthUser? user) {
   return _firstNonBlank(<String?>[
-        user?.lastName,
+        user?.firstName,
         user?.username,
         user?.email,
         user?.mobile,

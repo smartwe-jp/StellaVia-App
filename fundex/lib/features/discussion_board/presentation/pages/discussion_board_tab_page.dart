@@ -70,8 +70,8 @@ class _DiscussionBoardTabPageState
 
   String _resolveAvatarText(AuthUser? user) {
     final candidates = <String>[
-      user?.lastName ?? '',
       user?.firstName ?? '',
+      user?.lastName ?? '',
       user?.username ?? '',
       user?.id ?? '',
     ];

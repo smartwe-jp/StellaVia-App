@@ -250,7 +250,9 @@ class _MemberProfileEditFlowPageState
           .call();
       final MemberProfileDetails? onboardingDraft = _isSingleSectionMode
           ? null
-          : await ref.read(memberProfileRepositoryProvider).readOnboardingDraft();
+          : await ref
+                .read(memberProfileRepositoryProvider)
+                .readOnboardingDraft();
       final AuthUser? authUser = await ref
           .read(currentAuthUserProvider.future)
           .catchError((Object _) => null);
@@ -296,11 +298,11 @@ class _MemberProfileEditFlowPageState
         ]);
         _familyNameRomanController.text = _firstNonEmpty(<String>[
           savedProfile?.familyNameEn ?? '',
-          authUser?.lastNameEn ?? '',
+          authUser?.firstNameEn ?? '',
         ]);
         _givenNameRomanController.text = _firstNonEmpty(<String>[
           savedProfile?.givenNameEn ?? '',
-          authUser?.firstNameEn ?? '',
+          authUser?.lastNameEn ?? '',
         ]);
         _phone = savedProfile?.phone.trim().isNotEmpty == true
             ? savedProfile!.phone.trim()
@@ -422,9 +424,7 @@ class _MemberProfileEditFlowPageState
     await _persistOnboardingDraft(showNotice: true);
   }
 
-  Future<void> _pickAndSaveImage({
-    required _ProfilePhotoTarget target,
-  }) async {
+  Future<void> _pickAndSaveImage({required _ProfilePhotoTarget target}) async {
     if (_isUploadingPhoto || _isSubmitting || _isRunningRealPersonAuth) {
       return;
     }
@@ -746,8 +746,11 @@ class _MemberProfileEditFlowPageState
         editingStep: _currentStep.index,
       );
       final shouldSubmitRemotely =
-          _completedAt != null || draft.isEditFlowComplete;
-      final shouldMarkCompleted = draft.isEditFlowComplete && _completedAt == null;
+          _isSingleSectionMode ||
+          _completedAt != null ||
+          draft.isEditFlowComplete;
+      final shouldMarkCompleted =
+          draft.isEditFlowComplete && _completedAt == null;
       if (shouldSubmitRemotely) {
         await ref.read(submitMemberProfileUseCaseProvider).call(draft);
         await ref.read(syncMemberProfileFromRemoteUseCaseProvider).call();
@@ -1067,10 +1070,15 @@ class _MemberProfileEditFlowPageState
           : _completedAt,
       editingStep: _currentStep.index,
     );
-    await ref.read(memberProfileRepositoryProvider).saveOnboardingDraft(profile);
+    await ref
+        .read(memberProfileRepositoryProvider)
+        .saveOnboardingDraft(profile);
     _completedAt = profile.completedAt;
     if (showNotice && mounted) {
-      AppNotice.show(context, message: context.l10n.memberProfileAutoSavedToast);
+      AppNotice.show(
+        context,
+        message: context.l10n.memberProfileAutoSavedToast,
+      );
     }
   }
 

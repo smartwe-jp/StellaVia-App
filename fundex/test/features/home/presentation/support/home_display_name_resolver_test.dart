@@ -6,72 +6,37 @@ import 'package:fundex/features/home/presentation/support/home_display_name_reso
 
 void main() {
   group('resolveHomeDisplayName', () {
-    test('uses lastName with さん in Japanese locale', () {
-      const user = AuthUser(
-        username: 'aaron@example.com',
-        lastName: '田中',
-        sex: 1,
-      );
-
+    test('uses firstName for japanese display name', () {
       final result = resolveHomeDisplayName(
         locale: const Locale('ja'),
-        user: user,
+        user: const AuthUser(username: 'demo', firstName: '刁', lastName: '文阳'),
       );
 
-      expect(result, '田中さん');
+      expect(result, '刁さん');
     });
 
-    test('uses male honorific in Chinese locale', () {
-      const user = AuthUser(
-        username: 'aaron@example.com',
-        lastName: '田中',
-        sex: 1,
-      );
-
+    test('uses firstName for chinese display name', () {
       final result = resolveHomeDisplayName(
         locale: const Locale('zh'),
-        user: user,
+        user: const AuthUser(username: 'demo', firstName: '刁', lastName: '文阳'),
       );
 
-      expect(result, '田中先生');
+      expect(result, '刁');
     });
 
-    test('uses female honorific in Chinese locale', () {
-      const user = AuthUser(username: 'amy@example.com', lastName: '王', sex: 2);
-
-      final result = resolveHomeDisplayName(
-        locale: const Locale('zh'),
-        user: user,
-      );
-
-      expect(result, '王女士');
-    });
-
-    test('uses english last name with english honorific', () {
-      const user = AuthUser(
-        username: 'aaron@example.com',
-        lastName: '田中',
-        lastNameEn: 'Tanaka',
-        sex: 1,
-      );
-
+    test('uses firstNameEn first for english display name', () {
       final result = resolveHomeDisplayName(
         locale: const Locale('en'),
-        user: user,
+        user: const AuthUser(
+          username: 'demo',
+          firstName: '刁',
+          lastName: '文阳',
+          firstNameEn: 'Diao',
+          lastNameEn: 'Wenyang',
+        ),
       );
 
-      expect(result, 'Mr. Tanaka');
-    });
-
-    test('falls back to plain name when sex is unknown in Chinese locale', () {
-      const user = AuthUser(username: 'aaron@example.com', lastName: '田中');
-
-      final result = resolveHomeDisplayName(
-        locale: const Locale('zh'),
-        user: user,
-      );
-
-      expect(result, '田中');
+      expect(result, 'Diao');
     });
   });
 }
