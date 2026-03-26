@@ -220,6 +220,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ? _resolveErrorMessage(context, state.errorKey!)
             : null);
     final canSendCode = state.canSendCode && !_sendCodeCooldown.isActive;
+    final isEditingInput = MediaQuery.viewInsetsOf(context).bottom > 0;
 
     ref.listen<AuthState>(authControllerProvider, (previous, next) {
       final didLogin =
@@ -238,9 +239,26 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           bottom: false,
           child: Column(
             children: <Widget>[
-              _LoginHeroHeader(
-                subtitle: l10n.loginTitle,
-                onClose: _continueWithoutLogin,
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 260),
+                curve: Curves.easeOutCubic,
+                height: isEditingInput ? 0 : 220,
+                child: ClipRect(
+                  child: OverflowBox(
+                    alignment: Alignment.topCenter,
+                    minHeight: 0,
+                    maxHeight: 220,
+                    child: AnimatedSlide(
+                      duration: const Duration(milliseconds: 260),
+                      curve: Curves.easeOutCubic,
+                      offset: Offset(0, isEditingInput ? -1.0 : 0),
+                      child: _LoginHeroHeader(
+                        subtitle: l10n.loginTitle,
+                        onClose: _continueWithoutLogin,
+                      ),
+                    ),
+                  ),
+                ),
               ),
               Expanded(
                 child: SingleChildScrollView(
