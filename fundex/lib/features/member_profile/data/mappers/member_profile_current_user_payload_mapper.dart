@@ -134,6 +134,7 @@ class MemberProfileCurrentUserPayloadMapper {
       ),
       bankName: _string(bank['bankName']),
       branchBankName: _string(bank['branchBankName']),
+      branchBankNumber: _string(bank['branchBankNumber']),
       bankNumber: _string(bank['bankNumber']),
       bankAccountType: _mapBankAccountTypeFromRemote(
         _string(bank['bankAccountType']),

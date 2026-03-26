@@ -60,36 +60,62 @@ class UserWalletAccountHistoryItemDto {
 class UserWalletBankAccountPoolDto {
   const UserWalletBankAccountPoolDto({
     this.id,
+    this.bankType,
     this.bankName,
     this.branchName,
+    this.branchBankNumber,
+    this.bankAccountType,
     this.accountType,
     this.accountNumber,
     this.accountName,
+    this.bankAccountOwnerAddress,
+    this.bankAccountOwnerNationality,
+    this.bankAccountSwiftCode,
+    this.bankCountry,
+    this.branchBankAddress,
     this.version,
   });
 
   factory UserWalletBankAccountPoolDto.fromJson(Map<String, dynamic> json) {
     return UserWalletBankAccountPoolDto(
       id: _stringOrNull(json['id']),
+      bankType: _intOrNull(json['bankType']),
       bankName: _stringOrNull(json['bankName']),
       branchName: _stringOrNull(json['branchName'] ?? json['branchBankName']),
-      accountType: _stringOrNull(
-        json['accountType'] ?? json['bankAccountType'],
+      branchBankNumber: _stringOrNull(json['branchBankNumber']),
+      bankAccountType: _intOrNull(
+        json['bankAccountType'] ?? json['accountType'],
       ),
+      accountType: _stringOrNull(json['accountType']),
       accountNumber: _stringOrNull(json['accountNumber'] ?? json['bankNumber']),
       accountName: _stringOrNull(
         json['accountName'] ?? json['bankAccountOwnerName'],
       ),
+      bankAccountOwnerAddress: _stringOrNull(json['bankAccountOwnerAddress']),
+      bankAccountOwnerNationality: _stringOrNull(
+        json['bankAccountOwnerNationality'],
+      ),
+      bankAccountSwiftCode: _stringOrNull(json['bankAccountSwiftCode']),
+      bankCountry: _stringOrNull(json['bankCountry']),
+      branchBankAddress: _stringOrNull(json['branchBankAddress']),
       version: _intOrNull(json['version']),
     );
   }
 
   final String? id;
+  final int? bankType;
   final String? bankName;
   final String? branchName;
+  final String? branchBankNumber;
+  final int? bankAccountType;
   final String? accountType;
   final String? accountNumber;
   final String? accountName;
+  final String? bankAccountOwnerAddress;
+  final String? bankAccountOwnerNationality;
+  final String? bankAccountSwiftCode;
+  final String? bankCountry;
+  final String? branchBankAddress;
   final int? version;
 }
 
@@ -100,7 +126,7 @@ class UserWalletBankAccountAddRequestDto {
     this.branchName,
     this.branchBankName,
     this.branchBankNumber,
-    this.accountType,
+    this.bankAccountType,
     this.accountNumber,
     this.bankNumber,
     this.accountName,
@@ -117,7 +143,7 @@ class UserWalletBankAccountAddRequestDto {
   final String? branchName;
   final String? branchBankName;
   final String? branchBankNumber;
-  final String? accountType;
+  final int? bankAccountType;
   final String? accountNumber;
   final String? bankNumber;
   final String? accountName;
@@ -129,14 +155,15 @@ class UserWalletBankAccountAddRequestDto {
   final String? branchBankAddress;
 
   Map<String, dynamic> toJson() {
+    final normalizedCountry = _stringOrNull(bankCountry);
+    final normalizedNationality = _stringOrNull(bankAccountOwnerNationality);
     return <String, dynamic>{
       'bankName': bankName.trim(),
       'bankType': bankType,
       'branchName': _stringOrNull(branchName ?? branchBankName),
       'branchBankName': _stringOrNull(branchBankName ?? branchName),
       'branchBankNumber': _stringOrNull(branchBankNumber),
-      'accountType': _stringOrNull(accountType),
-      'bankAccountType': _stringOrNull(accountType),
+      'bankAccountType': bankAccountType,
       'accountNumber': _stringOrNull(accountNumber ?? bankNumber),
       'bankNumber': _stringOrNull(bankNumber ?? accountNumber),
       'accountName': _stringOrNull(accountName ?? bankAccountOwnerName),
@@ -144,11 +171,10 @@ class UserWalletBankAccountAddRequestDto {
         bankAccountOwnerName ?? accountName,
       ),
       'bankAccountOwnerAddress': _stringOrNull(bankAccountOwnerAddress),
-      'bankAccountOwnerNationality': _stringOrNull(
-        bankAccountOwnerNationality,
-      ),
+      'bankAccountOwnerNationality':
+          normalizedNationality ?? (bankType == 0 ? '' : null),
       'bankAccountSwiftCode': _stringOrNull(bankAccountSwiftCode),
-      'bankCountry': _stringOrNull(bankCountry),
+      'bankCountry': normalizedCountry ?? (bankType == 0 ? '日本' : null),
       'branchBankAddress': _stringOrNull(branchBankAddress),
     }..removeWhere((_, dynamic value) => value == null);
   }

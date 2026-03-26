@@ -19,10 +19,43 @@ extension WalletBankAccountInfoDtoMapper on WalletBankAccountInfoDto {
       id: bankAccountId ?? pool.id,
       bankName: pool.bankName ?? '--',
       branchName: pool.branchName ?? '--',
-      accountType: pool.accountType ?? '--',
+      accountType: _resolveAccountTypeLabel(
+        accountType: pool.accountType,
+        bankAccountType: pool.bankAccountType,
+      ),
       accountNumber: pool.accountNumber ?? '--',
       accountHolder: pool.accountName ?? '--',
       expireTime: expireTime,
     );
+  }
+}
+
+String _resolveAccountTypeLabel({
+  required String? accountType,
+  required int? bankAccountType,
+}) {
+  final normalized = accountType?.trim().toLowerCase() ?? '';
+  if (normalized.isNotEmpty) {
+    switch (normalized) {
+      case '1':
+      case 'ordinary':
+      case '普通':
+      case '普通預金':
+        return '普通';
+      case '2':
+      case 'checking':
+      case 'current':
+      case '当座':
+      case '当座預金':
+        return '当座';
+    }
+  }
+  switch (bankAccountType) {
+    case 1:
+      return '普通';
+    case 2:
+      return '当座';
+    default:
+      return '--';
   }
 }

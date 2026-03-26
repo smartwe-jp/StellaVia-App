@@ -20,6 +20,7 @@ class _WalletBankAccountAddPageState
     extends ConsumerState<WalletBankAccountAddPage> {
   late final TextEditingController _bankNameController;
   late final TextEditingController _branchNameController;
+  late final TextEditingController _branchNumberController;
   late final TextEditingController _accountNumberController;
   late final TextEditingController _accountHolderController;
   String? _accountType = _accountTypeOrdinary;
@@ -29,6 +30,8 @@ class _WalletBankAccountAddPageState
     super.initState();
     _bankNameController = TextEditingController()..addListener(_handleChanged);
     _branchNameController = TextEditingController()
+      ..addListener(_handleChanged);
+    _branchNumberController = TextEditingController()
       ..addListener(_handleChanged);
     _accountNumberController = TextEditingController()
       ..addListener(_handleChanged);
@@ -40,6 +43,7 @@ class _WalletBankAccountAddPageState
   void dispose() {
     _bankNameController.dispose();
     _branchNameController.dispose();
+    _branchNumberController.dispose();
     _accountNumberController.dispose();
     _accountHolderController.dispose();
     super.dispose();
@@ -56,6 +60,7 @@ class _WalletBankAccountAddPageState
   bool get _canSubmit {
     return _isFilled(_bankNameController.text) &&
         _isFilled(_branchNameController.text) &&
+        _isFilled(_branchNumberController.text) &&
         _isFilled(_accountNumberController.text) &&
         _isFilled(_accountHolderController.text) &&
         _isFilled(_accountType ?? '');
@@ -88,6 +93,7 @@ class _WalletBankAccountAddPageState
             WalletBankAccountDraft.domestic(
               bankName: _bankNameController.text.trim(),
               branchName: _branchNameController.text.trim(),
+              branchNumber: _branchNumberController.text.trim(),
               accountType: _accountType ?? _accountTypeOrdinary,
               accountNumber: _accountNumberController.text.trim(),
               accountHolder: _accountHolderController.text.trim(),
@@ -161,6 +167,9 @@ class _WalletBankAccountAddPageState
                   _accountType = value;
                 });
               },
+              branchNumberLabel: l10n.walletBankSettingsBranchNumberLabel,
+              branchNumberController: _branchNumberController,
+              branchNumberHintText: l10n.walletBankSettingsBranchNumberHint,
               accountNumberLabel: l10n.memberProfileAccountNumberLabel,
               accountNumberController: _accountNumberController,
               accountNumberHintText: l10n.memberProfileAccountNumberHint,

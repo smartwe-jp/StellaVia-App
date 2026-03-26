@@ -73,6 +73,7 @@ class _MemberProfileEditFlowPageState
   late final TextEditingController _cityAddressController;
   late final TextEditingController _bankNameController;
   late final TextEditingController _branchNameController;
+  late final TextEditingController _branchNumberController;
   late final TextEditingController _accountNumberController;
   late final TextEditingController _accountHolderController;
 
@@ -130,6 +131,7 @@ class _MemberProfileEditFlowPageState
     _cityAddressController = TextEditingController();
     _bankNameController = TextEditingController();
     _branchNameController = TextEditingController();
+    _branchNumberController = TextEditingController();
     _accountNumberController = TextEditingController();
     _accountHolderController = TextEditingController();
     _registerTextFieldListeners();
@@ -151,6 +153,7 @@ class _MemberProfileEditFlowPageState
     _cityAddressController.dispose();
     _bankNameController.dispose();
     _branchNameController.dispose();
+    _branchNumberController.dispose();
     _accountNumberController.dispose();
     _accountHolderController.dispose();
     super.dispose();
@@ -181,6 +184,7 @@ class _MemberProfileEditFlowPageState
         _cityAddressController,
         _bankNameController,
         _branchNameController,
+        _branchNumberController,
         _accountNumberController,
         _accountHolderController,
       ];
@@ -367,6 +371,10 @@ class _MemberProfileEditFlowPageState
         _branchNameController.text = _firstNonEmpty(<String>[
           savedProfile?.branchBankName ?? '',
           _readBankString(authBank, 'branchBankName'),
+        ]);
+        _branchNumberController.text = _firstNonEmpty(<String>[
+          savedProfile?.branchBankNumber ?? '',
+          _readBankString(authBank, 'branchBankNumber'),
         ]);
         _accountNumberController.text = _firstNonEmpty(<String>[
           savedProfile?.bankNumber ?? '',
@@ -998,6 +1006,7 @@ class _MemberProfileEditFlowPageState
   bool get _isBankAccountStepReady =>
       _isFilled(_bankNameController.text) &&
       _isFilled(_branchNameController.text) &&
+      _isFilled(_branchNumberController.text) &&
       _isFilled(_accountType) &&
       _isFilled(_accountNumberController.text) &&
       _isFilled(_accountHolderController.text);
@@ -1134,6 +1143,7 @@ class _MemberProfileEditFlowPageState
       selfiePhotoPath: _emptyToNull(_selfiePhotoPath),
       bankName: _bankNameController.text.trim(),
       branchBankName: _branchNameController.text.trim(),
+      branchBankNumber: _branchNumberController.text.trim(),
       bankNumber: _accountNumberController.text.trim(),
       bankAccountType: _accountType ?? '',
       bankAccountOwnerName: _accountHolderController.text.trim(),
@@ -1654,6 +1664,7 @@ class _MemberProfileEditFlowPageState
         return MemberProfileBankAccountStepPage(
           bankNameController: _bankNameController,
           branchNameController: _branchNameController,
+          branchNumberController: _branchNumberController,
           accountType: safeAccountType,
           accountTypeItems: accountTypeItems,
           accountNumberController: _accountNumberController,

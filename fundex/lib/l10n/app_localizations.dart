@@ -4604,6 +4604,48 @@ abstract class AppLocalizations {
   /// **'The withdrawal fee for overseas bank accounts is JPY 10,000.'**
   String get walletBankSettingsOverseasTip;
 
+  /// No description provided for @walletBankSettingsDomesticChipLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Japan'**
+  String get walletBankSettingsDomesticChipLabel;
+
+  /// No description provided for @walletBankSettingsOverseasChipLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Overseas'**
+  String get walletBankSettingsOverseasChipLabel;
+
+  /// No description provided for @walletBankSettingsDeleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get walletBankSettingsDeleteAction;
+
+  /// No description provided for @walletBankSettingsDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Bank Account'**
+  String get walletBankSettingsDeleteConfirmTitle;
+
+  /// No description provided for @walletBankSettingsDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this withdrawal account? This action cannot be undone.'**
+  String get walletBankSettingsDeleteConfirmBody;
+
+  /// No description provided for @walletBankSettingsDeleteSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal account deleted.'**
+  String get walletBankSettingsDeleteSuccess;
+
+  /// No description provided for @walletBankSettingsDeleteFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete withdrawal account.'**
+  String get walletBankSettingsDeleteFailure;
+
   /// No description provided for @walletBankAccountExpireNotice.
   ///
   /// In en, this message translates to:

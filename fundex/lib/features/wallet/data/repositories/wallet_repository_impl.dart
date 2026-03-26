@@ -49,6 +49,11 @@ class WalletRepositoryImpl implements WalletRepository {
   }
 
   @override
+  Future<void> deleteBankAccount({required Object id}) {
+    return _remote.deleteBankAccount(id: id);
+  }
+
+  @override
   Future<void> sendWithdrawApplyCode() {
     return _remote.sendWithdrawApplyCode();
   }

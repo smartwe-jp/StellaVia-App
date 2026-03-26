@@ -871,6 +871,13 @@
   "walletBankSettingsBranchAddressLabel": "分行地址",
   "walletBankSettingsBranchAddressHint": "东京都千代田区...",
   "walletBankSettingsOverseasTip": "海外账户出金手续费为 10,000 日元。",
+  "walletBankSettingsDomesticChipLabel": "日本国内",
+  "walletBankSettingsOverseasChipLabel": "海外",
+  "walletBankSettingsDeleteAction": "删除",
+  "walletBankSettingsDeleteConfirmTitle": "删除账户",
+  "walletBankSettingsDeleteConfirmBody": "确定要删除这个出金账户吗？此操作无法撤销。",
+  "walletBankSettingsDeleteSuccess": "出金账户已删除。",
+  "walletBankSettingsDeleteFailure": "出金账户删除失败。",
   "walletBankAccountExpireNotice": "请在 {date} 前完成汇款",
   "@walletBankAccountExpireNotice": {
     "placeholders": {

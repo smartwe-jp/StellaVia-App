@@ -14,11 +14,21 @@ extension WalletBankAccountPoolDtoMapper on WalletBankAccountPoolDto {
   WalletBankAccountInfo toEntity() {
     return WalletBankAccountInfo(
       id: id,
+      bankType: bankType,
       bankName: bankName ?? '--',
       branchName: branchName ?? '--',
-      accountType: accountType ?? '--',
+      branchNumber: branchBankNumber,
+      accountType: _resolveAccountTypeLabel(
+        accountType: accountType,
+        bankAccountType: bankAccountType,
+      ),
       accountNumber: accountNumber ?? '--',
       accountHolder: accountName ?? '--',
+      accountHolderAddress: bankAccountOwnerAddress,
+      accountHolderNationality: bankAccountOwnerNationality,
+      swiftCode: bankAccountSwiftCode,
+      bankCountry: bankCountry,
+      branchAddress: branchBankAddress,
     );
   }
 }
@@ -31,7 +41,7 @@ extension WalletBankAccountDraftMapper on WalletBankAccountDraft {
       branchName: branchName.trim(),
       branchBankName: branchName.trim(),
       branchBankNumber: branchNumber?.trim(),
-      accountType: accountType?.trim(),
+      bankAccountType: _mapBankAccountType(accountType),
       accountNumber: accountNumber.trim(),
       bankNumber: accountNumber.trim(),
       accountName: accountHolder.trim(),
@@ -42,5 +52,57 @@ extension WalletBankAccountDraftMapper on WalletBankAccountDraft {
       bankCountry: bankCountry?.trim(),
       branchBankAddress: branchAddress?.trim(),
     );
+  }
+}
+
+int? _mapBankAccountType(String? value) {
+  final normalized = value?.trim().toLowerCase() ?? '';
+  if (normalized.isEmpty) {
+    return null;
+  }
+  switch (normalized) {
+    case '1':
+    case 'ordinary':
+    case '普通':
+    case '普通預金':
+      return 1;
+    case '2':
+    case 'checking':
+    case 'current':
+    case '当座':
+    case '当座預金':
+      return 2;
+    default:
+      return int.tryParse(normalized);
+  }
+}
+
+String _resolveAccountTypeLabel({
+  required String? accountType,
+  required int? bankAccountType,
+}) {
+  final normalized = accountType?.trim().toLowerCase() ?? '';
+  if (normalized.isNotEmpty) {
+    switch (normalized) {
+      case '1':
+      case 'ordinary':
+      case '普通':
+      case '普通預金':
+        return '普通';
+      case '2':
+      case 'checking':
+      case 'current':
+      case '当座':
+      case '当座預金':
+        return '当座';
+    }
+  }
+  switch (bankAccountType) {
+    case 1:
+      return '普通';
+    case 2:
+      return '当座';
+    default:
+      return '--';
   }
 }

@@ -110,6 +110,13 @@ class MemberProfileApiPayloadMapper {
     if (branchBankName.isNotEmpty) {
       payload['branchBankName'] = branchBankName;
     }
+    final branchBankNumber = _firstNonEmpty(<String>[
+      profile.branchBankNumber,
+      _readBankString(authUser?.bank, 'branchBankNumber'),
+    ]);
+    if (branchBankNumber.isNotEmpty) {
+      payload['branchBankNumber'] = branchBankNumber;
+    }
     final bankNumber = _firstNonEmpty(<String>[
       profile.bankNumber,
       _readBankString(authUser?.bank, 'bankNumber'),
@@ -124,12 +131,25 @@ class MemberProfileApiPayloadMapper {
     if (bankAccountOwnerName.isNotEmpty) {
       payload['bankAccountOwnerName'] = bankAccountOwnerName;
     }
+    final bankType = _readBankInt(authUser?.bank, 'bankType') ?? 0;
+    final bankAccountOwnerNationality = _firstNonEmpty(<String>[
+      _readBankString(authUser?.bank, 'bankAccountOwnerNationality'),
+    ]);
+    if (bankAccountOwnerNationality.isNotEmpty) {
+      payload['bankAccountOwnerNationality'] = bankAccountOwnerNationality;
+    }
+    final bankCountry = _firstNonEmpty(<String>[
+      _readBankString(authUser?.bank, 'bankCountry'),
+      if (bankType == 0) '日本',
+    ]);
+    if (bankCountry.isNotEmpty) {
+      payload['bankCountry'] = bankCountry;
+    }
     final bankAccountType = _mapBankAccountTypeOrNull(profile.bankAccountType);
     if (bankAccountType != null) {
       payload['bankAccountType'] = bankAccountType;
     }
-    final bankType = _readBankInt(authUser?.bank, 'bankType');
-    if (bankType != null) {
+    if (bankType != 0 || _readBankInt(authUser?.bank, 'bankType') != null) {
       payload['bankType'] = bankType;
     }
     final liveType = _readBankInt(authUser?.bank, 'liveType');
@@ -145,6 +165,11 @@ class MemberProfileApiPayloadMapper {
       }
       return false;
     });
+    if (payload.isNotEmpty &&
+        bankType == 0 &&
+        !payload.containsKey('bankAccountOwnerNationality')) {
+      payload['bankAccountOwnerNationality'] = '';
+    }
     if (payload.isNotEmpty && !payload.containsKey('bankType')) {
       payload['bankType'] = 0;
     }

@@ -426,6 +426,9 @@ class MemberProfileBankAccountFormSection extends StatelessWidget {
     required this.accountTypeLabel,
     required this.accountType,
     required this.accountTypeItems,
+    this.branchNumberLabel,
+    this.branchNumberController,
+    this.branchNumberHintText,
     required this.accountNumberLabel,
     required this.accountNumberController,
     required this.accountNumberHintText,
@@ -447,6 +450,10 @@ class MemberProfileBankAccountFormSection extends StatelessWidget {
   final String? accountType;
   final List<DropdownMenuItem<String>> accountTypeItems;
   final ValueChanged<String?>? onAccountTypeChanged;
+
+  final String? branchNumberLabel;
+  final TextEditingController? branchNumberController;
+  final String? branchNumberHintText;
 
   final String accountNumberLabel;
   final TextEditingController accountNumberController;
@@ -488,6 +495,16 @@ class MemberProfileBankAccountFormSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 14),
+        if (branchNumberLabel != null &&
+            branchNumberController != null) ...<Widget>[
+          MemberProfileTextField(
+            label: branchNumberLabel!,
+            controller: branchNumberController!,
+            hintText: branchNumberHintText,
+            keyboardType: TextInputType.number,
+          ),
+          const SizedBox(height: 14),
+        ],
         MemberProfileTextField(
           label: accountNumberLabel,
           controller: accountNumberController,

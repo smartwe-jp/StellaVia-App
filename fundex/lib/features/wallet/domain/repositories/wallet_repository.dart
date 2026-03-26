@@ -15,6 +15,8 @@ abstract class WalletRepository {
 
   Future<void> addBankAccount(WalletBankAccountDraft draft);
 
+  Future<void> deleteBankAccount({required Object id});
+
   Future<void> sendWithdrawApplyCode();
 
   Future<void> applyWithdraw(WalletWithdrawApplyDraft draft);

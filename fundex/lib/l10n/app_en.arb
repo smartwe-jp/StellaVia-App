@@ -871,6 +871,13 @@
   "walletBankSettingsBranchAddressLabel": "Branch address",
   "walletBankSettingsBranchAddressHint": "Tokyo...",
   "walletBankSettingsOverseasTip": "The withdrawal fee for overseas bank accounts is JPY 10,000.",
+  "walletBankSettingsDomesticChipLabel": "Japan",
+  "walletBankSettingsOverseasChipLabel": "Overseas",
+  "walletBankSettingsDeleteAction": "Delete",
+  "walletBankSettingsDeleteConfirmTitle": "Delete Bank Account",
+  "walletBankSettingsDeleteConfirmBody": "Delete this withdrawal account? This action cannot be undone.",
+  "walletBankSettingsDeleteSuccess": "Withdrawal account deleted.",
+  "walletBankSettingsDeleteFailure": "Failed to delete withdrawal account.",
   "walletBankAccountExpireNotice": "Please transfer by {date}.",
   "@walletBankAccountExpireNotice": {
     "placeholders": {

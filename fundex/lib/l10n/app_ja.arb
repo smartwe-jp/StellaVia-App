@@ -871,6 +871,13 @@
   "walletBankSettingsBranchAddressLabel": "支店住所",
   "walletBankSettingsBranchAddressHint": "東京都千代田区...",
   "walletBankSettingsOverseasTip": "海外口座からの出金手数料は 10,000 円です。",
+  "walletBankSettingsDomesticChipLabel": "日本国内",
+  "walletBankSettingsOverseasChipLabel": "海外",
+  "walletBankSettingsDeleteAction": "削除",
+  "walletBankSettingsDeleteConfirmTitle": "口座の削除",
+  "walletBankSettingsDeleteConfirmBody": "この出金口座を削除しますか？この操作は取り消せません。",
+  "walletBankSettingsDeleteSuccess": "出金口座を削除しました。",
+  "walletBankSettingsDeleteFailure": "出金口座の削除に失敗しました。",
   "walletBankAccountExpireNotice": "{date} まで、期限内にお振込みください",
   "@walletBankAccountExpireNotice": {
     "placeholders": {

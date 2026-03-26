@@ -19,7 +19,8 @@ class UserWalletApiPaths {
   static const String bankAccountApply = '/member/bank-account/apply';
   static const String bankAccountInfo = '/member/bank-account/info';
   static const String bankAccountList = '/member/bank/list';
-  static const String bankAccountAdd = '/member/bank-account/add';
+  static const String bankAccountAdd = '/member/bank/new';
+  static const String bankAccountDelete = '/member/bank/delete';
 }
 
 class UserWalletApiClient {
@@ -37,6 +38,7 @@ class UserWalletApiClient {
     this.bankAccountInfoPath = UserWalletApiPaths.bankAccountInfo,
     this.bankAccountListPath = UserWalletApiPaths.bankAccountList,
     this.bankAccountAddPath = UserWalletApiPaths.bankAccountAdd,
+    this.bankAccountDeletePath = UserWalletApiPaths.bankAccountDelete,
   }) : _dioForPath = dioForPath,
        _envelopeCodec =
            envelopeCodec ??
@@ -58,6 +60,7 @@ class UserWalletApiClient {
   final String bankAccountInfoPath;
   final String bankAccountListPath;
   final String bankAccountAddPath;
+  final String bankAccountDeletePath;
 
   /// 0: all records, 1: CNY, 2: USD
   Future<List<UserWalletAccountHistoryItemDto>> fetchAccountHistory({
@@ -220,6 +223,24 @@ class UserWalletApiClient {
     _envelopeCodec.assertSuccessIfEnvelope(
       payload,
       fallbackMessage: 'Failed to add bank account.',
+    );
+  }
+
+  Future<void> deleteBankAccount({required Object id}) async {
+    final response = await _dioForPath(bankAccountDeletePath)
+        .delete<Map<String, dynamic>>(
+          bankAccountDeletePath,
+          data: <String, dynamic>{'id': id},
+          options: authRequired(true),
+        );
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    if (payload.isEmpty) {
+      return;
+    }
+    _envelopeCodec.assertSuccessIfEnvelope(
+      payload,
+      fallbackMessage: 'Failed to delete bank account.',
+      requireTruthyData: true,
     );
   }
 

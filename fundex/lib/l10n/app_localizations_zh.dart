@@ -2317,6 +2317,27 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletBankSettingsOverseasTip => '海外账户出金手续费为 10,000 日元。';
 
   @override
+  String get walletBankSettingsDomesticChipLabel => '日本国内';
+
+  @override
+  String get walletBankSettingsOverseasChipLabel => '海外';
+
+  @override
+  String get walletBankSettingsDeleteAction => '删除';
+
+  @override
+  String get walletBankSettingsDeleteConfirmTitle => '删除账户';
+
+  @override
+  String get walletBankSettingsDeleteConfirmBody => '确定要删除这个出金账户吗？此操作无法撤销。';
+
+  @override
+  String get walletBankSettingsDeleteSuccess => '出金账户已删除。';
+
+  @override
+  String get walletBankSettingsDeleteFailure => '出金账户删除失败。';
+
+  @override
   String walletBankAccountExpireNotice(Object date) {
     return '请在 $date 前完成汇款';
   }
@@ -5810,6 +5831,27 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletBankSettingsOverseasTip => '海外帳戶出金手續費為 10,000 日圓。';
+
+  @override
+  String get walletBankSettingsDomesticChipLabel => '日本國內';
+
+  @override
+  String get walletBankSettingsOverseasChipLabel => '海外';
+
+  @override
+  String get walletBankSettingsDeleteAction => '刪除';
+
+  @override
+  String get walletBankSettingsDeleteConfirmTitle => '刪除帳戶';
+
+  @override
+  String get walletBankSettingsDeleteConfirmBody => '確定要刪除這個出金帳戶嗎？此操作無法復原。';
+
+  @override
+  String get walletBankSettingsDeleteSuccess => '出金帳戶已刪除。';
+
+  @override
+  String get walletBankSettingsDeleteFailure => '出金帳戶刪除失敗。';
 
   @override
   String walletBankAccountExpireNotice(Object date) {

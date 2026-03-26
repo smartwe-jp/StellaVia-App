@@ -2341,6 +2341,28 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletBankSettingsOverseasTip => '海外口座からの出金手数料は 10,000 円です。';
 
   @override
+  String get walletBankSettingsDomesticChipLabel => '日本国内';
+
+  @override
+  String get walletBankSettingsOverseasChipLabel => '海外';
+
+  @override
+  String get walletBankSettingsDeleteAction => '削除';
+
+  @override
+  String get walletBankSettingsDeleteConfirmTitle => '口座の削除';
+
+  @override
+  String get walletBankSettingsDeleteConfirmBody =>
+      'この出金口座を削除しますか？この操作は取り消せません。';
+
+  @override
+  String get walletBankSettingsDeleteSuccess => '出金口座を削除しました。';
+
+  @override
+  String get walletBankSettingsDeleteFailure => '出金口座の削除に失敗しました。';
+
+  @override
   String walletBankAccountExpireNotice(Object date) {
     return '$date まで、期限内にお振込みください';
   }

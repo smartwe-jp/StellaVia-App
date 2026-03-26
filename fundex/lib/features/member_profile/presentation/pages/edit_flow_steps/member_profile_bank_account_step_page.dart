@@ -8,6 +8,7 @@ class MemberProfileBankAccountStepPage extends StatelessWidget {
     super.key,
     required this.bankNameController,
     required this.branchNameController,
+    required this.branchNumberController,
     required this.accountType,
     required this.accountTypeItems,
     required this.accountNumberController,
@@ -24,6 +25,7 @@ class MemberProfileBankAccountStepPage extends StatelessWidget {
 
   final TextEditingController bankNameController;
   final TextEditingController branchNameController;
+  final TextEditingController branchNumberController;
   final String? accountType;
   final List<DropdownMenuItem<String>> accountTypeItems;
   final TextEditingController accountNumberController;
@@ -61,6 +63,9 @@ class MemberProfileBankAccountStepPage extends StatelessWidget {
         accountType: accountType,
         accountTypeItems: accountTypeItems,
         onAccountTypeChanged: onAccountTypeChanged,
+        branchNumberLabel: l10n.walletBankSettingsBranchNumberLabel,
+        branchNumberController: branchNumberController,
+        branchNumberHintText: l10n.walletBankSettingsBranchNumberHint,
         accountNumberLabel: l10n.memberProfileAccountNumberLabel,
         accountNumberController: accountNumberController,
         accountNumberHintText: l10n.memberProfileAccountNumberHint,

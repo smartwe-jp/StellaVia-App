@@ -4,16 +4,16 @@ class WalletBankAccountDraft {
   const WalletBankAccountDraft.domestic({
     required this.bankName,
     required this.branchName,
+    required this.branchNumber,
     required this.accountType,
     required this.accountNumber,
     required this.accountHolder,
   }) : kind = WalletBankAccountKind.domestic,
        bankType = 0,
-       branchNumber = null,
        accountHolderAddress = null,
        accountHolderNationality = null,
        swiftCode = null,
-       bankCountry = null,
+       bankCountry = '日本',
        branchAddress = null;
 
   const WalletBankAccountDraft.overseas({

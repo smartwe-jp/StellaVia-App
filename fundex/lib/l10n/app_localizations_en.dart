@@ -2469,6 +2469,29 @@ class AppLocalizationsEn extends AppLocalizations {
       'The withdrawal fee for overseas bank accounts is JPY 10,000.';
 
   @override
+  String get walletBankSettingsDomesticChipLabel => 'Japan';
+
+  @override
+  String get walletBankSettingsOverseasChipLabel => 'Overseas';
+
+  @override
+  String get walletBankSettingsDeleteAction => 'Delete';
+
+  @override
+  String get walletBankSettingsDeleteConfirmTitle => 'Delete Bank Account';
+
+  @override
+  String get walletBankSettingsDeleteConfirmBody =>
+      'Delete this withdrawal account? This action cannot be undone.';
+
+  @override
+  String get walletBankSettingsDeleteSuccess => 'Withdrawal account deleted.';
+
+  @override
+  String get walletBankSettingsDeleteFailure =>
+      'Failed to delete withdrawal account.';
+
+  @override
   String walletBankAccountExpireNotice(Object date) {
     return 'Please transfer by $date.';
   }

@@ -38,6 +38,7 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
     String? selfiePhotoPath,
     @Default('') String bankName,
     @Default('') String branchBankName,
+    @Default('') String branchBankNumber,
     @Default('') String bankNumber,
     @Default('') String bankAccountType,
     @Default('') String bankAccountOwnerName,
@@ -106,6 +107,7 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       (selfiePhotoPath?.trim().isNotEmpty ?? false) ||
       bankName.trim().isNotEmpty ||
       branchBankName.trim().isNotEmpty ||
+      branchBankNumber.trim().isNotEmpty ||
       bankNumber.trim().isNotEmpty ||
       bankAccountType.trim().isNotEmpty ||
       bankAccountOwnerName.trim().isNotEmpty ||
@@ -185,6 +187,7 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
   bool get _isBankAccountStepComplete =>
       bankName.trim().isNotEmpty &&
       branchBankName.trim().isNotEmpty &&
+      branchBankNumber.trim().isNotEmpty &&
       bankNumber.trim().isNotEmpty &&
       bankAccountType.trim().isNotEmpty &&
       bankAccountOwnerName.trim().isNotEmpty;
