@@ -127,6 +127,72 @@ final settingsPhoneVerifiedProvider = FutureProvider.autoDispose<bool>((
   return snapshot.verified;
 });
 
+final settingsEmailVerifiedProvider = FutureProvider.autoDispose<bool>((ref) async {
+  final user = await ref.watch(currentAuthUserProvider.future).catchError((
+    Object _,
+  ) {
+    return null;
+  });
+  if (user == null) {
+    return false;
+  }
+
+  final remoteStatus = await ref
+      .watch(settingsRemoteVerificationStatusProvider.future)
+      .catchError((Object _) {
+        return null;
+      });
+  if (remoteStatus != null) {
+    return remoteStatus.isEmailVerified;
+  }
+
+  return (user.checkEmailTime?.trim().isNotEmpty ?? false);
+});
+
+final settingsVerifiedEmailProvider = FutureProvider.autoDispose<String?>((
+  ref,
+) async {
+  final user = await ref.watch(currentAuthUserProvider.future).catchError((
+    Object _,
+  ) {
+    return null;
+  });
+  if (user == null) {
+    return null;
+  }
+
+  final remoteStatus = await ref
+      .watch(settingsRemoteVerificationStatusProvider.future)
+      .catchError((Object _) {
+        return null;
+      });
+  final remoteEmail = remoteStatus?.email?.trim() ?? '';
+  if (remoteEmail.isNotEmpty) {
+    return remoteEmail;
+  }
+
+  final currentEmail = user.email?.trim() ?? '';
+  return currentEmail.isEmpty ? null : currentEmail;
+});
+
+final settingsEmailVerificationUpdatedAtProvider =
+    FutureProvider.autoDispose<DateTime?>((ref) async {
+      final user = await ref.watch(currentAuthUserProvider.future).catchError((
+        Object _,
+      ) {
+        return null;
+      });
+      if (user == null) {
+        return null;
+      }
+
+      final raw = user.checkEmailTime?.trim() ?? '';
+      if (raw.isEmpty) {
+        return null;
+      }
+      return DateTime.tryParse(raw)?.toLocal();
+    });
+
 final settingsVerifiedPhoneNumberProvider = FutureProvider.autoDispose<String?>(
   (ref) async {
     final user = await ref.watch(currentAuthUserProvider.future).catchError((

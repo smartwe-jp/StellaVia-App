@@ -1997,6 +1997,12 @@ abstract class AppLocalizations {
   /// **'Manage phone verification and real-person verification status for sensitive actions.'**
   String get settingsTwoFactorDescription;
 
+  /// No description provided for @settingsEmailVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Email verification'**
+  String get settingsEmailVerificationTitle;
+
   /// No description provided for @settingsPhoneVerificationTitle.
   ///
   /// In en, this message translates to:
@@ -2021,6 +2027,12 @@ abstract class AppLocalizations {
   /// **'Not verified'**
   String get settingsVerificationStatusUnverified;
 
+  /// No description provided for @settingsVerificationEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified email'**
+  String get settingsVerificationEmailLabel;
+
   /// No description provided for @settingsVerificationPhoneLabel.
   ///
   /// In en, this message translates to:
@@ -2032,6 +2044,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Last verified'**
   String get settingsVerificationLastUpdatedLabel;
+
+  /// No description provided for @settingsEmailVerificationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a verification code to your current email address and update the email verification status.'**
+  String get settingsEmailVerificationDescription;
+
+  /// No description provided for @settingsCurrentEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current email address'**
+  String get settingsCurrentEmailLabel;
+
+  /// No description provided for @settingsEmailUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No email address registered.'**
+  String get settingsEmailUnavailable;
+
+  /// No description provided for @settingsEmailVerificationInputDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the email address to use for verification and send a verification code.'**
+  String get settingsEmailVerificationInputDescription;
+
+  /// No description provided for @settingsEmailAutoFillHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the verification code from the email to complete verification.'**
+  String get settingsEmailAutoFillHint;
+
+  /// No description provided for @settingsEmailVerifyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify email address'**
+  String get settingsEmailVerifyAction;
+
+  /// No description provided for @settingsEmailCodeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the verification code first.'**
+  String get settingsEmailCodeRequired;
+
+  /// No description provided for @settingsEmailCodeSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification code sent.'**
+  String get settingsEmailCodeSent;
+
+  /// No description provided for @settingsEmailVerificationSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Email verification completed.'**
+  String get settingsEmailVerificationSuccess;
+
+  /// No description provided for @settingsEmailVerifiedReadonlyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A verified email address cannot be changed from this screen.'**
+  String get settingsEmailVerifiedReadonlyDescription;
 
   /// No description provided for @settingsPhoneVerificationDescription.
   ///

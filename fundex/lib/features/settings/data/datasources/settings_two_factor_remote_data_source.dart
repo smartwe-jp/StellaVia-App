@@ -13,9 +13,18 @@ abstract class SettingsTwoFactorRemoteDataSource {
     required String bizId,
   });
 
+  Future<void> sendEmailVerificationCode({
+    required String email,
+  });
+
   Future<void> verifyOnlinePhoneChangeCode({
     required String mobile,
     required String bizId,
+    required String code,
+  });
+
+  Future<void> verifyEmailVerificationCode({
+    required String email,
     required String code,
   });
 }
@@ -66,6 +75,13 @@ class SettingsTwoFactorRemoteDataSourceImpl
   }
 
   @override
+  Future<void> sendEmailVerificationCode({
+    required String email,
+  }) {
+    return _apiClient.sendEmailVerificationCode(email: email);
+  }
+
+  @override
   Future<void> verifyOnlinePhoneChangeCode({
     required String mobile,
     required String bizId,
@@ -76,5 +92,13 @@ class SettingsTwoFactorRemoteDataSourceImpl
       bizId: bizId,
       code: code,
     );
+  }
+
+  @override
+  Future<void> verifyEmailVerificationCode({
+    required String email,
+    required String code,
+  }) {
+    return _apiClient.verifyEmailVerificationCode(email: email, code: code);
   }
 }

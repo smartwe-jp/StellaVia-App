@@ -15,6 +15,11 @@ class SettingsTwoFactorPage extends ConsumerWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final l10n = context.l10n;
+    final emailVerified = ref.watch(settingsEmailVerifiedProvider);
+    final verifiedEmail = ref.watch(settingsVerifiedEmailProvider);
+    final emailVerifiedAt = ref.watch(
+      settingsEmailVerificationUpdatedAtProvider,
+    );
     final phoneVerified = ref.watch(settingsPhoneVerifiedProvider);
     final verifiedPhone = ref.watch(settingsVerifiedPhoneNumberProvider);
     final phoneVerifiedAt = ref.watch(
@@ -24,6 +29,7 @@ class SettingsTwoFactorPage extends ConsumerWidget {
     final faceVerifiedAt = ref.watch(
       settingsRealPersonVerificationUpdatedAtProvider,
     );
+    final canOpenEmailVerification = emailVerified.asData?.value != true;
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -57,13 +63,34 @@ class SettingsTwoFactorPage extends ConsumerWidget {
             title: l10n.menuSectionSecurity,
             children: <Widget>[
               AppMenuItem(
+                icon: Icons.mark_email_read_rounded,
+                label: l10n.settingsEmailVerificationTitle,
+                iconBackgroundColor: colors.primarySubtle,
+                iconForegroundColor: colors.primary,
+                trailing: _VerificationStatusText(
+                  verified: emailVerified.asData?.value == true,
+                  verifiedValueLabel: l10n.settingsVerificationEmailLabel,
+                  verifiedValue: verifiedEmail.asData?.value,
+                  verifiedAt: emailVerifiedAt.asData?.value,
+                  isLoading:
+                      emailVerified.isLoading ||
+                      verifiedEmail.isLoading ||
+                      emailVerifiedAt.isLoading,
+                ),
+                showChevron: canOpenEmailVerification,
+                onTap: canOpenEmailVerification
+                    ? () => context.push('/profile/settings/two-factor/email')
+                    : null,
+              ),
+              AppMenuItem(
                 icon: Icons.sms_rounded,
                 label: l10n.settingsPhoneVerificationTitle,
                 iconBackgroundColor: colors.infoSubtle,
                 iconForegroundColor: colors.info,
                 trailing: _VerificationStatusText(
                   verified: phoneVerified.asData?.value == true,
-                  verifiedPhone: verifiedPhone.asData?.value,
+                  verifiedValueLabel: l10n.settingsVerificationPhoneLabel,
+                  verifiedValue: verifiedPhone.asData?.value,
                   verifiedAt: phoneVerifiedAt.asData?.value,
                   isLoading:
                       phoneVerified.isLoading ||
@@ -97,13 +124,15 @@ class SettingsTwoFactorPage extends ConsumerWidget {
 class _VerificationStatusText extends StatelessWidget {
   const _VerificationStatusText({
     required this.verified,
-    this.verifiedPhone,
+    this.verifiedValueLabel,
+    this.verifiedValue,
     required this.verifiedAt,
     required this.isLoading,
   });
 
   final bool verified;
-  final String? verifiedPhone;
+  final String? verifiedValueLabel;
+  final String? verifiedValue;
   final DateTime? verifiedAt;
   final bool isLoading;
 
@@ -134,9 +163,11 @@ class _VerificationStatusText extends StatelessWidget {
             color: verified ? colors.success : colors.textSecondary,
           ),
         ),
-        if (verified && (verifiedPhone?.trim().isNotEmpty ?? false))
+        if (verified &&
+            (verifiedValueLabel?.trim().isNotEmpty ?? false) &&
+            (verifiedValue?.trim().isNotEmpty ?? false))
           Text(
-            '${l10n.settingsVerificationPhoneLabel} ${verifiedPhone!.trim()}',
+            '${verifiedValueLabel!.trim()} ${verifiedValue!.trim()}',
             style: appText.micro.copyWith(color: colors.textSecondary),
           ),
         if (verified && verifiedAt != null)

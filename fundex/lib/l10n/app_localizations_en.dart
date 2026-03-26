@@ -1036,6 +1036,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Manage phone verification and real-person verification status for sensitive actions.';
 
   @override
+  String get settingsEmailVerificationTitle => 'Email verification';
+
+  @override
   String get settingsPhoneVerificationTitle => 'Phone verification';
 
   @override
@@ -1048,10 +1051,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsVerificationStatusUnverified => 'Not verified';
 
   @override
+  String get settingsVerificationEmailLabel => 'Verified email';
+
+  @override
   String get settingsVerificationPhoneLabel => 'Verified number';
 
   @override
   String get settingsVerificationLastUpdatedLabel => 'Last verified';
+
+  @override
+  String get settingsEmailVerificationDescription =>
+      'Send a verification code to your current email address and update the email verification status.';
+
+  @override
+  String get settingsCurrentEmailLabel => 'Current email address';
+
+  @override
+  String get settingsEmailUnavailable => 'No email address registered.';
+
+  @override
+  String get settingsEmailVerificationInputDescription =>
+      'Enter the email address to use for verification and send a verification code.';
+
+  @override
+  String get settingsEmailAutoFillHint =>
+      'Enter the verification code from the email to complete verification.';
+
+  @override
+  String get settingsEmailVerifyAction => 'Verify email address';
+
+  @override
+  String get settingsEmailCodeRequired => 'Enter the verification code first.';
+
+  @override
+  String get settingsEmailCodeSent => 'Verification code sent.';
+
+  @override
+  String get settingsEmailVerificationSuccess =>
+      'Email verification completed.';
+
+  @override
+  String get settingsEmailVerifiedReadonlyDescription =>
+      'A verified email address cannot be changed from this screen.';
 
   @override
   String get settingsPhoneVerificationDescription =>

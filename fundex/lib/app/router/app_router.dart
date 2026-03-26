@@ -40,6 +40,7 @@ import '../../features/settings/presentation/pages/settings_face_verification_pa
 import '../../features/settings/presentation/pages/settings_contact_page.dart';
 import '../../features/settings/presentation/pages/settings_contract_document_detail_page.dart';
 import '../../features/settings/presentation/pages/settings_contract_documents_page.dart';
+import '../../features/settings/presentation/pages/settings_email_verification_page.dart';
 import '../../features/settings/presentation/pages/settings_faq_page.dart';
 import '../../features/settings/presentation/pages/settings_operating_company_page.dart';
 import '../../features/settings/presentation/pages/settings_phone_verification_page.dart';
@@ -368,6 +369,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                           return const SettingsTwoFactorPage();
                         },
                         routes: <RouteBase>[
+                          GoRoute(
+                            path: 'email',
+                            parentNavigatorKey: _rootNavigatorKey,
+                            builder:
+                                (BuildContext context, GoRouterState state) {
+                                  return const SettingsEmailVerificationPage();
+                                },
+                          ),
                           GoRoute(
                             path: 'phone',
                             parentNavigatorKey: _rootNavigatorKey,

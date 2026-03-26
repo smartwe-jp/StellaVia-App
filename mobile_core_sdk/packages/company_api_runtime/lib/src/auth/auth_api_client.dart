@@ -27,6 +27,10 @@ class AuthApiPaths {
       '/member/change/phone/online/send';
   static const String changePhoneOnlineCheck =
       '/member/change/phone/online/check';
+  static const String sendEmailVerificationCode =
+      '/crowdfunding/user/send/email/code';
+  static const String verifyEmailVerificationCode =
+      '/crowdfunding/user/check/email/code';
   static const String memberLoginIndex = '/member/login/index';
   static const String oauthToken = '/uaa/oauth/token';
   static const String crowdfundingUserIndex = '/crowdfunding/user/index-new';
@@ -45,6 +49,10 @@ class AuthApiClient {
     this.registerApplyPath = AuthApiPaths.registerApply,
     this.changePhoneOnlineSendPath = AuthApiPaths.changePhoneOnlineSend,
     this.changePhoneOnlineCheckPath = AuthApiPaths.changePhoneOnlineCheck,
+    this.sendEmailVerificationCodePath =
+        AuthApiPaths.sendEmailVerificationCode,
+    this.verifyEmailVerificationCodePath =
+        AuthApiPaths.verifyEmailVerificationCode,
     this.memberLoginIndexPath = AuthApiPaths.memberLoginIndex,
     this.oauthTokenPath = AuthApiPaths.oauthToken,
     this.crowdfundingUserIndexPath = AuthApiPaths.crowdfundingUserIndex,
@@ -67,6 +75,8 @@ class AuthApiClient {
   final String registerApplyPath;
   final String changePhoneOnlineSendPath;
   final String changePhoneOnlineCheckPath;
+  final String sendEmailVerificationCodePath;
+  final String verifyEmailVerificationCodePath;
   final String memberLoginIndexPath;
   final String oauthTokenPath;
   final String crowdfundingUserIndexPath;
@@ -185,6 +195,40 @@ class AuthApiClient {
     _assertEnvelopeSuccessAllowZero(
       _envelopeCodec.toJsonMap(response.data),
       fallbackMessage: 'Failed to verify phone code.',
+    );
+  }
+
+  Future<void> sendEmailVerificationCode({
+    required String email,
+  }) async {
+    final response = await _dioForPath(sendEmailVerificationCodePath)
+        .get<Map<String, dynamic>>(
+          sendEmailVerificationCodePath,
+          queryParameters: <String, dynamic>{'email': email.trim()},
+          options: authRequired(true),
+        );
+    _assertEnvelopeSuccessAllowZero(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to send email verification code.',
+    );
+  }
+
+  Future<void> verifyEmailVerificationCode({
+    required String email,
+    required String code,
+  }) async {
+    final response = await _dioForPath(verifyEmailVerificationCodePath)
+        .get<Map<String, dynamic>>(
+          verifyEmailVerificationCodePath,
+          queryParameters: <String, dynamic>{
+            'email': email.trim(),
+            'code': code.trim(),
+          },
+          options: authRequired(true),
+        );
+    _assertEnvelopeSuccessAllowZero(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to verify email code.',
     );
   }
 

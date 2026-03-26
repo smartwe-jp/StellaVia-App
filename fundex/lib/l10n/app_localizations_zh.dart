@@ -975,6 +975,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsTwoFactorDescription => '用于管理手机号认证与人脸认证状态，保护高敏感操作。';
 
   @override
+  String get settingsEmailVerificationTitle => '邮箱认证';
+
+  @override
   String get settingsPhoneVerificationTitle => '手机号认证';
 
   @override
@@ -987,10 +990,43 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsVerificationStatusUnverified => '未认证';
 
   @override
+  String get settingsVerificationEmailLabel => '已认证邮箱';
+
+  @override
   String get settingsVerificationPhoneLabel => '已认证号码';
 
   @override
   String get settingsVerificationLastUpdatedLabel => '最近认证';
+
+  @override
+  String get settingsEmailVerificationDescription => '向当前邮箱发送验证码，并更新邮箱认证状态。';
+
+  @override
+  String get settingsCurrentEmailLabel => '当前邮箱';
+
+  @override
+  String get settingsEmailUnavailable => '尚未登记邮箱。';
+
+  @override
+  String get settingsEmailVerificationInputDescription => '请输入用于认证的邮箱，并发送验证码。';
+
+  @override
+  String get settingsEmailAutoFillHint => '请输入邮件中的验证码以完成认证。';
+
+  @override
+  String get settingsEmailVerifyAction => '认证邮箱';
+
+  @override
+  String get settingsEmailCodeRequired => '请先输入验证码。';
+
+  @override
+  String get settingsEmailCodeSent => '验证码已发送。';
+
+  @override
+  String get settingsEmailVerificationSuccess => '邮箱认证完成。';
+
+  @override
+  String get settingsEmailVerifiedReadonlyDescription => '已认证邮箱无法在此页面修改。';
 
   @override
   String get settingsPhoneVerificationDescription =>
@@ -4402,6 +4438,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get settingsTwoFactorDescription => '用於管理手機號碼驗證與人臉驗證狀態，保護高敏感操作。';
 
   @override
+  String get settingsEmailVerificationTitle => '電子郵件驗證';
+
+  @override
   String get settingsPhoneVerificationTitle => '手機號碼驗證';
 
   @override
@@ -4414,10 +4453,45 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get settingsVerificationStatusUnverified => '未驗證';
 
   @override
+  String get settingsVerificationEmailLabel => '已驗證電子郵件';
+
+  @override
   String get settingsVerificationPhoneLabel => '已驗證號碼';
 
   @override
   String get settingsVerificationLastUpdatedLabel => '最近驗證';
+
+  @override
+  String get settingsEmailVerificationDescription =>
+      '向目前電子郵件發送驗證碼，並更新電子郵件驗證狀態。';
+
+  @override
+  String get settingsCurrentEmailLabel => '目前電子郵件';
+
+  @override
+  String get settingsEmailUnavailable => '尚未登記電子郵件。';
+
+  @override
+  String get settingsEmailVerificationInputDescription =>
+      '請輸入用於驗證的電子郵件，並發送驗證碼。';
+
+  @override
+  String get settingsEmailAutoFillHint => '請輸入電子郵件中的驗證碼以完成驗證。';
+
+  @override
+  String get settingsEmailVerifyAction => '驗證電子郵件';
+
+  @override
+  String get settingsEmailCodeRequired => '請先輸入驗證碼。';
+
+  @override
+  String get settingsEmailCodeSent => '驗證碼已發送。';
+
+  @override
+  String get settingsEmailVerificationSuccess => '電子郵件驗證完成。';
+
+  @override
+  String get settingsEmailVerifiedReadonlyDescription => '已驗證的電子郵件無法在此頁面修改。';
 
   @override
   String get settingsPhoneVerificationDescription =>

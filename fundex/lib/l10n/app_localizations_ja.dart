@@ -980,6 +980,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsTwoFactorDescription => '重要な操作に備えて、電話番号認証と本人確認の状態を管理します。';
 
   @override
+  String get settingsEmailVerificationTitle => 'メール認証';
+
+  @override
   String get settingsPhoneVerificationTitle => '電話番号認証';
 
   @override
@@ -992,10 +995,46 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsVerificationStatusUnverified => '未認証';
 
   @override
+  String get settingsVerificationEmailLabel => '認証済みメール';
+
+  @override
   String get settingsVerificationPhoneLabel => '認証済み番号';
 
   @override
   String get settingsVerificationLastUpdatedLabel => '最終認証';
+
+  @override
+  String get settingsEmailVerificationDescription =>
+      '現在のメールアドレスに認証コードを送信して、メール認証状態を更新します。';
+
+  @override
+  String get settingsCurrentEmailLabel => '現在のメールアドレス';
+
+  @override
+  String get settingsEmailUnavailable => 'メールアドレスが未登録です。';
+
+  @override
+  String get settingsEmailVerificationInputDescription =>
+      '認証に使用するメールアドレスを入力して、認証コードを送信してください。';
+
+  @override
+  String get settingsEmailAutoFillHint => 'メールに届いた認証コードを入力して認証を完了してください。';
+
+  @override
+  String get settingsEmailVerifyAction => 'メールアドレスを認証';
+
+  @override
+  String get settingsEmailCodeRequired => '認証コードを入力してください。';
+
+  @override
+  String get settingsEmailCodeSent => '認証コードを送信しました。';
+
+  @override
+  String get settingsEmailVerificationSuccess => 'メール認証が完了しました。';
+
+  @override
+  String get settingsEmailVerifiedReadonlyDescription =>
+      '認証済みのメールアドレスは、この画面から変更できません。';
 
   @override
   String get settingsPhoneVerificationDescription =>

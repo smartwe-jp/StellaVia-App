@@ -135,6 +135,7 @@ class AuthMemberLoginIndexDto {
   final Object? verificationStatus;
 
   bool get isPhoneVerified => _isVerifiedFlag(mobileAuth);
+  bool get isEmailVerified => _isVerifiedFlag(emailAuth);
   bool get isRealPersonVerified => _isVerifiedFlag(verificationStatus);
   bool get isCurrentDeviceVerified =>
       _isVerifiedFlag(currentDeviceVerificationStatus);
