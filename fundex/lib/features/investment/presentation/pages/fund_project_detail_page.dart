@@ -237,17 +237,17 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            FundDetailContentCard(
-                              backgroundColor: colors.dangerSoft,
-                              borderColor: colors.dangerBorder,
-                              child: Text(
-                                staticContent.riskSection.warning,
-                                style: appText.bodyStrong.copyWith(
-                                  color: colors.dangerForeground,
-                                  height: 1.6,
-                                ),
-                              ),
-                            ),
+                            // FundDetailContentCard(
+                            //   backgroundColor: colors.dangerSoft,
+                            //   borderColor: colors.dangerBorder,
+                            //   child: Text(
+                            //     staticContent.riskSection.warning,
+                            //     style: appText.bodyStrong.copyWith(
+                            //       color: colors.dangerForeground,
+                            //       height: 1.6,
+                            //     ),
+                            //   ),
+                            // ),
                             const SizedBox(height: UiTokens.spacing8),
                             FundDetailDisclosureList(
                               items: staticContent.riskSection.items
