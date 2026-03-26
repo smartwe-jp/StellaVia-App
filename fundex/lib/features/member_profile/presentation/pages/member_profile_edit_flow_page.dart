@@ -1589,6 +1589,7 @@ class _MemberProfileEditFlowPageState
           accountNumberController: _accountNumberController,
           accountHolderController: _accountHolderController,
           primaryButtonEnabled: _canProceedFromCurrentStep,
+          showSkip: !_isSingleSectionMode,
           titleOverride: _isSingleSectionMode ? _stepTitle : null,
           descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
           primaryButtonLabelOverride: _isSingleSectionMode
@@ -1600,6 +1601,7 @@ class _MemberProfileEditFlowPageState
             });
           },
           onNext: _isSingleSectionMode ? _saveCurrentSection : _goNextStep,
+          onSkip: _isSingleSectionMode ? null : _goNextStep,
         );
       case MemberProfileEditStep.consent:
         return MemberProfileConsentStepPage(

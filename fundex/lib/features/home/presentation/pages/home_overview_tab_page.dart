@@ -11,6 +11,7 @@ import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../investment/presentation/support/fund_project_yield_display.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
+import '../../../auth/domain/entities/auth_user.dart';
 import '../../../member_profile/domain/entities/member_profile_details.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
@@ -51,7 +52,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
     );
 
     final reminders = <FundReminderData>[
-      if (!_isMemberProfileFlowComplete(asyncMemberProfile, memberProfile))
+      if (_shouldShowMemberProfileReminder(currentUser))
         FundReminderData(
           leading: const Icon(
             Icons.warning_rounded,
@@ -328,14 +329,12 @@ Future<void> _refreshHomeOverviewTab(WidgetRef ref) async {
   ]);
 }
 
-bool _isMemberProfileFlowComplete(
-  AsyncValue<MemberProfileDetails?> asyncMemberProfile,
-  MemberProfileDetails? memberProfile,
-) {
-  if (asyncMemberProfile.isLoading) {
-    return true;
+bool _shouldShowMemberProfileReminder(AuthUser? user) {
+  final status = user?.status;
+  if (status == null) {
+    return false;
   }
-  return memberProfile?.isEditFlowComplete ?? false;
+  return status == 1 || status == 3;
 }
 
 FundFeaturedFundCardData _buildFeaturedFundCardData(

@@ -13,11 +13,13 @@ class MemberProfileBankAccountStepPage extends StatelessWidget {
     required this.accountNumberController,
     required this.accountHolderController,
     this.primaryButtonEnabled = true,
+    this.showSkip = false,
     this.titleOverride,
     this.descriptionOverride,
     this.primaryButtonLabelOverride,
     this.onAccountTypeChanged,
     this.onNext,
+    this.onSkip,
   });
 
   final TextEditingController bankNameController;
@@ -27,11 +29,13 @@ class MemberProfileBankAccountStepPage extends StatelessWidget {
   final TextEditingController accountNumberController;
   final TextEditingController accountHolderController;
   final bool primaryButtonEnabled;
+  final bool showSkip;
   final String? titleOverride;
   final String? descriptionOverride;
   final String? primaryButtonLabelOverride;
   final ValueChanged<String?>? onAccountTypeChanged;
   final VoidCallback? onNext;
+  final VoidCallback? onSkip;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +47,9 @@ class MemberProfileBankAccountStepPage extends StatelessWidget {
           primaryButtonLabelOverride ?? l10n.memberProfileNextConsent,
       onPrimaryPressed: onNext,
       primaryButtonEnabled: primaryButtonEnabled,
+      showSkip: showSkip,
+      skipLabel: l10n.commonSkipChevron,
+      onSkip: onSkip,
       child: MemberProfileBankAccountFormSection(
         bankNameLabel: l10n.memberProfileBankNameLabel,
         bankNameController: bankNameController,

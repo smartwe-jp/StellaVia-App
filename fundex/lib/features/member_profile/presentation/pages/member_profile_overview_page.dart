@@ -347,54 +347,6 @@ class _MemberProfileOverviewPageState
                               ),
                             ],
                           ),
-                          _MemberProfileOverviewSection(
-                            icon: Icons.account_balance_outlined,
-                            title: memberProfileEditStepTitle(
-                              l10n,
-                              MemberProfileEditStep.bankAccount,
-                              plain: true,
-                            ),
-                            onEdit: () =>
-                                _openSection(MemberProfileEditStep.bankAccount),
-                            children: <Widget>[
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileBankNameLabel,
-                                value: _displayValue(profile.bankName, l10n),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileBranchLabel,
-                                value: _displayValue(
-                                  profile.branchBankName,
-                                  l10n,
-                                ),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileAccountTypeLabel,
-                                value: _displayValue(
-                                  _accountTypeLabel(
-                                    l10n,
-                                    profile.bankAccountType,
-                                  ),
-                                  l10n,
-                                ),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileAccountNumberLabel,
-                                value: _displayValue(
-                                  _maskAccountNumber(profile.bankNumber),
-                                  l10n,
-                                ),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileAccountHolderLabel,
-                                value: _displayValue(
-                                  profile.bankAccountOwnerName,
-                                  l10n,
-                                ),
-                                isLast: true,
-                              ),
-                            ],
-                          ),
                         ],
                       ),
                     );
@@ -678,16 +630,6 @@ String _documentTypeLabel(AppLocalizations l10n, String raw) {
   };
 }
 
-String _accountTypeLabel(AppLocalizations l10n, String raw) {
-  return switch (raw.trim()) {
-    'ordinary' => l10n.accountTypeOrdinary,
-    'checking' => l10n.accountTypeChecking,
-    '1' => l10n.accountTypeOrdinary,
-    '2' => l10n.accountTypeChecking,
-    _ => raw.trim(),
-  };
-}
-
 String _experienceSummary(AppLocalizations l10n, List<String> values) {
   final labels = values
       .map((String code) => _experienceLabel(l10n, code))
@@ -711,16 +653,4 @@ String _experienceLabel(AppLocalizations l10n, String raw) {
     'none' => l10n.memberProfileExperienceNone,
     _ => raw.trim(),
   };
-}
-
-String _maskAccountNumber(String raw) {
-  final value = raw.trim();
-  if (value.isEmpty) {
-    return '';
-  }
-  if (value.length <= 4) {
-    return value;
-  }
-  final suffix = value.substring(value.length - 4);
-  return '•••• $suffix';
 }
