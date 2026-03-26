@@ -91,7 +91,9 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                 metrics: <FundMyPageMetricData>[
                   FundMyPageMetricData(
                     label: l10n.myPageMetricOperating,
-                    value: _formatCompactCurrency(operatingAssetsExcludingLoan),
+                    value: _formatCompactCurrency(
+                      operatingAssetsExcludingLoan ?? 0,
+                    ),
                     onTap: () => context.push(
                       '/profile/my/section-list?type=${MyPageSectionType.activeFunds.queryValue}',
                     ),

@@ -186,7 +186,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
         totalAssetsDelta: null,
         activeInvestmentLabel: l10n.homeHeroActiveInvestmentLabel,
         activeInvestmentValue: _formatCompactCurrencyValue(
-          accountStatistic?.crowdfundingTotal,
+          accountStatistic?.crowdfundingTotal ?? 0,
         ),
         totalDividendsLabel: l10n.homeHeroCashLabel,
         totalDividendsValue: _formatCompactCurrencyValue(
