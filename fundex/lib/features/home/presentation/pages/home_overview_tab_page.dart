@@ -642,7 +642,7 @@ String _formatProgressPercent(double? ratio) {
   if (ratio == null) {
     return '--';
   }
-  final percentage = ratio > 1 ? ratio : ratio * 100;
+  final percentage = ratio * 100;
   final hasFraction = percentage % 1 != 0;
   return '${percentage.toStringAsFixed(hasFraction ? 1 : 0)}%';
 }

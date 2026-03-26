@@ -452,7 +452,9 @@ String _formatAchievementRate(double? value) {
   if (value == null || value <= 0) {
     return '--';
   }
-  final ratio = value > 1 ? value * 100 : value * 100;
-  final text = ratio.toStringAsFixed(ratio.truncateToDouble() == ratio ? 0 : 1);
+  final percentage = value * 100;
+  final text = percentage.toStringAsFixed(
+    percentage.truncateToDouble() == percentage ? 0 : 1,
+  );
   return '$text%';
 }

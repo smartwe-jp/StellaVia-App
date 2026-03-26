@@ -145,7 +145,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
     if (ratio == null) {
       return '--';
     }
-    final percentage = ratio > 1 ? ratio : ratio * 100;
+    final percentage = ratio * 100;
     final hasFraction = percentage % 1 != 0;
     return '${percentage.toStringAsFixed(hasFraction ? 1 : 0)}%';
   }
@@ -305,7 +305,8 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
   ) {
     final l10n = context.l10n;
     if (project.projectStatus == 0) {
-      final openDate = _parseDateTime(project.offeringStartDatetime) ??
+      final openDate =
+          _parseDateTime(project.offeringStartDatetime) ??
           _parseDateTime(project.scheduledStartDate);
       if (openDate != null) {
         final text = _formatDateForLocale(
@@ -383,11 +384,11 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                         .map(
                           (_FundListFilterOption option) =>
                               AppFilterBarItem<_FundListFilter>(
-                            value: option.filter,
-                            label: option.label,
-                            style: option.style,
-                            leadingIcon: option.leadingIcon,
-                          ),
+                                value: option.filter,
+                                label: option.label,
+                                style: option.style,
+                                leadingIcon: option.leadingIcon,
+                              ),
                         )
                         .toList(growable: false),
                   ),
@@ -473,9 +474,9 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                         );
                         final periodText =
                             (project.investmentPeriod?.trim().isNotEmpty ??
-                                    false)
-                                ? project.investmentPeriod!.trim()
-                                : '--';
+                                false)
+                            ? project.investmentPeriod!.trim()
+                            : '--';
 
                         return _FundProjectCard(
                           project: project,
@@ -963,10 +964,11 @@ class _CardStatCell extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           value,
-          style: (useNumericValueStyle
-                  ? appText.sectionTitle
-                  : appText.sectionTitle)
-              .copyWith(color: valueColor ?? colors.textPrimary),
+          style:
+              (useNumericValueStyle
+                      ? appText.sectionTitle
+                      : appText.sectionTitle)
+                  .copyWith(color: valueColor ?? colors.textPrimary),
         ),
       ],
     );
