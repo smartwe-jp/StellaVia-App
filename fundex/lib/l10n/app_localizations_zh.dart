@@ -842,13 +842,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get kizunarkComposePlaceholder => '分享你的投资观点...';
 
   @override
-  String get kizunarkAssociateFundAction => '关联FUND';
+  String get kizunarkAssociateFundAction => '关联基金';
 
   @override
-  String get kizunarkAssociateFundSheetTitle => '选择关联的FUND';
+  String get kizunarkAssociateFundSheetTitle => '选择关联的基金';
 
   @override
-  String get kizunarkAssociateFundEmpty => '当前没有可关联的运用中FUND。';
+  String get kizunarkAssociateFundEmpty => '当前没有可关联的运用中基金。';
 
   @override
   String get kizunarkPostAction => '发布';
@@ -4335,13 +4335,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get kizunarkComposePlaceholder => '分享你的投資觀點...';
 
   @override
-  String get kizunarkAssociateFundAction => '關聯FUND';
+  String get kizunarkAssociateFundAction => '關聯基金';
 
   @override
-  String get kizunarkAssociateFundSheetTitle => '選擇關聯的FUND';
+  String get kizunarkAssociateFundSheetTitle => '選擇關聯的基金';
 
   @override
-  String get kizunarkAssociateFundEmpty => '目前沒有可關聯的運用中FUND。';
+  String get kizunarkAssociateFundEmpty => '目前沒有可關聯的運用中基金。';
 
   @override
   String get kizunarkPostAction => '發佈';
