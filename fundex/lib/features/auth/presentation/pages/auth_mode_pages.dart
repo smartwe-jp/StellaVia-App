@@ -203,6 +203,7 @@ class _AuthMethodLoginPageState extends ConsumerState<_AuthMethodLoginPage> {
     final hotelTheme = Theme.of(context).extension<AppFTKTheme>();
     final effectiveErrorMessage =
         _localValidationError ??
+        state.errorMessage ??
         (state.errorKey != null
             ? _resolveErrorMessage(context, state.errorKey!)
             : null);
@@ -316,9 +317,9 @@ class _AuthMethodLoginPageState extends ConsumerState<_AuthMethodLoginPage> {
                               .withValues(alpha: canSendCode ? 0.12 : 0.06),
                           foregroundColor: canSendCode
                               ? Theme.of(context).appColors.primary
-                              : Theme.of(context).appColors.primary.withValues(
-                                  alpha: 0.4,
-                                ),
+                              : Theme.of(
+                                  context,
+                                ).appColors.primary.withValues(alpha: 0.4),
                           onTap: canSendCode
                               ? () => _handleSendCode(controller)
                               : null,
@@ -711,9 +712,7 @@ class _AuthMethodRegisterPageState
                       trailing: Tooltip(
                         message: _sendCodeButtonLabel(l10n.registerSendCode),
                         child: AppNavigationIconButton(
-                          key: const Key(
-                            'register_account_send_code_button',
-                          ),
+                          key: const Key('register_account_send_code_button'),
                           icon: Icons.send_rounded,
                           size: 34,
                           borderRadius: 10,
@@ -721,9 +720,9 @@ class _AuthMethodRegisterPageState
                               .withValues(alpha: _canSendCode ? 0.12 : 0.06),
                           foregroundColor: _canSendCode
                               ? Theme.of(context).appColors.primary
-                              : Theme.of(context).appColors.primary.withValues(
-                                  alpha: 0.4,
-                                ),
+                              : Theme.of(
+                                  context,
+                                ).appColors.primary.withValues(alpha: 0.4),
                           onTap: _canSendCode ? _sendCode : null,
                         ),
                       ),

@@ -48,9 +48,9 @@ class MemberTemplateApp extends ConsumerWidget {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final messengerContext = _rootScaffoldMessengerKey.currentContext;
         if (messengerContext != null) {
-          final message = next.key.resolve(
-            AppLocalizations.of(messengerContext),
-          );
+          final message = next.customMessage?.trim().isNotEmpty == true
+              ? next.customMessage!.trim()
+              : next.key.resolve(AppLocalizations.of(messengerContext));
           AppNotice.show(messengerContext, message: message);
         }
         ref.read(appUiMessageProvider.notifier).clearIfMatches(next.id);

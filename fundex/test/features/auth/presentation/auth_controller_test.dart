@@ -102,6 +102,20 @@ void main() {
 
     expect(controller.state.errorKey, AuthErrorKey.sendCodeFailed);
   });
+
+  test('login failure keeps backend message', () async {
+    final controller = AuthController(
+      SendLoginCodeUseCase(_FakeRepository()),
+      LoginWithCodeUseCase(_ThrowingLoginRepository()),
+    );
+
+    controller.onAccountChanged('user@example.com');
+    controller.onCodeChanged('123456');
+    await controller.login();
+
+    expect(controller.state.errorKey, AuthErrorKey.loginFailed);
+    expect(controller.state.errorMessage, 'アカウントはシステムに存在しません');
+  });
 }
 
 class _ThrowingSendCodeRepository implements AuthRepository {
@@ -167,4 +181,44 @@ class _ThrowingSendCodeRepository implements AuthRepository {
       intlCode: intlCode,
     );
   }
+}
+
+class _ThrowingLoginRepository implements AuthRepository {
+  @override
+  Future<AuthSession> loginWithCode({
+    required String account,
+    required String code,
+    String? intlCode,
+  }) {
+    throw StateError('アカウントはシステムに存在しません');
+  }
+
+  @override
+  Future<void> logout() async {}
+
+  @override
+  Future<bool> refreshSession() async => true;
+
+  @override
+  Future<void> registerAccount({
+    required String account,
+    required String code,
+    required String intlCode,
+    String? contact,
+  }) async {}
+
+  @override
+  Future<bool> restoreSession() async => true;
+
+  @override
+  Future<void> sendLoginCode({
+    required String account,
+    String? intlCode,
+  }) async {}
+
+  @override
+  Future<void> sendRegisterCode({
+    required String account,
+    required String intlCode,
+  }) async {}
 }

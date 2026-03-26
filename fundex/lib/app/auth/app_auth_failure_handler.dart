@@ -7,14 +7,16 @@ class AppAuthFailureHandler implements AuthFailureHandler {
   AppAuthFailureHandler({
     required AppLogger logger,
     required Future<void> Function() onSignedOut,
-    required void Function(AppUiMessageKey messageKey) reportErrorMessage,
+    required void Function(AppUiMessageKey messageKey, {String? customMessage})
+    reportErrorMessage,
   }) : _logger = logger,
        _onSignedOut = onSignedOut,
        _reportErrorMessage = reportErrorMessage;
 
   final AppLogger _logger;
   final Future<void> Function() _onSignedOut;
-  final void Function(AppUiMessageKey messageKey) _reportErrorMessage;
+  final void Function(AppUiMessageKey messageKey, {String? customMessage})
+  _reportErrorMessage;
 
   @override
   Future<void> onAuthFailure(AuthFailureReason reason) async {

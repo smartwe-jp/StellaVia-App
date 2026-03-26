@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../domain/usecases/login_with_code_usecase.dart';
 import '../../domain/usecases/send_login_code_usecase.dart';
 import '../state/auth_state.dart';
@@ -26,10 +27,11 @@ class AuthController extends StateNotifier<AuthState> {
       await _sendCode.call(account: state.account.trim(), intlCode: intlCode);
       state = state.copyWith(isSendingCode: false);
       return true;
-    } catch (_) {
+    } catch (error) {
       state = state.copyWith(
         isSendingCode: false,
         errorKey: AuthErrorKey.sendCodeFailed,
+        errorMessage: resolveAppRequestErrorMessage(error, ''),
       );
       return false;
     }
@@ -51,10 +53,11 @@ class AuthController extends StateNotifier<AuthState> {
       );
       state = state.copyWith(isLoggingIn: false, session: session);
       return true;
-    } catch (_) {
+    } catch (error) {
       state = state.copyWith(
         isLoggingIn: false,
         errorKey: AuthErrorKey.loginFailed,
+        errorMessage: resolveAppRequestErrorMessage(error, ''),
       );
       return false;
     }

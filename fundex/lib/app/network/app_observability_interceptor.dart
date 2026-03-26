@@ -1,19 +1,22 @@
 import 'package:core_network/core_network.dart';
 import 'package:core_tool_kit/core_tool_kit.dart';
 
+import '../support/app_request_error_message_resolver.dart';
 import '../observability/app_observability_providers.dart';
 
 class AppObservabilityInterceptor extends Interceptor {
   AppObservabilityInterceptor({
     required AppLogger logger,
-    required void Function(AppUiMessageKey messageKey) reportErrorMessage,
+    required void Function(AppUiMessageKey messageKey, {String? customMessage})
+    reportErrorMessage,
     this.includeHttpPayloadLog = false,
     this.includeHttpResponseLog = true,
   }) : _logger = logger,
        _reportErrorMessage = reportErrorMessage;
 
   final AppLogger _logger;
-  final void Function(AppUiMessageKey messageKey) _reportErrorMessage;
+  final void Function(AppUiMessageKey messageKey, {String? customMessage})
+  _reportErrorMessage;
   final bool includeHttpPayloadLog;
   final bool includeHttpResponseLog;
 
@@ -79,7 +82,10 @@ class AppObservabilityInterceptor extends Interceptor {
 
       final userMessage = _mapUserMessage(failure);
       if (userMessage != null) {
-        _reportErrorMessage(userMessage);
+        _reportErrorMessage(
+          userMessage,
+          customMessage: _resolveCustomMessage(err, failure),
+        );
       }
       handler.next(err);
       return;
@@ -98,8 +104,25 @@ class AppObservabilityInterceptor extends Interceptor {
           'responseData': _stringifyForLog(err.response?.data),
       },
     );
-    _reportErrorMessage(AppUiMessageKey.requestFailed);
+    _reportErrorMessage(
+      AppUiMessageKey.requestFailed,
+      customMessage: _resolveCustomMessage(err, null),
+    );
     handler.next(err);
+  }
+
+  String? _resolveCustomMessage(DioException err, NetworkFailure? failure) {
+    if (failure != null && failure.type != NetworkFailureType.badResponse) {
+      return null;
+    }
+    final resolved = resolveAppRequestErrorMessage(err, '').trim();
+    if (resolved.isEmpty ||
+        resolved == 'Bad response' ||
+        resolved == 'Request failed' ||
+        resolved == 'Unknown network error') {
+      return null;
+    }
+    return resolved;
   }
 
   AppUiMessageKey? _mapUserMessage(NetworkFailure failure) {

@@ -96,11 +96,63 @@ class LegacyEnvelopeCodec {
     Map<String, dynamic> payload, {
     required String fallbackMessage,
   }) {
-    final dynamic message =
-        payload[profile.primaryMessageKey] ??
-        payload[profile.secondaryMessageKey] ??
-        fallbackMessage;
-    return message.toString();
+    final resolved =
+        _extractMessageText(payload[profile.primaryMessageKey]) ??
+        _extractMessageText(payload[profile.secondaryMessageKey]) ??
+        _extractMessageText(payload['error_description']) ??
+        _extractMessageText(payload['errorDescription']) ??
+        _extractMessageText(payload['detail']) ??
+        _extractMessageText(payload['error']) ??
+        _extractMessageText(payload);
+    return resolved ?? fallbackMessage;
+  }
+
+  String? _extractMessageText(dynamic value) {
+    if (value == null) {
+      return null;
+    }
+    if (value is String) {
+      final normalized = value.trim();
+      return normalized.isEmpty ? null : normalized;
+    }
+    if (value is num || value is bool) {
+      return value.toString();
+    }
+    if (value is Map) {
+      final map = toJsonMap(value);
+      final prioritized = <dynamic>[
+        map['error_description'],
+        map['errorDescription'],
+        map[profile.primaryMessageKey],
+        map[profile.secondaryMessageKey],
+        map['detail'],
+        map['error'],
+      ];
+      for (final candidate in prioritized) {
+        final resolved = _extractMessageText(candidate);
+        if (resolved != null) {
+          return resolved;
+        }
+      }
+      for (final candidate in map.values) {
+        final resolved = _extractMessageText(candidate);
+        if (resolved != null) {
+          return resolved;
+        }
+      }
+      return null;
+    }
+    if (value is List) {
+      for (final item in value) {
+        final resolved = _extractMessageText(item);
+        if (resolved != null) {
+          return resolved;
+        }
+      }
+      return null;
+    }
+    final normalized = value.toString().trim();
+    return normalized.isEmpty ? null : normalized;
   }
 
   bool isSuccessEnvelope(

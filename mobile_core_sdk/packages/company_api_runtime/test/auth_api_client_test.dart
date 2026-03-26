@@ -82,6 +82,30 @@ void main() {
         );
       },
     );
+
+    test(
+      'sendOnlinePhoneChangeCode resolves nested msg map on failure',
+      () async {
+        final dio = _buildDio((_) async {
+          return _jsonOk(
+            '{"code":500,"msg":{"error":"invalid","error_description":"認証コード送信に失敗しました"}}',
+          );
+        });
+        final api = AuthApiClient(dioForPath: (_) => dio);
+
+        await expectLater(
+          () =>
+              api.sendOnlinePhoneChangeCode(mobile: '09085309521', bizId: '81'),
+          throwsA(
+            isA<StateError>().having(
+              (error) => error.message,
+              'message',
+              '認証コード送信に失敗しました',
+            ),
+          ),
+        );
+      },
+    );
   });
 
   group('AuthApiClient /member/login/index', () {
@@ -161,6 +185,48 @@ void main() {
       );
 
       expect(called, isFalse);
+    });
+  });
+
+  group('AuthApiClient loginWithCode errors', () {
+    test('uses oauth error_description from bad response payload', () async {
+      final dio = _buildDio((_) async {
+        return ResponseBody.fromString(
+          '{"error":"invalid_grant","error_description":"アカウントはシステムに存在しません"}',
+          400,
+          headers: <String, List<String>>{
+            Headers.contentTypeHeader: <String>['application/json'],
+          },
+        );
+      });
+      final api = AuthApiClient(dioForPath: (_) => dio);
+
+      await expectLater(
+        () => api.loginWithCode(account: 'demo@example.com', code: '123456'),
+        throwsA(
+          isA<StateError>().having(
+            (error) => error.message,
+            'message',
+            'アカウントはシステムに存在しません',
+          ),
+        ),
+      );
+    });
+
+    test('resolves nested map message payload', () {
+      const codec = LegacyEnvelopeCodec(
+        profile: LegacyEnvelopeProfile(successCodes: <String>{'200'}),
+      );
+
+      expect(
+        codec.resolveErrorMessage(<String, dynamic>{
+          'msg': <String, dynamic>{
+            'error': 'invalid_grant',
+            'error_description': 'アカウントはシステムに存在しません',
+          },
+        }, fallbackMessage: 'Login failed.'),
+        'アカウントはシステムに存在しません',
+      );
     });
   });
 }

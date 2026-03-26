@@ -215,6 +215,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         .copyWith(fontWeight: FontWeight.bold);
     final effectiveErrorMessage =
         _localValidationError ??
+        state.errorMessage ??
         (state.errorKey != null
             ? _resolveErrorMessage(context, state.errorKey!)
             : null);
@@ -459,10 +460,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 }
 
 class _LoginHeroHeader extends StatelessWidget {
-  const _LoginHeroHeader({
-    required this.subtitle,
-    required this.onClose,
-  });
+  const _LoginHeroHeader({required this.subtitle, required this.onClose});
 
   final String subtitle;
   final VoidCallback onClose;

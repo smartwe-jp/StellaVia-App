@@ -16,18 +16,23 @@ enum AppUiMessageKey {
 }
 
 class AppUiMessage {
-  const AppUiMessage({required this.id, required this.key});
+  const AppUiMessage({required this.id, required this.key, this.customMessage});
 
   final int id;
   final AppUiMessageKey key;
+  final String? customMessage;
 }
 
 class AppUiMessageController extends StateNotifier<AppUiMessage?> {
   AppUiMessageController() : super(null);
 
-  void showError(AppUiMessageKey messageKey) {
+  void showError(AppUiMessageKey messageKey, {String? customMessage}) {
     final now = DateTime.now().microsecondsSinceEpoch;
-    state = AppUiMessage(id: now, key: messageKey);
+    state = AppUiMessage(
+      id: now,
+      key: messageKey,
+      customMessage: customMessage,
+    );
   }
 
   void clearIfMatches(int messageId) {

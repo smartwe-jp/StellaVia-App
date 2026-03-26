@@ -9,6 +9,7 @@ class AuthState {
     this.isSendingCode = false,
     this.isLoggingIn = false,
     this.errorKey,
+    this.errorMessage,
     this.session,
   });
 
@@ -17,6 +18,7 @@ class AuthState {
   final bool isSendingCode;
   final bool isLoggingIn;
   final AuthErrorKey? errorKey;
+  final String? errorMessage;
   final AuthSession? session;
 
   bool get canSendCode => account.trim().isNotEmpty && !isSendingCode;
@@ -29,6 +31,7 @@ class AuthState {
     bool? isSendingCode,
     bool? isLoggingIn,
     AuthErrorKey? errorKey,
+    String? errorMessage,
     bool clearError = false,
     bool clearSession = false,
     AuthSession? session,
@@ -39,6 +42,7 @@ class AuthState {
       isSendingCode: isSendingCode ?? this.isSendingCode,
       isLoggingIn: isLoggingIn ?? this.isLoggingIn,
       errorKey: clearError ? null : (errorKey ?? this.errorKey),
+      errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
       session: clearSession ? null : (session ?? this.session),
     );
   }

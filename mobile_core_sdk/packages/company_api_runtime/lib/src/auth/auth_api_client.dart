@@ -49,8 +49,7 @@ class AuthApiClient {
     this.registerApplyPath = AuthApiPaths.registerApply,
     this.changePhoneOnlineSendPath = AuthApiPaths.changePhoneOnlineSend,
     this.changePhoneOnlineCheckPath = AuthApiPaths.changePhoneOnlineCheck,
-    this.sendEmailVerificationCodePath =
-        AuthApiPaths.sendEmailVerificationCode,
+    this.sendEmailVerificationCodePath = AuthApiPaths.sendEmailVerificationCode,
     this.verifyEmailVerificationCodePath =
         AuthApiPaths.verifyEmailVerificationCode,
     this.memberLoginIndexPath = AuthApiPaths.memberLoginIndex,
@@ -198,9 +197,7 @@ class AuthApiClient {
     );
   }
 
-  Future<void> sendEmailVerificationCode({
-    required String email,
-  }) async {
+  Future<void> sendEmailVerificationCode({required String email}) async {
     final response = await _dioForPath(sendEmailVerificationCodePath)
         .get<Map<String, dynamic>>(
           sendEmailVerificationCodePath,
@@ -312,24 +309,35 @@ class AuthApiClient {
     final isEmail = _isEmailAccount(normalizedAccount);
     final normalizedIntlCode = _normalizedIntlCode(intlCode);
 
-    final response = await _dioForPath(oauthTokenPath)
-        .post<Map<String, dynamic>>(
-          oauthTokenPath,
-          data: <String, dynamic>{
-            'username': normalizedAccount,
-            'password': code.trim(),
-            'grant_type': 'password',
-            'auth_type': isEmail ? 'email' : 'mobile',
-            'scope': 'app',
-            if (!isEmail) 'code': normalizedIntlCode,
-          },
-          options: authRequired(false).copyWith(
-            headers: <String, dynamic>{
-              'Authorization': oauthClientAuthorization,
-            },
-            contentType: Headers.formUrlEncodedContentType,
+    late final Response<Map<String, dynamic>> response;
+    try {
+      response = await _dioForPath(oauthTokenPath).post<Map<String, dynamic>>(
+        oauthTokenPath,
+        data: <String, dynamic>{
+          'username': normalizedAccount,
+          'password': code.trim(),
+          'grant_type': 'password',
+          'auth_type': isEmail ? 'email' : 'mobile',
+          'scope': 'app',
+          if (!isEmail) 'code': normalizedIntlCode,
+        },
+        options: authRequired(false).copyWith(
+          headers: <String, dynamic>{'Authorization': oauthClientAuthorization},
+          contentType: Headers.formUrlEncodedContentType,
+        ),
+      );
+    } on DioException catch (error) {
+      final payload = _envelopeCodec.toJsonMap(error.response?.data);
+      if (payload.isNotEmpty) {
+        throw StateError(
+          _envelopeCodec.resolveErrorMessage(
+            payload,
+            fallbackMessage: 'Login failed.',
           ),
         );
+      }
+      rethrow;
+    }
 
     final payload = _extractTokenPayload(
       _envelopeCodec.toJsonMap(response.data),
@@ -504,6 +512,12 @@ class AuthApiClient {
         payload.containsKey('refreshToken');
   }
 
+  bool _looksLikeOauthErrorPayload(Map<String, dynamic> payload) {
+    return payload.containsKey('error_description') ||
+        payload.containsKey('errorDescription') ||
+        payload.containsKey('error');
+  }
+
   void _assertLegacyBoolSuccessIfPresent(
     Map<String, dynamic> payload, {
     required String fallbackMessage,
@@ -529,8 +543,12 @@ class AuthApiClient {
       return;
     }
 
-    final message = _toNormalizedString(payload['msg']);
-    throw StateError(message ?? fallbackMessage);
+    throw StateError(
+      _envelopeCodec.resolveErrorMessage(
+        payload,
+        fallbackMessage: fallbackMessage,
+      ),
+    );
   }
 
   Map<String, dynamic> _extractTokenPayload(
@@ -543,6 +561,15 @@ class AuthApiClient {
 
     if (_hasOauthTokenFields(payload)) {
       return payload;
+    }
+
+    if (_looksLikeOauthErrorPayload(payload)) {
+      throw StateError(
+        _envelopeCodec.resolveErrorMessage(
+          payload,
+          fallbackMessage: fallbackMessage,
+        ),
+      );
     }
 
     if (_envelopeCodec.looksLikeEnvelope(payload)) {
@@ -583,8 +610,12 @@ class AuthApiClient {
     final code = payload['code']?.toString().trim() ?? '';
     final isSuccess = code == '0' || code == '200';
     if (!isSuccess) {
-      final message = _toNormalizedString(payload['msg']);
-      throw StateError(message ?? fallbackMessage);
+      throw StateError(
+        _envelopeCodec.resolveErrorMessage(
+          payload,
+          fallbackMessage: fallbackMessage,
+        ),
+      );
     }
 
     return _toJsonMap(payload['data']);
