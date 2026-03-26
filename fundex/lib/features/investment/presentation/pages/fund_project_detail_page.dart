@@ -110,8 +110,8 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
       ),
       data: (FundProject project) {
         final favoriteProjectId = project.id.trim().isEmpty
-            ? projectId
-            : project.id;
+            ? projectId.trim()
+            : project.id.trim();
         final isFavorite = favoriteProjectIds.contains(favoriteProjectId);
         final normalizedPhotoUrls = project.photos
             .map((String url) => url.trim())

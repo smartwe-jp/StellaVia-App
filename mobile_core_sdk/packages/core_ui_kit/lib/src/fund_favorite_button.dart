@@ -50,7 +50,7 @@ class FundFavoriteButton extends StatelessWidget {
     final effectiveIconColor = selected
         ? (selectedIconColor ?? _resolveSelectedIconColor(colors))
         : (unselectedIconColor ?? _resolveUnselectedIconColor(colors));
-    final borderColor = _resolveBorderColor(colors);
+    final borderColor = _resolveBorderColor(colors, selected);
 
     final button = SizedBox(
       width: size,
@@ -111,7 +111,7 @@ class FundFavoriteButton extends StatelessWidget {
 
   Color _resolveSelectedBackgroundColor(AppSemanticColorTheme colors) {
     if (_isOverlayStyle) {
-      return colors.scrim.withValues(alpha: 0.40);
+      return colors.warningSubtle.withValues(alpha: 0.92);
     }
     return colors.warningSubtle;
   }
@@ -125,13 +125,16 @@ class FundFavoriteButton extends StatelessWidget {
 
   Color _resolveSelectedIconColor(AppSemanticColorTheme colors) {
     if (_isOverlayStyle) {
-      return colors.onDark;
+      return colors.warning;
     }
     return colors.warning;
   }
 
-  Color _resolveBorderColor(AppSemanticColorTheme colors) {
+  Color _resolveBorderColor(AppSemanticColorTheme colors, bool selected) {
     if (_isOverlayStyle) {
+      if (selected) {
+        return colors.warningBorder;
+      }
       return colors.onDark.withValues(alpha: 0.10);
     }
     return colors.onDark.withValues(alpha: 0.22);
