@@ -393,7 +393,7 @@ class AppThemeFactory {
         height: 1.35,
       ),
       cellValue: sans(
-        size: 16,
+        size: 14,
         weight: FontWeight.w700,
         color: semanticColors.textTertiary,
         height: 1.35,
