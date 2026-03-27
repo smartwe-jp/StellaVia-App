@@ -18,15 +18,15 @@ class BaiduFaceLivenessCollector implements LivenessCollector {
 
   @override
   Future<LivenessCollectResult> collect() async {
-    if (_licenseId.isEmpty) {
-      return const LivenessCollectResult(
-        photoBase64: '',
-        errorMessage: 'baidu_face_license_missing',
-      );
-    }
-
     final plugin = bd_collect.FlutterBdfaceCollect.instance;
     try {
+      if (_licenseId.isEmpty) {
+        return const LivenessCollectResult(
+          photoBase64: '',
+          errorMessage: 'baidu_face_license_missing',
+        );
+      }
+
       final initError = await plugin.init(_licenseId);
       if (initError != null && initError.trim().isNotEmpty) {
         return LivenessCollectResult(

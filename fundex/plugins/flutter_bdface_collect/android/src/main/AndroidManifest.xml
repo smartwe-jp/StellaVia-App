@@ -9,14 +9,14 @@
 
     <application>
         <activity
-            android:name=".FinanceFaceActionLivenessActivity"
+            android:name="com.fluttercandies.flutter_bdface_collect.FinanceFaceActionLivenessActivity"
             android:exported="false"
             android:hardwareAccelerated="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/Theme_NoTitle" />
         <activity
-            android:name=".FinanceFaceSilenceLivenessActivity"
+            android:name="com.fluttercandies.flutter_bdface_collect.FinanceFaceSilenceLivenessActivity"
             android:exported="false"
             android:hardwareAccelerated="true"
             android:launchMode="singleTop"

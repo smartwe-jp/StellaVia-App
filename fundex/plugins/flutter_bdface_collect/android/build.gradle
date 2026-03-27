@@ -16,7 +16,7 @@ apply plugin: 'com.android.library'
 
 android {
     if (project.android.hasProperty("namespace")) {
-        namespace 'com.fluttercandies.flutter_bdface_collect'
+        namespace 'com.baidu.idl.face.platform.ui'
     }
     compileSdkVersion 31
 

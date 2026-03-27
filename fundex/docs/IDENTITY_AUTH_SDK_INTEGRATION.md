@@ -81,7 +81,10 @@
 
 `identityAuthLivenessCollectorProvider` 读取：
 
-- `BAIDU_FACE_LICENSE_ID`
+- Android: `BAIDU_FACE_LICENSE_ID_ANDROID`
+- Android 兼容旧配置：`BAIDU_FACE_LICENSE_ID`
+- iOS: `BAIDU_FACE_LICENSE_ID_IOS`
+- iOS 兼容旧配置：`BAIDU_FACE_LICENSE_ID`
 
 示例：
 
@@ -89,10 +92,12 @@
 fvm flutter run \
   --flavor dev \
   -t lib/main_dev.dart \
-  --dart-define=BAIDU_FACE_LICENSE_ID=demo-face-ios
+  --dart-define=BAIDU_FACE_LICENSE_ID_ANDROID=demo-face-android \
+  --dart-define=BAIDU_FACE_LICENSE_ID_IOS=demo-face-ios
 ```
 
-> Android/iOS 请使用各自申请的 licenseId，并确保插件所需授权文件已按插件文档放置。
+> Android/iOS 都需要 `licenseId`。仅放置授权文件不够。
+> 推荐分别配置 `BAIDU_FACE_LICENSE_ID_ANDROID` 与 `BAIDU_FACE_LICENSE_ID_IOS`，共享旧配置 `BAIDU_FACE_LICENSE_ID` 仅作为兼容回退。
 
 ## 5. 平台配置
 
