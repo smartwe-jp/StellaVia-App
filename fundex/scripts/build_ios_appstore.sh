@@ -11,6 +11,19 @@ KEY_ID="${APP_STORE_CONNECT_API_KEY_ID:-}"
 ISSUER_ID="${APP_STORE_CONNECT_ISSUER_ID:-}"
 KEY_PATH="${APP_STORE_CONNECT_API_KEY_PATH:-}"
 SKIP_UPLOAD="${SKIP_UPLOAD:-0}"
+IOS_TEAM_ID="${IOS_TEAM_ID:-PGU4LJ2SPF}"
+IOS_BUNDLE_ID="${IOS_BUNDLE_ID:-com.fund.stellavia}"
+IOS_PROVISIONING_PROFILE_NAME="${IOS_PROVISIONING_PROFILE_NAME:-Stellavia_release_Profile}"
+
+cleanup() {
+  if [[ -n "${TEMP_KEY_DIR:-}" && -d "${TEMP_KEY_DIR:-}" ]]; then
+    rm -rf "$TEMP_KEY_DIR"
+  fi
+  if [[ -n "${TEMP_EXPORT_DIR:-}" && -d "${TEMP_EXPORT_DIR:-}" ]]; then
+    rm -rf "$TEMP_EXPORT_DIR"
+  fi
+}
+trap cleanup EXIT
 
 if [[ -n "${FLUTTER_ROOT:-}" && -x "${FLUTTER_ROOT}/bin/flutter" ]]; then
   FLUTTER_CMD=("${FLUTTER_ROOT}/bin/flutter")
@@ -26,12 +39,36 @@ if [[ ! -f "$DEFINE_FILE" ]]; then
   exit 1
 fi
 
+TEMP_EXPORT_DIR="$(mktemp -d)"
+EXPORT_OPTIONS_PLIST="$TEMP_EXPORT_DIR/ExportOptions.plist"
+cat > "$EXPORT_OPTIONS_PLIST" <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>method</key>
+  <string>app-store</string>
+  <key>signingStyle</key>
+  <string>manual</string>
+  <key>teamID</key>
+  <string>${IOS_TEAM_ID}</string>
+  <key>signingCertificate</key>
+  <string>Apple Distribution</string>
+  <key>provisioningProfiles</key>
+  <dict>
+    <key>${IOS_BUNDLE_ID}</key>
+    <string>${IOS_PROVISIONING_PROFILE_NAME}</string>
+  </dict>
+</dict>
+</plist>
+EOF
+
 BUILD_ARGS=(
   ipa
   --flavor prod
   -t lib/main_prod.dart
   --dart-define-from-file="$DEFINE_FILE"
-  --export-method app-store
+  --export-options-plist="$EXPORT_OPTIONS_PLIST"
 )
 
 if [[ -n "$BUILD_NAME" ]]; then
@@ -66,13 +103,6 @@ if [[ -z "$KEY_ID" || -z "$ISSUER_ID" ]]; then
   echo "You can also set APP_STORE_CONNECT_API_KEY_PATH to the .p8 file."
   exit 1
 fi
-
-cleanup() {
-  if [[ -n "${TEMP_KEY_DIR:-}" && -d "${TEMP_KEY_DIR:-}" ]]; then
-    rm -rf "$TEMP_KEY_DIR"
-  fi
-}
-trap cleanup EXIT
 
 if [[ -n "$KEY_PATH" ]]; then
   if [[ ! -f "$KEY_PATH" ]]; then

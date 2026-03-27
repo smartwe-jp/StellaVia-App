@@ -1426,7 +1426,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fund.stellavia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = FundingStellavia_profile;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_release_Profile;
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1469,6 +1469,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerProd.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = 3583NXG8VV;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PGU4LJ2SPF;
@@ -1497,6 +1498,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerProd.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = 3583NXG8VV;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PGU4LJ2SPF;
