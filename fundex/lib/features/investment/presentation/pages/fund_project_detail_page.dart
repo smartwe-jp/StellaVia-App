@@ -11,6 +11,7 @@ import '../../domain/entities/fund_project.dart';
 import '../providers/fund_project_favorite_providers.dart';
 import '../providers/fund_project_providers.dart';
 import '../support/fund_detail_static_content.dart';
+import '../support/fund_project_gain_type_label.dart';
 import '../support/fund_project_detail_structured_data.dart';
 import '../support/fund_project_detail_view_data.dart';
 import '../widgets/fund_project_detail_comments_section.dart';
@@ -32,6 +33,7 @@ class FundProjectDetailPage extends ConsumerStatefulWidget {
 
 class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
   int _selectedDetailTabIndex = 0;
+  final GlobalKey _gainTypeDescriptionSectionKey = GlobalKey();
 
   Future<void> _showFundApplyVerificationRequiredDialog() {
     final l10n = context.l10n;
@@ -87,6 +89,19 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
         invalidSourceNotice: context.l10n.imageViewerInvalidSourceNotice,
         closeTooltip: context.l10n.imageViewerCloseTooltip,
       ),
+    );
+  }
+
+  Future<void> _scrollToGainTypeDescription() async {
+    final targetContext = _gainTypeDescriptionSectionKey.currentContext;
+    if (targetContext == null) {
+      return;
+    }
+    await Scrollable.ensureVisible(
+      targetContext,
+      duration: const Duration(milliseconds: 320),
+      curve: Curves.easeOutCubic,
+      alignment: 0.08,
     );
   }
 
@@ -162,6 +177,24 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
           project: project,
           operatingCompanyContent: operatingCompanyContent,
         );
+        final gainTypeLabel = resolveFundProjectGainTypeLabel(
+          context,
+          project.gainType,
+        );
+        final hasGainType = (project.gainType?.trim().isNotEmpty ?? false);
+        final gainTypeExplanationItems = _buildGainTypeExplanationItems(
+          context,
+        );
+        final infoItems = hasGainType
+            ? <FundDetailInfoItemData>[
+                ...viewData.infoItems,
+                FundDetailInfoItemData(
+                  label: context.l10n.fundDetailGainTypeTitle,
+                  value: gainTypeLabel,
+                  onTap: _scrollToGainTypeDescription,
+                ),
+              ]
+            : viewData.infoItems;
 
         return FundProjectDetailScaffold(
           actionBar: FundDetailStickyActionBar(
@@ -220,11 +253,11 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                         ],
                       ),
                     ),
-                    if (viewData.infoItems.isNotEmpty) ...<Widget>[
+                    if (infoItems.isNotEmpty) ...<Widget>[
                       const SizedBox(height: UiTokens.spacing16),
                       FundDetailSection(
                         title: context.l10n.fundDetailKeyFactsTitle,
-                        child: FundDetailInfoTable(items: viewData.infoItems),
+                        child: FundDetailInfoTable(items: infoItems),
                       ),
                     ],
                     if (project.achievementRate != null) ...<Widget>[
@@ -258,6 +291,33 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                     ),
                     if (staticContent != null) ...<Widget>[
                       const SizedBox(height: 18),
+                      if (hasGainType) ...<Widget>[
+                        KeyedSubtree(
+                          key: _gainTypeDescriptionSectionKey,
+                          child: FundDetailSection(
+                            title:
+                                context.l10n.fundDetailGainTypeDescriptionTitle,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                for (
+                                  var index = 0;
+                                  index < gainTypeExplanationItems.length;
+                                  index++
+                                ) ...<Widget>[
+                                  _FundDetailGainTypeExplanationCard(
+                                    item: gainTypeExplanationItems[index],
+                                  ),
+                                  if (index <
+                                      gainTypeExplanationItems.length - 1)
+                                    const SizedBox(height: UiTokens.spacing8),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 18),
+                      ],
                       FundDetailSection(
                         title: staticContent.riskSection.title,
                         child: Column(
@@ -427,6 +487,67 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
           ),
         );
       },
+    );
+  }
+}
+
+class _FundDetailGainTypeExplanationItem {
+  const _FundDetailGainTypeExplanationItem({
+    required this.title,
+    required this.body,
+  });
+
+  final String title;
+  final String body;
+}
+
+List<_FundDetailGainTypeExplanationItem> _buildGainTypeExplanationItems(
+  BuildContext context,
+) {
+  final l10n = context.l10n;
+  return <_FundDetailGainTypeExplanationItem>[
+    _FundDetailGainTypeExplanationItem(
+      title: l10n.fundDetailGainTypeIncomeGainTitle,
+      body: l10n.fundDetailGainTypeIncomeGainBody,
+    ),
+    _FundDetailGainTypeExplanationItem(
+      title: l10n.fundDetailGainTypeCapitalGainTitle,
+      body: l10n.fundDetailGainTypeCapitalGainBody,
+    ),
+    _FundDetailGainTypeExplanationItem(
+      title: l10n.fundDetailGainTypeMixedTitle,
+      body: l10n.fundDetailGainTypeMixedBody,
+    ),
+  ];
+}
+
+class _FundDetailGainTypeExplanationCard extends StatelessWidget {
+  const _FundDetailGainTypeExplanationCard({required this.item});
+
+  final _FundDetailGainTypeExplanationItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    final appText = Theme.of(context).appTextTheme;
+    final colors = Theme.of(context).appColors;
+    return FundDetailContentCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            item.title,
+            style: appText.bodyStrong.copyWith(color: colors.textPrimary),
+          ),
+          const SizedBox(height: UiTokens.spacing8),
+          Text(
+            item.body,
+            style: appText.body.copyWith(
+              color: colors.textSecondary,
+              height: 1.7,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

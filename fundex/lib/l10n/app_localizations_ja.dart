@@ -772,6 +772,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get fundListMethodLottery => '抽選';
 
   @override
+  String get fundListGainTypeIncomeGain => 'インカムゲイン';
+
+  @override
+  String get fundListGainTypeCapitalGain => 'キャピタルゲイン';
+
+  @override
+  String get fundListGainTypeMixed => '混合型（インカム＋キャピタル）';
+
+  @override
   String get fundListMethodUnknown => '未設定';
 
   @override
@@ -1859,6 +1868,33 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get fundDetailAchievementRateLabel => '募集達成率';
+
+  @override
+  String get fundDetailGainTypeTitle => '収益の種類';
+
+  @override
+  String get fundDetailGainTypeDescriptionTitle => '収益の種類の説明';
+
+  @override
+  String get fundDetailGainTypeIncomeGainTitle => '1. インカムゲイン（Income Gain）';
+
+  @override
+  String get fundDetailGainTypeIncomeGainBody =>
+      '意味：保有資産から得られる定期的な収入\n\n特徴：毎月や四半期ごとに安定して入るお金\n\n例：不動産の賃料収入、民泊・ホテル運営收益';
+
+  @override
+  String get fundDetailGainTypeCapitalGainTitle => '2. キャピタルゲイン（Capital Gain）';
+
+  @override
+  String get fundDetailGainTypeCapitalGainBody =>
+      '意味：資産価格の値上がりによる売却益\n\n特徴：資産を売ったときに得られる一時的な利益\n\n例：不動産の売却益';
+
+  @override
+  String get fundDetailGainTypeMixedTitle => '3. 混合型（インカム＋キャピタル）';
+
+  @override
+  String get fundDetailGainTypeMixedBody =>
+      '意味：インカムゲインとキャピタルゲインの両方を狙う運用\n\n特徴：配当・利息などの安定収入と値上がり益の両方を期待できる\n\n例：賃料収入＋物件売却益';
 
   @override
   String get fundDetailTabPropertyOverview => '物件概要';

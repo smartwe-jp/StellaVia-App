@@ -29,6 +29,7 @@ extension FundProjectDtoMapper on FundProjectDto {
       offeringEndDatetime: offeringEndDatetime,
       typeOfOffering: typeOfOffering,
       offeringMethod: offeringMethod,
+      gainType: gainType,
       investmentUnit: investmentUnit,
       maximumInvestmentPerPerson: maximumInvestmentPerPerson,
       achievementRate: achievementRate,

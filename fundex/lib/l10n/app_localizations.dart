@@ -1595,6 +1595,24 @@ abstract class AppLocalizations {
   /// **'Lottery'**
   String get fundListMethodLottery;
 
+  /// No description provided for @fundListGainTypeIncomeGain.
+  ///
+  /// In en, this message translates to:
+  /// **'Income Gain'**
+  String get fundListGainTypeIncomeGain;
+
+  /// No description provided for @fundListGainTypeCapitalGain.
+  ///
+  /// In en, this message translates to:
+  /// **'Capital Gain'**
+  String get fundListGainTypeCapitalGain;
+
+  /// No description provided for @fundListGainTypeMixed.
+  ///
+  /// In en, this message translates to:
+  /// **'Mixed (Income + Capital)'**
+  String get fundListGainTypeMixed;
+
   /// No description provided for @fundListMethodUnknown.
   ///
   /// In en, this message translates to:
@@ -3661,6 +3679,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Funding achievement rate'**
   String get fundDetailAchievementRateLabel;
+
+  /// No description provided for @fundDetailGainTypeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Type of Return'**
+  String get fundDetailGainTypeTitle;
+
+  /// No description provided for @fundDetailGainTypeDescriptionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About the Type of Return'**
+  String get fundDetailGainTypeDescriptionTitle;
+
+  /// No description provided for @fundDetailGainTypeIncomeGainTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'1. Income Gain'**
+  String get fundDetailGainTypeIncomeGainTitle;
+
+  /// No description provided for @fundDetailGainTypeIncomeGainBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Meaning: Regular income generated from held assets\n\nFeatures: Stable cash flow received monthly or quarterly\n\nExamples: Rental income from real estate, revenue from minpaku and hotel operations'**
+  String get fundDetailGainTypeIncomeGainBody;
+
+  /// No description provided for @fundDetailGainTypeCapitalGainTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'2. Capital Gain'**
+  String get fundDetailGainTypeCapitalGainTitle;
+
+  /// No description provided for @fundDetailGainTypeCapitalGainBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Meaning: Profit earned by selling an asset after its price increases\n\nFeatures: One-time profit realized when the asset is sold\n\nExamples: Profit from real estate sales'**
+  String get fundDetailGainTypeCapitalGainBody;
+
+  /// No description provided for @fundDetailGainTypeMixedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'3. Mixed (Income + Capital)'**
+  String get fundDetailGainTypeMixedTitle;
+
+  /// No description provided for @fundDetailGainTypeMixedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Meaning: A strategy that targets both income gain and capital gain\n\nFeatures: Can expect both stable income such as dividends or interest and upside from price appreciation\n\nExamples: Rental income + profit from property sales'**
+  String get fundDetailGainTypeMixedBody;
 
   /// No description provided for @fundDetailTabPropertyOverview.
   ///

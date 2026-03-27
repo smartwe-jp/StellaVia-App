@@ -9,6 +9,7 @@ import '../../../../app/network/app_network_connectivity_providers.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
+import '../../../investment/presentation/support/fund_project_gain_type_label.dart';
 import '../../../investment/presentation/support/fund_project_yield_display.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
 import '../../../auth/domain/entities/auth_user.dart';
@@ -390,7 +391,7 @@ FundFeaturedFundCardData _buildFeaturedFundCardData(
 ) {
   final status = project.projectStatus;
   final statusTag = _buildStatusTag(context, status);
-  final methodTag = _buildMethodTag(context, project.offeringMethod);
+  final methodTag = _buildMethodTag(context, project.gainType);
   final metadata = _buildFeaturedMetadata(context, project);
 
   return FundFeaturedFundCardData(
@@ -527,9 +528,9 @@ FundFeaturedFundTagData _buildStatusTag(BuildContext context, int? status) {
 
 FundFeaturedFundTagData? _buildMethodTag(
   BuildContext context,
-  String? offeringMethod,
+  String? gainType,
 ) {
-  final label = _resolveMethodLabel(context, offeringMethod).trim();
+  final label = resolveFundProjectGainTypeLabel(context, gainType).trim();
   if (label.isEmpty) {
     return null;
   }
@@ -650,22 +651,6 @@ String _buildProgressLabel(
     amount,
     _formatProgressPercent(project.achievementRate),
   );
-}
-
-String _resolveMethodLabel(BuildContext context, String? offeringMethod) {
-  final l10n = context.l10n;
-  final value = offeringMethod?.trim();
-  if (value == null || value.isEmpty) {
-    return l10n.fundListMethodLottery;
-  }
-
-  final normalized = value.toLowerCase();
-  if (normalized.contains('lottery') ||
-      value.contains('抽選') ||
-      value.contains('抽签')) {
-    return l10n.fundListMethodLottery;
-  }
-  return value;
 }
 
 String _resolveStatusLabel(BuildContext context, int? status) {

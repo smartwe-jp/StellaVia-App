@@ -764,6 +764,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundListMethodLottery => '抽选';
 
   @override
+  String get fundListGainTypeIncomeGain => '旅馆运营';
+
+  @override
+  String get fundListGainTypeCapitalGain => '不动产开发';
+
+  @override
+  String get fundListGainTypeMixed => '开发旅馆并运营';
+
+  @override
   String get fundListMethodUnknown => '未设置';
 
   @override
@@ -1839,6 +1848,33 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get fundDetailAchievementRateLabel => '募集达成率';
+
+  @override
+  String get fundDetailGainTypeTitle => '收益的类型';
+
+  @override
+  String get fundDetailGainTypeDescriptionTitle => '收益的类型说明';
+
+  @override
+  String get fundDetailGainTypeIncomeGainTitle => '1. 旅馆运营（Income Gain）';
+
+  @override
+  String get fundDetailGainTypeIncomeGainBody =>
+      '含义：从持有资产中获得的定期收益\n\n特点：按月或按季度稳定获得现金收入\n\n例：不动产租金收入、民宿或酒店运营收益';
+
+  @override
+  String get fundDetailGainTypeCapitalGainTitle => '2. 不动产开发（Capital Gain）';
+
+  @override
+  String get fundDetailGainTypeCapitalGainBody =>
+      '含义：因资产价格上涨而在出售时获得的收益\n\n特点：出售资产时实现的一次性利润\n\n例：不动产出售收益';
+
+  @override
+  String get fundDetailGainTypeMixedTitle => '3. 开发旅馆并运营（Mixed）';
+
+  @override
+  String get fundDetailGainTypeMixedBody =>
+      '含义：同时追求收益型与资本利得型回报的运用方式\n\n特点：既可期待分红、利息等稳定收入，也可期待资产升值带来的收益\n\n例：租金收入 + 物件出售收益';
 
   @override
   String get fundDetailTabPropertyOverview => '物件概要';
@@ -4284,6 +4320,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundListMethodLottery => '抽籤';
 
   @override
+  String get fundListGainTypeIncomeGain => '旅館營運';
+
+  @override
+  String get fundListGainTypeCapitalGain => '不動產開發';
+
+  @override
+  String get fundListGainTypeMixed => '開發旅館並營運';
+
+  @override
   String get fundListMethodUnknown => '未设置';
 
   @override
@@ -5361,6 +5406,33 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get fundDetailAchievementRateLabel => '募集達成率';
+
+  @override
+  String get fundDetailGainTypeTitle => '收益的類型';
+
+  @override
+  String get fundDetailGainTypeDescriptionTitle => '收益的類型說明';
+
+  @override
+  String get fundDetailGainTypeIncomeGainTitle => '1. 旅館營運（Income Gain）';
+
+  @override
+  String get fundDetailGainTypeIncomeGainBody =>
+      '含義：從持有資產中獲得的定期收益\n\n特點：按月或按季度穩定獲得現金收入\n\n例：不動產租金收入、民宿或飯店營運收益';
+
+  @override
+  String get fundDetailGainTypeCapitalGainTitle => '2. 不動產開發（Capital Gain）';
+
+  @override
+  String get fundDetailGainTypeCapitalGainBody =>
+      '含義：因資產價格上漲而在出售時獲得的收益\n\n特點：出售資產時實現的一次性利潤\n\n例：不動產出售收益';
+
+  @override
+  String get fundDetailGainTypeMixedTitle => '3. 開發旅館並營運（Mixed）';
+
+  @override
+  String get fundDetailGainTypeMixedBody =>
+      '含義：同時追求收益型與資本利得型回報的運用方式\n\n特點：既可期待分紅、利息等穩定收入，也可期待資產升值帶來的收益\n\n例：租金收入 + 物件出售收益';
 
   @override
   String get fundDetailTabPropertyOverview => '物件概要';

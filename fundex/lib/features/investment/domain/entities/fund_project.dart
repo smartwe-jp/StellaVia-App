@@ -15,6 +15,7 @@ class FundProject {
     this.offeringEndDatetime,
     this.typeOfOffering,
     this.offeringMethod,
+    this.gainType,
     this.investmentUnit,
     this.maximumInvestmentPerPerson,
     this.achievementRate,
@@ -45,6 +46,7 @@ class FundProject {
   final String? offeringEndDatetime;
   final String? typeOfOffering;
   final String? offeringMethod;
+  final String? gainType;
   final int? investmentUnit;
   final int? maximumInvestmentPerPerson;
   final double? achievementRate;

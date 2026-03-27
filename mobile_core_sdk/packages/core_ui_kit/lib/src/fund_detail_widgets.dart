@@ -21,10 +21,15 @@ class FundDetailBadgeData {
 }
 
 class FundDetailInfoItemData {
-  const FundDetailInfoItemData({required this.label, required this.value});
+  const FundDetailInfoItemData({
+    required this.label,
+    required this.value,
+    this.onTap,
+  });
 
   final String label;
   final String value;
+  final VoidCallback? onTap;
 }
 
 class FundDetailDisclosureItemData {
@@ -759,6 +764,7 @@ class _FundDetailTableCell extends StatelessWidget {
     final appText = theme.appTextTheme;
     final labelStyle = appText.tableLabel.copyWith(color: colors.textTertiary);
     final valueStyle = appText.tableValue.copyWith(color: colors.textPrimary);
+    final isInteractive = item!.onTap != null;
 
     final child = Padding(
       padding: const EdgeInsets.all(12),
@@ -766,20 +772,58 @@ class _FundDetailTableCell extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(item!.label, style: labelStyle),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Flexible(
+                child: Text(
+                  item!.label,
+                  style: labelStyle.copyWith(
+                    color: isInteractive ? colors.primary : colors.textTertiary,
+                  ),
+                ),
+              ),
+              if (isInteractive) ...<Widget>[
+                const SizedBox(width: 6),
+                Container(
+                  width: 18,
+                  height: 18,
+                  decoration: BoxDecoration(
+                    color: colors.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Center(
+                    child: Text(
+                      '!',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 11,
+                        height: 1,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
           const SizedBox(height: 2),
           Text(item!.value, style: valueStyle),
         ],
       ),
     );
 
+    final wrappedChild = isInteractive
+        ? InkWell(onTap: item!.onTap, child: child)
+        : child;
+
     if (minHeight <= 0) {
-      return child;
+      return wrappedChild;
     }
 
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: minHeight),
-      child: child,
+      child: wrappedChild,
     );
   }
 }

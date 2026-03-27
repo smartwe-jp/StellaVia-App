@@ -818,6 +818,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundListMethodLottery => 'Lottery';
 
   @override
+  String get fundListGainTypeIncomeGain => 'Income Gain';
+
+  @override
+  String get fundListGainTypeCapitalGain => 'Capital Gain';
+
+  @override
+  String get fundListGainTypeMixed => 'Mixed (Income + Capital)';
+
+  @override
   String get fundListMethodUnknown => 'Unknown';
 
   @override
@@ -1958,6 +1967,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fundDetailAchievementRateLabel => 'Funding achievement rate';
+
+  @override
+  String get fundDetailGainTypeTitle => 'Type of Return';
+
+  @override
+  String get fundDetailGainTypeDescriptionTitle => 'About the Type of Return';
+
+  @override
+  String get fundDetailGainTypeIncomeGainTitle => '1. Income Gain';
+
+  @override
+  String get fundDetailGainTypeIncomeGainBody =>
+      'Meaning: Regular income generated from held assets\n\nFeatures: Stable cash flow received monthly or quarterly\n\nExamples: Rental income from real estate, revenue from minpaku and hotel operations';
+
+  @override
+  String get fundDetailGainTypeCapitalGainTitle => '2. Capital Gain';
+
+  @override
+  String get fundDetailGainTypeCapitalGainBody =>
+      'Meaning: Profit earned by selling an asset after its price increases\n\nFeatures: One-time profit realized when the asset is sold\n\nExamples: Profit from real estate sales';
+
+  @override
+  String get fundDetailGainTypeMixedTitle => '3. Mixed (Income + Capital)';
+
+  @override
+  String get fundDetailGainTypeMixedBody =>
+      'Meaning: A strategy that targets both income gain and capital gain\n\nFeatures: Can expect both stable income such as dividends or interest and upside from price appreciation\n\nExamples: Rental income + profit from property sales';
 
   @override
   String get fundDetailTabPropertyOverview => 'Property overview';

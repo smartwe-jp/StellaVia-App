@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../settings/presentation/support/settings_operating_company_content.dart';
 import '../../domain/entities/fund_project.dart';
+import 'fund_project_gain_type_label.dart';
 import 'fund_project_yield_display.dart';
 import '../widgets/fund_project_detail_protection_structure_card.dart';
 
@@ -615,7 +616,7 @@ List<FundDetailBadgeData> _buildHeroBadges(
   return <FundDetailBadgeData>[
     _buildStatusBadge(context, project.projectStatus),
     FundDetailBadgeData(
-      label: _resolveMethodLabel(context, project.offeringMethod),
+      label: resolveFundProjectGainTypeLabel(context, project.gainType),
       backgroundColor: colors.communitySecondary.withValues(alpha: 0.88),
       foregroundColor: colors.brandWhite,
     ),
