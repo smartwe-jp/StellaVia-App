@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/**"
+      - "fundex/**"
+      - "mobile_core_sdk/**"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/**"
+      - "fundex/**"
+      - "mobile_core_sdk/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fundex:
+    name: Analyze And Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+        working-directory: fundex
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.41.4"
+          cache: true
+
+      - name: Flutter Version
+        run: flutter --version
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Generate Localizations
+        run: flutter gen-l10n
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test
