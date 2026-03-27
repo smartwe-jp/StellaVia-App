@@ -690,6 +690,8 @@
   "lotteryApplyStep6Headline": "Investment process completed",
   "lotteryApplyStep6Body": "We have confirmed your payment. Please wait for operation start. Distribution schedules will be sent via notifications.",
   "lotteryApplyReceiptLabel": "Receipt No:",
+  "fundApplyVerificationRequiredTitle": "Verification required",
+  "fundApplyVerificationRequiredMessage": "Fund applications are available only to verified members. Please complete verification first.",
   "fundDetailUnknownValue": "--",
   "fundDetailOneUnitSuffix": "(1 unit)",
   "fundDetailMonthlyDistribution": "Monthly",

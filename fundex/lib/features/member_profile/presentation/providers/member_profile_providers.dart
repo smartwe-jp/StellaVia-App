@@ -130,6 +130,15 @@ final isMemberProfileCompletedProvider = FutureProvider<bool>((ref) async {
   return ref.watch(isMemberProfileCompletedUseCaseProvider).call();
 });
 
+final isFundApplyVerifiedProvider = FutureProvider<bool>((ref) async {
+  ref.watch(authSessionProvider);
+  final user = await ref
+      .watch(currentAuthUserProvider.future)
+      .catchError((Object _) => null);
+  final status = user?.status;
+  return status == 4 || status == 5;
+});
+
 final profileDocumentImagePickerProvider = Provider<ProfileDocumentImagePicker>(
   (ref) {
     return DeviceProfileDocumentImagePicker();

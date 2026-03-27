@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../domain/entities/fund_project.dart';
 import '../providers/fund_project_providers.dart';
 import '../support/fund_lottery_apply_models.dart';
@@ -16,6 +19,7 @@ import 'fund_lottery_apply/fund_lottery_apply_confirm_step.dart';
 import 'fund_lottery_apply/fund_lottery_apply_documents_step.dart';
 import 'fund_lottery_apply/fund_lottery_apply_selected_step.dart';
 import 'fund_lottery_apply/fund_lottery_apply_submitted_step.dart';
+import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../member_profile/presentation/support/mypage_section_support.dart';
 
 class FundLotteryApplyFlowPage extends ConsumerStatefulWidget {
@@ -52,6 +56,7 @@ class _FundLotteryApplyFlowPageState
   int _selectedUnits = _minimumUnits;
   int _currentMaximumUnits = _defaultMaxMultiplier;
   bool _isSyncingUnitsController = false;
+  bool _didCheckApplyAccess = false;
   final Set<int> _checkedDocuments = <int>{};
   final Set<int> _openedDocuments = <int>{};
   bool _agreedToApply = false;
@@ -63,6 +68,11 @@ class _FundLotteryApplyFlowPageState
     _currentStep = widget.initialStep;
     _unitsController = TextEditingController(text: _minimumUnits.toString());
     _unitsController.addListener(_handleUnitsChanged);
+    if (_requiresVerifiedApplicationAccess) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        unawaited(_ensureVerifiedApplicationAccess());
+      });
+    }
   }
 
   @override
@@ -194,6 +204,56 @@ class _FundLotteryApplyFlowPageState
       return;
     }
     AppNotice.show(context, message: message);
+  }
+
+  bool get _requiresVerifiedApplicationAccess =>
+      widget.initialStep.index < FundLotteryApplyStep.submitted.index;
+
+  Future<void> _showFundApplyVerificationRequiredDialog() {
+    final l10n = context.l10n;
+    return AppDialogs.showAdaptiveAlert<void>(
+      context: context,
+      title: l10n.fundApplyVerificationRequiredTitle,
+      message: l10n.fundApplyVerificationRequiredMessage,
+      actions: <AppDialogAction<void>>[
+        AppDialogAction<void>(label: l10n.commonOk, isDefaultAction: true),
+      ],
+    );
+  }
+
+  Future<void> _ensureVerifiedApplicationAccess() async {
+    if (_didCheckApplyAccess || !_requiresVerifiedApplicationAccess) {
+      return;
+    }
+    _didCheckApplyAccess = true;
+    final isAuthenticated = ref.read(isAuthenticatedProvider).asData?.value;
+    if (isAuthenticated != true) {
+      if (!mounted) {
+        return;
+      }
+      context.go('/login');
+      return;
+    }
+
+    var isFundApplyVerified = false;
+    try {
+      isFundApplyVerified = await ref.read(isFundApplyVerifiedProvider.future);
+    } catch (_) {
+      isFundApplyVerified = false;
+    }
+    if (!mounted || isFundApplyVerified) {
+      return;
+    }
+
+    await _showFundApplyVerificationRequiredDialog();
+    if (!mounted) {
+      return;
+    }
+    if (context.canPop()) {
+      context.pop();
+      return;
+    }
+    context.go('/funds/${widget.projectId}');
   }
 
   bool _canProceedStep2(int requiredCount) =>

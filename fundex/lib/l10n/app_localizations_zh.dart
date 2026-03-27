@@ -1811,6 +1811,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get lotteryApplyReceiptLabel => '受理编号：';
 
   @override
+  String get fundApplyVerificationRequiredTitle => '未认证';
+
+  @override
+  String get fundApplyVerificationRequiredMessage => '基金申请仅限已认证用户。请先完成认证。';
+
+  @override
   String get fundDetailUnknownValue => '--';
 
   @override
@@ -5325,6 +5331,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get lotteryApplyReceiptLabel => '受理編號：';
+
+  @override
+  String get fundApplyVerificationRequiredTitle => '未認證';
+
+  @override
+  String get fundApplyVerificationRequiredMessage => '基金申請僅限已認證用戶。請先完成認證。';
 
   @override
   String get fundDetailUnknownValue => '--';

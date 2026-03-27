@@ -3602,6 +3602,18 @@ abstract class AppLocalizations {
   /// **'Receipt No:'**
   String get lotteryApplyReceiptLabel;
 
+  /// No description provided for @fundApplyVerificationRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification required'**
+  String get fundApplyVerificationRequiredTitle;
+
+  /// No description provided for @fundApplyVerificationRequiredMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Fund applications are available only to verified members. Please complete verification first.'**
+  String get fundApplyVerificationRequiredMessage;
+
   /// No description provided for @fundDetailUnknownValue.
   ///
   /// In en, this message translates to:

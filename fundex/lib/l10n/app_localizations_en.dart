@@ -1928,6 +1928,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lotteryApplyReceiptLabel => 'Receipt No:';
 
   @override
+  String get fundApplyVerificationRequiredTitle => 'Verification required';
+
+  @override
+  String get fundApplyVerificationRequiredMessage =>
+      'Fund applications are available only to verified members. Please complete verification first.';
+
+  @override
   String get fundDetailUnknownValue => '--';
 
   @override

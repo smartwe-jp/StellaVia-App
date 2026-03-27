@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../settings/presentation/providers/settings_content_providers.dart';
 import '../../domain/entities/fund_project.dart';
 import '../providers/fund_project_favorite_providers.dart';
@@ -32,12 +33,37 @@ class FundProjectDetailPage extends ConsumerStatefulWidget {
 class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
   int _selectedDetailTabIndex = 0;
 
-  void _handleLotteryApplyTap(
+  Future<void> _showFundApplyVerificationRequiredDialog() {
+    final l10n = context.l10n;
+    return AppDialogs.showAdaptiveAlert<void>(
+      context: context,
+      title: l10n.fundApplyVerificationRequiredTitle,
+      message: l10n.fundApplyVerificationRequiredMessage,
+      actions: <AppDialogAction<void>>[
+        AppDialogAction<void>(label: l10n.commonOk, isDefaultAction: true),
+      ],
+    );
+  }
+
+  Future<void> _handleLotteryApplyTap(
     String projectId, {
     required bool isAuthenticated,
-  }) {
+  }) async {
     if (!isAuthenticated) {
       context.push('/login');
+      return;
+    }
+    var isFundApplyVerified = false;
+    try {
+      isFundApplyVerified = await ref.read(isFundApplyVerifiedProvider.future);
+    } catch (_) {
+      isFundApplyVerified = false;
+    }
+    if (!mounted) {
+      return;
+    }
+    if (!isFundApplyVerified) {
+      await _showFundApplyVerificationRequiredDialog();
       return;
     }
     context.push('/funds/$projectId/lottery-apply');

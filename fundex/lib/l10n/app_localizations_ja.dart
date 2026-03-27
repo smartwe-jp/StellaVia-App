@@ -1830,6 +1830,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get lotteryApplyReceiptLabel => '受付番号：';
 
   @override
+  String get fundApplyVerificationRequiredTitle => '未認証';
+
+  @override
+  String get fundApplyVerificationRequiredMessage =>
+      'ファンド申込は認証済み会員のみご利用いただけます。先に認証を完了してください。';
+
+  @override
   String get fundDetailUnknownValue => '--';
 
   @override
