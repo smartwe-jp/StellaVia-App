@@ -254,6 +254,10 @@ jobs:
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.STELLAVIA_APP_STORE_CONNECT_ISSUER_ID }}
           APP_STORE_CONNECT_API_KEY_PATH: ${{ env.APP_STORE_CONNECT_API_KEY_PATH }}
         run: |
+          export PATH="$FLUTTER_ROOT/bin:$PATH"
+          which flutter
+          flutter --version
+
           if [[ "${UPLOAD_IOS}" == "true" ]]; then
             export SKIP_UPLOAD=0
           else

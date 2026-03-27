@@ -12,7 +12,9 @@ ISSUER_ID="${APP_STORE_CONNECT_ISSUER_ID:-}"
 KEY_PATH="${APP_STORE_CONNECT_API_KEY_PATH:-}"
 SKIP_UPLOAD="${SKIP_UPLOAD:-0}"
 
-if command -v fvm >/dev/null 2>&1; then
+if [[ -n "${FLUTTER_ROOT:-}" && -x "${FLUTTER_ROOT}/bin/flutter" ]]; then
+  FLUTTER_CMD=("${FLUTTER_ROOT}/bin/flutter")
+elif command -v fvm >/dev/null 2>&1; then
   FLUTTER_CMD=(fvm flutter)
 else
   FLUTTER_CMD=(flutter)
