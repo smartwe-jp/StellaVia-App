@@ -4,6 +4,7 @@ allprojects {
         mavenCentral()
         maven(url = "https://maven.aliyun.com/nexus/content/repositories/releases/")
         maven(url = "https://developer.huawei.com/repo/")
+        maven(url = "https://developer.hihonor.com/repo")
     }
 }
 

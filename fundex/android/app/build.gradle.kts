@@ -1,3 +1,4 @@
+import groovy.json.JsonSlurper
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -17,6 +18,51 @@ val keystoreProperties = Properties()
 if (keystorePropertiesFile.exists()) {
     FileInputStream(keystorePropertiesFile).use { keystoreProperties.load(it) }
 }
+
+val androidLocalPropertiesFile = rootProject.file("local.properties")
+val androidLocalProperties = Properties()
+if (androidLocalPropertiesFile.exists()) {
+    FileInputStream(androidLocalPropertiesFile).use {
+        androidLocalProperties.load(it)
+    }
+}
+
+val requestedTaskNames = gradle.startParameter.taskNames.joinToString(" ").lowercase()
+val activeFlavor = when {
+    "staging" in requestedTaskNames -> "staging"
+    "prod" in requestedTaskNames -> "prod"
+    else -> "dev"
+}
+
+fun readDartDefineValue(flavor: String, key: String): String? {
+    val defineFile = rootDir.parentFile.resolve(".vscode/dart_define.$flavor.local.json")
+    if (!defineFile.exists()) {
+        return null
+    }
+    val parsed = JsonSlurper().parse(defineFile)
+    val map = parsed as? Map<*, *> ?: return null
+    return map[key]?.toString()
+}
+
+fun resolveBuildConfigValue(key: String, defaultValue: String = ""): String {
+    val localValue = androidLocalProperties.getProperty(key)?.trim()
+    if (!localValue.isNullOrEmpty()) {
+        return localValue
+    }
+    val envValue = System.getenv(key)?.trim()
+    if (!envValue.isNullOrEmpty()) {
+        return envValue
+    }
+    val defineValue = readDartDefineValue(activeFlavor, key)?.trim()
+    if (!defineValue.isNullOrEmpty()) {
+        return defineValue
+    }
+    return defaultValue
+}
+
+val aliyunPushAndroidAppKey = resolveBuildConfigValue("ALIYUN_PUSH_ANDROID_APP_KEY")
+val aliyunPushAndroidAppSecret = resolveBuildConfigValue("ALIYUN_PUSH_ANDROID_APP_SECRET")
+val honorPushAppId = resolveBuildConfigValue("HONOR_PUSH_APP_ID")
 
 val hasReleaseSigning = listOf("storeFile", "storePassword", "keyAlias", "keyPassword").all {
     !keystoreProperties.getProperty(it).isNullOrBlank()
@@ -45,19 +91,20 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["aliyunPushAppKey"] = aliyunPushAndroidAppKey
+        manifestPlaceholders["aliyunPushAppSecret"] = aliyunPushAndroidAppSecret
+        manifestPlaceholders["honorPushAppId"] = honorPushAppId
     }
 
     flavorDimensions += "environment"
     productFlavors {
         create("dev") {
             dimension = "environment"
-            applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
             resValue("string", "app_name", "StellaVia Dev")
         }
         create("staging") {
             dimension = "environment"
-            applicationIdSuffix = ".staging"
             versionNameSuffix = "-staging"
             resValue("string", "app_name", "StellaVia Staging")
         }

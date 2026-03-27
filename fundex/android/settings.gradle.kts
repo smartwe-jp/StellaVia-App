@@ -13,6 +13,7 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
+        maven(url = "https://developer.hihonor.com/repo")
         gradlePluginPortal()
     }
 }
