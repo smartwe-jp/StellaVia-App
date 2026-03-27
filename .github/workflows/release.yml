@@ -245,6 +245,12 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
+      - name: Install FlutterFire CLI
+        run: |
+          export PATH="$PUB_CACHE/bin:$PATH"
+          dart pub global activate flutterfire_cli
+          flutterfire --version
+
       - name: Build iOS IPA
         env:
           BUILD_NAME: ${{ inputs.build_name }}
