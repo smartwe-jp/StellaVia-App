@@ -12,6 +12,12 @@ ISSUER_ID="${APP_STORE_CONNECT_ISSUER_ID:-}"
 KEY_PATH="${APP_STORE_CONNECT_API_KEY_PATH:-}"
 SKIP_UPLOAD="${SKIP_UPLOAD:-0}"
 
+if command -v fvm >/dev/null 2>&1; then
+  FLUTTER_CMD=(fvm flutter)
+else
+  FLUTTER_CMD=(flutter)
+fi
+
 if [[ ! -f "$DEFINE_FILE" ]]; then
   echo "Missing define file: $DEFINE_FILE"
   echo "Set DART_DEFINE_FILE or create .vscode/dart_define.prod.local.json first."
@@ -37,7 +43,7 @@ fi
 echo "==> Building App Store IPA"
 (
   cd "$ROOT"
-  fvm flutter build "${BUILD_ARGS[@]}"
+  "${FLUTTER_CMD[@]}" build "${BUILD_ARGS[@]}"
 )
 
 IPA_PATH="$(find "$ROOT/build/ios/ipa" -maxdepth 1 -name '*.ipa' | head -n 1)"
