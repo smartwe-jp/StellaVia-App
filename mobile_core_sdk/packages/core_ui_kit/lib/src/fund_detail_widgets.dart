@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
@@ -298,6 +299,7 @@ class FundDetailHeroHeader extends StatefulWidget {
 }
 
 class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
+  static const int _maxVisibleIndicators = 5;
   late final PageController _pageController;
   int _currentIndex = 0;
 
@@ -336,8 +338,25 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
     super.dispose();
   }
 
+  List<int> _visibleIndicatorIndices(int imageCount) {
+    if (imageCount <= _maxVisibleIndicators) {
+      return List<int>.generate(imageCount, (int index) => index);
+    }
+    final halfWindow = _maxVisibleIndicators ~/ 2;
+    final maxStart = imageCount - _maxVisibleIndicators;
+    final start = math.max(
+      0,
+      math.min(_currentIndex - halfWindow, maxStart),
+    );
+    return List<int>.generate(
+      _maxVisibleIndicators,
+      (int offset) => start + offset,
+    );
+  }
+
   Widget _buildPageIndicator(BuildContext context, int imageCount) {
     final colors = Theme.of(context).appColors;
+    final visibleIndices = _visibleIndicatorIndices(imageCount);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -347,11 +366,14 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: List<Widget>.generate(imageCount, (int index) {
+        children: List<Widget>.generate(visibleIndices.length, (int dotIndex) {
+          final index = visibleIndices[dotIndex];
           final selected = index == _currentIndex;
           return AnimatedContainer(
             duration: const Duration(milliseconds: 180),
-            margin: EdgeInsets.only(right: index == imageCount - 1 ? 0 : 5),
+            margin: EdgeInsets.only(
+              right: dotIndex == visibleIndices.length - 1 ? 0 : 5,
+            ),
             width: selected ? 16 : 6,
             height: 6,
             decoration: BoxDecoration(
