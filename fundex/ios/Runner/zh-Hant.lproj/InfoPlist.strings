@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "用於拍攝並上傳證件照片，以完成身分驗證及投資或預約前的資料填寫。";
+"NSFaceIDUsageDescription" = "用於敏感操作時的生物辨識驗證，以保護您的帳戶安全。";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "用於在基金詳情頁顯示目前位置與路線導航，僅在您使用相關功能時存取定位資訊。";
+"NSLocationWhenInUseUsageDescription" = "用於在基金詳情頁顯示目前位置與路線導航。";
+"NSPhotoLibraryUsageDescription" = "用於從相簿選擇證件照片，以完成身分驗證及投資或預約前的資料填寫。";

@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "本人確認および投資・予約前の情報入力のため、身分証明書の写真を撮影してアップロードする際に使用します。";
+"NSFaceIDUsageDescription" = "重要な操作時の生体認証に使用し、アカウントの安全を保護します。";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "ファンド詳細ページで現在地と経路案内を表示するために使用し、関連機能を利用するときのみ位置情報にアクセスします。";
+"NSLocationWhenInUseUsageDescription" = "ファンド詳細ページで現在地と経路案内を表示するために使用します。";
+"NSPhotoLibraryUsageDescription" = "本人確認および投資・予約前の情報入力のため、アルバムから身分証明書の写真を選択してアップロードする際に使用します。";

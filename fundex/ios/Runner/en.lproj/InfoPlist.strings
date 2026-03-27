@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "Used to capture and upload ID document photos during identity verification and before completing investment or booking information.";
+"NSFaceIDUsageDescription" = "Used for biometric verification during sensitive actions to protect your account.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Used to show your current location and navigation on the fund detail page, only when you use related features.";
+"NSLocationWhenInUseUsageDescription" = "Used to show your current location and navigation on the fund detail page.";
+"NSPhotoLibraryUsageDescription" = "Used to select ID document photos from your photo library during identity verification and before completing investment or booking information.";

@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "用于拍摄并上传证件照片，以完成身份认证及投资或预约前的信息录入。";
+"NSFaceIDUsageDescription" = "用于敏感操作时的生物识别验证，以保护您的账户安全。";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "用于在基金详情页显示当前位置与路线导航，仅在您使用相关功能时访问定位信息。";
+"NSLocationWhenInUseUsageDescription" = "用于在基金详情页显示当前位置与路线导航。";
+"NSPhotoLibraryUsageDescription" = "用于从相册选择证件照片，以完成身份认证及投资或预约前的信息录入。";

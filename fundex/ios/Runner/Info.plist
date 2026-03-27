@@ -27,13 +27,15 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>用于拍摄并上传证件照片，完成交易与订房前的资料录入。</string>
+	<string>本人確認および投資・予約前の情報入力のため、身分証明書の写真を撮影してアップロードする際に使用します。</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>用于敏感操作的生物识别验证，保护您的账户安全。</string>
+	<string>重要な操作時の生体認証に使用し、アカウントの安全を保護します。</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>ファンド詳細ページで現在地と経路案内を表示するために使用し、関連機能を利用するときのみ位置情報にアクセスします。</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>用于在基金详情页显示当前位置与路线导航。</string>
+	<string>ファンド詳細ページで現在地と経路案内を表示するために使用します。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>用于从相册选择证件照片，完成交易与订房前的资料录入。</string>
+	<string>本人確認および投資・予約前の情報入力のため、アルバムから身分証明書の写真を選択してアップロードする際に使用します。</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
