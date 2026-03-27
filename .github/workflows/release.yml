@@ -59,11 +59,11 @@ jobs:
 
       - name: Validate Android Release Secrets
         env:
-          DART_DEFINE_PROD_JSON: ${{ secrets.FUNDEX_DART_DEFINE_PROD_JSON }}
-          ANDROID_KEYSTORE_BASE64: ${{ secrets.FUNDEX_ANDROID_KEYSTORE_BASE64 }}
-          ANDROID_STORE_PASSWORD: ${{ secrets.FUNDEX_ANDROID_STORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.FUNDEX_ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.FUNDEX_ANDROID_KEY_PASSWORD }}
+          DART_DEFINE_PROD_JSON: ${{ secrets.STELLAVIA_DART_DEFINE_PROD_JSON }}
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.STELLAVIA_ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.STELLAVIA_ANDROID_STORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.STELLAVIA_ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.STELLAVIA_ANDROID_KEY_PASSWORD }}
         run: |
           missing=()
           for var in \
@@ -86,7 +86,7 @@ jobs:
 
       - name: Write Prod Dart Defines
         env:
-          DART_DEFINE_PROD_JSON: ${{ secrets.FUNDEX_DART_DEFINE_PROD_JSON }}
+          DART_DEFINE_PROD_JSON: ${{ secrets.STELLAVIA_DART_DEFINE_PROD_JSON }}
         run: |
           mkdir -p .vscode
           printf '%s' "$DART_DEFINE_PROD_JSON" > .vscode/dart_define.prod.local.json
@@ -94,10 +94,10 @@ jobs:
       - name: Install Android Signing Files
         working-directory: fundex/android
         env:
-          ANDROID_KEYSTORE_BASE64: ${{ secrets.FUNDEX_ANDROID_KEYSTORE_BASE64 }}
-          ANDROID_STORE_PASSWORD: ${{ secrets.FUNDEX_ANDROID_STORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.FUNDEX_ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.FUNDEX_ANDROID_KEY_PASSWORD }}
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.STELLAVIA_ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.STELLAVIA_ANDROID_STORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.STELLAVIA_ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.STELLAVIA_ANDROID_KEY_PASSWORD }}
         run: |
           KEYSTORE_PATH="$PWD/upload-keystore.jks"
           printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE_PATH"
@@ -166,13 +166,13 @@ jobs:
 
       - name: Validate iOS Release Secrets
         env:
-          DART_DEFINE_PROD_JSON: ${{ secrets.FUNDEX_DART_DEFINE_PROD_JSON }}
-          IOS_DIST_CERT_P12_BASE64: ${{ secrets.FUNDEX_IOS_DIST_CERT_P12_BASE64 }}
-          IOS_DIST_CERT_PASSWORD: ${{ secrets.FUNDEX_IOS_DIST_CERT_PASSWORD }}
-          IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.FUNDEX_IOS_PROVISIONING_PROFILE_BASE64 }}
-          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.FUNDEX_APP_STORE_CONNECT_API_KEY_ID }}
-          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.FUNDEX_APP_STORE_CONNECT_ISSUER_ID }}
-          APP_STORE_CONNECT_API_KEY_P8_BASE64: ${{ secrets.FUNDEX_APP_STORE_CONNECT_API_KEY_P8_BASE64 }}
+          DART_DEFINE_PROD_JSON: ${{ secrets.STELLAVIA_DART_DEFINE_PROD_JSON }}
+          IOS_DIST_CERT_P12_BASE64: ${{ secrets.STELLAVIA_IOS_DIST_CERT_P12_BASE64 }}
+          IOS_DIST_CERT_PASSWORD: ${{ secrets.STELLAVIA_IOS_DIST_CERT_PASSWORD }}
+          IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.STELLAVIA_IOS_PROVISIONING_PROFILE_BASE64 }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.STELLAVIA_APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.STELLAVIA_APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_P8_BASE64: ${{ secrets.STELLAVIA_APP_STORE_CONNECT_API_KEY_P8_BASE64 }}
           UPLOAD_IOS: ${{ inputs.upload_ios }}
         run: |
           missing=()
@@ -207,7 +207,7 @@ jobs:
 
       - name: Write Prod Dart Defines
         env:
-          DART_DEFINE_PROD_JSON: ${{ secrets.FUNDEX_DART_DEFINE_PROD_JSON }}
+          DART_DEFINE_PROD_JSON: ${{ secrets.STELLAVIA_DART_DEFINE_PROD_JSON }}
         run: |
           mkdir -p .vscode
           printf '%s' "$DART_DEFINE_PROD_JSON" > .vscode/dart_define.prod.local.json
@@ -215,12 +215,12 @@ jobs:
       - name: Import Code Signing Certificate
         uses: apple-actions/import-codesign-certs@v3
         with:
-          p12-file-base64: ${{ secrets.FUNDEX_IOS_DIST_CERT_P12_BASE64 }}
-          p12-password: ${{ secrets.FUNDEX_IOS_DIST_CERT_PASSWORD }}
+          p12-file-base64: ${{ secrets.STELLAVIA_IOS_DIST_CERT_P12_BASE64 }}
+          p12-password: ${{ secrets.STELLAVIA_IOS_DIST_CERT_PASSWORD }}
 
       - name: Install Provisioning Profile
         env:
-          IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.FUNDEX_IOS_PROVISIONING_PROFILE_BASE64 }}
+          IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.STELLAVIA_IOS_PROVISIONING_PROFILE_BASE64 }}
         run: |
           PROFILE_PATH="$RUNNER_TEMP/fundex.mobileprovision"
           printf '%s' "$IOS_PROVISIONING_PROFILE_BASE64" | openssl base64 -d -A -out "$PROFILE_PATH"
@@ -235,8 +235,8 @@ jobs:
       - name: Write App Store Connect API Key
         if: ${{ inputs.upload_ios }}
         env:
-          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.FUNDEX_APP_STORE_CONNECT_API_KEY_ID }}
-          APP_STORE_CONNECT_API_KEY_P8_BASE64: ${{ secrets.FUNDEX_APP_STORE_CONNECT_API_KEY_P8_BASE64 }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.STELLAVIA_APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_KEY_P8_BASE64: ${{ secrets.STELLAVIA_APP_STORE_CONNECT_API_KEY_P8_BASE64 }}
         run: |
           API_KEY_PATH="$RUNNER_TEMP/AuthKey_${APP_STORE_CONNECT_API_KEY_ID}.p8"
           printf '%s' "$APP_STORE_CONNECT_API_KEY_P8_BASE64" | openssl base64 -d -A -out "$API_KEY_PATH"
@@ -250,8 +250,8 @@ jobs:
           BUILD_NAME: ${{ inputs.build_name }}
           BUILD_NUMBER: ${{ inputs.build_number }}
           UPLOAD_IOS: ${{ inputs.upload_ios }}
-          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.FUNDEX_APP_STORE_CONNECT_API_KEY_ID }}
-          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.FUNDEX_APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.STELLAVIA_APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.STELLAVIA_APP_STORE_CONNECT_ISSUER_ID }}
           APP_STORE_CONNECT_API_KEY_PATH: ${{ env.APP_STORE_CONNECT_API_KEY_PATH }}
         run: |
           if [[ "${UPLOAD_IOS}" == "true" ]]; then
