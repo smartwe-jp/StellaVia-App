@@ -95,7 +95,7 @@
       buildConfiguration = "Debug-prod">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Profile"
+      buildConfiguration = "Profile-prod"
       customArchiveName = "StellaVia"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
