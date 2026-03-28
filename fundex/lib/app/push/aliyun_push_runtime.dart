@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:aliyun_push_flutter/aliyun_push_flutter.dart';
 import 'package:core_tool_kit/core_tool_kit.dart';
 import 'package:flutter/foundation.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'app_push_runtime.dart';
 import 'app_push_settings.dart';
@@ -11,7 +12,7 @@ class AliyunPushRuntime implements AppPushRuntime {
   AliyunPushRuntime({
     required AliyunPushCredentials credentials,
     AliyunPushFlutter? push,
-    String androidChannelId = 'fundex_push',
+    String androidChannelId = 'gutingjunpush',
     String androidChannelName = 'FUNDEX Push',
     String androidChannelDescription = 'FUNDEX notification channel',
   }) : _credentials = credentials,
@@ -66,6 +67,7 @@ class AliyunPushRuntime implements AppPushRuntime {
 
     try {
       if (defaultTargetPlatform == TargetPlatform.android) {
+        await _ensureAndroidNotificationPermission(logger: logger);
         await _setupAndroidChannel(logger: logger);
       } else if (defaultTargetPlatform == TargetPlatform.iOS) {
         await _setupIosForegroundBehavior(logger: logger);
@@ -93,6 +95,9 @@ class AliyunPushRuntime implements AppPushRuntime {
       );
 
       await _resolveDeviceId(logger: logger);
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        await _logAndroidNotificationState(logger: logger);
+      }
       _setupReceivers(logger: logger);
     } catch (error, stackTrace) {
       logger.error(
@@ -103,12 +108,36 @@ class AliyunPushRuntime implements AppPushRuntime {
     }
   }
 
+  Future<void> _ensureAndroidNotificationPermission({
+    required AppLogger logger,
+  }) async {
+    final status = await Permission.notification.status;
+    if (status.isGranted) {
+      logger.info('Android notification permission already granted.');
+      return;
+    }
+
+    final result = await Permission.notification.request();
+    logger.info(
+      'Android notification permission request finished.',
+      context: <String, Object?>{'status': result.name},
+    );
+    if (!result.isGranted) {
+      logger.warning(
+        'Android notification permission is not granted; system notification UI may be blocked.',
+        context: <String, Object?>{'status': result.name},
+      );
+    }
+  }
+
   Future<void> _setupAndroidChannel({required AppLogger logger}) async {
     final result = await _push.createAndroidChannel(
       _androidChannelId,
       _androidChannelName,
       4,
       _androidChannelDescription,
+      showBadge: true,
+      vibration: true,
     );
     final code = '${result['code'] ?? ''}'.trim();
     if (_isSuccess(code)) {
@@ -151,6 +180,23 @@ class AliyunPushRuntime implements AppPushRuntime {
     );
   }
 
+  Future<void> _logAndroidNotificationState({required AppLogger logger}) async {
+    final notificationsEnabled = await _push.isAndroidNotificationEnabled(
+      id: _androidChannelId,
+    );
+    final pushChannelStatus = await _push.checkAndroidPushChannelStatus();
+    logger.info(
+      'Aliyun Android notification state.',
+      context: <String, Object?>{
+        'channelId': _androidChannelId,
+        'notificationsEnabled': notificationsEnabled,
+        'pushChannelCode': '${pushChannelStatus['code'] ?? ''}',
+        'pushChannelStatus': '${pushChannelStatus['status'] ?? ''}',
+        'pushChannelErrorMsg': '${pushChannelStatus['errorMsg'] ?? ''}',
+      },
+    );
+  }
+
   void _setupReceivers({required AppLogger logger}) {
     _push.addMessageReceiver(
       onNotificationOpened: (Map<dynamic, dynamic> message) async {
@@ -163,6 +209,13 @@ class AliyunPushRuntime implements AppPushRuntime {
       onNotification: (Map<dynamic, dynamic> message) async {
         logger.info(
           'Aliyun notification received.',
+          context: <String, Object?>{'message': message.toString()},
+        );
+        return null;
+      },
+      onAndroidNotificationReceivedInApp: (Map<dynamic, dynamic> message) async {
+        logger.info(
+          'Aliyun in-app notification received.',
           context: <String, Object?>{'message': message.toString()},
         );
         return null;
