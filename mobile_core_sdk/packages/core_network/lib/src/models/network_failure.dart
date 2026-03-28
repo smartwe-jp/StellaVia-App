@@ -9,6 +9,7 @@ enum NetworkFailureType {
   badCertificate,
   badResponse,
   connectionError,
+  networkAccessDenied,
   unauthorized,
   forbidden,
   serverError,
@@ -87,6 +88,16 @@ NetworkFailure mapDioExceptionToFailure(DioException exception) {
         rawError: exception.error,
       );
     case DioExceptionType.connectionError:
+      if (_isNetworkAccessDeniedException(exception)) {
+        return NetworkFailure(
+          type: NetworkFailureType.networkAccessDenied,
+          message: 'Network access denied',
+          code: 'network_access_denied',
+          statusCode: statusCode,
+          path: path,
+          rawError: exception.error,
+        );
+      }
       return NetworkFailure(
         type: NetworkFailureType.connectionError,
         message: 'Connection error',
@@ -138,6 +149,16 @@ NetworkFailure mapDioExceptionToFailure(DioException exception) {
         rawError: exception.error,
       );
     case DioExceptionType.unknown:
+      if (_isNetworkAccessDeniedException(exception)) {
+        return NetworkFailure(
+          type: NetworkFailureType.networkAccessDenied,
+          message: 'Network access denied',
+          code: 'network_access_denied',
+          statusCode: statusCode,
+          path: path,
+          rawError: exception.error,
+        );
+      }
       return NetworkFailure(
         type: NetworkFailureType.unknown,
         message: 'Unknown network error',
@@ -147,4 +168,16 @@ NetworkFailure mapDioExceptionToFailure(DioException exception) {
         rawError: exception.error,
       );
   }
+}
+
+bool _isNetworkAccessDeniedException(DioException exception) {
+  final normalized = <String>[
+    exception.message ?? '',
+    exception.error?.toString() ?? '',
+    exception.response?.statusMessage ?? '',
+  ].join('\n').toLowerCase();
+
+  return normalized.contains('denied over wi-fi interface') ||
+      normalized.contains('denied over wifi interface') ||
+      normalized.contains('denied over cellular interface');
 }

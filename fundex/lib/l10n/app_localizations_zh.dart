@@ -102,6 +102,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get networkOfflineBannerMessage => '网络恢复后将自动刷新最新数据。';
 
   @override
+  String get networkAccessDeniedBannerTitle => '无法访问网络';
+
+  @override
+  String get networkAccessDeniedBannerMessage =>
+      '请检查网络连接，或在 iPhone 系统设置中允许 StellaVia 使用网络。';
+
+  @override
   String get loginForgotPassword => '找回密码';
 
   @override
@@ -1386,6 +1393,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get uiErrorNetworkUnavailable => '网络连接异常，请稍后重试';
+
+  @override
+  String get uiErrorNetworkAccessDenied => '无法访问网络，请检查网络连接或系统设置。';
 
   @override
   String get uiErrorAuthExpired => '登录状态已失效，请重新登录';
@@ -3654,6 +3664,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get networkOfflineBannerMessage => '網路恢復後將自動更新最新資料。';
 
   @override
+  String get networkAccessDeniedBannerTitle => '無法存取網路';
+
+  @override
+  String get networkAccessDeniedBannerMessage =>
+      '請檢查網路連線，或在 iPhone 系統設定中允許 StellaVia 使用網路。';
+
+  @override
   String get loginForgotPassword => '忘記密碼？';
 
   @override
@@ -4940,6 +4957,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get uiErrorNetworkUnavailable => '网络连接异常，请稍后重试';
+
+  @override
+  String get uiErrorNetworkAccessDenied => '無法存取網路，請檢查網路連線或系統設定。';
 
   @override
   String get uiErrorAuthExpired => '登录状态已失效，请重新登录';

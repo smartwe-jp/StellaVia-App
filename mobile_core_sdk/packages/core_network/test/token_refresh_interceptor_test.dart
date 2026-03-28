@@ -335,5 +335,36 @@ void main() {
         expect(failure.path, '/health');
       }
     });
+
+    test(
+      'maps iOS denied interface errors into network access denied failure',
+      () async {
+        final store = InMemoryTokenStore();
+        final dio = Dio(BaseOptions(baseUrl: 'https://api.example.com'));
+        dio.httpClientAdapter = _FakeAdapter((options) async {
+          throw DioException.connectionError(
+            requestOptions: options,
+            reason: 'unsatisfied (Denied over Wi-Fi interface)',
+          );
+        });
+
+        final client = CoreHttpClient(
+          baseUrl: 'https://api.example.com',
+          tokenStore: store,
+          tokenRefresher: _FakeTokenRefresher((_) async => null),
+          dio: dio,
+        );
+
+        try {
+          await client.dio.get<dynamic>('/health');
+          fail('expected error');
+        } on DioException catch (error) {
+          expect(error.error, isA<NetworkFailure>());
+          final failure = error.error as NetworkFailure;
+          expect(failure.type, NetworkFailureType.networkAccessDenied);
+          expect(failure.code, 'network_access_denied');
+        }
+      },
+    );
   });
 }

@@ -104,6 +104,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'We\'ll refresh the latest data automatically when the connection returns.';
 
   @override
+  String get networkAccessDeniedBannerTitle => 'Unable to access the network';
+
+  @override
+  String get networkAccessDeniedBannerMessage =>
+      'Check your connection, or allow StellaVia network access in iPhone Settings.';
+
+  @override
   String get loginForgotPassword => 'Forgot password';
 
   @override
@@ -1478,6 +1485,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get uiErrorNetworkUnavailable =>
       'Network connection error. Please try again later.';
+
+  @override
+  String get uiErrorNetworkAccessDenied =>
+      'Unable to access the network. Check your connection or system settings.';
 
   @override
   String get uiErrorAuthExpired => 'Session expired. Please sign in again.';

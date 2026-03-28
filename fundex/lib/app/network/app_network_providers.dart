@@ -8,6 +8,7 @@ import '../config/environment_provider.dart';
 import '../observability/app_observability_providers.dart';
 import '../storage/app_storage_providers.dart';
 import 'app_observability_interceptor.dart';
+import 'app_network_connectivity_providers.dart';
 
 enum AppApiCluster { oa, member, hotel }
 
@@ -74,6 +75,9 @@ final coreHttpClientByClusterProvider =
       final environment = ref.watch(appEnvironmentProvider);
       final logger = ref.watch(appLoggerProvider);
       final messageController = ref.watch(appUiMessageProvider.notifier);
+      final networkAccessState = ref.watch(
+        appNetworkAccessStateProvider.notifier,
+      );
 
       final client = CoreHttpClient(
         baseUrl: baseUrl,
@@ -86,6 +90,8 @@ final coreHttpClientByClusterProvider =
         AppObservabilityInterceptor(
           logger: logger,
           reportErrorMessage: messageController.showError,
+          markNetworkAccessDenied: networkAccessState.markDenied,
+          clearNetworkAccessDenied: networkAccessState.clear,
           includeHttpPayloadLog: environment.enableHttpLog,
           includeHttpResponseLog: enableHttpResponseLog,
         ),

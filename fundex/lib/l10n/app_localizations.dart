@@ -287,6 +287,18 @@ abstract class AppLocalizations {
   /// **'We\'ll refresh the latest data automatically when the connection returns.'**
   String get networkOfflineBannerMessage;
 
+  /// No description provided for @networkAccessDeniedBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to access the network'**
+  String get networkAccessDeniedBannerTitle;
+
+  /// No description provided for @networkAccessDeniedBannerMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your connection, or allow StellaVia network access in iPhone Settings.'**
+  String get networkAccessDeniedBannerMessage;
+
   /// No description provided for @loginForgotPassword.
   ///
   /// In en, this message translates to:
@@ -2794,6 +2806,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Network connection error. Please try again later.'**
   String get uiErrorNetworkUnavailable;
+
+  /// No description provided for @uiErrorNetworkAccessDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to access the network. Check your connection or system settings.'**
+  String get uiErrorNetworkAccessDenied;
 
   /// No description provided for @uiErrorAuthExpired.
   ///
