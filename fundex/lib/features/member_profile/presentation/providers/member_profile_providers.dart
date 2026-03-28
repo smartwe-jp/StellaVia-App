@@ -18,6 +18,32 @@ import '../../domain/usecases/sync_member_profile_from_remote_usecase.dart';
 import '../../domain/usecases/upload_member_profile_photo_usecase.dart';
 import '../support/profile_document_image_picker.dart';
 
+class MemberBasicProfile {
+  const MemberBasicProfile({
+    required this.familyName,
+    required this.givenName,
+    required this.familyNameKana,
+    required this.givenNameKana,
+    required this.familyNameEn,
+    required this.givenNameEn,
+    required this.username,
+    required this.email,
+    required this.phone,
+    required this.sex,
+  });
+
+  final String familyName;
+  final String givenName;
+  final String familyNameKana;
+  final String givenNameKana;
+  final String familyNameEn;
+  final String givenNameEn;
+  final String username;
+  final String email;
+  final String phone;
+  final int? sex;
+}
+
 final memberProfileLocalDataSourceProvider =
     Provider<MemberProfileLocalDataSource>((ref) {
       return MemberProfileLocalDataSourceImpl(
@@ -115,6 +141,52 @@ final memberProfileDetailsProvider = FutureProvider<MemberProfileDetails?>((
   return ref.watch(loadMemberProfileDetailsUseCaseProvider).call();
 });
 
+final memberBasicProfileProvider = Provider<MemberBasicProfile?>((ref) {
+  final authUser = ref.watch(currentAuthUserProvider).asData?.value;
+  final memberProfile = ref.watch(memberProfileDetailsProvider).asData?.value;
+  if (authUser == null && memberProfile == null) {
+    return null;
+  }
+
+  final (String authFamilyNameKana, String authGivenNameKana) =
+      _splitJapaneseName(authUser?.katakana);
+
+  return MemberBasicProfile(
+    familyName: _firstNonBlank(<String?>[
+      memberProfile?.familyName,
+      authUser?.lastName,
+    ]),
+    givenName: _firstNonBlank(<String?>[
+      memberProfile?.givenName,
+      authUser?.firstName,
+    ]),
+    familyNameKana: _firstNonBlank(<String?>[
+      memberProfile?.familyNameKana,
+      authFamilyNameKana,
+    ]),
+    givenNameKana: _firstNonBlank(<String?>[
+      memberProfile?.givenNameKana,
+      authGivenNameKana,
+    ]),
+    familyNameEn: _firstNonBlank(<String?>[
+      memberProfile?.familyNameEn,
+      authUser?.lastNameEn,
+    ]),
+    givenNameEn: _firstNonBlank(<String?>[
+      memberProfile?.givenNameEn,
+      authUser?.firstNameEn,
+    ]),
+    username: _firstNonBlank(<String?>[authUser?.username]),
+    email: _firstNonBlank(<String?>[memberProfile?.email, authUser?.email]),
+    phone: _firstNonBlank(<String?>[
+      memberProfile?.phone,
+      authUser?.phone,
+      authUser?.mobile,
+    ]),
+    sex: memberProfile?.sex ?? authUser?.sex,
+  );
+});
+
 final isMemberProfileCompletedProvider = FutureProvider<bool>((ref) async {
   ref.watch(authSessionProvider);
   final user = await ref
@@ -144,3 +216,27 @@ final profileDocumentImagePickerProvider = Provider<ProfileDocumentImagePicker>(
     return DeviceProfileDocumentImagePicker();
   },
 );
+
+String _firstNonBlank(List<String?> candidates) {
+  for (final candidate in candidates) {
+    final normalized = candidate?.trim();
+    if (normalized != null && normalized.isNotEmpty) {
+      return normalized;
+    }
+  }
+  return '';
+}
+
+(String, String) _splitJapaneseName(String? fullName) {
+  final parts = (fullName ?? '')
+      .split(RegExp(r'\s+'))
+      .where((String part) => part.trim().isNotEmpty)
+      .toList(growable: false);
+  if (parts.isEmpty) {
+    return ('', '');
+  }
+  if (parts.length == 1) {
+    return (parts.first, '');
+  }
+  return (parts.first, parts.skip(1).join(' '));
+}

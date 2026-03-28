@@ -14,12 +14,16 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
     required this.familyNameRomanController,
     required this.givenNameRomanController,
     required this.birthdayController,
+    required this.sexValue,
+    required this.sexItems,
+    required this.taxCountryController,
     required this.showAgeWarning,
     this.primaryButtonEnabled = true,
     this.titleOverride,
     this.descriptionOverride,
     this.primaryButtonLabelOverride,
     this.onBirthdayTap,
+    required this.onSexChanged,
     this.onNext,
     this.onSkip,
   });
@@ -31,12 +35,16 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
   final TextEditingController familyNameRomanController;
   final TextEditingController givenNameRomanController;
   final TextEditingController birthdayController;
+  final int? sexValue;
+  final List<DropdownMenuItem<int>> sexItems;
+  final TextEditingController taxCountryController;
   final bool showAgeWarning;
   final bool primaryButtonEnabled;
   final String? titleOverride;
   final String? descriptionOverride;
   final String? primaryButtonLabelOverride;
   final VoidCallback? onBirthdayTap;
+  final ValueChanged<int?> onSexChanged;
   final VoidCallback? onNext;
   final VoidCallback? onSkip;
 
@@ -60,21 +68,25 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
             startLabel: l10n.memberProfileFamilyNameLabel,
             startController: familyNameController,
             startHintText: l10n.memberProfileFamilyNameHint,
+            startRequired: true,
             endLabel: l10n.memberProfileGivenNameLabel,
             endController: givenNameController,
             endHintText: l10n.memberProfileGivenNameHint,
+            endRequired: true,
           ),
           const SizedBox(height: 14),
           MemberProfileDualTextFieldRow(
             startLabel: l10n.memberProfileFamilyNameKanaLabel,
             startController: familyNameKanaController,
             startHintText: l10n.memberProfileFamilyNameKanaHint,
+            startRequired: true,
             startInputFormatters: <TextInputFormatter>[
               MemberProfileInputFormatters.katakanaOnly,
             ],
             endLabel: l10n.memberProfileGivenNameKanaLabel,
             endController: givenNameKanaController,
             endHintText: l10n.memberProfileGivenNameKanaHint,
+            endRequired: true,
             endInputFormatters: <TextInputFormatter>[
               MemberProfileInputFormatters.katakanaOnly,
             ],
@@ -104,6 +116,31 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
             readOnly: true,
             onTap: onBirthdayTap,
             suffixIcon: const Icon(Icons.calendar_month_rounded),
+            isRequired: true,
+          ),
+          const SizedBox(height: 14),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: MemberProfileSelectField<int>(
+                  label: l10n.memberProfileSexLabel,
+                  value: sexValue,
+                  items: sexItems,
+                  onChanged: onSexChanged,
+                  isRequired: true,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: MemberProfileTextField(
+                  label: l10n.memberProfileTaxCountryLabel,
+                  controller: taxCountryController,
+                  hintText: l10n.memberProfileTaxCountryHint,
+                  isRequired: true,
+                ),
+              ),
+            ],
           ),
           if (showAgeWarning) ...<Widget>[
             const SizedBox(height: 12),

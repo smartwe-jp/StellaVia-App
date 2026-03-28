@@ -3153,6 +3153,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileBirthdayHint => '请选择出生日期';
 
   @override
+  String get memberProfileSexLabel => '性别';
+
+  @override
+  String get memberProfileSexFemale => '女';
+
+  @override
+  String get memberProfileSexMale => '男';
+
+  @override
+  String get memberProfileTaxCountryLabel => '纳税国';
+
+  @override
+  String get memberProfileTaxCountryHint => '日本';
+
+  @override
   String get memberProfileUnderageTitle => '本服务仅限 18 岁以上用户使用。';
 
   @override
@@ -6715,6 +6730,21 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get memberProfileBirthdayHint => '请选择出生日期';
+
+  @override
+  String get memberProfileSexLabel => '性別';
+
+  @override
+  String get memberProfileSexFemale => '女';
+
+  @override
+  String get memberProfileSexMale => '男';
+
+  @override
+  String get memberProfileTaxCountryLabel => '納稅國';
+
+  @override
+  String get memberProfileTaxCountryHint => '日本';
 
   @override
   String get memberProfileUnderageTitle => '本服務僅限18歲以上人士使用。';

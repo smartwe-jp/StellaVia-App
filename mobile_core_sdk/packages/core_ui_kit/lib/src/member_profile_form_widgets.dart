@@ -535,6 +535,8 @@ class MemberProfileDualTextFieldRow extends StatelessWidget {
     this.endKeyboardType,
     this.startInputFormatters,
     this.endInputFormatters,
+    this.startRequired = false,
+    this.endRequired = false,
   });
 
   final String startLabel;
@@ -547,6 +549,8 @@ class MemberProfileDualTextFieldRow extends StatelessWidget {
   final TextInputType? endKeyboardType;
   final List<TextInputFormatter>? startInputFormatters;
   final List<TextInputFormatter>? endInputFormatters;
+  final bool startRequired;
+  final bool endRequired;
 
   @override
   Widget build(BuildContext context) {
@@ -560,6 +564,7 @@ class MemberProfileDualTextFieldRow extends StatelessWidget {
             hintText: startHintText,
             keyboardType: startKeyboardType,
             inputFormatters: startInputFormatters,
+            isRequired: startRequired,
           ),
         ),
         const SizedBox(width: 12),
@@ -570,6 +575,7 @@ class MemberProfileDualTextFieldRow extends StatelessWidget {
             hintText: endHintText,
             keyboardType: endKeyboardType,
             inputFormatters: endInputFormatters,
+            isRequired: endRequired,
           ),
         ),
       ],

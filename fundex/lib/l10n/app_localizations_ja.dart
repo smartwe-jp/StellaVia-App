@@ -3190,6 +3190,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfileBirthdayHint => '生年月日を選択';
 
   @override
+  String get memberProfileSexLabel => '性別';
+
+  @override
+  String get memberProfileSexFemale => '女性';
+
+  @override
+  String get memberProfileSexMale => '男性';
+
+  @override
+  String get memberProfileTaxCountryLabel => '納税国';
+
+  @override
+  String get memberProfileTaxCountryHint => '日本';
+
+  @override
   String get memberProfileUnderageTitle => '本サービスは18歳以上の方のみご利用いただけます。';
 
   @override

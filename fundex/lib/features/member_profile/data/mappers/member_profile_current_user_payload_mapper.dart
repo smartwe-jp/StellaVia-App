@@ -49,6 +49,11 @@ class MemberProfileCurrentUserPayloadMapper {
       _string(payload['cityAddress']),
       address,
     ]);
+    final sex = _parseSex(payload['sex']) ?? authUser?.sex;
+    final taxcountry = _firstNonEmpty(<String>[
+      _string(payload['taxcountry']),
+      authUser?.taxcountry ?? '',
+    ]);
 
     final profile = MemberProfileDetails(
       familyName: familyName,
@@ -72,6 +77,8 @@ class MemberProfileCurrentUserPayloadMapper {
           authUser?.birthday ?? '',
         ]),
       ),
+      sex: sex,
+      taxcountry: taxcountry,
       zipCode: zipCode,
       prefectureCode: prefectureCode,
       cityAddress: cityAddress,
@@ -161,6 +168,21 @@ class MemberProfileCurrentUserPayloadMapper {
       return '';
     }
     return value.toString().trim();
+  }
+
+  static int? _parseSex(Object? value) {
+    if (value == null) {
+      return null;
+    }
+    if (value is int) {
+      return value == 0 || value == 1 ? value : null;
+    }
+    final normalized = value.toString().trim();
+    if (normalized.isEmpty) {
+      return null;
+    }
+    final parsed = int.tryParse(normalized);
+    return parsed == 0 || parsed == 1 ? parsed : null;
   }
 
   static String _firstNonEmpty(List<String> values) {

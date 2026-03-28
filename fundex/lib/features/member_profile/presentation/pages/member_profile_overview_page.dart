@@ -87,6 +87,8 @@ class _MemberProfileOverviewPageState
                   ),
                   data: (MemberProfileDetails? details) {
                     final profile = details ?? const MemberProfileDetails();
+                    final (String addressPrefecture, String addressCity) =
+                        _splitAddressFields(profile.address);
                     return RefreshIndicator(
                       onRefresh: _refreshProfile,
                       child: ListView(
@@ -144,6 +146,17 @@ class _MemberProfileOverviewPageState
                                 ),
                               ),
                               _OverviewFieldRow(
+                                label: l10n.memberProfileSexLabel,
+                                value: _displayValue(
+                                  _sexLabel(l10n, profile.sex),
+                                  l10n,
+                                ),
+                              ),
+                              _OverviewFieldRow(
+                                label: l10n.memberProfileTaxCountryLabel,
+                                value: _displayValue(profile.taxcountry, l10n),
+                              ),
+                              _OverviewFieldRow(
                                 label: l10n.profileEmailLabel,
                                 value: _displayValue(profile.email, l10n),
                                 isLast: true,
@@ -169,7 +182,9 @@ class _MemberProfileOverviewPageState
                                 value: _displayValue(
                                   _prefectureLabel(
                                     l10n,
-                                    profile.prefectureCode,
+                                    addressPrefecture.trim().isNotEmpty
+                                        ? addressPrefecture
+                                        : profile.prefectureCode,
                                   ),
                                   l10n,
                                 ),
@@ -177,9 +192,11 @@ class _MemberProfileOverviewPageState
                               _OverviewFieldRow(
                                 label: l10n.memberProfileCityAddressLabel,
                                 value: _displayValue(
-                                  profile.cityAddress.trim().isNotEmpty
-                                      ? profile.cityAddress
-                                      : profile.address,
+                                  addressCity.trim().isNotEmpty
+                                      ? addressCity
+                                      : (profile.cityAddress.trim().isNotEmpty
+                                            ? profile.cityAddress
+                                            : profile.address),
                                   l10n,
                                 ),
                                 isLast: true,
@@ -296,8 +313,7 @@ class _MemberProfileOverviewPageState
                                 ),
                               ),
                               _OverviewFieldRow(
-                                label:
-                                    l10n.memberProfilePhotoDocumentBackTitle,
+                                label: l10n.memberProfilePhotoDocumentBackTitle,
                                 value: _statusValue(
                                   (profile.idDocumentBackPhotoPath
                                           ?.trim()
@@ -420,8 +436,9 @@ class _OverviewFieldRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
         border: Border(
-          bottom:
-              isLast ? BorderSide.none : BorderSide(color: colors.borderSoft),
+          bottom: isLast
+              ? BorderSide.none
+              : BorderSide(color: colors.borderSoft),
         ),
       ),
       child: Row(
@@ -497,6 +514,14 @@ String _statusValue(bool value, AppLocalizations l10n) {
   return value ? '✓' : l10n.fundDetailUnknownValue;
 }
 
+String _sexLabel(AppLocalizations l10n, int? sex) {
+  return switch (sex) {
+    0 => l10n.memberProfileSexFemale,
+    1 => l10n.memberProfileSexMale,
+    _ => '',
+  };
+}
+
 String _prefectureLabel(AppLocalizations l10n, String raw) {
   return switch (raw.trim()) {
     'tokyo' => l10n.prefectureTokyo,
@@ -506,6 +531,30 @@ String _prefectureLabel(AppLocalizations l10n, String raw) {
     'fukuoka' => l10n.prefectureFukuoka,
     _ => raw.trim(),
   };
+}
+
+(String, String) _splitAddressFields(String rawAddress) {
+  final normalized = rawAddress.trim();
+  if (normalized.isEmpty) {
+    return ('', '');
+  }
+
+  final parts = normalized
+      .split(RegExp(r'\s+'))
+      .where((String part) => part.trim().isNotEmpty)
+      .toList(growable: false);
+  if (parts.length >= 2) {
+    return (parts.first.trim(), parts.skip(1).join(' ').trim());
+  }
+
+  final match = RegExp(r'^(東京都|北海道|(?:京都|大阪)府|.+?県)').firstMatch(normalized);
+  if (match == null) {
+    return ('', normalized);
+  }
+
+  final prefecture = match.group(0)?.trim() ?? '';
+  final cityAddress = normalized.substring(prefecture.length).trim();
+  return (prefecture, cityAddress);
 }
 
 String _occupationLabel(AppLocalizations l10n, String raw) {

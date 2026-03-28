@@ -6224,6 +6224,36 @@ abstract class AppLocalizations {
   /// **'Select your date of birth'**
   String get memberProfileBirthdayHint;
 
+  /// No description provided for @memberProfileSexLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sex'**
+  String get memberProfileSexLabel;
+
+  /// No description provided for @memberProfileSexFemale.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get memberProfileSexFemale;
+
+  /// No description provided for @memberProfileSexMale.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get memberProfileSexMale;
+
+  /// No description provided for @memberProfileTaxCountryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax country'**
+  String get memberProfileTaxCountryLabel;
+
+  /// No description provided for @memberProfileTaxCountryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Japan'**
+  String get memberProfileTaxCountryHint;
+
   /// No description provided for @memberProfileUnderageTitle.
   ///
   /// In en, this message translates to:

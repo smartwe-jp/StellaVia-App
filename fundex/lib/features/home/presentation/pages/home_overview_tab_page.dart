@@ -36,6 +36,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
     final networkAccessState = ref.watch(appNetworkAccessStateProvider);
     final isAuthenticated = authState.asData?.value ?? false;
     final currentUser = ref.watch(currentAuthUserProvider).asData?.value;
+    final basicProfile = ref.watch(memberBasicProfileProvider);
     final asyncProjects = ref.watch(fundProjectListProvider);
     final asyncSecondaryMarketRecords = ref.watch(
       secondaryMarketMarketplaceListProvider,
@@ -177,7 +178,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
         greeting: l10n.homeWelcomeUser(
           resolveHomeDisplayName(
             locale: Localizations.localeOf(context),
-            user: currentUser,
+            profile: basicProfile,
           ),
         ),
         totalAssetsLabel: l10n.homeHeroTotalAssetsAmountLabel,

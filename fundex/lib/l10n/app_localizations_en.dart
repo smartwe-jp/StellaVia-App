@@ -3361,6 +3361,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memberProfileBirthdayHint => 'Select your date of birth';
 
   @override
+  String get memberProfileSexLabel => 'Sex';
+
+  @override
+  String get memberProfileSexFemale => 'Female';
+
+  @override
+  String get memberProfileSexMale => 'Male';
+
+  @override
+  String get memberProfileTaxCountryLabel => 'Tax country';
+
+  @override
+  String get memberProfileTaxCountryHint => 'Japan';
+
+  @override
   String get memberProfileUnderageTitle =>
       'This service is available only to users aged 18 or older.';
 
