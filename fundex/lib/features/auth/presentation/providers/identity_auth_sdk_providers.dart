@@ -116,7 +116,7 @@ String? _resolveAndroidBaiduFaceLicenseId() {
     return normalizedShared;
   }
 
-  return 'stellavia-googleplay-face-android';
+  return 'fund-stellavia-face-android';
 }
 
 String? _resolveIosBaiduFaceLicenseId() {
