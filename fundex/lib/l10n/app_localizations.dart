@@ -161,6 +161,18 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get commonClose;
 
+  /// No description provided for @commonCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get commonCancel;
+
+  /// No description provided for @commonOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get commonOpenSettings;
+
   /// No description provided for @pdfViewerPageTitle.
   ///
   /// In en, this message translates to:
@@ -274,6 +286,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We\'ll refresh the latest data automatically when the connection returns.'**
   String get networkOfflineBannerMessage;
+
+  /// No description provided for @networkAccessDeniedBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to access the network'**
+  String get networkAccessDeniedBannerTitle;
+
+  /// No description provided for @networkAccessDeniedBannerMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your connection, or allow StellaVia network access in iPhone Settings.'**
+  String get networkAccessDeniedBannerMessage;
 
   /// No description provided for @loginForgotPassword.
   ///
@@ -772,6 +796,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to select document photo. Please try again.'**
   String get profileDocumentPickFailed;
+
+  /// No description provided for @profileDocumentCameraPermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow camera access to take a document photo.'**
+  String get profileDocumentCameraPermissionRequired;
+
+  /// No description provided for @profileDocumentPhotoLibraryPermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow photo library access to select a document photo.'**
+  String get profileDocumentPhotoLibraryPermissionRequired;
 
   /// No description provided for @profileIncompleteBannerTitle.
   ///
@@ -2770,6 +2806,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Network connection error. Please try again later.'**
   String get uiErrorNetworkUnavailable;
+
+  /// No description provided for @uiErrorNetworkAccessDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to access the network. Check your connection or system settings.'**
+  String get uiErrorNetworkAccessDenied;
 
   /// No description provided for @uiErrorAuthExpired.
   ///
@@ -6182,6 +6224,36 @@ abstract class AppLocalizations {
   /// **'Select your date of birth'**
   String get memberProfileBirthdayHint;
 
+  /// No description provided for @memberProfileSexLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sex'**
+  String get memberProfileSexLabel;
+
+  /// No description provided for @memberProfileSexFemale.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get memberProfileSexFemale;
+
+  /// No description provided for @memberProfileSexMale.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get memberProfileSexMale;
+
+  /// No description provided for @memberProfileTaxCountryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax country'**
+  String get memberProfileTaxCountryLabel;
+
+  /// No description provided for @memberProfileTaxCountryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Japan'**
+  String get memberProfileTaxCountryHint;
+
   /// No description provided for @memberProfileUnderageTitle.
   ///
   /// In en, this message translates to:
@@ -6949,6 +7021,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unable to continue this sensitive action.'**
   String get identityAuthSensitiveBlocked;
+
+  /// No description provided for @identityAuthCameraPermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow camera access to continue face verification.'**
+  String get identityAuthCameraPermissionRequired;
+
+  /// No description provided for @identityAuthCameraPermissionSettingsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Open system settings and allow camera access to continue face verification.'**
+  String get identityAuthCameraPermissionSettingsRequired;
+
+  /// No description provided for @permissionSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Permission required'**
+  String get permissionSettingsTitle;
+
+  /// No description provided for @permissionSettingsCameraMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is disabled. Open system settings and allow camera access.'**
+  String get permissionSettingsCameraMessage;
+
+  /// No description provided for @permissionSettingsPhotosMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo library access is disabled. Open system settings and allow photo access.'**
+  String get permissionSettingsPhotosMessage;
+
+  /// No description provided for @permissionSettingsLocationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Location access is disabled. Open system settings and allow location access.'**
+  String get permissionSettingsLocationMessage;
 
   /// No description provided for @identityAuthBaiduLicenseMissing.
   ///

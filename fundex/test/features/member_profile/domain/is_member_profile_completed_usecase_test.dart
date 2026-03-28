@@ -10,6 +10,9 @@ class _FakeMemberProfileRepository implements MemberProfileRepository {
   MemberProfileDetails? profile;
 
   @override
+  Future<void> clearOnboardingDraft() async {}
+
+  @override
   Future<void> clearLocalProfile() async {
     profile = null;
   }
@@ -18,9 +21,15 @@ class _FakeMemberProfileRepository implements MemberProfileRepository {
   Future<MemberProfileDetails?> readLocalProfile() async => profile;
 
   @override
+  Future<MemberProfileDetails?> readOnboardingDraft() async => null;
+
+  @override
   Future<void> saveLocalProfile(MemberProfileDetails profile) async {
     this.profile = profile;
   }
+
+  @override
+  Future<void> saveOnboardingDraft(MemberProfileDetails profile) async {}
 
   @override
   Future<void> syncLocalProfileFromRemote() async {}

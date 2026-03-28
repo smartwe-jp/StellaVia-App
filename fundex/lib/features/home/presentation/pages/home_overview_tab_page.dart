@@ -1,4 +1,5 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -32,8 +33,10 @@ class HomeOverviewTabPage extends ConsumerWidget {
     final networkAvailability =
         ref.watch(appNetworkAvailabilityProvider).asData?.value ??
         AppNetworkAvailability.online;
+    final networkAccessState = ref.watch(appNetworkAccessStateProvider);
     final isAuthenticated = authState.asData?.value ?? false;
     final currentUser = ref.watch(currentAuthUserProvider).asData?.value;
+    final basicProfile = ref.watch(memberBasicProfileProvider);
     final asyncProjects = ref.watch(fundProjectListProvider);
     final asyncSecondaryMarketRecords = ref.watch(
       secondaryMarketMarketplaceListProvider,
@@ -175,7 +178,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
         greeting: l10n.homeWelcomeUser(
           resolveHomeDisplayName(
             locale: Localizations.localeOf(context),
-            user: currentUser,
+            profile: basicProfile,
           ),
         ),
         totalAssetsLabel: l10n.homeHeroTotalAssetsAmountLabel,
@@ -224,7 +227,15 @@ class HomeOverviewTabPage extends ConsumerWidget {
           padding: EdgeInsets.zero,
           physics: const AlwaysScrollableScrollPhysics(),
           children: <Widget>[
-            if (networkAvailability == AppNetworkAvailability.offline)
+            if (networkAccessState == AppNetworkAccessState.denied ||
+                (_isApplePlatform &&
+                    networkAvailability == AppNetworkAvailability.offline))
+              AppNetworkStatusBar(
+                title: l10n.networkAccessDeniedBannerTitle,
+                message: l10n.networkAccessDeniedBannerMessage,
+                icon: Icons.wifi_find_outlined,
+              )
+            else if (networkAvailability == AppNetworkAvailability.offline)
               AppNetworkStatusBar(
                 title: l10n.networkOfflineBannerTitle,
                 message: l10n.networkOfflineBannerMessage,
@@ -323,6 +334,11 @@ class HomeOverviewTabPage extends ConsumerWidget {
     );
   }
 }
+
+bool get _isApplePlatform =>
+    !kIsWeb &&
+    (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.macOS);
 
 class _HomeGuestTopBar extends StatelessWidget {
   const _HomeGuestTopBar({required this.title, this.onSettingsTap});

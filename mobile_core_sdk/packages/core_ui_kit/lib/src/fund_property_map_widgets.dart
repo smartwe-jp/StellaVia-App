@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'app_dialogs.dart';
 import 'app_notice.dart';
 import 'app_theme_extensions.dart';
 import 'ui_tokens.dart';
@@ -31,6 +32,9 @@ class FundPropertyMapSheetStrings {
     required this.cancel,
     required this.locationPermissionDenied,
     required this.locationUnavailable,
+    this.openSettings = '',
+    this.locationPermissionSettingsTitle = '',
+    this.locationPermissionSettingsMessage = '',
   });
 
   final String close;
@@ -41,6 +45,9 @@ class FundPropertyMapSheetStrings {
   final String cancel;
   final String locationPermissionDenied;
   final String locationUnavailable;
+  final String openSettings;
+  final String locationPermissionSettingsTitle;
+  final String locationPermissionSettingsMessage;
 }
 
 class FundPropertyMapPreviewCard extends StatelessWidget {
@@ -287,8 +294,35 @@ class _FundPropertyMapBottomSheetState
         permission = await Geolocator.requestPermission();
       }
 
+      final shouldOpenSettings =
+          permission == LocationPermission.deniedForever ||
+          (permission == LocationPermission.denied &&
+              (Theme.of(context).platform == TargetPlatform.iOS ||
+                  Theme.of(context).platform == TargetPlatform.macOS));
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
+        if (shouldOpenSettings &&
+            widget.strings.openSettings.isNotEmpty &&
+            widget.strings.locationPermissionSettingsTitle.isNotEmpty &&
+            widget.strings.locationPermissionSettingsMessage.isNotEmpty) {
+          final openSettings = await AppDialogs.showAdaptiveAlert<bool>(
+            context: context,
+            title: widget.strings.locationPermissionSettingsTitle,
+            message: widget.strings.locationPermissionSettingsMessage,
+            actions: <AppDialogAction<bool>>[
+              AppDialogAction<bool>(label: widget.strings.cancel, value: false),
+              AppDialogAction<bool>(
+                label: widget.strings.openSettings,
+                value: true,
+                isDefaultAction: true,
+              ),
+            ],
+          );
+          if (openSettings == true) {
+            await Geolocator.openAppSettings();
+          }
+          return;
+        }
         _showSnackBar(widget.strings.locationPermissionDenied);
         return;
       }

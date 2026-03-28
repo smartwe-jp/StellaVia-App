@@ -10,6 +10,7 @@ final appLoggerProvider = Provider<AppLogger>((ref) {
 enum AppUiMessageKey {
   requestFailed,
   networkUnavailable,
+  networkAccessDenied,
   authExpired,
   forbidden,
   serverUnavailable,

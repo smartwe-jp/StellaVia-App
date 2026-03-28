@@ -1,5 +1,6 @@
 import 'package:core_network/core_network.dart';
 import 'package:core_tool_kit/core_tool_kit.dart';
+import 'package:flutter/foundation.dart';
 
 import '../support/app_request_error_message_resolver.dart';
 import '../observability/app_observability_providers.dart';
@@ -9,14 +10,20 @@ class AppObservabilityInterceptor extends Interceptor {
     required AppLogger logger,
     required void Function(AppUiMessageKey messageKey, {String? customMessage})
     reportErrorMessage,
+    required void Function() markNetworkAccessDenied,
+    required void Function() clearNetworkAccessDenied,
     this.includeHttpPayloadLog = false,
     this.includeHttpResponseLog = true,
   }) : _logger = logger,
-       _reportErrorMessage = reportErrorMessage;
+       _reportErrorMessage = reportErrorMessage,
+       _markNetworkAccessDenied = markNetworkAccessDenied,
+       _clearNetworkAccessDenied = clearNetworkAccessDenied;
 
   final AppLogger _logger;
   final void Function(AppUiMessageKey messageKey, {String? customMessage})
   _reportErrorMessage;
+  final void Function() _markNetworkAccessDenied;
+  final void Function() _clearNetworkAccessDenied;
   final bool includeHttpPayloadLog;
   final bool includeHttpResponseLog;
 
@@ -43,6 +50,7 @@ class AppObservabilityInterceptor extends Interceptor {
     Response<dynamic> response,
     ResponseInterceptorHandler handler,
   ) {
+    _clearNetworkAccessDenied();
     if (!includeHttpResponseLog) {
       handler.next(response);
       return;
@@ -64,21 +72,33 @@ class AppObservabilityInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) {
     final failure = err.error;
     if (failure is NetworkFailure) {
-      _logger.error(
-        'HTTP failure',
-        error: failure,
-        stackTrace: err.stackTrace,
-        context: <String, Object?>{
-          'method': err.requestOptions.method,
-          'path': err.requestOptions.path,
-          'statusCode': failure.statusCode,
-          'failureType': failure.type.name,
-          if (includeHttpPayloadLog &&
-              includeHttpResponseLog &&
-              err.response?.data != null)
-            'responseData': _stringifyForLog(err.response?.data),
-        },
-      );
+      final context = <String, Object?>{
+        'method': err.requestOptions.method,
+        'path': err.requestOptions.path,
+        'statusCode': failure.statusCode,
+        'failureType': failure.type.name,
+        if (includeHttpPayloadLog &&
+            includeHttpResponseLog &&
+            err.response?.data != null)
+          'responseData': _stringifyForLog(err.response?.data),
+      };
+      final shouldTreatAsRestrictedNetwork =
+          failure.type == NetworkFailureType.networkAccessDenied ||
+          (_isApplePlatform &&
+              failure.type == NetworkFailureType.connectionError &&
+              failure.statusCode == null);
+      if (shouldTreatAsRestrictedNetwork) {
+        _markNetworkAccessDenied();
+        _logger.warning('HTTP network access restricted', context: context);
+      } else {
+        _clearNetworkAccessDenied();
+        _logger.error(
+          'HTTP failure',
+          error: failure,
+          stackTrace: err.stackTrace,
+          context: context,
+        );
+      }
 
       final userMessage = _mapUserMessage(failure);
       if (userMessage != null) {
@@ -132,8 +152,14 @@ class AppObservabilityInterceptor extends Interceptor {
       case NetworkFailureType.connectionTimeout:
       case NetworkFailureType.sendTimeout:
       case NetworkFailureType.receiveTimeout:
-      case NetworkFailureType.connectionError:
         return AppUiMessageKey.networkUnavailable;
+      case NetworkFailureType.connectionError:
+        if (_isApplePlatform) {
+          return AppUiMessageKey.networkAccessDenied;
+        }
+        return AppUiMessageKey.networkUnavailable;
+      case NetworkFailureType.networkAccessDenied:
+        return AppUiMessageKey.networkAccessDenied;
       case NetworkFailureType.unauthorized:
         return AppUiMessageKey.authExpired;
       case NetworkFailureType.forbidden:
@@ -155,4 +181,9 @@ class AppObservabilityInterceptor extends Interceptor {
     }
     return '${text.substring(0, maxLen)}...<truncated>';
   }
+
+  bool get _isApplePlatform =>
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.iOS ||
+          defaultTargetPlatform == TargetPlatform.macOS);
 }

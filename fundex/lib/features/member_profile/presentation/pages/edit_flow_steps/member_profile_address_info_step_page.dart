@@ -7,28 +7,24 @@ class MemberProfileAddressInfoStepPage extends StatelessWidget {
   const MemberProfileAddressInfoStepPage({
     super.key,
     required this.postalCodeController,
-    required this.prefecture,
+    required this.prefectureController,
     required this.cityAddressController,
-    required this.prefectureItems,
     this.primaryButtonEnabled = true,
     this.titleOverride,
     this.descriptionOverride,
     this.primaryButtonLabelOverride,
-    this.onPrefectureChanged,
     this.onAddressSearch,
     this.onNext,
     this.onSkip,
   });
 
   final TextEditingController postalCodeController;
-  final String? prefecture;
+  final TextEditingController prefectureController;
   final TextEditingController cityAddressController;
-  final List<DropdownMenuItem<String>> prefectureItems;
   final bool primaryButtonEnabled;
   final String? titleOverride;
   final String? descriptionOverride;
   final String? primaryButtonLabelOverride;
-  final ValueChanged<String?>? onPrefectureChanged;
   final VoidCallback? onAddressSearch;
   final VoidCallback? onNext;
   final VoidCallback? onSkip;
@@ -67,11 +63,9 @@ class MemberProfileAddressInfoStepPage extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-          MemberProfileSelectField<String>(
+          MemberProfileTextField(
             label: l10n.memberProfilePrefectureLabel,
-            value: prefecture,
-            items: prefectureItems,
-            onChanged: onPrefectureChanged,
+            controller: prefectureController,
           ),
           const SizedBox(height: 14),
           MemberProfileTextField(

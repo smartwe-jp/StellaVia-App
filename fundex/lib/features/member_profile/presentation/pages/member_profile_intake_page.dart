@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/support/app_permission_dialogs.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../auth/presentation/support/intl_code_picker_field.dart';
 import '../../domain/entities/member_profile_details.dart';
@@ -229,9 +230,13 @@ class _MemberProfileIntakePageState
       _isPickingPhoto = true;
     });
     try {
-      final path = await ref
+      final result = await ref
           .read(profileDocumentImagePickerProvider)
           .pick(source);
+      if (!mounted) {
+        return;
+      }
+      final path = await _resolvePickedImagePath(result, source);
       if (path == null || path.trim().isEmpty || !mounted) {
         return;
       }
@@ -248,6 +253,36 @@ class _MemberProfileIntakePageState
           _isPickingPhoto = false;
         });
       }
+    }
+  }
+
+  Future<String?> _resolvePickedImagePath(
+    ProfileDocumentImagePickResult result,
+    ProfileDocumentImageSource source,
+  ) async {
+    switch (result.status) {
+      case ProfileDocumentImagePickStatus.success:
+        return result.path!.trim();
+      case ProfileDocumentImagePickStatus.canceled:
+        return null;
+      case ProfileDocumentImagePickStatus.permissionDenied:
+        await _showValidationMessage(
+          source == ProfileDocumentImageSource.camera
+              ? context.l10n.profileDocumentCameraPermissionRequired
+              : context.l10n.profileDocumentPhotoLibraryPermissionRequired,
+        );
+        return null;
+      case ProfileDocumentImagePickStatus.permissionSettingsRequired:
+        await showAppPermissionSettingsDialog(
+          context,
+          permission: source == ProfileDocumentImageSource.camera
+              ? AppPermissionKind.camera
+              : AppPermissionKind.photos,
+        );
+        return null;
+      case ProfileDocumentImagePickStatus.failed:
+        await _showValidationMessage(context.l10n.profileDocumentPickFailed);
+        return null;
     }
   }
 

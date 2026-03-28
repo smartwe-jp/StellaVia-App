@@ -1,81 +1,82 @@
 import 'dart:ui';
 
-import '../../../auth/domain/entities/auth_user.dart';
+import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 
 String resolveHomeDisplayName({
   required Locale locale,
-  required AuthUser? user,
+  required MemberBasicProfile? profile,
 }) {
   final languageCode = locale.languageCode.toLowerCase();
 
   return switch (languageCode) {
-    'ja' => _resolveJapaneseDisplayName(user),
-    'zh' => _resolveChineseDisplayName(user),
-    'en' => _resolveEnglishDisplayName(user),
-    _ => _resolveGenericDisplayName(user),
+    'ja' => _resolveJapaneseDisplayName(profile),
+    'zh' => _resolveChineseDisplayName(profile),
+    'en' => _resolveEnglishDisplayName(profile),
+    _ => _resolveGenericDisplayName(profile),
   };
 }
 
-String _resolveJapaneseDisplayName(AuthUser? user) {
+String _resolveJapaneseDisplayName(MemberBasicProfile? profile) {
   final baseName =
       _firstNonBlank(<String?>[
-        user?.firstName,
-        user?.katakana,
-        user?.username,
-        user?.email,
-        user?.mobile,
-        user?.phone,
+        profile?.familyName,
+        profile?.givenName,
+        profile?.givenNameKana,
+        profile?.username,
+        profile?.email,
+        profile?.phone,
       ]) ??
       'StellaVia';
 
   return '$baseNameさん';
 }
 
-String _resolveChineseDisplayName(AuthUser? user) {
+String _resolveChineseDisplayName(MemberBasicProfile? profile) {
   final baseName =
       _firstNonBlank(<String?>[
-        user?.firstName,
-        user?.username,
-        user?.email,
-        user?.mobile,
-        user?.phone,
+        profile?.familyName,
+        profile?.givenName,
+        profile?.username,
+        profile?.email,
+        profile?.phone,
       ]) ??
       'StellaVia';
 
-  return switch (_resolveGender(user?.sex)) {
+  return switch (_resolveGender(profile?.sex)) {
     _Gender.female => '$baseName女士',
     _Gender.male => '$baseName先生',
     _Gender.unknown => baseName,
   };
 }
 
-String _resolveEnglishDisplayName(AuthUser? user) {
+String _resolveEnglishDisplayName(MemberBasicProfile? profile) {
   final baseName =
       _firstNonBlank(<String?>[
-        user?.firstNameEn,
-        user?.firstName,
-        user?.lastNameEn,
-        user?.username,
-        user?.email,
-        user?.mobile,
-        user?.phone,
+
+        profile?.familyNameEn,
+        profile?.familyName,
+        profile?.givenNameEn,
+        profile?.givenName,
+        profile?.username,
+        profile?.email,
+        profile?.phone,
       ]) ??
       'StellaVia';
 
-  return switch (_resolveGender(user?.sex)) {
+  return switch (_resolveGender(profile?.sex)) {
     _Gender.female => 'Ms. $baseName',
     _Gender.male => 'Mr. $baseName',
     _Gender.unknown => baseName,
   };
 }
 
-String _resolveGenericDisplayName(AuthUser? user) {
+String _resolveGenericDisplayName(MemberBasicProfile? profile) {
   return _firstNonBlank(<String?>[
-        user?.firstName,
-        user?.username,
-        user?.email,
-        user?.mobile,
-        user?.phone,
+        profile?.familyName,
+        profile?.givenName,
+        profile?.username,
+        profile?.email,
+        profile?.phone,
       ]) ??
       'StellaVia';
 }
@@ -93,7 +94,7 @@ String? _firstNonBlank(List<String?> candidates) {
 _Gender _resolveGender(int? sex) {
   return switch (sex) {
     1 => _Gender.male,
-    2 => _Gender.female,
+    0 => _Gender.female,
     _ => _Gender.unknown,
   };
 }

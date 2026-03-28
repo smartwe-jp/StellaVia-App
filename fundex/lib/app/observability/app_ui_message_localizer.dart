@@ -6,6 +6,7 @@ extension AppUiMessageLocalizer on AppUiMessageKey {
     return switch (this) {
       AppUiMessageKey.requestFailed => l10n.uiErrorRequestFailed,
       AppUiMessageKey.networkUnavailable => l10n.uiErrorNetworkUnavailable,
+      AppUiMessageKey.networkAccessDenied => l10n.uiErrorNetworkAccessDenied,
       AppUiMessageKey.authExpired => l10n.uiErrorAuthExpired,
       AppUiMessageKey.forbidden => l10n.uiErrorForbidden,
       AppUiMessageKey.serverUnavailable => l10n.uiErrorServerUnavailable,

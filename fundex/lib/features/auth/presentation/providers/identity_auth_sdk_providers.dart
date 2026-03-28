@@ -44,23 +44,13 @@ final identityAuthStateStoreProvider = Provider<IdentityAuthStateStore>((ref) {
 });
 
 final baiduFaceLicenseIdProvider = Provider<String?>((ref) {
-  // const value = String.fromEnvironment(
-  //   'BAIDU_FACE_LICENSE_ID',
-  //   defaultValue: '',
-  // );
-  // final normalized = value.trim();
-  // if (normalized.isNotEmpty) {
-  //   return normalized;
-  // }
-
   if (kIsWeb) {
     return null;
   }
 
-  // Backward-compatible fallback used in legacy FUNDEX-family apps.
   return switch (defaultTargetPlatform) {
-    TargetPlatform.android => 'stellavia-googleplay-face-android',
-    TargetPlatform.iOS => 'fund-stellavia-face-ios',
+    TargetPlatform.android => _resolveAndroidBaiduFaceLicenseId(),
+    TargetPlatform.iOS => _resolveIosBaiduFaceLicenseId(),
     _ => null,
   };
 });
@@ -78,7 +68,7 @@ final identityAuthLivenessCollectorProvider = Provider<LivenessCollector?>((
   ref,
 ) {
   final licenseId = ref.watch(baiduFaceLicenseIdProvider);
-  if (licenseId == null || licenseId.trim().isEmpty) {
+  if (licenseId == null) {
     return null;
   }
   return BaiduFaceLivenessCollector(licenseId: licenseId);
@@ -105,4 +95,48 @@ String _resolveBiometricReason(AppLanguage language) {
     AppLanguage.zh || AppLanguage.zhHant => '请使用面容 ID 或触控 ID 以继续操作。',
     AppLanguage.system => 'Authenticate with Face ID or Touch ID to continue.',
   };
+}
+
+String? _resolveAndroidBaiduFaceLicenseId() {
+  const androidValue = String.fromEnvironment(
+    'BAIDU_FACE_LICENSE_ID_ANDROID',
+    defaultValue: '',
+  );
+  final normalizedAndroid = androidValue.trim();
+  if (normalizedAndroid.isNotEmpty) {
+    return normalizedAndroid;
+  }
+
+  const sharedValue = String.fromEnvironment(
+    'BAIDU_FACE_LICENSE_ID',
+    defaultValue: '',
+  );
+  final normalizedShared = sharedValue.trim();
+  if (normalizedShared.isNotEmpty) {
+    return normalizedShared;
+  }
+
+  return 'fund-stellavia-face-android';
+}
+
+String? _resolveIosBaiduFaceLicenseId() {
+  const iosValue = String.fromEnvironment(
+    'BAIDU_FACE_LICENSE_ID_IOS',
+    defaultValue: '',
+  );
+  final normalizedIos = iosValue.trim();
+  if (normalizedIos.isNotEmpty) {
+    return normalizedIos;
+  }
+
+  const sharedValue = String.fromEnvironment(
+    'BAIDU_FACE_LICENSE_ID',
+    defaultValue: '',
+  );
+  final normalizedShared = sharedValue.trim();
+  if (normalizedShared.isNotEmpty) {
+    return normalizedShared;
+  }
+
+  return 'fund-stellavia-face-ios';
 }

@@ -61,13 +61,17 @@ class MemberProfileApiPayloadMapper {
         _joinNonEmpty(<String?>[profile.prefectureCode, profile.cityAddress]),
         authUser?.address ?? '',
       ]),
-      'sex': authUser?.sex ?? 1,
+      'sex': profile.sex ?? authUser?.sex ?? 1,
       'liveJp': authUser?.liveJp ?? 1,
       'nationality': _firstNonEmpty(<String>[
         authUser?.nationality ?? '',
         '日本',
       ]),
-      'taxcountry': _firstNonEmpty(<String>[authUser?.taxcountry ?? '', '日本']),
+      'taxcountry': _firstNonEmpty(<String>[
+        profile.taxcountry,
+        authUser?.taxcountry ?? '',
+        '日本',
+      ]),
     };
     if (bank.isNotEmpty) {
       baseInfo['bank'] = bank;

@@ -39,6 +39,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get commonClose => '閉じる';
 
   @override
+  String get commonCancel => 'キャンセル';
+
+  @override
+  String get commonOpenSettings => '設定を開く';
+
+  @override
   String get pdfViewerPageTitle => 'PDF';
 
   @override
@@ -94,6 +100,13 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get networkOfflineBannerMessage => '接続が回復すると最新データを自動で更新します。';
+
+  @override
+  String get networkAccessDeniedBannerTitle => 'ネットワークにアクセスできません';
+
+  @override
+  String get networkAccessDeniedBannerMessage =>
+      '接続状況を確認するか、iPhone の設定で StellaVia のネットワークアクセスを許可してください。';
 
   @override
   String get loginForgotPassword => 'パスワードを忘れた場合';
@@ -347,6 +360,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get profileDocumentPickFailed => '書類写真の選択に失敗しました。再度お試しください。';
+
+  @override
+  String get profileDocumentCameraPermissionRequired =>
+      '書類写真を撮影するにはカメラ権限を許可してください。';
+
+  @override
+  String get profileDocumentPhotoLibraryPermissionRequired =>
+      '書類写真を選択するには写真ライブラリへのアクセスを許可してください。';
 
   @override
   String get profileIncompleteBannerTitle => '詳細情報が未完了です';
@@ -1386,6 +1407,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get uiErrorNetworkUnavailable => 'ネットワーク接続に問題があります。後でもう一度お試しください。';
+
+  @override
+  String get uiErrorNetworkAccessDenied =>
+      'ネットワークにアクセスできません。接続状況またはシステム設定をご確認ください。';
 
   @override
   String get uiErrorAuthExpired => 'セッションの有効期限が切れました。再度ログインしてください。';
@@ -3165,6 +3190,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfileBirthdayHint => '生年月日を選択';
 
   @override
+  String get memberProfileSexLabel => '性別';
+
+  @override
+  String get memberProfileSexFemale => '女性';
+
+  @override
+  String get memberProfileSexMale => '男性';
+
+  @override
+  String get memberProfileTaxCountryLabel => '納税国';
+
+  @override
+  String get memberProfileTaxCountryHint => '日本';
+
+  @override
   String get memberProfileUnderageTitle => '本サービスは18歳以上の方のみご利用いただけます。';
 
   @override
@@ -3557,6 +3597,28 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get identityAuthSensitiveBlocked => 'この重要な操作を続行できません。';
+
+  @override
+  String get identityAuthCameraPermissionRequired => '顔認証を行うにはカメラ権限を許可してください。';
+
+  @override
+  String get identityAuthCameraPermissionSettingsRequired =>
+      '顔認証を続けるには、システム設定でカメラ権限を許可してください。';
+
+  @override
+  String get permissionSettingsTitle => '権限の設定が必要です';
+
+  @override
+  String get permissionSettingsCameraMessage =>
+      'カメラへのアクセスが無効になっています。システム設定でカメラ権限を許可してください。';
+
+  @override
+  String get permissionSettingsPhotosMessage =>
+      '写真ライブラリへのアクセスが無効になっています。システム設定で写真へのアクセスを許可してください。';
+
+  @override
+  String get permissionSettingsLocationMessage =>
+      '位置情報へのアクセスが無効になっています。システム設定で位置情報の利用を許可してください。';
 
   @override
   String get identityAuthBaiduLicenseMissing => 'Baidu顔認証ライセンスが設定されていません。';

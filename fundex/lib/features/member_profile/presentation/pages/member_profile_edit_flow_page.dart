@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:core_identity_auth/core_identity_auth.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/support/app_permission_dialogs.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/domain/entities/auth_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
@@ -27,7 +28,6 @@ import '../support/member_profile_edit_step.dart';
 import '../support/member_profile_edit_step_presenter.dart';
 import '../support/member_profile_option_item.dart';
 import '../support/profile_document_image_picker.dart';
-import '../support/member_profile_zip_candidate_picker.dart';
 
 enum _MemberProfileEditFlowMode { flow, section }
 
@@ -69,7 +69,9 @@ class _MemberProfileEditFlowPageState
   late final TextEditingController _familyNameRomanController;
   late final TextEditingController _givenNameRomanController;
   late final TextEditingController _birthdayController;
+  late final TextEditingController _taxCountryController;
   late final TextEditingController _postalCodeController;
+  late final TextEditingController _prefectureController;
   late final TextEditingController _cityAddressController;
   late final TextEditingController _bankNameController;
   late final TextEditingController _branchNameController;
@@ -79,7 +81,7 @@ class _MemberProfileEditFlowPageState
 
   MemberProfileEditStep _currentStep = MemberProfileEditStep.basicInfo;
   DateTime? _birthday;
-  String? _prefecture;
+  int? _sex;
   String? _occupation;
   String? _annualIncome;
   String? _financialAssets;
@@ -127,7 +129,9 @@ class _MemberProfileEditFlowPageState
     _familyNameRomanController = TextEditingController();
     _givenNameRomanController = TextEditingController();
     _birthdayController = TextEditingController();
+    _taxCountryController = TextEditingController();
     _postalCodeController = TextEditingController();
+    _prefectureController = TextEditingController();
     _cityAddressController = TextEditingController();
     _bankNameController = TextEditingController();
     _branchNameController = TextEditingController();
@@ -149,7 +153,9 @@ class _MemberProfileEditFlowPageState
     _familyNameRomanController.dispose();
     _givenNameRomanController.dispose();
     _birthdayController.dispose();
+    _taxCountryController.dispose();
     _postalCodeController.dispose();
+    _prefectureController.dispose();
     _cityAddressController.dispose();
     _bankNameController.dispose();
     _branchNameController.dispose();
@@ -180,7 +186,9 @@ class _MemberProfileEditFlowPageState
         _familyNameRomanController,
         _givenNameRomanController,
         _birthdayController,
+        _taxCountryController,
         _postalCodeController,
+        _prefectureController,
         _cityAddressController,
         _bankNameController,
         _branchNameController,
@@ -266,6 +274,10 @@ class _MemberProfileEditFlowPageState
       final MemberProfileDetails? savedProfile = shouldImportDraft
           ? onboardingDraft
           : officialProfile;
+      final (String savedPrefectureFromAddress, String savedCityFromAddress) =
+          _splitAddressFields(savedProfile?.address ?? '');
+      final (String authPrefectureFromAddress, String authCityFromAddress) =
+          _splitAddressFields(authUser?.address ?? '');
 
       final (String legacyFamilyName, String legacyGivenName) =
           _splitJapaneseName(savedProfile?.nameKanji ?? '');
@@ -278,6 +290,7 @@ class _MemberProfileEditFlowPageState
       if (!mounted) {
         return;
       }
+      final l10n = context.l10n;
 
       setState(() {
         _familyNameController.text = _firstNonEmpty(<String>[
@@ -318,6 +331,8 @@ class _MemberProfileEditFlowPageState
           authUser?.zipCode ?? '',
         ]);
         _cityAddressController.text = _firstNonEmpty(<String>[
+          savedCityFromAddress,
+          authCityFromAddress,
           savedProfile?.cityAddress ?? '',
           savedProfile?.address ?? '',
           authUser?.address ?? '',
@@ -328,14 +343,16 @@ class _MemberProfileEditFlowPageState
         _birthdayController.text = _birthday == null
             ? ''
             : _formatDate(_birthday!);
-        _prefecture = (savedProfile?.prefectureCode.trim().isNotEmpty ?? false)
-            ? savedProfile!.prefectureCode.trim()
-            : _resolvePrefecture(
-                _firstNonEmpty(<String>[
-                  savedProfile?.address ?? '',
-                  authUser?.address ?? '',
-                ]),
-              );
+        _sex = _normalizeSex(savedProfile?.sex ?? authUser?.sex);
+        _taxCountryController.text = _firstNonEmpty(<String>[
+          savedProfile?.taxcountry ?? '',
+          authUser?.taxcountry ?? '',
+        ]);
+        _prefectureController.text = _firstNonEmpty(<String>[
+          savedPrefectureFromAddress,
+          authPrefectureFromAddress,
+          _prefectureInputValue(l10n, savedProfile?.prefectureCode ?? ''),
+        ]);
         _occupation = _emptyToNull(savedProfile?.occupationCode);
         _annualIncome = _emptyToNull(savedProfile?.annualIncomeCode);
         _financialAssets = _emptyToNull(savedProfile?.financialAssetsCode);
@@ -470,9 +487,13 @@ class _MemberProfileEditFlowPageState
     if (source == null) {
       return;
     }
-    final String? path = await ref
+    final result = await ref
         .read(profileDocumentImagePickerProvider)
         .pick(source);
+    if (!mounted) {
+      return;
+    }
+    final String? path = await _resolvePickedImagePath(result, source);
     if (!mounted || path == null || path.trim().isEmpty) {
       return;
     }
@@ -549,6 +570,40 @@ class _MemberProfileEditFlowPageState
     }
   }
 
+  Future<String?> _resolvePickedImagePath(
+    ProfileDocumentImagePickResult result,
+    ProfileDocumentImageSource source,
+  ) async {
+    switch (result.status) {
+      case ProfileDocumentImagePickStatus.success:
+        return result.path!.trim();
+      case ProfileDocumentImagePickStatus.canceled:
+        return null;
+      case ProfileDocumentImagePickStatus.permissionDenied:
+        AppNotice.show(
+          context,
+          message: source == ProfileDocumentImageSource.camera
+              ? context.l10n.profileDocumentCameraPermissionRequired
+              : context.l10n.profileDocumentPhotoLibraryPermissionRequired,
+        );
+        return null;
+      case ProfileDocumentImagePickStatus.permissionSettingsRequired:
+        await showAppPermissionSettingsDialog(
+          context,
+          permission: source == ProfileDocumentImageSource.camera
+              ? AppPermissionKind.camera
+              : AppPermissionKind.photos,
+        );
+        return null;
+      case ProfileDocumentImagePickStatus.failed:
+        AppNotice.show(
+          context,
+          message: context.l10n.profileDocumentPickFailed,
+        );
+        return null;
+    }
+  }
+
   Future<void> _searchAddressByPostalCode() async {
     if (_isAddressSearching ||
         _isSubmitting ||
@@ -581,20 +636,11 @@ class _MemberProfileEditFlowPageState
         return;
       }
 
-      final MemberProfileRegion? selected = rows.length == 1
-          ? rows.first
-          : await MemberProfileZipCandidatePicker.show(
-              context,
-              candidates: rows,
-              title: l10n.memberProfileAddressSearchSelectTitle,
-              cancelLabel: l10n.commonClose,
-            );
-
-      if (!mounted || selected == null) {
+      if (!mounted) {
         return;
       }
 
-      _applyResolvedAddress(selected.displayName);
+      _applyResolvedAddressRows(rows);
       await _persistOnboardingDraft(showNotice: true);
     } catch (error) {
       if (!mounted) {
@@ -613,23 +659,34 @@ class _MemberProfileEditFlowPageState
     }
   }
 
-  void _applyResolvedAddress(String rawAddress) {
-    final normalizedAddress = rawAddress.trim();
-    if (normalizedAddress.isEmpty) {
+  void _applyResolvedAddressRows(List<MemberProfileRegion> rows) {
+    final String resolvedPrefecture = rows
+        .where((MemberProfileRegion row) => row.regionType == 0)
+        .map((MemberProfileRegion row) => row.displayName)
+        .firstWhere((String value) => value.trim().isNotEmpty, orElse: () => '')
+        .trim();
+
+    final String resolvedCityAddress = rows
+        .where(
+          (MemberProfileRegion row) =>
+              row.regionType == 1 || row.regionType == 2,
+        )
+        .map((MemberProfileRegion row) => row.displayName.trim())
+        .where((String value) => value.isNotEmpty)
+        .join(' ')
+        .trim();
+
+    if (resolvedPrefecture.isEmpty && resolvedCityAddress.isEmpty) {
       return;
     }
 
-    final resolvedPrefecture = _resolvePrefecture(normalizedAddress);
-    final normalizedCityAddress = _cityAddressWithoutPrefecture(
-      normalizedAddress,
-      resolvedPrefecture,
-    );
-
     setState(() {
-      if (resolvedPrefecture != null) {
-        _prefecture = resolvedPrefecture;
+      if (resolvedPrefecture.isNotEmpty) {
+        _prefectureController.text = resolvedPrefecture;
       }
-      _cityAddressController.text = normalizedCityAddress;
+      if (resolvedCityAddress.isNotEmpty) {
+        _cityAddressController.text = resolvedCityAddress;
+      }
     });
   }
 
@@ -895,7 +952,14 @@ class _MemberProfileEditFlowPageState
         setState(() {
           _realPersonAuthStatusMessage = message;
         });
-        AppNotice.show(context, message: message);
+        if (isIdentityAuthPermissionSettingsRequired(collected.errorMessage)) {
+          await showAppPermissionSettingsDialog(
+            context,
+            permission: AppPermissionKind.camera,
+          );
+        } else {
+          AppNotice.show(context, message: message);
+        }
         return false;
       }
 
@@ -982,11 +1046,13 @@ class _MemberProfileEditFlowPageState
       _isFilled(_givenNameKanaController.text) &&
       _isFilled(_familyNameRomanController.text) &&
       _isFilled(_givenNameRomanController.text) &&
+      _sex != null &&
+      _isFilled(_taxCountryController.text) &&
       _isFilled(_birthdayController.text);
 
   bool get _isAddressInfoStepReady =>
       _isFilled(_postalCodeController.text) &&
-      _isFilled(_prefecture) &&
+      _isFilled(_prefectureController.text) &&
       _isFilled(_cityAddressController.text);
 
   bool get _isSuitabilityStepReady =>
@@ -1108,10 +1174,10 @@ class _MemberProfileEditFlowPageState
       givenNameKana,
     ]);
     final String cityAddress = _cityAddressController.text.trim();
+    final String prefecture = _prefectureController.text.trim();
     final String composedAddress = _composeAddress(
-      prefectureCode: _prefecture,
+      prefecture: prefecture,
       cityAddress: cityAddress,
-      l10n: context.l10n,
     );
     return MemberProfileDetails(
       familyName: familyName,
@@ -1124,8 +1190,10 @@ class _MemberProfileEditFlowPageState
       katakana: normalizedKatakana,
       address: composedAddress,
       birthday: _emptyToNull(_birthdayController.text),
+      sex: _sex,
+      taxcountry: _taxCountryController.text.trim(),
       zipCode: _postalCodeController.text.trim(),
-      prefectureCode: _prefecture ?? '',
+      prefectureCode: prefecture,
       cityAddress: cityAddress,
       phoneIntlCode: _phoneIntlCode,
       phone: _phone,
@@ -1175,6 +1243,20 @@ class _MemberProfileEditFlowPageState
         : l10n.memberProfileFundSourceWarningStandard;
   }
 
+  List<DropdownMenuItem<int>> _sexItems(BuildContext context) {
+    final l10n = context.l10n;
+    return <DropdownMenuItem<int>>[
+      DropdownMenuItem<int>(
+        value: 0,
+        child: Text(l10n.memberProfileSexFemale),
+      ),
+      DropdownMenuItem<int>(
+        value: 1,
+        child: Text(l10n.memberProfileSexMale),
+      ),
+    ];
+  }
+
   List<MemberProfileOptionItem> _experienceOptions(BuildContext context) {
     final l10n = context.l10n;
     return <MemberProfileOptionItem>[
@@ -1205,32 +1287,6 @@ class _MemberProfileEditFlowPageState
       MemberProfileOptionItem(
         value: 'none',
         label: l10n.memberProfileExperienceNone,
-      ),
-    ];
-  }
-
-  List<DropdownMenuItem<String>> _prefectureItems(BuildContext context) {
-    final l10n = context.l10n;
-    return <DropdownMenuItem<String>>[
-      DropdownMenuItem<String>(
-        value: 'tokyo',
-        child: Text(l10n.prefectureTokyo),
-      ),
-      DropdownMenuItem<String>(
-        value: 'osaka',
-        child: Text(l10n.prefectureOsaka),
-      ),
-      DropdownMenuItem<String>(
-        value: 'kanagawa',
-        child: Text(l10n.prefectureKanagawa),
-      ),
-      DropdownMenuItem<String>(
-        value: 'aichi',
-        child: Text(l10n.prefectureAichi),
-      ),
-      DropdownMenuItem<String>(
-        value: 'fukuoka',
-        child: Text(l10n.prefectureFukuoka),
       ),
     ];
   }
@@ -1481,6 +1537,9 @@ class _MemberProfileEditFlowPageState
           familyNameRomanController: _familyNameRomanController,
           givenNameRomanController: _givenNameRomanController,
           birthdayController: _birthdayController,
+          sexValue: _sex,
+          sexItems: _sexItems(context),
+          taxCountryController: _taxCountryController,
           showAgeWarning: _showAgeWarning,
           primaryButtonEnabled: isActionEnabled,
           titleOverride: _isSingleSectionMode ? _stepTitle : null,
@@ -1489,6 +1548,11 @@ class _MemberProfileEditFlowPageState
               ? _primaryActionLabel
               : null,
           onBirthdayTap: _pickBirthday,
+          onSexChanged: (int? value) {
+            _applyUserChange(() {
+              _sex = _normalizeSex(value);
+            });
+          },
           onNext: _isSingleSectionMode ? _saveCurrentSection : _goNextStep,
           onSkip: _isSingleSectionMode
               ? null
@@ -1500,20 +1564,14 @@ class _MemberProfileEditFlowPageState
         final bool isActionEnabled = _canProceedFromCurrentStep;
         return MemberProfileAddressInfoStepPage(
           postalCodeController: _postalCodeController,
-          prefecture: _prefecture,
+          prefectureController: _prefectureController,
           cityAddressController: _cityAddressController,
-          prefectureItems: _prefectureItems(context),
           primaryButtonEnabled: isActionEnabled,
           titleOverride: _isSingleSectionMode ? _stepTitle : null,
           descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
           primaryButtonLabelOverride: _isSingleSectionMode
               ? _primaryActionLabel
               : null,
-          onPrefectureChanged: (String? value) {
-            _applyUserChange(() {
-              _prefecture = value;
-            });
-          },
           onAddressSearch: _isAddressSearching
               ? null
               : _searchAddressByPostalCode,
@@ -1745,6 +1803,10 @@ bool _isRemoteImageUrl(String? value) {
   return normalized.startsWith('http://') || normalized.startsWith('https://');
 }
 
+int? _normalizeSex(int? value) {
+  return value == 0 || value == 1 ? value : null;
+}
+
 bool _isSelfieUploaded(String? value) {
   final normalized = value?.trim() ?? '';
   if (normalized.isEmpty) {
@@ -1792,22 +1854,46 @@ String _formatDate(DateTime value) {
 }
 
 String? _resolvePrefecture(String address) {
-  if (address.startsWith('東京都')) {
-    return 'tokyo';
+  final normalized = address.trim();
+  if (normalized.isEmpty) {
+    return null;
   }
-  if (address.startsWith('大阪府')) {
-    return 'osaka';
+  final match = RegExp(r'^(東京都|北海道|(?:京都|大阪)府|.+?県)').firstMatch(normalized);
+  return match?.group(0);
+}
+
+String _prefectureInputValue(AppLocalizations l10n, String raw) {
+  return switch (raw.trim()) {
+    'tokyo' => l10n.prefectureTokyo,
+    'osaka' => l10n.prefectureOsaka,
+    'kanagawa' => l10n.prefectureKanagawa,
+    'aichi' => l10n.prefectureAichi,
+    'fukuoka' => l10n.prefectureFukuoka,
+    _ => raw.trim(),
+  };
+}
+
+(String, String) _splitAddressFields(String rawAddress) {
+  final normalized = rawAddress.trim();
+  if (normalized.isEmpty) {
+    return ('', '');
   }
-  if (address.startsWith('神奈川県')) {
-    return 'kanagawa';
+
+  final parts = normalized
+      .split(RegExp(r'\s+'))
+      .where((String part) => part.trim().isNotEmpty)
+      .toList(growable: false);
+  if (parts.length >= 2) {
+    return (parts.first.trim(), parts.skip(1).join(' ').trim());
   }
-  if (address.startsWith('愛知県')) {
-    return 'aichi';
+
+  final prefecture = _resolvePrefecture(normalized)?.trim() ?? '';
+  if (prefecture.isEmpty) {
+    return ('', normalized);
   }
-  if (address.startsWith('福岡県')) {
-    return 'fukuoka';
-  }
-  return null;
+
+  final cityAddress = normalized.substring(prefecture.length).trim();
+  return (prefecture, cityAddress);
 }
 
 String _readBankString(Map<String, dynamic>? bank, String key) {
@@ -1859,44 +1945,12 @@ String? _normalizeAccountType(String? raw) {
 }
 
 String _composeAddress({
-  required String? prefectureCode,
+  required String prefecture,
   required String cityAddress,
-  required AppLocalizations l10n,
 }) {
-  final String prefecture = switch (prefectureCode) {
-    'tokyo' => l10n.prefectureTokyo,
-    'osaka' => l10n.prefectureOsaka,
-    'kanagawa' => l10n.prefectureKanagawa,
-    'aichi' => l10n.prefectureAichi,
-    'fukuoka' => l10n.prefectureFukuoka,
-    _ => '',
-  };
   return _joinNonEmpty(<String?>[prefecture, cityAddress]);
 }
 
 String _normalizePostalCode(String value) {
   return value.replaceAll(RegExp(r'[^0-9]'), '');
-}
-
-String _cityAddressWithoutPrefecture(String address, String? prefectureCode) {
-  final normalizedAddress = address.trim();
-  if (normalizedAddress.isEmpty) {
-    return '';
-  }
-
-  final prefecture = switch (prefectureCode) {
-    'tokyo' => '東京都',
-    'osaka' => '大阪府',
-    'kanagawa' => '神奈川県',
-    'aichi' => '愛知県',
-    'fukuoka' => '福岡県',
-    _ => '',
-  };
-  if (prefecture.isNotEmpty && normalizedAddress.startsWith(prefecture)) {
-    final cityOnly = normalizedAddress.substring(prefecture.length).trim();
-    if (cityOnly.isNotEmpty) {
-      return cityOnly;
-    }
-  }
-  return normalizedAddress;
 }

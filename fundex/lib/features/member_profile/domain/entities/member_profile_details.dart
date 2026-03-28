@@ -19,6 +19,8 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
     @Default('') String katakana,
     @Default('') String address,
     String? birthday,
+    int? sex,
+    @Default('') String taxcountry,
     @Default('') String zipCode,
     @Default('') String prefectureCode,
     @Default('') String cityAddress,
@@ -90,6 +92,8 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       katakana.trim().isNotEmpty ||
       address.trim().isNotEmpty ||
       (birthday?.trim().isNotEmpty ?? false) ||
+      sex != null ||
+      taxcountry.trim().isNotEmpty ||
       zipCode.trim().isNotEmpty ||
       prefectureCode.trim().isNotEmpty ||
       cityAddress.trim().isNotEmpty ||
@@ -164,6 +168,8 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       (givenNameKana.trim().isNotEmpty || katakana.trim().isNotEmpty) &&
       familyNameEn.trim().isNotEmpty &&
       givenNameEn.trim().isNotEmpty &&
+      sex != null &&
+      taxcountry.trim().isNotEmpty &&
       (birthday?.trim().isNotEmpty ?? false);
 
   bool get _isAddressInfoStepComplete =>

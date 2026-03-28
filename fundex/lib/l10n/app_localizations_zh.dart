@@ -39,6 +39,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonClose => '关闭';
 
   @override
+  String get commonCancel => '取消';
+
+  @override
+  String get commonOpenSettings => '前往设置';
+
+  @override
   String get pdfViewerPageTitle => 'PDF';
 
   @override
@@ -94,6 +100,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get networkOfflineBannerMessage => '网络恢复后将自动刷新最新数据。';
+
+  @override
+  String get networkAccessDeniedBannerTitle => '无法访问网络';
+
+  @override
+  String get networkAccessDeniedBannerMessage =>
+      '请检查网络连接，或在 iPhone 系统设置中允许 StellaVia 使用网络。';
 
   @override
   String get loginForgotPassword => '找回密码';
@@ -344,6 +357,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get profileDocumentPickFailed => '证件照片选择失败，请重试。';
+
+  @override
+  String get profileDocumentCameraPermissionRequired => '拍摄证件照片前，请先允许相机权限。';
+
+  @override
+  String get profileDocumentPhotoLibraryPermissionRequired =>
+      '选择证件照片前，请先允许相册权限。';
 
   @override
   String get profileIncompleteBannerTitle => '资料未完成';
@@ -1373,6 +1393,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get uiErrorNetworkUnavailable => '网络连接异常，请稍后重试';
+
+  @override
+  String get uiErrorNetworkAccessDenied => '无法访问网络，请检查网络连接或系统设置。';
 
   @override
   String get uiErrorAuthExpired => '登录状态已失效，请重新登录';
@@ -3130,6 +3153,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileBirthdayHint => '请选择出生日期';
 
   @override
+  String get memberProfileSexLabel => '性别';
+
+  @override
+  String get memberProfileSexFemale => '女';
+
+  @override
+  String get memberProfileSexMale => '男';
+
+  @override
+  String get memberProfileTaxCountryLabel => '纳税国';
+
+  @override
+  String get memberProfileTaxCountryHint => '日本';
+
+  @override
   String get memberProfileUnderageTitle => '本服务仅限 18 岁以上用户使用。';
 
   @override
@@ -3521,6 +3559,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get identityAuthSensitiveBlocked => '当前无法继续该敏感操作。';
 
   @override
+  String get identityAuthCameraPermissionRequired => '请先允许相机权限后再进行人脸认证。';
+
+  @override
+  String get identityAuthCameraPermissionSettingsRequired =>
+      '继续进行人脸认证前，请前往系统设置开启相机权限。';
+
+  @override
+  String get permissionSettingsTitle => '需要权限设置';
+
+  @override
+  String get permissionSettingsCameraMessage => '相机权限已被关闭，请前往系统设置开启相机权限。';
+
+  @override
+  String get permissionSettingsPhotosMessage => '照片权限已被关闭，请前往系统设置开启照片访问权限。';
+
+  @override
+  String get permissionSettingsLocationMessage => '定位权限已被关闭，请前往系统设置开启定位权限。';
+
+  @override
   String get identityAuthBaiduLicenseMissing => '未配置百度人脸SDK许可证。';
 }
 
@@ -3557,6 +3614,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get commonClose => '关闭';
+
+  @override
+  String get commonCancel => '取消';
+
+  @override
+  String get commonOpenSettings => '前往設定';
 
   @override
   String get pdfViewerPageTitle => 'PDF';
@@ -3614,6 +3677,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get networkOfflineBannerMessage => '網路恢復後將自動更新最新資料。';
+
+  @override
+  String get networkAccessDeniedBannerTitle => '無法存取網路';
+
+  @override
+  String get networkAccessDeniedBannerMessage =>
+      '請檢查網路連線，或在 iPhone 系統設定中允許 StellaVia 使用網路。';
 
   @override
   String get loginForgotPassword => '忘記密碼？';
@@ -3864,6 +3934,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get profileDocumentPickFailed => '证件照片选择失败，请重试。';
+
+  @override
+  String get profileDocumentCameraPermissionRequired => '拍攝證件照片前，請先允許相機權限。';
+
+  @override
+  String get profileDocumentPhotoLibraryPermissionRequired =>
+      '選擇證件照片前，請先允許相簿權限。';
 
   @override
   String get profileIncompleteBannerTitle => '资料未完成';
@@ -4895,6 +4972,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get uiErrorNetworkUnavailable => '网络连接异常，请稍后重试';
+
+  @override
+  String get uiErrorNetworkAccessDenied => '無法存取網路，請檢查網路連線或系統設定。';
 
   @override
   String get uiErrorAuthExpired => '登录状态已失效，请重新登录';
@@ -6652,6 +6732,21 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileBirthdayHint => '请选择出生日期';
 
   @override
+  String get memberProfileSexLabel => '性別';
+
+  @override
+  String get memberProfileSexFemale => '女';
+
+  @override
+  String get memberProfileSexMale => '男';
+
+  @override
+  String get memberProfileTaxCountryLabel => '納稅國';
+
+  @override
+  String get memberProfileTaxCountryHint => '日本';
+
+  @override
   String get memberProfileUnderageTitle => '本服務僅限18歲以上人士使用。';
 
   @override
@@ -7041,6 +7136,25 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get identityAuthSensitiveBlocked => '目前無法繼續此敏感操作。';
+
+  @override
+  String get identityAuthCameraPermissionRequired => '請先允許相機權限後再進行人臉認證。';
+
+  @override
+  String get identityAuthCameraPermissionSettingsRequired =>
+      '繼續進行人臉認證前，請前往系統設定開啟相機權限。';
+
+  @override
+  String get permissionSettingsTitle => '需要權限設定';
+
+  @override
+  String get permissionSettingsCameraMessage => '相機權限已被關閉，請前往系統設定開啟相機權限。';
+
+  @override
+  String get permissionSettingsPhotosMessage => '照片權限已被關閉，請前往系統設定開啟照片存取權限。';
+
+  @override
+  String get permissionSettingsLocationMessage => '定位權限已被關閉，請前往系統設定開啟定位權限。';
 
   @override
   String get identityAuthBaiduLicenseMissing => '尚未配置百度人臉SDK授權。';

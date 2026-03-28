@@ -1,7 +1,9 @@
 import 'package:core_identity_auth/core_identity_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bdface_collect/flutter_bdface_collect.dart'
     as bd_collect;
 import 'package:flutter_bdface_collect/model.dart' as bd_model;
+import 'package:permission_handler/permission_handler.dart';
 
 class BaiduFaceLivenessCollector implements LivenessCollector {
   BaiduFaceLivenessCollector({
@@ -18,15 +20,33 @@ class BaiduFaceLivenessCollector implements LivenessCollector {
 
   @override
   Future<LivenessCollectResult> collect() async {
-    if (_licenseId.isEmpty) {
-      return const LivenessCollectResult(
-        photoBase64: '',
-        errorMessage: 'baidu_face_license_missing',
-      );
-    }
-
     final plugin = bd_collect.FlutterBdfaceCollect.instance;
     try {
+      if (_licenseId.isEmpty) {
+        return const LivenessCollectResult(
+          photoBase64: '',
+          errorMessage: 'baidu_face_license_missing',
+        );
+      }
+
+      if (!kIsWeb) {
+        final cameraStatus = await Permission.camera.request();
+        if (!cameraStatus.isGranted) {
+          final requiresSettings =
+              cameraStatus.isPermanentlyDenied ||
+              cameraStatus.isRestricted ||
+              ((defaultTargetPlatform == TargetPlatform.iOS ||
+                      defaultTargetPlatform == TargetPlatform.macOS) &&
+                  cameraStatus.isDenied);
+          return LivenessCollectResult(
+            photoBase64: '',
+            errorMessage: requiresSettings
+                ? 'camera_permission_settings_required'
+                : 'camera_permission_denied',
+          );
+        }
+      }
+
       final initError = await plugin.init(_licenseId);
       if (initError != null && initError.trim().isNotEmpty) {
         return LivenessCollectResult(

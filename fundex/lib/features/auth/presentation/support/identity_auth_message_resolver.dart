@@ -43,17 +43,40 @@ String _resolveLivenessErrorMessage(AppLocalizations l10n, String message) {
   }
 
   final normalizedLower = normalized.toLowerCase();
-  if (normalizedLower.contains('license') ||
-      normalizedLower.contains('licence')) {
-    return l10n.identityAuthBaiduLicenseMissing;
-  }
-
   switch (normalized) {
     case 'baidu_face_license_missing':
       return l10n.identityAuthBaiduLicenseMissing;
+    case 'camera_permission_denied':
+      return l10n.identityAuthCameraPermissionRequired;
+    case 'camera_permission_settings_required':
+      return l10n.identityAuthCameraPermissionSettingsRequired;
     case 'baidu_face_collect_empty':
       return l10n.identityAuthCollectFailed;
     default:
+      if (_isMissingLicenseConfigurationMessage(normalizedLower, normalized)) {
+        return l10n.identityAuthBaiduLicenseMissing;
+      }
       return normalized;
   }
+}
+
+bool isIdentityAuthPermissionSettingsRequired(String? message) {
+  return (message?.trim() ?? '') == 'camera_permission_settings_required';
+}
+
+bool _isMissingLicenseConfigurationMessage(String normalizedLower, String raw) {
+  if (normalizedLower.contains('licenseid is empty')) {
+    return true;
+  }
+  if (normalizedLower.contains('failed to read the license file')) {
+    return true;
+  }
+  if (normalizedLower.contains('license file') &&
+      normalizedLower.contains('read')) {
+    return true;
+  }
+  if (raw.contains('license文件读取失败')) {
+    return true;
+  }
+  return false;
 }

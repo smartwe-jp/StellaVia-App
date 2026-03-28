@@ -40,6 +40,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonClose => 'Close';
 
   @override
+  String get commonCancel => 'Cancel';
+
+  @override
+  String get commonOpenSettings => 'Open Settings';
+
+  @override
   String get pdfViewerPageTitle => 'PDF';
 
   @override
@@ -96,6 +102,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get networkOfflineBannerMessage =>
       'We\'ll refresh the latest data automatically when the connection returns.';
+
+  @override
+  String get networkAccessDeniedBannerTitle => 'Unable to access the network';
+
+  @override
+  String get networkAccessDeniedBannerMessage =>
+      'Check your connection, or allow StellaVia network access in iPhone Settings.';
 
   @override
   String get loginForgotPassword => 'Forgot password';
@@ -369,6 +382,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get profileDocumentPickFailed =>
       'Failed to select document photo. Please try again.';
+
+  @override
+  String get profileDocumentCameraPermissionRequired =>
+      'Allow camera access to take a document photo.';
+
+  @override
+  String get profileDocumentPhotoLibraryPermissionRequired =>
+      'Allow photo library access to select a document photo.';
 
   @override
   String get profileIncompleteBannerTitle => 'Profile details incomplete';
@@ -1464,6 +1485,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get uiErrorNetworkUnavailable =>
       'Network connection error. Please try again later.';
+
+  @override
+  String get uiErrorNetworkAccessDenied =>
+      'Unable to access the network. Check your connection or system settings.';
 
   @override
   String get uiErrorAuthExpired => 'Session expired. Please sign in again.';
@@ -3336,6 +3361,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memberProfileBirthdayHint => 'Select your date of birth';
 
   @override
+  String get memberProfileSexLabel => 'Sex';
+
+  @override
+  String get memberProfileSexFemale => 'Female';
+
+  @override
+  String get memberProfileSexMale => 'Male';
+
+  @override
+  String get memberProfileTaxCountryLabel => 'Tax country';
+
+  @override
+  String get memberProfileTaxCountryHint => 'Japan';
+
+  @override
   String get memberProfileUnderageTitle =>
       'This service is available only to users aged 18 or older.';
 
@@ -3763,6 +3803,29 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get identityAuthSensitiveBlocked =>
       'Unable to continue this sensitive action.';
+
+  @override
+  String get identityAuthCameraPermissionRequired =>
+      'Allow camera access to continue face verification.';
+
+  @override
+  String get identityAuthCameraPermissionSettingsRequired =>
+      'Open system settings and allow camera access to continue face verification.';
+
+  @override
+  String get permissionSettingsTitle => 'Permission required';
+
+  @override
+  String get permissionSettingsCameraMessage =>
+      'Camera access is disabled. Open system settings and allow camera access.';
+
+  @override
+  String get permissionSettingsPhotosMessage =>
+      'Photo library access is disabled. Open system settings and allow photo access.';
+
+  @override
+  String get permissionSettingsLocationMessage =>
+      'Location access is disabled. Open system settings and allow location access.';
 
   @override
   String get identityAuthBaiduLicenseMissing =>

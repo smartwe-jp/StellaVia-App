@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:flutter/services.dart';
 
 import 'constants.dart';
@@ -39,16 +40,29 @@ class _ServiceApi {
     //   }
     // }
     final String? err = await _methodChannel.invokeMethod<String>(
-        MethodConstants.Init, licenseId);
+      MethodConstants.Init,
+      <String, dynamic>{
+        'licenseId': licenseId,
+        'localeTag': _currentLocaleTag(),
+      },
+    );
     return err;
   }
 
   /// 采集
   Future<CollectResult> collect(FaceConfig config) async {
+    final bool shouldDisableVoicePrompt = _shouldDisableVoicePrompt();
+    final Map<String, dynamic> arguments = <String, dynamic>{
+      ...config.toMap(),
+      'sound': shouldDisableVoicePrompt ? false : config.sound,
+      'localeTag': _currentLocaleTag(),
+    };
     final Map<String, dynamic>? result = await _methodChannel.invokeMapMethod(
-        MethodConstants.Collect, config.toMap());
+      MethodConstants.Collect,
+      arguments,
+    );
     if (result == null) {
-      return CollectResult(error: "取消识别");
+      return CollectResult(error: _localizedCancelMessage());
     }
     return CollectResult.fromMap(result);
   }
@@ -56,5 +70,36 @@ class _ServiceApi {
   /// 释放
   Future<void> unInit() async {
     await _methodChannel.invokeMethod(MethodConstants.UnInit);
+  }
+
+  String _localizedCancelMessage() {
+    final locale = PlatformDispatcher.instance.locale;
+    final languageCode = locale.languageCode.toLowerCase();
+    final scriptCode = locale.scriptCode?.toLowerCase();
+    final countryCode = locale.countryCode?.toLowerCase();
+
+    if (languageCode == 'ja') {
+      return '認証をキャンセルしました';
+    }
+    if (languageCode == 'en') {
+      return 'Recognition cancelled';
+    }
+    if (languageCode == 'zh' &&
+        (scriptCode == 'hant' ||
+            countryCode == 'tw' ||
+            countryCode == 'hk' ||
+            countryCode == 'mo')) {
+      return '已取消辨識';
+    }
+    return '已取消识别';
+  }
+
+  String _currentLocaleTag() {
+    return PlatformDispatcher.instance.locale.toLanguageTag();
+  }
+
+  bool _shouldDisableVoicePrompt() {
+    final locale = PlatformDispatcher.instance.locale;
+    return locale.languageCode.toLowerCase() == 'ja';
   }
 }

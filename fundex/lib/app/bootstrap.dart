@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:core_storage/core_storage.dart';
 import 'package:core_tool_kit/core_tool_kit.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,6 +15,7 @@ import 'firebase/app_firebase_runtime.dart';
 import 'observability/app_observability_providers.dart';
 import 'push/app_push_runtime_factory.dart';
 import 'push/app_push_runtime_provider.dart';
+import 'push/app_push_runtime.dart';
 import 'push/app_push_settings.dart';
 
 bool? _parseOptionalBool(String value) {
@@ -27,6 +30,41 @@ bool? _parseOptionalBool(String value) {
     return false;
   }
   return null;
+}
+
+const Duration _startupRuntimeInitTimeout = Duration(seconds: 8);
+
+Future<void> _runStartupRuntimeInitializers({
+  required AppLogger logger,
+  required AppPushRuntime pushRuntime,
+}) async {
+  Future<void> runGuarded(String label, Future<void> Function() action) async {
+    try {
+      await action().timeout(_startupRuntimeInitTimeout);
+    } on TimeoutException {
+      logger.warning(
+        '$label timed out during startup. Continue without blocking UI.',
+        context: <String, Object?>{
+          'timeoutMs': _startupRuntimeInitTimeout.inMilliseconds,
+        },
+      );
+    } catch (error, stackTrace) {
+      logger.error(
+        '$label failed during startup.',
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+  }
+
+  await runGuarded(
+    'Firebase runtime initialization',
+    () => AppFirebaseRuntime.initialize(logger: logger, enablePush: false),
+  );
+  await runGuarded(
+    'Push runtime initialization',
+    () => pushRuntime.initialize(logger: logger),
+  );
 }
 
 Future<void> bootstrap({
@@ -68,9 +106,6 @@ Future<void> bootstrap({
     context: <String, Object?>{'provider': pushSettings.provider.name},
   );
 
-  await AppFirebaseRuntime.initialize(logger: logger, enablePush: false);
-  await pushRuntime.initialize(logger: logger);
-
   runApp(
     ProviderScope(
       overrides: <Override>[
@@ -80,5 +115,9 @@ Future<void> bootstrap({
       ],
       child: const MemberTemplateApp(),
     ),
+  );
+
+  unawaited(
+    _runStartupRuntimeInitializers(logger: logger, pushRuntime: pushRuntime),
   );
 }
