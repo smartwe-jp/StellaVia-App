@@ -1,7 +1,11 @@
 package com.fluttercandies.flutter_bdface_collect;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 
@@ -19,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -34,6 +39,7 @@ public class FlutterBdfaceCollectPlugin implements FlutterPlugin, MethodCallHand
     public static final int COLLECT_OK_CODE = 10011949;
     private static final String CHANNEL_NAME = "com.fluttercandies.bdface_collect";
     private static final String LICENSE_FILE_NAME = "idl-license.face-android";
+    private static String preferredLocaleTag;
 
     private MethodChannel channel;
     private Activity activity;
@@ -119,24 +125,35 @@ public class FlutterBdfaceCollectPlugin implements FlutterPlugin, MethodCallHand
     }
 
     private void init(Object arguments, final Result result) {
+        String localeTag = "";
+        String licenseId = "";
+        if (arguments instanceof String) {
+            licenseId = ((String) arguments).trim();
+        } else if (arguments instanceof Map) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> argumentsMap = (Map<String, Object>) arguments;
+            licenseId = getString(argumentsMap, "licenseId");
+            localeTag = getString(argumentsMap, "localeTag");
+        }
+        setPreferredLocaleTag(localeTag);
         if (activity == null) {
-            result.success(formatInitError("NO_ACTIVITY", "activity is null"));
+            result.success(formatInitError("NO_ACTIVITY", localizedPluginMessage(null, PluginMessageKey.NO_ACTIVITY)));
             return;
         }
-        String licenseId = arguments instanceof String ? ((String) arguments).trim() : "";
         if (licenseId.isEmpty()) {
-            result.success(formatInitError("INVALID_ARGUMENT", "licenseId is empty"));
+            result.success(formatInitError("INVALID_ARGUMENT", localizedPluginMessage(activity, PluginMessageKey.LICENSE_ID_EMPTY)));
             return;
         }
 
         InitOption option = new InitOption();
         option.licenseKey = licenseId;
         option.licenseFileName = LICENSE_FILE_NAME;
-        FaceLiveManager.getInstance().init(activity.getApplicationContext(), option, new InitCallback() {
+        final Context appContext = activity.getApplicationContext();
+        FaceLiveManager.getInstance().init(appContext, option, new InitCallback() {
             @Override
             public void onSuccess(int resultCode, String resultMsg) {
                 if (activity == null) {
-                    result.success(formatInitError(resultCode, resultMsg));
+                    result.success(formatInitError(resultCode, localizeInitErrorMessage(appContext, resultCode, resultMsg)));
                     return;
                 }
                 activity.runOnUiThread(() -> result.success(null));
@@ -145,34 +162,37 @@ public class FlutterBdfaceCollectPlugin implements FlutterPlugin, MethodCallHand
             @Override
             public void onError(int resultCode, String resultMsg) {
                 if (activity == null) {
-                    result.success(formatInitError(resultCode, resultMsg));
+                    result.success(formatInitError(resultCode, localizeInitErrorMessage(appContext, resultCode, resultMsg)));
                     return;
                 }
-                activity.runOnUiThread(() -> result.success(formatInitError(resultCode, resultMsg)));
+                activity.runOnUiThread(() -> result.success(
+                        formatInitError(resultCode, localizeInitErrorMessage(activity, resultCode, resultMsg))
+                ));
             }
         });
     }
 
     private void collect(Object arguments, final Result result) {
         if (activity == null) {
-            result.success(errorResult("activity is null"));
+            result.success(errorResult(localizedPluginMessage(null, PluginMessageKey.NO_ACTIVITY)));
             return;
         }
         if (pendingResult != null) {
-            result.success(errorResult("collect already in progress"));
+            result.success(errorResult(localizedPluginMessage(activity, PluginMessageKey.COLLECT_IN_PROGRESS)));
             return;
         }
         if (!FaceSDKManager.getInstance().getInitFlag()) {
-            result.success(errorResult("SDK not initialized"));
+            result.success(errorResult(localizedPluginMessage(activity, PluginMessageKey.SDK_NOT_INITIALIZED)));
             return;
         }
         if (!(arguments instanceof Map)) {
-            result.success(errorResult("invalid collect arguments"));
+            result.success(errorResult(localizedPluginMessage(activity, PluginMessageKey.INVALID_COLLECT_ARGUMENTS)));
             return;
         }
 
         @SuppressWarnings("unchecked")
         Map<String, Object> argumentsMap = (Map<String, Object>) arguments;
+        setPreferredLocaleTag(getString(argumentsMap, "localeTag"));
         boolean useActionLiveness = setFaceConfig(argumentsMap);
 
         Intent intent = new Intent(
@@ -228,6 +248,8 @@ public class FlutterBdfaceCollectPlugin implements FlutterPlugin, MethodCallHand
         config.setIsShowTimeoutDialog(true);
         config.setIsOpenColorLive(false);
         config.setIsOpenDistanceLive(false);
+        config.setShowLanguageSwitch(false);
+        config.setLivenessLanguage(resolveSdkLanguageTag(getString(argumentsMap, "localeTag")));
         setSecTypeIfPossible(config, getInt(argumentsMap, "secType", 0));
 
         List<LivenessTypeEnum> livenessTypeEnums = mapLivenessTypes(getStringList(argumentsMap, "livenessTypes"));
@@ -290,6 +312,11 @@ public class FlutterBdfaceCollectPlugin implements FlutterPlugin, MethodCallHand
             }
         }
         return stringList;
+    }
+
+    private static String getString(Map<String, Object> argumentsMap, String key) {
+        Object value = argumentsMap.get(key);
+        return value instanceof String ? ((String) value).trim() : "";
     }
 
     private static List<LivenessTypeEnum> mapLivenessTypes(List<String> livenessTypes) {
@@ -373,5 +400,264 @@ public class FlutterBdfaceCollectPlugin implements FlutterPlugin, MethodCallHand
 
     private static String formatInitError(String resultCode, String resultMsg) {
         return "errCode: " + resultCode + ", errMsg: " + resultMsg;
+    }
+
+    private static String localizeInitErrorMessage(Context context, int resultCode, String resultMsg) {
+        final String normalized = resultMsg == null ? "" : resultMsg.trim().toUpperCase(Locale.ROOT);
+        if (normalized.contains("LICENSE_LOCAL_FILE_ERROR") || normalized.contains("LOCAL_FILE_ERROR")) {
+            return localizedString(
+                    context,
+                    "license文件读取失败",
+                    "Failed to read the license file",
+                    "讀取 license 檔案失敗",
+                    "license ファイルの読み込みに失敗しました"
+            );
+        }
+        if (normalized.contains("LICENSE_KEY_CHECK_ERROR") || normalized.contains("KEY_CHECK_ERROR")) {
+            return localizedString(
+                    context,
+                    "licenseId校验失败",
+                    "licenseId verification failed",
+                    "licenseId 驗證失敗",
+                    "licenseId の検証に失敗しました"
+            );
+        }
+        if (normalized.contains("LICENSE_FUNCTION_CHECK_ERROR") || normalized.contains("FUNCTION_CHECK_ERROR")) {
+            return localizedString(
+                    context,
+                    "当前license未开通采集能力",
+                    "The current license does not include collection capability",
+                    "目前 license 未開通採集能力",
+                    "現在の license では収集機能が有効になっていません"
+            );
+        }
+        if (normalized.contains("LICENSE_TIME_EXPIRED") || normalized.contains("TIME_EXPIRED")) {
+            return localizedString(
+                    context,
+                    "license已过期",
+                    "The license has expired",
+                    "license 已過期",
+                    "license の有効期限が切れています"
+            );
+        }
+        if (normalized.contains("DECRYPT_ERROR")) {
+            return localizedString(
+                    context,
+                    "license文件解密失败",
+                    "Failed to decrypt the license file",
+                    "license 檔案解密失敗",
+                    "license ファイルの復号に失敗しました"
+            );
+        }
+        if (normalized.contains("REMOTE_DATA_ERROR")) {
+            return localizedString(
+                    context,
+                    "远端license数据校验失败",
+                    "Failed to verify remote license data",
+                    "遠端 license 資料驗證失敗",
+                    "リモート license データの検証に失敗しました"
+            );
+        }
+        if (normalized.contains("SUCH APP NOT EXISTS") || normalized.contains("APP NOT EXISTS")) {
+            return localizedString(
+                    context,
+                    "当前应用包名或签名与license不匹配",
+                    "The app package name or signing certificate does not match the license",
+                    "目前應用的套件名稱或簽章與 license 不匹配",
+                    "現在のアプリのパッケージ名または署名証明書が license と一致しません"
+            );
+        }
+        return String.format(
+                localeForContext(context),
+                localizedString(
+                        context,
+                        "初始化失败(%1$d)",
+                        "Initialization failed (%1$d)",
+                        "初始化失敗（%1$d）",
+                        "初期化に失敗しました（%1$d）"
+                ),
+                resultCode
+        );
+    }
+
+    private enum PluginMessageKey {
+        NO_ACTIVITY,
+        LICENSE_ID_EMPTY,
+        COLLECT_IN_PROGRESS,
+        SDK_NOT_INITIALIZED,
+        INVALID_COLLECT_ARGUMENTS
+    }
+
+    private static String localizedPluginMessage(Context context, PluginMessageKey key) {
+        switch (key) {
+            case NO_ACTIVITY:
+                return localizedString(
+                        context,
+                        "当前页面不可用",
+                        "The current screen is unavailable",
+                        "目前頁面不可用",
+                        "現在の画面は利用できません"
+                );
+            case LICENSE_ID_EMPTY:
+                return localizedString(
+                        context,
+                        "licenseId不能为空",
+                        "licenseId cannot be empty",
+                        "licenseId 不可為空",
+                        "licenseId は必須です"
+                );
+            case COLLECT_IN_PROGRESS:
+                return localizedString(
+                        context,
+                        "正在采集中，请稍候",
+                        "Face collection is already in progress",
+                        "正在採集中，請稍候",
+                        "顔の収集中です。しばらくお待ちください"
+                );
+            case SDK_NOT_INITIALIZED:
+                return localizedString(
+                        context,
+                        "SDK未初始化",
+                        "SDK not initialized",
+                        "SDK 尚未初始化",
+                        "SDK が初期化されていません"
+                );
+            case INVALID_COLLECT_ARGUMENTS:
+                return localizedString(
+                        context,
+                        "采集参数无效",
+                        "Invalid collection arguments",
+                        "採集參數無效",
+                        "収集パラメータが無効です"
+                );
+            default:
+                return "";
+        }
+    }
+
+    private static String localizedString(
+            Context context,
+            String chinese,
+            String english,
+            String traditionalChinese,
+            String japanese
+    ) {
+        String localeCode = currentLocaleCode(context);
+        switch (localeCode) {
+            case "ja":
+                return japanese;
+            case "zh-Hant":
+                return traditionalChinese;
+            case "en":
+                return english;
+            default:
+                return chinese;
+        }
+    }
+
+    private static String currentLocaleCode(Context context) {
+        Locale locale = localeForContext(context);
+        String language = locale.getLanguage();
+        String script = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? locale.getScript() : "";
+        String country = locale.getCountry();
+        if ("ja".equals(language)) {
+            return "ja";
+        }
+        if ("en".equals(language)) {
+            return "en";
+        }
+        if ("zh".equals(language) && (
+                "Hant".equalsIgnoreCase(script) ||
+                "TW".equalsIgnoreCase(country) ||
+                "HK".equalsIgnoreCase(country) ||
+                "MO".equalsIgnoreCase(country))) {
+            return "zh-Hant";
+        }
+        return "zh-Hans";
+    }
+
+    private static Locale localeForContext(Context context) {
+        Locale preferredLocale = localeFromTag(preferredLocaleTag);
+        if (preferredLocale != null) {
+            return preferredLocale;
+        }
+        if (context == null) {
+            return Locale.getDefault();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if (!context.getResources().getConfiguration().getLocales().isEmpty()) {
+                return context.getResources().getConfiguration().getLocales().get(0);
+            }
+        }
+        Locale locale = context.getResources().getConfiguration().locale;
+        return locale == null ? Locale.getDefault() : locale;
+    }
+
+    static Context wrapContextWithPreferredLocale(Context base) {
+        Locale preferredLocale = localeFromTag(preferredLocaleTag);
+        if (base == null || preferredLocale == null) {
+            return base;
+        }
+        Locale.setDefault(preferredLocale);
+        Configuration configuration = new Configuration(base.getResources().getConfiguration());
+        configuration.setLocale(preferredLocale);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            configuration.setLocales(new android.os.LocaleList(preferredLocale));
+        }
+        return base.createConfigurationContext(configuration);
+    }
+
+    static void reapplyPreferredLocale(Activity activity) {
+        Locale preferredLocale = localeFromTag(preferredLocaleTag);
+        if (activity == null || preferredLocale == null) {
+            return;
+        }
+        Locale.setDefault(preferredLocale);
+        updateResourcesLocale(activity.getApplicationContext().getResources(), preferredLocale);
+        updateResourcesLocale(activity.getResources(), preferredLocale);
+    }
+
+    private static void updateResourcesLocale(Resources resources, Locale locale) {
+        if (resources == null || locale == null) {
+            return;
+        }
+        Configuration configuration = new Configuration(resources.getConfiguration());
+        configuration.setLocale(locale);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            configuration.setLocales(new android.os.LocaleList(locale));
+        }
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+    }
+
+    private static void setPreferredLocaleTag(String localeTag) {
+        preferredLocaleTag = sanitizeLocaleTag(localeTag);
+    }
+
+    private static String sanitizeLocaleTag(String localeTag) {
+        if (localeTag == null) {
+            return null;
+        }
+        String normalized = localeTag.trim();
+        return normalized.isEmpty() ? null : normalized;
+    }
+
+    private static Locale localeFromTag(String localeTag) {
+        String normalized = sanitizeLocaleTag(localeTag);
+        if (normalized == null) {
+            return null;
+        }
+        return Locale.forLanguageTag(normalized);
+    }
+
+    private static String resolveSdkLanguageTag(String localeTag) {
+        Locale locale = localeFromTag(localeTag);
+        if (locale == null) {
+            locale = localeForContext(null);
+        }
+        String language = locale.getLanguage();
+        if ("en".equalsIgnoreCase(language)) {
+            return "EN";
+        }
+        return "ZH_CN";
     }
 }

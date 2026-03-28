@@ -1,12 +1,29 @@
 package com.fluttercandies.flutter_bdface_collect;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.widget.TextView;
+
 import com.baidu.idl.face.platform.FaceStatusNewEnum;
 import com.baidu.idl.face.platform.model.ImageInfo;
 import com.baidu.idl.face.platform.ui.FaceSilenceLivenessActivity;
+import com.baidu.idl.face.platform.ui.R;
 
 import java.util.HashMap;
 
 public class FinanceFaceSilenceLivenessActivity extends FaceSilenceLivenessActivity {
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(FlutterBdfaceCollectPlugin.wrapContextWithPreferredLocale(newBase));
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FlutterBdfaceCollectPlugin.reapplyPreferredLocale(this);
+        refreshLocalizedTexts();
+    }
+
     @Override
     public void onCollectCompletion(
             FaceStatusNewEnum status,
@@ -38,5 +55,12 @@ public class FinanceFaceSilenceLivenessActivity extends FaceSilenceLivenessActiv
 
     private boolean isEmpty(String value) {
         return value == null || value.trim().isEmpty();
+    }
+
+    private void refreshLocalizedTexts() {
+        TextView topTips = findViewById(R.id.detect_top_tips);
+        if (topTips != null) {
+            topTips.setText(getString(R.string.faceLivenessMovetoFrameText));
+        }
     }
 }
