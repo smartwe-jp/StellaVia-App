@@ -10,6 +10,8 @@
   "loginBrowseAsGuest": "ログインせずに閲覧する（ゲストモード）",
   "loginCreateAccount": "新規登録",
   "commonClose": "閉じる",
+  "commonCancel": "キャンセル",
+  "commonOpenSettings": "設定を開く",
   "pdfViewerPageTitle": "PDF",
   "pdfViewerOpenExternalTooltip": "外部アプリで開く",
   "pdfViewerOpenExternalLabel": "外部アプリで開く",
@@ -112,6 +114,8 @@
   "profileEmailRequired": "有効なメールアドレスを入力してください。",
   "profileDocumentPhotoRequired": "本人確認書類の写真をアップロードしてください。",
   "profileDocumentPickFailed": "書類写真の選択に失敗しました。再度お試しください。",
+  "profileDocumentCameraPermissionRequired": "書類写真を撮影するにはカメラ権限を許可してください。",
+  "profileDocumentPhotoLibraryPermissionRequired": "書類写真を選択するには写真ライブラリへのアクセスを許可してください。",
   "profileIncompleteBannerTitle": "詳細情報が未完了です",
   "profileIncompleteBannerSubtitle": "取引・宿泊には詳細情報の完了が必要です。",
   "profileIncompleteBannerBody": "氏名、住所、電話、メール、本人確認書類の写真を入力後に取引または宿泊手続きを進めてください。",
@@ -1326,5 +1330,10 @@
   "identityAuthBiometricNotConfigured": "生体認証機能の設定が未完了です。",
   "identityAuthSensitiveBlocked": "この重要な操作を続行できません。",
   "identityAuthCameraPermissionRequired": "顔認証を行うにはカメラ権限を許可してください。",
+  "identityAuthCameraPermissionSettingsRequired": "顔認証を続けるには、システム設定でカメラ権限を許可してください。",
+  "permissionSettingsTitle": "権限の設定が必要です",
+  "permissionSettingsCameraMessage": "カメラへのアクセスが無効になっています。システム設定でカメラ権限を許可してください。",
+  "permissionSettingsPhotosMessage": "写真ライブラリへのアクセスが無効になっています。システム設定で写真へのアクセスを許可してください。",
+  "permissionSettingsLocationMessage": "位置情報へのアクセスが無効になっています。システム設定で位置情報の利用を許可してください。",
   "identityAuthBaiduLicenseMissing": "Baidu顔認証ライセンスが設定されていません。"
 }

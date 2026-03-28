@@ -48,6 +48,8 @@ String _resolveLivenessErrorMessage(AppLocalizations l10n, String message) {
       return l10n.identityAuthBaiduLicenseMissing;
     case 'camera_permission_denied':
       return l10n.identityAuthCameraPermissionRequired;
+    case 'camera_permission_settings_required':
+      return l10n.identityAuthCameraPermissionSettingsRequired;
     case 'baidu_face_collect_empty':
       return l10n.identityAuthCollectFailed;
     default:
@@ -56,6 +58,10 @@ String _resolveLivenessErrorMessage(AppLocalizations l10n, String message) {
       }
       return normalized;
   }
+}
+
+bool isIdentityAuthPermissionSettingsRequired(String? message) {
+  return (message?.trim() ?? '') == 'camera_permission_settings_required';
 }
 
 bool _isMissingLicenseConfigurationMessage(String normalizedLower, String raw) {

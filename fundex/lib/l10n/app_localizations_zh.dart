@@ -39,6 +39,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonClose => '关闭';
 
   @override
+  String get commonCancel => '取消';
+
+  @override
+  String get commonOpenSettings => '前往设置';
+
+  @override
   String get pdfViewerPageTitle => 'PDF';
 
   @override
@@ -344,6 +350,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get profileDocumentPickFailed => '证件照片选择失败，请重试。';
+
+  @override
+  String get profileDocumentCameraPermissionRequired => '拍摄证件照片前，请先允许相机权限。';
+
+  @override
+  String get profileDocumentPhotoLibraryPermissionRequired =>
+      '选择证件照片前，请先允许相册权限。';
 
   @override
   String get profileIncompleteBannerTitle => '资料未完成';
@@ -3524,6 +3537,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get identityAuthCameraPermissionRequired => '请先允许相机权限后再进行人脸认证。';
 
   @override
+  String get identityAuthCameraPermissionSettingsRequired =>
+      '继续进行人脸认证前，请前往系统设置开启相机权限。';
+
+  @override
+  String get permissionSettingsTitle => '需要权限设置';
+
+  @override
+  String get permissionSettingsCameraMessage => '相机权限已被关闭，请前往系统设置开启相机权限。';
+
+  @override
+  String get permissionSettingsPhotosMessage => '照片权限已被关闭，请前往系统设置开启照片访问权限。';
+
+  @override
+  String get permissionSettingsLocationMessage => '定位权限已被关闭，请前往系统设置开启定位权限。';
+
+  @override
   String get identityAuthBaiduLicenseMissing => '未配置百度人脸SDK许可证。';
 }
 
@@ -3560,6 +3589,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get commonClose => '关闭';
+
+  @override
+  String get commonCancel => '取消';
+
+  @override
+  String get commonOpenSettings => '前往設定';
 
   @override
   String get pdfViewerPageTitle => 'PDF';
@@ -3867,6 +3902,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get profileDocumentPickFailed => '证件照片选择失败，请重试。';
+
+  @override
+  String get profileDocumentCameraPermissionRequired => '拍攝證件照片前，請先允許相機權限。';
+
+  @override
+  String get profileDocumentPhotoLibraryPermissionRequired =>
+      '選擇證件照片前，請先允許相簿權限。';
 
   @override
   String get profileIncompleteBannerTitle => '资料未完成';
@@ -7047,6 +7089,22 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get identityAuthCameraPermissionRequired => '請先允許相機權限後再進行人臉認證。';
+
+  @override
+  String get identityAuthCameraPermissionSettingsRequired =>
+      '繼續進行人臉認證前，請前往系統設定開啟相機權限。';
+
+  @override
+  String get permissionSettingsTitle => '需要權限設定';
+
+  @override
+  String get permissionSettingsCameraMessage => '相機權限已被關閉，請前往系統設定開啟相機權限。';
+
+  @override
+  String get permissionSettingsPhotosMessage => '照片權限已被關閉，請前往系統設定開啟照片存取權限。';
+
+  @override
+  String get permissionSettingsLocationMessage => '定位權限已被關閉，請前往系統設定開啟定位權限。';
 
   @override
   String get identityAuthBaiduLicenseMissing => '尚未配置百度人臉SDK授權。';

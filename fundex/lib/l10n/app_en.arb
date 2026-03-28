@@ -10,6 +10,8 @@
   "loginBrowseAsGuest": "Browse without signing in (Guest mode)",
   "loginCreateAccount": "Create account",
   "commonClose": "Close",
+  "commonCancel": "Cancel",
+  "commonOpenSettings": "Open Settings",
   "pdfViewerPageTitle": "PDF",
   "pdfViewerOpenExternalTooltip": "Open externally",
   "pdfViewerOpenExternalLabel": "Open externally",
@@ -112,6 +114,8 @@
   "profileEmailRequired": "Please enter a valid email address.",
   "profileDocumentPhotoRequired": "Please upload an ID document photo.",
   "profileDocumentPickFailed": "Failed to select document photo. Please try again.",
+  "profileDocumentCameraPermissionRequired": "Allow camera access to take a document photo.",
+  "profileDocumentPhotoLibraryPermissionRequired": "Allow photo library access to select a document photo.",
   "profileIncompleteBannerTitle": "Profile details incomplete",
   "profileIncompleteBannerSubtitle": "Trading and booking require a complete profile.",
   "profileIncompleteBannerBody": "Please complete name, address, phone, email, and ID document photo before trading or booking.",
@@ -1326,5 +1330,10 @@
   "identityAuthBiometricNotConfigured": "Biometric authentication is not configured.",
   "identityAuthSensitiveBlocked": "Unable to continue this sensitive action.",
   "identityAuthCameraPermissionRequired": "Allow camera access to continue face verification.",
+  "identityAuthCameraPermissionSettingsRequired": "Open system settings and allow camera access to continue face verification.",
+  "permissionSettingsTitle": "Permission required",
+  "permissionSettingsCameraMessage": "Camera access is disabled. Open system settings and allow camera access.",
+  "permissionSettingsPhotosMessage": "Photo library access is disabled. Open system settings and allow photo access.",
+  "permissionSettingsLocationMessage": "Location access is disabled. Open system settings and allow location access.",
   "identityAuthBaiduLicenseMissing": "Baidu face SDK license is missing."
 }

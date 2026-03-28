@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/support/app_permission_dialogs.dart';
 import '../../../auth/presentation/providers/identity_auth_sdk_providers.dart';
 import '../../../auth/presentation/support/identity_auth_message_resolver.dart';
 import '../../../member_profile/domain/constants/member_profile_upload_markers.dart';
@@ -32,6 +33,44 @@ class _SettingsFaceVerificationPageState
   bool _isSelfieUploaded(String? path) {
     final normalized = path?.trim() ?? '';
     return normalized.isNotEmpty;
+  }
+
+  Future<String?> _pickImagePath(ProfileDocumentImageSource source) async {
+    final result = await ref
+        .read(profileDocumentImagePickerProvider)
+        .pick(source);
+    if (!mounted) {
+      return null;
+    }
+
+    switch (result.status) {
+      case ProfileDocumentImagePickStatus.success:
+        return result.path!.trim();
+      case ProfileDocumentImagePickStatus.canceled:
+        return null;
+      case ProfileDocumentImagePickStatus.permissionDenied:
+        AppNotice.show(
+          context,
+          message: source == ProfileDocumentImageSource.camera
+              ? context.l10n.profileDocumentCameraPermissionRequired
+              : context.l10n.profileDocumentPhotoLibraryPermissionRequired,
+        );
+        return null;
+      case ProfileDocumentImagePickStatus.permissionSettingsRequired:
+        await showAppPermissionSettingsDialog(
+          context,
+          permission: source == ProfileDocumentImageSource.camera
+              ? AppPermissionKind.camera
+              : AppPermissionKind.photos,
+        );
+        return null;
+      case ProfileDocumentImagePickStatus.failed:
+        AppNotice.show(
+          context,
+          message: context.l10n.profileDocumentPickFailed,
+        );
+        return null;
+    }
   }
 
   Future<void> _pickAndUploadSelfie() async {
@@ -73,9 +112,7 @@ class _SettingsFaceVerificationPageState
       return;
     }
 
-    final path = await ref
-        .read(profileDocumentImagePickerProvider)
-        .pick(source);
+    final path = await _pickImagePath(source);
     if (!mounted || path == null || path.trim().isEmpty) {
       return;
     }
@@ -184,7 +221,14 @@ class _SettingsFaceVerificationPageState
         setState(() {
           _statusMessage = message;
         });
-        AppNotice.show(context, message: message);
+        if (isIdentityAuthPermissionSettingsRequired(collected.errorMessage)) {
+          await showAppPermissionSettingsDialog(
+            context,
+            permission: AppPermissionKind.camera,
+          );
+        } else {
+          AppNotice.show(context, message: message);
+        }
         return;
       }
 

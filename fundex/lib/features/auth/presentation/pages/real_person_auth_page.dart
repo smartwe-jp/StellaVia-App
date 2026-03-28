@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/support/app_permission_dialogs.dart';
 import '../providers/identity_auth_sdk_providers.dart';
 import '../support/identity_auth_message_resolver.dart';
 
@@ -72,7 +73,14 @@ class _RealPersonAuthPageState extends ConsumerState<RealPersonAuthPage> {
         setState(() {
           _statusMessage = message;
         });
-        AppNotice.show(context, message: message);
+        if (isIdentityAuthPermissionSettingsRequired(collected.errorMessage)) {
+          await showAppPermissionSettingsDialog(
+            context,
+            permission: AppPermissionKind.camera,
+          );
+        } else {
+          AppNotice.show(context, message: message);
+        }
         return;
       }
 

@@ -32,9 +32,17 @@ class BaiduFaceLivenessCollector implements LivenessCollector {
       if (!kIsWeb) {
         final cameraStatus = await Permission.camera.request();
         if (!cameraStatus.isGranted) {
-          return const LivenessCollectResult(
+          final requiresSettings =
+              cameraStatus.isPermanentlyDenied ||
+              cameraStatus.isRestricted ||
+              ((defaultTargetPlatform == TargetPlatform.iOS ||
+                      defaultTargetPlatform == TargetPlatform.macOS) &&
+                  cameraStatus.isDenied);
+          return LivenessCollectResult(
             photoBase64: '',
-            errorMessage: 'camera_permission_denied',
+            errorMessage: requiresSettings
+                ? 'camera_permission_settings_required'
+                : 'camera_permission_denied',
           );
         }
       }

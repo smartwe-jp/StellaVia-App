@@ -161,6 +161,18 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get commonClose;
 
+  /// No description provided for @commonCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get commonCancel;
+
+  /// No description provided for @commonOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get commonOpenSettings;
+
   /// No description provided for @pdfViewerPageTitle.
   ///
   /// In en, this message translates to:
@@ -772,6 +784,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to select document photo. Please try again.'**
   String get profileDocumentPickFailed;
+
+  /// No description provided for @profileDocumentCameraPermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow camera access to take a document photo.'**
+  String get profileDocumentCameraPermissionRequired;
+
+  /// No description provided for @profileDocumentPhotoLibraryPermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow photo library access to select a document photo.'**
+  String get profileDocumentPhotoLibraryPermissionRequired;
 
   /// No description provided for @profileIncompleteBannerTitle.
   ///
@@ -6955,6 +6979,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Allow camera access to continue face verification.'**
   String get identityAuthCameraPermissionRequired;
+
+  /// No description provided for @identityAuthCameraPermissionSettingsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Open system settings and allow camera access to continue face verification.'**
+  String get identityAuthCameraPermissionSettingsRequired;
+
+  /// No description provided for @permissionSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Permission required'**
+  String get permissionSettingsTitle;
+
+  /// No description provided for @permissionSettingsCameraMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera access is disabled. Open system settings and allow camera access.'**
+  String get permissionSettingsCameraMessage;
+
+  /// No description provided for @permissionSettingsPhotosMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo library access is disabled. Open system settings and allow photo access.'**
+  String get permissionSettingsPhotosMessage;
+
+  /// No description provided for @permissionSettingsLocationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Location access is disabled. Open system settings and allow location access.'**
+  String get permissionSettingsLocationMessage;
 
   /// No description provided for @identityAuthBaiduLicenseMissing.
   ///

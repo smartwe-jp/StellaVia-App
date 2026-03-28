@@ -40,6 +40,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonClose => 'Close';
 
   @override
+  String get commonCancel => 'Cancel';
+
+  @override
+  String get commonOpenSettings => 'Open Settings';
+
+  @override
   String get pdfViewerPageTitle => 'PDF';
 
   @override
@@ -369,6 +375,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get profileDocumentPickFailed =>
       'Failed to select document photo. Please try again.';
+
+  @override
+  String get profileDocumentCameraPermissionRequired =>
+      'Allow camera access to take a document photo.';
+
+  @override
+  String get profileDocumentPhotoLibraryPermissionRequired =>
+      'Allow photo library access to select a document photo.';
 
   @override
   String get profileIncompleteBannerTitle => 'Profile details incomplete';
@@ -3767,6 +3781,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get identityAuthCameraPermissionRequired =>
       'Allow camera access to continue face verification.';
+
+  @override
+  String get identityAuthCameraPermissionSettingsRequired =>
+      'Open system settings and allow camera access to continue face verification.';
+
+  @override
+  String get permissionSettingsTitle => 'Permission required';
+
+  @override
+  String get permissionSettingsCameraMessage =>
+      'Camera access is disabled. Open system settings and allow camera access.';
+
+  @override
+  String get permissionSettingsPhotosMessage =>
+      'Photo library access is disabled. Open system settings and allow photo access.';
+
+  @override
+  String get permissionSettingsLocationMessage =>
+      'Location access is disabled. Open system settings and allow location access.';
 
   @override
   String get identityAuthBaiduLicenseMissing =>

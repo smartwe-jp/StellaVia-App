@@ -126,6 +126,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            signingConfig = if (activeFlavor == "prod" && hasReleaseSigning) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
+        }
         release {
             signingConfig = if (hasReleaseSigning) {
                 signingConfigs.getByName("release")

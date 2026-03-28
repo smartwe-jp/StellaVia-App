@@ -39,6 +39,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get commonClose => '閉じる';
 
   @override
+  String get commonCancel => 'キャンセル';
+
+  @override
+  String get commonOpenSettings => '設定を開く';
+
+  @override
   String get pdfViewerPageTitle => 'PDF';
 
   @override
@@ -347,6 +353,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get profileDocumentPickFailed => '書類写真の選択に失敗しました。再度お試しください。';
+
+  @override
+  String get profileDocumentCameraPermissionRequired =>
+      '書類写真を撮影するにはカメラ権限を許可してください。';
+
+  @override
+  String get profileDocumentPhotoLibraryPermissionRequired =>
+      '書類写真を選択するには写真ライブラリへのアクセスを許可してください。';
 
   @override
   String get profileIncompleteBannerTitle => '詳細情報が未完了です';
@@ -3560,6 +3574,25 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get identityAuthCameraPermissionRequired => '顔認証を行うにはカメラ権限を許可してください。';
+
+  @override
+  String get identityAuthCameraPermissionSettingsRequired =>
+      '顔認証を続けるには、システム設定でカメラ権限を許可してください。';
+
+  @override
+  String get permissionSettingsTitle => '権限の設定が必要です';
+
+  @override
+  String get permissionSettingsCameraMessage =>
+      'カメラへのアクセスが無効になっています。システム設定でカメラ権限を許可してください。';
+
+  @override
+  String get permissionSettingsPhotosMessage =>
+      '写真ライブラリへのアクセスが無効になっています。システム設定で写真へのアクセスを許可してください。';
+
+  @override
+  String get permissionSettingsLocationMessage =>
+      '位置情報へのアクセスが無効になっています。システム設定で位置情報の利用を許可してください。';
 
   @override
   String get identityAuthBaiduLicenseMissing => 'Baidu顔認証ライセンスが設定されていません。';

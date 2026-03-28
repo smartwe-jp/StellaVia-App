@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:core_identity_auth/core_identity_auth.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/support/app_permission_dialogs.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/domain/entities/auth_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
@@ -470,9 +471,13 @@ class _MemberProfileEditFlowPageState
     if (source == null) {
       return;
     }
-    final String? path = await ref
+    final result = await ref
         .read(profileDocumentImagePickerProvider)
         .pick(source);
+    if (!mounted) {
+      return;
+    }
+    final String? path = await _resolvePickedImagePath(result, source);
     if (!mounted || path == null || path.trim().isEmpty) {
       return;
     }
@@ -546,6 +551,40 @@ class _MemberProfileEditFlowPageState
 
     if (shouldAutoStartRealPersonAuth && mounted) {
       await _runRealPersonAuthStep();
+    }
+  }
+
+  Future<String?> _resolvePickedImagePath(
+    ProfileDocumentImagePickResult result,
+    ProfileDocumentImageSource source,
+  ) async {
+    switch (result.status) {
+      case ProfileDocumentImagePickStatus.success:
+        return result.path!.trim();
+      case ProfileDocumentImagePickStatus.canceled:
+        return null;
+      case ProfileDocumentImagePickStatus.permissionDenied:
+        AppNotice.show(
+          context,
+          message: source == ProfileDocumentImageSource.camera
+              ? context.l10n.profileDocumentCameraPermissionRequired
+              : context.l10n.profileDocumentPhotoLibraryPermissionRequired,
+        );
+        return null;
+      case ProfileDocumentImagePickStatus.permissionSettingsRequired:
+        await showAppPermissionSettingsDialog(
+          context,
+          permission: source == ProfileDocumentImageSource.camera
+              ? AppPermissionKind.camera
+              : AppPermissionKind.photos,
+        );
+        return null;
+      case ProfileDocumentImagePickStatus.failed:
+        AppNotice.show(
+          context,
+          message: context.l10n.profileDocumentPickFailed,
+        );
+        return null;
     }
   }
 
@@ -895,7 +934,14 @@ class _MemberProfileEditFlowPageState
         setState(() {
           _realPersonAuthStatusMessage = message;
         });
-        AppNotice.show(context, message: message);
+        if (isIdentityAuthPermissionSettingsRequired(collected.errorMessage)) {
+          await showAppPermissionSettingsDialog(
+            context,
+            permission: AppPermissionKind.camera,
+          );
+        } else {
+          AppNotice.show(context, message: message);
+        }
         return false;
       }
 

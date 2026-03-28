@@ -10,6 +10,8 @@
   "loginBrowseAsGuest": "不登录直接浏览（访客模式）",
   "loginCreateAccount": "免费注册",
   "commonClose": "关闭",
+  "commonCancel": "取消",
+  "commonOpenSettings": "前往设置",
   "pdfViewerPageTitle": "PDF",
   "pdfViewerOpenExternalTooltip": "在外部应用中打开",
   "pdfViewerOpenExternalLabel": "在外部应用中打开",
@@ -112,6 +114,8 @@
   "profileEmailRequired": "请填写有效邮箱。",
   "profileDocumentPhotoRequired": "请上传证件照片。",
   "profileDocumentPickFailed": "证件照片选择失败，请重试。",
+  "profileDocumentCameraPermissionRequired": "拍摄证件照片前，请先允许相机权限。",
+  "profileDocumentPhotoLibraryPermissionRequired": "选择证件照片前，请先允许相册权限。",
   "profileIncompleteBannerTitle": "资料未完成",
   "profileIncompleteBannerSubtitle": "交易与订房前需要完整资料。",
   "profileIncompleteBannerBody": "请补齐姓名、地址、电话、邮箱和证件照片后再进行交易或订房。",
@@ -1326,5 +1330,10 @@
   "identityAuthBiometricNotConfigured": "系统生物识别能力未配置。",
   "identityAuthSensitiveBlocked": "当前无法继续该敏感操作。",
   "identityAuthCameraPermissionRequired": "请先允许相机权限后再进行人脸认证。",
+  "identityAuthCameraPermissionSettingsRequired": "继续进行人脸认证前，请前往系统设置开启相机权限。",
+  "permissionSettingsTitle": "需要权限设置",
+  "permissionSettingsCameraMessage": "相机权限已被关闭，请前往系统设置开启相机权限。",
+  "permissionSettingsPhotosMessage": "照片权限已被关闭，请前往系统设置开启照片访问权限。",
+  "permissionSettingsLocationMessage": "定位权限已被关闭，请前往系统设置开启定位权限。",
   "identityAuthBaiduLicenseMissing": "未配置百度人脸SDK许可证。"
 }
