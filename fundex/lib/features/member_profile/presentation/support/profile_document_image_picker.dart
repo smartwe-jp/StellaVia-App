@@ -95,6 +95,14 @@ class DeviceProfileDocumentImagePicker implements ProfileDocumentImagePicker {
       return null;
     }
 
+    final currentStatus = await permission.status;
+    if (currentStatus.isGranted || currentStatus.isLimited) {
+      return null;
+    }
+    if (_needsSettings(currentStatus)) {
+      return const ProfileDocumentImagePickResult.permissionSettingsRequired();
+    }
+
     final status = await permission.request();
     if (status.isGranted || status.isLimited) {
       return null;
@@ -119,11 +127,6 @@ class DeviceProfileDocumentImagePicker implements ProfileDocumentImagePicker {
   }
 
   bool _needsSettings(PermissionStatus status) {
-    if (status.isPermanentlyDenied || status.isRestricted) {
-      return true;
-    }
-    return (defaultTargetPlatform == TargetPlatform.iOS ||
-            defaultTargetPlatform == TargetPlatform.macOS) &&
-        status.isDenied;
+    return status.isPermanentlyDenied || status.isRestricted;
   }
 }
