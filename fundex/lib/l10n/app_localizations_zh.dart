@@ -3521,6 +3521,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get identityAuthSensitiveBlocked => '当前无法继续该敏感操作。';
 
   @override
+  String get identityAuthCameraPermissionRequired => '请先允许相机权限后再进行人脸认证。';
+
+  @override
   String get identityAuthBaiduLicenseMissing => '未配置百度人脸SDK许可证。';
 }
 
@@ -7041,6 +7044,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get identityAuthSensitiveBlocked => '目前無法繼續此敏感操作。';
+
+  @override
+  String get identityAuthCameraPermissionRequired => '請先允許相機權限後再進行人臉認證。';
 
   @override
   String get identityAuthBaiduLicenseMissing => '尚未配置百度人臉SDK授權。';

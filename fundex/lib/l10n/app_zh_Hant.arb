@@ -1325,5 +1325,6 @@
   "identityAuthLivenessNotConfigured": "人臉採集能力尚未配置。",
   "identityAuthBiometricNotConfigured": "系統生物識別能力尚未配置。",
   "identityAuthSensitiveBlocked": "目前無法繼續此敏感操作。",
+  "identityAuthCameraPermissionRequired": "請先允許相機權限後再進行人臉認證。",
   "identityAuthBaiduLicenseMissing": "尚未配置百度人臉SDK授權。"
 }

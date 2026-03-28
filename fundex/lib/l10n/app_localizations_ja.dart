@@ -3559,5 +3559,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get identityAuthSensitiveBlocked => 'この重要な操作を続行できません。';
 
   @override
+  String get identityAuthCameraPermissionRequired => '顔認証を行うにはカメラ権限を許可してください。';
+
+  @override
   String get identityAuthBaiduLicenseMissing => 'Baidu顔認証ライセンスが設定されていません。';
 }

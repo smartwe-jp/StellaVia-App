@@ -1,7 +1,9 @@
 import 'package:core_identity_auth/core_identity_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bdface_collect/flutter_bdface_collect.dart'
     as bd_collect;
 import 'package:flutter_bdface_collect/model.dart' as bd_model;
+import 'package:permission_handler/permission_handler.dart';
 
 class BaiduFaceLivenessCollector implements LivenessCollector {
   BaiduFaceLivenessCollector({
@@ -25,6 +27,16 @@ class BaiduFaceLivenessCollector implements LivenessCollector {
           photoBase64: '',
           errorMessage: 'baidu_face_license_missing',
         );
+      }
+
+      if (!kIsWeb) {
+        final cameraStatus = await Permission.camera.request();
+        if (!cameraStatus.isGranted) {
+          return const LivenessCollectResult(
+            photoBase64: '',
+            errorMessage: 'camera_permission_denied',
+          );
+        }
       }
 
       final initError = await plugin.init(_licenseId);

@@ -3765,6 +3765,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Unable to continue this sensitive action.';
 
   @override
+  String get identityAuthCameraPermissionRequired =>
+      'Allow camera access to continue face verification.';
+
+  @override
   String get identityAuthBaiduLicenseMissing =>
       'Baidu face SDK license is missing.';
 }

@@ -6950,6 +6950,12 @@ abstract class AppLocalizations {
   /// **'Unable to continue this sensitive action.'**
   String get identityAuthSensitiveBlocked;
 
+  /// No description provided for @identityAuthCameraPermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow camera access to continue face verification.'**
+  String get identityAuthCameraPermissionRequired;
+
   /// No description provided for @identityAuthBaiduLicenseMissing.
   ///
   /// In en, this message translates to:

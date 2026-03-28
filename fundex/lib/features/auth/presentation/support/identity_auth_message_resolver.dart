@@ -46,6 +46,8 @@ String _resolveLivenessErrorMessage(AppLocalizations l10n, String message) {
   switch (normalized) {
     case 'baidu_face_license_missing':
       return l10n.identityAuthBaiduLicenseMissing;
+    case 'camera_permission_denied':
+      return l10n.identityAuthCameraPermissionRequired;
     case 'baidu_face_collect_empty':
       return l10n.identityAuthCollectFailed;
     default:

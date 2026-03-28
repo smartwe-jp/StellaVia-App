@@ -1325,5 +1325,6 @@
   "identityAuthLivenessNotConfigured": "顔認証機能の設定が未完了です。",
   "identityAuthBiometricNotConfigured": "生体認証機能の設定が未完了です。",
   "identityAuthSensitiveBlocked": "この重要な操作を続行できません。",
+  "identityAuthCameraPermissionRequired": "顔認証を行うにはカメラ権限を許可してください。",
   "identityAuthBaiduLicenseMissing": "Baidu顔認証ライセンスが設定されていません。"
 }

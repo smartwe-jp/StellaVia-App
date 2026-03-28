@@ -1325,5 +1325,6 @@
   "identityAuthLivenessNotConfigured": "Liveness collector is not configured.",
   "identityAuthBiometricNotConfigured": "Biometric authentication is not configured.",
   "identityAuthSensitiveBlocked": "Unable to continue this sensitive action.",
+  "identityAuthCameraPermissionRequired": "Allow camera access to continue face verification.",
   "identityAuthBaiduLicenseMissing": "Baidu face SDK license is missing."
 }
