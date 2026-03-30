@@ -17,6 +17,7 @@ import '../../../member_profile/domain/entities/member_profile_details.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
+import '../../../notifications/presentation/providers/notifications_providers.dart';
 import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 import '../support/home_display_name_resolver.dart';
 
@@ -35,6 +36,13 @@ class HomeOverviewTabPage extends ConsumerWidget {
         AppNetworkAvailability.online;
     final networkAccessState = ref.watch(appNetworkAccessStateProvider);
     final isAuthenticated = authState.asData?.value ?? false;
+    final hasUnreadNotifications =
+        isAuthenticated &&
+        ref.watch(
+          notificationsControllerProvider.select(
+            (state) => state.unreadCount > 0,
+          ),
+        );
     final currentUser = ref.watch(currentAuthUserProvider).asData?.value;
     final basicProfile = ref.watch(memberBasicProfileProvider);
     final asyncProjects = ref.watch(fundProjectListProvider);
@@ -195,7 +203,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
         totalDividendsValue: _formatCompactCurrencyValue(
           accountStatistic?.firstLevelAccountTotal,
         ),
-        showNotificationDot: true,
+        showNotificationDot: hasUnreadNotifications,
         onNotificationTap: () => context.push('/profile/notifications'),
       ),
       _ => Column(
