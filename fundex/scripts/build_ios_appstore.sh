@@ -7,6 +7,7 @@ ROOT="$(cd "$DIR/.." && pwd)"
 DEFINE_FILE="${DART_DEFINE_FILE:-$ROOT/.vscode/dart_define.prod.local.json}"
 BUILD_NAME="${BUILD_NAME:-}"
 BUILD_NUMBER="${BUILD_NUMBER:-}"
+IPA_OUTPUT_NAME="${IPA_OUTPUT_NAME:-}"
 KEY_ID="${APP_STORE_CONNECT_API_KEY_ID:-}"
 ISSUER_ID="${APP_STORE_CONNECT_ISSUER_ID:-}"
 KEY_PATH="${APP_STORE_CONNECT_API_KEY_PATH:-}"
@@ -89,6 +90,14 @@ IPA_PATH="$(find "$ROOT/build/ios/ipa" -maxdepth 1 -name '*.ipa' | head -n 1)"
 if [[ -z "$IPA_PATH" ]]; then
   echo "IPA not found under $ROOT/build/ios/ipa"
   exit 1
+fi
+
+if [[ -n "$IPA_OUTPUT_NAME" ]]; then
+  RENAMED_IPA_PATH="$ROOT/build/ios/ipa/$IPA_OUTPUT_NAME"
+  if [[ "$IPA_PATH" != "$RENAMED_IPA_PATH" ]]; then
+    mv "$IPA_PATH" "$RENAMED_IPA_PATH"
+    IPA_PATH="$RENAMED_IPA_PATH"
+  fi
 fi
 
 echo "==> IPA generated: $IPA_PATH"
