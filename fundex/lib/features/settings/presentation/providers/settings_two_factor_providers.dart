@@ -139,12 +139,9 @@ final settingsEmailVerifiedProvider = FutureProvider.autoDispose<bool>((
     return false;
   }
 
-  // /crowdfunding/user/index-new is the source of truth here:
-  // status == 0 means email is not bound yet; any other value is treated
-  // as already verified/bound.
-  final emailBindingStatus = user.status;
-  if (emailBindingStatus != null) {
-    return emailBindingStatus != 0;
+  final currentEmail = user.email?.trim() ?? '';
+  if (currentEmail.isNotEmpty) {
+    return true;
   }
 
   final remoteStatus = await ref
@@ -153,7 +150,16 @@ final settingsEmailVerifiedProvider = FutureProvider.autoDispose<bool>((
         return null;
       });
   if (remoteStatus != null) {
-    return remoteStatus.isEmailVerified;
+    final remoteEmail = remoteStatus.email?.trim() ?? '';
+    if (remoteStatus.isEmailVerified || remoteEmail.isNotEmpty) {
+      return true;
+    }
+    return false;
+  }
+
+  final emailBindingStatus = user.status;
+  if (emailBindingStatus != null) {
+    return emailBindingStatus != 0;
   }
 
   return (user.checkEmailTime?.trim().isNotEmpty ?? false);

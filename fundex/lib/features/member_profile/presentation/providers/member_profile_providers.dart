@@ -197,7 +197,7 @@ final isMemberProfileCompletedProvider = FutureProvider<bool>((ref) async {
   }
   final status = user.status;
   if (status != null) {
-    return status != 1 && status != 3;
+    return status != 0 && status != 1 && status != 3;
   }
   return ref.watch(isMemberProfileCompletedUseCaseProvider).call();
 });

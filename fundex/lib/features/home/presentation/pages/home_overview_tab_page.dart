@@ -49,6 +49,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
         .watch(isMemberProfileCompletedProvider)
         .asData
         ?.value;
+    final isEmailVerified = ref.watch(settingsEmailVerifiedProvider).asData?.value;
     final asyncProjects = ref.watch(fundProjectListProvider);
     final asyncSecondaryMarketRecords = ref.watch(
       secondaryMarketMarketplaceListProvider,
@@ -94,7 +95,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
           completedSegmentCount: memberProfile?.completedFlowStepCount ?? 0,
           onTap: () => context.push('/member-profile/onboarding'),
         ),
-      if ((currentUser?.status ?? -1) == 0)
+      if (isEmailVerified == false)
         FundReminderData(
           leading: Icon(
             Icons.alternate_email_rounded,
@@ -419,7 +420,7 @@ bool _shouldShowMemberProfileReminder(
     }
     return false;
   }
-  return status == 1 || status == 3;
+  return status == 0 || status == 1 || status == 3;
 }
 
 FundFeaturedFundCardData _buildFeaturedFundCardData(
