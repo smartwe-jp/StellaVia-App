@@ -45,6 +45,10 @@ class HomeOverviewTabPage extends ConsumerWidget {
         );
     final currentUser = ref.watch(currentAuthUserProvider).asData?.value;
     final basicProfile = ref.watch(memberBasicProfileProvider);
+    final isMemberProfileCompleted = ref
+        .watch(isMemberProfileCompletedProvider)
+        .asData
+        ?.value;
     final asyncProjects = ref.watch(fundProjectListProvider);
     final asyncSecondaryMarketRecords = ref.watch(
       secondaryMarketMarketplaceListProvider,
@@ -69,8 +73,27 @@ class HomeOverviewTabPage extends ConsumerWidget {
       symbol: '¥',
       decimalDigits: 0,
     );
+    final shouldShowMemberProfileReminder = _shouldShowMemberProfileReminder(
+      currentUser,
+      isMemberProfileCompleted: isMemberProfileCompleted,
+    );
 
     final reminders = <FundReminderData>[
+      if (shouldShowMemberProfileReminder)
+        FundReminderData(
+          leading: const Icon(
+            Icons.warning_rounded,
+            size: 18,
+            color: Color(0xFFFBBF24),
+          ),
+          title: l10n.homeReminderProfileTitle,
+          message: l10n.homeReminderProfileBody,
+          tone: FundReminderTone.danger,
+          badgeLabel: l10n.homeReminderProfileBadge,
+          segmentCount: MemberProfileDetails.flowStepCount,
+          completedSegmentCount: memberProfile?.completedFlowStepCount ?? 0,
+          onTap: () => context.push('/member-profile/onboarding'),
+        ),
       if ((currentUser?.status ?? -1) == 0)
         FundReminderData(
           leading: Icon(
@@ -97,7 +120,8 @@ class HomeOverviewTabPage extends ConsumerWidget {
           badgeLabel: l10n.homeReminderProfileBadge,
           onTap: () => context.push('/profile/settings/two-factor/phone'),
         ),
-      if (verificationStatus?.isRealPersonVerified == false)
+      if (!shouldShowMemberProfileReminder &&
+          verificationStatus?.isRealPersonVerified == false)
         FundReminderData(
           leading: const Icon(
             Icons.verified_user_outlined,
@@ -109,21 +133,6 @@ class HomeOverviewTabPage extends ConsumerWidget {
           tone: FundReminderTone.danger,
           badgeLabel: l10n.homeReminderProfileBadge,
           onTap: () => context.push('/profile/settings/two-factor/face'),
-        ),
-      if (_shouldShowMemberProfileReminder(currentUser))
-        FundReminderData(
-          leading: const Icon(
-            Icons.warning_rounded,
-            size: 18,
-            color: Color(0xFFFBBF24),
-          ),
-          title: l10n.homeReminderProfileTitle,
-          message: l10n.homeReminderProfileBody,
-          tone: FundReminderTone.danger,
-          badgeLabel: l10n.homeReminderProfileBadge,
-          segmentCount: MemberProfileDetails.flowStepCount,
-          completedSegmentCount: memberProfile?.completedFlowStepCount ?? 0,
-          onTap: () => context.push('/member-profile/onboarding'),
         ),
     ];
 
@@ -399,9 +408,15 @@ Future<void> _refreshHomeOverviewTab(WidgetRef ref) async {
   ]);
 }
 
-bool _shouldShowMemberProfileReminder(AuthUser? user) {
+bool _shouldShowMemberProfileReminder(
+  AuthUser? user, {
+  bool? isMemberProfileCompleted,
+}) {
   final status = user?.status;
   if (status == null) {
+    if (isMemberProfileCompleted != null) {
+      return !isMemberProfileCompleted;
+    }
     return false;
   }
   return status == 1 || status == 3;
