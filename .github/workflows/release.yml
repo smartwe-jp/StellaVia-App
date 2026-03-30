@@ -202,6 +202,7 @@ jobs:
           fi
 
           echo "bundle_path=$target_bundle" >> "$GITHUB_OUTPUT"
+          echo "release_glob=build/app/outputs/bundle/prodRelease/*.aab" >> "$GITHUB_OUTPUT"
 
       - name: Upload Android Artifacts
         uses: actions/upload-artifact@v4
@@ -219,7 +220,7 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.STELLAVIA_GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: com.fund.stellavia
-          releaseFiles: fundex/${{ steps.android_package.outputs.bundle_path }}
+          releaseFiles: fundex/${{ steps.android_package.outputs.release_glob }}
           track: ${{ inputs.android_track }}
           status: completed
           mappingFile: fundex/${{ steps.android_package.outputs.mapping_path }}
@@ -230,7 +231,7 @@ jobs:
         with:
           serviceAccountJsonPlainText: ${{ secrets.STELLAVIA_GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
           packageName: com.fund.stellavia
-          releaseFiles: fundex/${{ steps.android_package.outputs.bundle_path }}
+          releaseFiles: fundex/${{ steps.android_package.outputs.release_glob }}
           track: ${{ inputs.android_track }}
           status: completed
 
