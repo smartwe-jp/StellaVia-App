@@ -12,7 +12,9 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../auth/domain/entities/auth_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../auth/presentation/providers/identity_auth_sdk_providers.dart';
+import '../../../auth/presentation/support/identity_auth_guard.dart';
 import '../../../auth/presentation/support/identity_auth_message_resolver.dart';
+import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 import '../../domain/constants/member_profile_upload_markers.dart';
 import '../../domain/entities/member_profile_details.dart';
 import '../../domain/entities/member_profile_region.dart';
@@ -36,15 +38,18 @@ enum _ProfilePhotoTarget { documentFront, documentBack, selfie }
 class MemberProfileEditFlowPage extends ConsumerStatefulWidget {
   const MemberProfileEditFlowPage({super.key})
     : _mode = _MemberProfileEditFlowMode.flow,
-      initialStep = null;
+      initialStep = null,
+      skipInitialAccessGuard = false;
 
   const MemberProfileEditFlowPage.section({
     super.key,
     required this.initialStep,
+    this.skipInitialAccessGuard = false,
   }) : _mode = _MemberProfileEditFlowMode.section;
 
   final _MemberProfileEditFlowMode _mode;
   final MemberProfileEditStep? initialStep;
+  final bool skipInitialAccessGuard;
 
   bool get isSingleSectionMode => _mode == _MemberProfileEditFlowMode.section;
 
@@ -106,11 +111,15 @@ class _MemberProfileEditFlowPageState
   bool _isUploadingPhoto = false;
   bool _isAddressSearching = false;
   bool _isRunningRealPersonAuth = false;
+  bool _isSectionAccessChecking = false;
   String? _realPersonAuthStatusMessage;
   Timer? _onboardingDraftSaveTimer;
 
   bool get _isIdentityAuthEnabled =>
       ref.read(identityAuthFeatureEnabledProvider);
+
+  bool get _isRealPersonVerified =>
+      ref.read(settingsRealPersonVerifiedProvider).asData?.value == true;
 
   bool get _isSingleSectionMode => widget.isSingleSectionMode;
 
@@ -140,6 +149,13 @@ class _MemberProfileEditFlowPageState
     _accountHolderController = TextEditingController();
     _registerTextFieldListeners();
     _loadInitialData();
+    if (_isSingleSectionMode &&
+        widget.initialStep == MemberProfileEditStep.ekyc &&
+        !widget.skipInitialAccessGuard) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        unawaited(_guardSingleSectionAccess());
+      });
+    }
   }
 
   @override
@@ -417,6 +433,7 @@ class _MemberProfileEditFlowPageState
         _currentStep = _isSingleSectionMode
             ? _normalizeStepForIdentityAuth(
                 widget.initialStep ?? MemberProfileEditStep.basicInfo,
+                realPersonVerified: _isRealPersonVerified,
               )
             : _normalizeStepForIdentityAuth(resolvedStep);
         _isLoading = false;
@@ -447,6 +464,72 @@ class _MemberProfileEditFlowPageState
       _birthdayController.text = _formatDate(picked);
     });
     await _persistOnboardingDraft(showNotice: true);
+  }
+
+  Future<void> _guardSingleSectionAccess() async {
+    if (!_isSingleSectionMode ||
+        widget.initialStep != MemberProfileEditStep.ekyc ||
+        widget.skipInitialAccessGuard) {
+      return;
+    }
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _isSectionAccessChecking = true;
+    });
+
+    try {
+      final faceVerified = await ref
+          .read(settingsRealPersonVerifiedProvider.future)
+          .catchError((Object _) => false);
+      if (!mounted) {
+        return;
+      }
+
+      if (!faceVerified) {
+        final l10n = context.l10n;
+        final shouldStartVerification =
+            await AppDialogs.showAdaptiveAlert<bool>(
+              context: context,
+              title: l10n.memberProfileEditRequiresFaceVerificationTitle,
+              message: l10n.memberProfileEditRequiresFaceVerificationMessage,
+              actions: <AppDialogAction<bool>>[
+                AppDialogAction<bool>(label: l10n.commonCancel, value: false),
+                AppDialogAction<bool>(
+                  label: l10n.identityAuthStartAction,
+                  value: true,
+                  isDefaultAction: true,
+                ),
+              ],
+            ) ??
+            false;
+        if (!mounted) {
+          return;
+        }
+        if (shouldStartVerification) {
+          context.go('/profile/settings/two-factor/face');
+        } else {
+          context.go('/member-profile/edit');
+        }
+        return;
+      }
+
+      final authorized = await ensureSensitiveActionAuthorized(context, ref);
+      if (!mounted) {
+        return;
+      }
+      if (!authorized) {
+        context.go('/member-profile/edit');
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSectionAccessChecking = false;
+        });
+      }
+    }
   }
 
   Future<void> _pickAndSaveImage({required _ProfilePhotoTarget target}) async {
@@ -871,7 +954,8 @@ class _MemberProfileEditFlowPageState
       case MemberProfileEditStep.ekyc:
         return _isEkycStepReady;
       case MemberProfileEditStep.realPersonAuth:
-        return !_isIdentityAuthEnabled || _isSelfieUploaded(_selfiePhotoPath);
+        return !_shouldShowRealPersonAuthStep() ||
+            _isSelfieUploaded(_selfiePhotoPath);
       case MemberProfileEditStep.bankAccount:
         return _isBankAccountStepReady;
       case MemberProfileEditStep.consent:
@@ -880,7 +964,7 @@ class _MemberProfileEditFlowPageState
   }
 
   Future<bool> _runRealPersonAuthStep() async {
-    if (!_isIdentityAuthEnabled) {
+    if (!_shouldShowRealPersonAuthStep()) {
       return true;
     }
 
@@ -1011,10 +1095,13 @@ class _MemberProfileEditFlowPageState
   }
 
   MemberProfileEditStep _normalizeStepForIdentityAuth(
-    MemberProfileEditStep step,
-  ) {
+    MemberProfileEditStep step, {
+    bool? realPersonVerified,
+  }) {
     if (!_isSingleSectionMode &&
-        !_isIdentityAuthEnabled &&
+        !_shouldShowRealPersonAuthStep(
+          realPersonVerified: realPersonVerified,
+        ) &&
         step == MemberProfileEditStep.realPersonAuth) {
       return MemberProfileEditStep.bankAccount;
     }
@@ -1023,7 +1110,7 @@ class _MemberProfileEditFlowPageState
 
   MemberProfileEditStep? _nextStep(MemberProfileEditStep step) {
     final MemberProfileEditStep? next = step.next;
-    if (!_isIdentityAuthEnabled &&
+    if (!_shouldShowRealPersonAuthStep() &&
         next == MemberProfileEditStep.realPersonAuth) {
       return MemberProfileEditStep.bankAccount;
     }
@@ -1032,11 +1119,18 @@ class _MemberProfileEditFlowPageState
 
   MemberProfileEditStep? _previousStep(MemberProfileEditStep step) {
     final MemberProfileEditStep? previous = step.previous;
-    if (!_isIdentityAuthEnabled &&
+    if (!_shouldShowRealPersonAuthStep() &&
         previous == MemberProfileEditStep.realPersonAuth) {
       return MemberProfileEditStep.ekyc;
     }
     return previous;
+  }
+
+  bool _shouldShowRealPersonAuthStep({bool? realPersonVerified}) {
+    if (!_isIdentityAuthEnabled) {
+      return false;
+    }
+    return !(realPersonVerified ?? _isRealPersonVerified);
   }
 
   bool get _isBasicInfoStepReady =>
@@ -1246,14 +1340,8 @@ class _MemberProfileEditFlowPageState
   List<DropdownMenuItem<int>> _sexItems(BuildContext context) {
     final l10n = context.l10n;
     return <DropdownMenuItem<int>>[
-      DropdownMenuItem<int>(
-        value: 0,
-        child: Text(l10n.memberProfileSexFemale),
-      ),
-      DropdownMenuItem<int>(
-        value: 1,
-        child: Text(l10n.memberProfileSexMale),
-      ),
+      DropdownMenuItem<int>(value: 0, child: Text(l10n.memberProfileSexFemale)),
+      DropdownMenuItem<int>(value: 1, child: Text(l10n.memberProfileSexMale)),
     ];
   }
 
@@ -1434,12 +1522,42 @@ class _MemberProfileEditFlowPageState
 
   @override
   Widget build(BuildContext context) {
+    if (_isSectionAccessChecking) {
+      return Scaffold(
+        backgroundColor: Theme.of(context).appColors.background,
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = theme.appColors;
+    ref.listen<AsyncValue<bool>>(settingsRealPersonVerifiedProvider, (
+      AsyncValue<bool>? _,
+      AsyncValue<bool> next,
+    ) {
+      if (!mounted) {
+        return;
+      }
+      final normalizedStep = _normalizeStepForIdentityAuth(
+        _currentStep,
+        realPersonVerified: next.asData?.value == true,
+      );
+      if (normalizedStep == _currentStep) {
+        return;
+      }
+      setState(() {
+        _currentStep = normalizedStep;
+      });
+    });
+    final isRealPersonVerified =
+        ref.watch(settingsRealPersonVerifiedProvider).asData?.value == true;
+    final showRealPersonAuthStep = _shouldShowRealPersonAuthStep(
+      realPersonVerified: isRealPersonVerified,
+    );
     final stepCount =
-        MemberProfileEditStep.values.length - (_isIdentityAuthEnabled ? 0 : 1);
-    final currentStepIndex = _isIdentityAuthEnabled
+        MemberProfileEditStep.values.length - (showRealPersonAuthStep ? 0 : 1);
+    final currentStepIndex = showRealPersonAuthStep
         ? _currentStep.index
         : (_currentStep.index > MemberProfileEditStep.realPersonAuth.index
               ? _currentStep.index - 1
@@ -1680,7 +1798,7 @@ class _MemberProfileEditFlowPageState
           onNext: _isSingleSectionMode ? _saveCurrentSection : _goNextStep,
         );
       case MemberProfileEditStep.realPersonAuth:
-        if (!_isIdentityAuthEnabled && !_isSingleSectionMode) {
+        if (!_shouldShowRealPersonAuthStep() && !_isSingleSectionMode) {
           return const SizedBox.shrink();
         }
         return MemberProfileRealPersonAuthStepPage(

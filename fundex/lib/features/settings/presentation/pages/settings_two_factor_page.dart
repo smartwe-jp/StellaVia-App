@@ -30,6 +30,7 @@ class SettingsTwoFactorPage extends ConsumerWidget {
       settingsRealPersonVerificationUpdatedAtProvider,
     );
     final canOpenEmailVerification = emailVerified.asData?.value != true;
+    final canOpenFaceVerification = faceVerified.asData?.value != true;
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -113,7 +114,10 @@ class SettingsTwoFactorPage extends ConsumerWidget {
                   verifiedAt: faceVerifiedAt.asData?.value,
                   isLoading: faceVerified.isLoading || faceVerifiedAt.isLoading,
                 ),
-                onTap: () => context.push('/profile/settings/two-factor/face'),
+                showChevron: canOpenFaceVerification,
+                onTap: canOpenFaceVerification
+                    ? () => context.push('/profile/settings/two-factor/face')
+                    : null,
               ),
             ],
           ),

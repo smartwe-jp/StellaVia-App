@@ -2,12 +2,10 @@ import 'package:core_identity_auth/core_identity_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../app/localization/app_locale_providers.dart';
 import '../../../../app/network/app_network_providers.dart';
 import '../../../../app/storage/app_storage_providers.dart';
 import '../../data/adapters/auth_identity_auth_state_store.dart';
 import '../../data/adapters/baidu_face_liveness_collector.dart';
-import '../../data/adapters/system_device_biometric_authenticator.dart';
 import 'auth_providers.dart';
 
 final identityAuthFeatureEnabledProvider = Provider<bool>((ref) {
@@ -57,12 +55,8 @@ final baiduFaceLicenseIdProvider = Provider<String?>((ref) {
 
 final identityAuthBiometricAuthenticatorProvider =
     Provider<DeviceBiometricAuthenticator?>((ref) {
-  return SystemDeviceBiometricAuthenticator(
-    localizedReason: _resolveBiometricReason(
-      ref.watch(appLanguageProvider),
-    ),
-  );
-});
+      return const _BaiduOnlyBiometricAuthenticator();
+    });
 
 final identityAuthLivenessCollectorProvider = Provider<LivenessCollector?>((
   ref,
@@ -85,16 +79,17 @@ final identityAuthCoordinatorProvider = Provider<IdentityAuthCoordinator>((
     ),
     livenessCollector: ref.watch(identityAuthLivenessCollectorProvider),
     flow: ref.watch(identityAuthFlowProvider),
+    markDeviceBiometricEnabledOnSuccess: false,
   );
 });
 
-String _resolveBiometricReason(AppLanguage language) {
-  return switch (language) {
-    AppLanguage.ja => '続行するために生体認証を行ってください。',
-    AppLanguage.en => 'Authenticate with Face ID or Touch ID to continue.',
-    AppLanguage.zh || AppLanguage.zhHant => '请使用面容 ID 或触控 ID 以继续操作。',
-    AppLanguage.system => 'Authenticate with Face ID or Touch ID to continue.',
-  };
+class _BaiduOnlyBiometricAuthenticator implements DeviceBiometricAuthenticator {
+  const _BaiduOnlyBiometricAuthenticator();
+
+  @override
+  Future<DeviceBiometricResult> authenticate() async {
+    return DeviceBiometricResult.unavailable;
+  }
 }
 
 String? _resolveAndroidBaiduFaceLicenseId() {

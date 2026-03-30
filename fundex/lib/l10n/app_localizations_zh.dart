@@ -651,6 +651,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeReminderRealPersonVerificationBody => '该账户尚未完成本人认证，请先完成人脸认证。';
 
   @override
+  String get memberProfileEditRequiresFaceVerificationTitle => '需要先完成人脸认证';
+
+  @override
+  String get memberProfileEditRequiresFaceVerificationMessage =>
+      '修改已提交的身份确认资料前，请先完成人脸认证。';
+
+  @override
+  String get walletWithdrawRequiresFaceVerificationTitle => '需要先完成人脸认证';
+
+  @override
+  String get walletWithdrawRequiresFaceVerificationMessage => '继续出金前，请先完成人脸认证。';
+
+  @override
   String get homeReminderCoolingOffTitle => 'クーリングオフ期间中';
 
   @override
@@ -4226,6 +4239,19 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get homeReminderRealPersonVerificationBody => '此帳戶尚未完成本人認證，請先完成人臉認證。';
+
+  @override
+  String get memberProfileEditRequiresFaceVerificationTitle => '需要先完成人臉驗證';
+
+  @override
+  String get memberProfileEditRequiresFaceVerificationMessage =>
+      '修改已提交的身分確認資料前，請先完成人臉驗證。';
+
+  @override
+  String get walletWithdrawRequiresFaceVerificationTitle => '需要先完成人臉驗證';
+
+  @override
+  String get walletWithdrawRequiresFaceVerificationMessage => '繼續出金前，請先完成人臉驗證。';
 
   @override
   String get homeReminderCoolingOffTitle => '冷靜期中';

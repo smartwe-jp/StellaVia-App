@@ -663,7 +663,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               final step =
                   memberProfileEditStepFromRouteValue(rawStep) ??
                   MemberProfileEditStep.basicInfo;
-              return MemberProfileEditFlowPage.section(initialStep: step);
+              return MemberProfileEditFlowPage.section(
+                initialStep: step,
+                skipInitialAccessGuard: state.extra == true,
+              );
             },
           ),
         ],

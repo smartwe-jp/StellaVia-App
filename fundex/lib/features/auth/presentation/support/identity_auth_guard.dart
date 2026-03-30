@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../providers/identity_auth_sdk_providers.dart';
+import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 import 'identity_auth_message_resolver.dart';
 
 Future<bool> ensureSensitiveActionAuthorized(
@@ -67,4 +68,53 @@ Future<bool> ensureSensitiveActionAuthorized(
     ),
   );
   return false;
+}
+
+Future<bool> ensureRealPersonVerifiedAndAuthorizeSensitiveAction(
+  BuildContext context,
+  WidgetRef ref, {
+  required String faceVerificationTitle,
+  required String faceVerificationMessage,
+  String? identifyGroupId,
+}) async {
+  final faceVerified = await ref
+      .read(settingsRealPersonVerifiedProvider.future)
+      .catchError((Object _) => false);
+  if (!context.mounted) {
+    return false;
+  }
+
+  if (!faceVerified) {
+    final shouldStartVerification =
+        await AppDialogs.showAdaptiveAlert<bool>(
+          context: context,
+          title: faceVerificationTitle,
+          message: faceVerificationMessage,
+          actions: <AppDialogAction<bool>>[
+            AppDialogAction<bool>(
+              label: context.l10n.commonCancel,
+              value: false,
+            ),
+            AppDialogAction<bool>(
+              label: context.l10n.identityAuthStartAction,
+              value: true,
+              isDefaultAction: true,
+            ),
+          ],
+        ) ??
+        false;
+    if (!context.mounted) {
+      return false;
+    }
+    if (shouldStartVerification) {
+      context.push('/profile/settings/two-factor/face');
+    }
+    return false;
+  }
+
+  return ensureSensitiveActionAuthorized(
+    context,
+    ref,
+    identifyGroupId: identifyGroupId,
+  );
 }

@@ -660,6 +660,20 @@ class AppLocalizationsJa extends AppLocalizations {
       'このアカウントは本人確認が未完了です。本人確認を完了してください';
 
   @override
+  String get memberProfileEditRequiresFaceVerificationTitle => '先に本人確認が必要です';
+
+  @override
+  String get memberProfileEditRequiresFaceVerificationMessage =>
+      '提出済みの本人確認情報を編集する前に、本人確認を完了してください。';
+
+  @override
+  String get walletWithdrawRequiresFaceVerificationTitle => '先に本人確認が必要です';
+
+  @override
+  String get walletWithdrawRequiresFaceVerificationMessage =>
+      '出金を続ける前に、本人確認を完了してください。';
+
+  @override
   String get homeReminderCoolingOffTitle => 'クーリングオフ期間中';
 
   @override

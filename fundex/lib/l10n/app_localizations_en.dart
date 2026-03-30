@@ -702,6 +702,22 @@ class AppLocalizationsEn extends AppLocalizations {
       'Real-person verification is not complete for this account. Please complete identity verification.';
 
   @override
+  String get memberProfileEditRequiresFaceVerificationTitle =>
+      'Face verification required';
+
+  @override
+  String get memberProfileEditRequiresFaceVerificationMessage =>
+      'Complete face verification before editing submitted identity information.';
+
+  @override
+  String get walletWithdrawRequiresFaceVerificationTitle =>
+      'Face verification required';
+
+  @override
+  String get walletWithdrawRequiresFaceVerificationMessage =>
+      'Complete face verification before continuing with the withdrawal.';
+
+  @override
   String get homeReminderCoolingOffTitle => 'Cooling-off period in progress';
 
   @override

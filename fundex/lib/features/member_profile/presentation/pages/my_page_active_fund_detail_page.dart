@@ -292,7 +292,14 @@ Future<void> _confirmBenefitWithdrawal(
     return;
   }
 
-  final allowed = await ensureSensitiveActionAuthorized(context, ref);
+  final allowed = await ensureRealPersonVerifiedAndAuthorizeSensitiveAction(
+    context,
+    ref,
+    faceVerificationTitle:
+        context.l10n.walletWithdrawRequiresFaceVerificationTitle,
+    faceVerificationMessage:
+        context.l10n.walletWithdrawRequiresFaceVerificationMessage,
+  );
   if (!context.mounted || !allowed) {
     return;
   }

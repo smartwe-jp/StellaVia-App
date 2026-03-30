@@ -534,7 +534,14 @@ Future<void> refreshProfileCenterTabPage(WidgetRef ref) async {
 }
 
 Future<void> _handleWithdrawTap(BuildContext context, WidgetRef ref) async {
-  final allowed = await ensureSensitiveActionAuthorized(context, ref);
+  final allowed = await ensureRealPersonVerifiedAndAuthorizeSensitiveAction(
+    context,
+    ref,
+    faceVerificationTitle:
+        context.l10n.walletWithdrawRequiresFaceVerificationTitle,
+    faceVerificationMessage:
+        context.l10n.walletWithdrawRequiresFaceVerificationMessage,
+  );
   if (!context.mounted || !allowed) {
     return;
   }

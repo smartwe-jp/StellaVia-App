@@ -22,6 +22,14 @@ class NotificationsPage extends ConsumerStatefulWidget {
 }
 
 class _NotificationsPageState extends ConsumerState<NotificationsPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unawaited(_refreshOnOpen());
+    });
+  }
+
   String _resolveCurrentUserId(AuthUser? user) {
     final candidates = <String>[
       user?.memberId?.toString() ?? '',
@@ -36,6 +44,25 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
       }
     }
     return '';
+  }
+
+  Future<void> _refreshOnOpen() async {
+    if (!mounted) {
+      return;
+    }
+
+    final isAuthenticated =
+        ref.read(isAuthenticatedProvider).asData?.value ?? false;
+    if (!isAuthenticated) {
+      return;
+    }
+
+    final state = ref.read(notificationsControllerProvider);
+    if (state.isLoading || state.isRefreshing) {
+      return;
+    }
+
+    await ref.read(notificationsControllerProvider.notifier).refreshNotices();
   }
 
   Future<void> _openNoticeDetail(NotificationItemViewData item) async {

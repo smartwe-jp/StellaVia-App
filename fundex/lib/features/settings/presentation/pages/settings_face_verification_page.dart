@@ -28,7 +28,6 @@ class _SettingsFaceVerificationPageState
   bool _isUploadingPhoto = false;
   bool _isRunningVerification = false;
   bool _isVerified = false;
-  bool _isReverificationMode = false;
 
   bool _isSelfieUploaded(String? path) {
     final normalized = path?.trim() ?? '';
@@ -184,7 +183,6 @@ class _SettingsFaceVerificationPageState
         if (decision.action == IdentityAuthAction.none) {
           setState(() {
             _isVerified = true;
-            _isReverificationMode = false;
           });
           ref.invalidate(settingsRemoteVerificationStatusProvider);
           ref.invalidate(settingsRealPersonVerifiedProvider);
@@ -242,7 +240,6 @@ class _SettingsFaceVerificationPageState
       if (result.verified) {
         setState(() {
           _isVerified = true;
-          _isReverificationMode = false;
         });
         ref.invalidate(settingsRemoteVerificationStatusProvider);
         ref.invalidate(settingsRealPersonVerifiedProvider);
@@ -292,10 +289,7 @@ class _SettingsFaceVerificationPageState
     final verifiedAsync = ref.watch(settingsRealPersonVerifiedProvider);
     final selfieUploaded = _isSelfieUploaded(_selfiePhotoPath);
     final verified = _isVerified || (verifiedAsync.asData?.value == true);
-    final showUploadSection = !verified || _isReverificationMode;
-    final ctaLabel = verified && !_isReverificationMode
-        ? l10n.settingsFaceVerificationReverifyAction
-        : l10n.identityAuthStartAction;
+    final showUploadSection = !verified;
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -425,23 +419,16 @@ class _SettingsFaceVerificationPageState
             const SizedBox(height: 16),
             const LinearProgressIndicator(minHeight: 2),
           ],
-          const SizedBox(height: 20),
-          PrimaryCtaButton(
-            label: ctaLabel,
-            onPressed: _isUploadingPhoto || _isRunningVerification
-                ? null
-                : () {
-                    if (verified && !_isReverificationMode) {
-                      setState(() {
-                        _isReverificationMode = true;
-                        _statusMessage = null;
-                      });
-                      return;
-                    }
-                    _startVerification(forceLiveness: _isReverificationMode);
-                  },
-            isLoading: _isRunningVerification,
-          ),
+          if (showUploadSection) ...<Widget>[
+            const SizedBox(height: 20),
+            PrimaryCtaButton(
+              label: l10n.identityAuthStartAction,
+              onPressed: _isUploadingPhoto || _isRunningVerification
+                  ? null
+                  : () => _startVerification(),
+              isLoading: _isRunningVerification,
+            ),
+          ],
         ],
       ),
     );

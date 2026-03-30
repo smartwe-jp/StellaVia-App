@@ -1367,6 +1367,30 @@ abstract class AppLocalizations {
   /// **'Real-person verification is not complete for this account. Please complete identity verification.'**
   String get homeReminderRealPersonVerificationBody;
 
+  /// No description provided for @memberProfileEditRequiresFaceVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Face verification required'**
+  String get memberProfileEditRequiresFaceVerificationTitle;
+
+  /// No description provided for @memberProfileEditRequiresFaceVerificationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete face verification before editing submitted identity information.'**
+  String get memberProfileEditRequiresFaceVerificationMessage;
+
+  /// No description provided for @walletWithdrawRequiresFaceVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Face verification required'**
+  String get walletWithdrawRequiresFaceVerificationTitle;
+
+  /// No description provided for @walletWithdrawRequiresFaceVerificationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete face verification before continuing with the withdrawal.'**
+  String get walletWithdrawRequiresFaceVerificationMessage;
+
   /// No description provided for @homeReminderCoolingOffTitle.
   ///
   /// In en, this message translates to:
