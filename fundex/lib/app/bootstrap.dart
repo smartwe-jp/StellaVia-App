@@ -96,7 +96,7 @@ Future<void> bootstrap({
   );
   final logger = await FileAppLogger.create(
     enableDebugLogs: environment.enableHttpLog,
-    loggerName: 'fundex',
+    loggerName: 'StellaVia',
   );
 
   final pushSettings = AppPushSettings.fromDartDefine();

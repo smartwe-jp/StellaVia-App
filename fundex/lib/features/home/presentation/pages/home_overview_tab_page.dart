@@ -460,7 +460,11 @@ FundActiveFundCardData _buildActiveFundCardData(
     symbol: '¥',
     decimalDigits: 0,
   );
-  final nextDistributionDate = _parseDateTime(project.distributionDate);
+  final operationPeriod = _formatOperationPeriod(
+    context,
+    project.scheduledStartDate,
+    project.scheduledEndDate,
+  );
 
   return FundActiveFundCardData(
     title: project.projectName,
@@ -471,10 +475,8 @@ FundActiveFundCardData _buildActiveFundCardData(
         value: _formatCurrency(project.amountApplication, currencyFormatter),
       ),
       FundLabeledValue(
-        label: context.l10n.homeNextDividendLabel,
-        value: nextDistributionDate == null
-            ? context.l10n.myPageResultAnnouncementTbd
-            : _formatDateForLocale(nextDistributionDate, locale),
+        label: context.l10n.fundListPeriodLabel,
+        value: operationPeriod ?? context.l10n.myPageResultAnnouncementTbd,
       ),
     ],
     onTap: () => context.push('/funds/${project.id}'),
@@ -792,4 +794,18 @@ String _formatDateForLocale(DateTime value, Locale locale) {
     return DateFormat.yMd('zh').format(value);
   }
   return DateFormat.yMMMd(locale.toLanguageTag()).format(value);
+}
+
+String? _formatOperationPeriod(
+  BuildContext context,
+  String? start,
+  String? end,
+) {
+  final locale = Localizations.localeOf(context);
+  final startDate = _parseDateTime(start);
+  final endDate = _parseDateTime(end);
+  if (startDate == null || endDate == null) {
+    return null;
+  }
+  return '${_formatDateForLocale(startDate, locale)}～${_formatDateForLocale(endDate, locale)}';
 }
