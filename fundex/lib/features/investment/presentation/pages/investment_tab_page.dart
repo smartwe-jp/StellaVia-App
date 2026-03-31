@@ -9,6 +9,7 @@ import '../../domain/entities/fund_project.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
 import '../providers/fund_project_favorite_providers.dart';
 import '../providers/fund_project_providers.dart';
+import '../support/fund_project_gain_type_label.dart';
 import '../support/fund_project_yield_display.dart';
 
 enum _FundListFilter {
@@ -283,19 +284,8 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
     }
   }
 
-  String _resolveMethodLabel(BuildContext context, String? offeringMethod) {
-    final l10n = context.l10n;
-    final value = offeringMethod?.trim();
-    if (value == null || value.isEmpty) {
-      return l10n.fundListMethodLottery;
-    }
-    final normalized = value.toLowerCase();
-    if (normalized.contains('lottery') ||
-        value.contains('抽選') ||
-        value.contains('抽签')) {
-      return l10n.fundListMethodLottery;
-    }
-    return value;
+  String _resolveMethodLabel(BuildContext context, String? gainType) {
+    return resolveFundProjectGainTypeLabel(context, gainType);
   }
 
   String _resolveAmountBannerText(
@@ -470,7 +460,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                         );
                         final methodLabel = _resolveMethodLabel(
                           context,
-                          project.offeringMethod,
+                          project.gainType,
                         );
                         final periodText =
                             (project.investmentPeriod?.trim().isNotEmpty ??

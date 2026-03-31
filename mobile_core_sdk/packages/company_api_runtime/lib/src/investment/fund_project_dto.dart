@@ -14,6 +14,7 @@ class FundProjectDto {
     this.offeringEndDatetime,
     this.typeOfOffering,
     this.offeringMethod,
+    this.gainType,
     this.investmentUnit,
     this.maximumInvestmentPerPerson,
     this.achievementRate,
@@ -56,6 +57,7 @@ class FundProjectDto {
       offeringMethod:
           _normalizedOptionalString(json['offeringMethod']) ??
           _normalizedOptionalString(json['typeOfOffering']),
+      gainType: _normalizedOptionalString(json['gainType']),
       investmentUnit: _intOrNull(json['investmentUnit']),
       maximumInvestmentPerPerson: _intOrNull(
         json['maximumInvestmentPerPerson'],
@@ -89,6 +91,7 @@ class FundProjectDto {
   final String? offeringEndDatetime;
   final String? typeOfOffering;
   final String? offeringMethod;
+  final String? gainType;
   final int? investmentUnit;
   final int? maximumInvestmentPerPerson;
   final double? achievementRate;
