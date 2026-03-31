@@ -24,12 +24,12 @@ class MemberProfileApiPayloadMapper {
     ]);
     final familyNameEn = _firstNonEmpty(<String>[
       profile.familyNameEn,
-      authUser?.firstNameEn ?? '',
+      authUser?.lastNameEn ?? '',
       familyName,
     ]);
     final givenNameEn = _firstNonEmpty(<String>[
       profile.givenNameEn,
-      authUser?.lastNameEn ?? '',
+      authUser?.firstNameEn ?? '',
       givenName,
     ]);
     final katakana = _firstNonEmpty(<String>[
@@ -43,8 +43,8 @@ class MemberProfileApiPayloadMapper {
     final baseInfo = <String, dynamic>{
       'firstName': familyName,
       'lastName': givenName,
-      'firstNameEn': familyNameEn,
-      'lastNameEn': givenNameEn,
+      'firstNameEn': givenNameEn,
+      'lastNameEn': familyNameEn,
       'katakana': katakana,
       'birthday': _normalizeBirthday(
         _firstNonEmpty(<String>[
