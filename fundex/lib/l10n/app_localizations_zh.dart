@@ -1014,10 +1014,43 @@ class AppLocalizationsZh extends AppLocalizations {
   String get menuItemTheme => '主题';
 
   @override
-  String get menuItemEditProfile => '编辑会员资料';
+  String get menuItemEditProfile => '会员资料';
 
   @override
   String get memberProfileOverviewTitle => '会员基本情报';
+
+  @override
+  String get memberProfileOverviewStatusEmailUnbound => '未绑定邮箱';
+
+  @override
+  String get memberProfileOverviewStatusIncomplete => '未完成';
+
+  @override
+  String get memberProfileOverviewStatusUnverified => '未认证';
+
+  @override
+  String get memberProfileOverviewStatusPending => '待审核';
+
+  @override
+  String get memberProfileOverviewStatusFailed => '认证失败';
+
+  @override
+  String get memberProfileOverviewStatusVerified => '已认证';
+
+  @override
+  String get memberProfileOverviewUnverifiedTitle => '未认证';
+
+  @override
+  String get memberProfileOverviewUnverifiedMessage => '请先完成会员资料录入与认证流程。';
+
+  @override
+  String get memberProfileOverviewFailedTitle => '认证失败';
+
+  @override
+  String get memberProfileOverviewFailedMessage => '请重新进入会员资料录入流程并再次认证。';
+
+  @override
+  String get memberProfileOverviewStartIntakeAction => '前往资料录入';
 
   @override
   String get commonEditText => '编辑';
@@ -4640,10 +4673,43 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get menuItemTheme => '主題';
 
   @override
-  String get menuItemEditProfile => '編輯會員資訊';
+  String get menuItemEditProfile => '會員資訊';
 
   @override
   String get memberProfileOverviewTitle => '會員基本情報';
+
+  @override
+  String get memberProfileOverviewStatusEmailUnbound => '未綁定電子郵件';
+
+  @override
+  String get memberProfileOverviewStatusIncomplete => '未完成';
+
+  @override
+  String get memberProfileOverviewStatusUnverified => '未驗證';
+
+  @override
+  String get memberProfileOverviewStatusPending => '待審核';
+
+  @override
+  String get memberProfileOverviewStatusFailed => '驗證失敗';
+
+  @override
+  String get memberProfileOverviewStatusVerified => '已驗證';
+
+  @override
+  String get memberProfileOverviewUnverifiedTitle => '尚未驗證';
+
+  @override
+  String get memberProfileOverviewUnverifiedMessage => '請先完成會員資料填寫與驗證流程。';
+
+  @override
+  String get memberProfileOverviewFailedTitle => '驗證失敗';
+
+  @override
+  String get memberProfileOverviewFailedMessage => '請重新進入會員資料填寫流程並再次驗證。';
+
+  @override
+  String get memberProfileOverviewStartIntakeAction => '前往資料填寫';
 
   @override
   String get commonEditText => '編輯';

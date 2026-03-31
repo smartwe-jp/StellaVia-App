@@ -2072,7 +2072,7 @@ abstract class AppLocalizations {
   /// No description provided for @menuItemEditProfile.
   ///
   /// In en, this message translates to:
-  /// **'Edit member profile'**
+  /// **'Member profile'**
   String get menuItemEditProfile;
 
   /// No description provided for @memberProfileOverviewTitle.
@@ -2080,6 +2080,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Member Profile'**
   String get memberProfileOverviewTitle;
+
+  /// No description provided for @memberProfileOverviewStatusEmailUnbound.
+  ///
+  /// In en, this message translates to:
+  /// **'Email not linked'**
+  String get memberProfileOverviewStatusEmailUnbound;
+
+  /// No description provided for @memberProfileOverviewStatusIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Incomplete'**
+  String get memberProfileOverviewStatusIncomplete;
+
+  /// No description provided for @memberProfileOverviewStatusUnverified.
+  ///
+  /// In en, this message translates to:
+  /// **'Not verified'**
+  String get memberProfileOverviewStatusUnverified;
+
+  /// No description provided for @memberProfileOverviewStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending review'**
+  String get memberProfileOverviewStatusPending;
+
+  /// No description provided for @memberProfileOverviewStatusFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification failed'**
+  String get memberProfileOverviewStatusFailed;
+
+  /// No description provided for @memberProfileOverviewStatusVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified'**
+  String get memberProfileOverviewStatusVerified;
+
+  /// No description provided for @memberProfileOverviewUnverifiedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification required'**
+  String get memberProfileOverviewUnverifiedTitle;
+
+  /// No description provided for @memberProfileOverviewUnverifiedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete the member profile intake and verification flow first.'**
+  String get memberProfileOverviewUnverifiedMessage;
+
+  /// No description provided for @memberProfileOverviewFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification failed'**
+  String get memberProfileOverviewFailedTitle;
+
+  /// No description provided for @memberProfileOverviewFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart the member profile intake flow to verify again.'**
+  String get memberProfileOverviewFailedMessage;
+
+  /// No description provided for @memberProfileOverviewStartIntakeAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to profile intake'**
+  String get memberProfileOverviewStartIntakeAction;
 
   /// No description provided for @commonEditText.
   ///

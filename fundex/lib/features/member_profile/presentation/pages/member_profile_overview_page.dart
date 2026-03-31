@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../auth/presentation/support/identity_auth_guard.dart';
-import '../../../investment/presentation/widgets/secondary_market_buy_flow_sections.dart';
 import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 import '../../domain/entities/member_profile_details.dart';
 import '../providers/member_profile_providers.dart';
@@ -62,7 +62,18 @@ class _MemberProfileOverviewPageState
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = theme.appColors;
+    final authUser = ref.watch(currentAuthUserProvider).asData?.value;
+    final basicProfile = ref.watch(memberBasicProfileProvider);
     final detailsAsync = ref.watch(memberProfileDetailsProvider);
+    final currentDetails = detailsAsync.asData?.value;
+    final headerPresentation = _resolveMemberProfileOverviewPresentation(
+      l10n,
+      status: authUser?.status,
+      email: _firstFilledString(<String?>[
+        basicProfile?.email,
+        currentDetails?.email,
+      ]),
+    );
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -75,8 +86,9 @@ class _MemberProfileOverviewPageState
       ),
       body: Column(
         children: <Widget>[
-          SecondaryMarketTradePinnedTitleBar(
+          _MemberProfileOverviewPinnedTitleBar(
             title: l10n.memberProfileOverviewTitle,
+            presentation: headerPresentation,
           ),
           Expanded(
             child: Stack(
@@ -89,244 +101,329 @@ class _MemberProfileOverviewPageState
                   ),
                   data: (MemberProfileDetails? details) {
                     final profile = details ?? const MemberProfileDetails();
+                    final resolvedEmail = _firstFilledString(<String?>[
+                      basicProfile?.email,
+                      profile.email,
+                    ]);
+                    final presentation =
+                        _resolveMemberProfileOverviewPresentation(
+                          l10n,
+                          status: authUser?.status,
+                          email: resolvedEmail,
+                        );
                     final (String addressPrefecture, String addressCity) =
                         _splitAddressFields(profile.address);
+                    final resolvedFamilyName = _firstFilledString(<String?>[
+                      basicProfile?.familyName,
+                      profile.familyName,
+                    ]);
+                    final resolvedGivenName = _firstFilledString(<String?>[
+                      basicProfile?.givenName,
+                      profile.givenName,
+                    ]);
+                    final resolvedFamilyNameKana = _firstFilledString(<String?>[
+                      basicProfile?.familyNameKana,
+                      profile.familyNameKana,
+                    ]);
+                    final resolvedGivenNameKana = _firstFilledString(<String?>[
+                      basicProfile?.givenNameKana,
+                      profile.givenNameKana,
+                    ]);
+                    final resolvedFamilyNameEn = _firstFilledString(<String?>[
+                      basicProfile?.familyNameEn,
+                      profile.familyNameEn,
+                    ]);
+                    final resolvedGivenNameEn = _firstFilledString(<String?>[
+                      basicProfile?.givenNameEn,
+                      profile.givenNameEn,
+                    ]);
+                    final resolvedSex = profile.sex ?? basicProfile?.sex;
+                    final canEditSections = presentation.allowsEditing;
                     return RefreshIndicator(
                       onRefresh: _refreshProfile,
                       child: ListView(
                         physics: const AlwaysScrollableScrollPhysics(),
                         padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
                         children: <Widget>[
-                          _MemberProfileOverviewSection(
-                            icon: Icons.badge_outlined,
-                            title: memberProfileEditStepTitle(
-                              l10n,
-                              MemberProfileEditStep.basicInfo,
-                              plain: true,
+                          if (!presentation.showProfileContent)
+                            _MemberProfileOverviewBlockedState(
+                              title: presentation.emptyTitle ?? '',
+                              message: presentation.emptyMessage ?? '',
+                              actionLabel:
+                                  presentation.primaryActionLabel ?? '',
+                              tone: presentation.tone,
+                              onAction: () =>
+                                  context.push('/member-profile/onboarding'),
+                            )
+                          else ...<Widget>[
+                            _MemberProfileOverviewSection(
+                              icon: Icons.badge_outlined,
+                              title: memberProfileEditStepTitle(
+                                l10n,
+                                MemberProfileEditStep.basicInfo,
+                                plain: true,
+                              ),
+                              onEdit: canEditSections
+                                  ? () => _openSection(
+                                      MemberProfileEditStep.basicInfo,
+                                    )
+                                  : null,
+                              children: <Widget>[
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfileFamilyNameLabel,
+                                  value: _displayValue(
+                                    resolvedFamilyName,
+                                    l10n,
+                                  ),
+                                ),
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfileGivenNameLabel,
+                                  value: _displayValue(resolvedGivenName, l10n),
+                                ),
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfileFamilyNameKanaLabel,
+                                  value: _displayValue(
+                                    resolvedFamilyNameKana,
+                                    l10n,
+                                  ),
+                                ),
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfileGivenNameKanaLabel,
+                                  value: _displayValue(
+                                    resolvedGivenNameKana,
+                                    l10n,
+                                  ),
+                                ),
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfileFamilyNameRomanLabel,
+                                  value: _displayValue(
+                                    resolvedFamilyNameEn,
+                                    l10n,
+                                  ),
+                                ),
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfileGivenNameRomanLabel,
+                                  value: _displayValue(
+                                    resolvedGivenNameEn,
+                                    l10n,
+                                  ),
+                                ),
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfileBirthdayLabel,
+                                  value: _displayValue(
+                                    profile.birthday ?? '',
+                                    l10n,
+                                  ),
+                                ),
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfileSexLabel,
+                                  value: _displayValue(
+                                    _sexLabel(l10n, resolvedSex),
+                                    l10n,
+                                  ),
+                                ),
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfileTaxCountryLabel,
+                                  value: _displayValue(
+                                    profile.taxcountry,
+                                    l10n,
+                                  ),
+                                ),
+                                _OverviewFieldRow(
+                                  label: l10n.profileEmailLabel,
+                                  value: resolvedEmail.trim().isEmpty
+                                      ? l10n.settingsEmailUnavailable
+                                      : resolvedEmail,
+                                  actionLabel:
+                                      presentation.showEmailBindingAction
+                                      ? l10n.settingsEmailVerifyAction
+                                      : null,
+                                  onActionTap:
+                                      presentation.showEmailBindingAction
+                                      ? () => context.push(
+                                          '/profile/settings/two-factor/email',
+                                        )
+                                      : null,
+                                  isLast: true,
+                                ),
+                              ],
                             ),
-                            onEdit: () =>
-                                _openSection(MemberProfileEditStep.basicInfo),
-                            children: <Widget>[
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileFamilyNameLabel,
-                                value: _displayValue(profile.familyName, l10n),
+                            _MemberProfileOverviewSection(
+                              icon: Icons.location_on_outlined,
+                              title: memberProfileEditStepTitle(
+                                l10n,
+                                MemberProfileEditStep.addressInfo,
+                                plain: true,
                               ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileGivenNameLabel,
-                                value: _displayValue(profile.givenName, l10n),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileFamilyNameKanaLabel,
-                                value: _displayValue(
-                                  profile.familyNameKana,
-                                  l10n,
+                              onEdit: canEditSections
+                                  ? () => _openSection(
+                                      MemberProfileEditStep.addressInfo,
+                                    )
+                                  : null,
+                              children: <Widget>[
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfilePostalCodeLabel,
+                                  value: _displayValue(profile.zipCode, l10n),
                                 ),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileGivenNameKanaLabel,
-                                value: _displayValue(
-                                  profile.givenNameKana,
-                                  l10n,
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfilePrefectureLabel,
+                                  value: _displayValue(
+                                    _prefectureLabel(
+                                      l10n,
+                                      addressPrefecture.trim().isNotEmpty
+                                          ? addressPrefecture
+                                          : profile.prefectureCode,
+                                    ),
+                                    l10n,
+                                  ),
                                 ),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileFamilyNameRomanLabel,
-                                value: _displayValue(
-                                  profile.familyNameEn,
-                                  l10n,
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfileCityAddressLabel,
+                                  value: _displayValue(
+                                    addressCity.trim().isNotEmpty
+                                        ? addressCity
+                                        : (profile.cityAddress.trim().isNotEmpty
+                                              ? profile.cityAddress
+                                              : profile.address),
+                                    l10n,
+                                  ),
+                                  isLast: true,
                                 ),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileGivenNameRomanLabel,
-                                value: _displayValue(profile.givenNameEn, l10n),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileBirthdayLabel,
-                                value: _displayValue(
-                                  profile.birthday ?? '',
-                                  l10n,
-                                ),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileSexLabel,
-                                value: _displayValue(
-                                  _sexLabel(l10n, profile.sex),
-                                  l10n,
-                                ),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileTaxCountryLabel,
-                                value: _displayValue(profile.taxcountry, l10n),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.profileEmailLabel,
-                                value: _displayValue(profile.email, l10n),
-                                isLast: true,
-                              ),
-                            ],
-                          ),
-                          _MemberProfileOverviewSection(
-                            icon: Icons.location_on_outlined,
-                            title: memberProfileEditStepTitle(
-                              l10n,
-                              MemberProfileEditStep.addressInfo,
-                              plain: true,
+                              ],
                             ),
-                            onEdit: () =>
-                                _openSection(MemberProfileEditStep.addressInfo),
-                            children: <Widget>[
-                              _OverviewFieldRow(
-                                label: l10n.memberProfilePostalCodeLabel,
-                                value: _displayValue(profile.zipCode, l10n),
+                            _MemberProfileOverviewSection(
+                              icon: Icons.insights_outlined,
+                              title: memberProfileEditStepTitle(
+                                l10n,
+                                MemberProfileEditStep.suitability,
+                                plain: true,
                               ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfilePrefectureLabel,
-                                value: _displayValue(
-                                  _prefectureLabel(
+                              onEdit: canEditSections
+                                  ? () => _openSection(
+                                      MemberProfileEditStep.suitability,
+                                    )
+                                  : null,
+                              children: <Widget>[
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfileOccupationLabel,
+                                  value: _displayValue(
+                                    _occupationLabel(
+                                      l10n,
+                                      profile.occupationCode,
+                                    ),
                                     l10n,
-                                    addressPrefecture.trim().isNotEmpty
-                                        ? addressPrefecture
-                                        : profile.prefectureCode,
                                   ),
-                                  l10n,
                                 ),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileCityAddressLabel,
-                                value: _displayValue(
-                                  addressCity.trim().isNotEmpty
-                                      ? addressCity
-                                      : (profile.cityAddress.trim().isNotEmpty
-                                            ? profile.cityAddress
-                                            : profile.address),
-                                  l10n,
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfileAnnualIncomeLabel,
+                                  value: _displayValue(
+                                    _incomeLabel(
+                                      l10n,
+                                      profile.annualIncomeCode,
+                                    ),
+                                    l10n,
+                                  ),
                                 ),
-                                isLast: true,
-                              ),
-                            ],
-                          ),
-                          _MemberProfileOverviewSection(
-                            icon: Icons.insights_outlined,
-                            title: memberProfileEditStepTitle(
-                              l10n,
-                              MemberProfileEditStep.suitability,
-                              plain: true,
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfileFinancialAssetsLabel,
+                                  value: _displayValue(
+                                    _financialAssetLabel(
+                                      l10n,
+                                      profile.financialAssetsCode,
+                                    ),
+                                    l10n,
+                                  ),
+                                ),
+                                _OverviewFieldRow(
+                                  label: l10n
+                                      .memberProfileInvestmentExperienceLabel,
+                                  value: _displayValue(
+                                    _experienceSummary(
+                                      l10n,
+                                      profile.investmentExperienceCodes,
+                                    ),
+                                    l10n,
+                                  ),
+                                ),
+                                _OverviewFieldRow(
+                                  label:
+                                      l10n.memberProfileInvestmentPurposeLabel,
+                                  value: _displayValue(
+                                    _purposeLabel(
+                                      l10n,
+                                      profile.investmentPurposeCode,
+                                    ),
+                                    l10n,
+                                  ),
+                                ),
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfileFundSourceLabel,
+                                  value: _displayValue(
+                                    _fundSourceLabel(
+                                      l10n,
+                                      profile.fundSourceCode,
+                                    ),
+                                    l10n,
+                                  ),
+                                ),
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfileRiskToleranceLabel,
+                                  value: _displayValue(
+                                    _riskLabel(l10n, profile.riskToleranceCode),
+                                    l10n,
+                                  ),
+                                  isLast: true,
+                                ),
+                              ],
                             ),
-                            onEdit: () =>
-                                _openSection(MemberProfileEditStep.suitability),
-                            children: <Widget>[
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileOccupationLabel,
-                                value: _displayValue(
-                                  _occupationLabel(
+                            _MemberProfileOverviewSection(
+                              icon: Icons.verified_user_outlined,
+                              title: memberProfileEditStepTitle(
+                                l10n,
+                                MemberProfileEditStep.ekyc,
+                                plain: true,
+                              ),
+                              onEdit: canEditSections
+                                  ? () =>
+                                        _openSection(MemberProfileEditStep.ekyc)
+                                  : null,
+                              children: <Widget>[
+                                _OverviewFieldRow(
+                                  label: l10n.memberProfileDocumentTypeLabel,
+                                  value: _displayValue(
+                                    _documentTypeLabel(
+                                      l10n,
+                                      profile.ekycDocumentType,
+                                    ),
                                     l10n,
-                                    profile.occupationCode,
                                   ),
-                                  l10n,
                                 ),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileAnnualIncomeLabel,
-                                value: _displayValue(
-                                  _incomeLabel(l10n, profile.annualIncomeCode),
-                                  l10n,
-                                ),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileFinancialAssetsLabel,
-                                value: _displayValue(
-                                  _financialAssetLabel(
+                                _OverviewFieldRow(
+                                  label:
+                                      l10n.memberProfilePhotoDocumentFrontTitle,
+                                  value: _statusValue(
+                                    (profile.idDocumentPhotoPath
+                                            ?.trim()
+                                            .isNotEmpty ??
+                                        false),
                                     l10n,
-                                    profile.financialAssetsCode,
                                   ),
-                                  l10n,
                                 ),
-                              ),
-                              _OverviewFieldRow(
-                                label:
-                                    l10n.memberProfileInvestmentExperienceLabel,
-                                value: _displayValue(
-                                  _experienceSummary(
+                                _OverviewFieldRow(
+                                  label:
+                                      l10n.memberProfilePhotoDocumentBackTitle,
+                                  value: _statusValue(
+                                    (profile.idDocumentBackPhotoPath
+                                            ?.trim()
+                                            .isNotEmpty ??
+                                        false),
                                     l10n,
-                                    profile.investmentExperienceCodes,
                                   ),
-                                  l10n,
+                                  isLast: true,
                                 ),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileInvestmentPurposeLabel,
-                                value: _displayValue(
-                                  _purposeLabel(
-                                    l10n,
-                                    profile.investmentPurposeCode,
-                                  ),
-                                  l10n,
-                                ),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileFundSourceLabel,
-                                value: _displayValue(
-                                  _fundSourceLabel(
-                                    l10n,
-                                    profile.fundSourceCode,
-                                  ),
-                                  l10n,
-                                ),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileRiskToleranceLabel,
-                                value: _displayValue(
-                                  _riskLabel(l10n, profile.riskToleranceCode),
-                                  l10n,
-                                ),
-                                isLast: true,
-                              ),
-                            ],
-                          ),
-                          _MemberProfileOverviewSection(
-                            icon: Icons.verified_user_outlined,
-                            title: memberProfileEditStepTitle(
-                              l10n,
-                              MemberProfileEditStep.ekyc,
-                              plain: true,
+                              ],
                             ),
-                            onEdit: () =>
-                                _openSection(MemberProfileEditStep.ekyc),
-                            children: <Widget>[
-                              _OverviewFieldRow(
-                                label: l10n.memberProfileDocumentTypeLabel,
-                                value: _displayValue(
-                                  _documentTypeLabel(
-                                    l10n,
-                                    profile.ekycDocumentType,
-                                  ),
-                                  l10n,
-                                ),
-                              ),
-                              _OverviewFieldRow(
-                                label:
-                                    l10n.memberProfilePhotoDocumentFrontTitle,
-                                value: _statusValue(
-                                  (profile.idDocumentPhotoPath
-                                          ?.trim()
-                                          .isNotEmpty ??
-                                      false),
-                                  l10n,
-                                ),
-                              ),
-                              _OverviewFieldRow(
-                                label: l10n.memberProfilePhotoDocumentBackTitle,
-                                value: _statusValue(
-                                  (profile.idDocumentBackPhotoPath
-                                          ?.trim()
-                                          .isNotEmpty ??
-                                      false),
-                                  l10n,
-                                ),
-                                isLast: true,
-                              ),
-                            ],
-                          ),
+                          ],
                         ],
                       ),
                     );
@@ -400,13 +497,13 @@ class _MemberProfileOverviewSection extends StatelessWidget {
   const _MemberProfileOverviewSection({
     required this.icon,
     required this.title,
-    required this.onEdit,
     required this.children,
+    this.onEdit,
   });
 
   final IconData icon;
   final String title;
-  final VoidCallback onEdit;
+  final VoidCallback? onEdit;
   final List<Widget> children;
 
   @override
@@ -441,16 +538,17 @@ class _MemberProfileOverviewSection extends StatelessWidget {
                   ),
                 ),
               ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  foregroundColor: colors.primary,
+              if (onEdit != null)
+                TextButton(
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    foregroundColor: colors.primary,
+                  ),
+                  onPressed: onEdit,
+                  child: Text(context.l10n.commonEditText),
                 ),
-                onPressed: onEdit,
-                child: Text(context.l10n.commonEditText),
-              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -468,11 +566,15 @@ class _OverviewFieldRow extends StatelessWidget {
     required this.label,
     required this.value,
     this.isLast = false,
+    this.actionLabel,
+    this.onActionTap,
   });
 
   final String label;
   final String value;
   final bool isLast;
+  final String? actionLabel;
+  final VoidCallback? onActionTap;
 
   @override
   Widget build(BuildContext context) {
@@ -504,14 +606,173 @@ class _OverviewFieldRow extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
-              value,
-              style: appText.body.copyWith(
-                color: colors.textPrimary,
-                height: 1.6,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  value,
+                  style: appText.body.copyWith(
+                    color: colors.textPrimary,
+                    height: 1.6,
+                  ),
+                ),
+                if ((actionLabel?.trim().isNotEmpty ?? false) &&
+                    onActionTap != null) ...<Widget>[
+                  const SizedBox(height: 8),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      foregroundColor: colors.primary,
+                    ),
+                    onPressed: onActionTap,
+                    child: Text(actionLabel!),
+                  ),
+                ],
+              ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MemberProfileOverviewPinnedTitleBar extends StatelessWidget {
+  const _MemberProfileOverviewPinnedTitleBar({
+    required this.title,
+    required this.presentation,
+  });
+
+  final String title;
+  final _MemberProfileOverviewPresentation presentation;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final badgeColors = _statusBadgeColors(colors, presentation.tone);
+
+    return SizedBox(
+      width: double.infinity,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: colors.surface,
+          border: Border(bottom: BorderSide(color: colors.borderSoft)),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: colors.scrim.withValues(alpha: 0.03),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: appText.pageTitle.copyWith(
+                    color: colors.textPrimary,
+                    height: 1.3,
+                  ),
+                ),
+              ),
+              if (presentation.statusLabel.trim().isNotEmpty) ...<Widget>[
+                const SizedBox(width: 12),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: badgeColors.$1,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    presentation.statusLabel,
+                    style: appText.chip.copyWith(color: badgeColors.$2),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MemberProfileOverviewBlockedState extends StatelessWidget {
+  const _MemberProfileOverviewBlockedState({
+    required this.title,
+    required this.message,
+    required this.actionLabel,
+    required this.tone,
+    required this.onAction,
+  });
+
+  final String title;
+  final String message;
+  final String actionLabel;
+  final _MemberProfileOverviewStatusTone tone;
+  final VoidCallback onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final palette = _statusBadgeColors(colors, tone);
+    final icon = switch (tone) {
+      _MemberProfileOverviewStatusTone.danger => Icons.error_outline_rounded,
+      _MemberProfileOverviewStatusTone.warning => Icons.pending_actions_rounded,
+      _MemberProfileOverviewStatusTone.success => Icons.verified_rounded,
+      _MemberProfileOverviewStatusTone.neutral => Icons.info_outline_rounded,
+    };
+
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: colors.surfaceAlt,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: colors.border),
+      ),
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: palette.$1,
+              borderRadius: BorderRadius.circular(18),
+            ),
+            alignment: Alignment.center,
+            child: Icon(icon, color: palette.$2, size: 28),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            title,
+            style: appText.sectionTitle.copyWith(color: colors.textPrimary),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            message,
+            style: appText.body.copyWith(
+              color: colors.textSecondary,
+              height: 1.6,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 18),
+          FilledButton(onPressed: onAction, child: Text(actionLabel)),
         ],
       ),
     );
@@ -553,9 +814,134 @@ class _MemberProfileOverviewError extends StatelessWidget {
   }
 }
 
+enum _MemberProfileOverviewStatusTone { neutral, warning, danger, success }
+
+class _MemberProfileOverviewPresentation {
+  const _MemberProfileOverviewPresentation({
+    required this.statusLabel,
+    required this.tone,
+    required this.showProfileContent,
+    required this.allowsEditing,
+    required this.showEmailBindingAction,
+    this.emptyTitle,
+    this.emptyMessage,
+    this.primaryActionLabel,
+  });
+
+  final String statusLabel;
+  final _MemberProfileOverviewStatusTone tone;
+  final bool showProfileContent;
+  final bool allowsEditing;
+  final bool showEmailBindingAction;
+  final String? emptyTitle;
+  final String? emptyMessage;
+  final String? primaryActionLabel;
+}
+
+_MemberProfileOverviewPresentation _resolveMemberProfileOverviewPresentation(
+  AppLocalizations l10n, {
+  required int? status,
+  required String email,
+}) {
+  final hasEmail = email.trim().isNotEmpty;
+  switch (status) {
+    case 2:
+    case 5:
+      return _MemberProfileOverviewPresentation(
+        statusLabel: l10n.memberProfileOverviewStatusPending,
+        tone: _MemberProfileOverviewStatusTone.warning,
+        showProfileContent: true,
+        allowsEditing: false,
+        showEmailBindingAction: false,
+      );
+    case 3:
+      return _MemberProfileOverviewPresentation(
+        statusLabel: l10n.memberProfileOverviewStatusFailed,
+        tone: _MemberProfileOverviewStatusTone.danger,
+        showProfileContent: false,
+        allowsEditing: false,
+        showEmailBindingAction: false,
+        emptyTitle: l10n.memberProfileOverviewFailedTitle,
+        emptyMessage: l10n.memberProfileOverviewFailedMessage,
+        primaryActionLabel: l10n.memberProfileOverviewStartIntakeAction,
+      );
+    case 4:
+      return _MemberProfileOverviewPresentation(
+        statusLabel: l10n.memberProfileOverviewStatusVerified,
+        tone: _MemberProfileOverviewStatusTone.success,
+        showProfileContent: true,
+        allowsEditing: true,
+        showEmailBindingAction: false,
+      );
+    case 1:
+      return _MemberProfileOverviewPresentation(
+        statusLabel: l10n.memberProfileOverviewStatusUnverified,
+        tone: _MemberProfileOverviewStatusTone.warning,
+        showProfileContent: false,
+        allowsEditing: false,
+        showEmailBindingAction: false,
+        emptyTitle: l10n.memberProfileOverviewUnverifiedTitle,
+        emptyMessage: l10n.memberProfileOverviewUnverifiedMessage,
+        primaryActionLabel: l10n.memberProfileOverviewStartIntakeAction,
+      );
+    case 0:
+      return _MemberProfileOverviewPresentation(
+        statusLabel: hasEmail
+            ? l10n.memberProfileOverviewStatusIncomplete
+            : l10n.memberProfileOverviewStatusEmailUnbound,
+        tone: _MemberProfileOverviewStatusTone.warning,
+        showProfileContent: true,
+        allowsEditing: true,
+        showEmailBindingAction: !hasEmail,
+      );
+    default:
+      return const _MemberProfileOverviewPresentation(
+        statusLabel: '',
+        tone: _MemberProfileOverviewStatusTone.neutral,
+        showProfileContent: true,
+        allowsEditing: true,
+        showEmailBindingAction: false,
+      );
+  }
+}
+
+(Color, Color) _statusBadgeColors(
+  AppSemanticColorTheme colors,
+  _MemberProfileOverviewStatusTone tone,
+) {
+  return switch (tone) {
+    _MemberProfileOverviewStatusTone.success => (
+      colors.successSubtle,
+      colors.success,
+    ),
+    _MemberProfileOverviewStatusTone.danger => (
+      colors.dangerSubtle,
+      colors.danger,
+    ),
+    _MemberProfileOverviewStatusTone.warning => (
+      colors.warningSubtle,
+      colors.warning,
+    ),
+    _MemberProfileOverviewStatusTone.neutral => (
+      colors.surfaceAlt,
+      colors.textSecondary,
+    ),
+  };
+}
+
 String _displayValue(String raw, AppLocalizations l10n) {
   final value = raw.trim();
   return value.isEmpty ? l10n.fundDetailUnknownValue : value;
+}
+
+String _firstFilledString(List<String?> values) {
+  for (final value in values) {
+    final normalized = value?.trim() ?? '';
+    if (normalized.isNotEmpty) {
+      return normalized;
+    }
+  }
+  return '';
 }
 
 String _statusValue(bool value, AppLocalizations l10n) {

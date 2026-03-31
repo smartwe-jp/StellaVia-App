@@ -1024,10 +1024,43 @@ class AppLocalizationsJa extends AppLocalizations {
   String get menuItemTheme => 'テーマ';
 
   @override
-  String get menuItemEditProfile => '会員情報の編集';
+  String get menuItemEditProfile => '会員情報';
 
   @override
   String get memberProfileOverviewTitle => '会員基本情報';
+
+  @override
+  String get memberProfileOverviewStatusEmailUnbound => 'メール未連携';
+
+  @override
+  String get memberProfileOverviewStatusIncomplete => '未完了';
+
+  @override
+  String get memberProfileOverviewStatusUnverified => '未認証';
+
+  @override
+  String get memberProfileOverviewStatusPending => '審査中';
+
+  @override
+  String get memberProfileOverviewStatusFailed => '認証失敗';
+
+  @override
+  String get memberProfileOverviewStatusVerified => '認証済み';
+
+  @override
+  String get memberProfileOverviewUnverifiedTitle => '未認証です';
+
+  @override
+  String get memberProfileOverviewUnverifiedMessage => '会員情報の入力と認証を完了してください。';
+
+  @override
+  String get memberProfileOverviewFailedTitle => '認証に失敗しました';
+
+  @override
+  String get memberProfileOverviewFailedMessage => '会員情報を再度入力して認証をやり直してください。';
+
+  @override
+  String get memberProfileOverviewStartIntakeAction => '資料入力へ';
 
   @override
   String get commonEditText => '編集';

@@ -1081,10 +1081,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemTheme => 'Theme';
 
   @override
-  String get menuItemEditProfile => 'Edit member profile';
+  String get menuItemEditProfile => 'Member profile';
 
   @override
   String get memberProfileOverviewTitle => 'Member Profile';
+
+  @override
+  String get memberProfileOverviewStatusEmailUnbound => 'Email not linked';
+
+  @override
+  String get memberProfileOverviewStatusIncomplete => 'Incomplete';
+
+  @override
+  String get memberProfileOverviewStatusUnverified => 'Not verified';
+
+  @override
+  String get memberProfileOverviewStatusPending => 'Pending review';
+
+  @override
+  String get memberProfileOverviewStatusFailed => 'Verification failed';
+
+  @override
+  String get memberProfileOverviewStatusVerified => 'Verified';
+
+  @override
+  String get memberProfileOverviewUnverifiedTitle => 'Verification required';
+
+  @override
+  String get memberProfileOverviewUnverifiedMessage =>
+      'Complete the member profile intake and verification flow first.';
+
+  @override
+  String get memberProfileOverviewFailedTitle => 'Verification failed';
+
+  @override
+  String get memberProfileOverviewFailedMessage =>
+      'Restart the member profile intake flow to verify again.';
+
+  @override
+  String get memberProfileOverviewStartIntakeAction => 'Go to profile intake';
 
   @override
   String get commonEditText => 'Edit';
