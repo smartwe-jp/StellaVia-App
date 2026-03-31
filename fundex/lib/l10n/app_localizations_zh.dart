@@ -3317,7 +3317,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfilePostalCodeLabel => '邮编';
 
   @override
-  String get memberProfilePostalCodeHint => '100-0001';
+  String get memberProfilePostalCodeHint => '1000001';
 
   @override
   String get memberProfileAddressSearch => '地址检索';
@@ -7024,7 +7024,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfilePostalCodeLabel => '郵遞區號';
 
   @override
-  String get memberProfilePostalCodeHint => '100-0001';
+  String get memberProfilePostalCodeHint => '1000001';
 
   @override
   String get memberProfileAddressSearch => '搜尋地址';

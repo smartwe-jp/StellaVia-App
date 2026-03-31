@@ -1266,7 +1266,7 @@
   "memberProfileStep2Title": "Step 2：地址信息",
   "memberProfileStep2Description": "用于身份确认",
   "memberProfilePostalCodeLabel": "邮编",
-  "memberProfilePostalCodeHint": "100-0001",
+  "memberProfilePostalCodeHint": "1000001",
   "memberProfileAddressSearch": "地址检索",
   "memberProfileAddressSearchPending": "地址检索会在后续实现中接入。",
   "memberProfileAddressSearchZipError": "请输入7位邮编。",

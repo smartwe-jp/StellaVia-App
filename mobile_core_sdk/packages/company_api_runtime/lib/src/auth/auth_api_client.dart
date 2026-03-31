@@ -21,7 +21,9 @@ class AuthApiPaths {
   static const String createRegisterMobileCode =
       '/member/user/createRegisterMobileCode';
   static const String createRegisterEmailCode =
-      '/member/user/createRegisterEmailCode';
+      '/member/email/offline/send-code';
+  static const String verifyRegisterEmailCode =
+      '/member/email/offline/verificate-code';
   static const String registerApply = '/member/user/registerApply';
   static const String changePhoneOnlineSend =
       '/member/change/phone/online/send';
@@ -46,6 +48,7 @@ class AuthApiClient {
     this.emailLoginCodePath = AuthApiPaths.emailLoginCode,
     this.createRegisterMobileCodePath = AuthApiPaths.createRegisterMobileCode,
     this.createRegisterEmailCodePath = AuthApiPaths.createRegisterEmailCode,
+    this.verifyRegisterEmailCodePath = AuthApiPaths.verifyRegisterEmailCode,
     this.registerApplyPath = AuthApiPaths.registerApply,
     this.changePhoneOnlineSendPath = AuthApiPaths.changePhoneOnlineSend,
     this.changePhoneOnlineCheckPath = AuthApiPaths.changePhoneOnlineCheck,
@@ -71,6 +74,7 @@ class AuthApiClient {
   final String emailLoginCodePath;
   final String createRegisterMobileCodePath;
   final String createRegisterEmailCodePath;
+  final String verifyRegisterEmailCodePath;
   final String registerApplyPath;
   final String changePhoneOnlineSendPath;
   final String changePhoneOnlineCheckPath;
@@ -132,7 +136,7 @@ class AuthApiClient {
             queryParameters: <String, dynamic>{'email': normalizedAccount},
             options: authRequired(false),
           );
-      _assertLegacyBoolSuccessIfPresent(
+      _assertEnvelopeSuccessAllowZero(
         _envelopeCodec.toJsonMap(response.data),
         fallbackMessage: 'Failed to send registration code.',
       );
@@ -390,19 +394,34 @@ class AuthApiClient {
 
     final isEmail = _isEmailAccount(normalizedAccount);
 
+    if (isEmail) {
+      final response = await _dioForPath(verifyRegisterEmailCodePath)
+          .put<Map<String, dynamic>>(
+            verifyRegisterEmailCodePath,
+            data: <String, dynamic>{
+              'email': normalizedAccount,
+              'code': normalizedCode,
+              'from': 'stellavia',
+            },
+            options: authRequired(
+              false,
+            ).copyWith(contentType: Headers.jsonContentType),
+          );
+      _assertEnvelopeSuccessAllowZero(
+        _envelopeCodec.toJsonMap(response.data),
+        fallbackMessage: 'Registration failed.',
+      );
+      return;
+    }
+
     final payload = <String, dynamic>{
       'code': normalizedCode,
       'intlTelCode': normalizedIntlCode,
-      'type': isEmail ? 'email' : 'mobile',
-      if (isEmail) 'email': normalizedAccount else 'mobile': normalizedAccount,
+      'type': 'mobile',
+      'mobile': normalizedAccount,
     };
 
-    if (isEmail) {
-      if (normalizedContact == null || normalizedContact.isEmpty) {
-        throw StateError('Mobile number is required for email registration.');
-      }
-      payload['mobile'] = normalizedContact;
-    } else if (normalizedContact != null && normalizedContact.contains('@')) {
+    if (normalizedContact != null && normalizedContact.contains('@')) {
       payload['email'] = normalizedContact;
     }
 

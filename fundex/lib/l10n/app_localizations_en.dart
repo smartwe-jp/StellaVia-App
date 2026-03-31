@@ -3534,7 +3534,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memberProfilePostalCodeLabel => 'Postal code';
 
   @override
-  String get memberProfilePostalCodeHint => '100-0001';
+  String get memberProfilePostalCodeHint => '1000001';
 
   @override
   String get memberProfileAddressSearch => 'Search address';

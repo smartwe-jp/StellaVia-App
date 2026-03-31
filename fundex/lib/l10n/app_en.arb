@@ -1266,7 +1266,7 @@
   "memberProfileStep2Title": "Step 2: Address Info",
   "memberProfileStep2Description": "Required for identity verification.",
   "memberProfilePostalCodeLabel": "Postal code",
-  "memberProfilePostalCodeHint": "100-0001",
+  "memberProfilePostalCodeHint": "1000001",
   "memberProfileAddressSearch": "Search address",
   "memberProfileAddressSearchPending": "Address lookup will be connected in a later implementation.",
   "memberProfileAddressSearchZipError": "Please enter a 7-digit postal code.",

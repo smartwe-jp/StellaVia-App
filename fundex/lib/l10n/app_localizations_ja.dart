@@ -3355,7 +3355,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfilePostalCodeLabel => '郵便番号';
 
   @override
-  String get memberProfilePostalCodeHint => '100-0001';
+  String get memberProfilePostalCodeHint => '1000001';
 
   @override
   String get memberProfileAddressSearch => '住所検索';

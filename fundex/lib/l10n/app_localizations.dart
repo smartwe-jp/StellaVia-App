@@ -6533,7 +6533,7 @@ abstract class AppLocalizations {
   /// No description provided for @memberProfilePostalCodeHint.
   ///
   /// In en, this message translates to:
-  /// **'100-0001'**
+  /// **'1000001'**
   String get memberProfilePostalCodeHint;
 
   /// No description provided for @memberProfileAddressSearch.

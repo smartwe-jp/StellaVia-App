@@ -112,7 +112,7 @@ void main() {
           expect(options.path, AuthApiPaths.createRegisterEmailCode);
           expect(options.queryParameters['email'], 'user@example.com');
           expect(options.extra['auth_required'], false);
-          return _jsonOk('{"code":200,"data":true}');
+          return _jsonOk('{"code":200,"msg":"success"}');
         });
         final source = AuthRemoteDataSourceImpl(client);
 
@@ -307,20 +307,22 @@ void main() {
       await source.logout(accessToken: 'access-token');
     });
 
-    test('registerApply uses email payload when account is email', () async {
+    test(
+      'registerApply uses offline email verification endpoint when account is email',
+      () async {
       final client = _buildClient((options) async {
-        expect(options.method, 'POST');
-        expect(options.path, AuthApiPaths.registerApply);
+        expect(options.method, 'PUT');
+        expect(options.path, AuthApiPaths.verifyRegisterEmailCode);
         expect(options.contentType, Headers.jsonContentType);
         expect(options.extra['auth_required'], false);
 
         final body = options.data as Map<String, dynamic>;
-        expect(body['type'], 'email');
         expect(body['email'], 'user@example.com');
-        expect(body['mobile'], '13900000000');
-        expect(body['intlTelCode'], '81');
         expect(body['code'], '123456');
-        return _jsonOk('{"code":200,"data":true}');
+        expect(body['from'], 'stellavia');
+        expect(body.containsKey('mobile'), isFalse);
+        expect(body.containsKey('intlTelCode'), isFalse);
+        return _jsonOk('{"code":200,"msg":"success"}');
       });
       final source = AuthRemoteDataSourceImpl(client);
 
@@ -328,7 +330,6 @@ void main() {
         account: 'user@example.com',
         code: '123456',
         intlCode: '81',
-        contact: '13900000000',
       );
     });
 

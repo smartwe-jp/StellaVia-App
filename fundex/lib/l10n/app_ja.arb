@@ -1266,7 +1266,7 @@
   "memberProfileStep2Title": "Step 2：住所情報",
   "memberProfileStep2Description": "本人確認に必要です",
   "memberProfilePostalCodeLabel": "郵便番号",
-  "memberProfilePostalCodeHint": "100-0001",
+  "memberProfilePostalCodeHint": "1000001",
   "memberProfileAddressSearch": "住所検索",
   "memberProfileAddressSearchPending": "住所検索は次の実装で接続します。",
   "memberProfileAddressSearchZipError": "郵便番号は7桁で入力してください。",
