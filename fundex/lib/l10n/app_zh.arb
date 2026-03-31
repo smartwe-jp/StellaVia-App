@@ -554,6 +554,7 @@
   "fundDetailFundTotalLabel": "募集金额",
   "fundDetailMinimumInvestmentLabel": "最低投资额",
   "fundDetailDividendLabel": "分配",
+  "fundDetailDistributionDateLabel": "配当日",
   "fundDetailLotteryDateLabel": "抽签日",
   "fundDetailOfferingTargetsLabel": "募集对象",
   "fundDetailPreferredStructureTitle": "优先/劣后结构",

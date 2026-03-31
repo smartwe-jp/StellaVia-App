@@ -3023,6 +3023,12 @@ abstract class AppLocalizations {
   /// **'Distribution'**
   String get fundDetailDividendLabel;
 
+  /// No description provided for @fundDetailDistributionDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Distribution Date'**
+  String get fundDetailDistributionDateLabel;
+
   /// No description provided for @fundDetailLotteryDateLabel.
   ///
   /// In en, this message translates to:

@@ -1504,6 +1504,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailDividendLabel => '分配';
 
   @override
+  String get fundDetailDistributionDateLabel => '配当日';
+
+  @override
   String get fundDetailLotteryDateLabel => '抽签日';
 
   @override
@@ -5175,6 +5178,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get fundDetailDividendLabel => '分配';
+
+  @override
+  String get fundDetailDistributionDateLabel => '配當日';
 
   @override
   String get fundDetailLotteryDateLabel => '抽签日';

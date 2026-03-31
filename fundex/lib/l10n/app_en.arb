@@ -554,6 +554,7 @@
   "fundDetailFundTotalLabel": "Fund size",
   "fundDetailMinimumInvestmentLabel": "Minimum investment",
   "fundDetailDividendLabel": "Distribution",
+  "fundDetailDistributionDateLabel": "Distribution Date",
   "fundDetailLotteryDateLabel": "Lottery date",
   "fundDetailOfferingTargetsLabel": "Offering targets",
   "fundDetailPreferredStructureTitle": "Senior/Junior Structure",

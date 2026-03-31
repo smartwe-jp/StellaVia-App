@@ -140,12 +140,12 @@ List<FundDetailInfoItemData> _buildPrimaryInfoItems(
     ),
   ];
 
-  final dividendText = _resolveDividendText(context, project);
-  if (dividendText != null) {
+  final distributionDateText = _resolveDistributionDateText(context, project);
+  if (distributionDateText != null) {
     items.add(
       FundDetailInfoItemData(
-        label: context.l10n.fundDetailDividendLabel,
-        value: dividendText,
+        label: context.l10n.fundDetailDistributionDateLabel,
+        value: distributionDateText,
       ),
     );
   }
@@ -746,30 +746,11 @@ String _resolvePeriodText(BuildContext context, FundProject project) {
   return context.l10n.fundDetailUnknownValue;
 }
 
-String? _resolveDividendText(BuildContext context, FundProject project) {
+String? _resolveDistributionDateText(BuildContext context, FundProject project) {
   if (project.distributionDate != null &&
       project.distributionDate!.trim().isNotEmpty) {
-    return _resolveDateText(context, project.distributionDate);
+    return project.distributionDate!.trim();
   }
-
-  switch (project.periodType?.trim().toUpperCase()) {
-    case 'MONTH':
-    case 'MONTHLY':
-      return context.l10n.fundDetailMonthlyDistribution;
-    case 'SEASON':
-    case 'QUARTER':
-    case 'QUARTERLY':
-      return context.l10n.fundDetailQuarterlyDistribution;
-    case 'HALF':
-    case 'HALF_YEAR':
-    case 'SEMI_ANNUAL':
-      return context.l10n.fundDetailSemiAnnualDistribution;
-    case 'YEAR':
-    case 'YEARLY':
-    case 'ANNUAL':
-      return context.l10n.fundDetailAnnualDistribution;
-  }
-
   return null;
 }
 
