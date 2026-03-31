@@ -551,7 +551,13 @@
   "fundDetailEstimatedYieldAnnualLabel": "想定利回り（年率）",
   "fundDetailYieldDisclaimer": "※ 想定であり、保証するものではありません",
   "fundDetailKeyFactsTitle": "基本情報",
+  "fundDetailScheduleTitle": "募集・運用スケジュール",
+  "fundDetailTargetAmountLabel": "目標金額",
+  "fundDetailInvestmentUnitLabel": "投資単位",
+  "fundDetailMaximumInvestmentPerPersonLabel": "一人当たり\n投資可能上限金額",
   "fundDetailFundTotalLabel": "募集金額",
+  "fundDetailOfferCategoryLabel": "募集種別",
+  "fundDetailRemainingDaysLabel": "残り日数",
   "fundDetailMinimumInvestmentLabel": "最低投資額",
   "fundDetailDividendLabel": "配当",
   "fundDetailDistributionDateLabel": "配当日",
@@ -722,6 +728,19 @@
   "fundApplyVerificationRequiredTitle": "未認証",
   "fundApplyVerificationRequiredMessage": "ファンド申込は認証済み会員のみご利用いただけます。先に認証を完了してください。",
   "fundDetailUnknownValue": "--",
+  "fundDetailInvestmentUnitValue": "{amount}円／1口",
+  "@fundDetailInvestmentUnitValue": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "fundDetailMaximumInvestmentPerPersonValue": "{amount}円／{units}口",
+  "@fundDetailMaximumInvestmentPerPersonValue": {
+    "placeholders": {
+      "amount": {},
+      "units": {}
+    }
+  },
   "fundDetailOneUnitSuffix": "（1口）",
   "fundDetailMonthlyDistribution": "毎月",
   "fundDetailQuarterlyDistribution": "四半期毎",

@@ -1495,7 +1495,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailKeyFactsTitle => '基本信息';
 
   @override
+  String get fundDetailScheduleTitle => '募集・运用日程';
+
+  @override
+  String get fundDetailTargetAmountLabel => '目标金额';
+
+  @override
+  String get fundDetailInvestmentUnitLabel => '投资单位';
+
+  @override
+  String get fundDetailMaximumInvestmentPerPersonLabel => '每人可投资上限金额';
+
+  @override
   String get fundDetailFundTotalLabel => '募集金额';
+
+  @override
+  String get fundDetailOfferCategoryLabel => '募集种别';
+
+  @override
+  String get fundDetailRemainingDaysLabel => '剩余日数';
 
   @override
   String get fundDetailMinimumInvestmentLabel => '最低投资额';
@@ -1908,6 +1926,19 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get fundDetailUnknownValue => '--';
+
+  @override
+  String fundDetailInvestmentUnitValue(Object amount) {
+    return '$amount円/1口';
+  }
+
+  @override
+  String fundDetailMaximumInvestmentPerPersonValue(
+    Object amount,
+    Object units,
+  ) {
+    return '$amount円/$units口';
+  }
 
   @override
   String get fundDetailOneUnitSuffix => '（1口）';
@@ -5171,7 +5202,25 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailKeyFactsTitle => '基本信息';
 
   @override
+  String get fundDetailScheduleTitle => '募集・運用日程';
+
+  @override
+  String get fundDetailTargetAmountLabel => '目標金額';
+
+  @override
+  String get fundDetailInvestmentUnitLabel => '投資單位';
+
+  @override
+  String get fundDetailMaximumInvestmentPerPersonLabel => '每人可投資上限金額';
+
+  @override
   String get fundDetailFundTotalLabel => '募集金额';
+
+  @override
+  String get fundDetailOfferCategoryLabel => '募集種別';
+
+  @override
+  String get fundDetailRemainingDaysLabel => '剩餘日數';
 
   @override
   String get fundDetailMinimumInvestmentLabel => '最低投资额';
@@ -5584,6 +5633,19 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get fundDetailUnknownValue => '--';
+
+  @override
+  String fundDetailInvestmentUnitValue(Object amount) {
+    return '$amount円/1口';
+  }
+
+  @override
+  String fundDetailMaximumInvestmentPerPersonValue(
+    Object amount,
+    Object units,
+  ) {
+    return '$amount円/$units口';
+  }
 
   @override
   String get fundDetailOneUnitSuffix => '（1口）';

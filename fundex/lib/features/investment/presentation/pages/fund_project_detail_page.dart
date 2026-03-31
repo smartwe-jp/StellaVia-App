@@ -260,6 +260,15 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                         child: FundDetailInfoTable(items: infoItems),
                       ),
                     ],
+                    if (viewData.contractScheduleItems.isNotEmpty) ...<Widget>[
+                      const SizedBox(height: UiTokens.spacing16),
+                      FundDetailSection(
+                        title: context.l10n.fundDetailScheduleTitle,
+                        child: FundDetailInfoTable(
+                          items: viewData.contractScheduleItems,
+                        ),
+                      ),
+                    ],
                     if (project.achievementRate != null) ...<Widget>[
                       const SizedBox(height: UiTokens.spacing12),
                       Padding(
@@ -364,7 +373,6 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                       ),
                     ],
                     if (viewData.contractOverviewItems.isNotEmpty ||
-                        viewData.contractScheduleItems.isNotEmpty ||
                         staticContent != null) ...<Widget>[
                       const SizedBox(height: 18),
                       FundDetailSection(
@@ -377,16 +385,8 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                               FundDetailInfoTable(
                                 items: viewData.contractOverviewItems,
                               ),
-                            if (viewData.contractOverviewItems.isNotEmpty &&
-                                viewData.contractScheduleItems.isNotEmpty)
-                              const SizedBox(height: 1),
-                            if (viewData.contractScheduleItems.isNotEmpty)
-                              FundDetailInfoTable(
-                                items: viewData.contractScheduleItems,
-                              ),
                             if (staticContent != null) ...<Widget>[
-                              if (viewData.contractOverviewItems.isNotEmpty ||
-                                  viewData.contractScheduleItems.isNotEmpty)
+                              if (viewData.contractOverviewItems.isNotEmpty)
                                 const SizedBox(height: UiTokens.spacing8),
                               for (
                                 var index = 0;

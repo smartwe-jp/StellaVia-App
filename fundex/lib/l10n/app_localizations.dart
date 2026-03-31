@@ -3005,11 +3005,47 @@ abstract class AppLocalizations {
   /// **'Key facts'**
   String get fundDetailKeyFactsTitle;
 
+  /// No description provided for @fundDetailScheduleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Offering & Operation Schedule'**
+  String get fundDetailScheduleTitle;
+
+  /// No description provided for @fundDetailTargetAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Target amount'**
+  String get fundDetailTargetAmountLabel;
+
+  /// No description provided for @fundDetailInvestmentUnitLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Investment unit'**
+  String get fundDetailInvestmentUnitLabel;
+
+  /// No description provided for @fundDetailMaximumInvestmentPerPersonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum per investor'**
+  String get fundDetailMaximumInvestmentPerPersonLabel;
+
   /// No description provided for @fundDetailFundTotalLabel.
   ///
   /// In en, this message translates to:
   /// **'Fund size'**
   String get fundDetailFundTotalLabel;
+
+  /// No description provided for @fundDetailOfferCategoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Offering category'**
+  String get fundDetailOfferCategoryLabel;
+
+  /// No description provided for @fundDetailRemainingDaysLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Days remaining'**
+  String get fundDetailRemainingDaysLabel;
 
   /// No description provided for @fundDetailMinimumInvestmentLabel.
   ///
@@ -3793,6 +3829,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'--'**
   String get fundDetailUnknownValue;
+
+  /// No description provided for @fundDetailInvestmentUnitValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount}円 / 1 unit'**
+  String fundDetailInvestmentUnitValue(Object amount);
+
+  /// No description provided for @fundDetailMaximumInvestmentPerPersonValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount}円 / {units} units'**
+  String fundDetailMaximumInvestmentPerPersonValue(Object amount, Object units);
 
   /// No description provided for @fundDetailOneUnitSuffix.
   ///

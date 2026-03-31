@@ -551,7 +551,13 @@
   "fundDetailEstimatedYieldAnnualLabel": "Estimated yield (annualized)",
   "fundDetailYieldDisclaimer": "※ Estimated, not guaranteed",
   "fundDetailKeyFactsTitle": "Key facts",
+  "fundDetailScheduleTitle": "Offering & Operation Schedule",
+  "fundDetailTargetAmountLabel": "Target amount",
+  "fundDetailInvestmentUnitLabel": "Investment unit",
+  "fundDetailMaximumInvestmentPerPersonLabel": "Maximum per investor",
   "fundDetailFundTotalLabel": "Fund size",
+  "fundDetailOfferCategoryLabel": "Offering category",
+  "fundDetailRemainingDaysLabel": "Days remaining",
   "fundDetailMinimumInvestmentLabel": "Minimum investment",
   "fundDetailDividendLabel": "Distribution",
   "fundDetailDistributionDateLabel": "Distribution Date",
@@ -722,6 +728,19 @@
   "fundApplyVerificationRequiredTitle": "Verification required",
   "fundApplyVerificationRequiredMessage": "Fund applications are available only to verified members. Please complete verification first.",
   "fundDetailUnknownValue": "--",
+  "fundDetailInvestmentUnitValue": "{amount}円 / 1 unit",
+  "@fundDetailInvestmentUnitValue": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "fundDetailMaximumInvestmentPerPersonValue": "{amount}円 / {units} units",
+  "@fundDetailMaximumInvestmentPerPersonValue": {
+    "placeholders": {
+      "amount": {},
+      "units": {}
+    }
+  },
   "fundDetailOneUnitSuffix": "(1 unit)",
   "fundDetailMonthlyDistribution": "Monthly",
   "fundDetailQuarterlyDistribution": "Quarterly",

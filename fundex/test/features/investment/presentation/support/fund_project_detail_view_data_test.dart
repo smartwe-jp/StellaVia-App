@@ -8,7 +8,7 @@ import 'package:fundex/l10n/app_localizations.dart';
 
 void main() {
   testWidgets(
-    'uses open investor types for offering targets and yield range',
+    'builds yield display without exposing offering targets in key facts',
     (WidgetTester tester) async {
       const project = FundProject(
         id: 'project-open',
@@ -57,10 +57,9 @@ void main() {
       expect(viewData.yieldDisplay, '4%～8%');
       expect(
         viewData.infoItems.any(
-          (FundDetailInfoItemData item) =>
-              item.label == '募集対象' && item.value == '優先出資者A / 優先出資者B',
+          (FundDetailInfoItemData item) => item.label == '募集対象',
         ),
-        isTrue,
+        isFalse,
       );
     },
   );
@@ -103,12 +102,6 @@ void main() {
       );
 
       expect(viewData.yieldDisplay, '1%～2%');
-      expect(
-        viewData.infoItems.any(
-          (FundDetailInfoItemData item) => item.label == '募集対象',
-        ),
-        isFalse,
-      );
     },
   );
 
@@ -256,6 +249,95 @@ void main() {
       expect(viewData.operatorItems[1].value, 'Fallback Permit');
       expect(viewData.operatorItems[2].value, 'Fallback Representative');
       expect(viewData.operatorItems[3].value, 'Fallback Address');
+    },
+  );
+
+  testWidgets(
+    'maps key facts and schedule items to the requested fields',
+    (WidgetTester tester) async {
+      const project = FundProject(
+        id: 'project-schedule',
+        projectName: 'Schedule Fund',
+        distributionDate: '各計算期間の属する月の2ヶ月後応当月の最終営業日まで',
+        investmentPeriod: '12ヶ月',
+        scheduledStartDate: '2025-09-01',
+        scheduledEndDate: '2026-08-31',
+        offeringStartDatetime: '2025-08-01 10:00:00',
+        offeringEndDatetime: '2025-08-31 17:00:00',
+        typeOfOffering: 'LOTTERY',
+        offeringMethod: 'LOTTERY',
+        gainType: 'INCOME_GAIN',
+        investmentUnit: 1000000,
+        maximumInvestmentPerPerson: 1250000000,
+        amountApplication: 1250000000,
+        currentlySubscribed: 1405000000,
+        daysRemaining: 0,
+        detailData: <String, Object?>{
+          'contractType': '匿名組合型',
+        },
+      );
+
+      late FundProjectDetailViewData viewData;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('ja'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: AppThemeFactory.light(locale: const Locale('ja')),
+          home: Builder(
+            builder: (BuildContext context) {
+              viewData = FundProjectDetailViewDataBuilder.build(
+                context: context,
+                project: project,
+              );
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+      );
+
+      expect(
+        viewData.infoItems.map((FundDetailInfoItemData item) => item.label),
+        containsAll(<String>[
+          '目標金額',
+          '投資単位',
+          '一人当たり\n投資可能上限金額',
+          '募集金額',
+          '運用期間',
+        ]),
+      );
+      expect(
+        viewData.infoItems.firstWhere(
+          (FundDetailInfoItemData item) => item.label == '目標金額',
+        ).value,
+        '1,250,000,000円',
+      );
+      expect(
+        viewData.infoItems.firstWhere(
+          (FundDetailInfoItemData item) => item.label == '募集金額',
+        ).value,
+        '1,405,000,000円',
+      );
+      expect(
+        viewData.contractScheduleItems.map(
+          (FundDetailInfoItemData item) => item.label,
+        ),
+        containsAll(<String>[
+          '募集期間',
+          '運用期間',
+          '募集方式',
+          '募集種別',
+          '残り日数',
+          '配当日',
+        ]),
+      );
+      expect(
+        viewData.contractScheduleItems.firstWhere(
+          (FundDetailInfoItemData item) => item.label == '募集種別',
+        ).value,
+        '匿名組合型',
+      );
     },
   );
 }

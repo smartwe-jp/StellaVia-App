@@ -1597,7 +1597,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundDetailKeyFactsTitle => 'Key facts';
 
   @override
+  String get fundDetailScheduleTitle => 'Offering & Operation Schedule';
+
+  @override
+  String get fundDetailTargetAmountLabel => 'Target amount';
+
+  @override
+  String get fundDetailInvestmentUnitLabel => 'Investment unit';
+
+  @override
+  String get fundDetailMaximumInvestmentPerPersonLabel =>
+      'Maximum per investor';
+
+  @override
   String get fundDetailFundTotalLabel => 'Fund size';
+
+  @override
+  String get fundDetailOfferCategoryLabel => 'Offering category';
+
+  @override
+  String get fundDetailRemainingDaysLabel => 'Days remaining';
 
   @override
   String get fundDetailMinimumInvestmentLabel => 'Minimum investment';
@@ -2033,6 +2052,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fundDetailUnknownValue => '--';
+
+  @override
+  String fundDetailInvestmentUnitValue(Object amount) {
+    return '$amount円 / 1 unit';
+  }
+
+  @override
+  String fundDetailMaximumInvestmentPerPersonValue(
+    Object amount,
+    Object units,
+  ) {
+    return '$amount円 / $units units';
+  }
 
   @override
   String get fundDetailOneUnitSuffix => '(1 unit)';

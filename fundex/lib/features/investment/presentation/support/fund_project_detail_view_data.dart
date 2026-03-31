@@ -69,6 +69,9 @@ class FundProjectDetailViewDataBuilder {
       symbol: '¥',
       decimalDigits: 0,
     );
+    final decimalFormatter = NumberFormat.decimalPattern(
+      locale.toLanguageTag(),
+    );
     final propertyLocation =
         _resolveLocationText(project) ?? _defaultPropertyLocation(context);
     final propertyCoordinate = _resolvePropertyCoordinate(
@@ -82,7 +85,11 @@ class FundProjectDetailViewDataBuilder {
     );
 
     return FundProjectDetailViewData(
-      infoItems: _buildPrimaryInfoItems(context, project, currencyFormatter),
+      infoItems: _buildPrimaryInfoItems(
+        context,
+        project,
+        decimalFormatter,
+      ),
       propertyItems: _buildPropertyInfoItems(
         context,
         project,
@@ -119,48 +126,34 @@ class FundProjectDetailViewDataBuilder {
 List<FundDetailInfoItemData> _buildPrimaryInfoItems(
   BuildContext context,
   FundProject project,
-  NumberFormat currencyFormatter,
+  NumberFormat decimalFormatter,
 ) {
-  final items = <FundDetailInfoItemData>[
+  return <FundDetailInfoItemData>[
+    FundDetailInfoItemData(
+      label: context.l10n.fundDetailTargetAmountLabel,
+      value: _resolveTargetAmountText(project, decimalFormatter),
+    ),
+    FundDetailInfoItemData(
+      label: context.l10n.fundDetailInvestmentUnitLabel,
+      value: _resolveInvestmentUnitText(context, project, decimalFormatter),
+    ),
+    FundDetailInfoItemData(
+      label: context.l10n.fundDetailMaximumInvestmentPerPersonLabel,
+      value: _resolveMaximumInvestmentPerPersonText(
+        context,
+        project,
+        decimalFormatter,
+      ),
+    ),
+    FundDetailInfoItemData(
+      label: context.l10n.fundDetailFundTotalLabel,
+      value: _formatYenAmount(project.currentlySubscribed, decimalFormatter),
+    ),
     FundDetailInfoItemData(
       label: context.l10n.fundListPeriodLabel,
       value: _resolvePeriodText(context, project),
     ),
-    FundDetailInfoItemData(
-      label: context.l10n.fundDetailFundTotalLabel,
-      value: _formatCurrency(project.amountApplication, currencyFormatter),
-    ),
-    FundDetailInfoItemData(
-      label: context.l10n.fundDetailMinimumInvestmentLabel,
-      value: _resolveMinimumInvestmentText(context, project, currencyFormatter),
-    ),
-    FundDetailInfoItemData(
-      label: context.l10n.fundListMethodLabel,
-      value: _resolveMethodLabel(context, project.offeringMethod),
-    ),
   ];
-
-  final distributionDateText = _resolveDistributionDateText(context, project);
-  if (distributionDateText != null) {
-    items.add(
-      FundDetailInfoItemData(
-        label: context.l10n.fundDetailDistributionDateLabel,
-        value: distributionDateText,
-      ),
-    );
-  }
-
-  final offeringTargetsText = _resolveOfferingTargetsText(project);
-  if (offeringTargetsText != null) {
-    items.add(
-      FundDetailInfoItemData(
-        label: context.l10n.fundDetailOfferingTargetsLabel,
-        value: offeringTargetsText,
-      ),
-    );
-  }
-
-  return items;
 }
 
 List<FundDetailInfoItemData> _buildPropertyInfoItems(
@@ -269,35 +262,40 @@ _FundContractTables _buildContractTables(
     ),
   ];
 
-  final offerPeriod = _resolveDateRangeText(
-    context,
+  final offerPeriod = _resolveCompactDateRangeText(
     project.offeringStartDatetime,
     project.offeringEndDatetime,
   );
-  final operationStart = _resolveDateText(context, project.scheduledStartDate);
-  final operationEnd = _resolveDateText(context, project.scheduledEndDate);
-  final coolingOffText = _detailString(project.detailData, const <String>[
-        'coolingOff',
-        'coolingOffPeriod',
-        'coolingOffPolicy',
-      ]) ??
-      context.l10n.fundDetailCoolingOffDefault;
+  final operationPeriod = _resolveCompactDateRangeText(
+    project.scheduledStartDate,
+    project.scheduledEndDate,
+  );
+  final offeringType = _resolveOfferingTypeText(context, project);
+  final distributionDate = _resolveDistributionDateText(context, project);
   final scheduleItems = <FundDetailInfoItemData>[
     FundDetailInfoItemData(
       label: context.l10n.fundDetailOfferPeriodLabel,
       value: offerPeriod ?? context.l10n.fundDetailUnknownValue,
     ),
     FundDetailInfoItemData(
-      label: context.l10n.fundDetailOperationStartLabel,
-      value: operationStart ?? context.l10n.fundDetailUnknownValue,
+      label: context.l10n.fundListPeriodLabel,
+      value: operationPeriod ?? context.l10n.fundDetailUnknownValue,
     ),
     FundDetailInfoItemData(
-      label: context.l10n.fundDetailOperationEndLabel,
-      value: operationEnd ?? context.l10n.fundDetailUnknownValue,
+      label: context.l10n.fundListMethodLabel,
+      value: _resolveMethodLabel(context, project.offeringMethod),
     ),
     FundDetailInfoItemData(
-      label: context.l10n.fundDetailCoolingOffLabel,
-      value: coolingOffText,
+      label: context.l10n.fundDetailOfferCategoryLabel,
+      value: offeringType,
+    ),
+    FundDetailInfoItemData(
+      label: context.l10n.fundDetailRemainingDaysLabel,
+      value: project.daysRemaining?.toString() ?? context.l10n.fundDetailUnknownValue,
+    ),
+    FundDetailInfoItemData(
+      label: context.l10n.fundDetailDistributionDateLabel,
+      value: distributionDate ?? context.l10n.fundDetailUnknownValue,
     ),
   ];
 
@@ -726,16 +724,56 @@ String _resolveMethodLabel(BuildContext context, String? offeringMethod) {
   return value;
 }
 
-String _resolveMinimumInvestmentText(
+String _resolveTargetAmountText(
+  FundProject project,
+  NumberFormat decimalFormatter,
+) {
+  return _formatYenAmount(project.amountApplication, decimalFormatter);
+}
+
+String _resolveInvestmentUnitText(
   BuildContext context,
   FundProject project,
-  NumberFormat currencyFormatter,
+  NumberFormat decimalFormatter,
 ) {
   final amount = project.investmentUnit;
-  if (amount == null) {
+  if (amount == null || amount <= 0) {
     return context.l10n.fundDetailUnknownValue;
   }
-  return '${_formatCurrency(amount, currencyFormatter)} ${context.l10n.fundDetailOneUnitSuffix}';
+  return context.l10n.fundDetailInvestmentUnitValue(
+    decimalFormatter.format(amount),
+  );
+}
+
+String _resolveMaximumInvestmentPerPersonText(
+  BuildContext context,
+  FundProject project,
+  NumberFormat decimalFormatter,
+) {
+  final unitAmount = project.investmentUnit;
+  final rawMaximum = project.maximumInvestmentPerPerson;
+  if (unitAmount == null ||
+      unitAmount <= 0 ||
+      rawMaximum == null ||
+      rawMaximum <= 0) {
+    return context.l10n.fundDetailUnknownValue;
+  }
+
+  final maximumAmount = rawMaximum < unitAmount
+      ? rawMaximum * unitAmount
+      : rawMaximum;
+  final unitCount = rawMaximum < unitAmount
+      ? rawMaximum
+      : (maximumAmount / unitAmount).floor();
+
+  if (maximumAmount <= 0 || unitCount <= 0) {
+    return context.l10n.fundDetailUnknownValue;
+  }
+
+  return context.l10n.fundDetailMaximumInvestmentPerPersonValue(
+    _formatAmount(maximumAmount, decimalFormatter),
+    decimalFormatter.format(unitCount),
+  );
 }
 
 String _resolvePeriodText(BuildContext context, FundProject project) {
@@ -752,6 +790,35 @@ String? _resolveDistributionDateText(BuildContext context, FundProject project) 
     return project.distributionDate!.trim();
   }
   return null;
+}
+
+String _resolveOfferingTypeText(BuildContext context, FundProject project) {
+  final detailValue = _detailString(project.detailData, const <String>[
+    'recruitmentType',
+    'offeringCategory',
+    'offeringTypeLabel',
+    'fundType',
+    'contractType',
+    'schemeType',
+  ]);
+  if (detailValue != null) {
+    return detailValue;
+  }
+
+  final raw = project.typeOfOffering?.trim();
+  if (raw == null || raw.isEmpty) {
+    return context.l10n.fundDetailUnknownValue;
+  }
+
+  final normalized = raw.toLowerCase();
+  if (normalized.contains('lottery') ||
+      normalized.contains('first') ||
+      raw.contains('抽選') ||
+      raw.contains('先着')) {
+    return context.l10n.fundDetailUnknownValue;
+  }
+
+  return raw;
 }
 
 String? _resolveLocationText(FundProject project) {
@@ -907,44 +974,43 @@ String _formatCurrency(int? amount, NumberFormat formatter) {
   return formatter.format(amount);
 }
 
-String? _resolveOfferingTargetsText(FundProject project) {
-  final codes = project.investorTypes
-      .where((FundProjectInvestorType item) => item.isOpen == true)
-      .map((FundProjectInvestorType item) => item.investorCode?.trim() ?? '')
-      .where((String value) => value.isNotEmpty)
-      .toList(growable: false);
-  if (codes.isEmpty) {
-    return null;
+String _formatAmount(int? amount, NumberFormat formatter) {
+  if (amount == null) {
+    return '--';
   }
-
-  final uniqueCodes = <String>[];
-  for (final code in codes) {
-    if (!uniqueCodes.contains(code)) {
-      uniqueCodes.add(code);
-    }
-  }
-  return uniqueCodes.join(' / ');
+  return formatter.format(amount);
 }
 
-String? _resolveDateRangeText(
-  BuildContext context,
-  String? start,
-  String? end,
-) {
-  final startText = _resolveDateText(context, start);
-  final endText = _resolveDateText(context, end);
+String _formatYenAmount(int? amount, NumberFormat formatter) {
+  if (amount == null) {
+    return '--';
+  }
+  return '${formatter.format(amount)}円';
+}
+
+String? _resolveCompactDateRangeText(String? start, String? end) {
+  final startText = _resolveCompactDateText(start);
+  final endText = _resolveCompactDateText(end);
   if (startText == null || endText == null) {
     return null;
   }
-  return '$startText - $endText';
+  return '$startText～$endText';
 }
 
-String? _resolveDateText(BuildContext context, String? raw) {
-  final value = _parseDateTime(raw);
-  if (value == null) {
+String? _resolveCompactDateText(String? raw) {
+  final parsed = _parseDateTime(raw);
+  if (parsed != null) {
+    return DateFormat('yyyy-MM-dd').format(parsed);
+  }
+
+  final trimmed = raw?.trim();
+  if (trimmed == null || trimmed.isEmpty) {
     return null;
   }
-  return _formatDateForLocale(value, Localizations.localeOf(context));
+  if (trimmed.length >= 10) {
+    return trimmed.substring(0, 10);
+  }
+  return trimmed;
 }
 
 DateTime? _parseDateTime(String? raw) {
@@ -953,17 +1019,6 @@ DateTime? _parseDateTime(String? raw) {
   }
   final normalized = raw.trim().replaceAll(' ', 'T');
   return DateTime.tryParse(normalized);
-}
-
-String _formatDateForLocale(DateTime value, Locale locale) {
-  final languageCode = locale.languageCode;
-  if (languageCode == 'ja') {
-    return DateFormat.yMd('ja').format(value);
-  }
-  if (languageCode == 'zh') {
-    return DateFormat.yMd('zh').format(value);
-  }
-  return DateFormat.yMMMd(locale.toLanguageTag()).format(value);
 }
 
 String? _detailString(Map<String, Object?> data, List<String> keys) {

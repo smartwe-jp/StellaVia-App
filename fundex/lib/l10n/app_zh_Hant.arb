@@ -551,7 +551,13 @@
   "fundDetailEstimatedYieldAnnualLabel": "预计收益率（年化）",
   "fundDetailYieldDisclaimer": "※ 为预估值，不保证收益",
   "fundDetailKeyFactsTitle": "基本信息",
+  "fundDetailScheduleTitle": "募集・運用日程",
+  "fundDetailTargetAmountLabel": "目標金額",
+  "fundDetailInvestmentUnitLabel": "投資單位",
+  "fundDetailMaximumInvestmentPerPersonLabel": "每人可投資上限金額",
   "fundDetailFundTotalLabel": "募集金额",
+  "fundDetailOfferCategoryLabel": "募集種別",
+  "fundDetailRemainingDaysLabel": "剩餘日數",
   "fundDetailMinimumInvestmentLabel": "最低投资额",
   "fundDetailDividendLabel": "分配",
   "fundDetailDistributionDateLabel": "配當日",
@@ -722,6 +728,19 @@
   "fundApplyVerificationRequiredTitle": "未認證",
   "fundApplyVerificationRequiredMessage": "基金申請僅限已認證用戶。請先完成認證。",
   "fundDetailUnknownValue": "--",
+  "fundDetailInvestmentUnitValue": "{amount}円/1口",
+  "@fundDetailInvestmentUnitValue": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "fundDetailMaximumInvestmentPerPersonValue": "{amount}円/{units}口",
+  "@fundDetailMaximumInvestmentPerPersonValue": {
+    "placeholders": {
+      "amount": {},
+      "units": {}
+    }
+  },
   "fundDetailOneUnitSuffix": "（1口）",
   "fundDetailMonthlyDistribution": "每月",
   "fundDetailQuarterlyDistribution": "每季度",

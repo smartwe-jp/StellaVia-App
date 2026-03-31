@@ -748,7 +748,7 @@ class FundDetailInfoTable extends StatelessWidget {
                 horizontalInside: BorderSide(color: effectiveBorderColor),
                 verticalInside: BorderSide(color: effectiveBorderColor),
               ),
-              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              defaultVerticalAlignment: TableCellVerticalAlignment.top,
               children: List<TableRow>.generate(rowCount, (int rowIndex) {
                 return TableRow(
                   children: List<Widget>.generate(safeColumns, (int colIndex) {
@@ -792,7 +792,7 @@ class _FundDetailTableCell extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -845,7 +845,7 @@ class _FundDetailTableCell extends StatelessWidget {
 
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: minHeight),
-      child: wrappedChild,
+      child: Align(alignment: Alignment.topLeft, child: wrappedChild),
     );
   }
 }

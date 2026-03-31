@@ -1511,7 +1511,25 @@ class AppLocalizationsJa extends AppLocalizations {
   String get fundDetailKeyFactsTitle => '基本情報';
 
   @override
+  String get fundDetailScheduleTitle => '募集・運用スケジュール';
+
+  @override
+  String get fundDetailTargetAmountLabel => '目標金額';
+
+  @override
+  String get fundDetailInvestmentUnitLabel => '投資単位';
+
+  @override
+  String get fundDetailMaximumInvestmentPerPersonLabel => '一人当たり\n投資可能上限金額';
+
+  @override
   String get fundDetailFundTotalLabel => '募集金額';
+
+  @override
+  String get fundDetailOfferCategoryLabel => '募集種別';
+
+  @override
+  String get fundDetailRemainingDaysLabel => '残り日数';
 
   @override
   String get fundDetailMinimumInvestmentLabel => '最低投資額';
@@ -1931,6 +1949,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get fundDetailUnknownValue => '--';
+
+  @override
+  String fundDetailInvestmentUnitValue(Object amount) {
+    return '$amount円／1口';
+  }
+
+  @override
+  String fundDetailMaximumInvestmentPerPersonValue(
+    Object amount,
+    Object units,
+  ) {
+    return '$amount円／$units口';
+  }
 
   @override
   String get fundDetailOneUnitSuffix => '（1口）';
