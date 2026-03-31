@@ -4298,6 +4298,12 @@ abstract class AppLocalizations {
   /// **'Active Funds'**
   String get myPageOperatingFundsTitle;
 
+  /// No description provided for @myPageActiveFundHeroEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'MY FUND'**
+  String get myPageActiveFundHeroEyebrow;
+
   /// No description provided for @myPageTransactionHistoryAction.
   ///
   /// In en, this message translates to:

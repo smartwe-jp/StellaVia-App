@@ -235,13 +235,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             AppMenuSection(
               title: l10n.menuSectionDocsTax,
               children: <Widget>[
-                AppMenuItem(
-                  icon: Icons.description_rounded,
-                  label: l10n.menuItemAnnualReport,
-                  iconBackgroundColor: colors.dangerSubtle,
-                  iconForegroundColor: colors.danger,
-                  onTap: () => _showComingSoon(l10n.menuItemAnnualReport),
-                ),
+                // AppMenuItem(
+                //   icon: Icons.description_rounded,
+                //   label: l10n.menuItemAnnualReport,
+                //   iconBackgroundColor: colors.dangerSubtle,
+                //   iconForegroundColor: colors.danger,
+                //   onTap: () => _showComingSoon(l10n.menuItemAnnualReport),
+                // ),
                 AppMenuItem(
                   icon: Icons.article_rounded,
                   label: l10n.menuItemContractList,

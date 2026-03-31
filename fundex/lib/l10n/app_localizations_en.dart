@@ -2306,6 +2306,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageOperatingFundsTitle => 'Active Funds';
 
   @override
+  String get myPageActiveFundHeroEyebrow => 'MY FUND';
+
+  @override
   String get myPageTransactionHistoryAction => 'Transaction History';
 
   @override

@@ -1,6 +1,8 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../app/localization/app_localizations_ext.dart';
+
 class ActiveFundOverviewMetricData {
   const ActiveFundOverviewMetricData({
     required this.label,
@@ -139,7 +141,7 @@ class ActiveFundOverviewHeroCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            'MY POSITION',
+                            context.l10n.myPageActiveFundHeroEyebrow,
                             style: appText.micro.copyWith(
                               color: colors.textSecondary,
                             ),

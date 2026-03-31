@@ -2169,6 +2169,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageOperatingFundsTitle => '运用中基金';
 
   @override
+  String get myPageActiveFundHeroEyebrow => '我的基金';
+
+  @override
   String get myPageTransactionHistoryAction => '查看交易记录';
 
   @override
@@ -5828,6 +5831,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageOperatingFundsTitle => '運用中基金';
+
+  @override
+  String get myPageActiveFundHeroEyebrow => '我的基金';
 
   @override
   String get myPageTransactionHistoryAction => '查看交易紀錄';
