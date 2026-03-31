@@ -688,7 +688,7 @@
   "lotteryApplyApplicationNumberLabel": "Application number",
   "lotteryApplyStep4HintBody": "If selected, please complete payment within 8 days (including cooling-off period). If not selected, no action is needed. If minimum demand is not met, a review and lottery process still applies.",
   "lotteryApplyBackHomeAction": "Back to Home",
-  "lotteryApplyDemoCheckResultAction": "(Demo) View lottery result →",
+  "lotteryApplyDemoCheckResultAction": "View lottery result →",
   "lotteryApplyStep5Headline": "Selection notice",
   "lotteryApplyStep5Body": "Congratulations! You were selected in the \"{projectName}\" lottery. Please transfer funds to the designated account by the deadline below.",
   "@lotteryApplyStep5Body": {

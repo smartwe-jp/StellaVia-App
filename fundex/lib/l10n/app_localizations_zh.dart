@@ -1820,7 +1820,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get lotteryApplyBackHomeAction => '返回首页';
 
   @override
-  String get lotteryApplyDemoCheckResultAction => '（演示）查看抽签结果 →';
+  String get lotteryApplyDemoCheckResultAction => '查看抽签结果 →';
 
   @override
   String get lotteryApplyStep5Headline => '中签通知';
@@ -5481,7 +5481,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get lotteryApplyBackHomeAction => '返回首頁';
 
   @override
-  String get lotteryApplyDemoCheckResultAction => '（示範）查看抽籤結果 →';
+  String get lotteryApplyDemoCheckResultAction => '查看抽籤結果 →';
 
   @override
   String get lotteryApplyStep5Headline => '中選通知';

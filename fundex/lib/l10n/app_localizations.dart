@@ -3623,7 +3623,7 @@ abstract class AppLocalizations {
   /// No description provided for @lotteryApplyDemoCheckResultAction.
   ///
   /// In en, this message translates to:
-  /// **'(Demo) View lottery result →'**
+  /// **'View lottery result →'**
   String get lotteryApplyDemoCheckResultAction;
 
   /// No description provided for @lotteryApplyStep5Headline.

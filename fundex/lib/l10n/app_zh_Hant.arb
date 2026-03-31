@@ -688,7 +688,7 @@
   "lotteryApplyApplicationNumberLabel": "申請編號",
   "lotteryApplyStep4HintBody": "若中選，請於8日內完成入金（含冷靜期）。未中選則無需操作。若募集未達人數也會進行審查與抽籤。",
   "lotteryApplyBackHomeAction": "返回首頁",
-  "lotteryApplyDemoCheckResultAction": "（示範）查看抽籤結果 →",
+  "lotteryApplyDemoCheckResultAction": "查看抽籤結果 →",
   "lotteryApplyStep5Headline": "中選通知",
   "lotteryApplyStep5Body": "恭喜，你已中選「{projectName}」。請於下方期限前匯款至指定帳戶。",
   "@lotteryApplyStep5Body": {

@@ -193,6 +193,14 @@ class _FundLotteryApplyFlowPageState
     context.go('/home');
   }
 
+  void _back() {
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      _goHome();
+    }
+  }
+
   void _goToMyPageApplyingList() {
     context.go(
       '/profile/my/section-list?type=${MyPageSectionType.pendingApplications.queryValue}&filter=${MyPageApplyHistoryFilter.applying.queryValue}',
@@ -764,7 +772,7 @@ class _FundLotteryApplyFlowPageState
                             onDemoCheckResult:
                                 widget.allowSubmittedResultAdvance
                                 ? _goToMyPageApplyingList
-                                : null,
+                                : _back,
                           ),
                         FundLotteryApplyStep.selected =>
                           FundLotteryApplySelectedStep(

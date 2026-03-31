@@ -1941,8 +1941,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lotteryApplyBackHomeAction => 'Back to Home';
 
   @override
-  String get lotteryApplyDemoCheckResultAction =>
-      '(Demo) View lottery result →';
+  String get lotteryApplyDemoCheckResultAction => 'View lottery result →';
 
   @override
   String get lotteryApplyStep5Headline => 'Selection notice';

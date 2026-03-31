@@ -688,7 +688,7 @@
   "lotteryApplyApplicationNumberLabel": "申请编号",
   "lotteryApplyStep4HintBody": "若中签，请在8日内完成入金（含冷静期）。未中签则无需操作。若募集未达人数也会进行审查与抽签。",
   "lotteryApplyBackHomeAction": "返回首页",
-  "lotteryApplyDemoCheckResultAction": "（演示）查看抽签结果 →",
+  "lotteryApplyDemoCheckResultAction": "查看抽签结果 →",
   "lotteryApplyStep5Headline": "中签通知",
   "lotteryApplyStep5Body": "恭喜，你已中签「{projectName}」。请在下方期限前转账至指定账户。",
   "@lotteryApplyStep5Body": {
