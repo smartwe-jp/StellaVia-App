@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/support/app_request_error_message_resolver.dart';
-import '../../../auth/presentation/support/identity_auth_guard.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../support/secondary_market_trade_models.dart';
 import '../support/secondary_market_trade_widgets.dart';
@@ -53,11 +52,6 @@ class _SecondaryMarketBuyConfirmPageState
       ],
     );
     if (confirmed != true || !mounted) {
-      return;
-    }
-
-    final allowed = await ensureSensitiveActionAuthorized(context, ref);
-    if (!mounted || !allowed) {
       return;
     }
 
