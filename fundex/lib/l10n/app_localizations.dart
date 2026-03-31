@@ -2153,6 +2153,12 @@ abstract class AppLocalizations {
   /// **'Edit'**
   String get commonEditText;
 
+  /// No description provided for @commonReplaceText.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get commonReplaceText;
+
   /// No description provided for @menuItemBankSettings.
   ///
   /// In en, this message translates to:
@@ -2794,6 +2800,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{feature} will be connected in a later implementation.'**
   String menuFeatureComingSoon(Object feature);
+
+  /// No description provided for @settingsLogoutConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out?'**
+  String get settingsLogoutConfirmTitle;
+
+  /// No description provided for @settingsLogoutConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You will need to sign in again to continue using this account.'**
+  String get settingsLogoutConfirmBody;
 
   /// No description provided for @notificationsTitle.
   ///

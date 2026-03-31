@@ -347,7 +347,7 @@ class _SettingsPhoneVerificationPageState
                                 phone: currentPhone,
                                 intlCode: currentIntlCode,
                               ),
-                              child: Text(l10n.commonEditText),
+                              child: Text(l10n.commonReplaceText),
                             ),
                         ],
                       ),
@@ -404,41 +404,43 @@ class _SettingsPhoneVerificationPageState
                     ),
                   ),
                   const SizedBox(height: 18),
-                ],
-                VerificationCodeField(
-                  controller: _codeController,
-                  labelText: l10n.loginCodeLabel,
-                  sendCodeLabel: sendButtonLabel,
-                  enabled: !_isSubmitting,
-                  isSendingCode: _isSendingCode,
-                  onChanged: (_) => setState(() {}),
-                  onSendCode: canSendCode
-                      ? () =>
-                            _sendCode(phone: activePhone, intlCode: activeIntlCode)
-                      : null,
-                  autofillHints: const <String>[AutofillHints.oneTimeCode],
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  l10n.settingsPhoneAutoFillHint,
-                  style: appText.helper.copyWith(
-                    color: colors.textSecondary,
-                    height: 1.5,
+                  VerificationCodeField(
+                    controller: _codeController,
+                    labelText: l10n.loginCodeLabel,
+                    sendCodeLabel: sendButtonLabel,
+                    enabled: !_isSubmitting,
+                    isSendingCode: _isSendingCode,
+                    onChanged: (_) => setState(() {}),
+                    onSendCode: canSendCode
+                        ? () => _sendCode(
+                              phone: activePhone,
+                              intlCode: activeIntlCode,
+                            )
+                        : null,
+                    autofillHints: const <String>[AutofillHints.oneTimeCode],
                   ),
-                ),
-                const SizedBox(height: 20),
-                PrimaryCtaButton(
-                  label: l10n.settingsPhoneVerifyAction,
-                  onPressed:
-                      _codeController.text.trim().length >= 4 &&
-                          !_isSubmitting
-                      ? () => _verifyPhone(
-                          phone: activePhone,
-                          intlCode: activeIntlCode,
-                        )
-                      : null,
-                  isLoading: _isSubmitting,
-                ),
+                  const SizedBox(height: 10),
+                  Text(
+                    l10n.settingsPhoneAutoFillHint,
+                    style: appText.helper.copyWith(
+                      color: colors.textSecondary,
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  PrimaryCtaButton(
+                    label: l10n.settingsPhoneVerifyAction,
+                    onPressed:
+                        _codeController.text.trim().length >= 4 &&
+                            !_isSubmitting
+                        ? () => _verifyPhone(
+                            phone: activePhone,
+                            intlCode: activeIntlCode,
+                          )
+                        : null,
+                    isLoading: _isSubmitting,
+                  ),
+                ],
               ],
             ),
           );

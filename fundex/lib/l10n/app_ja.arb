@@ -387,6 +387,7 @@
   "memberProfileOverviewFailedMessage": "会員情報を再度入力して認証をやり直してください。",
   "memberProfileOverviewStartIntakeAction": "資料入力へ",
   "commonEditText": "編集",
+  "commonReplaceText": "変更",
   "menuItemBankSettings": "銀行口座設定",
   "menuItemChangePassword": "パスワード変更",
   "menuItemTwoFactor": "二段階認証",
@@ -509,6 +510,8 @@
       "feature": {}
     }
   },
+  "settingsLogoutConfirmTitle": "ログアウトしますか？",
+  "settingsLogoutConfirmBody": "ログアウトすると、このアカウントを利用するには再度ログインが必要です。",
   "notificationsTitle": "お知らせ",
   "notificationsLotteryTitle": "抽選結果",
   "notificationsLotterySubtitle": "API連携後、抽選結果と入金案内の通知をここに表示します。",

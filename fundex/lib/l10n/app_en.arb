@@ -387,6 +387,7 @@
   "memberProfileOverviewFailedMessage": "Restart the member profile intake flow to verify again.",
   "memberProfileOverviewStartIntakeAction": "Go to profile intake",
   "commonEditText": "Edit",
+  "commonReplaceText": "Change",
   "menuItemBankSettings": "Bank account settings",
   "menuItemChangePassword": "Change password",
   "menuItemTwoFactor": "Two-factor authentication",
@@ -509,6 +510,8 @@
       "feature": {}
     }
   },
+  "settingsLogoutConfirmTitle": "Log out?",
+  "settingsLogoutConfirmBody": "You will need to sign in again to continue using this account.",
   "notificationsTitle": "Notifications",
   "notificationsLotteryTitle": "Lottery result",
   "notificationsLotterySubtitle": "After API integration, lottery and deposit notifications will appear here.",

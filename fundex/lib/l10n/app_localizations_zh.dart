@@ -1056,6 +1056,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonEditText => '编辑';
 
   @override
+  String get commonReplaceText => '更换';
+
+  @override
   String get menuItemBankSettings => '银行账户设置';
 
   @override
@@ -1386,6 +1389,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String menuFeatureComingSoon(Object feature) {
     return '$feature 会在后续实现中接入。';
   }
+
+  @override
+  String get settingsLogoutConfirmTitle => '确认退出登录？';
+
+  @override
+  String get settingsLogoutConfirmBody => '退出后需要重新登录才能继续使用当前账户。';
 
   @override
   String get notificationsTitle => '通知';
@@ -4718,6 +4727,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get commonEditText => '編輯';
 
   @override
+  String get commonReplaceText => '更換';
+
+  @override
   String get menuItemBankSettings => '銀行帳戶設定';
 
   @override
@@ -5050,6 +5062,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String menuFeatureComingSoon(Object feature) {
     return '$feature 会在后续实现中接入。';
   }
+
+  @override
+  String get settingsLogoutConfirmTitle => '確認登出？';
+
+  @override
+  String get settingsLogoutConfirmBody => '登出後需要重新登入才能繼續使用目前帳戶。';
 
   @override
   String get notificationsTitle => '通知';

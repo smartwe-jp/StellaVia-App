@@ -1066,6 +1066,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get commonEditText => '編集';
 
   @override
+  String get commonReplaceText => '変更';
+
+  @override
   String get menuItemBankSettings => '銀行口座設定';
 
   @override
@@ -1401,6 +1404,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String menuFeatureComingSoon(Object feature) {
     return '$feature は次の実装で接続します。';
   }
+
+  @override
+  String get settingsLogoutConfirmTitle => 'ログアウトしますか？';
+
+  @override
+  String get settingsLogoutConfirmBody => 'ログアウトすると、このアカウントを利用するには再度ログインが必要です。';
 
   @override
   String get notificationsTitle => 'お知らせ';

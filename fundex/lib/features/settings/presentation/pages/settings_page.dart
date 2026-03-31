@@ -68,14 +68,18 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     }
   }
 
-  Future<void> _confirmDeleteAccount() async {
+  Future<void> _confirmLogout() async {
+    if (_isLoggingOut) {
+      return;
+    }
+
     final l10n = context.l10n;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(l10n.menuDeleteAccountConfirmTitle),
-          content: Text(l10n.menuDeleteAccountConfirmBody),
+          title: Text(l10n.settingsLogoutConfirmTitle),
+          content: Text(l10n.settingsLogoutConfirmBody),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
@@ -83,22 +87,16 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             ),
             FilledButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: Text(l10n.menuDeleteAccountAction),
+              child: Text(l10n.homeLogout),
             ),
           ],
         );
       },
     );
 
-    if (confirmed != true || !mounted) {
-      return;
+    if (confirmed == true) {
+      await _logout();
     }
-
-    AppNotice.show(context, message: l10n.menuDeleteAccountComingSoon);
-  }
-
-  void _showComingSoon(String label) {
-    AppNotice.show(context, message: context.l10n.menuFeatureComingSoon(label));
   }
 
   String _languageLabel(AppLanguage language) {
@@ -383,7 +381,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           ),
           if (isAuthenticated) ...<Widget>[
             OutlinedButton(
-              onPressed: _isLoggingOut ? null : _logout,
+              onPressed: _isLoggingOut ? null : _confirmLogout,
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
@@ -394,14 +392,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : Text(l10n.homeLogout),
-            ),
-            const SizedBox(height: 10),
-            TextButton(
-              onPressed: _confirmDeleteAccount,
-              child: Text(
-                l10n.menuDeleteAccountAction,
-                style: appText.helper.copyWith(color: colors.dangerForeground),
-              ),
             ),
           ],
         ],

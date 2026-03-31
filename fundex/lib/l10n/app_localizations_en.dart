@@ -1125,6 +1125,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonEditText => 'Edit';
 
   @override
+  String get commonReplaceText => 'Change';
+
+  @override
   String get menuItemBankSettings => 'Bank account settings';
 
   @override
@@ -1480,6 +1483,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String menuFeatureComingSoon(Object feature) {
     return '$feature will be connected in a later implementation.';
   }
+
+  @override
+  String get settingsLogoutConfirmTitle => 'Log out?';
+
+  @override
+  String get settingsLogoutConfirmBody =>
+      'You will need to sign in again to continue using this account.';
 
   @override
   String get notificationsTitle => 'Notifications';

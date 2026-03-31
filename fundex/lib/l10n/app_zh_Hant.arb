@@ -387,6 +387,7 @@
   "memberProfileOverviewFailedMessage": "請重新進入會員資料填寫流程並再次驗證。",
   "memberProfileOverviewStartIntakeAction": "前往資料填寫",
   "commonEditText": "編輯",
+  "commonReplaceText": "更換",
   "menuItemBankSettings": "銀行帳戶設定",
   "menuItemChangePassword": "變更密碼",
   "menuItemTwoFactor": "雙重驗證",
@@ -509,6 +510,8 @@
       "feature": {}
     }
   },
+  "settingsLogoutConfirmTitle": "確認登出？",
+  "settingsLogoutConfirmBody": "登出後需要重新登入才能繼續使用目前帳戶。",
   "notificationsTitle": "通知",
   "notificationsLotteryTitle": "抽签结果",
   "notificationsLotterySubtitle": "接入 API 后，抽签结果与入金提醒会显示在这里。",
