@@ -202,12 +202,19 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       ],
     );
 
-    if (mounted) {
-      setState(() {
-        _isSubmitting = false;
-      });
-      context.go('/login');
+    if (!mounted) {
+      return;
     }
+    setState(() {
+      _isSubmitting = false;
+    });
+    await ref
+        .read(authLocalDataSourceProvider)
+        .saveLastSignedOutAccount(_accountValue);
+    if (!mounted) {
+      return;
+    }
+    context.go('/login');
   }
 
   @override

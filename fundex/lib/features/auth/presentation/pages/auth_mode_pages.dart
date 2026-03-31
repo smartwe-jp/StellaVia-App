@@ -618,26 +618,33 @@ class _AuthMethodRegisterPageState
       ],
     );
 
-    if (mounted) {
-      setState(() {
-        _isSubmitting = false;
-      });
-      final trimmedContact = _contactController.text.trim();
-      final seedPhone = _isEmailMode ? trimmedContact : _accountValue;
-      final seedEmail = _isEmailMode
-          ? _accountValue
-          : (trimmedContact.contains('@') ? trimmedContact : null);
-      final nextRoute = _isEmailMode ? '/login/email' : '/login/mobile';
-      final route = Uri(
-        path: '/member-profile/onboarding',
-        queryParameters: <String, String>{
-          'next': nextRoute,
-          if (seedPhone.isNotEmpty) 'phone': seedPhone,
-          if (seedEmail != null && seedEmail.isNotEmpty) 'email': seedEmail,
-        },
-      ).toString();
-      context.go(route);
+    if (!mounted) {
+      return;
     }
+    setState(() {
+      _isSubmitting = false;
+    });
+    await ref
+        .read(authLocalDataSourceProvider)
+        .saveLastSignedOutAccount(_accountValue);
+    if (!mounted) {
+      return;
+    }
+    final trimmedContact = _contactController.text.trim();
+    final seedPhone = _isEmailMode ? trimmedContact : _accountValue;
+    final seedEmail = _isEmailMode
+        ? _accountValue
+        : (trimmedContact.contains('@') ? trimmedContact : null);
+    final nextRoute = _isEmailMode ? '/login/email' : '/login/mobile';
+    final route = Uri(
+      path: '/member-profile/onboarding',
+      queryParameters: <String, String>{
+        'next': nextRoute,
+        if (seedPhone.isNotEmpty) 'phone': seedPhone,
+        if (seedEmail != null && seedEmail.isNotEmpty) 'email': seedEmail,
+      },
+    ).toString();
+    context.go(route);
   }
 
   @override

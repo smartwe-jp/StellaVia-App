@@ -804,6 +804,16 @@ class _MemberProfileEditFlowPageState
     await _advanceToNextStep();
   }
 
+  Future<void> _skipBankAccountStep() async {
+    if (_isSubmitting || _isUploadingPhoto || _isRunningRealPersonAuth) {
+      return;
+    }
+    if (_currentStep != MemberProfileEditStep.bankAccount) {
+      return;
+    }
+    await _advanceToNextStep();
+  }
+
   Future<void> _goPreviousStep() async {
     if (_isSubmitting || _isUploadingPhoto || _isRunningRealPersonAuth) {
       return;
@@ -840,6 +850,7 @@ class _MemberProfileEditFlowPageState
       await ref.read(submitMemberProfileUseCaseProvider).call(profileToSubmit);
       _completedAt = DateTime.now().toUtc();
       await _persistOfficialProfile(markCompleted: true);
+      await _refreshVerificationStateAfterProfileSubmit();
       await ref.read(memberProfileRepositoryProvider).clearOnboardingDraft();
     } catch (error) {
       if (!mounted) {
@@ -902,6 +913,7 @@ class _MemberProfileEditFlowPageState
       if (shouldSubmitRemotely) {
         await ref.read(submitMemberProfileUseCaseProvider).call(draft);
         await ref.read(syncMemberProfileFromRemoteUseCaseProvider).call();
+        await _refreshVerificationStateAfterProfileSubmit();
         _invalidateOfficialProfileProviders();
       } else {
         await _persistOfficialProfile(markCompleted: shouldMarkCompleted);
@@ -1210,6 +1222,42 @@ class _MemberProfileEditFlowPageState
   void _invalidateOfficialProfileProviders() {
     ref.invalidate(memberProfileDetailsProvider);
     ref.invalidate(isMemberProfileCompletedProvider);
+  }
+
+  Future<void> _refreshVerificationStateAfterProfileSubmit() async {
+    try {
+      final remoteUser = await ref.read(authRemoteDataSourceProvider)
+          .fetchCurrentUser();
+      if (remoteUser != null) {
+        await ref.read(authLocalDataSourceProvider).saveCurrentUser(remoteUser);
+      }
+    } catch (_) {
+      // Keep successful profile submission from being blocked by follow-up sync.
+    }
+
+    ref.invalidate(currentAuthUserProvider);
+    ref.invalidate(settingsRemoteVerificationStatusProvider);
+    ref.invalidate(settingsEmailVerifiedProvider);
+    ref.invalidate(settingsVerifiedEmailProvider);
+    ref.invalidate(settingsEmailVerificationUpdatedAtProvider);
+    ref.invalidate(settingsPhoneVerifiedProvider);
+    ref.invalidate(settingsVerifiedPhoneNumberProvider);
+    ref.invalidate(settingsPhoneVerificationUpdatedAtProvider);
+    ref.invalidate(settingsRealPersonVerifiedProvider);
+    ref.invalidate(settingsRealPersonVerificationUpdatedAtProvider);
+
+    try {
+      await ref.refresh(currentAuthUserProvider.future).catchError((Object _) {
+        return null;
+      });
+      await ref
+          .refresh(settingsRemoteVerificationStatusProvider.future)
+          .catchError((Object _) {
+            return null;
+          });
+    } catch (_) {
+      // Best effort refresh only.
+    }
   }
 
   Future<void> _persistOfficialProfile({bool markCompleted = false}) async {
@@ -1858,7 +1906,7 @@ class _MemberProfileEditFlowPageState
             });
           },
           onNext: _isSingleSectionMode ? _saveCurrentSection : _goNextStep,
-          onSkip: _isSingleSectionMode ? null : _goNextStep,
+          onSkip: _isSingleSectionMode ? null : _skipBankAccountStep,
         );
       case MemberProfileEditStep.consent:
         return MemberProfileConsentStepPage(
