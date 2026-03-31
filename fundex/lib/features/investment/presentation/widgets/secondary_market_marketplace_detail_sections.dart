@@ -32,6 +32,8 @@ class SecondaryMarketDetailHeroCard extends StatelessWidget {
     required this.soldUnitsLabel,
     required this.completionRateLabel,
     this.orderTimeLabel,
+    this.onTitleTap,
+    this.titleColor,
   });
 
   final String marketLabel;
@@ -48,6 +50,8 @@ class SecondaryMarketDetailHeroCard extends StatelessWidget {
   final String soldUnitsLabel;
   final String completionRateLabel;
   final String? orderTimeLabel;
+  final VoidCallback? onTitleTap;
+  final Color? titleColor;
 
   @override
   Widget build(BuildContext context) {
@@ -182,11 +186,14 @@ class SecondaryMarketDetailHeroCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 14),
-                Text(
-                  title,
-                  style: appText.pageTitle.copyWith(
-                    color: colors.textPrimary,
-                    height: 1.25,
+                GestureDetector(
+                  onTap: onTitleTap,
+                  child: Text(
+                    title,
+                    style: appText.pageTitle.copyWith(
+                      color: titleColor ?? colors.textPrimary,
+                      height: 1.25,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -229,7 +236,7 @@ class SecondaryMarketDetailHeroCard extends StatelessWidget {
                             const SizedBox(height: 8),
                             Text(
                               unitPriceLabel,
-                              style: appText.numericHeadline.copyWith(
+                              style: appText.numericTitle.copyWith(
                                 color: colors.textPrimary,
                                 height: 1.0,
                               ),
@@ -240,9 +247,9 @@ class SecondaryMarketDetailHeroCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 12),
                     SizedBox(
-                      width: 112,
+                      width: 88,
                       child: ConstrainedBox(
-                        constraints: const BoxConstraints(minHeight: 104),
+                        constraints: const BoxConstraints(minHeight: 78),
                         child: Container(
                           padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
                           decoration: BoxDecoration(

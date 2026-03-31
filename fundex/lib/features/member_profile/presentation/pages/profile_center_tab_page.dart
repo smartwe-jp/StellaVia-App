@@ -10,6 +10,7 @@ import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../investment/presentation/support/fund_lottery_apply_step.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
+import '../../../notifications/presentation/providers/notifications_providers.dart';
 import '../../domain/entities/mypage_models.dart';
 import '../providers/mypage_providers.dart';
 import '../support/mypage_section_support.dart';
@@ -38,6 +39,9 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
       locale: localeTag,
       symbol: '¥',
       decimalDigits: 0,
+    );
+    final hasUnreadNotifications = ref.watch(
+      notificationsControllerProvider.select((state) => state.unreadCount > 0),
     );
     final accountStatisticAsync = ref.watch(myPageAccountStatisticProvider);
     final accountStatistic = accountStatisticAsync.asData?.value;
@@ -81,7 +85,7 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                 totalAssetsCaption: l10n.myPageTotalAssetsCaption,
                 leading: _HeroHeaderActionButton(
                   icon: Icons.notifications_none_rounded,
-                  showDot: true,
+                  showDot: hasUnreadNotifications,
                   onTap: () => context.push('/profile/notifications'),
                 ),
                 trailing: _HeroHeaderActionButton(

@@ -262,6 +262,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 routes: <RouteBase>[
                   GoRoute(
                     path: ':id',
+                    parentNavigatorKey: _rootNavigatorKey,
                     builder: (BuildContext context, GoRouterState state) {
                       final id = state.pathParameters['id'] ?? '';
                       return FundProjectDetailPage(projectId: id);

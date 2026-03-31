@@ -102,6 +102,8 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
           children: <Widget>[
             ActiveFundOverviewHeroCard(
               title: projectName,
+              onTitleTap: () => context.push('/funds/$projectId'),
+              titleColor: colors.primary,
               statusLabel: statusLabel,
               statusBackgroundColor: colors.primarySubtle,
               statusForegroundColor: colors.primaryAlt,

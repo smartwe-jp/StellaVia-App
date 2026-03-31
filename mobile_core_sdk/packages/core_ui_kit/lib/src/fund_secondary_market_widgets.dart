@@ -145,7 +145,7 @@ class FundSecondaryMarketCard extends StatelessWidget {
                         ],
                         Text(
                           data.title,
-                          maxLines: 2,
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: appText.cardTitle.copyWith(
                             color: headerTitleColor,

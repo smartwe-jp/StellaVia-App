@@ -40,6 +40,8 @@ class ActiveFundOverviewHeroCard extends StatelessWidget {
     required this.totalHistoricalBenefitValue,
     required this.primaryMetrics,
     required this.secondaryMetrics,
+    this.onTitleTap,
+    this.titleColor,
   });
 
   final String title;
@@ -52,6 +54,8 @@ class ActiveFundOverviewHeroCard extends StatelessWidget {
   final String totalHistoricalBenefitValue;
   final List<ActiveFundOverviewMetricData> primaryMetrics;
   final List<ActiveFundOverviewMetricData> secondaryMetrics;
+  final VoidCallback? onTitleTap;
+  final Color? titleColor;
 
   @override
   Widget build(BuildContext context) {
@@ -169,11 +173,14 @@ class ActiveFundOverviewHeroCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  title,
-                  style: appText.pageTitle.copyWith(
-                    color: colors.textPrimary,
-                    height: 1.24,
+                GestureDetector(
+                  onTap: onTitleTap,
+                  child: Text(
+                    title,
+                    style: appText.pageTitle.copyWith(
+                      color: titleColor ?? colors.textPrimary,
+                      height: 1.24,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),

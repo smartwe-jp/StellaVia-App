@@ -102,16 +102,18 @@ class SecondaryMarketMarketplaceDetailPage extends ConsumerWidget {
               SecondaryMarketDetailHeroCard(
                 marketLabel: l10n.homeFreeMarketTitle,
                 title: record.projectName,
+                onTitleTap: () => context.push('/funds/${record.projectId}'),
+                titleColor: colors.primary,
                 statusLabel: l10n.homeFreeMarketStatusListed,
                 statusBackgroundColor: colors.warningSubtle,
                 statusForegroundColor: colors.warningAction,
                 investorTypeLabel: buildSecondaryMarketInvestorTypeDisplay(
                   record,
                 ),
-                unitPriceLabel: formatter.format(record.price ?? 0),
+                unitPriceLabel: formatter.format(record.price ?? 0) + l10n.myPageResaleYenSuffix,
                 unitPriceCaption: l10n.secondaryMarketPricePerUnitCaption,
                 remainingUnitsLabel:
-                    '${formatSecondaryMarketRemainingUnits(record)}${l10n.myPageResaleUnitsSuffix}',
+                    formatSecondaryMarketRemainingUnits(record),
                 remainingUnitsCaption: l10n.secondaryMarketRemainingUnitsLabel,
                 listedUnitsLabel:
                     '${l10n.secondaryMarketSellUnitsLabel}\n${record.sellNum ?? 0}${l10n.myPageResaleUnitsSuffix}',
