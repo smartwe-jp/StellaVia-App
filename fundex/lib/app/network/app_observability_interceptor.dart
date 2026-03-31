@@ -132,7 +132,11 @@ class AppObservabilityInterceptor extends Interceptor {
   }
 
   String? _resolveCustomMessage(DioException err, NetworkFailure? failure) {
-    if (failure != null && failure.type != NetworkFailureType.badResponse) {
+    if (failure != null &&
+        failure.type != NetworkFailureType.badResponse &&
+        failure.type != NetworkFailureType.unauthorized &&
+        failure.type != NetworkFailureType.forbidden &&
+        failure.type != NetworkFailureType.serverError) {
       return null;
     }
     final resolved = resolveAppRequestErrorMessage(err, '').trim();
