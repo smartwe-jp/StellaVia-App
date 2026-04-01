@@ -227,7 +227,7 @@ class VerificationCodeField extends StatelessWidget {
   }
 }
 
-class _BaseInputField extends StatelessWidget {
+class _BaseInputField extends StatefulWidget {
   const _BaseInputField({
     this.fieldKey,
     required this.controller,
@@ -259,6 +259,45 @@ class _BaseInputField extends StatelessWidget {
   final bool obscureText;
 
   @override
+  State<_BaseInputField> createState() => _BaseInputFieldState();
+}
+
+class _BaseInputFieldState extends State<_BaseInputField> {
+  late final FocusNode _focusNode;
+  bool _isFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+    _focusNode.addListener(_handleFocusChanged);
+  }
+
+  @override
+  void dispose() {
+    _focusNode
+      ..removeListener(_handleFocusChanged)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _handleFocusChanged() {
+    if (_isFocused == _focusNode.hasFocus) {
+      return;
+    }
+    setState(() {
+      _isFocused = _focusNode.hasFocus;
+    });
+  }
+
+  void _requestFocus() {
+    if (!widget.enabled || _focusNode.hasFocus) {
+      return;
+    }
+    _focusNode.requestFocus();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
@@ -279,7 +318,9 @@ class _BaseInputField extends StatelessWidget {
     final textStyle = appText.inputText;
 
     final inputShell = _InputShell(
-      enabled: enabled,
+      enabled: widget.enabled,
+      isFocused: _isFocused,
+      onTap: _requestFocus,
       fillColor: fillColor,
       glowColor: hotelTheme.primaryButtonColor.withValues(alpha: 0.16),
       shadowColor: isDark
@@ -299,28 +340,29 @@ class _BaseInputField extends StatelessWidget {
               color: iconBg,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(leadingIcon, size: 18, color: iconColor),
+            child: Icon(widget.leadingIcon, size: 18, color: iconColor),
           ),
           const SizedBox(width: UiTokens.spacing12),
           Expanded(
             child: SizedBox(
               //height: 34,
               child: TextField(
-                key: fieldKey,
-                controller: controller,
-                enabled: enabled,
-                obscureText: obscureText,
-                keyboardType: keyboardType,
-                textInputAction: textInputAction,
-                onChanged: onChanged,
+                key: widget.fieldKey,
+                controller: widget.controller,
+                focusNode: _focusNode,
+                enabled: widget.enabled,
+                obscureText: widget.obscureText,
+                keyboardType: widget.keyboardType,
+                textInputAction: widget.textInputAction,
+                onChanged: widget.onChanged,
                 autofocus: false,
-                autofillHints: autofillHints,
+                autofillHints: widget.autofillHints,
                 style: textStyle,
                 textAlignVertical: TextAlignVertical.center,
                 cursorColor: hotelTheme.primaryButtonColor,
                 decoration: InputDecoration(
                   isDense: true,
-                  hintText: hintText,
+                  hintText: widget.hintText,
                   hintStyle: hintStyle,
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
@@ -334,22 +376,22 @@ class _BaseInputField extends StatelessWidget {
               ),
             ),
           ),
-          if (trailing != null) ...<Widget>[
+          if (widget.trailing != null) ...<Widget>[
             const SizedBox(width: UiTokens.spacing8),
-            trailing!,
+            widget.trailing!,
           ],
         ],
       ),
     );
 
-    if (!showLabel) {
+    if (!widget.showLabel) {
       return inputShell;
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        _FieldLabel(labelText: labelText),
+        _FieldLabel(labelText: widget.labelText),
         const SizedBox(height: UiTokens.spacing8),
         inputShell,
       ],
@@ -377,6 +419,8 @@ class _FieldLabel extends StatelessWidget {
 class _InputShell extends StatefulWidget {
   const _InputShell({
     required this.child,
+    required this.isFocused,
+    required this.onTap,
     required this.fillColor,
     required this.glowColor,
     required this.shadowColor,
@@ -387,6 +431,8 @@ class _InputShell extends StatefulWidget {
   });
 
   final Widget child;
+  final bool isFocused;
+  final VoidCallback onTap;
   final Color fillColor;
   final Color glowColor;
   final Color shadowColor;
@@ -400,19 +446,11 @@ class _InputShell extends StatefulWidget {
 }
 
 class _InputShellState extends State<_InputShell> {
-  bool _isFocused = false;
-
   @override
   Widget build(BuildContext context) {
-    return Focus(
-      onFocusChange: (bool focused) {
-        if (_isFocused == focused) {
-          return;
-        }
-        setState(() {
-          _isFocused = focused;
-        });
-      },
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: widget.enabled ? widget.onTap : null,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 160),
         curve: Curves.easeOutCubic,
@@ -422,14 +460,14 @@ class _InputShellState extends State<_InputShell> {
         ),
         decoration: BoxDecoration(
           color: widget.enabled
-              ? (_isFocused
+              ? (widget.isFocused
                     ? widget.fillColor.withValues(alpha: 1)
                     : widget.fillColor)
               : widget.fillColor.withValues(alpha: 0.62),
           border: Border.all(
             color: !widget.enabled
                 ? widget.disabledBorderColor
-                : (_isFocused
+                : (widget.isFocused
                       ? widget.focusedBorderColor
                       : widget.defaultBorderColor),
             width: 1.5,
