@@ -1383,6 +1383,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get menuDeleteAccountAction => '删除账户（退会）';
 
   @override
+  String get settingsDeleteAccountSupportTitle => '删除账户';
+
+  @override
+  String get settingsDeleteAccountSupportMessage =>
+      '当前应用内暂不支持删除账户。请联系客户支持并通过电话办理。';
+
+  @override
+  String get settingsDeleteAccountCallAction => '拨打电话';
+
+  @override
   String get menuDeleteAccountConfirmTitle => '确认删除账户？';
 
   @override
@@ -5094,6 +5104,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get menuDeleteAccountAction => '删除账户（退会）';
+
+  @override
+  String get settingsDeleteAccountSupportTitle => '刪除帳戶';
+
+  @override
+  String get settingsDeleteAccountSupportMessage =>
+      '目前應用內暫不支援刪除帳戶。請聯絡客戶支援並透過電話辦理。';
+
+  @override
+  String get settingsDeleteAccountCallAction => '撥打電話';
 
   @override
   String get menuDeleteAccountConfirmTitle => '确认删除账户？';

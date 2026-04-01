@@ -1398,6 +1398,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get menuDeleteAccountAction => 'アカウントを削除（退会）';
 
   @override
+  String get settingsDeleteAccountSupportTitle => '退会をご希望の場合';
+
+  @override
+  String get settingsDeleteAccountSupportMessage =>
+      '退会のお手続きは現在アプリ内で対応していません。お手数ですが、カスタマーサポートまでお電話でお問い合わせください。';
+
+  @override
+  String get settingsDeleteAccountCallAction => '電話をかける';
+
+  @override
   String get menuDeleteAccountConfirmTitle => '退会しますか？';
 
   @override

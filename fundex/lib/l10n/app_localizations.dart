@@ -2789,6 +2789,24 @@ abstract class AppLocalizations {
   /// **'Delete account'**
   String get menuDeleteAccountAction;
 
+  /// No description provided for @settingsDeleteAccountSupportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get settingsDeleteAccountSupportTitle;
+
+  /// No description provided for @settingsDeleteAccountSupportMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Account deletion is not available in the app yet. Please contact customer support by phone.'**
+  String get settingsDeleteAccountSupportMessage;
+
+  /// No description provided for @settingsDeleteAccountCallAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get settingsDeleteAccountCallAction;
+
   /// No description provided for @menuDeleteAccountConfirmTitle.
   ///
   /// In en, this message translates to:

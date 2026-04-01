@@ -1475,6 +1475,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuDeleteAccountAction => 'Delete account';
 
   @override
+  String get settingsDeleteAccountSupportTitle => 'Delete account';
+
+  @override
+  String get settingsDeleteAccountSupportMessage =>
+      'Account deletion is not available in the app yet. Please contact customer support by phone.';
+
+  @override
+  String get settingsDeleteAccountCallAction => 'Call';
+
+  @override
   String get menuDeleteAccountConfirmTitle => 'Delete account?';
 
   @override

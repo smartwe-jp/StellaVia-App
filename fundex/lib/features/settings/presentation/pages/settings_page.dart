@@ -2,6 +2,7 @@ import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../app/config/environment_provider.dart';
 import '../../../../app/localization/app_locale_providers.dart';
@@ -99,6 +100,85 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     }
   }
 
+  String _normalizeDialUriPhone(String phone) {
+    return phone.replaceAll(RegExp(r'[^0-9+]'), '');
+  }
+
+  String _formatSupportPhoneDisplay(String phone) {
+    final trimmed = phone.trim();
+    if (trimmed.isEmpty) {
+      return '';
+    }
+    if (trimmed.startsWith('+')) {
+      return trimmed;
+    }
+    if (trimmed.startsWith('0')) {
+      return '+81 ${trimmed.substring(1)}';
+    }
+    return '+81 $trimmed';
+  }
+
+  Future<void> _callSupportPhone(String phone) async {
+    final normalized = phone.trim();
+    if (normalized.isEmpty) {
+      return;
+    }
+    final dialTarget = _normalizeDialUriPhone(normalized);
+    if (dialTarget.isEmpty) {
+      return;
+    }
+    final launched = await launchUrl(Uri.parse('tel:$dialTarget'));
+    if (!mounted || launched) {
+      return;
+    }
+    AppNotice.show(context, message: context.l10n.uiErrorRequestFailed);
+  }
+
+  Future<void> _showDeleteAccountDialog(String supportPhone) async {
+    final l10n = context.l10n;
+    final displayPhone = _formatSupportPhoneDisplay(supportPhone);
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        final hasPhone = displayPhone.isNotEmpty;
+        return AlertDialog(
+          title: Text(l10n.settingsDeleteAccountSupportTitle),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(l10n.settingsDeleteAccountSupportMessage),
+              if (hasPhone) ...<Widget>[
+                const SizedBox(height: 12),
+                TextButton(
+                  onPressed: () async {
+                    Navigator.of(dialogContext).pop();
+                    await _callSupportPhone(supportPhone);
+                  },
+                  child: Text(displayPhone),
+                ),
+              ],
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(l10n.profileGuardCancel),
+            ),
+            if (hasPhone)
+              FilledButton(
+                onPressed: () async {
+                  Navigator.of(dialogContext).pop();
+                  await _callSupportPhone(supportPhone);
+                },
+                child: Text(l10n.settingsDeleteAccountCallAction),
+              ),
+          ],
+        );
+      },
+    );
+  }
+
   String _languageLabel(AppLanguage language) {
     final l10n = context.l10n;
     return switch (language) {
@@ -171,6 +251,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       version: appVersionAsync.asData?.value,
       licenseNumber: operatingCompanyAsync.asData?.value.licenseNumber,
     );
+    final supportPhone = operatingCompanyAsync.asData?.value.tel.trim() ?? '';
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -384,6 +465,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               onPressed: _isLoggingOut ? null : _confirmLogout,
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 12),
+                foregroundColor: colors.textPrimary,
+                side: BorderSide(color: colors.border),
+                textStyle: appText.bodyStrong,
               ),
               child: _isLoggingOut
                   ? const SizedBox(
@@ -392,6 +476,17 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : Text(l10n.homeLogout),
+            ),
+            const SizedBox(height: 8),
+            Center(
+              child: TextButton(
+                onPressed: () => _showDeleteAccountDialog(supportPhone),
+                style: TextButton.styleFrom(
+                  foregroundColor: colors.danger,
+                  textStyle: appText.meta,
+                ),
+                child: Text(l10n.menuDeleteAccountAction),
+              ),
             ),
           ],
         ],
