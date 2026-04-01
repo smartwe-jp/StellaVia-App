@@ -50,7 +50,7 @@ void main() {
   });
 
   group('settingsAppVersionProvider', () {
-    test('returns the installed app version', () async {
+    test('returns the installed app version with build number', () async {
       PackageInfo.setMockInitialValues(
         appName: 'fundex',
         packageName: 'com.example.fundex',
@@ -62,7 +62,10 @@ void main() {
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
-      expect(await container.read(settingsAppVersionProvider.future), '2.4.6');
+      expect(
+        await container.read(settingsAppVersionProvider.future),
+        '2.4.6(12)',
+      );
     });
   });
 }

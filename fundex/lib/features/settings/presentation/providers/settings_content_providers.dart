@@ -14,8 +14,15 @@ final settingsOperatingCompanyContentProvider =
 final settingsAppVersionProvider = FutureProvider<String>((ref) async {
   final info = await PackageInfo.fromPlatform();
   final version = info.version.trim();
+  final buildNumber = info.buildNumber.trim();
+  if (version.isNotEmpty && buildNumber.isNotEmpty) {
+    return '$version($buildNumber)';
+  }
   if (version.isNotEmpty) {
     return version;
+  }
+  if (buildNumber.isNotEmpty) {
+    return '0.0.0($buildNumber)';
   }
   return '0.0.0';
 });
