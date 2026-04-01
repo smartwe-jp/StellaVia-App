@@ -21,6 +21,8 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
     this.primaryButtonEnabled = true,
     this.titleOverride,
     this.descriptionOverride,
+    this.secondaryButtonLabelOverride,
+    this.onSecondaryPressed,
     this.primaryButtonLabelOverride,
     this.onBirthdayTap,
     required this.onSexChanged,
@@ -42,6 +44,8 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
   final bool primaryButtonEnabled;
   final String? titleOverride;
   final String? descriptionOverride;
+  final String? secondaryButtonLabelOverride;
+  final VoidCallback? onSecondaryPressed;
   final String? primaryButtonLabelOverride;
   final VoidCallback? onBirthdayTap;
   final ValueChanged<int?> onSexChanged;
@@ -56,6 +60,8 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
     return MemberProfileEditStepScaffold(
       title: titleOverride ?? l10n.memberProfileStep1Title,
       description: descriptionOverride ?? l10n.memberProfileStep1Description,
+      secondaryButtonLabel: secondaryButtonLabelOverride,
+      onSecondaryPressed: onSecondaryPressed,
       primaryButtonLabel: primaryButtonLabelOverride ?? l10n.commonNext,
       onPrimaryPressed: onNext,
       primaryButtonEnabled: primaryButtonEnabled,

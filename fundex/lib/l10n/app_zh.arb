@@ -104,6 +104,7 @@
   "profileSavedAndContinueLoginMessage": "详细资料已保存在本地，你可以继续登录。",
   "profileSavedSnackbar": "详细资料已保存到本地。",
   "memberProfileAutoSavedToast": "已保存。",
+  "memberProfileTemporarySaveAction": "暂时保存",
   "memberProfileDraftImportTitle": "检测到已保存的录入资料",
   "memberProfileDraftImportMessage": "是否导入上次保存的录入内容？",
   "memberProfileDraftImportAction": "导入",

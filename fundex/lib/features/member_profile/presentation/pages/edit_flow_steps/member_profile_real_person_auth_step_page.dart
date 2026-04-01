@@ -12,6 +12,8 @@ class MemberProfileRealPersonAuthStepPage extends StatelessWidget {
     this.showSkip = false,
     this.titleOverride,
     this.descriptionOverride,
+    this.secondaryButtonLabelOverride,
+    this.onSecondaryPressed,
     this.primaryButtonLabelOverride,
     this.statusMessage,
     this.onUploadSelfie,
@@ -25,6 +27,8 @@ class MemberProfileRealPersonAuthStepPage extends StatelessWidget {
   final bool showSkip;
   final String? titleOverride;
   final String? descriptionOverride;
+  final String? secondaryButtonLabelOverride;
+  final VoidCallback? onSecondaryPressed;
   final String? primaryButtonLabelOverride;
   final String? statusMessage;
   final VoidCallback? onUploadSelfie;
@@ -41,6 +45,8 @@ class MemberProfileRealPersonAuthStepPage extends StatelessWidget {
       title: titleOverride ?? l10n.memberProfileStep5RealPersonTitle,
       description:
           descriptionOverride ?? l10n.memberProfileStep5RealPersonDescription,
+      secondaryButtonLabel: secondaryButtonLabelOverride,
+      onSecondaryPressed: onSecondaryPressed,
       primaryButtonLabel:
           primaryButtonLabelOverride ?? l10n.identityAuthStartAction,
       onPrimaryPressed: onStartVerification,

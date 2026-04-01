@@ -12,6 +12,8 @@ class MemberProfileAddressInfoStepPage extends StatelessWidget {
     this.primaryButtonEnabled = true,
     this.titleOverride,
     this.descriptionOverride,
+    this.secondaryButtonLabelOverride,
+    this.onSecondaryPressed,
     this.primaryButtonLabelOverride,
     this.onAddressSearch,
     this.onNext,
@@ -24,6 +26,8 @@ class MemberProfileAddressInfoStepPage extends StatelessWidget {
   final bool primaryButtonEnabled;
   final String? titleOverride;
   final String? descriptionOverride;
+  final String? secondaryButtonLabelOverride;
+  final VoidCallback? onSecondaryPressed;
   final String? primaryButtonLabelOverride;
   final VoidCallback? onAddressSearch;
   final VoidCallback? onNext;
@@ -35,6 +39,8 @@ class MemberProfileAddressInfoStepPage extends StatelessWidget {
     return MemberProfileEditStepScaffold(
       title: titleOverride ?? l10n.memberProfileStep2Title,
       description: descriptionOverride ?? l10n.memberProfileStep2Description,
+      secondaryButtonLabel: secondaryButtonLabelOverride,
+      onSecondaryPressed: onSecondaryPressed,
       primaryButtonLabel: primaryButtonLabelOverride ?? l10n.commonNext,
       onPrimaryPressed: onNext,
       primaryButtonEnabled: primaryButtonEnabled,

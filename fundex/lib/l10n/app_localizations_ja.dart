@@ -326,6 +326,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfileAutoSavedToast => '保存しました。';
 
   @override
+  String get memberProfileTemporarySaveAction => '一時保存';
+
+  @override
   String get memberProfileDraftImportTitle => '保存済みの入力内容があります';
 
   @override

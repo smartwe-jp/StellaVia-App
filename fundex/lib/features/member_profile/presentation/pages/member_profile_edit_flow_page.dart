@@ -113,7 +113,6 @@ class _MemberProfileEditFlowPageState
   bool _isRunningRealPersonAuth = false;
   bool _isSectionAccessChecking = false;
   String? _realPersonAuthStatusMessage;
-  Timer? _onboardingDraftSaveTimer;
 
   bool get _isIdentityAuthEnabled =>
       ref.read(identityAuthFeatureEnabledProvider);
@@ -160,7 +159,6 @@ class _MemberProfileEditFlowPageState
 
   @override
   void dispose() {
-    _onboardingDraftSaveTimer?.cancel();
     _unregisterTextFieldListeners();
     _familyNameController.dispose();
     _givenNameController.dispose();
@@ -218,7 +216,6 @@ class _MemberProfileEditFlowPageState
       return;
     }
     setState(() {});
-    _scheduleOnboardingDraftSave();
   }
 
   void _applyUserChange(VoidCallback change) {
@@ -226,17 +223,6 @@ class _MemberProfileEditFlowPageState
       return;
     }
     setState(change);
-    _scheduleOnboardingDraftSave();
-  }
-
-  void _scheduleOnboardingDraftSave() {
-    if (_isSingleSectionMode || _isLoading) {
-      return;
-    }
-    _onboardingDraftSaveTimer?.cancel();
-    _onboardingDraftSaveTimer = Timer(const Duration(milliseconds: 700), () {
-      unawaited(_persistOnboardingDraft(showNotice: true));
-    });
   }
 
   Future<bool> _shouldImportOnboardingDraft(
@@ -463,7 +449,6 @@ class _MemberProfileEditFlowPageState
       _birthday = picked;
       _birthdayController.text = _formatDate(picked);
     });
-    await _persistOnboardingDraft(showNotice: true);
   }
 
   Future<void> _guardSingleSectionAccess() async {
@@ -600,7 +585,7 @@ class _MemberProfileEditFlowPageState
           _selfiePhotoPath = uploadedUrl.trim();
         }
       });
-      await _persistOnboardingDraft(showNotice: false);
+      await _persistOnboardingDraft();
       if (!mounted) {
         return;
       }
@@ -620,7 +605,7 @@ class _MemberProfileEditFlowPageState
         setState(() {
           _selfiePhotoPath = selfieUploadCompletedMarker;
         });
-        await _persistOnboardingDraft(showNotice: false);
+        await _persistOnboardingDraft();
         if (!mounted) {
           return;
         }
@@ -724,7 +709,6 @@ class _MemberProfileEditFlowPageState
       }
 
       _applyResolvedAddressRows(rows);
-      await _persistOnboardingDraft(showNotice: true);
     } catch (error) {
       if (!mounted) {
         return;
@@ -818,7 +802,7 @@ class _MemberProfileEditFlowPageState
     if (_isSubmitting || _isUploadingPhoto || _isRunningRealPersonAuth) {
       return;
     }
-    await _persistOnboardingDraft(showNotice: false);
+    await _persistOnboardingDraft();
     if (!mounted) {
       return;
     }
@@ -830,7 +814,7 @@ class _MemberProfileEditFlowPageState
     setState(() {
       _currentStep = previous;
     });
-    await _persistOnboardingDraft(showNotice: false);
+    await _persistOnboardingDraft();
   }
 
   Future<void> _completeFlow() async {
@@ -1200,7 +1184,7 @@ class _MemberProfileEditFlowPageState
       setState(() {
         _currentStep = next;
       });
-      await _persistOnboardingDraft(showNotice: false);
+      await _persistOnboardingDraft();
     } catch (error) {
       if (!mounted) {
         return;
@@ -1226,7 +1210,8 @@ class _MemberProfileEditFlowPageState
 
   Future<void> _refreshVerificationStateAfterProfileSubmit() async {
     try {
-      final remoteUser = await ref.read(authRemoteDataSourceProvider)
+      final remoteUser = await ref
+          .read(authRemoteDataSourceProvider)
           .fetchCurrentUser();
       if (remoteUser != null) {
         await ref.read(authLocalDataSourceProvider).saveCurrentUser(remoteUser);
@@ -1261,7 +1246,6 @@ class _MemberProfileEditFlowPageState
   }
 
   Future<void> _persistOfficialProfile({bool markCompleted = false}) async {
-    _onboardingDraftSaveTimer?.cancel();
     final MemberProfileDetails profile = _buildDraft(
       completedAtOverride: markCompleted
           ? DateTime.now().toUtc()
@@ -1273,14 +1257,10 @@ class _MemberProfileEditFlowPageState
     _completedAt = profile.completedAt;
   }
 
-  Future<void> _persistOnboardingDraft({
-    bool markCompleted = false,
-    required bool showNotice,
-  }) async {
+  Future<void> _persistOnboardingDraft({bool markCompleted = false}) async {
     if (_isSingleSectionMode) {
       return;
     }
-    _onboardingDraftSaveTimer?.cancel();
     final MemberProfileDetails profile = _buildDraft(
       completedAtOverride: markCompleted
           ? DateTime.now().toUtc()
@@ -1291,11 +1271,43 @@ class _MemberProfileEditFlowPageState
         .read(memberProfileRepositoryProvider)
         .saveOnboardingDraft(profile);
     _completedAt = profile.completedAt;
-    if (showNotice && mounted) {
+  }
+
+  Future<void> _saveOnboardingDraftTemporarily() async {
+    if (_isSingleSectionMode ||
+        _isLoading ||
+        _isSubmitting ||
+        _isUploadingPhoto ||
+        _isRunningRealPersonAuth) {
+      return;
+    }
+    final l10n = context.l10n;
+    setState(() {
+      _isSubmitting = true;
+    });
+    try {
+      await _persistOnboardingDraft();
+      if (!mounted) {
+        return;
+      }
       AppNotice.show(
         context,
         message: context.l10n.memberProfileAutoSavedToast,
       );
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      AppNotice.show(
+        context,
+        message: _resolveSubmitErrorMessage(error, l10n.uiErrorRequestFailed),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
     }
   }
 
@@ -1692,6 +1704,12 @@ class _MemberProfileEditFlowPageState
   }
 
   Widget _buildStep(BuildContext context) {
+    final String? secondaryButtonLabel = _isSingleSectionMode
+        ? null
+        : context.l10n.memberProfileTemporarySaveAction;
+    final VoidCallback? onSecondaryPressed = _isSingleSectionMode
+        ? null
+        : _saveOnboardingDraftTemporarily;
     switch (_currentStep) {
       case MemberProfileEditStep.basicInfo:
         final bool isActionEnabled = _canProceedFromCurrentStep;
@@ -1710,6 +1728,8 @@ class _MemberProfileEditFlowPageState
           primaryButtonEnabled: isActionEnabled,
           titleOverride: _isSingleSectionMode ? _stepTitle : null,
           descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
+          secondaryButtonLabelOverride: secondaryButtonLabel,
+          onSecondaryPressed: onSecondaryPressed,
           primaryButtonLabelOverride: _isSingleSectionMode
               ? _primaryActionLabel
               : null,
@@ -1735,6 +1755,8 @@ class _MemberProfileEditFlowPageState
           primaryButtonEnabled: isActionEnabled,
           titleOverride: _isSingleSectionMode ? _stepTitle : null,
           descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
+          secondaryButtonLabelOverride: secondaryButtonLabel,
+          onSecondaryPressed: onSecondaryPressed,
           primaryButtonLabelOverride: _isSingleSectionMode
               ? _primaryActionLabel
               : null,
@@ -1769,6 +1791,8 @@ class _MemberProfileEditFlowPageState
           primaryButtonEnabled: _canProceedFromCurrentStep,
           titleOverride: _isSingleSectionMode ? _stepTitle : null,
           descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
+          secondaryButtonLabelOverride: secondaryButtonLabel,
+          onSecondaryPressed: onSecondaryPressed,
           primaryButtonLabelOverride: _isSingleSectionMode
               ? _primaryActionLabel
               : null,
@@ -1825,6 +1849,8 @@ class _MemberProfileEditFlowPageState
               !_isSubmitting,
           titleOverride: _isSingleSectionMode ? _stepTitle : null,
           descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
+          secondaryButtonLabelOverride: secondaryButtonLabel,
+          onSecondaryPressed: onSecondaryPressed,
           primaryButtonLabelOverride: _isSingleSectionMode
               ? _primaryActionLabel
               : null,
@@ -1860,6 +1886,8 @@ class _MemberProfileEditFlowPageState
           showSkip: !_isSingleSectionMode,
           titleOverride: _isSingleSectionMode ? _stepTitle : null,
           descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
+          secondaryButtonLabelOverride: secondaryButtonLabel,
+          onSecondaryPressed: onSecondaryPressed,
           primaryButtonLabelOverride: _isSingleSectionMode
               ? _primaryActionLabel
               : null,
@@ -1897,6 +1925,8 @@ class _MemberProfileEditFlowPageState
           showSkip: !_isSingleSectionMode,
           titleOverride: _isSingleSectionMode ? _stepTitle : null,
           descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
+          secondaryButtonLabelOverride: secondaryButtonLabel,
+          onSecondaryPressed: onSecondaryPressed,
           primaryButtonLabelOverride: _isSingleSectionMode
               ? _primaryActionLabel
               : null,
@@ -1915,6 +1945,8 @@ class _MemberProfileEditFlowPageState
           privacyConsent: _privacyConsent,
           titleOverride: _isSingleSectionMode ? _stepTitle : null,
           descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
+          secondaryButtonLabelOverride: secondaryButtonLabel,
+          onSecondaryPressed: onSecondaryPressed,
           primaryButtonLabelOverride: _isSingleSectionMode
               ? _primaryActionLabel
               : null,

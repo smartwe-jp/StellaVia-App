@@ -104,6 +104,7 @@
   "profileSavedAndContinueLoginMessage": "詳細情報はローカルに保存されました。続けてログインできます。",
   "profileSavedSnackbar": "詳細情報をローカルに保存しました。",
   "memberProfileAutoSavedToast": "保存しました。",
+  "memberProfileTemporarySaveAction": "一時保存",
   "memberProfileDraftImportTitle": "保存済みの入力内容があります",
   "memberProfileDraftImportMessage": "前回保存した入力内容を読み込みますか？",
   "memberProfileDraftImportAction": "読み込む",

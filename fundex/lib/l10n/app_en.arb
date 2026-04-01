@@ -104,6 +104,7 @@
   "profileSavedAndContinueLoginMessage": "Your details have been saved locally. You can continue to sign in.",
   "profileSavedSnackbar": "Profile details saved locally.",
   "memberProfileAutoSavedToast": "Saved.",
+  "memberProfileTemporarySaveAction": "Save draft",
   "memberProfileDraftImportTitle": "Saved profile draft found",
   "memberProfileDraftImportMessage": "Do you want to import the saved draft from your last session?",
   "memberProfileDraftImportAction": "Import",

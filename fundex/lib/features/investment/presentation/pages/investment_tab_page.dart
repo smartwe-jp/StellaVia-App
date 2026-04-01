@@ -458,7 +458,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                           context,
                           project.projectStatus,
                         );
-                        final methodLabel = _resolveMethodLabel(
+                        final gainType = _resolveMethodLabel(
                           context,
                           project.gainType,
                         );
@@ -473,7 +473,8 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                           isFavorite: favoriteProjectIds.contains(projectId),
                           palette: palette,
                           statusLabel: statusLabel,
-                          methodLabel: methodLabel,
+                          methodLabel: project.offeringMethod ?? '--',
+                          gainTypeLabel: gainType,
                           yieldLabel: l10n.fundListYieldLabel,
                           periodLabel: l10n.fundListPeriodLabel,
                           methodTitleLabel: l10n.fundListMethodLabel,
@@ -525,6 +526,7 @@ class _FundProjectCard extends StatelessWidget {
     required this.palette,
     required this.statusLabel,
     required this.methodLabel,
+    required this.gainTypeLabel,
     required this.yieldLabel,
     required this.periodLabel,
     required this.methodTitleLabel,
@@ -544,6 +546,7 @@ class _FundProjectCard extends StatelessWidget {
   final _FundStatusPalette palette;
   final String statusLabel;
   final String methodLabel;
+  final String gainTypeLabel;
   final String yieldLabel;
   final String periodLabel;
   final String methodTitleLabel;
@@ -739,7 +742,7 @@ class _FundProjectCard extends StatelessWidget {
                             foregroundColor: palette.tagForegroundColor,
                           ),
                           _PillTag(
-                            label: methodLabel,
+                            label: gainTypeLabel,
                             backgroundColor: colors.communitySecondary
                                 .withValues(alpha: 0.14),
                             foregroundColor: colors.communitySecondary,
@@ -967,11 +970,11 @@ class _HeroInfoBubble extends StatelessWidget {
         children: <Widget>[
           Text(
             label,
-            style: appText.micro.copyWith(color: labelColor, height: 1.1),
+            style: appText.micro.copyWith(color: labelColor, height: 1.1, fontSize: 9),
           ),
           Text(
             value,
-            style: appText.bodyStrong.copyWith(color: valueColor, height: 1.1),
+            style: appText.bodyStrong.copyWith(color: valueColor, height: 1.1, fontSize: 11),
           ),
         ],
       ),

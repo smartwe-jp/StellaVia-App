@@ -9,6 +9,8 @@ class MemberProfileEditStepScaffold extends StatelessWidget {
     required this.title,
     required this.description,
     required this.child,
+    this.secondaryButtonLabel,
+    this.onSecondaryPressed,
     required this.primaryButtonLabel,
     this.onPrimaryPressed,
     this.showSkip = false,
@@ -20,6 +22,8 @@ class MemberProfileEditStepScaffold extends StatelessWidget {
   final String title;
   final String description;
   final Widget child;
+  final String? secondaryButtonLabel;
+  final VoidCallback? onSecondaryPressed;
   final String primaryButtonLabel;
   final VoidCallback? onPrimaryPressed;
   final bool showSkip;
@@ -52,6 +56,13 @@ class MemberProfileEditStepScaffold extends StatelessWidget {
           const SizedBox(height: 20),
           child,
           const SizedBox(height: 20),
+          if (secondaryButtonLabel != null) ...<Widget>[
+            MemberProfileOutlineButton(
+              label: secondaryButtonLabel!,
+              onPressed: onSecondaryPressed,
+            ),
+            const SizedBox(height: 12),
+          ],
           MemberProfilePrimaryButton(
             label: primaryButtonLabel,
             onPressed: primaryButtonEnabled ? onPrimaryPressed : null,

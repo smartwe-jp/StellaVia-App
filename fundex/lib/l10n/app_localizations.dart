@@ -725,6 +725,12 @@ abstract class AppLocalizations {
   /// **'Saved.'**
   String get memberProfileAutoSavedToast;
 
+  /// No description provided for @memberProfileTemporarySaveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save draft'**
+  String get memberProfileTemporarySaveAction;
+
   /// No description provided for @memberProfileDraftImportTitle.
   ///
   /// In en, this message translates to:

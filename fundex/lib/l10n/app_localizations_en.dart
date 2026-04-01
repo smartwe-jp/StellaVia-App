@@ -345,6 +345,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memberProfileAutoSavedToast => 'Saved.';
 
   @override
+  String get memberProfileTemporarySaveAction => 'Save draft';
+
+  @override
   String get memberProfileDraftImportTitle => 'Saved profile draft found';
 
   @override

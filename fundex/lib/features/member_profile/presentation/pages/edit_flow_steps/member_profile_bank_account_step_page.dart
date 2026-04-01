@@ -17,6 +17,8 @@ class MemberProfileBankAccountStepPage extends StatelessWidget {
     this.showSkip = false,
     this.titleOverride,
     this.descriptionOverride,
+    this.secondaryButtonLabelOverride,
+    this.onSecondaryPressed,
     this.primaryButtonLabelOverride,
     this.onAccountTypeChanged,
     this.onNext,
@@ -34,6 +36,8 @@ class MemberProfileBankAccountStepPage extends StatelessWidget {
   final bool showSkip;
   final String? titleOverride;
   final String? descriptionOverride;
+  final String? secondaryButtonLabelOverride;
+  final VoidCallback? onSecondaryPressed;
   final String? primaryButtonLabelOverride;
   final ValueChanged<String?>? onAccountTypeChanged;
   final VoidCallback? onNext;
@@ -45,6 +49,8 @@ class MemberProfileBankAccountStepPage extends StatelessWidget {
     return MemberProfileEditStepScaffold(
       title: titleOverride ?? l10n.memberProfileStep5Title,
       description: descriptionOverride ?? l10n.memberProfileStep5Description,
+      secondaryButtonLabel: secondaryButtonLabelOverride,
+      onSecondaryPressed: onSecondaryPressed,
       primaryButtonLabel:
           primaryButtonLabelOverride ?? l10n.memberProfileNextConsent,
       onPrimaryPressed: onNext,
