@@ -388,6 +388,10 @@ class _DiscussionBoardTabPageState
     required bool isAuthenticated,
     required String currentUserId,
   }) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
     if (state.isLoading && state.threads.isEmpty) {
       return const Padding(
         padding: EdgeInsets.symmetric(vertical: 32),
@@ -398,20 +402,19 @@ class _DiscussionBoardTabPageState
     if (state.threads.isEmpty) {
       return DecoratedBox(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColorTokens.fundexBorder),
+          border: Border.all(color: colors.borderSoft),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
           child: Text(
             l10n.kizunarkEmptyState,
             textAlign: TextAlign.center,
-            style: (Theme.of(context).textTheme.bodyMedium ?? const TextStyle())
-                .copyWith(
-                  color: AppColorTokens.fundexTextSecondary,
-                  height: 1.6,
-                ),
+            style: appText.bodyMuted.copyWith(
+              color: colors.textSecondary,
+              height: 1.6,
+            ),
           ),
         ),
       );
