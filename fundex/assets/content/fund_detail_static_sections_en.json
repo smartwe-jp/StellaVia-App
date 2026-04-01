@@ -40,16 +40,6 @@
       "body": "Profits generated from rent and other income from the target property, after deducting necessary expenses such as management fees, repair reserves, property tax, and operator fees, are distributed every six months based on the investment ratio. Distribution amounts are paid after withholding tax (20.42%)."
     },
     {
-      "id": "fees",
-      "title": "Fees and charges",
-      "rows": [
-        {"label": "Investment fee", "value": "Free"},
-        {"label": "Management fee", "value": "2.0% of rental income"},
-        {"label": "Exit fee", "value": "30% of capital gain"},
-        {"label": "Withdrawal fee", "value": "JPY 145 / time"}
-      ]
-    },
-    {
       "id": "tax",
       "title": "Tax treatment",
       "body": "Distributions are classified as miscellaneous income subject to comprehensive taxation. A withholding tax of 20.42% (income tax 20% + special reconstruction tax 0.42%) will be deducted at payment. Tax filing may be required. Please consult a tax office or tax advisor for details."
