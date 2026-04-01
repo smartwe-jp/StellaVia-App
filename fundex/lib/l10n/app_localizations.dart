@@ -731,6 +731,12 @@ abstract class AppLocalizations {
   /// **'Save draft'**
   String get memberProfileTemporarySaveAction;
 
+  /// No description provided for @memberProfilePhotoPreviewAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get memberProfilePhotoPreviewAction;
+
   /// No description provided for @memberProfileDraftImportTitle.
   ///
   /// In en, this message translates to:

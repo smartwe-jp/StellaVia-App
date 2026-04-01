@@ -105,6 +105,7 @@
   "profileSavedSnackbar": "详细资料已保存到本地。",
   "memberProfileAutoSavedToast": "已保存。",
   "memberProfileTemporarySaveAction": "暫時保存",
+  "memberProfilePhotoPreviewAction": "預覽",
   "memberProfileDraftImportTitle": "偵測到已保存的錄入資料",
   "memberProfileDraftImportMessage": "是否匯入上次保存的錄入內容？",
   "memberProfileDraftImportAction": "匯入",

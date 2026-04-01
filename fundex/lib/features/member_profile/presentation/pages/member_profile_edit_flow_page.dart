@@ -1132,10 +1132,6 @@ class _MemberProfileEditFlowPageState
   bool get _isBasicInfoStepReady =>
       _isFilled(_familyNameController.text) &&
       _isFilled(_givenNameController.text) &&
-      _isFilled(_familyNameKanaController.text) &&
-      _isFilled(_givenNameKanaController.text) &&
-      _isFilled(_familyNameRomanController.text) &&
-      _isFilled(_givenNameRomanController.text) &&
       _sex != null &&
       _isFilled(_taxCountryController.text) &&
       _isFilled(_birthdayController.text);
@@ -1710,6 +1706,8 @@ class _MemberProfileEditFlowPageState
     final VoidCallback? onSecondaryPressed = _isSingleSectionMode
         ? null
         : _saveOnboardingDraftTemporarily;
+    final String previewActionLabel =
+        context.l10n.memberProfilePhotoPreviewAction;
     switch (_currentStep) {
       case MemberProfileEditStep.basicInfo:
         final bool isActionEnabled = _canProceedFromCurrentStep;
@@ -1843,6 +1841,13 @@ class _MemberProfileEditFlowPageState
           documentTypeItems: _simpleItems(_documentTypeOptions(context)),
           documentFrontUploaded: _isRemoteImageUrl(_documentPhotoPath),
           documentBackUploaded: _isRemoteImageUrl(_documentBackPhotoPath),
+          documentFrontPreviewUrl: _isRemoteImageUrl(_documentPhotoPath)
+              ? _documentPhotoPath
+              : null,
+          documentBackPreviewUrl: _isRemoteImageUrl(_documentBackPhotoPath)
+              ? _documentBackPhotoPath
+              : null,
+          previewActionLabel: previewActionLabel,
           primaryButtonEnabled:
               _canProceedFromCurrentStep &&
               !_isUploadingPhoto &&
@@ -1878,6 +1883,10 @@ class _MemberProfileEditFlowPageState
         return MemberProfileRealPersonAuthStepPage(
           isProcessing: _isRunningRealPersonAuth,
           selfieUploaded: _isSelfieUploaded(_selfiePhotoPath),
+          selfiePreviewUrl: _isRemoteImageUrl(_selfiePhotoPath)
+              ? _selfiePhotoPath
+              : null,
+          previewActionLabel: previewActionLabel,
           primaryButtonEnabled:
               _canProceedFromCurrentStep &&
               !_isUploadingPhoto &&

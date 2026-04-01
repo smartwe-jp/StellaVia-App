@@ -8,6 +8,8 @@ class MemberProfileRealPersonAuthStepPage extends StatelessWidget {
     super.key,
     required this.isProcessing,
     required this.selfieUploaded,
+    this.selfiePreviewUrl,
+    this.previewActionLabel,
     this.primaryButtonEnabled = true,
     this.showSkip = false,
     this.titleOverride,
@@ -23,6 +25,8 @@ class MemberProfileRealPersonAuthStepPage extends StatelessWidget {
 
   final bool isProcessing;
   final bool selfieUploaded;
+  final String? selfiePreviewUrl;
+  final String? previewActionLabel;
   final bool primaryButtonEnabled;
   final bool showSkip;
   final String? titleOverride;
@@ -61,6 +65,8 @@ class MemberProfileRealPersonAuthStepPage extends StatelessWidget {
             title: l10n.memberProfileSelfieTitle,
             description: l10n.memberProfileSelfieDescription,
             isCompleted: selfieUploaded,
+            previewLabel: previewActionLabel,
+            previewUrl: selfiePreviewUrl,
             onTap: onUploadSelfie,
           ),
           const SizedBox(height: 14),

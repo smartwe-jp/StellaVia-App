@@ -10,6 +10,9 @@ class MemberProfileEkycStepPage extends StatelessWidget {
     required this.documentTypeItems,
     required this.documentFrontUploaded,
     required this.documentBackUploaded,
+    this.documentFrontPreviewUrl,
+    this.documentBackPreviewUrl,
+    this.previewActionLabel,
     this.primaryButtonEnabled = true,
     this.titleOverride,
     this.descriptionOverride,
@@ -26,6 +29,9 @@ class MemberProfileEkycStepPage extends StatelessWidget {
   final List<DropdownMenuItem<String>> documentTypeItems;
   final bool documentFrontUploaded;
   final bool documentBackUploaded;
+  final String? documentFrontPreviewUrl;
+  final String? documentBackPreviewUrl;
+  final String? previewActionLabel;
   final bool primaryButtonEnabled;
   final String? titleOverride;
   final String? descriptionOverride;
@@ -62,6 +68,8 @@ class MemberProfileEkycStepPage extends StatelessWidget {
             title: l10n.memberProfilePhotoDocumentFrontTitle,
             description: l10n.memberProfilePhotoDocumentFrontDescription,
             isCompleted: documentFrontUploaded,
+            previewLabel: previewActionLabel,
+            previewUrl: documentFrontPreviewUrl,
             onTap: onUploadDocumentFront,
           ),
           const SizedBox(height: 14),
@@ -70,6 +78,8 @@ class MemberProfileEkycStepPage extends StatelessWidget {
             title: l10n.memberProfilePhotoDocumentBackTitle,
             description: l10n.memberProfilePhotoDocumentBackDescription,
             isCompleted: documentBackUploaded,
+            previewLabel: previewActionLabel,
+            previewUrl: documentBackPreviewUrl,
             onTap: onUploadDocumentBack,
           ),
         ],

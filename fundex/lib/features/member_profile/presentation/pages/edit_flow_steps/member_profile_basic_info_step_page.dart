@@ -85,14 +85,12 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
             startLabel: l10n.memberProfileFamilyNameKanaLabel,
             startController: familyNameKanaController,
             startHintText: l10n.memberProfileFamilyNameKanaHint,
-            startRequired: true,
             startInputFormatters: <TextInputFormatter>[
               MemberProfileInputFormatters.katakanaOnly,
             ],
             endLabel: l10n.memberProfileGivenNameKanaLabel,
             endController: givenNameKanaController,
             endHintText: l10n.memberProfileGivenNameKanaHint,
-            endRequired: true,
             endInputFormatters: <TextInputFormatter>[
               MemberProfileInputFormatters.katakanaOnly,
             ],

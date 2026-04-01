@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'app_image_viewer.dart';
 import 'app_theme_extensions.dart';
 
 class MemberProfileInputFormatters {
@@ -769,6 +770,8 @@ class MemberProfileUploadTile extends StatelessWidget {
     required this.title,
     required this.description,
     this.isCompleted = false,
+    this.previewLabel,
+    this.previewUrl,
     this.onTap,
   });
 
@@ -776,6 +779,8 @@ class MemberProfileUploadTile extends StatelessWidget {
   final String title;
   final String description;
   final bool isCompleted;
+  final String? previewLabel;
+  final String? previewUrl;
   final VoidCallback? onTap;
 
   @override
@@ -800,52 +805,120 @@ class MemberProfileUploadTile extends StatelessWidget {
         ? (isDark ? colors.onDark.withValues(alpha: 0.74) : colors.primaryAlt)
         : colors.textSecondary;
     final iconColor = isCompleted ? primary : colors.textSecondary;
+    final normalizedPreviewUrl = previewUrl?.trim() ?? '';
+    final canPreview = normalizedPreviewUrl.isNotEmpty;
 
-    return Material(
-      color: completedBackgroundColor,
-      borderRadius: BorderRadius.circular(16),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: onTap,
-        child: CustomPaint(
-          painter: _RoundedDashedBorderPainter(
-            color: completedBorderColor,
-            radius: 16,
-            strokeWidth: 2,
-            gap: 6,
-            dash: 8,
-          ),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 34),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
-            child: Column(
-              children: <Widget>[
-                Icon(
-                  isCompleted ? Icons.check_circle_rounded : icon,
-                  size: 44,
-                  color: iconColor,
+    return Stack(
+      children: <Widget>[
+        Material(
+          color: completedBackgroundColor,
+          borderRadius: BorderRadius.circular(16),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: onTap,
+            child: CustomPaint(
+              painter: _RoundedDashedBorderPainter(
+                color: completedBorderColor,
+                radius: 16,
+                strokeWidth: 2,
+                gap: 6,
+                dash: 8,
+              ),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 34,
                 ),
-                const SizedBox(height: 10),
-                Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: appText.cardTitle.copyWith(color: titleColor),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  description,
-                  textAlign: TextAlign.center,
-                  style: appText.helper.copyWith(
-                    color: descriptionColor,
-                    height: 1.35,
-                  ),
+                child: Column(
+                  children: <Widget>[
+                    Icon(
+                      isCompleted ? Icons.check_circle_rounded : icon,
+                      size: 44,
+                      color: iconColor,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: appText.cardTitle.copyWith(color: titleColor),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      description,
+                      textAlign: TextAlign.center,
+                      style: appText.helper.copyWith(
+                        color: descriptionColor,
+                        height: 1.35,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
-      ),
+        if (canPreview)
+          Positioned(
+            top: 12,
+            right: 12,
+            child: Material(
+              color: colors.surface,
+              borderRadius: BorderRadius.circular(999),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(999),
+                onTap: () {
+                  openAppImageViewer(
+                    context,
+                    items: <AppImageViewerItem>[
+                      AppImageViewerItem(
+                        source: normalizedPreviewUrl,
+                        semanticLabel: title,
+                      ),
+                    ],
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(999),
+                    border: Border.all(color: colors.border, width: 1),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: colors.scrim.withValues(alpha: 0.08),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Icon(
+                        Icons.remove_red_eye_outlined,
+                        size: 14,
+                        color: colors.textPrimary,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        previewLabel ?? 'Preview',
+                        style: appText.micro.copyWith(
+                          color: colors.textPrimary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

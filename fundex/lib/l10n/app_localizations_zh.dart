@@ -326,6 +326,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileTemporarySaveAction => '暂时保存';
 
   @override
+  String get memberProfilePhotoPreviewAction => '预览';
+
+  @override
   String get memberProfileDraftImportTitle => '检测到已保存的录入资料';
 
   @override
@@ -4032,6 +4035,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get memberProfileTemporarySaveAction => '暫時保存';
+
+  @override
+  String get memberProfilePhotoPreviewAction => '預覽';
 
   @override
   String get memberProfileDraftImportTitle => '偵測到已保存的錄入資料';
