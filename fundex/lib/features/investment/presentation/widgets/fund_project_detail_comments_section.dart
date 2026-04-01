@@ -6,10 +6,8 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/domain/entities/auth_user.dart';
 import '../../../auth/domain/utils/auth_utils.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
-import '../../../discussion_board/presentation/controllers/discussion_board_controller.dart';
 import '../../../discussion_board/presentation/providers/discussion_board_providers.dart';
 import '../../../discussion_board/presentation/widgets/discussion_board_thread_list.dart';
-import '../../../../l10n/app_localizations.dart';
 
 class FundProjectDetailCommentsSection extends ConsumerStatefulWidget {
   const FundProjectDetailCommentsSection({
@@ -42,32 +40,6 @@ class _FundProjectDetailCommentsSectionState
     super.dispose();
   }
 
-  Future<void> _submitPost(
-    BuildContext context,
-    AppLocalizations l10n,
-    DiscussionBoardController controller,
-    bool isAuthenticated,
-  ) async {
-    if (!isAuthenticated) {
-      return;
-    }
-
-    final localContext = context;
-    if (!mounted) return;
-
-    final submitted = await controller.submitPost(
-      nowLabel: l10n.kizunarkJustNow,
-      fallbackName: l10n.kizunarkFallbackDisplayName,
-      fallbackHandle: l10n.kizunarkFallbackHandle,
-      fallbackBadgeLabel: l10n.kizunarkInvestorBadge,
-    );
-
-    if (submitted) {
-      // ignore: use_build_context_synchronously
-      AppNotice.show(localContext, message: l10n.kizunarkPostSuccessNotice);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -80,8 +52,6 @@ class _FundProjectDetailCommentsSectionState
     final controller = ref.read(
       discussionBoardControllerProvider(widget.projectId).notifier,
     );
-    final isAuthenticated =
-        ref.watch(isAuthenticatedProvider).asData?.value ?? false;
 
     ref.listen<AsyncValue<bool>>(isAuthenticatedProvider, (previous, next) {
       final previousValue = previous?.asData?.value;
