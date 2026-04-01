@@ -236,6 +236,7 @@ class _SettingsPhoneVerificationPageState
     final l10n = context.l10n;
     final userAsync = ref.watch(currentAuthUserProvider);
     final profileAsync = ref.watch(memberProfileDetailsProvider);
+    final phoneVerifiedAsync = ref.watch(settingsPhoneVerifiedProvider);
     final verifiedPhoneAsync = ref.watch(settingsVerifiedPhoneNumberProvider);
 
     return Scaffold(
@@ -257,6 +258,7 @@ class _SettingsPhoneVerificationPageState
         ),
         data: (user) {
           final profile = profileAsync.asData?.value;
+          final isPhoneVerified = phoneVerifiedAsync.asData?.value ?? false;
           final verifiedPhone = verifiedPhoneAsync.asData?.value?.trim() ?? '';
           final currentPhone = verifiedPhone.isNotEmpty
               ? verifiedPhone
@@ -347,7 +349,11 @@ class _SettingsPhoneVerificationPageState
                                 phone: currentPhone,
                                 intlCode: currentIntlCode,
                               ),
-                              child: Text(l10n.commonReplaceText),
+                              child: Text(
+                                isPhoneVerified
+                                    ? l10n.commonReplaceText
+                                    : l10n.settingsPhoneVerifyAction,
+                              ),
                             ),
                         ],
                       ),
