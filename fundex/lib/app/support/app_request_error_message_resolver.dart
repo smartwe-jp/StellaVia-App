@@ -9,16 +9,10 @@ String resolveAppRequestErrorMessage(Object error, String fallbackMessage) {
       return text;
     }
   }
-  if (error is Failure) {
-    final text = error.message.trim();
-    if (text.isNotEmpty &&
-        text != 'Bad response' &&
-        text != 'Request failed' &&
-        text != 'Unknown network error') {
-      return text;
-    }
-  }
   if (error is NetworkFailure) {
+    if (!_shouldExposeServerMessage(error.statusCode)) {
+      return fallbackMessage;
+    }
     final raw = error.rawError;
     if (raw != null) {
       final nested = resolveAppRequestErrorMessage(raw, '');
@@ -26,8 +20,30 @@ String resolveAppRequestErrorMessage(Object error, String fallbackMessage) {
         return nested;
       }
     }
+    final text = error.message.trim();
+    if (text.isNotEmpty &&
+        text != 'Bad response' &&
+        text != 'Request failed' &&
+        text != 'Unknown network error' &&
+        text != 'Server error') {
+      return text;
+    }
+    return fallbackMessage;
+  }
+  if (error is Failure) {
+    final text = error.message.trim();
+    if (text.isNotEmpty &&
+        text != 'Bad response' &&
+        text != 'Request failed' &&
+        text != 'Unknown network error' &&
+        text != 'Server error') {
+      return text;
+    }
   }
   if (error is DioException) {
+    if (!_shouldExposeServerMessage(error.response?.statusCode)) {
+      return fallbackMessage;
+    }
     final responseData = error.response?.data;
     final resolved = _extractErrorMessageFromPayload(responseData);
     if (resolved != null) {
@@ -46,6 +62,13 @@ String resolveAppRequestErrorMessage(Object error, String fallbackMessage) {
     }
   }
   return fallbackMessage;
+}
+
+bool _shouldExposeServerMessage(int? statusCode) {
+  if (statusCode == null) {
+    return true;
+  }
+  return statusCode >= 400 && statusCode < 500;
 }
 
 String? _extractErrorMessageFromPayload(dynamic payload) {

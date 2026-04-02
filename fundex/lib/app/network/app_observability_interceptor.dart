@@ -132,21 +132,32 @@ class AppObservabilityInterceptor extends Interceptor {
   }
 
   String? _resolveCustomMessage(DioException err, NetworkFailure? failure) {
+    final statusCode = failure?.statusCode ?? err.response?.statusCode;
+    if (!_shouldUseServerCustomMessage(statusCode)) {
+      return null;
+    }
     if (failure != null &&
         failure.type != NetworkFailureType.badResponse &&
         failure.type != NetworkFailureType.unauthorized &&
-        failure.type != NetworkFailureType.forbidden &&
-        failure.type != NetworkFailureType.serverError) {
+        failure.type != NetworkFailureType.forbidden) {
       return null;
     }
     final resolved = resolveAppRequestErrorMessage(err, '').trim();
     if (resolved.isEmpty ||
         resolved == 'Bad response' ||
         resolved == 'Request failed' ||
-        resolved == 'Unknown network error') {
+        resolved == 'Unknown network error' ||
+        resolved == 'Server error') {
       return null;
     }
     return resolved;
+  }
+
+  bool _shouldUseServerCustomMessage(int? statusCode) {
+    if (statusCode == null) {
+      return false;
+    }
+    return statusCode >= 400 && statusCode < 500;
   }
 
   AppUiMessageKey? _mapUserMessage(NetworkFailure failure) {
