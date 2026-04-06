@@ -123,21 +123,60 @@ if [[ -n "$KEY_PATH" ]]; then
   export API_PRIVATE_KEYS_DIR="$TEMP_KEY_DIR"
 fi
 
+upload_with_altool() {
+  xcrun altool \
+    --upload-app \
+    --type ios \
+    --file "$IPA_PATH" \
+    --apiKey "$KEY_ID" \
+    --apiIssuer "$ISSUER_ID" \
+    --verbose
+}
+
+find_transporter_path() {
+  local developer_dir xcode_app
+  developer_dir="$(xcode-select -p 2>/dev/null || true)"
+  xcode_app="${developer_dir%/Contents/Developer}"
+
+  local candidates=(
+    "$xcode_app/Contents/SharedFrameworks/ContentDeliveryServices.framework/itms/bin/iTMSTransporter"
+    "$xcode_app/Contents/SharedFrameworks/ContentDeliveryServices.framework/Frameworks/AppStoreService.framework/itms/bin/iTMSTransporter"
+    "/Applications/Transporter.app/Contents/itms/bin/iTMSTransporter"
+    "/usr/local/itms/bin/iTMSTransporter"
+  )
+
+  local path
+  for path in "${candidates[@]}"; do
+    if [[ -x "$path" ]]; then
+      printf '%s\n' "$path"
+      return 0
+    fi
+  done
+
+  return 1
+}
+
 echo "==> Uploading IPA to App Store Connect"
-if xcrun iTMSTransporter -m upload \
-  -assetFile "$IPA_PATH" \
-  -apiKey "$KEY_ID" \
-  -apiIssuer "$ISSUER_ID" \
-  -v informational; then
-  echo "Upload completed."
+if [[ "${GITHUB_ACTIONS:-}" == "true" ]]; then
+  echo "Running on GitHub Actions. Using altool upload path."
+  upload_with_altool
   exit 0
 fi
 
-echo "iTMSTransporter upload failed. Trying altool fallback..."
-xcrun altool \
-  --upload-app \
-  --type ios \
-  --file "$IPA_PATH" \
-  --apiKey "$KEY_ID" \
-  --apiIssuer "$ISSUER_ID" \
-  --verbose
+TRANSPORTER_PATH="$(find_transporter_path || true)"
+if [[ -n "${TRANSPORTER_PATH:-}" ]]; then
+  if "$TRANSPORTER_PATH" -m upload \
+    -assetFile "$IPA_PATH" \
+    -apiKey "$KEY_ID" \
+    -apiIssuer "$ISSUER_ID" \
+    -v informational; then
+    echo "Upload completed."
+    exit 0
+  fi
+
+  echo "iTMSTransporter upload failed. Trying altool fallback..."
+else
+  echo "iTMSTransporter not found. Using altool upload path."
+fi
+
+upload_with_altool
