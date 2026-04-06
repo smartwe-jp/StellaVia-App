@@ -475,6 +475,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get registerAcceptPolicy => '我已阅读并同意《服务条款》与《隐私政策》。';
 
   @override
+  String get registerElectronicDeliveryDocumentTitle => '关于以电子方式交付书面的同意书';
+
+  @override
+  String get registerAntiSocialDocumentTitle => '关于非反社会势力的声明与承诺同意书';
+
+  @override
+  String get registerPersonalInformationDocumentTitle => '关于个人信息处理的确认书';
+
+  @override
   String get registerPolicyButton => '查看';
 
   @override
@@ -4224,6 +4233,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get registerAcceptPolicy => '我已阅读并同意《服务条款》与《隐私政策》。';
+
+  @override
+  String get registerElectronicDeliveryDocumentTitle => '關於以電子方式交付書面的同意書';
+
+  @override
+  String get registerAntiSocialDocumentTitle => '關於非反社會勢力的聲明與承諾同意書';
+
+  @override
+  String get registerPersonalInformationDocumentTitle => '關於個人資料處理的確認書';
 
   @override
   String get registerPolicyButton => '查看';

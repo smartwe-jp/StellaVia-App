@@ -510,6 +510,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'I agree to the Terms of Service and Privacy Policy.';
 
   @override
+  String get registerElectronicDeliveryDocumentTitle =>
+      'Consent to Electronic Delivery of Documents';
+
+  @override
+  String get registerAntiSocialDocumentTitle =>
+      'Statement and Pledge Regarding Non-Affiliation with Anti-Social Forces';
+
+  @override
+  String get registerPersonalInformationDocumentTitle =>
+      'Confirmation Regarding the Handling of Personal Information';
+
+  @override
   String get registerPolicyButton => 'View';
 
   @override

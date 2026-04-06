@@ -1019,6 +1019,24 @@ abstract class AppLocalizations {
   /// **'I agree to the Terms of Service and Privacy Policy.'**
   String get registerAcceptPolicy;
 
+  /// No description provided for @registerElectronicDeliveryDocumentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Consent to Electronic Delivery of Documents'**
+  String get registerElectronicDeliveryDocumentTitle;
+
+  /// No description provided for @registerAntiSocialDocumentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Statement and Pledge Regarding Non-Affiliation with Anti-Social Forces'**
+  String get registerAntiSocialDocumentTitle;
+
+  /// No description provided for @registerPersonalInformationDocumentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmation Regarding the Handling of Personal Information'**
+  String get registerPersonalInformationDocumentTitle;
+
   /// No description provided for @registerPolicyButton.
   ///
   /// In en, this message translates to:

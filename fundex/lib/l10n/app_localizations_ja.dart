@@ -480,6 +480,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get registerAcceptPolicy => '利用規約とプライバシーポリシーに同意します。';
 
   @override
+  String get registerElectronicDeliveryDocumentTitle => '書面の電磁的方法による交付等の承諾書';
+
+  @override
+  String get registerAntiSocialDocumentTitle => '反社会的勢力でないことの表明・確約に関する同意書';
+
+  @override
+  String get registerPersonalInformationDocumentTitle => '個人情報の取扱いについての確認書';
+
+  @override
   String get registerPolicyButton => '表示';
 
   @override

@@ -9,6 +9,9 @@ class MemberProfileConsentStepPage extends StatelessWidget {
     required this.electronicConsent,
     required this.antiSocialConsent,
     required this.privacyConsent,
+    this.electronicDeliveryUrl,
+    this.antiSocialRuleUrl,
+    this.personalInformationUrl,
     this.titleOverride,
     this.descriptionOverride,
     this.secondaryButtonLabelOverride,
@@ -23,6 +26,9 @@ class MemberProfileConsentStepPage extends StatelessWidget {
   final bool electronicConsent;
   final bool antiSocialConsent;
   final bool privacyConsent;
+  final String? electronicDeliveryUrl;
+  final String? antiSocialRuleUrl;
+  final String? personalInformationUrl;
   final String? titleOverride;
   final String? descriptionOverride;
   final String? secondaryButtonLabelOverride;
@@ -90,10 +96,15 @@ class MemberProfileConsentStepPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          MemberProfileCheckTile(
+          _ConsentLinkTile(
             label: l10n.memberProfileElectronicDeliveryConsent,
             value: electronicConsent,
             onChanged: onElectronicConsentChanged,
+            onOpenLink: () => _openConsentPdf(
+              context,
+              title: l10n.memberProfileElectronicDeliveryConsent,
+              url: electronicDeliveryUrl,
+            ),
           ),
           const SizedBox(height: 14),
           MemberProfileInfoCard(
@@ -105,16 +116,135 @@ class MemberProfileConsentStepPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          MemberProfileCheckTile(
+          _ConsentLinkTile(
             label: l10n.memberProfileAntiSocialConsent,
             value: antiSocialConsent,
             onChanged: onAntiSocialConsentChanged,
+            onOpenLink: () => _openConsentPdf(
+              context,
+              title: l10n.memberProfileAntiSocialConsent,
+              url: antiSocialRuleUrl,
+            ),
           ),
           const SizedBox(height: 14),
-          MemberProfileCheckTile(
+          _ConsentLinkTile(
             label: l10n.memberProfilePrivacyConsent,
             value: privacyConsent,
             onChanged: onPrivacyConsentChanged,
+            onOpenLink: () => _openConsentPdf(
+              context,
+              title: l10n.memberProfilePrivacyConsent,
+              url: personalInformationUrl,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+void _openConsentPdf(
+  BuildContext context, {
+  required String title,
+  required String? url,
+}) {
+  final l10n = context.l10n;
+  final normalizedUrl = url?.trim() ?? '';
+  if (normalizedUrl.isEmpty) {
+    AppNotice.show(context, message: l10n.pdfViewerInvalidUrlNotice);
+    return;
+  }
+  openAppPdfViewer(
+    context,
+    url: normalizedUrl,
+    title: title,
+    texts: AppPdfViewerTexts(
+      pageTitle: l10n.pdfViewerPageTitle,
+      openExternalTooltip: l10n.pdfViewerOpenExternalTooltip,
+      openExternalLabel: l10n.pdfViewerOpenExternalLabel,
+      loadingLabel: l10n.pdfViewerLoadingLabel,
+      loadFailedLabel: l10n.pdfViewerLoadFailedLabel,
+      retryLabel: l10n.fundListRetry,
+      invalidUrlNotice: l10n.pdfViewerInvalidUrlNotice,
+      openExternalFailedNotice: l10n.pdfViewerOpenExternalFailedNotice,
+    ),
+  );
+}
+
+class _ConsentLinkTile extends StatelessWidget {
+  const _ConsentLinkTile({
+    required this.label,
+    required this.value,
+    required this.onOpenLink,
+    this.onChanged,
+  });
+
+  final String label;
+  final bool value;
+  final VoidCallback onOpenLink;
+  final ValueChanged<bool>? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final primary = colors.primary;
+
+    void toggle() {
+      if (onChanged == null) {
+        return;
+      }
+      onChanged!(!value);
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: colors.surfaceAlt,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      padding: const EdgeInsets.all(12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: toggle,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 160),
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                color: value ? primary : colors.surface,
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(
+                  color: value ? primary : colors.border,
+                  width: 2,
+                ),
+              ),
+              child: value
+                  ? Icon(Icons.check_rounded, size: 12, color: colors.onDark)
+                  : null,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: InkWell(
+              onTap: onOpenLink,
+              borderRadius: BorderRadius.circular(6),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 1),
+                child: Text(
+                  label,
+                  style: appText.body.copyWith(
+                    height: 1.5,
+                    color: primary,
+                    decoration: TextDecoration.underline,
+                    decorationColor: primary,
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),

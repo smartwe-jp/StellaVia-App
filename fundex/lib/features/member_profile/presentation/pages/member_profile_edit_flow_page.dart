@@ -14,6 +14,7 @@ import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../auth/presentation/providers/identity_auth_sdk_providers.dart';
 import '../../../auth/presentation/support/identity_auth_guard.dart';
 import '../../../auth/presentation/support/identity_auth_message_resolver.dart';
+import '../../../settings/presentation/providers/settings_content_providers.dart';
 import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 import '../../domain/constants/member_profile_upload_markers.dart';
 import '../../domain/entities/member_profile_details.dart';
@@ -1941,10 +1942,18 @@ class _MemberProfileEditFlowPageState
           onSkip: _isSingleSectionMode ? null : _skipBankAccountStep,
         );
       case MemberProfileEditStep.consent:
+        final localeTag = Localizations.localeOf(context).toLanguageTag();
+        final operatingCompanyContent = ref
+            .watch(settingsOperatingCompanyContentProvider(localeTag))
+            .asData
+            ?.value;
         return MemberProfileConsentStepPage(
           electronicConsent: _electronicConsent,
           antiSocialConsent: _antiSocialConsent,
           privacyConsent: _privacyConsent,
+          electronicDeliveryUrl: operatingCompanyContent?.electronicInformationUrl,
+          antiSocialRuleUrl: operatingCompanyContent?.antiSocialRuleUrl,
+          personalInformationUrl: operatingCompanyContent?.personalInformationUrl,
           titleOverride: _isSingleSectionMode ? _stepTitle : null,
           descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
           secondaryButtonLabelOverride: secondaryButtonLabel,

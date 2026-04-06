@@ -6,11 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../settings/presentation/providers/settings_content_providers.dart';
 import '../providers/auth_providers.dart';
 import '../support/code_send_cooldown.dart';
-
-const String _registerTermsConditionsPdfUrl =
-    'https://testoa.gutingjun.com/terms_conditions.pdf';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -23,6 +21,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   late final TextEditingController _accountController;
   late final TextEditingController _codeController;
   bool _acceptPolicy = false;
+  bool _acceptElectronicDelivery = false;
+  bool _acceptAntiSocial = false;
+  bool _acceptPersonalInformation = false;
   bool _isSubmitting = false;
   bool _isSendingCode = false;
   late final CodeSendCooldown _sendCodeCooldown;
@@ -67,7 +68,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   bool get _canSubmit {
     final hasRequiredFields =
         _isAccountFormatValid && _codeController.text.trim().isNotEmpty;
-    return hasRequiredFields && _acceptPolicy && !_isSubmitting;
+    return hasRequiredFields &&
+        _acceptPolicy &&
+        _acceptElectronicDelivery &&
+        _acceptAntiSocial &&
+        _acceptPersonalInformation &&
+        !_isSubmitting;
   }
 
   Future<bool> _ensureValidAccountInput() async {
@@ -81,12 +87,20 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     return false;
   }
 
-  Future<void> _showPolicySheet() {
+  Future<void> _showPolicySheet({
+    required String title,
+    required String? url,
+  }) {
     final l10n = context.l10n;
+    final normalizedUrl = url?.trim() ?? '';
+    if (normalizedUrl.isEmpty) {
+      AppNotice.show(context, message: l10n.pdfViewerInvalidUrlNotice);
+      return Future<void>.value();
+    }
     return openAppPdfViewer(
       context,
-      url: _registerTermsConditionsPdfUrl,
-      title: l10n.registerPolicyTitle,
+      url: normalizedUrl,
+      title: title,
     );
   }
 
@@ -221,6 +235,11 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
+    final localeTag = Localizations.localeOf(context).toLanguageTag();
+    final operatingCompanyContent = ref
+        .watch(settingsOperatingCompanyContentProvider(localeTag))
+        .asData
+        ?.value;
     final travelTheme = theme.extension<AppFTKTheme>();
     final navBorderColor =
         travelTheme?.cardBorderColor.withValues(alpha: 0.9) ??
@@ -318,7 +337,49 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                 text: l10n.registerAcceptPolicy,
                 actionLabel: l10n.registerPolicyButton,
                 onTap: () => setState(() => _acceptPolicy = !_acceptPolicy),
-                onActionTap: _showPolicySheet,
+                onActionTap: () => _showPolicySheet(
+                  title: l10n.registerPolicyTitle,
+                  url: operatingCompanyContent?.termsConditionsUrl,
+                ),
+              ),
+              const SizedBox(height: UiTokens.spacing12),
+              _RegisterPolicyRow(
+                checked: _acceptElectronicDelivery,
+                text: l10n.registerElectronicDeliveryDocumentTitle,
+                actionLabel: l10n.registerPolicyButton,
+                onTap: () => setState(
+                  () => _acceptElectronicDelivery = !_acceptElectronicDelivery,
+                ),
+                onActionTap: () => _showPolicySheet(
+                  title: l10n.registerElectronicDeliveryDocumentTitle,
+                  url: operatingCompanyContent?.electronicInformationUrl,
+                ),
+              ),
+              const SizedBox(height: UiTokens.spacing12),
+              _RegisterPolicyRow(
+                checked: _acceptAntiSocial,
+                text: l10n.registerAntiSocialDocumentTitle,
+                actionLabel: l10n.registerPolicyButton,
+                onTap: () =>
+                    setState(() => _acceptAntiSocial = !_acceptAntiSocial),
+                onActionTap: () => _showPolicySheet(
+                  title: l10n.registerAntiSocialDocumentTitle,
+                  url: operatingCompanyContent?.antiSocialRuleUrl,
+                ),
+              ),
+              const SizedBox(height: UiTokens.spacing12),
+              _RegisterPolicyRow(
+                checked: _acceptPersonalInformation,
+                text: l10n.registerPersonalInformationDocumentTitle,
+                actionLabel: l10n.registerPolicyButton,
+                onTap: () => setState(
+                  () => _acceptPersonalInformation =
+                      !_acceptPersonalInformation,
+                ),
+                onActionTap: () => _showPolicySheet(
+                  title: l10n.registerPersonalInformationDocumentTitle,
+                  url: operatingCompanyContent?.personalInformationUrl,
+                ),
               ),
               const SizedBox(height: UiTokens.spacing16),
               PrimaryCtaButton(

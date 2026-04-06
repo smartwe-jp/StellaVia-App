@@ -49,6 +49,30 @@ class SettingsOperatingCompanyContent {
   final String copyright;
   final List<SettingsOperatingCompanyLink> links;
 
+  String? get electronicInformationUrl =>
+      _findLinkUrlBySuffix('electronic_information.pdf');
+
+  String? get termsConditionsUrl =>
+      _findLinkUrlBySuffix('terms_conditions.pdf');
+
+  String? get antiSocialRuleUrl => _findLinkUrlBySuffix('antisocialrule.pdf');
+
+  String? get personalInformationUrl =>
+      _findLinkUrlBySuffix('personal_information.pdf');
+
+  String? _findLinkUrlBySuffix(String suffix) {
+    for (final link in links) {
+      final url = link.url.trim();
+      if (url.isEmpty) {
+        continue;
+      }
+      if (url.toLowerCase().endsWith(suffix.toLowerCase())) {
+        return url;
+      }
+    }
+    return null;
+  }
+
   static Future<SettingsOperatingCompanyContent> load(String localeTag) async {
     final normalizedTag = localeTag.replaceAll('_', '-').toLowerCase();
     final normalized = switch (normalizedTag) {
