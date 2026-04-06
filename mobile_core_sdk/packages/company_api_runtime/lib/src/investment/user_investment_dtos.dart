@@ -8,6 +8,8 @@ class UserInvestmentAccountStatisticDto {
     this.firstLevelAccountTotal,
     this.takingAmt,
     this.takingFee,
+    this.lockedFee,
+    this.lockedList = const <UserInvestmentLockedAmountDto>[],
   });
 
   factory UserInvestmentAccountStatisticDto.fromJson(
@@ -24,6 +26,13 @@ class UserInvestmentAccountStatisticDto {
       firstLevelAccountTotal: _numOrNull(json['firstLevelAccountTotal']),
       takingAmt: _numOrNull(json['takingAmt']),
       takingFee: _numOrNull(json['takingFee']),
+      lockedFee: _numOrNull(json['lockedFee']),
+      lockedList: _toList(json['lockedList'])
+          .map(
+            (dynamic item) =>
+                UserInvestmentLockedAmountDto.fromJson(_toJsonMap(item)),
+          )
+          .toList(growable: false),
     );
   }
 
@@ -35,6 +44,34 @@ class UserInvestmentAccountStatisticDto {
   final num? firstLevelAccountTotal;
   final num? takingAmt;
   final num? takingFee;
+  final num? lockedFee;
+  final List<UserInvestmentLockedAmountDto> lockedList;
+}
+
+class UserInvestmentLockedAmountDto {
+  const UserInvestmentLockedAmountDto({
+    this.userId,
+    this.lockedAmount,
+    this.lockedReason,
+    this.startLockedTime,
+    this.lockExpireTime,
+  });
+
+  factory UserInvestmentLockedAmountDto.fromJson(Map<String, dynamic> json) {
+    return UserInvestmentLockedAmountDto(
+      userId: _intOrNull(json['userId']),
+      lockedAmount: _numOrNull(json['lockedAmount']),
+      lockedReason: _stringOrNull(json['lockedReason']),
+      startLockedTime: _stringOrNull(json['startLockedTime']),
+      lockExpireTime: _stringOrNull(json['lockExpireTime']),
+    );
+  }
+
+  final int? userId;
+  final num? lockedAmount;
+  final String? lockedReason;
+  final String? startLockedTime;
+  final String? lockExpireTime;
 }
 
 class UserInvestmentInvestorTypeDto {

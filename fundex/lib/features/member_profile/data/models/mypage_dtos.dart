@@ -1,6 +1,7 @@
 export 'package:company_api_runtime/company_api_runtime.dart'
     show
         UserInvestmentAccountStatisticDto,
+        UserInvestmentLockedAmountDto,
         UserInvestmentApplyRecordDto,
         UserInvestmentInvestorTypeDto,
         UserInvestmentBenefitDetailDto,
@@ -14,6 +15,7 @@ export 'package:company_api_runtime/company_api_runtime.dart'
 import 'package:company_api_runtime/company_api_runtime.dart'
     show
         UserInvestmentAccountStatisticDto,
+        UserInvestmentLockedAmountDto,
         UserInvestmentApplyRecordDto,
         UserInvestmentInvestorTypeDto,
         UserInvestmentBenefitDetailDto,
@@ -27,6 +29,7 @@ import 'package:company_api_runtime/company_api_runtime.dart'
 import '../../domain/entities/mypage_models.dart';
 
 typedef MyPageAccountStatisticDto = UserInvestmentAccountStatisticDto;
+typedef MyPageLockedAmountDto = UserInvestmentLockedAmountDto;
 typedef MyPageApplyRecordDto = UserInvestmentApplyRecordDto;
 typedef MyPageInvestmentRecordDto = UserInvestmentRecordDto;
 typedef MyPageInvestorTypeDto = UserInvestmentInvestorTypeDto;
@@ -49,6 +52,22 @@ extension MyPageAccountStatisticDtoMapper on MyPageAccountStatisticDto {
       firstLevelAccountTotal: firstLevelAccountTotal,
       takingAmt: takingAmt,
       takingFee: takingFee,
+      lockedFee: lockedFee,
+      lockedList: lockedList
+          .map((MyPageLockedAmountDto item) => item.toEntity())
+          .toList(growable: false),
+    );
+  }
+}
+
+extension MyPageLockedAmountDtoMapper on MyPageLockedAmountDto {
+  MyPageLockedAmount toEntity() {
+    return MyPageLockedAmount(
+      userId: userId,
+      lockedAmount: lockedAmount,
+      lockedReason: lockedReason,
+      startLockedTime: startLockedTime,
+      lockExpireTime: lockExpireTime,
     );
   }
 }

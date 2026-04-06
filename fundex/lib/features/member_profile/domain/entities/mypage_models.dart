@@ -290,6 +290,8 @@ class MyPageAccountStatistic {
     this.firstLevelAccountTotal,
     this.takingAmt,
     this.takingFee,
+    this.lockedFee,
+    this.lockedList = const <MyPageLockedAmount>[],
   });
 
   final int? userId;
@@ -300,4 +302,32 @@ class MyPageAccountStatistic {
   final num? firstLevelAccountTotal;
   final num? takingAmt;
   final num? takingFee;
+  final num? lockedFee;
+  final List<MyPageLockedAmount> lockedList;
+
+  num? get withdrawableAmount {
+    final total = firstLevelAccountTotal;
+    if (total == null) {
+      return null;
+    }
+    final locked = lockedFee ?? 0;
+    final remaining = total - locked;
+    return remaining < 0 ? 0 : remaining;
+  }
+}
+
+class MyPageLockedAmount {
+  const MyPageLockedAmount({
+    this.userId,
+    this.lockedAmount,
+    this.lockedReason,
+    this.startLockedTime,
+    this.lockExpireTime,
+  });
+
+  final int? userId;
+  final num? lockedAmount;
+  final String? lockedReason;
+  final String? startLockedTime;
+  final String? lockExpireTime;
 }

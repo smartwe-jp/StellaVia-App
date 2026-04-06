@@ -46,7 +46,7 @@ void main() {
         expect(options.path, equals(UserInvestmentApiPaths.accountStatistic));
         expect(options.extra['auth_required'], isTrue);
         return _jsonOk(
-          '{"msg":"success","code":200,"data":{"userId":125530,"total":"89859954","crowdfundingTotal":"89703200","crowdfundingDistributedBenefit":"572781","firstLevelAccountTotal":"156754","takingAmt":"50000","takingFee":"10000"}}',
+          '{"msg":"success","code":200,"data":{"userId":125530,"total":"89859954","crowdfundingTotal":"89703200","crowdfundingDistributedBenefit":"572781","firstLevelAccountTotal":"156754","takingAmt":"50000","takingFee":"10000","lockedFee":"2500","lockedList":[{"userId":125530,"lockedAmount":2500,"lockedReason":"新規登録ボーナス ¥2,500","startLockedTime":null,"lockExpireTime":null}]}}',
         );
       });
       final api = UserInvestmentApiClient(dioForPath: (_) => dio);
@@ -61,6 +61,10 @@ void main() {
       expect(row.firstLevelAccountTotal, equals(156754));
       expect(row.takingAmt, equals(50000));
       expect(row.takingFee, equals(10000));
+      expect(row.lockedFee, equals(2500));
+      expect(row.lockedList, hasLength(1));
+      expect(row.lockedList.first.lockedAmount, equals(2500));
+      expect(row.lockedList.first.lockedReason, equals('新規登録ボーナス ¥2,500'));
     });
 
     test('fetchApplyList posts payload and parses rows envelope', () async {

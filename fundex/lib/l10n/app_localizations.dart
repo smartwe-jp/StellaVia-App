@@ -5012,6 +5012,36 @@ abstract class AppLocalizations {
   /// **'Available to withdraw'**
   String get walletWithdrawAvailableAmountLabel;
 
+  /// No description provided for @walletWithdrawLockedAmountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Non-withdrawable amount'**
+  String get walletWithdrawLockedAmountTitle;
+
+  /// No description provided for @walletWithdrawLockedBreakdownTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Breakdown'**
+  String get walletWithdrawLockedBreakdownTitle;
+
+  /// No description provided for @walletWithdrawLockedReasonPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Note: '**
+  String get walletWithdrawLockedReasonPrefix;
+
+  /// No description provided for @walletWithdrawLockedStartLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Lock start'**
+  String get walletWithdrawLockedStartLabel;
+
+  /// No description provided for @walletWithdrawLockedReleaseLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned unlock'**
+  String get walletWithdrawLockedReleaseLabel;
+
   /// No description provided for @walletWithdrawAmountLabel.
   ///
   /// In en, this message translates to:

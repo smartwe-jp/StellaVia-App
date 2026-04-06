@@ -2566,6 +2566,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletWithdrawAvailableAmountLabel => '出金可能額';
 
   @override
+  String get walletWithdrawLockedAmountTitle => '出金不可額';
+
+  @override
+  String get walletWithdrawLockedBreakdownTitle => '出金不可の内訳';
+
+  @override
+  String get walletWithdrawLockedReasonPrefix => '各注：';
+
+  @override
+  String get walletWithdrawLockedStartLabel => 'ロック開始';
+
+  @override
+  String get walletWithdrawLockedReleaseLabel => 'ロック解除予定';
+
+  @override
   String get walletWithdrawAmountLabel => '出金金額';
 
   @override

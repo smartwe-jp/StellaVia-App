@@ -2700,6 +2700,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletWithdrawAvailableAmountLabel => 'Available to withdraw';
 
   @override
+  String get walletWithdrawLockedAmountTitle => 'Non-withdrawable amount';
+
+  @override
+  String get walletWithdrawLockedBreakdownTitle => 'Breakdown';
+
+  @override
+  String get walletWithdrawLockedReasonPrefix => 'Note: ';
+
+  @override
+  String get walletWithdrawLockedStartLabel => 'Lock start';
+
+  @override
+  String get walletWithdrawLockedReleaseLabel => 'Planned unlock';
+
+  @override
   String get walletWithdrawAmountLabel => 'Withdrawal amount';
 
   @override

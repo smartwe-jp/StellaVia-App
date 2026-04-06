@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/navigation/app_root_route_refresh_scope.dart';
+import '../../../auth/presentation/support/identity_auth_guard.dart';
+import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 import '../../domain/entities/wallet_bank_account_info.dart';
@@ -28,7 +30,8 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
   @override
   void initState() {
     super.initState();
-    _amountController = TextEditingController()..addListener(_handleAmountChanged);
+    _amountController = TextEditingController()
+      ..addListener(_handleAmountChanged);
   }
 
   @override
@@ -155,7 +158,9 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
     if (!mounted || entry == null) {
       return;
     }
-    final added = await context.push<bool>(walletBankAccountAddRouteForEntry(entry));
+    final added = await context.push<bool>(
+      walletBankAccountAddRouteForEntry(entry),
+    );
     if (!mounted || added != true) {
       return;
     }
@@ -242,6 +247,30 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
     ref.invalidate(myPageAccountStatisticProvider);
   }
 
+  Future<void> _handleSubmitTap({
+    required WalletBankAccountInfo? selected,
+    required num? availableAmount,
+    required num? feeAmount,
+  }) async {
+    final allowed = await ensureRealPersonVerifiedAndAuthorizeSensitiveAction(
+      context,
+      ref,
+      faceVerificationTitle:
+          context.l10n.walletWithdrawRequiresFaceVerificationTitle,
+      faceVerificationMessage:
+          context.l10n.walletWithdrawRequiresFaceVerificationMessage,
+    );
+    if (!mounted || !allowed) {
+      return;
+    }
+
+    await _openWithdrawConfirmPage(
+      selected: selected,
+      availableAmount: availableAmount,
+      feeAmount: feeAmount,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -256,8 +285,31 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
     final accountsAsync = ref.watch(walletBankAccountListProvider);
     final availableAmountAsync = ref.watch(myPageAccountStatisticProvider);
     final phoneVerifiedAsync = ref.watch(settingsPhoneVerifiedProvider);
-    final availableAmount =
-        availableAmountAsync.asData?.value?.firstLevelAccountTotal;
+    final accountStatistic = availableAmountAsync.asData?.value;
+    final availableAmount = accountStatistic?.withdrawableAmount;
+    final lockedAmount = accountStatistic?.lockedFee ?? 0;
+    final lockedItems =
+        accountStatistic?.lockedList ?? const <MyPageLockedAmount>[];
+    final accounts = accountsAsync.asData?.value;
+    final selected = accounts == null
+        ? null
+        : _resolveSelectedAccount(accounts);
+    final selectedBankId = selected?.id?.trim();
+    final feeAsync = selectedBankId == null || selectedBankId.isEmpty
+        ? const AsyncData<num>(0)
+        : ref.watch(walletWithdrawCostProvider(selectedBankId));
+    final feeValueText = feeAsync.when(
+      data: (num fee) => currency.format(fee),
+      loading: () => '--',
+      error: (_, __) => '--',
+    );
+    final feeValue = feeAsync.asData?.value;
+    final canSubmit = _canSubmitWithdraw(
+      selected: selected,
+      availableAmount: availableAmount,
+      feeAmount: feeValue,
+    );
+    final bool? phoneVerified = phoneVerifiedAsync.asData?.value;
 
     return AppRootRouteRefreshScope(
       onRefresh: (WidgetRef ref) async {
@@ -278,28 +330,26 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
             onTap: () => context.pop(),
           ),
         ),
+        bottomNavigationBar: accounts == null || phoneVerified != true
+            ? null
+            : _WithdrawBottomActionBar(
+                label: l10n.walletWithdrawSubmitAction,
+                enabled: canSubmit,
+                onTap: () => _handleSubmitTap(
+                  selected: selected,
+                  availableAmount: availableAmount,
+                  feeAmount: feeValue,
+                ),
+              ),
         body: accountsAsync.when(
           data: (accounts) {
-            final selected = _resolveSelectedAccount(accounts);
-            final selectedBankId = selected?.id?.trim();
-            final feeAsync =
-                selectedBankId == null || selectedBankId.isEmpty
-                ? const AsyncData<num>(0)
-                : ref.watch(walletWithdrawCostProvider(selectedBankId));
-            final feeValueText = feeAsync.when(
-              data: (num fee) => currency.format(fee),
-              loading: () => '--',
-              error: (_, __) => '--',
-            );
-            final feeValue = feeAsync.asData?.value;
-            final canSubmit = _canSubmitWithdraw(
-              selected: selected,
-              availableAmount: availableAmount,
-              feeAmount: feeValue,
-            );
-            final bool? phoneVerified = phoneVerifiedAsync.asData?.value;
             return ListView(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+              padding: EdgeInsets.fromLTRB(
+                20,
+                20,
+                20,
+                phoneVerified == true ? 120 : 24,
+              ),
               children: <Widget>[
                 _WithdrawBalanceHeroCard(
                   label: l10n.walletWithdrawAvailableAmountLabel,
@@ -307,6 +357,14 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
                   onTapHistory: () => context.push('/wallet/withdraw/history'),
                 ),
                 const SizedBox(height: 16),
+                if (lockedAmount > 0 || lockedItems.isNotEmpty) ...<Widget>[
+                  _WithdrawLockedAmountSection(
+                    totalLockedAmount: lockedAmount,
+                    items: lockedItems,
+                    currency: currency,
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 if (phoneVerifiedAsync.isLoading)
                   const Padding(
                     padding: EdgeInsets.only(top: 24),
@@ -314,9 +372,12 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
                   )
                 else if (phoneVerified != true)
                   _WithdrawPhoneVerificationGateCard(
-                    message: l10n.walletWithdrawPhoneVerificationRequiredMessage,
-                    actionLabel: l10n.walletWithdrawPhoneVerificationRequiredAction,
-                    onTap: () => context.push('/profile/settings/two-factor/phone'),
+                    message:
+                        l10n.walletWithdrawPhoneVerificationRequiredMessage,
+                    actionLabel:
+                        l10n.walletWithdrawPhoneVerificationRequiredAction,
+                    onTap: () =>
+                        context.push('/profile/settings/two-factor/phone'),
                   )
                 else ...<Widget>[
                   MemberProfileTextField(
@@ -349,18 +410,6 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
                       onTap: _openAddBankAccountPage,
                     ),
                   ],
-                  const SizedBox(height: 20),
-                  PrimaryCtaButton(
-                    label: l10n.walletWithdrawSubmitAction,
-                    fullWidth: true,
-                    onPressed: !canSubmit
-                        ? null
-                        : () => _openWithdrawConfirmPage(
-                            selected: selected,
-                            availableAmount: availableAmount,
-                            feeAmount: feeValue,
-                          ),
-                  ),
                 ],
               ],
             );
@@ -626,6 +675,228 @@ class _WithdrawInfoCard extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _WithdrawLockedAmountSection extends StatelessWidget {
+  const _WithdrawLockedAmountSection({
+    required this.totalLockedAmount,
+    required this.items,
+    required this.currency,
+  });
+
+  final num totalLockedAmount;
+  final List<MyPageLockedAmount> items;
+  final NumberFormat currency;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final l10n = context.l10n;
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      decoration: BoxDecoration(
+        color: colors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: colors.border),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      l10n.walletWithdrawLockedAmountTitle,
+                      style: appText.caption.copyWith(
+                        color: colors.textSecondary,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      currency.format(totalLockedAmount),
+                      style: appText.heroTitle.copyWith(
+                        color: colors.textPrimary,
+                        height: 1.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    l10n.walletWithdrawLockedBreakdownTitle,
+                    style: appText.caption.copyWith(
+                      color: colors.textSecondary,
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    '${items.length}',
+                    style: appText.heroTitle.copyWith(
+                      color: colors.textPrimary,
+                      height: 1.0,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Text(
+            '${l10n.walletWithdrawLockedBreakdownTitle} :',
+            style: appText.bodyStrong.copyWith(color: colors.textSecondary),
+          ),
+          if (items.isNotEmpty) ...<Widget>[
+            const SizedBox(height: 12),
+            ...items.map(
+              (item) => Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _WithdrawLockedAmountItemCard(
+                  item: item,
+                  currency: currency,
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _WithdrawLockedAmountItemCard extends StatelessWidget {
+  const _WithdrawLockedAmountItemCard({
+    required this.item,
+    required this.currency,
+  });
+
+  final MyPageLockedAmount item;
+  final NumberFormat currency;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final l10n = context.l10n;
+    final reason = _displayText(item.lockedReason);
+    final start = _displayText(item.startLockedTime);
+    final release = _displayText(item.lockExpireTime);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
+      decoration: BoxDecoration(
+        color: colors.surfaceAlt,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: colors.borderSoft),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                currency.format(item.lockedAmount ?? 0),
+                style: appText.heroSubtitle.copyWith(
+                  color: colors.textPrimary,
+                  height: 1.0,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  reason,
+                  style: appText.bodySemi.copyWith(
+                    color: colors.textSecondary,
+                    height: 1.45,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  '${l10n.walletWithdrawLockedStartLabel} : $start',
+                  style: appText.bodyMuted.copyWith(
+                    color: colors.textSecondary,
+                    height: 1.4,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  '${l10n.walletWithdrawLockedReleaseLabel} : $release',
+                  textAlign: TextAlign.left,
+                  style: appText.bodyMuted.copyWith(
+                    color: colors.textSecondary,
+                    height: 1.4,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _displayText(String? raw) {
+    final normalized = raw?.trim() ?? '';
+    return normalized.isEmpty ? '-' : normalized;
+  }
+}
+
+class _WithdrawBottomActionBar extends StatelessWidget {
+  const _WithdrawBottomActionBar({
+    required this.label,
+    required this.enabled,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool enabled;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surface,
+        border: Border(top: BorderSide(color: colors.borderSoft)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+          child: PrimaryCtaButton(
+            label: label,
+            fullWidth: true,
+            onPressed: enabled ? onTap : null,
+          ),
+        ),
       ),
     );
   }

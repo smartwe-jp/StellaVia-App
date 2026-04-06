@@ -2537,6 +2537,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletWithdrawAvailableAmountLabel => '可出金额';
 
   @override
+  String get walletWithdrawLockedAmountTitle => '不可出金额';
+
+  @override
+  String get walletWithdrawLockedBreakdownTitle => '不可出金明细';
+
+  @override
+  String get walletWithdrawLockedReasonPrefix => '备注：';
+
+  @override
+  String get walletWithdrawLockedStartLabel => '锁定开始';
+
+  @override
+  String get walletWithdrawLockedReleaseLabel => '预计解锁';
+
+  @override
   String get walletWithdrawAmountLabel => '出金金额';
 
   @override
@@ -6258,6 +6273,21 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletWithdrawAvailableAmountLabel => '可出金額';
+
+  @override
+  String get walletWithdrawLockedAmountTitle => '不可出金額';
+
+  @override
+  String get walletWithdrawLockedBreakdownTitle => '不可出金明細';
+
+  @override
+  String get walletWithdrawLockedReasonPrefix => '備註：';
+
+  @override
+  String get walletWithdrawLockedStartLabel => '鎖定開始';
+
+  @override
+  String get walletWithdrawLockedReleaseLabel => '預計解鎖';
 
   @override
   String get walletWithdrawAmountLabel => '出金金額';

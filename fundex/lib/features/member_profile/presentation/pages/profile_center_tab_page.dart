@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
-import '../../../auth/presentation/support/identity_auth_guard.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../investment/presentation/support/fund_lottery_apply_step.dart';
@@ -538,17 +537,6 @@ Future<void> refreshProfileCenterTabPage(WidgetRef ref) async {
 }
 
 Future<void> _handleWithdrawTap(BuildContext context, WidgetRef ref) async {
-  final allowed = await ensureRealPersonVerifiedAndAuthorizeSensitiveAction(
-    context,
-    ref,
-    faceVerificationTitle:
-        context.l10n.walletWithdrawRequiresFaceVerificationTitle,
-    faceVerificationMessage:
-        context.l10n.walletWithdrawRequiresFaceVerificationMessage,
-  );
-  if (!context.mounted || !allowed) {
-    return;
-  }
   context.push('/wallet/withdraw');
 }
 
