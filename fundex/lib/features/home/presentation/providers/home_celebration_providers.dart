@@ -1,15 +1,24 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/config/app_flavor.dart';
 import '../../../../app/config/environment_provider.dart';
 import '../../../../app/push/app_push_runtime.dart';
 import '../../../../app/push/app_push_runtime_provider.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 
+const String _devMockCelebrationLottieUrl =
+    'https://lottie.host/841f99ee-3995-471d-8f53-e58b5be5611f/Ls0f67Lakk.lottie';
+
 class HomeCelebrationEvent {
-  const HomeCelebrationEvent({required this.token, required this.source});
+  const HomeCelebrationEvent({
+    required this.token,
+    required this.source,
+    this.lottieUrl,
+  });
 
   final String token;
   final String source;
+  final String? lottieUrl;
 }
 
 class HomeCelebrationState {
@@ -39,19 +48,26 @@ const Object _sentinel = Object();
 class HomeCelebrationController extends StateNotifier<HomeCelebrationState> {
   HomeCelebrationController() : super(const HomeCelebrationState());
 
+  void queueDevMock() {
+    _queueEvent(
+      HomeCelebrationEvent(
+        token: 'dev-startup-${DateTime.now().microsecondsSinceEpoch}',
+        source: 'devMock',
+        lottieUrl: _devMockCelebrationLottieUrl,
+      ),
+    );
+  }
+
   void queueFromPush(AppPushNotificationEvent event) {
     if (!_isHomeCelebrationEvent(event.payload)) {
       return;
     }
     _queueEvent(
-      HomeCelebrationEvent(token: _resolvePushToken(event), source: event.kind),
-    );
-  }
-
-  void queueDevPreview() {
-    final now = DateTime.now().microsecondsSinceEpoch;
-    _queueEvent(
-      HomeCelebrationEvent(token: 'dev-login-$now', source: 'dev-login'),
+      HomeCelebrationEvent(
+        token: _resolvePushToken(event),
+        source: event.kind,
+        lottieUrl: _readCelebrationUrl(event.payload),
+      ),
     );
   }
 
@@ -104,6 +120,15 @@ class HomeCelebrationController extends StateNotifier<HomeCelebrationState> {
     return 'push-${event.kind}-${payload.toString()}';
   }
 
+  String? _readCelebrationUrl(Map<String, Object?> payload) {
+    final exts = _readMap(payload, 'exts');
+    return _readString(exts, 'url') ??
+        _readString(exts, 'lottieUrl') ??
+        _readString(exts, 'LOTTIE_URL') ??
+        _readString(payload, 'LOTTIE_URL') ??
+        _readString(_readMap(payload, 'extraMap'), 'LOTTIE_URL');
+  }
+
   Map<String, Object?> _readMap(Map<String, Object?> payload, String key) {
     final value = payload[key];
     if (value is Map<String, Object?>) {
@@ -142,6 +167,8 @@ final homeCelebrationBootstrapProvider = Provider<void>((ref) {
   final controller = ref.watch(homeCelebrationControllerProvider.notifier);
   final pushRuntime = ref.watch(appPushRuntimeProvider);
   final environment = ref.watch(appEnvironmentProvider);
+  final isDevFlavor = environment.flavor == AppFlavor.dev;
+  var hasQueuedDevMockForLaunch = false;
 
   final pushSubscription = pushRuntime.notificationEvents.listen(
     controller.queueFromPush,
@@ -158,8 +185,16 @@ final homeCelebrationBootstrapProvider = Provider<void>((ref) {
       controller.clearPending();
       return;
     }
-    if (environment.flavor.name == 'dev') {
-      controller.queueDevPreview();
+    if (isDevFlavor && !hasQueuedDevMockForLaunch) {
+      hasQueuedDevMockForLaunch = true;
+      controller.queueDevMock();
     }
   });
+
+  final isAuthenticatedNow =
+      ref.read(isAuthenticatedProvider).asData?.value ?? false;
+  if (isDevFlavor && isAuthenticatedNow && !hasQueuedDevMockForLaunch) {
+    hasQueuedDevMockForLaunch = true;
+    controller.queueDevMock();
+  }
 });

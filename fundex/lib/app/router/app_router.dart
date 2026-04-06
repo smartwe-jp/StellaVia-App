@@ -63,6 +63,8 @@ final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(
   debugLabel: 'root',
 );
 
+GlobalKey<NavigatorState> get appRootNavigatorKey => _rootNavigatorKey;
+
 String? resolveAuthRedirect({
   required AsyncValue<bool> authState,
   required String location,

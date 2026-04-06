@@ -1,29 +1,33 @@
-import 'dart:ui';
+import 'dart:async';
 
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../providers/home_celebration_providers.dart';
 
-class HomeCelebrationDialog extends StatelessWidget {
-  const HomeCelebrationDialog({super.key});
+const String _defaultCelebrationLottieAsset =
+    'assets/content/home_celebration_bonus_lottie.json';
+const Duration _fallbackCelebrationDuration = Duration(milliseconds: 2600);
 
-  static Future<void> show(BuildContext context) {
+class HomeCelebrationDialog extends StatefulWidget {
+  const HomeCelebrationDialog({required this.event, super.key});
+
+  final HomeCelebrationEvent event;
+
+  static Future<void> show(
+    BuildContext context, {
+    required HomeCelebrationEvent event,
+  }) {
     return showGeneralDialog<void>(
       context: context,
       barrierLabel: 'homeCelebration',
-      barrierDismissible: true,
-      barrierColor: Colors.black.withValues(alpha: 0.56),
-      transitionDuration: const Duration(milliseconds: 260),
+      barrierDismissible: false,
+      barrierColor: Colors.transparent,
+      transitionDuration: const Duration(milliseconds: 220),
       pageBuilder: (BuildContext context, _, __) {
-        return const SafeArea(
-          child: Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24),
-              child: HomeCelebrationDialog(),
-            ),
-          ),
-        );
+        return HomeCelebrationDialog(event: event);
       },
       transitionBuilder:
           (
@@ -37,15 +41,73 @@ class HomeCelebrationDialog extends StatelessWidget {
               curve: Curves.easeOutCubic,
               reverseCurve: Curves.easeInCubic,
             );
-            return FadeTransition(
-              opacity: curved,
-              child: ScaleTransition(
-                scale: Tween<double>(begin: 0.92, end: 1).animate(curved),
-                child: child,
-              ),
-            );
+            return FadeTransition(opacity: curved, child: child);
           },
     );
+  }
+
+  @override
+  State<HomeCelebrationDialog> createState() => _HomeCelebrationDialogState();
+}
+
+class _HomeCelebrationDialogState extends State<HomeCelebrationDialog>
+    with SingleTickerProviderStateMixin {
+  static const Duration _animationStartTimeout = Duration(milliseconds: 900);
+
+  late final AnimationController _controller = AnimationController(vsync: this)
+    ..addStatusListener(_handleAnimationStatus);
+  late final Timer _fallbackStartTimer = Timer(
+    _animationStartTimeout,
+    _triggerFallbackAnimation,
+  );
+
+  bool _showActions = false;
+  bool _animationConfigured = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _fallbackStartTimer.cancel();
+    _controller
+      ..removeStatusListener(_handleAnimationStatus)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _handleAnimationStatus(AnimationStatus status) {
+    if (status != AnimationStatus.completed || _showActions || !mounted) {
+      return;
+    }
+    setState(() {
+      _showActions = true;
+    });
+  }
+
+  void _startAnimation(Duration duration) {
+    if (_animationConfigured) {
+      return;
+    }
+    _animationConfigured = true;
+    _controller.duration = duration;
+    _controller.forward(from: 0);
+  }
+
+  void _handleLottieLoaded(LottieComposition composition) {
+    if (_animationConfigured) {
+      return;
+    }
+    _startAnimation(composition.duration);
+  }
+
+  void _triggerFallbackAnimation() {
+    if (!mounted || _animationConfigured) {
+      return;
+    }
+    _startAnimation(_fallbackCelebrationDuration);
   }
 
   @override
@@ -56,152 +118,83 @@ class HomeCelebrationDialog extends StatelessWidget {
     final l10n = context.l10n;
 
     return Material(
-      color: Colors.transparent,
+      type: MaterialType.transparency,
       child: Stack(
-        clipBehavior: Clip.none,
+        fit: StackFit.expand,
         children: <Widget>[
-          Container(
-            constraints: const BoxConstraints(maxWidth: 420),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(28),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-                  colors.heroStart,
-                  colors.heroMiddle,
-                  colors.heroEnd,
-                ],
-              ),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.22),
-                  blurRadius: 28,
-                  offset: const Offset(0, 16),
-                ),
-              ],
+          IgnorePointer(
+            child: _CelebrationLottieLayer(
+              controller: _controller,
+              lottieUrl: widget.event.lottieUrl,
+              onLoaded: _handleLottieLoaded,
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(28),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 28, 24, 22),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 7,
+          ),
+          SafeArea(
+            child: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                AnimatedOpacity(
+                  opacity: _showActions ? 1 : 0,
+                  duration: const Duration(milliseconds: 220),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 8, right: 12),
+                      child: IconButton(
+                        onPressed: _showActions
+                            ? () => Navigator.of(context).pop()
+                            : null,
+                        icon: const Icon(Icons.close_rounded),
+                        tooltip: l10n.commonClose,
+                        style: IconButton.styleFrom(
+                          foregroundColor: colors.onDark,
+                          backgroundColor: colors.surface.withValues(
+                            alpha: 0.72,
                           ),
-                          decoration: BoxDecoration(
-                            color: colors.highlightGold.withValues(alpha: 0.18),
-                            borderRadius: BorderRadius.circular(999),
-                            border: Border.all(
-                              color: colors.highlightGold.withValues(
-                                alpha: 0.34,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                AnimatedSlide(
+                  offset: _showActions ? Offset.zero : const Offset(0, 0.2),
+                  duration: const Duration(milliseconds: 220),
+                  curve: Curves.easeOutCubic,
+                  child: AnimatedOpacity(
+                    opacity: _showActions ? 1 : 0,
+                    duration: const Duration(milliseconds: 220),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(24, 0, 24, 78),
+                        child: SizedBox(
+                          width: 188,
+                          child: FilledButton(
+                            onPressed: _showActions
+                                ? () => Navigator.of(context).pop()
+                                : null,
+                            style: FilledButton.styleFrom(
+                              backgroundColor: colors.highlightGold,
+                              foregroundColor: colors.textPrimary,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 12,
+                              ),
+                              shape: const StadiumBorder(),
+                            ),
+                            child: Text(
+                              l10n.commonOk,
+                              style: appText.bodyStrong.copyWith(
+                                color: colors.textPrimary,
                               ),
                             ),
                           ),
-                          child: Text(
-                            l10n.homeCelebrationBadge,
-                            style: appText.meta.copyWith(
-                              color: colors.onDark.withValues(alpha: 0.92),
-                              letterSpacing: 1.1,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
                         ),
                       ),
-                      const SizedBox(height: 18),
-                      Icon(
-                        Icons.card_giftcard_rounded,
-                        size: 42,
-                        color: colors.highlightGold,
-                      ),
-                      const SizedBox(height: 18),
-                      Text(
-                        l10n.homeCelebrationTitle,
-                        style: appText.pageTitle.copyWith(color: colors.onDark),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 14),
-                      Text(
-                        l10n.homeCelebrationAmount,
-                        style: appText.numericDisplay.copyWith(
-                          color: colors.highlightGold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 14),
-                      Text(
-                        l10n.homeCelebrationBody,
-                        style: appText.body.copyWith(
-                          color: colors.onDark.withValues(alpha: 0.9),
-                          height: 1.55,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 24),
-                      FilledButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        style: FilledButton.styleFrom(
-                          backgroundColor: colors.highlightGold,
-                          foregroundColor: colors.textPrimary,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
-                        child: Text(
-                          l10n.homeCelebrationPrimaryAction,
-                          style: appText.bodyStrong.copyWith(
-                            color: colors.textPrimary,
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
-          Positioned(
-            right: 14,
-            top: 14,
-            child: IconButton(
-              onPressed: () => Navigator.of(context).pop(),
-              icon: const Icon(Icons.close_rounded),
-              color: colors.onDark.withValues(alpha: 0.88),
-              tooltip: l10n.commonClose,
-            ),
-          ),
-          Positioned(
-            left: -10,
-            top: -12,
-            child: _CelebrationOrb(
-              size: 54,
-              color: colors.highlightGold.withValues(alpha: 0.28),
-            ),
-          ),
-          Positioned(
-            right: 28,
-            top: 52,
-            child: _CelebrationOrb(
-              size: 16,
-              color: colors.highlightGold.withValues(alpha: 0.42),
-            ),
-          ),
-          Positioned(
-            right: -8,
-            bottom: 56,
-            child: _CelebrationOrb(
-              size: 36,
-              color: colors.primarySubtle.withValues(alpha: 0.18),
+              ],
             ),
           ),
         ],
@@ -210,20 +203,91 @@ class HomeCelebrationDialog extends StatelessWidget {
   }
 }
 
-class _CelebrationOrb extends StatelessWidget {
-  const _CelebrationOrb({required this.size, required this.color});
+class _CelebrationLottieLayer extends StatelessWidget {
+  const _CelebrationLottieLayer({
+    required this.controller,
+    required this.lottieUrl,
+    required this.onLoaded,
+  });
 
-  final double size;
-  final Color color;
+  final AnimationController controller;
+  final String? lottieUrl;
+  final ValueChanged<LottieComposition> onLoaded;
 
   @override
   Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final normalizedUrl = lottieUrl?.trim();
+        if (normalizedUrl != null && normalizedUrl.isNotEmpty) {
+          return _wrapPlayer(
+            constraints,
+            Lottie.network(
+              normalizedUrl,
+              controller: controller,
+              fit: BoxFit.fitWidth,
+              alignment: Alignment.center,
+              repeat: false,
+              onLoaded: onLoaded,
+              decoder: _decoderForUrl(normalizedUrl),
+              errorBuilder: (_, __, ___) => _buildDefaultAsset(constraints),
+            ),
+          );
+        }
+        return _buildDefaultAsset(constraints);
+      },
+    );
+  }
+
+  Widget _buildDefaultAsset(BoxConstraints constraints) {
+    return _wrapPlayer(
+      constraints,
+      Lottie.asset(
+        _defaultCelebrationLottieAsset,
+        controller: controller,
+        fit: BoxFit.fitWidth,
+        alignment: Alignment.center,
+        repeat: false,
+        onLoaded: onLoaded,
+        errorBuilder: (_, __, ___) => const SizedBox.shrink(),
       ),
     );
   }
+
+  Widget _wrapPlayer(BoxConstraints constraints, Widget child) {
+    return ClipRect(
+      child: SizedBox(
+        width: constraints.maxWidth,
+        height: constraints.maxHeight,
+        child: child,
+      ),
+    );
+  }
+
+  LottieDecoder? _decoderForUrl(String url) {
+    if (!url.toLowerCase().endsWith('.lottie')) {
+      return null;
+    }
+    return _decodeDotLottie;
+  }
+}
+
+Future<LottieComposition?> _decodeDotLottie(List<int> bytes) {
+  return LottieComposition.decodeZip(
+    bytes,
+    filePicker: (files) {
+      for (final file in files) {
+        final name = file.name;
+        if (name.startsWith('animations/') && name.endsWith('.json')) {
+          return file;
+        }
+      }
+      for (final file in files) {
+        if (file.name.endsWith('.json')) {
+          return file;
+        }
+      }
+      return null;
+    },
+  );
 }

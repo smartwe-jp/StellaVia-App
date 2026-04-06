@@ -21,6 +21,7 @@ import 'theme/app_theme_mode_providers.dart';
 import '../features/auth/presentation/providers/auth_providers.dart';
 import '../features/investment/presentation/providers/fund_project_providers.dart';
 import '../features/home/presentation/providers/home_celebration_providers.dart';
+import '../features/home/presentation/widgets/home_celebration_dialog.dart';
 import '../features/member_profile/presentation/providers/member_profile_providers.dart';
 import '../features/settings/presentation/providers/settings_content_providers.dart';
 
@@ -149,6 +150,7 @@ class MemberTemplateApp extends ConsumerWidget {
                   ),
                 ],
               ),
+              const _GlobalCelebrationHost(),
               const _LocalizedSettingsContentBootstrap(),
             ],
           ),
@@ -174,6 +176,119 @@ class _LocalizedSettingsContentBootstrap extends ConsumerWidget {
         WidgetsBinding.instance.platformDispatcher.locale.toLanguageTag();
 
     ref.watch(settingsOperatingCompanyContentProvider(localeTag));
+    return const SizedBox.shrink();
+  }
+}
+
+class _GlobalCelebrationHost extends ConsumerStatefulWidget {
+  const _GlobalCelebrationHost();
+
+  @override
+  ConsumerState<_GlobalCelebrationHost> createState() =>
+      _GlobalCelebrationHostState();
+}
+
+class _GlobalCelebrationHostState
+    extends ConsumerState<_GlobalCelebrationHost> {
+  static const Duration _splashRetryDelay = Duration(milliseconds: 300);
+
+  bool _isShowingCelebration = false;
+  bool _isCelebrationScheduled = false;
+
+  void _tryPresentCelebration() {
+    if (!mounted || _isShowingCelebration || _isCelebrationScheduled) {
+      return;
+    }
+
+    final isAuthenticated =
+        ref.read(isAuthenticatedProvider).asData?.value ?? false;
+    final pendingEvent = ref
+        .read(homeCelebrationControllerProvider)
+        .pendingEvent;
+    if (!isAuthenticated || pendingEvent == null) {
+      return;
+    }
+    final currentLocation = _currentLocation();
+    if (currentLocation == '/splash') {
+      _isCelebrationScheduled = true;
+      Future<void>.delayed(_splashRetryDelay, () {
+        _isCelebrationScheduled = false;
+        _tryPresentCelebration();
+      });
+      return;
+    }
+
+    _isCelebrationScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      _isCelebrationScheduled = false;
+      if (!mounted) {
+        return;
+      }
+      final navigatorContext = appRootNavigatorKey.currentContext;
+      if (navigatorContext == null) {
+        _tryPresentCelebration();
+        return;
+      }
+
+      final currentPending = ref
+          .read(homeCelebrationControllerProvider)
+          .pendingEvent;
+      if (currentPending == null ||
+          currentPending.token != pendingEvent.token) {
+        return;
+      }
+
+      _isShowingCelebration = true;
+      ref
+          .read(homeCelebrationControllerProvider.notifier)
+          .consumePending(currentPending.token);
+
+      await HomeCelebrationDialog.show(navigatorContext, event: currentPending);
+      if (!mounted) {
+        _isShowingCelebration = false;
+        return;
+      }
+      setState(() {
+        _isShowingCelebration = false;
+      });
+    });
+  }
+
+  String? _currentLocation() {
+    try {
+      return ref
+          .read(appRouterProvider)
+          .routerDelegate
+          .currentConfiguration
+          .uri
+          .path;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen<HomeCelebrationState>(homeCelebrationControllerProvider, (
+      previous,
+      next,
+    ) {
+      if (previous?.pendingEvent?.token == next.pendingEvent?.token) {
+        return;
+      }
+      _tryPresentCelebration();
+    });
+    ref.listen<AsyncValue<bool>>(isAuthenticatedProvider, (previous, next) {
+      final wasAuthenticated = previous?.asData?.value ?? false;
+      final isAuthenticated = next.asData?.value ?? false;
+      if (wasAuthenticated == isAuthenticated) {
+        return;
+      }
+      if (isAuthenticated) {
+        _tryPresentCelebration();
+      }
+    });
+    _tryPresentCelebration();
     return const SizedBox.shrink();
   }
 }

@@ -568,7 +568,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get forgotPasswordRecoverFailed => 'アクセス復旧に失敗しました。認証コードを確認してください。';
 
   @override
-  String get commonOk => 'OK';
+  String get commonOk => '了解';
 
   @override
   String get commonBackToLogin => 'ログインへ戻る';
