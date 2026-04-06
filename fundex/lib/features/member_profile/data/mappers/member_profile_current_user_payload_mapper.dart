@@ -61,12 +61,12 @@ class MemberProfileCurrentUserPayloadMapper {
       familyNameKana: familyNameKana,
       givenNameKana: givenNameKana,
       familyNameEn: _firstNonEmpty(<String>[
-        _string(payload['firstNameEn']),
-        authUser?.firstNameEn ?? '',
-      ]),
-      givenNameEn: _firstNonEmpty(<String>[
         _string(payload['lastNameEn']),
         authUser?.lastNameEn ?? '',
+      ]),
+      givenNameEn: _firstNonEmpty(<String>[
+        _string(payload['firstNameEn']),
+        authUser?.firstNameEn ?? '',
       ]),
       nameKanji: _joinNonEmpty(<String>[familyName, givenName]),
       katakana: _joinNonEmpty(<String>[familyNameKana, givenNameKana]),

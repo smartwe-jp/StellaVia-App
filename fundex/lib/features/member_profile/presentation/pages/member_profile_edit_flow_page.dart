@@ -318,11 +318,11 @@ class _MemberProfileEditFlowPageState
         ]);
         _familyNameRomanController.text = _firstNonEmpty(<String>[
           savedProfile?.familyNameEn ?? '',
-          authUser?.firstNameEn ?? '',
+          authUser?.lastNameEn ?? '',
         ]);
         _givenNameRomanController.text = _firstNonEmpty(<String>[
           savedProfile?.givenNameEn ?? '',
-          authUser?.lastNameEn ?? '',
+          authUser?.firstNameEn ?? '',
         ]);
         _phone = savedProfile?.phone.trim().isNotEmpty == true
             ? savedProfile!.phone.trim()

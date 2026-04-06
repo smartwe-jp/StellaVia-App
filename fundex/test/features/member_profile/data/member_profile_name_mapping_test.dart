@@ -6,15 +6,15 @@ import 'package:fundex/features/member_profile/domain/entities/member_profile_de
 void main() {
   group('member profile name mapping', () {
     test(
-      'reads server firstName as family name and lastName as given name',
+      'reads server lastNameEn as family roman name and firstNameEn as given roman name',
       () {
         final profile =
             MemberProfileCurrentUserPayloadMapper.toEntity(<String, dynamic>{
               'email': 'user@example.com',
               'firstName': '刁',
               'lastName': '文阳',
-              'firstNameEn': 'Diao',
-              'lastNameEn': 'Wenyang',
+              'firstNameEn': 'Wenyang',
+              'lastNameEn': 'Diao',
             });
 
         expect(profile, isNotNull);
@@ -38,8 +38,8 @@ void main() {
       final baseInfo = payload['baseInfo'] as Map<String, dynamic>;
       expect(baseInfo['firstName'], '刁');
       expect(baseInfo['lastName'], '文阳');
-      expect(baseInfo['firstNameEn'], 'Diao');
-      expect(baseInfo['lastNameEn'], 'Wenyang');
+      expect(baseInfo['firstNameEn'], 'Wenyang');
+      expect(baseInfo['lastNameEn'], 'Diao');
     });
   });
 }
