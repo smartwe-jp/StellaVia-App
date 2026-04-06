@@ -134,6 +134,9 @@ jobs:
           mkdir -p .vscode
           printf '%s' "$DART_DEFINE_PROD_JSON" > .vscode/dart_define.prod.local.json
 
+      - name: Validate Prod Dart Defines
+        run: dart tool/validate_prod_dart_defines.dart .vscode/dart_define.prod.local.json
+
       - name: Install Android Signing Files
         working-directory: fundex/android
         env:
@@ -323,6 +326,9 @@ jobs:
         run: |
           mkdir -p .vscode
           printf '%s' "$DART_DEFINE_PROD_JSON" > .vscode/dart_define.prod.local.json
+
+      - name: Validate Prod Dart Defines
+        run: dart tool/validate_prod_dart_defines.dart .vscode/dart_define.prod.local.json
 
       - name: Import Code Signing Certificate
         uses: apple-actions/import-codesign-certs@v3

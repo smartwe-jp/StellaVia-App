@@ -11,7 +11,7 @@ import 'auth_providers.dart';
 final identityAuthFeatureEnabledProvider = Provider<bool>((ref) {
   return const bool.fromEnvironment(
     'ENABLE_IDENTITY_AUTH',
-    defaultValue: false,
+    defaultValue: true,
   );
 });
 
