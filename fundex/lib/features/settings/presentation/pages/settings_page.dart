@@ -75,24 +75,18 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     }
 
     final l10n = context.l10n;
-    final confirmed = await showDialog<bool>(
+    final confirmed = await AppDialogs.showAdaptiveAlert<bool>(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(l10n.settingsLogoutConfirmTitle),
-          content: Text(l10n.settingsLogoutConfirmBody),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(l10n.profileGuardCancel),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(l10n.homeLogout),
-            ),
-          ],
-        );
-      },
+      title: l10n.settingsLogoutConfirmTitle,
+      message: l10n.settingsLogoutConfirmBody,
+      actions: <AppDialogAction<bool>>[
+        AppDialogAction<bool>(label: l10n.profileGuardCancel, value: false),
+        AppDialogAction<bool>(
+          label: l10n.homeLogout,
+          value: true,
+          isDefaultAction: true,
+        ),
+      ],
     );
 
     if (confirmed == true) {
@@ -162,17 +156,18 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           ),
           actions: <Widget>[
             TextButton(
+              onPressed: hasPhone
+                  ? () async {
+                      Navigator.of(dialogContext).pop();
+                      await _callSupportPhone(supportPhone);
+                    }
+                  : null,
+              child: Text(l10n.settingsDeleteAccountCallAction),
+            ),
+            FilledButton(
               onPressed: () => Navigator.of(dialogContext).pop(),
               child: Text(l10n.profileGuardCancel),
             ),
-            if (hasPhone)
-              FilledButton(
-                onPressed: () async {
-                  Navigator.of(dialogContext).pop();
-                  await _callSupportPhone(supportPhone);
-                },
-                child: Text(l10n.settingsDeleteAccountCallAction),
-              ),
           ],
         );
       },
