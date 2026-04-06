@@ -258,6 +258,7 @@ class _MemberProfileEditFlowPageState
     try {
       if (_isSingleSectionMode) {
         await ref.read(syncMemberProfileFromRemoteUseCaseProvider).call();
+        ref.invalidate(currentAuthUserProvider);
       }
       final MemberProfileDetails? officialProfile = await ref
           .read(loadMemberProfileDetailsUseCaseProvider)
@@ -1200,21 +1201,13 @@ class _MemberProfileEditFlowPageState
   }
 
   void _invalidateOfficialProfileProviders() {
+    ref.invalidate(currentAuthUserProvider);
     ref.invalidate(memberProfileDetailsProvider);
     ref.invalidate(isMemberProfileCompletedProvider);
   }
 
   Future<void> _refreshVerificationStateAfterProfileSubmit() async {
-    try {
-      final remoteUser = await ref
-          .read(authRemoteDataSourceProvider)
-          .fetchCurrentUser();
-      if (remoteUser != null) {
-        await ref.read(authLocalDataSourceProvider).saveCurrentUser(remoteUser);
-      }
-    } catch (_) {
-      // Keep successful profile submission from being blocked by follow-up sync.
-    }
+    await ref.read(syncMemberProfileFromRemoteUseCaseProvider).call();
 
     ref.invalidate(currentAuthUserProvider);
     ref.invalidate(settingsRemoteVerificationStatusProvider);

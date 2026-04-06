@@ -42,6 +42,7 @@ class _MemberProfileOverviewPageState
     });
     try {
       await ref.read(syncMemberProfileFromRemoteUseCaseProvider).call();
+      ref.invalidate(currentAuthUserProvider);
       ref.invalidate(memberProfileDetailsProvider);
       ref.invalidate(isMemberProfileCompletedProvider);
     } catch (_) {

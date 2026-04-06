@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../auth/presentation/support/code_send_cooldown.dart';
 import '../providers/settings_two_factor_providers.dart';
 
@@ -106,28 +107,29 @@ class _SettingsEmailVerificationPageState
   }
 
   Future<void> _syncVerifiedEmailLocally(String email) async {
-    try {
-      final remoteUser = await ref.read(authRemoteDataSourceProvider)
-          .fetchCurrentUser();
-      if (remoteUser != null) {
-        await ref.read(authLocalDataSourceProvider).saveCurrentUser(remoteUser);
-        return;
-      }
-    } catch (_) {
-      // Fall back to updating the local cached user below.
+    await ref.read(syncMemberProfileFromRemoteUseCaseProvider).call();
+
+    final syncedUser = await ref
+        .read(authLocalDataSourceProvider)
+        .readCurrentUser();
+    if ((syncedUser?.email?.trim().isNotEmpty ?? false)) {
+      return;
     }
 
-    final localUser = await ref.read(authLocalDataSourceProvider)
+    final localUser = await ref
+        .read(authLocalDataSourceProvider)
         .readCurrentUser();
     if (localUser == null) {
       return;
     }
-    await ref.read(authLocalDataSourceProvider).saveCurrentUser(
-      localUser.copyWith(
-        email: email.trim(),
-        checkEmailTime: DateTime.now().toIso8601String(),
-      ),
-    );
+    await ref
+        .read(authLocalDataSourceProvider)
+        .saveCurrentUser(
+          localUser.copyWith(
+            email: email.trim(),
+            checkEmailTime: DateTime.now().toIso8601String(),
+          ),
+        );
   }
 
   Future<void> _verifyEmail(String email) async {
@@ -154,6 +156,8 @@ class _SettingsEmailVerificationPageState
           .verifyEmailVerificationCode(email: email, code: code);
       await _syncVerifiedEmailLocally(email);
       ref.invalidate(currentAuthUserProvider);
+      ref.invalidate(memberProfileDetailsProvider);
+      ref.invalidate(isMemberProfileCompletedProvider);
       ref.invalidate(settingsRemoteVerificationStatusProvider);
       ref.invalidate(settingsEmailVerifiedProvider);
       ref.invalidate(settingsVerifiedEmailProvider);
@@ -335,7 +339,9 @@ class _SettingsEmailVerificationPageState
                         foregroundColor: canSendCode
                             ? colors.primary
                             : colors.primary.withValues(alpha: 0.4),
-                        onTap: canSendCode ? () => _sendCode(activeEmail) : null,
+                        onTap: canSendCode
+                            ? () => _sendCode(activeEmail)
+                            : null,
                       ),
                     ),
                     onChanged: (_) => setState(() {}),
@@ -356,7 +362,9 @@ class _SettingsEmailVerificationPageState
                     enabled: !_isSubmitting,
                     isSendingCode: _isSendingCode,
                     onChanged: (_) => setState(() {}),
-                    onSendCode: canSendCode ? () => _sendCode(activeEmail) : null,
+                    onSendCode: canSendCode
+                        ? () => _sendCode(activeEmail)
+                        : null,
                     autofillHints: const <String>[AutofillHints.oneTimeCode],
                   ),
                   const SizedBox(height: 10),

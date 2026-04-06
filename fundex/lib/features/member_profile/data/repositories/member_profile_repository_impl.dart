@@ -1,4 +1,5 @@
 import '../../../auth/data/datasources/auth_local_data_source.dart';
+import '../../../auth/data/models/auth_user_dto.dart';
 import '../../domain/entities/member_profile_details.dart';
 import '../../domain/entities/member_profile_region.dart';
 import '../../domain/repositories/member_profile_repository.dart';
@@ -63,7 +64,9 @@ class MemberProfileRepositoryImpl implements MemberProfileRepository {
   @override
   Future<void> saveOnboardingDraft(MemberProfileDetails profile) async {
     try {
-      await _local.saveOnboardingDraft(MemberProfileDetailsDto.fromEntity(profile));
+      await _local.saveOnboardingDraft(
+        MemberProfileDetailsDto.fromEntity(profile),
+      );
     } catch (_) {
       // Keep onboarding draft flow available even when local cache fails.
     }
@@ -82,13 +85,19 @@ class MemberProfileRepositoryImpl implements MemberProfileRepository {
   Future<void> syncLocalProfileFromRemote() async {
     try {
       final payload = await _remote.fetchCurrentMemberProfilePayload();
+      final remoteUser = AuthUserDto.tryFromCurrentUserPayload(payload);
+      if (remoteUser != null) {
+        await _authLocal.saveCurrentUser(remoteUser);
+      }
       final remoteProfile = MemberProfileCurrentUserPayloadMapper.toEntity(
         payload,
       );
       if (remoteProfile == null) {
         return;
       }
-      await _local.saveProfile(MemberProfileDetailsDto.fromEntity(remoteProfile));
+      await _local.saveProfile(
+        MemberProfileDetailsDto.fromEntity(remoteProfile),
+      );
     } catch (_) {
       // Keep auth flow and local draft access available on transient sync failures.
     }
