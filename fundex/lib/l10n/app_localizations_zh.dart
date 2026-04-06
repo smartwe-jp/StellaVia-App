@@ -657,6 +657,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeReminderRealPersonVerificationBody => '该账户尚未完成本人认证，请先完成人脸认证。';
 
   @override
+  String get homeCelebrationBadge => 'WELCOME BONUS';
+
+  @override
+  String get homeCelebrationTitle => '首次注册赠送';
+
+  @override
+  String get homeCelebrationAmount => '¥2,500';
+
+  @override
+  String get homeCelebrationBody => '感谢完成首次注册。系统已为您发放2,500日元的投资额度赠送，可用于后续投资。';
+
+  @override
+  String get homeCelebrationPrimaryAction => '知道了';
+
+  @override
   String get memberProfileEditRequiresFaceVerificationTitle => '需要先完成人脸认证';
 
   @override
@@ -4391,6 +4406,21 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get homeReminderRealPersonVerificationBody => '此帳戶尚未完成本人認證，請先完成人臉認證。';
+
+  @override
+  String get homeCelebrationBadge => 'WELCOME BONUS';
+
+  @override
+  String get homeCelebrationTitle => '首次註冊贈送';
+
+  @override
+  String get homeCelebrationAmount => '¥2,500';
+
+  @override
+  String get homeCelebrationBody => '感謝完成首次註冊。系統已為您發放2,500日圓的投資額度贈送，可用於後續投資。';
+
+  @override
+  String get homeCelebrationPrimaryAction => '知道了';
 
   @override
   String get memberProfileEditRequiresFaceVerificationTitle => '需要先完成人臉驗證';

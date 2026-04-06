@@ -666,6 +666,22 @@ class AppLocalizationsJa extends AppLocalizations {
       'このアカウントは本人確認が未完了です。本人確認を完了してください';
 
   @override
+  String get homeCelebrationBadge => 'WELCOME BONUS';
+
+  @override
+  String get homeCelebrationTitle => '初回登録特典';
+
+  @override
+  String get homeCelebrationAmount => '¥2,500';
+
+  @override
+  String get homeCelebrationBody =>
+      '初回登録ありがとうございます。投資に利用できる2,500円分の投資枠をプレゼントしました。';
+
+  @override
+  String get homeCelebrationPrimaryAction => '確認する';
+
+  @override
   String get memberProfileEditRequiresFaceVerificationTitle => '先に本人確認が必要です';
 
   @override

@@ -20,6 +20,7 @@ import 'network/app_network_connectivity_providers.dart';
 import 'theme/app_theme_mode_providers.dart';
 import '../features/auth/presentation/providers/auth_providers.dart';
 import '../features/investment/presentation/providers/fund_project_providers.dart';
+import '../features/home/presentation/providers/home_celebration_providers.dart';
 import '../features/member_profile/presentation/providers/member_profile_providers.dart';
 import '../features/settings/presentation/providers/settings_content_providers.dart';
 
@@ -34,6 +35,7 @@ class MemberTemplateApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     AppNotice.bindHostOverlayKey(_appNoticeOverlayKey);
     ref.watch(pushTokenSyncBootstrapProvider);
+    ref.watch(homeCelebrationBootstrapProvider);
 
     final router = ref.watch(appRouterProvider);
     final environment = ref.watch(appEnvironmentProvider);

@@ -16,6 +16,10 @@ class FirebasePushRuntime implements AppPushRuntime {
   Stream<String> get tokenStream => AppFirebaseRuntime.tokenStream;
 
   @override
+  Stream<AppPushNotificationEvent> get notificationEvents =>
+      const Stream<AppPushNotificationEvent>.empty();
+
+  @override
   Future<void> initialize({required AppLogger logger}) {
     return AppFirebaseRuntime.ensurePushConfigured(logger: logger);
   }

@@ -1379,6 +1379,36 @@ abstract class AppLocalizations {
   /// **'Real-person verification is not complete for this account. Please complete identity verification.'**
   String get homeReminderRealPersonVerificationBody;
 
+  /// No description provided for @homeCelebrationBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'WELCOME BONUS'**
+  String get homeCelebrationBadge;
+
+  /// No description provided for @homeCelebrationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'First Sign-Up Reward'**
+  String get homeCelebrationTitle;
+
+  /// No description provided for @homeCelebrationAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'¥2,500'**
+  String get homeCelebrationAmount;
+
+  /// No description provided for @homeCelebrationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for completing your first registration. We have added a 2,500 yen investment bonus to your account.'**
+  String get homeCelebrationBody;
+
+  /// No description provided for @homeCelebrationPrimaryAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get homeCelebrationPrimaryAction;
+
   /// No description provided for @memberProfileEditRequiresFaceVerificationTitle.
   ///
   /// In en, this message translates to:

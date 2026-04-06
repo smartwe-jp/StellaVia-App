@@ -20,16 +20,83 @@ import '../../../member_profile/presentation/providers/member_profile_providers.
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../../notifications/presentation/providers/notifications_providers.dart';
 import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
+import '../providers/home_celebration_providers.dart';
 import '../support/home_display_name_resolver.dart';
+import '../widgets/home_celebration_dialog.dart';
 
 const Set<int> _featuredProjectStatuses = <int>{0, 1};
 const int _operatingProjectStatus = 4;
 
-class HomeOverviewTabPage extends ConsumerWidget {
+class HomeOverviewTabPage extends ConsumerStatefulWidget {
   const HomeOverviewTabPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeOverviewTabPage> createState() =>
+      _HomeOverviewTabPageState();
+}
+
+class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
+  bool _isShowingCelebration = false;
+
+  void _tryPresentCelebration() {
+    if (!mounted || _isShowingCelebration) {
+      return;
+    }
+
+    final isAuthenticated =
+        ref.read(isAuthenticatedProvider).asData?.value ?? false;
+    final pendingEvent = ref
+        .read(homeCelebrationControllerProvider)
+        .pendingEvent;
+    if (!isAuthenticated || pendingEvent == null) {
+      return;
+    }
+
+    _isShowingCelebration = true;
+    ref
+        .read(homeCelebrationControllerProvider.notifier)
+        .consumePending(pendingEvent.token);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) {
+        _isShowingCelebration = false;
+        return;
+      }
+
+      await HomeCelebrationDialog.show(context);
+      if (!mounted) {
+        _isShowingCelebration = false;
+        return;
+      }
+      setState(() {
+        _isShowingCelebration = false;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen<HomeCelebrationState>(homeCelebrationControllerProvider, (
+      previous,
+      next,
+    ) {
+      if (previous?.pendingEvent?.token == next.pendingEvent?.token) {
+        return;
+      }
+      _tryPresentCelebration();
+    });
+    ref.listen<AsyncValue<bool>>(isAuthenticatedProvider, (previous, next) {
+      final wasAuthenticated = previous?.asData?.value ?? false;
+      final isAuthenticated = next.asData?.value ?? false;
+      if (wasAuthenticated == isAuthenticated) {
+        return;
+      }
+      if (isAuthenticated) {
+        _tryPresentCelebration();
+      }
+    });
+    _tryPresentCelebration();
+
     final l10n = context.l10n;
     final authState = ref.watch(isAuthenticatedProvider);
     final networkAvailability =
@@ -50,7 +117,10 @@ class HomeOverviewTabPage extends ConsumerWidget {
         .watch(isMemberProfileCompletedProvider)
         .asData
         ?.value;
-    final isEmailVerified = ref.watch(settingsEmailVerifiedProvider).asData?.value;
+    final isEmailVerified = ref
+        .watch(settingsEmailVerifiedProvider)
+        .asData
+        ?.value;
     final asyncProjects = ref.watch(fundProjectListProvider);
     final asyncSecondaryMarketRecords = ref.watch(
       secondaryMarketMarketplaceListProvider,

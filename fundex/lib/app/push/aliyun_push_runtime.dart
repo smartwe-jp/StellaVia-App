@@ -33,6 +33,8 @@ class AliyunPushRuntime implements AppPushRuntime {
   String? _latestDeviceId;
   final StreamController<String> _tokenController =
       StreamController<String>.broadcast();
+  final StreamController<AppPushNotificationEvent> _notificationController =
+      StreamController<AppPushNotificationEvent>.broadcast();
 
   @override
   String get providerName => 'aliyun';
@@ -42,6 +44,10 @@ class AliyunPushRuntime implements AppPushRuntime {
 
   @override
   Stream<String> get tokenStream => _tokenController.stream;
+
+  @override
+  Stream<AppPushNotificationEvent> get notificationEvents =>
+      _notificationController.stream;
 
   @override
   Future<void> initialize({required AppLogger logger}) async {
@@ -200,6 +206,7 @@ class AliyunPushRuntime implements AppPushRuntime {
   void _setupReceivers({required AppLogger logger}) {
     _push.addMessageReceiver(
       onNotificationOpened: (Map<dynamic, dynamic> message) async {
+        _emitNotificationEvent(kind: 'opened', message: message);
         logger.info(
           'Aliyun notification opened.',
           context: <String, Object?>{'message': message.toString()},
@@ -207,20 +214,24 @@ class AliyunPushRuntime implements AppPushRuntime {
         return null;
       },
       onNotification: (Map<dynamic, dynamic> message) async {
+        _emitNotificationEvent(kind: 'notification', message: message);
         logger.info(
           'Aliyun notification received.',
           context: <String, Object?>{'message': message.toString()},
         );
         return null;
       },
-      onAndroidNotificationReceivedInApp: (Map<dynamic, dynamic> message) async {
-        logger.info(
-          'Aliyun in-app notification received.',
-          context: <String, Object?>{'message': message.toString()},
-        );
-        return null;
-      },
+      onAndroidNotificationReceivedInApp:
+          (Map<dynamic, dynamic> message) async {
+            _emitNotificationEvent(kind: 'inAppNotification', message: message);
+            logger.info(
+              'Aliyun in-app notification received.',
+              context: <String, Object?>{'message': message.toString()},
+            );
+            return null;
+          },
       onMessage: (Map<dynamic, dynamic> message) async {
+        _emitNotificationEvent(kind: 'message', message: message);
         logger.info(
           'Aliyun data message received.',
           context: <String, Object?>{'message': message.toString()},
@@ -239,5 +250,32 @@ class AliyunPushRuntime implements AppPushRuntime {
 
   bool _isSuccess(String code) {
     return code == _successCode || code == '0';
+  }
+
+  void _emitNotificationEvent({
+    required String kind,
+    required Map<dynamic, dynamic> message,
+  }) {
+    _notificationController.add(
+      AppPushNotificationEvent(kind: kind, payload: _normalizeMap(message)),
+    );
+  }
+
+  Map<String, Object?> _normalizeMap(Map<dynamic, dynamic> source) {
+    final normalized = <String, Object?>{};
+    source.forEach((dynamic key, dynamic value) {
+      normalized['$key'] = _normalizeValue(value);
+    });
+    return normalized;
+  }
+
+  Object? _normalizeValue(Object? value) {
+    if (value is Map<dynamic, dynamic>) {
+      return _normalizeMap(value);
+    }
+    if (value is Iterable) {
+      return value.map(_normalizeValue).toList(growable: false);
+    }
+    return value;
   }
 }

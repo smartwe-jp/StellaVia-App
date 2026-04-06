@@ -708,6 +708,22 @@ class AppLocalizationsEn extends AppLocalizations {
       'Real-person verification is not complete for this account. Please complete identity verification.';
 
   @override
+  String get homeCelebrationBadge => 'WELCOME BONUS';
+
+  @override
+  String get homeCelebrationTitle => 'First Sign-Up Reward';
+
+  @override
+  String get homeCelebrationAmount => '¥2,500';
+
+  @override
+  String get homeCelebrationBody =>
+      'Thanks for completing your first registration. We have added a 2,500 yen investment bonus to your account.';
+
+  @override
+  String get homeCelebrationPrimaryAction => 'Got it';
+
+  @override
   String get memberProfileEditRequiresFaceVerificationTitle =>
       'Face verification required';
 
