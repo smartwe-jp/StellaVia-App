@@ -2814,6 +2814,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageApplyStatusInvalid => '已失效';
 
   @override
+  String get myPageApplyInvalidToast => '该申请已失效';
+
+  @override
   String get myPageApplyConfirmationPendingAtLabel => '待确认时间';
 
   @override
@@ -6574,6 +6577,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageApplyStatusInvalid => '已失效';
+
+  @override
+  String get myPageApplyInvalidToast => '該申請已失效';
 
   @override
   String get myPageApplyConfirmationPendingAtLabel => '待確認時間';

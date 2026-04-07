@@ -13,6 +13,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
     required this.coolingOffTitle,
     required this.coolingOffBody,
     required this.depositRows,
+    required this.jumpDepositButtonLabel,
     required this.reportDepositButtonLabel,
     required this.onReportDeposit,
     required this.onJumpDeposit,
@@ -29,6 +30,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
   final String coolingOffTitle;
   final String coolingOffBody;
   final List<FundLotteryDepositRow> depositRows;
+  final String jumpDepositButtonLabel;
   final String reportDepositButtonLabel;
   final VoidCallback onJumpDeposit;
   final VoidCallback onReportDeposit;
@@ -209,7 +211,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 PrimaryCtaButton(
-                  label: reportDepositButtonLabel,
+                  label: jumpDepositButtonLabel,
                   onPressed: onJumpDeposit,
                   horizontalPadding: 0,
                 ),

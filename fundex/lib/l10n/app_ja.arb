@@ -1056,6 +1056,7 @@
   "myPageApplyStatusPendingConfirmation": "確認待ち",
   "myPageApplyStatusCompleted": "完了",
   "myPageApplyStatusInvalid": "失効",
+  "myPageApplyInvalidToast": "この申込は失効しました。",
   "myPageApplyConfirmationPendingAtLabel": "確認待ち",
   "myPageApplyCompletedAtLabel": "完了日",
   "myPageApplyInvalidAtLabel": "失効日",

@@ -2846,6 +2846,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageApplyStatusInvalid => '失効';
 
   @override
+  String get myPageApplyInvalidToast => 'この申込は失効しました。';
+
+  @override
   String get myPageApplyConfirmationPendingAtLabel => '確認待ち';
 
   @override

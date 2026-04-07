@@ -640,27 +640,27 @@ class _FundProjectCard extends StatelessWidget {
                           unselectedToastMessage: favoriteRemovedMessage,
                         ),
                       ),
-                      Positioned(
-                        right: 10,
-                        top: 10,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 3,
-                          ),
-                          decoration: BoxDecoration(
-                            color: heroGlassColor,
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: heroGlassBorderColor),
-                          ),
-                          child: Text(
-                            volumeText,
-                            style: appText.chip.copyWith(
-                              color: heroGlassSecondaryTextColor,
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Positioned(
+                      //   right: 10,
+                      //   top: 10,
+                      //   child: Container(
+                      //     padding: const EdgeInsets.symmetric(
+                      //       horizontal: 8,
+                      //       vertical: 3,
+                      //     ),
+                      //     decoration: BoxDecoration(
+                      //       color: heroGlassColor,
+                      //       borderRadius: BorderRadius.circular(6),
+                      //       border: Border.all(color: heroGlassBorderColor),
+                      //     ),
+                      //     child: Text(
+                      //       volumeText,
+                      //       style: appText.chip.copyWith(
+                      //         color: heroGlassSecondaryTextColor,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       Positioned(
                         left: 14,
                         right: 14,

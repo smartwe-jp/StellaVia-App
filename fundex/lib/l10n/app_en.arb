@@ -1056,6 +1056,7 @@
   "myPageApplyStatusPendingConfirmation": "Pending",
   "myPageApplyStatusCompleted": "Completed",
   "myPageApplyStatusInvalid": "Invalid",
+  "myPageApplyInvalidToast": "This application is no longer valid.",
   "myPageApplyConfirmationPendingAtLabel": "Pending since",
   "myPageApplyCompletedAtLabel": "Completed at",
   "myPageApplyInvalidAtLabel": "Invalidated at",

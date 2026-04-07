@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
-import '../../../investment/presentation/support/fund_lottery_apply_step.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
 import '../../../notifications/presentation/providers/notifications_providers.dart';
 import '../../domain/entities/mypage_models.dart';
@@ -311,7 +310,7 @@ Widget _buildPendingApplicationsSection(
                       child: Text(l10n.myPageCancelRequestAction),
                     )
                   : null,
-              onTap: _buildPendingApplyTapHandler(context, record.projectId),
+              onTap: () => handlePendingApplyTap(context, record),
             ),
           )
           .toList(growable: false);
@@ -555,18 +554,6 @@ Future<void> _handleApplyWithdraw(
     processId: processId,
     confirmBody: context.l10n.myPageWithdrawApplyConfirmBody,
     onSuccessRefresh: () => refreshProfileCenterTabPage(ref),
-  );
-}
-
-VoidCallback? _buildPendingApplyTapHandler(
-  BuildContext context,
-  String? projectId,
-) {
-  if (projectId == null || projectId.trim().isEmpty) {
-    return null;
-  }
-  return () => context.push(
-    '/funds/$projectId/lottery-apply?step=${FundLotteryApplyStep.submitted.queryValue}&allowSubmittedAdvance=false',
   );
 }
 

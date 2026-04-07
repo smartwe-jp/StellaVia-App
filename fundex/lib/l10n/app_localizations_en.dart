@@ -3002,6 +3002,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageApplyStatusInvalid => 'Invalid';
 
   @override
+  String get myPageApplyInvalidToast => 'This application is no longer valid.';
+
+  @override
   String get myPageApplyConfirmationPendingAtLabel => 'Pending since';
 
   @override

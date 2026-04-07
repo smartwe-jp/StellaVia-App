@@ -1,9 +1,11 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../investment/domain/entities/fund_project.dart';
+import '../../../investment/presentation/support/fund_lottery_apply_step.dart';
 import '../../domain/entities/mypage_models.dart';
 
 enum MyPageSectionType {
@@ -234,6 +236,43 @@ bool canShowApplyCancelAction(int? status) {
     0 || 2 => true,
     _ => false,
   };
+}
+
+void handlePendingApplyTap(
+  BuildContext context,
+  MyPageApplyRecord record,
+) {
+  final projectId = record.projectId?.trim();
+  if (projectId == null || projectId.isEmpty) {
+    return;
+  }
+
+  switch (record.status) {
+    case 0:
+    case 2:
+      context.push(
+        '/funds/$projectId/lottery-apply?step=${FundLotteryApplyStep.submitted.queryValue}&allowSubmittedAdvance=false',
+      );
+      return;
+    case 3:
+      context.push(
+        '/funds/$projectId/lottery-apply?step=${FundLotteryApplyStep.selected.queryValue}',
+      );
+      return;
+    case 1:
+    case 4:
+    case 5:
+      AppNotice.show(
+        context,
+        message: AppLocalizations.of(context).myPageApplyInvalidToast,
+      );
+      return;
+    default:
+      context.push(
+        '/funds/$projectId/lottery-apply?step=${FundLotteryApplyStep.submitted.queryValue}&allowSubmittedAdvance=false',
+      );
+      return;
+  }
 }
 
 String? resolveApplyWithdrawProcessId(MyPageApplyRecord record) {

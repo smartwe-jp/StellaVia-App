@@ -805,6 +805,8 @@ class _FundLotteryApplyFlowPageState
                                 value: l10n.lotteryApplyMockBankHolder,
                               ),
                             ],
+                            jumpDepositButtonLabel:
+                                l10n.lotteryApplyStep1DepositAction,
                             reportDepositButtonLabel:
                                 l10n.lotteryApplyReportDepositAction,
                             onReportDeposit: _goNextStep,

@@ -5558,6 +5558,12 @@ abstract class AppLocalizations {
   /// **'Invalid'**
   String get myPageApplyStatusInvalid;
 
+  /// No description provided for @myPageApplyInvalidToast.
+  ///
+  /// In en, this message translates to:
+  /// **'This application is no longer valid.'**
+  String get myPageApplyInvalidToast;
+
   /// No description provided for @myPageApplyConfirmationPendingAtLabel.
   ///
   /// In en, this message translates to:

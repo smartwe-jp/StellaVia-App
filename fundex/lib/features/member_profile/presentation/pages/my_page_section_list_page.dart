@@ -8,7 +8,6 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
-import '../../../investment/presentation/support/fund_lottery_apply_step.dart';
 import '../../domain/entities/mypage_models.dart';
 import '../providers/mypage_providers.dart';
 import '../support/mypage_section_support.dart';
@@ -344,7 +343,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
               child: Text(l10n.myPageCancelRequestAction),
             )
           : null,
-      onTap: _buildPendingApplyTapHandler(context, record.projectId),
+      onTap: () => handlePendingApplyTap(context, record),
     );
   }
 
@@ -507,18 +506,6 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
       const SizedBox(height: 16),
     ];
     return _buildSliverList(listChildren);
-  }
-
-  VoidCallback? _buildPendingApplyTapHandler(
-    BuildContext context,
-    String? projectId,
-  ) {
-    if (projectId == null || projectId.trim().isEmpty) {
-      return null;
-    }
-    return () => context.push(
-      '/funds/$projectId/lottery-apply?step=${FundLotteryApplyStep.submitted.queryValue}&allowSubmittedAdvance=false',
-    );
   }
 
   VoidCallback? _buildActiveFundTapHandler(
