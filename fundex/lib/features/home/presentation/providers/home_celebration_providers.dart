@@ -121,12 +121,8 @@ class HomeCelebrationController extends StateNotifier<HomeCelebrationState> {
   }
 
   String? _readCelebrationUrl(Map<String, Object?> payload) {
-    final exts = _readMap(payload, 'exts');
-    return _readString(exts, 'url') ??
-        _readString(exts, 'lottieUrl') ??
-        _readString(exts, 'LOTTIE_URL') ??
-        _readString(payload, 'LOTTIE_URL') ??
-        _readString(_readMap(payload, 'extraMap'), 'LOTTIE_URL');
+    return _readString(payload, 'LOTTIE_URL') ??
+        _readString(_readMap(payload, 'exts'), 'LOTTIE_URL');
   }
 
   Map<String, Object?> _readMap(Map<String, Object?> payload, String key) {
