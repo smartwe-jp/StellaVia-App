@@ -12,39 +12,14 @@ const String _defaultCelebrationLottieAsset =
 const Duration _fallbackCelebrationDuration = Duration(milliseconds: 2600);
 
 class HomeCelebrationDialog extends StatefulWidget {
-  const HomeCelebrationDialog({required this.event, super.key});
+  const HomeCelebrationDialog({
+    required this.event,
+    required this.onDismiss,
+    super.key,
+  });
 
   final HomeCelebrationEvent event;
-
-  static Future<void> show(
-    BuildContext context, {
-    required HomeCelebrationEvent event,
-  }) {
-    return showGeneralDialog<void>(
-      context: context,
-      barrierLabel: 'homeCelebration',
-      barrierDismissible: false,
-      barrierColor: Colors.transparent,
-      transitionDuration: const Duration(milliseconds: 220),
-      pageBuilder: (BuildContext context, _, __) {
-        return HomeCelebrationDialog(event: event);
-      },
-      transitionBuilder:
-          (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-            Widget child,
-          ) {
-            final curved = CurvedAnimation(
-              parent: animation,
-              curve: Curves.easeOutCubic,
-              reverseCurve: Curves.easeInCubic,
-            );
-            return FadeTransition(opacity: curved, child: child);
-          },
-    );
-  }
+  final VoidCallback onDismiss;
 
   @override
   State<HomeCelebrationDialog> createState() => _HomeCelebrationDialogState();
@@ -122,6 +97,11 @@ class _HomeCelebrationDialogState extends State<HomeCelebrationDialog>
       child: Stack(
         fit: StackFit.expand,
         children: <Widget>[
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {},
+            child: const SizedBox.expand(),
+          ),
           IgnorePointer(
             child: _CelebrationLottieLayer(
               controller: _controller,
@@ -142,7 +122,7 @@ class _HomeCelebrationDialogState extends State<HomeCelebrationDialog>
                       padding: const EdgeInsets.only(top: 8, right: 12),
                       child: IconButton(
                         onPressed: _showActions
-                            ? () => Navigator.of(context).pop()
+                            ? widget.onDismiss
                             : null,
                         icon: const Icon(Icons.close_rounded),
                         tooltip: l10n.commonClose,
@@ -170,9 +150,7 @@ class _HomeCelebrationDialogState extends State<HomeCelebrationDialog>
                         child: SizedBox(
                           width: 188,
                           child: FilledButton(
-                            onPressed: _showActions
-                                ? () => Navigator.of(context).pop()
-                                : null,
+                            onPressed: _showActions ? widget.onDismiss : null,
                             style: FilledButton.styleFrom(
                               backgroundColor: colors.highlightGold,
                               foregroundColor: colors.textPrimary,

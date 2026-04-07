@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -190,13 +191,13 @@ class _GlobalCelebrationHost extends ConsumerStatefulWidget {
 
 class _GlobalCelebrationHostState
     extends ConsumerState<_GlobalCelebrationHost> {
-  static const Duration _splashRetryDelay = Duration(milliseconds: 300);
+  static const Duration _presentationRetryDelay = Duration(milliseconds: 300);
 
-  bool _isShowingCelebration = false;
+  HomeCelebrationEvent? _activeCelebration;
   bool _isCelebrationScheduled = false;
 
   void _tryPresentCelebration() {
-    if (!mounted || _isShowingCelebration || _isCelebrationScheduled) {
+    if (!mounted || _activeCelebration != null || _isCelebrationScheduled) {
       return;
     }
 
@@ -209,48 +210,66 @@ class _GlobalCelebrationHostState
       return;
     }
     final currentLocation = _currentLocation();
-    if (currentLocation == '/splash') {
-      _isCelebrationScheduled = true;
-      Future<void>.delayed(_splashRetryDelay, () {
-        _isCelebrationScheduled = false;
-        _tryPresentCelebration();
-      });
+    if (currentLocation == null || currentLocation == '/splash') {
+      _scheduleRetry();
       return;
     }
 
     _isCelebrationScheduled = true;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _isCelebrationScheduled = false;
       if (!mounted) {
+        _isCelebrationScheduled = false;
         return;
       }
-      final navigatorContext = appRootNavigatorKey.currentContext;
-      if (navigatorContext == null) {
-        _tryPresentCelebration();
+      await SchedulerBinding.instance.endOfFrame;
+      _isCelebrationScheduled = false;
+      if (!mounted || _activeCelebration != null) {
         return;
       }
 
       final currentPending = ref
           .read(homeCelebrationControllerProvider)
           .pendingEvent;
+      final stableLocation = _currentLocation();
       if (currentPending == null ||
-          currentPending.token != pendingEvent.token) {
+          currentPending.token != pendingEvent.token ||
+          stableLocation == null ||
+          stableLocation == '/splash') {
+        if (currentPending != null && stableLocation == '/splash') {
+          _scheduleRetry();
+        }
         return;
       }
 
-      _isShowingCelebration = true;
       ref
           .read(homeCelebrationControllerProvider.notifier)
           .consumePending(currentPending.token);
-
-      await HomeCelebrationDialog.show(navigatorContext, event: currentPending);
-      if (!mounted) {
-        _isShowingCelebration = false;
-        return;
-      }
       setState(() {
-        _isShowingCelebration = false;
+        _activeCelebration = currentPending;
       });
+    });
+  }
+
+  void _scheduleRetry() {
+    if (!mounted || _isCelebrationScheduled) {
+      return;
+    }
+    _isCelebrationScheduled = true;
+    Future<void>.delayed(_presentationRetryDelay, () {
+      _isCelebrationScheduled = false;
+      _tryPresentCelebration();
+    });
+  }
+
+  void _dismissCelebration() {
+    if (!mounted || _activeCelebration == null) {
+      return;
+    }
+    setState(() {
+      _activeCelebration = null;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _tryPresentCelebration();
     });
   }
 
@@ -289,7 +308,14 @@ class _GlobalCelebrationHostState
       }
     });
     _tryPresentCelebration();
-    return const SizedBox.shrink();
+    final activeCelebration = _activeCelebration;
+    if (activeCelebration == null) {
+      return const SizedBox.shrink();
+    }
+    return HomeCelebrationDialog(
+      event: activeCelebration,
+      onDismiss: _dismissCelebration,
+    );
   }
 }
 
