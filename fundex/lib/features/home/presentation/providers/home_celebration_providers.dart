@@ -1,13 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../app/config/app_flavor.dart';
-import '../../../../app/config/environment_provider.dart';
 import '../../../../app/push/app_push_runtime.dart';
 import '../../../../app/push/app_push_runtime_provider.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
-
-const String _devMockCelebrationLottieUrl =
-    'https://stellavia.co.jp/Gift_box_with_coupon.json';
 
 class HomeCelebrationEvent {
   const HomeCelebrationEvent({
@@ -47,16 +42,6 @@ const Object _sentinel = Object();
 
 class HomeCelebrationController extends StateNotifier<HomeCelebrationState> {
   HomeCelebrationController() : super(const HomeCelebrationState());
-
-  void queueDevMock() {
-    _queueEvent(
-      HomeCelebrationEvent(
-        token: 'dev-startup-${DateTime.now().microsecondsSinceEpoch}',
-        source: 'devMock',
-        lottieUrl: _devMockCelebrationLottieUrl,
-      ),
-    );
-  }
 
   void queueFromPush(AppPushNotificationEvent event) {
     if (!_isHomeCelebrationEvent(event.payload)) {
@@ -162,9 +147,6 @@ final homeCelebrationControllerProvider =
 final homeCelebrationBootstrapProvider = Provider<void>((ref) {
   final controller = ref.watch(homeCelebrationControllerProvider.notifier);
   final pushRuntime = ref.watch(appPushRuntimeProvider);
-  final environment = ref.watch(appEnvironmentProvider);
-  final isDevFlavor = environment.flavor == AppFlavor.dev;
-  var hasQueuedDevMockForLaunch = false;
 
   final pushSubscription = pushRuntime.notificationEvents.listen(
     controller.queueFromPush,
@@ -179,18 +161,6 @@ final homeCelebrationBootstrapProvider = Provider<void>((ref) {
     }
     if (!isAuthenticated) {
       controller.clearPending();
-      return;
-    }
-    if (isDevFlavor && !hasQueuedDevMockForLaunch) {
-      hasQueuedDevMockForLaunch = true;
-      controller.queueDevMock();
     }
   });
-
-  final isAuthenticatedNow =
-      ref.read(isAuthenticatedProvider).asData?.value ?? false;
-  if (isDevFlavor && isAuthenticatedNow && !hasQueuedDevMockForLaunch) {
-    hasQueuedDevMockForLaunch = true;
-    controller.queueDevMock();
-  }
 });
