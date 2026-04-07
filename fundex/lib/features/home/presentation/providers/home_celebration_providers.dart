@@ -7,7 +7,7 @@ import '../../../../app/push/app_push_runtime_provider.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 
 const String _devMockCelebrationLottieUrl =
-    'https://lottie.host/841f99ee-3995-471d-8f53-e58b5be5611f/Ls0f67Lakk.lottie';
+    'https://stellavia.co.jp/Gift_box_with_coupon.json';
 
 class HomeCelebrationEvent {
   const HomeCelebrationEvent({
@@ -103,7 +103,7 @@ class HomeCelebrationController extends StateNotifier<HomeCelebrationState> {
   bool _isHomeCelebrationEvent(Map<String, Object?> payload) {
     final targetPage =
         _readString(payload, 'TARGET_PAGE') ??
-        _readString(_readMap(payload, 'extraMap'), 'TARGET_PAGE');
+        _readString(_readMap(payload, 'exts'), 'TARGET_PAGE');
     return targetPage == 'homeCelebration';
   }
 
