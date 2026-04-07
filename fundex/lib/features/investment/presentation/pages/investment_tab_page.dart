@@ -171,13 +171,13 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
   }
 
   String _resolveLocationHint(FundProject project) {
-    final name = project.projectName.trim();
-    if (name.contains(' ')) {
-      return name.split(' ').first;
-    }
-    if (name.contains('　')) {
-      return name.split('　').first;
-    }
+    // final name = project.projectName.trim();
+    // if (name.contains(' ')) {
+    //   return name.split(' ').first;
+    // }
+    // if (name.contains('　')) {
+    //   return name.split('　').first;
+    // }
     final company = project.operatingCompany?.trim();
     if (company != null && company.isNotEmpty) {
       return company;
