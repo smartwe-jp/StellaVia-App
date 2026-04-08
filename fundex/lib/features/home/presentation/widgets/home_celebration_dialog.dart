@@ -125,7 +125,6 @@ class _HomeCelebrationDialogState extends State<HomeCelebrationDialog>
                             ? widget.onDismiss
                             : null,
                         icon: const Icon(Icons.close_rounded),
-                        tooltip: l10n.commonClose,
                         style: IconButton.styleFrom(
                           foregroundColor: colors.onDark,
                           backgroundColor: colors.surface.withValues(

@@ -221,7 +221,6 @@ class _GlobalCelebrationHostState
         _isCelebrationScheduled = false;
         return;
       }
-      await SchedulerBinding.instance.endOfFrame;
       _isCelebrationScheduled = false;
       if (!mounted || _activeCelebration != null) {
         return;
@@ -248,6 +247,7 @@ class _GlobalCelebrationHostState
         _activeCelebration = currentPending;
       });
     });
+    SchedulerBinding.instance.ensureVisualUpdate();
   }
 
   void _scheduleRetry() {
