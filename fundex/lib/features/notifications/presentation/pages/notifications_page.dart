@@ -166,14 +166,22 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
 
     return Scaffold(
       backgroundColor: colors.surface,
+      appBar: 
+      AppNavigationBar(
+        title: l10n.notificationsTitle,
+        leading: AppNavigationIconButton(
+          icon: Icons.arrow_back_rounded,
+          onTap: () => context.pop(),
+        ),
+      ),
       body: SafeArea(
         bottom: false,
         child: Column(
           children: <Widget>[
-            _NotificationsHeader(
-              title: l10n.notificationsTitle,
-              onBack: () => context.pop(),
-            ),
+            // _NotificationsHeader(
+            //   title: l10n.notificationsTitle,
+            //   onBack: () => context.pop(),
+            // ),
             Expanded(
               child: RefreshIndicator(
                 color: colors.danger,
