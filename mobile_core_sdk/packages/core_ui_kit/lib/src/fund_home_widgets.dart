@@ -1050,40 +1050,33 @@ class FundFeaturedFundCard extends StatelessWidget {
                           ),
 
                           const SizedBox(height: UiTokens.spacing8),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      yieldLabel,
-                                      style: appText.caption.copyWith(
-                                        color: colors.textSecondary,
-                                      ),
-                                    ),
-                                    //const SizedBox(height: 2),
-                                    Text(
-                                      data.annualYield,
-                                      style: appText.numericHeadline.copyWith(
-                                        color: colors.success,
-                                        height: 1.0,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: UiTokens.spacing8),
-                              Text(
-                                data.metadata,
-                                textAlign: TextAlign.end,
-                                style: appText.caption.copyWith(
-                                  color: colors.textSecondary,
-                                ),
-                              ),
-                            ],
+
+                          Text(
+                            yieldLabel,
+                            style: appText.caption.copyWith(
+                              color: colors.textSecondary,
+                            ),
                           ),
+                          //const SizedBox(height: 2),
+                          Text(
+                            data.annualYield,
+                            style: appText.numericHeadline.copyWith(
+                              color: colors.success,
+                              height: 1.0,
+                            ),
+                          ),
+
+                          Container(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              data.metadata,
+                              textAlign: TextAlign.end,
+                              style: appText.caption.copyWith(
+                                color: colors.textSecondary,
+                              ),
+                            ),
+                          ),
+                                 
                           const SizedBox(height: UiTokens.spacing4),
                           _FundGradientProgressBar(
                             value: data.progress,

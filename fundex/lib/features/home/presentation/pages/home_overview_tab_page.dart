@@ -319,6 +319,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
                       title: l10n.homeFeaturedFundsTitle,
                       actionLabel: l10n.homeViewAllAction,
                       onActionTap: () => context.go('/funds'),
+                      height: 272,
                       children: featuredFundCards,
                     ),
                   if (secondaryMarketCards.isNotEmpty)
