@@ -21,6 +21,7 @@ import 'fund_lottery_apply/fund_lottery_apply_selected_step.dart';
 import 'fund_lottery_apply/fund_lottery_apply_submitted_step.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../member_profile/presentation/support/mypage_section_support.dart';
+import '../../../wallet/presentation/providers/wallet_providers.dart';
 
 class FundLotteryApplyFlowPage extends ConsumerStatefulWidget {
   const FundLotteryApplyFlowPage({
@@ -61,6 +62,7 @@ class _FundLotteryApplyFlowPageState
   final Set<int> _openedDocuments = <int>{};
   bool _agreedToApply = false;
   bool _isApplying = false;
+  bool _isReportingDeposit = false;
 
   @override
   void initState() {
@@ -393,11 +395,23 @@ class _FundLotteryApplyFlowPageState
   }
 
   String _resolveApplyErrorMessage(BuildContext context, Object error) {
+    return _resolveRequestErrorMessage(
+      context,
+      error,
+      fallbackMessage: context.l10n.lotteryApplySubmitFailedFallback,
+    );
+  }
+
+  String _resolveRequestErrorMessage(
+    BuildContext context,
+    Object error, {
+    required String fallbackMessage,
+  }) {
     final message = _extractApplyErrorMessage(error);
     if (message != null) {
       return message;
     }
-    return context.l10n.lotteryApplySubmitFailedFallback;
+    return fallbackMessage;
   }
 
   String? _extractApplyErrorMessage(Object error) {
@@ -468,6 +482,44 @@ class _FundLotteryApplyFlowPageState
       if (mounted) {
         setState(() {
           _isApplying = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _reportDepositCompleted({required int amount}) async {
+    if (_isReportingDeposit) {
+      return;
+    }
+
+    setState(() {
+      _isReportingDeposit = true;
+    });
+
+    try {
+      await ref
+          .read(confirmWalletPaymentUseCaseProvider)
+          .call(amount: amount);
+      if (!mounted) {
+        return;
+      }
+      _showToast(context.l10n.lotteryApplyReportDepositSuccess);
+      _goNextStep();
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      _showToast(
+        _resolveRequestErrorMessage(
+          context,
+          error,
+          fallbackMessage: context.l10n.lotteryApplyReportDepositFailure,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isReportingDeposit = false;
         });
       }
     }
@@ -809,7 +861,9 @@ class _FundLotteryApplyFlowPageState
                                 l10n.lotteryApplyStep1DepositAction,
                             reportDepositButtonLabel:
                                 l10n.lotteryApplyReportDepositAction,
-                            onReportDeposit: _goNextStep,
+                            isReportingDeposit: _isReportingDeposit,
+                            onReportDeposit: () =>
+                                _reportDepositCompleted(amount: totalAmount),
                             onJumpDeposit: () => context.push('/wallet/deposit'),
                             laterButtonLabel:
                                 l10n.lotteryApplyLaterDepositAction,

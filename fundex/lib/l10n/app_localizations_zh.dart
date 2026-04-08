@@ -1941,6 +1941,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get lotteryApplyReportDepositAction => '报告已完成入金';
 
   @override
+  String get lotteryApplyReportDepositSuccess => '发送成功';
+
+  @override
+  String get lotteryApplyReportDepositFailure => '发送失败，请稍后重试。';
+
+  @override
   String get lotteryApplyLaterDepositAction => '稍后入金';
 
   @override
@@ -5704,6 +5710,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get lotteryApplyReportDepositAction => '回報已完成入金';
+
+  @override
+  String get lotteryApplyReportDepositSuccess => '發送成功';
+
+  @override
+  String get lotteryApplyReportDepositFailure => '發送失敗，請稍後重試。';
 
   @override
   String get lotteryApplyLaterDepositAction => '稍後入金';

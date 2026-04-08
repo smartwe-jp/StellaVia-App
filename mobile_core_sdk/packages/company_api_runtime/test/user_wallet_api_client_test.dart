@@ -158,6 +158,22 @@ void main() {
       expect(cost, equals(15));
     });
 
+    test('confirmPayment sends GET with amount query', () async {
+      final dio = _buildDio((options) async {
+        expect(options.method, equals('GET'));
+        expect(options.path, equals(UserWalletApiPaths.paymentConfirmation));
+        expect(
+          options.queryParameters,
+          equals(<String, dynamic>{'amount': 10000}),
+        );
+        expect(options.extra['auth_required'], isTrue);
+        return _jsonOk('{"msg":"success","code":200,"data":true}');
+      });
+      final api = UserWalletApiClient(dioForPath: (_) => dio);
+
+      await api.confirmPayment(amount: 10000);
+    });
+
     test(
       'fetchWithdrawHistory sends POST and maps withdraw-list fields',
       () async {

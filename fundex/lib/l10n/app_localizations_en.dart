@@ -2069,6 +2069,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lotteryApplyReportDepositAction => 'Report payment completed';
 
   @override
+  String get lotteryApplyReportDepositSuccess =>
+      'Payment completion report sent.';
+
+  @override
+  String get lotteryApplyReportDepositFailure =>
+      'Failed to send the payment completion report. Please try again later.';
+
+  @override
   String get lotteryApplyLaterDepositAction => 'Pay later';
 
   @override

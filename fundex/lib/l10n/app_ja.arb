@@ -732,6 +732,8 @@
   "lotteryApplyMockBankAccount": "普通 1234567",
   "lotteryApplyMockBankHolder": "ファンデックス（カ",
   "lotteryApplyReportDepositAction": "入金完了を報告",
+  "lotteryApplyReportDepositSuccess": "入金完了報告を送信しました。",
+  "lotteryApplyReportDepositFailure": "入金完了報告の送信に失敗しました。しばらくしてから再度お試しください。",
   "lotteryApplyLaterDepositAction": "あとで入金する",
   "lotteryApplyCopyAction": "コピー",
   "lotteryApplyCopyDoneToast": "コピーしました",

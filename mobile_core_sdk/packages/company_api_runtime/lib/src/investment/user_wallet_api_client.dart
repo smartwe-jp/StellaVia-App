@@ -12,6 +12,8 @@ class UserWalletApiPaths {
   static const String withdrawApply = '/member/wx/account/withdraw/apply-v1';
   static const String withdrawCancel = '/member/wx/account/withdraw/cancel';
   static const String withdrawCost = '/member/wx/account/withdraw/cost';
+  static const String paymentConfirmation =
+      '/member/wx/account/payment-confirmation';
   static const String withdrawApplySendCode =
       '/member/wx/account/withdraw-apply-send-code';
   static const String withdrawHistory = '/member/wx/account/withdraw-list';
@@ -31,6 +33,7 @@ class UserWalletApiClient {
     this.withdrawApplyPath = UserWalletApiPaths.withdrawApply,
     this.withdrawCancelPath = UserWalletApiPaths.withdrawCancel,
     this.withdrawCostPath = UserWalletApiPaths.withdrawCost,
+    this.paymentConfirmationPath = UserWalletApiPaths.paymentConfirmation,
     this.withdrawApplySendCodePath = UserWalletApiPaths.withdrawApplySendCode,
     this.withdrawHistoryPath = UserWalletApiPaths.withdrawHistory,
     this.withdrawingListPath = UserWalletApiPaths.withdrawingList,
@@ -53,6 +56,7 @@ class UserWalletApiClient {
   final String withdrawApplyPath;
   final String withdrawCancelPath;
   final String withdrawCostPath;
+  final String paymentConfirmationPath;
   final String withdrawApplySendCodePath;
   final String withdrawHistoryPath;
   final String withdrawingListPath;
@@ -135,6 +139,23 @@ class UserWalletApiClient {
       fallbackMessage: 'Failed to load withdraw cost.',
     );
     return _asNumOrZero(payload['data']);
+  }
+
+  Future<void> confirmPayment({required Object amount}) async {
+    final response = await _dioForPath(paymentConfirmationPath)
+        .get<Map<String, dynamic>>(
+          paymentConfirmationPath,
+          queryParameters: <String, dynamic>{'amount': amount},
+          options: authRequired(true),
+        );
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    if (payload.isEmpty) {
+      return;
+    }
+    _envelopeCodec.assertSuccessIfEnvelope(
+      payload,
+      fallbackMessage: 'Failed to confirm payment.',
+    );
   }
 
   Future<void> sendWithdrawApplyCode() async {

@@ -3854,6 +3854,18 @@ abstract class AppLocalizations {
   /// **'Report payment completed'**
   String get lotteryApplyReportDepositAction;
 
+  /// No description provided for @lotteryApplyReportDepositSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment completion report sent.'**
+  String get lotteryApplyReportDepositSuccess;
+
+  /// No description provided for @lotteryApplyReportDepositFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send the payment completion report. Please try again later.'**
+  String get lotteryApplyReportDepositFailure;
+
   /// No description provided for @lotteryApplyLaterDepositAction.
   ///
   /// In en, this message translates to:

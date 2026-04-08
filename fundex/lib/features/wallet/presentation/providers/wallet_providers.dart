@@ -14,6 +14,7 @@ import '../../domain/usecases/fetch_wallet_bank_account_list_usecase.dart';
 import '../../domain/usecases/fetch_wallet_bank_account_info_usecase.dart';
 import '../../domain/usecases/fetch_wallet_account_history_usecase.dart';
 import '../../domain/usecases/cancel_wallet_withdraw_usecase.dart';
+import '../../domain/usecases/confirm_wallet_payment_usecase.dart';
 import '../../domain/usecases/delete_wallet_bank_account_usecase.dart';
 import '../../domain/usecases/fetch_wallet_withdraw_cost_usecase.dart';
 import '../../domain/usecases/fetch_wallet_withdraw_history_usecase.dart';
@@ -98,6 +99,11 @@ final sendWalletWithdrawApplyCodeUseCaseProvider =
       return SendWalletWithdrawApplyCodeUseCase(
         ref.watch(walletRepositoryProvider),
       );
+    });
+
+final confirmWalletPaymentUseCaseProvider =
+    Provider<ConfirmWalletPaymentUseCase>((ref) {
+      return ConfirmWalletPaymentUseCase(ref.watch(walletRepositoryProvider));
     });
 
 final fetchWalletWithdrawHistoryUseCaseProvider =

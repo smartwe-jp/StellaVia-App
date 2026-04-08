@@ -15,6 +15,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
     required this.depositRows,
     required this.jumpDepositButtonLabel,
     required this.reportDepositButtonLabel,
+    required this.isReportingDeposit,
     required this.onReportDeposit,
     required this.onJumpDeposit,
     required this.laterButtonLabel,
@@ -32,6 +33,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
   final List<FundLotteryDepositRow> depositRows;
   final String jumpDepositButtonLabel;
   final String reportDepositButtonLabel;
+  final bool isReportingDeposit;
   final VoidCallback onJumpDeposit;
   final VoidCallback onReportDeposit;
   final String laterButtonLabel;
@@ -219,6 +221,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                 PrimaryCtaButton(
                   label: reportDepositButtonLabel,
                   onPressed: onReportDeposit,
+                  isLoading: isReportingDeposit,
                   horizontalPadding: 0,
                   backgroundColor: colors.success,
                   shadowColor: colors.success.withValues(alpha: 0.34),

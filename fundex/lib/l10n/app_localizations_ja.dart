@@ -1963,6 +1963,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get lotteryApplyReportDepositAction => '入金完了を報告';
 
   @override
+  String get lotteryApplyReportDepositSuccess => '入金完了報告を送信しました。';
+
+  @override
+  String get lotteryApplyReportDepositFailure =>
+      '入金完了報告の送信に失敗しました。しばらくしてから再度お試しください。';
+
+  @override
   String get lotteryApplyLaterDepositAction => 'あとで入金する';
 
   @override

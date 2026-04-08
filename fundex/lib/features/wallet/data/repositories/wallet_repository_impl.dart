@@ -59,6 +59,11 @@ class WalletRepositoryImpl implements WalletRepository {
   }
 
   @override
+  Future<void> confirmPayment({required Object amount}) {
+    return _remote.confirmPayment(amount: amount);
+  }
+
+  @override
   Future<void> applyWithdraw(WalletWithdrawApplyDraft draft) {
     return _remote.applyWithdraw(draft.toDto());
   }

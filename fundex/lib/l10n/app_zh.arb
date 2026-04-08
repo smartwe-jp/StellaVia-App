@@ -732,6 +732,8 @@
   "lotteryApplyMockBankAccount": "普通 1234567",
   "lotteryApplyMockBankHolder": "FUNDEX株式会社",
   "lotteryApplyReportDepositAction": "报告已完成入金",
+  "lotteryApplyReportDepositSuccess": "发送成功",
+  "lotteryApplyReportDepositFailure": "发送失败，请稍后重试。",
   "lotteryApplyLaterDepositAction": "稍后入金",
   "lotteryApplyCopyAction": "复制",
   "lotteryApplyCopyDoneToast": "已复制",
