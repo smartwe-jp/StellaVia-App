@@ -318,20 +318,28 @@ class _FundHeroMetricCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
+    final isDark = theme.brightness == Brightness.dark;
     final valueStyle = isPrimary
         ? appText.heroMetricPrimary
         : appText.heroMetricSecondary;
     final backgroundGradient = isPrimary
-        ? <Color>[
-            colors.heroMiddle.withValues(alpha: 0.82),
-            colors.primary.withValues(alpha: 0.30),
-          ]
+        ? (isDark
+              ? <Color>[
+                  colors.heroMiddle.withValues(alpha: 0.82),
+                  colors.primary.withValues(alpha: 0.30),
+                ]
+              : <Color>[
+                  colors.heroMiddle.withValues(alpha: 0.72),
+                  colors.brandPrimaryBright.withValues(alpha: 0.24),
+                ])
         : <Color>[
             colors.heroEnd.withValues(alpha: 0.30),
             colors.brandWhite.withValues(alpha: 0.10),
           ];
     final borderColor = isPrimary
-        ? colors.primary.withValues(alpha: 0.22)
+        ? (isDark
+              ? colors.primary.withValues(alpha: 0.22)
+              : colors.brandPrimaryBright.withValues(alpha: 0.20))
         : colors.brandWhite.withValues(alpha: 0.1);
 
     return Container(

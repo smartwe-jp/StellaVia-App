@@ -105,7 +105,7 @@ class _NoticeCard extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 560),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         decoration: BoxDecoration(
-          color: colors.heroStart,
+          color: colors.brandPrimaryBright,
           borderRadius: BorderRadius.circular(12),
           // boxShadow: <BoxShadow>[
           //   BoxShadow(
