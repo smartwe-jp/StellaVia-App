@@ -209,6 +209,19 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
 
   _FundStatusPalette _resolveStatusPalette(BuildContext context, int? status) {
     final colors = context.appColors;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final openAccentColor = isDark
+        ? colors.success
+        : Color.alphaBlend(
+            colors.successForeground.withValues(alpha: 0.22),
+            colors.success,
+          );
+    final openTagBackgroundColor = isDark
+        ? colors.successSubtle
+        : Color.alphaBlend(
+            colors.successForeground.withValues(alpha: 0.10),
+            colors.successSubtle,
+          );
     switch (status) {
       case 4:
         return _FundStatusPalette(
@@ -229,11 +242,14 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
         );
       case 1:
         return _FundStatusPalette(
-          heroGradientColors: <Color>[colors.successForeground, colors.success],
-          tagBackgroundColor: colors.successSubtle,
+          heroGradientColors: <Color>[
+            colors.successForeground,
+            openAccentColor,
+          ],
+          tagBackgroundColor: openTagBackgroundColor,
           tagForegroundColor: colors.successForeground,
           amountGradientColors: <Color>[
-            colors.success,
+            openAccentColor,
             colors.successForeground,
           ],
         );
@@ -970,11 +986,19 @@ class _HeroInfoBubble extends StatelessWidget {
         children: <Widget>[
           Text(
             label,
-            style: appText.micro.copyWith(color: labelColor, height: 1.1, fontSize: 9),
+            style: appText.micro.copyWith(
+              color: labelColor,
+              height: 1.1,
+              fontSize: 9,
+            ),
           ),
           Text(
             value,
-            style: appText.bodyStrong.copyWith(color: valueColor, height: 1.1, fontSize: 11),
+            style: appText.bodyStrong.copyWith(
+              color: valueColor,
+              height: 1.1,
+              fontSize: 11,
+            ),
           ),
         ],
       ),

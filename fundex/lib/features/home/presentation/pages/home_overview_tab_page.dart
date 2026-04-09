@@ -596,6 +596,19 @@ _FeaturedFundStatusPalette _resolveFeaturedStatusPalette(
   int? status,
 ) {
   final colors = Theme.of(context).appColors;
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+  final openAccentColor = isDark
+      ? colors.success
+      : Color.alphaBlend(
+          colors.successForeground.withValues(alpha: 0.22),
+          colors.success,
+        );
+  final openTagBackgroundColor = isDark
+      ? colors.successSubtle
+      : Color.alphaBlend(
+          colors.successForeground.withValues(alpha: 0.10),
+          colors.successSubtle,
+        );
 
   switch (status) {
     case 4:
@@ -612,8 +625,8 @@ _FeaturedFundStatusPalette _resolveFeaturedStatusPalette(
       );
     case 1:
       return _FeaturedFundStatusPalette(
-        gradientColors: <Color>[colors.successForeground, colors.success],
-        tagBackgroundColor: colors.successSubtle,
+        gradientColors: <Color>[colors.successForeground, openAccentColor],
+        tagBackgroundColor: openTagBackgroundColor,
         tagForegroundColor: colors.successForeground,
       );
     case 0:
