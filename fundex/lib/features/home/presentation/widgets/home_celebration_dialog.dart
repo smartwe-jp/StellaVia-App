@@ -90,6 +90,9 @@ class _HomeCelebrationDialogState extends State<HomeCelebrationDialog>
     final theme = Theme.of(context);
     final appText = theme.appTextTheme;
     final colors = theme.appColors;
+    final darkColors = AppThemeFactory.dark(
+      locale: Localizations.maybeLocaleOf(context),
+    ).appColors;
     final l10n = context.l10n;
 
     return Material(
@@ -151,8 +154,8 @@ class _HomeCelebrationDialogState extends State<HomeCelebrationDialog>
                           child: FilledButton(
                             onPressed: _showActions ? widget.onDismiss : null,
                             style: FilledButton.styleFrom(
-                              backgroundColor: colors.highlightGold,
-                              foregroundColor: colors.textPrimary,
+                              backgroundColor: darkColors.highlightGold,
+                              foregroundColor: darkColors.textPrimary,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 24,
                                 vertical: 12,
@@ -162,7 +165,7 @@ class _HomeCelebrationDialogState extends State<HomeCelebrationDialog>
                             child: Text(
                               l10n.commonOk,
                               style: appText.bodyStrong.copyWith(
-                                color: colors.textPrimary,
+                                color: darkColors.textPrimary,
                               ),
                             ),
                           ),
