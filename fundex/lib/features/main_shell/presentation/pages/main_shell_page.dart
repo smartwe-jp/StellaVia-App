@@ -101,10 +101,9 @@ class MainShellPage extends ConsumerWidget {
                   NavigationDestination(
                     icon: const _KizunarkTabAssetIcon(
                       assetPath: 'assets/images/kizunark.tab.normal.png',
-                      useInactiveTintInLight: true,
                     ),
                     selectedIcon: const _KizunarkTabAssetIcon(
-                      assetPath: 'assets/images/kizunark.tab.select.png',
+                      assetPath: 'assets/images/kizunark.tab.normal.png',
                     ),
                     label: l10n.mainTabKizunark,
                   ),
@@ -124,27 +123,21 @@ class MainShellPage extends ConsumerWidget {
 }
 
 class _KizunarkTabAssetIcon extends StatelessWidget {
-  const _KizunarkTabAssetIcon({
-    required this.assetPath,
-    this.useInactiveTintInLight = false,
-  });
+  const _KizunarkTabAssetIcon({required this.assetPath});
 
   final String assetPath;
-  final bool useInactiveTintInLight;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final shouldTint =
-        useInactiveTintInLight && theme.brightness == Brightness.light;
+    final iconTheme = IconTheme.of(context);
+    final fallbackColor = Theme.of(context).appColors.textSecondary;
     return Image.asset(
       assetPath,
       width: 28,
       height: 28,
       fit: BoxFit.contain,
-      color: shouldTint ? colors.textSecondary : null,
-      colorBlendMode: shouldTint ? BlendMode.srcIn : null,
+      color: iconTheme.color ?? fallbackColor,
+      colorBlendMode: BlendMode.srcIn,
     );
   }
 }

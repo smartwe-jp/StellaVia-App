@@ -2283,7 +2283,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageOperatingFundsTitle => '運用中ファンド';
 
   @override
-  String get myPageActiveFundHeroEyebrow => 'MY FUND';
+  String get myPageActiveFundHeroEyebrow => '保有ファンド';
 
   @override
   String get myPageTransactionHistoryAction => '取引履歴を見る';
