@@ -58,6 +58,14 @@ class AppThemeFactory {
         Color.alphaBlend(foreground.withValues(alpha: opacity), base);
     final textTheme = AppTypographyTokens.textTheme(brightness, locale: locale);
     final contentMuted = onSurface.withValues(alpha: 0.72);
+    final darkInteractivePrimary = AppColorTokens.brandPrimaryBright;
+    final darkInteractivePrimaryAlt =
+        Color.lerp(
+          AppColorTokens.brandPrimaryBright,
+          AppColorTokens.brandPrimary,
+          0.38,
+        ) ??
+        AppColorTokens.brandPrimaryBright;
     TextStyle sans({
       required double size,
       required FontWeight weight,
@@ -94,25 +102,15 @@ class AppThemeFactory {
       brandAlert: AppColorTokens.brandAlert,
       brandNeutral: AppColorTokens.brandNeutral,
       brandWhite: AppColorTokens.brandWhite,
-      primary: isDark
-          ? AppColorTokens.brandPrimaryBright
-          : AppColorTokens.fundexAccent,
+      primary: isDark ? darkInteractivePrimary : AppColorTokens.fundexAccent,
       primaryAlt: isDark
-          ? AppColorTokens.brandPrimary
+          ? darkInteractivePrimaryAlt
           : AppColorTokens.fundexAccentAlt,
       primarySoft: isDark
-          ? overlay(
-              AppColorTokens.brandPrimaryBright,
-              AppColorTokens.darkSurfaceAlt,
-              0.24,
-            )
+          ? overlay(darkInteractivePrimary, AppColorTokens.darkSurfaceAlt, 0.32)
           : AppColorTokens.fundexAccentLight,
       primarySubtle: isDark
-          ? overlay(
-              AppColorTokens.brandPrimary,
-              AppColorTokens.darkSurface,
-              0.16,
-            )
+          ? overlay(darkInteractivePrimary, AppColorTokens.darkSurface, 0.22)
           : AppColorTokens.fundexAccentSuperLight,
       success: AppColorTokens.fundexSuccess,
       successSubtle: isDark
@@ -178,23 +176,15 @@ class AppThemeFactory {
       dangerForeground: isDark
           ? AppColorTokens.dangerBorder
           : AppColorTokens.dangerText,
-      info: isDark ? AppColorTokens.brandPrimaryBright : AppColorTokens.info,
+      info: isDark ? darkInteractivePrimary : AppColorTokens.info,
       infoSubtle: isDark
-          ? overlay(
-              AppColorTokens.brandPrimaryBright,
-              AppColorTokens.darkSurface,
-              0.14,
-            )
+          ? overlay(darkInteractivePrimary, AppColorTokens.darkSurface, 0.2)
           : AppColorTokens.infoLight,
       infoSoft: isDark
-          ? overlay(
-              AppColorTokens.brandPrimaryBright,
-              AppColorTokens.darkSurfaceAlt,
-              0.22,
-            )
+          ? overlay(darkInteractivePrimary, AppColorTokens.darkSurfaceAlt, 0.3)
           : AppColorTokens.infoSoft,
       infoBorder: isDark
-          ? AppColorTokens.brandPrimaryBright.withValues(alpha: 0.56)
+          ? darkInteractivePrimary.withValues(alpha: 0.64)
           : AppColorTokens.infoBorder,
       infoForeground: isDark
           ? AppColorTokens.infoBorder
@@ -450,10 +440,12 @@ class AppThemeFactory {
     );
 
     final travelHotelTheme = AppFTKTheme(
-      primaryButtonColor: AppColorTokens.travelPrimaryTeal,
-      primaryButtonShadowColor: AppColorTokens.travelPrimaryTeal.withValues(
-        alpha: isDark ? 0.22 : 0.15,
-      ),
+      primaryButtonColor: isDark
+          ? semanticColors.primary
+          : AppColorTokens.travelPrimaryTeal,
+      primaryButtonShadowColor:
+          (isDark ? semanticColors.primary : AppColorTokens.travelPrimaryTeal)
+              .withValues(alpha: isDark ? 0.28 : 0.15),
       primaryButtonTextStyle: (textTheme.titleMedium ?? const TextStyle())
           .copyWith(
             color: Colors.white,
@@ -461,7 +453,9 @@ class AppThemeFactory {
             fontWeight: FontWeight.w900,
             height: 22 / 16,
           ),
-      categorySelectedBackgroundColor: AppColorTokens.travelPrimaryBlueAlt,
+      categorySelectedBackgroundColor: isDark
+          ? semanticColors.primary
+          : AppColorTokens.travelPrimaryBlueAlt,
       categorySelectedForegroundColor: Colors.white,
       categorySelectedLabelStyle: (textTheme.bodySmall ?? const TextStyle())
           .copyWith(

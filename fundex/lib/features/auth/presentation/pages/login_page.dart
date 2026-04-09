@@ -606,20 +606,30 @@ class _LoginChannelChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
     final travelTheme = theme.extension<AppFTKTheme>()!;
+    final isDark = theme.brightness == Brightness.dark;
     final radius = BorderRadius.circular(16);
+    final selectedBackgroundColor = isDark
+        ? travelTheme.primaryButtonColor
+        : travelTheme.primaryButtonColor.withValues(alpha: 0.14);
+    final selectedForegroundColor = isDark
+        ? colors.onDark
+        : travelTheme.primaryButtonColor;
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 160),
       curve: Curves.easeOutCubic,
       decoration: BoxDecoration(
         color: selected
-            ? travelTheme.primaryButtonColor.withValues(alpha: 0.14)
+            ? selectedBackgroundColor
             : theme.colorScheme.surface.withValues(alpha: 0.7),
         borderRadius: radius,
         border: Border.all(
           color: selected
-              ? travelTheme.primaryButtonColor.withValues(alpha: 0.45)
+              ? (isDark
+                    ? travelTheme.primaryButtonColor
+                    : travelTheme.primaryButtonColor.withValues(alpha: 0.45))
               : travelTheme.cardBorderColor.withValues(alpha: 0.95),
           width: selected ? 1.2 : 1,
         ),
@@ -638,7 +648,7 @@ class _LoginChannelChip extends StatelessWidget {
                   icon,
                   size: 18,
                   color: selected
-                      ? travelTheme.primaryButtonColor
+                      ? selectedForegroundColor
                       : travelTheme.categoryIdleIconColor,
                 ),
                 const SizedBox(width: 8),
@@ -650,7 +660,7 @@ class _LoginChannelChip extends StatelessWidget {
                     style: (theme.textTheme.labelLarge ?? const TextStyle())
                         .copyWith(
                           color: selected
-                              ? travelTheme.primaryButtonColor
+                              ? selectedForegroundColor
                               : theme.textTheme.bodyMedium?.color,
                           fontWeight: FontWeight.w700,
                         ),

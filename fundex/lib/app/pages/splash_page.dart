@@ -96,6 +96,36 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final onDark = colors.onDark;
+    final isDark = theme.brightness == Brightness.dark;
+    final splashGradientColors = isDark
+        ? <Color>[
+            Color.alphaBlend(
+              colors.brandPrimaryDark.withValues(alpha: 0.96),
+              colors.background,
+            ),
+            Color.alphaBlend(
+              colors.heroStart.withValues(alpha: 0.94),
+              colors.brandPrimaryDark,
+            ),
+            Color.alphaBlend(
+              colors.heroEnd.withValues(alpha: 0.96),
+              colors.background,
+            ),
+          ]
+        : <Color>[
+            Color.alphaBlend(
+              colors.brandPrimaryDark.withValues(alpha: 0.12),
+              colors.heroStart,
+            ),
+            Color.alphaBlend(
+              colors.brandPrimaryDark.withValues(alpha: 0.08),
+              colors.heroMiddle,
+            ),
+            Color.alphaBlend(
+              colors.brandPrimaryDark.withValues(alpha: 0.12),
+              colors.heroEnd,
+            ),
+          ];
 
     return Scaffold(
       key: const Key('splash_page'),
@@ -104,11 +134,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           gradient: LinearGradient(
             begin: const Alignment(-0.65, -1),
             end: const Alignment(0.85, 1),
-            colors: <Color>[
-              colors.heroStart,
-              colors.heroMiddle,
-              colors.heroEnd,
-            ],
+            colors: splashGradientColors,
             stops: const <double>[0, 0.5, 1],
           ),
         ),
@@ -148,9 +174,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                         return Stack(
                           fit: StackFit.expand,
                           children: <Widget>[
-                            Container(
-                              color: onDark.withValues(alpha: 0.18),
-                            ),
+                            Container(color: onDark.withValues(alpha: 0.18)),
                             FractionallySizedBox(
                               widthFactor: _progressController.value,
                               alignment: Alignment.centerLeft,

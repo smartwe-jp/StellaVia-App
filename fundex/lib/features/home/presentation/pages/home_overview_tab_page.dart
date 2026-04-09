@@ -86,10 +86,10 @@ class HomeOverviewTabPage extends ConsumerWidget {
     final reminders = <FundReminderData>[
       if (shouldShowMemberProfileReminder)
         FundReminderData(
-          leading: const Icon(
+          leading: Icon(
             Icons.warning_rounded,
             size: 18,
-            color: Color(0xFFFBBF24),
+            color: Theme.of(context).appColors.highlightGold,
           ),
           title: l10n.homeReminderProfileTitle,
           message: l10n.homeReminderProfileBody,
@@ -128,10 +128,10 @@ class HomeOverviewTabPage extends ConsumerWidget {
       if (!shouldShowMemberProfileReminder &&
           verificationStatus?.isRealPersonVerified == false)
         FundReminderData(
-          leading: const Icon(
+          leading: Icon(
             Icons.verified_user_outlined,
             size: 18,
-            color: Color(0xFFFBBF24),
+            color: Theme.of(context).appColors.highlightGold,
           ),
           title: l10n.homeReminderRealPersonVerificationTitle,
           message: l10n.homeReminderRealPersonVerificationBody,

@@ -26,7 +26,7 @@ void main() {
 
     expect(semanticColors, isNotNull);
     expect(semanticText, isNotNull);
-    expect(semanticColors!.brandPrimary, const Color(0xFF066FC9));
+    expect(semanticColors!.brandPrimary, const Color(0xFF0C1C50));
     expect(semanticColors.primary, AppColorTokens.fundexAccent);
     expect(theme.textTheme.titleSmall, isNotNull);
     expect(theme.textTheme.labelSmall, isNotNull);

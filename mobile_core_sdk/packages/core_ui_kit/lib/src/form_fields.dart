@@ -309,7 +309,7 @@ class _BaseInputFieldState extends State<_BaseInputField> {
         ? surfaceColor.withValues(alpha: 0.9)
         : surfaceColor.withValues(alpha: 0.92);
     final iconBg = hotelTheme.primaryButtonColor.withValues(
-      alpha: isDark ? 0.18 : 0.12,
+      alpha: isDark ? 0.24 : 0.12,
     );
     final iconColor = hotelTheme.primaryButtonColor;
     final hintStyle = appText.body.copyWith(

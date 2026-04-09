@@ -1,6 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+Color _resolveDialogTitleColor(BuildContext context) {
+  final theme = Theme.of(context);
+  return theme.dialogTheme.titleTextStyle?.color ??
+      theme.textTheme.titleLarge?.color ??
+      theme.colorScheme.onSurface;
+}
+
 class AppDialogAction<T> {
   const AppDialogAction({
     required this.label,
@@ -35,6 +42,7 @@ class AppDialogs {
         context: context,
         barrierDismissible: barrierDismissible,
         builder: (BuildContext dialogContext) {
+          final titleColor = _resolveDialogTitleColor(dialogContext);
           return CupertinoAlertDialog(
             title: Text(title),
             content: message == null ? null : Text(message),
@@ -43,7 +51,14 @@ class AppDialogs {
                 isDestructiveAction: action.isDestructive,
                 isDefaultAction: action.isDefaultAction,
                 onPressed: () => Navigator.of(dialogContext).pop(action.value),
-                child: Text(action.label),
+                child: Text(
+                  action.label,
+                  style: TextStyle(
+                    color: action.isDestructive
+                        ? CupertinoColors.systemRed.resolveFrom(dialogContext)
+                        : titleColor,
+                  ),
+                ),
               );
             }).toList(),
           );
@@ -55,15 +70,16 @@ class AppDialogs {
       context: context,
       barrierDismissible: barrierDismissible,
       builder: (BuildContext dialogContext) {
+        final titleColor = _resolveDialogTitleColor(dialogContext);
         return AlertDialog(
           title: Text(title),
           content: message == null ? null : Text(message),
           actions: actions.map((action) {
             final style = action.isDestructive
                 ? TextButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.error,
+                    foregroundColor: Theme.of(dialogContext).colorScheme.error,
                   )
-                : null;
+                : TextButton.styleFrom(foregroundColor: titleColor);
             return TextButton(
               style: style,
               onPressed: () => Navigator.of(dialogContext).pop(action.value),

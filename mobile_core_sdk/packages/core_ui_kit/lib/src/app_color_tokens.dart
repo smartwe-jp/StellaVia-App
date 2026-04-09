@@ -4,9 +4,9 @@ class AppColorTokens {
   const AppColorTokens._();
 
   // Corporate guideline palette extracted from the UI spec image.
-  static const Color brandPrimary = Color(0xFF066FC9);
-  static const Color brandPrimaryDark = Color(0xFF055399);
-  static const Color brandPrimaryBright = Color(0xFF1782E2);
+  static const Color brandPrimary = Color(0xFF0C1C50);
+  static const Color brandPrimaryDark = Color(0xFF09153B);
+  static const Color brandPrimaryBright = Color(0xFF5E7DE0);
   static const Color brandSecondaryTeal = Color(0xFF2495A3);
   static const Color brandAlert = Color(0xFFF9675F);
   static const Color brandNeutral = Color(0xFFE7E7E7);
@@ -17,10 +17,10 @@ class AppColorTokens {
   // from a single file instead of touching component code.
   static const Color fundexPrimaryDark = brandPrimaryDark;
   static const Color fundexPrimaryDarkDradient = brandPrimary;
-  static const Color fundexPrimaryDarkAlt = Color(0xFF04457F);
+  static const Color fundexPrimaryDarkAlt = Color(0xFF18306F);
   static const Color fundexAccent = brandPrimary;
-  static const Color fundexAccentLight = Color(0xFFD6EAF9);
-  static const Color fundexAccentSuperLight = Color(0xFFF2F8FD);
+  static const Color fundexAccentLight = Color(0xFFE2E8F7);
+  static const Color fundexAccentSuperLight = Color(0xFFF4F7FC);
   static const Color fundexAccentDradient = brandPrimaryBright;
   static const Color fundexAccentAlt = brandPrimaryBright;
   static const Color fundexSuccess = Color(0xFF10B981);
@@ -45,7 +45,7 @@ class AppColorTokens {
   static const Color fundexTextSecondary = Color(0xFF475569);
   static const Color fundexTextTertiary = Color(0xFF94A3B8);
   static const Color fundexDisabled = Color(0xFFCBD5E1);
-  static const Color fundexHighlightGold = Color(0xFFFBBF24);
+  static const Color fundexHighlightGold = Color(0xFFB8954F);
   static const Color fundexSurfaceInverse = Color(0xFF1E293B);
   static const Color fundexSurfaceInverseAlt = Color(0xFF334155);
 
@@ -82,9 +82,9 @@ class AppColorTokens {
   static const Color info = fundexAccent;
   static const Color infoLight = fundexAccentLight;
   static const Color infoSoft = fundexAccentSuperLight;
-  static const Color infoBorder = Color(0xFFBAE6FD);
-  static const Color infoStrong = Color(0xFF1D4ED8);
-  static const Color infoText = Color(0xFF1E3A8A);
+  static const Color infoBorder = Color(0xFFC7D2F0);
+  static const Color infoStrong = Color(0xFF1E3C91);
+  static const Color infoText = Color(0xFF152B68);
   static const Color successSoft = Color(0xFFF0FDF4);
   static const Color successBorder = Color(0xFFA7F3D0);
   static const Color successStrong = Color(0xFF047857);
