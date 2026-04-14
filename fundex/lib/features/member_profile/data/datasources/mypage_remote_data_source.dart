@@ -7,8 +7,8 @@ abstract class MyPageRemoteDataSource {
   Future<MyPageAccountStatisticDto> fetchAccountStatistic();
 
   Future<List<MyPageApplyRecordDto>> fetchApplyList({
-    int startPage = 1,
-    int limit = 20,
+    int? startPage,
+    int? limit,
     List<int>? statuses,
   });
 
@@ -90,8 +90,8 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
 
   @override
   Future<List<MyPageApplyRecordDto>> fetchApplyList({
-    int startPage = 1,
-    int limit = 20,
+    int? startPage,
+    int? limit,
     List<int>? statuses,
   }) async {
     return _apiClient.fetchApplyList(

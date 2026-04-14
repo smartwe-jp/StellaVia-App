@@ -67,15 +67,12 @@ void main() {
       expect(row.lockedList.first.lockedReason, equals('新規登録ボーナス ¥2,500'));
     });
 
-    test('fetchApplyList posts payload and parses rows envelope', () async {
+    test('fetchApplyList without params posts no body and parses rows', () async {
       final dio = _buildDio((options) async {
         expect(options.method, equals('POST'));
         expect(options.path, equals(UserInvestmentApiPaths.applyList));
         expect(options.extra['auth_required'], isTrue);
-        expect(
-          options.data,
-          equals(<String, dynamic>{'startPage': 1, 'limit': 20}),
-        );
+        expect(options.data, isNull);
         return _jsonOk(
           '{"msg":"success","code":200,"data":{"rows":[{"projecId":"p-1","projectName":"プレミアムレジデンス赤坂","status":2}]}}',
         );
@@ -87,6 +84,30 @@ void main() {
       expect(rows, hasLength(1));
       expect(rows.first.projectId, equals('p-1'));
       expect(rows.first.projectName, equals('プレミアムレジデンス赤坂'));
+      expect(rows.first.status, equals(2));
+    });
+
+    test('fetchApplyList posts only status filter when provided', () async {
+      final dio = _buildDio((options) async {
+        expect(options.method, equals('POST'));
+        expect(options.path, equals(UserInvestmentApiPaths.applyList));
+        expect(options.extra['auth_required'], isTrue);
+        expect(
+          options.data,
+          equals(<String, dynamic>{
+            'status': <int>[2],
+          }),
+        );
+        return _jsonOk(
+          '{"msg":"success","code":200,"data":{"rows":[{"projectId":"p-2","projectName":"大阪レジデンス","status":2}]}}',
+        );
+      });
+      final api = UserInvestmentApiClient(dioForPath: (_) => dio);
+
+      final rows = await api.fetchApplyList(statuses: const <int>[2]);
+
+      expect(rows, hasLength(1));
+      expect(rows.first.projectId, equals('p-2'));
       expect(rows.first.status, equals(2));
     });
 

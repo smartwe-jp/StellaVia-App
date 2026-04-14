@@ -46,7 +46,8 @@ import '../../features/settings/presentation/pages/settings_operating_company_pa
 import '../../features/settings/presentation/pages/settings_phone_verification_page.dart';
 import '../../features/settings/presentation/pages/settings_two_factor_page.dart';
 import '../../features/settings/presentation/support/settings_contract_document_models.dart';
-import '../../features/wallet/presentation/pages/deposit_page.dart';
+import '../../features/wallet/presentation/pages/deposit_detail_page.dart';
+import '../../features/wallet/presentation/pages/deposit_list_page.dart';
 import '../../features/wallet/presentation/pages/withdraw_page.dart';
 import '../../features/wallet/presentation/pages/wallet_withdraw_confirm_page.dart';
 import '../../features/wallet/presentation/pages/wallet_withdraw_verify_page.dart';
@@ -488,8 +489,21 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/wallet/deposit',
         builder: (BuildContext context, GoRouterState state) {
-          return const DepositPage();
+          return const DepositListPage();
         },
+        routes: <RouteBase>[
+          GoRoute(
+            path: ':projectId',
+            builder: (BuildContext context, GoRouterState state) {
+              final projectId = state.pathParameters['projectId'] ?? '';
+              final extra = state.extra;
+              return DepositDetailPage(
+                projectId: projectId,
+                initialRecord: extra is MyPageApplyRecord ? extra : null,
+              );
+            },
+          ),
+        ],
       ),
       GoRoute(
         path: '/wallet/withdraw',

@@ -2518,6 +2518,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletDepositTitle => 'Deposit';
 
   @override
+  String get walletDepositDetailTitle => 'Deposit Details';
+
+  @override
   String get walletHistoryTitle => 'Deposit History';
 
   @override
@@ -2534,6 +2537,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletDedicatedAccountTitle => 'Your Dedicated Deposit Account';
+
+  @override
+  String get walletProjectDepositAccountTitle => 'Project Deposit Account';
 
   @override
   String get walletDedicatedAccountDescription =>
@@ -2728,6 +2734,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletDataLoadError => 'Failed to load deposit data.';
+
+  @override
+  String get walletPendingDepositEmptyMessage =>
+      'There are no projects requiring a deposit.';
+
+  @override
+  String get walletPendingDepositUnavailableMessage =>
+      'The application requiring a deposit could not be found.';
+
+  @override
+  String get walletProjectDepositAccountUnavailableMessage =>
+      'Failed to load the deposit account for this project.';
 
   @override
   String get walletWithdrawTitle => 'Withdraw Request';

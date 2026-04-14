@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/network/app_network_providers.dart';
+import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../data/datasources/wallet_remote_data_source.dart';
 import '../../data/repositories/wallet_repository_impl.dart';
@@ -197,4 +198,22 @@ final walletDepositPageViewDataProvider =
         standbyBalance: standbyBalance,
         recentHistory: preview,
       );
+    });
+
+final walletPendingDepositListProvider =
+    FutureProvider.autoDispose<List<MyPageApplyRecord>>((ref) async {
+      return ref
+          .watch(fetchMyPageApplyListUseCaseProvider)
+          .call(statuses: const <int>[2]);
+    });
+
+final walletPendingDepositRecordProvider = FutureProvider.autoDispose
+    .family<MyPageApplyRecord?, String>((ref, String projectId) async {
+      final records = await ref.watch(walletPendingDepositListProvider.future);
+      for (final record in records) {
+        if (record.projectId == projectId) {
+          return record;
+        }
+      }
+      return null;
     });

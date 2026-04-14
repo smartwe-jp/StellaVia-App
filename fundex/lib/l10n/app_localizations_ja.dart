@@ -2389,6 +2389,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletDepositTitle => '入金';
 
   @override
+  String get walletDepositDetailTitle => '入金詳細';
+
+  @override
   String get walletHistoryTitle => '入金履歴';
 
   @override
@@ -2405,6 +2408,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get walletDedicatedAccountTitle => 'お客様専用の入金口座';
+
+  @override
+  String get walletProjectDepositAccountTitle => '案件専用の入金口座';
 
   @override
   String get walletDedicatedAccountDescription =>
@@ -2590,6 +2596,16 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get walletDataLoadError => '入金情報の取得に失敗しました。';
+
+  @override
+  String get walletPendingDepositEmptyMessage => '入金が必要な案件はありません。';
+
+  @override
+  String get walletPendingDepositUnavailableMessage => '入金対象の申込情報が見つかりません。';
+
+  @override
+  String get walletProjectDepositAccountUnavailableMessage =>
+      'この案件の入金口座情報を取得できませんでした。';
 
   @override
   String get walletWithdrawTitle => '出金申請';

@@ -107,18 +107,19 @@ class UserInvestmentApiClient {
   }
 
   Future<List<UserInvestmentApplyRecordDto>> fetchApplyList({
-    int startPage = 1,
-    int limit = 20,
+    int? startPage,
+    int? limit,
     List<int>? statuses,
   }) async {
+    final body = <String, dynamic>{
+      if (startPage != null) 'startPage': startPage,
+      if (limit != null) 'limit': limit,
+      if (statuses != null && statuses.isNotEmpty) 'status': statuses,
+    };
     final response = await _dioForPath(applyListPath)
         .post<Map<String, dynamic>>(
           applyListPath,
-          data: <String, dynamic>{
-            'startPage': startPage,
-            'limit': limit,
-            if (statuses != null && statuses.isNotEmpty) 'status': statuses,
-          },
+          data: body.isEmpty ? null : body,
           options: authRequired(true),
         );
 

@@ -109,6 +109,12 @@ void main() {
           operatingCompany: '運営会社',
           operatingCompanyAccount: 127005,
           accountId: '48978',
+          liveJapanBank: FundProjectLiveJapanBankDto(
+            bankName: 'みずほ銀行',
+            branchBankName: '船場支店',
+            bankNumber: '普通3081072',
+            bankAccountOwnerName: '株式会社繁星優選 大阪2号',
+          ),
           detailData: <String, Object?>{'permitNumber': '東京都知事 第001号'},
         );
 
@@ -124,6 +130,9 @@ void main() {
       expect(entity.operatingCompany, '運営会社');
       expect(entity.operatingCompanyAccount, 127005);
       expect(entity.accountId, '48978');
+      expect(entity.liveJapanBank?.bankName, 'みずほ銀行');
+      expect(entity.liveJapanBank?.branchBankName, '船場支店');
+      expect(entity.liveJapanBank?.bankNumber, '普通3081072');
       expect(entity.detailData['permitNumber'], '東京都知事 第001号');
     });
 

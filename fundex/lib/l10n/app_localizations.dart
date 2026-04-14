@@ -4670,6 +4670,12 @@ abstract class AppLocalizations {
   /// **'Deposit'**
   String get walletDepositTitle;
 
+  /// No description provided for @walletDepositDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit Details'**
+  String get walletDepositDetailTitle;
+
   /// No description provided for @walletHistoryTitle.
   ///
   /// In en, this message translates to:
@@ -4705,6 +4711,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your Dedicated Deposit Account'**
   String get walletDedicatedAccountTitle;
+
+  /// No description provided for @walletProjectDepositAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Deposit Account'**
+  String get walletProjectDepositAccountTitle;
 
   /// No description provided for @walletDedicatedAccountDescription.
   ///
@@ -5059,6 +5071,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to load deposit data.'**
   String get walletDataLoadError;
+
+  /// No description provided for @walletPendingDepositEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no projects requiring a deposit.'**
+  String get walletPendingDepositEmptyMessage;
+
+  /// No description provided for @walletPendingDepositUnavailableMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The application requiring a deposit could not be found.'**
+  String get walletPendingDepositUnavailableMessage;
+
+  /// No description provided for @walletProjectDepositAccountUnavailableMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load the deposit account for this project.'**
+  String get walletProjectDepositAccountUnavailableMessage;
 
   /// No description provided for @walletWithdrawTitle.
   ///

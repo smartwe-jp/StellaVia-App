@@ -27,6 +27,7 @@ class FundProjectDto {
     this.periodType,
     this.times,
     this.accountId,
+    this.liveJapanBank,
     this.detailData = const <String, Object?>{},
     this.photos = const <String>[],
     this.investorTypes = const <FundProjectInvestorTypeDto>[],
@@ -72,6 +73,11 @@ class FundProjectDto {
       periodType: _normalizedOptionalString(json['periodType']),
       times: _intOrNull(json['times']),
       accountId: _normalizedOptionalString(json['accountId']),
+      liveJapanBank: _mapOrNull(json['liveJapanBank']) == null
+          ? null
+          : FundProjectLiveJapanBankDto.fromJson(
+              _mapOrNull(json['liveJapanBank'])!,
+            ),
       detailData: _detailDataFrom(json['detail']),
       photos: _photoUrlsFrom(json['photos']),
       investorTypes: _investorTypesFrom(json['investorTypeList']),
@@ -104,6 +110,7 @@ class FundProjectDto {
   final String? periodType;
   final int? times;
   final String? accountId;
+  final FundProjectLiveJapanBankDto? liveJapanBank;
   final Map<String, Object?> detailData;
   final List<String> photos;
   final List<FundProjectInvestorTypeDto> investorTypes;
@@ -341,6 +348,80 @@ class FundProjectInvestorTypeDto {
   final bool? isOpen;
   final int? isOpenType;
   final int? currentAmountApplication;
+}
+
+class FundProjectLiveJapanBankDto {
+  const FundProjectLiveJapanBankDto({
+    this.id,
+    this.bankType,
+    this.relatedId,
+    this.bankAccountOwnerName,
+    this.bankAccountOwnerAddress,
+    this.bankAccountOwnerNationality,
+    this.bankAccountSwiftCode,
+    this.bankName,
+    this.branchBankName,
+    this.branchBankAddress,
+    this.bankCountry,
+    this.branchBankNumber,
+    this.bankNumber,
+    this.bankAccountType,
+    this.liveType,
+  });
+
+  factory FundProjectLiveJapanBankDto.fromJson(Map<String, dynamic> json) {
+    return FundProjectLiveJapanBankDto(
+      id: FundProjectDto._normalizedOptionalString(json['id']),
+      bankType: FundProjectDto._intOrNull(json['bankType']),
+      relatedId: FundProjectDto._normalizedOptionalString(json['relatedId']),
+      bankAccountOwnerName: FundProjectDto._normalizedOptionalString(
+        json['bankAccountOwnerName'],
+      ),
+      bankAccountOwnerAddress: FundProjectDto._normalizedOptionalString(
+        json['bankAccountOwnerAddress'],
+      ),
+      bankAccountOwnerNationality: FundProjectDto._normalizedOptionalString(
+        json['bankAccountOwnerNationality'],
+      ),
+      bankAccountSwiftCode: FundProjectDto._normalizedOptionalString(
+        json['bankAccountSwiftCode'],
+      ),
+      bankName: FundProjectDto._normalizedOptionalString(json['bankName']),
+      branchBankName: FundProjectDto._normalizedOptionalString(
+        json['branchBankName'],
+      ),
+      branchBankAddress: FundProjectDto._normalizedOptionalString(
+        json['branchBankAddress'],
+      ),
+      bankCountry: FundProjectDto._normalizedOptionalString(
+        json['bankCountry'],
+      ),
+      branchBankNumber: FundProjectDto._normalizedOptionalString(
+        json['branchBankNumber'],
+      ),
+      bankNumber: FundProjectDto._normalizedOptionalString(json['bankNumber']),
+      bankAccountType: FundProjectDto._normalizedOptionalString(
+        json['bankAccountType'],
+      ),
+      liveType: FundProjectDto._intOrNull(json['liveType']),
+    );
+  }
+
+  final String? id;
+  final int? bankType;
+  final String? relatedId;
+  final String? bankAccountOwnerName;
+  final String? bankAccountOwnerAddress;
+  final String? bankAccountOwnerNationality;
+  final String? bankAccountSwiftCode;
+  final String? bankName;
+  final String? branchBankName;
+  final String? branchBankAddress;
+  final String? bankCountry;
+  final String? branchBankNumber;
+  final String? bankNumber;
+  final String? bankAccountType;
+  final int? liveType;
 }
 
 class FundProjectPdfDocumentDto {

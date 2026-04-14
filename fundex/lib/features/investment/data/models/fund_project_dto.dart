@@ -1,6 +1,7 @@
 export 'package:company_api_runtime/company_api_runtime.dart'
     show
         FundProjectDto,
+        FundProjectLiveJapanBankDto,
         FundProjectInvestorTypeDto,
         FundProjectPdfDocumentDto,
         FundProjectPdfUrlDto;
@@ -8,6 +9,7 @@ export 'package:company_api_runtime/company_api_runtime.dart'
 import 'package:company_api_runtime/company_api_runtime.dart'
     show
         FundProjectDto,
+        FundProjectLiveJapanBankDto,
         FundProjectInvestorTypeDto,
         FundProjectPdfDocumentDto,
         FundProjectPdfUrlDto;
@@ -42,6 +44,7 @@ extension FundProjectDtoMapper on FundProjectDto {
       periodType: periodType,
       times: times,
       accountId: accountId,
+      liveJapanBank: liveJapanBank?.toEntity(),
       detailData: Map<String, Object?>.unmodifiable(detailData),
       photos: List<String>.unmodifiable(photos),
       investorTypes: List<FundProjectInvestorType>.unmodifiable(
@@ -50,6 +53,28 @@ extension FundProjectDtoMapper on FundProjectDto {
       pdfDocuments: List<FundProjectPdfDocument>.unmodifiable(
         pdfDocuments.map((item) => item.toEntity()),
       ),
+    );
+  }
+}
+
+extension FundProjectLiveJapanBankDtoMapper on FundProjectLiveJapanBankDto {
+  FundProjectLiveJapanBank toEntity() {
+    return FundProjectLiveJapanBank(
+      id: id,
+      bankType: bankType,
+      relatedId: relatedId,
+      bankAccountOwnerName: bankAccountOwnerName,
+      bankAccountOwnerAddress: bankAccountOwnerAddress,
+      bankAccountOwnerNationality: bankAccountOwnerNationality,
+      bankAccountSwiftCode: bankAccountSwiftCode,
+      bankName: bankName,
+      branchBankName: branchBankName,
+      branchBankAddress: branchBankAddress,
+      bankCountry: bankCountry,
+      branchBankNumber: branchBankNumber,
+      bankNumber: bankNumber,
+      bankAccountType: bankAccountType,
+      liveType: liveType,
     );
   }
 }

@@ -92,7 +92,7 @@ void main() {
           expect(options.extra['auth_required'], isTrue);
 
           return _jsonOk(
-            '{"msg":"success","code":200,"data":{"id":"453461223669231137","projectName":"繁星優選Fund商品20241123","detail":"{\\"permitNumber\\":\\"東京都知事 第001号\\"}"}}',
+            '{"msg":"success","code":200,"data":{"id":"453461223669231137","projectName":"繁星優選Fund商品20241123","detail":"{\\"permitNumber\\":\\"東京都知事 第001号\\"}","liveJapanBank":{"id":"448371408253091840","bankName":"みずほ銀行","branchBankName":"船場支店","bankNumber":"普通3081072","bankAccountOwnerName":"株式会社繁星優選 大阪2号"}}}',
           );
         });
         final api = FundProjectApiClient(client);
@@ -101,6 +101,9 @@ void main() {
 
         expect(item.id, equals('453461223669231137'));
         expect(item.detailData['permitNumber'], equals('東京都知事 第001号'));
+        expect(item.liveJapanBank?.bankName, equals('みずほ銀行'));
+        expect(item.liveJapanBank?.branchBankName, equals('船場支店'));
+        expect(item.liveJapanBank?.bankNumber, equals('普通3081072'));
       },
     );
   });

@@ -2363,6 +2363,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletDepositTitle => '入金';
 
   @override
+  String get walletDepositDetailTitle => '入金详情';
+
+  @override
   String get walletHistoryTitle => '入金记录';
 
   @override
@@ -2379,6 +2382,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get walletDedicatedAccountTitle => '您的专用入金账户';
+
+  @override
+  String get walletProjectDepositAccountTitle => '项目专用入金账户';
 
   @override
   String get walletDedicatedAccountDescription =>
@@ -2559,6 +2565,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get walletDataLoadError => '入金信息读取失败。';
+
+  @override
+  String get walletPendingDepositEmptyMessage => '当前没有需要入金的项目。';
+
+  @override
+  String get walletPendingDepositUnavailableMessage => '未找到需要入金的申请信息。';
+
+  @override
+  String get walletProjectDepositAccountUnavailableMessage => '未能获取该项目的入金账户信息。';
 
   @override
   String get walletWithdrawTitle => '出金申请';
@@ -6134,6 +6149,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get walletDepositTitle => '入金';
 
   @override
+  String get walletDepositDetailTitle => '入金詳情';
+
+  @override
   String get walletHistoryTitle => '入金紀錄';
 
   @override
@@ -6150,6 +6168,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletDedicatedAccountTitle => '您的專用入金帳戶';
+
+  @override
+  String get walletProjectDepositAccountTitle => '項目專用入金帳戶';
 
   @override
   String get walletDedicatedAccountDescription =>
@@ -6330,6 +6351,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletDataLoadError => '入金資訊讀取失敗。';
+
+  @override
+  String get walletPendingDepositEmptyMessage => '目前沒有需要入金的項目。';
+
+  @override
+  String get walletPendingDepositUnavailableMessage => '找不到需要入金的申請資訊。';
+
+  @override
+  String get walletProjectDepositAccountUnavailableMessage => '無法取得該項目的入金帳戶資訊。';
 
   @override
   String get walletWithdrawTitle => '出金申請';
