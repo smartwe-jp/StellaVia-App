@@ -55,7 +55,7 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
         ? summary.projectName
         : projectId;
     final statusLabel = resolveProjectStatusLabel(l10n, summary.projectStatus);
-    final canShowResale = summary.projectStatus == 4;
+    //final canShowResale = summary.projectStatus == 4;
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -66,34 +66,34 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
           onTap: () => context.pop(),
         ),
       ),
-      bottomNavigationBar: 
-      canShowResale ?
-      SafeArea(
-              top: false,
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                child: 
-                PrimaryCtaButton(
-                  label: l10n.myPageResaleTabOrder,
-                  onPressed: summary.processId == null
-                      ? null
-                      : () => context.push(
-                          '/my/secondary-market/sell',
-                          extra: MyPageSecondaryMarketSellSeed(
-                            projectId: projectId,
-                            projectName: projectName,
-                            fromProcessId: summary.processId!,
-                            availableUnits: summary.investNumRemaining ?? 0,
-                            investorCode: summary.investorCode,
-                            earningRatio: summary.earningRatio,
-                          ),
-                        ),
-                  backgroundColor: colors.danger,
-                  shadowColor: colors.danger.withValues(alpha: 0.5),
-                  horizontalPadding: 0,
-                  threeSideShadow: true,
-                ))):
-                null,
+      // bottomNavigationBar: 
+      // canShowResale ?
+      // SafeArea(
+      //         top: false,
+      //         child: Container(
+      //           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+      //           child: 
+      //           PrimaryCtaButton(
+      //             label: l10n.myPageResaleTabOrder,
+      //             onPressed: summary.processId == null
+      //                 ? null
+      //                 : () => context.push(
+      //                     '/my/secondary-market/sell',
+      //                     extra: MyPageSecondaryMarketSellSeed(
+      //                       projectId: projectId,
+      //                       projectName: projectName,
+      //                       fromProcessId: summary.processId!,
+      //                       availableUnits: summary.investNumRemaining ?? 0,
+      //                       investorCode: summary.investorCode,
+      //                       earningRatio: summary.earningRatio,
+      //                     ),
+      //                   ),
+      //             backgroundColor: colors.danger,
+      //             shadowColor: colors.danger.withValues(alpha: 0.5),
+      //             horizontalPadding: 0,
+      //             threeSideShadow: true,
+      //           ))):
+      //           null,
             
       body: RefreshIndicator(
         onRefresh: () => _refresh(ref, projectId: projectId),

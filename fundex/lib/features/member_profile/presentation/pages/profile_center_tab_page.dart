@@ -53,7 +53,7 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
       loanTypeFunds,
     );
     final applyAsync = ref.watch(myPagePendingApplyListProvider);
-    final orderInquiryAsync = ref.watch(myPageOrderInquiryListProvider);
+    //final orderInquiryAsync = ref.watch(myPageOrderInquiryListProvider);
     final investmentAsync = ref.watch(myPageInvestmentListProvider);
     final investmentRecords = investmentAsync.asData?.value;
     final fundProjects =
@@ -142,7 +142,7 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                     context,
                     ref,
                     applyAsync: applyAsync,
-                    orderInquiryAsync: orderInquiryAsync,
+                    //orderInquiryAsync: orderInquiryAsync,
                     investmentAsync: investmentAsync,
                     currencyFormatter: currencyFormatter,
                     fundProjectsById: fundProjectsById,
@@ -204,7 +204,7 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
     BuildContext context,
     WidgetRef ref, {
     required AsyncValue<List<MyPageApplyRecord>> applyAsync,
-    required AsyncValue<List<MyPageOrderInquiryRecord>> orderInquiryAsync,
+    // required AsyncValue<List<MyPageOrderInquiryRecord>> orderInquiryAsync,
     required AsyncValue<List<MyPageInvestmentRecord>> investmentAsync,
     required NumberFormat currencyFormatter,
     required Map<String, FundProject> fundProjectsById,
@@ -222,24 +222,24 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
       );
     }
 
-    if (_shouldShowHomeOrderInquirySection(
-      orderInquiryAsync,
-      _hiddenOrderInquiryIds,
-    )) {
-      if (children.isNotEmpty) {
-        children.add(const SizedBox(height: UiTokens.spacing12));
-      }
-      children.add(
-        _buildCoolingOffSection(
-          context,
-          ref,
-          asyncValue: orderInquiryAsync,
-          formatter: currencyFormatter,
-          hiddenOrderInquiryIds: _hiddenOrderInquiryIds,
-          onWithdrawTap: (record) => _handleOrderWithdraw(context, ref, record),
-        ),
-      );
-    }
+    // if (_shouldShowHomeOrderInquirySection(
+    //   orderInquiryAsync,
+    //   _hiddenOrderInquiryIds,
+    // )) {
+    //   if (children.isNotEmpty) {
+    //     children.add(const SizedBox(height: UiTokens.spacing12));
+    //   }
+    //   children.add(
+    //     _buildCoolingOffSection(
+    //       context,
+    //       ref,
+    //       asyncValue: orderInquiryAsync,
+    //       formatter: currencyFormatter,
+    //       hiddenOrderInquiryIds: _hiddenOrderInquiryIds,
+    //       onWithdrawTap: (record) => _handleOrderWithdraw(context, ref, record),
+    //     ),
+    //   );
+    // }
 
     if (children.isNotEmpty) {
       children.add(const SizedBox(height: UiTokens.spacing12));

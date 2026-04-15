@@ -175,23 +175,23 @@ class HomeOverviewTabPage extends ConsumerWidget {
           ),
         )
         .toList(growable: false);
-    final secondaryMarketCards = secondaryMarketRecords
-        .take(4)
-        .map(
-          (MyPageOrderInquiryRecord record) => FundSecondaryMarketCard(
-            fillHeight: true,
-            data: _buildSecondaryMarketCardData(
-              context,
-              record,
-              currencyFormatter,
-            ),
-            actionLabel: l10n.secondaryMarketBuyAction,
-            yieldLabel: l10n.homeEstimatedYieldLabel,
-            soldUnitsTitle: l10n.homeFreeMarketSoldUnitsLabel,
-            unitPriceTitle: l10n.homeFreeMarketUnitPriceLabel,
-          ),
-        )
-        .toList(growable: false);
+    // final secondaryMarketCards = secondaryMarketRecords
+    //     .take(4)
+    //     .map(
+    //       (MyPageOrderInquiryRecord record) => FundSecondaryMarketCard(
+    //         fillHeight: true,
+    //         data: _buildSecondaryMarketCardData(
+    //           context,
+    //           record,
+    //           currencyFormatter,
+    //         ),
+    //         actionLabel: l10n.secondaryMarketBuyAction,
+    //         yieldLabel: l10n.homeEstimatedYieldLabel,
+    //         soldUnitsTitle: l10n.homeFreeMarketSoldUnitsLabel,
+    //         unitPriceTitle: l10n.homeFreeMarketUnitPriceLabel,
+    //       ),
+    //     )
+    //     .toList(growable: false);
     final loadError = asyncProjects.asError;
 
     final topSection = switch ((authState.isLoading, isAuthenticated)) {
@@ -322,19 +322,19 @@ class HomeOverviewTabPage extends ConsumerWidget {
                       height: 272,
                       children: featuredFundCards,
                     ),
-                  if (secondaryMarketCards.isNotEmpty)
-                    FundFeaturedFundCarousel(
-                      title: l10n.homeFreeMarketTitle,
-                      // leading: Icon(
-                      //   Icons.storefront_rounded,
-                      //   size: 18,
-                      //   color: Theme.of(context).appColors.warningAction,
-                      // ),
-                      actionLabel: l10n.homeViewAllAction,
-                      onActionTap: () => context.push('/home/free-market'),
-                      height: 262,
-                      children: secondaryMarketCards,
-                    ),
+                  // if (secondaryMarketCards.isNotEmpty)
+                  //   FundFeaturedFundCarousel(
+                  //     title: l10n.homeFreeMarketTitle,
+                  //     // leading: Icon(
+                  //     //   Icons.storefront_rounded,
+                  //     //   size: 18,
+                  //     //   color: Theme.of(context).appColors.warningAction,
+                  //     // ),
+                  //     actionLabel: l10n.homeViewAllAction,
+                  //     onActionTap: () => context.push('/home/free-market'),
+                  //     height: 262,
+                  //     children: secondaryMarketCards,
+                  //   ),
                   if (activeFundCards.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(
