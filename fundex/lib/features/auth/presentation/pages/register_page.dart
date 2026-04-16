@@ -426,9 +426,9 @@ class _RegisterPolicyRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final accentColor = theme.colorScheme.primary;
-    final borderColor =
-        (theme.extension<AppFTKTheme>()?.cardBorderColor ?? theme.dividerColor)
-            .withValues(alpha: 0.9);
+    final borderColor = 
+    (theme.extension<AppFTKTheme>()?.cardBorderColor ?? theme.dividerColor)
+        .withValues(alpha: 0.9);
 
     return Material(
       color: Colors.transparent,
@@ -460,11 +460,7 @@ class _RegisterPolicyRow extends StatelessWidget {
                   color: checked ? accentColor : Colors.transparent,
                 ),
                 child: checked
-                    ? Icon(
-                        Icons.check,
-                        size: 14,
-                        color: theme.appColors.onDark,
-                      )
+                    ? Icon(Icons.check, size: 14, color: theme.appColors.onDark)
                     : null,
               ),
               const SizedBox(width: UiTokens.spacing8),

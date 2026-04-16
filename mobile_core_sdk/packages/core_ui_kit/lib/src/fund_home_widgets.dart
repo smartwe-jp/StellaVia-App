@@ -746,6 +746,8 @@ _FundReminderPalette _paletteFor(BuildContext context, FundReminderTone tone) {
 
   switch (tone) {
     case FundReminderTone.danger:
+    case FundReminderTone.warning:
+    case FundReminderTone.info:
       return _FundReminderPalette(
         backgroundGradientColors: <Color>[
           colors.dangerSubtle,
@@ -762,37 +764,37 @@ _FundReminderPalette _paletteFor(BuildContext context, FundReminderTone tone) {
         actionTextColor: colors.dangerForeground,
         actionBorderColor: colors.dangerBorder,
       );
-    case FundReminderTone.warning:
-      return _FundReminderPalette(
-        backgroundGradientColors: <Color>[
-          colors.warningSubtle,
-          colors.warningSoft,
-        ],
-        borderColor: colors.warningBorder,
-        titleColor: colors.warning,
-        messageColor: colors.warningForeground,
-        dotColor: colors.warning,
-        badgeBackgroundColor: colors.warning,
-        badgeForegroundColor: colors.onDark,
-        progressTrackColor: colors.warningSubtle,
-        progressFillColor: colors.warning,
-        actionTextColor: colors.warningAction,
-        actionBorderColor: colors.warningBorder,
-      );
-    case FundReminderTone.info:
-      return _FundReminderPalette(
-        backgroundGradientColors: <Color>[colors.infoSubtle, colors.infoSoft],
-        borderColor: colors.infoBorder,
-        titleColor: colors.info,
-        messageColor: colors.infoForeground,
-        dotColor: colors.info,
-        badgeBackgroundColor: colors.info,
-        badgeForegroundColor: colors.onDark,
-        progressTrackColor: colors.infoSubtle,
-        progressFillColor: colors.info,
-        actionTextColor: colors.infoForeground,
-        actionBorderColor: colors.infoBorder,
-      );
+    // case FundReminderTone.warning:
+    //   return _FundReminderPalette(
+    //     backgroundGradientColors: <Color>[
+    //       colors.warningSubtle,
+    //       colors.warningSoft,
+    //     ],
+    //     borderColor: colors.warningBorder,
+    //     titleColor: colors.warning,
+    //     messageColor: colors.warningForeground,
+    //     dotColor: colors.warning,
+    //     badgeBackgroundColor: colors.warning,
+    //     badgeForegroundColor: colors.onDark,
+    //     progressTrackColor: colors.warningSubtle,
+    //     progressFillColor: colors.warning,
+    //     actionTextColor: colors.warningAction,
+    //     actionBorderColor: colors.warningBorder,
+    //   );
+    // case FundReminderTone.info:
+    //   return _FundReminderPalette(
+    //     backgroundGradientColors: <Color>[colors.infoSubtle, colors.infoSoft],
+    //     borderColor: colors.infoBorder,
+    //     titleColor: colors.info,
+    //     messageColor: colors.infoForeground,
+    //     dotColor: colors.info,
+    //     badgeBackgroundColor: colors.info,
+    //     badgeForegroundColor: colors.onDark,
+    //     progressTrackColor: colors.infoSubtle,
+    //     progressFillColor: colors.info,
+    //     actionTextColor: colors.infoForeground,
+    //     actionBorderColor: colors.infoBorder,
+    //   );
   }
 }
 

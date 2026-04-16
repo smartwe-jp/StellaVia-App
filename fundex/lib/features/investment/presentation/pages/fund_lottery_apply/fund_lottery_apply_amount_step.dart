@@ -70,13 +70,13 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
           title,
           style: appText.sectionTitle.copyWith(color: colors.textPrimary),
         ),
-        const SizedBox(height: 18),
-        _BalanceCard(
-          label: balanceLabel,
-          value: balanceValue,
-          actionLabel: depositActionLabel,
-          onTap: onDepositTap,
-        ),
+        // const SizedBox(height: 18),
+        // _BalanceCard(
+        //   label: balanceLabel,
+        //   value: balanceValue,
+        //   actionLabel: depositActionLabel,
+        //   onTap: onDepositTap,
+        // ),
         const SizedBox(height: 18),
         DecoratedBox(
           decoration: BoxDecoration(

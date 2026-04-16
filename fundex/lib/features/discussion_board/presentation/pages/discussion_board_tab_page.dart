@@ -322,12 +322,12 @@ class _DiscussionBoardTabPageState
               ),
               padding: EdgeInsets.zero,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                  child: KizunarkNoticeBanner(
-                    label: l10n.kizunarkInvestorOnlyNotice,
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                //   child: KizunarkNoticeBanner(
+                //     label: l10n.kizunarkInvestorOnlyNotice,
+                //   ),
+                // ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                   child: isAuthenticated

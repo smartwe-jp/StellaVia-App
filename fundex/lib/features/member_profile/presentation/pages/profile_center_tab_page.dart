@@ -121,8 +121,8 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                 quickActions: <FundMyPageQuickActionData>[
                   FundMyPageQuickActionData(
                     label: l10n.myPageDepositAction,
-                    backgroundColor: colors.infoSubtle,
-                    foregroundColor: colors.primary,
+                    backgroundColor: colors.highlightGold,
+                    foregroundColor: colors.infoSubtle,
                     onTap: () => context.push('/wallet/deposit'),
                   ),
                   FundMyPageQuickActionData(
@@ -172,33 +172,33 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
     });
   }
 
-  Future<void> _handleOrderWithdraw(
-    BuildContext context,
-    WidgetRef ref,
-    MyPageOrderInquiryRecord record,
-  ) async {
-    final processId = resolveOrderInquiryWithdrawProcessId(record);
-    final orderId = record.id?.trim();
-    final sellNum = record.sellNum;
-    final price = record.price?.toInt();
-    if (processId == null ||
-        orderId == null ||
-        sellNum == null ||
-        price == null) {
-      return;
-    }
-    await confirmAndSubmitMyPageSecondaryMarketInvalidate(
-      context,
-      ref,
-      id: orderId,
-      fromProcessId: processId,
-      sellNum: sellNum,
-      price: price,
-      thisTimeSoldNum: record.soldNum ?? 0,
-      confirmBody: context.l10n.myPageWithdrawOrderConfirmBody,
-      onSuccessRefresh: () => _hideOrderInquiryRecord(orderId),
-    );
-  }
+  // Future<void> _handleOrderWithdraw(
+  //   BuildContext context,
+  //   WidgetRef ref,
+  //   MyPageOrderInquiryRecord record,
+  // ) async {
+  //   final processId = resolveOrderInquiryWithdrawProcessId(record);
+  //   final orderId = record.id?.trim();
+  //   final sellNum = record.sellNum;
+  //   final price = record.price?.toInt();
+  //   if (processId == null ||
+  //       orderId == null ||
+  //       sellNum == null ||
+  //       price == null) {
+  //     return;
+  //   }
+  //   await confirmAndSubmitMyPageSecondaryMarketInvalidate(
+  //     context,
+  //     ref,
+  //     id: orderId,
+  //     fromProcessId: processId,
+  //     sellNum: sellNum,
+  //     price: price,
+  //     thisTimeSoldNum: record.soldNum ?? 0,
+  //     confirmBody: context.l10n.myPageWithdrawOrderConfirmBody,
+  //     onSuccessRefresh: () => _hideOrderInquiryRecord(orderId),
+  //   );
+  // }
 
   List<Widget> _buildSectionChildren(
     BuildContext context,

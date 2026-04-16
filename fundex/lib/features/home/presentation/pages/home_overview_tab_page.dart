@@ -55,9 +55,9 @@ class HomeOverviewTabPage extends ConsumerWidget {
         .asData
         ?.value;
     final asyncProjects = ref.watch(fundProjectListProvider);
-    final asyncSecondaryMarketRecords = ref.watch(
-      secondaryMarketMarketplaceListProvider,
-    );
+    // final asyncSecondaryMarketRecords = ref.watch(
+    //   secondaryMarketMarketplaceListProvider,
+    // );
     final asyncMemberProfile = ref.watch(memberProfileDetailsProvider);
     final asyncVerificationStatus = ref.watch(
       settingsRemoteVerificationStatusProvider,
@@ -69,9 +69,9 @@ class HomeOverviewTabPage extends ConsumerWidget {
     final memberProfile = asyncMemberProfile.asData?.value;
     final verificationStatus = asyncVerificationStatus.asData?.value;
     final projects = asyncProjects.asData?.value ?? const <FundProject>[];
-    final secondaryMarketRecords =
-        asyncSecondaryMarketRecords.asData?.value ??
-        const <MyPageOrderInquiryRecord>[];
+    // final secondaryMarketRecords =
+    //     asyncSecondaryMarketRecords.asData?.value ??
+    //     const <MyPageOrderInquiryRecord>[];
     final locale = Localizations.localeOf(context);
     final currencyFormatter = NumberFormat.currency(
       locale: locale.toLanguageTag(),

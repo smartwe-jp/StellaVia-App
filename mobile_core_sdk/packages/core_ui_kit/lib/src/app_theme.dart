@@ -494,9 +494,9 @@ class AppThemeFactory {
       floatingIconShadowColor: Colors.black.withValues(
         alpha: isDark ? 0.24 : 0.10,
       ),
-      cardBorderColor: isDark
-          ? outline.withValues(alpha: 0.85)
-          : AppColorTokens.travelBorderSoft,
+      cardBorderColor:  isDark
+          ? AppColorTokens.darkBorderSoft
+          : AppColorTokens.lightBorderSoft,
       cardTileShadowColor: Colors.black.withValues(alpha: isDark ? 0.22 : 0.10),
       amenityHighlightedShadowColor: Colors.black.withValues(
         alpha: isDark ? 0.26 : 0.10,
