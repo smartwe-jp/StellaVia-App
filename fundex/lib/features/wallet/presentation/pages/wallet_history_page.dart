@@ -245,7 +245,7 @@ Color _resolveHistoryAmountColor({
   if (isIncome == null) {
     return colors.textSecondary;
   }
-  return isIncome ? colors.success : colors.textPrimary;
+  return isIncome ? colors.highlightGold : colors.textPrimary;
 }
 
 IconData _resolveHistoryIcon({required bool? isIncome}) {
@@ -262,7 +262,7 @@ Color _resolveHistoryIconBackground({
   if (isIncome == null) {
     return colors.surfaceAlt;
   }
-  return isIncome ? colors.successSubtle : colors.dangerSubtle;
+  return isIncome ? colors.primarySubtle : colors.dangerSubtle;
 }
 
 Color _resolveHistoryIconColor({
@@ -272,7 +272,7 @@ Color _resolveHistoryIconColor({
   if (isIncome == null) {
     return colors.textSecondary;
   }
-  return isIncome ? colors.success : colors.danger;
+  return isIncome ? colors.primary : colors.danger;
 }
 
 String _formatDateText(String? value) {

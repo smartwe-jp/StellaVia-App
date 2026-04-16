@@ -607,10 +607,16 @@ class AppThemeFactory {
       tertiary: semanticColors.success,
       onTertiary: Colors.white,
     );
+    final inputFillColor = isDark
+        ? surface.withValues(alpha: 0.72)
+        : surface;
+    final inputOutlineColor = isDark
+        ? outline
+        : semanticColors.primary.withValues(alpha: 0.22);
 
     final inputBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(UiTokens.radius12),
-      borderSide: BorderSide(color: outline, width: 1.5),
+      borderSide: BorderSide(color: inputOutlineColor, width: 1.5),
     );
     final statusBarOverlayStyle = statusBarOverlayStyleFor(brightness);
 
@@ -649,7 +655,7 @@ class AppThemeFactory {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: isDark ? surface.withValues(alpha: 0.72) : surface,
+        fillColor: inputFillColor,
         hintStyle: semanticTextTheme.helper.copyWith(
           color: semanticColors.textTertiary,
         ),

@@ -223,8 +223,8 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                   onPressed: onReportDeposit,
                   isLoading: isReportingDeposit,
                   horizontalPadding: 0,
-                  backgroundColor: colors.success,
-                  shadowColor: colors.success.withValues(alpha: 0.34),
+                  backgroundColor: colors.primary,
+                  shadowColor: colors.primary.withValues(alpha: 0.34),
                 ),
                 const SizedBox(height: 16),
                 OutlinedButton(

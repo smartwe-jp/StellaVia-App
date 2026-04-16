@@ -272,7 +272,8 @@ class FundWalletStandbyBalanceCard extends StatelessWidget {
                         (entry) => _FundWalletBalanceHistoryRow(
                           label: entry.value.label,
                           value: entry.value.value,
-                          valueColor: entry.value.valueColor ?? colors.success,
+                          valueColor:
+                              entry.value.valueColor ?? colors.highlightGold,
                           isLast: entry.key == entries.length - 1,
                         ),
                       )
@@ -451,7 +452,8 @@ class FundWalletHistoryListItem extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
-    final amountColor = isPositive ? colors.success : colors.textPrimary;
+    final amountColor =
+        isPositive ? colors.highlightGold : colors.textPrimary;
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: DecoratedBox(

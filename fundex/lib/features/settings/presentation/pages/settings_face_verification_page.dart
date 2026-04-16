@@ -306,10 +306,12 @@ class _SettingsFaceVerificationPageState
           Container(
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: verified ? colors.successSubtle : colors.surfaceAlt,
+              color: verified ? colors.primarySubtle : colors.surfaceAlt,
               borderRadius: BorderRadius.circular(UiTokens.radius16),
               border: Border.all(
-                color: verified ? colors.successBorder : colors.border,
+                color: verified
+                    ? colors.primary.withValues(alpha: 0.22)
+                    : colors.border,
               ),
             ),
             child: Row(
@@ -319,7 +321,7 @@ class _SettingsFaceVerificationPageState
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: verified ? colors.success : colors.primarySubtle,
+                    color: verified ? colors.primary : colors.primarySubtle,
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Icon(
@@ -340,7 +342,7 @@ class _SettingsFaceVerificationPageState
                             ? l10n.settingsVerificationStatusVerified
                             : l10n.settingsFaceVerificationTitle,
                         style: appText.cardTitle.copyWith(
-                          color: verified ? colors.success : colors.textPrimary,
+                          color: verified ? colors.primary : colors.textPrimary,
                         ),
                       ),
                       const SizedBox(height: 6),

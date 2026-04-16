@@ -171,6 +171,9 @@ class VerificationCodeField extends StatelessWidget {
     this.inputKey,
     this.sendButtonKey,
     this.buttonWidth = 126,
+    this.sendButtonBackgroundColor,
+    this.sendButtonForegroundColor,
+    this.sendButtonFilled = false,
     this.autofillHints = const <String>[AutofillHints.oneTimeCode],
   });
 
@@ -185,6 +188,9 @@ class VerificationCodeField extends StatelessWidget {
   final Key? inputKey;
   final Key? sendButtonKey;
   final double buttonWidth;
+  final Color? sendButtonBackgroundColor;
+  final Color? sendButtonForegroundColor;
+  final bool sendButtonFilled;
   final Iterable<String> autofillHints;
 
   @override
@@ -218,6 +224,9 @@ class VerificationCodeField extends StatelessWidget {
               label: sendCodeLabel,
               width: buttonWidth,
               isLoading: isSendingCode,
+              backgroundColor: sendButtonBackgroundColor,
+              foregroundColor: sendButtonForegroundColor,
+              filledBackground: sendButtonFilled,
               onPressed: enabled ? onSendCode : null,
             ),
           ],
@@ -328,9 +337,11 @@ class _BaseInputFieldState extends State<_BaseInputField> {
           : colors.scrim.withValues(alpha: 0.06),
       defaultBorderColor: isDark
           ? hotelTheme.cardBorderColor.withValues(alpha: 0.88)
-          : hotelTheme.cardBorderColor.withValues(alpha: 1),
+          : colors.primary.withValues(alpha: 0.22),
       focusedBorderColor: hotelTheme.primaryButtonColor,
-      disabledBorderColor: hotelTheme.cardBorderColor.withValues(alpha: 0.45),
+      disabledBorderColor: isDark
+          ? hotelTheme.cardBorderColor.withValues(alpha: 0.45)
+          : colors.primary.withValues(alpha: 0.12),
       child: Row(
         children: <Widget>[
           Container(

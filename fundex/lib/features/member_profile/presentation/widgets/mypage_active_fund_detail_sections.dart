@@ -195,7 +195,9 @@ class ActiveFundOverviewHeroCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: colors.surface.withValues(alpha: 0.9),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: colors.successBorder),
+                    border: Border.all(
+                      color: colors.primary.withValues(alpha: 0.18),
+                    ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,12 +210,15 @@ class ActiveFundOverviewHeroCard extends StatelessWidget {
                       ),
                       
                       const SizedBox(height: 8),
-                      Divider(height: 1, color: colors.successBorder),
+                      Divider(
+                        height: 1,
+                        color: colors.primary.withValues(alpha: 0.18),
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         totalHistoricalBenefitValue,
                         style: appText.numericTitle.copyWith(
-                          color: colors.success,
+                          color: colors.highlightGold,
                           height: 1.0,
                         ),
                       ),
@@ -363,10 +368,10 @@ class ActiveFundBenefitBalanceCard extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: <Color>[colors.successSubtle, colors.surface],
+          colors: <Color>[colors.primarySubtle, colors.surface],
         ),
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: colors.successBorder),
+        border: Border.all(color: colors.primary.withValues(alpha: 0.18)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
@@ -380,7 +385,7 @@ class ActiveFundBenefitBalanceCard extends StatelessWidget {
             Text(
               value,
               style: appText.numericHeadline.copyWith(
-                color: colors.success,
+                color: colors.highlightGold,
                 letterSpacing: 0.2,
               ),
             ),
@@ -470,9 +475,9 @@ class ActiveFundBenefitHistoryCard extends StatelessWidget {
                   child: _BenefitMetricTile(
                     label: netLabel,
                     value: netValue,
-                    valueColor: colors.success,
-                    backgroundColor: colors.successSubtle,
-                    borderColor: colors.successSubtle,
+                    valueColor: colors.highlightGold,
+                    backgroundColor: colors.primarySubtle,
+                    borderColor: colors.primarySubtle,
                   ),
                 ),
               ],

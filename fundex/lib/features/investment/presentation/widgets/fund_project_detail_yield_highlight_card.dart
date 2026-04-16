@@ -18,6 +18,18 @@ class FundProjectDetailYieldHighlightCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
+    final isDark = theme.brightness == Brightness.dark;
+    final backgroundStart = Color.alphaBlend(
+      colors.highlightGold.withValues(alpha: isDark ? 0.18 : 0.08),
+      colors.surfaceAlt,
+    );
+    final backgroundEnd = Color.alphaBlend(
+      colors.highlightGold.withValues(alpha: isDark ? 0.28 : 0.16),
+      colors.surface,
+    );
+    final borderColor = colors.highlightGold.withValues(
+      alpha: isDark ? 0.52 : 0.58,
+    );
 
     return Container(
       width: double.infinity,
@@ -26,9 +38,9 @@ class FundProjectDetailYieldHighlightCard extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: <Color>[colors.successSubtle, colors.successSoft],
+          colors: <Color>[backgroundStart, backgroundEnd],
         ),
-        border: Border.all(color: colors.successBorder, width: 1.5),
+        border: Border.all(color: borderColor, width: 1.5),
         borderRadius: BorderRadius.circular(UiTokens.radius16),
       ),
       child: Column(
@@ -71,13 +83,13 @@ class _YieldValueText extends StatelessWidget {
     final appText = theme.appTextTheme;
     final parsed = _parseYield(value);
     final numberStyle = appText.numericDisplay.copyWith(
-      color: colors.success,
+      color: colors.highlightGold,
       fontSize: 58,
       height: 0.95,
       letterSpacing: -1.2,
     );
     final suffixStyle = appText.numericTitle.copyWith(
-      color: colors.success,
+      color: colors.highlightGold,
       fontSize: 24,
       fontWeight: FontWeight.w900,
       height: 1.1,

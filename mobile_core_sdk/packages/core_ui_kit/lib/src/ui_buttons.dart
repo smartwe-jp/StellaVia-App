@@ -143,6 +143,9 @@ class CompactActionButton extends StatefulWidget {
     this.isLoading = false,
     this.width = 124,
     this.height = 52,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.filledBackground = false,
   });
 
   final String label;
@@ -150,6 +153,9 @@ class CompactActionButton extends StatefulWidget {
   final bool isLoading;
   final double width;
   final double height;
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+  final bool filledBackground;
 
   @override
   State<CompactActionButton> createState() => _CompactActionButtonState();
@@ -163,10 +169,13 @@ class _CompactActionButtonState extends State<CompactActionButton> {
     final theme = Theme.of(context);
     final appText = theme.appTextTheme;
     final hotelTheme = theme.extension<AppFTKTheme>()!;
-    final baseColor = hotelTheme.primaryButtonColor;
+    final baseColor = widget.backgroundColor ?? hotelTheme.primaryButtonColor;
+    final textColor =
+        widget.foregroundColor ??
+        (widget.filledBackground ? theme.colorScheme.onPrimary : baseColor);
     final isEnabled = widget.onPressed != null && !widget.isLoading;
     final radius = BorderRadius.circular(UiTokens.radius16);
-    final textStyle = appText.inputLabel.copyWith(color: baseColor);
+    final textStyle = appText.inputLabel.copyWith(color: textColor);
 
     return SizedBox(
       width: widget.width,
@@ -177,7 +186,11 @@ class _CompactActionButtonState extends State<CompactActionButton> {
         scale: 0.97,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: baseColor.withValues(alpha: isEnabled ? 0.12 : 0.06),
+            color: baseColor.withValues(
+              alpha: widget.filledBackground
+                  ? (isEnabled ? 1 : 0.42)
+                  : (isEnabled ? 0.12 : 0.06),
+            ),
             borderRadius: radius,
           ),
           child: Material(
@@ -201,7 +214,7 @@ class _CompactActionButtonState extends State<CompactActionButton> {
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           valueColor: AlwaysStoppedAnimation<Color>(
-                            baseColor.withValues(alpha: 0.92),
+                            textColor.withValues(alpha: 0.92),
                           ),
                         ),
                       )
@@ -209,7 +222,7 @@ class _CompactActionButtonState extends State<CompactActionButton> {
                         widget.label,
                         style: widget.onPressed == null
                             ? textStyle.copyWith(
-                                color: baseColor.withValues(alpha: 0.45),
+                                color: textColor.withValues(alpha: 0.45),
                               )
                             : textStyle,
                       ),

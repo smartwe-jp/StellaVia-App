@@ -211,6 +211,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final controller = ref.read(authControllerProvider.notifier);
     final theme = Theme.of(context);
     final hotelTheme = theme.extension<AppFTKTheme>();
+    final brandGold = theme.appColors.highlightGold;
     final titleStyle = (theme.textTheme.titleSmall ?? const TextStyle())
         .copyWith(fontWeight: FontWeight.bold);
     final effectiveErrorMessage =
@@ -266,37 +267,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SurfacePanelCard(
-                        title: l10n.loginModeTitle,
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: _LoginChannelChip(
-                                key: const Key('login_mode_email_button'),
-                                label: l10n.authModeEmail,
-                                icon: Icons.alternate_email_rounded,
-                                selected: _loginChannel == _LoginChannel.email,
-                                onTap: () => _switchLoginChannel(
-                                  _LoginChannel.email,
-                                  controller,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: UiTokens.spacing8),
-                            Expanded(
-                              child: _LoginChannelChip(
-                                key: const Key('login_mode_mobile_button'),
-                                label: l10n.authModeMobile,
-                                icon: Icons.phone_iphone_rounded,
-                                selected: _loginChannel == _LoginChannel.mobile,
-                                onTap: () => _switchLoginChannel(
-                                  _LoginChannel.mobile,
-                                  controller,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                      _LoginChannelSegmentedControl(
+                        emailButtonKey: const Key('login_mode_email_button'),
+                        mobileButtonKey: const Key('login_mode_mobile_button'),
+                        emailLabel: l10n.authModeEmail,
+                        mobileLabel: l10n.authModeMobile,
+                        selectedChannel: _loginChannel,
+                        onSelect: (_LoginChannel channel) =>
+                            _switchLoginChannel(channel, controller),
                       ),
                       const SizedBox(height: UiTokens.spacing12),
                       if (!_isEmailMode) ...<Widget>[
@@ -331,13 +309,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                       icon: Icons.send_rounded,
                                       size: 34,
                                       borderRadius: 10,
-                                      backgroundColor: theme.appColors.primary
-                                          .withValues(
-                                            alpha: canSendCode ? 0.12 : 0.06,
-                                          ),
+                                      backgroundColor: brandGold.withValues(
+                                        alpha: canSendCode ? 1 : 0.42,
+                                      ),
                                       foregroundColor: canSendCode
-                                          ? theme.appColors.primary
-                                          : theme.appColors.primary.withValues(
+                                          ? theme.appColors.onDark
+                                          : theme.appColors.onDark.withValues(
                                               alpha: 0.4,
                                             ),
                                       onTap: canSendCode
@@ -365,13 +342,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                       icon: Icons.send_rounded,
                                       size: 34,
                                       borderRadius: 10,
-                                      backgroundColor: theme.appColors.primary
-                                          .withValues(
-                                            alpha: canSendCode ? 0.12 : 0.06,
-                                          ),
+                                      backgroundColor: brandGold.withValues(
+                                        alpha: canSendCode ? 1 : 0.42,
+                                      ),
                                       foregroundColor: canSendCode
-                                          ? theme.appColors.primary
-                                          : theme.appColors.primary.withValues(
+                                          ? theme.appColors.onDark
+                                          : theme.appColors.onDark.withValues(
                                               alpha: 0.4,
                                             ),
                                       onTap: canSendCode
@@ -394,6 +370,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         inputKey: const Key('login_code_input'),
                         sendButtonKey: const Key('login_send_code_button'),
                         isSendingCode: state.isSendingCode,
+                        sendButtonBackgroundColor: brandGold,
+                        sendButtonForegroundColor: theme.appColors.onDark,
+                        sendButtonFilled: true,
                         onChanged: (String value) =>
                             _onCodeChanged(value, controller),
                         onSendCode: canSendCode
@@ -589,8 +568,183 @@ class _LoginHeroHeader extends StatelessWidget {
   }
 }
 
-class _LoginChannelChip extends StatelessWidget {
-  const _LoginChannelChip({
+class _LoginChannelSegmentedControl extends StatelessWidget {
+  const _LoginChannelSegmentedControl({
+    required this.emailButtonKey,
+    required this.mobileButtonKey,
+    required this.emailLabel,
+    required this.mobileLabel,
+    required this.selectedChannel,
+    required this.onSelect,
+  });
+
+  final Key emailButtonKey;
+  final Key mobileButtonKey;
+  final String emailLabel;
+  final String mobileLabel;
+  final _LoginChannel selectedChannel;
+  final ValueChanged<_LoginChannel> onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final isDark = theme.brightness == Brightness.dark;
+    final radius = BorderRadius.circular(18);
+    final selectedBackgroundColor = isDark
+        ? Color.alphaBlend(
+            colors.highlightGold.withValues(alpha: 0.20),
+            colors.surfaceAlt,
+          )
+        : Color.alphaBlend(
+            colors.highlightGold.withValues(alpha: 0.28),
+            colors.surface,
+          );
+    final containerBackgroundColor = colors.surfaceAlt;
+    final containerShadowColor = colors.scrim.withValues(
+      alpha: isDark ? 0 : 0.08,
+    );
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 180),
+      curve: Curves.easeOutCubic,
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: containerBackgroundColor,
+        borderRadius: radius,
+        border: Border.all(
+          color: isDark
+              ? colors.border
+              : colors.textPrimary.withValues(alpha: 0.12),
+        ),
+        boxShadow: isDark
+            ? const <BoxShadow>[]
+            : <BoxShadow>[
+                BoxShadow(
+                  color: containerShadowColor,
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+      ),
+      child: SizedBox(
+        height: 56,
+        child: Stack(
+          fit: StackFit.expand,
+          children: <Widget>[
+            AnimatedAlign(
+              duration: const Duration(milliseconds: 240),
+              curve: Curves.easeOutCubic,
+              alignment: selectedChannel == _LoginChannel.email
+                  ? Alignment.centerLeft
+                  : Alignment.centerRight,
+              child: FractionallySizedBox(
+                widthFactor: 0.5,
+                heightFactor: 1,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: selectedBackgroundColor,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+              ),
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: _LoginChannelSegmentButton(
+                    key: emailButtonKey,
+                    label: emailLabel,
+                    icon: Icons.alternate_email_rounded,
+                    selected: selectedChannel == _LoginChannel.email,
+                    onTap: () => onSelect(_LoginChannel.email),
+                  ),
+                ),
+                Expanded(
+                  child: _LoginChannelSegmentButton(
+                    key: mobileButtonKey,
+                    label: mobileLabel,
+                    icon: Icons.phone_android_rounded,
+                    selected: selectedChannel == _LoginChannel.mobile,
+                    onTap: () => onSelect(_LoginChannel.mobile),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LoginChannelSegmentButton extends StatelessWidget {
+  const _LoginChannelSegmentButton({
+    super.key,
+    required this.label,
+    required this.icon,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final isDark = theme.brightness == Brightness.dark;
+    final radius = BorderRadius.circular(14);
+    final selectedForegroundColor = isDark ? colors.onDark : colors.primary;
+    final idleForegroundColor = isDark
+        ? colors.textSecondary
+        : colors.textSecondary.withValues(alpha: 0.94);
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(borderRadius: radius),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              icon,
+              size: 17,
+              color: selected ? selectedForegroundColor : idleForegroundColor,
+            ),
+            const SizedBox(width: 8),
+            Flexible(
+              child: AnimatedDefaultTextStyle(
+                duration: const Duration(milliseconds: 180),
+                curve: Curves.easeOutCubic,
+                style: (theme.textTheme.labelLarge ?? const TextStyle())
+                    .copyWith(
+                      color: selected
+                          ? selectedForegroundColor
+                          : idleForegroundColor,
+                      fontWeight: FontWeight.w700,
+                    ),
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class LoginChannelLegacyChip extends StatelessWidget {
+  const LoginChannelLegacyChip({
     super.key,
     required this.label,
     required this.icon,

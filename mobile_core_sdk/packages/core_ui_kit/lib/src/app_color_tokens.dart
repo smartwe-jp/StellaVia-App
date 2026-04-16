@@ -7,6 +7,9 @@ class AppColorTokens {
   static const Color brandPrimary = Color(0xFF0C1C50);
   static const Color brandPrimaryDark = Color(0xFF09153B);
   static const Color brandPrimaryBright = Color(0xFF5E7DE0);
+  static const Color brandBaseCream = Color(0xFFEEE8E0);
+  static const Color brandBaseCreamLight = Color(0xFFF5F1EB);
+  static const Color brandBaseCreamLighter = Color(0xFFF8F4EF);
   static const Color brandSecondaryTeal = Color(0xFF2495A3);
   static const Color brandAlert = Color(0xFFF9675F);
   static const Color brandNeutral = Color(0xFFE7E7E7);
@@ -36,16 +39,20 @@ class AppColorTokens {
   static const Color kizunarkPrimary = brandPrimary;
   static const Color kizunarkSecondary = brandPrimaryBright;
   static const Color kizunarkPrimaryLight = fundexAccentSuperLight;
-  static const Color fundexBackground = Color(0xFFF8FBFD);
-  static const Color fundexSurface = brandWhite;
-  static const Color fundexSurfaceAlt = Color(0xFFFBFCFD);
-  static const Color fundexBorder = brandNeutral;
-  static const Color fundexBorderSoft = Color(0xFFF3F3F3);
+  // Light theme hierarchy:
+  // page background keeps the brand base cream, while cards/cells sit one level
+  // lighter so they still read as distinct layers within the same family.
+  static const Color fundexBackground = fundexBaseCream;
+  static const Color fundexSurface = brandBaseCreamLight;
+  static const Color fundexSurfaceAlt = brandBaseCreamLighter;
+  static const Color fundexBorder = Color(0xFFD2C09D);
+  static const Color fundexBorderSoft = Color(0xFFE3D7C3);
   static const Color fundexText = Color(0xFF0F172A);
   static const Color fundexTextSecondary = Color(0xFF475569);
   static const Color fundexTextTertiary = Color(0xFF94A3B8);
   static const Color fundexDisabled = Color(0xFFCBD5E1);
   static const Color fundexHighlightGold = Color(0xFFB8954F);
+  static const Color fundexBaseCream = brandBaseCream;
   static const Color fundexSurfaceInverse = Color(0xFF1E293B);
   static const Color fundexSurfaceInverseAlt = Color(0xFF334155);
 

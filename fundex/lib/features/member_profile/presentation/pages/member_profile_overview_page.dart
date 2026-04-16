@@ -912,8 +912,8 @@ _MemberProfileOverviewPresentation _resolveMemberProfileOverviewPresentation(
 ) {
   return switch (tone) {
     _MemberProfileOverviewStatusTone.success => (
-      colors.successSubtle,
-      colors.success,
+      colors.primarySubtle,
+      colors.primary,
     ),
     _MemberProfileOverviewStatusTone.danger => (
       colors.dangerSubtle,

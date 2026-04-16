@@ -473,6 +473,7 @@ FundActiveFundCardData _buildActiveFundCardData(
   return FundActiveFundCardData(
     title: project.projectName,
     annualYield: resolveFundProjectYieldDisplay(project),
+    annualYieldColor: Theme.of(context).appColors.highlightGold,
     rows: <FundLabeledValue>[
       FundLabeledValue(
         label: context.l10n.fundDetailFundTotalLabel,
@@ -503,8 +504,8 @@ FundSecondaryMarketCardData _buildSecondaryMarketCardData(
   return FundSecondaryMarketCardData(
     title: record.projectName,
     statusLabel: context.l10n.homeFreeMarketStatusListed,
-    statusBackgroundColor: colors.warningSubtle,
-    statusForegroundColor: colors.warningAction,
+    statusBackgroundColor: colors.primary,
+    statusForegroundColor: colors.onDark,
     annualYield: _formatYieldPercent(record.investorType?.earningsRadio),
     investorTypeLabel: investorCode != null && investorCode.isNotEmpty
         ? investorCode
@@ -582,8 +583,8 @@ FundFeaturedFundTagData? _buildMethodTag(
   }
   return FundFeaturedFundTagData(
     label: label,
-    backgroundColor: AppColorTokens.fundexPink.withValues(alpha: 0.85),
-    foregroundColor: Colors.white,
+    backgroundColor: Theme.of(context).appColors.onDark.withValues(alpha: 0.14),
+    foregroundColor: Theme.of(context).appColors.onDark.withValues(alpha: 0.92),
   );
 }
 
@@ -596,19 +597,6 @@ _FeaturedFundStatusPalette _resolveFeaturedStatusPalette(
   int? status,
 ) {
   final colors = Theme.of(context).appColors;
-  final isDark = Theme.of(context).brightness == Brightness.dark;
-  final openAccentColor = isDark
-      ? colors.success
-      : Color.alphaBlend(
-          colors.successForeground.withValues(alpha: 0.22),
-          colors.success,
-        );
-  final openTagBackgroundColor = isDark
-      ? colors.successSubtle
-      : Color.alphaBlend(
-          colors.successForeground.withValues(alpha: 0.10),
-          colors.successSubtle,
-        );
 
   switch (status) {
     case 4:
@@ -625,15 +613,15 @@ _FeaturedFundStatusPalette _resolveFeaturedStatusPalette(
       );
     case 1:
       return _FeaturedFundStatusPalette(
-        gradientColors: <Color>[colors.successForeground, openAccentColor],
-        tagBackgroundColor: openTagBackgroundColor,
-        tagForegroundColor: colors.successForeground,
+        gradientColors: <Color>[colors.brandPrimaryDark, colors.primary],
+        tagBackgroundColor: colors.highlightGold,
+        tagForegroundColor: colors.onDark,
       );
     case 0:
       return _FeaturedFundStatusPalette(
-        gradientColors: <Color>[colors.warningForeground, colors.warning],
-        tagBackgroundColor: colors.warningSubtle,
-        tagForegroundColor: colors.warningForeground,
+        gradientColors: <Color>[colors.brandPrimaryDark, colors.primary],
+        tagBackgroundColor: colors.surface,
+        tagForegroundColor: colors.primary,
       );
     case 3:
       return _FeaturedFundStatusPalette(
@@ -643,9 +631,9 @@ _FeaturedFundStatusPalette _resolveFeaturedStatusPalette(
       );
     case 7:
       return _FeaturedFundStatusPalette(
-        gradientColors: <Color>[colors.successForeground, colors.success],
-        tagBackgroundColor: colors.successSubtle,
-        tagForegroundColor: colors.successForeground,
+        gradientColors: <Color>[colors.primaryAlt, colors.primary],
+        tagBackgroundColor: colors.primarySubtle,
+        tagForegroundColor: colors.primary,
       );
     case 2:
       return _FeaturedFundStatusPalette(

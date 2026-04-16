@@ -421,6 +421,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
           project,
           fallbackRatio: group.earningRatio,
         ),
+        annualYieldColor: colors.highlightGold,
         rows: <FundLabeledValue>[
           FundLabeledValue(
             label: l10n.myPageInvestmentAmountLabel,
@@ -429,7 +430,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
           FundLabeledValue(
             label: l10n.myPageAccumulatedDistributionLabel,
             value: formatCurrency(group.earnings, formatter),
-            valueColor: colors.success,
+            valueColor: colors.highlightGold,
           ),
         ],
         onTap: _buildActiveFundTapHandler(context, group.projectId),

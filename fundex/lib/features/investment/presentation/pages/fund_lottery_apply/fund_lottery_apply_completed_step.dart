@@ -41,14 +41,14 @@ class FundLotteryApplyCompletedStep extends StatelessWidget {
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: colors.successSubtle,
+                    color: colors.primarySubtle,
                     borderRadius: BorderRadius.circular(40),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(12),
                     child: Icon(
                       Icons.check_rounded,
-                      color: colors.success,
+                      color: colors.primary,
                       size: 38,
                     ),
                   ),

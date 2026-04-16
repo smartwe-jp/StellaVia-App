@@ -61,25 +61,30 @@ class FundSecondaryMarketCard extends StatelessWidget {
     final headerGradientColors = isDark
         ? <Color>[
             Color.alphaBlend(
-              colors.warningSoft.withValues(alpha: 0.38),
+              colors.surface.withValues(alpha: 0.18),
               colors.surfaceAlt,
             ),
             Color.alphaBlend(
-              colors.primarySoft.withValues(alpha: 0.24),
+              colors.highlightGold.withValues(alpha: 0.22),
               colors.surface,
             ),
           ]
-        : <Color>[colors.primarySubtle, colors.warningSubtle];
+        : <Color>[
+            colors.surface,
+            Color.alphaBlend(
+              colors.highlightGold.withValues(alpha: 0.14),
+              colors.surface,
+            ),
+          ];
     final defaultStatusBackground = isDark
         ? Color.alphaBlend(
-            colors.warningSoft.withValues(alpha: 0.30),
+            colors.primary.withValues(alpha: 0.42),
             colors.surfaceAlt,
           )
-        : colors.primarySubtle;
-    final defaultStatusForeground = isDark
-        ? colors.warningForeground
         : colors.primary;
-    final headerTitleColor = isDark ? colors.onDark : colors.textPrimary;
+    final defaultStatusForeground = colors.onDark;
+    final headerTitleColor = isDark ? colors.onDark : colors.primary;
+    final cardBackgroundColor = colors.surface;
 
     return SizedBox(
       width: width,
@@ -97,7 +102,7 @@ class FundSecondaryMarketCard extends StatelessWidget {
             ],
           ),
           child: Material(
-            color: colors.surface,
+            color: cardBackgroundColor,
             shape: RoundedRectangleBorder(
               borderRadius: cardRadius,
               side: BorderSide(color: colors.border),
@@ -129,14 +134,16 @@ class FundSecondaryMarketCard extends StatelessWidget {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: data.statusBackgroundColor ??
+                              color:
+                                  data.statusBackgroundColor ??
                                   defaultStatusBackground,
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
                               data.statusLabel!,
                               style: appText.micro.copyWith(
-                                color: data.statusForegroundColor ??
+                                color:
+                                    data.statusForegroundColor ??
                                     defaultStatusForeground,
                               ),
                             ),
@@ -171,6 +178,9 @@ class FundSecondaryMarketCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
+    final actionBackgroundColor = theme.brightness == Brightness.dark
+        ? colors.highlightGold.withValues(alpha: 0.16)
+        : colors.highlightGold.withValues(alpha: 0.08);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
@@ -193,7 +203,7 @@ class FundSecondaryMarketCard extends StatelessWidget {
                     Text(
                       data.annualYield,
                       style: appText.numericHeadline.copyWith(
-                        color: colors.success,
+                        color: colors.highlightGold,
                         height: 1.0,
                       ),
                     ),
@@ -232,12 +242,12 @@ class FundSecondaryMarketCard extends StatelessWidget {
               onPressed: data.onTap,
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size.fromHeight(38),
-                side: BorderSide(color: colors.warningAction),
+                side: BorderSide(color: colors.highlightGold),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                foregroundColor: colors.warningAction,
-                backgroundColor: colors.warningSubtle.withValues(alpha: 0.28),
+                foregroundColor: colors.highlightGold,
+                backgroundColor: actionBackgroundColor,
                 textStyle: appText.button,
                 padding: const EdgeInsets.symmetric(horizontal: 12),
               ),

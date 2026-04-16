@@ -115,7 +115,7 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                               ? null
                               : _sumInvestmentEarnings(investmentRecords)),
                     ),
-                    valueColor: colors.success,
+                    valueColor: colors.highlightGold,
                   ),
                 ],
                 quickActions: <FundMyPageQuickActionData>[
@@ -467,6 +467,7 @@ Widget _buildActiveFundsSection(
                   project,
                   fallbackRatio: group.earningRatio,
                 ),
+                annualYieldColor: colors.highlightGold,
                 rows: <FundLabeledValue>[
                   FundLabeledValue(
                     label: l10n.myPageInvestmentAmountLabel,
@@ -475,7 +476,7 @@ Widget _buildActiveFundsSection(
                   FundLabeledValue(
                     label: l10n.myPageAccumulatedDistributionLabel,
                     value: _formatCurrency(group.earnings, formatter),
-                    valueColor: colors.success,
+                    valueColor: colors.highlightGold,
                   ),
                 ],
                 onTap: _buildActiveFundDetailTapHandler(

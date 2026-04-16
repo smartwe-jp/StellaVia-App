@@ -286,8 +286,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 AppMenuItem(
                   icon: Icons.account_balance_wallet_rounded,
                   label: l10n.menuItemBankSettings,
-                  iconBackgroundColor: colors.successSubtle,
-                  iconForegroundColor: colors.success,
+                  iconBackgroundColor: colors.primarySubtle,
+                  iconForegroundColor: colors.primary,
                   onTap: () => context.push('/profile/wallet/bank-settings'),
                 ),
               ],

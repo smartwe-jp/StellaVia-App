@@ -277,8 +277,8 @@ FundSecondaryMarketCardData _buildSecondaryMarketCardData(
   return FundSecondaryMarketCardData(
     title: record.projectName,
     statusLabel: context.l10n.homeFreeMarketStatusListed,
-    statusBackgroundColor: colors.warningSubtle,
-    statusForegroundColor: colors.warningAction,
+    statusBackgroundColor: colors.primary,
+    statusForegroundColor: colors.onDark,
     annualYield: _formatYieldPercent(record.investorType?.earningsRadio),
     investorTypeLabel: investorCode != null && investorCode.isNotEmpty
         ? investorCode

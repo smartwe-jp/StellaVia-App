@@ -627,8 +627,8 @@ FundDetailBadgeData _buildStatusBadge(BuildContext context, int? status) {
     case 1:
       return FundDetailBadgeData(
         label: context.l10n.fundListStatusOpen,
-        backgroundColor: colors.success,
-        foregroundColor: colors.brandWhite,
+        backgroundColor: colors.highlightGold,
+        foregroundColor: colors.primary,
       );
     case 0:
       return FundDetailBadgeData(
@@ -651,7 +651,7 @@ FundDetailBadgeData _buildStatusBadge(BuildContext context, int? status) {
     case 7:
       return FundDetailBadgeData(
         label: context.l10n.fundListStatusCompleted,
-        backgroundColor: colors.successForeground,
+        backgroundColor: colors.primary,
         foregroundColor: colors.brandWhite,
       );
     case 2:
@@ -673,7 +673,11 @@ List<Color> _resolveHeroGradientColors(BuildContext context, int? status) {
   final colors = context.appColors;
   switch (status) {
     case 1:
-      return <Color>[colors.successForeground, colors.success, colors.primary];
+      return <Color>[
+        colors.brandPrimaryDark,
+        colors.primary,
+        colors.primaryAlt,
+      ];
     case 0:
       return <Color>[
         colors.warningForeground,
@@ -685,7 +689,7 @@ List<Color> _resolveHeroGradientColors(BuildContext context, int? status) {
     case 5:
       return <Color>[colors.heroStart, colors.heroMiddle, colors.heroEnd];
     case 7:
-      return <Color>[colors.successForeground, colors.success, colors.primary];
+      return <Color>[colors.primaryAlt, colors.primary, colors.brandPrimaryDark];
     case 2:
       return <Color>[colors.dangerForeground, colors.danger, colors.brandAlert];
     default:

@@ -170,7 +170,7 @@ class _VerificationStatusText extends StatelessWidget {
               ? l10n.settingsVerificationStatusVerified
               : l10n.settingsVerificationStatusUnverified,
           style: appText.helper.copyWith(
-            color: verified ? colors.success : colors.textSecondary,
+            color: verified ? colors.primary : colors.textSecondary,
           ),
         ),
         if (verified && (verifiedValue?.trim().isNotEmpty ?? false))

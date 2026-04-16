@@ -247,7 +247,7 @@ Color _resolveAmountColor(
   if (isIncome == null) {
     return colors.textSecondary;
   }
-  return isIncome ? colors.success : colors.danger;
+  return isIncome ? colors.highlightGold : colors.danger;
 }
 
 bool? _parseInflowFlag(String? inOut) {

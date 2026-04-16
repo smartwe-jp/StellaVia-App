@@ -39,7 +39,7 @@ class KizunarkGradientHeader extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           if (titleAssetPath?.trim().isNotEmpty ?? false)
             Semantics(

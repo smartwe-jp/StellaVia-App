@@ -211,17 +211,21 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
     final colors = context.appColors;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final openAccentColor = isDark
-        ? colors.success
+        ? colors.primaryAlt
         : Color.alphaBlend(
-            colors.successForeground.withValues(alpha: 0.22),
-            colors.success,
+            colors.brandPrimaryDark.withValues(alpha: 0.20),
+            colors.primary,
           );
     final openTagBackgroundColor = isDark
-        ? colors.successSubtle
+        ? Color.alphaBlend(
+            colors.primary.withValues(alpha: 0.24),
+            colors.surfaceAlt,
+          )
         : Color.alphaBlend(
-            colors.successForeground.withValues(alpha: 0.10),
-            colors.successSubtle,
+            colors.brandPrimaryDark.withValues(alpha: 0.08),
+            colors.primarySubtle,
           );
+    final openTagForegroundColor = isDark ? colors.onDark : colors.primary;
     switch (status) {
       case 4:
         return _FundStatusPalette(
@@ -242,16 +246,10 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
         );
       case 1:
         return _FundStatusPalette(
-          heroGradientColors: <Color>[
-            colors.successForeground,
-            openAccentColor,
-          ],
+          heroGradientColors: <Color>[colors.brandPrimaryDark, openAccentColor],
           tagBackgroundColor: openTagBackgroundColor,
-          tagForegroundColor: colors.successForeground,
-          amountGradientColors: <Color>[
-            openAccentColor,
-            colors.successForeground,
-          ],
+          tagForegroundColor: openTagForegroundColor,
+          amountGradientColors: <Color>[openAccentColor, colors.primary],
         );
       case 0:
         return _FundStatusPalette(
@@ -272,13 +270,10 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
         );
       case 7:
         return _FundStatusPalette(
-          heroGradientColors: <Color>[colors.successForeground, colors.success],
-          tagBackgroundColor: colors.successSubtle,
-          tagForegroundColor: colors.successForeground,
-          amountGradientColors: <Color>[
-            colors.successForeground,
-            colors.success,
-          ],
+          heroGradientColors: <Color>[colors.brandPrimaryDark, colors.primary],
+          tagBackgroundColor: openTagBackgroundColor,
+          tagForegroundColor: openTagForegroundColor,
+          amountGradientColors: <Color>[colors.primaryAlt, colors.primary],
         );
       case 2:
         return _FundStatusPalette(
@@ -803,7 +798,7 @@ class _FundProjectCard extends StatelessWidget {
                               child: _CardStatCell(
                                 label: yieldLabel,
                                 value: annualYieldText,
-                                valueColor: colors.success,
+                                valueColor: colors.highlightGold,
                                 useNumericValueStyle: true,
                               ),
                             ),
@@ -875,14 +870,18 @@ _AchievementBarPalette _resolveAchievementBarPalette({
       0.36 + (0.64 * Curves.easeOutCubic.transform(normalizedValue));
   final blueShift = _resolveAchievementBlueShift(normalizedValue);
   final shiftedGradientColors = <Color>[
-    Color.lerp(colors.success, colors.primary, blueShift * 0.58) ??
-        colors.success,
-    Color.lerp(colors.success, colors.primary, blueShift) ?? colors.primary,
+    Color.lerp(
+          colors.primary,
+          colors.brandPrimaryDark,
+          blueShift * 0.58,
+        ) ??
+        colors.brandPrimaryDark,
+    Color.lerp(colors.primaryAlt, colors.primary, blueShift) ?? colors.primary,
   ];
   final effectiveGradientColors = shiftedGradientColors
       .map((Color color) => Color.lerp(trackColor, color, visibility) ?? color)
       .toList(growable: false);
-  final foregroundColor = normalizedValue >= 0.62
+  final foregroundColor = normalizedValue >= 0.15
       ? colors.onDark
       : colors.textPrimary;
   final borderColor =

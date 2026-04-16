@@ -627,9 +627,13 @@ _AchievementBannerPalette _resolveAchievementBannerPalette({
       0.36 + (0.64 * Curves.easeOutCubic.transform(normalizedValue));
   final blueShift = _resolveAchievementBlueShift(normalizedValue);
   final shiftedGradientColors = <Color>[
-    Color.lerp(colors.success, colors.primary, blueShift * 0.58) ??
-        colors.success,
-    Color.lerp(colors.success, colors.primary, blueShift) ?? colors.primary,
+    Color.lerp(
+          colors.brandPrimaryDark,
+          colors.primary,
+          blueShift * 0.58,
+        ) ??
+        colors.brandPrimaryDark,
+    Color.lerp(colors.primary, colors.primaryAlt, blueShift) ?? colors.primary,
   ];
   final effectiveGradientColors = shiftedGradientColors
       .map((Color color) => Color.lerp(trackColor, color, visibility) ?? color)

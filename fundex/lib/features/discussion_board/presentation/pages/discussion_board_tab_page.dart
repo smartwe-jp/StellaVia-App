@@ -807,7 +807,7 @@ class _ComposerFundPickerSheetState
                               FundLabeledValue(
                                 label: l10n.myPageAccumulatedDistributionLabel,
                                 value: currencyFormatter.format(group.earnings),
-                                valueColor: colors.success,
+                                valueColor: colors.highlightGold,
                               ),
                             ],
                           ),

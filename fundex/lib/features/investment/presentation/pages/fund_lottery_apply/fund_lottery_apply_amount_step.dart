@@ -231,10 +231,13 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: <Color>[colors.successSubtle, colors.successSoft],
+              colors: <Color>[colors.primarySubtle, colors.surface],
             ),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: colors.successBorder, width: 1.5),
+            border: Border.all(
+              color: colors.primary.withValues(alpha: 0.18),
+              width: 1.5,
+            ),
           ),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(14, 22, 14, 22),
@@ -249,7 +252,7 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
                 RichText(
                   text: TextSpan(
                     style: appText.numericHeadline.copyWith(
-                      color: colors.success,
+                      color: colors.highlightGold,
                       fontSize: 26,
                       fontWeight: FontWeight.w900,
                     ),
@@ -258,7 +261,7 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
                       TextSpan(
                         text: ' $estimatedDistributionSuffix',
                         style: appText.numericBody.copyWith(
-                          color: colors.success,
+                          color: colors.highlightGold,
                         ),
                       ),
                     ],

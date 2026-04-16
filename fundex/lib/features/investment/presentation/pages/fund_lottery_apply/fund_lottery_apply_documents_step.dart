@@ -183,13 +183,15 @@ class _DocumentTile extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final tileBackgroundColor = checked
-        ? colors.successSubtle
+        ? colors.primarySubtle
         : colors.surfaceAlt;
-    final tileBorderColor = checked ? colors.successBorder : colors.borderSoft;
+    final tileBorderColor = checked
+        ? colors.primary.withValues(alpha: 0.18)
+        : colors.borderSoft;
     final iconBackgroundColor = checked
-        ? colors.success.withValues(alpha: 0.14)
+        ? colors.primary.withValues(alpha: 0.14)
         : colors.dangerSubtle;
-    final iconForegroundColor = checked ? colors.success : colors.danger;
+    final iconForegroundColor = checked ? colors.primary : colors.danger;
     return DecoratedBox(
       decoration: BoxDecoration(
         color: tileBackgroundColor,
@@ -256,7 +258,7 @@ class _DocumentTile extends StatelessWidget {
                           Icons.chevron_right_rounded,
                           size: 18,
                           color: checked
-                              ? colors.success
+                              ? colors.primary
                               : colors.textTertiary,
                         ),
                       ],
