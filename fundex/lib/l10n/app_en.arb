@@ -222,6 +222,7 @@
   "homeHeroTotalDividendsLabel": "Total dividends",
   "homeGuestBrowsingTitle": "Browsing without signing in",
   "homeGuestBrowsingBody": "An account is required to invest.",
+  "homeGuestRegisterBonusBar": "Free sign-up for new members and get ¥3,000 in investment credit.",
   "homeReminderProfileTitle": "Complete your profile to get started",
   "homeReminderProfileBody": "Identity verification required. 3 steps remaining.",
   "homeReminderProfileBadge": "Action needed",

@@ -227,6 +227,9 @@ class HomeOverviewTabPage extends ConsumerWidget {
             title: l10n.splashBrandName,
             onSettingsTap: () => context.push('/profile/settings'),
           ),
+          _HomeGuestRegisterBonusBar(
+            message: l10n.homeGuestRegisterBonusBar,
+          ),
           FundGuestBrowsingBar(
             title: l10n.homeGuestBrowsingTitle,
             message: l10n.homeGuestBrowsingBody,
@@ -394,6 +397,59 @@ class _HomeGuestTopBar extends StatelessWidget {
               ),
             ),
             AppNavigationIconButton(icon: Icons.menu, onTap: onSettingsTap),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeGuestRegisterBonusBar extends StatelessWidget {
+  const _HomeGuestRegisterBonusBar({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.highlightGold,
+        border: Border(
+          bottom: BorderSide(
+            color: colors.brandPrimaryDark.withValues(alpha: 0.12),
+          ),
+        ),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: colors.brandPrimaryDark.withValues(alpha: 0.08),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+        child: Row(
+          children: <Widget>[
+            Icon(
+              Icons.workspace_premium_rounded,
+              size: 18,
+              color: colors.brandPrimaryDark,
+            ),
+            const SizedBox(width: UiTokens.spacing8),
+            Expanded(
+              child: Text(
+                message,
+                style: appText.bodyStrong.copyWith(
+                  color: colors.brandPrimaryDark,
+                  height: 1.35,
+                ),
+              ),
+            ),
           ],
         ),
       ),

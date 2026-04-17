@@ -645,6 +645,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeGuestBrowsingBody => '投資するにはアカウントが必要です';
 
   @override
+  String get homeGuestRegisterBonusBar => '新規会員無料登録で 3,000円分の投資金をプレゼント';
+
+  @override
   String get homeReminderProfileTitle => '本人情報を入力して出資を始めましょう';
 
   @override

@@ -222,6 +222,7 @@
   "homeHeroTotalDividendsLabel": "累计分配金",
   "homeGuestBrowsingTitle": "当前未登录浏览",
   "homeGuestBrowsingBody": "如需投资，请先注册或登录账号",
+  "homeGuestRegisterBonusBar": "新会员免费注册赠送 3,000 日元投资金",
   "homeReminderProfileTitle": "填写个人资料以开始出资",
   "homeReminderProfileBody": "出资与出金需要完成身份验证，还差3步即可完成。",
   "homeReminderProfileBadge": "待处理",

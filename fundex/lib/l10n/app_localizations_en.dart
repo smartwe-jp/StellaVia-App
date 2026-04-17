@@ -689,6 +689,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeGuestBrowsingBody => 'An account is required to invest.';
 
   @override
+  String get homeGuestRegisterBonusBar =>
+      'Free sign-up for new members and get ¥3,000 in investment credit.';
+
+  @override
   String get homeReminderProfileTitle => 'Complete your profile to get started';
 
   @override

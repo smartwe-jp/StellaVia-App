@@ -639,6 +639,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeGuestBrowsingBody => '如需投资，请先注册或登录账号';
 
   @override
+  String get homeGuestRegisterBonusBar => '新会员免费注册赠送 3,000 日元投资金';
+
+  @override
   String get homeReminderProfileTitle => '填写个人资料以开始出资';
 
   @override
@@ -4421,6 +4424,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get homeGuestBrowsingBody => '如需投資，請先註冊或登入帳號';
+
+  @override
+  String get homeGuestRegisterBonusBar => '新會員免費註冊送 3,000 日圓投資金';
 
   @override
   String get homeReminderProfileTitle => '填寫個人資料以開始出資';

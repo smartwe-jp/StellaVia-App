@@ -1343,6 +1343,12 @@ abstract class AppLocalizations {
   /// **'An account is required to invest.'**
   String get homeGuestBrowsingBody;
 
+  /// No description provided for @homeGuestRegisterBonusBar.
+  ///
+  /// In en, this message translates to:
+  /// **'Free sign-up for new members and get ¥3,000 in investment credit.'**
+  String get homeGuestRegisterBonusBar;
+
   /// No description provided for @homeReminderProfileTitle.
   ///
   /// In en, this message translates to:
