@@ -3471,6 +3471,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileStep4Description => '请拍摄身份确认文件';
 
   @override
+  String get memberProfileDocumentGuideTitle => '上传证件说明';
+
+  @override
+  String get memberProfileDocumentGuideBody =>
+      '请提交以下任一本人验证文件。\n\n① 居住者\n・个人编号卡（My Number 卡，仅正面）\n・在留卡\n・特别永住者证明书\n・驾照\n\n② 非居住者\n・母国政府核发之附照片身份证明文件\n・护照（照片页及持有人资料页）\n\n③ 法人（公司名义）\n请提交以下资料：\n・公司登记簿誊本（履历事项全部证明书）\n・代表者或实际办理人的本人验证文件\n・必要时，实质支配者相关资料';
+
+  @override
   String get memberProfileDocumentTypeLabel => '选择证件';
 
   @override
@@ -7258,6 +7265,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get memberProfileStep4Description => '請拍攝身分證件';
+
+  @override
+  String get memberProfileDocumentGuideTitle => '上傳證件說明';
+
+  @override
+  String get memberProfileDocumentGuideBody =>
+      '請提交以下任一本人驗證文件。\n\n① 居住者\n・個人編號卡（My Number 卡，僅正面）\n・在留卡\n・特別永住者證明書\n・駕照\n\n② 非居住者\n・母國政府核發之附照片身分證明文件\n・護照（照片頁及持有人資料頁）\n\n③ 法人（公司名義）\n請提交以下資料：\n・公司登記簿謄本（履歷事項全部證明書）\n・代表者或實際辦理人的本人驗證文件\n・必要時，實質支配者相關資料';
 
   @override
   String get memberProfileDocumentTypeLabel => '選擇文件';

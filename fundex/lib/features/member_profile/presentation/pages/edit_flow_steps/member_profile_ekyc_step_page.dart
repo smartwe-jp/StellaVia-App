@@ -10,6 +10,7 @@ class MemberProfileEkycStepPage extends StatelessWidget {
     required this.documentTypeItems,
     required this.documentFrontUploaded,
     required this.documentBackUploaded,
+    required this.showDocumentBack,
     this.documentFrontPreviewUrl,
     this.documentBackPreviewUrl,
     this.previewActionLabel,
@@ -29,6 +30,7 @@ class MemberProfileEkycStepPage extends StatelessWidget {
   final List<DropdownMenuItem<String>> documentTypeItems;
   final bool documentFrontUploaded;
   final bool documentBackUploaded;
+  final bool showDocumentBack;
   final String? documentFrontPreviewUrl;
   final String? documentBackPreviewUrl;
   final String? previewActionLabel;
@@ -56,6 +58,11 @@ class MemberProfileEkycStepPage extends StatelessWidget {
       primaryButtonEnabled: primaryButtonEnabled,
       child: Column(
         children: <Widget>[
+          _MemberProfileDocumentGuideCard(
+            title: l10n.memberProfileDocumentGuideTitle,
+            body: l10n.memberProfileDocumentGuideBody,
+          ),
+          const SizedBox(height: 14),
           MemberProfileSelectField<String>(
             label: l10n.memberProfileDocumentTypeLabel,
             value: documentType,
@@ -70,19 +77,110 @@ class MemberProfileEkycStepPage extends StatelessWidget {
             isCompleted: documentFrontUploaded,
             previewLabel: previewActionLabel,
             previewUrl: documentFrontPreviewUrl,
+            inlinePreview: true,
             onTap: onUploadDocumentFront,
           ),
-          const SizedBox(height: 14),
-          MemberProfileUploadTile(
-            icon: Icons.flip_to_back_outlined,
-            title: l10n.memberProfilePhotoDocumentBackTitle,
-            description: l10n.memberProfilePhotoDocumentBackDescription,
-            isCompleted: documentBackUploaded,
-            previewLabel: previewActionLabel,
-            previewUrl: documentBackPreviewUrl,
-            onTap: onUploadDocumentBack,
-          ),
+          if (showDocumentBack) ...<Widget>[
+            const SizedBox(height: 14),
+            MemberProfileUploadTile(
+              icon: Icons.flip_to_back_outlined,
+              title: l10n.memberProfilePhotoDocumentBackTitle,
+              description: l10n.memberProfilePhotoDocumentBackDescription,
+              isCompleted: documentBackUploaded,
+              previewLabel: previewActionLabel,
+              previewUrl: documentBackPreviewUrl,
+              inlinePreview: true,
+              onTap: onUploadDocumentBack,
+            ),
+          ],
         ],
+      ),
+    );
+  }
+}
+
+class _MemberProfileDocumentGuideCard extends StatefulWidget {
+  const _MemberProfileDocumentGuideCard({
+    required this.title,
+    required this.body,
+  });
+
+  final String title;
+  final String body;
+
+  @override
+  State<_MemberProfileDocumentGuideCard> createState() =>
+      _MemberProfileDocumentGuideCardState();
+}
+
+class _MemberProfileDocumentGuideCardState
+    extends State<_MemberProfileDocumentGuideCard> {
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 180),
+      decoration: BoxDecoration(
+        color: colors.surfaceAlt,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: _expanded ? colors.highlightGold : colors.border,
+          width: 1.5,
+        ),
+      ),
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () => setState(() => _expanded = !_expanded),
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.info_outline_rounded,
+                      size: 18,
+                      color: colors.primary,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        widget.title,
+                        style: appText.cardTitle.copyWith(
+                          color: colors.primary,
+                        ),
+                      ),
+                    ),
+                    Icon(
+                      _expanded
+                          ? Icons.keyboard_arrow_up_rounded
+                          : Icons.keyboard_arrow_down_rounded,
+                      color: colors.primary,
+                    ),
+                  ],
+                ),
+                if (_expanded) ...<Widget>[
+                  const SizedBox(height: 10),
+                  Text(
+                    widget.body,
+                    style: appText.helper.copyWith(
+                      color: colors.textPrimary,
+                      height: 1.65,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

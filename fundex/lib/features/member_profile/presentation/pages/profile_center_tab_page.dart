@@ -122,14 +122,14 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                   FundMyPageQuickActionData(
                     label: l10n.myPageDepositAction,
                     backgroundColor: colors.highlightGold,
-                    foregroundColor: colors.infoSubtle,
+                    foregroundColor: colors.textPrimary,
                     onTap: () => context.push('/wallet/deposit'),
                   ),
                   FundMyPageQuickActionData(
                     label: l10n.myPageWithdrawAction,
                     backgroundColor: colors.background,
                     borderColor: colors.border,
-                    foregroundColor: colors.textSecondary,
+                    foregroundColor: colors.highlightGold,
                     onTap: () => _handleWithdrawTap(context, ref),
                   ),
                 ],
@@ -163,14 +163,14 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
     await refreshProfileCenterTabPage(ref);
   }
 
-  Future<void> _hideOrderInquiryRecord(String orderId) async {
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      _hiddenOrderInquiryIds.add(orderId);
-    });
-  }
+  // Future<void> _hideOrderInquiryRecord(String orderId) async {
+  //   if (!mounted) {
+  //     return;
+  //   }
+  //   setState(() {
+  //     _hiddenOrderInquiryIds.add(orderId);
+  //   });
+  // }
 
   // Future<void> _handleOrderWithdraw(
   //   BuildContext context,
@@ -287,9 +287,11 @@ Widget _buildPendingApplicationsSection(
           .map(
             (record) => FundMyPageProjectCard(
               title: record.projectName,
-              accentColor: AppColorTokens.fundexViolet,
+              accentColor: AppColorTokens.fundexHighlightGold,
               trailing: _PendingStatusBadge(
                 label: resolveApplyStatusLabel(l10n, record),
+                backgroundColor: AppColorTokens.fundexHighlightGold,
+                foregroundColor: AppColorTokens.fundexText,
               ),
               rows: <FundLabeledValue>[
                 FundLabeledValue(

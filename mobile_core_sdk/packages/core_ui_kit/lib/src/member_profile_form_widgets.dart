@@ -772,6 +772,7 @@ class MemberProfileUploadTile extends StatelessWidget {
     this.isCompleted = false,
     this.previewLabel,
     this.previewUrl,
+    this.inlinePreview = false,
     this.onTap,
   });
 
@@ -781,6 +782,7 @@ class MemberProfileUploadTile extends StatelessWidget {
   final bool isCompleted;
   final String? previewLabel;
   final String? previewUrl;
+  final bool inlinePreview;
   final VoidCallback? onTap;
 
   @override
@@ -807,6 +809,8 @@ class MemberProfileUploadTile extends StatelessWidget {
     final iconColor = isCompleted ? primary : colors.textSecondary;
     final normalizedPreviewUrl = previewUrl?.trim() ?? '';
     final canPreview = normalizedPreviewUrl.isNotEmpty;
+    final showInlinePreview = inlinePreview && canPreview;
+    final actionLabel = previewLabel ?? (showInlinePreview ? 'Edit' : 'Preview');
 
     return Stack(
       children: <Widget>[
@@ -816,49 +820,121 @@ class MemberProfileUploadTile extends StatelessWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(16),
             onTap: onTap,
-            child: CustomPaint(
-              painter: _RoundedDashedBorderPainter(
-                color: completedBorderColor,
-                radius: 16,
-                strokeWidth: 2,
-                gap: 6,
-                dash: 8,
-              ),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 34,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Icon(
-                      isCompleted ? Icons.check_circle_rounded : icon,
-                      size: 44,
-                      color: iconColor,
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      title,
-                      textAlign: TextAlign.center,
-                      style: appText.cardTitle.copyWith(color: titleColor),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      description,
-                      textAlign: TextAlign.center,
-                      style: appText.helper.copyWith(
-                        color: descriptionColor,
-                        height: 1.35,
+            child: showInlinePreview
+                ? Container(
+                    width: double.infinity,
+                    height: 196,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: completedBorderColor,
+                        width: 1.5,
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(14.5),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: <Widget>[
+                          Image.network(
+                            normalizedPreviewUrl,
+                            fit: BoxFit.fitHeight,
+                            alignment: Alignment.center,
+                            errorBuilder: (_, __, ___) => ColoredBox(
+                              color: colors.surfaceAlt,
+                              child: Center(
+                                child: Icon(
+                                  Icons.broken_image_outlined,
+                                  size: 36,
+                                  color: colors.textSecondary,
+                                ),
+                              ),
+                            ),
+                          ),
+                          DecoratedBox(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: <Color>[
+                                  colors.scrim.withValues(alpha: 0.04),
+                                  colors.scrim.withValues(alpha: 0.44),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 14,
+                            right: 14,
+                            bottom: 12,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                  title,
+                                  style: appText.cardTitle.copyWith(
+                                    color: colors.onDark,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  description,
+                                  style: appText.helper.copyWith(
+                                    color: colors.onDark.withValues(alpha: 0.9),
+                                    height: 1.35,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : CustomPaint(
+                    painter: _RoundedDashedBorderPainter(
+                      color: completedBorderColor,
+                      radius: 16,
+                      strokeWidth: 2,
+                      gap: 6,
+                      dash: 8,
+                    ),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 34,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          Icon(
+                            isCompleted ? Icons.check_circle_rounded : icon,
+                            size: 44,
+                            color: iconColor,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            title,
+                            textAlign: TextAlign.center,
+                            style: appText.cardTitle.copyWith(color: titleColor),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            description,
+                            textAlign: TextAlign.center,
+                            style: appText.helper.copyWith(
+                              color: descriptionColor,
+                              height: 1.35,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
           ),
         ),
         if (canPreview)
@@ -870,17 +946,19 @@ class MemberProfileUploadTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(999),
               child: InkWell(
                 borderRadius: BorderRadius.circular(999),
-                onTap: () {
-                  openAppImageViewer(
-                    context,
-                    items: <AppImageViewerItem>[
-                      AppImageViewerItem(
-                        source: normalizedPreviewUrl,
-                        semanticLabel: title,
-                      ),
-                    ],
-                  );
-                },
+                onTap: showInlinePreview
+                    ? onTap
+                    : () {
+                        openAppImageViewer(
+                          context,
+                          items: <AppImageViewerItem>[
+                            AppImageViewerItem(
+                              source: normalizedPreviewUrl,
+                              semanticLabel: title,
+                            ),
+                          ],
+                        );
+                      },
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
@@ -901,13 +979,15 @@ class MemberProfileUploadTile extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Icon(
-                        Icons.remove_red_eye_outlined,
+                        showInlinePreview
+                            ? Icons.edit_outlined
+                            : Icons.remove_red_eye_outlined,
                         size: 14,
                         color: colors.textPrimary,
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        previewLabel ?? 'Preview',
+                        actionLabel,
                         style: appText.micro.copyWith(
                           color: colors.textPrimary,
                         ),
@@ -1051,21 +1131,14 @@ class MemberProfilePrimaryButton extends StatelessWidget {
     final bool enabled = onPressed != null;
     return DecoratedBox(
       decoration: BoxDecoration(
-        gradient: enabled
-            ? LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[colors.primary, colors.primaryAlt],
-              )
-            : null,
-        color: enabled ? null : colors.disabled,
+        color: enabled ? colors.primary : colors.disabled,
         borderRadius: BorderRadius.circular(14),
         boxShadow: enabled
             ? <BoxShadow>[
                 BoxShadow(
-                  color: colors.primary.withValues(alpha: 0.35),
-                  blurRadius: 16,
-                  offset: Offset(0, 4),
+                  color: colors.primary.withValues(alpha: 0.24),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
                 ),
               ]
             : const <BoxShadow>[],

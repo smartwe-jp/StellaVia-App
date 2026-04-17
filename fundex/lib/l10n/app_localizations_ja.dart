@@ -3512,6 +3512,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfileStep4Description => '本人確認書類を撮影してください';
 
   @override
+  String get memberProfileDocumentGuideTitle => 'アップロード書類の説明';
+
+  @override
+  String get memberProfileDocumentGuideBody =>
+      '以下のいずれかの本人確認書類をご提出ください。\n\n① 居住者の方\n・個人番号カード（マイナンバーカード、表面のみ）\n・在留カード\n・特別永住者証明書\n・運転免許証\n\n② 非居住者の方\n・本国政府発行の顔写真付き本人確認書類\n・パスポート（顔写真ページおよび所持人情報ページ）\n\n③ 法人（法人名義）\n以下の資料をご提出ください。\n・登記事項証明書（履歴事項全部証明書）\n・代表者または取引担当者の本人確認書類\n・必要に応じて、実質的支配者に関する資料';
+
+  @override
   String get memberProfileDocumentTypeLabel => '書類を選択';
 
   @override

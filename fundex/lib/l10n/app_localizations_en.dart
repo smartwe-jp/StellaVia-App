@@ -3703,6 +3703,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please photograph your identity verification documents.';
 
   @override
+  String get memberProfileDocumentGuideTitle => 'Upload document guide';
+
+  @override
+  String get memberProfileDocumentGuideBody =>
+      'Please submit one of the following identity verification documents.\n\n1. Residents\n- Individual Number Card (My Number Card, front side only)\n- Residence card\n- Special Permanent Resident Certificate\n- Driver\'s license\n\n2. Non-residents\n- Government-issued photo ID from your home country\n- Passport (photo page and bearer information page)\n\n3. Corporations (corporate account)\nPlease submit the following documents:\n- Certificate of Registered Matters (full historical record)\n- Identity verification document for the representative or transaction agent\n- If required, documents regarding beneficial owners';
+
+  @override
   String get memberProfileDocumentTypeLabel => 'Select document';
 
   @override

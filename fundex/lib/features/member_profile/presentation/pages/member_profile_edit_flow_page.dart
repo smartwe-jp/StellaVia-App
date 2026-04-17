@@ -384,6 +384,9 @@ class _MemberProfileEditFlowPageState
         _documentBackPhotoPath = _emptyToNull(
           savedProfile?.idDocumentBackPhotoPath,
         );
+        if (!_documentTypeRequiresBack(_documentType)) {
+          _documentBackPhotoPath = null;
+        }
         _selfiePhotoPath = _emptyToNull(savedProfile?.selfiePhotoPath);
         _bankNameController.text = _firstNonEmpty(<String>[
           savedProfile?.bankName ?? '',
@@ -1155,7 +1158,8 @@ class _MemberProfileEditFlowPageState
   bool get _isEkycStepReady =>
       _isFilled(_documentType) &&
       _isRemoteImageUrl(_documentPhotoPath) &&
-      _isRemoteImageUrl(_documentBackPhotoPath);
+      (!_documentTypeRequiresBack(_documentType) ||
+          _isRemoteImageUrl(_documentBackPhotoPath));
 
   bool get _isBankAccountStepReady =>
       _isFilled(_bankNameController.text) &&
@@ -1351,7 +1355,9 @@ class _MemberProfileEditFlowPageState
       riskToleranceCode: _riskTolerance ?? '',
       ekycDocumentType: _documentType ?? '',
       idDocumentPhotoPath: _emptyToNull(_documentPhotoPath),
-      idDocumentBackPhotoPath: _emptyToNull(_documentBackPhotoPath),
+      idDocumentBackPhotoPath: _documentTypeRequiresBack(_documentType)
+          ? _emptyToNull(_documentBackPhotoPath)
+          : null,
       selfiePhotoPath: _emptyToNull(_selfiePhotoPath),
       bankName: _bankNameController.text.trim(),
       branchBankName: _branchNameController.text.trim(),
@@ -1556,6 +1562,10 @@ class _MemberProfileEditFlowPageState
     ];
   }
 
+  bool _documentTypeRequiresBack(String? documentType) {
+    return documentType != 'my_number';
+  }
+
   List<MemberProfileOptionItem> _accountTypeOptions(BuildContext context) {
     final l10n = context.l10n;
     return <MemberProfileOptionItem>[
@@ -1702,6 +1712,7 @@ class _MemberProfileEditFlowPageState
         : _saveOnboardingDraftTemporarily;
     final String previewActionLabel =
         context.l10n.memberProfilePhotoPreviewAction;
+    final String editActionLabel = context.l10n.commonEditText;
     switch (_currentStep) {
       case MemberProfileEditStep.basicInfo:
         final bool isActionEnabled = _canProceedFromCurrentStep;
@@ -1835,13 +1846,14 @@ class _MemberProfileEditFlowPageState
           documentTypeItems: _simpleItems(_documentTypeOptions(context)),
           documentFrontUploaded: _isRemoteImageUrl(_documentPhotoPath),
           documentBackUploaded: _isRemoteImageUrl(_documentBackPhotoPath),
+          showDocumentBack: _documentTypeRequiresBack(_documentType),
           documentFrontPreviewUrl: _isRemoteImageUrl(_documentPhotoPath)
               ? _documentPhotoPath
               : null,
           documentBackPreviewUrl: _isRemoteImageUrl(_documentBackPhotoPath)
               ? _documentBackPhotoPath
               : null,
-          previewActionLabel: previewActionLabel,
+          previewActionLabel: editActionLabel,
           primaryButtonEnabled:
               _canProceedFromCurrentStep &&
               !_isUploadingPhoto &&
@@ -1856,6 +1868,9 @@ class _MemberProfileEditFlowPageState
           onDocumentTypeChanged: (String? value) {
             _applyUserChange(() {
               _documentType = value;
+              if (!_documentTypeRequiresBack(value)) {
+                _documentBackPhotoPath = null;
+              }
             });
           },
           onUploadDocumentFront: (_isSubmitting || _isUploadingPhoto)

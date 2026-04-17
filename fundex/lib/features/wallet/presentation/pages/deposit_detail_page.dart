@@ -58,8 +58,11 @@ class DepositDetailPage extends ConsumerWidget {
               );
             }
             return projectAsync.when(
-              data: (project) =>
-                  _DepositDetailBody(record: record, project: project),
+              data: (project) => _DepositDetailBody(
+                record: record,
+                project: project,
+                projectId: projectId,
+              ),
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, __) => DepositLoadState(
                 icon: Icons.wifi_off_rounded,
@@ -92,21 +95,77 @@ class DepositDetailPage extends ConsumerWidget {
   }
 }
 
-class _DepositDetailBody extends StatelessWidget {
-  const _DepositDetailBody({required this.record, required this.project});
+class _DepositDetailBody extends ConsumerStatefulWidget {
+  const _DepositDetailBody({
+    required this.record,
+    required this.project,
+    required this.projectId,
+  });
 
   final MyPageApplyRecord record;
   final FundProject project;
+  final String projectId;
+
+  @override
+  ConsumerState<_DepositDetailBody> createState() => _DepositDetailBodyState();
+}
+
+class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
+  bool _isReportingDeposit = false;
+
+  Future<void> _reportDepositCompleted() async {
+    final amount = resolveDepositAmount(widget.record)?.round();
+    if (amount == null || amount <= 0 || _isReportingDeposit) {
+      return;
+    }
+
+    setState(() {
+      _isReportingDeposit = true;
+    });
+
+    try {
+      await ref.read(confirmWalletPaymentUseCaseProvider).call(amount: amount);
+      ref.invalidate(walletPendingDepositListProvider);
+      ref.invalidate(walletPendingDepositRecordProvider(widget.projectId));
+      if (!mounted) {
+        return;
+      }
+      AppNotice.show(
+        context,
+        message: context.l10n.lotteryApplyReportDepositSuccess,
+      );
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      AppNotice.show(
+        context,
+        message: resolveAppRequestErrorMessage(
+          error,
+          context.l10n.lotteryApplyReportDepositFailure,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isReportingDeposit = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
     final l10n = context.l10n;
-    final bank = project.liveJapanBank;
+    final bank = widget.project.liveJapanBank;
+    final depositAmount = resolveDepositAmount(widget.record)?.round();
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
       children: <Widget>[
-        DepositProjectCard(record: record),
+        DepositProjectCard(record: widget.record),
         const SizedBox(height: 16),
         if (bank == null)
           DepositLoadState(
@@ -118,6 +177,17 @@ class _DepositDetailBody extends StatelessWidget {
             bank: bank,
             title: l10n.walletProjectDepositAccountTitle,
           ),
+        const SizedBox(height: 20),
+        PrimaryCtaButton(
+          label: l10n.lotteryApplyReportDepositAction,
+          onPressed: depositAmount == null || depositAmount <= 0
+              ? null
+              : _reportDepositCompleted,
+          isLoading: _isReportingDeposit,
+          horizontalPadding: 0,
+          backgroundColor: colors.primary,
+          shadowColor: colors.primary.withValues(alpha: 0.34),
+        ),
       ],
     );
   }

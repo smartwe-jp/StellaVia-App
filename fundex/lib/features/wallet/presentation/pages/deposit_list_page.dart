@@ -107,78 +107,67 @@ class DepositProjectCard extends StatelessWidget {
     final depositAmount = resolveDepositAmount(record);
     final unitPrice = resolveDepositUnitPrice(record);
 
-    return Material(
-      color: colors.surface,
-      borderRadius: BorderRadius.circular(18),
-      child: InkWell(
-        onTap: onTap,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surface,
         borderRadius: BorderRadius.circular(18),
-        child: Ink(
-          decoration: BoxDecoration(
-            color: colors.surface,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: colors.border),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: colors.scrim.withValues(alpha: 0.06),
-                blurRadius: 3,
-                offset: const Offset(0, 1),
-              ),
-              BoxShadow(
-                color: colors.scrim.withValues(alpha: 0.04),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
+        border: Border.all(color: colors.border),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: colors.scrim.withValues(alpha: 0.06),
+            blurRadius: 3,
+            offset: const Offset(0, 1),
+          ),
+          BoxShadow(
+            color: colors.scrim.withValues(alpha: 0.04),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              record.projectName,
+              style: appText.cardTitle.copyWith(color: colors.textPrimary),
+            ),
+            const SizedBox(height: 14),
+            _DepositInfoRow(
+              label: l10n.lotteryApplyStep1UnitCountLabel,
+              value: unitCount == null
+                  ? '--'
+                  : '$unitCount${l10n.lotteryApplyStep1UnitSuffix}',
+            ),
+            const SizedBox(height: 10),
+            _DepositInfoRow(
+              label: l10n.lotteryApplyStep1UnitPriceLabel,
+              value: unitPrice == null ? '--' : currency.format(unitPrice),
+            ),
+            const SizedBox(height: 10),
+            _DepositInfoRow(
+              label: l10n.lotteryApplyDepositAmountLabel,
+              value: depositAmount == null
+                  ? '--'
+                  : currency.format(depositAmount),
+              emphasize: true,
+            ),
+            if (onTap != null) ...<Widget>[
+              const SizedBox(height: 16),
+              PrimaryCtaButton(
+                label: l10n.myPageDepositAction,
+                onPressed: onTap,
+                horizontalPadding: 0,
+                backgroundColor: colors.highlightGold,
+                shadowColor: colors.highlightGold.withValues(alpha: 0.22),
+                textStyle: appText.button.copyWith(
+                  color: colors.brandPrimaryDark,
+                ),
               ),
             ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        record.projectName,
-                        style: appText.cardTitle.copyWith(
-                          color: colors.textPrimary,
-                        ),
-                      ),
-                    ),
-                    if (onTap != null) ...<Widget>[
-                      const SizedBox(width: 12),
-                      Icon(
-                        Icons.chevron_right_rounded,
-                        color: colors.textSecondary,
-                      ),
-                    ],
-                  ],
-                ),
-                const SizedBox(height: 14),
-                _DepositInfoRow(
-                  label: l10n.lotteryApplyStep1UnitCountLabel,
-                  value: unitCount == null
-                      ? '--'
-                      : '$unitCount${l10n.lotteryApplyStep1UnitSuffix}',
-                ),
-                const SizedBox(height: 10),
-                _DepositInfoRow(
-                  label: l10n.lotteryApplyStep1UnitPriceLabel,
-                  value: unitPrice == null ? '--' : currency.format(unitPrice),
-                ),
-                const SizedBox(height: 10),
-                _DepositInfoRow(
-                  label: l10n.lotteryApplyDepositAmountLabel,
-                  value: depositAmount == null
-                      ? '--'
-                      : currency.format(depositAmount),
-                  emphasize: true,
-                ),
-              ],
-            ),
-          ),
+          ],
         ),
       ),
     );

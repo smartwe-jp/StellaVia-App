@@ -1316,6 +1316,8 @@
   "memberProfileRiskToleranceLabel": "風險承受度",
   "memberProfileStep4Title": "Step 4：身分驗證（eKYC）",
   "memberProfileStep4Description": "請拍攝身分證件",
+  "memberProfileDocumentGuideTitle": "上傳證件說明",
+  "memberProfileDocumentGuideBody": "請提交以下任一本人驗證文件。\n\n① 居住者\n・個人編號卡（My Number 卡，僅正面）\n・在留卡\n・特別永住者證明書\n・駕照\n\n② 非居住者\n・母國政府核發之附照片身分證明文件\n・護照（照片頁及持有人資料頁）\n\n③ 法人（公司名義）\n請提交以下資料：\n・公司登記簿謄本（履歷事項全部證明書）\n・代表者或實際辦理人的本人驗證文件\n・必要時，實質支配者相關資料",
   "memberProfileDocumentTypeLabel": "選擇文件",
   "memberProfilePhotoDocumentTitle": "拍攝文件（正・反面）",
   "memberProfilePhotoDocumentDescription": "點擊開啟相機",

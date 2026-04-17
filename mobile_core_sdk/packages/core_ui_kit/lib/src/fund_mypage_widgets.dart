@@ -244,7 +244,7 @@ class FundMyPageProjectCard extends StatelessWidget {
         child: Material(
           color: colors.surface.withValues(alpha: 0),
           borderRadius: cardRadius,
-          clipBehavior: Clip.antiAlias,
+          //clipBehavior: Clip.antiAlias,
           child: InkWell(
             borderRadius: cardRadius,
             onTap: onTap,
