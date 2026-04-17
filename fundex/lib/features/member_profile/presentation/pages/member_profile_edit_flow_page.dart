@@ -9,7 +9,7 @@ import 'package:core_identity_auth/core_identity_auth.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/support/app_permission_dialogs.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../auth/domain/entities/auth_user.dart';
+import '../../../auth/domain/entities/auth_user.dart' as app_auth;
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../auth/presentation/providers/identity_auth_sdk_providers.dart';
 import '../../../auth/presentation/support/identity_auth_guard.dart';
@@ -84,6 +84,11 @@ class _MemberProfileEditFlowPageState
   late final TextEditingController _branchNumberController;
   late final TextEditingController _accountNumberController;
   late final TextEditingController _accountHolderController;
+  late final TextEditingController _accountHolderAddressController;
+  late final TextEditingController _accountHolderNationalityController;
+  late final TextEditingController _swiftCodeController;
+  late final TextEditingController _bankCountryController;
+  late final TextEditingController _branchAddressController;
 
   MemberProfileEditStep _currentStep = MemberProfileEditStep.basicInfo;
   DateTime? _birthday;
@@ -96,6 +101,7 @@ class _MemberProfileEditFlowPageState
   String? _riskTolerance;
   String? _documentType = 'drivers_license';
   String? _accountType = 'ordinary';
+  String? _bankRegionType = _bankRegionDomestic;
   String _phoneIntlCode = '81';
   String _phone = '';
   String _email = '';
@@ -147,6 +153,11 @@ class _MemberProfileEditFlowPageState
     _branchNumberController = TextEditingController();
     _accountNumberController = TextEditingController();
     _accountHolderController = TextEditingController();
+    _accountHolderAddressController = TextEditingController();
+    _accountHolderNationalityController = TextEditingController();
+    _swiftCodeController = TextEditingController();
+    _bankCountryController = TextEditingController();
+    _branchAddressController = TextEditingController();
     _registerTextFieldListeners();
     _loadInitialData();
     if (_isSingleSectionMode &&
@@ -177,6 +188,11 @@ class _MemberProfileEditFlowPageState
     _branchNumberController.dispose();
     _accountNumberController.dispose();
     _accountHolderController.dispose();
+    _accountHolderAddressController.dispose();
+    _accountHolderNationalityController.dispose();
+    _swiftCodeController.dispose();
+    _bankCountryController.dispose();
+    _branchAddressController.dispose();
     super.dispose();
   }
 
@@ -210,6 +226,11 @@ class _MemberProfileEditFlowPageState
         _branchNumberController,
         _accountNumberController,
         _accountHolderController,
+        _accountHolderAddressController,
+        _accountHolderNationalityController,
+        _swiftCodeController,
+        _bankCountryController,
+        _branchAddressController,
       ];
 
   void _onTrackedFieldChanged() {
@@ -269,7 +290,7 @@ class _MemberProfileEditFlowPageState
           : await ref
                 .read(memberProfileRepositoryProvider)
                 .readOnboardingDraft();
-      final AuthUser? authUser = await ref
+      final app_auth.AuthUser? authUser = await ref
           .read(currentAuthUserProvider.future)
           .catchError((Object _) => null);
       final bool shouldImportDraft = await _shouldImportOnboardingDraft(
@@ -365,6 +386,11 @@ class _MemberProfileEditFlowPageState
         _riskTolerance = _emptyToNull(savedProfile?.riskToleranceCode);
         _documentType =
             _emptyToNull(savedProfile?.ekycDocumentType) ?? 'drivers_license';
+        _bankRegionType =
+            _normalizeBankRegionType(
+              _emptyToNull(savedProfile?.bankRegionType),
+            ) ??
+            _bankRegionTypeFromBank(authBank);
         _accountType =
             _normalizeAccountType(
               _emptyToNull(savedProfile?.bankAccountType) ??
@@ -407,6 +433,27 @@ class _MemberProfileEditFlowPageState
         _accountHolderController.text = _firstNonEmpty(<String>[
           savedProfile?.bankAccountOwnerName ?? '',
           _readBankString(authBank, 'bankAccountOwnerName'),
+        ]);
+        _accountHolderAddressController.text = _firstNonEmpty(<String>[
+          savedProfile?.bankAccountOwnerAddress ?? '',
+          _readBankString(authBank, 'bankAccountOwnerAddress'),
+        ]);
+        _accountHolderNationalityController.text = _firstNonEmpty(<String>[
+          savedProfile?.bankAccountOwnerNationality ?? '',
+          _readBankString(authBank, 'bankAccountOwnerNationality'),
+        ]);
+        _swiftCodeController.text = _firstNonEmpty(<String>[
+          savedProfile?.bankAccountSwiftCode ?? '',
+          _readBankString(authBank, 'bankAccountSwiftCode'),
+        ]);
+        _bankCountryController.text = _firstNonEmpty(<String>[
+          savedProfile?.bankCountry ?? '',
+          _readBankString(authBank, 'bankCountry'),
+          if (_bankRegionType != _bankRegionOverseas) '日本',
+        ]);
+        _branchAddressController.text = _firstNonEmpty(<String>[
+          savedProfile?.branchBankAddress ?? '',
+          _readBankString(authBank, 'branchBankAddress'),
         ]);
         _selectedExperiences
           ..clear()
@@ -1165,9 +1212,15 @@ class _MemberProfileEditFlowPageState
       _isFilled(_bankNameController.text) &&
       _isFilled(_branchNameController.text) &&
       _isFilled(_branchNumberController.text) &&
-      _isFilled(_accountType) &&
       _isFilled(_accountNumberController.text) &&
-      _isFilled(_accountHolderController.text);
+      _isFilled(_accountHolderController.text) &&
+      (_bankRegionType == _bankRegionOverseas
+          ? _isFilled(_accountHolderAddressController.text) &&
+                _isFilled(_accountHolderNationalityController.text) &&
+                _isFilled(_swiftCodeController.text) &&
+                _isFilled(_bankCountryController.text) &&
+                _isFilled(_branchAddressController.text)
+          : _isFilled(_accountType));
 
   bool get _isConsentStepReady =>
       _electronicConsent && _antiSocialConsent && _privacyConsent;
@@ -1363,8 +1416,17 @@ class _MemberProfileEditFlowPageState
       branchBankName: _branchNameController.text.trim(),
       branchBankNumber: _branchNumberController.text.trim(),
       bankNumber: _accountNumberController.text.trim(),
-      bankAccountType: _accountType ?? '',
+      bankAccountType: _bankRegionType == _bankRegionOverseas
+          ? ''
+          : (_accountType ?? ''),
       bankAccountOwnerName: _accountHolderController.text.trim(),
+      bankRegionType: _bankRegionType ?? _bankRegionDomestic,
+      bankAccountOwnerAddress: _accountHolderAddressController.text.trim(),
+      bankAccountOwnerNationality: _accountHolderNationalityController.text
+          .trim(),
+      bankAccountSwiftCode: _swiftCodeController.text.trim(),
+      bankCountry: _bankCountryController.text.trim(),
+      branchBankAddress: _branchAddressController.text.trim(),
       electronicDeliveryConsent: _electronicConsent,
       antiSocialForcesConsent: _antiSocialConsent,
       privacyPolicyConsent: _privacyConsent,
@@ -1580,6 +1642,20 @@ class _MemberProfileEditFlowPageState
     ];
   }
 
+  List<MemberProfileOptionItem> _bankRegionOptions(BuildContext context) {
+    final l10n = context.l10n;
+    return <MemberProfileOptionItem>[
+      MemberProfileOptionItem(
+        value: _bankRegionDomestic,
+        label: l10n.walletBankSettingsAddDomesticOption,
+      ),
+      MemberProfileOptionItem(
+        value: _bankRegionOverseas,
+        label: l10n.walletBankSettingsAddOverseasOption,
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isSectionAccessChecking) {
@@ -1704,15 +1780,15 @@ class _MemberProfileEditFlowPageState
   }
 
   Widget _buildStep(BuildContext context) {
+    final l10n = context.l10n;
     final String? secondaryButtonLabel = _isSingleSectionMode
         ? null
-        : context.l10n.memberProfileTemporarySaveAction;
+        : l10n.memberProfileTemporarySaveAction;
     final VoidCallback? onSecondaryPressed = _isSingleSectionMode
         ? null
         : _saveOnboardingDraftTemporarily;
-    final String previewActionLabel =
-        context.l10n.memberProfilePhotoPreviewAction;
-    final String editActionLabel = context.l10n.commonEditText;
+    final String previewActionLabel = l10n.memberProfilePhotoPreviewAction;
+    final String editActionLabel = l10n.commonEditText;
     switch (_currentStep) {
       case MemberProfileEditStep.basicInfo:
         final bool isActionEnabled = _canProceedFromCurrentStep;
@@ -1923,6 +1999,14 @@ class _MemberProfileEditFlowPageState
           onSkip: _skipRealPersonAuthStep,
         );
       case MemberProfileEditStep.bankAccount:
+        final bankRegionItems = _simpleItems(_bankRegionOptions(context));
+        final bankRegionValues = bankRegionItems
+            .map((DropdownMenuItem<String> item) => item.value)
+            .whereType<String>()
+            .toSet();
+        final safeBankRegionType = bankRegionValues.contains(_bankRegionType)
+            ? _bankRegionType
+            : _bankRegionDomestic;
         final accountTypeItems = _simpleItems(_accountTypeOptions(context));
         final accountTypeValues = accountTypeItems
             .map((DropdownMenuItem<String> item) => item.value)
@@ -1932,6 +2016,9 @@ class _MemberProfileEditFlowPageState
             ? _accountType
             : null;
         return MemberProfileBankAccountStepPage(
+          bankRegionLabel: l10n.memberProfileBankRegionLabel,
+          bankRegionType: safeBankRegionType,
+          bankRegionItems: bankRegionItems,
           bankNameController: _bankNameController,
           branchNameController: _branchNameController,
           branchNumberController: _branchNumberController,
@@ -1939,6 +2026,14 @@ class _MemberProfileEditFlowPageState
           accountTypeItems: accountTypeItems,
           accountNumberController: _accountNumberController,
           accountHolderController: _accountHolderController,
+          accountHolderAddressController: _accountHolderAddressController,
+          accountHolderNationalityController:
+              _accountHolderNationalityController,
+          swiftCodeController: _swiftCodeController,
+          bankCountryController: _bankCountryController,
+          branchAddressController: _branchAddressController,
+          domesticTip: l10n.walletBankSettingsDomesticTip,
+          overseasTip: l10n.walletBankSettingsOverseasTip,
           primaryButtonEnabled: _canProceedFromCurrentStep,
           showSkip: !_isSingleSectionMode,
           titleOverride: _isSingleSectionMode ? _stepTitle : null,
@@ -1948,6 +2043,15 @@ class _MemberProfileEditFlowPageState
           primaryButtonLabelOverride: _isSingleSectionMode
               ? _primaryActionLabel
               : null,
+          onBankRegionChanged: (String? value) {
+            _applyUserChange(() {
+              _bankRegionType =
+                  _normalizeBankRegionType(value) ?? _bankRegionDomestic;
+              if (_bankRegionType != _bankRegionOverseas) {
+                _bankCountryController.text = '日本';
+              }
+            });
+          },
           onAccountTypeChanged: (String? value) {
             _applyUserChange(() {
               _accountType = _normalizeAccountType(value);
@@ -1966,9 +2070,11 @@ class _MemberProfileEditFlowPageState
           electronicConsent: _electronicConsent,
           antiSocialConsent: _antiSocialConsent,
           privacyConsent: _privacyConsent,
-          electronicDeliveryUrl: operatingCompanyContent?.electronicInformationUrl,
+          electronicDeliveryUrl:
+              operatingCompanyContent?.electronicInformationUrl,
           antiSocialRuleUrl: operatingCompanyContent?.antiSocialRuleUrl,
-          personalInformationUrl: operatingCompanyContent?.personalInformationUrl,
+          personalInformationUrl:
+              operatingCompanyContent?.personalInformationUrl,
           titleOverride: _isSingleSectionMode ? _stepTitle : null,
           descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
           secondaryButtonLabelOverride: secondaryButtonLabel,
@@ -2130,6 +2236,48 @@ String _readBankString(Map<String, dynamic>? bank, String key) {
   }
   final String text = value.toString().trim();
   return text;
+}
+
+const String _bankRegionDomestic = 'domestic';
+const String _bankRegionOverseas = 'overseas';
+
+String _bankRegionTypeFromBank(Map<String, dynamic>? bank) {
+  final int? bankType = _readBankInt(bank, 'bankType');
+  if (bankType == null) {
+    return _bankRegionDomestic;
+  }
+  return bankType == 0 ? _bankRegionDomestic : _bankRegionOverseas;
+}
+
+int? _readBankInt(Map<String, dynamic>? bank, String key) {
+  if (bank == null) {
+    return null;
+  }
+  final Object? value = bank[key];
+  if (value is int) {
+    return value;
+  }
+  if (value is num) {
+    return value.toInt();
+  }
+  if (value == null) {
+    return null;
+  }
+  return int.tryParse(value.toString());
+}
+
+String? _normalizeBankRegionType(String? raw) {
+  final String normalized = raw?.trim().toLowerCase() ?? '';
+  if (normalized.isEmpty) {
+    return null;
+  }
+  if (normalized == '0' || normalized == _bankRegionDomestic) {
+    return _bankRegionDomestic;
+  }
+  if (normalized == '1' || normalized == _bankRegionOverseas) {
+    return _bankRegionOverseas;
+  }
+  return null;
 }
 
 String? _normalizeAccountType(String? raw) {

@@ -44,6 +44,12 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
     @Default('') String bankNumber,
     @Default('') String bankAccountType,
     @Default('') String bankAccountOwnerName,
+    @Default('domestic') String bankRegionType,
+    @Default('') String bankAccountOwnerAddress,
+    @Default('') String bankAccountOwnerNationality,
+    @Default('') String bankAccountSwiftCode,
+    @Default('') String bankCountry,
+    @Default('') String branchBankAddress,
     @Default(false) bool electronicDeliveryConsent,
     @Default(false) bool antiSocialForcesConsent,
     @Default(false) bool privacyPolicyConsent,
@@ -114,10 +120,17 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       branchBankNumber.trim().isNotEmpty ||
       bankNumber.trim().isNotEmpty ||
       bankAccountType.trim().isNotEmpty ||
+      bankAccountOwnerAddress.trim().isNotEmpty ||
+      bankAccountOwnerNationality.trim().isNotEmpty ||
+      bankAccountSwiftCode.trim().isNotEmpty ||
+      bankCountry.trim().isNotEmpty ||
+      branchBankAddress.trim().isNotEmpty ||
       bankAccountOwnerName.trim().isNotEmpty ||
       electronicDeliveryConsent ||
       antiSocialForcesConsent ||
       privacyPolicyConsent;
+
+  bool get _isOverseasBank => bankRegionType.trim().toLowerCase() == 'overseas';
 
   MemberProfileDetails mergeWithSeed({
     String? familyName,
@@ -195,8 +208,14 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       branchBankName.trim().isNotEmpty &&
       branchBankNumber.trim().isNotEmpty &&
       bankNumber.trim().isNotEmpty &&
-      bankAccountType.trim().isNotEmpty &&
-      bankAccountOwnerName.trim().isNotEmpty;
+      bankAccountOwnerName.trim().isNotEmpty &&
+      (_isOverseasBank
+          ? bankAccountOwnerAddress.trim().isNotEmpty &&
+                bankAccountOwnerNationality.trim().isNotEmpty &&
+                bankAccountSwiftCode.trim().isNotEmpty &&
+                bankCountry.trim().isNotEmpty &&
+                branchBankAddress.trim().isNotEmpty
+          : bankAccountType.trim().isNotEmpty);
 
   bool get _isConsentStepComplete =>
       electronicDeliveryConsent &&

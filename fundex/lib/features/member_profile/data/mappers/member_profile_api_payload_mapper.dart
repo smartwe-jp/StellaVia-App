@@ -100,6 +100,7 @@ class MemberProfileApiPayloadMapper {
     final Map<String, dynamic> payload = <String, dynamic>{
       if (authUser?.bank != null) ...Map<String, dynamic>.from(authUser!.bank!),
     };
+    final isOverseasBank = _isOverseasBankRegionType(profile.bankRegionType);
     final bankName = _firstNonEmpty(<String>[
       profile.bankName,
       _readBankString(authUser?.bank, 'bankName'),
@@ -135,30 +136,61 @@ class MemberProfileApiPayloadMapper {
     if (bankAccountOwnerName.isNotEmpty) {
       payload['bankAccountOwnerName'] = bankAccountOwnerName;
     }
-    final bankType = _readBankInt(authUser?.bank, 'bankType') ?? 0;
+    final bankType = isOverseasBank ? 1 : 0;
+    final bankAccountOwnerAddress = _firstNonEmpty(<String>[
+      profile.bankAccountOwnerAddress,
+      _readBankString(authUser?.bank, 'bankAccountOwnerAddress'),
+    ]);
+    if (bankAccountOwnerAddress.isNotEmpty) {
+      payload['bankAccountOwnerAddress'] = bankAccountOwnerAddress;
+    }
     final bankAccountOwnerNationality = _firstNonEmpty(<String>[
+      profile.bankAccountOwnerNationality,
       _readBankString(authUser?.bank, 'bankAccountOwnerNationality'),
     ]);
     if (bankAccountOwnerNationality.isNotEmpty) {
       payload['bankAccountOwnerNationality'] = bankAccountOwnerNationality;
     }
-    final bankCountry = _firstNonEmpty(<String>[
-      _readBankString(authUser?.bank, 'bankCountry'),
-      if (bankType == 0) '日本',
+    final bankAccountSwiftCode = _firstNonEmpty(<String>[
+      profile.bankAccountSwiftCode,
+      _readBankString(authUser?.bank, 'bankAccountSwiftCode'),
     ]);
+    if (bankAccountSwiftCode.isNotEmpty) {
+      payload['bankAccountSwiftCode'] = bankAccountSwiftCode;
+    }
+    final bankCountry = isOverseasBank
+        ? _firstNonEmpty(<String>[
+            profile.bankCountry,
+            _readBankString(authUser?.bank, 'bankCountry'),
+          ])
+        : '日本';
     if (bankCountry.isNotEmpty) {
       payload['bankCountry'] = bankCountry;
     }
+    final branchBankAddress = _firstNonEmpty(<String>[
+      profile.branchBankAddress,
+      _readBankString(authUser?.bank, 'branchBankAddress'),
+    ]);
+    if (branchBankAddress.isNotEmpty) {
+      payload['branchBankAddress'] = branchBankAddress;
+    }
     final bankAccountType = _mapBankAccountTypeOrNull(profile.bankAccountType);
-    if (bankAccountType != null) {
+    if (!isOverseasBank && bankAccountType != null) {
       payload['bankAccountType'] = bankAccountType;
     }
-    if (bankType != 0 || _readBankInt(authUser?.bank, 'bankType') != null) {
-      payload['bankType'] = bankType;
+    if (isOverseasBank) {
+      payload['bankAccountType'] = '';
     }
+    payload['bankType'] = bankType;
     final liveType = _readBankInt(authUser?.bank, 'liveType');
     if (liveType != null) {
       payload['liveType'] = liveType;
+    }
+    if (!isOverseasBank) {
+      payload['bankAccountOwnerAddress'] = '';
+      payload['bankAccountOwnerNationality'] = '';
+      payload['bankAccountSwiftCode'] = '';
+      payload['branchBankAddress'] = '';
     }
     payload.removeWhere((_, dynamic value) {
       if (value == null) {
@@ -173,9 +205,6 @@ class MemberProfileApiPayloadMapper {
         bankType == 0 &&
         !payload.containsKey('bankAccountOwnerNationality')) {
       payload['bankAccountOwnerNationality'] = '';
-    }
-    if (payload.isNotEmpty && !payload.containsKey('bankType')) {
-      payload['bankType'] = 0;
     }
     return payload;
   }
@@ -254,6 +283,10 @@ class MemberProfileApiPayloadMapper {
       return null;
     }
     return int.tryParse(value.toString());
+  }
+
+  static bool _isOverseasBankRegionType(String raw) {
+    return raw.trim().toLowerCase() == 'overseas';
   }
 
   static String _normalizeBirthday(String value) {

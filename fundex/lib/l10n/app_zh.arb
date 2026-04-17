@@ -1334,6 +1334,7 @@
   "memberProfileStep5RealPersonSelfieRequired": "请先完成自拍照上传。",
   "memberProfileStep5Title": "Step 6：银行账户登记",
   "memberProfileStep5Description": "请登记分配金收款账户",
+  "memberProfileBankRegionLabel": "银行所在地区",
   "memberProfileBankNameLabel": "金融机构名称",
   "memberProfileBankNameHint": "三菱UFJ银行",
   "memberProfileBranchLabel": "支店名称",

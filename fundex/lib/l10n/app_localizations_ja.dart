@@ -3569,6 +3569,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfileStep5Description => '分配金の振込先を登録してください';
 
   @override
+  String get memberProfileBankRegionLabel => '銀行所在地域';
+
+  @override
   String get memberProfileBankNameLabel => '金融機関名';
 
   @override

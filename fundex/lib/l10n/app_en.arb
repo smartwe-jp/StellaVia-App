@@ -1334,6 +1334,7 @@
   "memberProfileStep5RealPersonSelfieRequired": "Please upload a selfie photo first.",
   "memberProfileStep5Title": "Step 6: Bank Account",
   "memberProfileStep5Description": "Register the bank account for distribution transfers.",
+  "memberProfileBankRegionLabel": "Bank region",
   "memberProfileBankNameLabel": "Financial institution",
   "memberProfileBankNameHint": "MUFG Bank",
   "memberProfileBranchLabel": "Branch",

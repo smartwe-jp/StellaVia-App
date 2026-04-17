@@ -6938,6 +6938,12 @@ abstract class AppLocalizations {
   /// **'Register the bank account for distribution transfers.'**
   String get memberProfileStep5Description;
 
+  /// No description provided for @memberProfileBankRegionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank region'**
+  String get memberProfileBankRegionLabel;
+
   /// No description provided for @memberProfileBankNameLabel.
   ///
   /// In en, this message translates to:

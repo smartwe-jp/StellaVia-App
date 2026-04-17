@@ -3526,6 +3526,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileStep5Description => '请登记分配金收款账户';
 
   @override
+  String get memberProfileBankRegionLabel => '银行所在地区';
+
+  @override
   String get memberProfileBankNameLabel => '金融机构名称';
 
   @override
@@ -7320,6 +7323,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get memberProfileStep5Description => '請登記配息入帳帳戶';
+
+  @override
+  String get memberProfileBankRegionLabel => '銀行所在地區';
 
   @override
   String get memberProfileBankNameLabel => '金融機構名稱';

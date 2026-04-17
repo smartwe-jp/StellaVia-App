@@ -147,6 +147,12 @@ class MemberProfileCurrentUserPayloadMapper {
         _string(bank['bankAccountType']),
       ),
       bankAccountOwnerName: _string(bank['bankAccountOwnerName']),
+      bankRegionType: _bankRegionTypeFromRemote(bank['bankType']),
+      bankAccountOwnerAddress: _string(bank['bankAccountOwnerAddress']),
+      bankAccountOwnerNationality: _string(bank['bankAccountOwnerNationality']),
+      bankAccountSwiftCode: _string(bank['bankAccountSwiftCode']),
+      bankCountry: _string(bank['bankCountry']),
+      branchBankAddress: _string(bank['branchBankAddress']),
       lastUpdatedAt: DateTime.now().toUtc(),
     );
 
@@ -192,6 +198,20 @@ class MemberProfileCurrentUserPayloadMapper {
       }
     }
     return '';
+  }
+
+  static String _bankRegionTypeFromRemote(Object? value) {
+    if (value is int) {
+      return value == 0 ? 'domestic' : 'overseas';
+    }
+    final normalized = value?.toString().trim().toLowerCase() ?? '';
+    if (normalized.isEmpty) {
+      return 'domestic';
+    }
+    if (normalized == '0' || normalized == 'domestic') {
+      return 'domestic';
+    }
+    return 'overseas';
   }
 
   static String _joinNonEmpty(List<String> values) {

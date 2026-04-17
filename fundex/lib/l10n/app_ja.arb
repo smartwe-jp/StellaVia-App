@@ -1334,6 +1334,7 @@
   "memberProfileStep5RealPersonSelfieRequired": "先に自撮り写真のアップロードを完了してください。",
   "memberProfileStep5Title": "Step 6：銀行口座登録",
   "memberProfileStep5Description": "分配金の振込先を登録してください",
+  "memberProfileBankRegionLabel": "銀行所在地域",
   "memberProfileBankNameLabel": "金融機関名",
   "memberProfileBankNameHint": "三菱UFJ銀行",
   "memberProfileBranchLabel": "支店名",

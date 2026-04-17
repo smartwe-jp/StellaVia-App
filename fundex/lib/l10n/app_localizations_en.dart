@@ -3766,6 +3766,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Register the bank account for distribution transfers.';
 
   @override
+  String get memberProfileBankRegionLabel => 'Bank region';
+
+  @override
   String get memberProfileBankNameLabel => 'Financial institution';
 
   @override

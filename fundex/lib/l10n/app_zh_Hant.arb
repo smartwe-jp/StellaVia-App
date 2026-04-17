@@ -1334,6 +1334,7 @@
   "memberProfileStep5RealPersonSelfieRequired": "請先完成自拍照上傳。",
   "memberProfileStep5Title": "Step 6：銀行帳戶登記",
   "memberProfileStep5Description": "請登記配息入帳帳戶",
+  "memberProfileBankRegionLabel": "銀行所在地區",
   "memberProfileBankNameLabel": "金融機構名稱",
   "memberProfileBankNameHint": "三菱UFJ銀行",
   "memberProfileBranchLabel": "分行名稱",
