@@ -3820,7 +3820,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get loginCreateAccount => '免費註冊';
 
   @override
-  String get commonClose => '关闭';
+  String get commonClose => '關閉';
 
   @override
   String get commonCancel => '取消';
@@ -3896,25 +3896,25 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get loginForgotPassword => '忘記密碼？';
 
   @override
-  String get loginFootnote => '面向国际会员设计，兼顾日本市场体验与隐私规范。';
+  String get loginFootnote => '面向國際會員設計，兼顧日本市場體驗與隱私規範。';
 
   @override
-  String get loginErrorSendCodeFailed => '验证码发送失败，请稍后重试';
+  String get loginErrorSendCodeFailed => '驗證碼發送失敗，請稍後重試';
 
   @override
-  String get loginErrorInvalidCode => '登录失败，请检查验证码';
+  String get loginErrorInvalidCode => '登入失敗，請檢查驗證碼';
 
   @override
-  String get loginEmailAccountInvalid => '邮箱登录请填写有效邮箱地址。';
+  String get loginEmailAccountInvalid => '電子郵件登入請填寫有效電子郵件地址。';
 
   @override
-  String get loginMobileAccountInvalid => '手机登录请填写有效手机号。';
+  String get loginMobileAccountInvalid => '手機登入請填寫有效手機號碼。';
 
   @override
   String get registerTitle => '新會員註冊';
 
   @override
-  String get registerSubtitle => '开通安全账号，统一管理投资、订房与会员权益。';
+  String get registerSubtitle => '開通安全帳號，統一管理投資、訂房與會員權益。';
 
   @override
   String get registerQuickTitle => '建立帳號';
@@ -3923,7 +3923,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get registerQuickSubtitle => '只需電子郵件和密碼即可註冊。出資所需資訊可稍後隨時填寫。';
 
   @override
-  String get registerModeTitle => '注册方式';
+  String get registerModeTitle => '註冊方式';
 
   @override
   String get authModeEmail => '電子郵件';
@@ -3941,149 +3941,149 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get splashTagline => '不動產眾籌投資';
 
   @override
-  String get authEntryHeadline => '投资与订房会员服务一站登录';
+  String get authEntryHeadline => '投資與訂房會員服務一站登入';
 
   @override
-  String get authEntryDescription => '使用手机号或邮箱快速登录，统一管理投资、订房与会员权益。';
+  String get authEntryDescription => '使用手機號碼或電子郵件快速登入，統一管理投資、訂房與會員權益。';
 
   @override
-  String get authEntryPhoneLogin => '手机号登录';
+  String get authEntryPhoneLogin => '手機號碼登入';
 
   @override
-  String get authEntryEmailLogin => '邮箱登录';
+  String get authEntryEmailLogin => '電子郵件登入';
 
   @override
-  String get authEntryNonMemberRegisterNow => '非会员？立即注册';
+  String get authEntryNonMemberRegisterNow => '非會員？立即註冊';
 
   @override
-  String get authBeforeMemberDirectLogin => '已经是会员？直接登录';
+  String get authBeforeMemberDirectLogin => '已經是會員？直接登入';
 
   @override
-  String get authBeforeNonMemberRegister => '不是会员？立即注册';
+  String get authBeforeNonMemberRegister => '不是會員？立即註冊';
 
   @override
-  String get authRegisterEntryHeadline => '请选择注册方式';
+  String get authRegisterEntryHeadline => '請選擇註冊方式';
 
   @override
-  String get authRegisterEntryDescription => '手机号或邮箱均可创建账号，注册后统一管理会员权益。';
+  String get authRegisterEntryDescription => '手機號碼或電子郵件均可建立帳號，註冊後統一管理會員權益。';
 
   @override
-  String get authEntryPhoneRegister => '手机号注册';
+  String get authEntryPhoneRegister => '手機號碼註冊';
 
   @override
-  String get authEntryEmailRegister => '邮箱注册';
+  String get authEntryEmailRegister => '電子郵件註冊';
 
   @override
-  String get authBackToLoginEntry => '返回登录入口';
+  String get authBackToLoginEntry => '返回登入入口';
 
   @override
-  String get authBackToRegisterEntry => '返回注册方式';
+  String get authBackToRegisterEntry => '返回註冊方式';
 
   @override
-  String get authIntlCodeLabel => '手机区号';
+  String get authIntlCodeLabel => '手機區號';
 
   @override
-  String get authIntlCodePickerTitle => '选择手机区号';
+  String get authIntlCodePickerTitle => '選擇手機區號';
 
   @override
-  String get authMethodFormSubtitle => '使用验证码完成安全验证。';
+  String get authMethodFormSubtitle => '使用驗證碼完成安全驗證。';
 
   @override
-  String get profileOnboardingTitle => '完善详细资料';
+  String get profileOnboardingTitle => '完善詳細資料';
 
   @override
-  String get profileEditTitle => '编辑详细资料';
+  String get profileEditTitle => '編輯詳細資料';
 
   @override
-  String get profileOnboardingCardTitle => '交易与订房前资料确认';
+  String get profileOnboardingCardTitle => '交易與訂房前資料確認';
 
   @override
   String get profileOnboardingCardSubtitle =>
-      '为符合交易与订房实名要求，请补充详细资料。可先跳过，后续再填写。';
+      '為符合交易與訂房實名要求，請補充詳細資料。可先跳過，後續再填寫。';
 
   @override
-  String get profileEditCardTitle => '详细资料';
+  String get profileEditCardTitle => '詳細資料';
 
   @override
-  String get profileEditCardSubtitle => '再次填写会保留你上次保存的内容。';
+  String get profileEditCardSubtitle => '再次填寫會保留你上次儲存的內容。';
 
   @override
-  String get profileLastSavedHint => '已加载本地保存内容，可继续补充或修改。';
+  String get profileLastSavedHint => '已載入本地儲存內容，可繼續補充或修改。';
 
   @override
-  String get profileSkipButton => '稍后填写';
+  String get profileSkipButton => '稍後填寫';
 
   @override
   String get profileStepName => '姓名';
 
   @override
-  String get profileStepNameSubtitle => '按日式录入顺序填写姓与名。';
+  String get profileStepNameSubtitle => '按日式錄入順序填寫姓與名。';
 
   @override
-  String get profileStepContact => '联系方式';
+  String get profileStepContact => '聯絡方式';
 
   @override
-  String get profileStepContactSubtitle => '填写地址、电话与邮箱（如有已自动填充）。';
+  String get profileStepContactSubtitle => '填寫地址、電話與電子郵件（如有已自動填入）。';
 
   @override
-  String get profileStepDocument => '证件照片';
+  String get profileStepDocument => '證件照片';
 
   @override
-  String get profileStepDocumentSubtitle => '上传证件照片用于后续交易与订房校验。';
+  String get profileStepDocumentSubtitle => '上傳證件照片用於後續交易與訂房驗證。';
 
   @override
   String get profileFamilyNameLabel => '姓';
 
   @override
-  String get profileFamilyNameHint => '请输入姓';
+  String get profileFamilyNameHint => '請輸入姓';
 
   @override
   String get profileGivenNameLabel => '名';
 
   @override
-  String get profileGivenNameHint => '请输入名';
+  String get profileGivenNameHint => '請輸入名';
 
   @override
   String get profileAddressLabel => '地址';
 
   @override
-  String get profileAddressHint => '请输入完整地址（都道府县 / 市区町村 / 详细地址）';
+  String get profileAddressHint => '請輸入完整地址（都道府縣 / 市區町村 / 詳細地址）';
 
   @override
-  String get profilePhoneLabel => '电话';
+  String get profilePhoneLabel => '電話';
 
   @override
-  String get profilePhoneHint => '请输入联系电话';
+  String get profilePhoneHint => '請輸入聯絡電話';
 
   @override
-  String get profileEmailLabel => '邮箱';
+  String get profileEmailLabel => '電子郵件';
 
   @override
-  String get profileEmailHint => '请输入邮箱地址';
+  String get profileEmailHint => '請輸入電子郵件地址';
 
   @override
-  String get profileDocumentPhotoLabel => '证件照片';
+  String get profileDocumentPhotoLabel => '證件照片';
 
   @override
-  String get profileDocumentAddPhoto => '上传证件照片';
+  String get profileDocumentAddPhoto => '上傳證件照片';
 
   @override
-  String get profileDocumentChangePhoto => '更换证件照片';
+  String get profileDocumentChangePhoto => '更換證件照片';
 
   @override
-  String get profileDocumentRemovePhoto => '移除证件照片';
+  String get profileDocumentRemovePhoto => '移除證件照片';
 
   @override
-  String get profileDocumentTakePhoto => '拍照上传';
+  String get profileDocumentTakePhoto => '拍照上傳';
 
   @override
-  String get profileDocumentPickFromGallery => '从相册选择';
+  String get profileDocumentPickFromGallery => '從相簿選擇';
 
   @override
-  String get profileDocumentHint => '建议上传清晰、无遮挡的证件照片，便于后续人工审核。';
+  String get profileDocumentHint => '建議上傳清晰、無遮擋的證件照片，便於後續人工審核。';
 
   @override
-  String get profileDocumentAttachedBadge => '已上传';
+  String get profileDocumentAttachedBadge => '已上傳';
 
   @override
   String get profilePrevStep => '上一步';
@@ -4092,16 +4092,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get profileNextStep => '下一步';
 
   @override
-  String get profileSaveButton => '保存资料';
+  String get profileSaveButton => '保存資料';
 
   @override
-  String get profileSavedTitle => '资料已保存';
+  String get profileSavedTitle => '資料已保存';
 
   @override
-  String get profileSavedAndContinueLoginMessage => '详细资料已保存在本地，你可以继续登录。';
+  String get profileSavedAndContinueLoginMessage => '詳細資料已保存在本地，你可以繼續登入。';
 
   @override
-  String get profileSavedSnackbar => '详细资料已保存到本地。';
+  String get profileSavedSnackbar => '詳細資料已保存到本地。';
 
   @override
   String get memberProfileAutoSavedToast => '已保存。';
@@ -4125,28 +4125,28 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileDraftImportSkipAction => '暫不匯入';
 
   @override
-  String get profileIntakeValidationTitle => '资料未完成';
+  String get profileIntakeValidationTitle => '資料未完成';
 
   @override
-  String get profileFamilyNameRequired => '请填写姓。';
+  String get profileFamilyNameRequired => '請填寫姓。';
 
   @override
-  String get profileGivenNameRequired => '请填写名。';
+  String get profileGivenNameRequired => '請填寫名。';
 
   @override
-  String get profileAddressRequired => '请填写地址。';
+  String get profileAddressRequired => '請填寫地址。';
 
   @override
-  String get profilePhoneRequired => '请填写有效电话。';
+  String get profilePhoneRequired => '請填寫有效電話。';
 
   @override
-  String get profileEmailRequired => '请填写有效邮箱。';
+  String get profileEmailRequired => '請填寫有效電子郵件。';
 
   @override
-  String get profileDocumentPhotoRequired => '请上传证件照片。';
+  String get profileDocumentPhotoRequired => '請上傳證件照片。';
 
   @override
-  String get profileDocumentPickFailed => '证件照片选择失败，请重试。';
+  String get profileDocumentPickFailed => '證件照片選擇失敗，請重試。';
 
   @override
   String get profileDocumentCameraPermissionRequired => '拍攝證件照片前，請先允許相機權限。';
@@ -4156,107 +4156,107 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
       '選擇證件照片前，請先允許相簿權限。';
 
   @override
-  String get profileIncompleteBannerTitle => '资料未完成';
+  String get profileIncompleteBannerTitle => '資料未完成';
 
   @override
-  String get profileIncompleteBannerSubtitle => '交易与订房前需要完整资料。';
+  String get profileIncompleteBannerSubtitle => '交易與訂房前需要完整資料。';
 
   @override
-  String get profileIncompleteBannerBody => '请补齐姓名、地址、电话、邮箱和证件照片后再进行交易或订房。';
+  String get profileIncompleteBannerBody => '請補齊姓名、地址、電話、電子郵件和證件照片後再進行交易或訂房。';
 
   @override
-  String get profileGuardTitle => '需要先完善详细资料';
+  String get profileGuardTitle => '需要先完善詳細資料';
 
   @override
-  String get profileGuardMessage => '交易或订房前需要先完成详细资料录入。';
+  String get profileGuardMessage => '交易或訂房前需要先完成詳細資料錄入。';
 
   @override
   String profileGuardMessageWithAction(Object actionLabel) {
-    return '进行“$actionLabel”前需要先完成详细资料录入。';
+    return '進行“$actionLabel”前需要先完成詳細資料錄入。';
   }
 
   @override
   String get profileGuardCancel => '取消';
 
   @override
-  String get profileGuardGoFill => '去填写';
+  String get profileGuardGoFill => '去填寫';
 
   @override
   String profileGuardPassMessage(Object actionLabel) {
-    return '已通过资料校验，可继续$actionLabel。';
+    return '已通過資料校驗，可繼續$actionLabel。';
   }
 
   @override
-  String get profileStatusCardTitle => '详细资料状态';
+  String get profileStatusCardTitle => '詳細資料狀態';
 
   @override
-  String get profileStatusCompleted => '已完成，可进行交易与订房。';
+  String get profileStatusCompleted => '已完成，可進行交易與訂房。';
 
   @override
-  String get profileStatusIncomplete => '未完成，交易与订房前需先补充资料。';
+  String get profileStatusIncomplete => '未完成，交易與訂房前需先補充資料。';
 
   @override
-  String get profileStatusLoadFailed => '资料状态读取失败，请稍后重试。';
+  String get profileStatusLoadFailed => '資料狀態讀取失敗，請稍後重試。';
 
   @override
-  String get profileEditEntryButton => '填写/编辑资料';
+  String get profileEditEntryButton => '填寫/編輯資料';
 
   @override
-  String get profileProtectedBookingAction => '订房';
+  String get profileProtectedBookingAction => '訂房';
 
   @override
   String get profileProtectedTradeAction => '交易';
 
   @override
-  String get authMobileLoginTitle => '手机号登录';
+  String get authMobileLoginTitle => '手機號碼登入';
 
   @override
-  String get authEmailLoginTitle => '邮箱登录';
+  String get authEmailLoginTitle => '電子郵件登入';
 
   @override
-  String get authMobileRegisterTitle => '手机号注册';
+  String get authMobileRegisterTitle => '手機號碼註冊';
 
   @override
-  String get authEmailRegisterTitle => '邮箱注册';
+  String get authEmailRegisterTitle => '電子郵件註冊';
 
   @override
-  String get registerAccountLabel => '手机号或邮箱';
+  String get registerAccountLabel => '手機號碼或電子郵件';
 
   @override
-  String get registerEmailAccountLabel => '邮箱';
+  String get registerEmailAccountLabel => '電子郵件';
 
   @override
-  String get registerMobileAccountLabel => '手机号';
+  String get registerMobileAccountLabel => '手機號碼';
 
   @override
-  String get registerCodeLabel => '验证码';
+  String get registerCodeLabel => '驗證碼';
 
   @override
-  String get registerSendCode => '发送验证码';
+  String get registerSendCode => '發送驗證碼';
 
   @override
-  String get registerSendCodeSuccess => '注册验证码已发送。';
+  String get registerSendCodeSuccess => '註冊驗證碼已發送。';
 
   @override
-  String get registerContactLabel => '联系信息';
+  String get registerContactLabel => '聯絡資訊';
 
   @override
-  String get registerContactHelperEmail => '邮箱注册时请填写手机号。';
+  String get registerContactHelperEmail => '電子郵件註冊時請填寫手機號碼。';
 
   @override
-  String get registerContactHelperMobile => '可选：填写邮箱用于账号绑定。';
+  String get registerContactHelperMobile => '可選：填寫電子郵件用於帳號綁定。';
 
   @override
-  String get registerPasswordLabel => '密码';
+  String get registerPasswordLabel => '密碼';
 
   @override
-  String get registerConfirmPasswordLabel => '确认密码';
+  String get registerConfirmPasswordLabel => '確認密碼';
 
   @override
-  String get registerInviteCodeLabel => '邀请码（选填）';
+  String get registerInviteCodeLabel => '邀請碼（選填）';
 
   @override
-  String get registerAcceptPolicy => '我已阅读并同意《服务条款》与《隐私政策》。';
+  String get registerAcceptPolicy => '我已閱讀並同意《服務條款》與《隱私政策》。';
 
   @override
   String get registerElectronicDeliveryDocumentTitle => '關於以電子方式交付書面的同意書';
@@ -4271,100 +4271,100 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get registerPolicyButton => '查看';
 
   @override
-  String get registerPolicyTitle => '条款与隐私';
+  String get registerPolicyTitle => '條款與隱私';
 
   @override
-  String get registerPolicyDescription => '此处示例展示复用的底部弹框。后续可接入正式法务内容与版本记录。';
+  String get registerPolicyDescription => '此處示例展示複用的底部彈框。後續可接入正式法務內容與版本紀錄。';
 
   @override
-  String get registerSubmit => '创建账号';
+  String get registerSubmit => '建立帳號';
 
   @override
-  String get registerBackToLogin => '已有账号？去登录';
+  String get registerBackToLogin => '已有帳號？去登入';
 
   @override
-  String get registerPasswordMismatchTitle => '两次密码不一致';
+  String get registerPasswordMismatchTitle => '兩次密碼不一致';
 
   @override
-  String get registerPasswordMismatchMessage => '请确认两次输入的密码完全一致。';
+  String get registerPasswordMismatchMessage => '請確認兩次輸入的密碼完全一致。';
 
   @override
-  String get registerUiReadyTitle => '注册页面已就绪';
+  String get registerUiReadyTitle => '註冊頁面已就緒';
 
   @override
-  String get registerUiReadyMessage => 'UI 已完成，可继续接入注册接口。';
+  String get registerUiReadyMessage => 'UI 已完成，可繼續接入註冊接口。';
 
   @override
-  String get registerEmailMobileRequired => '邮箱注册必须填写手机号。';
+  String get registerEmailMobileRequired => '電子郵件註冊必須填寫手機號碼。';
 
   @override
-  String get registerEmailAccountInvalid => '邮箱注册请填写有效邮箱地址。';
+  String get registerEmailAccountInvalid => '電子郵件註冊請填寫有效電子郵件地址。';
 
   @override
-  String get registerMobileAccountInvalid => '手机注册请填写有效手机号。';
+  String get registerMobileAccountInvalid => '手機註冊請填寫有效手機號碼。';
 
   @override
-  String get registerSubmitFailed => '注册失败，请稍后重试。';
+  String get registerSubmitFailed => '註冊失敗，請稍後重試。';
 
   @override
-  String get registerSuccessTitle => '注册成功';
+  String get registerSuccessTitle => '註冊成功';
 
   @override
-  String get registerSuccessMessage => '账号已创建，请登录。';
+  String get registerSuccessMessage => '帳號已建立，請登入。';
 
   @override
-  String get forgotPasswordTitle => '重置密码';
+  String get forgotPasswordTitle => '重設密碼';
 
   @override
-  String get forgotPasswordSubtitle => '通过安全验证恢复账号访问。';
+  String get forgotPasswordSubtitle => '透過安全驗證恢復帳號存取。';
 
   @override
-  String get forgotPasswordAccountLabel => '手机号或邮箱';
+  String get forgotPasswordAccountLabel => '手機號碼或電子郵件';
 
   @override
-  String get forgotPasswordCodeLabel => '验证码';
+  String get forgotPasswordCodeLabel => '驗證碼';
 
   @override
-  String get forgotPasswordSendCode => '发送验证码';
+  String get forgotPasswordSendCode => '發送驗證碼';
 
   @override
-  String get forgotPasswordSendCodeSuccess => '验证码已发送。';
+  String get forgotPasswordSendCodeSuccess => '驗證碼已發送。';
 
   @override
-  String get forgotPasswordNewPasswordLabel => '新密码';
+  String get forgotPasswordNewPasswordLabel => '新密碼';
 
   @override
-  String get forgotPasswordConfirmPasswordLabel => '确认新密码';
+  String get forgotPasswordConfirmPasswordLabel => '確認新密碼';
 
   @override
-  String get forgotPasswordSubmit => '更新密码';
+  String get forgotPasswordSubmit => '更新密碼';
 
   @override
-  String get forgotPasswordMismatchTitle => '两次密码不一致';
+  String get forgotPasswordMismatchTitle => '兩次密碼不一致';
 
   @override
-  String get forgotPasswordMismatchMessage => '请检查新密码与确认密码是否一致。';
+  String get forgotPasswordMismatchMessage => '請檢查新密碼與確認密碼是否一致。';
 
   @override
-  String get forgotPasswordUiReadyTitle => '找回密码页面已就绪';
+  String get forgotPasswordUiReadyTitle => '找回密碼頁面已就緒';
 
   @override
-  String get forgotPasswordUiReadyMessage => 'UI 已完成，可继续接入找回密码接口。';
+  String get forgotPasswordUiReadyMessage => 'UI 已完成，可繼續接入找回密碼接口。';
 
   @override
-  String get forgotPasswordRecoverFailed => '恢复访问失败，请检查验证码。';
+  String get forgotPasswordRecoverFailed => '恢復存取失敗，請檢查驗證碼。';
 
   @override
   String get commonOk => '知道了';
 
   @override
-  String get commonBackToLogin => '返回登录';
+  String get commonBackToLogin => '返回登入';
 
   @override
-  String get homeTitle => '首页';
+  String get homeTitle => '首頁';
 
   @override
-  String get mainTabHome => '首页';
+  String get mainTabHome => '首頁';
 
   @override
   String get mainTabHotel => '酒店預訂';
@@ -4385,36 +4385,36 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get mainTabSettings => '設定';
 
   @override
-  String get homeHeroTitle => '投资概览';
+  String get homeHeroTitle => '投資概覽';
 
   @override
-  String get homeHeroSubtitle => '快速查看当前持仓、浮动收益与可用资金。';
+  String get homeHeroSubtitle => '快速查看當前持倉、浮動收益與可用資金。';
 
   @override
-  String get homeHeroAssetsLabel => '总资产';
+  String get homeHeroAssetsLabel => '總資產';
 
   @override
-  String get homeHeroPnlLabel => '浮动收益';
+  String get homeHeroPnlLabel => '浮動收益';
 
   @override
-  String get homeHeroCashLabel => '可用资金';
+  String get homeHeroCashLabel => '可用資金';
 
   @override
   String homeWelcomeUser(Object name) {
-    return '欢迎回来，$name';
+    return '歡迎回來，$name';
   }
 
   @override
-  String get homeHeroTotalAssetsAmountLabel => '总资产额';
+  String get homeHeroTotalAssetsAmountLabel => '總資產額';
 
   @override
-  String get homeHeroMonthlyDelta => '+¥127,500（较上月 +3.4%）';
+  String get homeHeroMonthlyDelta => '+¥127,500（較上月 +3.4%）';
 
   @override
-  String get homeHeroActiveInvestmentLabel => '运用中';
+  String get homeHeroActiveInvestmentLabel => '運用中';
 
   @override
-  String get homeHeroTotalDividendsLabel => '累计分配金';
+  String get homeHeroTotalDividendsLabel => '累計分配金';
 
   @override
   String get homeGuestBrowsingTitle => '未登入瀏覽中';
@@ -4539,34 +4539,34 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeShowLessAction => '收起';
 
   @override
-  String get homeMockFeaturedFundA => '东京都港区 赤坂高端公寓';
+  String get homeMockFeaturedFundA => '東京都港區 赤坂高端公寓';
 
   @override
-  String get homeMockFeaturedFundB => '大阪市中央区 心斋桥商业楼';
+  String get homeMockFeaturedFundB => '大阪市中央區 心齋橋商業大樓';
 
   @override
-  String get homeMockFeaturedFundC => '京都市东山区 町家改造酒店';
+  String get homeMockFeaturedFundC => '京都市東山區 町家改造酒店';
 
   @override
-  String get homeMockFeaturedMetaA => '12个月 ・ 2亿日元';
+  String get homeMockFeaturedMetaA => '12個月 ・ 2億日圓';
 
   @override
-  String get homeMockFeaturedMetaB => '18个月 ・ 1.5亿日元';
+  String get homeMockFeaturedMetaB => '18個月 ・ 1.5億日圓';
 
   @override
-  String get homeMockFeaturedMetaC => '24个月 ・ 3亿日元';
+  String get homeMockFeaturedMetaC => '24個月 ・ 3億日圓';
 
   @override
-  String get homeMockActiveFundA => '涩谷区 办公楼 #12';
+  String get homeMockActiveFundA => '澀谷區 辦公大樓 #12';
 
   @override
-  String get homeMockActiveFundB => '名古屋市 物流设施 #09';
+  String get homeMockActiveFundB => '名古屋市 物流設施 #09';
 
   @override
   String get homeMockActiveFundC => '福冈市 住宅基金 #07';
 
   @override
-  String get homeMockActiveFundD => '札幌市 复合设施基金 #03';
+  String get homeMockActiveFundD => '札幌市 複合設施基金 #03';
 
   @override
   String get fundListTitle => '基金列表';
@@ -4620,35 +4620,35 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundListGainTypeMixed => '開發旅館並營運';
 
   @override
-  String get fundListMethodUnknown => '未设置';
+  String get fundListMethodUnknown => '未設定';
 
   @override
   String fundListAppliedAmount(Object amount, Object progress) {
-    return '申请金额 $amount（$progress）';
+    return '申請金額 $amount（$progress）';
   }
 
   @override
   String fundListOpenStartAt(Object start) {
-    return '募集开始 $start';
+    return '募集開始 $start';
   }
 
   @override
   String get fundListViewDetail => '詳情→';
 
   @override
-  String get fundListLoadError => '获取基金列表失败，请重试。';
+  String get fundListLoadError => '取得基金列表失敗，請重試。';
 
   @override
-  String get fundListRetry => '重试';
+  String get fundListRetry => '重試';
 
   @override
-  String get fundListEmpty => '当前筛选条件下没有基金。';
+  String get fundListEmpty => '當前篩選條件下沒有基金。';
 
   @override
-  String get fundListStatusOperating => '运用中';
+  String get fundListStatusOperating => '運用中';
 
   @override
-  String get fundListStatusOperatingEnded => '运用结束';
+  String get fundListStatusOperatingEnded => '運用結束';
 
   @override
   String get fundListStatusOpen => '募集中';
@@ -4657,16 +4657,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundListStatusUpcoming => '募集前';
 
   @override
-  String get fundListStatusClosed => '募集结束';
+  String get fundListStatusClosed => '募集結束';
 
   @override
   String get fundListStatusCompleted => '募集完成';
 
   @override
-  String get fundListStatusFailed => '募集失败';
+  String get fundListStatusFailed => '募集失敗';
 
   @override
-  String get fundListStatusUnknown => '未设置';
+  String get fundListStatusUnknown => '未設定';
 
   @override
   String fundListVolume(Object number) {
@@ -4674,19 +4674,19 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get hotelTabHeadline => '酒店预订模块（框架）';
+  String get hotelTabHeadline => '酒店預訂模組（框架）';
 
   @override
-  String get hotelTabSubtitle => '后续在此接入搜索、列表、详情、下单流程。';
+  String get hotelTabSubtitle => '後續在此接入搜尋、列表、詳情、下單流程。';
 
   @override
-  String get discussionTabHeadline => '投资讨论板块（框架）';
+  String get discussionTabHeadline => '投資討論板塊（框架）';
 
   @override
-  String get discussionTabSubtitle => '类似留言版的互动区，后续支持回复、点赞、置顶与审核。';
+  String get discussionTabSubtitle => '類似留言板的互動區，後續支援回覆、按讚、置頂與審核。';
 
   @override
-  String get discussionTabReplyAction => '回复';
+  String get discussionTabReplyAction => '回覆';
 
   @override
   String get kizunarkSubtitle => '投資者社群';
@@ -4783,28 +4783,28 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get kizunarkEmptyState => '還沒有貼文，來發起第一則討論吧。';
 
   @override
-  String get investmentTabHeadline => '投资相关模块（框架）';
+  String get investmentTabHeadline => '投資相關模組（框架）';
 
   @override
-  String get investmentTabSubtitle => '后续承接产品列表、持仓、申购赎回、账单等能力。';
+  String get investmentTabSubtitle => '後續承接產品列表、持倉、申購贖回、帳單等能力。';
 
   @override
-  String get investmentTabPortfolioLabel => '持仓项目';
+  String get investmentTabPortfolioLabel => '持倉项目';
 
   @override
-  String get investmentTabWatchlistLabel => '关注列表';
+  String get investmentTabWatchlistLabel => '關注列表';
 
   @override
-  String get profileTabHeadline => '个人中心（框架）';
+  String get profileTabHeadline => '個人中心（框架）';
 
   @override
-  String get profileTabSubtitle => '管理账号资料、详细信息录入、偏好设置与会员状态。';
+  String get profileTabSubtitle => '管理帳號資料、詳細資訊錄入、偏好設定與會員狀態。';
 
   @override
-  String get settingsTabHeadline => '设置';
+  String get settingsTabHeadline => '設定';
 
   @override
-  String get settingsTabSubtitle => '账号、安全、法定文档与偏好设置将在此统一管理。';
+  String get settingsTabSubtitle => '帳號、安全、法定文件與偏好設定將在此統一管理。';
 
   @override
   String get menuTitle => '選單';
@@ -5190,7 +5190,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get menuVersionFootnote => 'StellaVia v1.0.0 ・ 不動產特定共同事業 第XXX號';
 
   @override
-  String get menuDeleteAccountAction => '删除账户（退会）';
+  String get menuDeleteAccountAction => '刪除帳戶（退會）';
 
   @override
   String get settingsDeleteAccountSupportTitle => '刪除帳戶';
@@ -5203,17 +5203,17 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get settingsDeleteAccountCallAction => '撥打電話';
 
   @override
-  String get menuDeleteAccountConfirmTitle => '确认删除账户？';
+  String get menuDeleteAccountConfirmTitle => '確認刪除帳戶？';
 
   @override
-  String get menuDeleteAccountConfirmBody => '此操作不可撤销。实际退会申请功能会在后续接入。';
+  String get menuDeleteAccountConfirmBody => '此操作不可撤銷。實際退會申請功能會在後續接入。';
 
   @override
-  String get menuDeleteAccountComingSoon => '退会申请功能会在后续实现中接入。';
+  String get menuDeleteAccountComingSoon => '退會申請功能會在後續實作中接入。';
 
   @override
   String menuFeatureComingSoon(Object feature) {
-    return '$feature 会在后续实现中接入。';
+    return '$feature 會在後續實作中接入。';
   }
 
   @override
@@ -5226,16 +5226,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get notificationsTitle => '通知';
 
   @override
-  String get notificationsLotteryTitle => '抽签结果';
+  String get notificationsLotteryTitle => '抽籤結果';
 
   @override
-  String get notificationsLotterySubtitle => '接入 API 后，抽签结果与入金提醒会显示在这里。';
+  String get notificationsLotterySubtitle => '接入 API 後，抽籤結果與入金提醒會顯示在這裡。';
 
   @override
-  String get notificationsSystemTitle => '系统通知';
+  String get notificationsSystemTitle => '系統通知';
 
   @override
-  String get notificationsSystemSubtitle => '维护、报表与法规相关通知。';
+  String get notificationsSystemSubtitle => '維護、報表與法規相關通知。';
 
   @override
   String get notificationsTabImportant => '重要';
@@ -5279,25 +5279,25 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeLogout => '登出';
 
   @override
-  String get uiErrorRequestFailed => '请求失败，请稍后重试';
+  String get uiErrorRequestFailed => '請求失敗，請稍後重試';
 
   @override
-  String get uiErrorNetworkUnavailable => '网络连接异常，请稍后重试';
+  String get uiErrorNetworkUnavailable => '網路連線異常，請稍後重試';
 
   @override
   String get uiErrorNetworkAccessDenied => '無法存取網路，請檢查網路連線或系統設定。';
 
   @override
-  String get uiErrorAuthExpired => '登录状态已失效，请重新登录';
+  String get uiErrorAuthExpired => '登入狀態已失效，請重新登入';
 
   @override
-  String get uiErrorForbidden => '暂无权限访问该资源';
+  String get uiErrorForbidden => '暫無權限存取該資源';
 
   @override
-  String get uiErrorServerUnavailable => '服务暂时不可用，请稍后重试';
+  String get uiErrorServerUnavailable => '服務暫時不可用，請稍後重試';
 
   @override
-  String get languageFollowSystem => '跟随系统';
+  String get languageFollowSystem => '跟隨系統';
 
   @override
   String get languageChinese => '簡體中文';
@@ -5312,13 +5312,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get languageJapanese => '日本語';
 
   @override
-  String get fundDetailEstimatedYieldAnnualLabel => '预计收益率（年化）';
+  String get fundDetailEstimatedYieldAnnualLabel => '預計收益率（年化）';
 
   @override
-  String get fundDetailYieldDisclaimer => '※ 为预估值，不保证收益';
+  String get fundDetailYieldDisclaimer => '※ 為預估值，不保證收益';
 
   @override
-  String get fundDetailKeyFactsTitle => '基本信息';
+  String get fundDetailKeyFactsTitle => '基本資訊';
 
   @override
   String get fundDetailScheduleTitle => '募集・運用日程';
@@ -5333,7 +5333,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailMaximumInvestmentPerPersonLabel => '每人可投資上限金額';
 
   @override
-  String get fundDetailFundTotalLabel => '募集金额';
+  String get fundDetailFundTotalLabel => '募集金額';
 
   @override
   String get fundDetailOfferCategoryLabel => '募集種別';
@@ -5342,7 +5342,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailRemainingDaysLabel => '剩餘日數';
 
   @override
-  String get fundDetailMinimumInvestmentLabel => '最低投资额';
+  String get fundDetailMinimumInvestmentLabel => '最低投資額';
 
   @override
   String get fundDetailDividendLabel => '分配';
@@ -5351,31 +5351,31 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailDistributionDateLabel => '配當日';
 
   @override
-  String get fundDetailLotteryDateLabel => '抽签日';
+  String get fundDetailLotteryDateLabel => '抽籤日';
 
   @override
   String get fundDetailOfferingTargetsLabel => '募集對象';
 
   @override
-  String get fundDetailPreferredStructureTitle => '优先/劣后结构';
+  String get fundDetailPreferredStructureTitle => '優先/劣後結構';
 
   @override
-  String get fundDetailSeniorInvestmentLabel => '优先出资';
+  String get fundDetailSeniorInvestmentLabel => '優先出資';
 
   @override
-  String get fundDetailJuniorInvestmentLabel => '劣后出资';
+  String get fundDetailJuniorInvestmentLabel => '劣後出資';
 
   @override
-  String get fundDetailPropertyInfoTitle => '物件信息';
+  String get fundDetailPropertyInfoTitle => '物件資訊';
 
   @override
   String get fundDetailLocationLabel => '所在地';
 
   @override
-  String get fundDetailPropertyTypeLabel => '类型';
+  String get fundDetailPropertyTypeLabel => '類型';
 
   @override
-  String get fundDetailStructureLabel => '结构';
+  String get fundDetailStructureLabel => '結構';
 
   @override
   String get fundDetailBuiltYearLabel => '竣工';
@@ -5411,40 +5411,40 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailMapUnavailable => '無法取得地圖資訊。';
 
   @override
-  String get fundDetailContractOverviewTitle => '合同概要（法定记载事项）';
+  String get fundDetailContractOverviewTitle => '契約概要（法定記載事項）';
 
   @override
-  String get fundDetailContractTypeLabel => '合同形式';
+  String get fundDetailContractTypeLabel => '契約形式';
 
   @override
-  String get fundDetailContractTypeValue => '匿名组合型';
+  String get fundDetailContractTypeValue => '匿名組合型';
 
   @override
-  String get fundDetailTargetPropertyTypeLabel => '目标不动产种类';
+  String get fundDetailTargetPropertyTypeLabel => '目標不動產種類';
 
   @override
-  String get fundDetailAppraisalValueLabel => '不动产评估价';
+  String get fundDetailAppraisalValueLabel => '不動產估價';
 
   @override
-  String get fundDetailAcquisitionPriceLabel => '预计取得价格';
+  String get fundDetailAcquisitionPriceLabel => '預計取得價格';
 
   @override
-  String get fundDetailOfferPeriodLabel => '募集期间';
+  String get fundDetailOfferPeriodLabel => '募集期間';
 
   @override
-  String get fundDetailOperationStartLabel => '预计运用开始日';
+  String get fundDetailOperationStartLabel => '預計運用開始日';
 
   @override
-  String get fundDetailOperationEndLabel => '预计运用结束日';
+  String get fundDetailOperationEndLabel => '預計運用結束日';
 
   @override
-  String get fundDetailOperatorInfoTitle => '运营方信息';
+  String get fundDetailOperatorInfoTitle => '營運方資訊';
 
   @override
-  String get fundDetailOperatorCompanyLabel => '运营公司';
+  String get fundDetailOperatorCompanyLabel => '營運公司';
 
   @override
-  String get fundDetailPermitNumberLabel => '许可编号';
+  String get fundDetailPermitNumberLabel => '許可編號';
 
   @override
   String get fundDetailRepresentativeLabel => '代表人';
@@ -5462,10 +5462,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailOperatorBusinessStartLabel => '事業開始申報';
 
   @override
-  String get fundDetailDocumentsTitle => '相关书面';
+  String get fundDetailDocumentsTitle => '相關書面';
 
   @override
-  String get fundDetailDocumentReady => '点击查看';
+  String get fundDetailDocumentReady => '點擊查看';
 
   @override
   String fundDetailDocumentMultipleReady(int count) {
@@ -5481,16 +5481,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get fundDetailDocumentUnavailable => '未配置书面链接';
+  String get fundDetailDocumentUnavailable => '未配置書面連結';
 
   @override
-  String get fundDetailPropertyPreviewBadge => '物件预览';
+  String get fundDetailPropertyPreviewBadge => '物件預覽';
 
   @override
   String get fundDetailCommentsTitle => '投資者聲音（KIZUNARK）';
 
   @override
-  String get fundDetailCommentsPlaceholder => '评论功能本次暂不实现，后续只接 UI 行为。';
+  String get fundDetailCommentsPlaceholder => '評論功能本次暫不實作，後續只接 UI 行為。';
 
   @override
   String get fundDetailCommentsPreviewAvatar => '佐';
@@ -5512,22 +5512,22 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get fundDetailCommentsMoreAction => '在 KIZUNARK 查看更多';
 
   @override
-  String get fundDetailFinancialStatusAction => '查看运营方财务状况 →';
+  String get fundDetailFinancialStatusAction => '查看營運方財務狀況 →';
 
   @override
-  String get fundDetailFinancialStatusToast => '财务状况页面会在后续实现中接入。';
+  String get fundDetailFinancialStatusToast => '財務狀況頁面會在後續實作中接入。';
 
   @override
-  String get fundDetailApplyNowAction => '立即申请抽签';
+  String get fundDetailApplyNowAction => '立即申請抽籤';
 
   @override
-  String get fundDetailOpenSoonAction => '等待募集开始';
+  String get fundDetailOpenSoonAction => '等待募集開始';
 
   @override
-  String get fundDetailUnavailableAction => '当前不可申请';
+  String get fundDetailUnavailableAction => '當前不可申請';
 
   @override
-  String get fundDetailApplyComingSoonToast => '申购流程会在下一步实现中接入。';
+  String get fundDetailApplyComingSoonToast => '申購流程會在下一步實作中接入。';
 
   @override
   String get lotteryApplyFlowTitle => '抽籤申請';
@@ -6008,19 +6008,19 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageTotalAssetsLabel => '總資產';
 
   @override
-  String get myPageTotalAssetsCaption => '运用中 + 待机资金 + 分配金';
+  String get myPageTotalAssetsCaption => '運用中 + 待機資金 + 分配金';
 
   @override
-  String get myPageMetricOperating => '运用中';
+  String get myPageMetricOperating => '運用中';
 
   @override
-  String get myPageMetricStandby => '待机资金';
+  String get myPageMetricStandby => '待機資金';
 
   @override
-  String get myPageMetricAccumulatedDistribution => '累计分配';
+  String get myPageMetricAccumulatedDistribution => '累計分配';
 
   @override
-  String get myPageMetricLoanType => '借贷型';
+  String get myPageMetricLoanType => '借貸型';
 
   @override
   String get myPageDepositAction => '入金';
@@ -6059,25 +6059,25 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageResultAnnouncementTbd => '待定';
 
   @override
-  String get myPageApplySubmittedAtLabel => '申请时间';
+  String get myPageApplySubmittedAtLabel => '申請時間';
 
   @override
-  String get myPageApplyReviewedAtLabel => '审核时间';
+  String get myPageApplyReviewedAtLabel => '審核時間';
 
   @override
   String get myPageApplyPaymentNoticeLabel => '入金通知';
 
   @override
-  String get myPageApplyPaidAtLabel => '入金时间';
+  String get myPageApplyPaidAtLabel => '入金時間';
 
   @override
-  String get myPageApplyCancellationRequestedAtLabel => '取消申请';
+  String get myPageApplyCancellationRequestedAtLabel => '取消申請';
 
   @override
   String get myPageApplyCancelledAtLabel => '取消完成';
 
   @override
-  String get myPageInvestmentAmountLabel => '投资金额';
+  String get myPageInvestmentAmountLabel => '投資金額';
 
   @override
   String get myPageOrderTimeLabel => '訂單時間';
@@ -6098,16 +6098,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageOrderInquiryStatusPending => '待確認';
 
   @override
-  String get myPageAccumulatedDistributionLabel => '累计分配金';
+  String get myPageAccumulatedDistributionLabel => '累計分配金';
 
   @override
-  String get myPageDocumentDeliveryDateLabel => '书面交付日';
+  String get myPageDocumentDeliveryDateLabel => '書面交付日';
 
   @override
   String get myPageCancelDeadlineLabel => '取消期限';
 
   @override
-  String get myPageCoolingOffFootnote => '※ 自收到合同成立时交付书面的次日起 8 日内，可无条件解除合同。';
+  String get myPageCoolingOffFootnote => '※ 自收到契約成立時交付書面的次日起 8 日內，可無條件解除契約。';
 
   @override
   String get myPageCancelRequestAction => '取消合約';
@@ -6116,7 +6116,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageCancelOrderAction => '取消訂單';
 
   @override
-  String get myPageCancelRequestComingSoon => '取消申请流程会在后续实现中接入。';
+  String get myPageCancelRequestComingSoon => '取消申請流程會在後續實作中接入。';
 
   @override
   String get myPageWithdrawConfirmTitle => '確認撤回？';
@@ -6137,13 +6137,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageWithdrawFailure => '撤回失敗，請稍後重試。';
 
   @override
-  String get myPageDepositComingSoon => '入金页面会在后续实现中接入。';
+  String get myPageDepositComingSoon => '入金頁面會在後續實作中接入。';
 
   @override
-  String get myPageWithdrawComingSoon => '出金页面会在后续实现中接入。';
+  String get myPageWithdrawComingSoon => '出金頁面會在後續實作中接入。';
 
   @override
-  String get myPageHistoryComingSoon => '交易记录页面会在后续实现中接入。';
+  String get myPageHistoryComingSoon => '交易紀錄頁面會在後續實作中接入。';
 
   @override
   String get walletDepositTitle => '入金';
@@ -6588,7 +6588,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageOperatingFundsEmptyAction => '去申請';
 
   @override
-  String get myPageSectionLoadError => '该区块加载失败，请重试。';
+  String get myPageSectionLoadError => '該區塊載入失敗，請重試。';
 
   @override
   String get myPageApplyHistoryListTitle => '申購記錄列表';
@@ -7086,7 +7086,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileFlowTitle => '個人資料填寫';
 
   @override
-  String get memberProfileStep1Title => 'Step 1：基本信息';
+  String get memberProfileStep1Title => 'Step 1：基本資訊';
 
   @override
   String get memberProfileStep1Description => '請輸入姓、名、片假名、羅馬字姓名與聯絡方式';
@@ -7143,7 +7143,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileBirthdayLabel => '出生日期';
 
   @override
-  String get memberProfileBirthdayHint => '请选择出生日期';
+  String get memberProfileBirthdayHint => '請選擇出生日期';
 
   @override
   String get memberProfileSexLabel => '性別';
@@ -7167,7 +7167,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileUnderageBody => '根據不動產特定共同事業法，本平台不接受未成年人的投資申請。';
 
   @override
-  String get memberProfilePhoneLabel => '电话号码';
+  String get memberProfilePhoneLabel => '電話號碼';
 
   @override
   String get memberProfilePhoneHint => '090-1234-5678';
@@ -7188,7 +7188,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileAddressSearch => '搜尋地址';
 
   @override
-  String get memberProfileAddressSearchPending => '地址检索会在后续实现中接入。';
+  String get memberProfileAddressSearchPending => '地址檢索會在後續實作中接入。';
 
   @override
   String get memberProfileAddressSearchZipError => '請輸入7位郵遞區號。';
@@ -7206,7 +7206,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileCityAddressLabel => '市區町村・地址';
 
   @override
-  String get memberProfileCityAddressHint => '千代田区丸之内1-1-1';
+  String get memberProfileCityAddressHint => '千代田區丸之內1-1-1';
 
   @override
   String get memberProfileStep3Title => 'Step 3：投資適性評估';
@@ -7228,13 +7228,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileInvestmentExperienceLabel => '投資經驗（可複選）';
 
   @override
-  String get memberProfileInvestmentPurposeLabel => '投资目的';
+  String get memberProfileInvestmentPurposeLabel => '投資目的';
 
   @override
   String get memberProfileFundSourceLabel => '資金來源';
 
   @override
-  String get memberProfileFundSourceWarningTitle => '请注意';
+  String get memberProfileFundSourceWarningTitle => '請注意';
 
   @override
   String get memberProfileFundSourceWarningStandard =>
@@ -7245,7 +7245,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
       '本商品不保證本金，有可能損失全部出資金。不建議使用生活費或借款進行投資，請在閒置資金範圍內進行投資。';
 
   @override
-  String get memberProfileRiskToleranceLabel => '风险承受度';
+  String get memberProfileRiskToleranceLabel => '風險承受度';
 
   @override
   String get memberProfileStep4Title => 'Step 4：身分驗證（eKYC）';
@@ -7281,10 +7281,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileSelfieDescription => '請正面拍攝';
 
   @override
-  String get memberProfileUploadDocumentPending => '证件拍摄功能会在后续实现中接入。';
+  String get memberProfileUploadDocumentPending => '證件拍攝功能會在後續實作中接入。';
 
   @override
-  String get memberProfileUploadSelfiePending => '自拍拍摄功能会在后续实现中接入。';
+  String get memberProfileUploadSelfiePending => '自拍拍攝功能會在後續實作中接入。';
 
   @override
   String get memberProfileStep5RealPersonTitle => 'Step 5：真人認證（活體）';
@@ -7305,7 +7305,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileBankNameLabel => '金融機構名稱';
 
   @override
-  String get memberProfileBankNameHint => '三菱UFJ银行';
+  String get memberProfileBankNameHint => '三菱UFJ銀行';
 
   @override
   String get memberProfileBranchLabel => '分行名稱';
@@ -7335,7 +7335,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileStep6Title => 'Step 7：同意事項確認';
 
   @override
-  String get memberProfileStep6Description => '请确认以下事项，并全部同意。';
+  String get memberProfileStep6Description => '請確認以下事項，並全部同意。';
 
   @override
   String get memberProfileElectronicDeliveryTitle => '關於書面的電子交付';
@@ -7345,33 +7345,33 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
       '本公司將依不動產特定共同事業法，以電子方式（透過App內PDF檔案）而非紙本方式交付以下書面。';
 
   @override
-  String get memberProfileElectronicDeliveryItem1 => '签约前交付书面';
+  String get memberProfileElectronicDeliveryItem1 => '簽約前交付書面';
 
   @override
-  String get memberProfileElectronicDeliveryItem2 => '签约时交付书面';
+  String get memberProfileElectronicDeliveryItem2 => '簽約時交付書面';
 
   @override
-  String get memberProfileElectronicDeliveryItem3 => '财产管理相关报告书';
+  String get memberProfileElectronicDeliveryItem3 => '財產管理相關報告書';
 
   @override
-  String get memberProfileElectronicDeliveryItem4 => '业务及财产状况相关书类';
+  String get memberProfileElectronicDeliveryItem4 => '業務及財產狀況相關書類';
 
   @override
   String get memberProfileElectronicDeliveryFootnote =>
       '※ 您可隨時從設定畫面撤回電子交付同意。撤回後將以郵寄紙本方式交付。';
 
   @override
-  String get memberProfileElectronicDeliveryConsent => '我同意以上电子交付方式';
+  String get memberProfileElectronicDeliveryConsent => '我同意以上電子交付方式';
 
   @override
   String get memberProfileAntiSocialTitle => '確認不屬於反社會勢力';
 
   @override
   String get memberProfileAntiSocialBody =>
-      '本人声明并承诺，现在及将来均不属于暴力团、暴力团成员、准成员、关联企业、总会屋及其他反社会势力。';
+      '本人聲明並承諾，現在及將來均不屬於暴力團、暴力團成員、準成員、關聯企業、總會屋及其他反社會勢力。';
 
   @override
-  String get memberProfileAntiSocialConsent => '我确认自己不属于反社会势力';
+  String get memberProfileAntiSocialConsent => '我確認自己不屬於反社會勢力';
 
   @override
   String get memberProfilePrivacyConsent => '我同意個人資料處理及隱私政策';
@@ -7380,7 +7380,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileAgreeAndComplete => '全部同意並完成註冊';
 
   @override
-  String get memberProfileCompletedToast => '本人信息登记已完成。';
+  String get memberProfileCompletedToast => '本人資訊登記已完成。';
 
   @override
   String get memberProfileSavingProgressMessage => '上傳保存中...';
@@ -7393,76 +7393,76 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
       '測試環境暫不支援自拍上傳，目前可直接繼續下一步。';
 
   @override
-  String get occupationEmployee => '公司职员';
+  String get occupationEmployee => '公司職員';
 
   @override
-  String get occupationSelfEmployed => '个体经营';
+  String get occupationSelfEmployed => '個體經營';
 
   @override
-  String get occupationPublicServant => '公务员';
+  String get occupationPublicServant => '公務員';
 
   @override
-  String get occupationHomemaker => '主妇/主夫';
+  String get occupationHomemaker => '主婦/主夫';
 
   @override
-  String get occupationStudent => '学生';
+  String get occupationStudent => '學生';
 
   @override
-  String get occupationPensioner => '领取养老金';
+  String get occupationPensioner => '領取年金';
 
   @override
-  String get incomeUnder3m => '300万日元以下';
+  String get incomeUnder3m => '300萬日圓以下';
 
   @override
-  String get income3to5m => '300万〜500万日元';
+  String get income3to5m => '300萬〜500萬日圓';
 
   @override
-  String get income5to10m => '500万〜1000万日元';
+  String get income5to10m => '500萬〜1000萬日圓';
 
   @override
-  String get incomeOver10m => '1000万日元以上';
+  String get incomeOver10m => '1000萬日圓以上';
 
   @override
-  String get assetsUnder1m => '100万日元以下';
+  String get assetsUnder1m => '100萬日圓以下';
 
   @override
-  String get assets1to5m => '100万〜500万日元';
+  String get assets1to5m => '100萬〜500萬日圓';
 
   @override
-  String get assets5to10m => '500万〜1000万日元';
+  String get assets5to10m => '500萬〜1000萬日圓';
 
   @override
-  String get assetsOver10m => '1000万日元以上';
+  String get assetsOver10m => '1000萬日圓以上';
 
   @override
-  String get purposeAssetGrowth => '长期资产增值';
+  String get purposeAssetGrowth => '長期資產增值';
 
   @override
-  String get purposeDividendIncome => '通过分配金获取定期收入';
+  String get purposeDividendIncome => '透過分配金取得定期收入';
 
   @override
-  String get purposeIdleFunds => '运用闲置资金';
+  String get purposeIdleFunds => '運用閒置資金';
 
   @override
-  String get purposeDiversification => '分散投资组合';
+  String get purposeDiversification => '分散投資組合';
 
   @override
-  String get fundSourceSurplus => '闲置资金（不影响生活）';
+  String get fundSourceSurplus => '閒置資金（不影響生活）';
 
   @override
-  String get fundSourceLivingFunds => '部分生活资金';
+  String get fundSourceLivingFunds => '部分生活資金';
 
   @override
-  String get fundSourceBorrowed => '借入资金';
+  String get fundSourceBorrowed => '借入資金';
 
   @override
-  String get riskToleranceAcceptLoss => '理解并能承受本金损失风险';
+  String get riskToleranceAcceptLoss => '理解並能承受本金損失風險';
 
   @override
-  String get riskToleranceLowRisk => '只希望低风险投资';
+  String get riskToleranceLowRisk => '只希望低風險投資';
 
   @override
-  String get riskToleranceHighRisk => '可接受高风险高回报投资';
+  String get riskToleranceHighRisk => '可接受高風險高回報投資';
 
   @override
   String get documentTypeDriversLicense => '駕駛證';
@@ -7483,43 +7483,43 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get accountTypeOrdinary => '普通';
 
   @override
-  String get accountTypeChecking => '当座';
+  String get accountTypeChecking => '當座';
 
   @override
-  String get prefectureTokyo => '东京都';
+  String get prefectureTokyo => '東京都';
 
   @override
   String get prefectureOsaka => '大阪府';
 
   @override
-  String get prefectureKanagawa => '神奈川县';
+  String get prefectureKanagawa => '神奈川縣';
 
   @override
-  String get prefectureAichi => '爱知县';
+  String get prefectureAichi => '愛知縣';
 
   @override
-  String get prefectureFukuoka => '福冈县';
+  String get prefectureFukuoka => '福岡縣';
 
   @override
   String get memberProfileExperienceStocks => '股票・ETF';
 
   @override
-  String get memberProfileExperienceMutualFunds => '投资信托';
+  String get memberProfileExperienceMutualFunds => '投資信托';
 
   @override
-  String get memberProfileExperienceRealEstate => '不动产投资';
+  String get memberProfileExperienceRealEstate => '不動產投資';
 
   @override
-  String get memberProfileExperienceRealEstateCrowdfunding => '不动产众筹 / FTK';
+  String get memberProfileExperienceRealEstateCrowdfunding => '不動產眾籌 / FTK';
 
   @override
-  String get memberProfileExperienceBonds => '债券';
+  String get memberProfileExperienceBonds => '債券';
 
   @override
-  String get memberProfileExperienceFxCrypto => '外汇・加密资产';
+  String get memberProfileExperienceFxCrypto => '外汇・加密資產';
 
   @override
-  String get memberProfileExperienceNone => '无投资经验';
+  String get memberProfileExperienceNone => '無投資經驗';
 
   @override
   String get identityAuthPageTitle => '真人認證';
