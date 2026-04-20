@@ -5792,6 +5792,12 @@ abstract class AppLocalizations {
   /// **'Withdrawn'**
   String get myPageActiveFundWithdrawDone;
 
+  /// No description provided for @myPageActiveFundCoolingPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Cooling Period'**
+  String get myPageActiveFundCoolingPeriod;
+
   /// No description provided for @myPageActiveFundWithdrawConfirmTitle.
   ///
   /// In en, this message translates to:

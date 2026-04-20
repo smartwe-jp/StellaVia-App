@@ -1108,6 +1108,7 @@
   "myPageActiveFundNetBenefitLabel": "税后收益",
   "myPageActiveFundWithdrawAction": "出金申请",
   "myPageActiveFundWithdrawDone": "已出金",
+  "myPageActiveFundCoolingPeriod": "冷却期间",
   "myPageActiveFundWithdrawConfirmTitle": "确认提交出金申请？",
   "myPageActiveFundWithdrawConfirmBody": "将为该笔收益提交出金申请。",
   "myPageActiveFundWithdrawConfirmAction": "确认提交",

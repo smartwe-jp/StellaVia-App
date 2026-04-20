@@ -1108,6 +1108,7 @@
   "myPageActiveFundNetBenefitLabel": "税引後",
   "myPageActiveFundWithdrawAction": "出金依頼",
   "myPageActiveFundWithdrawDone": "出金済み",
+  "myPageActiveFundCoolingPeriod": "冷却期間",
   "myPageActiveFundWithdrawConfirmTitle": "出金依頼を送信しますか？",
   "myPageActiveFundWithdrawConfirmBody": "この分配金の出金依頼を送信します。よろしいですか？",
   "myPageActiveFundWithdrawConfirmAction": "送信する",

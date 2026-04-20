@@ -2935,6 +2935,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageActiveFundWithdrawDone => '已出金';
 
   @override
+  String get myPageActiveFundCoolingPeriod => '冷却期间';
+
+  @override
   String get myPageActiveFundWithdrawConfirmTitle => '确认提交出金申请？';
 
   @override
@@ -6738,6 +6741,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageActiveFundWithdrawDone => '已出金';
+
+  @override
+  String get myPageActiveFundCoolingPeriod => '冷卻期間';
 
   @override
   String get myPageActiveFundWithdrawConfirmTitle => '確認提交出金申請？';

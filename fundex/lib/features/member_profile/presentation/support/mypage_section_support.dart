@@ -129,7 +129,9 @@ List<MyPageOrderInquiryRecord> selectCoolingOffRecords(
 List<MyPageInvestmentGroup> groupActiveInvestmentRecords(
   List<MyPageInvestmentRecord> records,
 ) {
-  final source = records.where((record) => record.projectStatus == 4).toList();
+  final source = records
+      .where((record) => record.projectStatus == 4 || record.projectStatus == 5)
+      .toList();
   final filtered = source.isEmpty ? [...records] : source;
   filtered.sort((a, b) => compareByDateDesc(a.createTime, b.createTime));
 
@@ -176,6 +178,79 @@ String resolveProjectStatusLabel(AppLocalizations l10n, int? projectStatus) {
     7 => l10n.fundListStatusCompleted,
     _ => l10n.fundListStatusUnknown,
   };
+}
+
+String resolveMyPageActiveFundStatusLabel(
+  AppLocalizations l10n,
+  int? projectStatus,
+) {
+  return switch (projectStatus) {
+    4 => l10n.fundListStatusOperating,
+    5 => l10n.myPageActiveFundCoolingPeriod,
+    _ => resolveProjectStatusLabel(l10n, projectStatus),
+  };
+}
+
+Color resolveMyPageActiveFundStatusBackgroundColor(
+  BuildContext context,
+  int? projectStatus,
+) {
+  final colors = Theme.of(context).appColors;
+  return switch (projectStatus) {
+    4 => colors.successSubtle,
+    5 => colors.warningSubtle,
+    _ => colors.surfaceAlt,
+  };
+}
+
+Color resolveMyPageActiveFundStatusForegroundColor(
+  BuildContext context,
+  int? projectStatus,
+) {
+  final colors = Theme.of(context).appColors;
+  return switch (projectStatus) {
+    4 => colors.successForeground,
+    5 => colors.warningAction,
+    _ => colors.textSecondary,
+  };
+}
+
+double? resolveMyPageActiveFundProgress(FundProject? project) {
+  final startDate = _parseProjectDate(project?.scheduledStartDate);
+  final endDate = _parseProjectDate(project?.scheduledEndDate);
+  if (startDate == null || endDate == null || !endDate.isAfter(startDate)) {
+    return null;
+  }
+
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  if (today.isBefore(startDate)) {
+    return 0;
+  }
+  if (today.isAfter(endDate) || today.isAtSameMomentAs(endDate)) {
+    return 1;
+  }
+
+  final totalDays = endDate.difference(startDate).inMilliseconds;
+  if (totalDays <= 0) {
+    return null;
+  }
+  final elapsedDays = today.difference(startDate).inMilliseconds;
+  return (elapsedDays / totalDays).clamp(0.0, 1.0);
+}
+
+String? formatMyPageActiveFundPeriod(
+  BuildContext context,
+  FundProject? project,
+) {
+  final startDate = _parseProjectDate(project?.scheduledStartDate);
+  final endDate = _parseProjectDate(project?.scheduledEndDate);
+  if (startDate == null || endDate == null) {
+    return null;
+  }
+
+  final locale = Localizations.localeOf(context);
+  return '${_formatProjectDateForLocale(startDate, locale)}～${_formatProjectDateForLocale(endDate, locale)}';
 }
 
 String resolveApplyStatusLabel(
@@ -238,10 +313,7 @@ bool canShowApplyCancelAction(int? status) {
   };
 }
 
-void handlePendingApplyTap(
-  BuildContext context,
-  MyPageApplyRecord record,
-) {
+void handlePendingApplyTap(BuildContext context, MyPageApplyRecord record) {
   final projectId = record.projectId?.trim();
   if (projectId == null || projectId.isEmpty) {
     return;
@@ -418,6 +490,23 @@ String formatYieldPercent(double? ratio) {
   final percentage = ratio > 1 ? ratio : ratio * 100;
   final hasFraction = percentage % 1 != 0;
   return '${percentage.toStringAsFixed(hasFraction ? 1 : 0)}%';
+}
+
+DateTime? _parseProjectDate(String? raw) {
+  if (raw == null || raw.trim().isEmpty) {
+    return null;
+  }
+  return DateTime.tryParse(raw.trim().replaceAll(' ', 'T'));
+}
+
+String _formatProjectDateForLocale(DateTime value, Locale locale) {
+  if (locale.languageCode == 'ja') {
+    return DateFormat('yyyy/M/d', 'ja').format(value);
+  }
+  if (locale.languageCode == 'zh') {
+    return DateFormat('yyyy/M/d', locale.toLanguageTag()).format(value);
+  }
+  return DateFormat.yMd(locale.toLanguageTag()).format(value);
 }
 
 String formatCurrency(num? amount, NumberFormat formatter) {

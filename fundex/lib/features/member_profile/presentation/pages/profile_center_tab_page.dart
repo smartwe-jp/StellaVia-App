@@ -15,6 +15,7 @@ import '../providers/member_profile_providers.dart';
 import '../providers/mypage_providers.dart';
 import '../support/mypage_section_support.dart';
 import '../support/mypage_withdraw_action.dart';
+import '../widgets/my_page_active_fund_summary_card.dart';
 import '../widgets/my_page_asset_trend_card.dart';
 
 class ProfileCenterTabPage extends ConsumerStatefulWidget {
@@ -297,7 +298,6 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
         context,
         ref,
         asyncValue: investmentAsync,
-        formatter: currencyFormatter,
         fundProjectsById: fundProjectsById,
       ),
     );
@@ -498,37 +498,40 @@ Widget _buildActiveFundsSection(
   BuildContext context,
   WidgetRef ref, {
   required AsyncValue<List<MyPageInvestmentRecord>> asyncValue,
-  required NumberFormat formatter,
   required Map<String, FundProject> fundProjectsById,
 }) {
   final l10n = context.l10n;
-  final colors = Theme.of(context).appColors;
 
   return asyncValue.when(
     data: (records) {
-      final displayGroups = _groupActiveInvestmentRecords(records);
+      final displayGroups = groupActiveInvestmentRecords(records);
       final cards = displayGroups
           .map((group) {
             final project = fundProjectsById[group.projectId];
-            return FundActiveFundCard(
-              data: FundActiveFundCardData(
+            final status = project?.projectStatus;
+            return MyPageActiveFundSummaryCard(
+              data: MyPageActiveFundSummaryCardData(
                 title: group.projectName,
-                annualYield: _resolveYieldLabel(
+                periodText:
+                    formatMyPageActiveFundPeriod(context, project) ??
+                    l10n.myPageResultAnnouncementTbd,
+                annualYield: resolveYieldLabel(
                   project,
                   fallbackRatio: group.earningRatio,
                 ),
-                annualYieldColor: colors.highlightGold,
-                rows: <FundLabeledValue>[
-                  FundLabeledValue(
-                    label: l10n.myPageInvestmentAmountLabel,
-                    value: _formatCurrency(group.investMoney, formatter),
-                  ),
-                  FundLabeledValue(
-                    label: l10n.myPageAccumulatedDistributionLabel,
-                    value: _formatCurrency(group.earnings, formatter),
-                    valueColor: colors.highlightGold,
-                  ),
-                ],
+                statusLabel: resolveMyPageActiveFundStatusLabel(l10n, status),
+                statusBackgroundColor:
+                    resolveMyPageActiveFundStatusBackgroundColor(
+                      context,
+                      status,
+                    ),
+                statusForegroundColor:
+                    resolveMyPageActiveFundStatusForegroundColor(
+                      context,
+                      status,
+                    ),
+                progress: resolveMyPageActiveFundProgress(project),
+                imageUrls: project?.photos ?? const <String>[],
                 onTap: _buildActiveFundDetailTapHandler(
                   context,
                   records: records,
@@ -642,52 +645,11 @@ List<MyPageOrderInquiryRecord> _selectCoolingOffRecords(
   return uniqueByProject.values.take(3).toList(growable: false);
 }
 
-List<_InvestmentGroup> _groupActiveInvestmentRecords(
-  List<MyPageInvestmentRecord> records,
-) {
-  final source = records.where((record) => record.projectStatus == 4).toList();
-  final filtered = source.isEmpty ? [...records] : source;
-  filtered.sort((a, b) => _compareByDateDesc(a.createTime, b.createTime));
-
-  final groups = <String, _InvestmentGroupAccumulator>{};
-  for (final record in filtered) {
-    final key = record.projectId;
-    groups.putIfAbsent(key, () => _InvestmentGroupAccumulator(record));
-    groups[key]!.add(record);
-  }
-
-  final values = groups.values
-      .map((accumulator) => accumulator.build())
-      .toList(growable: false);
-  values.sort(
-    (a, b) => _compareDateTimeDesc(a.latestCreateTime, b.latestCreateTime),
-  );
-  return values;
-}
-
 String? _resolveOrderProjectId(MyPageOrderInquiryRecord record) {
   return record.investorType?.projectId ??
       (record.pdfDocuments.isNotEmpty
           ? record.pdfDocuments.first.projectId
           : null);
-}
-
-String _resolveYieldLabel(FundProject? project, {double? fallbackRatio}) {
-  final ratio =
-      project?.expectedDistributionRatioMax ??
-      project?.expectedDistributionRatioMin ??
-      project?.investorTypes.firstOrNull?.earningsRadio ??
-      fallbackRatio;
-  return _formatYieldPercent(ratio);
-}
-
-String _formatYieldPercent(double? ratio) {
-  if (ratio == null) {
-    return '--';
-  }
-  final percentage = ratio > 1 ? ratio : ratio * 100;
-  final hasFraction = percentage % 1 != 0;
-  return '${percentage.toStringAsFixed(hasFraction ? 1 : 0)}%';
 }
 
 num? _subtractLoanTypeFunds(num? baseAmount, num? loanAmount) {
@@ -998,62 +960,6 @@ class _SectionStateCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _InvestmentGroup {
-  const _InvestmentGroup({
-    required this.projectId,
-    required this.projectName,
-    required this.investMoney,
-    required this.earnings,
-    required this.earningRatio,
-    required this.latestCreateTime,
-  });
-
-  final String projectId;
-  final String projectName;
-  final num investMoney;
-  final num earnings;
-  final double? earningRatio;
-  final DateTime? latestCreateTime;
-}
-
-class _InvestmentGroupAccumulator {
-  _InvestmentGroupAccumulator(MyPageInvestmentRecord seed)
-    : projectId = seed.projectId,
-      projectName = seed.projectName,
-      investMoney = seed.investMoney ?? 0,
-      earnings = seed.earnings ?? 0,
-      latestCreateTime = _parseApiDate(seed.createTime),
-      earningRatio = seed.earningRadio ?? seed.investorType?.earningsRadio;
-
-  final String projectId;
-  final String projectName;
-  num investMoney;
-  num earnings;
-  double? earningRatio;
-  DateTime? latestCreateTime;
-
-  void add(MyPageInvestmentRecord record) {
-    investMoney += record.investMoney ?? 0;
-    earnings += record.earnings ?? 0;
-    earningRatio ??= record.earningRadio ?? record.investorType?.earningsRadio;
-    final candidateDate = _parseApiDate(record.createTime);
-    if (_compareDateTimeDesc(latestCreateTime, candidateDate) > 0) {
-      latestCreateTime = candidateDate;
-    }
-  }
-
-  _InvestmentGroup build() {
-    return _InvestmentGroup(
-      projectId: projectId,
-      projectName: projectName,
-      investMoney: investMoney,
-      earnings: earnings,
-      earningRatio: earningRatio,
-      latestCreateTime: latestCreateTime,
     );
   }
 }

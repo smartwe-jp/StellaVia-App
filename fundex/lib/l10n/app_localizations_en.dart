@@ -3130,6 +3130,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageActiveFundWithdrawDone => 'Withdrawn';
 
   @override
+  String get myPageActiveFundCoolingPeriod => 'Cooling Period';
+
+  @override
   String get myPageActiveFundWithdrawConfirmTitle =>
       'Submit a withdrawal request?';
 

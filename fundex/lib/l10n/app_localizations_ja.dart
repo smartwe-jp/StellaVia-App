@@ -2969,6 +2969,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageActiveFundWithdrawDone => '出金済み';
 
   @override
+  String get myPageActiveFundCoolingPeriod => '冷却期間';
+
+  @override
   String get myPageActiveFundWithdrawConfirmTitle => '出金依頼を送信しますか？';
 
   @override

@@ -12,6 +12,7 @@ import '../../domain/entities/mypage_models.dart';
 import '../providers/mypage_providers.dart';
 import '../support/mypage_section_support.dart';
 import '../support/mypage_withdraw_action.dart';
+import '../widgets/my_page_active_fund_summary_card.dart';
 
 class MyPageSectionListPage extends ConsumerStatefulWidget {
   const MyPageSectionListPage({
@@ -407,32 +408,33 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
 
   Widget _buildActiveFundCard(
     BuildContext context,
-    MyPageInvestmentGroup group,
-    NumberFormat formatter, {
+    MyPageInvestmentGroup group, {
     required Map<String, FundProject> fundProjectsById,
   }) {
     final l10n = context.l10n;
-    final colors = Theme.of(context).appColors;
     final project = fundProjectsById[group.projectId];
-    return FundActiveFundCard(
-      data: FundActiveFundCardData(
+    final status = project?.projectStatus;
+    return MyPageActiveFundSummaryCard(
+      data: MyPageActiveFundSummaryCardData(
         title: group.projectName,
+        periodText:
+            formatMyPageActiveFundPeriod(context, project) ??
+            l10n.myPageResultAnnouncementTbd,
         annualYield: resolveYieldLabel(
           project,
           fallbackRatio: group.earningRatio,
         ),
-        annualYieldColor: colors.highlightGold,
-        rows: <FundLabeledValue>[
-          FundLabeledValue(
-            label: l10n.myPageInvestmentAmountLabel,
-            value: formatCurrency(group.investMoney, formatter),
-          ),
-          FundLabeledValue(
-            label: l10n.myPageAccumulatedDistributionLabel,
-            value: formatCurrency(group.earnings, formatter),
-            valueColor: colors.highlightGold,
-          ),
-        ],
+        statusLabel: resolveMyPageActiveFundStatusLabel(l10n, status),
+        statusBackgroundColor: resolveMyPageActiveFundStatusBackgroundColor(
+          context,
+          status,
+        ),
+        statusForegroundColor: resolveMyPageActiveFundStatusForegroundColor(
+          context,
+          status,
+        ),
+        progress: resolveMyPageActiveFundProgress(project),
+        imageUrls: project?.photos ?? const <String>[],
         onTap: _buildActiveFundTapHandler(context, group.projectId),
       ),
     );
@@ -477,7 +479,6 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
               (group) => _buildActiveFundCard(
                 context,
                 group,
-                formatter,
                 fundProjectsById: fundProjectsById,
               ),
             )
