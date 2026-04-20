@@ -2370,6 +2370,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageTotalAssetsLabel => 'Total assets';
 
   @override
+  String get myPageWelcomeBack => 'Welcome back';
+
+  @override
   String get myPageTotalAssetsCaption =>
       'Operating + standby cash + distributions';
 
@@ -2384,6 +2387,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myPageMetricLoanType => 'Lending';
+
+  @override
+  String get myPageAssetTrendTitle => 'Asset Trend';
 
   @override
   String get myPageDepositAction => 'Deposit';

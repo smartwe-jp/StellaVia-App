@@ -2225,6 +2225,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageTotalAssetsLabel => '总资产';
 
   @override
+  String get myPageWelcomeBack => '欢迎回来';
+
+  @override
   String get myPageTotalAssetsCaption => '运用中 + 待机资金 + 分配金';
 
   @override
@@ -2238,6 +2241,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get myPageMetricLoanType => '借贷型';
+
+  @override
+  String get myPageAssetTrendTitle => '资产趋势';
 
   @override
   String get myPageDepositAction => '入金';
@@ -6024,6 +6030,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageTotalAssetsLabel => '總資產';
 
   @override
+  String get myPageWelcomeBack => '歡迎回來';
+
+  @override
   String get myPageTotalAssetsCaption => '運用中 + 待機資金 + 分配金';
 
   @override
@@ -6037,6 +6046,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageMetricLoanType => '借貸型';
+
+  @override
+  String get myPageAssetTrendTitle => '資產推移';
 
   @override
   String get myPageDepositAction => '入金';

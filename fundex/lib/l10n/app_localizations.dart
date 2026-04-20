@@ -4394,6 +4394,12 @@ abstract class AppLocalizations {
   /// **'Total assets'**
   String get myPageTotalAssetsLabel;
 
+  /// No description provided for @myPageWelcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back'**
+  String get myPageWelcomeBack;
+
   /// No description provided for @myPageTotalAssetsCaption.
   ///
   /// In en, this message translates to:
@@ -4423,6 +4429,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Lending'**
   String get myPageMetricLoanType;
+
+  /// No description provided for @myPageAssetTrendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Asset Trend'**
+  String get myPageAssetTrendTitle;
 
   /// No description provided for @myPageDepositAction.
   ///

@@ -2250,6 +2250,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageTotalAssetsLabel => '総資産額';
 
   @override
+  String get myPageWelcomeBack => 'おかえりなさい';
+
+  @override
   String get myPageTotalAssetsCaption => '運用中 + 待機資金 + 分配金';
 
   @override
@@ -2263,6 +2266,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get myPageMetricLoanType => '貸付型';
+
+  @override
+  String get myPageAssetTrendTitle => '資産推移';
 
   @override
   String get myPageDepositAction => '入金';

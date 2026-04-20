@@ -9,10 +9,13 @@ import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
 import '../../../notifications/presentation/providers/notifications_providers.dart';
+import '../../../home/presentation/support/home_display_name_resolver.dart';
 import '../../domain/entities/mypage_models.dart';
+import '../providers/member_profile_providers.dart';
 import '../providers/mypage_providers.dart';
 import '../support/mypage_section_support.dart';
 import '../support/mypage_withdraw_action.dart';
+import '../widgets/my_page_asset_trend_card.dart';
 
 class ProfileCenterTabPage extends ConsumerStatefulWidget {
   const ProfileCenterTabPage({super.key});
@@ -24,6 +27,7 @@ class ProfileCenterTabPage extends ConsumerStatefulWidget {
 
 class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
   final Set<String> _hiddenOrderInquiryIds = <String>{};
+  MyPageAssetTrendRange _selectedTrendRange = MyPageAssetTrendRange.threeMonths;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +36,13 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final locale = Localizations.localeOf(context);
+    final basicProfile = ref.watch(memberBasicProfileProvider);
     final localeTag = locale.toLanguageTag();
+    final trendEndDate = _resolveTrendEndDate();
+    final trendRange = (
+      startDate: _selectedTrendRange.resolveStart(trendEndDate),
+      endDate: trendEndDate,
+    );
     final currencyFormatter = NumberFormat.currency(
       locale: localeTag,
       symbol: '¥',
@@ -55,6 +65,7 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
     final applyAsync = ref.watch(myPagePendingApplyListProvider);
     //final orderInquiryAsync = ref.watch(myPageOrderInquiryListProvider);
     final investmentAsync = ref.watch(myPageInvestmentListProvider);
+    final assetTrendAsync = ref.watch(myPageAssetTrendProvider(trendRange));
     final investmentRecords = investmentAsync.asData?.value;
     final fundProjects =
         ref.watch(fundProjectListProvider).asData?.value ??
@@ -75,21 +86,29 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
             padding: EdgeInsets.zero,
             children: <Widget>[
               FundMyPageAssetOverview(
+                brandLabel: 'STE//AVIA',
+                welcomeLabel: l10n.myPageWelcomeBack,
+                displayName: _resolveMyPageDisplayName(
+                  locale: locale,
+                  profile: basicProfile,
+                ),
                 totalAssetsLabel: l10n.myPageTotalAssetsLabel,
                 totalAssetsValue: _formatCurrency(
                   totalAssetsExcludingLoan,
                   currencyFormatter,
                 ),
                 totalAssetsCaption: l10n.myPageTotalAssetsCaption,
-                leading: _HeroHeaderActionButton(
-                  icon: Icons.notifications_none_rounded,
-                  showDot: hasUnreadNotifications,
-                  onTap: () => context.push('/profile/notifications'),
-                ),
-                trailing: _HeroHeaderActionButton(
-                  icon: Icons.menu_rounded,
-                  onTap: () => context.push('/profile/settings'),
-                ),
+                headerActions: <Widget>[
+                  _HeroHeaderActionButton(
+                    icon: Icons.notifications_none_rounded,
+                    showDot: hasUnreadNotifications,
+                    onTap: () => context.push('/profile/notifications'),
+                  ),
+                  _HeroHeaderActionButton(
+                    icon: Icons.menu_rounded,
+                    onTap: () => context.push('/profile/settings'),
+                  ),
+                ],
                 metrics: <FundMyPageMetricData>[
                   FundMyPageMetricData(
                     label: l10n.myPageMetricOperating,
@@ -115,27 +134,40 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                               ? null
                               : _sumInvestmentEarnings(investmentRecords)),
                     ),
-                    valueColor: colors.highlightGold,
                   ),
                 ],
                 quickActions: <FundMyPageQuickActionData>[
                   FundMyPageQuickActionData(
                     label: l10n.myPageDepositAction,
                     backgroundColor: colors.highlightGold,
-                    foregroundColor: colors.textPrimary,
+                    foregroundColor: colors.onDark,
                     onTap: () => context.push('/wallet/deposit'),
                   ),
                   FundMyPageQuickActionData(
                     label: l10n.myPageWithdrawAction,
-                    backgroundColor: colors.background,
-                    borderColor: colors.border,
+                    backgroundColor: colors.heroStart,
+                    borderColor: colors.highlightGold,
                     foregroundColor: colors.highlightGold,
                     onTap: () => _handleWithdrawTap(context, ref),
                   ),
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                child: MyPageAssetTrendCard(
+                  title: l10n.myPageAssetTrendTitle,
+                  selectedRange: _selectedTrendRange,
+                  onRangeChanged: (range) {
+                    setState(() {
+                      _selectedTrendRange = range;
+                    });
+                  },
+                  records: assetTrendAsync.asData?.value ?? const [],
+                  isLoading: assetTrendAsync.isLoading,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: _buildSectionChildren(
@@ -160,7 +192,23 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
     setState(() {
       _hiddenOrderInquiryIds.clear();
     });
-    await refreshProfileCenterTabPage(ref);
+    final trendEndDate = _resolveTrendEndDate();
+    await Future.wait<void>(<Future<void>>[
+      refreshProfileCenterTabPage(ref),
+      ref
+          .refresh(
+            myPageAssetTrendProvider((
+              startDate: _selectedTrendRange.resolveStart(trendEndDate),
+              endDate: trendEndDate,
+            )).future,
+          )
+          .then((_) {}),
+    ]);
+  }
+
+  DateTime _resolveTrendEndDate() {
+    final now = DateTime.now();
+    return DateTime(now.year, now.month, now.day);
   }
 
   // Future<void> _hideOrderInquiryRecord(String orderId) async {
@@ -529,6 +577,7 @@ Widget _buildActiveFundsSection(
 
 Future<void> refreshProfileCenterTabPage(WidgetRef ref) async {
   ref.invalidate(fundProjectListProvider);
+  ref.invalidate(myPageAssetTrendProvider);
   await Future.wait<void>(<Future<void>>[
     ref.refresh(fundProjectListProvider.future).then((_) {}),
     ref.refresh(myPageAccountStatisticProvider.future).then((_) {}),
@@ -688,6 +737,46 @@ String _formatCompactNumber(double value) {
     return value.toStringAsFixed(0);
   }
   return value.toStringAsFixed(1);
+}
+
+String _resolveMyPageDisplayName({
+  required Locale locale,
+  required MemberBasicProfile? profile,
+}) {
+  if (locale.languageCode.toLowerCase() == 'ja') {
+    final family = profile?.familyName.trim() ?? '';
+    final given = profile?.givenName.trim() ?? '';
+    final fullName = <String>[
+      family,
+      given,
+    ].where((String part) => part.isNotEmpty).join(' ');
+    if (fullName.isNotEmpty) {
+      return '$fullName さん';
+    }
+  }
+
+  if (locale.languageCode.toLowerCase() == 'zh') {
+    final family = profile?.familyName.trim() ?? '';
+    final given = profile?.givenName.trim() ?? '';
+    final fullName = '$family$given'.trim();
+    if (fullName.isNotEmpty) {
+      return fullName;
+    }
+  }
+
+  if (locale.languageCode.toLowerCase() == 'en') {
+    final family = profile?.familyNameEn.trim() ?? '';
+    final given = profile?.givenNameEn.trim() ?? '';
+    final fullName = <String>[
+      family,
+      given,
+    ].where((String part) => part.isNotEmpty).join(' ');
+    if (fullName.isNotEmpty) {
+      return fullName;
+    }
+  }
+
+  return resolveHomeDisplayName(locale: locale, profile: profile);
 }
 
 DateTime? _parseApiDate(String? raw) {

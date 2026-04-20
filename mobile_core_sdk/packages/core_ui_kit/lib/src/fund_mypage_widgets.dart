@@ -39,150 +39,151 @@ class FundMyPageQuickActionData {
 class FundMyPageAssetOverview extends StatelessWidget {
   const FundMyPageAssetOverview({
     super.key,
+    required this.brandLabel,
+    required this.welcomeLabel,
+    required this.displayName,
     required this.totalAssetsLabel,
     required this.totalAssetsValue,
     required this.totalAssetsCaption,
     required this.metrics,
     required this.quickActions,
-    this.title,
-    this.leading,
-    this.trailing,
+    this.headerActions = const <Widget>[],
   });
 
+  final String brandLabel;
+  final String welcomeLabel;
+  final String displayName;
   final String totalAssetsLabel;
   final String totalAssetsValue;
   final String totalAssetsCaption;
   final List<FundMyPageMetricData> metrics;
   final List<FundMyPageQuickActionData> quickActions;
-  final String? title;
-  final Widget? leading;
-  final Widget? trailing;
+  final List<Widget> headerActions;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
-    return Column(
-      children: <Widget>[
-        Stack(
-          clipBehavior: Clip.none,
+    final topInset = MediaQuery.paddingOf(context).top;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(color: colors.heroStart),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(20, topInset + 18, 20, 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: <Color>[colors.heroStart, colors.heroMiddle],
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 18, 20, 54),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        if (leading != null) leading!,
-                        if (leading != null && title != null)
-                          const SizedBox(width: 12),
-                        if (title != null)
-                          Expanded(
-                            child: Text(
-                              title!,
-                              style: appText.pageTitle.copyWith(
-                                color: colors.onDark,
-                              ),
-                            ),
-                          )
-                        else
-                          const Spacer(),
-                        if (trailing != null) ...<Widget>[
-                          if (title != null) const SizedBox(width: 12),
-                          trailing!,
-                        ],
-                      ],
-                    ),
-                    const SizedBox(height: UiTokens.spacing16),
-                    Center(
-                      child: Column(
-                        children: <Widget>[
-                          Text(
-                            totalAssetsLabel,
-                            style: appText.caption.copyWith(
-                              color: colors.onDark.withValues(alpha: 0.52),
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            totalAssetsValue,
-                            style: appText.heroMetricPrimary.copyWith(
-                              color: colors.onDark,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            totalAssetsCaption,
-                            textAlign: TextAlign.center,
-                            style: appText.micro.copyWith(
-                              color: colors.onDark.withValues(alpha: 0.42),
-                              height: 1.3,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            if (metrics.isNotEmpty)
-              Positioned(
-                left: UiTokens.spacing16,
-                right: UiTokens.spacing16,
-                bottom: -36,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    for (
-                      var index = 0;
-                      index < metrics.length;
-                      index++
-                    ) ...<Widget>[
-                      Expanded(
-                        child: _FundMyPageMetricCard(data: metrics[index]),
-                      ),
-                      if (index < metrics.length - 1)
-                        const SizedBox(width: UiTokens.spacing8),
-                    ],
-                  ],
-                ),
-              ),
-          ],
-        ),
-        SizedBox(height: metrics.isEmpty ? UiTokens.spacing16 : 52),
-        if (quickActions.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: Row(
+            Row(
               children: <Widget>[
-                for (
-                  var index = 0;
-                  index < quickActions.length;
-                  index++
-                ) ...<Widget>[
-                  Expanded(
-                    child: _FundMyPageQuickActionButton(
-                      data: quickActions[index],
+                Expanded(
+                  child: Text(
+                    brandLabel,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: appText.cardTitle.copyWith(
+                      color: colors.highlightGold,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 1.6,
                     ),
                   ),
-                  if (index < quickActions.length - 1)
-                    const SizedBox(width: 10),
+                ),
+                if (headerActions.isNotEmpty) ...<Widget>[
+                  for (
+                    var index = 0;
+                    index < headerActions.length;
+                    index++
+                  ) ...<Widget>[
+                    headerActions[index],
+                    if (index < headerActions.length - 1)
+                      const SizedBox(width: 12),
+                  ],
                 ],
               ],
             ),
-          ),
-      ],
+            const SizedBox(height: 30),
+            Text(
+              welcomeLabel,
+              style: appText.body.copyWith(
+                color: colors.onDark.withValues(alpha: 0.6),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              displayName,
+              style: appText.pageTitle.copyWith(
+                color: colors.onDark,
+                fontWeight: FontWeight.w800,
+                height: 1.15,
+              ),
+            ),
+            const SizedBox(height: 22),
+            Text(
+              totalAssetsLabel,
+              style: appText.caption.copyWith(
+                color: colors.highlightGold,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              totalAssetsValue,
+              style: appText.heroMetricPrimary.copyWith(
+                color: colors.onDark,
+                height: 1,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              totalAssetsCaption,
+              style: appText.body.copyWith(
+                color: colors.onDark.withValues(alpha: 0.62),
+                height: 1.35,
+              ),
+            ),
+            if (metrics.isNotEmpty) ...<Widget>[
+              const SizedBox(height: 16),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  for (
+                    var index = 0;
+                    index < metrics.length;
+                    index++
+                  ) ...<Widget>[
+                    Expanded(
+                      child: _FundMyPageMetricCard(data: metrics[index]),
+                    ),
+                    if (index < metrics.length - 1)
+                      const SizedBox(width: UiTokens.spacing8),
+                  ],
+                ],
+              ),
+            ],
+            if (quickActions.isNotEmpty) ...<Widget>[
+              const SizedBox(height: 16),
+              Row(
+                children: <Widget>[
+                  for (
+                    var index = 0;
+                    index < quickActions.length;
+                    index++
+                  ) ...<Widget>[
+                    Expanded(
+                      child: _FundMyPageQuickActionButton(
+                        data: quickActions[index],
+                      ),
+                    ),
+                    if (index < quickActions.length - 1)
+                      const SizedBox(width: 10),
+                  ],
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 }
@@ -386,16 +387,8 @@ class _FundMyPageMetricCardState extends State<_FundMyPageMetricCard> {
           curve: Curves.easeOut,
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: colors.surface,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: colors.border),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: colors.scrim.withValues(alpha: _pressed ? 0.03 : 0.05),
-                  blurRadius: _pressed ? 6 : 10,
-                  offset: Offset(0, _pressed ? 2 : 4),
-                ),
-              ],
+              color: colors.primaryAlt.withValues(alpha: 0.22),
+              borderRadius: BorderRadius.circular(UiTokens.radius12),
             ),
             child: SizedBox(
               width: double.infinity,
@@ -409,7 +402,9 @@ class _FundMyPageMetricCardState extends State<_FundMyPageMetricCard> {
                     Text(
                       widget.data.label,
                       textAlign: TextAlign.center,
-                      style: appText.meta.copyWith(color: colors.textTertiary),
+                      style: appText.meta.copyWith(
+                        color: colors.onDark.withValues(alpha: 0.58),
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -418,7 +413,7 @@ class _FundMyPageMetricCardState extends State<_FundMyPageMetricCard> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: appText.heroMetricSecondary.copyWith(
-                        color: widget.data.valueColor ?? colors.textPrimary,
+                        color: widget.data.valueColor ?? colors.onDark,
                       ),
                     ),
                   ],
@@ -442,31 +437,27 @@ class _FundMyPageQuickActionButton extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
+    final borderColor = data.borderColor ?? colors.surface.withValues(alpha: 0);
+    final foregroundColor = data.foregroundColor ?? colors.textPrimary;
 
     return Material(
       type: MaterialType.transparency,
       child: InkWell(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(UiTokens.radius12),
         onTap: data.onTap,
         child: Ink(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
           decoration: BoxDecoration(
             color: data.backgroundColor ?? colors.background,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: data.borderColor ?? colors.surface.withValues(alpha: 0),
-              width: 1.5,
-            ),
+            borderRadius: BorderRadius.circular(UiTokens.radius12),
+            border: Border.all(color: borderColor, width: 1.5),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               if (data.icon != null) ...<Widget>[
                 IconTheme(
-                  data: IconThemeData(
-                    size: 18,
-                    color: data.foregroundColor ?? colors.textPrimary,
-                  ),
+                  data: IconThemeData(size: 18, color: foregroundColor),
                   child: data.icon!,
                 ),
                 const SizedBox(width: 8),
@@ -476,7 +467,8 @@ class _FundMyPageQuickActionButton extends StatelessWidget {
                   data.label,
                   overflow: TextOverflow.ellipsis,
                   style: appText.button.copyWith(
-                    color: data.foregroundColor ?? colors.textPrimary,
+                    color: foregroundColor,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
               ),
