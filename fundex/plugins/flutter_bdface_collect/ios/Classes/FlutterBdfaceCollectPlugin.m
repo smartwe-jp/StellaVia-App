@@ -443,26 +443,45 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
   if ([localeCode isEqualToString:@"zh-Hant"]) {
     return @{
       @"Face recognition timeout" : @"人臉辨識未通過",
+      @"人脸识别未通过" : @"人臉辨識未通過",
+      @"人脸识别超时" : @"人臉辨識未通過",
       @"Please check the following environmental conditions and try again" :
           @"請檢查以下環境條件後再試一次",
+      @"请检查以下环境情况，再重新尝试" : @"請檢查以下環境條件後再試一次",
+      @"请检查以下环境条件后再试一次" : @"請檢查以下環境條件後再試一次",
       @"Moderate lighting" : @"光線適中",
+      @"光线适中" : @"光線適中",
       @"Avoid obstruction" : @"避免遮擋",
+      @"避免遮挡" : @"避免遮擋",
       @"Face to screen" : @"請正對手機",
+      @"请正对手机" : @"請正對手機",
       @"Clear camera" : @"攝影機畫面需清晰",
+      @"摄像头清晰" : @"攝影機畫面需清晰",
       @"Restart" : @"重新採集",
+      @"重新采集" : @"重新採集",
       @"Back" : @"返回",
     };
   }
   return @{
     @"Face recognition timeout" : @"顔認証がタイムアウトしました",
+    @"人脸识别未通过" : @"顔認証がタイムアウトしました",
+    @"人脸识别超时" : @"顔認証がタイムアウトしました",
     @"Please check the following environmental conditions and try again" :
         @"次の環境を確認して、もう一度お試しください",
+    @"请检查以下环境情况，再重新尝试" : @"次の環境を確認して、もう一度お試しください",
+    @"请检查以下环境条件后再试一次" : @"次の環境を確認して、もう一度お試しください",
     @"Moderate lighting" : @"適切な明るさ",
+    @"光线适中" : @"適切な明るさ",
     @"Avoid obstruction" : @"遮らないでください",
+    @"避免遮挡" : @"遮らないでください",
     @"Face to screen" : @"画面を正面から見てください",
+    @"请正对手机" : @"画面を正面から見てください",
     @"Clear camera" : @"カメラを鮮明にしてください",
+    @"摄像头清晰" : @"カメラを鮮明にしてください",
     @"Restart" : @"再試行",
+    @"重新采集" : @"再試行",
     @"Back" : @"戻る",
+    @"返回" : @"戻る",
   };
 }
 
@@ -521,25 +540,92 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
                      replacements:(NSDictionary<NSString *, NSString *> *)replacements {
   if ([view isKindOfClass:[UILabel class]]) {
     UILabel *label = (UILabel *)view;
-    NSString *replacement = replacements[label.text];
+    NSString *replacement =
+        [self replacementForPrimaryCandidate:label.text
+                            secondaryCandidate:label.attributedText.string
+                              tertiaryCandidate:label.accessibilityLabel
+                                    replacements:replacements];
     if (replacement != nil) {
+      label.attributedText = nil;
       label.text = replacement;
+      label.accessibilityLabel = replacement;
     }
   } else if ([view isKindOfClass:[UIButton class]]) {
     UIButton *button = (UIButton *)view;
-    NSString *normalTitle = [button titleForState:UIControlStateNormal];
-    NSString *replacement = replacements[normalTitle];
+    NSString *replacement =
+        [self replacementForPrimaryCandidate:[button titleForState:UIControlStateNormal]
+                            secondaryCandidate:button.currentAttributedTitle.string
+                              tertiaryCandidate:button.accessibilityLabel
+                                    replacements:replacements];
     if (replacement != nil) {
+      [button setAttributedTitle:nil forState:UIControlStateNormal];
+      [button setAttributedTitle:nil forState:UIControlStateHighlighted];
+      [button setAttributedTitle:nil forState:UIControlStateSelected];
+      [button setAttributedTitle:nil forState:UIControlStateDisabled];
       [button setTitle:replacement forState:UIControlStateNormal];
       [button setTitle:replacement forState:UIControlStateHighlighted];
       [button setTitle:replacement forState:UIControlStateSelected];
       [button setTitle:replacement forState:UIControlStateDisabled];
+      button.accessibilityLabel = replacement;
     }
   }
 
   for (UIView *subview in view.subviews) {
     [self replaceVisibleTextsInView:subview replacements:replacements];
   }
+}
+
+- (NSString *)replacementForPrimaryCandidate:(NSString *)primaryCandidate
+                           secondaryCandidate:(NSString *)secondaryCandidate
+                             tertiaryCandidate:(NSString *)tertiaryCandidate
+                                   replacements:(NSDictionary<NSString *, NSString *> *)replacements {
+  NSArray<NSString *> *candidates = @[ primaryCandidate ?: @"", secondaryCandidate ?: @"",
+                                       tertiaryCandidate ?: @"" ];
+  for (NSString *candidate in candidates) {
+    NSString *normalized = [self normalizedReplacementCandidate:candidate];
+    if (normalized.length == 0) {
+      continue;
+    }
+    NSString *replacement = replacements[normalized];
+    if (replacement != nil) {
+      return replacement;
+    }
+    NSString *compactNormalized = [self compactReplacementCandidate:normalized];
+    for (NSString *key in replacements) {
+      NSString *normalizedKey = [self normalizedReplacementCandidate:key];
+      NSString *compactKey = [self compactReplacementCandidate:normalizedKey];
+      if (compactKey.length == 0) {
+        continue;
+      }
+      if ([normalized containsString:normalizedKey] || [compactNormalized containsString:compactKey]) {
+        return replacements[key];
+      }
+    }
+  }
+  return nil;
+}
+
+- (NSString *)normalizedReplacementCandidate:(NSString *)candidate {
+  if (![candidate isKindOfClass:[NSString class]]) {
+    return nil;
+  }
+  NSString *normalized = [candidate stringByTrimmingCharactersInSet:
+                                    [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  normalized = [normalized stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
+  while ([normalized containsString:@"  "]) {
+    normalized = [normalized stringByReplacingOccurrencesOfString:@"  " withString:@" "];
+  }
+  return normalized.length > 0 ? normalized : nil;
+}
+
+- (NSString *)compactReplacementCandidate:(NSString *)candidate {
+  NSString *normalized = [self normalizedReplacementCandidate:candidate];
+  if (normalized.length == 0) {
+    return nil;
+  }
+  NSCharacterSet *whitespace = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+  NSArray<NSString *> *parts = [normalized componentsSeparatedByCharactersInSet:whitespace];
+  return [parts componentsJoinedByString:@""];
 }
 
 - (void)applyLocalizationToTipConfig:(BDFaceBaseKitLivenessTipCustomConfigItem *)tipConfig
