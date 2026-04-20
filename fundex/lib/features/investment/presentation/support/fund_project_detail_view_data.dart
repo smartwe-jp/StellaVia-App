@@ -628,7 +628,7 @@ FundDetailBadgeData _buildStatusBadge(BuildContext context, int? status) {
       return FundDetailBadgeData(
         label: context.l10n.fundListStatusOpen,
         backgroundColor: colors.highlightGold,
-        foregroundColor: colors.primary,
+        foregroundColor: colors.onDark,
       );
     case 0:
       return FundDetailBadgeData(

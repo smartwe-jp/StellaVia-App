@@ -671,7 +671,7 @@ _FeaturedFundStatusPalette _resolveFeaturedStatusPalette(
       return _FeaturedFundStatusPalette(
         gradientColors: <Color>[colors.brandPrimaryDark, colors.primary],
         tagBackgroundColor: colors.highlightGold,
-        tagForegroundColor: colors.textPrimary,
+        tagForegroundColor: colors.onDark,
       );
     case 0:
       return _FeaturedFundStatusPalette(

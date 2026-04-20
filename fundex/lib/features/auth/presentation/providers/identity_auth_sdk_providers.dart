@@ -2,6 +2,7 @@ import 'package:core_identity_auth/core_identity_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/localization/app_locale_providers.dart';
 import '../../../../app/network/app_network_providers.dart';
 import '../../../../app/storage/app_storage_providers.dart';
 import '../../data/adapters/auth_identity_auth_state_store.dart';
@@ -65,7 +66,8 @@ final identityAuthLivenessCollectorProvider = Provider<LivenessCollector?>((
   if (licenseId == null) {
     return null;
   }
-  return BaiduFaceLivenessCollector(licenseId: licenseId);
+  final localeTag = ref.watch(appLocaleProvider)?.toLanguageTag();
+  return BaiduFaceLivenessCollector(licenseId: licenseId, localeTag: localeTag);
 });
 
 final identityAuthCoordinatorProvider = Provider<IdentityAuthCoordinator>((

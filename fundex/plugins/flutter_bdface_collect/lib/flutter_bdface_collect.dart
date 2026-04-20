@@ -14,6 +14,7 @@ class FlutterBdfaceCollect extends _ServiceApi {
 class _ServiceApi {
   static const String _ChannelName = 'com.fluttercandies.bdface_collect';
   final MethodChannel _methodChannel = MethodChannel(_ChannelName);
+  String? _preferredLocaleTag;
 
   Future<String?> get platformVersion async {
     final String? version = await _methodChannel
@@ -22,7 +23,7 @@ class _ServiceApi {
   }
 
   /// 初始化
-  Future<String?> init(String licenseId) async {
+  Future<String?> init(String licenseId, {String? localeTag}) async {
     // var s = await Permission.camera.status;
     // if (![PermissionStatus.granted, PermissionStatus.limited].contains(s)) {
     //   s = await Permission.camera.request();
@@ -39,6 +40,7 @@ class _ServiceApi {
     //     }
     //   }
     // }
+    _updatePreferredLocaleTag(localeTag);
     final String? err = await _methodChannel.invokeMethod<String>(
       MethodConstants.Init,
       <String, dynamic>{
@@ -50,7 +52,8 @@ class _ServiceApi {
   }
 
   /// 采集
-  Future<CollectResult> collect(FaceConfig config) async {
+  Future<CollectResult> collect(FaceConfig config, {String? localeTag}) async {
+    _updatePreferredLocaleTag(localeTag);
     final bool shouldDisableVoicePrompt = _shouldDisableVoicePrompt();
     final Map<String, dynamic> arguments = <String, dynamic>{
       ...config.toMap(),
@@ -73,7 +76,7 @@ class _ServiceApi {
   }
 
   String _localizedCancelMessage() {
-    final locale = PlatformDispatcher.instance.locale;
+    final locale = _effectiveLocale();
     final languageCode = locale.languageCode.toLowerCase();
     final scriptCode = locale.scriptCode?.toLowerCase();
     final countryCode = locale.countryCode?.toLowerCase();
@@ -95,11 +98,54 @@ class _ServiceApi {
   }
 
   String _currentLocaleTag() {
-    return PlatformDispatcher.instance.locale.toLanguageTag();
+    return _effectiveLocale().toLanguageTag();
   }
 
   bool _shouldDisableVoicePrompt() {
-    final locale = PlatformDispatcher.instance.locale;
+    final locale = _effectiveLocale();
     return locale.languageCode.toLowerCase() == 'ja';
+  }
+
+  void _updatePreferredLocaleTag(String? localeTag) {
+    final normalized = localeTag?.trim();
+    if (normalized == null || normalized.isEmpty) {
+      _preferredLocaleTag = null;
+      return;
+    }
+    _preferredLocaleTag = normalized;
+  }
+
+  Locale _effectiveLocale() {
+    final overrideTag = _preferredLocaleTag;
+    if (overrideTag != null && overrideTag.isNotEmpty) {
+      return _localeFromTag(overrideTag);
+    }
+    return PlatformDispatcher.instance.locale;
+  }
+
+  Locale _localeFromTag(String localeTag) {
+    final normalized = localeTag.replaceAll('_', '-').trim();
+    if (normalized.isEmpty) {
+      return PlatformDispatcher.instance.locale;
+    }
+    final parts = normalized.split('-');
+    final languageCode = parts.first.toLowerCase();
+    String? scriptCode;
+    String? countryCode;
+    for (final part in parts.skip(1)) {
+      if (part.length == 4 && scriptCode == null) {
+        scriptCode =
+            '${part[0].toUpperCase()}${part.substring(1).toLowerCase()}';
+        continue;
+      }
+      if ((part.length == 2 || part.length == 3) && countryCode == null) {
+        countryCode = part.toUpperCase();
+      }
+    }
+    return Locale.fromSubtags(
+      languageCode: languageCode,
+      scriptCode: scriptCode,
+      countryCode: countryCode,
+    );
   }
 }

@@ -8,13 +8,16 @@ import 'package:permission_handler/permission_handler.dart';
 class BaiduFaceLivenessCollector implements LivenessCollector {
   BaiduFaceLivenessCollector({
     required String licenseId,
+    String? localeTag,
     Set<bd_model.LivenessType>? livenessTypes,
     bool randomAction = true,
   }) : _licenseId = licenseId.trim(),
+       _localeTag = localeTag?.trim(),
        _livenessTypes = livenessTypes,
        _randomAction = randomAction;
 
   final String _licenseId;
+  final String? _localeTag;
   final Set<bd_model.LivenessType>? _livenessTypes;
   final bool _randomAction;
 
@@ -47,7 +50,7 @@ class BaiduFaceLivenessCollector implements LivenessCollector {
         }
       }
 
-      final initError = await plugin.init(_licenseId);
+      final initError = await plugin.init(_licenseId, localeTag: _localeTag);
       if (initError != null && initError.trim().isNotEmpty) {
         return LivenessCollectResult(
           photoBase64: '',
@@ -63,7 +66,7 @@ class BaiduFaceLivenessCollector implements LivenessCollector {
             ),
         livenessRandom: _randomAction,
       );
-      final result = await plugin.collect(config);
+      final result = await plugin.collect(config, localeTag: _localeTag);
       final sourcePhoto = result.imageSrcBase64.trim();
       final cropPhoto = result.imageCropBase64.trim();
       final photo = sourcePhoto.isNotEmpty ? sourcePhoto : cropPhoto;

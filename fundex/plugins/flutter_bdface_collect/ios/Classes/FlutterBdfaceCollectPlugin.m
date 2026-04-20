@@ -15,6 +15,8 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
 @interface FlutterBdfaceCollectPlugin ()
 
 @property (nonatomic, assign) BOOL didInitSdk;
+@property (nonatomic, copy) NSString *preferredLocaleTag;
+@property (nonatomic, strong) NSTimer *uiLocalizationTimer;
 
 @end
 
@@ -58,6 +60,7 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
     licenseId = argumentMap[@"licenseId"] ?: argumentMap[@"licenseID"];
     licenseName = argumentMap[@"licenseName"] ?: kDefaultLicenseName;
     encryptKeyName = argumentMap[@"encryptKeyName"] ?: kDefaultEncryptKeyName;
+    [self updatePreferredLocaleTag:argumentMap[@"localeTag"]];
   }
 
   if (licenseId.length == 0) {
@@ -106,6 +109,7 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
 - (void)unInit:(FlutterResult)result {
   self.didInitSdk = NO;
 #if !TARGET_OS_SIMULATOR
+  [self stopUiLocalizationMonitoring];
   [[BDFaceBaseKitManager sharedInstance] uninitCollect];
 #endif
   result(nil);
@@ -116,6 +120,10 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
   result(@{@"error" : [self unsupportedSimulatorMessage]});
   return;
 #else
+  if ([faceConfigMap isKindOfClass:[NSDictionary class]]) {
+    [self updatePreferredLocaleTag:faceConfigMap[@"localeTag"]];
+  }
+
   if (![faceConfigMap isKindOfClass:[NSDictionary class]]) {
     result(@{
       @"error" : [self localizedStringForLocale:[self currentLivenessLocaleCode]
@@ -160,6 +168,7 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
     [self applyLocalizationToTipConfig:tipConfig localeCode:localeCode];
     [[BDFaceBaseKitManager sharedInstance] setFaceSdkCustomParamsConfig:paramsConfig];
     [[BDFaceBaseKitManager sharedInstance] setFaceSdkCustomLivenessTipConfig:tipConfig];
+    [self startUiLocalizationMonitoringIfNeededForLocale:localeCode];
 
     __block BOOL didReturnResult = NO;
     [[BDFaceBaseKitManager sharedInstance]
@@ -167,6 +176,7 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
                        andExtradata:@{}
                           callback:^(BDFaceCompletionStatusCode code, NSDictionary *sdkResult) {
                             dispatch_async(dispatch_get_main_queue(), ^{
+                              [self stopUiLocalizationMonitoring];
                               if (didReturnResult) {
                                 return;
                               }
@@ -193,6 +203,11 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
                               }
 
                               if (code == BDFaceStatusCancel) {
+                                result(nil);
+                                return;
+                              }
+
+                              if (code == BDFaceStatusTimeout) {
                                 result(nil);
                                 return;
                               }
@@ -297,7 +312,10 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
 #endif
 
 - (NSString *)currentLivenessLocaleCode {
-  NSString *identifier = [[[NSLocale preferredLanguages] firstObject] lowercaseString];
+  NSString *identifier = [self normalizedLocaleIdentifier:self.preferredLocaleTag];
+  if (identifier.length == 0) {
+    identifier = [self normalizedLocaleIdentifier:[[NSLocale preferredLanguages] firstObject]];
+  }
   if (identifier.length == 0) {
     return @"en";
   }
@@ -311,6 +329,22 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
     return @"zh-Hans";
   }
   return @"en";
+}
+
+- (void)updatePreferredLocaleTag:(NSString *)localeTag {
+  self.preferredLocaleTag = [self normalizedLocaleIdentifier:localeTag];
+}
+
+- (NSString *)normalizedLocaleIdentifier:(NSString *)identifier {
+  if (![identifier isKindOfClass:[NSString class]]) {
+    return nil;
+  }
+  NSString *normalized =
+      [[identifier stringByReplacingOccurrencesOfString:@"_" withString:@"-"]
+          lowercaseString];
+  normalized = [normalized stringByTrimmingCharactersInSet:
+                                 [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  return normalized.length > 0 ? normalized : nil;
 }
 
 - (BOOL)isTraditionalChineseIdentifier:(NSString *)identifier {
@@ -339,8 +373,173 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
 - (void)applyLocalizationToParamsConfig:(BDFaceBaseKitParamsCustomConfigItem *)config
                              localeCode:(NSString *)localeCode {
   config.isShowLanguageSwitch = NO;
+  config.isPopWindow = YES;
   config.liveness_languageType =
       [localeCode isEqualToString:@"ja"] || [localeCode isEqualToString:@"en"] ? @"EN" : @"ZH_CN";
+}
+
+- (void)startUiLocalizationMonitoringIfNeededForLocale:(NSString *)localeCode {
+  [self stopUiLocalizationMonitoring];
+  if (![localeCode isEqualToString:@"ja"]) {
+    return;
+  }
+  __weak typeof(self) weakSelf = self;
+  self.uiLocalizationTimer =
+      [NSTimer scheduledTimerWithTimeInterval:0.25
+                                      repeats:YES
+                                        block:^(__unused NSTimer *timer) {
+                                          [weakSelf localizeVisibleSdkTextsIfNeeded];
+                                        }];
+  [self.uiLocalizationTimer fire];
+}
+
+- (void)stopUiLocalizationMonitoring {
+  [self.uiLocalizationTimer invalidate];
+  self.uiLocalizationTimer = nil;
+}
+
+- (void)localizeVisibleSdkTextsIfNeeded {
+  NSString *localeCode = [self currentLivenessLocaleCode];
+  if (![localeCode isEqualToString:@"ja"] && ![localeCode isEqualToString:@"zh-Hant"]) {
+    return;
+  }
+  if ([localeCode isEqualToString:@"ja"]) {
+    [self hideSdkTopRightControlsIfNeeded];
+  }
+  UIWindow *keyWindow = nil;
+  if (@available(iOS 13.0, *)) {
+    for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
+      if (![scene isKindOfClass:[UIWindowScene class]]) {
+        continue;
+      }
+      UIWindowScene *windowScene = (UIWindowScene *)scene;
+      for (UIWindow *window in windowScene.windows) {
+        if (window.isKeyWindow) {
+          keyWindow = window;
+          break;
+        }
+      }
+      if (keyWindow != nil) {
+        break;
+      }
+    }
+  }
+  if (keyWindow == nil) {
+    keyWindow = UIApplication.sharedApplication.keyWindow;
+  }
+  if (keyWindow == nil) {
+    return;
+  }
+
+  NSDictionary<NSString *, NSString *> *replacements =
+      [self timeoutDialogReplacementsForLocale:localeCode];
+  [self replaceVisibleTextsInView:keyWindow replacements:replacements];
+  if ([localeCode isEqualToString:@"ja"]) {
+    [self hideSdkTopRightButtonsInView:keyWindow];
+  }
+}
+
+- (NSDictionary<NSString *, NSString *> *)timeoutDialogReplacementsForLocale:(NSString *)localeCode {
+  if ([localeCode isEqualToString:@"zh-Hant"]) {
+    return @{
+      @"Face recognition timeout" : @"人臉辨識未通過",
+      @"Please check the following environmental conditions and try again" :
+          @"請檢查以下環境條件後再試一次",
+      @"Moderate lighting" : @"光線適中",
+      @"Avoid obstruction" : @"避免遮擋",
+      @"Face to screen" : @"請正對手機",
+      @"Clear camera" : @"攝影機畫面需清晰",
+      @"Restart" : @"重新採集",
+      @"Back" : @"返回",
+    };
+  }
+  return @{
+    @"Face recognition timeout" : @"顔認証がタイムアウトしました",
+    @"Please check the following environmental conditions and try again" :
+        @"次の環境を確認して、もう一度お試しください",
+    @"Moderate lighting" : @"適切な明るさ",
+    @"Avoid obstruction" : @"遮らないでください",
+    @"Face to screen" : @"画面を正面から見てください",
+    @"Clear camera" : @"カメラを鮮明にしてください",
+    @"Restart" : @"再試行",
+    @"Back" : @"戻る",
+  };
+}
+
+- (void)hideSdkTopRightControlsIfNeeded {
+  UIViewController *controller = [self topViewController];
+  if (controller == nil) {
+    return;
+  }
+  @try {
+    NSArray<NSString *> *candidateKeys = @[ @"voiceImageView", @"language_logo" ];
+    for (NSString *candidateKey in candidateKeys) {
+      id button = [controller valueForKey:candidateKey];
+      if ([button isKindOfClass:[UIView class]]) {
+        UIView *buttonView = (UIView *)button;
+        buttonView.hidden = YES;
+        buttonView.alpha = 0.0;
+        buttonView.userInteractionEnabled = NO;
+      }
+    }
+  } @catch (__unused NSException *exception) {
+    // Ignore because some SDK screens may not expose these private ivars.
+  }
+}
+
+- (void)hideSdkTopRightButtonsInView:(UIView *)view {
+  if ([view isKindOfClass:[UIButton class]]) {
+    UIButton *button = (UIButton *)view;
+    NSString *normalTitle = [button titleForState:UIControlStateNormal];
+    NSString *selectedTitle = [button titleForState:UIControlStateSelected];
+    NSString *accessibilityLabel = button.accessibilityLabel;
+    if ([self isLanguageSwitchTitle:normalTitle] || [self isLanguageSwitchTitle:selectedTitle] ||
+        [self isLanguageSwitchTitle:accessibilityLabel]) {
+      button.hidden = YES;
+      button.alpha = 0.0;
+      button.userInteractionEnabled = NO;
+    }
+  }
+
+  for (UIView *subview in view.subviews) {
+    [self hideSdkTopRightButtonsInView:subview];
+  }
+}
+
+- (BOOL)isLanguageSwitchTitle:(NSString *)title {
+  if (![title isKindOfClass:[NSString class]]) {
+    return NO;
+  }
+  NSString *normalized = [[title stringByTrimmingCharactersInSet:
+                                     [NSCharacterSet whitespaceAndNewlineCharacterSet]]
+      uppercaseString];
+  return [normalized isEqualToString:@"EN"] || [normalized isEqualToString:@"ZH_CN"] ||
+         [normalized isEqualToString:@"ZH-CN"];
+}
+
+- (void)replaceVisibleTextsInView:(UIView *)view
+                     replacements:(NSDictionary<NSString *, NSString *> *)replacements {
+  if ([view isKindOfClass:[UILabel class]]) {
+    UILabel *label = (UILabel *)view;
+    NSString *replacement = replacements[label.text];
+    if (replacement != nil) {
+      label.text = replacement;
+    }
+  } else if ([view isKindOfClass:[UIButton class]]) {
+    UIButton *button = (UIButton *)view;
+    NSString *normalTitle = [button titleForState:UIControlStateNormal];
+    NSString *replacement = replacements[normalTitle];
+    if (replacement != nil) {
+      [button setTitle:replacement forState:UIControlStateNormal];
+      [button setTitle:replacement forState:UIControlStateHighlighted];
+      [button setTitle:replacement forState:UIControlStateSelected];
+      [button setTitle:replacement forState:UIControlStateDisabled];
+    }
+  }
+
+  for (UIView *subview in view.subviews) {
+    [self replaceVisibleTextsInView:subview replacements:replacements];
+  }
 }
 
 - (void)applyLocalizationToTipConfig:(BDFaceBaseKitLivenessTipCustomConfigItem *)tipConfig
