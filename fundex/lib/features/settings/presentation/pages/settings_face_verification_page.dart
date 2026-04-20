@@ -31,7 +31,15 @@ class _SettingsFaceVerificationPageState
 
   bool _isSelfieUploaded(String? path) {
     final normalized = path?.trim() ?? '';
-    return normalized.isNotEmpty;
+    //return normalized.isNotEmpty;
+    if (normalized.isEmpty) {
+      return false;
+    }
+    if (normalized == selfieUploadCompletedMarker) {
+      return true;
+    }
+    return normalized.startsWith('http://') ||
+        normalized.startsWith('https://');
   }
 
   Future<String?> _pickImagePath(ProfileDocumentImageSource source) async {
@@ -290,6 +298,8 @@ class _SettingsFaceVerificationPageState
     final selfieUploaded = _isSelfieUploaded(_selfiePhotoPath);
     final verified = _isVerified || (verifiedAsync.asData?.value == true);
     final showUploadSection = !verified;
+    final canStartVerification =
+        selfieUploaded && !_isUploadingPhoto && !_isRunningVerification;
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -425,9 +435,9 @@ class _SettingsFaceVerificationPageState
             const SizedBox(height: 20),
             PrimaryCtaButton(
               label: l10n.identityAuthStartAction,
-              onPressed: _isUploadingPhoto || _isRunningVerification
-                  ? null
-                  : () => _startVerification(),
+              onPressed: canStartVerification
+                  ? () => _startVerification()
+                  : null,
               isLoading: _isRunningVerification,
             ),
           ],
