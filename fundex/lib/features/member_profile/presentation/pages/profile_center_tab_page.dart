@@ -743,36 +743,43 @@ String _resolveMyPageDisplayName({
   required Locale locale,
   required MemberBasicProfile? profile,
 }) {
-  if (locale.languageCode.toLowerCase() == 'ja') {
-    final family = profile?.familyName.trim() ?? '';
-    final given = profile?.givenName.trim() ?? '';
+  final languageCode = locale.languageCode.toLowerCase();
+
+  if (languageCode == 'ja') {
     final fullName = <String>[
-      family,
-      given,
+      profile?.familyName.trim() ?? '',
+      profile?.givenName.trim() ?? '',
     ].where((String part) => part.isNotEmpty).join(' ');
     if (fullName.isNotEmpty) {
       return '$fullName さん';
     }
   }
 
-  if (locale.languageCode.toLowerCase() == 'zh') {
-    final family = profile?.familyName.trim() ?? '';
-    final given = profile?.givenName.trim() ?? '';
-    final fullName = '$family$given'.trim();
+  if (languageCode == 'zh') {
+    final fullName = <String>[
+      profile?.familyName.trim() ?? '',
+      profile?.givenName.trim() ?? '',
+    ].where((String part) => part.isNotEmpty).join(' ');
     if (fullName.isNotEmpty) {
-      return fullName;
+      return switch (profile?.sex) {
+        0 => '$fullName 女士',
+        1 => '$fullName 先生',
+        _ => fullName,
+      };
     }
   }
 
-  if (locale.languageCode.toLowerCase() == 'en') {
-    final family = profile?.familyNameEn.trim() ?? '';
-    final given = profile?.givenNameEn.trim() ?? '';
+  if (languageCode == 'en') {
     final fullName = <String>[
-      family,
-      given,
+      profile?.familyNameEn.trim() ?? '',
+      profile?.givenNameEn.trim() ?? '',
     ].where((String part) => part.isNotEmpty).join(' ');
     if (fullName.isNotEmpty) {
-      return fullName;
+      return switch (profile?.sex) {
+        0 => 'Ms. $fullName',
+        1 => 'Mr. $fullName',
+        _ => fullName,
+      };
     }
   }
 
