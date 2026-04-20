@@ -63,6 +63,7 @@ class _FundLotteryApplyFlowPageState
   bool _agreedToApply = false;
   bool _isApplying = false;
   bool _isReportingDeposit = false;
+  bool _blocksBackOnSubmittedStep = false;
 
   @override
   void initState() {
@@ -218,6 +219,10 @@ class _FundLotteryApplyFlowPageState
 
   bool get _requiresVerifiedApplicationAccess =>
       widget.initialStep.index < FundLotteryApplyStep.submitted.index;
+
+  bool get _shouldLockSubmittedBackNavigation =>
+      _currentStep == FundLotteryApplyStep.submitted &&
+      _blocksBackOnSubmittedStep;
 
   Future<void> _showFundApplyVerificationRequiredDialog() {
     final l10n = context.l10n;
@@ -467,6 +472,7 @@ class _FundLotteryApplyFlowPageState
       if (!mounted) {
         return;
       }
+      _blocksBackOnSubmittedStep = true;
       _goNextStep();
     } catch (error) {
       if (!mounted) {
@@ -474,6 +480,7 @@ class _FundLotteryApplyFlowPageState
       }
       if (_shouldBypassIdentityVerificationError(error)) {
         _showToast(_identityVerificationBypassNotice);
+        _blocksBackOnSubmittedStep = true;
         _goNextStep();
         return;
       }
@@ -497,9 +504,7 @@ class _FundLotteryApplyFlowPageState
     });
 
     try {
-      await ref
-          .read(confirmWalletPaymentUseCaseProvider)
-          .call(amount: amount);
+      await ref.read(confirmWalletPaymentUseCaseProvider).call(amount: amount);
       if (!mounted) {
         return;
       }
@@ -530,37 +535,45 @@ class _FundLotteryApplyFlowPageState
     FundProject project,
   ) {
     var selectionIndex = 0;
-    return project.pdfDocuments.map((FundProjectPdfDocument document) {
-      final groupTitle = _documentGroupTitle(context, document);
-      final items = _availablePdfUrls(document).asMap().entries.map((
-        MapEntry<int, FundProjectPdfUrl> entry,
-      ) {
-        final currentSelectionIndex = selectionIndex++;
-        final itemTitle = _documentLinkTitle(context, entry.value, entry.key);
-        final item = FundLotteryDocumentItem(
-          selectionIndex: currentSelectionIndex,
-          title: itemTitle,
-          subtitle:
-              _formatDocumentCreatedAt(context, entry.value) ??
-              context.l10n.fundDetailDocumentReady,
-          onOpen: () {
-            if (mounted) {
-              setState(() {
-                _openedDocuments.add(currentSelectionIndex);
-              });
-            }
-            _openPdfDocument(
-              context,
-              groupTitle: groupTitle,
-              linkTitle: itemTitle,
-              item: entry.value,
-            );
-          },
-        );
-        return item;
-      }).toList(growable: false);
-      return FundLotteryDocumentGroup(title: groupTitle, items: items);
-    }).toList(growable: false);
+    return project.pdfDocuments
+        .map((FundProjectPdfDocument document) {
+          final groupTitle = _documentGroupTitle(context, document);
+          final items = _availablePdfUrls(document)
+              .asMap()
+              .entries
+              .map((MapEntry<int, FundProjectPdfUrl> entry) {
+                final currentSelectionIndex = selectionIndex++;
+                final itemTitle = _documentLinkTitle(
+                  context,
+                  entry.value,
+                  entry.key,
+                );
+                final item = FundLotteryDocumentItem(
+                  selectionIndex: currentSelectionIndex,
+                  title: itemTitle,
+                  subtitle:
+                      _formatDocumentCreatedAt(context, entry.value) ??
+                      context.l10n.fundDetailDocumentReady,
+                  onOpen: () {
+                    if (mounted) {
+                      setState(() {
+                        _openedDocuments.add(currentSelectionIndex);
+                      });
+                    }
+                    _openPdfDocument(
+                      context,
+                      groupTitle: groupTitle,
+                      linkTitle: itemTitle,
+                      item: entry.value,
+                    );
+                  },
+                );
+                return item;
+              })
+              .toList(growable: false);
+          return FundLotteryDocumentGroup(title: groupTitle, items: items);
+        })
+        .toList(growable: false);
   }
 
   @override
@@ -619,7 +632,9 @@ class _FundLotteryApplyFlowPageState
         return PopScope<void>(
           canPop: _currentStep.isFirst,
           onPopInvokedWithResult: (bool didPop, void _) {
-            if (!didPop && !_currentStep.isFirst) {
+            if (!didPop &&
+                !_currentStep.isFirst &&
+                !_shouldLockSubmittedBackNavigation) {
               _goPreviousOrPop();
             }
           },
@@ -629,21 +644,23 @@ class _FundLotteryApplyFlowPageState
               title: l10n.lotteryApplyFlowTitle,
               backgroundColor: colors.surface,
               foregroundColor: colors.textPrimary,
-              leading: SizedBox.square(
-                dimension: 32,
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(8),
-                    onTap: _goPreviousOrPop,
-                    child: Icon(
-                      Icons.arrow_back_rounded,
-                      size: 20,
-                      color: colors.textPrimary,
+              leading: _shouldLockSubmittedBackNavigation
+                  ? null
+                  : SizedBox.square(
+                      dimension: 32,
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(8),
+                          onTap: _goPreviousOrPop,
+                          child: Icon(
+                            Icons.arrow_back_rounded,
+                            size: 20,
+                            color: colors.textPrimary,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
             ),
             body: Column(
               children: <Widget>[
@@ -864,7 +881,8 @@ class _FundLotteryApplyFlowPageState
                             isReportingDeposit: _isReportingDeposit,
                             onReportDeposit: () =>
                                 _reportDepositCompleted(amount: totalAmount),
-                            onJumpDeposit: () => context.push('/wallet/deposit'),
+                            onJumpDeposit: () =>
+                                context.push('/wallet/deposit'),
                             laterButtonLabel:
                                 l10n.lotteryApplyLaterDepositAction,
                             onLaterDeposit: _goHome,
