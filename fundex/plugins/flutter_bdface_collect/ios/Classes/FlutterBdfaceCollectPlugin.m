@@ -1,6 +1,10 @@
 #import "FlutterBdfaceCollectPlugin.h"
 
+#import <TargetConditionals.h>
+
+#if !TARGET_OS_SIMULATOR
 #import <BDFaceBaseKit/BDFaceBaseKit.h>
+#endif
 
 #import "MethodConstants.h"
 
@@ -38,6 +42,11 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
 }
 
 - (void)initSdk:(id)arguments result:(FlutterResult)result {
+#if TARGET_OS_SIMULATOR
+  self.didInitSdk = NO;
+  result([self unsupportedSimulatorMessage]);
+  return;
+#else
   NSString *licenseId = nil;
   NSString *licenseName = kDefaultLicenseName;
   NSString *encryptKeyName = kDefaultEncryptKeyName;
@@ -91,15 +100,22 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
                            }
                          });
                        }];
+#endif
 }
 
 - (void)unInit:(FlutterResult)result {
   self.didInitSdk = NO;
+#if !TARGET_OS_SIMULATOR
   [[BDFaceBaseKitManager sharedInstance] uninitCollect];
+#endif
   result(nil);
 }
 
 - (void)collect:(NSDictionary *)faceConfigMap result:(FlutterResult)result {
+#if TARGET_OS_SIMULATOR
+  result(@{@"error" : [self unsupportedSimulatorMessage]});
+  return;
+#else
   if (![faceConfigMap isKindOfClass:[NSDictionary class]]) {
     result(@{
       @"error" : [self localizedStringForLocale:[self currentLivenessLocaleCode]
@@ -185,8 +201,10 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
                             });
                           }];
   });
+#endif
 }
 
+#if !TARGET_OS_SIMULATOR
 - (BDFaceBaseKitParamsCustomConfigItem *)paramsConfigFromFaceConfig:(NSDictionary *)faceConfigMap {
   BDFaceBaseKitParamsCustomConfigItem *config =
       [[BDFaceBaseKitParamsCustomConfigItem alloc] initWithParamsConfig];
@@ -276,6 +294,7 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
 
   return config;
 }
+#endif
 
 - (NSString *)currentLivenessLocaleCode {
   NSString *identifier = [[[NSLocale preferredLanguages] firstObject] lowercaseString];
@@ -316,6 +335,7 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
   return chinese;
 }
 
+#if !TARGET_OS_SIMULATOR
 - (void)applyLocalizationToParamsConfig:(BDFaceBaseKitParamsCustomConfigItem *)config
                              localeCode:(NSString *)localeCode {
   config.isShowLanguageSwitch = NO;
@@ -552,6 +572,15 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
   }
   return nil;
 }
+#endif
+
+- (NSString *)unsupportedSimulatorMessage {
+  return [self localizedStringForLocale:[self currentLivenessLocaleCode]
+                                chinese:@"iOS 模拟器不支持百度人脸采集，请使用真机调试"
+                                english:@"Baidu face collection is unavailable on the iOS simulator. Please use a real device."
+                     traditionalChinese:@"iOS 模擬器不支援百度人臉採集，請使用真機調試"
+                               japanese:@"iOS シミュレータでは百度の顔認証収集は利用できません。実機で確認してください。"];
+}
 
 - (NSDictionary *)payloadFromSdkResult:(NSDictionary *)sdkResult {
 
@@ -747,6 +776,7 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
   return controller;
 }
 
+#if !TARGET_OS_SIMULATOR
 - (NSString *)faceInitErrorMessageForCode:(BDFaceInitRemindCode)code {
   switch (code) {
     case BDFaceInitOK:
@@ -857,5 +887,6 @@ static NSString *const kDefaultEncryptKeyName = @"idl-key.face-ios";
                                         (long)code];
   }
 }
+#endif
 
 @end

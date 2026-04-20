@@ -48,8 +48,22 @@ target 'Runner' do
 end
 
 post_install do |installer|
+  simulator_unsupported_framework_flags = [
+    '-framework "BDFaceBaseKit"',
+    '-framework "IDLFaceSDK"',
+  ]
+
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+
+    if target.name == 'flutter_bdface_collect'
+      target.frameworks_build_phase.files.each do |build_file|
+        framework_name = build_file.file_ref&.display_name
+        next unless ['BDFaceBaseKit.framework', 'IDLFaceSDK.framework'].include?(framework_name)
+
+        target.frameworks_build_phase.remove_build_file(build_file)
+      end
+    end
 
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
@@ -59,6 +73,42 @@ post_install do |installer|
         'PERMISSION_PHOTOS=1',
         'PERMISSION_NOTIFICATIONS=1',
       ]
+
+      other_ldflags = config.build_settings['OTHER_LDFLAGS']
+      next if other_ldflags.nil?
+
+      simulator_ldflags =
+          if other_ldflags.is_a?(Array)
+            other_ldflags.reject { |flag| simulator_unsupported_framework_flags.include?(flag) }
+          else
+            simulator_unsupported_framework_flags.reduce(other_ldflags.dup) do |flags, framework_flag|
+              flags.gsub(framework_flag, '').gsub(/\s+/, ' ').strip
+            end
+          end
+      config.build_settings['OTHER_LDFLAGS[sdk=iphonesimulator*]'] = simulator_ldflags
     end
+  end
+
+  runner_xcconfig_paths = Dir.glob(File.join(__dir__, 'Pods', 'Target Support Files', 'Pods-Runner', 'Pods-Runner*.xcconfig'))
+  runner_xcconfig_paths.each do |path|
+    contents = File.read(path)
+    ldflags_line = contents.lines.find { |line| line.start_with?('OTHER_LDFLAGS = ') }
+    next if ldflags_line.nil?
+
+    base_ldflags = ldflags_line.sub('OTHER_LDFLAGS = ', '').strip
+    sanitized_ldflags =
+        simulator_unsupported_framework_flags.reduce(base_ldflags.dup) do |flags, framework_flag|
+          flags.gsub(framework_flag, '').gsub(/\s+/, ' ').strip
+        end
+    device_only_ldflags = '$(inherited) -framework "BDFaceBaseKit" -framework "IDLFaceSDK"'
+    replacement = <<~LDFLAGS
+      OTHER_LDFLAGS = #{sanitized_ldflags}
+      OTHER_LDFLAGS[sdk=iphoneos*] = #{device_only_ldflags}
+      OTHER_LDFLAGS[sdk=iphonesimulator*] = $(inherited)
+    LDFLAGS
+
+    contents = contents.gsub(/OTHER_LDFLAGS = .*\n(?:OTHER_LDFLAGS\[sdk=iphoneos\*\] = .*\n)?(?:OTHER_LDFLAGS\[sdk=iphonesimulator\*\] = .*\n)?/, replacement)
+
+    File.write(path, contents)
   end
 end
