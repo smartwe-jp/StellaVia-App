@@ -14,6 +14,7 @@ class MemberProfileApiPaths {
   static const String uploadPhoto = '/crowdfunding/user/upload/photo';
   static const String regionByZip = '/crowdfunding/user/region/zip';
   static const String uploadRealPersonPhoto = '/member/real/person/upload';
+  static const String uploadAvatar = '/member/user/avatar-upload';
 }
 
 class MemberProfileApiClient {
@@ -25,6 +26,7 @@ class MemberProfileApiClient {
     this.regionByZipPath = MemberProfileApiPaths.regionByZip,
     this.uploadRealPersonPhotoPath =
         MemberProfileApiPaths.uploadRealPersonPhoto,
+    this.uploadAvatarPath = MemberProfileApiPaths.uploadAvatar,
   }) : _dioForPath = dioForPath,
        _envelopeCodec =
            envelopeCodec ??
@@ -39,6 +41,7 @@ class MemberProfileApiClient {
   final String uploadPhotoPath;
   final String regionByZipPath;
   final String uploadRealPersonPhotoPath;
+  final String uploadAvatarPath;
 
   Future<List<MemberProfileRegionDto>> fetchRegionsByZip({
     required String zip,
@@ -86,6 +89,21 @@ class MemberProfileApiClient {
       responseData: response.data,
       payload: payload,
       fallbackMessage: 'Failed to upload profile photo.',
+    );
+  }
+
+  Future<String> uploadAvatar({required String filePath}) async {
+    final normalizedPath = _normalizeAndValidatePath(filePath);
+    final response = await _uploadMultipart(
+      path: uploadAvatarPath,
+      filePath: normalizedPath,
+    );
+
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    return _envelopeCodec.extractDataString(
+      payload,
+      fallbackMessage: 'Failed to upload avatar.',
+      fallbackKeys: const <String>['url'],
     );
   }
 

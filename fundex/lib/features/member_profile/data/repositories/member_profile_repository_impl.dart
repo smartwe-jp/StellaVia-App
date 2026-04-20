@@ -119,6 +119,11 @@ class MemberProfileRepositoryImpl implements MemberProfileRepository {
   }
 
   @override
+  Future<String> uploadAvatar({required String filePath}) {
+    return _remote.uploadAvatar(filePath: filePath);
+  }
+
+  @override
   Future<void> submitProfile(MemberProfileDetails profile) async {
     final authUser = await _authLocal.readCurrentUser();
     final frontUrl =

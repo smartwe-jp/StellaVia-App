@@ -16,6 +16,18 @@ class MyPageRepositoryImpl implements MyPageRepository {
   }
 
   @override
+  Future<List<MyPageAssetTrend>> fetchAssetTrend({
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
+    final dtos = await _remote.fetchAssetTrend(
+      startDate: startDate,
+      endDate: endDate,
+    );
+    return dtos.map((dto) => dto.toEntity()).toList(growable: false);
+  }
+
+  @override
   Future<List<MyPageApplyRecord>> fetchApplyList({
     int? startPage,
     int? limit,

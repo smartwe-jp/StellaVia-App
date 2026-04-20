@@ -8,6 +8,7 @@ import '../../domain/entities/mypage_models.dart';
 import '../../domain/repositories/mypage_repository.dart';
 import '../../domain/usecases/fetch_mypage_account_statistic_usecase.dart';
 import '../../domain/usecases/fetch_mypage_apply_list_usecase.dart';
+import '../../domain/usecases/fetch_mypage_asset_trend_usecase.dart';
 import '../../domain/usecases/fetch_mypage_investment_list_usecase.dart';
 import '../../domain/usecases/fetch_mypage_order_inquiry_list_usecase.dart';
 import '../../domain/usecases/fetch_mypage_project_benefit_usecase.dart';
@@ -41,6 +42,11 @@ final fetchMyPageAccountStatisticUseCaseProvider =
       return FetchMyPageAccountStatisticUseCase(
         ref.watch(myPageRepositoryProvider),
       );
+    });
+
+final fetchMyPageAssetTrendUseCaseProvider =
+    Provider<FetchMyPageAssetTrendUseCase>((ref) {
+      return FetchMyPageAssetTrendUseCase(ref.watch(myPageRepositoryProvider));
     });
 
 final fetchMyPageOrderInquiryListUseCaseProvider =
@@ -120,6 +126,22 @@ final myPageAccountStatisticProvider =
 
       await ref.watch(currentAuthUserProvider.future);
       return ref.watch(fetchMyPageAccountStatisticUseCaseProvider).call();
+    });
+
+final myPageAssetTrendProvider = FutureProvider.autoDispose
+    .family<List<MyPageAssetTrend>, ({DateTime startDate, DateTime endDate})>((
+      ref,
+      ({DateTime startDate, DateTime endDate}) range,
+    ) async {
+      final isAuthenticated = ref.watch(isAuthenticatedProvider).asData?.value;
+      if (isAuthenticated != true) {
+        return const <MyPageAssetTrend>[];
+      }
+
+      await ref.watch(currentAuthUserProvider.future);
+      return ref
+          .watch(fetchMyPageAssetTrendUseCaseProvider)
+          .call(startDate: range.startDate, endDate: range.endDate);
     });
 
 final myPageOrderInquiryListProvider =

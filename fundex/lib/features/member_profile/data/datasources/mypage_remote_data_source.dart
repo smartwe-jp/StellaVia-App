@@ -5,6 +5,10 @@ import '../models/mypage_dtos.dart';
 
 abstract class MyPageRemoteDataSource {
   Future<MyPageAccountStatisticDto> fetchAccountStatistic();
+  Future<List<MyPageAssetTrendDto>> fetchAssetTrend({
+    required DateTime startDate,
+    required DateTime endDate,
+  });
 
   Future<List<MyPageApplyRecordDto>> fetchApplyList({
     int? startPage,
@@ -86,6 +90,14 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
   @override
   Future<MyPageAccountStatisticDto> fetchAccountStatistic() async {
     return _apiClient.fetchAccountStatistic();
+  }
+
+  @override
+  Future<List<MyPageAssetTrendDto>> fetchAssetTrend({
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
+    return _apiClient.fetchAssetTrend(startDate: startDate, endDate: endDate);
   }
 
   @override

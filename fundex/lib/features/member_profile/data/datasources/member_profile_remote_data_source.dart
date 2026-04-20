@@ -11,6 +11,8 @@ abstract class MemberProfileRemoteDataSource {
     required bool isSelfie,
   });
 
+  Future<String> uploadAvatar({required String filePath});
+
   Future<void> saveMemberInfo({required Map<String, dynamic> payload});
 }
 
@@ -71,6 +73,11 @@ class MemberProfileRemoteDataSourceImpl
     }
 
     return _apiClient.uploadDocumentPhoto(filePath: filePath);
+  }
+
+  @override
+  Future<String> uploadAvatar({required String filePath}) async {
+    return _apiClient.uploadAvatar(filePath: filePath);
   }
 
   @override

@@ -14,5 +14,6 @@ abstract class MemberProfileRepository {
     required String filePath,
     required bool isSelfie,
   });
+  Future<String> uploadAvatar({required String filePath});
   Future<void> submitProfile(MemberProfileDetails profile);
 }

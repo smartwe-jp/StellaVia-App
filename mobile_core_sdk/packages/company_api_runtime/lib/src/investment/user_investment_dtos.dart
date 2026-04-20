@@ -48,6 +48,29 @@ class UserInvestmentAccountStatisticDto {
   final List<UserInvestmentLockedAmountDto> lockedList;
 }
 
+class UserInvestmentAssetTrendDto {
+  const UserInvestmentAssetTrendDto({
+    this.recordDate,
+    this.totalAccount,
+    this.totalFirstLevelAccount,
+    this.totalFundAccount,
+  });
+
+  factory UserInvestmentAssetTrendDto.fromJson(Map<String, dynamic> json) {
+    return UserInvestmentAssetTrendDto(
+      recordDate: _stringOrNull(json['recordDate']),
+      totalAccount: _numOrNull(json['totalAccount']),
+      totalFirstLevelAccount: _numOrNull(json['totalFirstLevelAccount']),
+      totalFundAccount: _numOrNull(json['totalFundAccount']),
+    );
+  }
+
+  final String? recordDate;
+  final num? totalAccount;
+  final num? totalFirstLevelAccount;
+  final num? totalFundAccount;
+}
+
 class UserInvestmentLockedAmountDto {
   const UserInvestmentLockedAmountDto({
     this.userId,

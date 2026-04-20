@@ -84,12 +84,42 @@ void main() {
       expect(row.lockedList.first.lockedReason, '新規登録ボーナス ¥2,500');
     });
 
+    test('fetchAssetTrend gets envelope and parses rows', () async {
+      final client = _buildClient((options) async {
+        expect(options.method, 'GET');
+        expect(options.path, UserInvestmentApiPaths.assetTrend);
+        expect(options.extra['auth_required'], true);
+        expect(options.queryParameters, <String, dynamic>{
+          'startDate': '2026-01-09',
+          'endDate': '2026-05-09',
+        });
+
+        return _jsonOk(
+          '{"msg":"success","code":200,"data":[{"recordDate":"2026-01-09","totalAccount":120000,"totalFirstLevelAccount":20000,"totalFundAccount":100000},{"recordDate":"2026-05-09","totalAccount":150000,"totalFirstLevelAccount":30000,"totalFundAccount":120000}]}',
+        );
+      });
+      final source = MyPageRemoteDataSourceImpl(client);
+
+      final rows = await source.fetchAssetTrend(
+        startDate: DateTime(2026, 1, 9),
+        endDate: DateTime(2026, 5, 9),
+      );
+
+      expect(rows, hasLength(2));
+      expect(rows.first.recordDate, '2026-01-09');
+      expect(rows.first.totalAccount, 120000);
+      expect(rows.first.totalFirstLevelAccount, 20000);
+      expect(rows.first.totalFundAccount, 100000);
+      expect(rows.last.recordDate, '2026-05-09');
+      expect(rows.last.totalAccount, 150000);
+    });
+
     test('fetchApplyList posts payload and parses rows envelope', () async {
       final client = _buildClient((options) async {
         expect(options.method, 'POST');
         expect(options.path, UserInvestmentApiPaths.applyList);
         expect(options.extra['auth_required'], true);
-        expect(options.data, <String, dynamic>{'startPage': 1, 'limit': 20});
+        expect(options.data, isNull);
 
         return _jsonOk(
           '{"msg":"success","code":200,"data":{"total":1,"limit":20,"currentPage":1,"rows":[{"projecId":"p-1","projectName":"プレミアムレジデンス赤坂","status":2,"applyMoney":500000,"applyTime":"2025-03-01 10:00:00","passTime":"2025-03-20 00:00:00","investMoney":0,"processId":"proc-1","investorType":{"projectId":"p-1","investorCode":"優先出資者A","earningsRadio":0.062}}]}}',

@@ -1,6 +1,7 @@
 export 'package:company_api_runtime/company_api_runtime.dart'
     show
         UserInvestmentAccountStatisticDto,
+        UserInvestmentAssetTrendDto,
         UserInvestmentLockedAmountDto,
         UserInvestmentApplyRecordDto,
         UserInvestmentInvestorTypeDto,
@@ -15,6 +16,7 @@ export 'package:company_api_runtime/company_api_runtime.dart'
 import 'package:company_api_runtime/company_api_runtime.dart'
     show
         UserInvestmentAccountStatisticDto,
+        UserInvestmentAssetTrendDto,
         UserInvestmentLockedAmountDto,
         UserInvestmentApplyRecordDto,
         UserInvestmentInvestorTypeDto,
@@ -29,6 +31,7 @@ import 'package:company_api_runtime/company_api_runtime.dart'
 import '../../domain/entities/mypage_models.dart';
 
 typedef MyPageAccountStatisticDto = UserInvestmentAccountStatisticDto;
+typedef MyPageAssetTrendDto = UserInvestmentAssetTrendDto;
 typedef MyPageLockedAmountDto = UserInvestmentLockedAmountDto;
 typedef MyPageApplyRecordDto = UserInvestmentApplyRecordDto;
 typedef MyPageInvestmentRecordDto = UserInvestmentRecordDto;
@@ -56,6 +59,17 @@ extension MyPageAccountStatisticDtoMapper on MyPageAccountStatisticDto {
       lockedList: lockedList
           .map((MyPageLockedAmountDto item) => item.toEntity())
           .toList(growable: false),
+    );
+  }
+}
+
+extension MyPageAssetTrendDtoMapper on MyPageAssetTrendDto {
+  MyPageAssetTrend toEntity() {
+    return MyPageAssetTrend(
+      recordDate: recordDate,
+      totalAccount: totalAccount,
+      totalFirstLevelAccount: totalFirstLevelAccount,
+      totalFundAccount: totalFundAccount,
     );
   }
 }

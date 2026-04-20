@@ -9,6 +9,7 @@ class UserInvestmentApiPaths {
   const UserInvestmentApiPaths._();
 
   static const String accountStatistic = '/member/login/account-statistic';
+  static const String assetTrend = '/member/wx/account/stellavia-asset-trend';
   static const String apply = '/crowdfunding/user/apply';
   static const String applyList = '/crowdfunding/user/apply/list';
   static const String userWithdraw = '/crowdfunding/user/withdraw';
@@ -33,6 +34,7 @@ class UserInvestmentApiClient {
     LegacyEnvelopeCodec? envelopeCodec,
     LegacyPageProfile? pageProfile,
     this.accountStatisticPath = UserInvestmentApiPaths.accountStatistic,
+    this.assetTrendPath = UserInvestmentApiPaths.assetTrend,
     this.applyPath = UserInvestmentApiPaths.apply,
     this.applyListPath = UserInvestmentApiPaths.applyList,
     this.userWithdrawPath = UserInvestmentApiPaths.userWithdraw,
@@ -58,6 +60,7 @@ class UserInvestmentApiClient {
   final LegacyPageProfile _pageProfile;
 
   final String accountStatisticPath;
+  final String assetTrendPath;
   final String applyPath;
   final String applyListPath;
   final String userWithdrawPath;
@@ -83,6 +86,32 @@ class UserInvestmentApiClient {
       fallbackMessage: 'Failed to load account statistic.',
     );
     return UserInvestmentAccountStatisticDto.fromJson(data);
+  }
+
+  Future<List<UserInvestmentAssetTrendDto>> fetchAssetTrend({
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
+    final response = await _dioForPath(assetTrendPath)
+        .get<Map<String, dynamic>>(
+          assetTrendPath,
+          queryParameters: <String, dynamic>{
+            'startDate': _formatApiDate(startDate),
+            'endDate': _formatApiDate(endDate),
+          },
+          options: authRequired(true),
+        );
+
+    final rows = _envelopeCodec.extractDataList(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load asset trend.',
+    );
+    return rows
+        .map(
+          (Map<String, dynamic> row) =>
+              UserInvestmentAssetTrendDto.fromJson(row),
+        )
+        .toList(growable: false);
   }
 
   Future<void> submitApply({
@@ -350,4 +379,11 @@ class UserInvestmentApiClient {
       requireTruthyData: false,
     );
   }
+}
+
+String _formatApiDate(DateTime value) {
+  final year = value.year.toString().padLeft(4, '0');
+  final month = value.month.toString().padLeft(2, '0');
+  final day = value.day.toString().padLeft(2, '0');
+  return '$year-$month-$day';
 }

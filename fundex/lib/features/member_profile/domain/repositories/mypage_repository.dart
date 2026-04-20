@@ -2,6 +2,10 @@ import '../entities/mypage_models.dart';
 
 abstract class MyPageRepository {
   Future<MyPageAccountStatistic> fetchAccountStatistic();
+  Future<List<MyPageAssetTrend>> fetchAssetTrend({
+    required DateTime startDate,
+    required DateTime endDate,
+  });
 
   Future<List<MyPageApplyRecord>> fetchApplyList({
     int? startPage,

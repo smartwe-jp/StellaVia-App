@@ -67,6 +67,38 @@ void main() {
       expect(row.lockedList.first.lockedReason, equals('新規登録ボーナス ¥2,500'));
     });
 
+    test('fetchAssetTrend gets envelope and parses rows', () async {
+      final dio = _buildDio((options) async {
+        expect(options.method, equals('GET'));
+        expect(options.path, equals(UserInvestmentApiPaths.assetTrend));
+        expect(options.extra['auth_required'], isTrue);
+        expect(
+          options.queryParameters,
+          equals(<String, dynamic>{
+            'startDate': '2026-01-09',
+            'endDate': '2026-05-09',
+          }),
+        );
+        return _jsonOk(
+          '{"msg":"success","code":200,"data":[{"recordDate":"2026-01-09","totalAccount":120000,"totalFirstLevelAccount":20000,"totalFundAccount":100000},{"recordDate":"2026-05-09","totalAccount":150000,"totalFirstLevelAccount":30000,"totalFundAccount":120000}]}',
+        );
+      });
+      final api = UserInvestmentApiClient(dioForPath: (_) => dio);
+
+      final rows = await api.fetchAssetTrend(
+        startDate: DateTime(2026, 1, 9),
+        endDate: DateTime(2026, 5, 9),
+      );
+
+      expect(rows, hasLength(2));
+      expect(rows.first.recordDate, equals('2026-01-09'));
+      expect(rows.first.totalAccount, equals(120000));
+      expect(rows.first.totalFirstLevelAccount, equals(20000));
+      expect(rows.first.totalFundAccount, equals(100000));
+      expect(rows.last.recordDate, equals('2026-05-09'));
+      expect(rows.last.totalAccount, equals(150000));
+    });
+
     test('fetchApplyList without params posts no body and parses rows', () async {
       final dio = _buildDio((options) async {
         expect(options.method, equals('POST'));

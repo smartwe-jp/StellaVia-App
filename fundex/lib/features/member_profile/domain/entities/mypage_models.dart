@@ -316,6 +316,20 @@ class MyPageAccountStatistic {
   }
 }
 
+class MyPageAssetTrend {
+  const MyPageAssetTrend({
+    this.recordDate,
+    this.totalAccount,
+    this.totalFirstLevelAccount,
+    this.totalFundAccount,
+  });
+
+  final String? recordDate;
+  final num? totalAccount;
+  final num? totalFirstLevelAccount;
+  final num? totalFundAccount;
+}
+
 class MyPageLockedAmount {
   const MyPageLockedAmount({
     this.userId,
