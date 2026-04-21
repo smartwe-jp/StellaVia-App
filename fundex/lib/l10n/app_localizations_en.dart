@@ -1177,11 +1177,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memberProfileOverviewStatusVerified => 'Verified';
 
   @override
-  String get memberProfileOverviewUnverifiedTitle => 'Verification required';
+  String get memberProfileOverviewUnverifiedTitle =>
+      'Complete identity verification now (about 3 min)';
 
   @override
   String get memberProfileOverviewUnverifiedMessage =>
-      'Complete the member profile intake and verification flow first.';
+      'After identity verification, you can start investing with ¥3,000 in investment credit.';
 
   @override
   String get memberProfileOverviewFailedTitle => 'Verification failed';

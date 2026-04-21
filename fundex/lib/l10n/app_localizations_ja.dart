@@ -1114,10 +1114,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfileOverviewStatusVerified => '認証済み';
 
   @override
-  String get memberProfileOverviewUnverifiedTitle => '未認証です';
+  String get memberProfileOverviewUnverifiedTitle => '本人確認を今すぐ完了（約3分）';
 
   @override
-  String get memberProfileOverviewUnverifiedMessage => '会員情報の入力と認証を完了してください。';
+  String get memberProfileOverviewUnverifiedMessage =>
+      '本人確認が完了すると、3,000円分の投資金で投資を始められます。';
 
   @override
   String get memberProfileOverviewFailedTitle => '認証に失敗しました';

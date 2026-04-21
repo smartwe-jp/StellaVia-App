@@ -2246,13 +2246,13 @@ abstract class AppLocalizations {
   /// No description provided for @memberProfileOverviewUnverifiedTitle.
   ///
   /// In en, this message translates to:
-  /// **'Verification required'**
+  /// **'Complete identity verification now (about 3 min)'**
   String get memberProfileOverviewUnverifiedTitle;
 
   /// No description provided for @memberProfileOverviewUnverifiedMessage.
   ///
   /// In en, this message translates to:
-  /// **'Complete the member profile intake and verification flow first.'**
+  /// **'After identity verification, you can start investing with ¥3,000 in investment credit.'**
   String get memberProfileOverviewUnverifiedMessage;
 
   /// No description provided for @memberProfileOverviewFailedTitle.

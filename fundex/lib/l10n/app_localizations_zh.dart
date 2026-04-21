@@ -1101,10 +1101,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileOverviewStatusVerified => '已认证';
 
   @override
-  String get memberProfileOverviewUnverifiedTitle => '未认证';
+  String get memberProfileOverviewUnverifiedTitle => '立即完成本人验证（约3分钟）';
 
   @override
-  String get memberProfileOverviewUnverifiedMessage => '请先完成会员资料录入与认证流程。';
+  String get memberProfileOverviewUnverifiedMessage =>
+      '完成本人验证后，即可使用3,000 日元投资金开始投资。';
 
   @override
   String get memberProfileOverviewFailedTitle => '认证失败';
@@ -4937,10 +4938,11 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileOverviewStatusVerified => '已驗證';
 
   @override
-  String get memberProfileOverviewUnverifiedTitle => '尚未驗證';
+  String get memberProfileOverviewUnverifiedTitle => '立即完成本人驗證（約3分鐘）';
 
   @override
-  String get memberProfileOverviewUnverifiedMessage => '請先完成會員資料填寫與驗證流程。';
+  String get memberProfileOverviewUnverifiedMessage =>
+      '完成本人驗證後，即可使用3,000 日圓投資金開始投資。';
 
   @override
   String get memberProfileOverviewFailedTitle => '驗證失敗';
