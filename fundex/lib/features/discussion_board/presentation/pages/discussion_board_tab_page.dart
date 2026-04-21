@@ -10,7 +10,6 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/domain/entities/auth_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
-import '../../domain/support/discussion_avatar_palette.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../controllers/discussion_board_controller.dart';
@@ -313,9 +312,6 @@ class _DiscussionBoardTabPageState
         ref.watch(isAuthenticatedProvider).asData?.value ?? false;
     final currentUser = ref.watch(currentAuthUserProvider).asData?.value;
     final currentUserId = _resolveCurrentUserId(currentUser);
-    final currentUserAvatarColors = discussionAvatarGradientForSeed(
-      _resolveCurrentUserAvatarSeed(currentUser),
-    ).map(Color.new).toList(growable: false);
 
     if (_composerController.text != state.composerText) {
       _composerController.value = TextEditingValue(
@@ -356,10 +352,11 @@ class _DiscussionBoardTabPageState
                           leading: GestureDetector(
                             onTap: _openAvatarEditor,
                             behavior: HitTestBehavior.opaque,
-                            child: KizunarkAvatarBadge(
-                              text: '',
-                              imageUrl: currentUser?.avatar,
-                              gradientColors: currentUserAvatarColors,
+                            child: AppUserAvatar(
+                              avatarUrl: currentUser?.avatar,
+                              avatarSeed: _resolveCurrentUserAvatarSeed(
+                                currentUser,
+                              ),
                               size: 32,
                               fontSize: 13,
                             ),
@@ -460,12 +457,10 @@ class _DiscussionBoardTabPageState
                 (reply) => Padding(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: KizunarkReplyTile(
-                    avatar: KizunarkAvatarBadge(
-                      text: '',
-                      imageUrl: reply.author.avatarUrl,
-                      gradientColors: reply.author.avatarGradientColorValues
-                          .map(Color.new)
-                          .toList(growable: false),
+                    avatar: AppUserAvatar(
+                      avatarUrl: reply.author.avatarUrl,
+                      gradientColorValues:
+                          reply.author.avatarGradientColorValues,
                       size: 24,
                       fontSize: 10,
                     ),
@@ -513,12 +508,9 @@ class _DiscussionBoardTabPageState
           return Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: KizunarkPostCard(
-              avatar: KizunarkAvatarBadge(
-                text: '',
-                imageUrl: thread.author.avatarUrl,
-                gradientColors: thread.author.avatarGradientColorValues
-                    .map(Color.new)
-                    .toList(growable: false),
+              avatar: AppUserAvatar(
+                avatarUrl: thread.author.avatarUrl,
+                gradientColorValues: thread.author.avatarGradientColorValues,
                 size: 32,
                 fontSize: 12,
               ),

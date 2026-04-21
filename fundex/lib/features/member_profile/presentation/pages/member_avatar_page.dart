@@ -10,7 +10,6 @@ import "package:go_router/go_router.dart";
 import "../../../../app/localization/app_localizations_ext.dart";
 import "../../../../app/support/app_request_error_message_resolver.dart";
 import "../../../auth/presentation/providers/auth_providers.dart";
-import "../../../discussion_board/domain/support/discussion_avatar_palette.dart";
 import "../providers/member_profile_providers.dart";
 import "member_avatar_crop_page.dart";
 import "../support/profile_document_image_picker.dart";
@@ -333,9 +332,6 @@ class _MemberAvatarPageState extends ConsumerState<MemberAvatarPage> {
     final l10n = context.l10n;
     final currentUser = ref.watch(currentAuthUserProvider).asData?.value;
     final currentAvatarUrl = currentUser?.avatar?.trim() ?? "";
-    final currentGradient = discussionAvatarGradientForSeed(
-      _resolveCurrentUserSeed(),
-    ).map(Color.new).toList(growable: false);
     final selectedPreset = _selectedPresetIndex == null
         ? null
         : _presets[_selectedPresetIndex!];
@@ -381,11 +377,10 @@ class _MemberAvatarPageState extends ConsumerState<MemberAvatarPage> {
                                       currentAvatarUrl,
                                     )
                                   : null,
-                              child: KizunarkAvatarBadge(
-                                text: "",
-                                imageUrl: previewImageUrl,
+                              child: AppUserAvatar(
+                                avatarUrl: previewImageUrl,
                                 imageProvider: previewImageProvider,
-                                gradientColors: currentGradient,
+                                avatarSeed: _resolveCurrentUserSeed(),
                                 size: 112,
                                 fontSize: 40,
                               ),

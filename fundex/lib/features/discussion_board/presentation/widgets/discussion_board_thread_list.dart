@@ -54,12 +54,10 @@ class DiscussionBoardThreadList extends StatelessWidget {
                   (reply) => Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: KizunarkReplyTile(
-                      avatar: KizunarkAvatarBadge(
-                        text: '',
-                        imageUrl: reply.author.avatarUrl,
-                        gradientColors: reply.author.avatarGradientColorValues
-                            .map(Color.new)
-                            .toList(growable: false),
+                      avatar: AppUserAvatar(
+                        avatarUrl: reply.author.avatarUrl,
+                        gradientColorValues:
+                            reply.author.avatarGradientColorValues,
                         size: 24,
                         fontSize: 10,
                       ),
@@ -84,12 +82,9 @@ class DiscussionBoardThreadList extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: KizunarkPostCard(
-                avatar: KizunarkAvatarBadge(
-                  text: '',
-                  imageUrl: thread.author.avatarUrl,
-                  gradientColors: thread.author.avatarGradientColorValues
-                      .map(Color.new)
-                      .toList(growable: false),
+                avatar: AppUserAvatar(
+                  avatarUrl: thread.author.avatarUrl,
+                  gradientColorValues: thread.author.avatarGradientColorValues,
                   size: 32,
                   fontSize: 12,
                 ),
