@@ -10,6 +10,10 @@ import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
 import '../../../notifications/presentation/providers/notifications_providers.dart';
 import '../../../home/presentation/support/home_display_name_resolver.dart';
+import '../../../wallet/domain/entities/wallet_account_history.dart';
+import '../../../wallet/presentation/providers/wallet_providers.dart';
+import '../../../wallet/presentation/support/wallet_history_view_support.dart';
+import '../../../wallet/presentation/widgets/wallet_history_list_item.dart';
 import '../../domain/entities/mypage_models.dart';
 import '../providers/member_profile_providers.dart';
 import '../providers/mypage_providers.dart';
@@ -66,6 +70,7 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
     final applyAsync = ref.watch(myPagePendingApplyListProvider);
     //final orderInquiryAsync = ref.watch(myPageOrderInquiryListProvider);
     final investmentAsync = ref.watch(myPageInvestmentListProvider);
+    final walletHistoryAsync = ref.watch(walletHistoryProvider);
     final assetTrendAsync = ref.watch(myPageAssetTrendProvider(trendRange));
     final investmentRecords = investmentAsync.asData?.value;
     final fundProjects =
@@ -177,6 +182,7 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                     applyAsync: applyAsync,
                     //orderInquiryAsync: orderInquiryAsync,
                     investmentAsync: investmentAsync,
+                    walletHistoryAsync: walletHistoryAsync,
                     currencyFormatter: currencyFormatter,
                     fundProjectsById: fundProjectsById,
                   ),
@@ -196,6 +202,7 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
     final trendEndDate = _resolveTrendEndDate();
     await Future.wait<void>(<Future<void>>[
       refreshProfileCenterTabPage(ref),
+      ref.refresh(walletHistoryProvider.future).then((_) {}),
       ref
           .refresh(
             myPageAssetTrendProvider((
@@ -255,6 +262,7 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
     required AsyncValue<List<MyPageApplyRecord>> applyAsync,
     // required AsyncValue<List<MyPageOrderInquiryRecord>> orderInquiryAsync,
     required AsyncValue<List<MyPageInvestmentRecord>> investmentAsync,
+    required AsyncValue<List<WalletAccountHistory>> walletHistoryAsync,
     required NumberFormat currencyFormatter,
     required Map<String, FundProject> fundProjectsById,
   }) {
@@ -303,20 +311,80 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
     );
     children.add(const SizedBox(height: UiTokens.spacing32));
     children.add(
-      SizedBox(
-        width: double.infinity,
-        child: OutlinedButton.icon(
-          onPressed: () => context.push('/wallet/history'),
-          label: Text(context.l10n.myPageTransactionHistoryAction),
-          style: OutlinedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-          ),
-        ),
+      _buildTransactionHistorySection(
+        context,
+        ref,
+        asyncValue: walletHistoryAsync,
+        formatter: currencyFormatter,
       ),
     );
     children.add(const SizedBox(height: UiTokens.spacing32));
     return children;
   }
+}
+
+Widget _buildTransactionHistorySection(
+  BuildContext context,
+  WidgetRef ref, {
+  required AsyncValue<List<WalletAccountHistory>> asyncValue,
+  required NumberFormat formatter,
+}) {
+  final l10n = context.l10n;
+
+  return asyncValue.when(
+    data: (items) {
+      final displayItems = [...items]..sort(compareWalletHistoryByDateDesc);
+      final visibleItems = displayItems.take(3).toList(growable: false);
+
+      return FundSectionList(
+        title: l10n.walletTransactionHistoryTitle,
+        initialVisibleCount: 3,
+        itemSpacing: 12,
+        actionLabel: l10n.homeViewAllAction,
+        onActionTap: () => context.push('/wallet/history'),
+        children: visibleItems.isEmpty
+            ? <Widget>[_SectionStateCard(message: l10n.walletHistoryEmpty)]
+            : visibleItems
+                  .map(
+                    (item) => WalletHistoryListItem(
+                      title: resolveWalletHistoryDisplayTitle(l10n, item),
+                      dateText: formatWalletHistoryDateText(
+                        item.tradeTime ?? item.createTime,
+                      ),
+                      amountText: formatWalletHistoryAmountText(
+                        item: item,
+                        formatter: formatter,
+                      ),
+                      amountColor: resolveWalletHistoryAmountColor(
+                        context,
+                        item,
+                      ),
+                      indicatorColor: resolveWalletHistoryIndicatorColor(
+                        context,
+                        item,
+                      ),
+                    ),
+                  )
+                  .toList(growable: false),
+      );
+    },
+    loading: () => FundSectionList(
+      title: l10n.walletTransactionHistoryTitle,
+      initialVisibleCount: 1,
+      children: const <Widget>[_SectionLoadingCard()],
+    ),
+    error: (_, __) => FundSectionList(
+      title: l10n.walletTransactionHistoryTitle,
+      initialVisibleCount: 1,
+      children: <Widget>[
+        _SectionStateCard(
+          message: l10n.myPageSectionLoadError,
+          actionLabel: l10n.fundListRetry,
+          onActionTap: () => ref.invalidate(walletHistoryProvider),
+        ),
+      ],
+    ),
+  );
 }
 
 Widget _buildPendingApplicationsSection(
@@ -513,8 +581,10 @@ Widget _buildActiveFundsSection(
               data: MyPageActiveFundSummaryCardData(
                 title: group.projectName,
                 periodText:
-                    formatMyPageActiveFundPeriod(context, project) ??
-                    l10n.myPageResultAnnouncementTbd,
+                    formatMyPageActiveFundPeriod(context, project) != null
+                    ? '${l10n.fundListPeriodLabel}：${formatMyPageActiveFundPeriod(context, project)!}'
+                    : l10n.myPageResultAnnouncementTbd,
+                yieldLabel: l10n.homeEstimatedYieldLabel,
                 annualYield: resolveYieldLabel(
                   project,
                   fallbackRatio: group.earningRatio,

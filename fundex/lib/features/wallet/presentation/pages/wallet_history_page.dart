@@ -9,6 +9,8 @@ import '../../../../app/navigation/app_root_route_refresh_scope.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/wallet_account_history.dart';
 import '../providers/wallet_providers.dart';
+import '../support/wallet_history_view_support.dart';
+import '../widgets/wallet_history_list_item.dart';
 
 class WalletHistoryPage extends ConsumerStatefulWidget {
   const WalletHistoryPage({super.key});
@@ -57,9 +59,9 @@ class _WalletHistoryPageState extends ConsumerState<WalletHistoryPage> {
                     case _WalletHistoryFilter.all:
                       return true;
                     case _WalletHistoryFilter.deposit:
-                      return _parseInflowFlag(item.inOut) == true;
+                      return parseWalletHistoryInflowFlag(item.inOut) == true;
                     case _WalletHistoryFilter.withdraw:
-                      return _parseInflowFlag(item.inOut) == false;
+                      return parseWalletHistoryInflowFlag(item.inOut) == false;
                   }
                 })
                 .toList(growable: false);
@@ -92,7 +94,7 @@ class _WalletHistoryPageState extends ConsumerState<WalletHistoryPage> {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 12),
                 Expanded(
                   child: ListView(
@@ -118,15 +120,20 @@ class _WalletHistoryPageState extends ConsumerState<WalletHistoryPage> {
                           ),
                         )
                       else
-                        ...filteredItems.map(
-                          (WalletAccountHistory item) => _buildHistoryCard(
+                        for (
+                          var index = 0;
+                          index < filteredItems.length;
+                          index++
+                        ) ...<Widget>[
+                          _buildHistoryCard(
                             context,
-                            item,
+                            filteredItems[index],
                             l10n: l10n,
-                            colors: colors,
                             formatter: currency,
                           ),
-                        ),
+                          if (index < filteredItems.length - 1)
+                            const SizedBox(height: 12),
+                        ],
                     ],
                   ),
                 ),
@@ -149,142 +156,19 @@ class _WalletHistoryPageState extends ConsumerState<WalletHistoryPage> {
     BuildContext context,
     WalletAccountHistory item, {
     required AppLocalizations l10n,
-    required AppSemanticColorTheme colors,
     required NumberFormat formatter,
   }) {
-    final isIncome = _parseInflowFlag(item.inOut);
-    return FundWalletTransactionCard(
-      title: _resolveHistoryTitle(l10n, isIncome: isIncome),
-      subtitle: _resolveHistorySubtitle(
-        item,
-        fallback: l10n.walletHistoryUnknownType,
-      ),
-      dateText: _formatDateText(item.tradeTime ?? item.createTime),
-      amountText: _formatAmountText(
-        amount: item.amount ?? item.money,
-        isIncome: isIncome,
+    return WalletHistoryListItem(
+      title: resolveWalletHistoryDisplayTitle(l10n, item),
+      dateText: formatWalletHistoryDateText(item.tradeTime ?? item.createTime),
+      amountText: formatWalletHistoryAmountText(
+        item: item,
         formatter: formatter,
       ),
-      amountColor: _resolveHistoryAmountColor(
-        isIncome: isIncome,
-        colors: colors,
-      ),
-      icon: _resolveHistoryIcon(isIncome: isIncome),
-      iconBackgroundColor: _resolveHistoryIconBackground(
-        isIncome: isIncome,
-        colors: colors,
-      ),
-      iconColor: _resolveHistoryIconColor(isIncome: isIncome, colors: colors),
+      amountColor: resolveWalletHistoryAmountColor(context, item),
+      indicatorColor: resolveWalletHistoryIndicatorColor(context, item),
     );
   }
 }
 
 enum _WalletHistoryFilter { all, deposit, withdraw }
-
-bool? _parseInflowFlag(String? inOut) {
-  final value = inOut?.trim();
-  if (value == null || value.isEmpty) {
-    return null;
-  }
-  final normalized = value.toLowerCase();
-  if (value == '收' ||
-      value == '収' ||
-      normalized == 'in' ||
-      normalized == 'income') {
-    return true;
-  }
-  if (value == '支' ||
-      value == '出' ||
-      normalized == 'out' ||
-      normalized == 'expense') {
-    return false;
-  }
-  return null;
-}
-
-String _formatAmountText({
-  required num? amount,
-  required bool? isIncome,
-  required NumberFormat formatter,
-}) {
-  if (amount == null) {
-    return '--';
-  }
-  final value = amount.abs();
-  final sign = isIncome == null ? '' : (isIncome ? '+' : '-');
-  return '$sign${formatter.format(value)}';
-}
-
-String _resolveHistoryTitle(AppLocalizations l10n, {required bool? isIncome}) {
-  if (isIncome == null) {
-    return l10n.walletHistoryUnknownType;
-  }
-  return isIncome
-      ? l10n.walletHistoryFilterDeposit
-      : l10n.walletHistoryFilterWithdraw;
-}
-
-String _resolveHistorySubtitle(
-  WalletAccountHistory item, {
-  required String fallback,
-}) {
-  final candidates = <String?>[item.tradeType, item.typeName, item.remark];
-  for (final candidate in candidates) {
-    final text = candidate?.trim() ?? '';
-    if (text.isNotEmpty) {
-      return text;
-    }
-  }
-  return fallback;
-}
-
-Color _resolveHistoryAmountColor({
-  required bool? isIncome,
-  required AppSemanticColorTheme colors,
-}) {
-  if (isIncome == null) {
-    return colors.textSecondary;
-  }
-  return isIncome ? colors.highlightGold : colors.textPrimary;
-}
-
-IconData _resolveHistoryIcon({required bool? isIncome}) {
-  if (isIncome == null) {
-    return Icons.swap_horiz_rounded;
-  }
-  return isIncome ? Icons.attach_money_rounded : Icons.remove_rounded;
-}
-
-Color _resolveHistoryIconBackground({
-  required bool? isIncome,
-  required AppSemanticColorTheme colors,
-}) {
-  if (isIncome == null) {
-    return colors.surfaceAlt;
-  }
-  return isIncome ? colors.primarySubtle : colors.dangerSubtle;
-}
-
-Color _resolveHistoryIconColor({
-  required bool? isIncome,
-  required AppSemanticColorTheme colors,
-}) {
-  if (isIncome == null) {
-    return colors.textSecondary;
-  }
-  return isIncome ? colors.primary : colors.danger;
-}
-
-String _formatDateText(String? value) {
-  if (value == null || value.trim().isEmpty) {
-    return '--';
-  }
-  final parsed = DateTime.tryParse(value);
-  if (parsed == null) {
-    return value;
-  }
-  final y = parsed.year.toString().padLeft(4, '0');
-  final m = parsed.month.toString().padLeft(2, '0');
-  final d = parsed.day.toString().padLeft(2, '0');
-  return '$y/$m/$d';
-}

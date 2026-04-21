@@ -5,6 +5,7 @@ class MyPageActiveFundSummaryCardData {
   const MyPageActiveFundSummaryCardData({
     required this.title,
     required this.periodText,
+    required this.yieldLabel,
     required this.annualYield,
     required this.statusLabel,
     required this.statusBackgroundColor,
@@ -16,6 +17,7 @@ class MyPageActiveFundSummaryCardData {
 
   final String title;
   final String periodText;
+  final String yieldLabel;
   final String annualYield;
   final String statusLabel;
   final Color statusBackgroundColor;
@@ -65,73 +67,89 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
           child: InkWell(
             borderRadius: cardRadius,
             onTap: data.onTap,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  _ActiveFundThumbnail(imageUrls: data.imageUrls),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          data.title,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: appText.cardTitle.copyWith(
-                            color: colors.textPrimary,
-                            fontSize: 13,
-                            height: 1.3,
-                            fontWeight: FontWeight.w700,
-                          ),
+            child: SizedBox(
+              height: 98,
+              child: Padding(
+                padding: const EdgeInsets.all(18),
+                child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      _ActiveFundThumbnail(imageUrls: data.imageUrls),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              data.title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: appText.cardTitle.copyWith(
+                                color: colors.textPrimary,
+                                fontSize: 13,
+                                height: 1.3,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Expanded(
+                              child: Text(
+                                data.periodText,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: appText.cardTitle.copyWith(
+                                  color: colors.textSecondary,
+                                  fontSize: 12,
+                                  height: 1.35,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            // const SizedBox(height: 10),
+                            // _ActiveFundProgressBar(
+                            //   value: data.progress ?? 0,
+                            //   activeColor: colors.highlightGold,
+                            //   trackColor: colors.border,
+                            // ),
+                          ],
                         ),
-                        const SizedBox(height: 6),
-                        Text(
-                          data.periodText,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: appText.meta.copyWith(
-                            color: colors.textSecondary,
-                            height: 1.35,
-                          ),
+                      ),
+                      const SizedBox(width: 12),
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(minWidth: 62),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            Text(
+                              data.annualYield,
+                              textAlign: TextAlign.right,
+                              style: appText.numericTitle.copyWith(
+                                color: colors.highlightGold,
+                                fontSize: 17,
+                                height: 1.1,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              data.yieldLabel,
+                              textAlign: TextAlign.right,
+                              style: appText.micro.copyWith(
+                                color: colors.textTertiary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const Spacer(),
+                            _ActiveFundStatusBadge(
+                              label: data.statusLabel,
+                              backgroundColor: data.statusBackgroundColor,
+                              foregroundColor: data.statusForegroundColor,
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 10),
-                        _ActiveFundProgressBar(
-                          value: data.progress ?? 0,
-                          activeColor: colors.highlightGold,
-                          trackColor: colors.border,
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 12),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(minWidth: 62),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        Text(
-                          data.annualYield,
-                          textAlign: TextAlign.right,
-                          style: appText.numericTitle.copyWith(
-                            color: colors.highlightGold,
-                            fontSize: 17,
-                            height: 1.1,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        const SizedBox(height: 18),
-                        _ActiveFundStatusBadge(
-                          label: data.statusLabel,
-                          backgroundColor: data.statusBackgroundColor,
-                          foregroundColor: data.statusForegroundColor,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
               ),
             ),
           ),
@@ -152,19 +170,24 @@ class _ActiveFundThumbnail extends StatelessWidget {
     final cardRadius = BorderRadius.circular(6);
     final imageUrl = imageUrls.isEmpty ? null : imageUrls.first.trim();
 
-    return ClipRRect(
-      borderRadius: cardRadius,
-      child: SizedBox(
-        width: 40,
-        height: 40,
-        child: imageUrl != null && imageUrl.isNotEmpty
-            ? Image.network(
-                imageUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) =>
-                    _ActiveFundThumbnailPlaceholder(colors: colors),
-              )
-            : _ActiveFundThumbnailPlaceholder(colors: colors),
+    return SizedBox(
+      height: double.infinity,
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: ClipRRect(
+          borderRadius: cardRadius,
+          child: imageUrl != null && imageUrl.isNotEmpty
+              ? DecoratedBox(
+                  decoration: BoxDecoration(color: colors.primary),
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) =>
+                        _ActiveFundThumbnailPlaceholder(colors: colors),
+                  ),
+                )
+              : _ActiveFundThumbnailPlaceholder(colors: colors),
+        ),
       ),
     );
   }
@@ -179,10 +202,12 @@ class _ActiveFundThumbnailPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(color: colors.primary),
-      child: Icon(
-        Icons.apartment_rounded,
-        size: 20,
-        color: colors.highlightGold,
+      child: Center(
+        child: Icon(
+          Icons.apartment_rounded,
+          size: 20,
+          color: colors.highlightGold,
+        ),
       ),
     );
   }

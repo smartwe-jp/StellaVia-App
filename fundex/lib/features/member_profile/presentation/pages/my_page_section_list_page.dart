@@ -417,9 +417,10 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     return MyPageActiveFundSummaryCard(
       data: MyPageActiveFundSummaryCardData(
         title: group.projectName,
-        periodText:
-            formatMyPageActiveFundPeriod(context, project) ??
-            l10n.myPageResultAnnouncementTbd,
+        periodText: formatMyPageActiveFundPeriod(context, project) != null
+            ? '${l10n.fundListPeriodLabel}：${formatMyPageActiveFundPeriod(context, project)!}'
+            : l10n.myPageResultAnnouncementTbd,
+        yieldLabel: l10n.homeEstimatedYieldLabel,
         annualYield: resolveYieldLabel(
           project,
           fallbackRatio: group.earningRatio,

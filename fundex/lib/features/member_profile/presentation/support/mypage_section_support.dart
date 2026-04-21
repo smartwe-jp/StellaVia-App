@@ -197,7 +197,7 @@ Color resolveMyPageActiveFundStatusBackgroundColor(
 ) {
   final colors = Theme.of(context).appColors;
   return switch (projectStatus) {
-    4 => colors.successSubtle,
+    4 => Color.lerp(colors.surface, colors.successSubtle, 0.5)!,
     5 => colors.warningSubtle,
     _ => colors.surfaceAlt,
   };
