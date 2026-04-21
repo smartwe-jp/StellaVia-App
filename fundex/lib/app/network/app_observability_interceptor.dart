@@ -133,6 +133,9 @@ class AppObservabilityInterceptor extends Interceptor {
 
   String? _resolveCustomMessage(DioException err, NetworkFailure? failure) {
     final statusCode = failure?.statusCode ?? err.response?.statusCode;
+    if (statusCode == 401) {
+      return null;
+    }
     if (!_shouldUseServerCustomMessage(statusCode)) {
       return null;
     }
