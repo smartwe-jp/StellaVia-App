@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/support/app_compact_money_formatter.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
@@ -118,8 +119,9 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                 metrics: <FundMyPageMetricData>[
                   FundMyPageMetricData(
                     label: l10n.myPageMetricOperating,
-                    value: _formatCompactCurrency(
+                    value: formatCompactYenAmount(
                       operatingAssetsExcludingLoan ?? 0,
+                      locale: localeTag,
                     ),
                     onTap: () => context.push(
                       '/profile/my/section-list?type=${MyPageSectionType.activeFunds.queryValue}',
@@ -127,18 +129,20 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                   ),
                   FundMyPageMetricData(
                     label: l10n.myPageMetricStandby,
-                    value: _formatCompactCurrency(
+                    value: formatCompactYenAmount(
                       accountStatistic?.firstLevelAccountTotal,
+                      locale: localeTag,
                     ),
                     onTap: () => context.push('/wallet/deposit'),
                   ),
                   FundMyPageMetricData(
                     label: l10n.myPageMetricAccumulatedDistribution,
-                    value: _formatCompactCurrency(
+                    value: formatCompactYenAmount(
                       accountStatistic?.crowdfundingDistributedBenefit ??
                           (investmentRecords == null
                               ? null
                               : _sumInvestmentEarnings(investmentRecords)),
+                      locale: localeTag,
                     ),
                   ),
                 ],
@@ -746,29 +750,6 @@ String _formatCurrency(num? amount, NumberFormat formatter) {
     return '--';
   }
   return formatter.format(amount);
-}
-
-String _formatCompactCurrency(num? amount) {
-  if (amount == null) {
-    return '--';
-  }
-
-  final value = amount.toDouble();
-  final abs = value.abs();
-  if (abs >= 1000000) {
-    return '¥${_formatCompactNumber(value / 1000000)}M';
-  }
-  if (abs >= 10000) {
-    return '¥${_formatCompactNumber(value / 1000)}K';
-  }
-  return '¥${value.toStringAsFixed(0)}';
-}
-
-String _formatCompactNumber(double value) {
-  if (value % 1 == 0) {
-    return value.toStringAsFixed(0);
-  }
-  return value.toStringAsFixed(1);
 }
 
 String _resolveMyPageDisplayName({

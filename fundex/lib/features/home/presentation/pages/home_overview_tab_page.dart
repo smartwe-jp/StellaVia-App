@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/network/app_network_connectivity_providers.dart';
+import '../../../../app/support/app_compact_money_formatter.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
@@ -210,12 +211,14 @@ class HomeOverviewTabPage extends ConsumerWidget {
         ),
         totalAssetsDelta: null,
         activeInvestmentLabel: l10n.homeHeroActiveInvestmentLabel,
-        activeInvestmentValue: _formatCompactCurrencyValue(
+        activeInvestmentValue: formatCompactYenAmount(
           accountStatistic?.crowdfundingTotal ?? 0,
+          locale: locale.toLanguageTag(),
         ),
         totalDividendsLabel: l10n.homeHeroCashLabel,
-        totalDividendsValue: _formatCompactCurrencyValue(
+        totalDividendsValue: formatCompactYenAmount(
           accountStatistic?.firstLevelAccountTotal,
+          locale: locale.toLanguageTag(),
         ),
         showNotificationDot: hasUnreadNotifications,
         onNotificationTap: () => context.push('/profile/notifications'),
@@ -227,9 +230,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
             title: l10n.splashBrandName,
             onSettingsTap: () => context.push('/profile/settings'),
           ),
-          _HomeGuestRegisterBonusBar(
-            message: l10n.homeGuestRegisterBonusBar,
-          ),
+          _HomeGuestRegisterBonusBar(message: l10n.homeGuestRegisterBonusBar),
           FundGuestBrowsingBar(
             title: l10n.homeGuestBrowsingTitle,
             message: l10n.homeGuestBrowsingBody,
@@ -813,29 +814,6 @@ String _formatCurrencyValue(num? amount, NumberFormat formatter) {
     return '-';
   }
   return formatter.format(amount);
-}
-
-String _formatCompactCurrencyValue(num? amount) {
-  if (amount == null) {
-    return '-';
-  }
-
-  final value = amount.toDouble();
-  final abs = value.abs();
-  if (abs >= 1000000) {
-    return '¥${_formatCompactNumber(value / 1000000)}M';
-  }
-  if (abs >= 10000) {
-    return '¥${_formatCompactNumber(value / 1000)}K';
-  }
-  return '¥${value.toStringAsFixed(0)}';
-}
-
-String _formatCompactNumber(double value) {
-  if (value % 1 == 0) {
-    return value.toStringAsFixed(0);
-  }
-  return value.toStringAsFixed(1);
 }
 
 DateTime? _parseDateTime(String? raw) {
