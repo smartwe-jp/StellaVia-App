@@ -130,7 +130,7 @@ class AppFirebaseRuntime {
         _tokenController.add(token);
         logger.info(
           'FCM token refreshed',
-          context: <String, Object?>{'token': token},
+          context: _tokenLogContext(token),
         );
       },
       onError: (Object error, StackTrace stackTrace) {
@@ -211,7 +211,7 @@ class AppFirebaseRuntime {
         _tokenController.add(token);
         logger.info(
           'FCM token resolved',
-          context: <String, Object?>{'token': token},
+          context: _tokenLogContext(token),
         );
         return;
       } catch (error, stackTrace) {
@@ -258,7 +258,7 @@ class AppFirebaseRuntime {
         if (apnsToken != null && apnsToken.trim().isNotEmpty) {
           logger.info(
             'APNs token resolved',
-            context: <String, Object?>{'token': apnsToken},
+            context: _tokenLogContext(apnsToken),
           );
           return true;
         }
@@ -278,6 +278,20 @@ class AppFirebaseRuntime {
       'body': message.notification?.body,
       'data': message.data.toString(),
     };
+  }
+
+  static Map<String, Object?> _tokenLogContext(String token) {
+    if (kReleaseMode) {
+      return const <String, Object?>{};
+    }
+    return <String, Object?>{'token': _maskToken(token)};
+  }
+
+  static String _maskToken(String token) {
+    if (token.length <= 10) {
+      return token;
+    }
+    return '${token.substring(0, 6)}...${token.substring(token.length - 4)}';
   }
 }
 
