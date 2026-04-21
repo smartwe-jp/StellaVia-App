@@ -407,7 +407,7 @@ Widget _buildPendingApplicationsSection(
               trailing: _PendingStatusBadge(
                 label: resolveApplyStatusLabel(l10n, record),
                 backgroundColor: AppColorTokens.fundexHighlightGold,
-                foregroundColor: AppColorTokens.fundexText,
+                foregroundColor: AppColorTokens.darkOnSurface,
               ),
               rows: <FundLabeledValue>[
                 FundLabeledValue(

@@ -174,7 +174,7 @@ class _TrendRangeSelector extends StatelessWidget {
                 left: range == MyPageAssetTrendRange.oneMonth ? 0 : 8,
               ),
               child: Material(
-                color: isSelected ? colors.primary : colors.background,
+                color: isSelected ? colors.primary : colors.highlightGold.withValues(alpha: 0.18),
                 borderRadius: BorderRadius.circular(UiTokens.radius8),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(UiTokens.radius8),
