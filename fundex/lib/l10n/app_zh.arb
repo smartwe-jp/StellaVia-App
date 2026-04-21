@@ -1297,7 +1297,7 @@
   "memberProfileSexLabel": "性别",
   "memberProfileSexFemale": "女",
   "memberProfileSexMale": "男",
-  "memberProfileTaxCountryLabel": "纳税国",
+  "memberProfileTaxCountryLabel": "居住国",
   "memberProfileTaxCountryHint": "日本",
   "memberProfileUnderageTitle": "本服务仅限 18 岁以上用户使用。",
   "memberProfileUnderageBody": "根据不动产特定共同事业法，未成年人不能提交投资申请。",

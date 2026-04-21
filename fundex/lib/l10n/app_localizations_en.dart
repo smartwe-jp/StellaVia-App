@@ -3640,7 +3640,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memberProfileSexMale => 'Male';
 
   @override
-  String get memberProfileTaxCountryLabel => 'Tax country';
+  String get memberProfileTaxCountryLabel => 'Country of residence';
 
   @override
   String get memberProfileTaxCountryHint => 'Japan';

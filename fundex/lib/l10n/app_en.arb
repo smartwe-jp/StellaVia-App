@@ -1297,7 +1297,7 @@
   "memberProfileSexLabel": "Sex",
   "memberProfileSexFemale": "Female",
   "memberProfileSexMale": "Male",
-  "memberProfileTaxCountryLabel": "Tax country",
+  "memberProfileTaxCountryLabel": "Country of residence",
   "memberProfileTaxCountryHint": "Japan",
   "memberProfileUnderageTitle": "This service is available only to users aged 18 or older.",
   "memberProfileUnderageBody": "Under the Real Estate Specified Joint Enterprise Act, minors cannot apply for investments.",

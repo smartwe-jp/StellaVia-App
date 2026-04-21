@@ -6719,7 +6719,7 @@ abstract class AppLocalizations {
   /// No description provided for @memberProfileTaxCountryLabel.
   ///
   /// In en, this message translates to:
-  /// **'Tax country'**
+  /// **'Country of residence'**
   String get memberProfileTaxCountryLabel;
 
   /// No description provided for @memberProfileTaxCountryHint.
