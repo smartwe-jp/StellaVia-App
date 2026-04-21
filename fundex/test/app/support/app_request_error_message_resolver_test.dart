@@ -55,5 +55,15 @@ void main() {
         'fallback',
       );
     });
+
+    test('returns fallback for internal server error state errors', () {
+      expect(
+        resolveAppRequestErrorMessage(
+          StateError('internal server error'),
+          'fallback',
+        ),
+        'fallback',
+      );
+    });
   });
 }

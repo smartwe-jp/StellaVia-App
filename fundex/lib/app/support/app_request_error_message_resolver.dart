@@ -5,7 +5,7 @@ String resolveAppRequestErrorMessage(Object error, String fallbackMessage) {
   if (error is StateError) {
     final dynamic raw = error.message;
     final String text = raw?.toString().trim() ?? '';
-    if (text.isNotEmpty) {
+    if (_isMeaningfulUserFacingMessage(text)) {
       return text;
     }
   }
@@ -21,22 +21,14 @@ String resolveAppRequestErrorMessage(Object error, String fallbackMessage) {
       }
     }
     final text = error.message.trim();
-    if (text.isNotEmpty &&
-        text != 'Bad response' &&
-        text != 'Request failed' &&
-        text != 'Unknown network error' &&
-        text != 'Server error') {
+    if (_isMeaningfulUserFacingMessage(text)) {
       return text;
     }
     return fallbackMessage;
   }
   if (error is Failure) {
     final text = error.message.trim();
-    if (text.isNotEmpty &&
-        text != 'Bad response' &&
-        text != 'Request failed' &&
-        text != 'Unknown network error' &&
-        text != 'Server error') {
+    if (_isMeaningfulUserFacingMessage(text)) {
       return text;
     }
   }
@@ -57,7 +49,7 @@ String resolveAppRequestErrorMessage(Object error, String fallbackMessage) {
       }
     }
     final message = error.message?.trim() ?? '';
-    if (message.isNotEmpty) {
+    if (_isMeaningfulUserFacingMessage(message)) {
       return message;
     }
   }
@@ -77,7 +69,7 @@ String? _extractErrorMessageFromPayload(dynamic payload) {
   }
   if (payload is String) {
     final normalized = payload.trim();
-    return normalized.isEmpty ? null : normalized;
+    return _isMeaningfulUserFacingMessage(normalized) ? normalized : null;
   }
   if (payload is num || payload is bool) {
     return payload.toString();
@@ -118,5 +110,20 @@ String? _extractErrorMessageFromPayload(dynamic payload) {
     return null;
   }
   final normalized = payload.toString().trim();
-  return normalized.isEmpty ? null : normalized;
+  return _isMeaningfulUserFacingMessage(normalized) ? normalized : null;
+}
+
+bool _isMeaningfulUserFacingMessage(String text) {
+  if (text.isEmpty) {
+    return false;
+  }
+  final normalized = text.trim().toLowerCase();
+  const genericMessages = <String>{
+    'bad response',
+    'request failed',
+    'unknown network error',
+    'server error',
+    'internal server error',
+  };
+  return !genericMessages.contains(normalized);
 }

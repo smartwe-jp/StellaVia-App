@@ -58,9 +58,9 @@ class TokenRefreshInterceptor extends Interceptor {
     TokenPair? pair;
     try {
       pair = await _queueRefresh(refreshToken);
-    } on DioException catch (refreshErr) {
+    } on DioException {
       await _handleAuthFailure(AuthFailureReason.refreshRequestFailed);
-      handler.next(refreshErr);
+      handler.next(err);
       return;
     } catch (_) {
       await _handleAuthFailure(AuthFailureReason.refreshRequestFailed);
