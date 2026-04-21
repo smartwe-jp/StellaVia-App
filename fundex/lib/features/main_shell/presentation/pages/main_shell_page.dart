@@ -25,6 +25,10 @@ class MainShellPage extends ConsumerWidget {
     final colors = theme.appColors;
     final colorScheme = theme.colorScheme;
     final shellNavigationTheme = theme.extension<AppShellNavigationTheme>()!;
+    final inactiveTabBackgroundColor = Color.alphaBlend(
+      colors.highlightGold.withValues(alpha: 0.18),
+      colors.surface,
+    );
     final currentTabIndex = ref.watch(mainShellCurrentTabIndexProvider);
     if (currentTabIndex != navigationShell.currentIndex) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -42,102 +46,171 @@ class MainShellPage extends ConsumerWidget {
     return Scaffold(
       key: const Key('home_page'),
       body: SafeArea(bottom: false, child: navigationShell),
-      bottomNavigationBar: NavigationBarTheme(
-        data: NavigationBarThemeData(
-          backgroundColor: colors.surface,
-          indicatorColor: colorScheme.primary.withValues(alpha: 0.14),
-          iconTheme: WidgetStateProperty.resolveWith<IconThemeData>((
-            Set<WidgetState> states,
-          ) {
-            return IconThemeData(
-              color: states.contains(WidgetState.selected)
-                  ? colorScheme.primary
-                  : shellNavigationTheme.bottomTabInactiveColor,
-            );
-          }),
-          labelTextStyle: WidgetStateProperty.resolveWith<TextStyle?>((
-            Set<WidgetState> states,
-          ) {
-            final base = theme.textTheme.labelMedium;
-            return base?.copyWith(
-              color: states.contains(WidgetState.selected)
-                  ? colorScheme.primary
-                  : shellNavigationTheme.bottomTabInactiveColor,
-              fontWeight: states.contains(WidgetState.selected)
-                  ? FontWeight.w700
-                  : FontWeight.w500,
-            );
-          }),
-        ),
-        child: DecoratedBox(
-          decoration: BoxDecoration(color: colors.surface),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                height: 1,
-                width: double.infinity,
-                color: colors.border,
-              ),
-              NavigationBar(
+      bottomNavigationBar: DecoratedBox(
+        decoration: BoxDecoration(color: colors.surface),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(height: 1, width: double.infinity, color: colors.border),
+            SafeArea(
+              top: false,
+              child: SizedBox(
                 key: const Key('main_tab_bar'),
-                height: 60,
-                selectedIndex: navigationShell.currentIndex,
-                onDestinationSelected: (int index) =>
-                    _onDestinationSelected(context, ref, index),
-                destinations: <NavigationDestination>[
-                  NavigationDestination(
-                    icon: const Icon(Icons.home_rounded),
-                    selectedIcon: const Icon(Icons.home_rounded),
-                    label: l10n.mainTabHome,
-                  ),
-                  NavigationDestination(
-                    icon: const Icon(Icons.insert_chart_outlined_outlined),
-                    selectedIcon: const Icon(
-                      Icons.insert_chart_outlined_outlined,
+                height: 68,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: _MainTabItem(
+                        label: l10n.mainTabHome,
+                        isSelected: currentTabIndex == 0,
+                        labelColor: currentTabIndex == 0
+                            ? colorScheme.primary
+                            : shellNavigationTheme.bottomTabInactiveColor,
+                        onTap: () => _onDestinationSelected(context, ref, 0),
+                        badge: _MainTabBadge(
+                          backgroundColor: currentTabIndex == 0
+                              ? colorScheme.primary
+                              : inactiveTabBackgroundColor,
+                          child: Icon(
+                            Icons.home_rounded,
+                            size: 20,
+                            color: currentTabIndex == 0
+                                ? colors.onDark
+                                : shellNavigationTheme.bottomTabInactiveColor,
+                          ),
+                        ),
+                      ),
                     ),
-                    label: l10n.mainTabInvestment,
-                  ),
-                  NavigationDestination(
-                    icon: const _KizunarkTabAssetIcon(
-                      assetPath: 'assets/images/kizunark.tab.normal.png',
+                    Expanded(
+                      child: _MainTabItem(
+                        label: l10n.mainTabInvestment,
+                        isSelected: currentTabIndex == 1,
+                        labelColor: currentTabIndex == 1
+                            ? colorScheme.primary
+                            : shellNavigationTheme.bottomTabInactiveColor,
+                        onTap: () => _onDestinationSelected(context, ref, 1),
+                        badge: _MainTabBadge(
+                          backgroundColor: currentTabIndex == 1
+                              ? colorScheme.primary
+                              : inactiveTabBackgroundColor,
+                          child: Icon(
+                            Icons.insert_chart_outlined_outlined,
+                            size: 20,
+                            color: currentTabIndex == 1
+                                ? colors.onDark
+                                : shellNavigationTheme.bottomTabInactiveColor,
+                          ),
+                        ),
+                      ),
                     ),
-                    selectedIcon: const _KizunarkTabAssetIcon(
-                      assetPath: 'assets/images/kizunark.tab.normal.png',
+                    Expanded(
+                      child: _MainTabItem(
+                        label: l10n.mainTabKizunark,
+                        isSelected: currentTabIndex == 2,
+                        labelColor: currentTabIndex == 2
+                            ? colorScheme.primary
+                            : shellNavigationTheme.bottomTabInactiveColor,
+                        onTap: () => _onDestinationSelected(context, ref, 2),
+                        badge: _MainTabBadge(
+                          backgroundColor: currentTabIndex == 2
+                              ? colorScheme.primary
+                              : inactiveTabBackgroundColor,
+                          child: Image.asset(
+                            'assets/images/kizunark.tab.normal.png',
+                            width: 20,
+                            height: 20,
+                            fit: BoxFit.contain,
+                            color: currentTabIndex == 2
+                                ? colors.onDark
+                                : shellNavigationTheme.bottomTabInactiveColor,
+                            colorBlendMode: BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
                     ),
-                    label: l10n.mainTabKizunark,
-                  ),
-                  NavigationDestination(
-                    icon: const Icon(Icons.person_rounded),
-                    selectedIcon: const Icon(Icons.person_rounded),
-                    label: l10n.mainTabProfile,
-                  ),
-                ],
+                    Expanded(
+                      child: _MainTabItem(
+                        label: l10n.mainTabProfile,
+                        isSelected: currentTabIndex == 3,
+                        labelColor: currentTabIndex == 3
+                            ? colorScheme.primary
+                            : shellNavigationTheme.bottomTabInactiveColor,
+                        onTap: () => _onDestinationSelected(context, ref, 3),
+                        badge: _MainTabBadge(
+                          backgroundColor: currentTabIndex == 3
+                              ? colorScheme.primary
+                              : inactiveTabBackgroundColor,
+                          child: Icon(
+                            Icons.person_rounded,
+                            size: 20,
+                            color: currentTabIndex == 3
+                                ? colors.onDark
+                                : shellNavigationTheme.bottomTabInactiveColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class _KizunarkTabAssetIcon extends StatelessWidget {
-  const _KizunarkTabAssetIcon({required this.assetPath});
+class _MainTabItem extends StatelessWidget {
+  const _MainTabItem({
+    required this.label,
+    required this.isSelected,
+    required this.labelColor,
+    required this.onTap,
+    required this.badge,
+  });
 
-  final String assetPath;
+  final String label;
+  final bool isSelected;
+  final Color labelColor;
+  final VoidCallback onTap;
+  final Widget badge;
 
   @override
   Widget build(BuildContext context) {
-    final iconTheme = IconTheme.of(context);
-    final fallbackColor = Theme.of(context).appColors.textSecondary;
-    return Image.asset(
-      assetPath,
-      width: 28,
-      height: 28,
-      fit: BoxFit.contain,
-      color: iconTheme.color ?? fallbackColor,
-      colorBlendMode: BlendMode.srcIn,
+    final labelStyle = Theme.of(context).textTheme.labelMedium;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          badge,
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: labelStyle?.copyWith(
+              color: labelColor,
+              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MainTabBadge extends StatelessWidget {
+  const _MainTabBadge({required this.backgroundColor, required this.child});
+
+  final Color backgroundColor;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(color: backgroundColor, shape: BoxShape.circle),
+      child: SizedBox(width: 32, height: 32, child: Center(child: child)),
     );
   }
 }
