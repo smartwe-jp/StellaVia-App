@@ -24,7 +24,7 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
   final SubmitDiscussionPostUseCase _submitPostUseCase;
   final SubmitDiscussionReplyUseCase _submitReplyUseCase;
   final DeleteDiscussionCommentUseCase _deleteCommentUseCase;
-  static const int _defaultPageLimit = 50;
+  static const int _defaultPageLimit = 10;
 
   Future<void> loadThreads({bool refresh = false}) async {
     if (refresh) {
