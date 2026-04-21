@@ -167,6 +167,66 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get commonCancel;
 
+  /// No description provided for @discussionAvatarPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Avatar'**
+  String get discussionAvatarPageTitle;
+
+  /// No description provided for @discussionAvatarPreviewHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a default avatar or upload an image from your photo library.'**
+  String get discussionAvatarPreviewHint;
+
+  /// No description provided for @discussionAvatarDefaultSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Default avatars'**
+  String get discussionAvatarDefaultSectionTitle;
+
+  /// No description provided for @discussionAvatarSaveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save avatar'**
+  String get discussionAvatarSaveAction;
+
+  /// No description provided for @discussionAvatarSaveSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Avatar updated.'**
+  String get discussionAvatarSaveSuccess;
+
+  /// No description provided for @discussionAvatarPickFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to choose an image. Please try again.'**
+  String get discussionAvatarPickFailed;
+
+  /// No description provided for @discussionAvatarPhotoLibraryPermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow photo library access to select an avatar image.'**
+  String get discussionAvatarPhotoLibraryPermissionRequired;
+
+  /// No description provided for @discussionAvatarCropTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust avatar'**
+  String get discussionAvatarCropTitle;
+
+  /// No description provided for @discussionAvatarCropHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag the image and pinch to zoom so the avatar fits inside the circle.'**
+  String get discussionAvatarCropHint;
+
+  /// No description provided for @discussionAvatarCropApplyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this image'**
+  String get discussionAvatarCropApplyAction;
+
   /// No description provided for @commonOpenSettings.
   ///
   /// In en, this message translates to:

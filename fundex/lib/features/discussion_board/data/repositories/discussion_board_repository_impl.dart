@@ -5,6 +5,7 @@ import '../datasources/discussion_board_remote_data_source.dart';
 import '../models/discussion_comment_dto.dart';
 import '../../domain/entities/discussion_board_models.dart';
 import '../../domain/repositories/discussion_board_repository.dart';
+import '../../domain/support/discussion_avatar_palette.dart';
 
 class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
   DiscussionBoardRepositoryImpl({
@@ -47,6 +48,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    String? fallbackAvatarUrl,
     int? linkedProjectId,
     String? linkedProjectName,
   }) async {
@@ -72,6 +74,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
       fallbackName: fallbackName,
       fallbackHandle: fallbackHandle,
       fallbackBadgeLabel: fallbackBadgeLabel,
+      fallbackAvatarUrl: fallbackAvatarUrl,
       linkedProjectId: effectiveProjectId,
       linkedProjectName: linkedProjectName,
       postedAtUtc: postedAtUtc,
@@ -310,6 +313,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
       id: (row.userId ?? row.id ?? '').toString(),
       displayName: displayName,
       accountHandle: _buildMaskedHandle(row.userId),
+      avatarUrl: _normalizeAvatarUrl(row.avatar),
       avatarText: avatarText,
       avatarGradientColorValues: colorValues,
       badge: const DiscussionAuthorBadge(
@@ -327,6 +331,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
       id: 'quote_$seed',
       displayName: displayName,
       accountHandle: '',
+      avatarUrl: _normalizeAvatarUrl(quote.avatar),
       avatarText: avatarText,
       avatarGradientColorValues: _avatarGradientForUser(seed),
       badge: const DiscussionAuthorBadge(
@@ -425,18 +430,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
   }
 
   List<int> _avatarGradientForUser(int? userSeed) {
-    const palette = <List<int>>[
-      <int>[0xFF6366F1, 0xFF8B5CF6],
-      <int>[0xFFEC4899, 0xFFF472B6],
-      <int>[0xFF10B981, 0xFF34D399],
-      <int>[0xFFF59E0B, 0xFFFBBF24],
-      <int>[0xFF2563EB, 0xFF60A5FA],
-      <int>[0xFF14B8A6, 0xFF2DD4BF],
-    ];
-    if (userSeed == null) {
-      return palette.first;
-    }
-    return palette[userSeed.abs() % palette.length];
+    return discussionAvatarGradientForSeed(userSeed);
   }
 
   String _buildMaskedHandle(int? userId) {
@@ -466,6 +460,14 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
       return 'U';
     }
     return String.fromCharCode(trimmed.runes.first);
+  }
+
+  String? _normalizeAvatarUrl(String? value) {
+    final trimmed = value?.trim();
+    if (trimmed == null || trimmed.isEmpty) {
+      return null;
+    }
+    return trimmed;
   }
 
   bool _containsRecentlyPostedThread(
@@ -513,6 +515,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    String? fallbackAvatarUrl,
     required int? linkedProjectId,
     required String? linkedProjectName,
     required DateTime postedAtUtc,
@@ -526,8 +529,9 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
         id: 'local_author',
         displayName: authorName,
         accountHandle: fallbackHandle,
+        avatarUrl: _normalizeAvatarUrl(fallbackAvatarUrl),
         avatarText: _firstVisibleCharacter(authorName),
-        avatarGradientColorValues: const <int>[0xFF6366F1, 0xFF8B5CF6],
+        avatarGradientColorValues: discussionAvatarGradientForSeed(null),
         badge: DiscussionAuthorBadge(
           label: fallbackBadgeLabel,
           backgroundColorValue: fallbackBadgeLabel.trim().isEmpty

@@ -4,7 +4,7 @@ part 'auth_dtos.freezed.dart';
 part 'auth_dtos.g.dart';
 
 @freezed
-class AuthSessionDto with _$AuthSessionDto {
+abstract class AuthSessionDto with _$AuthSessionDto {
   const AuthSessionDto._();
 
   const factory AuthSessionDto({
@@ -18,12 +18,13 @@ class AuthSessionDto with _$AuthSessionDto {
 }
 
 @freezed
-class AuthUserDto with _$AuthUserDto {
+abstract class AuthUserDto with _$AuthUserDto {
   const AuthUserDto._();
 
   const factory AuthUserDto({
     required String username,
     String? id,
+    String? avatar,
     int? userId,
     int? memberId,
     String? accountId,
@@ -162,7 +163,7 @@ class AuthMemberLoginIndexDto {
 }
 
 @freezed
-class AuthLoginResultDto with _$AuthLoginResultDto {
+abstract class AuthLoginResultDto with _$AuthLoginResultDto {
   const factory AuthLoginResultDto({
     required AuthSessionDto session,
     AuthUserDto? user,
@@ -226,6 +227,7 @@ Map<String, dynamic> _normalizedUserJson(Map<String, dynamic> json) {
   return <String, dynamic>{
     'username': username,
     'id': _normalizedOptionalString(json['id']),
+    'avatar': _normalizedOptionalString(json['avatar']),
     'userId': normalizedUserId,
     'memberId': normalizedMemberId,
     'accountId': _normalizedOptionalString(json['accountId']),

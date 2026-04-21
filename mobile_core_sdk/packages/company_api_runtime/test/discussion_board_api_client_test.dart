@@ -70,7 +70,7 @@ void main() {
         );
 
         return _jsonOk(
-          '{"msg":"success","code":200,"data":{"rows":[{"id":101,"userId":1001,"username":"佐藤","content":"主贴内容","createTime":"2026-03-12T08:00:00Z","projectId":123,"projectName":"プレミアムレジデンス赤坂","quote":{"id":99,"username":"山田","content":"前文","createTime":"2026-03-12T07:00:00Z"}}]}}',
+          '{"msg":"success","code":200,"data":{"rows":[{"id":101,"userId":1001,"username":"佐藤","avatar":"https://cdn.example.com/avatar-root.png","content":"主贴内容","createTime":"2026-03-12T08:00:00Z","projectId":123,"projectName":"プレミアムレジデンス赤坂","quote":{"id":99,"username":"山田","avatar":"https://cdn.example.com/avatar-quote.png","content":"前文","createTime":"2026-03-12T07:00:00Z"}}]}}',
         );
       });
       final api = DiscussionBoardApiClient(client);
@@ -79,7 +79,15 @@ void main() {
 
       expect(rows, hasLength(1));
       expect(rows.first.id, equals(101));
+      expect(
+        rows.first.avatar,
+        equals('https://cdn.example.com/avatar-root.png'),
+      );
       expect(rows.first.quote?.id, equals(99));
+      expect(
+        rows.first.quote?.avatar,
+        equals('https://cdn.example.com/avatar-quote.png'),
+      );
     });
 
     test('sendComment posts payload and checks success envelope', () async {

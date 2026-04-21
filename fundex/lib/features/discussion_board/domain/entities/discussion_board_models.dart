@@ -43,6 +43,7 @@ class DiscussionAuthor {
     required this.id,
     required this.displayName,
     required this.accountHandle,
+    this.avatarUrl,
     required this.avatarText,
     required this.avatarGradientColorValues,
     required this.badge,
@@ -51,6 +52,7 @@ class DiscussionAuthor {
   final String id;
   final String displayName;
   final String accountHandle;
+  final String? avatarUrl;
   final String avatarText;
   final List<int> avatarGradientColorValues;
   final DiscussionAuthorBadge badge;
@@ -59,6 +61,7 @@ class DiscussionAuthor {
     String? id,
     String? displayName,
     String? accountHandle,
+    String? avatarUrl,
     String? avatarText,
     List<int>? avatarGradientColorValues,
     DiscussionAuthorBadge? badge,
@@ -67,6 +70,7 @@ class DiscussionAuthor {
       id: id ?? this.id,
       displayName: displayName ?? this.displayName,
       accountHandle: accountHandle ?? this.accountHandle,
+      avatarUrl: avatarUrl ?? this.avatarUrl,
       avatarText: avatarText ?? this.avatarText,
       avatarGradientColorValues:
           avatarGradientColorValues ?? this.avatarGradientColorValues,
@@ -79,6 +83,7 @@ class DiscussionAuthor {
       'id': id,
       'displayName': displayName,
       'accountHandle': accountHandle,
+      'avatarUrl': avatarUrl,
       'avatarText': avatarText,
       'avatarGradientColorValues': avatarGradientColorValues,
       'badge': badge.toJson(),
@@ -90,6 +95,7 @@ class DiscussionAuthor {
       id: json['id']?.toString() ?? '',
       displayName: json['displayName']?.toString() ?? '',
       accountHandle: json['accountHandle']?.toString() ?? '',
+      avatarUrl: json['avatarUrl']?.toString(),
       avatarText: json['avatarText']?.toString() ?? '',
       avatarGradientColorValues: _toIntList(json['avatarGradientColorValues']),
       badge: DiscussionAuthorBadge.fromJson(_toMap(json['badge'])),

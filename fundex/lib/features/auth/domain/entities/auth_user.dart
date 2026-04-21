@@ -7,6 +7,7 @@ abstract class AuthUser with _$AuthUser {
   const factory AuthUser({
     required String username,
     String? id,
+    String? avatar,
     int? userId,
     int? memberId,
     String? accountId,

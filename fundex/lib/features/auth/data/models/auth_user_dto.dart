@@ -9,6 +9,7 @@ extension AuthUserDtoMapper on AuthUserDto {
     return AuthUser(
       username: username,
       id: id,
+      avatar: avatar,
       userId: userId,
       memberId: memberId,
       accountId: accountId,

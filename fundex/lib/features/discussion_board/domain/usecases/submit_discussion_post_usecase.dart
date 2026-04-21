@@ -12,6 +12,7 @@ class SubmitDiscussionPostUseCase {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    String? fallbackAvatarUrl,
     int? linkedProjectId,
     String? linkedProjectName,
   }) {
@@ -21,6 +22,7 @@ class SubmitDiscussionPostUseCase {
       fallbackName: fallbackName,
       fallbackHandle: fallbackHandle,
       fallbackBadgeLabel: fallbackBadgeLabel,
+      fallbackAvatarUrl: fallbackAvatarUrl,
       linkedProjectId: linkedProjectId,
       linkedProjectName: linkedProjectName,
     );

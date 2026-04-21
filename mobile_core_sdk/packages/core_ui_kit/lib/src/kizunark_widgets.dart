@@ -63,12 +63,10 @@ class KizunarkGradientHeader extends StatelessWidget {
             ),
           const SizedBox(height: 2),
           if (!(titleAssetPath?.trim().isNotEmpty ?? false))
-          Text(
-            subtitle,
-            style: appText.meta.copyWith(
-              color: colors.textSecondary,
+            Text(
+              subtitle,
+              style: appText.meta.copyWith(color: colors.textSecondary),
             ),
-          ),
         ],
       ),
     );
@@ -76,11 +74,7 @@ class KizunarkGradientHeader extends StatelessWidget {
 }
 
 class KizunarkNoticeBanner extends StatelessWidget {
-  const KizunarkNoticeBanner({
-    super.key,
-    required this.label,
-    this.icon,
-  });
+  const KizunarkNoticeBanner({super.key, required this.label, this.icon});
 
   final String label;
   final String? icon;
@@ -122,14 +116,20 @@ class KizunarkAvatarBadge extends StatelessWidget {
     super.key,
     required this.text,
     required this.gradientColors,
+    this.imageUrl,
+    this.imageProvider,
     this.size = 32,
     this.fontSize = 13,
+    this.usePersonIconFallback = true,
   });
 
   final String text;
   final List<Color> gradientColors;
+  final String? imageUrl;
+  final ImageProvider<Object>? imageProvider;
   final double size;
   final double fontSize;
+  final bool usePersonIconFallback;
 
   @override
   Widget build(BuildContext context) {
@@ -139,6 +139,28 @@ class KizunarkAvatarBadge extends StatelessWidget {
     final colors = gradientColors.isEmpty
         ? <Color>[appColors.communityPrimary, appColors.communitySecondary]
         : gradientColors;
+    final normalizedImageUrl = imageUrl?.trim() ?? '';
+    final resolvedImageProvider =
+        imageProvider ??
+        (normalizedImageUrl.isEmpty ? null : NetworkImage(normalizedImageUrl));
+
+    Widget buildFallback() {
+      if (usePersonIconFallback || text.trim().isEmpty) {
+        return Icon(
+          Icons.person_rounded,
+          size: size * 0.56,
+          color: appColors.onDark,
+        );
+      }
+      return Text(
+        text,
+        style: appText.chip.copyWith(
+          color: appColors.onDark,
+          fontSize: fontSize,
+        ),
+      );
+    }
+
     return Container(
       width: size,
       height: size,
@@ -151,13 +173,16 @@ class KizunarkAvatarBadge extends StatelessWidget {
         ),
       ),
       alignment: Alignment.center,
-      child: Text(
-        text,
-        style: appText.chip.copyWith(
-          color: appColors.onDark,
-          fontSize: fontSize,
-        ),
-      ),
+      clipBehavior: Clip.antiAlias,
+      child: resolvedImageProvider == null
+          ? buildFallback()
+          : Image(
+              image: resolvedImageProvider,
+              fit: BoxFit.cover,
+              width: size,
+              height: size,
+              errorBuilder: (_, __, ___) => buildFallback(),
+            ),
     );
   }
 }

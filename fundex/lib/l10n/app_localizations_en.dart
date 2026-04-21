@@ -43,6 +43,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonCancel => 'Cancel';
 
   @override
+  String get discussionAvatarPageTitle => 'Avatar';
+
+  @override
+  String get discussionAvatarPreviewHint =>
+      'Choose a default avatar or upload an image from your photo library.';
+
+  @override
+  String get discussionAvatarDefaultSectionTitle => 'Default avatars';
+
+  @override
+  String get discussionAvatarSaveAction => 'Save avatar';
+
+  @override
+  String get discussionAvatarSaveSuccess => 'Avatar updated.';
+
+  @override
+  String get discussionAvatarPickFailed =>
+      'Failed to choose an image. Please try again.';
+
+  @override
+  String get discussionAvatarPhotoLibraryPermissionRequired =>
+      'Allow photo library access to select an avatar image.';
+
+  @override
+  String get discussionAvatarCropTitle => 'Adjust avatar';
+
+  @override
+  String get discussionAvatarCropHint =>
+      'Drag the image and pinch to zoom so the avatar fits inside the circle.';
+
+  @override
+  String get discussionAvatarCropApplyAction => 'Use this image';
+
+  @override
   String get commonOpenSettings => 'Open Settings';
 
   @override

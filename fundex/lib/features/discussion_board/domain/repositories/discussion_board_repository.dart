@@ -9,6 +9,7 @@ abstract class DiscussionBoardRepository {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    String? fallbackAvatarUrl,
     int? linkedProjectId,
     String? linkedProjectName,
   });

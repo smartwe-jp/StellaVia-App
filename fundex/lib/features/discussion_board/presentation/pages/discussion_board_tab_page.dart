@@ -10,6 +10,7 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/domain/entities/auth_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../domain/support/discussion_avatar_palette.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../controllers/discussion_board_controller.dart';
@@ -68,22 +69,6 @@ class _DiscussionBoardTabPageState
     return _replyControllers.putIfAbsent(threadId, TextEditingController.new);
   }
 
-  String _resolveAvatarText(AuthUser? user) {
-    final candidates = <String>[
-      user?.firstName ?? '',
-      user?.lastName ?? '',
-      user?.username ?? '',
-      user?.id ?? '',
-    ];
-    for (final candidate in candidates) {
-      final text = candidate.trim();
-      if (text.isNotEmpty) {
-        return String.fromCharCode(text.runes.first);
-      }
-    }
-    return '田';
-  }
-
   String _resolveCurrentUserId(AuthUser? user) {
     final candidates = <String>[
       user?.userId?.toString() ?? '',
@@ -101,6 +86,21 @@ class _DiscussionBoardTabPageState
     return '';
   }
 
+  int? _resolveCurrentUserAvatarSeed(AuthUser? user) {
+    if (user?.userId != null) {
+      return user!.userId;
+    }
+    if (user?.memberId != null) {
+      return user!.memberId;
+    }
+    final normalized =
+        user?.id?.trim() ?? user?.accountId?.trim() ?? user?.username ?? '';
+    if (normalized.isEmpty) {
+      return null;
+    }
+    return normalized.hashCode;
+  }
+
   Future<void> _submitPost({required bool isAuthenticated}) async {
     final l10n = context.l10n;
     final controller = ref.read(
@@ -115,6 +115,11 @@ class _DiscussionBoardTabPageState
       fallbackName: l10n.kizunarkFallbackDisplayName,
       fallbackHandle: l10n.kizunarkFallbackHandle,
       fallbackBadgeLabel: l10n.kizunarkInvestorBadge,
+      fallbackAvatarUrl: ref
+          .read(currentAuthUserProvider)
+          .asData
+          ?.value
+          ?.avatar,
       linkedProjectId: int.tryParse(_selectedComposerFund?.projectId ?? ''),
       linkedProjectName: _selectedComposerFund?.projectName,
     );
@@ -245,6 +250,19 @@ class _DiscussionBoardTabPageState
     );
   }
 
+  Future<void> _openAvatarEditor() async {
+    final uploadedUrl = await context.push<String>('/profile/avatar');
+    if (!mounted || (uploadedUrl?.trim().isNotEmpty ?? false) == false) {
+      return;
+    }
+    await ref.refresh(currentAuthUserProvider.future).catchError((Object _) {
+      return null;
+    });
+    await ref
+        .read(discussionBoardControllerProvider(null).notifier)
+        .refreshThreads();
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.listen<String?>(
@@ -295,6 +313,9 @@ class _DiscussionBoardTabPageState
         ref.watch(isAuthenticatedProvider).asData?.value ?? false;
     final currentUser = ref.watch(currentAuthUserProvider).asData?.value;
     final currentUserId = _resolveCurrentUserId(currentUser);
+    final currentUserAvatarColors = discussionAvatarGradientForSeed(
+      _resolveCurrentUserAvatarSeed(currentUser),
+    ).map(Color.new).toList(growable: false);
 
     if (_composerController.text != state.composerText) {
       _composerController.value = TextEditingValue(
@@ -332,14 +353,16 @@ class _DiscussionBoardTabPageState
                   padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
                   child: isAuthenticated
                       ? KizunarkComposerCard(
-                          leading: KizunarkAvatarBadge(
-                            text: _resolveAvatarText(currentUser),
-                            gradientColors: const <Color>[
-                              AppColorTokens.kizunarkPrimary,
-                              AppColorTokens.kizunarkSecondary,
-                            ],
-                            size: 32,
-                            fontSize: 13,
+                          leading: GestureDetector(
+                            onTap: _openAvatarEditor,
+                            behavior: HitTestBehavior.opaque,
+                            child: KizunarkAvatarBadge(
+                              text: '',
+                              imageUrl: currentUser?.avatar,
+                              gradientColors: currentUserAvatarColors,
+                              size: 32,
+                              fontSize: 13,
+                            ),
                           ),
                           footerLeading: Align(
                             alignment: Alignment.centerLeft,
@@ -438,7 +461,8 @@ class _DiscussionBoardTabPageState
                   padding: const EdgeInsets.only(bottom: 8),
                   child: KizunarkReplyTile(
                     avatar: KizunarkAvatarBadge(
-                      text: reply.author.avatarText,
+                      text: '',
+                      imageUrl: reply.author.avatarUrl,
                       gradientColors: reply.author.avatarGradientColorValues
                           .map(Color.new)
                           .toList(growable: false),
@@ -490,7 +514,8 @@ class _DiscussionBoardTabPageState
             padding: const EdgeInsets.only(bottom: 12),
             child: KizunarkPostCard(
               avatar: KizunarkAvatarBadge(
-                text: thread.author.avatarText,
+                text: '',
+                imageUrl: thread.author.avatarUrl,
                 gradientColors: thread.author.avatarGradientColorValues
                     .map(Color.new)
                     .toList(growable: false),

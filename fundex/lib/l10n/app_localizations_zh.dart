@@ -42,6 +42,36 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonCancel => '取消';
 
   @override
+  String get discussionAvatarPageTitle => '头像';
+
+  @override
+  String get discussionAvatarPreviewHint => '请选择默认头像，或从相册上传图片。';
+
+  @override
+  String get discussionAvatarDefaultSectionTitle => '默认头像';
+
+  @override
+  String get discussionAvatarSaveAction => '保存头像';
+
+  @override
+  String get discussionAvatarSaveSuccess => '头像已更新。';
+
+  @override
+  String get discussionAvatarPickFailed => '选择图片失败，请重试。';
+
+  @override
+  String get discussionAvatarPhotoLibraryPermissionRequired => '请允许访问相册。';
+
+  @override
+  String get discussionAvatarCropTitle => '调整头像';
+
+  @override
+  String get discussionAvatarCropHint => '请拖动图片，并双指缩放，使头像对齐圆形范围。';
+
+  @override
+  String get discussionAvatarCropApplyAction => '使用这张图片';
+
+  @override
   String get commonOpenSettings => '前往设置';
 
   @override
@@ -3846,6 +3876,36 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get commonCancel => '取消';
+
+  @override
+  String get discussionAvatarPageTitle => '頭像';
+
+  @override
+  String get discussionAvatarPreviewHint => '請選擇預設頭像，或從相簿上傳圖片。';
+
+  @override
+  String get discussionAvatarDefaultSectionTitle => '預設頭像';
+
+  @override
+  String get discussionAvatarSaveAction => '保存頭像';
+
+  @override
+  String get discussionAvatarSaveSuccess => '頭像已更新。';
+
+  @override
+  String get discussionAvatarPickFailed => '選擇圖片失敗，請再試一次。';
+
+  @override
+  String get discussionAvatarPhotoLibraryPermissionRequired => '請允許存取相簿。';
+
+  @override
+  String get discussionAvatarCropTitle => '調整頭像';
+
+  @override
+  String get discussionAvatarCropHint => '請拖曳圖片，並雙指縮放，使頭像對齊圓形範圍。';
+
+  @override
+  String get discussionAvatarCropApplyAction => '使用這張圖片';
 
   @override
   String get commonOpenSettings => '前往設定';

@@ -55,7 +55,8 @@ class DiscussionBoardThreadList extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 8),
                     child: KizunarkReplyTile(
                       avatar: KizunarkAvatarBadge(
-                        text: reply.author.avatarText,
+                        text: '',
+                        imageUrl: reply.author.avatarUrl,
                         gradientColors: reply.author.avatarGradientColorValues
                             .map(Color.new)
                             .toList(growable: false),
@@ -84,7 +85,8 @@ class DiscussionBoardThreadList extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 12),
               child: KizunarkPostCard(
                 avatar: KizunarkAvatarBadge(
-                  text: thread.author.avatarText,
+                  text: '',
+                  imageUrl: thread.author.avatarUrl,
                   gradientColors: thread.author.avatarGradientColorValues
                       .map(Color.new)
                       .toList(growable: false),

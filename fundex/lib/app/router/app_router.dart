@@ -23,6 +23,7 @@ import '../../features/investment/presentation/pages/secondary_market_marketplac
 import '../../features/investment/presentation/pages/secondary_market_marketplace_page.dart';
 import '../../features/investment/presentation/support/fund_lottery_apply_step.dart';
 import '../../features/main_shell/presentation/pages/main_shell_page.dart';
+import '../../features/member_profile/presentation/pages/member_avatar_page.dart';
 import '../../features/member_profile/presentation/pages/member_profile_edit_flow_page.dart';
 import '../../features/member_profile/presentation/pages/member_profile_overview_page.dart';
 import '../../features/member_profile/presentation/pages/my_page_active_fund_detail_page.dart';
@@ -313,6 +314,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   return const ProfileCenterTabPage();
                 },
                 routes: <RouteBase>[
+                  GoRoute(
+                    path: 'avatar',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const MemberAvatarPage();
+                    },
+                  ),
                   GoRoute(
                     path: 'settings',
                     builder: (BuildContext context, GoRouterState state) {

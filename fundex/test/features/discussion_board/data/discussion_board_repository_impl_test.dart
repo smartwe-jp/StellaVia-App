@@ -92,6 +92,7 @@ void main() {
             id: 101,
             userId: 1001,
             username: '佐藤',
+            avatar: 'https://cdn.example.com/avatar-root.png',
             content: '主贴内容',
             createTime: '2026-03-12T08:00:00Z',
             projectId: 123,
@@ -101,6 +102,7 @@ void main() {
             id: 102,
             userId: 1002,
             username: '高橋',
+            avatar: 'https://cdn.example.com/avatar-reply.png',
             content: '回复内容',
             createTime: '2026-03-12T08:30:00Z',
             projectId: 123,
@@ -108,6 +110,7 @@ void main() {
             quote: DiscussionQuoteDto(
               id: 101,
               username: '佐藤',
+              avatar: 'https://cdn.example.com/avatar-root.png',
               content: '主贴内容',
               createTime: '2026-03-12T08:00:00Z',
             ),
@@ -123,9 +126,17 @@ void main() {
 
       expect(threads, hasLength(1));
       expect(threads.first.id, '101');
+      expect(
+        threads.first.author.avatarUrl,
+        'https://cdn.example.com/avatar-root.png',
+      );
       expect(threads.first.commentCount, 1);
       expect(threads.first.replies, hasLength(1));
       expect(threads.first.replies.first.id, '102');
+      expect(
+        threads.first.replies.first.author.avatarUrl,
+        'https://cdn.example.com/avatar-reply.png',
+      );
       expect(threads.first.fundReferenceLabel, 'プレミアムレジデンス赤坂 →');
       expect(local.storage, hasLength(1));
     });

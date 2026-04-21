@@ -6,10 +6,11 @@ part 'discussion_comment_dto.freezed.dart';
 part 'discussion_comment_dto.g.dart';
 
 @freezed
-class DiscussionQuoteDto with _$DiscussionQuoteDto {
+abstract class DiscussionQuoteDto with _$DiscussionQuoteDto {
   const factory DiscussionQuoteDto({
     @JsonKey(fromJson: _toNullableInt) int? id,
     @Default('') String username,
+    String? avatar,
     @Default('') String content,
     @Default('') String createTime,
   }) = _DiscussionQuoteDto;
@@ -19,11 +20,12 @@ class DiscussionQuoteDto with _$DiscussionQuoteDto {
 }
 
 @freezed
-class DiscussionCommentDto with _$DiscussionCommentDto {
+abstract class DiscussionCommentDto with _$DiscussionCommentDto {
   const factory DiscussionCommentDto({
     @JsonKey(fromJson: _toNullableInt) int? id,
     @JsonKey(fromJson: _toNullableInt) int? userId,
     @Default('') String username,
+    String? avatar,
     @Default('') String content,
     @Default('') String createTime,
     @JsonKey(fromJson: _toNullableInt) int? projectId,

@@ -6,30 +6,31 @@ part of 'discussion_comment_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$DiscussionQuoteDtoImpl _$$DiscussionQuoteDtoImplFromJson(
-  Map<String, dynamic> json,
-) => _$DiscussionQuoteDtoImpl(
-  id: _toNullableInt(json['id']),
-  username: json['username'] as String? ?? '',
-  content: json['content'] as String? ?? '',
-  createTime: json['createTime'] as String? ?? '',
-);
+_DiscussionQuoteDto _$DiscussionQuoteDtoFromJson(Map<String, dynamic> json) =>
+    _DiscussionQuoteDto(
+      id: _toNullableInt(json['id']),
+      username: json['username'] as String? ?? '',
+      avatar: json['avatar'] as String?,
+      content: json['content'] as String? ?? '',
+      createTime: json['createTime'] as String? ?? '',
+    );
 
-Map<String, dynamic> _$$DiscussionQuoteDtoImplToJson(
-  _$DiscussionQuoteDtoImpl instance,
-) => <String, dynamic>{
-  'id': instance.id,
-  'username': instance.username,
-  'content': instance.content,
-  'createTime': instance.createTime,
-};
+Map<String, dynamic> _$DiscussionQuoteDtoToJson(_DiscussionQuoteDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'username': instance.username,
+      'avatar': instance.avatar,
+      'content': instance.content,
+      'createTime': instance.createTime,
+    };
 
-_$DiscussionCommentDtoImpl _$$DiscussionCommentDtoImplFromJson(
+_DiscussionCommentDto _$DiscussionCommentDtoFromJson(
   Map<String, dynamic> json,
-) => _$DiscussionCommentDtoImpl(
+) => _DiscussionCommentDto(
   id: _toNullableInt(json['id']),
   userId: _toNullableInt(json['userId']),
   username: json['username'] as String? ?? '',
+  avatar: json['avatar'] as String?,
   content: json['content'] as String? ?? '',
   createTime: json['createTime'] as String? ?? '',
   projectId: _toNullableInt(json['projectId']),
@@ -37,12 +38,13 @@ _$DiscussionCommentDtoImpl _$$DiscussionCommentDtoImplFromJson(
   quote: _quoteFromJson(json['quote']),
 );
 
-Map<String, dynamic> _$$DiscussionCommentDtoImplToJson(
-  _$DiscussionCommentDtoImpl instance,
+Map<String, dynamic> _$DiscussionCommentDtoToJson(
+  _DiscussionCommentDto instance,
 ) => <String, dynamic>{
   'id': instance.id,
   'userId': instance.userId,
   'username': instance.username,
+  'avatar': instance.avatar,
   'content': instance.content,
   'createTime': instance.createTime,
   'projectId': instance.projectId,

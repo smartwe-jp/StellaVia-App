@@ -23,6 +23,16 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   bool _showLanguageOptions = false;
   bool _isLoggingOut = false;
 
+  Future<void> _openAvatarEditor() async {
+    final uploadedUrl = await context.push<String>('/profile/avatar');
+    if (!mounted || (uploadedUrl?.trim().isNotEmpty ?? false) == false) {
+      return;
+    }
+    await ref.refresh(currentAuthUserProvider.future).catchError((Object _) {
+      return null;
+    });
+  }
+
   Future<void> _switchThemePreference(AppThemePreference preference) async {
     await ref
         .read(appThemePreferenceProvider.notifier)
@@ -276,6 +286,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             AppMenuSection(
               title: l10n.menuSectionAccount,
               children: <Widget>[
+                AppMenuItem(
+                  icon: Icons.account_circle_rounded,
+                  label: l10n.discussionAvatarPageTitle,
+                  iconBackgroundColor: colors.primarySubtle,
+                  iconForegroundColor: colors.primary,
+                  onTap: _openAvatarEditor,
+                ),
                 AppMenuItem(
                   icon: Icons.person_rounded,
                   label: l10n.menuItemEditProfile,

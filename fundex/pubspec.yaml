@@ -65,6 +65,7 @@ flutter:
   assets:
     - assets/content/
     - assets/images/
+    - assets/images/avatars/
   fonts:
     - family: Noto Sans JP
       fonts:

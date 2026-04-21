@@ -68,9 +68,15 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<void> saveCurrentUser(AuthUserDto user) async {
     try {
+      final existingUser = await readCurrentUser();
+      final normalizedUser =
+          (user.avatar?.trim().isNotEmpty ?? false) ||
+              !(existingUser?.avatar?.trim().isNotEmpty ?? false)
+          ? user
+          : user.copyWith(avatar: existingUser!.avatar);
       await _largeDataStore.put<String>(
         _currentUserKey,
-        jsonEncode(user.toJson()),
+        jsonEncode(normalizedUser.toJson()),
       );
     } catch (_) {
       // Token login should not fail when local profile cache write fails.

@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,602 +9,592 @@ part of 'discussion_comment_dto.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
-
-DiscussionQuoteDto _$DiscussionQuoteDtoFromJson(Map<String, dynamic> json) {
-  return _DiscussionQuoteDto.fromJson(json);
-}
 
 /// @nodoc
 mixin _$DiscussionQuoteDto {
-  @JsonKey(fromJson: _toNullableInt)
-  int? get id => throw _privateConstructorUsedError;
-  String get username => throw _privateConstructorUsedError;
-  String get content => throw _privateConstructorUsedError;
-  String get createTime => throw _privateConstructorUsedError;
+
+@JsonKey(fromJson: _toNullableInt) int? get id; String get username; String? get avatar; String get content; String get createTime;
+/// Create a copy of DiscussionQuoteDto
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DiscussionQuoteDtoCopyWith<DiscussionQuoteDto> get copyWith => _$DiscussionQuoteDtoCopyWithImpl<DiscussionQuoteDto>(this as DiscussionQuoteDto, _$identity);
 
   /// Serializes this DiscussionQuoteDto to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of DiscussionQuoteDto
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $DiscussionQuoteDtoCopyWith<DiscussionQuoteDto> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DiscussionQuoteDto&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&(identical(other.avatar, avatar) || other.avatar == avatar)&&(identical(other.content, content) || other.content == content)&&(identical(other.createTime, createTime) || other.createTime == createTime));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,username,avatar,content,createTime);
+
+@override
+String toString() {
+  return 'DiscussionQuoteDto(id: $id, username: $username, avatar: $avatar, content: $content, createTime: $createTime)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $DiscussionQuoteDtoCopyWith<$Res> {
-  factory $DiscussionQuoteDtoCopyWith(
-    DiscussionQuoteDto value,
-    $Res Function(DiscussionQuoteDto) then,
-  ) = _$DiscussionQuoteDtoCopyWithImpl<$Res, DiscussionQuoteDto>;
-  @useResult
-  $Res call({
-    @JsonKey(fromJson: _toNullableInt) int? id,
-    String username,
-    String content,
-    String createTime,
-  });
-}
+abstract mixin class $DiscussionQuoteDtoCopyWith<$Res>  {
+  factory $DiscussionQuoteDtoCopyWith(DiscussionQuoteDto value, $Res Function(DiscussionQuoteDto) _then) = _$DiscussionQuoteDtoCopyWithImpl;
+@useResult
+$Res call({
+@JsonKey(fromJson: _toNullableInt) int? id, String username, String? avatar, String content, String createTime
+});
 
+
+
+
+}
 /// @nodoc
-class _$DiscussionQuoteDtoCopyWithImpl<$Res, $Val extends DiscussionQuoteDto>
+class _$DiscussionQuoteDtoCopyWithImpl<$Res>
     implements $DiscussionQuoteDtoCopyWith<$Res> {
-  _$DiscussionQuoteDtoCopyWithImpl(this._value, this._then);
+  _$DiscussionQuoteDtoCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final DiscussionQuoteDto _self;
+  final $Res Function(DiscussionQuoteDto) _then;
 
-  /// Create a copy of DiscussionQuoteDto
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? username = null,
-    Object? content = null,
-    Object? createTime = null,
-  }) {
-    return _then(
-      _value.copyWith(
-            id: freezed == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as int?,
-            username: null == username
-                ? _value.username
-                : username // ignore: cast_nullable_to_non_nullable
-                      as String,
-            content: null == content
-                ? _value.content
-                : content // ignore: cast_nullable_to_non_nullable
-                      as String,
-            createTime: null == createTime
-                ? _value.createTime
-                : createTime // ignore: cast_nullable_to_non_nullable
-                      as String,
-          )
-          as $Val,
-    );
-  }
+/// Create a copy of DiscussionQuoteDto
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? username = null,Object? avatar = freezed,Object? content = null,Object? createTime = null,}) {
+  return _then(_self.copyWith(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
+as String,avatar: freezed == avatar ? _self.avatar : avatar // ignore: cast_nullable_to_non_nullable
+as String?,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String,createTime: null == createTime ? _self.createTime : createTime // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
 }
 
-/// @nodoc
-abstract class _$$DiscussionQuoteDtoImplCopyWith<$Res>
-    implements $DiscussionQuoteDtoCopyWith<$Res> {
-  factory _$$DiscussionQuoteDtoImplCopyWith(
-    _$DiscussionQuoteDtoImpl value,
-    $Res Function(_$DiscussionQuoteDtoImpl) then,
-  ) = __$$DiscussionQuoteDtoImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({
-    @JsonKey(fromJson: _toNullableInt) int? id,
-    String username,
-    String content,
-    String createTime,
-  });
 }
 
-/// @nodoc
-class __$$DiscussionQuoteDtoImplCopyWithImpl<$Res>
-    extends _$DiscussionQuoteDtoCopyWithImpl<$Res, _$DiscussionQuoteDtoImpl>
-    implements _$$DiscussionQuoteDtoImplCopyWith<$Res> {
-  __$$DiscussionQuoteDtoImplCopyWithImpl(
-    _$DiscussionQuoteDtoImpl _value,
-    $Res Function(_$DiscussionQuoteDtoImpl) _then,
-  ) : super(_value, _then);
 
-  /// Create a copy of DiscussionQuoteDto
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? username = null,
-    Object? content = null,
-    Object? createTime = null,
-  }) {
-    return _then(
-      _$DiscussionQuoteDtoImpl(
-        id: freezed == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                  as int?,
-        username: null == username
-            ? _value.username
-            : username // ignore: cast_nullable_to_non_nullable
-                  as String,
-        content: null == content
-            ? _value.content
-            : content // ignore: cast_nullable_to_non_nullable
-                  as String,
-        createTime: null == createTime
-            ? _value.createTime
-            : createTime // ignore: cast_nullable_to_non_nullable
-                  as String,
-      ),
-    );
-  }
+/// Adds pattern-matching-related methods to [DiscussionQuoteDto].
+extension DiscussionQuoteDtoPatterns on DiscussionQuoteDto {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _DiscussionQuoteDto value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _DiscussionQuoteDto() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _DiscussionQuoteDto value)  $default,){
+final _that = this;
+switch (_that) {
+case _DiscussionQuoteDto():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _DiscussionQuoteDto value)?  $default,){
+final _that = this;
+switch (_that) {
+case _DiscussionQuoteDto() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _toNullableInt)  int? id,  String username,  String? avatar,  String content,  String createTime)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _DiscussionQuoteDto() when $default != null:
+return $default(_that.id,_that.username,_that.avatar,_that.content,_that.createTime);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _toNullableInt)  int? id,  String username,  String? avatar,  String content,  String createTime)  $default,) {final _that = this;
+switch (_that) {
+case _DiscussionQuoteDto():
+return $default(_that.id,_that.username,_that.avatar,_that.content,_that.createTime);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(fromJson: _toNullableInt)  int? id,  String username,  String? avatar,  String content,  String createTime)?  $default,) {final _that = this;
+switch (_that) {
+case _DiscussionQuoteDto() when $default != null:
+return $default(_that.id,_that.username,_that.avatar,_that.content,_that.createTime);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$DiscussionQuoteDtoImpl implements _DiscussionQuoteDto {
-  const _$DiscussionQuoteDtoImpl({
-    @JsonKey(fromJson: _toNullableInt) this.id,
-    this.username = '',
-    this.content = '',
-    this.createTime = '',
-  });
 
-  factory _$DiscussionQuoteDtoImpl.fromJson(Map<String, dynamic> json) =>
-      _$$DiscussionQuoteDtoImplFromJson(json);
+class _DiscussionQuoteDto implements DiscussionQuoteDto {
+  const _DiscussionQuoteDto({@JsonKey(fromJson: _toNullableInt) this.id, this.username = '', this.avatar, this.content = '', this.createTime = ''});
+  factory _DiscussionQuoteDto.fromJson(Map<String, dynamic> json) => _$DiscussionQuoteDtoFromJson(json);
 
-  @override
-  @JsonKey(fromJson: _toNullableInt)
-  final int? id;
-  @override
-  @JsonKey()
-  final String username;
-  @override
-  @JsonKey()
-  final String content;
-  @override
-  @JsonKey()
-  final String createTime;
+@override@JsonKey(fromJson: _toNullableInt) final  int? id;
+@override@JsonKey() final  String username;
+@override final  String? avatar;
+@override@JsonKey() final  String content;
+@override@JsonKey() final  String createTime;
 
-  @override
-  String toString() {
-    return 'DiscussionQuoteDto(id: $id, username: $username, content: $content, createTime: $createTime)';
-  }
+/// Create a copy of DiscussionQuoteDto
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$DiscussionQuoteDtoCopyWith<_DiscussionQuoteDto> get copyWith => __$DiscussionQuoteDtoCopyWithImpl<_DiscussionQuoteDto>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$DiscussionQuoteDtoImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.username, username) ||
-                other.username == username) &&
-            (identical(other.content, content) || other.content == content) &&
-            (identical(other.createTime, createTime) ||
-                other.createTime == createTime));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, username, content, createTime);
-
-  /// Create a copy of DiscussionQuoteDto
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$DiscussionQuoteDtoImplCopyWith<_$DiscussionQuoteDtoImpl> get copyWith =>
-      __$$DiscussionQuoteDtoImplCopyWithImpl<_$DiscussionQuoteDtoImpl>(
-        this,
-        _$identity,
-      );
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$DiscussionQuoteDtoImplToJson(this);
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$DiscussionQuoteDtoToJson(this, );
 }
 
-abstract class _DiscussionQuoteDto implements DiscussionQuoteDto {
-  const factory _DiscussionQuoteDto({
-    @JsonKey(fromJson: _toNullableInt) final int? id,
-    final String username,
-    final String content,
-    final String createTime,
-  }) = _$DiscussionQuoteDtoImpl;
-
-  factory _DiscussionQuoteDto.fromJson(Map<String, dynamic> json) =
-      _$DiscussionQuoteDtoImpl.fromJson;
-
-  @override
-  @JsonKey(fromJson: _toNullableInt)
-  int? get id;
-  @override
-  String get username;
-  @override
-  String get content;
-  @override
-  String get createTime;
-
-  /// Create a copy of DiscussionQuoteDto
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$DiscussionQuoteDtoImplCopyWith<_$DiscussionQuoteDtoImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DiscussionQuoteDto&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&(identical(other.avatar, avatar) || other.avatar == avatar)&&(identical(other.content, content) || other.content == content)&&(identical(other.createTime, createTime) || other.createTime == createTime));
 }
 
-DiscussionCommentDto _$DiscussionCommentDtoFromJson(Map<String, dynamic> json) {
-  return _DiscussionCommentDto.fromJson(json);
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,username,avatar,content,createTime);
+
+@override
+String toString() {
+  return 'DiscussionQuoteDto(id: $id, username: $username, avatar: $avatar, content: $content, createTime: $createTime)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class _$DiscussionQuoteDtoCopyWith<$Res> implements $DiscussionQuoteDtoCopyWith<$Res> {
+  factory _$DiscussionQuoteDtoCopyWith(_DiscussionQuoteDto value, $Res Function(_DiscussionQuoteDto) _then) = __$DiscussionQuoteDtoCopyWithImpl;
+@override @useResult
+$Res call({
+@JsonKey(fromJson: _toNullableInt) int? id, String username, String? avatar, String content, String createTime
+});
+
+
+
+
+}
+/// @nodoc
+class __$DiscussionQuoteDtoCopyWithImpl<$Res>
+    implements _$DiscussionQuoteDtoCopyWith<$Res> {
+  __$DiscussionQuoteDtoCopyWithImpl(this._self, this._then);
+
+  final _DiscussionQuoteDto _self;
+  final $Res Function(_DiscussionQuoteDto) _then;
+
+/// Create a copy of DiscussionQuoteDto
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? username = null,Object? avatar = freezed,Object? content = null,Object? createTime = null,}) {
+  return _then(_DiscussionQuoteDto(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
+as String,avatar: freezed == avatar ? _self.avatar : avatar // ignore: cast_nullable_to_non_nullable
+as String?,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String,createTime: null == createTime ? _self.createTime : createTime // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
 
 /// @nodoc
 mixin _$DiscussionCommentDto {
-  @JsonKey(fromJson: _toNullableInt)
-  int? get id => throw _privateConstructorUsedError;
-  @JsonKey(fromJson: _toNullableInt)
-  int? get userId => throw _privateConstructorUsedError;
-  String get username => throw _privateConstructorUsedError;
-  String get content => throw _privateConstructorUsedError;
-  String get createTime => throw _privateConstructorUsedError;
-  @JsonKey(fromJson: _toNullableInt)
-  int? get projectId => throw _privateConstructorUsedError;
-  String get projectName => throw _privateConstructorUsedError;
-  @JsonKey(fromJson: _quoteFromJson)
-  DiscussionQuoteDto? get quote => throw _privateConstructorUsedError;
+
+@JsonKey(fromJson: _toNullableInt) int? get id;@JsonKey(fromJson: _toNullableInt) int? get userId; String get username; String? get avatar; String get content; String get createTime;@JsonKey(fromJson: _toNullableInt) int? get projectId; String get projectName;@JsonKey(fromJson: _quoteFromJson) DiscussionQuoteDto? get quote;
+/// Create a copy of DiscussionCommentDto
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DiscussionCommentDtoCopyWith<DiscussionCommentDto> get copyWith => _$DiscussionCommentDtoCopyWithImpl<DiscussionCommentDto>(this as DiscussionCommentDto, _$identity);
 
   /// Serializes this DiscussionCommentDto to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  Map<String, dynamic> toJson();
 
-  /// Create a copy of DiscussionCommentDto
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $DiscussionCommentDtoCopyWith<DiscussionCommentDto> get copyWith =>
-      throw _privateConstructorUsedError;
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DiscussionCommentDto&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.username, username) || other.username == username)&&(identical(other.avatar, avatar) || other.avatar == avatar)&&(identical(other.content, content) || other.content == content)&&(identical(other.createTime, createTime) || other.createTime == createTime)&&(identical(other.projectId, projectId) || other.projectId == projectId)&&(identical(other.projectName, projectName) || other.projectName == projectName)&&(identical(other.quote, quote) || other.quote == quote));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,userId,username,avatar,content,createTime,projectId,projectName,quote);
+
+@override
+String toString() {
+  return 'DiscussionCommentDto(id: $id, userId: $userId, username: $username, avatar: $avatar, content: $content, createTime: $createTime, projectId: $projectId, projectName: $projectName, quote: $quote)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $DiscussionCommentDtoCopyWith<$Res> {
-  factory $DiscussionCommentDtoCopyWith(
-    DiscussionCommentDto value,
-    $Res Function(DiscussionCommentDto) then,
-  ) = _$DiscussionCommentDtoCopyWithImpl<$Res, DiscussionCommentDto>;
-  @useResult
-  $Res call({
-    @JsonKey(fromJson: _toNullableInt) int? id,
-    @JsonKey(fromJson: _toNullableInt) int? userId,
-    String username,
-    String content,
-    String createTime,
-    @JsonKey(fromJson: _toNullableInt) int? projectId,
-    String projectName,
-    @JsonKey(fromJson: _quoteFromJson) DiscussionQuoteDto? quote,
-  });
+abstract mixin class $DiscussionCommentDtoCopyWith<$Res>  {
+  factory $DiscussionCommentDtoCopyWith(DiscussionCommentDto value, $Res Function(DiscussionCommentDto) _then) = _$DiscussionCommentDtoCopyWithImpl;
+@useResult
+$Res call({
+@JsonKey(fromJson: _toNullableInt) int? id,@JsonKey(fromJson: _toNullableInt) int? userId, String username, String? avatar, String content, String createTime,@JsonKey(fromJson: _toNullableInt) int? projectId, String projectName,@JsonKey(fromJson: _quoteFromJson) DiscussionQuoteDto? quote
+});
 
-  $DiscussionQuoteDtoCopyWith<$Res>? get quote;
+
+$DiscussionQuoteDtoCopyWith<$Res>? get quote;
+
 }
-
 /// @nodoc
-class _$DiscussionCommentDtoCopyWithImpl<
-  $Res,
-  $Val extends DiscussionCommentDto
->
+class _$DiscussionCommentDtoCopyWithImpl<$Res>
     implements $DiscussionCommentDtoCopyWith<$Res> {
-  _$DiscussionCommentDtoCopyWithImpl(this._value, this._then);
+  _$DiscussionCommentDtoCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final DiscussionCommentDto _self;
+  final $Res Function(DiscussionCommentDto) _then;
 
-  /// Create a copy of DiscussionCommentDto
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? userId = freezed,
-    Object? username = null,
-    Object? content = null,
-    Object? createTime = null,
-    Object? projectId = freezed,
-    Object? projectName = null,
-    Object? quote = freezed,
-  }) {
-    return _then(
-      _value.copyWith(
-            id: freezed == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as int?,
-            userId: freezed == userId
-                ? _value.userId
-                : userId // ignore: cast_nullable_to_non_nullable
-                      as int?,
-            username: null == username
-                ? _value.username
-                : username // ignore: cast_nullable_to_non_nullable
-                      as String,
-            content: null == content
-                ? _value.content
-                : content // ignore: cast_nullable_to_non_nullable
-                      as String,
-            createTime: null == createTime
-                ? _value.createTime
-                : createTime // ignore: cast_nullable_to_non_nullable
-                      as String,
-            projectId: freezed == projectId
-                ? _value.projectId
-                : projectId // ignore: cast_nullable_to_non_nullable
-                      as int?,
-            projectName: null == projectName
-                ? _value.projectName
-                : projectName // ignore: cast_nullable_to_non_nullable
-                      as String,
-            quote: freezed == quote
-                ? _value.quote
-                : quote // ignore: cast_nullable_to_non_nullable
-                      as DiscussionQuoteDto?,
-          )
-          as $Val,
-    );
-  }
-
-  /// Create a copy of DiscussionCommentDto
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $DiscussionQuoteDtoCopyWith<$Res>? get quote {
-    if (_value.quote == null) {
-      return null;
-    }
-
-    return $DiscussionQuoteDtoCopyWith<$Res>(_value.quote!, (value) {
-      return _then(_value.copyWith(quote: value) as $Val);
-    });
-  }
+/// Create a copy of DiscussionCommentDto
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? userId = freezed,Object? username = null,Object? avatar = freezed,Object? content = null,Object? createTime = null,Object? projectId = freezed,Object? projectName = null,Object? quote = freezed,}) {
+  return _then(_self.copyWith(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as int?,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
+as String,avatar: freezed == avatar ? _self.avatar : avatar // ignore: cast_nullable_to_non_nullable
+as String?,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String,createTime: null == createTime ? _self.createTime : createTime // ignore: cast_nullable_to_non_nullable
+as String,projectId: freezed == projectId ? _self.projectId : projectId // ignore: cast_nullable_to_non_nullable
+as int?,projectName: null == projectName ? _self.projectName : projectName // ignore: cast_nullable_to_non_nullable
+as String,quote: freezed == quote ? _self.quote : quote // ignore: cast_nullable_to_non_nullable
+as DiscussionQuoteDto?,
+  ));
 }
+/// Create a copy of DiscussionCommentDto
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$DiscussionQuoteDtoCopyWith<$Res>? get quote {
+    if (_self.quote == null) {
+    return null;
+  }
 
-/// @nodoc
-abstract class _$$DiscussionCommentDtoImplCopyWith<$Res>
-    implements $DiscussionCommentDtoCopyWith<$Res> {
-  factory _$$DiscussionCommentDtoImplCopyWith(
-    _$DiscussionCommentDtoImpl value,
-    $Res Function(_$DiscussionCommentDtoImpl) then,
-  ) = __$$DiscussionCommentDtoImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({
-    @JsonKey(fromJson: _toNullableInt) int? id,
-    @JsonKey(fromJson: _toNullableInt) int? userId,
-    String username,
-    String content,
-    String createTime,
-    @JsonKey(fromJson: _toNullableInt) int? projectId,
-    String projectName,
-    @JsonKey(fromJson: _quoteFromJson) DiscussionQuoteDto? quote,
+  return $DiscussionQuoteDtoCopyWith<$Res>(_self.quote!, (value) {
+    return _then(_self.copyWith(quote: value));
   });
-
-  @override
-  $DiscussionQuoteDtoCopyWith<$Res>? get quote;
+}
 }
 
-/// @nodoc
-class __$$DiscussionCommentDtoImplCopyWithImpl<$Res>
-    extends _$DiscussionCommentDtoCopyWithImpl<$Res, _$DiscussionCommentDtoImpl>
-    implements _$$DiscussionCommentDtoImplCopyWith<$Res> {
-  __$$DiscussionCommentDtoImplCopyWithImpl(
-    _$DiscussionCommentDtoImpl _value,
-    $Res Function(_$DiscussionCommentDtoImpl) _then,
-  ) : super(_value, _then);
 
-  /// Create a copy of DiscussionCommentDto
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? userId = freezed,
-    Object? username = null,
-    Object? content = null,
-    Object? createTime = null,
-    Object? projectId = freezed,
-    Object? projectName = null,
-    Object? quote = freezed,
-  }) {
-    return _then(
-      _$DiscussionCommentDtoImpl(
-        id: freezed == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                  as int?,
-        userId: freezed == userId
-            ? _value.userId
-            : userId // ignore: cast_nullable_to_non_nullable
-                  as int?,
-        username: null == username
-            ? _value.username
-            : username // ignore: cast_nullable_to_non_nullable
-                  as String,
-        content: null == content
-            ? _value.content
-            : content // ignore: cast_nullable_to_non_nullable
-                  as String,
-        createTime: null == createTime
-            ? _value.createTime
-            : createTime // ignore: cast_nullable_to_non_nullable
-                  as String,
-        projectId: freezed == projectId
-            ? _value.projectId
-            : projectId // ignore: cast_nullable_to_non_nullable
-                  as int?,
-        projectName: null == projectName
-            ? _value.projectName
-            : projectName // ignore: cast_nullable_to_non_nullable
-                  as String,
-        quote: freezed == quote
-            ? _value.quote
-            : quote // ignore: cast_nullable_to_non_nullable
-                  as DiscussionQuoteDto?,
-      ),
-    );
-  }
+/// Adds pattern-matching-related methods to [DiscussionCommentDto].
+extension DiscussionCommentDtoPatterns on DiscussionCommentDto {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _DiscussionCommentDto value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _DiscussionCommentDto() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _DiscussionCommentDto value)  $default,){
+final _that = this;
+switch (_that) {
+case _DiscussionCommentDto():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _DiscussionCommentDto value)?  $default,){
+final _that = this;
+switch (_that) {
+case _DiscussionCommentDto() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _toNullableInt)  int? id, @JsonKey(fromJson: _toNullableInt)  int? userId,  String username,  String? avatar,  String content,  String createTime, @JsonKey(fromJson: _toNullableInt)  int? projectId,  String projectName, @JsonKey(fromJson: _quoteFromJson)  DiscussionQuoteDto? quote)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _DiscussionCommentDto() when $default != null:
+return $default(_that.id,_that.userId,_that.username,_that.avatar,_that.content,_that.createTime,_that.projectId,_that.projectName,_that.quote);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _toNullableInt)  int? id, @JsonKey(fromJson: _toNullableInt)  int? userId,  String username,  String? avatar,  String content,  String createTime, @JsonKey(fromJson: _toNullableInt)  int? projectId,  String projectName, @JsonKey(fromJson: _quoteFromJson)  DiscussionQuoteDto? quote)  $default,) {final _that = this;
+switch (_that) {
+case _DiscussionCommentDto():
+return $default(_that.id,_that.userId,_that.username,_that.avatar,_that.content,_that.createTime,_that.projectId,_that.projectName,_that.quote);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(fromJson: _toNullableInt)  int? id, @JsonKey(fromJson: _toNullableInt)  int? userId,  String username,  String? avatar,  String content,  String createTime, @JsonKey(fromJson: _toNullableInt)  int? projectId,  String projectName, @JsonKey(fromJson: _quoteFromJson)  DiscussionQuoteDto? quote)?  $default,) {final _that = this;
+switch (_that) {
+case _DiscussionCommentDto() when $default != null:
+return $default(_that.id,_that.userId,_that.username,_that.avatar,_that.content,_that.createTime,_that.projectId,_that.projectName,_that.quote);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$DiscussionCommentDtoImpl implements _DiscussionCommentDto {
-  const _$DiscussionCommentDtoImpl({
-    @JsonKey(fromJson: _toNullableInt) this.id,
-    @JsonKey(fromJson: _toNullableInt) this.userId,
-    this.username = '',
-    this.content = '',
-    this.createTime = '',
-    @JsonKey(fromJson: _toNullableInt) this.projectId,
-    this.projectName = '',
-    @JsonKey(fromJson: _quoteFromJson) this.quote,
+
+class _DiscussionCommentDto implements DiscussionCommentDto {
+  const _DiscussionCommentDto({@JsonKey(fromJson: _toNullableInt) this.id, @JsonKey(fromJson: _toNullableInt) this.userId, this.username = '', this.avatar, this.content = '', this.createTime = '', @JsonKey(fromJson: _toNullableInt) this.projectId, this.projectName = '', @JsonKey(fromJson: _quoteFromJson) this.quote});
+  factory _DiscussionCommentDto.fromJson(Map<String, dynamic> json) => _$DiscussionCommentDtoFromJson(json);
+
+@override@JsonKey(fromJson: _toNullableInt) final  int? id;
+@override@JsonKey(fromJson: _toNullableInt) final  int? userId;
+@override@JsonKey() final  String username;
+@override final  String? avatar;
+@override@JsonKey() final  String content;
+@override@JsonKey() final  String createTime;
+@override@JsonKey(fromJson: _toNullableInt) final  int? projectId;
+@override@JsonKey() final  String projectName;
+@override@JsonKey(fromJson: _quoteFromJson) final  DiscussionQuoteDto? quote;
+
+/// Create a copy of DiscussionCommentDto
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$DiscussionCommentDtoCopyWith<_DiscussionCommentDto> get copyWith => __$DiscussionCommentDtoCopyWithImpl<_DiscussionCommentDto>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$DiscussionCommentDtoToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DiscussionCommentDto&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.username, username) || other.username == username)&&(identical(other.avatar, avatar) || other.avatar == avatar)&&(identical(other.content, content) || other.content == content)&&(identical(other.createTime, createTime) || other.createTime == createTime)&&(identical(other.projectId, projectId) || other.projectId == projectId)&&(identical(other.projectName, projectName) || other.projectName == projectName)&&(identical(other.quote, quote) || other.quote == quote));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,userId,username,avatar,content,createTime,projectId,projectName,quote);
+
+@override
+String toString() {
+  return 'DiscussionCommentDto(id: $id, userId: $userId, username: $username, avatar: $avatar, content: $content, createTime: $createTime, projectId: $projectId, projectName: $projectName, quote: $quote)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$DiscussionCommentDtoCopyWith<$Res> implements $DiscussionCommentDtoCopyWith<$Res> {
+  factory _$DiscussionCommentDtoCopyWith(_DiscussionCommentDto value, $Res Function(_DiscussionCommentDto) _then) = __$DiscussionCommentDtoCopyWithImpl;
+@override @useResult
+$Res call({
+@JsonKey(fromJson: _toNullableInt) int? id,@JsonKey(fromJson: _toNullableInt) int? userId, String username, String? avatar, String content, String createTime,@JsonKey(fromJson: _toNullableInt) int? projectId, String projectName,@JsonKey(fromJson: _quoteFromJson) DiscussionQuoteDto? quote
+});
+
+
+@override $DiscussionQuoteDtoCopyWith<$Res>? get quote;
+
+}
+/// @nodoc
+class __$DiscussionCommentDtoCopyWithImpl<$Res>
+    implements _$DiscussionCommentDtoCopyWith<$Res> {
+  __$DiscussionCommentDtoCopyWithImpl(this._self, this._then);
+
+  final _DiscussionCommentDto _self;
+  final $Res Function(_DiscussionCommentDto) _then;
+
+/// Create a copy of DiscussionCommentDto
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? userId = freezed,Object? username = null,Object? avatar = freezed,Object? content = null,Object? createTime = null,Object? projectId = freezed,Object? projectName = null,Object? quote = freezed,}) {
+  return _then(_DiscussionCommentDto(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,userId: freezed == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as int?,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
+as String,avatar: freezed == avatar ? _self.avatar : avatar // ignore: cast_nullable_to_non_nullable
+as String?,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String,createTime: null == createTime ? _self.createTime : createTime // ignore: cast_nullable_to_non_nullable
+as String,projectId: freezed == projectId ? _self.projectId : projectId // ignore: cast_nullable_to_non_nullable
+as int?,projectName: null == projectName ? _self.projectName : projectName // ignore: cast_nullable_to_non_nullable
+as String,quote: freezed == quote ? _self.quote : quote // ignore: cast_nullable_to_non_nullable
+as DiscussionQuoteDto?,
+  ));
+}
+
+/// Create a copy of DiscussionCommentDto
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$DiscussionQuoteDtoCopyWith<$Res>? get quote {
+    if (_self.quote == null) {
+    return null;
+  }
+
+  return $DiscussionQuoteDtoCopyWith<$Res>(_self.quote!, (value) {
+    return _then(_self.copyWith(quote: value));
   });
-
-  factory _$DiscussionCommentDtoImpl.fromJson(Map<String, dynamic> json) =>
-      _$$DiscussionCommentDtoImplFromJson(json);
-
-  @override
-  @JsonKey(fromJson: _toNullableInt)
-  final int? id;
-  @override
-  @JsonKey(fromJson: _toNullableInt)
-  final int? userId;
-  @override
-  @JsonKey()
-  final String username;
-  @override
-  @JsonKey()
-  final String content;
-  @override
-  @JsonKey()
-  final String createTime;
-  @override
-  @JsonKey(fromJson: _toNullableInt)
-  final int? projectId;
-  @override
-  @JsonKey()
-  final String projectName;
-  @override
-  @JsonKey(fromJson: _quoteFromJson)
-  final DiscussionQuoteDto? quote;
-
-  @override
-  String toString() {
-    return 'DiscussionCommentDto(id: $id, userId: $userId, username: $username, content: $content, createTime: $createTime, projectId: $projectId, projectName: $projectName, quote: $quote)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$DiscussionCommentDtoImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.userId, userId) || other.userId == userId) &&
-            (identical(other.username, username) ||
-                other.username == username) &&
-            (identical(other.content, content) || other.content == content) &&
-            (identical(other.createTime, createTime) ||
-                other.createTime == createTime) &&
-            (identical(other.projectId, projectId) ||
-                other.projectId == projectId) &&
-            (identical(other.projectName, projectName) ||
-                other.projectName == projectName) &&
-            (identical(other.quote, quote) || other.quote == quote));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    id,
-    userId,
-    username,
-    content,
-    createTime,
-    projectId,
-    projectName,
-    quote,
-  );
-
-  /// Create a copy of DiscussionCommentDto
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$DiscussionCommentDtoImplCopyWith<_$DiscussionCommentDtoImpl>
-  get copyWith =>
-      __$$DiscussionCommentDtoImplCopyWithImpl<_$DiscussionCommentDtoImpl>(
-        this,
-        _$identity,
-      );
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$DiscussionCommentDtoImplToJson(this);
-  }
+}
 }
 
-abstract class _DiscussionCommentDto implements DiscussionCommentDto {
-  const factory _DiscussionCommentDto({
-    @JsonKey(fromJson: _toNullableInt) final int? id,
-    @JsonKey(fromJson: _toNullableInt) final int? userId,
-    final String username,
-    final String content,
-    final String createTime,
-    @JsonKey(fromJson: _toNullableInt) final int? projectId,
-    final String projectName,
-    @JsonKey(fromJson: _quoteFromJson) final DiscussionQuoteDto? quote,
-  }) = _$DiscussionCommentDtoImpl;
-
-  factory _DiscussionCommentDto.fromJson(Map<String, dynamic> json) =
-      _$DiscussionCommentDtoImpl.fromJson;
-
-  @override
-  @JsonKey(fromJson: _toNullableInt)
-  int? get id;
-  @override
-  @JsonKey(fromJson: _toNullableInt)
-  int? get userId;
-  @override
-  String get username;
-  @override
-  String get content;
-  @override
-  String get createTime;
-  @override
-  @JsonKey(fromJson: _toNullableInt)
-  int? get projectId;
-  @override
-  String get projectName;
-  @override
-  @JsonKey(fromJson: _quoteFromJson)
-  DiscussionQuoteDto? get quote;
-
-  /// Create a copy of DiscussionCommentDto
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$DiscussionCommentDtoImplCopyWith<_$DiscussionCommentDtoImpl>
-  get copyWith => throw _privateConstructorUsedError;
-}
+// dart format on

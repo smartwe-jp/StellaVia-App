@@ -42,6 +42,38 @@ class AppLocalizationsJa extends AppLocalizations {
   String get commonCancel => 'キャンセル';
 
   @override
+  String get discussionAvatarPageTitle => 'アイコン画像';
+
+  @override
+  String get discussionAvatarPreviewHint =>
+      'デフォルトアイコンを選ぶか、アルバムから画像をアップロードしてください。';
+
+  @override
+  String get discussionAvatarDefaultSectionTitle => 'デフォルトアイコン';
+
+  @override
+  String get discussionAvatarSaveAction => 'アイコンを保存';
+
+  @override
+  String get discussionAvatarSaveSuccess => 'アイコン画像を更新しました。';
+
+  @override
+  String get discussionAvatarPickFailed => '画像の選択に失敗しました。もう一度お試しください。';
+
+  @override
+  String get discussionAvatarPhotoLibraryPermissionRequired =>
+      '写真ライブラリへのアクセスを許可してください。';
+
+  @override
+  String get discussionAvatarCropTitle => 'アイコンを調整';
+
+  @override
+  String get discussionAvatarCropHint => '画像をドラッグして、ピンチで拡大・縮小し、円形の範囲に合わせてください。';
+
+  @override
+  String get discussionAvatarCropApplyAction => 'この画像を使用';
+
+  @override
   String get commonOpenSettings => '設定を開く';
 
   @override
