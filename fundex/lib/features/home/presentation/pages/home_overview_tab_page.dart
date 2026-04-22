@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/network/app_network_connectivity_providers.dart';
@@ -24,7 +25,7 @@ import '../../../settings/presentation/providers/settings_two_factor_providers.d
 import '../support/home_display_name_resolver.dart';
 
 const Set<int> _featuredProjectStatuses = <int>{0, 1};
-const int _operatingProjectStatus = 4;
+final Uri _officialSiteUri = Uri.parse('https://stellavia.co.jp/');
 
 class HomeOverviewTabPage extends ConsumerWidget {
   const HomeOverviewTabPage({super.key});
@@ -149,14 +150,6 @@ class HomeOverviewTabPage extends ConsumerWidget {
         )
         .take(6)
         .toList(growable: false);
-    final activeProjects = projects
-        .where(
-          (FundProject project) =>
-              project.projectStatus == _operatingProjectStatus,
-        )
-        .take(3)
-        .toList(growable: false);
-
     final featuredFundCards = featuredProjects
         .map(
           (FundProject project) => FundFeaturedFundCard(
@@ -166,13 +159,6 @@ class HomeOverviewTabPage extends ConsumerWidget {
               currencyFormatter,
             ),
             yieldLabel: l10n.homeEstimatedYieldLabel,
-          ),
-        )
-        .toList(growable: false);
-    final activeFundCards = activeProjects
-        .map(
-          (FundProject project) => FundActiveFundCard(
-            data: _buildActiveFundCardData(context, project),
           ),
         )
         .toList(growable: false);
@@ -339,19 +325,15 @@ class HomeOverviewTabPage extends ConsumerWidget {
                   //     height: 262,
                   //     children: secondaryMarketCards,
                   //   ),
-                  if (activeFundCards.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: UiTokens.spacing16,
-                      ),
-                      child: FundSectionList(
-                        title: l10n.homeActiveFundsTitle,
-                        actionLabel: l10n.homeViewAllAction,
-                        onActionTap: () => context.go('/funds'),
-                        initialVisibleCount: 3,
-                        children: activeFundCards,
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: UiTokens.spacing16,
                     ),
+                    child: _HomeOfficialSiteLink(
+                      label: l10n.homeOfficialSiteAction,
+                      onTap: () => _openOfficialSite(context),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -458,6 +440,67 @@ class _HomeGuestRegisterBonusBar extends StatelessWidget {
   }
 }
 
+class _HomeOfficialSiteLink extends StatelessWidget {
+  const _HomeOfficialSiteLink({required this.label, required this.onTap});
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final baseFontSize = appText.bodyStrong.fontSize ?? 14;
+
+    return Align(
+      alignment: Alignment.center,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(UiTokens.radius12),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: colors.highlightGold.withValues(alpha: 0.72),
+                    width: 1,
+                  ),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 3),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      label,
+                      style: appText.bodyStrong.copyWith(
+                        color: colors.highlightGold,
+                        fontSize: baseFontSize * 1.2,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Icon(
+                      Icons.north_east_rounded,
+                      size: 22,
+                      color: colors.highlightGold,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 Future<void> _refreshHomeOverviewTab(WidgetRef ref) async {
   ref.invalidate(fundProjectListProvider);
   ref.invalidate(memberProfileDetailsProvider);
@@ -469,6 +512,17 @@ Future<void> _refreshHomeOverviewTab(WidgetRef ref) async {
     ref.refresh(myPageAccountStatisticProvider.future).then((_) {}),
     ref.refresh(secondaryMarketMarketplaceListProvider.future).then((_) {}),
   ]);
+}
+
+Future<void> _openOfficialSite(BuildContext context) async {
+  final launched = await launchUrl(
+    _officialSiteUri,
+    mode: LaunchMode.externalApplication,
+  );
+  if (launched || !context.mounted) {
+    return;
+  }
+  AppNotice.show(context, message: context.l10n.homeOfficialSiteOpenFailed);
 }
 
 bool _shouldShowMemberProfileReminder(
@@ -507,40 +561,6 @@ FundFeaturedFundCardData _buildFeaturedFundCardData(
     ],
     artworkGradientColors: _featuredArtworkGradientColors(context, status),
     imageUrls: project.photos,
-    onTap: () => context.push('/funds/${project.id}'),
-  );
-}
-
-FundActiveFundCardData _buildActiveFundCardData(
-  BuildContext context,
-  FundProject project,
-) {
-  final locale = Localizations.localeOf(context);
-  final currencyFormatter = NumberFormat.currency(
-    locale: locale.toLanguageTag(),
-    symbol: '¥',
-    decimalDigits: 0,
-  );
-  final operationPeriod = _formatOperationPeriod(
-    context,
-    project.scheduledStartDate,
-    project.scheduledEndDate,
-  );
-
-  return FundActiveFundCardData(
-    title: project.projectName,
-    annualYield: resolveFundProjectYieldDisplay(project),
-    annualYieldColor: Theme.of(context).appColors.highlightGold,
-    rows: <FundLabeledValue>[
-      FundLabeledValue(
-        label: context.l10n.fundDetailFundTotalLabel,
-        value: _formatCurrency(project.amountApplication, currencyFormatter),
-      ),
-      FundLabeledValue(
-        label: context.l10n.fundListPeriodLabel,
-        value: operationPeriod ?? context.l10n.myPageResultAnnouncementTbd,
-      ),
-    ],
     onTap: () => context.push('/funds/${project.id}'),
   );
 }
@@ -833,18 +853,4 @@ String _formatDateForLocale(DateTime value, Locale locale) {
     return DateFormat.yMd('zh').format(value);
   }
   return DateFormat.yMMMd(locale.toLanguageTag()).format(value);
-}
-
-String? _formatOperationPeriod(
-  BuildContext context,
-  String? start,
-  String? end,
-) {
-  final locale = Localizations.localeOf(context);
-  final startDate = _parseDateTime(start);
-  final endDate = _parseDateTime(end);
-  if (startDate == null || endDate == null) {
-    return null;
-  }
-  return '${_formatDateForLocale(startDate, locale)}～${_formatDateForLocale(endDate, locale)}';
 }

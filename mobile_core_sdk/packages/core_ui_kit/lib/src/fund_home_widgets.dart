@@ -1056,6 +1056,7 @@ class FundFeaturedFundCard extends StatelessWidget {
                             : FundHeroMediaBackground(
                                 gradientColors: artworkGradientColors,
                                 imageUrls: data.imageUrls,
+                                showArtworkOverlay: false,
                               ),
                       ),
                     ),

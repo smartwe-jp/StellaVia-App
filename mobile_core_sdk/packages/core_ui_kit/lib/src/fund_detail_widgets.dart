@@ -64,6 +64,7 @@ class FundHeroMediaBackground extends StatefulWidget {
     super.key,
     required this.gradientColors,
     this.imageUrls = const <String>[],
+    this.showArtworkOverlay = true,
     this.pageController,
     this.onPageChanged,
     this.onImageTap,
@@ -73,6 +74,7 @@ class FundHeroMediaBackground extends StatefulWidget {
 
   final List<Color> gradientColors;
   final List<String> imageUrls;
+  final bool showArtworkOverlay;
   final PageController? pageController;
   final ValueChanged<int>? onPageChanged;
   final ValueChanged<int>? onImageTap;
@@ -218,6 +220,7 @@ class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground>
     if (images.isEmpty) {
       return _FundDetailHeroFallbackBackground(
         gradientColors: widget.gradientColors,
+        showArtworkOverlay: widget.showArtworkOverlay,
       );
     }
 
@@ -247,6 +250,7 @@ class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground>
               children: <Widget>[
                 _FundDetailHeroFallbackBackground(
                   gradientColors: widget.gradientColors,
+                  showArtworkOverlay: widget.showArtworkOverlay,
                 ),
                 Image.network(
                   images[index],
@@ -349,10 +353,7 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
     }
     final halfWindow = _maxVisibleIndicators ~/ 2;
     final maxStart = imageCount - _maxVisibleIndicators;
-    final start = math.max(
-      0,
-      math.min(_currentIndex - halfWindow, maxStart),
-    );
+    final start = math.max(0, math.min(_currentIndex - halfWindow, maxStart));
     return List<int>.generate(
       _maxVisibleIndicators,
       (int offset) => start + offset,
@@ -1132,9 +1133,13 @@ class _DefaultMediaPlaceholder extends StatelessWidget {
 }
 
 class _FundDetailHeroFallbackBackground extends StatelessWidget {
-  const _FundDetailHeroFallbackBackground({required this.gradientColors});
+  const _FundDetailHeroFallbackBackground({
+    required this.gradientColors,
+    this.showArtworkOverlay = true,
+  });
 
   final List<Color> gradientColors;
+  final bool showArtworkOverlay;
 
   @override
   Widget build(BuildContext context) {
@@ -1150,7 +1155,7 @@ class _FundDetailHeroFallbackBackground extends StatelessWidget {
             ),
           ),
         ),
-        const _FundDetailArtworkLayer(),
+        if (showArtworkOverlay) const _FundDetailArtworkLayer(),
       ],
     );
   }
@@ -1233,35 +1238,80 @@ class _DisclosureTile extends StatelessWidget {
 class _FundDetailArtworkLayer extends StatelessWidget {
   const _FundDetailArtworkLayer();
 
+  static const double _designTopPadding = 40;
+  static const double _designBottomPadding = 26;
+  static const double _designHorizontalPadding = 24;
+  static const double _designHeight =
+      142 + _designTopPadding + _designBottomPadding;
+
   @override
   Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 40, 24, 26),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const <Widget>[
-              _HeroBlock(height: 112, width: 30),
-              _HeroBlock(height: 142, width: 38),
-              _HeroBlock(height: 96, width: 28),
-              _HeroBlock(height: 126, width: 34),
-              _HeroBlock(height: 84, width: 24),
-            ],
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final maxHeight = constraints.maxHeight;
+        final scale = maxHeight.isFinite && maxHeight > 0
+            ? math.min(1.0, maxHeight / _designHeight)
+            : 1.0;
+
+        return IgnorePointer(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(
+                _designHorizontalPadding * scale,
+                _designTopPadding * scale,
+                _designHorizontalPadding * scale,
+                _designBottomPadding * scale,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  _HeroBlock(
+                    height: 112 * scale,
+                    width: 30 * scale,
+                    scale: scale,
+                  ),
+                  _HeroBlock(
+                    height: 142 * scale,
+                    width: 38 * scale,
+                    scale: scale,
+                  ),
+                  _HeroBlock(
+                    height: 96 * scale,
+                    width: 28 * scale,
+                    scale: scale,
+                  ),
+                  _HeroBlock(
+                    height: 126 * scale,
+                    width: 34 * scale,
+                    scale: scale,
+                  ),
+                  _HeroBlock(
+                    height: 84 * scale,
+                    width: 24 * scale,
+                    scale: scale,
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
 
 class _HeroBlock extends StatelessWidget {
-  const _HeroBlock({required this.height, required this.width});
+  const _HeroBlock({
+    required this.height,
+    required this.width,
+    required this.scale,
+  });
 
   final double height;
   final double width;
+  final double scale;
 
   @override
   Widget build(BuildContext context) {
@@ -1277,13 +1327,13 @@ class _HeroBlock extends StatelessWidget {
         children: List<Widget>.generate(
           6,
           (int index) => Padding(
-            padding: const EdgeInsets.only(top: 5),
+            padding: EdgeInsets.only(top: 5 * scale),
             child: Container(
               width: width * 0.28,
-              height: 4,
+              height: 4 * scale,
               decoration: BoxDecoration(
                 color: colors.onDark.withValues(alpha: 0.24),
-                borderRadius: BorderRadius.circular(1),
+                borderRadius: BorderRadius.circular(math.max(0.5, scale)),
               ),
             ),
           ),

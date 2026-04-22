@@ -18,6 +18,16 @@ enum AppLanguage {
   final String? languageCode;
   final String? scriptCode;
 
+  String get nativeLabel {
+    return switch (this) {
+      AppLanguage.system => 'System',
+      AppLanguage.zh => '简体中文',
+      AppLanguage.zhHant => '繁體中文',
+      AppLanguage.en => 'English',
+      AppLanguage.ja => '日本語',
+    };
+  }
+
   String? get storageCode {
     final code = languageCode;
     if (code == null) {

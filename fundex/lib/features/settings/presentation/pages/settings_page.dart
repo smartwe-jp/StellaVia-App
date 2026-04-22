@@ -185,14 +185,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   String _languageLabel(AppLanguage language) {
-    final l10n = context.l10n;
-    return switch (language) {
-      AppLanguage.system => l10n.languageFollowSystem,
-      AppLanguage.zh => l10n.languageChinese,
-      AppLanguage.zhHant => l10n.languageTraditionalChinese,
-      AppLanguage.en => l10n.languageEnglish,
-      AppLanguage.ja => l10n.languageJapanese,
-    };
+    return language.nativeLabel;
   }
 
   String _themeLabel(AppThemePreference preference) {
