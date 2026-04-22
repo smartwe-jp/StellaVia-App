@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'app_remote_image.dart';
 import 'app_theme_extensions.dart';
 
 class KizunarkGradientHeader extends StatelessWidget {
@@ -141,8 +142,7 @@ class KizunarkAvatarBadge extends StatelessWidget {
         : gradientColors;
     final normalizedImageUrl = imageUrl?.trim() ?? '';
     final resolvedImageProvider =
-        imageProvider ??
-        (normalizedImageUrl.isEmpty ? null : NetworkImage(normalizedImageUrl));
+        imageProvider ?? appCachedImageProvider(normalizedImageUrl);
 
     Widget buildFallback() {
       if (usePersonIconFallback || text.trim().isEmpty) {

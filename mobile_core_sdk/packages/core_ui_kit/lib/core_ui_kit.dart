@@ -10,6 +10,7 @@ export 'src/app_network_status_bar.dart';
 export 'src/app_filter_bar.dart';
 export 'src/app_navigation_bar.dart';
 export 'src/app_underlined_tab_bar.dart';
+export 'src/app_remote_image.dart';
 export 'src/app_image_viewer.dart';
 export 'src/app_pdf_viewer.dart';
 export 'src/app_web_viewer.dart';

@@ -105,12 +105,6 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            // const SizedBox(height: 10),
-                            // _ActiveFundProgressBar(
-                            //   value: data.progress ?? 0,
-                            //   activeColor: colors.highlightGold,
-                            //   trackColor: colors.border,
-                            // ),
                           ],
                         ),
                       ),
@@ -179,11 +173,12 @@ class _ActiveFundThumbnail extends StatelessWidget {
           child: imageUrl != null && imageUrl.isNotEmpty
               ? DecoratedBox(
                   decoration: BoxDecoration(color: colors.primary),
-                  child: Image.network(
-                    imageUrl,
+                  child: AppRemoteImage(
+                    imageUrl: imageUrl,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) =>
-                        _ActiveFundThumbnailPlaceholder(colors: colors),
+                    errorWidget: _ActiveFundThumbnailPlaceholder(
+                      colors: colors,
+                    ),
                   ),
                 )
               : _ActiveFundThumbnailPlaceholder(colors: colors),
@@ -207,41 +202,6 @@ class _ActiveFundThumbnailPlaceholder extends StatelessWidget {
           Icons.apartment_rounded,
           size: 20,
           color: colors.highlightGold,
-        ),
-      ),
-    );
-  }
-}
-
-class _ActiveFundProgressBar extends StatelessWidget {
-  const _ActiveFundProgressBar({
-    required this.value,
-    required this.activeColor,
-    required this.trackColor,
-  });
-
-  final double value;
-  final Color activeColor;
-  final Color trackColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(99),
-      child: SizedBox(
-        height: 3,
-        child: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            DecoratedBox(decoration: BoxDecoration(color: trackColor)),
-            FractionallySizedBox(
-              alignment: Alignment.centerLeft,
-              widthFactor: value.clamp(0.0, 1.0),
-              child: DecoratedBox(
-                decoration: BoxDecoration(color: activeColor),
-              ),
-            ),
-          ],
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 
+import 'app_remote_image.dart';
 import 'app_theme_extensions.dart';
 import 'fund_favorite_button.dart';
 import 'ui_buttons.dart';
@@ -245,30 +246,13 @@ class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground>
             onTap: widget.onImageTap == null
                 ? null
                 : () => widget.onImageTap!(index),
-            child: Stack(
-              fit: StackFit.expand,
-              children: <Widget>[
-                _FundDetailHeroFallbackBackground(
-                  gradientColors: widget.gradientColors,
-                  showArtworkOverlay: widget.showArtworkOverlay,
-                ),
-                Image.network(
-                  images[index],
-                  fit: BoxFit.cover,
-                  loadingBuilder:
-                      (
-                        BuildContext context,
-                        Widget child,
-                        ImageChunkEvent? loadingProgress,
-                      ) {
-                        if (loadingProgress == null) {
-                          return child;
-                        }
-                        return const SizedBox.shrink();
-                      },
-                  errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-                ),
-              ],
+            child: SizedBox.expand(
+              child: AppRemoteImage(
+                imageUrl: images[index],
+                fit: BoxFit.cover,
+                placeholder: const SizedBox.shrink(),
+                errorWidget: const SizedBox.shrink(),
+              ),
             ),
           );
         },
@@ -599,17 +583,11 @@ class FundDetailMediaPreview extends StatelessWidget {
               ),
             ),
             if (imageUrl != null && imageUrl!.trim().isNotEmpty)
-              Image.network(
-                imageUrl!,
+              AppRemoteImage(
+                imageUrl: imageUrl!,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) =>
-                    placeholder ?? const _DefaultMediaPlaceholder(),
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) {
-                    return child;
-                  }
-                  return placeholder ?? const _DefaultMediaPlaceholder();
-                },
+                placeholder: placeholder ?? const _DefaultMediaPlaceholder(),
+                errorWidget: placeholder ?? const _DefaultMediaPlaceholder(),
               )
             else
               placeholder ?? const _DefaultMediaPlaceholder(),
