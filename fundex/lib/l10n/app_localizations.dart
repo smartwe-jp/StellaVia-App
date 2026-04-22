@@ -1799,6 +1799,12 @@ abstract class AppLocalizations {
   /// **'Period'**
   String get fundListPeriodLabel;
 
+  /// No description provided for @fundListMinimumInvestmentValue.
+  ///
+  /// In en, this message translates to:
+  /// **'From JPY {amount}'**
+  String fundListMinimumInvestmentValue(Object amount);
+
   /// No description provided for @fundListMethodLabel.
   ///
   /// In en, this message translates to:

@@ -260,7 +260,7 @@
   "homeReminderCoolingOffAction": "办理取消",
   "homeFeaturedFundsTitle": "注目基金",
   "homeViewAllAction": "查看全部",
-  "homeOfficialSiteAction": "StellaVia Office Site",
+  "homeOfficialSiteAction": "StellaVia 官网",
   "homeOfficialSiteOpenFailed": "无法打开官网。",
   "homeEstimatedYieldLabel": "预计年化",
   "homeFreeMarketTitle": "自由市场",
@@ -298,6 +298,12 @@
   "fundListFilterFailed": "募集失败",
   "fundListYieldLabel": "收益率",
   "fundListPeriodLabel": "运用期间",
+  "fundListMinimumInvestmentValue": "{amount}日元起",
+  "@fundListMinimumInvestmentValue": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
   "fundListMethodLabel": "募集方式",
   "fundListMethodLottery": "抽选",
   "fundListGainTypeIncomeGain": "旅馆运营",

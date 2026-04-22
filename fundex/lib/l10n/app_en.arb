@@ -298,6 +298,12 @@
   "fundListFilterFailed": "Failed",
   "fundListYieldLabel": "Yield",
   "fundListPeriodLabel": "Period",
+  "fundListMinimumInvestmentValue": "From JPY {amount}",
+  "@fundListMinimumInvestmentValue": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
   "fundListMethodLabel": "Method",
   "fundListMethodLottery": "Lottery",
   "fundListGainTypeIncomeGain": "Income Gain",

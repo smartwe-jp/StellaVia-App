@@ -28,6 +28,9 @@ class FundProject {
     this.periodType,
     this.times,
     this.accountId,
+    this.features,
+    this.videoLink,
+    this.subordinatedRatio,
     this.liveJapanBank,
     this.detailData = const <String, Object?>{},
     this.photos = const <String>[],
@@ -60,6 +63,9 @@ class FundProject {
   final String? periodType;
   final int? times;
   final String? accountId;
+  final String? features;
+  final String? videoLink;
+  final String? subordinatedRatio;
   final FundProjectLiveJapanBank? liveJapanBank;
   final Map<String, Object?> detailData;
   final List<String> photos;

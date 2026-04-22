@@ -260,7 +260,7 @@
   "homeReminderCoolingOffAction": "取消手続き",
   "homeFeaturedFundsTitle": "注目ファンド",
   "homeViewAllAction": "一覧を見る",
-  "homeOfficialSiteAction": "StellaVia Office Site",
+  "homeOfficialSiteAction": "StellaVia公式サイト",
   "homeOfficialSiteOpenFailed": "公式サイトを開けませんでした。",
   "homeEstimatedYieldLabel": "想定利回り",
   "homeFreeMarketTitle": "フリーマーケット",
@@ -298,6 +298,12 @@
   "fundListFilterFailed": "募集失敗",
   "fundListYieldLabel": "利回り",
   "fundListPeriodLabel": "運用期間",
+  "fundListMinimumInvestmentValue": "{amount}円〜",
+  "@fundListMinimumInvestmentValue": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
   "fundListMethodLabel": "募集方式",
   "fundListMethodLottery": "抽選",
   "fundListGainTypeIncomeGain": "インカムゲイン",

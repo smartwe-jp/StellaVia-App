@@ -936,6 +936,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundListPeriodLabel => 'Period';
 
   @override
+  String fundListMinimumInvestmentValue(Object amount) {
+    return 'From JPY $amount';
+  }
+
+  @override
   String get fundListMethodLabel => 'Method';
 
   @override

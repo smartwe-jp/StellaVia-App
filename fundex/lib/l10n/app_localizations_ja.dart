@@ -768,7 +768,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeViewAllAction => '一覧を見る';
 
   @override
-  String get homeOfficialSiteAction => 'StellaVia Office Site';
+  String get homeOfficialSiteAction => 'StellaVia公式サイト';
 
   @override
   String get homeOfficialSiteOpenFailed => '公式サイトを開けませんでした。';
@@ -880,6 +880,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get fundListPeriodLabel => '運用期間';
+
+  @override
+  String fundListMinimumInvestmentValue(Object amount) {
+    return '$amount円〜';
+  }
 
   @override
   String get fundListMethodLabel => '募集方式';

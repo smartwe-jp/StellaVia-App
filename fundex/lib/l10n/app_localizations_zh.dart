@@ -755,7 +755,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeViewAllAction => '查看全部';
 
   @override
-  String get homeOfficialSiteAction => 'StellaVia Office Site';
+  String get homeOfficialSiteAction => 'StellaVia 官网';
 
   @override
   String get homeOfficialSiteOpenFailed => '无法打开官网。';
@@ -867,6 +867,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get fundListPeriodLabel => '运用期间';
+
+  @override
+  String fundListMinimumInvestmentValue(Object amount) {
+    return '$amount日元起';
+  }
 
   @override
   String get fundListMethodLabel => '募集方式';
@@ -4619,7 +4624,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeViewAllAction => '查看全部';
 
   @override
-  String get homeOfficialSiteAction => 'StellaVia Office Site';
+  String get homeOfficialSiteAction => 'StellaVia 官方網站';
 
   @override
   String get homeOfficialSiteOpenFailed => '無法打開官網。';
@@ -4731,6 +4736,11 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get fundListPeriodLabel => '運用期間';
+
+  @override
+  String fundListMinimumInvestmentValue(Object amount) {
+    return '$amount日圓起';
+  }
 
   @override
   String get fundListMethodLabel => '募資方式';

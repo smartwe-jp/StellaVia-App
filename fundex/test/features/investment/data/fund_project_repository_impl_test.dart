@@ -109,6 +109,9 @@ void main() {
           operatingCompany: '運営会社',
           operatingCompanyAccount: 127005,
           accountId: '48978',
+          features: '駅近・高稼働エリア',
+          videoLink: 'https://cdn.example.com/project.mp4',
+          subordinatedRatio: '30%',
           liveJapanBank: FundProjectLiveJapanBankDto(
             bankName: 'みずほ銀行',
             branchBankName: '船場支店',
@@ -130,6 +133,9 @@ void main() {
       expect(entity.operatingCompany, '運営会社');
       expect(entity.operatingCompanyAccount, 127005);
       expect(entity.accountId, '48978');
+      expect(entity.features, '駅近・高稼働エリア');
+      expect(entity.videoLink, 'https://cdn.example.com/project.mp4');
+      expect(entity.subordinatedRatio, '30%');
       expect(entity.liveJapanBank?.bankName, 'みずほ銀行');
       expect(entity.liveJapanBank?.branchBankName, '船場支店');
       expect(entity.liveJapanBank?.bankNumber, '普通3081072');

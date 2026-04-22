@@ -260,7 +260,7 @@
   "homeReminderCoolingOffAction": "取消手續",
   "homeFeaturedFundsTitle": "精選基金",
   "homeViewAllAction": "查看全部",
-  "homeOfficialSiteAction": "StellaVia Office Site",
+  "homeOfficialSiteAction": "StellaVia 官方網站",
   "homeOfficialSiteOpenFailed": "無法打開官網。",
   "homeEstimatedYieldLabel": "預期收益率",
   "homeFreeMarketTitle": "自由市場",
@@ -298,6 +298,12 @@
   "fundListFilterFailed": "募集失敗",
   "fundListYieldLabel": "收益率",
   "fundListPeriodLabel": "運用期間",
+  "fundListMinimumInvestmentValue": "{amount}日圓起",
+  "@fundListMinimumInvestmentValue": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
   "fundListMethodLabel": "募資方式",
   "fundListMethodLottery": "抽籤",
   "fundListGainTypeIncomeGain": "旅館營運",

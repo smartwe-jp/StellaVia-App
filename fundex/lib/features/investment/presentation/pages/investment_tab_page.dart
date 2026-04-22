@@ -78,6 +78,11 @@ class InvestmentTabPage extends ConsumerStatefulWidget {
 class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
   _FundListFilter _selectedFilter = _FundListFilter.all;
 
+  _FundListFilter get _effectiveSelectedFilter =>
+      _selectedFilter == _FundListFilter.completed
+      ? _FundListFilter.all
+      : _selectedFilter;
+
   List<_FundListFilterOption> _buildFilterOptions(BuildContext context) {
     final l10n = context.l10n;
     return <_FundListFilterOption>[
@@ -88,10 +93,6 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
       _FundListFilterOption(
         filter: _FundListFilter.opening,
         label: l10n.fundListFilterOpen,
-      ),
-      _FundListFilterOption(
-        filter: _FundListFilter.completed,
-        label: l10n.fundListFilterCompleted,
       ),
       _FundListFilterOption(
         filter: _FundListFilter.operating,
@@ -119,14 +120,15 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
     List<FundProject> projects,
     Set<String> favoriteIds,
   ) {
-    if (_selectedFilter == _FundListFilter.favorites) {
+    final effectiveFilter = _effectiveSelectedFilter;
+    if (effectiveFilter == _FundListFilter.favorites) {
       return projects
           .where(
             (FundProject project) => favoriteIds.contains(project.id.trim()),
           )
           .toList(growable: false);
     }
-    final statusCode = _selectedFilter.projectStatusCode;
+    final statusCode = effectiveFilter.projectStatusCode;
     if (statusCode == null) {
       return projects;
     }
@@ -183,6 +185,42 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
       return company;
     }
     return '-';
+  }
+
+  String _resolveMinimumInvestmentText(
+    BuildContext context,
+    FundProject project,
+    Locale locale,
+  ) {
+    final amount = project.investmentUnit;
+    if (amount == null || amount <= 0) {
+      return context.l10n.fundDetailUnknownValue;
+    }
+
+    final localizedAmount =
+        _formatMinimumInvestmentAmountForLocale(amount, locale) ??
+        NumberFormat.decimalPattern(locale.toLanguageTag()).format(amount);
+
+    return context.l10n.fundListMinimumInvestmentValue(localizedAmount);
+  }
+
+  String? _formatMinimumInvestmentAmountForLocale(int amount, Locale locale) {
+    if (amount < 10000 || amount % 10000 != 0) {
+      return null;
+    }
+
+    final manCount = amount ~/ 10000;
+    final manText = NumberFormat.decimalPattern(
+      locale.toLanguageTag(),
+    ).format(manCount);
+
+    switch (locale.languageCode) {
+      case 'ja':
+      case 'zh':
+        return '$manText万';
+      default:
+        return null;
+    }
   }
 
   String _resolveStatusLabel(BuildContext context, int? status) {
@@ -375,7 +413,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                   const SizedBox(height: 10),
                   AppFilterBar<_FundListFilter>(
                     padding: EdgeInsets.zero,
-                    value: _selectedFilter,
+                    value: _effectiveSelectedFilter,
                     onChanged: (_FundListFilter value) {
                       setState(() {
                         _selectedFilter = value;
@@ -473,6 +511,12 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                           context,
                           project.gainType,
                         );
+                        final minimumInvestmentText =
+                            _resolveMinimumInvestmentText(
+                              context,
+                              project,
+                              locale,
+                            );
                         final periodText =
                             (project.investmentPeriod?.trim().isNotEmpty ??
                                 false)
@@ -498,6 +542,9 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                             project,
                           ),
                           periodValueText: periodText,
+                          minimumInvestmentLabel:
+                              l10n.fundDetailMinimumInvestmentLabel,
+                          minimumInvestmentText: minimumInvestmentText,
                           locationText: _resolveLocationHint(project),
                           viewDetailText: l10n.fundListViewDetail,
                           volumeText: _resolveVolumeLabel(context, project),
@@ -544,6 +591,8 @@ class _FundProjectCard extends StatelessWidget {
     required this.appliedAmountText,
     required this.annualYieldText,
     required this.periodValueText,
+    required this.minimumInvestmentLabel,
+    required this.minimumInvestmentText,
     required this.locationText,
     required this.viewDetailText,
     required this.volumeText,
@@ -564,6 +613,8 @@ class _FundProjectCard extends StatelessWidget {
   final String appliedAmountText;
   final String annualYieldText;
   final String periodValueText;
+  final String minimumInvestmentLabel;
+  final String minimumInvestmentText;
   final String locationText;
   final String viewDetailText;
   final String volumeText;
@@ -814,6 +865,20 @@ class _FundProjectCard extends StatelessWidget {
                               child: _CardStatCell(
                                 label: periodLabel,
                                 value: periodValueText,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 36,
+                              child: VerticalDivider(
+                                width: 16,
+                                thickness: 1,
+                                color: colors.border,
+                              ),
+                            ),
+                            Expanded(
+                              child: _CardStatCell(
+                                label: minimumInvestmentLabel,
+                                value: minimumInvestmentText,
                               ),
                             ),
                           ],

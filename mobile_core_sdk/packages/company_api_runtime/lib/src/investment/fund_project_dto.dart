@@ -27,6 +27,9 @@ class FundProjectDto {
     this.periodType,
     this.times,
     this.accountId,
+    this.features,
+    this.videoLink,
+    this.subordinatedRatio,
     this.liveJapanBank,
     this.detailData = const <String, Object?>{},
     this.photos = const <String>[],
@@ -35,6 +38,8 @@ class FundProjectDto {
   });
 
   factory FundProjectDto.fromJson(Map<String, dynamic> json) {
+    final detailData = _detailDataFrom(json['detail']);
+
     return FundProjectDto(
       id: _stringOrEmpty(json['id']),
       projectName: _stringOrEmpty(json['projectName']),
@@ -73,12 +78,22 @@ class FundProjectDto {
       periodType: _normalizedOptionalString(json['periodType']),
       times: _intOrNull(json['times']),
       accountId: _normalizedOptionalString(json['accountId']),
+      features:
+          _normalizedOptionalString(json['features']) ??
+          _normalizedOptionalString(detailData['features']),
+      videoLink:
+          _normalizedOptionalString(json['videoLink']) ??
+          _normalizedOptionalString(detailData['videoLink']),
+      subordinatedRatio:
+          _normalizedOptionalString(json['subordinatedRatio']) ??
+          _normalizedOptionalString(detailData['subordinatedRatio']) ??
+          _normalizedOptionalString(detailData['subordinateRatio']),
       liveJapanBank: _mapOrNull(json['liveJapanBank']) == null
           ? null
           : FundProjectLiveJapanBankDto.fromJson(
               _mapOrNull(json['liveJapanBank'])!,
             ),
-      detailData: _detailDataFrom(json['detail']),
+      detailData: detailData,
       photos: _photoUrlsFrom(json['photos']),
       investorTypes: _investorTypesFrom(json['investorTypeList']),
       pdfDocuments: _pdfDocumentsFrom(json['pdfs']),
@@ -110,6 +125,9 @@ class FundProjectDto {
   final String? periodType;
   final int? times;
   final String? accountId;
+  final String? features;
+  final String? videoLink;
+  final String? subordinatedRatio;
   final FundProjectLiveJapanBankDto? liveJapanBank;
   final Map<String, Object?> detailData;
   final List<String> photos;
