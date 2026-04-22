@@ -254,7 +254,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
               ),
             topSection,
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 12, 0, 24),
+              padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
               child: Column(
                 spacing: UiTokens.spacing16,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -325,6 +325,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
                   //     height: 262,
                   //     children: secondaryMarketCards,
                   //   ),
+                  const SizedBox(height: UiTokens.spacing32),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: UiTokens.spacing16,
@@ -334,6 +335,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
                       onTap: () => _openOfficialSite(context),
                     ),
                   ),
+                  const _HomeLicenseBar(),
                 ],
               ),
             ),
@@ -496,6 +498,36 @@ class _HomeOfficialSiteLink extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _HomeLicenseBar extends StatelessWidget {
+  const _HomeLicenseBar();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(color: colors.highlightGold),
+      child: Container(
+        alignment: Alignment.center,
+        width: double.infinity,
+        height: 72,
+        child: 
+        Text(
+            context.l10n.myPageLicenseNotice,
+            textAlign: TextAlign.center,
+            style: appText.meta.copyWith(
+              color: colors.brandPrimaryDark,
+              height: 1.45,
+            ),
+        )  
+        
       ),
     );
   }

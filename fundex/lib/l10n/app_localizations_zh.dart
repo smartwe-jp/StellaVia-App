@@ -2274,7 +2274,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageWelcomeBack => '欢迎回来';
 
   @override
-  String get myPageTotalAssetsCaption => '运用中 + 待机资金 + 分配金';
+  String get myPageTotalAssetsCaption => '运用中 + 待机资金';
 
   @override
   String get myPageMetricOperating => '运用中';
@@ -2311,6 +2311,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get myPageOperatingFundsTitle => '运用中基金';
+
+  @override
+  String get myPageLicenseNotice => '大阪府知事许可 第22号（正式许可）｜ 第1号、第2号及电子交易业务';
 
   @override
   String get myPageActiveFundHeroEyebrow => '我的基金';
@@ -6137,7 +6140,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageWelcomeBack => '歡迎回來';
 
   @override
-  String get myPageTotalAssetsCaption => '運用中 + 待機資金 + 分配金';
+  String get myPageTotalAssetsCaption => '運用中 + 待機資金';
 
   @override
   String get myPageMetricOperating => '運用中';
@@ -6174,6 +6177,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageOperatingFundsTitle => '運用中基金';
+
+  @override
+  String get myPageLicenseNotice => '大阪府知事許可 第22號（正式許可）｜ 第1號、第2號及電子交易業務';
 
   @override
   String get myPageActiveFundHeroEyebrow => '我的基金';

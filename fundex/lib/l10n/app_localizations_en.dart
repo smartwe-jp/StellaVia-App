@@ -2423,8 +2423,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageWelcomeBack => 'Welcome back';
 
   @override
-  String get myPageTotalAssetsCaption =>
-      'Operating + standby cash + distributions';
+  String get myPageTotalAssetsCaption => 'Operating + standby cash';
 
   @override
   String get myPageMetricOperating => 'Operating';
@@ -2461,6 +2460,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myPageOperatingFundsTitle => 'Active Funds';
+
+  @override
+  String get myPageLicenseNotice =>
+      'Osaka Prefectural Governor Permit No. 22 (Official Permit) | Type I, Type II, and Electronic Transaction Services';
 
   @override
   String get myPageActiveFundHeroEyebrow => 'MY FUND';

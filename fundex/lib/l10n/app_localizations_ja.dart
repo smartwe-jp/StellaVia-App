@@ -2301,7 +2301,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageWelcomeBack => 'おかえりなさい';
 
   @override
-  String get myPageTotalAssetsCaption => '運用中 + 待機資金 + 分配金';
+  String get myPageTotalAssetsCaption => '運用中 + 待機資金';
 
   @override
   String get myPageMetricOperating => '運用中';
@@ -2338,6 +2338,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get myPageOperatingFundsTitle => '運用中ファンド';
+
+  @override
+  String get myPageLicenseNotice => '大阪府知事許可 第22号（本許可）｜ 第1号・第2号・電子取引業務';
 
   @override
   String get myPageActiveFundHeroEyebrow => '保有ファンド';

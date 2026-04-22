@@ -4493,7 +4493,7 @@ abstract class AppLocalizations {
   /// No description provided for @myPageTotalAssetsCaption.
   ///
   /// In en, this message translates to:
-  /// **'Operating + standby cash + distributions'**
+  /// **'Operating + standby cash'**
   String get myPageTotalAssetsCaption;
 
   /// No description provided for @myPageMetricOperating.
@@ -4567,6 +4567,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Active Funds'**
   String get myPageOperatingFundsTitle;
+
+  /// No description provided for @myPageLicenseNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Osaka Prefectural Governor Permit No. 22 (Official Permit) | Type I, Type II, and Electronic Transaction Services'**
+  String get myPageLicenseNotice;
 
   /// No description provided for @myPageActiveFundHeroEyebrow.
   ///

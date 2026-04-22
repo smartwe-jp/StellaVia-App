@@ -210,11 +210,11 @@ class _WalletBankAccountCard extends StatelessWidget {
     final appText = theme.appTextTheme;
     final isOverseas = account.bankType == 1;
     final gradientColors = isOverseas
-        ? <Color>[
-            Color.lerp(colors.brandAlert, colors.brandWhite, 0.08)!,
-            Color.lerp(colors.brandAlert, colors.brandWhite, 0.22)!,
-          ]
-        : <Color>[colors.heroStart, colors.primary];
+        ? <Color>[colors.heroStart, colors.primary]
+        : <Color>[
+            Color.lerp(colors.highlightGold, colors.primary, 0.18)!,
+            Color.lerp(colors.highlightGold, colors.primary, 0.34)!,
+          ];
     final chipBorderColor = colors.brandWhite.withValues(alpha: 0.35);
     final foreground = colors.brandWhite;
 
