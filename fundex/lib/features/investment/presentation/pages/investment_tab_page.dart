@@ -865,6 +865,14 @@ _AchievementBarPalette _resolveAchievementBarPalette({
   required double? achievementRate,
 }) {
   final normalizedValue = (achievementRate ?? 0).clamp(0, 1).toDouble();
+  if (normalizedValue <= 0) {
+    return _AchievementBarPalette(
+      gradientColors: const <Color>[Colors.transparent, Colors.transparent],
+      foregroundColor: colors.textPrimary,
+      borderColor: colors.border,
+    );
+  }
+
   final trackColor = colors.surfaceAlt;
   final visibility =
       0.36 + (0.64 * Curves.easeOutCubic.transform(normalizedValue));
