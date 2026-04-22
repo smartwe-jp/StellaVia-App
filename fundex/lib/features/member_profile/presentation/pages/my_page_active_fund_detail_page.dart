@@ -323,11 +323,14 @@ Future<void> _openBenefitReport(
       pageTitle: l10n.pdfViewerPageTitle,
       openExternalTooltip: l10n.pdfViewerOpenExternalTooltip,
       openExternalLabel: l10n.pdfViewerOpenExternalLabel,
+      shareTooltip: l10n.pdfViewerShareTooltip,
+      shareLabel: l10n.pdfViewerShareLabel,
       loadingLabel: l10n.pdfViewerLoadingLabel,
       loadFailedLabel: l10n.pdfViewerLoadFailedLabel,
       retryLabel: l10n.fundListRetry,
       invalidUrlNotice: l10n.pdfViewerInvalidUrlNotice,
       openExternalFailedNotice: l10n.pdfViewerOpenExternalFailedNotice,
+      shareFailedNotice: l10n.pdfViewerShareFailedNotice,
     );
     await openAppPdfViewerFile(
       context,
