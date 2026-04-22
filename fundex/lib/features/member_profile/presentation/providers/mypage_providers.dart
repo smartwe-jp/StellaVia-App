@@ -6,6 +6,7 @@ import '../../data/datasources/mypage_remote_data_source.dart';
 import '../../data/repositories/mypage_repository_impl.dart';
 import '../../domain/entities/mypage_models.dart';
 import '../../domain/repositories/mypage_repository.dart';
+import '../../domain/usecases/download_mypage_benefit_report_usecase.dart';
 import '../../domain/usecases/fetch_mypage_account_statistic_usecase.dart';
 import '../../domain/usecases/fetch_mypage_apply_list_usecase.dart';
 import '../../domain/usecases/fetch_mypage_asset_trend_usecase.dart';
@@ -66,6 +67,13 @@ final fetchMyPageInvestmentListUseCaseProvider =
 final fetchMyPageProjectBenefitUseCaseProvider =
     Provider<FetchMyPageProjectBenefitUseCase>((ref) {
       return FetchMyPageProjectBenefitUseCase(
+        ref.watch(myPageRepositoryProvider),
+      );
+    });
+
+final downloadMyPageBenefitReportUseCaseProvider =
+    Provider<DownloadMyPageBenefitReportUseCase>((ref) {
+      return DownloadMyPageBenefitReportUseCase(
         ref.watch(myPageRepositoryProvider),
       );
     });

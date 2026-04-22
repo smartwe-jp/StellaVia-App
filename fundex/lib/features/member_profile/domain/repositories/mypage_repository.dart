@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import '../entities/mypage_models.dart';
 
 abstract class MyPageRepository {
@@ -29,6 +31,8 @@ abstract class MyPageRepository {
   });
 
   Future<MyPageProjectBenefit> fetchProjectBenefit({required String projectId});
+
+  Future<Uint8List> downloadBenefitReport({required String benefitId});
 
   Future<bool> submitBenefitWithdrawal({required String benefitId});
 

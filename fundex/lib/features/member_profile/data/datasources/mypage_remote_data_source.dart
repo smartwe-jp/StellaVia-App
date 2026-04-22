@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:company_api_runtime/company_api_runtime.dart';
 import 'package:core_network/core_network.dart';
 
@@ -34,6 +36,8 @@ abstract class MyPageRemoteDataSource {
   Future<MyPageProjectBenefitDto> fetchProjectBenefit({
     required String projectId,
   });
+
+  Future<Uint8List> downloadBenefitReport({required String benefitId});
 
   Future<bool> submitBenefitWithdrawal({required String benefitId});
 
@@ -151,6 +155,11 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
     required String projectId,
   }) async {
     return _apiClient.fetchProjectBenefit(projectId: projectId);
+  }
+
+  @override
+  Future<Uint8List> downloadBenefitReport({required String benefitId}) async {
+    return _apiClient.downloadBenefitReport(benefitId: benefitId);
   }
 
   @override

@@ -84,6 +84,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get pdfViewerOpenExternalLabel => '在外部应用中打开';
 
   @override
+  String get pdfViewerShareTooltip => '分享';
+
+  @override
+  String get pdfViewerShareLabel => '分享';
+
+  @override
   String get pdfViewerLoadingLabel => '正在加载 PDF...';
 
   @override
@@ -94,6 +100,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get pdfViewerOpenExternalFailedNotice => '无法打开 PDF。';
+
+  @override
+  String get pdfViewerShareFailedNotice => '无法分享 PDF。';
 
   @override
   String get imageViewerLoadingLabel => '正在加载图片...';
@@ -744,6 +753,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get homeViewAllAction => '查看全部';
+
+  @override
+  String get homeOfficialSiteAction => 'StellaVia Office Site';
+
+  @override
+  String get homeOfficialSiteOpenFailed => '无法打开官网。';
 
   @override
   String get homeEstimatedYieldLabel => '预计年化';
@@ -2960,6 +2975,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageActiveFundNetBenefitLabel => '税后收益';
 
   @override
+  String get myPageActiveFundReportAction => '报告';
+
+  @override
+  String get myPageActiveFundReportTitle => '收益报告';
+
+  @override
+  String get myPageActiveFundReportUnavailableNotice => '暂时没有相关文档';
+
+  @override
   String get myPageActiveFundWithdrawAction => '出金申请';
 
   @override
@@ -3921,6 +3945,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get pdfViewerOpenExternalLabel => '在外部應用中開啟';
 
   @override
+  String get pdfViewerShareTooltip => '分享';
+
+  @override
+  String get pdfViewerShareLabel => '分享';
+
+  @override
   String get pdfViewerLoadingLabel => '正在載入 PDF...';
 
   @override
@@ -3931,6 +3961,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get pdfViewerOpenExternalFailedNotice => '無法開啟 PDF。';
+
+  @override
+  String get pdfViewerShareFailedNotice => '無法分享 PDF。';
 
   @override
   String get imageViewerLoadingLabel => '正在載入圖片...';
@@ -4581,6 +4614,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get homeViewAllAction => '查看全部';
+
+  @override
+  String get homeOfficialSiteAction => 'StellaVia Office Site';
+
+  @override
+  String get homeOfficialSiteOpenFailed => '無法打開官網。';
 
   @override
   String get homeEstimatedYieldLabel => '預期收益率';
@@ -6797,6 +6836,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageActiveFundNetBenefitLabel => '稅後收益';
+
+  @override
+  String get myPageActiveFundReportAction => '報告';
+
+  @override
+  String get myPageActiveFundReportTitle => '收益報告';
+
+  @override
+  String get myPageActiveFundReportUnavailableNotice => '暫時沒有相關文件';
 
   @override
   String get myPageActiveFundWithdrawAction => '出金申請';

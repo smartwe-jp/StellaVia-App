@@ -251,6 +251,18 @@ abstract class AppLocalizations {
   /// **'Open externally'**
   String get pdfViewerOpenExternalLabel;
 
+  /// No description provided for @pdfViewerShareTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get pdfViewerShareTooltip;
+
+  /// No description provided for @pdfViewerShareLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get pdfViewerShareLabel;
+
   /// No description provided for @pdfViewerLoadingLabel.
   ///
   /// In en, this message translates to:
@@ -274,6 +286,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unable to open PDF.'**
   String get pdfViewerOpenExternalFailedNotice;
+
+  /// No description provided for @pdfViewerShareFailedNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to share PDF.'**
+  String get pdfViewerShareFailedNotice;
 
   /// No description provided for @imageViewerLoadingLabel.
   ///
@@ -1552,6 +1570,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View All'**
   String get homeViewAllAction;
+
+  /// No description provided for @homeOfficialSiteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'StellaVia Office Site'**
+  String get homeOfficialSiteAction;
+
+  /// No description provided for @homeOfficialSiteOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open the official site.'**
+  String get homeOfficialSiteOpenFailed;
 
   /// No description provided for @homeEstimatedYieldLabel.
   ///
@@ -5839,6 +5869,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Net benefit'**
   String get myPageActiveFundNetBenefitLabel;
+
+  /// No description provided for @myPageActiveFundReportAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Report'**
+  String get myPageActiveFundReportAction;
+
+  /// No description provided for @myPageActiveFundReportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Benefit report'**
+  String get myPageActiveFundReportTitle;
+
+  /// No description provided for @myPageActiveFundReportUnavailableNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no related documents yet.'**
+  String get myPageActiveFundReportUnavailableNotice;
 
   /// No description provided for @myPageActiveFundWithdrawAction.
   ///

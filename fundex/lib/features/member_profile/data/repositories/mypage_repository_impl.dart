@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import '../../domain/entities/mypage_models.dart';
 import '../../domain/repositories/mypage_repository.dart';
 import '../datasources/mypage_remote_data_source.dart';
@@ -82,6 +84,11 @@ class MyPageRepositoryImpl implements MyPageRepository {
   }) async {
     final dto = await _remote.fetchProjectBenefit(projectId: projectId);
     return dto.toEntity();
+  }
+
+  @override
+  Future<Uint8List> downloadBenefitReport({required String benefitId}) {
+    return _remote.downloadBenefitReport(benefitId: benefitId);
   }
 
   @override

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -11,21 +12,27 @@ class AppPdfViewerTexts {
     this.pageTitle = 'PDF',
     this.openExternalTooltip = 'Open externally',
     this.openExternalLabel = 'Open externally',
+    this.shareTooltip = 'Share',
+    this.shareLabel = 'Share',
     this.loadingLabel = 'Loading PDF...',
     this.loadFailedLabel = 'Failed to load PDF.',
     this.retryLabel = 'Retry',
     this.invalidUrlNotice = 'Invalid PDF URL.',
     this.openExternalFailedNotice = 'Unable to open the PDF.',
+    this.shareFailedNotice = 'Unable to share the PDF.',
   });
 
   final String pageTitle;
   final String openExternalTooltip;
   final String openExternalLabel;
+  final String shareTooltip;
+  final String shareLabel;
   final String loadingLabel;
   final String loadFailedLabel;
   final String retryLabel;
   final String invalidUrlNotice;
   final String openExternalFailedNotice;
+  final String shareFailedNotice;
 }
 
 Future<void> openAppPdfViewer(
@@ -60,6 +67,34 @@ Future<void> openAppPdfViewer(
   );
 }
 
+Future<void> openAppPdfViewerFile(
+  BuildContext context, {
+  required String filePath,
+  String? title,
+  AppPdfViewerTexts texts = const AppPdfViewerTexts(),
+  bool useRootNavigator = true,
+}) async {
+  final normalizedPath = filePath.trim();
+  if (normalizedPath.isEmpty) {
+    AppNotice.show(context, message: texts.loadFailedLabel);
+    return;
+  }
+
+  final navigator = Navigator.of(context, rootNavigator: useRootNavigator);
+  await navigator.push<void>(
+    MaterialPageRoute<void>(
+      builder: (BuildContext context) => AppPdfFileViewerPage(
+        filePath: normalizedPath,
+        title: title?.trim().isNotEmpty == true
+            ? title!.trim()
+            : texts.pageTitle,
+        texts: texts,
+      ),
+      settings: const RouteSettings(name: 'app_pdf_file_viewer'),
+    ),
+  );
+}
+
 class AppPdfViewerPage extends StatefulWidget {
   const AppPdfViewerPage({
     super.key,
@@ -76,6 +111,22 @@ class AppPdfViewerPage extends StatefulWidget {
 
   @override
   State<AppPdfViewerPage> createState() => _AppPdfViewerPageState();
+}
+
+class AppPdfFileViewerPage extends StatefulWidget {
+  const AppPdfFileViewerPage({
+    super.key,
+    required this.filePath,
+    required this.title,
+    this.texts = const AppPdfViewerTexts(),
+  });
+
+  final String filePath;
+  final String title;
+  final AppPdfViewerTexts texts;
+
+  @override
+  State<AppPdfFileViewerPage> createState() => _AppPdfFileViewerPageState();
 }
 
 class _AppPdfViewerPageState extends State<AppPdfViewerPage> {
@@ -205,6 +256,165 @@ class _AppPdfViewerPageState extends State<AppPdfViewerPage> {
               message: widget.texts.loadFailedLabel,
               retryLabel: widget.texts.retryLabel,
               openExternalLabel: widget.texts.openExternalLabel,
+              onRetry: _reload,
+              onOpenExternal: _openExternally,
+            )
+          else
+            WebViewWidget(controller: _controller),
+          if (!_hasMainFrameError && !_pageLoaded)
+            Container(
+              color: colors.surface.withValues(alpha: 0.94),
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const CircularProgressIndicator.adaptive(),
+                  const SizedBox(height: 12),
+                  Text(widget.texts.loadingLabel, style: appText.body),
+                ],
+              ),
+            ),
+          if (!_hasMainFrameError && _progress > 0 && _progress < 100)
+            Align(
+              alignment: Alignment.topCenter,
+              child: LinearProgressIndicator(
+                value: _progress / 100,
+                minHeight: 2,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AppPdfFileViewerPageState extends State<AppPdfFileViewerPage> {
+  late final WebViewController _controller;
+
+  bool _hasMainFrameError = false;
+  bool _pageLoaded = false;
+  int _progress = 0;
+  Color? _lastAppliedBackgroundColor;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            if (!mounted) {
+              return;
+            }
+            setState(() {
+              _progress = progress.clamp(0, 100);
+            });
+          },
+          onPageStarted: (_) {
+            if (!mounted) {
+              return;
+            }
+            setState(() {
+              _hasMainFrameError = false;
+              _pageLoaded = false;
+              _progress = _progress == 0 ? 5 : _progress;
+            });
+          },
+          onPageFinished: (_) {
+            if (!mounted) {
+              return;
+            }
+            setState(() {
+              _hasMainFrameError = false;
+              _pageLoaded = true;
+              _progress = 100;
+            });
+          },
+          onWebResourceError: (WebResourceError error) {
+            if (error.isForMainFrame != true || !mounted) {
+              return;
+            }
+            setState(() {
+              _hasMainFrameError = true;
+              _pageLoaded = false;
+              _progress = 0;
+            });
+          },
+        ),
+      );
+    unawaited(_controller.loadFile(widget.filePath));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final backgroundColor = Theme.of(context).appColors.surface;
+    if (_lastAppliedBackgroundColor == backgroundColor) {
+      return;
+    }
+    _lastAppliedBackgroundColor = backgroundColor;
+    unawaited(_controller.setBackgroundColor(backgroundColor));
+  }
+
+  Future<void> _reload() async {
+    setState(() {
+      _hasMainFrameError = false;
+      _pageLoaded = false;
+      _progress = 0;
+    });
+    await _controller.loadFile(widget.filePath);
+  }
+
+  Future<void> _openExternally() async {
+    final box = context.findRenderObject() as RenderBox?;
+    final result = await SharePlus.instance.share(
+      ShareParams(
+        files: <XFile>[
+          XFile(
+            widget.filePath,
+            mimeType: 'application/pdf',
+            name: widget.title.trim().isEmpty ? 'document.pdf' : widget.title,
+          ),
+        ],
+        title: widget.title,
+        subject: widget.title,
+        sharePositionOrigin: box == null
+            ? null
+            : box.localToGlobal(Offset.zero) & box.size,
+      ),
+    );
+    if (!mounted || result.status != ShareResultStatus.unavailable) {
+      return;
+    }
+    ScaffoldMessenger.maybeOf(
+      context,
+    )?.showSnackBar(SnackBar(content: Text(widget.texts.shareFailedNotice)));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title, maxLines: 1, overflow: TextOverflow.ellipsis),
+        actions: <Widget>[
+          IconButton(
+            onPressed: _openExternally,
+            tooltip: widget.texts.shareTooltip,
+            icon: const Icon(Icons.ios_share_rounded),
+          ),
+        ],
+      ),
+      body: Stack(
+        children: <Widget>[
+          if (_hasMainFrameError)
+            _PdfLoadErrorPanel(
+              message: widget.texts.loadFailedLabel,
+              retryLabel: widget.texts.retryLabel,
+              openExternalLabel: widget.texts.shareLabel,
               onRetry: _reload,
               onOpenExternal: _openExternally,
             )

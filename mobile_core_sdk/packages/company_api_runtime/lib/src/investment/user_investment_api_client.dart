@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:core_network/core_network.dart';
 
 import '../envelope/legacy_envelope_codec.dart';
@@ -19,6 +22,7 @@ class UserInvestmentApiPaths {
   static const String myInvestmentList = '/crowdfunding/user/invest/list';
   static const String userInvestPdf = '/crowdfunding/user/invest/pdf';
   static const String benefitProject = '/crowdfunding/benefit/project';
+  static const String benefitDownload = '/crowdfunding/benefit/download';
   static const String benefitWithdrawal = '/crowdfunding/benefit/withdrawal';
   static const String secondaryMarketCreate =
       '/crowdfunding/secondary/market/create';
@@ -44,6 +48,7 @@ class UserInvestmentApiClient {
     this.myInvestmentListPath = UserInvestmentApiPaths.myInvestmentList,
     this.userInvestPdfPath = UserInvestmentApiPaths.userInvestPdf,
     this.benefitProjectPath = UserInvestmentApiPaths.benefitProject,
+    this.benefitDownloadPath = UserInvestmentApiPaths.benefitDownload,
     this.benefitWithdrawalPath = UserInvestmentApiPaths.benefitWithdrawal,
     this.secondaryMarketCreatePath =
         UserInvestmentApiPaths.secondaryMarketCreate,
@@ -69,6 +74,7 @@ class UserInvestmentApiClient {
   final String myInvestmentListPath;
   final String userInvestPdfPath;
   final String benefitProjectPath;
+  final String benefitDownloadPath;
   final String benefitWithdrawalPath;
   final String secondaryMarketCreatePath;
   final String secondaryMarketModifyPath;
@@ -285,6 +291,58 @@ class UserInvestmentApiClient {
       fallbackMessage: 'Failed to load project benefit details.',
     );
     return UserInvestmentProjectBenefitDto.fromJson(data);
+  }
+
+  Future<Uint8List> downloadBenefitReport({required String benefitId}) async {
+    final response = await _dioForPath(benefitDownloadPath).put<List<int>>(
+      benefitDownloadPath,
+      queryParameters: <String, dynamic>{
+        'benefitId': int.tryParse(benefitId) ?? benefitId,
+      },
+      options: authRequired(true).copyWith(responseType: ResponseType.bytes),
+    );
+
+    final rawBytes = response.data ?? const <int>[];
+    if (rawBytes.isEmpty) {
+      return Uint8List(0);
+    }
+    final bytes = Uint8List.fromList(rawBytes);
+    final header = utf8
+        .decode(
+          bytes.length > 128 ? bytes.sublist(0, 128) : bytes,
+          allowMalformed: true,
+        )
+        .trimLeft();
+    if (header.startsWith('%PDF-')) {
+      return bytes;
+    }
+
+    final contentType =
+        response.headers.value(Headers.contentTypeHeader)?.toLowerCase() ?? '';
+    if (contentType.contains('json') || header.startsWith('{')) {
+      final decoded = utf8.decode(bytes, allowMalformed: true);
+      final payload = _envelopeCodec.toJsonMap(
+        jsonDecode(decoded) as Map<String, dynamic>,
+      );
+      if (payload.isEmpty) {
+        throw StateError('Failed to load benefit report.');
+      }
+
+      if (_envelopeCodec.looksLikeEnvelope(payload)) {
+        _envelopeCodec.assertSuccessIfEnvelope(
+          payload,
+          fallbackMessage: 'Failed to load benefit report.',
+          requireTruthyData: false,
+        );
+        final inlineText =
+            payload[_envelopeCodec.profile.dataKey]?.toString().trim() ?? '';
+        if (inlineText.isEmpty) {
+          return Uint8List(0);
+        }
+      }
+    }
+
+    throw StateError('Failed to load benefit report.');
   }
 
   Future<bool> submitBenefitWithdrawal({required String benefitId}) async {

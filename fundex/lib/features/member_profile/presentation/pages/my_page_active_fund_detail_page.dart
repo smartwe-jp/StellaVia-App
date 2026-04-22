@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +12,6 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/support/identity_auth_guard.dart';
 import '../../domain/entities/mypage_models.dart';
 import '../providers/mypage_providers.dart';
-import '../support/mypage_secondary_market_models.dart';
 import '../support/mypage_section_support.dart';
 import '../widgets/mypage_active_fund_detail_sections.dart';
 
@@ -66,13 +67,14 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
           onTap: () => context.pop(),
         ),
       ),
-      // bottomNavigationBar: 
+
+      // bottomNavigationBar:
       // canShowResale ?
       // SafeArea(
       //         top: false,
       //         child: Container(
       //           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-      //           child: 
+      //           child:
       //           PrimaryCtaButton(
       //             label: l10n.myPageResaleTabOrder,
       //             onPressed: summary.processId == null
@@ -94,7 +96,6 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
       //             threeSideShadow: true,
       //           ))):
       //           null,
-            
       body: RefreshIndicator(
         onRefresh: () => _refresh(ref, projectId: projectId),
         child: ListView(
@@ -211,28 +212,55 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
                               formatter,
                             ),
                             footnote: detail.remark,
-                            action: OutlinedButton(
-                              onPressed:
-                                  detail.withdrawalTime == null &&
+                            action: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                OutlinedButton(
+                                  onPressed:
                                       detail.id != null &&
-                                      detail.id!.trim().isNotEmpty
-                                  ? () => _confirmBenefitWithdrawal(
-                                      context,
-                                      ref,
-                                      projectId: projectId,
-                                      benefitId: detail.id!,
-                                    )
-                                  : null,
-                              style: _detailOutlineButtonStyle(
-                                context,
-                                borderColor: colors.primary,
-                                foregroundColor: colors.primary,
-                              ),
-                              child: Text(
-                                detail.withdrawalTime == null
-                                    ? l10n.myPageActiveFundWithdrawAction
-                                    : l10n.myPageActiveFundWithdrawDone,
-                              ),
+                                          detail.id!.trim().isNotEmpty
+                                      ? () => _openBenefitReport(
+                                          context,
+                                          ref,
+                                          benefitId: detail.id!,
+                                          title:
+                                              l10n.myPageActiveFundReportTitle,
+                                        )
+                                      : null,
+                                  style: _detailOutlineButtonStyle(
+                                    context,
+                                    borderColor: colors.highlightGold,
+                                    foregroundColor: colors.highlightGold,
+                                  ),
+                                  child: Text(
+                                    l10n.myPageActiveFundReportAction,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                OutlinedButton(
+                                  onPressed:
+                                      detail.withdrawalTime == null &&
+                                          detail.id != null &&
+                                          detail.id!.trim().isNotEmpty
+                                      ? () => _confirmBenefitWithdrawal(
+                                          context,
+                                          ref,
+                                          projectId: projectId,
+                                          benefitId: detail.id!,
+                                        )
+                                      : null,
+                                  style: _detailOutlineButtonStyle(
+                                    context,
+                                    borderColor: colors.primary,
+                                    foregroundColor: colors.primary,
+                                  ),
+                                  child: Text(
+                                    detail.withdrawalTime == null
+                                        ? l10n.myPageActiveFundWithdrawAction
+                                        : l10n.myPageActiveFundWithdrawDone,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -251,9 +279,71 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
                     ref.invalidate(myPageProjectBenefitProvider(projectId)),
               ),
             ),
-            
           ],
         ),
+      ),
+    );
+  }
+}
+
+Future<void> _openBenefitReport(
+  BuildContext context,
+  WidgetRef ref, {
+  required String benefitId,
+  required String title,
+}) async {
+  final l10n = context.l10n;
+  try {
+    final pdfBytes =
+        (await ref
+                .read(downloadMyPageBenefitReportUseCaseProvider)
+                .call(benefitId: benefitId))
+            .toList(growable: false);
+    if (!context.mounted) {
+      return;
+    }
+    if (pdfBytes.isEmpty) {
+      AppNotice.show(
+        context,
+        message: l10n.myPageActiveFundReportUnavailableNotice,
+      );
+      return;
+    }
+
+    final tempDir = await Directory.systemTemp.createTemp(
+      'fundex_benefit_report_',
+    );
+    final file = File('${tempDir.path}/benefit_report.pdf');
+    await file.writeAsBytes(pdfBytes, flush: true);
+    if (!context.mounted) {
+      return;
+    }
+
+    final viewerTexts = AppPdfViewerTexts(
+      pageTitle: l10n.pdfViewerPageTitle,
+      openExternalTooltip: l10n.pdfViewerOpenExternalTooltip,
+      openExternalLabel: l10n.pdfViewerOpenExternalLabel,
+      loadingLabel: l10n.pdfViewerLoadingLabel,
+      loadFailedLabel: l10n.pdfViewerLoadFailedLabel,
+      retryLabel: l10n.fundListRetry,
+      invalidUrlNotice: l10n.pdfViewerInvalidUrlNotice,
+      openExternalFailedNotice: l10n.pdfViewerOpenExternalFailedNotice,
+    );
+    await openAppPdfViewerFile(
+      context,
+      filePath: file.path,
+      title: title,
+      texts: viewerTexts,
+    );
+  } catch (error) {
+    if (!context.mounted) {
+      return;
+    }
+    AppNotice.show(
+      context,
+      message: resolveAppRequestErrorMessage(
+        error,
+        l10n.myPageActiveFundReportUnavailableNotice,
       ),
     );
   }

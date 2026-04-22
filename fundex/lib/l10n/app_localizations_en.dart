@@ -89,6 +89,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pdfViewerOpenExternalLabel => 'Open externally';
 
   @override
+  String get pdfViewerShareTooltip => 'Share';
+
+  @override
+  String get pdfViewerShareLabel => 'Share';
+
+  @override
   String get pdfViewerLoadingLabel => 'Loading PDF...';
 
   @override
@@ -99,6 +105,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pdfViewerOpenExternalFailedNotice => 'Unable to open PDF.';
+
+  @override
+  String get pdfViewerShareFailedNotice => 'Unable to share PDF.';
 
   @override
   String get imageViewerLoadingLabel => 'Loading image...';
@@ -807,6 +816,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeViewAllAction => 'View All';
+
+  @override
+  String get homeOfficialSiteAction => 'StellaVia Office Site';
+
+  @override
+  String get homeOfficialSiteOpenFailed => 'Unable to open the official site.';
 
   @override
   String get homeEstimatedYieldLabel => 'Est. yield';
@@ -3157,6 +3172,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myPageActiveFundNetBenefitLabel => 'Net benefit';
+
+  @override
+  String get myPageActiveFundReportAction => 'Report';
+
+  @override
+  String get myPageActiveFundReportTitle => 'Benefit report';
+
+  @override
+  String get myPageActiveFundReportUnavailableNotice =>
+      'There are no related documents yet.';
 
   @override
   String get myPageActiveFundWithdrawAction => 'Request withdrawal';

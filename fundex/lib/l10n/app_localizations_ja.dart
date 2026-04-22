@@ -86,6 +86,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get pdfViewerOpenExternalLabel => '外部アプリで開く';
 
   @override
+  String get pdfViewerShareTooltip => '共有';
+
+  @override
+  String get pdfViewerShareLabel => '共有';
+
+  @override
   String get pdfViewerLoadingLabel => 'PDFを読み込んでいます…';
 
   @override
@@ -96,6 +102,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get pdfViewerOpenExternalFailedNotice => 'PDFを開けませんでした。';
+
+  @override
+  String get pdfViewerShareFailedNotice => 'PDFを共有できませんでした。';
 
   @override
   String get imageViewerLoadingLabel => '画像を読み込んでいます…';
@@ -757,6 +766,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get homeViewAllAction => '一覧を見る';
+
+  @override
+  String get homeOfficialSiteAction => 'StellaVia Office Site';
+
+  @override
+  String get homeOfficialSiteOpenFailed => '公式サイトを開けませんでした。';
 
   @override
   String get homeEstimatedYieldLabel => '想定利回り';
@@ -2994,6 +3009,15 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get myPageActiveFundNetBenefitLabel => '税引後';
+
+  @override
+  String get myPageActiveFundReportAction => 'レポート';
+
+  @override
+  String get myPageActiveFundReportTitle => '運用レポート';
+
+  @override
+  String get myPageActiveFundReportUnavailableNotice => '関連書類はまだありません。';
 
   @override
   String get myPageActiveFundWithdrawAction => '出金依頼';
