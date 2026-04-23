@@ -722,6 +722,27 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeAttractionFundsBody => '資産を守る。';
 
   @override
+  String get homeInvestmentFlowTitle => '投資の流れ';
+
+  @override
+  String get homeInvestmentFlowStep1Title => '会員登録';
+
+  @override
+  String get homeInvestmentFlowStep1Body => 'メールアドレスで\n即時登録';
+
+  @override
+  String get homeInvestmentFlowStep2Title => '本人確認';
+
+  @override
+  String get homeInvestmentFlowStep2Body => '安全に本人認証を\n行います';
+
+  @override
+  String get homeInvestmentFlowStep3Title => '投資開始';
+
+  @override
+  String get homeInvestmentFlowStep3Body => '厳選ファンドへの\n投資が可能に';
+
+  @override
   String get homeReminderProfileTitle => '本人情報を入力して出資を始めましょう';
 
   @override
@@ -729,6 +750,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get homeReminderProfileBadge => '要対応';
+
+  @override
+  String get homeReminderVerifyAction => '認証する';
 
   @override
   String get homeReminderEmailVerificationTitle => 'メールアドレス確認';

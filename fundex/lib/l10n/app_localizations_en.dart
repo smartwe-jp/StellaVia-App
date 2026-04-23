@@ -770,6 +770,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeAttractionFundsBody => 'a two-layer shield.';
 
   @override
+  String get homeInvestmentFlowTitle => 'How to Invest';
+
+  @override
+  String get homeInvestmentFlowStep1Title => 'Sign Up';
+
+  @override
+  String get homeInvestmentFlowStep1Body =>
+      'Register instantly\nwith your email';
+
+  @override
+  String get homeInvestmentFlowStep2Title => 'Verify Identity';
+
+  @override
+  String get homeInvestmentFlowStep2Body =>
+      'Complete secure\nidentity verification';
+
+  @override
+  String get homeInvestmentFlowStep3Title => 'Start Investing';
+
+  @override
+  String get homeInvestmentFlowStep3Body =>
+      'Invest in curated\nfund opportunities';
+
+  @override
   String get homeReminderProfileTitle => 'Complete your profile to get started';
 
   @override
@@ -778,6 +802,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeReminderProfileBadge => 'Action needed';
+
+  @override
+  String get homeReminderVerifyAction => 'Verify';
 
   @override
   String get homeReminderEmailVerificationTitle => 'Email verification';

@@ -714,6 +714,27 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeAttractionFundsBody => '守住资产。';
 
   @override
+  String get homeInvestmentFlowTitle => '投资流程';
+
+  @override
+  String get homeInvestmentFlowStep1Title => '会员注册';
+
+  @override
+  String get homeInvestmentFlowStep1Body => '通过邮箱\n立即注册';
+
+  @override
+  String get homeInvestmentFlowStep2Title => '本人验证';
+
+  @override
+  String get homeInvestmentFlowStep2Body => '安全完成\n本人认证';
+
+  @override
+  String get homeInvestmentFlowStep3Title => '开始投资';
+
+  @override
+  String get homeInvestmentFlowStep3Body => '即可投资\n严选基金';
+
+  @override
   String get homeReminderProfileTitle => '填写个人资料以开始出资';
 
   @override
@@ -721,6 +742,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get homeReminderProfileBadge => '待处理';
+
+  @override
+  String get homeReminderVerifyAction => '认证';
 
   @override
   String get homeReminderEmailVerificationTitle => '邮箱认证';
@@ -4616,6 +4640,27 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeAttractionFundsBody => '守住資產。';
 
   @override
+  String get homeInvestmentFlowTitle => '投資流程';
+
+  @override
+  String get homeInvestmentFlowStep1Title => '會員註冊';
+
+  @override
+  String get homeInvestmentFlowStep1Body => '透過電子郵件\n立即註冊';
+
+  @override
+  String get homeInvestmentFlowStep2Title => '本人驗證';
+
+  @override
+  String get homeInvestmentFlowStep2Body => '安全完成\n本人認證';
+
+  @override
+  String get homeInvestmentFlowStep3Title => '開始投資';
+
+  @override
+  String get homeInvestmentFlowStep3Body => '即可投資\n嚴選基金';
+
+  @override
   String get homeReminderProfileTitle => '填寫個人資料以開始出資';
 
   @override
@@ -4623,6 +4668,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get homeReminderProfileBadge => '待處理';
+
+  @override
+  String get homeReminderVerifyAction => '驗證';
 
   @override
   String get homeReminderEmailVerificationTitle => '電子郵件認證';

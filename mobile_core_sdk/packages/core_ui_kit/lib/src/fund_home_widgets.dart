@@ -439,136 +439,112 @@ class FundReminderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final palette = _paletteFor(context, data.tone);
     final cardRadius = BorderRadius.circular(UiTokens.radius16);
+    final actionLabel = data.actionLabel?.trim().isNotEmpty == true
+        ? data.actionLabel!.trim()
+        : (data.badgeLabel?.trim().isNotEmpty == true
+              ? data.badgeLabel!.trim()
+              : null);
+    final actionTap = data.onActionTap ?? data.onTap;
+
     final card = Container(
       width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: palette.backgroundGradientColors,
-        ),
+        color: palette.backgroundGradientColors.first,
         borderRadius: cardRadius,
         border: Border.all(color: palette.borderColor, width: 1.5),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: palette.borderColor.withValues(alpha: 0.12),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: palette.dotColor,
-                  shape: BoxShape.circle,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 14, 12, 14),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: palette.borderColor.withValues(alpha: 0.7),
                 ),
               ),
-              const SizedBox(width: 8),
-              data.leading,
-              const SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  data.title,
-                  style: appText.cardTitle.copyWith(color: palette.titleColor),
-                ),
+              alignment: Alignment.center,
+              child: IconTheme(
+                data: IconThemeData(color: palette.titleColor, size: 22),
+                child: data.leading,
               ),
-              if (data.badgeLabel != null)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    data.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: appText.cardTitle.copyWith(
+                      color: palette.titleColor,
+                    ),
                   ),
-                  decoration: BoxDecoration(
-                    color: palette.badgeBackgroundColor,
-                    borderRadius: BorderRadius.circular(8),
+                  const SizedBox(height: 4),
+                  Text(
+                    data.message,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: appText.bodyMuted.copyWith(
+                      color: palette.messageColor,
+                      height: 1.45,
+                    ),
                   ),
-                  child: Text(
-                    data.badgeLabel!,
-                    style: appText.chip.copyWith(
-                      color: palette.badgeForegroundColor,
+                ],
+              ),
+            ),
+            if (actionLabel != null) ...<Widget>[
+              const SizedBox(width: 12),
+              Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: actionTap,
+                  child: Ink(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: palette.titleColor,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      actionLabel,
+                      style: appText.chip.copyWith(
+                        color: palette.badgeForegroundColor,
+                      ),
                     ),
                   ),
                 ),
+              ),
             ],
-          ),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Text(
-              data.message,
-              style: appText.bodyMuted.copyWith(
-                color: palette.messageColor,
-                height: 1.6,
-              ),
-            ),
-          ),
-          if (data.segmentCount != null &&
-              data.completedSegmentCount != null) ...<Widget>[
-            const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: FundSegmentedProgressBar(
-                segmentCount: data.segmentCount!,
-                completedSegmentCount: data.completedSegmentCount!,
-                activeColor: palette.progressFillColor,
-                inactiveColor: palette.progressTrackColor,
-              ),
-            ),
-          ] else if (data.progress != null) ...<Widget>[
-            const SizedBox(height: UiTokens.spacing8),
-            Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(2),
-                child: LinearProgressIndicator(
-                  value: data.progress!.clamp(0, 1),
-                  minHeight: 4,
-                  backgroundColor: palette.progressTrackColor,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    palette.progressFillColor,
-                  ),
-                ),
-              ),
+            const SizedBox(width: 6),
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 24,
+              color: palette.titleColor,
             ),
           ],
-          if (data.actionLabel != null) ...<Widget>[
-            const SizedBox(height: UiTokens.spacing8),
-            Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: OutlinedButton(
-                onPressed: data.onActionTap,
-                style: OutlinedButton.styleFrom(
-                  visualDensity: const VisualDensity(
-                    horizontal: -2,
-                    vertical: -2,
-                  ),
-                  foregroundColor: palette.actionTextColor,
-                  side: BorderSide(
-                    color: palette.actionBorderColor,
-                    width: 1.5,
-                  ),
-                  backgroundColor: colors.surface,
-                  minimumSize: const Size(0, 30),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 6,
-                  ),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Text(data.actionLabel!, style: appText.chip),
-              ),
-            ),
-          ],
-        ],
+        ),
       ),
     );
 

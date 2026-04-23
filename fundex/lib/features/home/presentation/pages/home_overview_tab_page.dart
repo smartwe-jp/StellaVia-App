@@ -94,8 +94,10 @@ class HomeOverviewTabPage extends ConsumerWidget {
           message: l10n.homeReminderProfileBody,
           tone: FundReminderTone.danger,
           badgeLabel: l10n.homeReminderProfileBadge,
+          actionLabel: l10n.memberProfileOverviewStartIntakeAction,
           segmentCount: MemberProfileDetails.flowStepCount,
           completedSegmentCount: memberProfile?.completedFlowStepCount ?? 0,
+          onActionTap: () => context.push('/member-profile/onboarding'),
           onTap: () => context.push('/member-profile/onboarding'),
         ),
       if (isEmailVerified == false)
@@ -109,6 +111,8 @@ class HomeOverviewTabPage extends ConsumerWidget {
           message: l10n.homeReminderEmailVerificationBody,
           tone: FundReminderTone.warning,
           badgeLabel: l10n.homeReminderProfileBadge,
+          actionLabel: l10n.homeReminderVerifyAction,
+          onActionTap: () => context.push('/profile/settings/two-factor/email'),
           onTap: () => context.push('/profile/settings/two-factor/email'),
         ),
       if (verificationStatus?.isPhoneVerified == false)
@@ -122,6 +126,8 @@ class HomeOverviewTabPage extends ConsumerWidget {
           message: l10n.homeReminderPhoneVerificationBody,
           tone: FundReminderTone.warning,
           badgeLabel: l10n.homeReminderProfileBadge,
+          actionLabel: l10n.homeReminderVerifyAction,
+          onActionTap: () => context.push('/profile/settings/two-factor/phone'),
           onTap: () => context.push('/profile/settings/two-factor/phone'),
         ),
       if (!shouldShowMemberProfileReminder &&
@@ -136,6 +142,8 @@ class HomeOverviewTabPage extends ConsumerWidget {
           message: l10n.homeReminderRealPersonVerificationBody,
           tone: FundReminderTone.danger,
           badgeLabel: l10n.homeReminderProfileBadge,
+          actionLabel: l10n.homeReminderVerifyAction,
+          onActionTap: () => context.push('/profile/settings/two-factor/face'),
           onTap: () => context.push('/profile/settings/two-factor/face'),
         ),
     ];
@@ -256,6 +264,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
                       ),
                       child: FundReminderFeed(items: reminders),
                     ),
+                  if (!isAuthenticated)
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: UiTokens.spacing16,
@@ -321,6 +330,35 @@ class HomeOverviewTabPage extends ConsumerWidget {
                   //     height: 262,
                   //     children: secondaryMarketCards,
                   //   ),
+                  if (!isAuthenticated)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: UiTokens.spacing16,
+                    ),
+                    child: _HomeInvestmentFlowSection(
+                      title: l10n.homeInvestmentFlowTitle,
+                      steps: <_HomeInvestmentFlowStepData>[
+                        _HomeInvestmentFlowStepData(
+                          stepNumber: 1,
+                          icon: Icons.person_outline_rounded,
+                          title: l10n.homeInvestmentFlowStep1Title,
+                          body: l10n.homeInvestmentFlowStep1Body,
+                        ),
+                        _HomeInvestmentFlowStepData(
+                          stepNumber: 2,
+                          icon: Icons.badge_outlined,
+                          title: l10n.homeInvestmentFlowStep2Title,
+                          body: l10n.homeInvestmentFlowStep2Body,
+                        ),
+                        _HomeInvestmentFlowStepData(
+                          stepNumber: 3,
+                          icon: Icons.bar_chart_rounded,
+                          title: l10n.homeInvestmentFlowStep3Title,
+                          body: l10n.homeInvestmentFlowStep3Body,
+                        ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: UiTokens.spacing32),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -428,7 +466,7 @@ class _HomeHeroBanner extends StatelessWidget {
             const _HomeHeroVisual(),
             if (showGuestActions)
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 6, 20, 20),
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
                 child: Column(
                   children: <Widget>[
                     SizedBox(
@@ -729,28 +767,30 @@ class _HomeAttractionCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
+    final radius = BorderRadius.circular(UiTokens.radius12);
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(UiTokens.radius12),
-        onTap: data.onTap,
-        child: SizedBox(
-          height: 142,
-          child: Ink(
+    return Container(
+      height: 142,
+      decoration: BoxDecoration(
+        color: colors.surfaceAlt,
+        borderRadius: radius,
+        border: Border.all(color: colors.primarySubtle),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: colors.scrim.withValues(alpha: 0.05),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: radius,
+        child: InkWell(
+          borderRadius: radius,
+          onTap: data.onTap,
+          child: Padding(
             padding: const EdgeInsets.fromLTRB(14, 6, 14, 6),
-            decoration: BoxDecoration(
-              color: colors.surfaceAlt,
-              borderRadius: BorderRadius.circular(UiTokens.radius12),
-              border: Border.all(color: colors.primarySubtle),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: colors.scrim.withValues(alpha: 0.05),
-                  blurRadius: 12,
-                  offset: const Offset(0, 6),
-                ),
-              ],
-            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -771,7 +811,6 @@ class _HomeAttractionCard extends StatelessWidget {
                     height: 1.45,
                   ),
                 ),
-                
                 const Spacer(),
                 Icon(
                   Icons.arrow_forward_rounded,
@@ -782,6 +821,142 @@ class _HomeAttractionCard extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _HomeInvestmentFlowSection extends StatelessWidget {
+  const _HomeInvestmentFlowSection({required this.title, required this.steps});
+
+  final String title;
+  final List<_HomeInvestmentFlowStepData> steps;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final theme = Theme.of(context);
+        final colors = theme.appColors;
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(title, style: theme.appTextTheme.heroMetricSecondary),
+            const SizedBox(height: UiTokens.spacing12),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                for (var index = 0; index < steps.length; index++) ...<Widget>[
+                  Expanded(child: _HomeInvestmentFlowCard(data: steps[index])),
+                  if (index < steps.length - 1)
+                    Icon(
+                      Icons.play_arrow_rounded,
+                      size: 24,
+                      color: colors.highlightGold,
+                    ),
+                ],
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _HomeInvestmentFlowStepData {
+  const _HomeInvestmentFlowStepData({
+    required this.stepNumber,
+    required this.icon,
+    required this.title,
+    required this.body,
+  });
+
+  final int stepNumber;
+  final IconData icon;
+  final String title;
+  final String body;
+}
+
+class _HomeInvestmentFlowCard extends StatelessWidget {
+  const _HomeInvestmentFlowCard({required this.data});
+
+  final _HomeInvestmentFlowStepData data;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
+    return Container(
+      height: 146,
+      padding: const EdgeInsets.fromLTRB(5, 12, 5, 12),
+      decoration: BoxDecoration(
+        color: colors.surface,
+        borderRadius: BorderRadius.circular(UiTokens.radius12),
+        border: Border.all(color: colors.primarySubtle),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: colors.scrim.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: <Widget>[
+          Positioned(
+            left: 0,
+            top: -4,
+            child: Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                color: colors.highlightGold,
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                '${data.stepNumber}',
+                style: appText.caption.copyWith(
+                  color: colors.onDark,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Icon(data.icon, size: 32, color: colors.primary),
+              const SizedBox(height: 8),
+              Text(
+                data.title,
+                textAlign: TextAlign.center,
+                style: appText.bodyStrong.copyWith(
+                  color: colors.primary,
+                  fontSize: 13,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                data.body,
+                textAlign: TextAlign.center,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: appText.body.copyWith(
+                  color: colors.textSecondary,
+                  height: 1.35,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

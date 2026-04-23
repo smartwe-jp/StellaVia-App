@@ -1493,6 +1493,48 @@ abstract class AppLocalizations {
   /// **'a two-layer shield.'**
   String get homeAttractionFundsBody;
 
+  /// No description provided for @homeInvestmentFlowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How to Invest'**
+  String get homeInvestmentFlowTitle;
+
+  /// No description provided for @homeInvestmentFlowStep1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get homeInvestmentFlowStep1Title;
+
+  /// No description provided for @homeInvestmentFlowStep1Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Register instantly\nwith your email'**
+  String get homeInvestmentFlowStep1Body;
+
+  /// No description provided for @homeInvestmentFlowStep2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Identity'**
+  String get homeInvestmentFlowStep2Title;
+
+  /// No description provided for @homeInvestmentFlowStep2Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete secure\nidentity verification'**
+  String get homeInvestmentFlowStep2Body;
+
+  /// No description provided for @homeInvestmentFlowStep3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Investing'**
+  String get homeInvestmentFlowStep3Title;
+
+  /// No description provided for @homeInvestmentFlowStep3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Invest in curated\nfund opportunities'**
+  String get homeInvestmentFlowStep3Body;
+
   /// No description provided for @homeReminderProfileTitle.
   ///
   /// In en, this message translates to:
@@ -1510,6 +1552,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Action needed'**
   String get homeReminderProfileBadge;
+
+  /// No description provided for @homeReminderVerifyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify'**
+  String get homeReminderVerifyAction;
 
   /// No description provided for @homeReminderEmailVerificationTitle.
   ///
