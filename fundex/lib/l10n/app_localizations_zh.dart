@@ -672,13 +672,46 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeHeroTotalDividendsLabel => '累计分配金';
 
   @override
+  String get homeTopBannerTitle => '未来的资产，\n以值得信赖的不动产来守护。';
+
+  @override
+  String get homeTopBannerBody => '投资日本精选不动产，1万日元起即可轻松开始。';
+
+  @override
+  String get homeTopBannerRegisterAction => '免费注册';
+
+  @override
   String get homeGuestBrowsingTitle => '当前未登录浏览';
 
   @override
   String get homeGuestBrowsingBody => '如需投资，请先注册或登录账号';
 
   @override
-  String get homeGuestRegisterBonusBar => '新会员免费注册赠送 3,000 日元投资金';
+  String get homeGuestRegisterBonusTitle => '新会员免费注册';
+
+  @override
+  String get homeGuestRegisterBonusBar => '赠送 3,000 日元投资金';
+
+  @override
+  String get homeAttractionSectionTitle => 'StellaVia 的魅力';
+
+  @override
+  String get homeAttractionAreaTitle => '专注于酒店、旅馆与';
+
+  @override
+  String get homeAttractionAreaBody => '度假物业。';
+
+  @override
+  String get homeAttractionStructureTitle => '投资过的住宿设施，';
+
+  @override
+  String get homeAttractionStructureBody => '真的可以入住。';
+
+  @override
+  String get homeAttractionFundsTitle => '用双重防护，';
+
+  @override
+  String get homeAttractionFundsBody => '守住资产。';
 
   @override
   String get homeReminderProfileTitle => '填写个人资料以开始出资';
@@ -4541,13 +4574,46 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeHeroTotalDividendsLabel => '累計分配金';
 
   @override
+  String get homeTopBannerTitle => '未來的資產，\n以值得信賴的不動產來守護。';
+
+  @override
+  String get homeTopBannerBody => '投資日本精選不動產，1萬日圓起即可輕鬆開始。';
+
+  @override
+  String get homeTopBannerRegisterAction => '免費註冊';
+
+  @override
   String get homeGuestBrowsingTitle => '未登入瀏覽中';
 
   @override
   String get homeGuestBrowsingBody => '如需投資，請先註冊或登入帳號';
 
   @override
-  String get homeGuestRegisterBonusBar => '新會員免費註冊送 3,000 日圓投資金';
+  String get homeGuestRegisterBonusTitle => '新會員免費註冊';
+
+  @override
+  String get homeGuestRegisterBonusBar => '送 3,000 日圓投資金';
+
+  @override
+  String get homeAttractionSectionTitle => 'StellaVia 的魅力';
+
+  @override
+  String get homeAttractionAreaTitle => '專注於飯店、旅館與';
+
+  @override
+  String get homeAttractionAreaBody => '度假物業。';
+
+  @override
+  String get homeAttractionStructureTitle => '投資過的住宿設施，';
+
+  @override
+  String get homeAttractionStructureBody => '真的可以入住。';
+
+  @override
+  String get homeAttractionFundsTitle => '用雙重防護，';
+
+  @override
+  String get homeAttractionFundsBody => '守住資產。';
 
   @override
   String get homeReminderProfileTitle => '填寫個人資料以開始出資';

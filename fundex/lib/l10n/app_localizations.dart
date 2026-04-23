@@ -1409,6 +1409,24 @@ abstract class AppLocalizations {
   /// **'Total dividends'**
   String get homeHeroTotalDividendsLabel;
 
+  /// No description provided for @homeTopBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Build future assets\nwith trusted real estate.'**
+  String get homeTopBannerTitle;
+
+  /// No description provided for @homeTopBannerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Invest smartly in carefully selected real estate in Japan from JPY 10,000.'**
+  String get homeTopBannerBody;
+
+  /// No description provided for @homeTopBannerRegisterAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Free Sign Up'**
+  String get homeTopBannerRegisterAction;
+
   /// No description provided for @homeGuestBrowsingTitle.
   ///
   /// In en, this message translates to:
@@ -1421,11 +1439,59 @@ abstract class AppLocalizations {
   /// **'An account is required to invest.'**
   String get homeGuestBrowsingBody;
 
+  /// No description provided for @homeGuestRegisterBonusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Free sign-up for new members'**
+  String get homeGuestRegisterBonusTitle;
+
   /// No description provided for @homeGuestRegisterBonusBar.
   ///
   /// In en, this message translates to:
-  /// **'Free sign-up for new members and get ¥3,000 in investment credit.'**
+  /// **'Get ¥3,000 in investment credit.'**
   String get homeGuestRegisterBonusBar;
+
+  /// No description provided for @homeAttractionSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Why StellaVia'**
+  String get homeAttractionSectionTitle;
+
+  /// No description provided for @homeAttractionAreaTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Focused on hotels, inns,'**
+  String get homeAttractionAreaTitle;
+
+  /// No description provided for @homeAttractionAreaBody.
+  ///
+  /// In en, this message translates to:
+  /// **'and resorts.'**
+  String get homeAttractionAreaBody;
+
+  /// No description provided for @homeAttractionStructureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay at the property'**
+  String get homeAttractionStructureTitle;
+
+  /// No description provided for @homeAttractionStructureBody.
+  ///
+  /// In en, this message translates to:
+  /// **'you invested in.'**
+  String get homeAttractionStructureBody;
+
+  /// No description provided for @homeAttractionFundsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Protect your assets with'**
+  String get homeAttractionFundsTitle;
+
+  /// No description provided for @homeAttractionFundsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'a two-layer shield.'**
+  String get homeAttractionFundsBody;
 
   /// No description provided for @homeReminderProfileTitle.
   ///

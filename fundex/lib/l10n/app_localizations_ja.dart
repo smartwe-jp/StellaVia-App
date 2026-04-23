@@ -680,13 +680,46 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeHeroTotalDividendsLabel => '累計分配金';
 
   @override
+  String get homeTopBannerTitle => '未来の資産を、\n信頼できる不動産で。';
+
+  @override
+  String get homeTopBannerBody => '厳選した日本の不動産に、1万円からスマートに投資。';
+
+  @override
+  String get homeTopBannerRegisterAction => '新規登録（無料）';
+
+  @override
   String get homeGuestBrowsingTitle => 'ログインせずに閲覧中';
 
   @override
   String get homeGuestBrowsingBody => '投資するにはアカウントが必要です';
 
   @override
-  String get homeGuestRegisterBonusBar => '新規会員無料登録で 3,000円分の投資金をプレゼント';
+  String get homeGuestRegisterBonusTitle => '新規会員無料登録で';
+
+  @override
+  String get homeGuestRegisterBonusBar => '3,000円分の投資金をプレゼント';
+
+  @override
+  String get homeAttractionSectionTitle => 'StellaViaの魅力';
+
+  @override
+  String get homeAttractionAreaTitle => 'ホテル・旅館・リゾートに';
+
+  @override
+  String get homeAttractionAreaBody => '特化。';
+
+  @override
+  String get homeAttractionStructureTitle => '投資した宿に、';
+
+  @override
+  String get homeAttractionStructureBody => '実際に泊まれる。';
+
+  @override
+  String get homeAttractionFundsTitle => '二段階の盾で、';
+
+  @override
+  String get homeAttractionFundsBody => '資産を守る。';
 
   @override
   String get homeReminderProfileTitle => '本人情報を入力して出資を始めましょう';

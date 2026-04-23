@@ -726,14 +726,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeHeroTotalDividendsLabel => 'Total dividends';
 
   @override
+  String get homeTopBannerTitle =>
+      'Build future assets\nwith trusted real estate.';
+
+  @override
+  String get homeTopBannerBody =>
+      'Invest smartly in carefully selected real estate in Japan from JPY 10,000.';
+
+  @override
+  String get homeTopBannerRegisterAction => 'Free Sign Up';
+
+  @override
   String get homeGuestBrowsingTitle => 'Browsing without signing in';
 
   @override
   String get homeGuestBrowsingBody => 'An account is required to invest.';
 
   @override
-  String get homeGuestRegisterBonusBar =>
-      'Free sign-up for new members and get ¥3,000 in investment credit.';
+  String get homeGuestRegisterBonusTitle => 'Free sign-up for new members';
+
+  @override
+  String get homeGuestRegisterBonusBar => 'Get ¥3,000 in investment credit.';
+
+  @override
+  String get homeAttractionSectionTitle => 'Why StellaVia';
+
+  @override
+  String get homeAttractionAreaTitle => 'Focused on hotels, inns,';
+
+  @override
+  String get homeAttractionAreaBody => 'and resorts.';
+
+  @override
+  String get homeAttractionStructureTitle => 'Stay at the property';
+
+  @override
+  String get homeAttractionStructureBody => 'you invested in.';
+
+  @override
+  String get homeAttractionFundsTitle => 'Protect your assets with';
+
+  @override
+  String get homeAttractionFundsBody => 'a two-layer shield.';
 
   @override
   String get homeReminderProfileTitle => 'Complete your profile to get started';

@@ -91,6 +91,7 @@ class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground>
     with WidgetsBindingObserver {
   PageController? _internalController;
   Timer? _autoPlayTimer;
+  int _currentPage = 0;
   int _currentIndex = 0;
   bool _isPointerInteracting = false;
   bool _isAppActive = true;
@@ -103,6 +104,13 @@ class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground>
 
   PageController get _effectiveController {
     return widget.pageController ?? (_internalController ??= PageController());
+  }
+
+  int _logicalIndexForPage(int page, int imageCount) {
+    if (imageCount <= 0) {
+      return 0;
+    }
+    return page % imageCount;
   }
 
   @override
@@ -134,8 +142,12 @@ class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground>
         oldWidget.pageController != widget.pageController ||
         oldWidget.imageUrls != widget.imageUrls) {
       final imageCount = _normalizedImageUrls.length;
-      if (_currentIndex >= imageCount) {
+      if (imageCount == 0) {
+        _currentPage = 0;
         _currentIndex = 0;
+      } else if (_currentIndex >= imageCount) {
+        _currentIndex = 0;
+        _currentPage = 0;
       }
       _configureAutoPlay();
     }
@@ -195,10 +207,13 @@ class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground>
     if (!controller.hasClients) {
       return;
     }
-    final nextIndex = (_currentIndex + 1) % images.length;
+    final currentPage =
+        controller.page?.round() ??
+        (controller.initialPage == 0 ? _currentPage : controller.initialPage);
+    final nextPage = currentPage + 1;
     try {
       await controller.animateToPage(
-        nextIndex,
+        nextPage,
         duration: const Duration(milliseconds: 420),
         curve: Curves.easeInOutCubic,
       );
@@ -232,23 +247,26 @@ class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground>
       child: PageView.builder(
         controller: _effectiveController,
         physics: const PageScrollPhysics(),
-        itemCount: images.length,
-        onPageChanged: (int index) {
-          _currentIndex = index;
-          widget.onPageChanged?.call(index);
+        itemCount: images.length <= 1 ? images.length : null,
+        onPageChanged: (int page) {
+          _currentPage = page;
+          final logicalIndex = _logicalIndexForPage(page, images.length);
+          _currentIndex = logicalIndex;
+          widget.onPageChanged?.call(logicalIndex);
           if (!_isPointerInteracting) {
             _configureAutoPlay();
           }
         },
-        itemBuilder: (BuildContext context, int index) {
+        itemBuilder: (BuildContext context, int page) {
+          final logicalIndex = _logicalIndexForPage(page, images.length);
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: widget.onImageTap == null
                 ? null
-                : () => widget.onImageTap!(index),
+                : () => widget.onImageTap!(logicalIndex),
             child: SizedBox.expand(
               child: AppRemoteImage(
-                imageUrl: images[index],
+                imageUrl: images[logicalIndex],
                 fit: BoxFit.cover,
                 placeholder: const SizedBox.shrink(),
                 errorWidget: const SizedBox.shrink(),

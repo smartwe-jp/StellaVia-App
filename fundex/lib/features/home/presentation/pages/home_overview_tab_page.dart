@@ -8,7 +8,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/network/app_network_connectivity_providers.dart';
-import '../../../../app/support/app_compact_money_formatter.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
@@ -19,13 +18,16 @@ import '../../../auth/domain/entities/auth_user.dart';
 import '../../../member_profile/domain/entities/member_profile_details.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
-import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../../notifications/presentation/providers/notifications_providers.dart';
 import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
-import '../support/home_display_name_resolver.dart';
 
 const Set<int> _featuredProjectStatuses = <int>{0, 1};
 final Uri _officialSiteUri = Uri.parse('https://stellavia.co.jp/');
+const List<String> _homeHeroImageUrls = <String>[
+  'https://upload.wikimedia.org/wikipedia/commons/3/35/Minato_City%2C_Tokyo%2C_Japan.jpg',
+  'https://upload.wikimedia.org/wikipedia/commons/4/4e/Gion_kyoto_japan.JPG',
+  'https://upload.wikimedia.org/wikipedia/commons/e/e7/Biei_Hokkaido.jpg',
+];
 
 class HomeOverviewTabPage extends ConsumerWidget {
   const HomeOverviewTabPage({super.key});
@@ -47,7 +49,6 @@ class HomeOverviewTabPage extends ConsumerWidget {
           ),
         );
     final currentUser = ref.watch(currentAuthUserProvider).asData?.value;
-    final basicProfile = ref.watch(memberBasicProfileProvider);
     final isMemberProfileCompleted = ref
         .watch(isMemberProfileCompletedProvider)
         .asData
@@ -64,10 +65,6 @@ class HomeOverviewTabPage extends ConsumerWidget {
     final asyncVerificationStatus = ref.watch(
       settingsRemoteVerificationStatusProvider,
     );
-    final accountStatistic = ref
-        .watch(myPageAccountStatisticProvider)
-        .asData
-        ?.value;
     final memberProfile = asyncMemberProfile.asData?.value;
     final verificationStatus = asyncVerificationStatus.asData?.value;
     final projects = asyncProjects.asData?.value ?? const <FundProject>[];
@@ -183,51 +180,44 @@ class HomeOverviewTabPage extends ConsumerWidget {
 
     final topSection = switch ((authState.isLoading, isAuthenticated)) {
       (true, _) => const SizedBox(height: UiTokens.spacing12),
-      (_, true) => FundHomeHeroSummary(
-        greeting: l10n.homeWelcomeUser(
-          resolveHomeDisplayName(
-            locale: Localizations.localeOf(context),
-            profile: basicProfile,
-          ),
-        ),
-        totalAssetsLabel: l10n.homeHeroTotalAssetsAmountLabel,
-        totalAssetsValue: _formatCurrencyValue(
-          accountStatistic?.total,
-          currencyFormatter,
-        ),
-        totalAssetsDelta: null,
-        activeInvestmentLabel: l10n.homeHeroActiveInvestmentLabel,
-        activeInvestmentValue: formatCompactYenAmount(
-          accountStatistic?.crowdfundingTotal ?? 0,
-          locale: locale.toLanguageTag(),
-        ),
-        totalDividendsLabel: l10n.homeHeroCashLabel,
-        totalDividendsValue: formatCompactYenAmount(
-          accountStatistic?.firstLevelAccountTotal,
-          locale: locale.toLanguageTag(),
-        ),
-        showNotificationDot: hasUnreadNotifications,
+      _ => _HomeHeroBanner(
+        registerBonusTitle: l10n.homeGuestRegisterBonusTitle,
+        registerBonusBody: l10n.homeGuestRegisterBonusBar,
+        registerLabel: l10n.homeTopBannerRegisterAction,
+        loginLabel: l10n.loginSubmit,
+        onLoginTap: isAuthenticated ? null : () => context.push('/login'),
+        onRegisterTap: isAuthenticated
+            ? null
+            : () => context.push('/login?openRegister=1'),
+        onSettingsTap: () => context.push('/profile/settings'),
         onNotificationTap: () => context.push('/profile/notifications'),
-      ),
-      _ => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          _HomeGuestTopBar(
-            title: l10n.splashBrandName,
-            onSettingsTap: () => context.push('/profile/settings'),
-          ),
-          _HomeGuestRegisterBonusBar(message: l10n.homeGuestRegisterBonusBar),
-          FundGuestBrowsingBar(
-            title: l10n.homeGuestBrowsingTitle,
-            message: l10n.homeGuestBrowsingBody,
-            loginLabel: l10n.loginSubmit,
-            registerLabel: l10n.loginCreateAccount,
-            onLoginTap: () => context.push('/login'),
-            onRegisterTap: () => context.push('/login?openRegister=1'),
-          ),
-        ],
+        showNotificationDot: hasUnreadNotifications,
+        showGuestActions: !isAuthenticated,
       ),
     };
+    final attractionSection = _HomeAttractionSection(
+      title: l10n.homeAttractionSectionTitle,
+      items: <_HomeAttractionItemData>[
+        _HomeAttractionItemData(
+          icon: Icons.home_outlined,
+          title: l10n.homeAttractionAreaTitle,
+          body: l10n.homeAttractionAreaBody,
+          onTap: () => _openOfficialSite(context),
+        ),
+        _HomeAttractionItemData(
+          icon: Icons.hotel_outlined,
+          title: l10n.homeAttractionStructureTitle,
+          body: l10n.homeAttractionStructureBody,
+          onTap: () => _openOfficialSite(context),
+        ),
+        _HomeAttractionItemData(
+          icon: Icons.account_balance_outlined,
+          title: l10n.homeAttractionFundsTitle,
+          body: l10n.homeAttractionFundsBody,
+          onTap: () => _openOfficialSite(context),
+        ),
+      ],
+    );
 
     return MainShellTabRefreshScope(
       tabIndex: 0,
@@ -254,7 +244,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
               ),
             topSection,
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+              padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
               child: Column(
                 spacing: UiTokens.spacing16,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,6 +256,12 @@ class HomeOverviewTabPage extends ConsumerWidget {
                       ),
                       child: FundReminderFeed(items: reminders),
                     ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: UiTokens.spacing16,
+                    ),
+                    child: attractionSection,
+                  ),
                   if (asyncProjects.isLoading && projects.isEmpty)
                     const Center(
                       child: Padding(
@@ -351,17 +347,36 @@ bool get _isApplePlatform =>
     (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS);
 
-class _HomeGuestTopBar extends StatelessWidget {
-  const _HomeGuestTopBar({required this.title, this.onSettingsTap});
+class _HomeHeroBanner extends StatelessWidget {
+  const _HomeHeroBanner({
+    required this.registerBonusTitle,
+    required this.registerBonusBody,
+    required this.registerLabel,
+    required this.loginLabel,
+    required this.showGuestActions,
+    this.showNotificationDot = false,
+    this.onSettingsTap,
+    this.onNotificationTap,
+    this.onRegisterTap,
+    this.onLoginTap,
+  });
 
-  final String title;
+  final String registerBonusTitle;
+  final String registerBonusBody;
+  final String registerLabel;
+  final String loginLabel;
+  final bool showGuestActions;
+  final bool showNotificationDot;
   final VoidCallback? onSettingsTap;
+  final VoidCallback? onNotificationTap;
+  final VoidCallback? onRegisterTap;
+  final VoidCallback? onLoginTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
-    final appText = theme.appTextTheme;
+    double borderRadius = showGuestActions ? UiTokens.radius20 : 0;
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -370,18 +385,87 @@ class _HomeGuestTopBar extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: <Color>[colors.heroStart, colors.heroMiddle],
         ),
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(borderRadius),
+        ),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
-        child: Row(
+        padding: const EdgeInsets.only(bottom: 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Expanded(
-              child: Text(
-                title,
-                style: appText.pageTitle.copyWith(color: colors.onDark),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+              child: Row(
+                children: <Widget>[
+                  //"StellaVia" text
+                  Expanded(
+                    child: Text(
+                      "StellaVia",
+                      style: theme.appTextTheme.pageTitle.copyWith(
+                        color: colors.onDark,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  if (showGuestActions)
+                    AppNavigationIconButton(
+                      icon: Icons.menu_rounded,
+                      size: 40,
+                      borderRadius: 12,
+                      backgroundColor: colors.onDark.withValues(alpha: 0.08),
+                      onTap: onSettingsTap,
+                    )
+                  else
+                    _HomeHeroNotificationButton(
+                      showDot: showNotificationDot,
+                      onTap: onNotificationTap,
+                    ),
+                ],
               ),
             ),
-            AppNavigationIconButton(icon: Icons.menu, onTap: onSettingsTap),
+            const SizedBox(height: 6),
+            const _HomeHeroVisual(),
+            if (showGuestActions)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 6, 20, 20),
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 52,
+                      child: _HomeHeroRegisterBonusCard(
+                        title: registerBonusTitle,
+                        body: registerBonusBody,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      height: 52,
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: _HomeHeroActionButton(
+                              label: registerLabel,
+                              onTap: onRegisterTap,
+                              isPrimary: true,
+                            ),
+                          ),
+                          const SizedBox(width: UiTokens.spacing12),
+                          Expanded(
+                            child: _HomeHeroActionButton(
+                              label: loginLabel,
+                              onTap: onLoginTap,
+                              isPrimary: false,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            if (!showGuestActions)
+              Divider(height: 1, thickness: 1, color: colors.highlightGold),
           ],
         ),
       ),
@@ -389,10 +473,82 @@ class _HomeGuestTopBar extends StatelessWidget {
   }
 }
 
-class _HomeGuestRegisterBonusBar extends StatelessWidget {
-  const _HomeGuestRegisterBonusBar({required this.message});
+class _HomeHeroNotificationButton extends StatelessWidget {
+  const _HomeHeroNotificationButton({
+    required this.showDot,
+    required this.onTap,
+  });
 
-  final String message;
+  final bool showDot;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+
+    return SizedBox(
+      width: 40,
+      height: 40,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: <Widget>[
+          Positioned.fill(
+            child: AppNavigationIconButton(
+              icon: Icons.notifications_none_rounded,
+              size: 40,
+              borderRadius: 12,
+              backgroundColor: colors.onDark.withValues(alpha: 0.08),
+              onTap: onTap,
+            ),
+          ),
+          if (showDot)
+            Positioned(
+              right: 7,
+              top: 7,
+              child: Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: colors.danger,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: colors.heroStart, width: 1.5),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HomeHeroVisual extends StatelessWidget {
+  const _HomeHeroVisual();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+
+    return Container(
+      decoration: BoxDecoration(color: colors.onDark),
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: FundHeroMediaBackground(
+          gradientColors: <Color>[colors.heroMiddle, colors.primaryAlt],
+          imageUrls: _homeHeroImageUrls,
+          showArtworkOverlay: false,
+          autoPlay: _homeHeroImageUrls.length > 1,
+          autoPlayInterval: const Duration(seconds: 5),
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeHeroRegisterBonusCard extends StatelessWidget {
+  const _HomeHeroRegisterBonusCard({required this.title, required this.body});
+  final String title;
+  final String body;
 
   @override
   Widget build(BuildContext context) {
@@ -400,42 +556,231 @@ class _HomeGuestRegisterBonusBar extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
 
-    return DecoratedBox(
+    return Container(
+      width: double.infinity,
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
-        color: colors.highlightGold,
-        border: Border(
-          bottom: BorderSide(
-            color: colors.brandPrimaryDark.withValues(alpha: 0.12),
-          ),
+        color: colors.heroMiddle.withValues(alpha: 0.34),
+        borderRadius: BorderRadius.circular(UiTokens.radius8),
+        border: Border.all(
+          color: colors.highlightGold.withValues(alpha: 0.7),
+          width: 1.25,
         ),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: colors.brandPrimaryDark.withValues(alpha: 0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-        child: Row(
-          children: <Widget>[
-            Icon(
-              Icons.workspace_premium_rounded,
-              size: 18,
-              color: colors.brandPrimaryDark,
+      child: Row(
+        children: <Widget>[
+          Container(
+            width: 38,
+            height: 38,
+            decoration: BoxDecoration(
+              color: colors.brandSecondary.withValues(alpha: 0.3),
+              shape: BoxShape.circle,
             ),
-            const SizedBox(width: UiTokens.spacing8),
-            Expanded(
-              child: Text(
-                message,
+            child: Icon(
+              Icons.card_giftcard_rounded,
+              size: 20,
+              color: colors.highlightGold,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                title,
                 style: appText.bodyStrong.copyWith(
-                  color: colors.brandPrimaryDark,
+                  color: colors.onDark,
                   height: 1.35,
                 ),
               ),
+              Text(
+                body,
+                style: appText.bodyStrong.copyWith(
+                  color: colors.highlightGold,
+                  height: 1.35,
+                  fontSize: 16,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          //const SizedBox(width: 8),
+          // Icon(
+          //   Icons.chevron_right_rounded,
+          //   size: 22,
+          //   color: colors.highlightGold,
+          // ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HomeHeroActionButton extends StatelessWidget {
+  const _HomeHeroActionButton({
+    required this.label,
+    required this.isPrimary,
+    this.onTap,
+  });
+
+  final String label;
+  final bool isPrimary;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
+    final backgroundColor = isPrimary
+        ? colors.highlightGold
+        : Colors.transparent;
+    final foregroundColor = isPrimary ? colors.brandPrimaryDark : colors.onDark;
+    final borderColor = isPrimary
+        ? colors.highlightGold
+        : colors.onDark.withValues(alpha: 0.54);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(UiTokens.radius8),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(UiTokens.radius8),
+            border: Border.all(color: borderColor, width: 1.4),
+          ),
+          child: SizedBox.expand(
+            child: Center(
+              child: Text(
+                label,
+                style: appText.button.copyWith(color: foregroundColor),
+              ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeAttractionSection extends StatelessWidget {
+  const _HomeAttractionSection({required this.title, required this.items});
+
+  final String title;
+  final List<_HomeAttractionItemData> items;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(title, style: Theme.of(context).appTextTheme.heroMetricSecondary),
+        const SizedBox(height: UiTokens.spacing12),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            for (var index = 0; index < items.length; index++) ...<Widget>[
+              Expanded(child: _HomeAttractionCard(data: items[index])),
+              if (index < items.length - 1)
+                const SizedBox(width: UiTokens.spacing12),
+            ],
           ],
+        ),
+      ],
+    );
+  }
+}
+
+class _HomeAttractionItemData {
+  const _HomeAttractionItemData({
+    required this.icon,
+    required this.title,
+    required this.body,
+    this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String body;
+  final VoidCallback? onTap;
+}
+
+class _HomeAttractionCard extends StatelessWidget {
+  const _HomeAttractionCard({required this.data});
+
+  final _HomeAttractionItemData data;
+
+  String get _headlineText {
+    final title = data.title.trim();
+    final body = data.body.trim();
+    if (body.isEmpty) {
+      return title;
+    }
+    return '$title$body';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(UiTokens.radius12),
+        onTap: data.onTap,
+        child: SizedBox(
+          //height: 168,
+          child: Ink(
+            padding: const EdgeInsets.fromLTRB(14, 6, 14, 6),
+            decoration: BoxDecoration(
+              color: colors.surfaceAlt,
+              borderRadius: BorderRadius.circular(UiTokens.radius12),
+              border: Border.all(color: colors.primarySubtle),
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                  color: colors.scrim.withValues(alpha: 0.05),
+                  blurRadius: 12,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  width: 44,
+                  height: 44,
+                  child: Icon(data.icon, size: 32, color: colors.highlightGold),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  _headlineText,
+                  textAlign: TextAlign.center,
+                  maxLines: 4,
+                  overflow: TextOverflow.ellipsis,
+                  style: appText.bodyStrong.copyWith(
+                    color: colors.textPrimary,
+                    height: 1.45,
+                  ),
+                ),
+                
+                const SizedBox(height: 10),
+                Icon(
+                  Icons.arrow_forward_rounded,
+                  size: 18,
+                  color: colors.brandPrimaryDark,
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -518,16 +863,14 @@ class _HomeLicenseBar extends StatelessWidget {
         alignment: Alignment.center,
         width: double.infinity,
         height: 72,
-        child: 
-        Text(
-            context.l10n.myPageLicenseNotice,
-            textAlign: TextAlign.center,
-            style: appText.meta.copyWith(
-              color: colors.brandPrimaryDark,
-              height: 1.45,
-            ),
-        )  
-        
+        child: Text(
+          context.l10n.myPageLicenseNotice,
+          textAlign: TextAlign.center,
+          style: appText.meta.copyWith(
+            color: colors.brandPrimaryDark,
+            height: 1.45,
+          ),
+        ),
       ),
     );
   }
@@ -536,13 +879,9 @@ class _HomeLicenseBar extends StatelessWidget {
 Future<void> _refreshHomeOverviewTab(WidgetRef ref) async {
   ref.invalidate(fundProjectListProvider);
   ref.invalidate(memberProfileDetailsProvider);
-  ref.invalidate(myPageAccountStatisticProvider);
-  ref.invalidate(secondaryMarketMarketplaceListProvider);
   await Future.wait<void>(<Future<void>>[
     ref.refresh(fundProjectListProvider.future).then((_) {}),
     ref.refresh(memberProfileDetailsProvider.future).then((_) {}),
-    ref.refresh(myPageAccountStatisticProvider.future).then((_) {}),
-    ref.refresh(secondaryMarketMarketplaceListProvider.future).then((_) {}),
   ]);
 }
 
