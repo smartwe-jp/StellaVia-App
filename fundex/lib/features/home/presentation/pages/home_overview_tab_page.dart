@@ -736,7 +736,7 @@ class _HomeAttractionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(UiTokens.radius12),
         onTap: data.onTap,
         child: SizedBox(
-          //height: 168,
+          height: 142,
           child: Ink(
             padding: const EdgeInsets.fromLTRB(14, 6, 14, 6),
             decoration: BoxDecoration(
@@ -752,7 +752,7 @@ class _HomeAttractionCard extends StatelessWidget {
               ],
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
@@ -772,7 +772,7 @@ class _HomeAttractionCard extends StatelessWidget {
                   ),
                 ),
                 
-                const SizedBox(height: 10),
+                const Spacer(),
                 Icon(
                   Icons.arrow_forward_rounded,
                   size: 18,
