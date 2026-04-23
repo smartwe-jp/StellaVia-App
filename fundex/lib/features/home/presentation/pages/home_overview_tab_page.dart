@@ -85,11 +85,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
     final reminders = <FundReminderData>[
       if (shouldShowMemberProfileReminder)
         FundReminderData(
-          leading: Icon(
-            Icons.warning_rounded,
-            size: 18,
-            color: Theme.of(context).appColors.highlightGold,
-          ),
+          leading: const Icon(Icons.warning_rounded, size: 30),
           title: l10n.homeReminderProfileTitle,
           message: l10n.homeReminderProfileBody,
           tone: FundReminderTone.danger,
@@ -102,11 +98,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
         ),
       if (isEmailVerified == false)
         FundReminderData(
-          leading: Icon(
-            Icons.alternate_email_rounded,
-            size: 18,
-            color: Theme.of(context).appColors.warningAction,
-          ),
+          leading: const Icon(Icons.alternate_email_rounded, size: 30),
           title: l10n.homeReminderEmailVerificationTitle,
           message: l10n.homeReminderEmailVerificationBody,
           tone: FundReminderTone.warning,
@@ -117,11 +109,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
         ),
       if (verificationStatus?.isPhoneVerified == false)
         FundReminderData(
-          leading: Icon(
-            Icons.sms_outlined,
-            size: 18,
-            color: Theme.of(context).appColors.warningAction,
-          ),
+          leading: const Icon(Icons.smartphone_rounded, size: 30),
           title: l10n.homeReminderPhoneVerificationTitle,
           message: l10n.homeReminderPhoneVerificationBody,
           tone: FundReminderTone.warning,
@@ -133,11 +121,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
       if (!shouldShowMemberProfileReminder &&
           verificationStatus?.isRealPersonVerified == false)
         FundReminderData(
-          leading: Icon(
-            Icons.verified_user_outlined,
-            size: 18,
-            color: Theme.of(context).appColors.highlightGold,
-          ),
+          leading: const Icon(Icons.verified_user_outlined, size: 30),
           title: l10n.homeReminderRealPersonVerificationTitle,
           message: l10n.homeReminderRealPersonVerificationBody,
           tone: FundReminderTone.danger,
@@ -252,7 +236,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
               ),
             topSection,
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+              padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
               child: Column(
                 spacing: UiTokens.spacing16,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -265,12 +249,12 @@ class HomeOverviewTabPage extends ConsumerWidget {
                       child: FundReminderFeed(items: reminders),
                     ),
                   if (!isAuthenticated)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: UiTokens.spacing16,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: UiTokens.spacing16,
+                      ),
+                      child: attractionSection,
                     ),
-                    child: attractionSection,
-                  ),
                   if (asyncProjects.isLoading && projects.isEmpty)
                     const Center(
                       child: Padding(
@@ -331,34 +315,34 @@ class HomeOverviewTabPage extends ConsumerWidget {
                   //     children: secondaryMarketCards,
                   //   ),
                   if (!isAuthenticated)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: UiTokens.spacing16,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: UiTokens.spacing16,
+                      ),
+                      child: _HomeInvestmentFlowSection(
+                        title: l10n.homeInvestmentFlowTitle,
+                        steps: <_HomeInvestmentFlowStepData>[
+                          _HomeInvestmentFlowStepData(
+                            stepNumber: 1,
+                            icon: Icons.person_outline_rounded,
+                            title: l10n.homeInvestmentFlowStep1Title,
+                            body: l10n.homeInvestmentFlowStep1Body,
+                          ),
+                          _HomeInvestmentFlowStepData(
+                            stepNumber: 2,
+                            icon: Icons.badge_outlined,
+                            title: l10n.homeInvestmentFlowStep2Title,
+                            body: l10n.homeInvestmentFlowStep2Body,
+                          ),
+                          _HomeInvestmentFlowStepData(
+                            stepNumber: 3,
+                            icon: Icons.bar_chart_rounded,
+                            title: l10n.homeInvestmentFlowStep3Title,
+                            body: l10n.homeInvestmentFlowStep3Body,
+                          ),
+                        ],
+                      ),
                     ),
-                    child: _HomeInvestmentFlowSection(
-                      title: l10n.homeInvestmentFlowTitle,
-                      steps: <_HomeInvestmentFlowStepData>[
-                        _HomeInvestmentFlowStepData(
-                          stepNumber: 1,
-                          icon: Icons.person_outline_rounded,
-                          title: l10n.homeInvestmentFlowStep1Title,
-                          body: l10n.homeInvestmentFlowStep1Body,
-                        ),
-                        _HomeInvestmentFlowStepData(
-                          stepNumber: 2,
-                          icon: Icons.badge_outlined,
-                          title: l10n.homeInvestmentFlowStep2Title,
-                          body: l10n.homeInvestmentFlowStep2Body,
-                        ),
-                        _HomeInvestmentFlowStepData(
-                          stepNumber: 3,
-                          icon: Icons.bar_chart_rounded,
-                          title: l10n.homeInvestmentFlowStep3Title,
-                          body: l10n.homeInvestmentFlowStep3Body,
-                        ),
-                      ],
-                    ),
-                  ),
                   const SizedBox(height: UiTokens.spacing32),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -414,100 +398,147 @@ class _HomeHeroBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
-    double borderRadius = showGuestActions ? UiTokens.radius20 : 0;
+    const arcLift = 12.0;
+    const arcDepth = 12.0;
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: <Color>[colors.heroStart, colors.heroMiddle],
-        ),
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(borderRadius),
-        ),
+    return ClipPath(
+      clipper: const _HomeHeroBannerArcClipper(
+        edgeLift: arcLift,
+        arcDepth: arcDepth,
       ),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-              child: Row(
-                children: <Widget>[
-                  //"StellaVia" text
-                  Expanded(
-                    child: Text(
-                      "StellaVia",
-                      style: theme.appTextTheme.pageTitle.copyWith(
-                        color: colors.onDark,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                  if (showGuestActions)
-                    AppNavigationIconButton(
-                      icon: Icons.menu_rounded,
-                      size: 40,
-                      borderRadius: 12,
-                      backgroundColor: colors.onDark.withValues(alpha: 0.08),
-                      onTap: onSettingsTap,
-                    )
-                  else
-                    _HomeHeroNotificationButton(
-                      showDot: showNotificationDot,
-                      onTap: onNotificationTap,
-                    ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 6),
-            const _HomeHeroVisual(),
-            if (showGuestActions)
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: <Color>[colors.heroStart, colors.heroMiddle],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-                child: Column(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                child: Row(
                   children: <Widget>[
-                    SizedBox(
-                      height: 52,
-                      child: _HomeHeroRegisterBonusCard(
-                        title: registerBonusTitle,
-                        body: registerBonusBody,
+                    //"StellaVia" text
+                    Expanded(
+                      child: Text(
+                        "StellaVia",
+                        style: theme.appTextTheme.pageTitle.copyWith(
+                          color: colors.onDark,
+                          fontSize: 20,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      height: 52,
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: _HomeHeroActionButton(
-                              label: registerLabel,
-                              onTap: onRegisterTap,
-                              isPrimary: true,
-                            ),
-                          ),
-                          const SizedBox(width: UiTokens.spacing12),
-                          Expanded(
-                            child: _HomeHeroActionButton(
-                              label: loginLabel,
-                              onTap: onLoginTap,
-                              isPrimary: false,
-                            ),
-                          ),
-                        ],
+                    if (showGuestActions)
+                      AppNavigationIconButton(
+                        icon: Icons.menu_rounded,
+                        size: 40,
+                        borderRadius: 12,
+                        backgroundColor: colors.onDark.withValues(alpha: 0.08),
+                        onTap: onSettingsTap,
+                      )
+                    else
+                      _HomeHeroNotificationButton(
+                        showDot: showNotificationDot,
+                        onTap: onNotificationTap,
                       ),
-                    ),
                   ],
                 ),
               ),
-            if (!showGuestActions)
-              Divider(height: 1, thickness: 1, color: colors.highlightGold),
-          ],
+              const SizedBox(height: 6),
+              const _HomeHeroVisual(),
+              if (showGuestActions)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 52,
+                        child: _HomeHeroRegisterBonusCard(
+                          title: registerBonusTitle,
+                          body: registerBonusBody,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 52,
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: _HomeHeroActionButton(
+                                label: registerLabel,
+                                onTap: onRegisterTap,
+                                isPrimary: true,
+                              ),
+                            ),
+                            const SizedBox(width: UiTokens.spacing12),
+                            Expanded(
+                              child: _HomeHeroActionButton(
+                                label: loginLabel,
+                                onTap: onLoginTap,
+                                isPrimary: false,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else
+                const SizedBox(height: 10),
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+class _HomeHeroBannerArcClipper extends CustomClipper<Path> {
+  const _HomeHeroBannerArcClipper({
+    required this.edgeLift,
+    required this.arcDepth,
+  });
+
+  final double edgeLift;
+  final double arcDepth;
+
+  @override
+  Path getClip(Size size) {
+    final shoulderY = size.height - edgeLift - 20;
+    final centerY = shoulderY + arcDepth + 16;
+
+    final leftCornerY = shoulderY + 20;
+    final rightCornerY = shoulderY + 20;
+
+    final centerX = size.width * 0.5;
+    final midLeftX = size.width * 0.32;
+    final midRightX = size.width * 0.68;
+
+    return Path()
+      ..moveTo(0, 0)
+      ..lineTo(0, shoulderY)
+      ..cubicTo(0, leftCornerY, midLeftX, centerY, centerX, centerY)
+      ..cubicTo(
+        midRightX,
+        centerY,
+        size.width,
+        rightCornerY,
+        size.width,
+        shoulderY,
+      )
+      ..lineTo(size.width, 0)
+      ..close();
+  }
+
+  @override
+  bool shouldReclip(covariant _HomeHeroBannerArcClipper oldClipper) {
+    return oldClipper.edgeLift != edgeLift || oldClipper.arcDepth != arcDepth;
   }
 }
 
@@ -676,10 +707,8 @@ class _HomeHeroActionButton extends StatelessWidget {
     final backgroundColor = isPrimary
         ? colors.highlightGold
         : Colors.transparent;
-    final foregroundColor = isPrimary ? colors.brandPrimaryDark : colors.onDark;
-    final borderColor = isPrimary
-        ? colors.highlightGold
-        : colors.onDark.withValues(alpha: 0.54);
+    final foregroundColor = isPrimary ? colors.onDark : colors.highlightGold;
+    final borderColor = colors.highlightGold;
 
     return Material(
       color: Colors.transparent,

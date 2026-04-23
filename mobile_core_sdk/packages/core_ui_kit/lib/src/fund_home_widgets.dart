@@ -439,6 +439,7 @@ class FundReminderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final palette = _paletteFor(context, data.tone);
     final cardRadius = BorderRadius.circular(UiTokens.radius16);
@@ -464,25 +465,13 @@ class FundReminderCard extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 14, 12, 14),
+        padding: const EdgeInsets.fromLTRB(14, 6, 12, 6),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: palette.borderColor.withValues(alpha: 0.7),
-                ),
-              ),
-              alignment: Alignment.center,
-              child: IconTheme(
-                data: IconThemeData(color: palette.titleColor, size: 22),
-                child: data.leading,
-              ),
+            IconTheme(
+              data: IconThemeData(color: palette.titleColor),
+              child: data.leading,
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -503,40 +492,41 @@ class FundReminderCard extends StatelessWidget {
                     data.message,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: appText.bodyMuted.copyWith(
-                      color: palette.messageColor,
+                    style: appText.body.copyWith(
+                      color: colors.textSecondary,
                       height: 1.45,
+                      fontSize: 13
                     ),
                   ),
                 ],
               ),
             ),
-            if (actionLabel != null) ...<Widget>[
-              const SizedBox(width: 12),
-              Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(12),
-                  onTap: actionTap,
-                  child: Ink(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: palette.titleColor,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      actionLabel,
-                      style: appText.chip.copyWith(
-                        color: palette.badgeForegroundColor,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            // if (actionLabel != null) ...<Widget>[
+            //   const SizedBox(width: 12),
+            //   Material(
+            //     color: Colors.transparent,
+            //     child: InkWell(
+            //       borderRadius: BorderRadius.circular(12),
+            //       onTap: actionTap,
+            //       child: Ink(
+            //         padding: const EdgeInsets.symmetric(
+            //           horizontal: 16,
+            //           vertical: 10,
+            //         ),
+            //         decoration: BoxDecoration(
+            //           color: palette.titleColor,
+            //           borderRadius: BorderRadius.circular(12),
+            //         ),
+            //         child: Text(
+            //           actionLabel,
+            //           style: appText.chip.copyWith(
+            //             color: palette.badgeForegroundColor,
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ],
             const SizedBox(width: 6),
             Icon(
               Icons.chevron_right_rounded,
