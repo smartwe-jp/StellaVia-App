@@ -234,7 +234,7 @@ class _HomeHeroVisual extends StatelessWidget {
     );
 
     return Container(
-      decoration: BoxDecoration(color: colors.onDark),
+      decoration: BoxDecoration(color: colors.background),
       child: AspectRatio(
         aspectRatio: 11 / 5,
         child: FundHeroMediaBackground(

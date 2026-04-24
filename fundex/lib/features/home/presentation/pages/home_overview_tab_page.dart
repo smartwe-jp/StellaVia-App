@@ -217,12 +217,12 @@ class HomeOverviewTabPage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   if (isAuthenticated)
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(
-                    //     horizontal: UiTokens.spacing16,
-                    //   ),
-                    //   child: FundReminderFeed(items: reminders),
-                    // ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: UiTokens.spacing16,
+                      ),
+                      child: FundReminderFeed(items: reminders),
+                    ),
                   if (!isAuthenticated)
                     Padding(
                       padding: const EdgeInsets.symmetric(
