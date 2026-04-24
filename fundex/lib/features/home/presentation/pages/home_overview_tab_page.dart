@@ -217,12 +217,12 @@ class HomeOverviewTabPage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   if (isAuthenticated)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: UiTokens.spacing16,
-                      ),
-                      child: FundReminderFeed(items: reminders),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(
+                    //     horizontal: UiTokens.spacing16,
+                    //   ),
+                    //   child: FundReminderFeed(items: reminders),
+                    // ),
                   if (!isAuthenticated)
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -273,7 +273,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
                       title: l10n.homeFeaturedFundsTitle,
                       actionLabel: l10n.homeViewAllAction,
                       onActionTap: () => context.go('/funds'),
-                      height: 272,
+                      height: 350,
                       children: featuredFundCards,
                     ),
                   if (!isAuthenticated)

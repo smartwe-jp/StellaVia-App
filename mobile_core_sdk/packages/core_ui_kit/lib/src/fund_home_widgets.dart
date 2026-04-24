@@ -443,12 +443,6 @@ class FundReminderCard extends StatelessWidget {
     final appText = theme.appTextTheme;
     final palette = _paletteFor(context, data.tone);
     final cardRadius = BorderRadius.circular(UiTokens.radius16);
-    final actionLabel = data.actionLabel?.trim().isNotEmpty == true
-        ? data.actionLabel!.trim()
-        : (data.badgeLabel?.trim().isNotEmpty == true
-              ? data.badgeLabel!.trim()
-              : null);
-    final actionTap = data.onActionTap ?? data.onTap;
 
     final card = Container(
       width: double.infinity,
@@ -495,38 +489,12 @@ class FundReminderCard extends StatelessWidget {
                     style: appText.body.copyWith(
                       color: colors.textSecondary,
                       height: 1.45,
-                      fontSize: 13
+                      fontSize: 13,
                     ),
                   ),
                 ],
               ),
             ),
-            // if (actionLabel != null) ...<Widget>[
-            //   const SizedBox(width: 12),
-            //   Material(
-            //     color: Colors.transparent,
-            //     child: InkWell(
-            //       borderRadius: BorderRadius.circular(12),
-            //       onTap: actionTap,
-            //       child: Ink(
-            //         padding: const EdgeInsets.symmetric(
-            //           horizontal: 16,
-            //           vertical: 10,
-            //         ),
-            //         decoration: BoxDecoration(
-            //           color: palette.titleColor,
-            //           borderRadius: BorderRadius.circular(12),
-            //         ),
-            //         child: Text(
-            //           actionLabel,
-            //           style: appText.chip.copyWith(
-            //             color: palette.badgeForegroundColor,
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ],
             const SizedBox(width: 6),
             Icon(
               Icons.chevron_right_rounded,
@@ -982,7 +950,7 @@ class FundFeaturedFundCard extends StatelessWidget {
               borderRadius: cardRadius,
               onTap: data.onTap,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(14, 14, 14, 16),
+                padding: const EdgeInsets.fromLTRB(14, 14, 14, 26),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -994,26 +962,37 @@ class FundFeaturedFundCard extends StatelessWidget {
                             .map(
                               (FundFeaturedFundTagData tag) => Container(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
+                                  horizontal: 10,
                                   vertical: 4,
                                 ),
                                 decoration: BoxDecoration(
                                   color: tag.backgroundColor,
                                   borderRadius: BorderRadius.circular(6),
                                 ),
-                                child: Text(
-                                  tag.label,
-                                  style: appText.micro.copyWith(
-                                    color: tag.foregroundColor,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  widthFactor: 1,
+                                  heightFactor: 1,
+                                  child: Text(
+                                    tag.label,
+                                    textHeightBehavior:
+                                        const TextHeightBehavior(
+                                          applyHeightToFirstAscent: false,
+                                          applyHeightToLastDescent: false,
+                                        ),
+                                    style: appText.micro.copyWith(
+                                      color: tag.foregroundColor,
+                                      height: 1,
+                                    ),
                                   ),
                                 ),
                               ),
                             )
                             .toList(),
                       ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 12),
                     SizedBox(
-                      height: 104,
+                      height: 150,
                       width: double.infinity,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(UiTokens.radius16),
@@ -1026,7 +1005,7 @@ class FundFeaturedFundCard extends StatelessWidget {
                               ),
                       ),
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1037,7 +1016,7 @@ class FundFeaturedFundCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: appText.cardTitle.copyWith(
                               color: primaryTextColor,
-                              fontSize: 15,
+                              fontSize: 16,
                               height: 1.35,
                             ),
                           ),
