@@ -69,7 +69,7 @@ class _HomeAttractionCard extends StatelessWidget {
     final radius = BorderRadius.circular(UiTokens.radius12);
 
     return Container(
-      height: 142,
+      height: 154,
       decoration: BoxDecoration(
         color: colors.surfaceAlt,
         borderRadius: radius,

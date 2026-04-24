@@ -1,11 +1,8 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
-const List<String> _homeHeroImageUrls = <String>[
-  'https://upload.wikimedia.org/wikipedia/commons/3/35/Minato_City%2C_Tokyo%2C_Japan.jpg',
-  'https://upload.wikimedia.org/wikipedia/commons/4/4e/Gion_kyoto_japan.JPG',
-  'https://upload.wikimedia.org/wikipedia/commons/e/e7/Biei_Hokkaido.jpg',
-];
+const String _homeHeroBannerBaseUrl = 'https://stellavia.co.jp/img';
+const int _homeHeroBannerImageCount = 3;
 
 class HomeHeroBanner extends StatelessWidget {
   const HomeHeroBanner({
@@ -41,10 +38,10 @@ class HomeHeroBanner extends StatelessWidget {
     const arcDepth = 12.0;
 
     return ClipPath(
-      clipper: const _HomeHeroBannerArcClipper(
+      clipper: showGuestActions ? const _HomeHeroBannerArcClipper(
         edgeLift: arcLift,
         arcDepth: arcDepth,
-      ),
+      ):null,
       child: DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -54,12 +51,12 @@ class HomeHeroBanner extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 4),
+          padding: EdgeInsets.only(bottom: showGuestActions ? 6.0 : 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                padding: const EdgeInsets.fromLTRB(20, 4, 20, 4),
                 child: Row(
                   children: <Widget>[
                     Expanded(
@@ -87,7 +84,6 @@ class HomeHeroBanner extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 6),
               const _HomeHeroVisual(),
               if (showGuestActions)
                 Padding(
@@ -127,8 +123,6 @@ class HomeHeroBanner extends StatelessWidget {
                     ],
                   ),
                 )
-              else
-                const SizedBox(height: 10),
             ],
           ),
         ),
@@ -235,21 +229,45 @@ class _HomeHeroVisual extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
+    final imageUrls = _resolveHomeHeroImageUrls(
+      Localizations.localeOf(context),
+    );
 
     return Container(
       decoration: BoxDecoration(color: colors.onDark),
       child: AspectRatio(
-        aspectRatio: 16 / 9,
+        aspectRatio: 11 / 5,
         child: FundHeroMediaBackground(
           gradientColors: <Color>[colors.heroMiddle, colors.primaryAlt],
-          imageUrls: _homeHeroImageUrls,
+          imageUrls: imageUrls,
           showArtworkOverlay: false,
-          autoPlay: _homeHeroImageUrls.length > 1,
-          autoPlayInterval: const Duration(seconds: 5),
+          autoPlay: imageUrls.length > 1,
+          autoPlayInterval: const Duration(seconds: 15),
         ),
       ),
     );
   }
+}
+
+List<String> _resolveHomeHeroImageUrls(Locale locale) {
+  final localeSuffix = _resolveHomeHeroLocaleSuffix(locale);
+  return List<String>.generate(
+    _homeHeroBannerImageCount,
+    (index) => '$_homeHeroBannerBaseUrl/banner.${index + 1}.$localeSuffix.jpg',
+    growable: false,
+  );
+}
+
+String _resolveHomeHeroLocaleSuffix(Locale locale) {
+  final languageCode = locale.languageCode.toLowerCase();
+  if (languageCode == 'ja') {
+    return 'ja';
+  }
+  if (languageCode == 'zh') {
+    final scriptCode = locale.scriptCode?.toLowerCase();
+    return scriptCode == 'hant' ? 'zh-hant' : 'zh-hans';
+  }
+  return 'en';
 }
 
 class _HomeHeroRegisterBonusCard extends StatelessWidget {
