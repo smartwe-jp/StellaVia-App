@@ -51,6 +51,7 @@ class MemberProfileEditStepScaffold extends StatelessWidget {
             style: appText.helper.copyWith(
               color: colors.textSecondary.withValues(alpha: 0.92),
               height: 1.5,
+              fontSize: 14,
             ),
           ),
           const SizedBox(height: 20),

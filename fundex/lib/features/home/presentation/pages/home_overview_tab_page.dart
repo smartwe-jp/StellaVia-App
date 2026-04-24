@@ -69,7 +69,9 @@ class HomeOverviewTabPage extends ConsumerWidget {
       symbol: '¥',
       decimalDigits: 0,
     );
-    final shouldShowMemberProfileReminder = shouldShowHomeMemberProfileReminder(
+    final shouldShowMemberProfileReminder = kDebugMode
+        ? true :
+    shouldShowHomeMemberProfileReminder(
       currentUser,
       isMemberProfileCompleted: isMemberProfileCompleted,
     );

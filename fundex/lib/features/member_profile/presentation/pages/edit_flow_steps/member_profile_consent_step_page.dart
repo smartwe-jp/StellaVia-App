@@ -67,7 +67,7 @@ class MemberProfileConsentStepPage extends StatelessWidget {
               children: <Widget>[
                 Text(
                   l10n.memberProfileElectronicDeliveryBody,
-                  style: appText.helper.copyWith(height: 1.7),
+                  style: appText.helper.copyWith(height: 1.7, fontSize: 14),
                 ),
                 const SizedBox(height: 10),
                 ...<String>[
@@ -80,7 +80,7 @@ class MemberProfileConsentStepPage extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 8, bottom: 4),
                     child: Text(
                       '• $item',
-                      style: appText.helper.copyWith(height: 1.7),
+                      style: appText.helper.copyWith(height: 1.7, fontSize: 14),
                     ),
                   ),
                 ),
@@ -90,6 +90,7 @@ class MemberProfileConsentStepPage extends StatelessWidget {
                   style: appText.micro.copyWith(
                     color: colors.textSecondary.withValues(alpha: 0.86),
                     height: 1.6,
+                    fontSize: 12,
                   ),
                 ),
               ],
@@ -112,7 +113,7 @@ class MemberProfileConsentStepPage extends StatelessWidget {
             titleColor: colors.textPrimary,
             body: Text(
               l10n.memberProfileAntiSocialBody,
-              style: appText.helper.copyWith(height: 1.7),
+              style: appText.helper.copyWith(height: 1.7, fontSize: 13),
             ),
           ),
           const SizedBox(height: 10),
