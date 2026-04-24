@@ -185,6 +185,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   String _languageLabel(AppLanguage language) {
+    if (language == AppLanguage.system) {
+      return context.l10n.languageFollowSystem;
+    }
     return language.nativeLabel;
   }
 
