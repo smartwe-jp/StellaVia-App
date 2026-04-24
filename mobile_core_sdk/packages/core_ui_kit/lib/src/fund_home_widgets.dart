@@ -991,9 +991,8 @@ class FundFeaturedFundCard extends StatelessWidget {
                             .toList(),
                       ),
                     const SizedBox(height: 12),
-                    SizedBox(
-                      height: 150,
-                      width: double.infinity,
+                    AspectRatio(
+                      aspectRatio: 16 / 9,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(UiTokens.radius16),
                         child: !hasArtwork
