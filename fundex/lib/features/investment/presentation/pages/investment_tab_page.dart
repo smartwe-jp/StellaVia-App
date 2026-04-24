@@ -227,21 +227,21 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
     final l10n = context.l10n;
     switch (status) {
       case 4:
-        return l10n.fundListStatusOperating;
+        return l10n.fundListStatusOperating;//运用中
       case 5:
-        return l10n.fundListStatusOperatingEnded;
+        return l10n.fundListStatusOperatingEnded; //运用结束
       case 1:
-        return l10n.fundListStatusOpen;
+        return l10n.fundListStatusOpen;//募集中
       case 0:
-        return l10n.fundListStatusUpcoming;
+        return l10n.fundListStatusUpcoming;//募集前
       case 3:
-        return l10n.fundListStatusClosed;
+        return l10n.fundListStatusClosed;//募集结束
       case 7:
-        return l10n.fundListStatusCompleted;
+        return l10n.fundListStatusCompleted;//募集完成
       case 2:
-        return l10n.fundListStatusFailed;
+        return l10n.fundListStatusFailed;//募集失败
       default:
-        return l10n.fundListStatusUnknown;
+        return l10n.fundListStatusUnknown;//未设定
     }
   }
 
@@ -256,23 +256,23 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
           );
     final openTagBackgroundColor = isDark
         ? Color.alphaBlend(
-            colors.primary.withValues(alpha: 0.24),
+            colors.highlightGold,
             colors.surfaceAlt,
           )
         : Color.alphaBlend(
-            colors.brandPrimaryDark.withValues(alpha: 0.08),
+            colors.highlightGold,
             colors.primarySubtle,
           );
     final openTagForegroundColor = isDark ? colors.onDark : colors.primary;
     switch (status) {
-      case 4:
+      case 4:// 运用中
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.infoForeground, colors.primary],
           tagBackgroundColor: colors.infoSubtle,
           tagForegroundColor: colors.infoForeground,
           amountGradientColors: <Color>[colors.info, colors.primaryAlt],
         );
-      case 5:
+      case 5:// 运用结束
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.heroMiddle, colors.heroEnd],
           tagBackgroundColor: colors.surfaceAlt,
@@ -282,21 +282,21 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
             colors.heroMiddle,
           ],
         );
-      case 1:
+      case 1:// 募集中
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.brandPrimaryDark, openAccentColor],
           tagBackgroundColor: openTagBackgroundColor,
-          tagForegroundColor: openTagForegroundColor,
+          tagForegroundColor: colors.onDark,
           amountGradientColors: <Color>[openAccentColor, colors.primary],
         );
-      case 0:
+      case 0:// 募集前
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.warningForeground, colors.warning],
           tagBackgroundColor: colors.warningSubtle,
           tagForegroundColor: colors.warningForeground,
           amountGradientColors: <Color>[colors.warningAction, colors.warning],
         );
-      case 3:
+      case 3:// 募集结束
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.heroMiddle, colors.heroEnd],
           tagBackgroundColor: colors.surfaceAlt,
@@ -306,14 +306,14 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
             colors.heroMiddle,
           ],
         );
-      case 7:
+      case 7:// 募集完成
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.brandPrimaryDark, colors.primary],
           tagBackgroundColor: openTagBackgroundColor,
           tagForegroundColor: openTagForegroundColor,
           amountGradientColors: <Color>[colors.primaryAlt, colors.primary],
         );
-      case 2:
+      case 2:// 募集失败
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.dangerForeground, colors.danger],
           tagBackgroundColor: colors.dangerSubtle,
@@ -693,7 +693,7 @@ class _FundProjectCard extends StatelessWidget {
                         ),
                       ),
                       Positioned(
-                        left: 10,
+                        right: 10,
                         top: 10,
                         child: FundFavoriteButton(
                           selected: isFavorite,
@@ -702,6 +702,18 @@ class _FundProjectCard extends StatelessWidget {
                           unselectedToastMessage: favoriteRemovedMessage,
                         ),
                       ),
+
+                      Positioned(
+                        left: 10,
+                        top: 12,
+                        child: _PillTag(
+                            label: statusLabel,
+                            backgroundColor: palette.tagBackgroundColor,
+                            foregroundColor: palette.tagForegroundColor,
+                          ),
+                      ),
+
+                    
                       // Positioned(
                       //   right: 10,
                       //   top: 10,
@@ -753,36 +765,36 @@ class _FundProjectCard extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 6),
-                            Wrap(
-                              spacing: 6,
-                              runSpacing: 6,
-                              children: <Widget>[
-                                _HeroInfoBubble(
-                                  label: yieldLabel,
-                                  value: annualYieldText,
-                                  backgroundColor: heroGlassColor,
-                                  borderColor: heroGlassBorderColor,
-                                  labelColor: heroGlassSecondaryTextColor,
-                                  valueColor: heroGlassPrimaryTextColor,
-                                ),
-                                _HeroInfoBubble(
-                                  label: periodLabel,
-                                  value: periodValueText,
-                                  backgroundColor: heroGlassColor,
-                                  borderColor: heroGlassBorderColor,
-                                  labelColor: heroGlassSecondaryTextColor,
-                                  valueColor: heroGlassPrimaryTextColor,
-                                ),
-                                _HeroInfoBubble(
-                                  label: methodTitleLabel,
-                                  value: methodLabel,
-                                  backgroundColor: heroGlassColor,
-                                  borderColor: heroGlassBorderColor,
-                                  labelColor: heroGlassSecondaryTextColor,
-                                  valueColor: heroGlassPrimaryTextColor,
-                                ),
-                              ],
-                            ),
+                            // Wrap(
+                            //   spacing: 6,
+                            //   runSpacing: 6,
+                            //   children: <Widget>[
+                            //     _HeroInfoBubble(
+                            //       label: yieldLabel,
+                            //       value: annualYieldText,
+                            //       backgroundColor: heroGlassColor,
+                            //       borderColor: heroGlassBorderColor,
+                            //       labelColor: heroGlassSecondaryTextColor,
+                            //       valueColor: heroGlassPrimaryTextColor,
+                            //     ),
+                            //     _HeroInfoBubble(
+                            //       label: periodLabel,
+                            //       value: periodValueText,
+                            //       backgroundColor: heroGlassColor,
+                            //       borderColor: heroGlassBorderColor,
+                            //       labelColor: heroGlassSecondaryTextColor,
+                            //       valueColor: heroGlassPrimaryTextColor,
+                            //     ),
+                            //     _HeroInfoBubble(
+                            //       label: methodTitleLabel,
+                            //       value: methodLabel,
+                            //       backgroundColor: heroGlassColor,
+                            //       borderColor: heroGlassBorderColor,
+                            //       labelColor: heroGlassSecondaryTextColor,
+                            //       valueColor: heroGlassPrimaryTextColor,
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
                       ),
@@ -799,15 +811,15 @@ class _FundProjectCard extends StatelessWidget {
                         runSpacing: 4,
                         children: <Widget>[
                           _PillTag(
-                            label: statusLabel,
-                            backgroundColor: palette.tagBackgroundColor,
-                            foregroundColor: palette.tagForegroundColor,
+                            label: methodLabel,
+                            backgroundColor: colors.primary,
+                            foregroundColor: colors.infoSubtle,
+             
                           ),
                           _PillTag(
                             label: gainTypeLabel,
-                            backgroundColor: colors.communitySecondary
-                                .withValues(alpha: 0.14),
-                            foregroundColor: colors.communitySecondary,
+                            backgroundColor: colors.communitySecondary.withValues(alpha: 0.24),
+                            foregroundColor: colors.textPrimary,
                           ),
                         ],
                       ),
@@ -1083,23 +1095,32 @@ class _PillTag extends StatelessWidget {
     required this.label,
     required this.backgroundColor,
     required this.foregroundColor,
-  });
+    this.borderRadius = 12,
+  }
+  );
 
   final String label;
   final Color backgroundColor;
   final Color foregroundColor;
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(borderRadius),
       ),
-      child: Text(
-        label,
-        style: context.appTextTheme.micro.copyWith(color: foregroundColor),
+      child: 
+      Align(
+        alignment: Alignment.center,
+        widthFactor: 1.0,
+        heightFactor: 1.0,
+        child: Text(
+          label,
+          style: context.appTextTheme.micro.copyWith(color: foregroundColor),
+        ),
       ),
     );
   }
