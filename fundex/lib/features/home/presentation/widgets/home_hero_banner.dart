@@ -242,7 +242,7 @@ class _HomeHeroVisual extends StatelessWidget {
           imageUrls: imageUrls,
           showArtworkOverlay: false,
           autoPlay: imageUrls.length > 1,
-          autoPlayInterval: const Duration(seconds: 15),
+          autoPlayInterval: const Duration(seconds: 25),
         ),
       ),
     );
