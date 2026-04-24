@@ -79,7 +79,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
     final reminders = <FundReminderData>[
       if (shouldShowMemberProfileReminder)
         FundReminderData(
-          leading: const Icon(Icons.warning_rounded, size: 30),
+          leading: const Icon(Icons.person_outline, size: 30),
           title: l10n.homeReminderProfileTitle,
           message: l10n.homeReminderProfileBody,
           tone: FundReminderTone.danger,

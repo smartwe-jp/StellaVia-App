@@ -5183,7 +5183,7 @@ abstract class AppLocalizations {
   /// No description provided for @walletBankSettingsOwnerNationalityHint.
   ///
   /// In en, this message translates to:
-  /// **'China'**
+  /// **'United States'**
   String get walletBankSettingsOwnerNationalityHint;
 
   /// No description provided for @walletBankSettingsSwiftCodeLabel.
@@ -5207,7 +5207,7 @@ abstract class AppLocalizations {
   /// No description provided for @walletBankSettingsBankCountryHint.
   ///
   /// In en, this message translates to:
-  /// **'Japan'**
+  /// **'United States'**
   String get walletBankSettingsBankCountryHint;
 
   /// No description provided for @walletBankSettingsBranchAddressLabel.
@@ -7259,7 +7259,7 @@ abstract class AppLocalizations {
   /// No description provided for @memberProfileStep6Title.
   ///
   /// In en, this message translates to:
-  /// **'Step 7: Consent'**
+  /// **'Step 6: Consent'**
   String get memberProfileStep6Title;
 
   /// No description provided for @memberProfileStep6Description.

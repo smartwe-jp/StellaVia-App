@@ -2622,7 +2622,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletBankSettingsOwnerNationalityLabel => '账户名义人国籍';
 
   @override
-  String get walletBankSettingsOwnerNationalityHint => '中国';
+  String get walletBankSettingsOwnerNationalityHint => '美国';
 
   @override
   String get walletBankSettingsSwiftCodeLabel => 'SWIFT / BIC';
@@ -2634,7 +2634,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletBankSettingsBankCountryLabel => '银行所在国';
 
   @override
-  String get walletBankSettingsBankCountryHint => '日本';
+  String get walletBankSettingsBankCountryHint => '美国';
 
   @override
   String get walletBankSettingsBranchAddressLabel => '分行地址';
@@ -3688,7 +3688,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileNextConsent => '下一步：确认同意事项';
 
   @override
-  String get memberProfileStep6Title => 'Step 7：确认同意事项';
+  String get memberProfileStep6Title => 'Step 6：确认同意事项';
 
   @override
   String get memberProfileStep6Description => '请确认以下事项，并全部同意。';
@@ -6550,7 +6550,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get walletBankSettingsOwnerNationalityLabel => '帳戶名義人國籍';
 
   @override
-  String get walletBankSettingsOwnerNationalityHint => '中國';
+  String get walletBankSettingsOwnerNationalityHint => '美國';
 
   @override
   String get walletBankSettingsSwiftCodeLabel => 'SWIFT / BIC';
@@ -6562,7 +6562,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get walletBankSettingsBankCountryLabel => '銀行所在國';
 
   @override
-  String get walletBankSettingsBankCountryHint => '日本';
+  String get walletBankSettingsBankCountryHint => '美國';
 
   @override
   String get walletBankSettingsBranchAddressLabel => '分行地址';
@@ -7616,7 +7616,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileNextConsent => '下一步：確認同意事項';
 
   @override
-  String get memberProfileStep6Title => 'Step 7：同意事項確認';
+  String get memberProfileStep6Title => 'Step 6：同意事項確認';
 
   @override
   String get memberProfileStep6Description => '請確認以下事項，並全部同意。';

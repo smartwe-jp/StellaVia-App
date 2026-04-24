@@ -10,5 +10,13 @@ void main() {
       );
       expect(MemberProfileEditStep.realPersonAuth.appearsInOverview, isTrue);
     });
+
+    test('excludes bank account from overview steps', () {
+      expect(
+        memberProfileOverviewSteps,
+        isNot(contains(MemberProfileEditStep.bankAccount)),
+      );
+      expect(MemberProfileEditStep.bankAccount.appearsInOverview, isFalse);
+    });
   });
 }

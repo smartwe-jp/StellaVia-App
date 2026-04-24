@@ -133,9 +133,7 @@ class _MemberProfileEditFlowPageState
   void initState() {
     super.initState();
     if (_isSingleSectionMode) {
-      _currentStep = _normalizeStepForIdentityAuth(
-        widget.initialStep ?? MemberProfileEditStep.basicInfo,
-      );
+      _currentStep = widget.initialStep ?? MemberProfileEditStep.basicInfo;
     }
     _familyNameController = TextEditingController();
     _givenNameController = TextEditingController();
@@ -469,11 +467,8 @@ class _MemberProfileEditFlowPageState
               MemberProfileEditStep.values.length - 1,
             )];
         _currentStep = _isSingleSectionMode
-            ? _normalizeStepForIdentityAuth(
-                widget.initialStep ?? MemberProfileEditStep.basicInfo,
-                realPersonVerified: _isRealPersonVerified,
-              )
-            : _normalizeStepForIdentityAuth(resolvedStep);
+            ? widget.initialStep ?? MemberProfileEditStep.basicInfo
+            : _normalizeStepForFlow(resolvedStep);
         _isLoading = false;
       });
     } catch (_) {
@@ -1142,36 +1137,58 @@ class _MemberProfileEditFlowPageState
     }
   }
 
-  MemberProfileEditStep _normalizeStepForIdentityAuth(
+  List<MemberProfileEditStep> _flowSteps({bool? realPersonVerified}) {
+    return <MemberProfileEditStep>[
+      MemberProfileEditStep.basicInfo,
+      MemberProfileEditStep.addressInfo,
+      MemberProfileEditStep.suitability,
+      MemberProfileEditStep.ekyc,
+      if (_shouldShowRealPersonAuthStep(realPersonVerified: realPersonVerified))
+        MemberProfileEditStep.realPersonAuth,
+      MemberProfileEditStep.consent,
+    ];
+  }
+
+  MemberProfileEditStep _normalizeStepForFlow(
     MemberProfileEditStep step, {
     bool? realPersonVerified,
   }) {
-    if (!_isSingleSectionMode &&
-        !_shouldShowRealPersonAuthStep(
-          realPersonVerified: realPersonVerified,
-        ) &&
-        step == MemberProfileEditStep.realPersonAuth) {
-      return MemberProfileEditStep.bankAccount;
+    if (_isSingleSectionMode) {
+      return step;
     }
-    return step;
+    final flowSteps = _flowSteps(realPersonVerified: realPersonVerified);
+    if (flowSteps.contains(step)) {
+      return step;
+    }
+    if (step == MemberProfileEditStep.realPersonAuth ||
+        step == MemberProfileEditStep.bankAccount) {
+      return MemberProfileEditStep.consent;
+    }
+    return MemberProfileEditStep.basicInfo;
   }
 
   MemberProfileEditStep? _nextStep(MemberProfileEditStep step) {
-    final MemberProfileEditStep? next = step.next;
-    if (!_shouldShowRealPersonAuthStep() &&
-        next == MemberProfileEditStep.realPersonAuth) {
-      return MemberProfileEditStep.bankAccount;
+    if (_isSingleSectionMode) {
+      return step.next;
     }
-    return next;
+    final flowSteps = _flowSteps();
+    final currentIndex = flowSteps.indexOf(step);
+    if (currentIndex < 0 || currentIndex >= flowSteps.length - 1) {
+      return null;
+    }
+    return flowSteps[currentIndex + 1];
   }
 
   MemberProfileEditStep? _previousStep(MemberProfileEditStep step) {
-    final MemberProfileEditStep? previous = step.previous;
-    if (!_shouldShowRealPersonAuthStep() &&
-        previous == MemberProfileEditStep.realPersonAuth) {
-      return MemberProfileEditStep.ekyc;
+    if (_isSingleSectionMode) {
+      return step.previous;
     }
-    return previous;
+    final flowSteps = _flowSteps();
+    final currentIndex = flowSteps.indexOf(step);
+    if (currentIndex <= 0) {
+      return null;
+    }
+    return flowSteps[currentIndex - 1];
   }
 
   bool _shouldShowRealPersonAuthStep({bool? realPersonVerified}) {
@@ -1675,7 +1692,7 @@ class _MemberProfileEditFlowPageState
       if (!mounted) {
         return;
       }
-      final normalizedStep = _normalizeStepForIdentityAuth(
+      final normalizedStep = _normalizeStepForFlow(
         _currentStep,
         realPersonVerified: next.asData?.value == true,
       );
@@ -1688,16 +1705,10 @@ class _MemberProfileEditFlowPageState
     });
     final isRealPersonVerified =
         ref.watch(settingsRealPersonVerifiedProvider).asData?.value == true;
-    final showRealPersonAuthStep = _shouldShowRealPersonAuthStep(
-      realPersonVerified: isRealPersonVerified,
-    );
-    final stepCount =
-        MemberProfileEditStep.values.length - (showRealPersonAuthStep ? 0 : 1);
-    final currentStepIndex = showRealPersonAuthStep
-        ? _currentStep.index
-        : (_currentStep.index > MemberProfileEditStep.realPersonAuth.index
-              ? _currentStep.index - 1
-              : _currentStep.index);
+    final flowSteps = _flowSteps(realPersonVerified: isRealPersonVerified);
+    final currentStepIndex = flowSteps.contains(_currentStep)
+        ? flowSteps.indexOf(_currentStep)
+        : 0;
 
     return PopScope<void>(
       canPop: _isSingleSectionMode || _currentStep.isFirst,
@@ -1745,7 +1756,7 @@ class _MemberProfileEditFlowPageState
           children: <Widget>[
             if (!_isSingleSectionMode)
               AppStepProgressBar(
-                stepCount: stepCount,
+                stepCount: flowSteps.length,
                 currentStep: currentStepIndex,
                 pendingColor: colors.borderSoft,
               ),

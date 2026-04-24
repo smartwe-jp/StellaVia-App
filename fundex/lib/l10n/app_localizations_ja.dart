@@ -2654,7 +2654,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletBankSettingsOwnerNationalityLabel => '口座名義人国籍';
 
   @override
-  String get walletBankSettingsOwnerNationalityHint => '中国';
+  String get walletBankSettingsOwnerNationalityHint => '米国';
 
   @override
   String get walletBankSettingsSwiftCodeLabel => 'SWIFT / BIC';
@@ -2666,7 +2666,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletBankSettingsBankCountryLabel => '銀行所在国';
 
   @override
-  String get walletBankSettingsBankCountryHint => '日本';
+  String get walletBankSettingsBankCountryHint => '米国';
 
   @override
   String get walletBankSettingsBranchAddressLabel => '支店住所';
@@ -3733,7 +3733,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfileNextConsent => '次へ：同意事項の確認';
 
   @override
-  String get memberProfileStep6Title => 'Step 7：同意事項の確認';
+  String get memberProfileStep6Title => 'Step 6：同意事項の確認';
 
   @override
   String get memberProfileStep6Description => '以下の事項をご確認いただき、すべてに同意してください。';

@@ -1,5 +1,6 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../../../app/localization/app_localizations_ext.dart';
 
@@ -128,6 +129,9 @@ class MemberProfileBankAccountStepPage extends StatelessWidget {
               accountHolderLabel: l10n.memberProfileAccountHolderLabel,
               accountHolderController: accountHolderController,
               accountHolderHintText: l10n.memberProfileAccountHolderHint,
+              accountHolderInputFormatters: <TextInputFormatter>[
+                MemberProfileInputFormatters.katakanaOnly,
+              ],
             ),
           const SizedBox(height: 18),
           _BankAccountTipBanner(

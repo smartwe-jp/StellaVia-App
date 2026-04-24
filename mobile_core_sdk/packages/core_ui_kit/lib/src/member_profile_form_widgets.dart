@@ -436,6 +436,7 @@ class MemberProfileBankAccountFormSection extends StatelessWidget {
     required this.accountHolderLabel,
     required this.accountHolderController,
     required this.accountHolderHintText,
+    this.accountHolderInputFormatters,
     this.onAccountTypeChanged,
   });
 
@@ -463,6 +464,7 @@ class MemberProfileBankAccountFormSection extends StatelessWidget {
   final String accountHolderLabel;
   final TextEditingController accountHolderController;
   final String? accountHolderHintText;
+  final List<TextInputFormatter>? accountHolderInputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -517,6 +519,7 @@ class MemberProfileBankAccountFormSection extends StatelessWidget {
           label: accountHolderLabel,
           controller: accountHolderController,
           hintText: accountHolderHintText,
+          inputFormatters: accountHolderInputFormatters,
         ),
       ],
     );
@@ -810,7 +813,8 @@ class MemberProfileUploadTile extends StatelessWidget {
     final normalizedPreviewUrl = previewUrl?.trim() ?? '';
     final canPreview = normalizedPreviewUrl.isNotEmpty;
     final showInlinePreview = inlinePreview && canPreview;
-    final actionLabel = previewLabel ?? (showInlinePreview ? 'Edit' : 'Preview');
+    final actionLabel =
+        previewLabel ?? (showInlinePreview ? 'Edit' : 'Preview');
 
     return Stack(
       children: <Widget>[
@@ -920,7 +924,9 @@ class MemberProfileUploadTile extends StatelessWidget {
                           Text(
                             title,
                             textAlign: TextAlign.center,
-                            style: appText.cardTitle.copyWith(color: titleColor),
+                            style: appText.cardTitle.copyWith(
+                              color: titleColor,
+                            ),
                           ),
                           const SizedBox(height: 4),
                           Text(

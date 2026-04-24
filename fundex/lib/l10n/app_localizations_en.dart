@@ -2797,7 +2797,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Account holder nationality';
 
   @override
-  String get walletBankSettingsOwnerNationalityHint => 'China';
+  String get walletBankSettingsOwnerNationalityHint => 'United States';
 
   @override
   String get walletBankSettingsSwiftCodeLabel => 'SWIFT / BIC';
@@ -2809,7 +2809,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletBankSettingsBankCountryLabel => 'Bank country';
 
   @override
-  String get walletBankSettingsBankCountryHint => 'Japan';
+  String get walletBankSettingsBankCountryHint => 'United States';
 
   @override
   String get walletBankSettingsBranchAddressLabel => 'Branch address';
@@ -3937,7 +3937,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memberProfileNextConsent => 'Next: Consent Confirmation';
 
   @override
-  String get memberProfileStep6Title => 'Step 7: Consent';
+  String get memberProfileStep6Title => 'Step 6: Consent';
 
   @override
   String get memberProfileStep6Description =>

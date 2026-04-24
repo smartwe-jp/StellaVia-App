@@ -174,6 +174,7 @@ class _MemberProfileDocumentGuideCardState
                     style: appText.helper.copyWith(
                       color: colors.textPrimary,
                       height: 1.65,
+                      fontSize: 13,
                     ),
                   ),
                 ],

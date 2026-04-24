@@ -6,7 +6,7 @@ part 'member_profile_details.freezed.dart';
 abstract class MemberProfileDetails with _$MemberProfileDetails {
   const MemberProfileDetails._();
 
-  static const int flowStepCount = 6;
+  static const int flowStepCount = 5;
 
   const factory MemberProfileDetails({
     @Default('') String familyName,
@@ -69,7 +69,6 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       _isAddressInfoStepComplete,
       _isSuitabilityStepComplete,
       _isEkycStepComplete,
-      _isBankAccountStepComplete,
       _isConsentStepComplete,
     ];
 
@@ -129,8 +128,6 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       electronicDeliveryConsent ||
       antiSocialForcesConsent ||
       privacyPolicyConsent;
-
-  bool get _isOverseasBank => bankRegionType.trim().toLowerCase() == 'overseas';
 
   MemberProfileDetails mergeWithSeed({
     String? familyName,
@@ -203,20 +200,6 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       (idDocumentPhotoPath?.trim().isNotEmpty ?? false) &&
       (selfiePhotoPath?.trim().isNotEmpty ?? false);
 
-  bool get _isBankAccountStepComplete =>
-      bankName.trim().isNotEmpty &&
-      branchBankName.trim().isNotEmpty &&
-      branchBankNumber.trim().isNotEmpty &&
-      bankNumber.trim().isNotEmpty &&
-      bankAccountOwnerName.trim().isNotEmpty &&
-      (_isOverseasBank
-          ? bankAccountOwnerAddress.trim().isNotEmpty &&
-                bankAccountOwnerNationality.trim().isNotEmpty &&
-                bankAccountSwiftCode.trim().isNotEmpty &&
-                bankCountry.trim().isNotEmpty &&
-                branchBankAddress.trim().isNotEmpty
-          : bankAccountType.trim().isNotEmpty);
-
   bool get _isConsentStepComplete =>
       electronicDeliveryConsent &&
       antiSocialForcesConsent &&
@@ -227,7 +210,6 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       _isAddressInfoStepComplete &&
       _isSuitabilityStepComplete &&
       _isEkycStepComplete &&
-      _isBankAccountStepComplete &&
       _isConsentStepComplete;
 
   static String? mergeNullableString(String? current, String? seed) {
