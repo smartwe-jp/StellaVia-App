@@ -186,7 +186,7 @@ String resolveMyPageActiveFundStatusLabel(
 ) {
   return switch (projectStatus) {
     4 => l10n.fundListStatusOperating,
-    5 => l10n.myPageActiveFundCoolingPeriod,
+    5 => l10n.fundListStatusOperatingEnded,
     _ => resolveProjectStatusLabel(l10n, projectStatus),
   };
 }
@@ -198,7 +198,7 @@ Color resolveMyPageActiveFundStatusBackgroundColor(
   final colors = Theme.of(context).appColors;
   return switch (projectStatus) {
     4 => Color.lerp(colors.surface, colors.successSubtle, 0.5)!,
-    5 => colors.warningSubtle,
+    5 => colors.brandPrimary.withValues(alpha: 0.12),
     _ => colors.surfaceAlt,
   };
 }
@@ -210,7 +210,7 @@ Color resolveMyPageActiveFundStatusForegroundColor(
   final colors = Theme.of(context).appColors;
   return switch (projectStatus) {
     4 => colors.successForeground,
-    5 => colors.warningAction,
+    5 => colors.textSecondary,
     _ => colors.textSecondary,
   };
 }
