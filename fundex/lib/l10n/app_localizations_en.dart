@@ -3081,6 +3081,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please enter a valid withdrawal amount.';
 
   @override
+  String get walletWithdrawAmountExceedsAvailable =>
+      'The withdrawal amount exceeds the available amount.';
+
+  @override
   String get walletWithdrawInsufficientBalance =>
       'Your balance is not enough to cover the withdrawal amount and fee.';
 

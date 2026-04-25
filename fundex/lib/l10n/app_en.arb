@@ -1082,6 +1082,7 @@
   "walletWithdrawVerifySubmitAction": "Verify and submit",
   "walletWithdrawSubmitPending": "Withdraw API will be connected in a later implementation.",
   "walletWithdrawAmountInvalid": "Please enter a valid withdrawal amount.",
+  "walletWithdrawAmountExceedsAvailable": "The withdrawal amount exceeds the available amount.",
   "walletWithdrawInsufficientBalance": "Your balance is not enough to cover the withdrawal amount and fee.",
   "walletWithdrawSelectAccountFirst": "Please select a destination bank account.",
   "walletWithdrawSubmitSuccess": "Withdrawal request submitted.",

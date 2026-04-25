@@ -1082,6 +1082,7 @@
   "walletWithdrawVerifySubmitAction": "驗證並提交",
   "walletWithdrawSubmitPending": "出金功能將於後續接入。",
   "walletWithdrawAmountInvalid": "請輸入有效的出金金額。",
+  "walletWithdrawAmountExceedsAvailable": "出金金額超出可出金額。",
   "walletWithdrawInsufficientBalance": "目前餘額不足以覆蓋出金金額與手續費。",
   "walletWithdrawSelectAccountFirst": "請先選擇出金帳戶。",
   "walletWithdrawSubmitSuccess": "出金申請已送出。",

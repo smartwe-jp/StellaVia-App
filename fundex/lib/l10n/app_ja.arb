@@ -1082,6 +1082,7 @@
   "walletWithdrawVerifySubmitAction": "認証して送信",
   "walletWithdrawSubmitPending": "出金機能は次の実装で接続します。",
   "walletWithdrawAmountInvalid": "有効な出金金額を入力してください。",
+  "walletWithdrawAmountExceedsAvailable": "出金金額が可出金額を超えています。",
   "walletWithdrawInsufficientBalance": "出金金額と手数料を含めた残高が不足しています。",
   "walletWithdrawSelectAccountFirst": "出金先口座を選択してください。",
   "walletWithdrawSubmitSuccess": "出金申請を送信しました。",

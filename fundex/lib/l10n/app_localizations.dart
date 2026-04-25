@@ -5684,6 +5684,12 @@ abstract class AppLocalizations {
   /// **'Please enter a valid withdrawal amount.'**
   String get walletWithdrawAmountInvalid;
 
+  /// No description provided for @walletWithdrawAmountExceedsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The withdrawal amount exceeds the available amount.'**
+  String get walletWithdrawAmountExceedsAvailable;
+
   /// No description provided for @walletWithdrawInsufficientBalance.
   ///
   /// In en, this message translates to:

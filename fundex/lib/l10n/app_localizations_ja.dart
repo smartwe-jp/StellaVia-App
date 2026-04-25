@@ -2919,6 +2919,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletWithdrawAmountInvalid => '有効な出金金額を入力してください。';
 
   @override
+  String get walletWithdrawAmountExceedsAvailable => '出金金額が可出金額を超えています。';
+
+  @override
   String get walletWithdrawInsufficientBalance => '出金金額と手数料を含めた残高が不足しています。';
 
   @override

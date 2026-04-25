@@ -1,6 +1,7 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
@@ -26,6 +27,9 @@ class WithdrawPage extends ConsumerStatefulWidget {
 class _WithdrawPageState extends ConsumerState<WithdrawPage> {
   late final TextEditingController _amountController;
   WalletBankAccountInfo? _selectedAccount;
+  num? _latestAvailableAmount;
+  String _lastAcceptedAmountText = '';
+  bool _isNormalizingAmountInput = false;
 
   @override
   void initState() {
@@ -45,6 +49,34 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
     if (!mounted) {
       return;
     }
+    if (_isNormalizingAmountInput) {
+      setState(() {});
+      return;
+    }
+
+    final amount = _parseAmountOrNull();
+    final availableAmount = _latestAvailableAmount;
+    if (availableAmount != null && amount != null && amount > availableAmount) {
+      _restoreLastAcceptedAmount();
+      AppNotice.show(
+        context,
+        message: context.l10n.walletWithdrawAmountExceedsAvailable,
+      );
+      return;
+    }
+
+    _lastAcceptedAmountText = _amountController.text;
+    setState(() {});
+  }
+
+  void _restoreLastAcceptedAmount() {
+    final nextText = _lastAcceptedAmountText;
+    _isNormalizingAmountInput = true;
+    _amountController.value = TextEditingValue(
+      text: nextText,
+      selection: TextSelection.collapsed(offset: nextText.length),
+    );
+    _isNormalizingAmountInput = false;
     setState(() {});
   }
 
@@ -287,6 +319,7 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
     final phoneVerifiedAsync = ref.watch(settingsPhoneVerifiedProvider);
     final accountStatistic = availableAmountAsync.asData?.value;
     final availableAmount = accountStatistic?.withdrawableAmount;
+    _latestAvailableAmount = availableAmount;
     final lockedAmount = accountStatistic?.lockedFee ?? 0;
     final lockedItems =
         accountStatistic?.lockedList ?? const <MyPageLockedAmount>[];
@@ -386,6 +419,9 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
                     controller: _amountController,
                     hintText: l10n.walletWithdrawAmountHint,
                     keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
                   ),
                   const SizedBox(height: 16),
                   _WithdrawInfoCard(
@@ -607,9 +643,8 @@ class _WithdrawBalanceHeroCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                      ]
-                    )
-                    
+                      ],
+                    ),
                   ],
                 ),
                 const SizedBox(height: 14),

@@ -2882,6 +2882,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletWithdrawAmountInvalid => '请输入有效的出金金额。';
 
   @override
+  String get walletWithdrawAmountExceedsAvailable => '出金金额超出可出金额。';
+
+  @override
   String get walletWithdrawInsufficientBalance => '当前余额不足以覆盖出金金额与手续费。';
 
   @override
@@ -6882,6 +6885,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletWithdrawAmountInvalid => '請輸入有效的出金金額。';
+
+  @override
+  String get walletWithdrawAmountExceedsAvailable => '出金金額超出可出金額。';
 
   @override
   String get walletWithdrawInsufficientBalance => '目前餘額不足以覆蓋出金金額與手續費。';
