@@ -7,7 +7,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../app/config/environment_provider.dart';
 import '../../../../app/localization/app_locale_providers.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
-import '../../../../app/theme/app_theme_mode_providers.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../providers/settings_content_providers.dart';
 
@@ -19,7 +18,6 @@ class SettingsPage extends ConsumerStatefulWidget {
 }
 
 class _SettingsPageState extends ConsumerState<SettingsPage> {
-  bool _showThemeOptions = false;
   bool _showLanguageOptions = false;
   bool _isLoggingOut = false;
 
@@ -30,18 +28,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     }
     await ref.refresh(currentAuthUserProvider.future).catchError((Object _) {
       return null;
-    });
-  }
-
-  Future<void> _switchThemePreference(AppThemePreference preference) async {
-    await ref
-        .read(appThemePreferenceProvider.notifier)
-        .setPreference(preference);
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      _showThemeOptions = false;
     });
   }
 
@@ -191,15 +177,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     return language.nativeLabel;
   }
 
-  String _themeLabel(AppThemePreference preference) {
-    final l10n = context.l10n;
-    return switch (preference) {
-      AppThemePreference.system => l10n.menuThemeSystem,
-      AppThemePreference.light => l10n.menuThemeLight,
-      AppThemePreference.dark => l10n.menuThemeDark,
-    };
-  }
-
   String _buildFooterText({
     required String fallback,
     required String appName,
@@ -237,7 +214,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final environment = ref.watch(appEnvironmentProvider);
-    final currentThemePreference = ref.watch(appThemePreferenceProvider);
     final currentLanguage = ref.watch(appLanguageProvider);
     final isAuthenticated =
         ref.watch(isAuthenticatedProvider).asData?.value ?? false;
@@ -381,48 +357,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             title: l10n.menuSectionPreferences,
             children: <Widget>[
               AppMenuItem(
-                icon: Icons.dark_mode_rounded,
-                label: l10n.menuItemTheme,
-                iconBackgroundColor: colors.communitySecondary.withValues(
-                  alpha: 0.16,
-                ),
-                iconForegroundColor: colors.communitySecondary,
-                trailing: Text(
-                  _themeLabel(currentThemePreference),
-                  style: appText.cellValue,
-                ),
-                onTap: () {
-                  setState(() {
-                    _showThemeOptions = !_showThemeOptions;
-                    _showLanguageOptions = false;
-                  });
-                },
-              ),
-              if (_showThemeOptions)
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(4, 0, 4, 6),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: colors.surface,
-                      borderRadius: BorderRadius.circular(UiTokens.radius16),
-                      border: Border.all(color: colors.border),
-                    ),
-                    child: Column(
-                      children: AppThemePreference.values
-                          .map(
-                            (preference) => _SettingsOptionTile(
-                              label: _themeLabel(preference),
-                              selected: currentThemePreference == preference,
-                              isLast:
-                                  preference == AppThemePreference.values.last,
-                              onTap: () => _switchThemePreference(preference),
-                            ),
-                          )
-                          .toList(growable: false),
-                    ),
-                  ),
-                ),
-              AppMenuItem(
                 icon: Icons.language_rounded,
                 label: l10n.menuItemLanguage,
                 iconBackgroundColor: colors.infoSubtle,
@@ -433,7 +367,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 ),
                 onTap: () {
                   setState(() {
-                    _showThemeOptions = false;
                     _showLanguageOptions = !_showLanguageOptions;
                   });
                 },

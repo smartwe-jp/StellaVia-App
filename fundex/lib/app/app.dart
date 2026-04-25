@@ -20,7 +20,6 @@ import 'realtime/app_realtime_refresh.dart';
 import 'router/app_router.dart';
 import 'network/app_network_providers.dart';
 import 'network/app_network_connectivity_providers.dart';
-import 'theme/app_theme_mode_providers.dart';
 import '../features/auth/presentation/providers/auth_providers.dart';
 import '../features/investment/presentation/providers/fund_project_providers.dart';
 import '../features/home/presentation/providers/home_celebration_providers.dart';
@@ -45,7 +44,6 @@ class MemberTemplateApp extends ConsumerWidget {
     final router = ref.watch(appRouterProvider);
     final environment = ref.watch(appEnvironmentProvider);
     final locale = ref.watch(appLocaleProvider);
-    final themeMode = ref.watch(appThemeModeProvider);
 
     ref.listen<AppUiMessage?>(appUiMessageProvider, (previous, next) {
       if (next == null) {
@@ -165,8 +163,8 @@ class MemberTemplateApp extends ConsumerWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: AppThemeFactory.light(locale: locale),
-      darkTheme: AppThemeFactory.dark(locale: locale),
-      themeMode: themeMode,
+      darkTheme: AppThemeFactory.light(locale: locale),
+      themeMode: ThemeMode.light,
     );
   }
 }
