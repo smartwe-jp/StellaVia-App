@@ -27,6 +27,7 @@ class FundProjectDto {
     this.periodType,
     this.times,
     this.accountId,
+    this.description,
     this.features,
     this.videoLink,
     this.subordinatedRatio,
@@ -78,6 +79,11 @@ class FundProjectDto {
       periodType: _normalizedOptionalString(json['periodType']),
       times: _intOrNull(json['times']),
       accountId: _normalizedOptionalString(json['accountId']),
+      description:
+          _normalizedOptionalString(json['description']) ??
+          _normalizedOptionalString(json['desc']) ??
+          _normalizedOptionalString(detailData['description']) ??
+          _normalizedOptionalString(detailData['desc']),
       features:
           _normalizedOptionalString(json['features']) ??
           _normalizedOptionalString(detailData['features']),
@@ -125,6 +131,7 @@ class FundProjectDto {
   final String? periodType;
   final int? times;
   final String? accountId;
+  final String? description;
   final String? features;
   final String? videoLink;
   final String? subordinatedRatio;

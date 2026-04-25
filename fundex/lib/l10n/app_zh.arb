@@ -802,6 +802,8 @@
   "fundApplyVerificationRequiredTitle": "未认证",
   "fundApplyVerificationRequiredMessage": "基金申请仅限已认证用户。请先完成认证。",
   "fundDetailUnknownValue": "--",
+  "fundDetailProductSummaryTitle": "商品概要",
+  "fundDetailFeaturesTitle": "特征",
   "fundDetailInvestmentUnitValue": "{amount}円/1口",
   "@fundDetailInvestmentUnitValue": {
     "placeholders": {

@@ -2139,6 +2139,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailUnknownValue => '--';
 
   @override
+  String get fundDetailProductSummaryTitle => '商品概要';
+
+  @override
+  String get fundDetailFeaturesTitle => '特征';
+
+  @override
   String fundDetailInvestmentUnitValue(Object amount) {
     return '$amount円/1口';
   }
@@ -6119,6 +6125,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get fundDetailUnknownValue => '--';
+
+  @override
+  String get fundDetailProductSummaryTitle => '商品概要';
+
+  @override
+  String get fundDetailFeaturesTitle => '特徵';
 
   @override
   String fundDetailInvestmentUnitValue(Object amount) {

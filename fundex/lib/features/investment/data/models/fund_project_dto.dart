@@ -44,6 +44,7 @@ extension FundProjectDtoMapper on FundProjectDto {
       periodType: periodType,
       times: times,
       accountId: accountId,
+      description: description,
       features: features,
       videoLink: videoLink,
       subordinatedRatio: subordinatedRatio,

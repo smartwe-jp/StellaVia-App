@@ -802,6 +802,8 @@
   "fundApplyVerificationRequiredTitle": "Verification required",
   "fundApplyVerificationRequiredMessage": "Fund applications are available only to verified members. Please complete verification first.",
   "fundDetailUnknownValue": "--",
+  "fundDetailProductSummaryTitle": "Product Summary",
+  "fundDetailFeaturesTitle": "Features",
   "fundDetailInvestmentUnitValue": "{amount}円 / 1 unit",
   "@fundDetailInvestmentUnitValue": {
     "placeholders": {

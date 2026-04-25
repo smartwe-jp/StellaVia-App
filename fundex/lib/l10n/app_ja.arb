@@ -802,6 +802,8 @@
   "fundApplyVerificationRequiredTitle": "未認証",
   "fundApplyVerificationRequiredMessage": "ファンド申込は認証済み会員のみご利用いただけます。先に認証を完了してください。",
   "fundDetailUnknownValue": "--",
+  "fundDetailProductSummaryTitle": "商品概要",
+  "fundDetailFeaturesTitle": "特徴",
   "fundDetailInvestmentUnitValue": "{amount}円／1口",
   "@fundDetailInvestmentUnitValue": {
     "placeholders": {

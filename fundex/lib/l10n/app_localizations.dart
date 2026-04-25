@@ -4244,6 +4244,18 @@ abstract class AppLocalizations {
   /// **'--'**
   String get fundDetailUnknownValue;
 
+  /// No description provided for @fundDetailProductSummaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Summary'**
+  String get fundDetailProductSummaryTitle;
+
+  /// No description provided for @fundDetailFeaturesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Features'**
+  String get fundDetailFeaturesTitle;
+
   /// No description provided for @fundDetailInvestmentUnitValue.
   ///
   /// In en, this message translates to:

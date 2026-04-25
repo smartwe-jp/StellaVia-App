@@ -227,21 +227,21 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
     final l10n = context.l10n;
     switch (status) {
       case 4:
-        return l10n.fundListStatusOperating;//运用中
+        return l10n.fundListStatusOperating; //运用中
       case 5:
         return l10n.fundListStatusOperatingEnded; //运用结束
       case 1:
-        return l10n.fundListStatusOpen;//募集中
+        return l10n.fundListStatusOpen; //募集中
       case 0:
-        return l10n.fundListStatusUpcoming;//募集前
+        return l10n.fundListStatusUpcoming; //募集前
       case 3:
-        return l10n.fundListStatusClosed;//募集结束
+        return l10n.fundListStatusClosed; //募集结束
       case 7:
-        return l10n.fundListStatusCompleted;//募集完成
+        return l10n.fundListStatusCompleted; //募集完成
       case 2:
-        return l10n.fundListStatusFailed;//募集失败
+        return l10n.fundListStatusFailed; //募集失败
       default:
-        return l10n.fundListStatusUnknown;//未设定
+        return l10n.fundListStatusUnknown; //未设定
     }
   }
 
@@ -255,24 +255,18 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
             colors.primary,
           );
     final openTagBackgroundColor = isDark
-        ? Color.alphaBlend(
-            colors.highlightGold,
-            colors.surfaceAlt,
-          )
-        : Color.alphaBlend(
-            colors.highlightGold,
-            colors.primarySubtle,
-          );
+        ? Color.alphaBlend(colors.highlightGold, colors.surfaceAlt)
+        : Color.alphaBlend(colors.highlightGold, colors.primarySubtle);
     final openTagForegroundColor = isDark ? colors.onDark : colors.primary;
     switch (status) {
-      case 4:// 运用中
+      case 4: // 运用中
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.infoForeground, colors.primary],
           tagBackgroundColor: colors.infoSubtle,
           tagForegroundColor: colors.infoForeground,
           amountGradientColors: <Color>[colors.info, colors.primaryAlt],
         );
-      case 5:// 运用结束
+      case 5: // 运用结束
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.heroMiddle, colors.heroEnd],
           tagBackgroundColor: colors.surfaceAlt,
@@ -282,21 +276,21 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
             colors.heroMiddle,
           ],
         );
-      case 1:// 募集中
+      case 1: // 募集中
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.brandPrimaryDark, openAccentColor],
           tagBackgroundColor: openTagBackgroundColor,
           tagForegroundColor: colors.onDark,
           amountGradientColors: <Color>[openAccentColor, colors.primary],
         );
-      case 0:// 募集前
+      case 0: // 募集前
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.warningForeground, colors.warning],
           tagBackgroundColor: colors.warningSubtle,
           tagForegroundColor: colors.warningForeground,
           amountGradientColors: <Color>[colors.warningAction, colors.warning],
         );
-      case 3:// 募集结束
+      case 3: // 募集结束
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.heroMiddle, colors.heroEnd],
           tagBackgroundColor: colors.surfaceAlt,
@@ -306,14 +300,14 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
             colors.heroMiddle,
           ],
         );
-      case 7:// 募集完成
+      case 7: // 募集完成
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.brandPrimaryDark, colors.primary],
           tagBackgroundColor: openTagBackgroundColor,
           tagForegroundColor: openTagForegroundColor,
           amountGradientColors: <Color>[colors.primaryAlt, colors.primary],
         );
-      case 2:// 募集失败
+      case 2: // 募集失败
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.dangerForeground, colors.danger],
           tagBackgroundColor: colors.dangerSubtle,
@@ -633,12 +627,6 @@ class _FundProjectCard extends StatelessWidget {
       achievementRate: project.achievementRate,
     );
     final cardRadius = BorderRadius.circular(UiTokens.radius16);
-    final heroGlassColor = _resolveHeroGlassSurfaceColor(theme);
-    final heroGlassBorderColor = _resolveHeroGlassBorderColor(theme);
-    final heroGlassPrimaryTextColor = _resolveHeroGlassPrimaryTextColor(theme);
-    final heroGlassSecondaryTextColor = _resolveHeroGlassSecondaryTextColor(
-      theme,
-    );
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(2, 2, 2, 8),
@@ -707,13 +695,12 @@ class _FundProjectCard extends StatelessWidget {
                         left: 10,
                         top: 12,
                         child: _PillTag(
-                            label: statusLabel,
-                            backgroundColor: palette.tagBackgroundColor,
-                            foregroundColor: palette.tagForegroundColor,
-                          ),
+                          label: statusLabel,
+                          backgroundColor: palette.tagBackgroundColor,
+                          foregroundColor: palette.tagForegroundColor,
+                        ),
                       ),
 
-                    
                       // Positioned(
                       //   right: 10,
                       //   top: 10,
@@ -814,11 +801,11 @@ class _FundProjectCard extends StatelessWidget {
                             label: methodLabel,
                             backgroundColor: colors.primary,
                             foregroundColor: colors.infoSubtle,
-             
                           ),
                           _PillTag(
                             label: gainTypeLabel,
-                            backgroundColor: colors.communitySecondary.withValues(alpha: 0.24),
+                            backgroundColor: colors.communitySecondary
+                                .withValues(alpha: 0.24),
                             foregroundColor: colors.textPrimary,
                           ),
                         ],
@@ -955,11 +942,7 @@ _AchievementBarPalette _resolveAchievementBarPalette({
       0.36 + (0.64 * Curves.easeOutCubic.transform(normalizedValue));
   final blueShift = _resolveAchievementBlueShift(normalizedValue);
   final shiftedGradientColors = <Color>[
-    Color.lerp(
-          colors.primary,
-          colors.brandPrimaryDark,
-          blueShift * 0.58,
-        ) ??
+    Color.lerp(colors.primary, colors.brandPrimaryDark, blueShift * 0.58) ??
         colors.brandPrimaryDark,
     Color.lerp(colors.primaryAlt, colors.primary, blueShift) ?? colors.primary,
   ];
@@ -1007,102 +990,16 @@ double _lerpAchievementWindow(
   return startOutput + ((endOutput - startOutput) * t);
 }
 
-Color _resolveHeroGlassSurfaceColor(ThemeData theme) {
-  final colors = theme.appColors;
-  final authTheme = theme.extension<AppAuthVisualTheme>();
-  final isDark = theme.brightness == Brightness.dark;
-
-  return authTheme?.glassSurfaceColor ??
-      colors.surface.withValues(alpha: isDark ? 0.66 : 0.82);
-}
-
-Color _resolveHeroGlassBorderColor(ThemeData theme) {
-  final authTheme = theme.extension<AppAuthVisualTheme>();
-  final colors = theme.appColors;
-  final isDark = theme.brightness == Brightness.dark;
-
-  return authTheme?.glassBorderColor ??
-      colors.onDark.withValues(alpha: isDark ? 0.16 : 0.10);
-}
-
-Color _resolveHeroGlassPrimaryTextColor(ThemeData theme) {
-  final colors = theme.appColors;
-  final isDark = theme.brightness == Brightness.dark;
-  return isDark ? colors.onDark : colors.textPrimary;
-}
-
-Color _resolveHeroGlassSecondaryTextColor(ThemeData theme) {
-  final colors = theme.appColors;
-  final isDark = theme.brightness == Brightness.dark;
-  return isDark ? colors.onDark.withValues(alpha: 0.76) : colors.textSecondary;
-}
-
-class _HeroInfoBubble extends StatelessWidget {
-  const _HeroInfoBubble({
-    required this.label,
-    required this.value,
-    required this.backgroundColor,
-    required this.borderColor,
-    required this.labelColor,
-    required this.valueColor,
-  });
-
-  final String label;
-  final String value;
-  final Color backgroundColor;
-  final Color borderColor;
-  final Color labelColor;
-  final Color valueColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final appText = Theme.of(context).appTextTheme;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: borderColor),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(
-            label,
-            style: appText.micro.copyWith(
-              color: labelColor,
-              height: 1.1,
-              fontSize: 9,
-            ),
-          ),
-          Text(
-            value,
-            style: appText.bodyStrong.copyWith(
-              color: valueColor,
-              height: 1.1,
-              fontSize: 11,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _PillTag extends StatelessWidget {
   const _PillTag({
     required this.label,
     required this.backgroundColor,
     required this.foregroundColor,
-    this.borderRadius = 12,
-  }
-  );
+  });
 
   final String label;
   final Color backgroundColor;
   final Color foregroundColor;
-  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -1110,10 +1007,9 @@ class _PillTag extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: BorderRadius.circular(12),
       ),
-      child: 
-      Align(
+      child: Align(
         alignment: Alignment.center,
         widthFactor: 1.0,
         heightFactor: 1.0,

@@ -28,6 +28,7 @@ class FundProject {
     this.periodType,
     this.times,
     this.accountId,
+    this.description,
     this.features,
     this.videoLink,
     this.subordinatedRatio,
@@ -63,6 +64,7 @@ class FundProject {
   final String? periodType;
   final int? times;
   final String? accountId;
+  final String? description;
   final String? features;
   final String? videoLink;
   final String? subordinatedRatio;

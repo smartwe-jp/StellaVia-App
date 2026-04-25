@@ -2167,6 +2167,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get fundDetailUnknownValue => '--';
 
   @override
+  String get fundDetailProductSummaryTitle => '商品概要';
+
+  @override
+  String get fundDetailFeaturesTitle => '特徴';
+
+  @override
   String fundDetailInvestmentUnitValue(Object amount) {
     return '$amount円／1口';
   }

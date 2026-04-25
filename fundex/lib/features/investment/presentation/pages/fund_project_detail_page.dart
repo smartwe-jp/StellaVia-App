@@ -195,6 +195,8 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                 ),
               ]
             : viewData.infoItems;
+        final descriptionText = _normalizeFundDetailText(project.description);
+        final featuresText = _normalizeFundDetailText(project.features);
 
         return FundProjectDetailScaffold(
           actionBar: FundDetailStickyActionBar(
@@ -242,6 +244,19 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           FundProjectDetailTitleBlock(project: project),
+                          if (descriptionText != null) ...<Widget>[
+                            const SizedBox(height: UiTokens.spacing12),
+                            FundDetailDisclosureList(
+                              items: <FundDetailDisclosureItemData>[
+                                FundDetailDisclosureItemData(
+                                  title: context
+                                      .l10n
+                                      .fundDetailProductSummaryTitle,
+                                  body: descriptionText,
+                                ),
+                              ],
+                            ),
+                          ],
                           const SizedBox(height: UiTokens.spacing12),
                           FundProjectDetailYieldHighlightCard(
                             label: context
@@ -298,6 +313,21 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                         items: viewData.propertyItems,
                       ),
                     ),
+                    if (featuresText != null) ...<Widget>[
+                      const SizedBox(height: UiTokens.spacing16),
+                      FundDetailSection(
+                        title: context.l10n.fundDetailFeaturesTitle,
+                        child: FundDetailContentCard(
+                          child: Text(
+                            featuresText,
+                            style: appText.bodyMuted.copyWith(
+                              color: colors.textSecondary,
+                              height: 1.7,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                     if (staticContent != null) ...<Widget>[
                       const SizedBox(height: 18),
                       if (hasGainType) ...<Widget>[
@@ -627,11 +657,7 @@ _AchievementBannerPalette _resolveAchievementBannerPalette({
       0.36 + (0.64 * Curves.easeOutCubic.transform(normalizedValue));
   final blueShift = _resolveAchievementBlueShift(normalizedValue);
   final shiftedGradientColors = <Color>[
-    Color.lerp(
-          colors.brandPrimaryDark,
-          colors.primary,
-          blueShift * 0.58,
-        ) ??
+    Color.lerp(colors.brandPrimaryDark, colors.primary, blueShift * 0.58) ??
         colors.brandPrimaryDark,
     Color.lerp(colors.primary, colors.primaryAlt, blueShift) ?? colors.primary,
   ];
@@ -677,6 +703,14 @@ double _lerpAchievementWindow(
 ) {
   final t = ((value - start) / (end - start)).clamp(0, 1).toDouble();
   return startOutput + ((endOutput - startOutput) * t);
+}
+
+String? _normalizeFundDetailText(String? value) {
+  final text = value?.trim();
+  if (text == null || text.isEmpty) {
+    return null;
+  }
+  return text;
 }
 
 String _formatAchievementRate(double? value) {
