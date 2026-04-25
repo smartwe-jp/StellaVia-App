@@ -17,6 +17,7 @@ class MemberProfileActionGuard {
   }) async {
     bool completed;
     try {
+      await refreshMemberProfileVerificationStateFromProvider(_ref);
       completed = await _ref.read(isMemberProfileCompletedProvider.future);
     } catch (_) {
       completed = false;

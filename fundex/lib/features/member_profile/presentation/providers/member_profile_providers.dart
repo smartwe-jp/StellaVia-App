@@ -218,6 +218,22 @@ final isFundApplyVerifiedProvider = FutureProvider<bool>((ref) async {
   return status == 4 || status == 5;
 });
 
+Future<void> refreshMemberProfileVerificationState(WidgetRef ref) async {
+  await ref.read(syncMemberProfileFromRemoteUseCaseProvider).call();
+  ref.invalidate(currentAuthUserProvider);
+  ref.invalidate(memberProfileDetailsProvider);
+  ref.invalidate(isMemberProfileCompletedProvider);
+  ref.invalidate(isFundApplyVerifiedProvider);
+}
+
+Future<void> refreshMemberProfileVerificationStateFromProvider(Ref ref) async {
+  await ref.read(syncMemberProfileFromRemoteUseCaseProvider).call();
+  ref.invalidate(currentAuthUserProvider);
+  ref.invalidate(memberProfileDetailsProvider);
+  ref.invalidate(isMemberProfileCompletedProvider);
+  ref.invalidate(isFundApplyVerifiedProvider);
+}
+
 final profileDocumentImagePickerProvider = Provider<ProfileDocumentImagePicker>(
   (ref) {
     return DeviceProfileDocumentImagePicker();

@@ -445,6 +445,7 @@ class _MemberProfileOverviewPageState
 
   Future<void> _openSection(MemberProfileEditStep step) async {
     if (step == MemberProfileEditStep.ekyc) {
+      await refreshRemoteVerificationStatus(ref);
       final faceVerified = await ref
           .read(settingsRealPersonVerifiedProvider.future)
           .catchError((Object _) => false);

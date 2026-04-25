@@ -13,7 +13,12 @@ Future<bool> ensureSensitiveActionAuthorized(
   BuildContext context,
   WidgetRef ref, {
   String? identifyGroupId,
+  bool refreshVerificationStatus = true,
 }) async {
+  if (refreshVerificationStatus) {
+    await refreshRemoteVerificationStatus(ref);
+  }
+
   final isIdentityAuthEnabled = ref.read(identityAuthFeatureEnabledProvider);
   if (!isIdentityAuthEnabled) {
     return true;
@@ -77,6 +82,8 @@ Future<bool> ensureRealPersonVerifiedAndAuthorizeSensitiveAction(
   required String faceVerificationMessage,
   String? identifyGroupId,
 }) async {
+  await refreshRemoteVerificationStatus(ref);
+
   final faceVerified = await ref
       .read(settingsRealPersonVerifiedProvider.future)
       .catchError((Object _) => false);
@@ -116,5 +123,23 @@ Future<bool> ensureRealPersonVerifiedAndAuthorizeSensitiveAction(
     context,
     ref,
     identifyGroupId: identifyGroupId,
+    refreshVerificationStatus: false,
   );
+}
+
+Future<void> refreshRemoteVerificationStatus(WidgetRef ref) async {
+  ref.invalidate(settingsRemoteVerificationStatusProvider);
+  ref.invalidate(settingsPhoneVerifiedProvider);
+  ref.invalidate(settingsEmailVerifiedProvider);
+  ref.invalidate(settingsVerifiedEmailProvider);
+  ref.invalidate(settingsRealPersonVerifiedProvider);
+
+  await ref
+      .refresh(settingsRemoteVerificationStatusProvider.future)
+      .catchError((Object _) => null);
+
+  ref.invalidate(settingsPhoneVerifiedProvider);
+  ref.invalidate(settingsEmailVerifiedProvider);
+  ref.invalidate(settingsVerifiedEmailProvider);
+  ref.invalidate(settingsRealPersonVerifiedProvider);
 }

@@ -252,6 +252,7 @@ class _FundLotteryApplyFlowPageState
 
     var isFundApplyVerified = false;
     try {
+      await refreshMemberProfileVerificationState(ref);
       isFundApplyVerified = await ref.read(isFundApplyVerifiedProvider.future);
     } catch (_) {
       isFundApplyVerified = false;

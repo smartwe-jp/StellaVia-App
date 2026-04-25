@@ -513,6 +513,7 @@ class _MemberProfileEditFlowPageState
     });
 
     try {
+      await refreshRemoteVerificationStatus(ref);
       final faceVerified = await ref
           .read(settingsRealPersonVerifiedProvider.future)
           .catchError((Object _) => false);
