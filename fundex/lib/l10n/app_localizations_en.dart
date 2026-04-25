@@ -2842,23 +2842,36 @@ class AppLocalizationsEn extends AppLocalizations {
       'The withdrawal fee for domestic bank accounts is JPY 1,000.';
 
   @override
+  String get walletBankSettingsOverseasBankNameHint => 'Example National Bank';
+
+  @override
+  String get walletBankSettingsOverseasBranchNameHint => 'New York Main Branch';
+
+  @override
   String get walletBankSettingsBranchNumberLabel => 'Branch number';
 
   @override
   String get walletBankSettingsBranchNumberHint => '001';
 
   @override
+  String get walletBankSettingsOverseasBranchNumberHint => '102';
+
+  @override
+  String get walletBankSettingsOverseasAccountNumberHint => '1234567890';
+
+  @override
   String get walletBankSettingsOverseasAccountHolderLabel =>
       'Account holder name';
 
   @override
-  String get walletBankSettingsOverseasAccountHolderHint => 'DIAOWEN';
+  String get walletBankSettingsOverseasAccountHolderHint => 'JOHN SMITH';
 
   @override
   String get walletBankSettingsOwnerAddressLabel => 'Account holder address';
 
   @override
-  String get walletBankSettingsOwnerAddressHint => 'Osaka...';
+  String get walletBankSettingsOwnerAddressHint =>
+      '123 Example Avenue, New York, NY 10001, USA';
 
   @override
   String get walletBankSettingsOwnerNationalityLabel =>
@@ -2871,7 +2884,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletBankSettingsSwiftCodeLabel => 'SWIFT / BIC';
 
   @override
-  String get walletBankSettingsSwiftCodeHint => 'AAAABBCCDDD';
+  String get walletBankSettingsSwiftCodeHint => 'EXNBUS33XXX';
 
   @override
   String get walletBankSettingsBankCountryLabel => 'Bank country';
@@ -2883,7 +2896,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletBankSettingsBranchAddressLabel => 'Branch address';
 
   @override
-  String get walletBankSettingsBranchAddressHint => 'Tokyo...';
+  String get walletBankSettingsBranchAddressHint =>
+      '456 Sample Street, New York, NY 10005, USA';
 
   @override
   String get walletBankSettingsOverseasTip =>

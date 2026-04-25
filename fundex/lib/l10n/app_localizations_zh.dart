@@ -2661,46 +2661,60 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletBankSettingsDomesticTip => '日本国内账户出金手续费为 1,000 日元。';
 
   @override
+  String get walletBankSettingsOverseasBankNameHint => 'Example National Bank';
+
+  @override
+  String get walletBankSettingsOverseasBranchNameHint => 'New York Main Branch';
+
+  @override
   String get walletBankSettingsBranchNumberLabel => '分行编号';
 
   @override
   String get walletBankSettingsBranchNumberHint => '001';
 
   @override
+  String get walletBankSettingsOverseasBranchNumberHint => '102';
+
+  @override
+  String get walletBankSettingsOverseasAccountNumberHint => '1234567890';
+
+  @override
   String get walletBankSettingsOverseasAccountHolderLabel => '账户名义';
 
   @override
-  String get walletBankSettingsOverseasAccountHolderHint => 'DIAOWEN';
+  String get walletBankSettingsOverseasAccountHolderHint => 'JOHN SMITH';
 
   @override
   String get walletBankSettingsOwnerAddressLabel => '账户名义人地址';
 
   @override
-  String get walletBankSettingsOwnerAddressHint => '大阪府大阪市...';
+  String get walletBankSettingsOwnerAddressHint =>
+      '123 Example Avenue, New York, NY 10001, USA';
 
   @override
   String get walletBankSettingsOwnerNationalityLabel => '账户名义人国籍';
 
   @override
-  String get walletBankSettingsOwnerNationalityHint => '美国';
+  String get walletBankSettingsOwnerNationalityHint => 'United States';
 
   @override
   String get walletBankSettingsSwiftCodeLabel => 'SWIFT / BIC';
 
   @override
-  String get walletBankSettingsSwiftCodeHint => 'AAAABBCCDDD';
+  String get walletBankSettingsSwiftCodeHint => 'EXNBUS33XXX';
 
   @override
   String get walletBankSettingsBankCountryLabel => '银行所在国';
 
   @override
-  String get walletBankSettingsBankCountryHint => '美国';
+  String get walletBankSettingsBankCountryHint => 'United States';
 
   @override
   String get walletBankSettingsBranchAddressLabel => '分行地址';
 
   @override
-  String get walletBankSettingsBranchAddressHint => '东京都千代田区...';
+  String get walletBankSettingsBranchAddressHint =>
+      '456 Sample Street, New York, NY 10005, USA';
 
   @override
   String get walletBankSettingsOverseasTip => '海外账户出金手续费为 10,000 日元。';
@@ -6649,46 +6663,60 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get walletBankSettingsDomesticTip => '日本國內帳戶出金手續費為 1,000 日圓。';
 
   @override
+  String get walletBankSettingsOverseasBankNameHint => 'Example National Bank';
+
+  @override
+  String get walletBankSettingsOverseasBranchNameHint => 'New York Main Branch';
+
+  @override
   String get walletBankSettingsBranchNumberLabel => '分行編號';
 
   @override
   String get walletBankSettingsBranchNumberHint => '001';
 
   @override
+  String get walletBankSettingsOverseasBranchNumberHint => '102';
+
+  @override
+  String get walletBankSettingsOverseasAccountNumberHint => '1234567890';
+
+  @override
   String get walletBankSettingsOverseasAccountHolderLabel => '帳戶名義';
 
   @override
-  String get walletBankSettingsOverseasAccountHolderHint => 'DIAOWEN';
+  String get walletBankSettingsOverseasAccountHolderHint => 'JOHN SMITH';
 
   @override
   String get walletBankSettingsOwnerAddressLabel => '帳戶名義人地址';
 
   @override
-  String get walletBankSettingsOwnerAddressHint => '大阪府大阪市...';
+  String get walletBankSettingsOwnerAddressHint =>
+      '123 Example Avenue, New York, NY 10001, USA';
 
   @override
   String get walletBankSettingsOwnerNationalityLabel => '帳戶名義人國籍';
 
   @override
-  String get walletBankSettingsOwnerNationalityHint => '美國';
+  String get walletBankSettingsOwnerNationalityHint => 'United States';
 
   @override
   String get walletBankSettingsSwiftCodeLabel => 'SWIFT / BIC';
 
   @override
-  String get walletBankSettingsSwiftCodeHint => 'AAAABBCCDDD';
+  String get walletBankSettingsSwiftCodeHint => 'EXNBUS33XXX';
 
   @override
   String get walletBankSettingsBankCountryLabel => '銀行所在國';
 
   @override
-  String get walletBankSettingsBankCountryHint => '美國';
+  String get walletBankSettingsBankCountryHint => 'United States';
 
   @override
   String get walletBankSettingsBranchAddressLabel => '分行地址';
 
   @override
-  String get walletBankSettingsBranchAddressHint => '東京都千代田區...';
+  String get walletBankSettingsBranchAddressHint =>
+      '456 Sample Street, New York, NY 10005, USA';
 
   @override
   String get walletBankSettingsOverseasTip => '海外帳戶出金手續費為 10,000 日圓。';

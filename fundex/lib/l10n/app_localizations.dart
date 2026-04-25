@@ -5258,6 +5258,18 @@ abstract class AppLocalizations {
   /// **'The withdrawal fee for domestic bank accounts is JPY 1,000.'**
   String get walletBankSettingsDomesticTip;
 
+  /// No description provided for @walletBankSettingsOverseasBankNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Example National Bank'**
+  String get walletBankSettingsOverseasBankNameHint;
+
+  /// No description provided for @walletBankSettingsOverseasBranchNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'New York Main Branch'**
+  String get walletBankSettingsOverseasBranchNameHint;
+
   /// No description provided for @walletBankSettingsBranchNumberLabel.
   ///
   /// In en, this message translates to:
@@ -5270,6 +5282,18 @@ abstract class AppLocalizations {
   /// **'001'**
   String get walletBankSettingsBranchNumberHint;
 
+  /// No description provided for @walletBankSettingsOverseasBranchNumberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'102'**
+  String get walletBankSettingsOverseasBranchNumberHint;
+
+  /// No description provided for @walletBankSettingsOverseasAccountNumberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'1234567890'**
+  String get walletBankSettingsOverseasAccountNumberHint;
+
   /// No description provided for @walletBankSettingsOverseasAccountHolderLabel.
   ///
   /// In en, this message translates to:
@@ -5279,7 +5303,7 @@ abstract class AppLocalizations {
   /// No description provided for @walletBankSettingsOverseasAccountHolderHint.
   ///
   /// In en, this message translates to:
-  /// **'DIAOWEN'**
+  /// **'JOHN SMITH'**
   String get walletBankSettingsOverseasAccountHolderHint;
 
   /// No description provided for @walletBankSettingsOwnerAddressLabel.
@@ -5291,7 +5315,7 @@ abstract class AppLocalizations {
   /// No description provided for @walletBankSettingsOwnerAddressHint.
   ///
   /// In en, this message translates to:
-  /// **'Osaka...'**
+  /// **'123 Example Avenue, New York, NY 10001, USA'**
   String get walletBankSettingsOwnerAddressHint;
 
   /// No description provided for @walletBankSettingsOwnerNationalityLabel.
@@ -5315,7 +5339,7 @@ abstract class AppLocalizations {
   /// No description provided for @walletBankSettingsSwiftCodeHint.
   ///
   /// In en, this message translates to:
-  /// **'AAAABBCCDDD'**
+  /// **'EXNBUS33XXX'**
   String get walletBankSettingsSwiftCodeHint;
 
   /// No description provided for @walletBankSettingsBankCountryLabel.
@@ -5339,7 +5363,7 @@ abstract class AppLocalizations {
   /// No description provided for @walletBankSettingsBranchAddressHint.
   ///
   /// In en, this message translates to:
-  /// **'Tokyo...'**
+  /// **'456 Sample Street, New York, NY 10005, USA'**
   String get walletBankSettingsBranchAddressHint;
 
   /// No description provided for @walletBankSettingsOverseasTip.

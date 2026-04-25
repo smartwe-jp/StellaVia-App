@@ -171,21 +171,21 @@ class _WalletOverseasBankAccountAddPageState
             MemberProfileTextField(
               label: l10n.memberProfileBankNameLabel,
               controller: _bankNameController,
-              hintText: l10n.memberProfileBankNameHint,
+              hintText: l10n.walletBankSettingsOverseasBankNameHint,
               isRequired: true,
             ),
             const SizedBox(height: 18),
             MemberProfileTextField(
               label: l10n.memberProfileBranchLabel,
               controller: _branchNameController,
-              hintText: l10n.memberProfileBranchHint,
+              hintText: l10n.walletBankSettingsOverseasBranchNameHint,
               isRequired: true,
             ),
             const SizedBox(height: 18),
             MemberProfileTextField(
               label: l10n.walletBankSettingsBranchNumberLabel,
               controller: _branchNumberController,
-              hintText: l10n.walletBankSettingsBranchNumberHint,
+              hintText: l10n.walletBankSettingsOverseasBranchNumberHint,
               keyboardType: TextInputType.number,
               isRequired: true,
             ),
@@ -193,7 +193,7 @@ class _WalletOverseasBankAccountAddPageState
             MemberProfileTextField(
               label: l10n.memberProfileAccountNumberLabel,
               controller: _accountNumberController,
-              hintText: l10n.memberProfileAccountNumberHint,
+              hintText: l10n.walletBankSettingsOverseasAccountNumberHint,
               keyboardType: TextInputType.number,
               isRequired: true,
             ),
