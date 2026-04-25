@@ -1784,7 +1784,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeFeaturedFundsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Featured Funds'**
+  /// **'Latest Funds'**
   String get homeFeaturedFundsTitle;
 
   /// No description provided for @homeViewAllAction.

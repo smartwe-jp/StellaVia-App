@@ -860,7 +860,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeReminderCoolingOffAction => '办理取消';
 
   @override
-  String get homeFeaturedFundsTitle => '注目基金';
+  String get homeFeaturedFundsTitle => '最新基金';
 
   @override
   String get homeViewAllAction => '查看全部';
@@ -4866,7 +4866,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeReminderCoolingOffAction => '取消手續';
 
   @override
-  String get homeFeaturedFundsTitle => '精選基金';
+  String get homeFeaturedFundsTitle => '基金';
 
   @override
   String get homeViewAllAction => '查看全部';

@@ -935,7 +935,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeReminderCoolingOffAction => 'Cancel contract';
 
   @override
-  String get homeFeaturedFundsTitle => 'Featured Funds';
+  String get homeFeaturedFundsTitle => 'Latest Funds';
 
   @override
   String get homeViewAllAction => 'View All';

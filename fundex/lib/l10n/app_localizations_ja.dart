@@ -874,7 +874,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeReminderCoolingOffAction => '取消手続き';
 
   @override
-  String get homeFeaturedFundsTitle => '注目ファンド';
+  String get homeFeaturedFundsTitle => '最新ファンド';
 
   @override
   String get homeViewAllAction => '一覧を見る';

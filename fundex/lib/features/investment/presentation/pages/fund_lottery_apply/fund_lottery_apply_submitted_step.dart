@@ -113,8 +113,12 @@ class FundLotteryApplySubmittedStep extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               child: Row(
+                                spacing: 10,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Expanded(
+                                    flex: 2,
                                     child: Text(
                                       row.label,
                                       style: appText.caption.copyWith(
@@ -122,12 +126,16 @@ class FundLotteryApplySubmittedStep extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  Text(
-                                    row.value,
-                                    style: _submittedValueStyle(
-                                      appText,
+                                  Expanded(
+                                    flex: 3,
+                                    child: Text(
                                       row.value,
-                                    ).copyWith(color: rightValueColor),
+                                      textAlign: TextAlign.end,
+                                      style: _submittedValueStyle(
+                                        appText,
+                                        row.value,
+                                      ).copyWith(color: rightValueColor),
+                                    ),
                                   ),
                                 ],
                               ),

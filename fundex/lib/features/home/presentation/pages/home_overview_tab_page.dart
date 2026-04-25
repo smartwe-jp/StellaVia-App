@@ -128,10 +128,10 @@ class HomeOverviewTabPage extends ConsumerWidget {
     ];
 
     final featuredProjects = projects
-        .where(
-          (FundProject project) =>
-              _featuredProjectStatuses.contains(project.projectStatus),
-        )
+        // .where(
+        //   (FundProject project) =>
+        //       _featuredProjectStatuses.contains(project.projectStatus),
+        // )
         .take(6)
         .toList(growable: false);
     final featuredFundCards = featuredProjects
@@ -147,6 +147,8 @@ class HomeOverviewTabPage extends ConsumerWidget {
         )
         .toList(growable: false);
     final loadError = asyncProjects.asError;
+
+    final bool showGuide = shouldShowMemberProfileReminder || isEmailVerified == false || verificationStatus?.isPhoneVerified == false ||verificationStatus?.isRealPersonVerified == false;
 
     final topSection = switch ((authState.isLoading, isAuthenticated)) {
       (true, _) => const SizedBox(height: UiTokens.spacing12),
@@ -229,7 +231,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
                       ),
                       child: FundReminderFeed(items: reminders),
                     ),
-                  if (!isAuthenticated)
+                  //if (!isAuthenticated)
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: UiTokens.spacing16,
@@ -282,7 +284,7 @@ class HomeOverviewTabPage extends ConsumerWidget {
                       height: 350,
                       children: featuredFundCards,
                     ),
-                  if (!isAuthenticated)
+                  if (showGuide)
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: UiTokens.spacing16,
