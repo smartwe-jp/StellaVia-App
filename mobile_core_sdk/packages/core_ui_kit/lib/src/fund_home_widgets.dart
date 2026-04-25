@@ -955,41 +955,40 @@ class FundFeaturedFundCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     if (data.tags.isNotEmpty)
-                      Wrap(
-                        spacing: 10,
-                        runSpacing: 8,
-                        children: data.tags
-                            .map(
-                              (FundFeaturedFundTagData tag) => Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: tag.backgroundColor,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  widthFactor: 1,
-                                  heightFactor: 1,
-                                  child: Text(
-                                    tag.label,
-                                    textHeightBehavior:
-                                        const TextHeightBehavior(
-                                          applyHeightToFirstAscent: false,
-                                          applyHeightToLastDescent: false,
-                                        ),
-                                    style: appText.micro.copyWith(
-                                      color: tag.foregroundColor,
-                                      height: 1,
+                    Row(
+                      spacing: 6,
+                      children: [
+                        ...data.tags.map(
+                          (FundFeaturedFundTagData tag) => Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: tag.backgroundColor,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Align(
+                              alignment: Alignment.center,
+                              widthFactor: 1,
+                              heightFactor: 1,
+                              child: Text(
+                                tag.label,
+                                textHeightBehavior:
+                                    const TextHeightBehavior(
+                                      applyHeightToFirstAscent: false,
+                                      applyHeightToLastDescent: false,
                                     ),
-                                  ),
+                                style: appText.micro.copyWith(
+                                  color: tag.foregroundColor,
+                                  height: 1,
                                 ),
                               ),
-                            )
-                            .toList(),
-                      ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 12),
                     AspectRatio(
                       aspectRatio: 16 / 9,
