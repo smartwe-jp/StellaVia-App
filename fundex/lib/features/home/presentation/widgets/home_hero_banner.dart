@@ -62,7 +62,7 @@ class HomeHeroBanner extends StatelessWidget {
                     Expanded(
                       child: Text(
                         'StellaVia',
-                        style: theme.appTextTheme.pageTitle.copyWith(
+                        style: theme.appTextTheme.sectionTitle.copyWith(
                           color: colors.onDark,
                           fontSize: 20,
                         ),
