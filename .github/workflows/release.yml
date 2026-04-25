@@ -414,6 +414,5 @@ jobs:
           name: ${{ steps.ios_meta.outputs.artifact_name }}
           path: |
             fundex/build/ios/ipa/
-            fundex/build/ios/archive/Runner.xcarchive
           if-no-files-found: error
           retention-days: 14
