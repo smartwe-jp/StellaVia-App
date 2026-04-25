@@ -241,7 +241,7 @@ jobs:
   ios:
     name: iOS Prod IPA
     if: ${{ inputs.platform == 'all' || inputs.platform == 'ios' }}
-    runs-on: macos-latest
+    runs-on: macos-26
     timeout-minutes: 75
     defaults:
       run:
@@ -278,6 +278,20 @@ jobs:
         with:
           flutter-version: "3.41.4"
           cache: true
+
+      - name: Verify Xcode SDK
+        run: |
+          xcodebuild -version
+          ios_sdk_version="$(xcrun --sdk iphoneos --show-sdk-version)"
+          echo "iPhoneOS SDK: ${ios_sdk_version}"
+
+          case "$ios_sdk_version" in
+            26.*|[3-9][0-9].*) ;;
+            *)
+              echo "::error::App Store Connect requires iOS 26 SDK or later. Current iPhoneOS SDK is ${ios_sdk_version}."
+              exit 1
+              ;;
+          esac
 
       - name: Validate iOS Release Secrets
         env:
