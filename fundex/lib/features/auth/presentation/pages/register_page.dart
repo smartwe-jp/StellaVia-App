@@ -197,21 +197,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       return;
     }
 
-    await AppDialogs.showAdaptiveAlert<void>(
-      context: context,
-      title: l10n.registerSuccessTitle,
-      message: l10n.registerSuccessMessage,
-      actions: <AppDialogAction<void>>[
-        AppDialogAction<void>(
-          label: l10n.commonBackToLogin,
-          isDefaultAction: true,
-        ),
-      ],
-    );
-
-    if (!mounted) {
-      return;
-    }
     setState(() {
       _isSubmitting = false;
     });
@@ -221,6 +206,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     if (!mounted) {
       return;
     }
+    AppNotice.show(context, message: l10n.registerSuccessMessage);
     context.go('/login');
   }
 
@@ -426,9 +412,9 @@ class _RegisterPolicyRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final accentColor = theme.colorScheme.primary;
-    final borderColor = 
-    (theme.extension<AppFTKTheme>()?.cardBorderColor ?? theme.dividerColor)
-        .withValues(alpha: 0.9);
+    final borderColor =
+        (theme.extension<AppFTKTheme>()?.cardBorderColor ?? theme.dividerColor)
+            .withValues(alpha: 0.9);
 
     return Material(
       color: Colors.transparent,

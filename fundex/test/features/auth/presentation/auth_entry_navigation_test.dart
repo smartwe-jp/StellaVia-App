@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:core_network/core_network.dart';
+import 'package:core_tool_kit/core_tool_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,11 +10,52 @@ import 'package:fundex/app/config/app_environment.dart';
 import 'package:fundex/app/config/app_flavor.dart';
 import 'package:fundex/app/config/environment_provider.dart';
 import 'package:fundex/app/network/app_network_providers.dart';
+import 'package:fundex/app/observability/app_observability_providers.dart';
 import 'package:fundex/features/auth/data/datasources/auth_local_data_source.dart';
 import 'package:fundex/features/auth/data/models/auth_user_dto.dart';
 import 'package:fundex/features/auth/domain/entities/auth_session.dart';
 import 'package:fundex/features/auth/domain/repositories/auth_repository.dart';
 import 'package:fundex/features/auth/presentation/providers/auth_providers.dart';
+import 'package:go_router/go_router.dart';
+
+class _NoopAppLogger implements AppLogger {
+  @override
+  void debug(String message, {Map<String, Object?> context = const {}}) {}
+
+  @override
+  Future<void> dispose() async {}
+
+  @override
+  void error(
+    String message, {
+    Object? error,
+    StackTrace? stackTrace,
+    Map<String, Object?> context = const {},
+  }) {}
+
+  @override
+  Future<File> exportLogs({Directory? outputDirectory}) {
+    throw UnsupportedError('No log file is available in widget tests.');
+  }
+
+  @override
+  void info(String message, {Map<String, Object?> context = const {}}) {}
+
+  @override
+  Future<List<File>> listLogFiles() async => <File>[];
+
+  @override
+  void log(
+    AppLogLevel level,
+    String message, {
+    Object? error,
+    StackTrace? stackTrace,
+    Map<String, Object?> context = const {},
+  }) {}
+
+  @override
+  void warning(String message, {Map<String, Object?> context = const {}}) {}
+}
 
 class _SeededTokenStore implements TokenStore {
   _SeededTokenStore({String? accessToken, String? refreshToken})
@@ -137,6 +181,7 @@ Future<void> _pumpApp(WidgetTester tester) async {
     ProviderScope(
       overrides: <Override>[
         appEnvironmentProvider.overrideWithValue(environment),
+        appLoggerProvider.overrideWithValue(_NoopAppLogger()),
         tokenStoreProvider.overrideWithValue(_SeededTokenStore()),
         tokenRefresherProvider.overrideWithValue(
           _FakeTokenRefresher((_) async => null),
@@ -154,55 +199,43 @@ Future<void> _pumpApp(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
+Future<void> _openLoginPage(WidgetTester tester) async {
+  await _openRoute(tester, '/login');
+}
+
+Future<void> _openRoute(WidgetTester tester, String path) async {
+  final routerContext = tester.element(find.byType(Navigator).first);
+  GoRouter.of(routerContext).go(path);
+  await tester.pumpAndSettle();
+}
+
 void main() {
   group('Auth login navigation', () {
     testWidgets('navigates from login to register flow and back', (
       tester,
     ) async {
       await _pumpApp(tester);
+      await _openLoginPage(tester);
       expect(find.byKey(const Key('login_page')), findsOneWidget);
 
       await tester.ensureVisible(find.byKey(const Key('to_register_button')));
       await tester.tap(find.byKey(const Key('to_register_button')));
       await tester.pumpAndSettle();
-      expect(find.byKey(const Key('register_entry_page')), findsOneWidget);
+      expect(find.byKey(const Key('register_page')), findsOneWidget);
 
       await tester.ensureVisible(
-        find.byKey(const Key('register_entry_email_button')),
+        find.byKey(const Key('register_back_login_button')),
       );
-      await tester.tap(find.byKey(const Key('register_entry_email_button')));
-      await tester.pumpAndSettle();
-      expect(find.byKey(const Key('register_email_page')), findsOneWidget);
-
-      await tester.ensureVisible(
-        find.byKey(const Key('register_method_back_entry_button')),
-      );
-      await tester.tap(
-        find.byKey(const Key('register_method_back_entry_button')),
-      );
-      await tester.pumpAndSettle();
-      expect(find.byKey(const Key('register_entry_page')), findsOneWidget);
-
-      await tester.ensureVisible(
-        find.byKey(const Key('register_entry_back_login_button')),
-      );
-      await tester.tap(
-        find.byKey(const Key('register_entry_back_login_button')),
-      );
+      await tester.tap(find.byKey(const Key('register_back_login_button')));
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('login_page')), findsOneWidget);
     });
 
-    testWidgets('navigates from login to forgot password and back', (
+    testWidgets('opens forgot password route and returns to login', (
       tester,
     ) async {
       await _pumpApp(tester);
-      expect(find.byKey(const Key('login_page')), findsOneWidget);
-      await tester.ensureVisible(
-        find.byKey(const Key('to_forgot_password_button')),
-      );
-      await tester.tap(find.byKey(const Key('to_forgot_password_button')));
-      await tester.pumpAndSettle();
+      await _openRoute(tester, '/forgot-password');
       expect(find.byKey(const Key('forgot_password_page')), findsOneWidget);
 
       await tester.ensureVisible(

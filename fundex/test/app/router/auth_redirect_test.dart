@@ -145,15 +145,6 @@ void main() {
       expect(redirect, isNull);
     });
 
-    test('keeps unauthenticated user on nested login route', () {
-      final redirect = resolveAuthRedirect(
-        authState: const AsyncData<bool>(false),
-        location: '/login/email',
-      );
-
-      expect(redirect, isNull);
-    });
-
     test('redirects authenticated user from login to home', () {
       final redirect = resolveAuthRedirect(
         authState: const AsyncData<bool>(true),
@@ -185,15 +176,6 @@ void main() {
       final redirect = resolveAuthRedirect(
         authState: const AsyncData<bool>(true),
         location: '/register',
-      );
-
-      expect(redirect, '/home');
-    });
-
-    test('redirects authenticated user from nested register route to home', () {
-      final redirect = resolveAuthRedirect(
-        authState: const AsyncData<bool>(true),
-        location: '/register/mobile',
       );
 
       expect(redirect, '/home');
