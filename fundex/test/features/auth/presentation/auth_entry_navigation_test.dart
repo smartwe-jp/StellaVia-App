@@ -203,9 +203,13 @@ Future<void> _openLoginPage(WidgetTester tester) async {
   await _openRoute(tester, '/login');
 }
 
-Future<void> _openRoute(WidgetTester tester, String path) async {
+Future<void> _openRoute(
+  WidgetTester tester,
+  String path, {
+  Object? extra,
+}) async {
   final routerContext = tester.element(find.byType(Navigator).first);
-  GoRouter.of(routerContext).go(path);
+  GoRouter.of(routerContext).go(path, extra: extra);
   await tester.pumpAndSettle();
 }
 
@@ -244,6 +248,28 @@ void main() {
       await tester.tap(find.byKey(const Key('forgot_back_login_button')));
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('login_page')), findsOneWidget);
+    });
+
+    testWidgets('refreshes login account when route extra changes', (
+      tester,
+    ) async {
+      await _pumpApp(tester);
+      await _openLoginPage(tester);
+      expect(find.byKey(const Key('login_page')), findsOneWidget);
+
+      await tester.enterText(
+        find.byKey(const Key('login_account_input')),
+        'old@example.com',
+      );
+      await _openRoute(tester, '/login', extra: 'registered@example.com');
+
+      final accountField = tester.widget<TextField>(
+        find.byKey(const Key('login_account_input')),
+      );
+      expect(accountField.controller?.text, 'registered@example.com');
+
+      await tester.pump(const Duration(seconds: 2));
+      await tester.pumpAndSettle();
     });
   });
 }

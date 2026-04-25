@@ -148,7 +148,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (BuildContext context, GoRouterState state) {
           final shouldOpenRegister =
               state.uri.queryParameters['openRegister'] == '1';
-          return LoginPage(openRegisterOnEnter: shouldOpenRegister);
+          final initialAccount = state.extra is String
+              ? (state.extra! as String)
+              : null;
+          return LoginPage(
+            openRegisterOnEnter: shouldOpenRegister,
+            initialAccount: initialAccount,
+          );
         },
       ),
       GoRoute(

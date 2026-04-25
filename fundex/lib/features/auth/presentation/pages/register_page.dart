@@ -207,7 +207,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       return;
     }
     AppNotice.show(context, message: l10n.registerSuccessMessage);
-    context.go('/login');
+    context.go('/login', extra: _accountValue);
   }
 
   @override

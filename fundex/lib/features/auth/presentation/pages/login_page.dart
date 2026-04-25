@@ -17,9 +17,14 @@ const String _loginBrandLockupAssetPath =
     'assets/images/stellavia.logoAndText.light.png';
 
 class LoginPage extends ConsumerStatefulWidget {
-  const LoginPage({super.key, this.openRegisterOnEnter = false});
+  const LoginPage({
+    super.key,
+    this.openRegisterOnEnter = false,
+    this.initialAccount,
+  });
 
   final bool openRegisterOnEnter;
+  final String? initialAccount;
 
   @override
   ConsumerState<LoginPage> createState() => _LoginPageState();
@@ -167,7 +172,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         }
       },
     );
-    _prefillLastSignedOutAccount();
+    if (!_applyInitialAccount(rebuild: false)) {
+      _prefillLastSignedOutAccount();
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted || _didOpenRegisterOnEnter || !widget.openRegisterOnEnter) {
         return;
@@ -177,23 +184,66 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     });
   }
 
+  @override
+  void didUpdateWidget(covariant LoginPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialAccount != widget.initialAccount) {
+      _applyInitialAccount();
+    }
+  }
+
+  bool _applyInitialAccount({bool rebuild = true}) {
+    final account = widget.initialAccount?.trim() ?? '';
+    if (account.isEmpty) {
+      return false;
+    }
+    _applyPrefilledAccount(account, rebuild: rebuild);
+    return true;
+  }
+
+  void _applyPrefilledAccount(String account, {bool rebuild = true}) {
+    final normalized = account.trim();
+    if (normalized.isEmpty) {
+      return;
+    }
+    final nextChannel = _looksLikeEmail(normalized)
+        ? _LoginChannel.email
+        : _LoginChannel.mobile;
+
+    void updateState() {
+      _loginChannel = nextChannel;
+      _accountController.text = normalized;
+      _codeController.clear();
+      _localValidationError = null;
+    }
+
+    if (rebuild && mounted) {
+      setState(updateState);
+    } else {
+      updateState();
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _accountController.text.trim() != normalized) {
+        return;
+      }
+      final controller = ref.read(authControllerProvider.notifier);
+      controller.onAccountChanged(normalized);
+      controller.onCodeChanged('');
+    });
+  }
+
   Future<void> _prefillLastSignedOutAccount() async {
     final account = await ref
         .read(authLocalDataSourceProvider)
         .readLastSignedOutAccount();
-    if (!mounted || account == null || account.trim().isEmpty) {
+    if (!mounted ||
+        account == null ||
+        account.trim().isEmpty ||
+        (widget.initialAccount?.trim().isNotEmpty ?? false)) {
       return;
     }
-    final normalized = account.trim();
-    final nextChannel = _looksLikeEmail(normalized)
-        ? _LoginChannel.email
-        : _LoginChannel.mobile;
-    setState(() {
-      _loginChannel = nextChannel;
-      _accountController.text = normalized;
-      _localValidationError = null;
-    });
-    ref.read(authControllerProvider.notifier).onAccountChanged(normalized);
+    _applyPrefilledAccount(account);
   }
 
   @override
