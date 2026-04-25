@@ -10,6 +10,7 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/network/app_network_connectivity_providers.dart';
 import '../support/home_featured_fund_card_mapper.dart';
 import '../support/home_member_profile_reminder_support.dart';
+import '../widgets/home_attraction_detail_sheet.dart';
 import '../widgets/home_attraction_section.dart';
 import '../widgets/home_hero_banner.dart';
 import '../widgets/home_investment_flow_section.dart';
@@ -70,11 +71,11 @@ class HomeOverviewTabPage extends ConsumerWidget {
       decimalDigits: 0,
     );
     final shouldShowMemberProfileReminder = kDebugMode
-        ? true :
-    shouldShowHomeMemberProfileReminder(
-      currentUser,
-      isMemberProfileCompleted: isMemberProfileCompleted,
-    );
+        ? true
+        : shouldShowHomeMemberProfileReminder(
+            currentUser,
+            isMemberProfileCompleted: isMemberProfileCompleted,
+          );
 
     final reminders = <FundReminderData>[
       if (shouldShowMemberProfileReminder)
@@ -171,19 +172,22 @@ class HomeOverviewTabPage extends ConsumerWidget {
           icon: Icons.home_outlined,
           title: l10n.homeAttractionAreaTitle,
           body: l10n.homeAttractionAreaBody,
-          onTap: () => _openOfficialSite(context),
+          onTap: () =>
+              _openAttractionDetail(context, HomeAttractionDetailKind.area),
         ),
         HomeAttractionItemData(
           icon: Icons.hotel_outlined,
           title: l10n.homeAttractionStructureTitle,
           body: l10n.homeAttractionStructureBody,
-          onTap: () => _openOfficialSite(context),
+          onTap: () =>
+              _openAttractionDetail(context, HomeAttractionDetailKind.stay),
         ),
         HomeAttractionItemData(
           icon: Icons.account_balance_outlined,
           title: l10n.homeAttractionFundsTitle,
           body: l10n.homeAttractionFundsBody,
-          onTap: () => _openOfficialSite(context),
+          onTap: () =>
+              _openAttractionDetail(context, HomeAttractionDetailKind.shield),
         ),
       ],
     );
@@ -351,4 +355,19 @@ Future<void> _openOfficialSite(BuildContext context) async {
     return;
   }
   AppNotice.show(context, message: context.l10n.homeOfficialSiteOpenFailed);
+}
+
+Future<void> _openAttractionDetail(
+  BuildContext context,
+  HomeAttractionDetailKind kind,
+) {
+  return AppBottomSheet.showAdaptive<void>(
+    context: context,
+    isScrollControlled: true,
+    useSafeArea: true,
+    useRootNavigator: true,
+    builder: (BuildContext bottomSheetContext) {
+      return HomeAttractionDetailSheet(kind: kind);
+    },
+  );
 }

@@ -752,6 +752,31 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeAttractionFundsBody => '資産を守る。';
 
   @override
+  String get homeAttractionAreaDetailBody => '観光需要を直接リターンに変える投資です。';
+
+  @override
+  String get homeAttractionStructureDetailBody => '旅の体験そのものが、リターンになります。';
+
+  @override
+  String get homeAttractionShieldDetailBody => '会社が先にリスクを負う構造です。';
+
+  @override
+  String get homeAttractionShieldFirstLabel => '第1の盾';
+
+  @override
+  String get homeAttractionShieldFirstBody => 'Stella Asset株式会社の劣後出資';
+
+  @override
+  String get homeAttractionShieldSecondLabel => '第2の盾';
+
+  @override
+  String get homeAttractionShieldSecondBody => '運営会社の出資（TJ BROTHERS GROUP）';
+
+  @override
+  String get homeAttractionShieldFootnote =>
+      '案件ごとに劣後出資額は異なります。詳しくは案件概要欄をご覧ください。';
+
+  @override
   String get homeInvestmentFlowTitle => '投資の流れ';
 
   @override

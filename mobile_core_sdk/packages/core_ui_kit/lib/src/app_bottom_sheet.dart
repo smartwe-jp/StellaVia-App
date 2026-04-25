@@ -10,11 +10,13 @@ class AppBottomSheet {
     required WidgetBuilder builder,
     bool isScrollControlled = true,
     bool useSafeArea = true,
+    bool useRootNavigator = false,
   }) {
     return showModalBottomSheet<T>(
       context: context,
       isScrollControlled: isScrollControlled,
       useSafeArea: useSafeArea,
+      useRootNavigator: useRootNavigator,
       showDragHandle: false,
       backgroundColor: Theme.of(context).bottomSheetTheme.backgroundColor,
       shape: Theme.of(context).bottomSheetTheme.shape,

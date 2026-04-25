@@ -802,6 +802,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeAttractionFundsBody => 'a two-layer shield.';
 
   @override
+  String get homeAttractionAreaDetailBody =>
+      'An investment designed to turn travel demand directly into returns.';
+
+  @override
+  String get homeAttractionStructureDetailBody =>
+      'The travel experience itself can become part of the return.';
+
+  @override
+  String get homeAttractionShieldDetailBody =>
+      'A structure where the company takes risk first.';
+
+  @override
+  String get homeAttractionShieldFirstLabel => 'Shield 1';
+
+  @override
+  String get homeAttractionShieldFirstBody =>
+      'Subordinated investment by Stella Asset Co., Ltd.';
+
+  @override
+  String get homeAttractionShieldSecondLabel => 'Shield 2';
+
+  @override
+  String get homeAttractionShieldSecondBody =>
+      'Investment by the operating company (TJ BROTHERS GROUP)';
+
+  @override
+  String get homeAttractionShieldFootnote =>
+      'Subordinated investment amounts vary by project. Please see each project overview for details.';
+
+  @override
   String get homeInvestmentFlowTitle => 'How to Invest';
 
   @override

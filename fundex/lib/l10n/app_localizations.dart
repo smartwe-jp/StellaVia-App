@@ -1553,6 +1553,54 @@ abstract class AppLocalizations {
   /// **'a two-layer shield.'**
   String get homeAttractionFundsBody;
 
+  /// No description provided for @homeAttractionAreaDetailBody.
+  ///
+  /// In en, this message translates to:
+  /// **'An investment designed to turn travel demand directly into returns.'**
+  String get homeAttractionAreaDetailBody;
+
+  /// No description provided for @homeAttractionStructureDetailBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The travel experience itself can become part of the return.'**
+  String get homeAttractionStructureDetailBody;
+
+  /// No description provided for @homeAttractionShieldDetailBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A structure where the company takes risk first.'**
+  String get homeAttractionShieldDetailBody;
+
+  /// No description provided for @homeAttractionShieldFirstLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Shield 1'**
+  String get homeAttractionShieldFirstLabel;
+
+  /// No description provided for @homeAttractionShieldFirstBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Subordinated investment by Stella Asset Co., Ltd.'**
+  String get homeAttractionShieldFirstBody;
+
+  /// No description provided for @homeAttractionShieldSecondLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Shield 2'**
+  String get homeAttractionShieldSecondLabel;
+
+  /// No description provided for @homeAttractionShieldSecondBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Investment by the operating company (TJ BROTHERS GROUP)'**
+  String get homeAttractionShieldSecondBody;
+
+  /// No description provided for @homeAttractionShieldFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'Subordinated investment amounts vary by project. Please see each project overview for details.'**
+  String get homeAttractionShieldFootnote;
+
   /// No description provided for @homeInvestmentFlowTitle.
   ///
   /// In en, this message translates to:

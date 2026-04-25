@@ -744,6 +744,30 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeAttractionFundsBody => '守住资产。';
 
   @override
+  String get homeAttractionAreaDetailBody => '这是一种将观光住宿需求直接转化为回报的投资。';
+
+  @override
+  String get homeAttractionStructureDetailBody => '旅行体验本身，也能成为回报的一部分。';
+
+  @override
+  String get homeAttractionShieldDetailBody => '这是由公司先承担风险的结构。';
+
+  @override
+  String get homeAttractionShieldFirstLabel => '第1道盾';
+
+  @override
+  String get homeAttractionShieldFirstBody => 'Stella Asset 株式会社的劣后出资';
+
+  @override
+  String get homeAttractionShieldSecondLabel => '第2道盾';
+
+  @override
+  String get homeAttractionShieldSecondBody => '运营公司的出资（TJ BROTHERS GROUP）';
+
+  @override
+  String get homeAttractionShieldFootnote => '每个项目的劣后出资金额不同。详情请查看项目概要栏。';
+
+  @override
   String get homeInvestmentFlowTitle => '投资流程';
 
   @override
@@ -4698,6 +4722,30 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get homeAttractionFundsBody => '守住資產。';
+
+  @override
+  String get homeAttractionAreaDetailBody => '這是一種將觀光住宿需求直接轉化為回報的投資。';
+
+  @override
+  String get homeAttractionStructureDetailBody => '旅行體驗本身，也能成為回報的一部分。';
+
+  @override
+  String get homeAttractionShieldDetailBody => '這是由公司先承擔風險的結構。';
+
+  @override
+  String get homeAttractionShieldFirstLabel => '第1道盾';
+
+  @override
+  String get homeAttractionShieldFirstBody => 'Stella Asset 株式會社的劣後出資';
+
+  @override
+  String get homeAttractionShieldSecondLabel => '第2道盾';
+
+  @override
+  String get homeAttractionShieldSecondBody => '營運公司的出資（TJ BROTHERS GROUP）';
+
+  @override
+  String get homeAttractionShieldFootnote => '每個項目的劣後出資金額不同。詳情請查看項目概要欄。';
 
   @override
   String get homeInvestmentFlowTitle => '投資流程';
