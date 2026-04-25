@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
+import '../../../../app/support/localized_static_document_url.dart';
+
 @immutable
 class SettingsOperatingCompanyContent {
   const SettingsOperatingCompanyContent({
@@ -19,7 +21,10 @@ class SettingsOperatingCompanyContent {
     required this.links,
   });
 
-  factory SettingsOperatingCompanyContent.fromJson(Map<String, dynamic> json) {
+  factory SettingsOperatingCompanyContent.fromJson(
+    Map<String, dynamic> json, {
+    String? localeTag,
+  }) {
     return SettingsOperatingCompanyContent(
       tradeName: json['tradeName']?.toString() ?? '',
       licenseNumber: json['licenseNumber']?.toString() ?? '',
@@ -31,9 +36,14 @@ class SettingsOperatingCompanyContent {
       business: json['business']?.toString() ?? '',
       manager: json['manager']?.toString() ?? '',
       copyright: json['copyright']?.toString() ?? '',
-      links: _listOfMap(
-        json['links'],
-      ).map(SettingsOperatingCompanyLink.fromJson).toList(growable: false),
+      links: _listOfMap(json['links'])
+          .map(SettingsOperatingCompanyLink.fromJson)
+          .map(
+            (SettingsOperatingCompanyLink link) => localeTag == null
+                ? link
+                : link.withUrl(localizedStaticPdfUrl(link.url, localeTag)),
+          )
+          .toList(growable: false),
     );
   }
 
@@ -66,11 +76,19 @@ class SettingsOperatingCompanyContent {
       if (url.isEmpty) {
         continue;
       }
-      if (url.toLowerCase().endsWith(suffix.toLowerCase())) {
+      if (_canonicalPdfPath(url).endsWith(suffix.toLowerCase())) {
         return url;
       }
     }
     return null;
+  }
+
+  String _canonicalPdfPath(String url) {
+    final path = Uri.tryParse(url)?.path ?? url;
+    return path.toLowerCase().replaceFirst(
+      RegExp(r'\.(?:ja|en|zh-hans|zh-hant)\.pdf$', caseSensitive: false),
+      '.pdf',
+    );
   }
 
   static Future<SettingsOperatingCompanyContent> load(String localeTag) async {
@@ -93,6 +111,7 @@ class SettingsOperatingCompanyContent {
       );
       return SettingsOperatingCompanyContent.fromJson(
         Map<String, dynamic>.from(jsonDecode(raw) as Map),
+        localeTag: localeTag,
       );
     } catch (_) {
       final raw = await rootBundle.loadString(
@@ -100,6 +119,7 @@ class SettingsOperatingCompanyContent {
       );
       return SettingsOperatingCompanyContent.fromJson(
         Map<String, dynamic>.from(jsonDecode(raw) as Map),
+        localeTag: 'ja',
       );
     }
   }
@@ -135,4 +155,11 @@ class SettingsOperatingCompanyLink {
   final String title;
   final String icon;
   final String url;
+
+  SettingsOperatingCompanyLink withUrl(String url) {
+    if (url == this.url) {
+      return this;
+    }
+    return SettingsOperatingCompanyLink(title: title, icon: icon, url: url);
+  }
 }

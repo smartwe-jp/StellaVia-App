@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/support/localized_static_document_url.dart';
 import 'auth_visual_scaffold.dart';
 import '../controllers/auth_controller.dart';
 import '../providers/auth_providers.dart';
@@ -14,7 +15,7 @@ import '../support/intl_code_picker_field.dart';
 import '../state/auth_state.dart';
 
 const String _registerTermsConditionsPdfUrl =
-    'https://testoa.gutingjun.com/terms_conditions.pdf';
+    'https://stellavia.co.jp/terms_conditions.pdf';
 
 enum _AuthAccountMode { mobile, email }
 
@@ -489,11 +490,11 @@ class _AuthMethodRegisterPageState
 
   Future<void> _showPolicySheet() {
     final l10n = context.l10n;
-    return openAppPdfViewer(
-      context,
-      url: _registerTermsConditionsPdfUrl,
-      title: l10n.registerPolicyTitle,
+    final url = localizedStaticPdfUrl(
+      _registerTermsConditionsPdfUrl,
+      Localizations.localeOf(context).toLanguageTag(),
     );
+    return openAppPdfViewer(context, url: url, title: l10n.registerPolicyTitle);
   }
 
   String _resolveErrorMessage(Object error, String fallback) {

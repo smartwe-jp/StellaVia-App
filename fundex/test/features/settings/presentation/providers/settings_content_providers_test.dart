@@ -16,6 +16,14 @@ void main() {
 
       expect(simplified.business, '不动产特定共同事业、电商等业务');
       expect(traditional.business, '不動產特定共同事業、電子商務等業務');
+      expect(
+        simplified.termsConditionsUrl,
+        'https://stellavia.co.jp/terms_conditions.zh-hans.pdf',
+      );
+      expect(
+        traditional.termsConditionsUrl,
+        'https://stellavia.co.jp/terms_conditions.zh-hant.pdf',
+      );
     });
 
     test('defaults to english content for unsupported locales', () async {
@@ -26,7 +34,35 @@ void main() {
         'Real Estate Specified Joint Enterprise\n'
         'Osaka Governor License No. 22',
       );
+      expect(
+        fallback.termsConditionsUrl,
+        'https://stellavia.co.jp/terms_conditions.en.pdf',
+      );
     });
+
+    test(
+      'uses localized pdf suffix while keeping document lookup available',
+      () async {
+        final japanese = await SettingsOperatingCompanyContent.load('ja-JP');
+
+        expect(
+          japanese.termsConditionsUrl,
+          'https://stellavia.co.jp/terms_conditions.ja.pdf',
+        );
+        expect(
+          japanese.electronicInformationUrl,
+          'https://stellavia.co.jp/electronic_information.ja.pdf',
+        );
+        expect(
+          japanese.personalInformationUrl,
+          'https://stellavia.co.jp/personal_information.ja.pdf',
+        );
+        expect(
+          japanese.antiSocialRuleUrl,
+          'https://stellavia.co.jp/antisocialrule.ja.pdf',
+        );
+      },
+    );
   });
 
   group('settingsOperatingCompanyContentProvider', () {

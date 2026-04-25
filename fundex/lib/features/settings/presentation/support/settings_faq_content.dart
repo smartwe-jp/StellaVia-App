@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 class SettingsFaqContent {
@@ -10,23 +9,34 @@ class SettingsFaqContent {
   final List<SettingsFaqSection> sections;
 
   static Future<SettingsFaqContent> load(String localeTag) async {
-    final candidates = <String>[
-      'assets/content/settings_faq_$localeTag.json',
-      if (localeTag.startsWith('ja')) 'assets/content/settings_faq_ja.json',
-      'assets/content/settings_faq_ja.json',
-    ];
+    final normalizedTag = localeTag.replaceAll('_', '-').toLowerCase();
+    final normalized = switch (normalizedTag) {
+      String tag when tag.startsWith('ja') => 'ja',
+      String tag
+          when tag.startsWith('zh-hant') ||
+              tag.startsWith('zh-tw') ||
+              tag.startsWith('zh-hk') ||
+              tag.startsWith('zh-mo') =>
+        'zh_Hant',
+      String tag when tag.startsWith('zh') => 'zh',
+      _ => 'en',
+    };
 
-    for (final assetPath in candidates.toSet()) {
-      try {
-        final raw = await rootBundle.loadString(assetPath);
-        final json = jsonDecode(raw) as Map<String, dynamic>;
-        return SettingsFaqContent.fromJson(json);
-      } on FlutterError {
-        continue;
-      }
+    try {
+      final raw = await rootBundle.loadString(
+        'assets/content/settings_faq_$normalized.json',
+      );
+      return SettingsFaqContent.fromJson(
+        Map<String, dynamic>.from(jsonDecode(raw) as Map),
+      );
+    } catch (_) {
+      final raw = await rootBundle.loadString(
+        'assets/content/settings_faq_ja.json',
+      );
+      return SettingsFaqContent.fromJson(
+        Map<String, dynamic>.from(jsonDecode(raw) as Map),
+      );
     }
-
-    throw FlutterError('Unable to load FAQ content for locale: $localeTag');
   }
 
   factory SettingsFaqContent.fromJson(Map<String, dynamic> json) {

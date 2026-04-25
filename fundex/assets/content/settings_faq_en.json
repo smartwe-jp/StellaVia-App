@@ -1,0 +1,204 @@
+{
+  "heroTitle": "Frequently Asked Questions",
+  "sections": [
+    {
+      "title": "About Real Estate Crowdfunding",
+      "items": [
+        {
+          "question": "What is real estate crowdfunding?",
+          "answer": "Real estate crowdfunding is a structure in which multiple investors jointly invest in a business related to real estate.\nEach project sets an indicative yield, and when the investment period ends, investors may receive distributions according to their investment amount."
+        },
+        {
+          "question": "Are distributions from real estate crowdfunding taxable?",
+          "answer": "In real estate crowdfunding, distributions are treated as miscellaneous income and are therefore taxable. The withholding tax rate on distributions is 20.42%, broken down as follows.\n・Income tax: 20%\n・Special income tax for reconstruction: 0.42%"
+        },
+        {
+          "question": "What are the advantages and disadvantages of real estate crowdfunding?",
+          "answer": "Advantages: 1. You can start with a small amount. 2. Higher returns may be expected. 3. You can invest without much operational effort.\nDisadvantages: 1. Liquidity and convertibility to cash are limited. 2. There is a risk of loss of principal. 3. There are no tax-saving benefits."
+        },
+        {
+          "question": "What is the flow for StellaVia Co., Ltd.'s real estate crowdfunding?",
+          "answer": "(1) Register as a member on the website.\n(2) Complete identity verification and screening procedures.\n(3) Apply for funds that are currently accepting applications.\n(4) After making a deposit to the Tanimachikun system account, the investment operation starts.\n(5) Receive distributions."
+        }
+      ]
+    },
+    {
+      "title": "Member Registration",
+      "items": [
+        {
+          "question": "Can anyone register as a member?",
+          "answer": "Customers who fall under any of the following categories cannot use the service. Thank you for your understanding.\n■ Individual customers\n・Those who cannot submit identity verification documents\n・Those under 18 years old\n・Those aged 75 or older\n■ Corporate customers\n・Corporations that do not have a corporate number"
+        },
+        {
+          "question": "Can I register under a family member's or another person's name?",
+          "answer": "You cannot register unless the account is under your own name. Minors cannot register as members."
+        },
+        {
+          "question": "Can I register multiple accounts under the same name?",
+          "answer": "You cannot register multiple accounts under the same name."
+        },
+        {
+          "question": "How many days does member registration take?",
+          "answer": "It usually takes about 3 to 5 business days after you submit the full registration application. However, it may take longer depending on factors such as the identity verification documents you submit, the arrival status of the identity verification code, and system maintenance of this website."
+        },
+        {
+          "question": "What documents are required for member registration?",
+          "answer": "■ Individual customers\n1. Identity verification document (one of the following, as an image)\n・Residents: Individual Number Card (My Number Card) or Residence Card\n・Non-residents: Identification document from your home country or passport\n■ Corporate customers\n1. Certificate of all historical matters or certificate of current matters\n2. Document confirming the bank account in the corporation's name\n・A captured image showing the bank name, branch name (branch number), account holder name, and account number\n3. Identity verification document of the representative (one of the following, as an image)\n・Residents: Individual Number Card (My Number Card) or Residence Card\n・Non-residents: Identification document from your home country or passport"
+        },
+        {
+          "question": "I cannot upload the required documents successfully.",
+          "answer": "Please check the image size and file extension. Each file must be 5 MB or less, and the extension must be one of jpg, jpeg, bmp, gif, or png."
+        },
+        {
+          "question": "Do I need to submit my My Number?",
+          "answer": "Under tax law, when the profits distributed to a customer exceed a certain amount, the operator is required to prepare and submit payment records. The payment records must include the customer's Individual Number (My Number), or the corporate number for corporate customers. For this reason, customers who have a My Number are asked to register it."
+        },
+        {
+          "question": "What should I submit for My Number, and how?",
+          "answer": "Customers who need to submit it will see a message at the top of My Page stating, \"My Number image has not been registered. Please register it here.\" Please click it and submit the information according to the on-screen instructions."
+        },
+        {
+          "question": "I made a mistake in the information entered during member registration.",
+          "answer": "If the information you entered differs from the identity verification documents you submitted, we will send you an email requesting re-registration. We apologize for the inconvenience, but please register again.\nFor changes to name, date of birth, address, or withdrawal account, please contact us from the Inquiry screen."
+        }
+      ]
+    },
+    {
+      "title": "Login",
+      "items": [
+        {
+          "question": "I have not received an email.",
+          "answer": "Please check the following.\n・Please confirm again that the registered email address is correct.\n・Please check whether emails from us have been sorted into your spam or junk mail folder."
+        },
+        {
+          "question": "I cannot log in to My Page.",
+          "answer": "Please check that your email address and password have been entered correctly.\nWhen doing so, please note the following.\n・Are you entering the information using half-width characters?\n・Are uppercase and lowercase letters entered correctly?\n・Is Caps Lock turned off in your PC settings?\n・Are there any extra characters or spaces?"
+        },
+        {
+          "question": "I forgot my ID or password.",
+          "answer": "Your login ID is the email address you registered. If you have forgotten your password, please request a reissue from \"Forgot your password?\" at the bottom of the login screen."
+        }
+      ]
+    },
+    {
+      "title": "Investment Application",
+      "items": [
+        {
+          "question": "How do I apply for an investment?",
+          "answer": "After logging in to My Page, select the fund you would like to invest in from the fund list, then enter the number of investment units according to the on-screen instructions."
+        },
+        {
+          "question": "What is the minimum investment amount for a fund (silent partnership)?",
+          "answer": "It differs by fund. Please check the details of each fund."
+        },
+        {
+          "question": "What is a silent partnership?",
+          "answer": "A silent partnership is a contractual arrangement in which investors contribute capital to the operator's business and agree to receive distributions of profits generated from that business.\nThe investment principal is not guaranteed. However, even if losses exceed the invested amount, investors are not required to bear losses beyond the amount they invested.\nFor each investment project, our company forms a silent partnership and solicits investments for that silent partnership. After the investment application period ends, the operator uses the collected investment funds as capital to invest in the real estate business."
+        },
+        {
+          "question": "Are there any documents required when investing?",
+          "answer": "If your member registration has been completed and your personal information has not changed, there are no required documents to submit."
+        },
+        {
+          "question": "Do I need to enter into a contract for the second and subsequent investments?",
+          "answer": "A contract is required each time. Since each application is an investment in a new silent partnership, you must review and approve the pre-contract document, important matters explanation for electronic transactions, and contract conclusion document. These documents differ from previous contract documents, so please make sure to review them."
+        },
+        {
+          "question": "Is there a way to confirm that I have applied for an investment?",
+          "answer": "After logging in to My Page, you can check your investment application status from the Application History List screen."
+        },
+        {
+          "question": "What is the account for deposits?",
+          "answer": "After your application for investment in a fund is completed, we will notify you of the deposit account separately by email. We do not accept deposits of investment funds before application. Please make sure to make a deposit only after your application for an investment product has been completed."
+        },
+        {
+          "question": "How can I confirm that my deposit has been received?",
+          "answer": "After logging in to My Page, you can confirm the deposit from the Application History List screen on the top page. Please note that it may take about 3 business days after the transfer for the deposit to be reflected."
+        },
+        {
+          "question": "Can someone other than the member make a deposit?",
+          "answer": "If the name of the transfer requester does not match the registered name of the member, the system will not reflect the deposit. Please make sure that the deposit is made by the member themself. If a deposit is made under a name different from the member's name, please ask the sending financial institution to process a reversal. For the reversal procedure and related fees, please contact the sending financial institution."
+        },
+        {
+          "question": "Is the investment principal guaranteed?",
+          "answer": "The principal is not guaranteed. If a loss occurs when the real estate is sold, the principal may be impaired. However, depending on the fund structured by our company, there may be a senior-subordinated structure in which the customer's senior investment principal is protected as long as the loss is within the scope of the subordinated investment made by our company.\n* If losses exceed the subordinated investment, the principal of the senior investment portion will be impaired. Therefore, even a senior investment does not guarantee the principal.\nThe structure differs by fund. Please check the Fund List > Fund Details on the My Page top screen and the pre-contract document shown on the investment application screen."
+        },
+        {
+          "question": "What happens if applications for an investment product do not reach the target amount?",
+          "answer": "Even if the target amount is not reached, the fund will be established and the investment operation will start as scheduled if the total applications exceed the minimum successful amount set for each investment product."
+        },
+        {
+          "question": "Can I change my investment from one fund to another?",
+          "answer": "You cannot change the investment destination. Thank you for your understanding."
+        },
+        {
+          "question": "Can I cancel my investment application?",
+          "answer": "The silent partnership contracts for which our company handles solicitation are subject to the cooling-off system. After applying for an investment, you may cancel the silent partnership contract related to that application by notifying us in writing during the period until 8 days have passed from the date on which we send the contract conclusion document to your email address.\nFor details of the procedure, please refer to \"Cooling-off and Mid-term Cancellation\" at the bottom of the top page."
+        }
+      ]
+    },
+    {
+      "title": "Operation",
+      "items": [
+        {
+          "question": "Can the fund operation period be extended or shortened?",
+          "answer": "Depending on the timing of the sale of the target real estate, the end of the operation period may be earlier or later than originally scheduled. In that case, we will notify customers in advance by document, email, or this website."
+        },
+        {
+          "question": "How can I check distributions and redemption amounts?",
+          "answer": "After logging in to My Page, you can check them from the Investment History List > Investment Distribution Status List screen."
+        },
+        {
+          "question": "When are distributions and redemption payments made to investors?",
+          "answer": "It differs by investment product. Please check each fund details page."
+        },
+        {
+          "question": "How are distributions and redemption amounts paid?",
+          "answer": "If you wish to withdraw funds, please complete the withdrawal procedure. First, use the withdrawal request function in Investment History List > Investment Distribution Status List at the top of My Page.\nAfter applying for withdrawal, the funds will be deposited into the Tanimachikun first-class account. To withdraw to a financial institution, please perform the withdrawal operation from the Tanimachikun app."
+        },
+        {
+          "question": "What is a property management report?",
+          "answer": "A property management report is a report provided to customers by the operator, based on the Real Estate Specified Joint Enterprise Act, on the management status of the relevant assets at intervals not exceeding one year. After logging in to My Page, you can check it from the Delivered Documents List screen."
+        }
+      ]
+    },
+    {
+      "title": "Fees and Taxes",
+      "items": [
+        {
+          "question": "Are there any costs other than the investment amount?",
+          "answer": "・Member registration and investment application are free of charge.\n・Operation fees: Please check the contract conclusion document shown on the investment application screen.\n・Transfer fees when depositing funds: These are borne by the customer. Thank you for your understanding."
+        },
+        {
+          "question": "Taxes on distributions",
+          "answer": "Distributions paid to customers are paid after deducting withholding tax (income tax plus special income tax for reconstruction). For details and individual tax treatment, please confirm or consult with a tax office, tax accountant, or other professional."
+        },
+        {
+          "question": "What is withholding tax?",
+          "answer": "Withholding tax refers to tax paid to the government under the withholding tax system. Regardless of whether the customer is an individual or corporation, our company withholds income tax and special income tax for reconstruction from distributions in advance and pays them as advance payment of the income tax, etc. that the customer should pay."
+        },
+        {
+          "question": "Do I need to file a tax return?",
+          "answer": "Residents are required to file a tax return if the total amount of miscellaneous income for one year exceeds 200,000 yen. Non-residents who have a permanent establishment are also required to file a tax return. For details and individual tax treatment, please confirm or consult with a tax office, tax accountant, or other professional."
+        },
+        {
+          "question": "Are there documents I can use for filing a tax return?",
+          "answer": "The payment record for tax return filing can be downloaded from the Delivered Documents List page after logging in to My Page.\nIt reports the total amount of distributions finalized between January 1 and December 31 each year, and is issued around January to early February of the following year."
+        }
+      ]
+    },
+    {
+      "title": "Other",
+      "items": [
+        {
+          "question": "Please tell me about the procedure and fees for account withdrawal.",
+          "answer": "Customers who wish to withdraw their membership should log in to My Page and contact us from the Inquiry screen to inform us that they wish to withdraw. There is no fee for withdrawal.\nIf you have assets currently under operation, you cannot withdraw until the operation is completed. Thank you for your understanding."
+        },
+        {
+          "question": "Can I cancel midway?",
+          "answer": "In principle, mid-term cancellation is not allowed."
+        }
+      ]
+    }
+  ]
+}
