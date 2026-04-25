@@ -172,7 +172,7 @@ class _AttractionDetailBody extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: bottomSpacing),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Text.rich(
             TextSpan(
