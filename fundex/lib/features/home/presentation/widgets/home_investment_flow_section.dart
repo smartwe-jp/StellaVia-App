@@ -66,7 +66,7 @@ class _HomeInvestmentFlowCard extends StatelessWidget {
     final appText = theme.appTextTheme;
 
     return Container(
-      height: 146,
+      height: 160,
       padding: const EdgeInsets.fromLTRB(5, 12, 5, 12),
       decoration: BoxDecoration(
         color: colors.surface,
