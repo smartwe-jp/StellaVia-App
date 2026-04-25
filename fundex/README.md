@@ -137,3 +137,39 @@ cp .vscode/dart_define.dev.example.json .vscode/dart_define.dev.local.json
 cp .vscode/dart_define.staging.example.json .vscode/dart_define.staging.local.json
 cp .vscode/dart_define.prod.example.json .vscode/dart_define.prod.local.json
 ```
+
+强制阻止使用：
+{
+  "PUSH_ACTION": "app_block",
+  "PUSH_ID": "block-20260425",
+  "TITLE": "アプリの切り替えが必要です",
+  "BODY": "指定されたアプリをご利用ください。",
+  "IOS_URL": "https://apps.apple.com/...",
+  "ANDROID_URL": "https://play.google.com/store/apps/details?id=...",
+  "DISMISSIBLE": "false",
+  "SHOW_ONCE": "false"
+}
+版本更新：
+{
+  "PUSH_ACTION": "app_update",
+  "PUSH_ID": "update-1.0.70",
+  "TITLE": "新しいバージョンがあります",
+  "BODY": "更新内容...",
+  "IOS_URL": "https://apps.apple.com/...",
+  "ANDROID_URL": "https://play.google.com/store/apps/details?id=...",
+  "DISMISSIBLE": "true"
+}
+活动弹框：
+{
+  "PUSH_ACTION": "campaign_dialog",
+  "PUSH_ID": "campaign-001",
+  "TITLE": "キャンペーンのお知らせ",
+  "BODY": "活動内容...",
+  "IMAGE_URL": "https://example.com/campaign.jpg"
+}
+奖励动画
+
+{
+  TARGET_PAGE:"homeCelebration"
+  LOTTIE_URL:"https://stellavia.co.jp/Gift_box_with_coupon.json"
+}

@@ -51,7 +51,7 @@ class AppPushDialogHost extends ConsumerWidget {
   }
 }
 
-class _PushActionOverlay extends StatelessWidget {
+class _PushActionOverlay extends StatefulWidget {
   const _PushActionOverlay({
     required this.command,
     required this.dismissible,
@@ -65,45 +65,63 @@ class _PushActionOverlay extends StatelessWidget {
   final VoidCallback? onSecondaryPressed;
 
   @override
+  State<_PushActionOverlay> createState() => _PushActionOverlayState();
+}
+
+class _PushActionOverlayState extends State<_PushActionOverlay>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Future<bool> didPopRoute() async {
+    if (widget.dismissible && widget.onSecondaryPressed != null) {
+      widget.onSecondaryPressed!();
+    }
+    return true;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BackButtonListener(
-      onBackButtonPressed: () async {
-        if (dismissible && onSecondaryPressed != null) {
-          onSecondaryPressed!();
-        }
-        return true;
-      },
-      child: Material(
-        type: MaterialType.transparency,
-        child: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            ModalBarrier(
-              color: Colors.black.withValues(alpha: 0.48),
-              dismissible: false,
+    return Material(
+      type: MaterialType.transparency,
+      child: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          ModalBarrier(
+            color: Colors.black.withValues(alpha: 0.48),
+            dismissible: false,
+          ),
+          SafeArea(
+            child: Center(
+              child: switch (widget.command.action) {
+                AppPushAction.appBlock => _AppBlockDialog(
+                  command: widget.command,
+                  onPrimaryPressed: widget.onPrimaryPressed,
+                ),
+                AppPushAction.appUpdate => _AppUpdateDialog(
+                  command: widget.command,
+                  onPrimaryPressed: widget.onPrimaryPressed,
+                  onSecondaryPressed: widget.onSecondaryPressed,
+                ),
+                AppPushAction.campaignDialog => _CampaignDialog(
+                  command: widget.command,
+                  onPrimaryPressed: widget.onPrimaryPressed,
+                ),
+                AppPushAction.homeCelebration => const SizedBox.shrink(),
+              },
             ),
-            SafeArea(
-              child: Center(
-                child: switch (command.action) {
-                  AppPushAction.appBlock => _AppBlockDialog(
-                    command: command,
-                    onPrimaryPressed: onPrimaryPressed,
-                  ),
-                  AppPushAction.appUpdate => _AppUpdateDialog(
-                    command: command,
-                    onPrimaryPressed: onPrimaryPressed,
-                    onSecondaryPressed: onSecondaryPressed,
-                  ),
-                  AppPushAction.campaignDialog => _CampaignDialog(
-                    command: command,
-                    onPrimaryPressed: onPrimaryPressed,
-                  ),
-                  AppPushAction.homeCelebration => const SizedBox.shrink(),
-                },
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
