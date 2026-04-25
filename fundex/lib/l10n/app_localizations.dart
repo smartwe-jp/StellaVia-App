@@ -5912,6 +5912,12 @@ abstract class AppLocalizations {
   /// **'No operating funds yet.'**
   String get myPageOperatingFundsEmptyState;
 
+  /// No description provided for @myPageOperatingEndedFundsEmptyState.
+  ///
+  /// In en, this message translates to:
+  /// **'No operation-ended funds yet.'**
+  String get myPageOperatingEndedFundsEmptyState;
+
   /// No description provided for @myPageOperatingFundsEmptyAction.
   ///
   /// In en, this message translates to:

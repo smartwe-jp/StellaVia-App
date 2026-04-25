@@ -3206,6 +3206,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageOperatingFundsEmptyState => 'No operating funds yet.';
 
   @override
+  String get myPageOperatingEndedFundsEmptyState =>
+      'No operation-ended funds yet.';
+
+  @override
   String get myPageOperatingFundsEmptyAction => 'Browse funds';
 
   @override

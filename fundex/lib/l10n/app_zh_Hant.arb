@@ -1120,6 +1120,7 @@
   "myPageApplyHistoryEmptyState": "目前暫無申購記錄。",
   "myPageCoolingOffEmptyState": "目前沒有處於冷靜期中的項目。",
   "myPageOperatingFundsEmptyState": "目前沒有運用中的基金。",
+  "myPageOperatingEndedFundsEmptyState": "目前沒有運用結束的基金。",
   "myPageOperatingFundsEmptyAction": "去申請",
   "myPageSectionLoadError": "該區塊載入失敗，請重試。",
   "myPageApplyHistoryListTitle": "申購記錄列表",

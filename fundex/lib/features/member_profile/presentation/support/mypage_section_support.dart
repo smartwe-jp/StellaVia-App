@@ -35,6 +35,8 @@ enum MyPageApplyHistoryFilter {
   invalid,
 }
 
+enum MyPageActiveFundFilter { operating, ended }
+
 extension MyPageApplyHistoryFilterX on MyPageApplyHistoryFilter {
   String get queryValue {
     return switch (this) {
@@ -63,6 +65,15 @@ extension MyPageApplyHistoryFilterX on MyPageApplyHistoryFilter {
       }
     }
     return null;
+  }
+}
+
+extension MyPageActiveFundFilterX on MyPageActiveFundFilter {
+  List<int> get statuses {
+    return switch (this) {
+      MyPageActiveFundFilter.operating => const <int>[4],
+      MyPageActiveFundFilter.ended => const <int>[5],
+    };
   }
 }
 
@@ -103,6 +114,36 @@ String resolveApplyHistoryFilterLabel(
     MyPageApplyHistoryFilter.completed => l10n.myPageApplyFilterCompleted,
     MyPageApplyHistoryFilter.invalid => l10n.myPageApplyFilterInvalid,
   };
+}
+
+String resolveMyPageActiveFundFilterLabel(
+  AppLocalizations l10n,
+  MyPageActiveFundFilter filter,
+) {
+  return switch (filter) {
+    MyPageActiveFundFilter.operating => l10n.fundListStatusOperating,
+    MyPageActiveFundFilter.ended => l10n.fundListStatusOperatingEnded,
+  };
+}
+
+String resolveMyPageActiveFundEmptyState(
+  AppLocalizations l10n,
+  MyPageActiveFundFilter filter,
+) {
+  return switch (filter) {
+    MyPageActiveFundFilter.operating => l10n.myPageOperatingFundsEmptyState,
+    MyPageActiveFundFilter.ended => l10n.myPageOperatingEndedFundsEmptyState,
+  };
+}
+
+List<MyPageInvestmentRecord> filterInvestmentRecordsByActiveFundFilter(
+  List<MyPageInvestmentRecord> records,
+  MyPageActiveFundFilter filter,
+) {
+  final statuses = filter.statuses;
+  return records
+      .where((record) => statuses.contains(record.projectStatus))
+      .toList(growable: false);
 }
 
 List<MyPageOrderInquiryRecord> selectCoolingOffRecords(
@@ -582,6 +623,7 @@ class MyPageInvestmentGroup {
     required this.earnings,
     required this.earningRatio,
     required this.latestCreateTime,
+    required this.projectStatus,
   });
 
   final String projectId;
@@ -590,6 +632,7 @@ class MyPageInvestmentGroup {
   final num earnings;
   final double? earningRatio;
   final DateTime? latestCreateTime;
+  final int? projectStatus;
 }
 
 class _InvestmentGroupAccumulator {
@@ -599,7 +642,8 @@ class _InvestmentGroupAccumulator {
       investMoney = seed.investMoney ?? 0,
       earnings = seed.earnings ?? 0,
       latestCreateTime = parseApiDate(seed.createTime),
-      earningRatio = seed.earningRadio ?? seed.investorType?.earningsRadio;
+      earningRatio = seed.earningRadio ?? seed.investorType?.earningsRadio,
+      projectStatus = seed.projectStatus;
 
   final String projectId;
   final String projectName;
@@ -607,14 +651,17 @@ class _InvestmentGroupAccumulator {
   num earnings;
   double? earningRatio;
   DateTime? latestCreateTime;
+  int? projectStatus;
 
   void add(MyPageInvestmentRecord record) {
     investMoney += record.investMoney ?? 0;
     earnings += record.earnings ?? 0;
     earningRatio ??= record.earningRadio ?? record.investorType?.earningsRadio;
+    projectStatus ??= record.projectStatus;
     final candidateDate = parseApiDate(record.createTime);
     if (compareDateTimeDesc(latestCreateTime, candidateDate) > 0) {
       latestCreateTime = candidateDate;
+      projectStatus = record.projectStatus ?? projectStatus;
     }
   }
 
@@ -626,6 +673,7 @@ class _InvestmentGroupAccumulator {
       earnings: earnings,
       earningRatio: earningRatio,
       latestCreateTime: latestCreateTime,
+      projectStatus: projectStatus,
     );
   }
 }

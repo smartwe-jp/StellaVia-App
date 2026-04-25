@@ -1120,6 +1120,7 @@
   "myPageApplyHistoryEmptyState": "当前暂无申购记录。",
   "myPageCoolingOffEmptyState": "当前没有处于冷静期内的项目。",
   "myPageOperatingFundsEmptyState": "当前没有运用中的基金。",
+  "myPageOperatingEndedFundsEmptyState": "当前没有运用结束的基金。",
   "myPageOperatingFundsEmptyAction": "去申请",
   "myPageSectionLoadError": "该区块加载失败，请重试。",
   "myPageApplyHistoryListTitle": "申购记录列表",

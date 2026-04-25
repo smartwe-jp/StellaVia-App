@@ -3033,6 +3033,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageOperatingFundsEmptyState => '運用中のファンドはありません。';
 
   @override
+  String get myPageOperatingEndedFundsEmptyState => '運用終了のファンドはありません。';
+
+  @override
   String get myPageOperatingFundsEmptyAction => 'ファンド一覧へ';
 
   @override

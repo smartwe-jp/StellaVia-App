@@ -2996,6 +2996,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageOperatingFundsEmptyState => '当前没有运用中的基金。';
 
   @override
+  String get myPageOperatingEndedFundsEmptyState => '当前没有运用结束的基金。';
+
+  @override
   String get myPageOperatingFundsEmptyAction => '去申请';
 
   @override
@@ -6999,6 +7002,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageOperatingFundsEmptyState => '目前沒有運用中的基金。';
+
+  @override
+  String get myPageOperatingEndedFundsEmptyState => '目前沒有運用結束的基金。';
 
   @override
   String get myPageOperatingFundsEmptyAction => '去申請';

@@ -46,6 +46,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
   Object? _error;
   int _nextPage = 1;
   late MyPageApplyHistoryFilter _applyFilter;
+  MyPageActiveFundFilter _activeFundFilter = MyPageActiveFundFilter.operating;
 
   @override
   void initState() {
@@ -169,7 +170,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
         _visibleOrderInquiryRecords,
       ).length,
       MyPageSectionType.activeFunds => groupActiveInvestmentRecords(
-        _investmentRecords,
+        _filteredInvestmentRecords,
       ).length,
     };
   }
@@ -230,6 +231,29 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
                   )
                   .toList(growable: false),
             ),
+          if (widget.sectionType == MyPageSectionType.activeFunds)
+            AppFilterBar<MyPageActiveFundFilter>(
+              value: _activeFundFilter,
+              onChanged: (MyPageActiveFundFilter value) {
+                setState(() {
+                  _activeFundFilter = value;
+                });
+                if (_visibleItemCount == 0 && _hasMore) {
+                  _loadNextPage();
+                }
+              },
+              backgroundColor: colors.surface,
+              showBottomDivider: true,
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+              items: MyPageActiveFundFilter.values
+                  .map(
+                    (filter) => AppFilterBarItem<MyPageActiveFundFilter>(
+                      value: filter,
+                      label: resolveMyPageActiveFundFilterLabel(l10n, filter),
+                    ),
+                  )
+                  .toList(growable: false),
+            ),
           Expanded(
             child: RefreshIndicator(
               onRefresh: _loadInitial,
@@ -261,6 +285,13 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     return _orderInquiryRecords
         .where((record) => !_hiddenOrderInquiryIds.contains(record.id))
         .toList(growable: false);
+  }
+
+  List<MyPageInvestmentRecord> get _filteredInvestmentRecords {
+    return filterInvestmentRecordsByActiveFundFilter(
+      _investmentRecords,
+      _activeFundFilter,
+    );
   }
 
   Widget _buildRetryButton(BuildContext context) {
@@ -413,7 +444,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
   }) {
     final l10n = context.l10n;
     final project = fundProjectsById[group.projectId];
-    final status = project?.projectStatus;
+    final status = group.projectStatus ?? project?.projectStatus;
     return MyPageActiveFundSummaryCard(
       data: MyPageActiveFundSummaryCardData(
         title: group.projectName,
@@ -475,7 +506,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
             .map((record) => _buildCoolingOffCard(context, record, formatter))
             .toList(growable: false),
       MyPageSectionType.activeFunds =>
-        groupActiveInvestmentRecords(_investmentRecords)
+        groupActiveInvestmentRecords(_filteredInvestmentRecords)
             .map(
               (group) => _buildActiveFundCard(
                 context,
@@ -490,6 +521,8 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
       return _buildSliverState(
         message: widget.sectionType == MyPageSectionType.pendingApplications
             ? l10n.myPageApplyHistoryEmptyState
+            : widget.sectionType == MyPageSectionType.activeFunds
+            ? resolveMyPageActiveFundEmptyState(l10n, _activeFundFilter)
             : resolveSectionEmptyState(l10n, widget.sectionType),
       );
     }
