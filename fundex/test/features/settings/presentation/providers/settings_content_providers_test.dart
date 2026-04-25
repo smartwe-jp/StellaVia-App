@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fundex/features/settings/presentation/providers/settings_content_providers.dart';
+import 'package:fundex/features/settings/presentation/support/settings_contract_default_documents.dart';
 import 'package:fundex/features/settings/presentation/support/settings_operating_company_content.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -83,6 +84,30 @@ void main() {
       );
       expect(traditional.links.first.title, '使用條款');
     });
+  });
+
+  group('settings contract default documents', () {
+    test(
+      'puts fixed cooling-off document before operating company links',
+      () async {
+        final content = await SettingsOperatingCompanyContent.load('ja-JP');
+
+        final project = buildSettingsContractDefaultDocumentsProject(
+          projectName: '運営会社',
+          operatingCompanyContent: content,
+        );
+
+        expect(project.routeKey, settingsContractDefaultProjectId);
+        expect(project.documents, hasLength(content.links.length + 1));
+        expect(project.documents.first.description, 'クーリング・オフ通知書');
+        expect(
+          project.documents.first.files.single.url,
+          'https://stellavia.co.jp/coolingoffpost.pdf',
+        );
+        expect(project.documents[1].description, content.links.first.title);
+        expect(project.documents[1].files.single.url, content.links.first.url);
+      },
+    );
   });
 
   group('settingsAppVersionProvider', () {

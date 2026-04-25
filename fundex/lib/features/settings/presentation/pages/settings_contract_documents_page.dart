@@ -6,7 +6,10 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../providers/settings_contract_documents_providers.dart';
+import '../providers/settings_content_providers.dart';
+import '../support/settings_contract_default_documents.dart';
 import '../support/settings_contract_document_models.dart';
+import '../support/settings_operating_company_content.dart';
 
 class SettingsContractDocumentsPage extends ConsumerWidget {
   const SettingsContractDocumentsPage({super.key});
@@ -18,6 +21,11 @@ class SettingsContractDocumentsPage extends ConsumerWidget {
     final appText = theme.appTextTheme;
     final l10n = context.l10n;
     final projectsAsync = ref.watch(settingsContractProjectsProvider);
+    final operatingCompanyAsync = ref.watch(
+      settingsOperatingCompanyContentProvider(
+        Localizations.localeOf(context).toLanguageTag(),
+      ),
+    );
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -41,48 +49,88 @@ class SettingsContractDocumentsPage extends ConsumerWidget {
           ),
         ),
         data: (List<SettingsContractProject> projects) {
-          if (projects.isEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Text(
-                  l10n.settingsContractListEmptyState,
-                  textAlign: TextAlign.center,
-                  style: appText.body.copyWith(color: colors.textSecondary),
+          return operatingCompanyAsync.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (_, __) => _ContractProjectList(
+              projects: projects,
+              emptyMessage: l10n.settingsContractListEmptyState,
+            ),
+            data: (SettingsOperatingCompanyContent operatingCompanyContent) {
+              final displayProjects = <SettingsContractProject>[
+                ...projects,
+                buildSettingsContractDefaultDocumentsProject(
+                  projectName: l10n.settingsOperatingCompanyTitle,
+                  operatingCompanyContent: operatingCompanyContent,
                 ),
-              ),
-            );
-          }
+              ];
 
-          return ListView.separated(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
-            itemCount: projects.length + 1,
-            separatorBuilder: (_, int index) {
-              if (index == 0) {
-                return const SizedBox(height: 18);
-              }
-              return const SizedBox(height: 12);
-            },
-            itemBuilder: (BuildContext context, int index) {
-              if (index == 0) {
-                return Text(
-                  l10n.settingsContractListDescription,
-                  style: appText.body.copyWith(color: colors.textSecondary),
-                );
-              }
-
-              final project = projects[index - 1];
-              return _ContractProjectCard(
-                project: project,
-                onTap: () => context.push(
-                  '/profile/settings/contracts/${Uri.encodeComponent(project.routeKey)}',
-                  extra: project,
-                ),
+              return _ContractProjectList(
+                projects: displayProjects,
+                emptyMessage: l10n.settingsContractListEmptyState,
               );
             },
           );
         },
       ),
+    );
+  }
+}
+
+class _ContractProjectList extends StatelessWidget {
+  const _ContractProjectList({
+    required this.projects,
+    required this.emptyMessage,
+  });
+
+  final List<SettingsContractProject> projects;
+  final String emptyMessage;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final l10n = context.l10n;
+
+    if (projects.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Text(
+            emptyMessage,
+            textAlign: TextAlign.center,
+            style: appText.body.copyWith(color: colors.textSecondary),
+          ),
+        ),
+      );
+    }
+
+    return ListView.separated(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
+      itemCount: projects.length + 1,
+      separatorBuilder: (_, int index) {
+        if (index == 0) {
+          return const SizedBox(height: 18);
+        }
+        return const SizedBox(height: 12);
+      },
+      itemBuilder: (BuildContext context, int index) {
+        if (index == 0) {
+          return Text(
+            l10n.settingsContractListDescription,
+            style: appText.body.copyWith(color: colors.textSecondary),
+          );
+        }
+
+        final project = projects[index - 1];
+        return _ContractProjectCard(
+          project: project,
+          onTap: () => context.push(
+            '/profile/settings/contracts/${Uri.encodeComponent(project.routeKey)}',
+            extra: project,
+          ),
+        );
+      },
     );
   }
 }
@@ -102,6 +150,8 @@ class _ContractProjectCard extends StatelessWidget {
     final localeTag = Localizations.localeOf(context).toLanguageTag();
     final dateFormatter = DateFormat('yyyy.MM.dd', localeTag);
     final latestUpdatedAt = project.latestUpdatedAt;
+    final isDefaultProject =
+        project.routeKey == settingsContractDefaultProjectId;
 
     return Material(
       color: Colors.transparent,
@@ -167,7 +217,11 @@ class _ContractProjectCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        latestUpdatedAt == null
+                        isDefaultProject
+                            ? l10n.settingsContractListDocumentTypeCount(
+                                project.availableDocumentCount,
+                              )
+                            : latestUpdatedAt == null
                             ? l10n.settingsContractListPendingLabel
                             : '${l10n.settingsContractListLatestUpdatedLabel} ${dateFormatter.format(latestUpdatedAt)}',
                         style: appText.bodyMuted.copyWith(

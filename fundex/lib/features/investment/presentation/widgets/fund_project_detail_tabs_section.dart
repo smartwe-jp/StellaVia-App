@@ -634,33 +634,34 @@ class _FundSchemeCard extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: colors.border, width: 1.5),
-          borderRadius: BorderRadius.circular(16),
-          color: colors.surface,
-        ),
-        child: Column(
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-              decoration: BoxDecoration(
-                color: headerGradient == null
-                    ? (headerBackgroundColor ?? colors.primary)
-                    : null,
-                gradient: headerGradient,
-              ),
-              child: Text(
-                title,
-                style: appText.chip.copyWith(color: colors.onDark),
-              ),
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: colors.surface,
+      ),
+      foregroundDecoration: BoxDecoration(
+        border: Border.all(color: colors.border, width: 1.5),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: headerGradient == null
+                  ? (headerBackgroundColor ?? colors.primary)
+                  : null,
+              gradient: headerGradient,
             ),
-            for (final row in rows) _FundSchemeRow(item: row),
-          ],
-        ),
+            child: Text(
+              title,
+              style: appText.chip.copyWith(color: colors.onDark),
+            ),
+          ),
+          for (final row in rows) _FundSchemeRow(item: row),
+        ],
       ),
     );
   }

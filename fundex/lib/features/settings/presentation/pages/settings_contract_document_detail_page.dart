@@ -6,7 +6,10 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../providers/settings_contract_documents_providers.dart';
+import '../providers/settings_content_providers.dart';
+import '../support/settings_contract_default_documents.dart';
 import '../support/settings_contract_document_models.dart';
+import '../support/settings_operating_company_content.dart';
 
 class SettingsContractDocumentDetailPage extends ConsumerWidget {
   const SettingsContractDocumentDetailPage({
@@ -24,7 +27,23 @@ class SettingsContractDocumentDetailPage extends ConsumerWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final l10n = context.l10n;
-    final projectAsync = ref.watch(settingsContractProjectProvider(projectKey));
+    final isDefaultProject = projectKey == settingsContractDefaultProjectId;
+    final projectAsync = isDefaultProject
+        ? ref
+              .watch(
+                settingsOperatingCompanyContentProvider(
+                  Localizations.localeOf(context).toLanguageTag(),
+                ),
+              )
+              .whenData<SettingsContractProject?>((
+                SettingsOperatingCompanyContent content,
+              ) {
+                return buildSettingsContractDefaultDocumentsProject(
+                  projectName: l10n.settingsOperatingCompanyTitle,
+                  operatingCompanyContent: content,
+                );
+              })
+        : ref.watch(settingsContractProjectProvider(projectKey));
     final project = projectAsync.asData?.value ?? initialProject;
 
     return Scaffold(
