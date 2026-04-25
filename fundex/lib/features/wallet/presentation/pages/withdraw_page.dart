@@ -353,6 +353,7 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
               children: <Widget>[
                 _WithdrawBalanceHeroCard(
                   label: l10n.walletWithdrawAvailableAmountLabel,
+                  subTitle: l10n.walletWithdrawHistoryAction,
                   value: currency.format(availableAmount ?? 0),
                   onTapHistory: () => context.push('/wallet/withdraw/history'),
                 ),
@@ -492,11 +493,13 @@ class _WithdrawPhoneVerificationGateCard extends StatelessWidget {
 class _WithdrawBalanceHeroCard extends StatelessWidget {
   const _WithdrawBalanceHeroCard({
     required this.label,
+    required this.subTitle,
     required this.value,
     required this.onTapHistory,
   });
 
   final String label;
+  final String subTitle;
   final String value;
   final VoidCallback onTapHistory;
 
@@ -576,23 +579,37 @@ class _WithdrawBalanceHeroCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: colors.surface.withValues(alpha: 0.14),
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: colors.surface.withValues(alpha: 0.22),
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Text(
+                          subTitle,
+                          style: appText.caption.copyWith(
+                            color: foregroundColor.withValues(alpha: 0.82),
+                            letterSpacing: 0.2,
+                          ),
                         ),
-                      ),
-                      child: IconButton(
-                        onPressed: onTapHistory,
-                        tooltip: context.l10n.walletWithdrawHistoryAction,
-                        icon: Icon(
-                          Icons.history_rounded,
-                          color: foregroundColor,
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: colors.surface.withValues(alpha: 0.14),
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                              color: colors.surface.withValues(alpha: 0.22),
+                            ),
+                          ),
+                          child: IconButton(
+                            onPressed: onTapHistory,
+                            tooltip: context.l10n.walletWithdrawHistoryAction,
+                            icon: Icon(
+                              Icons.history_rounded,
+                              color: foregroundColor,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
+                      ]
+                    )
+                    
                   ],
                 ),
                 const SizedBox(height: 14),
