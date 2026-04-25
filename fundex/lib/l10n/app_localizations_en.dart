@@ -43,6 +43,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonCancel => 'Cancel';
 
   @override
+  String get pushDialogDefaultBlockTitle => 'This app is unavailable';
+
+  @override
+  String get pushDialogDefaultBlockBody =>
+      'Please use the specified app instead.';
+
+  @override
+  String get pushDialogDefaultUpdateTitle => 'A new version is available';
+
+  @override
+  String get pushDialogDefaultUpdateBody =>
+      'Please update to the latest version.';
+
+  @override
+  String get pushDialogDefaultCampaignTitle => 'Campaign Notice';
+
+  @override
+  String get pushDialogOpenStore => 'Open Store';
+
+  @override
+  String get pushDialogUpdateNow => 'Update';
+
+  @override
+  String get pushDialogUpdateLater => 'Later';
+
+  @override
+  String get pushDialogClose => 'OK';
+
+  @override
+  String get pushDialogOpenFailed => 'Unable to open the link.';
+
+  @override
   String get discussionAvatarPageTitle => 'Avatar';
 
   @override

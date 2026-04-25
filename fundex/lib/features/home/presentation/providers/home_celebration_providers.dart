@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/push/app_push_runtime.dart';
+import '../../../../app/push/app_push_action.dart';
 import '../../../../app/push/app_push_runtime_provider.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 
@@ -44,14 +45,15 @@ class HomeCelebrationController extends StateNotifier<HomeCelebrationState> {
   HomeCelebrationController() : super(const HomeCelebrationState());
 
   void queueFromPush(AppPushNotificationEvent event) {
-    if (!_isHomeCelebrationEvent(event.payload)) {
+    final command = parseAppPushCommand(event);
+    if (command?.action != AppPushAction.homeCelebration) {
       return;
     }
     _queueEvent(
       HomeCelebrationEvent(
-        token: _resolvePushToken(event),
+        token: command!.token,
         source: event.kind,
-        lottieUrl: _readCelebrationUrl(event.payload),
+        lottieUrl: command.lottieUrl,
       ),
     );
   }
@@ -83,57 +85,6 @@ class HomeCelebrationController extends StateNotifier<HomeCelebrationState> {
       pendingEvent: event,
       recentTokens: List<String>.unmodifiable(nextRecentTokens),
     );
-  }
-
-  bool _isHomeCelebrationEvent(Map<String, Object?> payload) {
-    final targetPage =
-        _readString(payload, 'TARGET_PAGE') ??
-        _readString(_readMap(payload, 'exts'), 'TARGET_PAGE');
-    return targetPage == 'homeCelebration';
-  }
-
-  String _resolvePushToken(AppPushNotificationEvent event) {
-    final payload = event.payload;
-    final extraMap = _readMap(payload, 'extraMap');
-    final messageId =
-        _readString(extraMap, '_ALIYUN_NOTIFICATION_MSG_ID_') ??
-        _readString(payload, '_ALIYUN_NOTIFICATION_MSG_ID_') ??
-        _readString(payload, 'msg_id');
-    if (messageId != null && messageId.isNotEmpty) {
-      return 'push-$messageId';
-    }
-    return 'push-${event.kind}-${payload.toString()}';
-  }
-
-  String? _readCelebrationUrl(Map<String, Object?> payload) {
-    return _readString(payload, 'LOTTIE_URL') ??
-        _readString(_readMap(payload, 'exts'), 'LOTTIE_URL');
-  }
-
-  Map<String, Object?> _readMap(Map<String, Object?> payload, String key) {
-    final value = payload[key];
-    if (value is Map<String, Object?>) {
-      return value;
-    }
-    if (value is Map) {
-      return value.map(
-        (dynamic mapKey, dynamic mapValue) =>
-            MapEntry('$mapKey', mapValue as Object?),
-      );
-    }
-    return const <String, Object?>{};
-  }
-
-  String? _readString(Map<String, Object?> payload, String key) {
-    final value = payload[key];
-    if (value == null) {
-      return null;
-    }
-    final normalized = '$value'.trim();
-    if (normalized.isEmpty) {
-      return null;
-    }
-    return normalized;
   }
 }
 

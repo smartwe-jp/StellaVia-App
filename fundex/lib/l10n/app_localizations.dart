@@ -167,6 +167,66 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get commonCancel;
 
+  /// No description provided for @pushDialogDefaultBlockTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This app is unavailable'**
+  String get pushDialogDefaultBlockTitle;
+
+  /// No description provided for @pushDialogDefaultBlockBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Please use the specified app instead.'**
+  String get pushDialogDefaultBlockBody;
+
+  /// No description provided for @pushDialogDefaultUpdateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A new version is available'**
+  String get pushDialogDefaultUpdateTitle;
+
+  /// No description provided for @pushDialogDefaultUpdateBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Please update to the latest version.'**
+  String get pushDialogDefaultUpdateBody;
+
+  /// No description provided for @pushDialogDefaultCampaignTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Campaign Notice'**
+  String get pushDialogDefaultCampaignTitle;
+
+  /// No description provided for @pushDialogOpenStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Store'**
+  String get pushDialogOpenStore;
+
+  /// No description provided for @pushDialogUpdateNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get pushDialogUpdateNow;
+
+  /// No description provided for @pushDialogUpdateLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get pushDialogUpdateLater;
+
+  /// No description provided for @pushDialogClose.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get pushDialogClose;
+
+  /// No description provided for @pushDialogOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open the link.'**
+  String get pushDialogOpenFailed;
+
   /// No description provided for @discussionAvatarPageTitle.
   ///
   /// In en, this message translates to:

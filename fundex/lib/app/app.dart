@@ -13,6 +13,8 @@ import 'firebase/push_token_sync_providers.dart';
 import 'localization/app_locale_providers.dart';
 import 'observability/app_observability_providers.dart';
 import 'observability/app_ui_message_localizer.dart';
+import 'push/app_push_dialog_host.dart';
+import 'push/app_push_dialog_providers.dart';
 import 'realtime/app_lifecycle_refresh_scope.dart';
 import 'realtime/app_realtime_refresh.dart';
 import 'router/app_router.dart';
@@ -38,6 +40,7 @@ class MemberTemplateApp extends ConsumerWidget {
     AppNotice.bindHostOverlayKey(_appNoticeOverlayKey);
     ref.watch(pushTokenSyncBootstrapProvider);
     ref.watch(homeCelebrationBootstrapProvider);
+    ref.watch(appPushDialogBootstrapProvider);
 
     final router = ref.watch(appRouterProvider);
     final environment = ref.watch(appEnvironmentProvider);
@@ -143,6 +146,8 @@ class MemberTemplateApp extends ConsumerWidget {
                     child: ColoredBox(color: statusBarColor),
                   ),
                 ),
+              const _GlobalCelebrationHost(),
+              const AppPushDialogHost(),
               Overlay(
                 key: _appNoticeOverlayKey,
                 initialEntries: <OverlayEntry>[
@@ -151,7 +156,6 @@ class MemberTemplateApp extends ConsumerWidget {
                   ),
                 ],
               ),
-              const _GlobalCelebrationHost(),
               const _LocalizedSettingsContentBootstrap(),
             ],
           ),

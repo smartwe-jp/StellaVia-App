@@ -42,6 +42,36 @@ class AppLocalizationsJa extends AppLocalizations {
   String get commonCancel => 'キャンセル';
 
   @override
+  String get pushDialogDefaultBlockTitle => 'このアプリは利用できません';
+
+  @override
+  String get pushDialogDefaultBlockBody => '指定されたアプリをご利用ください。';
+
+  @override
+  String get pushDialogDefaultUpdateTitle => '新しいバージョンがあります';
+
+  @override
+  String get pushDialogDefaultUpdateBody => '最新バージョンへアップデートしてください。';
+
+  @override
+  String get pushDialogDefaultCampaignTitle => 'キャンペーンのお知らせ';
+
+  @override
+  String get pushDialogOpenStore => 'ストアを開く';
+
+  @override
+  String get pushDialogUpdateNow => 'アップデート';
+
+  @override
+  String get pushDialogUpdateLater => 'あとで';
+
+  @override
+  String get pushDialogClose => '確認';
+
+  @override
+  String get pushDialogOpenFailed => 'リンクを開けませんでした。';
+
+  @override
   String get discussionAvatarPageTitle => 'アイコン画像';
 
   @override

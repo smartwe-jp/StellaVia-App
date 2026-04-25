@@ -17,7 +17,7 @@ class FirebasePushRuntime implements AppPushRuntime {
 
   @override
   Stream<AppPushNotificationEvent> get notificationEvents =>
-      const Stream<AppPushNotificationEvent>.empty();
+      AppFirebaseRuntime.notificationEvents;
 
   @override
   Future<void> initialize({required AppLogger logger}) {

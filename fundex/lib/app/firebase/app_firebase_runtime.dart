@@ -7,6 +7,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fundex/firebase_options.dart';
 
+import '../push/app_push_runtime.dart';
+
 class AppFirebaseRuntime {
   AppFirebaseRuntime._();
 
@@ -20,12 +22,17 @@ class AppFirebaseRuntime {
   static String? _latestFcmToken;
   static final StreamController<String> _tokenController =
       StreamController<String>.broadcast();
+  static final StreamController<AppPushNotificationEvent>
+  _notificationController =
+      StreamController<AppPushNotificationEvent>.broadcast();
   static StreamSubscription<String>? _tokenRefreshSubscription;
   static StreamSubscription<RemoteMessage>? _onMessageSubscription;
   static StreamSubscription<RemoteMessage>? _onMessageOpenedSubscription;
 
   static String? get latestFcmToken => _latestFcmToken;
   static Stream<String> get tokenStream => _tokenController.stream;
+  static Stream<AppPushNotificationEvent> get notificationEvents =>
+      _notificationController.stream;
 
   static Future<void> initialize({
     required AppLogger logger,
@@ -128,10 +135,7 @@ class AppFirebaseRuntime {
       (String token) {
         _latestFcmToken = token;
         _tokenController.add(token);
-        logger.info(
-          'FCM token refreshed',
-          context: _tokenLogContext(token),
-        );
+        logger.info('FCM token refreshed', context: _tokenLogContext(token));
       },
       onError: (Object error, StackTrace stackTrace) {
         logger.error(
@@ -164,6 +168,7 @@ class AppFirebaseRuntime {
         'Push message received in foreground',
         context: _messageContext(message),
       );
+      _emitRemoteMessageEvent(kind: 'foreground', message: message);
     });
 
     await _onMessageOpenedSubscription?.cancel();
@@ -171,7 +176,17 @@ class AppFirebaseRuntime {
       RemoteMessage message,
     ) {
       logger.info('Push message opened app', context: _messageContext(message));
+      _emitRemoteMessageEvent(kind: 'opened', message: message);
     });
+
+    final initialMessage = await messaging.getInitialMessage();
+    if (initialMessage != null) {
+      logger.info(
+        'Push message opened app from terminated state',
+        context: _messageContext(initialMessage),
+      );
+      _emitRemoteMessageEvent(kind: 'initial', message: initialMessage);
+    }
   }
 
   static Future<void> _resolveAndLogCurrentToken({
@@ -209,10 +224,7 @@ class AppFirebaseRuntime {
           continue;
         }
         _tokenController.add(token);
-        logger.info(
-          'FCM token resolved',
-          context: _tokenLogContext(token),
-        );
+        logger.info('FCM token resolved', context: _tokenLogContext(token));
         return;
       } catch (error, stackTrace) {
         if (_isApnsTokenNotReadyError(error)) {
@@ -278,6 +290,27 @@ class AppFirebaseRuntime {
       'body': message.notification?.body,
       'data': message.data.toString(),
     };
+  }
+
+  static void _emitRemoteMessageEvent({
+    required String kind,
+    required RemoteMessage message,
+  }) {
+    _notificationController.add(
+      AppPushNotificationEvent(
+        kind: kind,
+        payload: _remoteMessagePayload(message),
+      ),
+    );
+  }
+
+  static Map<String, Object?> _remoteMessagePayload(RemoteMessage message) {
+    final payload = <String, Object?>{...message.data};
+    payload.putIfAbsent('MESSAGE_ID', () => message.messageId);
+    payload.putIfAbsent('FROM', () => message.from);
+    payload.putIfAbsent('TITLE', () => message.notification?.title);
+    payload.putIfAbsent('BODY', () => message.notification?.body);
+    return payload;
   }
 
   static Map<String, Object?> _tokenLogContext(String token) {

@@ -42,6 +42,36 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonCancel => '取消';
 
   @override
+  String get pushDialogDefaultBlockTitle => '当前 App 无法使用';
+
+  @override
+  String get pushDialogDefaultBlockBody => '请使用指定的其他 App。';
+
+  @override
+  String get pushDialogDefaultUpdateTitle => '发现新版本';
+
+  @override
+  String get pushDialogDefaultUpdateBody => '请更新到最新版本。';
+
+  @override
+  String get pushDialogDefaultCampaignTitle => '活动通知';
+
+  @override
+  String get pushDialogOpenStore => '打开商店';
+
+  @override
+  String get pushDialogUpdateNow => '立即更新';
+
+  @override
+  String get pushDialogUpdateLater => '稍后';
+
+  @override
+  String get pushDialogClose => '确认';
+
+  @override
+  String get pushDialogOpenFailed => '无法打开链接。';
+
+  @override
   String get discussionAvatarPageTitle => '头像';
 
   @override
@@ -3966,6 +3996,36 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get commonCancel => '取消';
+
+  @override
+  String get pushDialogDefaultBlockTitle => '目前 App 無法使用';
+
+  @override
+  String get pushDialogDefaultBlockBody => '請使用指定的其他 App。';
+
+  @override
+  String get pushDialogDefaultUpdateTitle => '發現新版本';
+
+  @override
+  String get pushDialogDefaultUpdateBody => '請更新至最新版本。';
+
+  @override
+  String get pushDialogDefaultCampaignTitle => '活動通知';
+
+  @override
+  String get pushDialogOpenStore => '開啟商店';
+
+  @override
+  String get pushDialogUpdateNow => '立即更新';
+
+  @override
+  String get pushDialogUpdateLater => '稍後';
+
+  @override
+  String get pushDialogClose => '確認';
+
+  @override
+  String get pushDialogOpenFailed => '無法開啟連結。';
 
   @override
   String get discussionAvatarPageTitle => '頭像';
