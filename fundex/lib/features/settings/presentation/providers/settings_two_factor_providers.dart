@@ -3,6 +3,7 @@ import 'package:core_foundation/core_foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/firebase/push_token_sync_adapters.dart';
+import '../../../../app/localization/app_locale_providers.dart';
 import '../../../../app/network/app_network_providers.dart';
 import '../../../../app/push/app_push_runtime_provider.dart';
 import '../../../../app/storage/app_storage_providers.dart';
@@ -64,11 +65,13 @@ final settingsRemoteVerificationStatusProvider =
         }
         final version = await resolvePushSyncAppVersion();
         final deviceType = resolvePushSyncDeviceType();
+        final languageTag = ref.watch(appApiLanguageTagProvider);
         final remoteStatus = await ref
             .watch(settingsTwoFactorRemoteDataSourceProvider)
             .fetchMemberLoginIndexStatus(
               deviceId: deviceId,
               deviceType: deviceType,
+              languageTag: languageTag,
               version: version,
             );
         if (remoteStatus == null) {

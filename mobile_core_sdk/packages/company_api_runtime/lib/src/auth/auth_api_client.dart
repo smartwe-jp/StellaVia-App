@@ -237,11 +237,13 @@ class AuthApiClient {
     required String deviceId,
     required int deviceType,
     required String version,
+    String languageTag = 'ja',
     String app = 'STELLAVIA',
   }) async {
     final normalizedDeviceId = deviceId.trim();
     final normalizedVersion = version.trim();
     final normalizedApp = app.trim();
+    final normalizedLanguageTag = _normalizeMemberLoginLanguageTag(languageTag);
     if (normalizedDeviceId.isEmpty ||
         normalizedVersion.isEmpty ||
         normalizedApp.isEmpty) {
@@ -255,6 +257,7 @@ class AuthApiClient {
             app: normalizedApp,
             deviceId: normalizedDeviceId,
             deviceType: deviceType,
+            languageTag: normalizedLanguageTag,
             version: normalizedVersion,
           ),
           options: authRequired(true),
@@ -274,11 +277,13 @@ class AuthApiClient {
     required String deviceId,
     required int deviceType,
     required String version,
+    String languageTag = 'ja',
     String app = 'STELLAVIA',
   }) async {
     final normalizedDeviceId = deviceId.trim();
     final normalizedVersion = version.trim();
     final normalizedApp = app.trim();
+    final normalizedLanguageTag = _normalizeMemberLoginLanguageTag(languageTag);
     if (normalizedDeviceId.isEmpty ||
         normalizedVersion.isEmpty ||
         normalizedApp.isEmpty) {
@@ -292,6 +297,7 @@ class AuthApiClient {
             app: normalizedApp,
             deviceId: normalizedDeviceId,
             deviceType: deviceType,
+            languageTag: normalizedLanguageTag,
             version: normalizedVersion,
           ),
           options: authRequired(true),
@@ -502,14 +508,21 @@ class AuthApiClient {
     required String app,
     required String deviceId,
     required int deviceType,
+    required String languageTag,
     required String version,
   }) {
     return <String, dynamic>{
       'app': app,
       'deviceId': deviceId,
       'deviceType': deviceType,
+      'languageTag': languageTag,
       'version': version,
     };
+  }
+
+  String _normalizeMemberLoginLanguageTag(String value) {
+    final normalized = value.trim();
+    return normalized.isEmpty ? 'ja' : normalized;
   }
 
   String _normalizedIntlCode(String? intlCode) {

@@ -19,17 +19,20 @@ class PushTokenSyncService {
     required Future<void> Function({
       required String deviceId,
       required int deviceType,
+      required String languageTag,
       required String version,
     })
     registerDevice,
     required PushTokenSyncLogger logger,
     required Future<String> Function() appVersionResolver,
     required int Function() deviceTypeResolver,
+    String Function()? languageTagResolver,
     List<Duration>? retryDelays,
   }) : _registerDevice = registerDevice,
        _logger = logger,
        _appVersionResolver = appVersionResolver,
        _deviceTypeResolver = deviceTypeResolver,
+       _languageTagResolver = languageTagResolver ?? (() => 'ja'),
        _retryDelays =
            retryDelays ??
            const <Duration>[
@@ -44,12 +47,14 @@ class PushTokenSyncService {
   final Future<void> Function({
     required String deviceId,
     required int deviceType,
+    required String languageTag,
     required String version,
   })
   _registerDevice;
   final PushTokenSyncLogger _logger;
   final Future<String> Function() _appVersionResolver;
   final int Function() _deviceTypeResolver;
+  final String Function() _languageTagResolver;
   final List<Duration> _retryDelays;
 
   String? _pendingToken;
@@ -131,6 +136,7 @@ class PushTokenSyncService {
       await _registerDevice(
         deviceId: token,
         deviceType: _deviceTypeResolver(),
+        languageTag: _languageTagResolver(),
         version: version,
       );
       _lastSyncedToken = token;

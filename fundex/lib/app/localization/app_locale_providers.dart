@@ -67,6 +67,34 @@ enum AppLanguage {
   }
 }
 
+String resolveAppApiLanguageTag(AppLanguage language, {Locale? systemLocale}) {
+  final locale =
+      language.toLocale() ??
+      systemLocale ??
+      WidgetsBinding.instance.platformDispatcher.locale;
+  return resolveApiLanguageTagForLocale(locale);
+}
+
+String resolveApiLanguageTagForLocale(Locale locale) {
+  return switch (locale.languageCode.toLowerCase()) {
+    'ja' => 'ja',
+    'zh' => _isTraditionalChineseLocale(locale) ? 'zh-Hant' : 'zh-Hans',
+    _ => 'en',
+  };
+}
+
+bool _isTraditionalChineseLocale(Locale locale) {
+  final scriptCode = locale.scriptCode?.toLowerCase();
+  if (scriptCode == 'hant') {
+    return true;
+  }
+  if (scriptCode == 'hans') {
+    return false;
+  }
+  final countryCode = locale.countryCode?.toUpperCase();
+  return countryCode == 'TW' || countryCode == 'HK' || countryCode == 'MO';
+}
+
 class AppLocaleController extends StateNotifier<AppLanguage> {
   AppLocaleController(this._storage) : super(AppLanguage.system) {
     _restoreFuture = _restore();
@@ -107,4 +135,8 @@ final appLanguageProvider =
 
 final appLocaleProvider = Provider<Locale?>((ref) {
   return ref.watch(appLanguageProvider).toLocale();
+});
+
+final appApiLanguageTagProvider = Provider<String>((ref) {
+  return resolveAppApiLanguageTag(ref.watch(appLanguageProvider));
 });

@@ -39,17 +39,20 @@ void main() {
             ({
               required String deviceId,
               required int deviceType,
+              required String languageTag,
               required String version,
             }) async {
               calls.add(<String, Object?>{
                 'deviceId': deviceId,
                 'deviceType': deviceType,
+                'languageTag': languageTag,
                 'version': version,
               });
             },
         logger: logger,
         appVersionResolver: () async => '1.2.3',
         deviceTypeResolver: () => 1,
+        languageTagResolver: () => 'en',
         retryDelays: const <Duration>[Duration(milliseconds: 10)],
       );
 
@@ -63,6 +66,7 @@ void main() {
       expect(calls, hasLength(1));
       expect(calls.first['deviceId'], equals('token-a'));
       expect(calls.first['deviceType'], equals(1));
+      expect(calls.first['languageTag'], equals('en'));
       expect(calls.first['version'], equals('1.2.3'));
 
       service.dispose();
@@ -77,6 +81,7 @@ void main() {
             ({
               required String deviceId,
               required int deviceType,
+              required String languageTag,
               required String version,
             }) async {
               attempt += 1;

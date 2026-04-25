@@ -122,6 +122,7 @@ void main() {
               'app': 'STELLAVIA',
               'deviceId': 'device-abc',
               'deviceType': 1,
+              'languageTag': 'zh-Hant',
               'version': '1.2.3',
             }),
           );
@@ -134,6 +135,7 @@ void main() {
         final result = await api.fetchMemberLoginIndexStatus(
           deviceId: 'device-abc',
           deviceType: 1,
+          languageTag: 'zh-Hant',
           version: '1.2.3',
         );
 
@@ -156,6 +158,7 @@ void main() {
             'app': 'STELLAVIA',
             'deviceId': 'fcm-token-value',
             'deviceType': 1,
+            'languageTag': 'ja',
             'version': '1.2.3',
           }),
         );

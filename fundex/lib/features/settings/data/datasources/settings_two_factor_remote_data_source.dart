@@ -5,6 +5,7 @@ abstract class SettingsTwoFactorRemoteDataSource {
   Future<AuthMemberLoginIndexDto?> fetchMemberLoginIndexStatus({
     required String deviceId,
     required int deviceType,
+    required String languageTag,
     required String version,
   });
 
@@ -13,9 +14,7 @@ abstract class SettingsTwoFactorRemoteDataSource {
     required String bizId,
   });
 
-  Future<void> sendEmailVerificationCode({
-    required String email,
-  });
+  Future<void> sendEmailVerificationCode({required String email});
 
   Future<void> verifyOnlinePhoneChangeCode({
     required String mobile,
@@ -56,12 +55,14 @@ class SettingsTwoFactorRemoteDataSourceImpl
   Future<AuthMemberLoginIndexDto?> fetchMemberLoginIndexStatus({
     required String deviceId,
     required int deviceType,
+    required String languageTag,
     required String version,
   }) {
     return _apiClient.fetchMemberLoginIndexStatus(
       app: 'STELLAVIA',
       deviceId: deviceId,
       deviceType: deviceType,
+      languageTag: languageTag,
       version: version,
     );
   }
@@ -75,9 +76,7 @@ class SettingsTwoFactorRemoteDataSourceImpl
   }
 
   @override
-  Future<void> sendEmailVerificationCode({
-    required String email,
-  }) {
+  Future<void> sendEmailVerificationCode({required String email}) {
     return _apiClient.sendEmailVerificationCode(email: email);
   }
 

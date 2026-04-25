@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:company_api_runtime/company_api_runtime.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../localization/app_locale_providers.dart';
 import '../../features/auth/presentation/providers/auth_providers.dart';
 import '../network/app_network_providers.dart';
 import '../observability/app_observability_providers.dart';
@@ -22,10 +23,12 @@ final pushTokenSyncServiceProvider = Provider<PushTokenSyncService>((ref) {
         ({
           required String deviceId,
           required int deviceType,
+          required String languageTag,
           required String version,
         }) => authApiClient.updateLoginDevice(
           deviceId: deviceId,
           deviceType: deviceType,
+          languageTag: languageTag,
           version: version,
         ),
     logger: AppPushTokenSyncLogger(
@@ -34,6 +37,7 @@ final pushTokenSyncServiceProvider = Provider<PushTokenSyncService>((ref) {
     ),
     appVersionResolver: resolvePushSyncAppVersion,
     deviceTypeResolver: resolvePushSyncDeviceType,
+    languageTagResolver: () => ref.read(appApiLanguageTagProvider),
   );
   ref.onDispose(service.dispose);
   return service;
