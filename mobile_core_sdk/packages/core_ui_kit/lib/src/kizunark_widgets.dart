@@ -617,7 +617,7 @@ class KizunarkReplyTile extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
                               Text(
                                 quoteTitle ?? '',
