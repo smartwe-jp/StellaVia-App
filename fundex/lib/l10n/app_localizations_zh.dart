@@ -2145,6 +2145,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailFeaturesTitle => '特征';
 
   @override
+  String get fundDetailReferenceVideoTitle => '参考视频';
+
+  @override
+  String get fundDetailReferenceVideoLoadError => '视频加载失败。';
+
+  @override
+  String get fundDetailReferenceVideoOpenInBrowser => '在浏览器中播放';
+
+  @override
+  String get fundDetailReferenceVideoExternalHint => '将打开外部页面播放视频。';
+
+  @override
+  String get fundDetailReferenceVideoOpenFailed => '无法打开视频页面。';
+
+  @override
+  String get fundDetailReferenceVideoPlayAction => '播放';
+
+  @override
   String fundDetailInvestmentUnitValue(Object amount) {
     return '$amount円/1口';
   }
@@ -6154,6 +6172,24 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get fundDetailFeaturesTitle => '特徵';
+
+  @override
+  String get fundDetailReferenceVideoTitle => '參考影片';
+
+  @override
+  String get fundDetailReferenceVideoLoadError => '影片載入失敗。';
+
+  @override
+  String get fundDetailReferenceVideoOpenInBrowser => '在瀏覽器中播放';
+
+  @override
+  String get fundDetailReferenceVideoExternalHint => '將開啟外部頁面播放影片。';
+
+  @override
+  String get fundDetailReferenceVideoOpenFailed => '無法開啟影片頁面。';
+
+  @override
+  String get fundDetailReferenceVideoPlayAction => '播放';
 
   @override
   String fundDetailInvestmentUnitValue(Object amount) {

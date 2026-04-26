@@ -19,6 +19,7 @@ import '../widgets/fund_project_detail_documents_section.dart';
 import '../widgets/fund_project_detail_scaffold.dart';
 import '../widgets/fund_project_detail_tabs_section.dart';
 import '../widgets/fund_project_detail_title_block.dart';
+import '../widgets/fund_project_detail_video_player.dart';
 import '../widgets/fund_project_detail_yield_highlight_card.dart';
 
 class FundProjectDetailPage extends ConsumerStatefulWidget {
@@ -205,6 +206,11 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
         ];
         final descriptionText = _normalizeFundDetailText(project.description);
         final featuresText = _normalizeFundDetailText(project.features);
+        final videoLink = _normalizeFundVideoLink(project.videoLink);
+        final isDirectPlayableVideoLink =
+            videoLink != null && isFundProjectDirectPlayableVideoUrl(videoLink);
+        final isYoutubeVideoLink =
+            videoLink != null && isFundProjectYoutubeVideoUrl(videoLink);
 
         return FundProjectDetailScaffold(
           actionBar: FundDetailStickyActionBar(
@@ -304,6 +310,30 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                           achievementRate: project.achievementRate,
                         ),
                       ),
+                    ],
+                    if (videoLink != null) ...<Widget>[
+                      const SizedBox(height: UiTokens.spacing16),
+                      if (isDirectPlayableVideoLink)
+                        FundDetailSection(
+                          title: context.l10n.fundDetailReferenceVideoTitle,
+                          child: FundProjectDetailVideoPlayer(
+                            videoUrl: videoLink,
+                          ),
+                        )
+                      else if (isYoutubeVideoLink)
+                        FundDetailSection(
+                          title: context.l10n.fundDetailReferenceVideoTitle,
+                          child: FundProjectDetailYoutubePlayer(
+                            videoUrl: videoLink,
+                          ),
+                        )
+                      else
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: FundProjectDetailExternalVideoLinkRow(
+                            videoUrl: videoLink,
+                          ),
+                        ),
                     ],
                     const SizedBox(height: UiTokens.spacing16),
                     FundProjectDetailTabsSection(
@@ -714,6 +744,14 @@ double _lerpAchievementWindow(
 }
 
 String? _normalizeFundDetailText(String? value) {
+  final text = value?.trim();
+  if (text == null || text.isEmpty) {
+    null;
+  }
+  return text;
+}
+
+String? _normalizeFundVideoLink(String? value) {
   final text = value?.trim();
   if (text == null || text.isEmpty) {
     return null;

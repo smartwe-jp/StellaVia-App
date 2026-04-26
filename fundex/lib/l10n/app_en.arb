@@ -804,6 +804,12 @@
   "fundDetailUnknownValue": "--",
   "fundDetailProductSummaryTitle": "Product Summary",
   "fundDetailFeaturesTitle": "Features",
+  "fundDetailReferenceVideoTitle": "Reference video",
+  "fundDetailReferenceVideoLoadError": "Failed to load the video.",
+  "fundDetailReferenceVideoOpenInBrowser": "Play in browser",
+  "fundDetailReferenceVideoExternalHint": "This video opens on an external page.",
+  "fundDetailReferenceVideoOpenFailed": "Could not open the video page.",
+  "fundDetailReferenceVideoPlayAction": "Play",
   "fundDetailInvestmentUnitValue": "{amount}円 / 1 unit",
   "@fundDetailInvestmentUnitValue": {
     "placeholders": {

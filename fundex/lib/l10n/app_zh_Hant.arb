@@ -804,6 +804,12 @@
   "fundDetailUnknownValue": "--",
   "fundDetailProductSummaryTitle": "商品概要",
   "fundDetailFeaturesTitle": "特徵",
+  "fundDetailReferenceVideoTitle": "參考影片",
+  "fundDetailReferenceVideoLoadError": "影片載入失敗。",
+  "fundDetailReferenceVideoOpenInBrowser": "在瀏覽器中播放",
+  "fundDetailReferenceVideoExternalHint": "將開啟外部頁面播放影片。",
+  "fundDetailReferenceVideoOpenFailed": "無法開啟影片頁面。",
+  "fundDetailReferenceVideoPlayAction": "播放",
   "fundDetailInvestmentUnitValue": "{amount}円/1口",
   "@fundDetailInvestmentUnitValue": {
     "placeholders": {

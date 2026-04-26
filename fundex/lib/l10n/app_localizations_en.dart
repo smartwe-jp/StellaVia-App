@@ -2294,6 +2294,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundDetailFeaturesTitle => 'Features';
 
   @override
+  String get fundDetailReferenceVideoTitle => 'Reference video';
+
+  @override
+  String get fundDetailReferenceVideoLoadError => 'Failed to load the video.';
+
+  @override
+  String get fundDetailReferenceVideoOpenInBrowser => 'Play in browser';
+
+  @override
+  String get fundDetailReferenceVideoExternalHint =>
+      'This video opens on an external page.';
+
+  @override
+  String get fundDetailReferenceVideoOpenFailed =>
+      'Could not open the video page.';
+
+  @override
+  String get fundDetailReferenceVideoPlayAction => 'Play';
+
+  @override
   String fundDetailInvestmentUnitValue(Object amount) {
     return '$amount円 / 1 unit';
   }

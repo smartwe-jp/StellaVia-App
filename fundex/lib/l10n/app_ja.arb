@@ -804,6 +804,12 @@
   "fundDetailUnknownValue": "--",
   "fundDetailProductSummaryTitle": "商品概要",
   "fundDetailFeaturesTitle": "特徴",
+  "fundDetailReferenceVideoTitle": "参考動画",
+  "fundDetailReferenceVideoLoadError": "動画を読み込めませんでした。",
+  "fundDetailReferenceVideoOpenInBrowser": "ブラウザで再生",
+  "fundDetailReferenceVideoExternalHint": "外部ページで動画を開きます。",
+  "fundDetailReferenceVideoOpenFailed": "動画ページを開けませんでした。",
+  "fundDetailReferenceVideoPlayAction": "再生",
   "fundDetailInvestmentUnitValue": "{amount}円／1口",
   "@fundDetailInvestmentUnitValue": {
     "placeholders": {

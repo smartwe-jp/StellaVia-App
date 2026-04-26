@@ -4256,6 +4256,42 @@ abstract class AppLocalizations {
   /// **'Features'**
   String get fundDetailFeaturesTitle;
 
+  /// No description provided for @fundDetailReferenceVideoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reference video'**
+  String get fundDetailReferenceVideoTitle;
+
+  /// No description provided for @fundDetailReferenceVideoLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load the video.'**
+  String get fundDetailReferenceVideoLoadError;
+
+  /// No description provided for @fundDetailReferenceVideoOpenInBrowser.
+  ///
+  /// In en, this message translates to:
+  /// **'Play in browser'**
+  String get fundDetailReferenceVideoOpenInBrowser;
+
+  /// No description provided for @fundDetailReferenceVideoExternalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'This video opens on an external page.'**
+  String get fundDetailReferenceVideoExternalHint;
+
+  /// No description provided for @fundDetailReferenceVideoOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the video page.'**
+  String get fundDetailReferenceVideoOpenFailed;
+
+  /// No description provided for @fundDetailReferenceVideoPlayAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get fundDetailReferenceVideoPlayAction;
+
   /// No description provided for @fundDetailInvestmentUnitValue.
   ///
   /// In en, this message translates to:

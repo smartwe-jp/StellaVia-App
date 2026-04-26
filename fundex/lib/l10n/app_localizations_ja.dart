@@ -2173,6 +2173,24 @@ class AppLocalizationsJa extends AppLocalizations {
   String get fundDetailFeaturesTitle => '特徴';
 
   @override
+  String get fundDetailReferenceVideoTitle => '参考動画';
+
+  @override
+  String get fundDetailReferenceVideoLoadError => '動画を読み込めませんでした。';
+
+  @override
+  String get fundDetailReferenceVideoOpenInBrowser => 'ブラウザで再生';
+
+  @override
+  String get fundDetailReferenceVideoExternalHint => '外部ページで動画を開きます。';
+
+  @override
+  String get fundDetailReferenceVideoOpenFailed => '動画ページを開けませんでした。';
+
+  @override
+  String get fundDetailReferenceVideoPlayAction => '再生';
+
+  @override
   String fundDetailInvestmentUnitValue(Object amount) {
     return '$amount円／1口';
   }
