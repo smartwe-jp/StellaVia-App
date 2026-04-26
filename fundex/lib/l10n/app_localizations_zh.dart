@@ -2182,6 +2182,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailGainTypeTitle => '收益的类型';
 
   @override
+  String get fundDetailSubordinatedRatioLabel => '劣后出资比例';
+
+  @override
   String get fundDetailGainTypeDescriptionTitle => '收益种类说明';
 
   @override
@@ -6188,6 +6191,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get fundDetailGainTypeTitle => '收益的類型';
+
+  @override
+  String get fundDetailSubordinatedRatioLabel => '劣後出資比例';
 
   @override
   String get fundDetailGainTypeDescriptionTitle => '收益種類說明';

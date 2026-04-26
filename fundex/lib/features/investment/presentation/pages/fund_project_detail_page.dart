@@ -183,19 +183,26 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
           project.gainType,
         );
         final hasGainType = (project.gainType?.trim().isNotEmpty ?? false);
+        final subordinatedRatio = _normalizeFundDetailText(
+          project.subordinatedRatio,
+        );
         final gainTypeExplanationItems = _buildGainTypeExplanationItems(
           context,
         );
-        final infoItems = hasGainType
-            ? <FundDetailInfoItemData>[
-                ...viewData.infoItems,
-                FundDetailInfoItemData(
-                  label: context.l10n.fundDetailGainTypeTitle,
-                  value: gainTypeLabel,
-                  onTap: _scrollToGainTypeDescription,
-                ),
-              ]
-            : viewData.infoItems;
+        final infoItems = <FundDetailInfoItemData>[
+          ...viewData.infoItems,
+          if (subordinatedRatio != null)
+            FundDetailInfoItemData(
+              label: context.l10n.fundDetailSubordinatedRatioLabel,
+              value: subordinatedRatio,
+            ),
+          if (hasGainType)
+            FundDetailInfoItemData(
+              label: context.l10n.fundDetailGainTypeTitle,
+              value: gainTypeLabel,
+              onTap: _scrollToGainTypeDescription,
+            ),
+        ];
         final descriptionText = _normalizeFundDetailText(project.description);
         final featuresText = _normalizeFundDetailText(project.features);
 
@@ -321,7 +328,7 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                         child: FundDetailContentCard(
                           child: Text(
                             featuresText,
-                            style: appText.bodyMuted.copyWith(
+                            style: appText.bodySemi.copyWith(
                               color: colors.textSecondary,
                               height: 1.7,
                             ),

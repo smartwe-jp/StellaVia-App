@@ -4316,6 +4316,12 @@ abstract class AppLocalizations {
   /// **'Type of Return'**
   String get fundDetailGainTypeTitle;
 
+  /// No description provided for @fundDetailSubordinatedRatioLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Subordinated investment ratio'**
+  String get fundDetailSubordinatedRatioLabel;
+
   /// No description provided for @fundDetailGainTypeDescriptionTitle.
   ///
   /// In en, this message translates to:

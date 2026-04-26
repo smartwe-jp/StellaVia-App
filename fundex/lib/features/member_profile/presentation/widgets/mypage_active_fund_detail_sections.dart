@@ -477,7 +477,7 @@ class ActiveFundBenefitHistoryCard extends StatelessWidget {
                     value: netValue,
                     valueColor: colors.highlightGold,
                     backgroundColor: colors.primarySubtle,
-                    borderColor: colors.primarySubtle,
+                    borderColor: colors.borderSoft,
                   ),
                 ),
               ],

@@ -2332,6 +2332,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundDetailGainTypeTitle => 'Type of Return';
 
   @override
+  String get fundDetailSubordinatedRatioLabel =>
+      'Subordinated investment ratio';
+
+  @override
   String get fundDetailGainTypeDescriptionTitle => 'About the Type of Return';
 
   @override

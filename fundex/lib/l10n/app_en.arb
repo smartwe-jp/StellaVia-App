@@ -825,6 +825,7 @@
   "fundDetailPlannedDistributionRateLabel": "Planned distribution rate (before tax)",
   "fundDetailAchievementRateLabel": "Funding achievement rate",
   "fundDetailGainTypeTitle": "Type of Return",
+  "fundDetailSubordinatedRatioLabel": "Subordinated investment ratio",
   "fundDetailGainTypeDescriptionTitle": "About the Type of Return",
   "fundDetailGainTypeIncomeGainTitle": "1. Income Gain",
   "fundDetailGainTypeIncomeGainBody": "Meaning: Regular income generated from held assets\n\nFeatures: Stable cash flow received monthly or quarterly\n\nExamples: Rental income from real estate, revenue from minpaku and hotel operations",

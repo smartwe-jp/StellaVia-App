@@ -825,6 +825,7 @@
   "fundDetailPlannedDistributionRateLabel": "预计分配率（税前）",
   "fundDetailAchievementRateLabel": "募集达成率",
   "fundDetailGainTypeTitle": "收益的类型",
+  "fundDetailSubordinatedRatioLabel": "劣后出资比例",
   "fundDetailGainTypeDescriptionTitle": "收益种类说明",
   "fundDetailGainTypeIncomeGainTitle": "1. 稳定收益型（Income Gain）",
   "fundDetailGainTypeIncomeGainBody": "含义：从持有资产中获得的定期性收入\n\n特点：每月或每季可稳定取得现金流\n\n例：不动产租金收入、民宿／酒店运营收益",

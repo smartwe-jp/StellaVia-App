@@ -825,6 +825,7 @@
   "fundDetailPlannedDistributionRateLabel": "予定分配率（税引前）",
   "fundDetailAchievementRateLabel": "募集達成率",
   "fundDetailGainTypeTitle": "収益の種類",
+  "fundDetailSubordinatedRatioLabel": "劣後出資比率",
   "fundDetailGainTypeDescriptionTitle": "収益の種類の説明",
   "fundDetailGainTypeIncomeGainTitle": "1. インカムゲイン（Income Gain）",
   "fundDetailGainTypeIncomeGainBody": "意味：保有資産から得られる定期的な収入\n\n特徴：毎月や四半期ごとに安定して入るお金\n\n例：不動産の賃料収入、民泊・ホテル運営收益",

@@ -49,7 +49,7 @@ class AppColorTokens {
   static const Color fundexBorderSoft = Color(0xFFE3D7C3);
   static const Color fundexText = Color(0xFF0F172A);
   static const Color fundexTextSecondary = Color(0xFF475569);
-  static const Color fundexTextTertiary = Color(0xFF94A3B8);
+  static const Color fundexTextTertiary = Color.fromARGB(255, 122, 137, 159);
   static const Color fundexDisabled = Color(0xFFCBD5E1);
   static const Color fundexHighlightGold = Color(0xFFB8954F);
   static const Color fundexBaseCream = brandBaseCream;

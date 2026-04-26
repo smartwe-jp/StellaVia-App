@@ -2210,6 +2210,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get fundDetailGainTypeTitle => '収益の種類';
 
   @override
+  String get fundDetailSubordinatedRatioLabel => '劣後出資比率';
+
+  @override
   String get fundDetailGainTypeDescriptionTitle => '収益の種類の説明';
 
   @override

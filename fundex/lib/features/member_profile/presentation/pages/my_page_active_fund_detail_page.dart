@@ -237,6 +237,7 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
                                   ),
                                 ),
                                 const SizedBox(width: 8),
+                                if (detail.withdrawalTime == null)
                                 OutlinedButton(
                                   onPressed:
                                       detail.withdrawalTime == null &&
