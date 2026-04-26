@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/network/app_network_connectivity_providers.dart';
 import '../../../../app/support/app_compact_money_formatter.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
@@ -58,7 +59,7 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
       notificationsControllerProvider.select((state) => state.unreadCount > 0),
     );
     final accountStatisticAsync = ref.watch(myPageAccountStatisticProvider);
-    final accountStatistic = accountStatisticAsync.asData?.value;
+    final accountStatistic = accountStatisticAsync.valueOrNull;
     final loanTypeFunds = accountStatistic?.financialTotal;
     final totalAssetsExcludingLoan = _subtractLoanTypeFunds(
       accountStatistic?.total,
@@ -73,10 +74,9 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
     final investmentAsync = ref.watch(myPageInvestmentListProvider);
     final walletHistoryAsync = ref.watch(walletHistoryProvider);
     final assetTrendAsync = ref.watch(myPageAssetTrendProvider(trendRange));
-    final investmentRecords = investmentAsync.asData?.value;
+    final investmentRecords = investmentAsync.valueOrNull;
     final fundProjects =
-        ref.watch(fundProjectListProvider).asData?.value ??
-        const <FundProject>[];
+        ref.watch(fundProjectListProvider).valueOrNull ?? const <FundProject>[];
     final fundProjectsById = <String, FundProject>{
       for (final project in fundProjects) project.id: project,
     };
@@ -172,7 +172,7 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                       _selectedTrendRange = range;
                     });
                   },
-                  records: assetTrendAsync.asData?.value ?? const [],
+                  records: assetTrendAsync.valueOrNull ?? const [],
                   isLoading: assetTrendAsync.isLoading,
                 ),
               ),
@@ -200,6 +200,9 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
   }
 
   Future<void> _refreshPage() async {
+    if (shouldSkipAppNetworkRefresh(ref)) {
+      return;
+    }
     setState(() {
       _hiddenOrderInquiryIds.clear();
     });
@@ -336,6 +339,7 @@ Widget _buildTransactionHistorySection(
   final l10n = context.l10n;
 
   return asyncValue.when(
+    skipError: true,
     data: (items) {
       final displayItems = [...items]..sort(compareWalletHistoryByDateDesc);
       final visibleItems = displayItems.take(3).toList(growable: false);
@@ -401,6 +405,7 @@ Widget _buildPendingApplicationsSection(
   final colors = Theme.of(context).appColors;
 
   return asyncValue.when(
+    skipError: true,
     data: (records) {
       final displayRecords = sortApplyRecords(records, maxItems: 3);
       final cards = displayRecords
@@ -479,6 +484,7 @@ Widget _buildCoolingOffSection(
   final colors = theme.appColors;
 
   return asyncValue.when(
+    skipError: true,
     data: (records) {
       final visibleRecords = records
           .where((record) => !hiddenOrderInquiryIds.contains(record.id))
@@ -575,6 +581,7 @@ Widget _buildActiveFundsSection(
   final l10n = context.l10n;
 
   return asyncValue.when(
+    skipError: true,
     data: (records) {
       final displayGroups = groupActiveInvestmentRecords(records);
       final cards = displayGroups
@@ -653,6 +660,9 @@ Widget _buildActiveFundsSection(
 }
 
 Future<void> refreshProfileCenterTabPage(WidgetRef ref) async {
+  if (shouldSkipAppNetworkRefresh(ref)) {
+    return;
+  }
   ref.invalidate(fundProjectListProvider);
   ref.invalidate(myPageAssetTrendProvider);
   await Future.wait<void>(<Future<void>>[
@@ -945,6 +955,7 @@ bool _shouldShowHomePendingSection(
   AsyncValue<List<MyPageApplyRecord>> asyncValue,
 ) {
   return asyncValue.when(
+    skipError: true,
     data: (records) => records.isNotEmpty,
     loading: () => true,
     error: (_, __) => true,
@@ -956,6 +967,7 @@ bool _shouldShowHomeOrderInquirySection(
   Set<String> hiddenOrderInquiryIds,
 ) {
   return asyncValue.when(
+    skipError: true,
     data: (records) {
       final visibleRecords = records
           .where((record) => !hiddenOrderInquiryIds.contains(record.id))

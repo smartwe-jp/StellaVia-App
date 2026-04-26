@@ -30,6 +30,8 @@ import '../features/settings/presentation/providers/settings_content_providers.d
 final GlobalKey<ScaffoldMessengerState> _rootScaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
 final GlobalKey<OverlayState> _appNoticeOverlayKey = GlobalKey<OverlayState>();
+final _networkOfflineDialogShownProvider = StateProvider<bool>((ref) => false);
+final _networkOfflineDialogOpenProvider = StateProvider<bool>((ref) => false);
 
 class MemberTemplateApp extends ConsumerWidget {
   const MemberTemplateApp({super.key});
@@ -95,10 +97,20 @@ class MemberTemplateApp extends ConsumerWidget {
       (previous, next) {
         final previousAvailability = previous?.asData?.value;
         final nextAvailability = next.asData?.value;
+        if (nextAvailability == AppNetworkAvailability.offline) {
+          final alreadyShown = ref.read(_networkOfflineDialogShownProvider);
+          if (previousAvailability != AppNetworkAvailability.offline &&
+              !alreadyShown) {
+            ref.read(_networkOfflineDialogShownProvider.notifier).state = true;
+            _scheduleNetworkOfflineDialog(ref);
+          }
+          return;
+        }
         if (previousAvailability != AppNetworkAvailability.offline ||
             nextAvailability != AppNetworkAvailability.online) {
           return;
         }
+        ref.read(_networkOfflineDialogShownProvider.notifier).state = false;
         ref.invalidate(fundProjectListProvider);
         final isAuthenticated =
             ref.read(isAuthenticatedProvider).asData?.value ?? false;
@@ -180,6 +192,63 @@ class _LocalizedSettingsContentBootstrap extends ConsumerWidget {
 
     ref.watch(settingsOperatingCompanyContentProvider(localeTag));
     return const SizedBox.shrink();
+  }
+}
+
+void _scheduleNetworkOfflineDialog(WidgetRef ref, {int remainingRetries = 3}) {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    unawaited(
+      _showNetworkOfflineDialog(ref, remainingRetries: remainingRetries),
+    );
+  });
+}
+
+Future<void> _showNetworkOfflineDialog(
+  WidgetRef ref, {
+  required int remainingRetries,
+}) async {
+  if (ref.read(_networkOfflineDialogOpenProvider)) {
+    return;
+  }
+  final dialogContext =
+      appRootNavigatorKey.currentContext ??
+      _rootScaffoldMessengerKey.currentContext;
+  if (dialogContext == null || !dialogContext.mounted) {
+    if (remainingRetries <= 0) {
+      ref.read(_networkOfflineDialogShownProvider.notifier).state = false;
+      return;
+    }
+    unawaited(
+      Future<void>.delayed(const Duration(milliseconds: 300), () {
+        final availability = ref
+            .read(appNetworkAvailabilityProvider)
+            .asData
+            ?.value;
+        if (availability != AppNetworkAvailability.offline) {
+          ref.read(_networkOfflineDialogShownProvider.notifier).state = false;
+          return;
+        }
+        _scheduleNetworkOfflineDialog(
+          ref,
+          remainingRetries: remainingRetries - 1,
+        );
+      }),
+    );
+    return;
+  }
+  final l10n = AppLocalizations.of(dialogContext);
+  ref.read(_networkOfflineDialogOpenProvider.notifier).state = true;
+  try {
+    await AppDialogs.showAdaptiveAlert<void>(
+      context: dialogContext,
+      title: l10n.networkOfflineBannerTitle,
+      message: l10n.networkOfflineBannerMessage,
+      actions: <AppDialogAction<void>>[
+        AppDialogAction<void>(label: l10n.commonOk, isDefaultAction: true),
+      ],
+    );
+  } finally {
+    ref.read(_networkOfflineDialogOpenProvider.notifier).state = false;
   }
 }
 

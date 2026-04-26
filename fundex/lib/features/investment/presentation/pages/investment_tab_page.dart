@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/network/app_network_connectivity_providers.dart';
 import '../../domain/entities/fund_project.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
 import '../providers/fund_project_favorite_providers.dart';
@@ -112,6 +113,9 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
   }
 
   Future<void> _refreshProjects() async {
+    if (shouldSkipAppNetworkRefresh(ref)) {
+      return;
+    }
     ref.invalidate(fundProjectListProvider);
     await ref.read(fundProjectListProvider.future);
   }
@@ -431,6 +435,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
             Divider(height: 1, thickness: 1, color: colors.border),
             Expanded(
               child: asyncProjects.when(
+                skipError: true,
                 loading: () =>
                     const Center(child: CircularProgressIndicator.adaptive()),
                 error: (Object error, StackTrace stackTrace) {
@@ -567,6 +572,9 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
 }
 
 Future<void> _refreshInvestmentTab(WidgetRef ref) async {
+  if (shouldSkipAppNetworkRefresh(ref)) {
+    return;
+  }
   ref.invalidate(fundProjectListProvider);
   await ref.refresh(fundProjectListProvider.future).then((_) {});
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/auth/presentation/providers/auth_providers.dart';
+import '../network/app_network_connectivity_providers.dart';
 import 'app_realtime_refresh.dart';
 
 class AppLifecycleRefreshScope extends ConsumerStatefulWidget {
@@ -44,6 +45,9 @@ class _AppLifecycleRefreshScopeState
     if (!isAuthenticated) {
       return;
     }
+    if (shouldSkipAppNetworkRefresh(ref)) {
+      return;
+    }
 
     final now = DateTime.now();
     final lastRefreshAt = _lastResumeRefreshAt;
@@ -55,6 +59,9 @@ class _AppLifecycleRefreshScopeState
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) {
+        return;
+      }
+      if (shouldSkipAppNetworkRefresh(ref)) {
         return;
       }
       unawaited(

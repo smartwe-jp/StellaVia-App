@@ -5,6 +5,15 @@ enum AppNetworkAvailability { online, offline }
 
 enum AppNetworkAccessState { normal, denied }
 
+bool isAppNetworkOffline(WidgetRef ref) {
+  return ref.read(appNetworkAvailabilityProvider).asData?.value ==
+      AppNetworkAvailability.offline;
+}
+
+bool shouldSkipAppNetworkRefresh(WidgetRef ref) {
+  return isAppNetworkOffline(ref);
+}
+
 class AppNetworkAccessStateController
     extends StateNotifier<AppNetworkAccessState> {
   AppNetworkAccessStateController() : super(AppNetworkAccessState.normal);

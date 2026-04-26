@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/network/app_network_connectivity_providers.dart';
 import '../providers/main_shell_providers.dart';
 
 class MainShellTabRefreshScope extends ConsumerStatefulWidget {
@@ -32,10 +33,16 @@ class _MainShellTabRefreshScopeState
     if (_refreshQueued || !mounted) {
       return;
     }
+    if (shouldSkipAppNetworkRefresh(ref)) {
+      return;
+    }
     _refreshQueued = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _refreshQueued = false;
       if (!mounted) {
+        return;
+      }
+      if (shouldSkipAppNetworkRefresh(ref)) {
         return;
       }
       unawaited(

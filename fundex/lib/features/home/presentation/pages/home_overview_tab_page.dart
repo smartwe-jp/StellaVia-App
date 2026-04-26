@@ -50,20 +50,18 @@ class HomeOverviewTabPage extends ConsumerWidget {
     final currentUser = ref.watch(currentAuthUserProvider).asData?.value;
     final isMemberProfileCompleted = ref
         .watch(isMemberProfileCompletedProvider)
-        .asData
-        ?.value;
+        .valueOrNull;
     final isEmailVerified = ref
         .watch(settingsEmailVerifiedProvider)
-        .asData
-        ?.value;
+        .valueOrNull;
     final asyncProjects = ref.watch(fundProjectListProvider);
     final asyncMemberProfile = ref.watch(memberProfileDetailsProvider);
     final asyncVerificationStatus = ref.watch(
       settingsRemoteVerificationStatusProvider,
     );
-    final memberProfile = asyncMemberProfile.asData?.value;
-    final verificationStatus = asyncVerificationStatus.asData?.value;
-    final projects = asyncProjects.asData?.value ?? const <FundProject>[];
+    final memberProfile = asyncMemberProfile.valueOrNull;
+    final verificationStatus = asyncVerificationStatus.valueOrNull;
+    final projects = asyncProjects.valueOrNull ?? const <FundProject>[];
     final locale = Localizations.localeOf(context);
     final currencyFormatter = NumberFormat.currency(
       locale: locale.toLanguageTag(),
@@ -148,7 +146,11 @@ class HomeOverviewTabPage extends ConsumerWidget {
         .toList(growable: false);
     final loadError = asyncProjects.asError;
 
-    final bool showGuide = shouldShowMemberProfileReminder || isEmailVerified == false || verificationStatus?.isPhoneVerified == false ||verificationStatus?.isRealPersonVerified == false;
+    final bool showGuide =
+        shouldShowMemberProfileReminder ||
+        isEmailVerified == false ||
+        verificationStatus?.isPhoneVerified == false ||
+        verificationStatus?.isRealPersonVerified == false;
 
     final topSection = switch ((authState.isLoading, isAuthenticated)) {
       (true, _) => const SizedBox(height: UiTokens.spacing12),
@@ -232,12 +234,12 @@ class HomeOverviewTabPage extends ConsumerWidget {
                       child: FundReminderFeed(items: reminders),
                     ),
                   //if (!isAuthenticated)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: UiTokens.spacing16,
-                      ),
-                      child: attractionSection,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: UiTokens.spacing16,
                     ),
+                    child: attractionSection,
+                  ),
                   if (asyncProjects.isLoading && projects.isEmpty)
                     const Center(
                       child: Padding(
@@ -340,6 +342,9 @@ bool get _isApplePlatform =>
         defaultTargetPlatform == TargetPlatform.macOS);
 
 Future<void> _refreshHomeOverviewTab(WidgetRef ref) async {
+  if (shouldSkipAppNetworkRefresh(ref)) {
+    return;
+  }
   ref.invalidate(fundProjectListProvider);
   ref.invalidate(memberProfileDetailsProvider);
   await Future.wait<void>(<Future<void>>[
