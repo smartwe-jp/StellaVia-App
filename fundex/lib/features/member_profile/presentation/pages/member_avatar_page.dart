@@ -100,6 +100,9 @@ class _MemberAvatarPageState extends ConsumerState<MemberAvatarPage> {
       case ProfileDocumentImagePickStatus.permissionSettingsRequired:
         AppNotice.show(context, message: l10n.permissionSettingsPhotosMessage);
         return;
+      case ProfileDocumentImagePickStatus.sizeLimitExceeded:
+        AppNotice.show(context, message: l10n.profileImageSizeTooLarge);
+        return;
       case ProfileDocumentImagePickStatus.failed:
         AppNotice.show(
           context,

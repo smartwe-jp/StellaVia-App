@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'profile_image_upload_optimizer.dart';
+
 enum ProfileDocumentImageSource { camera, gallery }
 
 enum ProfileDocumentImagePickStatus {
@@ -9,6 +11,7 @@ enum ProfileDocumentImagePickStatus {
   canceled,
   permissionDenied,
   permissionSettingsRequired,
+  sizeLimitExceeded,
   failed,
 }
 
@@ -31,6 +34,12 @@ class ProfileDocumentImagePickResult {
   const ProfileDocumentImagePickResult.permissionSettingsRequired()
     : this._(status: ProfileDocumentImagePickStatus.permissionSettingsRequired);
 
+  const ProfileDocumentImagePickResult.sizeLimitExceeded([String? errorMessage])
+    : this._(
+        status: ProfileDocumentImagePickStatus.sizeLimitExceeded,
+        errorMessage: errorMessage,
+      );
+
   const ProfileDocumentImagePickResult.failed([String? errorMessage])
     : this._(
         status: ProfileDocumentImagePickStatus.failed,
@@ -51,10 +60,14 @@ abstract class ProfileDocumentImagePicker {
 }
 
 class DeviceProfileDocumentImagePicker implements ProfileDocumentImagePicker {
-  DeviceProfileDocumentImagePicker([ImagePicker? imagePicker])
-    : _imagePicker = imagePicker ?? ImagePicker();
+  DeviceProfileDocumentImagePicker([
+    ImagePicker? imagePicker,
+    ProfileImageUploadOptimizer? imageOptimizer,
+  ]) : _imagePicker = imagePicker ?? ImagePicker(),
+       _imageOptimizer = imageOptimizer ?? const ProfileImageUploadOptimizer();
 
   final ImagePicker _imagePicker;
+  final ProfileImageUploadOptimizer _imageOptimizer;
 
   @override
   Future<ProfileDocumentImagePickResult> pick(
@@ -77,7 +90,10 @@ class DeviceProfileDocumentImagePicker implements ProfileDocumentImagePicker {
       if (path.isEmpty) {
         return const ProfileDocumentImagePickResult.canceled();
       }
-      return ProfileDocumentImagePickResult.success(path);
+      final optimizedPath = await _imageOptimizer.ensureWithinUploadLimit(path);
+      return ProfileDocumentImagePickResult.success(optimizedPath);
+    } on ProfileImageSizeLimitException catch (error) {
+      return ProfileDocumentImagePickResult.sizeLimitExceeded(error.toString());
     } catch (error) {
       return ProfileDocumentImagePickResult.failed(error.toString());
     }

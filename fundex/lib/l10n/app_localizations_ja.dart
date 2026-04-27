@@ -91,6 +91,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get discussionAvatarPickFailed => '画像の選択に失敗しました。もう一度お試しください。';
 
   @override
+  String get profileImageSizeTooLarge => '画像サイズが大きすぎます。10MB未満の画像を選択してください。';
+
+  @override
   String get discussionAvatarPhotoLibraryPermissionRequired =>
       '写真ライブラリへのアクセスを許可してください。';
 

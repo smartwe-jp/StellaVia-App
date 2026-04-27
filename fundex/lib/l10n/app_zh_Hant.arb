@@ -27,6 +27,7 @@
   "discussionAvatarSaveAction": "保存頭像",
   "discussionAvatarSaveSuccess": "頭像已更新。",
   "discussionAvatarPickFailed": "選擇圖片失敗，請再試一次。",
+  "profileImageSizeTooLarge": "圖片過大，僅支援小於10MB的圖片，請重新選擇。",
   "discussionAvatarPhotoLibraryPermissionRequired": "請允許存取相簿。",
   "discussionAvatarCropTitle": "調整頭像",
   "discussionAvatarCropHint": "請拖曳圖片，並雙指縮放，使頭像對齊圓形範圍。",

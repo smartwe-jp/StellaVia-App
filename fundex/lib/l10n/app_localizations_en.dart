@@ -95,6 +95,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Failed to choose an image. Please try again.';
 
   @override
+  String get profileImageSizeTooLarge =>
+      'The image is too large. Please choose an image under 10MB.';
+
+  @override
   String get discussionAvatarPhotoLibraryPermissionRequired =>
       'Allow photo library access to select an avatar image.';
 

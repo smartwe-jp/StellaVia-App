@@ -50,6 +50,7 @@ dependencies:
   video_player: ^2.11.1
   cached_video_player_plus: ^4.1.0
   youtube_player_flutter: ^9.1.3
+  flutter_image_compress: ^2.4.0
 
 dev_dependencies:
   flutter_test:

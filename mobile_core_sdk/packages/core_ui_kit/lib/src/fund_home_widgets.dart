@@ -982,6 +982,7 @@ class FundFeaturedFundCard extends StatelessWidget {
                                 style: appText.micro.copyWith(
                                   color: tag.foregroundColor,
                                   height: 1,
+                                  fontSize: 11,
                                 ),
                               ),
                             ),

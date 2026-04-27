@@ -263,6 +263,12 @@ abstract class AppLocalizations {
   /// **'Failed to choose an image. Please try again.'**
   String get discussionAvatarPickFailed;
 
+  /// No description provided for @profileImageSizeTooLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'The image is too large. Please choose an image under 10MB.'**
+  String get profileImageSizeTooLarge;
+
   /// No description provided for @discussionAvatarPhotoLibraryPermissionRequired.
   ///
   /// In en, this message translates to:

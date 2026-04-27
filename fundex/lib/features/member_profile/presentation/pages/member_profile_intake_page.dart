@@ -280,6 +280,9 @@ class _MemberProfileIntakePageState
               : AppPermissionKind.photos,
         );
         return null;
+      case ProfileDocumentImagePickStatus.sizeLimitExceeded:
+        await _showValidationMessage(context.l10n.profileImageSizeTooLarge);
+        return null;
       case ProfileDocumentImagePickStatus.failed:
         await _showValidationMessage(context.l10n.profileDocumentPickFailed);
         return null;

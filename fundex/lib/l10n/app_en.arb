@@ -27,6 +27,7 @@
   "discussionAvatarSaveAction": "Save avatar",
   "discussionAvatarSaveSuccess": "Avatar updated.",
   "discussionAvatarPickFailed": "Failed to choose an image. Please try again.",
+  "profileImageSizeTooLarge": "The image is too large. Please choose an image under 10MB.",
   "discussionAvatarPhotoLibraryPermissionRequired": "Allow photo library access to select an avatar image.",
   "discussionAvatarCropTitle": "Adjust avatar",
   "discussionAvatarCropHint": "Drag the image and pinch to zoom so the avatar fits inside the circle.",

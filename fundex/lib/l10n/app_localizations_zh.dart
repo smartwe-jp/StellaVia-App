@@ -90,6 +90,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get discussionAvatarPickFailed => '选择图片失败，请重试。';
 
   @override
+  String get profileImageSizeTooLarge => '图片过大，仅支持小于10MB的图片，请重新选择。';
+
+  @override
   String get discussionAvatarPhotoLibraryPermissionRequired => '请允许访问相册。';
 
   @override
@@ -4130,6 +4133,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get discussionAvatarPickFailed => '選擇圖片失敗，請再試一次。';
+
+  @override
+  String get profileImageSizeTooLarge => '圖片過大，僅支援小於10MB的圖片，請重新選擇。';
 
   @override
   String get discussionAvatarPhotoLibraryPermissionRequired => '請允許存取相簿。';

@@ -71,6 +71,9 @@ class _SettingsFaceVerificationPageState
               : AppPermissionKind.photos,
         );
         return null;
+      case ProfileDocumentImagePickStatus.sizeLimitExceeded:
+        AppNotice.show(context, message: context.l10n.profileImageSizeTooLarge);
+        return null;
       case ProfileDocumentImagePickStatus.failed:
         AppNotice.show(
           context,

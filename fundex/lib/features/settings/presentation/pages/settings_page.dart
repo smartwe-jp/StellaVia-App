@@ -204,7 +204,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     if (compactLicenseNumber.isEmpty) {
       return appInfo;
     }
-    return '$compactLicenseNumber \n $appInfo';
+    return '$compactLicenseNumber \n\n $appInfo';
   }
 
   @override
