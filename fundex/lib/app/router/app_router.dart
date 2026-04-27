@@ -19,6 +19,7 @@ import '../../features/investment/presentation/pages/secondary_market_buy_confir
 import '../../features/investment/presentation/pages/secondary_market_buy_order_page.dart';
 import '../../features/investment/presentation/pages/secondary_market_marketplace_detail_page.dart';
 import '../../features/investment/presentation/pages/secondary_market_marketplace_page.dart';
+import '../../features/investment/presentation/support/fund_lottery_apply_models.dart';
 import '../../features/investment/presentation/support/fund_lottery_apply_step.dart';
 import '../../features/main_shell/presentation/pages/main_shell_page.dart';
 import '../../features/member_profile/presentation/pages/member_avatar_page.dart';
@@ -243,12 +244,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                       final allowSubmittedResultAdvance =
                           state.uri.queryParameters['allowSubmittedAdvance'] !=
                           'false';
+                      final extra = state.extra;
                       return FundLotteryApplyFlowPage(
                         projectId: id,
                         initialStep:
                             initialStep ?? FundLotteryApplyStep.amountInput,
                         allowSubmittedResultAdvance:
                             allowSubmittedResultAdvance,
+                        initialSeed: extra is FundLotteryApplyFlowSeed
+                            ? extra
+                            : null,
                       );
                     },
                   ),

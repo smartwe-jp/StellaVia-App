@@ -3169,6 +3169,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageActiveFundRemainingUnitsLabel => '残口数';
 
   @override
+  String get myPageActiveFundFloatingYieldLabel => '変動';
+
+  @override
   String get myPageActiveFundProcessIdLabel => 'プロセスID';
 
   @override

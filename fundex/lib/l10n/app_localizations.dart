@@ -6176,6 +6176,12 @@ abstract class AppLocalizations {
   /// **'Remaining units'**
   String get myPageActiveFundRemainingUnitsLabel;
 
+  /// No description provided for @myPageActiveFundFloatingYieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Floating'**
+  String get myPageActiveFundFloatingYieldLabel;
+
   /// No description provided for @myPageActiveFundProcessIdLabel.
   ///
   /// In en, this message translates to:

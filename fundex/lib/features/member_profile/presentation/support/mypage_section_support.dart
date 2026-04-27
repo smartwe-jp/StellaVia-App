@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../investment/domain/entities/fund_project.dart';
+import '../../../investment/presentation/support/fund_lottery_apply_models.dart';
 import '../../../investment/presentation/support/fund_lottery_apply_step.dart';
 import '../../domain/entities/mypage_models.dart';
 
@@ -383,16 +384,19 @@ void handlePendingApplyTap(BuildContext context, MyPageApplyRecord record) {
     return;
   }
 
+  final seed = _buildLotteryApplyFlowSeed(record);
   switch (record.status) {
     case 0:
     case 2:
       context.push(
         '/funds/$projectId/lottery-apply?step=${FundLotteryApplyStep.submitted.queryValue}&allowSubmittedAdvance=false',
+        extra: seed,
       );
       return;
     case 3:
       context.push(
         '/funds/$projectId/lottery-apply?step=${FundLotteryApplyStep.selected.queryValue}',
+        extra: seed,
       );
       return;
     case 1:
@@ -406,9 +410,31 @@ void handlePendingApplyTap(BuildContext context, MyPageApplyRecord record) {
     default:
       context.push(
         '/funds/$projectId/lottery-apply?step=${FundLotteryApplyStep.submitted.queryValue}&allowSubmittedAdvance=false',
+        extra: seed,
       );
       return;
   }
+}
+
+FundLotteryApplyFlowSeed _buildLotteryApplyFlowSeed(MyPageApplyRecord record) {
+  final isSelected = record.status == 3;
+  final units = isSelected
+      ? record.passNum ?? record.investNum ?? record.applyNum
+      : record.applyNum ?? record.passNum ?? record.investNum;
+  final amount = isSelected
+      ? record.passMoney ?? record.investMoney ?? record.applyMoney
+      : record.applyMoney ?? record.passMoney ?? record.investMoney;
+  return FundLotteryApplyFlowSeed(
+    units: units != null && units > 0 ? units : null,
+    amount: _positiveIntOrNull(amount),
+  );
+}
+
+int? _positiveIntOrNull(num? value) {
+  if (value == null || value <= 0) {
+    return null;
+  }
+  return value.round();
 }
 
 String? resolveApplyWithdrawProcessId(MyPageApplyRecord record) {
@@ -493,13 +519,16 @@ String formatCoolingOffDeadlineLabel(
   return l10n.myPageCoolingOffDeadlineExpired(dateText);
 }
 
-String resolveYieldLabel(FundProject? project, {double? fallbackRatio}) {
-  final ratio =
-      project?.expectedDistributionRatioMax ??
-      project?.expectedDistributionRatioMin ??
-      project?.investorTypes.firstOrNull?.earningsRadio ??
-      fallbackRatio;
-  return formatYieldPercent(ratio);
+String resolveYieldLabel(
+  AppLocalizations l10n, {
+  required String? earningType,
+  required double? earningRatio,
+}) {
+  final normalizedType = earningType?.trim().toUpperCase();
+  if (normalizedType == 'FLOATING') {
+    return l10n.myPageActiveFundFloatingYieldLabel;
+  }
+  return formatYieldPercent(earningRatio);
 }
 
 String resolveOrderInquiryStatusLabel(
@@ -647,6 +676,7 @@ class MyPageInvestmentGroup {
     required this.investNum,
     required this.investNumValid,
     required this.investNumRemaining,
+    required this.earningType,
     required this.earningRatio,
     required this.latestCreateTime,
     required this.projectStatus,
@@ -659,6 +689,7 @@ class MyPageInvestmentGroup {
   final int investNum;
   final int investNumValid;
   final int investNumRemaining;
+  final String? earningType;
   final double? earningRatio;
   final DateTime? latestCreateTime;
   final int? projectStatus;
@@ -691,7 +722,7 @@ class MyPageActiveFundDetailSeed {
       investNumValid: record.investNumValid,
       investNumRemaining: record.investNumRemaining,
       projectStatus: record.projectStatus,
-      earningRatio: record.earningRadio ?? record.investorType?.earningsRadio,
+      earningRatio: record.earningRadio,
       processId: record.processId,
       investorCode: record.investorCode,
       createTime: record.createTime,
@@ -723,6 +754,7 @@ class _InvestmentGroupAccumulator {
       investNum = 0,
       investNumValid = 0,
       investNumRemaining = 0,
+      earningType = null,
       latestCreateTime = null,
       earningRatio = null,
       projectStatus = null;
@@ -734,6 +766,7 @@ class _InvestmentGroupAccumulator {
   int investNum;
   int investNumValid;
   int investNumRemaining;
+  String? earningType;
   double? earningRatio;
   DateTime? latestCreateTime;
   int? projectStatus;
@@ -744,7 +777,8 @@ class _InvestmentGroupAccumulator {
     investNum += record.investNum ?? 0;
     investNumValid += record.investNumValid ?? 0;
     investNumRemaining += record.investNumRemaining ?? 0;
-    earningRatio ??= record.earningRadio ?? record.investorType?.earningsRadio;
+    earningType ??= record.earningType;
+    earningRatio ??= record.earningRadio;
     projectStatus ??= record.projectStatus;
     final candidateDate = parseApiDate(record.createTime);
     if (compareDateTimeDesc(latestCreateTime, candidateDate) > 0) {
@@ -762,6 +796,7 @@ class _InvestmentGroupAccumulator {
       investNum: investNum,
       investNumValid: investNumValid,
       investNumRemaining: investNumRemaining,
+      earningType: earningType,
       earningRatio: earningRatio,
       latestCreateTime: latestCreateTime,
       projectStatus: projectStatus,

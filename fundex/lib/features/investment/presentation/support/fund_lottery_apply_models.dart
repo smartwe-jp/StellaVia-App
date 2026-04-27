@@ -19,6 +19,13 @@ class FundLotteryDocumentGroup {
   final List<FundLotteryDocumentItem> items;
 }
 
+class FundLotteryApplyFlowSeed {
+  const FundLotteryApplyFlowSeed({this.units, this.amount});
+
+  final int? units;
+  final int? amount;
+}
+
 class FundLotterySummaryRow {
   const FundLotterySummaryRow({required this.label, required this.value});
 

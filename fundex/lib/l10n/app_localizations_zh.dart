@@ -3132,6 +3132,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageActiveFundRemainingUnitsLabel => '剩余口数';
 
   @override
+  String get myPageActiveFundFloatingYieldLabel => '浮动';
+
+  @override
   String get myPageActiveFundProcessIdLabel => '流程ID';
 
   @override
@@ -7180,6 +7183,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageActiveFundRemainingUnitsLabel => '剩餘口數';
+
+  @override
+  String get myPageActiveFundFloatingYieldLabel => '浮動';
 
   @override
   String get myPageActiveFundProcessIdLabel => '流程ID';

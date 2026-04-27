@@ -1177,6 +1177,7 @@
   "myPageActiveFundValidUnitsLabel": "有效口數",
   "myPageActiveFundSellingUnitsLabel": "賣出執行中",
   "myPageActiveFundRemainingUnitsLabel": "剩餘口數",
+  "myPageActiveFundFloatingYieldLabel": "浮動",
   "myPageActiveFundProcessIdLabel": "流程ID",
   "myPageActiveFundInvestorCodeLabel": "投資者區分",
   "myPageActiveFundAppliedAtLabel": "申請時間",

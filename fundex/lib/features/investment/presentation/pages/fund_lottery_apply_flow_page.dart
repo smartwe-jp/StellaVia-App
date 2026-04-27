@@ -28,11 +28,13 @@ class FundLotteryApplyFlowPage extends ConsumerStatefulWidget {
     required this.projectId,
     this.initialStep = FundLotteryApplyStep.amountInput,
     this.allowSubmittedResultAdvance = true,
+    this.initialSeed,
   });
 
   final String projectId;
   final FundLotteryApplyStep initialStep;
   final bool allowSubmittedResultAdvance;
+  final FundLotteryApplyFlowSeed? initialSeed;
 
   @override
   ConsumerState<FundLotteryApplyFlowPage> createState() =>
@@ -68,13 +70,22 @@ class _FundLotteryApplyFlowPageState
   void initState() {
     super.initState();
     _currentStep = widget.initialStep;
-    _unitsController = TextEditingController(text: _minimumUnits.toString());
+    _selectedUnits = _resolveInitialUnits();
+    _unitsController = TextEditingController(text: _selectedUnits.toString());
     _unitsController.addListener(_handleUnitsChanged);
     if (_requiresVerifiedApplicationAccess) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         unawaited(_ensureVerifiedApplicationAccess());
       });
     }
+  }
+
+  int _resolveInitialUnits() {
+    final units = widget.initialSeed?.units;
+    if (units == null || units < _minimumUnits) {
+      return _minimumUnits;
+    }
+    return units;
   }
 
   @override
@@ -286,6 +297,16 @@ class _FundLotteryApplyFlowPageState
     return _currencyFormatter(context).format(value);
   }
 
+  int _resolveTotalAmount(int calculatedTotalAmount) {
+    final seedAmount = widget.initialSeed?.amount;
+    if (widget.initialStep.index >= FundLotteryApplyStep.submitted.index &&
+        seedAmount != null &&
+        seedAmount > 0) {
+      return seedAmount;
+    }
+    return calculatedTotalAmount;
+  }
+
   String _resolveLotteryDate(BuildContext context, FundProject project) {
     final parsed =
         _parseDate(project.distributionDate) ??
@@ -336,13 +357,6 @@ class _FundLotteryApplyFlowPageState
       return project.expectedDistributionRatioMin!;
     }
     return 8.5;
-  }
-
-  String _formatYieldPercent(double value) {
-    final hasFraction = value % 1 != 0;
-    return hasFraction
-        ? '${value.toStringAsFixed(1)}%'
-        : '${value.toStringAsFixed(0)}%';
   }
 
   int _resolveUnitAmount(
@@ -626,19 +640,19 @@ class _FundLotteryApplyFlowPageState
         final projectName = project.projectName.trim().isEmpty
             ? l10n.fundDetailUnknownValue
             : project.projectName.trim();
-        final yieldValue = _formatYieldPercent(_resolveYield(project));
         final lotteryDate = _resolveLotteryDate(context, project);
         final unitAmount = _resolveUnitAmount(project, applyDetail);
         final resolvedMaximumUnits = _resolveMaximumUnits(applyDetail);
         final maximumAmount = resolvedMaximumUnits * unitAmount;
         _currentMaximumUnits = resolvedMaximumUnits;
-        final totalAmount = _selectedUnits * unitAmount;
+        final calculatedTotalAmount = _selectedUnits * unitAmount;
+        final totalAmount = _resolveTotalAmount(calculatedTotalAmount);
         final canProceedStep1 = _canProceedStep1(
           units: _selectedUnits,
           unitAmount: unitAmount,
           maximumAmount: maximumAmount,
         );
-        final exceededMaximum = totalAmount > maximumAmount;
+        final exceededMaximum = calculatedTotalAmount > maximumAmount;
         final estimatedDistribution =
             (totalAmount * _resolveYield(project) / 100).round();
         final formatter = _currencyFormatter(context);

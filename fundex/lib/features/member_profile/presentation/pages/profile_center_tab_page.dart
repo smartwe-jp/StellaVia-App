@@ -597,8 +597,9 @@ Widget _buildActiveFundsSection(
                     : l10n.myPageResultAnnouncementTbd,
                 yieldLabel: l10n.homeEstimatedYieldLabel,
                 annualYield: resolveYieldLabel(
-                  project,
-                  fallbackRatio: group.earningRatio,
+                  l10n,
+                  earningType: group.earningType,
+                  earningRatio: group.earningRatio,
                 ),
                 statusLabel: resolveMyPageActiveFundStatusLabel(l10n, status),
                 statusBackgroundColor:

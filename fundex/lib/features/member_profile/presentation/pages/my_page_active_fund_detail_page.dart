@@ -600,7 +600,7 @@ class _ActiveFundSummary {
       projectStatus: latest.projectStatus,
       processId: latest.processId,
       investorCode: latest.investorCode,
-      earningRatio: latest.earningRadio ?? latest.investorType?.earningsRadio,
+      earningRatio: latest.earningRadio,
       createTime: latest.createTime,
       withdrawalTime: latest.withdrawalTime,
       investMoney: null,

@@ -3349,6 +3349,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageActiveFundRemainingUnitsLabel => 'Remaining units';
 
   @override
+  String get myPageActiveFundFloatingYieldLabel => 'Floating';
+
+  @override
   String get myPageActiveFundProcessIdLabel => 'Process ID';
 
   @override
