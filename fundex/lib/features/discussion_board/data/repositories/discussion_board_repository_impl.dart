@@ -306,7 +306,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
 
   DiscussionAuthor _mapAuthor(DiscussionCommentDto row) {
     final username = row.username.trim();
-    final displayName = _maskUserName(username, 'User**');
+    final displayName = _resolveUserName(username, 'User**');
     final avatarText = _firstVisibleCharacter(displayName);
     final colorValues = _avatarGradientForUser(row.userId ?? row.id);
     return DiscussionAuthor(
@@ -325,7 +325,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
   }
 
   DiscussionAuthor _mapQuoteAuthor(DiscussionQuoteDto quote, int seed) {
-    final displayName = _maskUserName(quote.username, 'User**');
+    final displayName = _resolveUserName(quote.username, 'User**');
     final avatarText = _firstVisibleCharacter(displayName);
     return DiscussionAuthor(
       id: 'quote_$seed',
@@ -442,16 +442,12 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
     return '$visible***@';
   }
 
-  String _maskUserName(String username, String fallbackName) {
+  String _resolveUserName(String username, String fallbackName) {
     final normalized = username.trim();
     if (normalized.isEmpty) {
       return fallbackName;
     }
-    if (normalized.contains('*')) {
-      return normalized;
-    }
-    final first = _firstVisibleCharacter(normalized);
-    return '$first**';
+    return normalized;
   }
 
   String _firstVisibleCharacter(String value) {
