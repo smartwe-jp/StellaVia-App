@@ -61,7 +61,6 @@ class FundProjectDetailViewDataBuilder {
   static FundProjectDetailViewData build({
     required BuildContext context,
     required FundProject project,
-    FundProjectApplyDetail? applyDetail,
     SettingsOperatingCompanyContent? operatingCompanyContent,
   }) {
     final locale = Localizations.localeOf(context);
@@ -86,12 +85,7 @@ class FundProjectDetailViewDataBuilder {
     );
 
     return FundProjectDetailViewData(
-      infoItems: _buildPrimaryInfoItems(
-        context,
-        project,
-        applyDetail,
-        decimalFormatter,
-      ),
+      infoItems: _buildPrimaryInfoItems(context, project, decimalFormatter),
       propertyItems: _buildPropertyInfoItems(
         context,
         project,
@@ -128,12 +122,11 @@ class FundProjectDetailViewDataBuilder {
 List<FundDetailInfoItemData> _buildPrimaryInfoItems(
   BuildContext context,
   FundProject project,
-  FundProjectApplyDetail? applyDetail,
   NumberFormat decimalFormatter,
 ) {
   return <FundDetailInfoItemData>[
     FundDetailInfoItemData(
-      label: context.l10n.fundDetailTargetAmountLabel,
+      label: context.l10n.fundDetailFundTotalLabel,
       value: _resolveTargetAmountText(project, decimalFormatter),
     ),
     FundDetailInfoItemData(
@@ -141,16 +134,7 @@ List<FundDetailInfoItemData> _buildPrimaryInfoItems(
       value: _resolveInvestmentUnitText(context, project, decimalFormatter),
     ),
     FundDetailInfoItemData(
-      label: context.l10n.fundDetailMaximumInvestmentPerPersonLabel,
-      value: _resolveMaximumInvestmentPerPersonText(
-        context,
-        project,
-        applyDetail,
-        decimalFormatter,
-      ),
-    ),
-    FundDetailInfoItemData(
-      label: context.l10n.fundDetailFundTotalLabel,
+      label: context.l10n.myPageApplyAmountLabel,
       value: _formatYenAmount(project.currentlySubscribed, decimalFormatter),
     ),
     FundDetailInfoItemData(
@@ -767,46 +751,6 @@ String _resolveInvestmentUnitText(
   );
 }
 
-String _resolveMaximumInvestmentPerPersonText(
-  BuildContext context,
-  FundProject project,
-  FundProjectApplyDetail? applyDetail,
-  NumberFormat decimalFormatter,
-) {
-  final unitAmount = applyDetail?.investmentUnit ?? project.investmentUnit;
-  final unitCount = _resolveOpenApplyInvestor(applyDetail)?.availableApplyTotal;
-  if (unitAmount == null ||
-      unitAmount <= 0 ||
-      unitCount == null ||
-      unitCount < 0) {
-    return context.l10n.fundDetailUnknownValue;
-  }
-
-  final maximumAmount = unitCount * unitAmount;
-  if (maximumAmount < 0) {
-    return context.l10n.fundDetailUnknownValue;
-  }
-
-  return context.l10n.fundDetailMaximumInvestmentPerPersonValue(
-    _formatAmount(maximumAmount, decimalFormatter),
-    decimalFormatter.format(unitCount),
-  );
-}
-
-FundProjectApplyInvestor? _resolveOpenApplyInvestor(
-  FundProjectApplyDetail? applyDetail,
-) {
-  if (applyDetail == null) {
-    return null;
-  }
-  for (final investor in applyDetail.investorList) {
-    if (investor.isOpen == true) {
-      return investor;
-    }
-  }
-  return null;
-}
-
 String _resolvePeriodText(BuildContext context, FundProject project) {
   final period = project.investmentPeriod?.trim();
   if (period != null && period.isNotEmpty) {
@@ -1002,13 +946,6 @@ String _defaultPropertyBuiltYear(BuildContext context) {
 }
 
 String _formatCurrency(int? amount, NumberFormat formatter) {
-  if (amount == null) {
-    return '--';
-  }
-  return formatter.format(amount);
-}
-
-String _formatAmount(int? amount, NumberFormat formatter) {
   if (amount == null) {
     return '--';
   }

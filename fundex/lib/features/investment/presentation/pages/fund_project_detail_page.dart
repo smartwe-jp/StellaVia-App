@@ -35,6 +35,23 @@ class FundProjectDetailPage extends ConsumerStatefulWidget {
 class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
   int _selectedDetailTabIndex = 0;
   final GlobalKey _gainTypeDescriptionSectionKey = GlobalKey();
+  bool _didRequestInitialRefresh = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_didRequestInitialRefresh) {
+      return;
+    }
+    _didRequestInitialRefresh = true;
+    _refreshInitialDetailData();
+  }
+
+  void _refreshInitialDetailData() {
+    final projectId = widget.projectId;
+    ref.invalidate(fundProjectDetailProvider(projectId));
+    ref.invalidate(fundProjectApplyDetailProvider(projectId));
+  }
 
   Future<void> _showFundApplyVerificationRequiredDialog() {
     final l10n = context.l10n;
@@ -193,7 +210,6 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
             ),
           );
         }
-        final applyDetail = applyDetailAsync.requireValue;
         final favoriteProjectId = project.id.trim().isEmpty
             ? projectId.trim()
             : project.id.trim();
@@ -219,7 +235,6 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
         final viewData = FundProjectDetailViewDataBuilder.build(
           context: context,
           project: project,
-          applyDetail: applyDetail,
           operatingCompanyContent: operatingCompanyContent,
         );
         final gainTypeLabel = resolveFundProjectGainTypeLabel(
@@ -301,6 +316,19 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           FundProjectDetailTitleBlock(project: project),
+                          if (featuresText != null) ...<Widget>[
+                            const SizedBox(height: UiTokens.spacing16),
+                            FundDetailContentCard(
+                              child: Text(
+                                featuresText,
+                                style: appText.bodySemi.copyWith(
+                                  color: colors.highlightGold,
+                                  height: 1.7,
+                                ),
+                              ),
+                            ),
+                          ],
+
                           if (descriptionText != null) ...<Widget>[
                             const SizedBox(height: UiTokens.spacing12),
                             FundDetailDisclosureList(
@@ -394,21 +422,6 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                         items: viewData.propertyItems,
                       ),
                     ),
-                    if (featuresText != null) ...<Widget>[
-                      const SizedBox(height: UiTokens.spacing16),
-                      FundDetailSection(
-                        title: context.l10n.fundDetailFeaturesTitle,
-                        child: FundDetailContentCard(
-                          child: Text(
-                            featuresText,
-                            style: appText.bodySemi.copyWith(
-                              color: colors.textSecondary,
-                              height: 1.7,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
                     if (staticContent != null) ...<Widget>[
                       const SizedBox(height: 18),
                       if (hasGainType) ...<Widget>[
@@ -492,10 +505,10 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           spacing: UiTokens.spacing8,
                           children: <Widget>[
-                            if (viewData.contractOverviewItems.isNotEmpty)
-                              FundDetailInfoTable(
-                                items: viewData.contractOverviewItems,
-                              ),
+                            // if (viewData.contractOverviewItems.isNotEmpty)
+                            //   FundDetailInfoTable(
+                            //     items: viewData.contractOverviewItems,
+                            //   ),
                             if (staticContent != null) ...<Widget>[
                               if (viewData.contractOverviewItems.isNotEmpty)
                                 const SizedBox(height: UiTokens.spacing8),
@@ -807,8 +820,6 @@ String _formatAchievementRate(double? value) {
     return '--';
   }
   final percentage = value * 100;
-  final text = percentage.toStringAsFixed(
-    percentage.truncateToDouble() == percentage ? 0 : 1,
-  );
-  return '$text%';
+  final truncated = (percentage * 100).truncate() / 100;
+  return '${truncated.toStringAsFixed(2)}%';
 }

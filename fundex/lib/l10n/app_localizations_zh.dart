@@ -2053,7 +2053,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String lotteryApplyStep4Body(Object projectName) {
-    return '你已成功申请「$projectName」抽签。结果将于下方日期公布，并通过 App 通知告知。';
+    return '你已成功申请「$projectName」抽签。结果将通过 App 通知告知。';
   }
 
   @override
@@ -6100,7 +6100,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String lotteryApplyStep4Body(Object projectName) {
-    return '你已成功申請「$projectName」抽籤。結果將於下方日期公布，並透過 App 通知告知。';
+    return '你已成功申請「$projectName」抽籤。結果將透過 App 通知告知。';
   }
 
   @override

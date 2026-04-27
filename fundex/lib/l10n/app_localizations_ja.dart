@@ -2078,7 +2078,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String lotteryApplyStep4Body(Object projectName) {
-    return '「$projectName」の抽選に申し込みました。抽選結果は下記の日程で発表予定です。結果はアプリの通知でお知らせいたします。';
+    return '「$projectName」の抽選に申し込みました。結果はアプリの通知でお知らせいたします。';
   }
 
   @override
@@ -2508,7 +2508,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageTransactionHistoryAction => '取引履歴を見る';
 
   @override
-  String get myPageApplyAmountLabel => '申込金額';
+  String get myPageApplyAmountLabel => '応募金額';
 
   @override
   String get myPageResultAnnouncementLabel => '結果発表';

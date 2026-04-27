@@ -765,7 +765,7 @@
   "lotteryApplySubmitAction": "申请抽签",
   "lotteryApplySubmitFailedFallback": "抽签申请失败，请稍后重试。",
   "lotteryApplyStep4Headline": "抽签申请已完成！",
-  "lotteryApplyStep4Body": "你已成功申请「{projectName}」抽签。结果将于下方日期公布，并通过 App 通知告知。",
+  "lotteryApplyStep4Body": "你已成功申请「{projectName}」抽签。结果将通过 App 通知告知。",
   "@lotteryApplyStep4Body": {
     "placeholders": {
       "projectName": {}

@@ -333,7 +333,7 @@ FundLabeledValue buildApplySecondaryRow(
           l10n.myPageResultAnnouncementTbd,
     ),
     1 || 4 || 5 => FundLabeledValue(
-      label: l10n.myPageApplyInvalidAtLabel,
+      label: l10n.myPageApplySubmittedAtLabel,
       value:
           formatDateTimeOrNull(record.passTime ?? record.applyTime) ??
           l10n.myPageResultAnnouncementTbd,

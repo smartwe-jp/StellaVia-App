@@ -35,11 +35,6 @@
   },
   "legalSections": [
     {
-      "id": "distribution",
-      "title": "Distribution of returns and profits",
-      "body": "Profits generated from rent and other income from the target property, after deducting necessary expenses such as management fees, repair reserves, property tax, and operator fees, are distributed every six months based on the investment ratio. Distribution amounts are paid after withholding tax (20.42%)."
-    },
-    {
       "id": "tax",
       "title": "Tax treatment",
       "body": "Distributions are classified as miscellaneous income subject to comprehensive taxation. A withholding tax of 20.42% (income tax 20% + special reconstruction tax 0.42%) will be deducted at payment. Tax filing may be required. Please consult a tax office or tax advisor for details."
@@ -48,11 +43,6 @@
       "id": "cancellation",
       "title": "Contract cancellation",
       "body": "For 8 days from the day after receiving the contract documents, you may exercise the cooling-off right (unconditional cancellation) in writing. After this period, early termination is not permitted in principle, except for unavoidable circumstances."
-    },
-    {
-      "id": "rights",
-      "title": "Rights related to the target property",
-      "body": "Ownership: Acquired and held by StellaVia Inc. (operator). No mortgage is established. Investors, as silent partnership members, have the right to claim profit distribution but do not acquire ownership of the real estate."
     }
   ]
 }

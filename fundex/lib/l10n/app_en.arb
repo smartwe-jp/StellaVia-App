@@ -765,7 +765,7 @@
   "lotteryApplySubmitAction": "Submit lottery application",
   "lotteryApplySubmitFailedFallback": "Failed to submit lottery application. Please try again later.",
   "lotteryApplyStep4Headline": "Lottery application submitted!",
-  "lotteryApplyStep4Body": "Your lottery application for \"{projectName}\" has been completed. The result will be announced on the date below, and you'll receive a notification in the app.",
+  "lotteryApplyStep4Body": "Your lottery application for \"{projectName}\" has been completed. and you'll receive a notification in the app.",
   "@lotteryApplyStep4Body": {
     "placeholders": {
       "projectName": {}

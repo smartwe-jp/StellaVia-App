@@ -30,6 +30,7 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
     this.balanceWarningBody,
     this.balanceWarningActionLabel,
     this.onBalanceWarningActionTap,
+    this.showEstimatedDistribution = false,
   });
 
   final String title;
@@ -57,6 +58,7 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
   final String? balanceWarningBody;
   final String? balanceWarningActionLabel;
   final VoidCallback? onBalanceWarningActionTap;
+  final bool showEstimatedDistribution;
 
   @override
   Widget build(BuildContext context) {
@@ -225,52 +227,54 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
             onActionTap: onBalanceWarningActionTap,
           ),
         ],
-        const SizedBox(height: 18),
-        DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: <Color>[colors.primarySubtle, colors.surface],
+        if (showEstimatedDistribution) ...<Widget>[
+          const SizedBox(height: 18),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: <Color>[colors.primarySubtle, colors.surface],
+              ),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: colors.primary.withValues(alpha: 0.18),
+                width: 1.5,
+              ),
             ),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: colors.primary.withValues(alpha: 0.18),
-              width: 1.5,
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(14, 22, 14, 22),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  estimatedDistributionLabel,
-                  style: appText.meta.copyWith(color: colors.textSecondary),
-                ),
-                const SizedBox(height: 4),
-                RichText(
-                  text: TextSpan(
-                    style: appText.numericHeadline.copyWith(
-                      color: colors.highlightGold,
-                      fontSize: 26,
-                      fontWeight: FontWeight.w900,
-                    ),
-                    children: <InlineSpan>[
-                      TextSpan(text: estimatedDistributionAmount),
-                      TextSpan(
-                        text: ' $estimatedDistributionSuffix',
-                        style: appText.numericBody.copyWith(
-                          color: colors.highlightGold,
-                        ),
-                      ),
-                    ],
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(14, 22, 14, 22),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    estimatedDistributionLabel,
+                    style: appText.meta.copyWith(color: colors.textSecondary),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 4),
+                  RichText(
+                    text: TextSpan(
+                      style: appText.numericHeadline.copyWith(
+                        color: colors.highlightGold,
+                        fontSize: 26,
+                        fontWeight: FontWeight.w900,
+                      ),
+                      children: <InlineSpan>[
+                        TextSpan(text: estimatedDistributionAmount),
+                        TextSpan(
+                          text: ' $estimatedDistributionSuffix',
+                          style: appText.numericBody.copyWith(
+                            color: colors.highlightGold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
+        ],
         const SizedBox(height: 18),
         PrimaryCtaButton(
           label: nextButtonLabel,
@@ -306,76 +310,6 @@ class _UnitAdjustButton extends StatelessWidget {
           ),
         ),
         child: Icon(icon, size: 22),
-      ),
-    );
-  }
-}
-
-class _BalanceCard extends StatelessWidget {
-  const _BalanceCard({
-    required this.label,
-    required this.value,
-    required this.actionLabel,
-    required this.onTap,
-  });
-
-  final String label;
-  final String value;
-  final String actionLabel;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.surfaceAlt,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    label,
-                    style: appText.meta.copyWith(color: colors.textSecondary),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    value,
-                    style: appText.numericTitle.copyWith(
-                      fontSize: 19,
-                      fontWeight: FontWeight.w900,
-                      color: colors.textPrimary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            TextButton(
-              onPressed: onTap,
-              style: TextButton.styleFrom(
-                backgroundColor: colors.primarySubtle,
-                foregroundColor: colors.primary,
-                minimumSize: const Size(74, 30),
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text(
-                actionLabel,
-                style: appText.chip.copyWith(color: colors.primary),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

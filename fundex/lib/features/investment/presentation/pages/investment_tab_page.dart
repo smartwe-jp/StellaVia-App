@@ -153,8 +153,8 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
       return '--';
     }
     final percentage = ratio * 100;
-    final hasFraction = percentage % 1 != 0;
-    return '${percentage.toStringAsFixed(hasFraction ? 1 : 0)}%';
+    final truncated = (percentage * 100).truncate() / 100;
+    return '${truncated.toStringAsFixed(2)}%';
   }
 
   DateTime? _parseDateTime(String? raw) {

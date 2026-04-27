@@ -4085,7 +4085,7 @@ abstract class AppLocalizations {
   /// No description provided for @lotteryApplyStep4Body.
   ///
   /// In en, this message translates to:
-  /// **'Your lottery application for \"{projectName}\" has been completed. The result will be announced on the date below, and you\'ll receive a notification in the app.'**
+  /// **'Your lottery application for \"{projectName}\" has been completed. and you\'ll receive a notification in the app.'**
   String lotteryApplyStep4Body(Object projectName);
 
   /// No description provided for @lotteryApplyResultAnnouncementDateLabel.

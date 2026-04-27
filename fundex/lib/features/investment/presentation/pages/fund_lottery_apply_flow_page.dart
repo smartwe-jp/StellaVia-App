@@ -796,11 +796,11 @@ class _FundLotteryApplyFlowPageState
                                 label: l10n.lotteryApplyInvestmentAmountLabel,
                                 value: amountText,
                               ),
-                              FundLotterySummaryRow(
-                                label: l10n.fundDetailEstimatedYieldAnnualLabel,
-                                value:
-                                    '${l10n.lotteryApplyAnnualYieldPrefix} $yieldValue',
-                              ),
+                              // FundLotterySummaryRow(
+                              //   label: l10n.fundDetailEstimatedYieldAnnualLabel,
+                              //   value:
+                              //       '${l10n.lotteryApplyAnnualYieldPrefix} $yieldValue',
+                              // ),
                               FundLotterySummaryRow(
                                 label: l10n.fundListMethodLabel,
                                 value: l10n.homeTagLottery,
@@ -810,10 +810,10 @@ class _FundLotteryApplyFlowPageState
                                 value:
                                     '${_selectedUnits.toString()}${l10n.lotteryApplyStep1UnitSuffix}',
                               ),
-                              FundLotterySummaryRow(
-                                label: l10n.fundDetailLotteryDateLabel,
-                                value: lotteryDate,
-                              ),
+                              // FundLotterySummaryRow(
+                              //   label: l10n.fundDetailLotteryDateLabel,
+                              //   value: lotteryDate,
+                              // ),
                             ],
                             noticeTitle: l10n.lotteryApplyNoticeTitle,
                             noticeBody: l10n.lotteryApplyNoticeBody,

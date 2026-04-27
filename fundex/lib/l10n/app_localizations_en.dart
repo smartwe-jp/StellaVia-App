@@ -2197,7 +2197,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String lotteryApplyStep4Body(Object projectName) {
-    return 'Your lottery application for \"$projectName\" has been completed. The result will be announced on the date below, and you\'ll receive a notification in the app.';
+    return 'Your lottery application for \"$projectName\" has been completed. and you\'ll receive a notification in the app.';
   }
 
   @override
