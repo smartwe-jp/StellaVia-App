@@ -1616,7 +1616,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeInvestmentFlowStep1Body.
   ///
   /// In en, this message translates to:
-  /// **'Register instantly\nwith your email'**
+  /// **'Register instantly with your email'**
   String get homeInvestmentFlowStep1Body;
 
   /// No description provided for @homeInvestmentFlowStep2Title.
@@ -1628,7 +1628,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeInvestmentFlowStep2Body.
   ///
   /// In en, this message translates to:
-  /// **'Complete secure\nidentity verification'**
+  /// **'Complete secure identity verification'**
   String get homeInvestmentFlowStep2Body;
 
   /// No description provided for @homeInvestmentFlowStep3Title.
@@ -1640,7 +1640,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeInvestmentFlowStep3Body.
   ///
   /// In en, this message translates to:
-  /// **'Invest in curated\nfund opportunities'**
+  /// **'Invest in curated fund opportunities'**
   String get homeInvestmentFlowStep3Body;
 
   /// No description provided for @homeReminderProfileTitle.

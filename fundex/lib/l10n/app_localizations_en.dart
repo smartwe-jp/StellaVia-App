@@ -839,21 +839,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeInvestmentFlowStep1Body =>
-      'Register instantly\nwith your email';
+      'Register instantly with your email';
 
   @override
   String get homeInvestmentFlowStep2Title => 'Verify Identity';
 
   @override
   String get homeInvestmentFlowStep2Body =>
-      'Complete secure\nidentity verification';
+      'Complete secure identity verification';
 
   @override
   String get homeInvestmentFlowStep3Title => 'Start Investing';
 
   @override
   String get homeInvestmentFlowStep3Body =>
-      'Invest in curated\nfund opportunities';
+      'Invest in curated fund opportunities';
 
   @override
   String get homeReminderProfileTitle => 'Complete your profile to get started';

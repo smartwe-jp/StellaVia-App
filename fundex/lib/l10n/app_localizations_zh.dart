@@ -774,19 +774,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeInvestmentFlowStep1Title => '会员注册';
 
   @override
-  String get homeInvestmentFlowStep1Body => '通过邮箱\n立即注册';
+  String get homeInvestmentFlowStep1Body => '通过邮箱立即注册';
 
   @override
   String get homeInvestmentFlowStep2Title => '本人验证';
 
   @override
-  String get homeInvestmentFlowStep2Body => '安全完成\n本人认证';
+  String get homeInvestmentFlowStep2Body => '安全完成本人认证';
 
   @override
   String get homeInvestmentFlowStep3Title => '开始投资';
 
   @override
-  String get homeInvestmentFlowStep3Body => '即可投资\n严选基金';
+  String get homeInvestmentFlowStep3Body => '即可投资严选基金';
 
   @override
   String get homeReminderProfileTitle => '填写个人资料以开始出资';
@@ -4816,19 +4816,19 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeInvestmentFlowStep1Title => '會員註冊';
 
   @override
-  String get homeInvestmentFlowStep1Body => '透過電子郵件\n立即註冊';
+  String get homeInvestmentFlowStep1Body => '透過電子郵件立即註冊';
 
   @override
   String get homeInvestmentFlowStep2Title => '本人驗證';
 
   @override
-  String get homeInvestmentFlowStep2Body => '安全完成\n本人認證';
+  String get homeInvestmentFlowStep2Body => '安全完成本人認證';
 
   @override
   String get homeInvestmentFlowStep3Title => '開始投資';
 
   @override
-  String get homeInvestmentFlowStep3Body => '即可投資\n嚴選基金';
+  String get homeInvestmentFlowStep3Body => '即可投資嚴選基金';
 
   @override
   String get homeReminderProfileTitle => '填寫個人資料以開始出資';
