@@ -787,19 +787,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeAttractionAreaTitle => 'Focused on hotels, inns,';
 
   @override
-  String get homeAttractionAreaBody => 'and resorts.';
+  String get homeAttractionAreaBody => ' and resorts.';
 
   @override
   String get homeAttractionStructureTitle => 'Stay at the property';
 
   @override
-  String get homeAttractionStructureBody => 'you invested in.';
+  String get homeAttractionStructureBody => ' you invested in.';
 
   @override
   String get homeAttractionFundsTitle => 'Protect your assets with';
 
   @override
-  String get homeAttractionFundsBody => 'a two-layer shield.';
+  String get homeAttractionFundsBody => ' a two-layer shield.';
 
   @override
   String get homeAttractionAreaDetailBody =>

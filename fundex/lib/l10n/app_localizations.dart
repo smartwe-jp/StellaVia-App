@@ -1526,7 +1526,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeAttractionAreaBody.
   ///
   /// In en, this message translates to:
-  /// **'and resorts.'**
+  /// **' and resorts.'**
   String get homeAttractionAreaBody;
 
   /// No description provided for @homeAttractionStructureTitle.
@@ -1538,7 +1538,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeAttractionStructureBody.
   ///
   /// In en, this message translates to:
-  /// **'you invested in.'**
+  /// **' you invested in.'**
   String get homeAttractionStructureBody;
 
   /// No description provided for @homeAttractionFundsTitle.
@@ -1550,7 +1550,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeAttractionFundsBody.
   ///
   /// In en, this message translates to:
-  /// **'a two-layer shield.'**
+  /// **' a two-layer shield.'**
   String get homeAttractionFundsBody;
 
   /// No description provided for @homeAttractionAreaDetailBody.
