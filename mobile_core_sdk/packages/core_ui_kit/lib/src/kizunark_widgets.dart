@@ -457,12 +457,12 @@ class KizunarkPostCard extends StatelessWidget {
                               ),
                           ],
                         ),
-                        Text(
-                          accountText,
-                          style: appText.meta.copyWith(
-                            color: colors.textTertiary,
-                          ),
-                        ),
+                        // Text(
+                        //   accountText,
+                        //   style: appText.meta.copyWith(
+                        //     color: colors.textTertiary,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
