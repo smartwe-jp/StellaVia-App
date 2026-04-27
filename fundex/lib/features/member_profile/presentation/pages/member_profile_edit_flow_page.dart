@@ -1188,6 +1188,7 @@ class _MemberProfileEditFlowPageState
     return <DropdownMenuItem<int>>[
       DropdownMenuItem<int>(value: 0, child: Text(l10n.memberProfileSexFemale)),
       DropdownMenuItem<int>(value: 1, child: Text(l10n.memberProfileSexMale)),
+      DropdownMenuItem<int>(value: 2, child: Text(l10n.memberProfileSexOther)),
     ];
   }
 
@@ -1785,7 +1786,7 @@ bool _isRemoteImageUrl(String? value) {
 }
 
 int? _normalizeSex(int? value) {
-  return value == 0 || value == 1 ? value : null;
+  return value == 0 || value == 1 || value == 2 ? value : null;
 }
 
 String _joinNonEmpty(List<String?> values) {

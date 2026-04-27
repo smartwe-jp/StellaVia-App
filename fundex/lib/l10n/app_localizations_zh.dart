@@ -3602,6 +3602,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileSexMale => '男';
 
   @override
+  String get memberProfileSexOther => '其他';
+
+  @override
   String get memberProfileTaxCountryLabel => '居住国';
 
   @override
@@ -7629,6 +7632,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get memberProfileSexMale => '男';
+
+  @override
+  String get memberProfileSexOther => '其他';
 
   @override
   String get memberProfileTaxCountryLabel => '居住國';

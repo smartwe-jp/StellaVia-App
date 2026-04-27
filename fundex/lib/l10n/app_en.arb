@@ -1364,6 +1364,7 @@
   "memberProfileSexLabel": "Sex",
   "memberProfileSexFemale": "Female",
   "memberProfileSexMale": "Male",
+  "memberProfileSexOther": "Other",
   "memberProfileTaxCountryLabel": "Country of residence",
   "memberProfileTaxCountryHint": "Japan",
   "memberProfileUnderageTitle": "This service is available only to users aged 18 or older.",

@@ -1364,6 +1364,7 @@
   "memberProfileSexLabel": "性別",
   "memberProfileSexFemale": "女性",
   "memberProfileSexMale": "男性",
+  "memberProfileSexOther": "その他",
   "memberProfileTaxCountryLabel": "居住国",
   "memberProfileTaxCountryHint": "日本",
   "memberProfileUnderageTitle": "本サービスは18歳以上の方のみご利用いただけます。",

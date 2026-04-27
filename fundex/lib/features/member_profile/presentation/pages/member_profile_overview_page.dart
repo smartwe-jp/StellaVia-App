@@ -905,6 +905,7 @@ String _sexLabel(AppLocalizations l10n, int? sex) {
   return switch (sex) {
     0 => l10n.memberProfileSexFemale,
     1 => l10n.memberProfileSexMale,
+    2 => l10n.memberProfileSexOther,
     _ => '',
   };
 }

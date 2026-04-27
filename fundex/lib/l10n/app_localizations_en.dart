@@ -3848,6 +3848,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memberProfileSexMale => 'Male';
 
   @override
+  String get memberProfileSexOther => 'Other';
+
+  @override
   String get memberProfileTaxCountryLabel => 'Country of residence';
 
   @override

@@ -7088,6 +7088,12 @@ abstract class AppLocalizations {
   /// **'Male'**
   String get memberProfileSexMale;
 
+  /// No description provided for @memberProfileSexOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get memberProfileSexOther;
+
   /// No description provided for @memberProfileTaxCountryLabel.
   ///
   /// In en, this message translates to:
