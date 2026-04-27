@@ -6,8 +6,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
-import '../../../auth/presentation/support/identity_auth_guard.dart';
-import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 import '../../domain/entities/member_profile_details.dart';
 import '../providers/member_profile_providers.dart';
 import '../support/member_profile_edit_step.dart';
@@ -443,54 +441,7 @@ class _MemberProfileOverviewPageState
     );
   }
 
-  Future<void> _openSection(MemberProfileEditStep step) async {
-    if (step == MemberProfileEditStep.ekyc) {
-      await refreshRemoteVerificationStatus(ref);
-      final faceVerified = await ref
-          .read(settingsRealPersonVerifiedProvider.future)
-          .catchError((Object _) => false);
-      if (!mounted) {
-        return;
-      }
-
-      if (!faceVerified) {
-        final l10n = context.l10n;
-        final shouldStartVerification =
-            await AppDialogs.showAdaptiveAlert<bool>(
-              context: context,
-              title: l10n.memberProfileEditRequiresFaceVerificationTitle,
-              message: l10n.memberProfileEditRequiresFaceVerificationMessage,
-              actions: <AppDialogAction<bool>>[
-                AppDialogAction<bool>(label: l10n.commonCancel, value: false),
-                AppDialogAction<bool>(
-                  label: l10n.identityAuthStartAction,
-                  value: true,
-                  isDefaultAction: true,
-                ),
-              ],
-            ) ??
-            false;
-        if (!mounted) {
-          return;
-        }
-        if (shouldStartVerification) {
-          context.push('/profile/settings/two-factor/face');
-        }
-        return;
-      }
-
-      final authorized = await ensureSensitiveActionAuthorized(context, ref);
-      if (!mounted || !authorized) {
-        return;
-      }
-
-      context.push(
-        '/member-profile/edit/section/${step.routeValue}',
-        extra: true,
-      );
-      return;
-    }
-
+  void _openSection(MemberProfileEditStep step) {
     context.push('/member-profile/edit/section/${step.routeValue}');
   }
 }

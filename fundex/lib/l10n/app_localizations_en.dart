@@ -4051,7 +4051,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memberProfileNextConsent => 'Next: Consent Confirmation';
 
   @override
-  String get memberProfileStep6Title => 'Step 6: Consent';
+  String get memberProfileStep6Title => 'Step 5: Consent';
 
   @override
   String get memberProfileStep6Description =>

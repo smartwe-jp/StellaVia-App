@@ -1425,7 +1425,7 @@
   "memberProfileAccountHolderLabel": "账户名义（片假名）",
   "memberProfileAccountHolderHint": "タナカ タロウ",
   "memberProfileNextConsent": "下一步：确认同意事项",
-  "memberProfileStep6Title": "Step 6：确认同意事项",
+  "memberProfileStep6Title": "Step 5：确认同意事项",
   "memberProfileStep6Description": "请确认以下事项，并全部同意。",
   "memberProfileElectronicDeliveryTitle": "关于书面的电子交付",
   "memberProfileElectronicDeliveryBody": "根据不动产特定共同事业法，我们将以下书面以电子方式（App 内 PDF 文件）交付，而不是纸质方式。",

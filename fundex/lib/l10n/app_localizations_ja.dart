@@ -3835,7 +3835,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfileNextConsent => '次へ：同意事項の確認';
 
   @override
-  String get memberProfileStep6Title => 'Step 6：同意事項の確認';
+  String get memberProfileStep6Title => 'Step 5：同意事項の確認';
 
   @override
   String get memberProfileStep6Description => '以下の事項をご確認いただき、すべてに同意してください。';

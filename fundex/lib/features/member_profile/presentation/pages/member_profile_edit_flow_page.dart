@@ -1,22 +1,15 @@
-import 'dart:async';
-
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:core_identity_auth/core_identity_auth.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/support/app_permission_dialogs.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/domain/entities/auth_user.dart' as app_auth;
 import '../../../auth/presentation/providers/auth_providers.dart';
-import '../../../auth/presentation/providers/identity_auth_sdk_providers.dart';
-import '../../../auth/presentation/support/identity_auth_guard.dart';
-import '../../../auth/presentation/support/identity_auth_message_resolver.dart';
 import '../../../settings/presentation/providers/settings_content_providers.dart';
 import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
-import '../../domain/constants/member_profile_upload_markers.dart';
 import '../../domain/entities/member_profile_details.dart';
 import '../../domain/entities/member_profile_region.dart';
 import '../pages/edit_flow_steps/member_profile_address_info_step_page.dart';
@@ -24,7 +17,6 @@ import '../pages/edit_flow_steps/member_profile_bank_account_step_page.dart';
 import '../pages/edit_flow_steps/member_profile_basic_info_step_page.dart';
 import '../pages/edit_flow_steps/member_profile_consent_step_page.dart';
 import '../pages/edit_flow_steps/member_profile_ekyc_step_page.dart';
-import '../pages/edit_flow_steps/member_profile_real_person_auth_step_page.dart';
 import '../pages/edit_flow_steps/member_profile_suitability_step_page.dart';
 import '../providers/member_profile_providers.dart';
 import '../support/member_profile_edit_step.dart';
@@ -34,23 +26,20 @@ import '../support/profile_document_image_picker.dart';
 
 enum _MemberProfileEditFlowMode { flow, section }
 
-enum _ProfilePhotoTarget { documentFront, documentBack, selfie }
+enum _ProfilePhotoTarget { documentFront, documentBack }
 
 class MemberProfileEditFlowPage extends ConsumerStatefulWidget {
   const MemberProfileEditFlowPage({super.key})
     : _mode = _MemberProfileEditFlowMode.flow,
-      initialStep = null,
-      skipInitialAccessGuard = false;
+      initialStep = null;
 
   const MemberProfileEditFlowPage.section({
     super.key,
     required this.initialStep,
-    this.skipInitialAccessGuard = false,
   }) : _mode = _MemberProfileEditFlowMode.section;
 
   final _MemberProfileEditFlowMode _mode;
   final MemberProfileEditStep? initialStep;
-  final bool skipInitialAccessGuard;
 
   bool get isSingleSectionMode => _mode == _MemberProfileEditFlowMode.section;
 
@@ -65,8 +54,6 @@ class _MemberProfileEditFlowPageState
       _ProfilePhotoTarget.documentFront;
   static const _ProfilePhotoTarget _documentBackPhotoTarget =
       _ProfilePhotoTarget.documentBack;
-  static const _ProfilePhotoTarget _selfiePhotoTarget =
-      _ProfilePhotoTarget.selfie;
 
   late final TextEditingController _familyNameController;
   late final TextEditingController _givenNameController;
@@ -117,15 +104,6 @@ class _MemberProfileEditFlowPageState
   bool _isSubmitting = false;
   bool _isUploadingPhoto = false;
   bool _isAddressSearching = false;
-  bool _isRunningRealPersonAuth = false;
-  bool _isSectionAccessChecking = false;
-  String? _realPersonAuthStatusMessage;
-
-  bool get _isIdentityAuthEnabled =>
-      ref.read(identityAuthFeatureEnabledProvider);
-
-  bool get _isRealPersonVerified =>
-      ref.read(settingsRealPersonVerifiedProvider).asData?.value == true;
 
   bool get _isSingleSectionMode => widget.isSingleSectionMode;
 
@@ -133,7 +111,9 @@ class _MemberProfileEditFlowPageState
   void initState() {
     super.initState();
     if (_isSingleSectionMode) {
-      _currentStep = widget.initialStep ?? MemberProfileEditStep.basicInfo;
+      _currentStep = _normalizeStepForFlow(
+        widget.initialStep ?? MemberProfileEditStep.basicInfo,
+      );
     }
     _familyNameController = TextEditingController();
     _givenNameController = TextEditingController();
@@ -158,13 +138,6 @@ class _MemberProfileEditFlowPageState
     _branchAddressController = TextEditingController();
     _registerTextFieldListeners();
     _loadInitialData();
-    if (_isSingleSectionMode &&
-        widget.initialStep == MemberProfileEditStep.ekyc &&
-        !widget.skipInitialAccessGuard) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        unawaited(_guardSingleSectionAccess());
-      });
-    }
   }
 
   @override
@@ -467,7 +440,9 @@ class _MemberProfileEditFlowPageState
               MemberProfileEditStep.values.length - 1,
             )];
         _currentStep = _isSingleSectionMode
-            ? widget.initialStep ?? MemberProfileEditStep.basicInfo
+            ? _normalizeStepForFlow(
+                widget.initialStep ?? MemberProfileEditStep.basicInfo,
+              )
             : _normalizeStepForFlow(resolvedStep);
         _isLoading = false;
       });
@@ -498,75 +473,8 @@ class _MemberProfileEditFlowPageState
     });
   }
 
-  Future<void> _guardSingleSectionAccess() async {
-    if (!_isSingleSectionMode ||
-        widget.initialStep != MemberProfileEditStep.ekyc ||
-        widget.skipInitialAccessGuard) {
-      return;
-    }
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      _isSectionAccessChecking = true;
-    });
-
-    try {
-      await refreshRemoteVerificationStatus(ref);
-      final faceVerified = await ref
-          .read(settingsRealPersonVerifiedProvider.future)
-          .catchError((Object _) => false);
-      if (!mounted) {
-        return;
-      }
-
-      if (!faceVerified) {
-        final l10n = context.l10n;
-        final shouldStartVerification =
-            await AppDialogs.showAdaptiveAlert<bool>(
-              context: context,
-              title: l10n.memberProfileEditRequiresFaceVerificationTitle,
-              message: l10n.memberProfileEditRequiresFaceVerificationMessage,
-              actions: <AppDialogAction<bool>>[
-                AppDialogAction<bool>(label: l10n.commonCancel, value: false),
-                AppDialogAction<bool>(
-                  label: l10n.identityAuthStartAction,
-                  value: true,
-                  isDefaultAction: true,
-                ),
-              ],
-            ) ??
-            false;
-        if (!mounted) {
-          return;
-        }
-        if (shouldStartVerification) {
-          context.go('/profile/settings/two-factor/face');
-        } else {
-          context.go('/member-profile/edit');
-        }
-        return;
-      }
-
-      final authorized = await ensureSensitiveActionAuthorized(context, ref);
-      if (!mounted) {
-        return;
-      }
-      if (!authorized) {
-        context.go('/member-profile/edit');
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isSectionAccessChecking = false;
-        });
-      }
-    }
-  }
-
   Future<void> _pickAndSaveImage({required _ProfilePhotoTarget target}) async {
-    if (_isUploadingPhoto || _isSubmitting || _isRunningRealPersonAuth) {
+    if (_isUploadingPhoto || _isSubmitting) {
       return;
     }
     final ProfileDocumentImageSource? source =
@@ -613,14 +521,13 @@ class _MemberProfileEditFlowPageState
     if (!mounted || path == null || path.trim().isEmpty) {
       return;
     }
-    bool shouldAutoStartRealPersonAuth = false;
     setState(() {
       _isUploadingPhoto = true;
     });
     try {
       final uploadedUrl = await ref
           .read(uploadMemberProfilePhotoUseCaseProvider)
-          .call(filePath: path.trim(), isSelfie: target == _selfiePhotoTarget);
+          .call(filePath: path.trim(), isSelfie: false);
       if (!mounted) {
         return;
       }
@@ -629,8 +536,6 @@ class _MemberProfileEditFlowPageState
           _documentPhotoPath = uploadedUrl.trim();
         } else if (target == _documentBackPhotoTarget) {
           _documentBackPhotoPath = uploadedUrl.trim();
-        } else {
-          _selfiePhotoPath = uploadedUrl.trim();
         }
       });
       await _persistOnboardingDraft();
@@ -641,48 +546,23 @@ class _MemberProfileEditFlowPageState
         context,
         message: context.l10n.memberProfilePhotoUploadSuccess,
       );
-      shouldAutoStartRealPersonAuth =
-          target == _selfiePhotoTarget &&
-          _currentStep == MemberProfileEditStep.realPersonAuth &&
-          _isIdentityAuthEnabled;
     } catch (error) {
       if (!mounted) {
         return;
       }
-      if (target == _selfiePhotoTarget) {
-        setState(() {
-          _selfiePhotoPath = selfieUploadCompletedMarker;
-        });
-        await _persistOnboardingDraft();
-        if (!mounted) {
-          return;
-        }
-        AppNotice.show(
-          context,
-          message: context.l10n.memberProfileSelfieUploadBypassedNotice,
-        );
-        shouldAutoStartRealPersonAuth =
-            _currentStep == MemberProfileEditStep.realPersonAuth &&
-            _isIdentityAuthEnabled;
-      } else {
-        AppNotice.show(
-          context,
-          message: _resolveSubmitErrorMessage(
-            error,
-            context.l10n.uiErrorRequestFailed,
-          ),
-        );
-      }
+      AppNotice.show(
+        context,
+        message: _resolveSubmitErrorMessage(
+          error,
+          context.l10n.uiErrorRequestFailed,
+        ),
+      );
     } finally {
       if (mounted) {
         setState(() {
           _isUploadingPhoto = false;
         });
       }
-    }
-
-    if (shouldAutoStartRealPersonAuth && mounted) {
-      await _runRealPersonAuthStep();
     }
   }
 
@@ -721,10 +601,7 @@ class _MemberProfileEditFlowPageState
   }
 
   Future<void> _searchAddressByPostalCode() async {
-    if (_isAddressSearching ||
-        _isSubmitting ||
-        _isUploadingPhoto ||
-        _isRunningRealPersonAuth) {
+    if (_isAddressSearching || _isSubmitting || _isUploadingPhoto) {
       return;
     }
 
@@ -806,18 +683,11 @@ class _MemberProfileEditFlowPageState
   }
 
   Future<void> _goNextStep() async {
-    if (_isSubmitting || _isUploadingPhoto || _isRunningRealPersonAuth) {
+    if (_isSubmitting || _isUploadingPhoto) {
       return;
     }
     if (!_canProceedFromCurrentStep) {
       return;
-    }
-    if (_isIdentityAuthEnabled &&
-        _currentStep == MemberProfileEditStep.realPersonAuth) {
-      final verified = await _runRealPersonAuthStep();
-      if (!verified) {
-        return;
-      }
     }
     if (!mounted) {
       return;
@@ -826,18 +696,8 @@ class _MemberProfileEditFlowPageState
     await _advanceToNextStep();
   }
 
-  Future<void> _skipRealPersonAuthStep() async {
-    if (_isSubmitting || _isUploadingPhoto || _isRunningRealPersonAuth) {
-      return;
-    }
-    if (_currentStep != MemberProfileEditStep.realPersonAuth) {
-      return;
-    }
-    await _advanceToNextStep();
-  }
-
   Future<void> _skipBankAccountStep() async {
-    if (_isSubmitting || _isUploadingPhoto || _isRunningRealPersonAuth) {
+    if (_isSubmitting || _isUploadingPhoto) {
       return;
     }
     if (_currentStep != MemberProfileEditStep.bankAccount) {
@@ -847,7 +707,7 @@ class _MemberProfileEditFlowPageState
   }
 
   Future<void> _goPreviousStep() async {
-    if (_isSubmitting || _isUploadingPhoto || _isRunningRealPersonAuth) {
+    if (_isSubmitting || _isUploadingPhoto) {
       return;
     }
     await _persistOnboardingDraft();
@@ -866,7 +726,7 @@ class _MemberProfileEditFlowPageState
   }
 
   Future<void> _completeFlow() async {
-    if (_isSubmitting || _isUploadingPhoto || _isRunningRealPersonAuth) {
+    if (_isSubmitting || _isUploadingPhoto) {
       return;
     }
     final l10n = context.l10n;
@@ -909,18 +769,11 @@ class _MemberProfileEditFlowPageState
   }
 
   Future<void> _saveCurrentSection() async {
-    if (_isSubmitting || _isUploadingPhoto || _isRunningRealPersonAuth) {
+    if (_isSubmitting || _isUploadingPhoto) {
       return;
     }
     if (!_canProceedFromCurrentStep) {
       return;
-    }
-    if (_isIdentityAuthEnabled &&
-        _currentStep == MemberProfileEditStep.realPersonAuth) {
-      final verified = await _runRealPersonAuthStep();
-      if (!verified) {
-        return;
-      }
     }
     if (!mounted) {
       return;
@@ -998,8 +851,7 @@ class _MemberProfileEditFlowPageState
       case MemberProfileEditStep.ekyc:
         return _isEkycStepReady;
       case MemberProfileEditStep.realPersonAuth:
-        return !_shouldShowRealPersonAuthStep() ||
-            _isSelfieUploaded(_selfiePhotoPath);
+        return _isConsentStepReady;
       case MemberProfileEditStep.bankAccount:
         return _isBankAccountStepReady;
       case MemberProfileEditStep.consent:
@@ -1007,162 +859,28 @@ class _MemberProfileEditFlowPageState
     }
   }
 
-  Future<bool> _runRealPersonAuthStep() async {
-    if (!_shouldShowRealPersonAuthStep()) {
-      return true;
-    }
-
-    final l10n = context.l10n;
-    if (!_isSelfieUploaded(_selfiePhotoPath)) {
-      final message = l10n.memberProfileStep5RealPersonSelfieRequired;
-      setState(() {
-        _realPersonAuthStatusMessage = message;
-      });
-      AppNotice.show(context, message: message);
-      return false;
-    }
-
-    setState(() {
-      _isRunningRealPersonAuth = true;
-      _realPersonAuthStatusMessage = null;
-    });
-
-    try {
-      final coordinator = ref.read(identityAuthCoordinatorProvider);
-      final decision = await coordinator.evaluate(
-        entryPoint: IdentityAuthEntryPoint.securityCenterRealPerson,
-      );
-      if (!mounted) {
-        return false;
-      }
-
-      if (decision.action == IdentityAuthAction.none) {
-        return true;
-      }
-      if (decision.action != IdentityAuthAction.startRealPersonEnrollment) {
-        final message = resolveIdentityAuthMessage(
-          l10n,
-          reasonCode: decision.reasonCode,
-          fallbackMessage: l10n.identityAuthVerifyFailed,
-        );
-        setState(() {
-          _realPersonAuthStatusMessage = message;
-        });
-        AppNotice.show(context, message: message);
-        return false;
-      }
-
-      final collector = ref.read(identityAuthLivenessCollectorProvider);
-      if (collector == null) {
-        final message = resolveIdentityAuthMessage(
-          l10n,
-          reasonCode: 'liveness_collector_not_configured',
-          fallbackMessage: l10n.identityAuthLivenessNotConfigured,
-        );
-        setState(() {
-          _realPersonAuthStatusMessage = message;
-        });
-        AppNotice.show(context, message: message);
-        return false;
-      }
-
-      final collected = await collector.collect();
-      if (!mounted) {
-        return false;
-      }
-      if (!collected.isSuccess) {
-        final message = resolveIdentityAuthMessage(
-          l10n,
-          reasonCode: 'liveness_collect_failed',
-          errorMessage: collected.errorMessage,
-          fallbackMessage: l10n.identityAuthCollectFailed,
-        );
-        setState(() {
-          _realPersonAuthStatusMessage = message;
-        });
-        if (isIdentityAuthPermissionSettingsRequired(collected.errorMessage)) {
-          await showAppPermissionSettingsDialog(
-            context,
-            permission: AppPermissionKind.camera,
-          );
-        } else {
-          AppNotice.show(context, message: message);
-        }
-        return false;
-      }
-
-      final result = await coordinator.verifyWithPhotoBase64(
-        photoBase64: collected.photoBase64,
-        entryPoint: IdentityAuthEntryPoint.securityCenterRealPerson,
-      );
-      if (!mounted) {
-        return false;
-      }
-
-      if (result.verified) {
-        AppNotice.show(context, message: l10n.identityAuthVerifySuccess);
-        return true;
-      }
-
-      final message = resolveIdentityAuthMessage(
-        l10n,
-        reasonCode: result.reasonCode,
-        errorMessage: result.errorMessage,
-        fallbackMessage: l10n.identityAuthVerifyFailed,
-      );
-      setState(() {
-        _realPersonAuthStatusMessage = message;
-      });
-      AppNotice.show(context, message: message);
-      return false;
-    } catch (error) {
-      if (!mounted) {
-        return false;
-      }
-      final message = resolveIdentityAuthMessage(
-        l10n,
-        errorMessage: error.toString(),
-        fallbackMessage: l10n.identityAuthVerifyFailed,
-      );
-      setState(() {
-        _realPersonAuthStatusMessage = message;
-      });
-      AppNotice.show(context, message: message);
-      return false;
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isRunningRealPersonAuth = false;
-        });
-      }
-    }
-  }
-
-  List<MemberProfileEditStep> _flowSteps({bool? realPersonVerified}) {
+  List<MemberProfileEditStep> _flowSteps() {
     return <MemberProfileEditStep>[
       MemberProfileEditStep.basicInfo,
       MemberProfileEditStep.addressInfo,
       MemberProfileEditStep.suitability,
       MemberProfileEditStep.ekyc,
-      if (_shouldShowRealPersonAuthStep(realPersonVerified: realPersonVerified))
-        MemberProfileEditStep.realPersonAuth,
       MemberProfileEditStep.consent,
     ];
   }
 
-  MemberProfileEditStep _normalizeStepForFlow(
-    MemberProfileEditStep step, {
-    bool? realPersonVerified,
-  }) {
+  MemberProfileEditStep _normalizeStepForFlow(MemberProfileEditStep step) {
+    if (step == MemberProfileEditStep.realPersonAuth) {
+      return MemberProfileEditStep.consent;
+    }
     if (_isSingleSectionMode) {
       return step;
     }
-    final flowSteps = _flowSteps(realPersonVerified: realPersonVerified);
+    final flowSteps = _flowSteps();
     if (flowSteps.contains(step)) {
       return step;
     }
-    if (step == MemberProfileEditStep.realPersonAuth ||
-        step == MemberProfileEditStep.bankAccount) {
+    if (step == MemberProfileEditStep.bankAccount) {
       return MemberProfileEditStep.consent;
     }
     return MemberProfileEditStep.basicInfo;
@@ -1190,13 +908,6 @@ class _MemberProfileEditFlowPageState
       return null;
     }
     return flowSteps[currentIndex - 1];
-  }
-
-  bool _shouldShowRealPersonAuthStep({bool? realPersonVerified}) {
-    if (!_isIdentityAuthEnabled) {
-      return false;
-    }
-    return !(realPersonVerified ?? _isRealPersonVerified);
   }
 
   bool get _isBasicInfoStepReady =>
@@ -1342,8 +1053,7 @@ class _MemberProfileEditFlowPageState
     if (_isSingleSectionMode ||
         _isLoading ||
         _isSubmitting ||
-        _isUploadingPhoto ||
-        _isRunningRealPersonAuth) {
+        _isUploadingPhoto) {
       return;
     }
     final l10n = context.l10n;
@@ -1676,37 +1386,10 @@ class _MemberProfileEditFlowPageState
 
   @override
   Widget build(BuildContext context) {
-    if (_isSectionAccessChecking) {
-      return Scaffold(
-        backgroundColor: Theme.of(context).appColors.background,
-        body: const Center(child: CircularProgressIndicator()),
-      );
-    }
-
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = theme.appColors;
-    ref.listen<AsyncValue<bool>>(settingsRealPersonVerifiedProvider, (
-      AsyncValue<bool>? _,
-      AsyncValue<bool> next,
-    ) {
-      if (!mounted) {
-        return;
-      }
-      final normalizedStep = _normalizeStepForFlow(
-        _currentStep,
-        realPersonVerified: next.asData?.value == true,
-      );
-      if (normalizedStep == _currentStep) {
-        return;
-      }
-      setState(() {
-        _currentStep = normalizedStep;
-      });
-    });
-    final isRealPersonVerified =
-        ref.watch(settingsRealPersonVerifiedProvider).asData?.value == true;
-    final flowSteps = _flowSteps(realPersonVerified: isRealPersonVerified);
+    final flowSteps = _flowSteps();
     final currentStepIndex = flowSteps.contains(_currentStep)
         ? flowSteps.indexOf(_currentStep)
         : 0;
@@ -1718,8 +1401,7 @@ class _MemberProfileEditFlowPageState
             !_isSingleSectionMode &&
             !_currentStep.isFirst &&
             !_isSubmitting &&
-            !_isUploadingPhoto &&
-            !_isRunningRealPersonAuth) {
+            !_isUploadingPhoto) {
           _goPreviousStep();
         }
       },
@@ -1738,8 +1420,6 @@ class _MemberProfileEditFlowPageState
               child: InkWell(
                 borderRadius: BorderRadius.circular(8),
                 onTap: (_isSubmitting || _isUploadingPhoto)
-                    ? null
-                    : _isRunningRealPersonAuth
                     ? null
                     : _isSingleSectionMode
                     ? () => context.pop()
@@ -1799,7 +1479,6 @@ class _MemberProfileEditFlowPageState
     final VoidCallback? onSecondaryPressed = _isSingleSectionMode
         ? null
         : _saveOnboardingDraftTemporarily;
-    final String previewActionLabel = l10n.memberProfilePhotoPreviewAction;
     final String editActionLabel = l10n.commonEditText;
     switch (_currentStep) {
       case MemberProfileEditStep.basicInfo:
@@ -1963,33 +1642,28 @@ class _MemberProfileEditFlowPageState
           },
           onUploadDocumentFront: (_isSubmitting || _isUploadingPhoto)
               ? null
-              : _isRunningRealPersonAuth
-              ? null
               : () => _pickAndSaveImage(target: _documentFrontPhotoTarget),
           onUploadDocumentBack: (_isSubmitting || _isUploadingPhoto)
-              ? null
-              : _isRunningRealPersonAuth
               ? null
               : () => _pickAndSaveImage(target: _documentBackPhotoTarget),
           onNext: _isSingleSectionMode ? _saveCurrentSection : _goNextStep,
         );
       case MemberProfileEditStep.realPersonAuth:
-        if (!_shouldShowRealPersonAuthStep() && !_isSingleSectionMode) {
-          return const SizedBox.shrink();
-        }
-        return MemberProfileRealPersonAuthStepPage(
-          isProcessing: _isRunningRealPersonAuth,
-          selfieUploaded: _isSelfieUploaded(_selfiePhotoPath),
-          selfiePreviewUrl: _isRemoteImageUrl(_selfiePhotoPath)
-              ? _selfiePhotoPath
-              : null,
-          previewActionLabel: previewActionLabel,
-          primaryButtonEnabled:
-              _canProceedFromCurrentStep &&
-              !_isUploadingPhoto &&
-              !_isSubmitting &&
-              !_isRunningRealPersonAuth,
-          showSkip: !_isSingleSectionMode,
+      case MemberProfileEditStep.consent:
+        final localeTag = Localizations.localeOf(context).toLanguageTag();
+        final operatingCompanyContent = ref
+            .watch(settingsOperatingCompanyContentProvider(localeTag))
+            .asData
+            ?.value;
+        return MemberProfileConsentStepPage(
+          electronicConsent: _electronicConsent,
+          antiSocialConsent: _antiSocialConsent,
+          privacyConsent: _privacyConsent,
+          electronicDeliveryUrl:
+              operatingCompanyContent?.electronicInformationUrl,
+          antiSocialRuleUrl: operatingCompanyContent?.antiSocialRuleUrl,
+          personalInformationUrl:
+              operatingCompanyContent?.personalInformationUrl,
           titleOverride: _isSingleSectionMode ? _stepTitle : null,
           descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
           secondaryButtonLabelOverride: secondaryButtonLabel,
@@ -1997,18 +1671,26 @@ class _MemberProfileEditFlowPageState
           primaryButtonLabelOverride: _isSingleSectionMode
               ? _primaryActionLabel
               : null,
-          statusMessage: _realPersonAuthStatusMessage,
-          onUploadSelfie: (_isSubmitting || _isUploadingPhoto)
-              ? null
-              : _isRunningRealPersonAuth
-              ? null
-              : () => _pickAndSaveImage(target: _selfiePhotoTarget),
-          onStartVerification: _isRunningRealPersonAuth
+          onElectronicConsentChanged: (bool value) {
+            _applyUserChange(() {
+              _electronicConsent = value;
+            });
+          },
+          onAntiSocialConsentChanged: (bool value) {
+            _applyUserChange(() {
+              _antiSocialConsent = value;
+            });
+          },
+          onPrivacyConsentChanged: (bool value) {
+            _applyUserChange(() {
+              _privacyConsent = value;
+            });
+          },
+          onComplete: _isSubmitting
               ? null
               : _isSingleSectionMode
               ? _saveCurrentSection
-              : _goNextStep,
-          onSkip: _skipRealPersonAuthStep,
+              : _completeFlow,
         );
       case MemberProfileEditStep.bankAccount:
         final bankRegionItems = _simpleItems(_bankRegionOptions(context));
@@ -2072,49 +1754,6 @@ class _MemberProfileEditFlowPageState
           onNext: _isSingleSectionMode ? _saveCurrentSection : _goNextStep,
           onSkip: _isSingleSectionMode ? null : _skipBankAccountStep,
         );
-      case MemberProfileEditStep.consent:
-        final localeTag = Localizations.localeOf(context).toLanguageTag();
-        final operatingCompanyContent = ref
-            .watch(settingsOperatingCompanyContentProvider(localeTag))
-            .asData
-            ?.value;
-        return MemberProfileConsentStepPage(
-          electronicConsent: _electronicConsent,
-          antiSocialConsent: _antiSocialConsent,
-          privacyConsent: _privacyConsent,
-          electronicDeliveryUrl:
-              operatingCompanyContent?.electronicInformationUrl,
-          antiSocialRuleUrl: operatingCompanyContent?.antiSocialRuleUrl,
-          personalInformationUrl:
-              operatingCompanyContent?.personalInformationUrl,
-          titleOverride: _isSingleSectionMode ? _stepTitle : null,
-          descriptionOverride: _isSingleSectionMode ? _stepDescription : null,
-          secondaryButtonLabelOverride: secondaryButtonLabel,
-          onSecondaryPressed: onSecondaryPressed,
-          primaryButtonLabelOverride: _isSingleSectionMode
-              ? _primaryActionLabel
-              : null,
-          onElectronicConsentChanged: (bool value) {
-            _applyUserChange(() {
-              _electronicConsent = value;
-            });
-          },
-          onAntiSocialConsentChanged: (bool value) {
-            _applyUserChange(() {
-              _antiSocialConsent = value;
-            });
-          },
-          onPrivacyConsentChanged: (bool value) {
-            _applyUserChange(() {
-              _privacyConsent = value;
-            });
-          },
-          onComplete: (_isSubmitting || _isRunningRealPersonAuth)
-              ? null
-              : _isSingleSectionMode
-              ? _saveCurrentSection
-              : _completeFlow,
-        );
     }
   }
 }
@@ -2147,17 +1786,6 @@ bool _isRemoteImageUrl(String? value) {
 
 int? _normalizeSex(int? value) {
   return value == 0 || value == 1 ? value : null;
-}
-
-bool _isSelfieUploaded(String? value) {
-  final normalized = value?.trim() ?? '';
-  if (normalized.isEmpty) {
-    return false;
-  }
-  if (normalized == selfieUploadCompletedMarker) {
-    return true;
-  }
-  return _isRemoteImageUrl(normalized);
 }
 
 String _joinNonEmpty(List<String?> values) {

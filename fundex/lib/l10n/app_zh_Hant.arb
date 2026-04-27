@@ -1425,7 +1425,7 @@
   "memberProfileAccountHolderLabel": "帳戶名義（片假名）",
   "memberProfileAccountHolderHint": "タナカ タロウ",
   "memberProfileNextConsent": "下一步：確認同意事項",
-  "memberProfileStep6Title": "Step 6：同意事項確認",
+  "memberProfileStep6Title": "Step 5：同意事項確認",
   "memberProfileStep6Description": "請確認以下事項，並全部同意。",
   "memberProfileElectronicDeliveryTitle": "關於書面的電子交付",
   "memberProfileElectronicDeliveryBody": "本公司將依不動產特定共同事業法，以電子方式（透過App內PDF檔案）而非紙本方式交付以下書面。",

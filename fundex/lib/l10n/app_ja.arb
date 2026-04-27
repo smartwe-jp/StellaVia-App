@@ -1425,7 +1425,7 @@
   "memberProfileAccountHolderLabel": "口座名義（カタカナ）",
   "memberProfileAccountHolderHint": "タナカ タロウ",
   "memberProfileNextConsent": "次へ：同意事項の確認",
-  "memberProfileStep6Title": "Step 6：同意事項の確認",
+  "memberProfileStep6Title": "Step 5：同意事項の確認",
   "memberProfileStep6Description": "以下の事項をご確認いただき、すべてに同意してください。",
   "memberProfileElectronicDeliveryTitle": "書面の電子交付について",
   "memberProfileElectronicDeliveryBody": "当社は、不動産特定共同事業法に基づく以下の書面を、紙面ではなく電子的方法（PDFファイルによるアプリ内交付）により交付いたします。",

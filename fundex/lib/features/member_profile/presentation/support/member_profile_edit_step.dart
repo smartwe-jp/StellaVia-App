@@ -51,7 +51,6 @@ const List<MemberProfileEditStep> memberProfileOverviewSteps =
       MemberProfileEditStep.addressInfo,
       MemberProfileEditStep.suitability,
       MemberProfileEditStep.ekyc,
-      MemberProfileEditStep.realPersonAuth,
       MemberProfileEditStep.consent,
     ];
 
@@ -61,7 +60,7 @@ MemberProfileEditStep? memberProfileEditStepFromRouteValue(String? raw) {
     'address-info' => MemberProfileEditStep.addressInfo,
     'suitability' => MemberProfileEditStep.suitability,
     'ekyc' => MemberProfileEditStep.ekyc,
-    'real-person-auth' => MemberProfileEditStep.realPersonAuth,
+    'real-person-auth' => MemberProfileEditStep.consent,
     'bank-account' => MemberProfileEditStep.bankAccount,
     'consent' => MemberProfileEditStep.consent,
     _ => null,

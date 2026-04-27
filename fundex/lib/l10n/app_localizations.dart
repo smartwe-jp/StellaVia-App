@@ -7457,7 +7457,7 @@ abstract class AppLocalizations {
   /// No description provided for @memberProfileStep6Title.
   ///
   /// In en, this message translates to:
-  /// **'Step 6: Consent'**
+  /// **'Step 5: Consent'**
   String get memberProfileStep6Title;
 
   /// No description provided for @memberProfileStep6Description.

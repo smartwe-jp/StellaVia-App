@@ -3789,7 +3789,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileNextConsent => '下一步：确认同意事项';
 
   @override
-  String get memberProfileStep6Title => 'Step 6：确认同意事项';
+  String get memberProfileStep6Title => 'Step 5：确认同意事项';
 
   @override
   String get memberProfileStep6Description => '请确认以下事项，并全部同意。';
@@ -7818,7 +7818,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileNextConsent => '下一步：確認同意事項';
 
   @override
-  String get memberProfileStep6Title => 'Step 6：同意事項確認';
+  String get memberProfileStep6Title => 'Step 5：同意事項確認';
 
   @override
   String get memberProfileStep6Description => '請確認以下事項，並全部同意。';

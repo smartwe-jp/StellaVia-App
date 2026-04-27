@@ -1425,7 +1425,7 @@
   "memberProfileAccountHolderLabel": "Account holder (katakana)",
   "memberProfileAccountHolderHint": "TANAKA TARO",
   "memberProfileNextConsent": "Next: Consent Confirmation",
-  "memberProfileStep6Title": "Step 6: Consent",
+  "memberProfileStep6Title": "Step 5: Consent",
   "memberProfileStep6Description": "Please review the following items and agree to all of them.",
   "memberProfileElectronicDeliveryTitle": "Electronic delivery of documents",
   "memberProfileElectronicDeliveryBody": "We will deliver the following documents required under the Real Estate Specified Joint Enterprise Act electronically in the app as PDF files instead of on paper.",
