@@ -48,7 +48,7 @@ class KizunarkGradientHeader extends StatelessWidget {
               child: ExcludeSemantics(
                 child: Image.asset(
                   titleAssetPath!,
-                  height: 44,
+                  height: 34,
                   fit: BoxFit.contain,
                   alignment: Alignment.centerLeft,
                 ),

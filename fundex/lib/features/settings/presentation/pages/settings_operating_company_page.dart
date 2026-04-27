@@ -22,6 +22,17 @@ class SettingsOperatingCompanyPage extends ConsumerWidget {
     AppNotice.show(context, message: context.l10n.settingsContactCallFailed);
   }
 
+  Future<void> _sendEmail(BuildContext context, String email) async {
+    final launched = await launchUrl(
+      Uri(scheme: 'mailto', path: email),
+      mode: LaunchMode.externalApplication,
+    );
+    if (!context.mounted || launched) {
+      return;
+    }
+    AppNotice.show(context, message: context.l10n.settingsCompanyMailFailed);
+  }
+
   Future<void> _openLink(
     BuildContext context,
     SettingsOperatingCompanyLink link,
@@ -149,6 +160,12 @@ class SettingsOperatingCompanyPage extends ConsumerWidget {
                         value: content.tel,
                         valueColor: colors.primary,
                         onTap: () => _callPhone(context, content.tel),
+                      ),
+                      _CompanyInfoRow(
+                        label: l10n.settingsCompanyEmailLabel,
+                        value: content.email,
+                        valueColor: colors.primary,
+                        onTap: () => _sendEmail(context, content.email),
                       ),
                       _CompanyInfoRow(
                         label: l10n.settingsCompanyEstablishedLabel,

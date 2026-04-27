@@ -1497,6 +1497,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsContactCallFailed => '電話アプリを起動できませんでした。';
 
   @override
+  String get settingsCompanyMailFailed => 'メールアプリを起動できませんでした。';
+
+  @override
   String get settingsContactValidationName => '姓と名を入力してください。';
 
   @override
@@ -1565,6 +1568,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get settingsCompanyTelLabel => 'TEL';
+
+  @override
+  String get settingsCompanyEmailLabel => 'メール';
 
   @override
   String get settingsCompanyEstablishedLabel => '設立';

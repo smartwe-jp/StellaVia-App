@@ -14,6 +14,7 @@ class SettingsOperatingCompanyContent {
     required this.representative,
     required this.headOffice,
     required this.tel,
+    required this.email,
     required this.established,
     required this.business,
     required this.manager,
@@ -32,6 +33,7 @@ class SettingsOperatingCompanyContent {
       representative: json['representative']?.toString() ?? '',
       headOffice: json['headOffice']?.toString() ?? '',
       tel: json['tel']?.toString() ?? '',
+      email: json['email']?.toString() ?? '',
       established: json['established']?.toString() ?? '',
       business: json['business']?.toString() ?? '',
       manager: json['manager']?.toString() ?? '',
@@ -53,6 +55,7 @@ class SettingsOperatingCompanyContent {
   final String representative;
   final String headOffice;
   final String tel;
+  final String email;
   final String established;
   final String business;
   final String manager;

@@ -2981,6 +2981,12 @@ abstract class AppLocalizations {
   /// **'Could not open the phone app.'**
   String get settingsContactCallFailed;
 
+  /// No description provided for @settingsCompanyMailFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the mail app.'**
+  String get settingsCompanyMailFailed;
+
   /// No description provided for @settingsContactValidationName.
   ///
   /// In en, this message translates to:
@@ -3112,6 +3118,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'TEL'**
   String get settingsCompanyTelLabel;
+
+  /// No description provided for @settingsCompanyEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get settingsCompanyEmailLabel;
 
   /// No description provided for @settingsCompanyEstablishedLabel.
   ///

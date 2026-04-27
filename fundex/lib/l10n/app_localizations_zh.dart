@@ -1478,6 +1478,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsContactCallFailed => '无法打开电话应用。';
 
   @override
+  String get settingsCompanyMailFailed => '无法打开邮件应用。';
+
+  @override
   String get settingsContactValidationName => '请输入姓和名。';
 
   @override
@@ -1546,6 +1549,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsCompanyTelLabel => '电话';
+
+  @override
+  String get settingsCompanyEmailLabel => '邮箱';
 
   @override
   String get settingsCompanyEstablishedLabel => '成立时间';
@@ -5516,6 +5522,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get settingsContactCallFailed => '無法開啟電話應用程式。';
 
   @override
+  String get settingsCompanyMailFailed => '無法開啟郵件應用程式。';
+
+  @override
   String get settingsContactValidationName => '請輸入姓與名。';
 
   @override
@@ -5584,6 +5593,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get settingsCompanyTelLabel => '電話';
+
+  @override
+  String get settingsCompanyEmailLabel => '電子郵件';
 
   @override
   String get settingsCompanyEstablishedLabel => '成立時間';

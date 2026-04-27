@@ -52,22 +52,19 @@ class HomeHeroBanner extends StatelessWidget {
         ),
         child: Padding(
           padding: EdgeInsets.only(bottom: showGuestActions ? 6.0 : 0),
-          child: Column(
+          child:  Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 4, 20, 4),
                 child: Row(
                   children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        'StellaVia',
-                        style: theme.appTextTheme.sectionTitle.copyWith(
-                          color: colors.onDark,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
+                    const Image(image: 
+                      AssetImage(
+                        'assets/images/stellavia.nav.logo.png'), 
+                      height: 34),
+                    
+                    const Spacer(),
                     if (showGuestActions)
                       AppNavigationIconButton(
                         icon: Icons.menu_rounded,

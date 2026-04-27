@@ -1582,6 +1582,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsContactCallFailed => 'Could not open the phone app.';
 
   @override
+  String get settingsCompanyMailFailed => 'Could not open the mail app.';
+
+  @override
   String get settingsContactValidationName =>
       'Please enter your family name and given name.';
 
@@ -1658,6 +1661,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsCompanyTelLabel => 'TEL';
+
+  @override
+  String get settingsCompanyEmailLabel => 'Email';
 
   @override
   String get settingsCompanyEstablishedLabel => 'Established';

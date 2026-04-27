@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
+import '../providers/settings_content_providers.dart';
 
 enum _SettingsContactCategory { investment, account, wallet, ekyc, other }
 
@@ -38,7 +39,8 @@ class SettingsContactPage extends ConsumerStatefulWidget {
 }
 
 class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
-  static const String _supportPhoneNumber = '06-6940-4777';
+  static const String _fallbackSupportPhoneNumber = '06-6940-4777';
+  static const String _fallbackSupportEmail = 'info@stellavia.co.jp';
 
   late final TextEditingController _familyNameController;
   late final TextEditingController _givenNameController;
@@ -274,9 +276,12 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
     }
   }
 
-  Future<void> _callSupportPhone() async {
+  Future<void> _callSupportPhone(String phoneNumber) async {
+    final target = phoneNumber.trim().isEmpty
+        ? _fallbackSupportPhoneNumber
+        : phoneNumber.trim();
     final launched = await launchUrl(
-      Uri(scheme: 'tel', path: _supportPhoneNumber),
+      Uri(scheme: 'tel', path: target),
       mode: LaunchMode.externalApplication,
     );
     if (!mounted || launched) {
@@ -285,12 +290,37 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
     AppNotice.show(context, message: context.l10n.settingsContactCallFailed);
   }
 
+  Future<void> _sendSupportEmail(String email) async {
+    final target = email.trim().isEmpty ? _fallbackSupportEmail : email.trim();
+    final launched = await launchUrl(
+      Uri(scheme: 'mailto', path: target),
+      mode: LaunchMode.externalApplication,
+    );
+    if (!mounted || launched) {
+      return;
+    }
+    AppNotice.show(context, message: context.l10n.settingsCompanyMailFailed);
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final l10n = context.l10n;
+    final localeTag = Localizations.localeOf(context).toLanguageTag();
+    final operatingCompanyContent = ref
+        .watch(settingsOperatingCompanyContentProvider(localeTag))
+        .asData
+        ?.value;
+    final supportPhone = _firstNonEmpty(<String>[
+      operatingCompanyContent?.tel ?? '',
+      _fallbackSupportPhoneNumber,
+    ]);
+    final supportEmail = _firstNonEmpty(<String>[
+      operatingCompanyContent?.email ?? '',
+      _fallbackSupportEmail,
+    ]);
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -380,52 +410,79 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
             isLoading: _isSubmitting,
           ),
           const SizedBox(height: 16),
-          InkWell(
-            borderRadius: BorderRadius.circular(UiTokens.radius16),
-            onTap: _callSupportPhone,
-            child: Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: colors.surfaceAlt,
-                borderRadius: BorderRadius.circular(UiTokens.radius16),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          l10n.settingsContactPhoneSectionTitle,
-                          style: appText.helper.copyWith(
-                            color: colors.textSecondary,
-                            height: 1.6,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          _supportPhoneNumber,
-                          style: appText.bodyStrong.copyWith(
-                            color: colors.primary,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          l10n.settingsContactPhoneHours,
-                          style: appText.micro.copyWith(
-                            color: colors.textSecondary,
-                            height: 1.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          _ContactSupportTile(
+            title: l10n.settingsContactPhoneSectionTitle,
+            value: supportPhone,
+            helper: l10n.settingsContactPhoneHours,
+            onTap: () => _callSupportPhone(supportPhone),
+          ),
+          const SizedBox(height: 8),
+          _ContactSupportTile(
+            title: l10n.settingsCompanyEmailLabel,
+            value: supportEmail,
+            onTap: () => _sendSupportEmail(supportEmail),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ContactSupportTile extends StatelessWidget {
+  const _ContactSupportTile({
+    required this.title,
+    required this.value,
+    required this.onTap,
+    this.helper,
+  });
+
+  final String title;
+  final String value;
+  final String? helper;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final helperText = helper?.trim() ?? '';
+    return InkWell(
+      borderRadius: BorderRadius.circular(UiTokens.radius16),
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: colors.surfaceAlt,
+          borderRadius: BorderRadius.circular(UiTokens.radius16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              title,
+              style: appText.helper.copyWith(
+                color: colors.textSecondary,
+                height: 1.6,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              style: appText.bodyStrong.copyWith(color: colors.primary),
+            ),
+            if (helperText.isNotEmpty) ...<Widget>[
+              const SizedBox(height: 2),
+              Text(
+                helperText,
+                style: appText.micro.copyWith(
+                  color: colors.textSecondary,
+                  height: 1.5,
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
