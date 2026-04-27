@@ -1,10 +1,12 @@
 import 'package:core_identity_auth/core_identity_auth.dart';
+import 'package:core_network/core_network.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../../../app/support/app_permission_dialogs.dart';
 import '../../../auth/presentation/providers/identity_auth_sdk_providers.dart';
 import '../../../auth/presentation/support/identity_auth_message_resolver.dart';
@@ -151,14 +153,12 @@ class _SettingsFaceVerificationPageState
       if (!mounted) {
         return;
       }
+      final message = _resolveSelfieUploadErrorMessage(error);
       setState(() {
-        _selfiePhotoPath = selfieUploadCompletedMarker;
+        _selfiePhotoPath = null;
+        _statusMessage = message;
       });
-      AppNotice.show(
-        context,
-        message: context.l10n.memberProfileSelfieUploadBypassedNotice,
-      );
-      await _startVerification(forceLiveness: true);
+      AppNotice.show(context, message: message);
       return;
     } finally {
       if (mounted) {
@@ -167,6 +167,39 @@ class _SettingsFaceVerificationPageState
         });
       }
     }
+  }
+
+  String _resolveSelfieUploadErrorMessage(Object error) {
+    if (_isSelfieUploadSizeFailure(error)) {
+      return context.l10n.profileImageSizeTooLarge;
+    }
+    return resolveAppRequestErrorMessage(
+      error,
+      context.l10n.uiErrorRequestFailed,
+    );
+  }
+
+  bool _isSelfieUploadSizeFailure(Object error) {
+    final normalized = error.toString().toLowerCase();
+    if (normalized.contains('ファイルサイズ') ||
+        normalized.contains('サイズを小さく') ||
+        normalized.contains('上限') ||
+        normalized.contains('file size') ||
+        normalized.contains('too large') ||
+        normalized.contains('exceed')) {
+      return true;
+    }
+    if (error is DioException) {
+      final nested = error.error;
+      if (nested != null && nested != error) {
+        return _isSelfieUploadSizeFailure(nested);
+      }
+      return error.response?.statusCode == 500 &&
+          error.requestOptions.path.contains('/member/real/person/upload');
+    }
+    return error is NetworkFailure &&
+        error.type == NetworkFailureType.serverError &&
+        (error.path?.contains('/member/real/person/upload') ?? false);
   }
 
   Future<void> _startVerification({bool forceLiveness = false}) async {

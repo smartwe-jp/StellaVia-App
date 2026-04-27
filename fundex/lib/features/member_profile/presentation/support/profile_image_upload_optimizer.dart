@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class ProfileImageSizeLimitException implements Exception {
@@ -39,9 +40,17 @@ class ProfileImageUploadOptimizer {
       final sourceFile = File(sourcePath);
       final sourceSize = await sourceFile.length();
       if (sourceSize <= maxUploadBytes) {
+        _debugLog(
+          'skip compression, sourceSize=${_formatBytes(sourceSize)}, '
+          'limit=${_formatBytes(maxUploadBytes)}',
+        );
         return sourcePath;
       }
 
+      _debugLog(
+        'start compression, sourceSize=${_formatBytes(sourceSize)}, '
+        'limit=${_formatBytes(maxUploadBytes)}',
+      );
       final tempDir = await Directory.systemTemp.createTemp(
         'fundex_upload_image_',
       );
@@ -67,7 +76,14 @@ class ProfileImageUploadOptimizer {
 
           final compressedFile = File(path);
           final compressedSize = await compressedFile.length();
+          _debugLog(
+            'compressed candidate, dimension=$dimension, quality=$quality, '
+            'size=${_formatBytes(compressedSize)}',
+          );
           if (compressedSize <= maxUploadBytes) {
+            _debugLog(
+              'compression selected, outputSize=${_formatBytes(compressedSize)}',
+            );
             return path;
           }
 
@@ -85,5 +101,17 @@ class ProfileImageUploadOptimizer {
     } catch (error) {
       throw ProfileImageSizeLimitException(error.toString());
     }
+  }
+
+  void _debugLog(String message) {
+    if (!kDebugMode) {
+      return;
+    }
+    debugPrint('[ProfileImageUploadOptimizer] $message');
+  }
+
+  String _formatBytes(int bytes) {
+    final mb = bytes / 1000000;
+    return '${mb.toStringAsFixed(2)}MB($bytes bytes)';
   }
 }
