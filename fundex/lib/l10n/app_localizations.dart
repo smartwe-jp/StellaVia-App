@@ -6164,6 +6164,12 @@ abstract class AppLocalizations {
   /// **'Valid units'**
   String get myPageActiveFundValidUnitsLabel;
 
+  /// No description provided for @myPageActiveFundSellingUnitsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Selling in progress'**
+  String get myPageActiveFundSellingUnitsLabel;
+
   /// No description provided for @myPageActiveFundRemainingUnitsLabel.
   ///
   /// In en, this message translates to:

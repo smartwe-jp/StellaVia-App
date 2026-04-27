@@ -3163,6 +3163,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageActiveFundValidUnitsLabel => '有効口数';
 
   @override
+  String get myPageActiveFundSellingUnitsLabel => '売却執行中';
+
+  @override
   String get myPageActiveFundRemainingUnitsLabel => '残口数';
 
   @override

@@ -3126,6 +3126,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageActiveFundValidUnitsLabel => '有效口数';
 
   @override
+  String get myPageActiveFundSellingUnitsLabel => '卖出执行中';
+
+  @override
   String get myPageActiveFundRemainingUnitsLabel => '剩余口数';
 
   @override
@@ -7171,6 +7174,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageActiveFundValidUnitsLabel => '有效口數';
+
+  @override
+  String get myPageActiveFundSellingUnitsLabel => '賣出執行中';
 
   @override
   String get myPageActiveFundRemainingUnitsLabel => '剩餘口數';

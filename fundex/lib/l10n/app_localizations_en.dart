@@ -3343,6 +3343,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageActiveFundValidUnitsLabel => 'Valid units';
 
   @override
+  String get myPageActiveFundSellingUnitsLabel => 'Selling in progress';
+
+  @override
   String get myPageActiveFundRemainingUnitsLabel => 'Remaining units';
 
   @override
