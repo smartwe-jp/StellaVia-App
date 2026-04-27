@@ -20,7 +20,7 @@ class ProfileImageSizeLimitException implements Exception {
 class ProfileImageUploadOptimizer {
   const ProfileImageUploadOptimizer();
 
-  static const int maxUploadBytes = 10 * 1024 * 1024;
+  static const int maxUploadBytes = 9 * 1000 * 1000;
   static const List<int> _qualitySteps = <int>[
     82,
     74,
