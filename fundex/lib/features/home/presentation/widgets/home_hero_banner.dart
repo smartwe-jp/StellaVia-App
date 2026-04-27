@@ -1,6 +1,8 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
+import 'home_register_bonus_campaign_bar.dart';
+
 const String _homeHeroBannerBaseUrl = 'https://stellavia.co.jp/img';
 const int _homeHeroBannerImageCount = 3;
 
@@ -58,8 +60,8 @@ class HomeHeroBanner extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       SizedBox(
-                        height: 52,
-                        child: _HomeHeroRegisterBonusCard(
+                        height: 92,
+                        child: HomeRegisterBonusCampaignBar(
                           title: registerBonusTitle,
                           body: registerBonusBody,
                         ),
@@ -289,74 +291,6 @@ String _resolveHomeHeroLocaleSuffix(Locale locale) {
     return scriptCode == 'hant' ? 'zh-hant' : 'zh-hans';
   }
   return 'en';
-}
-
-class _HomeHeroRegisterBonusCard extends StatelessWidget {
-  const _HomeHeroRegisterBonusCard({required this.title, required this.body});
-
-  final String title;
-  final String body;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-
-    return Container(
-      width: double.infinity,
-      alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(horizontal: 14),
-      decoration: BoxDecoration(
-        color: colors.heroMiddle.withValues(alpha: 0.34),
-        borderRadius: BorderRadius.circular(UiTokens.radius8),
-        border: Border.all(
-          color: colors.highlightGold.withValues(alpha: 0.7),
-          width: 1.25,
-        ),
-      ),
-      child: Row(
-        children: <Widget>[
-          Container(
-            width: 38,
-            height: 38,
-            decoration: BoxDecoration(
-              color: colors.brandSecondary.withValues(alpha: 0.3),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.card_giftcard_rounded,
-              size: 20,
-              color: colors.highlightGold,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                title,
-                style: appText.bodyStrong.copyWith(
-                  color: colors.onDark,
-                  height: 1.35,
-                ),
-              ),
-              Text(
-                body,
-                style: appText.bodyStrong.copyWith(
-                  color: colors.highlightGold,
-                  height: 1.35,
-                  fontSize: 14,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class _HomeHeroActionButton extends StatelessWidget {
