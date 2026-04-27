@@ -124,7 +124,7 @@ void main() {
           expect(options.extra['auth_required'], isTrue);
 
           return _jsonOk(
-            '{"msg":"success","code":200,"data":{"projectId":"448236852676001792","projectName":"测试项目24308-文军","investmentUnit":1000000,"unitTotal":600,"soldedNumTotal":2,"soldedNumMoneyTotal":2000000,"validApplyTotal":2,"validApplyMoneyTotal":2000000,"avaliableApplyTotal":598,"avaliableApplyMoneyTotal":598000000,"investorList":[{"investorCode":"优先投资人","unitTotal":235,"soldedNumTotal":0,"soldedNumMoneyTotal":0,"validApplyTotal":0,"validApplyMoneyTotal":0,"avaliableApplyTotal":235,"avaliableApplyMoneyTotal":235000000}]}}',
+            '{"msg":"success","code":200,"data":{"projectId":"448236852676001792","projectName":"测试项目24308-文军","investmentUnit":1000000,"unitTotal":600,"soldedNumTotal":2,"soldedNumMoneyTotal":2000000,"validApplyTotal":2,"validApplyMoneyTotal":2000000,"avaliableApplyTotal":598,"avaliableApplyMoneyTotal":598000000,"investorList":[{"investorCode":"优先投资人","isOpen":true,"unitTotal":235,"soldedNumTotal":0,"soldedNumMoneyTotal":0,"validApplyTotal":0,"validApplyMoneyTotal":0,"avaliableApplyTotal":235,"avaliableApplyMoneyTotal":235000000}]}}',
           );
         });
         final api = FundProjectApiClient(client);
@@ -140,6 +140,7 @@ void main() {
         expect(item.availableApplyMoneyTotal, equals(598000000));
         expect(item.investorList, hasLength(1));
         expect(item.investorList.first.investorCode, equals('优先投资人'));
+        expect(item.investorList.first.isOpen, isTrue);
         expect(item.investorList.first.availableApplyTotal, equals(235));
       },
     );

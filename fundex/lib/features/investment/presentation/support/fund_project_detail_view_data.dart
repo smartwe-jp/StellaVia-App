@@ -61,6 +61,7 @@ class FundProjectDetailViewDataBuilder {
   static FundProjectDetailViewData build({
     required BuildContext context,
     required FundProject project,
+    FundProjectApplyDetail? applyDetail,
     SettingsOperatingCompanyContent? operatingCompanyContent,
   }) {
     final locale = Localizations.localeOf(context);
@@ -88,6 +89,7 @@ class FundProjectDetailViewDataBuilder {
       infoItems: _buildPrimaryInfoItems(
         context,
         project,
+        applyDetail,
         decimalFormatter,
       ),
       propertyItems: _buildPropertyInfoItems(
@@ -126,6 +128,7 @@ class FundProjectDetailViewDataBuilder {
 List<FundDetailInfoItemData> _buildPrimaryInfoItems(
   BuildContext context,
   FundProject project,
+  FundProjectApplyDetail? applyDetail,
   NumberFormat decimalFormatter,
 ) {
   return <FundDetailInfoItemData>[
@@ -142,6 +145,7 @@ List<FundDetailInfoItemData> _buildPrimaryInfoItems(
       value: _resolveMaximumInvestmentPerPersonText(
         context,
         project,
+        applyDetail,
         decimalFormatter,
       ),
     ),
@@ -168,7 +172,8 @@ List<FundDetailInfoItemData> _buildPropertyInfoItems(
     ),
   ];
 
-  final propertyType = _detailString(project.detailData, const <String>[
+  final propertyType =
+      _detailString(project.detailData, const <String>[
         'propertyType',
         'targetPropertyType',
         'realEstateType',
@@ -181,7 +186,8 @@ List<FundDetailInfoItemData> _buildPropertyInfoItems(
     ),
   );
 
-  final structure = _detailString(project.detailData, const <String>[
+  final structure =
+      _detailString(project.detailData, const <String>[
         'structure',
         'buildingStructure',
       ]) ??
@@ -193,7 +199,8 @@ List<FundDetailInfoItemData> _buildPropertyInfoItems(
     ),
   );
 
-  final builtYear = _detailString(project.detailData, const <String>[
+  final builtYear =
+      _detailString(project.detailData, const <String>[
         'builtYear',
         'builtAt',
         'completionYear',
@@ -242,7 +249,8 @@ _FundContractTables _buildContractTables(
   final overviewItems = <FundDetailInfoItemData>[
     FundDetailInfoItemData(
       label: context.l10n.fundDetailContractTypeLabel,
-      value: _detailString(project.detailData, const <String>[
+      value:
+          _detailString(project.detailData, const <String>[
             'contractType',
             'schemeType',
           ]) ??
@@ -291,7 +299,9 @@ _FundContractTables _buildContractTables(
     ),
     FundDetailInfoItemData(
       label: context.l10n.fundDetailRemainingDaysLabel,
-      value: project.daysRemaining?.toString() ?? context.l10n.fundDetailUnknownValue,
+      value:
+          project.daysRemaining?.toString() ??
+          context.l10n.fundDetailUnknownValue,
     ),
     FundDetailInfoItemData(
       label: context.l10n.fundDetailDistributionDateLabel,
@@ -340,23 +350,23 @@ List<FundDetailInfoItemData> _buildOperatorItems(
   ]);
 
   return <FundDetailInfoItemData>[
-    FundDetailInfoItemData(
-      label: context.l10n.fundDetailOperatorCompanyLabel,
-      value: companyName,
-    ),
-    FundDetailInfoItemData(
-      label: context.l10n.fundDetailPermitNumberLabel,
-      value: permitNumber,
-    ),
-    FundDetailInfoItemData(
-      label: context.l10n.fundDetailRepresentativeLabel,
-      value: representative,
-    ),
-    FundDetailInfoItemData(
-      label: context.l10n.fundDetailCompanyAddressLabel,
-      value: companyAddress,
-    ),
-  ]
+        FundDetailInfoItemData(
+          label: context.l10n.fundDetailOperatorCompanyLabel,
+          value: companyName,
+        ),
+        FundDetailInfoItemData(
+          label: context.l10n.fundDetailPermitNumberLabel,
+          value: permitNumber,
+        ),
+        FundDetailInfoItemData(
+          label: context.l10n.fundDetailRepresentativeLabel,
+          value: representative,
+        ),
+        FundDetailInfoItemData(
+          label: context.l10n.fundDetailCompanyAddressLabel,
+          value: companyAddress,
+        ),
+      ]
       .where((FundDetailInfoItemData item) => item.value.trim().isNotEmpty)
       .toList(growable: false);
 }
@@ -465,34 +475,38 @@ List<FundProjectDetailDocumentGroupData> _buildDocumentGroups(
   BuildContext context,
   FundProject project,
 ) {
-  return project.pdfDocuments.map((FundProjectPdfDocument document) {
-    final availablePdfs = _availablePdfUrls(document);
-    final title = _documentGroupTitle(context, document);
-    return FundProjectDetailDocumentGroupData(
-      title: title,
-      items: availablePdfs
-          .asMap()
-          .entries
-          .map((MapEntry<int, FundProjectPdfUrl> entry) {
-        final itemTitle = _documentLinkTitle(
-          context,
-          entry.value,
-          entry.key,
+  return project.pdfDocuments
+      .map((FundProjectPdfDocument document) {
+        final availablePdfs = _availablePdfUrls(document);
+        final title = _documentGroupTitle(context, document);
+        return FundProjectDetailDocumentGroupData(
+          title: title,
+          items: availablePdfs
+              .asMap()
+              .entries
+              .map((MapEntry<int, FundProjectPdfUrl> entry) {
+                final itemTitle = _documentLinkTitle(
+                  context,
+                  entry.value,
+                  entry.key,
+                );
+                return FundDetailDocumentItemData(
+                  title: itemTitle,
+                  subtitle:
+                      _formatDocumentCreatedAt(context, entry.value) ??
+                      context.l10n.fundDetailDocumentReady,
+                  onTap: () => _openPdfDocument(
+                    context,
+                    groupTitle: title,
+                    linkTitle: itemTitle,
+                    item: entry.value,
+                  ),
+                );
+              })
+              .toList(growable: false),
         );
-        return FundDetailDocumentItemData(
-          title: itemTitle,
-          subtitle: _formatDocumentCreatedAt(context, entry.value) ??
-              context.l10n.fundDetailDocumentReady,
-          onTap: () => _openPdfDocument(
-            context,
-            groupTitle: title,
-            linkTitle: itemTitle,
-            item: entry.value,
-          ),
-        );
-      }).toList(growable: false),
-    );
-  }).toList(growable: false);
+      })
+      .toList(growable: false);
 }
 
 List<FundProjectPdfUrl> _availablePdfUrls(FundProjectPdfDocument document) {
@@ -689,7 +703,11 @@ List<Color> _resolveHeroGradientColors(BuildContext context, int? status) {
     case 5:
       return <Color>[colors.heroStart, colors.heroMiddle, colors.heroEnd];
     case 7:
-      return <Color>[colors.primaryAlt, colors.primary, colors.brandPrimaryDark];
+      return <Color>[
+        colors.primaryAlt,
+        colors.primary,
+        colors.brandPrimaryDark,
+      ];
     case 2:
       return <Color>[colors.dangerForeground, colors.danger, colors.brandAlert];
     default:
@@ -752,25 +770,20 @@ String _resolveInvestmentUnitText(
 String _resolveMaximumInvestmentPerPersonText(
   BuildContext context,
   FundProject project,
+  FundProjectApplyDetail? applyDetail,
   NumberFormat decimalFormatter,
 ) {
-  final unitAmount = project.investmentUnit;
-  final rawMaximum = project.maximumInvestmentPerPerson;
+  final unitAmount = applyDetail?.investmentUnit ?? project.investmentUnit;
+  final unitCount = _resolveOpenApplyInvestor(applyDetail)?.availableApplyTotal;
   if (unitAmount == null ||
       unitAmount <= 0 ||
-      rawMaximum == null ||
-      rawMaximum <= 0) {
+      unitCount == null ||
+      unitCount < 0) {
     return context.l10n.fundDetailUnknownValue;
   }
 
-  final maximumAmount = rawMaximum < unitAmount
-      ? rawMaximum * unitAmount
-      : rawMaximum;
-  final unitCount = rawMaximum < unitAmount
-      ? rawMaximum
-      : (maximumAmount / unitAmount).floor();
-
-  if (maximumAmount <= 0 || unitCount <= 0) {
+  final maximumAmount = unitCount * unitAmount;
+  if (maximumAmount < 0) {
     return context.l10n.fundDetailUnknownValue;
   }
 
@@ -778,6 +791,20 @@ String _resolveMaximumInvestmentPerPersonText(
     _formatAmount(maximumAmount, decimalFormatter),
     decimalFormatter.format(unitCount),
   );
+}
+
+FundProjectApplyInvestor? _resolveOpenApplyInvestor(
+  FundProjectApplyDetail? applyDetail,
+) {
+  if (applyDetail == null) {
+    return null;
+  }
+  for (final investor in applyDetail.investorList) {
+    if (investor.isOpen == true) {
+      return investor;
+    }
+  }
+  return null;
 }
 
 String _resolvePeriodText(BuildContext context, FundProject project) {
@@ -788,7 +815,10 @@ String _resolvePeriodText(BuildContext context, FundProject project) {
   return context.l10n.fundDetailUnknownValue;
 }
 
-String? _resolveDistributionDateText(BuildContext context, FundProject project) {
+String? _resolveDistributionDateText(
+  BuildContext context,
+  FundProject project,
+) {
   if (project.distributionDate != null &&
       project.distributionDate!.trim().isNotEmpty) {
     return project.distributionDate!.trim();

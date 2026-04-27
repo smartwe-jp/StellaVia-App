@@ -89,6 +89,7 @@ extension FundProjectApplyInvestorDtoMapper on FundProjectApplyInvestorDto {
   FundProjectApplyInvestor toEntity() {
     return FundProjectApplyInvestor(
       investorCode: investorCode,
+      isOpen: isOpen,
       unitTotal: unitTotal,
       soldedNumTotal: soldedNumTotal,
       soldedNumMoneyTotal: soldedNumMoneyTotal,

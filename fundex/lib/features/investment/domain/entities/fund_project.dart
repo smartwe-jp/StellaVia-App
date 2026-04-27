@@ -108,6 +108,7 @@ class FundProjectApplyDetail {
 class FundProjectApplyInvestor {
   const FundProjectApplyInvestor({
     this.investorCode,
+    this.isOpen,
     this.unitTotal,
     this.soldedNumTotal,
     this.soldedNumMoneyTotal,
@@ -118,6 +119,7 @@ class FundProjectApplyInvestor {
   });
 
   final String? investorCode;
+  final bool? isOpen;
   final int? unitTotal;
   final int? soldedNumTotal;
   final int? soldedNumMoneyTotal;

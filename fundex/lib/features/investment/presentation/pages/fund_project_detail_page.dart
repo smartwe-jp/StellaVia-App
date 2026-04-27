@@ -114,6 +114,9 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final detailAsync = ref.watch(fundProjectDetailProvider(projectId));
+    final applyDetailAsync = ref.watch(
+      fundProjectApplyDetailProvider(projectId),
+    );
     final isAuthenticated =
         ref.watch(isAuthenticatedProvider).asData?.value ?? false;
     final favoriteProjectIds = ref.watch(
@@ -142,8 +145,10 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                 ),
                 const SizedBox(height: UiTokens.spacing12),
                 OutlinedButton(
-                  onPressed: () =>
-                      ref.invalidate(fundProjectDetailProvider(projectId)),
+                  onPressed: () {
+                    ref.invalidate(fundProjectDetailProvider(projectId));
+                    ref.invalidate(fundProjectApplyDetailProvider(projectId));
+                  },
                   child: Text(context.l10n.fundListRetry),
                 ),
               ],
@@ -152,6 +157,43 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
         ),
       ),
       data: (FundProject project) {
+        if (applyDetailAsync.isLoading) {
+          return const FundProjectDetailScaffold(
+            body: Center(child: CircularProgressIndicator.adaptive()),
+          );
+        }
+        if (applyDetailAsync.hasError || !applyDetailAsync.hasValue) {
+          return FundProjectDetailScaffold(
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      context.l10n.fundListLoadError,
+                      textAlign: TextAlign.center,
+                      style: appText.bodyMuted.copyWith(
+                        color: colors.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: UiTokens.spacing12),
+                    OutlinedButton(
+                      onPressed: () {
+                        ref.invalidate(fundProjectDetailProvider(projectId));
+                        ref.invalidate(
+                          fundProjectApplyDetailProvider(projectId),
+                        );
+                      },
+                      child: Text(context.l10n.fundListRetry),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+        final applyDetail = applyDetailAsync.requireValue;
         final favoriteProjectId = project.id.trim().isEmpty
             ? projectId.trim()
             : project.id.trim();
@@ -177,6 +219,7 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
         final viewData = FundProjectDetailViewDataBuilder.build(
           context: context,
           project: project,
+          applyDetail: applyDetail,
           operatingCompanyContent: operatingCompanyContent,
         );
         final gainTypeLabel = resolveFundProjectGainTypeLabel(

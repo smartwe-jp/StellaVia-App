@@ -445,6 +445,7 @@ class FundProjectApplyDetailDto {
 class FundProjectApplyInvestorDto {
   const FundProjectApplyInvestorDto({
     this.investorCode,
+    this.isOpen,
     this.unitTotal,
     this.soldedNumTotal,
     this.soldedNumMoneyTotal,
@@ -459,6 +460,7 @@ class FundProjectApplyInvestorDto {
       investorCode: FundProjectDto._normalizedOptionalString(
         json['investorCode'],
       ),
+      isOpen: FundProjectDto._boolOrNull(json['isOpen']),
       unitTotal: FundProjectDto._intOrNull(json['unitTotal']),
       soldedNumTotal: FundProjectDto._intOrNull(json['soldedNumTotal']),
       soldedNumMoneyTotal: FundProjectDto._intOrNull(
@@ -478,6 +480,7 @@ class FundProjectApplyInvestorDto {
   }
 
   final String? investorCode;
+  final bool? isOpen;
   final int? unitTotal;
   final int? soldedNumTotal;
   final int? soldedNumMoneyTotal;
