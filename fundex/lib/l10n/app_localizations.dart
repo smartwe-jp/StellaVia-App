@@ -2939,6 +2939,18 @@ abstract class AppLocalizations {
   /// **'Please enter your inquiry'**
   String get settingsContactMessageHint;
 
+  /// No description provided for @settingsContactConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get settingsContactConfirmAction;
+
+  /// No description provided for @settingsContactConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm inquiry details'**
+  String get settingsContactConfirmTitle;
+
   /// No description provided for @settingsContactSubmitAction.
   ///
   /// In en, this message translates to:

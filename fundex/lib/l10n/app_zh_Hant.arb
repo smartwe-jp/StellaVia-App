@@ -523,6 +523,8 @@
   "settingsContactCategoryOther": "其他",
   "settingsContactMessageLabel": "諮詢內容",
   "settingsContactMessageHint": "請輸入您的諮詢內容",
+  "settingsContactConfirmAction": "確認",
+  "settingsContactConfirmTitle": "確認送出內容",
   "settingsContactSubmitAction": "送出",
   "settingsContactSubmitSuccess": "已收到您的諮詢。",
   "settingsContactPhoneSectionTitle": "電話諮詢",

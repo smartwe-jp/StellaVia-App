@@ -1560,6 +1560,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsContactMessageHint => 'Please enter your inquiry';
 
   @override
+  String get settingsContactConfirmAction => 'Confirm';
+
+  @override
+  String get settingsContactConfirmTitle => 'Confirm inquiry details';
+
+  @override
   String get settingsContactSubmitAction => 'Send';
 
   @override

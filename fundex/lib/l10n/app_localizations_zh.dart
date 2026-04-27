@@ -1457,6 +1457,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsContactMessageHint => '请输入您的咨询内容';
 
   @override
+  String get settingsContactConfirmAction => '确认';
+
+  @override
+  String get settingsContactConfirmTitle => '确认发送内容';
+
+  @override
   String get settingsContactSubmitAction => '发送';
 
   @override
@@ -5487,6 +5493,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get settingsContactMessageHint => '請輸入您的諮詢內容';
+
+  @override
+  String get settingsContactConfirmAction => '確認';
+
+  @override
+  String get settingsContactConfirmTitle => '確認送出內容';
 
   @override
   String get settingsContactSubmitAction => '送出';

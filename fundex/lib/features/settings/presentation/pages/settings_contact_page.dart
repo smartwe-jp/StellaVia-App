@@ -11,6 +11,24 @@ import '../../../member_profile/presentation/providers/member_profile_providers.
 
 enum _SettingsContactCategory { investment, account, wallet, ekyc, other }
 
+class _SettingsContactDraft {
+  const _SettingsContactDraft({
+    required this.familyName,
+    required this.givenName,
+    required this.email,
+    required this.category,
+    required this.message,
+  });
+
+  final String familyName;
+  final String givenName;
+  final String email;
+  final _SettingsContactCategory category;
+  final String message;
+
+  String get displayName => '$familyName $givenName'.trim();
+}
+
 class SettingsContactPage extends ConsumerStatefulWidget {
   const SettingsContactPage({super.key});
 
@@ -141,40 +159,97 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
     };
   }
 
+  _SettingsContactDraft? _validateDraft() {
+    if (_isSubmitting) {
+      return null;
+    }
+
+    final l10n = context.l10n;
+    final familyName = _familyNameController.text.trim();
+    final givenName = _givenNameController.text.trim();
+    final email = _emailController.text.trim();
+    final message = _messageController.text.trim();
+
+    if (familyName.isEmpty || givenName.isEmpty) {
+      AppNotice.show(context, message: l10n.settingsContactValidationName);
+      return null;
+    }
+    if (!_isValidEmail(email)) {
+      AppNotice.show(context, message: l10n.settingsContactValidationEmail);
+      return null;
+    }
+    final category = _selectedCategory;
+    if (category == null) {
+      AppNotice.show(context, message: l10n.settingsContactValidationCategory);
+      return null;
+    }
+    if (message.isEmpty) {
+      AppNotice.show(context, message: l10n.settingsContactValidationMessage);
+      return null;
+    }
+
+    return _SettingsContactDraft(
+      familyName: familyName,
+      givenName: givenName,
+      email: email,
+      category: category,
+      message: message,
+    );
+  }
+
+  Future<void> _confirmAndSubmit() async {
+    final draft = _validateDraft();
+    if (draft == null) {
+      return;
+    }
+
+    FocusScope.of(context).unfocus();
+    final confirmed = await _showConfirmDialog(draft);
+    if (!mounted || confirmed != true) {
+      return;
+    }
+
+    await _submit();
+  }
+
+  Future<bool?> _showConfirmDialog(_SettingsContactDraft draft) {
+    final l10n = context.l10n;
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(l10n.settingsContactConfirmTitle),
+          content: _SettingsContactConfirmContent(
+            nameLabel: l10n.settingsContactNameLabel,
+            emailLabel: l10n.settingsContactEmailLabel,
+            categoryLabel: l10n.settingsContactCategoryLabel,
+            messageLabel: l10n.settingsContactMessageLabel,
+            name: draft.displayName,
+            email: draft.email,
+            category: _categoryLabel(draft.category),
+            message: draft.message,
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: Text(l10n.commonCancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: Text(l10n.settingsContactSubmitAction),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _submit() async {
     if (_isSubmitting) {
       return;
     }
 
     final l10n = context.l10n;
-    final familyName = _familyNameController.text.trim();
-    final givenName = _givenNameController.text.trim();
-    final familyNameKana = _familyNameKanaController.text.trim();
-    final givenNameKana = _givenNameKanaController.text.trim();
-    final email = _emailController.text.trim();
-    final message = _messageController.text.trim();
-
-    if (familyName.isEmpty || givenName.isEmpty) {
-      AppNotice.show(context, message: l10n.settingsContactValidationName);
-      return;
-    }
-    if (familyNameKana.isEmpty || givenNameKana.isEmpty) {
-      AppNotice.show(context, message: l10n.settingsContactValidationKana);
-      return;
-    }
-    if (!_isValidEmail(email)) {
-      AppNotice.show(context, message: l10n.settingsContactValidationEmail);
-      return;
-    }
-    if (_selectedCategory == null) {
-      AppNotice.show(context, message: l10n.settingsContactValidationCategory);
-      return;
-    }
-    if (message.isEmpty) {
-      AppNotice.show(context, message: l10n.settingsContactValidationMessage);
-      return;
-    }
-
     FocusScope.of(context).unfocus();
     setState(() {
       _isSubmitting = true;
@@ -251,7 +326,7 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
           const SizedBox(height: 16),
           MemberProfileSegmentedDualTextFieldRow(
             label: l10n.settingsContactKanaLabel,
-            isRequired: true,
+            isRequired: false,
             labelColor: colors.textPrimary,
             startSegmentLabel: l10n.settingsContactKanaFamilySegment,
             startController: _familyNameKanaController,
@@ -300,8 +375,8 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
           ),
           const SizedBox(height: 20),
           PrimaryCtaButton(
-            label: l10n.settingsContactSubmitAction,
-            onPressed: _isSubmitting ? null : _submit,
+            label: l10n.settingsContactConfirmAction,
+            onPressed: _isSubmitting ? null : _confirmAndSubmit,
             isLoading: _isSubmitting,
           ),
           const SizedBox(height: 16),
@@ -352,6 +427,101 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _SettingsContactConfirmContent extends StatelessWidget {
+  const _SettingsContactConfirmContent({
+    required this.nameLabel,
+    required this.emailLabel,
+    required this.categoryLabel,
+    required this.messageLabel,
+    required this.name,
+    required this.email,
+    required this.category,
+    required this.message,
+  });
+
+  final String nameLabel;
+  final String emailLabel;
+  final String categoryLabel;
+  final String messageLabel;
+  final String name;
+  final String email;
+  final String category;
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.sizeOf(context).height * 0.55,
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _SettingsContactConfirmRow(label: nameLabel, value: name),
+            const SizedBox(height: 12),
+            _SettingsContactConfirmRow(label: emailLabel, value: email),
+            const SizedBox(height: 12),
+            _SettingsContactConfirmRow(label: categoryLabel, value: category),
+            const SizedBox(height: 12),
+            Text(
+              messageLabel,
+              style: appText.micro.copyWith(color: colors.textSecondary),
+            ),
+            const SizedBox(height: 6),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: colors.surfaceAlt,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: colors.borderSoft),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  message,
+                  style: appText.body.copyWith(
+                    color: colors.textPrimary,
+                    height: 1.55,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SettingsContactConfirmRow extends StatelessWidget {
+  const _SettingsContactConfirmRow({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(label, style: appText.micro.copyWith(color: colors.textSecondary)),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: appText.bodyStrong.copyWith(color: colors.textPrimary),
+        ),
+      ],
     );
   }
 }

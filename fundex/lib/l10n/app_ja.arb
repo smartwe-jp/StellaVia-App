@@ -523,6 +523,8 @@
   "settingsContactCategoryOther": "その他",
   "settingsContactMessageLabel": "お問い合わせ内容",
   "settingsContactMessageHint": "お問い合わせ内容をご記入ください",
+  "settingsContactConfirmAction": "確認",
+  "settingsContactConfirmTitle": "送信内容の確認",
   "settingsContactSubmitAction": "送信",
   "settingsContactSubmitSuccess": "お問い合わせを受け付けました。",
   "settingsContactPhoneSectionTitle": "お電話でのお問い合わせ",

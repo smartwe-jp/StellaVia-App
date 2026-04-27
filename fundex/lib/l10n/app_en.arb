@@ -523,6 +523,8 @@
   "settingsContactCategoryOther": "Other",
   "settingsContactMessageLabel": "Message",
   "settingsContactMessageHint": "Please enter your inquiry",
+  "settingsContactConfirmAction": "Confirm",
+  "settingsContactConfirmTitle": "Confirm inquiry details",
   "settingsContactSubmitAction": "Send",
   "settingsContactSubmitSuccess": "Your inquiry has been received.",
   "settingsContactPhoneSectionTitle": "Phone inquiries",

@@ -1476,6 +1476,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsContactMessageHint => 'お問い合わせ内容をご記入ください';
 
   @override
+  String get settingsContactConfirmAction => '確認';
+
+  @override
+  String get settingsContactConfirmTitle => '送信内容の確認';
+
+  @override
   String get settingsContactSubmitAction => '送信';
 
   @override

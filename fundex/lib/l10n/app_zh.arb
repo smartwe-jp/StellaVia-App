@@ -523,6 +523,8 @@
   "settingsContactCategoryOther": "其他",
   "settingsContactMessageLabel": "咨询内容",
   "settingsContactMessageHint": "请输入您的咨询内容",
+  "settingsContactConfirmAction": "确认",
+  "settingsContactConfirmTitle": "确认发送内容",
   "settingsContactSubmitAction": "发送",
   "settingsContactSubmitSuccess": "已收到您的咨询。",
   "settingsContactPhoneSectionTitle": "电话咨询",
