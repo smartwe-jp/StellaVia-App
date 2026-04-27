@@ -76,6 +76,58 @@ class FundProject {
 }
 
 @immutable
+class FundProjectApplyDetail {
+  const FundProjectApplyDetail({
+    required this.projectId,
+    required this.projectName,
+    this.investmentUnit,
+    this.unitTotal,
+    this.soldedNumTotal,
+    this.soldedNumMoneyTotal,
+    this.validApplyTotal,
+    this.validApplyMoneyTotal,
+    this.availableApplyTotal,
+    this.availableApplyMoneyTotal,
+    this.investorList = const <FundProjectApplyInvestor>[],
+  });
+
+  final String projectId;
+  final String projectName;
+  final int? investmentUnit;
+  final int? unitTotal;
+  final int? soldedNumTotal;
+  final int? soldedNumMoneyTotal;
+  final int? validApplyTotal;
+  final int? validApplyMoneyTotal;
+  final int? availableApplyTotal;
+  final int? availableApplyMoneyTotal;
+  final List<FundProjectApplyInvestor> investorList;
+}
+
+@immutable
+class FundProjectApplyInvestor {
+  const FundProjectApplyInvestor({
+    this.investorCode,
+    this.unitTotal,
+    this.soldedNumTotal,
+    this.soldedNumMoneyTotal,
+    this.validApplyTotal,
+    this.validApplyMoneyTotal,
+    this.availableApplyTotal,
+    this.availableApplyMoneyTotal,
+  });
+
+  final String? investorCode;
+  final int? unitTotal;
+  final int? soldedNumTotal;
+  final int? soldedNumMoneyTotal;
+  final int? validApplyTotal;
+  final int? validApplyMoneyTotal;
+  final int? availableApplyTotal;
+  final int? availableApplyMoneyTotal;
+}
+
+@immutable
 class FundProjectInvestorType {
   const FundProjectInvestorType({
     this.id,

@@ -22,6 +22,14 @@ class FundProjectRepositoryImpl implements FundProjectRepository {
   }
 
   @override
+  Future<FundProjectApplyDetail> fetchFundProjectApplyDetail({
+    required String projectId,
+  }) async {
+    final dto = await _remote.fetchFundProjectApplyDetail(projectId: projectId);
+    return dto.toEntity();
+  }
+
+  @override
   Future<void> submitLotteryApply({
     required String projectId,
     required int units,

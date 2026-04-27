@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
@@ -346,26 +347,55 @@ class _FundLotteryApplyFlowPageState
         : '${value.toStringAsFixed(0)}%';
   }
 
-  int _resolveUnitAmount(FundProject project) {
-    final unit = project.investmentUnit ?? _defaultUnitAmount;
+  int _resolveUnitAmount(
+    FundProject project,
+    FundProjectApplyDetail applyDetail,
+  ) {
+    final unit =
+        applyDetail.investmentUnit ??
+        project.investmentUnit ??
+        _defaultUnitAmount;
     if (unit <= 0) {
       return _defaultUnitAmount;
     }
     return unit;
   }
 
-  int _resolveMaximumAmount(FundProject project, int unitAmount) {
+  int _resolveMaximumUnits(
+    FundProject project,
+    FundProjectApplyDetail applyDetail,
+    int unitAmount,
+  ) {
+    final availableUnits = _nonNegativeIntOrNull(
+      applyDetail.availableApplyTotal,
+    );
+    final perPersonUnits = _resolvePerPersonMaximumUnits(project, unitAmount);
+    if (availableUnits != null && perPersonUnits != null) {
+      return math.min(availableUnits, perPersonUnits);
+    }
+    return availableUnits ?? perPersonUnits ?? _defaultMaxMultiplier;
+  }
+
+  int? _resolvePerPersonMaximumUnits(FundProject project, int unitAmount) {
     final rawMaximum = project.maximumInvestmentPerPerson;
     if (rawMaximum == null || rawMaximum <= 0) {
-      return unitAmount * _defaultMaxMultiplier;
+      return null;
     }
 
     // Backend data may provide "maximum units per person" instead of amount.
     if (rawMaximum < unitAmount) {
-      return rawMaximum * unitAmount;
+      return rawMaximum;
     }
 
-    return rawMaximum;
+    final units = rawMaximum ~/ unitAmount;
+    return units <= 0 ? null : units;
+  }
+
+  int? _nonNegativeIntOrNull(int? value) {
+    if (value == null || value < 0) {
+      return null;
+    }
+    return value;
   }
 
   bool _isAmountInAllowedRange({
@@ -582,6 +612,9 @@ class _FundLotteryApplyFlowPageState
     final l10n = context.l10n;
     final colors = context.appColors;
     final detailAsync = ref.watch(fundProjectDetailProvider(widget.projectId));
+    final applyDetailAsync = ref.watch(
+      fundProjectApplyDetailProvider(widget.projectId),
+    );
 
     return detailAsync.when(
       loading: () => _FlowLoadingScaffold(title: l10n.lotteryApplyFlowTitle),
@@ -589,20 +622,39 @@ class _FundLotteryApplyFlowPageState
         title: l10n.lotteryApplyFlowTitle,
         body: l10n.fundListLoadError,
         retryLabel: l10n.fundListRetry,
-        onRetry: () =>
-            ref.invalidate(fundProjectDetailProvider(widget.projectId)),
+        onRetry: () {
+          ref.invalidate(fundProjectDetailProvider(widget.projectId));
+          ref.invalidate(fundProjectApplyDetailProvider(widget.projectId));
+        },
       ),
       data: (FundProject project) {
+        if (applyDetailAsync.isLoading) {
+          return _FlowLoadingScaffold(title: l10n.lotteryApplyFlowTitle);
+        }
+        if (applyDetailAsync.hasError || !applyDetailAsync.hasValue) {
+          return _FlowErrorScaffold(
+            title: l10n.lotteryApplyFlowTitle,
+            body: l10n.fundListLoadError,
+            retryLabel: l10n.fundListRetry,
+            onRetry: () {
+              ref.invalidate(fundProjectDetailProvider(widget.projectId));
+              ref.invalidate(fundProjectApplyDetailProvider(widget.projectId));
+            },
+          );
+        }
+        final applyDetail = applyDetailAsync.requireValue;
         final projectName = project.projectName.trim().isEmpty
             ? l10n.fundDetailUnknownValue
             : project.projectName.trim();
         final yieldValue = _formatYieldPercent(_resolveYield(project));
         final lotteryDate = _resolveLotteryDate(context, project);
-        final unitAmount = _resolveUnitAmount(project);
-        final maximumAmount = _resolveMaximumAmount(project, unitAmount);
-        final resolvedMaximumUnits = (maximumAmount ~/ unitAmount) <= 0
-            ? _minimumUnits
-            : (maximumAmount ~/ unitAmount);
+        final unitAmount = _resolveUnitAmount(project, applyDetail);
+        final resolvedMaximumUnits = _resolveMaximumUnits(
+          project,
+          applyDetail,
+          unitAmount,
+        );
+        final maximumAmount = resolvedMaximumUnits * unitAmount;
         _currentMaximumUnits = resolvedMaximumUnits;
         final totalAmount = _selectedUnits * unitAmount;
         final canProceedStep1 = _canProceedStep1(

@@ -110,5 +110,38 @@ void main() {
         expect(item.liveJapanBank?.bankNumber, equals('普通3081072'));
       },
     );
+
+    test(
+      'fetchProjectApplyDetail uses apply detail endpoint and parses envelope',
+      () async {
+        final client = _buildClient((options) async {
+          expect(options.method, equals('GET'));
+          expect(options.path, equals(FundProjectApiPaths.projectApplyDetail));
+          expect(
+            options.queryParameters['projectId'],
+            equals('448236852676001792'),
+          );
+          expect(options.extra['auth_required'], isTrue);
+
+          return _jsonOk(
+            '{"msg":"success","code":200,"data":{"projectId":"448236852676001792","projectName":"测试项目24308-文军","investmentUnit":1000000,"unitTotal":600,"soldedNumTotal":2,"soldedNumMoneyTotal":2000000,"validApplyTotal":2,"validApplyMoneyTotal":2000000,"avaliableApplyTotal":598,"avaliableApplyMoneyTotal":598000000,"investorList":[{"investorCode":"优先投资人","unitTotal":235,"soldedNumTotal":0,"soldedNumMoneyTotal":0,"validApplyTotal":0,"validApplyMoneyTotal":0,"avaliableApplyTotal":235,"avaliableApplyMoneyTotal":235000000}]}}',
+          );
+        });
+        final api = FundProjectApiClient(client);
+
+        final item = await api.fetchProjectApplyDetail(
+          projectId: '448236852676001792',
+        );
+
+        expect(item.projectId, equals('448236852676001792'));
+        expect(item.projectName, equals('测试项目24308-文军'));
+        expect(item.investmentUnit, equals(1000000));
+        expect(item.availableApplyTotal, equals(598));
+        expect(item.availableApplyMoneyTotal, equals(598000000));
+        expect(item.investorList, hasLength(1));
+        expect(item.investorList.first.investorCode, equals('优先投资人'));
+        expect(item.investorList.first.availableApplyTotal, equals(235));
+      },
+    );
   });
 }

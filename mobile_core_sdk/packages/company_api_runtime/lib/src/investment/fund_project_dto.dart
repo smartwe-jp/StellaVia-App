@@ -375,6 +375,118 @@ class FundProjectInvestorTypeDto {
   final int? currentAmountApplication;
 }
 
+class FundProjectApplyDetailDto {
+  const FundProjectApplyDetailDto({
+    required this.projectId,
+    required this.projectName,
+    this.investmentUnit,
+    this.unitTotal,
+    this.soldedNumTotal,
+    this.soldedNumMoneyTotal,
+    this.validApplyTotal,
+    this.validApplyMoneyTotal,
+    this.availableApplyTotal,
+    this.availableApplyMoneyTotal,
+    this.investorList = const <FundProjectApplyInvestorDto>[],
+  });
+
+  factory FundProjectApplyDetailDto.fromJson(Map<String, dynamic> json) {
+    return FundProjectApplyDetailDto(
+      projectId: FundProjectDto._stringOrEmpty(json['projectId']),
+      projectName: FundProjectDto._stringOrEmpty(json['projectName']),
+      investmentUnit: FundProjectDto._intOrNull(json['investmentUnit']),
+      unitTotal: FundProjectDto._intOrNull(json['unitTotal']),
+      soldedNumTotal: FundProjectDto._intOrNull(json['soldedNumTotal']),
+      soldedNumMoneyTotal: FundProjectDto._intOrNull(
+        json['soldedNumMoneyTotal'],
+      ),
+      validApplyTotal: FundProjectDto._intOrNull(json['validApplyTotal']),
+      validApplyMoneyTotal: FundProjectDto._intOrNull(
+        json['validApplyMoneyTotal'],
+      ),
+      availableApplyTotal:
+          FundProjectDto._intOrNull(json['avaliableApplyTotal']) ??
+          FundProjectDto._intOrNull(json['availableApplyTotal']),
+      availableApplyMoneyTotal:
+          FundProjectDto._intOrNull(json['avaliableApplyMoneyTotal']) ??
+          FundProjectDto._intOrNull(json['availableApplyMoneyTotal']),
+      investorList: _investorListFrom(json['investorList']),
+    );
+  }
+
+  final String projectId;
+  final String projectName;
+  final int? investmentUnit;
+  final int? unitTotal;
+  final int? soldedNumTotal;
+  final int? soldedNumMoneyTotal;
+  final int? validApplyTotal;
+  final int? validApplyMoneyTotal;
+  final int? availableApplyTotal;
+  final int? availableApplyMoneyTotal;
+  final List<FundProjectApplyInvestorDto> investorList;
+
+  static List<FundProjectApplyInvestorDto> _investorListFrom(Object? value) {
+    if (value is! List) {
+      return const <FundProjectApplyInvestorDto>[];
+    }
+    final list = <FundProjectApplyInvestorDto>[];
+    for (final item in value) {
+      final json = FundProjectDto._mapOrNull(item);
+      if (json == null) {
+        continue;
+      }
+      list.add(FundProjectApplyInvestorDto.fromJson(json));
+    }
+    return List<FundProjectApplyInvestorDto>.unmodifiable(list);
+  }
+}
+
+class FundProjectApplyInvestorDto {
+  const FundProjectApplyInvestorDto({
+    this.investorCode,
+    this.unitTotal,
+    this.soldedNumTotal,
+    this.soldedNumMoneyTotal,
+    this.validApplyTotal,
+    this.validApplyMoneyTotal,
+    this.availableApplyTotal,
+    this.availableApplyMoneyTotal,
+  });
+
+  factory FundProjectApplyInvestorDto.fromJson(Map<String, dynamic> json) {
+    return FundProjectApplyInvestorDto(
+      investorCode: FundProjectDto._normalizedOptionalString(
+        json['investorCode'],
+      ),
+      unitTotal: FundProjectDto._intOrNull(json['unitTotal']),
+      soldedNumTotal: FundProjectDto._intOrNull(json['soldedNumTotal']),
+      soldedNumMoneyTotal: FundProjectDto._intOrNull(
+        json['soldedNumMoneyTotal'],
+      ),
+      validApplyTotal: FundProjectDto._intOrNull(json['validApplyTotal']),
+      validApplyMoneyTotal: FundProjectDto._intOrNull(
+        json['validApplyMoneyTotal'],
+      ),
+      availableApplyTotal:
+          FundProjectDto._intOrNull(json['avaliableApplyTotal']) ??
+          FundProjectDto._intOrNull(json['availableApplyTotal']),
+      availableApplyMoneyTotal:
+          FundProjectDto._intOrNull(json['avaliableApplyMoneyTotal']) ??
+          FundProjectDto._intOrNull(json['availableApplyMoneyTotal']),
+    );
+  }
+
+  final String? investorCode;
+  final int? unitTotal;
+  final int? soldedNumTotal;
+  final int? soldedNumMoneyTotal;
+  final int? validApplyTotal;
+  final int? validApplyMoneyTotal;
+  final int? availableApplyTotal;
+  final int? availableApplyMoneyTotal;
+}
+
 class FundProjectLiveJapanBankDto {
   const FundProjectLiveJapanBankDto({
     this.id,

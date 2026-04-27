@@ -4,6 +4,9 @@ import 'package:core_network/core_network.dart';
 abstract class FundProjectRemoteDataSource {
   Future<List<FundProjectDto>> fetchFundProjectList();
   Future<FundProjectDto> fetchFundProjectDetail({required String id});
+  Future<FundProjectApplyDetailDto> fetchFundProjectApplyDetail({
+    required String projectId,
+  });
   Future<void> submitLotteryApply({
     required String projectId,
     required int units,
@@ -32,6 +35,13 @@ class FundProjectRemoteDataSourceImpl implements FundProjectRemoteDataSource {
   @override
   Future<FundProjectDto> fetchFundProjectDetail({required String id}) async {
     return _apiClient.fetchFundProjectDetail(id: id);
+  }
+
+  @override
+  Future<FundProjectApplyDetailDto> fetchFundProjectApplyDetail({
+    required String projectId,
+  }) async {
+    return _apiClient.fetchProjectApplyDetail(projectId: projectId);
   }
 
   @override

@@ -1,5 +1,7 @@
 export 'package:company_api_runtime/company_api_runtime.dart'
     show
+        FundProjectApplyDetailDto,
+        FundProjectApplyInvestorDto,
         FundProjectDto,
         FundProjectLiveJapanBankDto,
         FundProjectInvestorTypeDto,
@@ -8,6 +10,8 @@ export 'package:company_api_runtime/company_api_runtime.dart'
 
 import 'package:company_api_runtime/company_api_runtime.dart'
     show
+        FundProjectApplyDetailDto,
+        FundProjectApplyInvestorDto,
         FundProjectDto,
         FundProjectLiveJapanBankDto,
         FundProjectInvestorTypeDto,
@@ -57,6 +61,41 @@ extension FundProjectDtoMapper on FundProjectDto {
       pdfDocuments: List<FundProjectPdfDocument>.unmodifiable(
         pdfDocuments.map((item) => item.toEntity()),
       ),
+    );
+  }
+}
+
+extension FundProjectApplyDetailDtoMapper on FundProjectApplyDetailDto {
+  FundProjectApplyDetail toEntity() {
+    return FundProjectApplyDetail(
+      projectId: projectId,
+      projectName: projectName,
+      investmentUnit: investmentUnit,
+      unitTotal: unitTotal,
+      soldedNumTotal: soldedNumTotal,
+      soldedNumMoneyTotal: soldedNumMoneyTotal,
+      validApplyTotal: validApplyTotal,
+      validApplyMoneyTotal: validApplyMoneyTotal,
+      availableApplyTotal: availableApplyTotal,
+      availableApplyMoneyTotal: availableApplyMoneyTotal,
+      investorList: List<FundProjectApplyInvestor>.unmodifiable(
+        investorList.map((item) => item.toEntity()),
+      ),
+    );
+  }
+}
+
+extension FundProjectApplyInvestorDtoMapper on FundProjectApplyInvestorDto {
+  FundProjectApplyInvestor toEntity() {
+    return FundProjectApplyInvestor(
+      investorCode: investorCode,
+      unitTotal: unitTotal,
+      soldedNumTotal: soldedNumTotal,
+      soldedNumMoneyTotal: soldedNumMoneyTotal,
+      validApplyTotal: validApplyTotal,
+      validApplyMoneyTotal: validApplyMoneyTotal,
+      availableApplyTotal: availableApplyTotal,
+      availableApplyMoneyTotal: availableApplyMoneyTotal,
     );
   }
 }

@@ -5,6 +5,7 @@ import '../../data/datasources/fund_project_remote_data_source.dart';
 import '../../data/repositories/fund_project_repository_impl.dart';
 import '../../domain/entities/fund_project.dart';
 import '../../domain/repositories/fund_project_repository.dart';
+import '../../domain/usecases/fetch_fund_project_apply_detail_usecase.dart';
 import '../../domain/usecases/fetch_fund_project_detail_usecase.dart';
 import '../../domain/usecases/fetch_fund_project_list_usecase.dart';
 import '../../domain/usecases/submit_fund_lottery_apply_usecase.dart';
@@ -37,6 +38,13 @@ final fetchFundProjectDetailUseCaseProvider =
       );
     });
 
+final fetchFundProjectApplyDetailUseCaseProvider =
+    Provider<FetchFundProjectApplyDetailUseCase>((ref) {
+      return FetchFundProjectApplyDetailUseCase(
+        ref.watch(fundProjectRepositoryProvider),
+      );
+    });
+
 final submitFundLotteryApplyUseCaseProvider =
     Provider<SubmitFundLotteryApplyUseCase>((ref) {
       return SubmitFundLotteryApplyUseCase(
@@ -54,6 +62,13 @@ final fundProjectDetailProvider = FutureProvider.family<FundProject, String>((
 ) async {
   return ref.watch(fetchFundProjectDetailUseCaseProvider).call(id: id);
 });
+
+final fundProjectApplyDetailProvider =
+    FutureProvider.family<FundProjectApplyDetail, String>((ref, String id) {
+      return ref
+          .watch(fetchFundProjectApplyDetailUseCaseProvider)
+          .call(projectId: id);
+    });
 
 final fundDetailStaticContentProvider =
     FutureProvider.family<FundDetailStaticContent, String>((

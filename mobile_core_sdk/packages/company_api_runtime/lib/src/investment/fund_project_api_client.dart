@@ -8,6 +8,8 @@ class FundProjectApiPaths {
 
   static const String projectList = '/crowdfunding/offline/project/list';
   static const String projectDetail = '/crowdfunding/offline/project/detail';
+  static const String projectApplyDetail =
+      '/crowdfunding/offline/project/apply-detail-by-projectId';
 }
 
 class FundProjectApiClient {
@@ -16,12 +18,14 @@ class FundProjectApiClient {
     LegacyEnvelopeCodec? envelopeCodec,
     this.projectListPath = FundProjectApiPaths.projectList,
     this.projectDetailPath = FundProjectApiPaths.projectDetail,
+    this.projectApplyDetailPath = FundProjectApiPaths.projectApplyDetail,
   }) : _envelopeCodec = envelopeCodec ?? const LegacyEnvelopeCodec();
 
   final CoreHttpClient _client;
   final LegacyEnvelopeCodec _envelopeCodec;
   final String projectListPath;
   final String projectDetailPath;
+  final String projectApplyDetailPath;
 
   Future<List<FundProjectDto>> fetchFundProjectList() async {
     final response = await _client.dio.get<Map<String, dynamic>>(
@@ -53,5 +57,24 @@ class FundProjectApiClient {
       throw StateError('Failed to load fund project detail.');
     }
     return FundProjectDto.fromJson(row);
+  }
+
+  Future<FundProjectApplyDetailDto> fetchProjectApplyDetail({
+    required String projectId,
+  }) async {
+    final response = await _client.dio.get<Map<String, dynamic>>(
+      projectApplyDetailPath,
+      queryParameters: <String, dynamic>{'projectId': projectId},
+      options: authRequired(true),
+    );
+
+    final row = _envelopeCodec.extractDataMap(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load project apply detail.',
+    );
+    if (row.isEmpty) {
+      throw StateError('Failed to load project apply detail.');
+    }
+    return FundProjectApplyDetailDto.fromJson(row);
   }
 }
