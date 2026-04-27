@@ -52,14 +52,14 @@ class WalletHistoryListItem extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       title,
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: appText.chip.copyWith(
                         color: colors.textPrimary,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 10),
                     Text(
                       dateText,
                       maxLines: 1,

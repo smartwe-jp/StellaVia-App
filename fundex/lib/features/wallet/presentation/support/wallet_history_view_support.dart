@@ -65,24 +65,9 @@ String resolveWalletHistoryDisplayTitle(
   AppLocalizations l10n,
   WalletAccountHistory item,
 ) {
-  final visualType = resolveWalletHistoryVisualType(item);
-  switch (visualType) {
-    case WalletHistoryVisualType.deposit:
-      return l10n.walletHistoryFilterDeposit;
-    case WalletHistoryVisualType.withdraw:
-      return l10n.walletHistoryFilterWithdraw;
-    case WalletHistoryVisualType.bonus:
-    case WalletHistoryVisualType.dividend:
-    case WalletHistoryVisualType.unknown:
-      break;
-  }
-
-  final candidates = <String?>[item.tradeType, item.typeName, item.remark];
-  for (final candidate in candidates) {
-    final text = candidate?.trim() ?? '';
-    if (text.isNotEmpty) {
-      return text;
-    }
+  final remark = item.remark?.trim() ?? '';
+  if (remark.isNotEmpty) {
+    return remark;
   }
 
   final isIncome = parseWalletHistoryInflowFlag(item.inOut);
