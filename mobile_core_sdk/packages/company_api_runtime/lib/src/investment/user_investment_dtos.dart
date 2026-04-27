@@ -491,7 +491,10 @@ class UserInvestmentRecordDto {
       memberId: _intOrNull(json['memberId']),
       accountId: _stringOrNull(json['accountId']),
       memberName: _stringOrNull(json['memberName']),
-      earnings: _numOrNull(json['earnings']),
+      earnings:
+          _numOrNull(json['earnings']) ??
+          _numOrNull(json['earings']) ??
+          _numOrNull(json['earrings']),
       checkTimes: _intOrNull(json['checkTimes']),
       investorType: _toNullableJsonMap(json['investorType']) == null
           ? null

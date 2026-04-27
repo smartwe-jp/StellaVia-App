@@ -19,11 +19,11 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
   const MyPageActiveFundDetailPage({
     super.key,
     required this.projectId,
-    this.seedRecords = const <MyPageInvestmentRecord>[],
+    this.initialSeed,
   });
 
   final String projectId;
-  final List<MyPageInvestmentRecord> seedRecords;
+  final MyPageActiveFundDetailSeed? initialSeed;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,12 +43,18 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
         .watch(myPageInvestmentListProvider)
         .asData
         ?.value;
-    final records = _resolveRecords(
+    final records = _matchingInvestmentRecords(
       projectId,
-      seed: seedRecords,
-      fallback: fallbackRecords ?? const <MyPageInvestmentRecord>[],
+      fallbackRecords ?? const <MyPageInvestmentRecord>[],
     );
-    final summary = _ActiveFundSummary.fromRecords(records);
+    final summary = _ActiveFundSummary.fromData(
+      records,
+      initialSeed: initialSeed,
+    );
+    final sellingUnits = _subtractCounts(
+      summary.investNum,
+      summary.investNumRemaining,
+    );
     final benefitData = benefitAsync.asData?.value;
     final projectName = benefitData?.projectName?.trim().isNotEmpty == true
         ? benefitData!.projectName!.trim()
@@ -108,25 +114,12 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
               statusLabel: statusLabel,
               statusBackgroundColor: colors.primarySubtle,
               statusForegroundColor: colors.primaryAlt,
-              totalBenefitLabel: l10n.myPageActiveFundTotalBenefitLabel,
-              totalBenefitValue: formatCurrency(
-                benefitData?.balanceTotal ?? summary.earnings,
-                formatter,
-              ),
-              totalHistoricalBenefitLabel:
-                  l10n.myPageAccumulatedDistributionLabel,
-              totalHistoricalBenefitValue: formatCurrency(
-                benefitData?.balanceTotalHistorical ?? summary.earnings,
-                formatter,
-              ),
+              totalBenefitLabel: l10n.myPageAccumulatedDistributionLabel,
+              totalBenefitValue: formatCurrency(summary.earnings, formatter),
               primaryMetrics: <ActiveFundOverviewMetricData>[
                 ActiveFundOverviewMetricData(
                   label: l10n.myPageInvestmentAmountLabel,
                   value: formatCurrency(summary.investMoney, formatter),
-                ),
-                ActiveFundOverviewMetricData(
-                  label: l10n.myPageActiveFundValidInvestmentAmountLabel,
-                  value: formatCurrency(summary.investMoneyValid, formatter),
                 ),
               ],
               secondaryMetrics: <ActiveFundOverviewMetricData>[
@@ -135,8 +128,8 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
                   value: _formatCount(summary.investNum),
                 ),
                 ActiveFundOverviewMetricData(
-                  label: l10n.myPageActiveFundValidUnitsLabel,
-                  value: _formatCount(summary.investNumValid),
+                  label: l10n.myPageActiveFundSellingUnitsLabel,
+                  value: _formatCount(sellingUnits),
                 ),
                 ActiveFundOverviewMetricData(
                   label: l10n.myPageActiveFundRemainingUnitsLabel,
@@ -144,33 +137,33 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 14),
-            ActiveFundInfoCard(
-              title: l10n.myPageActiveFundMetaTitle,
-              rows: <ActiveFundInfoRowData>[
-                ActiveFundInfoRowData(
-                  label: l10n.myPageActiveFundProcessIdLabel,
-                  value: summary.processId ?? '--',
-                ),
-                ActiveFundInfoRowData(
-                  label: l10n.myPageActiveFundInvestorCodeLabel,
-                  value: summary.investorCode ?? '--',
-                  emphasized: true,
-                ),
-                ActiveFundInfoRowData(
-                  label: l10n.myPageActiveFundAppliedAtLabel,
-                  value:
-                      formatDateTimeOrNull(summary.createTime) ??
-                      l10n.myPageResultAnnouncementTbd,
-                ),
-                ActiveFundInfoRowData(
-                  label: l10n.myPageActiveFundWithdrawnAtLabel,
-                  value:
-                      formatDateTimeOrNull(summary.withdrawalTime) ??
-                      l10n.myPageResultAnnouncementTbd,
-                ),
-              ],
-            ),
+            // const SizedBox(height: 14),
+            // ActiveFundInfoCard(
+            //   title: l10n.myPageActiveFundMetaTitle,
+            //   rows: <ActiveFundInfoRowData>[
+            //     ActiveFundInfoRowData(
+            //       label: l10n.myPageActiveFundProcessIdLabel,
+            //       value: summary.processId ?? '--',
+            //     ),
+            //     ActiveFundInfoRowData(
+            //       label: l10n.myPageActiveFundInvestorCodeLabel,
+            //       value: summary.investorCode ?? '--',
+            //       emphasized: true,
+            //     ),
+            //     ActiveFundInfoRowData(
+            //       label: l10n.myPageActiveFundAppliedAtLabel,
+            //       value:
+            //           formatDateTimeOrNull(summary.createTime) ??
+            //           l10n.myPageResultAnnouncementTbd,
+            //     ),
+            //     ActiveFundInfoRowData(
+            //       label: l10n.myPageActiveFundWithdrawnAtLabel,
+            //       value:
+            //           formatDateTimeOrNull(summary.withdrawalTime) ??
+            //           l10n.myPageResultAnnouncementTbd,
+            //     ),
+            //   ],
+            // ),
             const SizedBox(height: 14),
 
             Text(
@@ -238,29 +231,29 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
                                 ),
                                 const SizedBox(width: 8),
                                 if (detail.withdrawalTime == null)
-                                OutlinedButton(
-                                  onPressed:
-                                      detail.withdrawalTime == null &&
-                                          detail.id != null &&
-                                          detail.id!.trim().isNotEmpty
-                                      ? () => _confirmBenefitWithdrawal(
-                                          context,
-                                          ref,
-                                          projectId: projectId,
-                                          benefitId: detail.id!,
-                                        )
-                                      : null,
-                                  style: _detailOutlineButtonStyle(
-                                    context,
-                                    borderColor: colors.primary,
-                                    foregroundColor: colors.primary,
+                                  OutlinedButton(
+                                    onPressed:
+                                        detail.withdrawalTime == null &&
+                                            detail.id != null &&
+                                            detail.id!.trim().isNotEmpty
+                                        ? () => _confirmBenefitWithdrawal(
+                                            context,
+                                            ref,
+                                            projectId: projectId,
+                                            benefitId: detail.id!,
+                                          )
+                                        : null,
+                                    style: _detailOutlineButtonStyle(
+                                      context,
+                                      borderColor: colors.primary,
+                                      foregroundColor: colors.primary,
+                                    ),
+                                    child: Text(
+                                      detail.withdrawalTime == null
+                                          ? l10n.myPageActiveFundWithdrawAction
+                                          : l10n.myPageActiveFundWithdrawDone,
+                                    ),
                                   ),
-                                  child: Text(
-                                    detail.withdrawalTime == null
-                                        ? l10n.myPageActiveFundWithdrawAction
-                                        : l10n.myPageActiveFundWithdrawDone,
-                                  ),
-                                ),
                               ],
                             ),
                           ),
@@ -426,14 +419,13 @@ Future<void> _confirmBenefitWithdrawal(
   }
 }
 
-List<MyPageInvestmentRecord> _resolveRecords(
-  String projectId, {
-  required List<MyPageInvestmentRecord> seed,
-  required List<MyPageInvestmentRecord> fallback,
-}) {
-  final source = seed.isNotEmpty ? seed : fallback;
+List<MyPageInvestmentRecord> _matchingInvestmentRecords(
+  String projectId,
+  List<MyPageInvestmentRecord> source,
+) {
+  final normalizedProjectId = projectId.trim();
   return source
-      .where((record) => record.projectId == projectId)
+      .where((record) => record.projectId.trim() == normalizedProjectId)
       .toList(growable: false);
 }
 
@@ -442,6 +434,14 @@ String _formatCount(num? value) {
     return '--';
   }
   return NumberFormat.decimalPattern().format(value);
+}
+
+num? _subtractCounts(num? total, num? remaining) {
+  if (total == null || remaining == null) {
+    return null;
+  }
+  final value = total - remaining;
+  return value < 0 ? 0 : value;
 }
 
 num? _resolveNetBenefit(MyPageBenefitDetail detail) {
@@ -537,7 +537,6 @@ class _ActiveFundSummary {
     required this.createTime,
     required this.withdrawalTime,
     required this.investMoney,
-    required this.investMoneyValid,
     required this.earnings,
     required this.investNum,
     required this.investNumValid,
@@ -552,14 +551,21 @@ class _ActiveFundSummary {
   final String? createTime;
   final String? withdrawalTime;
   final num? investMoney;
-  final num? investMoneyValid;
   final num? earnings;
   final int? investNum;
   final int? investNumValid;
   final int? investNumRemaining;
 
-  factory _ActiveFundSummary.fromRecords(List<MyPageInvestmentRecord> records) {
+  factory _ActiveFundSummary.fromData(
+    List<MyPageInvestmentRecord> records, {
+    required MyPageActiveFundDetailSeed? initialSeed,
+  }) {
+    final seed = initialSeed;
+
     if (records.isEmpty) {
+      if (seed != null) {
+        return _ActiveFundSummary.fromSeed(seed);
+      }
       return const _ActiveFundSummary(
         projectName: '',
         projectStatus: null,
@@ -569,7 +575,6 @@ class _ActiveFundSummary {
         createTime: null,
         withdrawalTime: null,
         investMoney: null,
-        investMoneyValid: null,
         earnings: null,
         investNum: null,
         investNumValid: null,
@@ -580,20 +585,14 @@ class _ActiveFundSummary {
     final sorted = [...records]
       ..sort((a, b) => compareByDateDesc(a.createTime, b.createTime));
     final latest = sorted.first;
-
-    num sumInvestMoney = 0;
-    num sumInvestMoneyValid = 0;
-    num sumEarnings = 0;
-    int sumInvestNum = 0;
-    int sumInvestNumValid = 0;
-    int sumInvestNumRemaining = 0;
-    for (final item in records) {
-      sumInvestMoney += item.investMoney ?? 0;
-      sumInvestMoneyValid += item.investMoneyValid ?? 0;
-      sumEarnings += item.earnings ?? 0;
-      sumInvestNum += item.investNum ?? 0;
-      sumInvestNumValid += item.investNumValid ?? 0;
-      sumInvestNumRemaining += item.investNumRemaining ?? 0;
+    if (seed != null) {
+      return _ActiveFundSummary.fromSeed(
+        seed,
+        processId: latest.processId,
+        investorCode: latest.investorCode,
+        createTime: latest.createTime,
+        withdrawalTime: latest.withdrawalTime,
+      );
     }
 
     return _ActiveFundSummary(
@@ -604,12 +603,34 @@ class _ActiveFundSummary {
       earningRatio: latest.earningRadio ?? latest.investorType?.earningsRadio,
       createTime: latest.createTime,
       withdrawalTime: latest.withdrawalTime,
-      investMoney: sumInvestMoney,
-      investMoneyValid: sumInvestMoneyValid,
-      earnings: sumEarnings,
-      investNum: sumInvestNum,
-      investNumValid: sumInvestNumValid,
-      investNumRemaining: sumInvestNumRemaining,
+      investMoney: null,
+      earnings: null,
+      investNum: null,
+      investNumValid: null,
+      investNumRemaining: null,
+    );
+  }
+
+  factory _ActiveFundSummary.fromSeed(
+    MyPageActiveFundDetailSeed seed, {
+    String? processId,
+    String? investorCode,
+    String? createTime,
+    String? withdrawalTime,
+  }) {
+    return _ActiveFundSummary(
+      projectName: seed.projectName,
+      projectStatus: seed.projectStatus,
+      processId: processId ?? seed.processId,
+      investorCode: investorCode ?? seed.investorCode,
+      earningRatio: seed.earningRatio,
+      createTime: createTime ?? seed.createTime,
+      withdrawalTime: withdrawalTime ?? seed.withdrawalTime,
+      investMoney: seed.investMoney,
+      earnings: seed.earnings,
+      investNum: seed.investNum,
+      investNumValid: seed.investNumValid,
+      investNumRemaining: seed.investNumRemaining,
     );
   }
 }

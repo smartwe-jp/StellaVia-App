@@ -421,12 +421,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     builder: (BuildContext context, GoRouterState state) {
                       final projectId = state.pathParameters['projectId'] ?? '';
                       final extra = state.extra;
-                      final seedRecords = extra is List<MyPageInvestmentRecord>
-                          ? extra
-                          : const <MyPageInvestmentRecord>[];
                       return MyPageActiveFundDetailPage(
                         projectId: projectId,
-                        seedRecords: seedRecords,
+                        initialSeed: extra is MyPageActiveFundDetailSeed
+                            ? extra
+                            : null,
                       );
                     },
                   ),

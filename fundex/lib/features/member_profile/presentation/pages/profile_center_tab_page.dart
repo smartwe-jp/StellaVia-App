@@ -615,8 +615,10 @@ Widget _buildActiveFundsSection(
                 imageUrls: project?.photos ?? const <String>[],
                 onTap: _buildActiveFundDetailTapHandler(
                   context,
-                  records: records,
-                  projectId: group.projectId,
+                  seed: resolveMyPageActiveFundDetailSeed(
+                    group.projectId,
+                    records,
+                  ),
                 ),
               ),
             );
@@ -698,19 +700,16 @@ Future<void> _handleApplyWithdraw(
 
 VoidCallback? _buildActiveFundDetailTapHandler(
   BuildContext context, {
-  required List<MyPageInvestmentRecord> records,
-  required String? projectId,
+  required MyPageActiveFundDetailSeed? seed,
 }) {
-  if (projectId == null || projectId.trim().isEmpty) {
+  final projectId = seed?.projectId;
+  if (projectId == null) {
     return null;
   }
-  final projectRecords = records
-      .where((record) => record.projectId == projectId)
-      .toList(growable: false);
-  return () => context.push(
-    '/profile/my/active-funds/$projectId',
-    extra: projectRecords,
-  );
+  if (projectId.trim().isEmpty) {
+    return null;
+  }
+  return () => context.push('/profile/my/active-funds/$projectId', extra: seed);
 }
 
 List<MyPageOrderInquiryRecord> _selectCoolingOffRecords(

@@ -1175,6 +1175,7 @@
   "myPageActiveFundValidInvestmentAmountLabel": "有效投資額",
   "myPageActiveFundInvestUnitsLabel": "投資口數",
   "myPageActiveFundValidUnitsLabel": "有效口數",
+  "myPageActiveFundSellingUnitsLabel": "賣出執行中",
   "myPageActiveFundRemainingUnitsLabel": "剩餘口數",
   "myPageActiveFundProcessIdLabel": "流程ID",
   "myPageActiveFundInvestorCodeLabel": "投資者區分",

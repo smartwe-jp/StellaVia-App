@@ -1175,6 +1175,7 @@
   "myPageActiveFundValidInvestmentAmountLabel": "Valid investment amount",
   "myPageActiveFundInvestUnitsLabel": "Investment units",
   "myPageActiveFundValidUnitsLabel": "Valid units",
+  "myPageActiveFundSellingUnitsLabel": "Selling in progress",
   "myPageActiveFundRemainingUnitsLabel": "Remaining units",
   "myPageActiveFundProcessIdLabel": "Process ID",
   "myPageActiveFundInvestorCodeLabel": "Investor class",

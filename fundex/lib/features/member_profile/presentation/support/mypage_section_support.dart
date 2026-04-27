@@ -192,6 +192,29 @@ List<MyPageInvestmentGroup> groupActiveInvestmentRecords(
   return values;
 }
 
+MyPageActiveFundDetailSeed? resolveMyPageActiveFundDetailSeed(
+  String projectId,
+  List<MyPageInvestmentRecord> records,
+) {
+  final normalizedProjectId = projectId.trim();
+  if (normalizedProjectId.isEmpty) {
+    return null;
+  }
+  final projectRecords = records
+      .where((record) => record.projectId.trim() == normalizedProjectId)
+      .toList();
+  if (projectRecords.isEmpty) {
+    return null;
+  }
+
+  final activeRecords = projectRecords
+      .where((record) => record.projectStatus == 4 || record.projectStatus == 5)
+      .toList();
+  final candidates = activeRecords.isEmpty ? projectRecords : activeRecords;
+  candidates.sort((a, b) => compareByDateDesc(a.createTime, b.createTime));
+  return MyPageActiveFundDetailSeed.fromRecord(candidates.first);
+}
+
 String resolveSectionTitle(AppLocalizations l10n, MyPageSectionType type) {
   return switch (type) {
     MyPageSectionType.pendingApplications => l10n.myPageApplyHistoryListTitle,
@@ -621,6 +644,9 @@ class MyPageInvestmentGroup {
     required this.projectName,
     required this.investMoney,
     required this.earnings,
+    required this.investNum,
+    required this.investNumValid,
+    required this.investNumRemaining,
     required this.earningRatio,
     required this.latestCreateTime,
     required this.projectStatus,
@@ -630,25 +656,84 @@ class MyPageInvestmentGroup {
   final String projectName;
   final num investMoney;
   final num earnings;
+  final int investNum;
+  final int investNumValid;
+  final int investNumRemaining;
   final double? earningRatio;
   final DateTime? latestCreateTime;
   final int? projectStatus;
+}
+
+class MyPageActiveFundDetailSeed {
+  const MyPageActiveFundDetailSeed({
+    required this.projectId,
+    required this.projectName,
+    required this.investMoney,
+    required this.earnings,
+    required this.investNum,
+    required this.investNumValid,
+    required this.investNumRemaining,
+    required this.projectStatus,
+    required this.earningRatio,
+    required this.processId,
+    required this.investorCode,
+    required this.createTime,
+    required this.withdrawalTime,
+  });
+
+  factory MyPageActiveFundDetailSeed.fromRecord(MyPageInvestmentRecord record) {
+    return MyPageActiveFundDetailSeed(
+      projectId: record.projectId,
+      projectName: record.projectName,
+      investMoney: record.investMoney,
+      earnings: record.earnings,
+      investNum: record.investNum,
+      investNumValid: record.investNumValid,
+      investNumRemaining: record.investNumRemaining,
+      projectStatus: record.projectStatus,
+      earningRatio: record.earningRadio ?? record.investorType?.earningsRadio,
+      processId: record.processId,
+      investorCode: record.investorCode,
+      createTime: record.createTime,
+      withdrawalTime: record.withdrawalTime,
+    );
+  }
+
+  final String projectId;
+  final String projectName;
+  final num? investMoney;
+  final num? earnings;
+  final int? investNum;
+  final int? investNumValid;
+  final int? investNumRemaining;
+  final int? projectStatus;
+  final double? earningRatio;
+  final String? processId;
+  final String? investorCode;
+  final String? createTime;
+  final String? withdrawalTime;
 }
 
 class _InvestmentGroupAccumulator {
   _InvestmentGroupAccumulator(MyPageInvestmentRecord seed)
     : projectId = seed.projectId,
       projectName = seed.projectName,
-      investMoney = seed.investMoney ?? 0,
-      earnings = seed.earnings ?? 0,
-      latestCreateTime = parseApiDate(seed.createTime),
-      earningRatio = seed.earningRadio ?? seed.investorType?.earningsRadio,
-      projectStatus = seed.projectStatus;
+      investMoney = 0,
+      earnings = 0,
+      investNum = 0,
+      investNumValid = 0,
+      investNumRemaining = 0,
+      latestCreateTime = null,
+      earningRatio = null,
+      projectStatus = null;
 
   final String projectId;
   final String projectName;
   num investMoney;
   num earnings;
+  int investNum;
+  int investNumValid;
+  int investNumRemaining;
   double? earningRatio;
   DateTime? latestCreateTime;
   int? projectStatus;
@@ -656,6 +741,9 @@ class _InvestmentGroupAccumulator {
   void add(MyPageInvestmentRecord record) {
     investMoney += record.investMoney ?? 0;
     earnings += record.earnings ?? 0;
+    investNum += record.investNum ?? 0;
+    investNumValid += record.investNumValid ?? 0;
+    investNumRemaining += record.investNumRemaining ?? 0;
     earningRatio ??= record.earningRadio ?? record.investorType?.earningsRadio;
     projectStatus ??= record.projectStatus;
     final candidateDate = parseApiDate(record.createTime);
@@ -671,6 +759,9 @@ class _InvestmentGroupAccumulator {
       projectName: projectName,
       investMoney: investMoney,
       earnings: earnings,
+      investNum: investNum,
+      investNumValid: investNumValid,
+      investNumRemaining: investNumRemaining,
       earningRatio: earningRatio,
       latestCreateTime: latestCreateTime,
       projectStatus: projectStatus,

@@ -467,7 +467,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
         ),
         progress: resolveMyPageActiveFundProgress(project),
         imageUrls: project?.photos ?? const <String>[],
-        onTap: _buildActiveFundTapHandler(context, group.projectId),
+        onTap: _buildActiveFundTapHandler(context, group),
       ),
     );
   }
@@ -546,16 +546,18 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
 
   VoidCallback? _buildActiveFundTapHandler(
     BuildContext context,
-    String? projectId,
+    MyPageInvestmentGroup group,
   ) {
-    if (projectId == null || projectId.trim().isEmpty) {
+    final seed = resolveMyPageActiveFundDetailSeed(
+      group.projectId,
+      _filteredInvestmentRecords,
+    );
+    final projectId = seed?.projectId ?? group.projectId;
+    if (projectId.trim().isEmpty) {
       return null;
     }
-    final records = _investmentRecords
-        .where((record) => record.projectId == projectId)
-        .toList(growable: false);
     return () =>
-        context.push('/profile/my/active-funds/$projectId', extra: records);
+        context.push('/profile/my/active-funds/$projectId', extra: seed);
   }
 
   Future<void> _refreshAfterWithdraw() async {

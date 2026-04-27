@@ -36,8 +36,6 @@ class ActiveFundOverviewHeroCard extends StatelessWidget {
     required this.statusForegroundColor,
     required this.totalBenefitLabel,
     required this.totalBenefitValue,
-    required this.totalHistoricalBenefitLabel,
-    required this.totalHistoricalBenefitValue,
     required this.primaryMetrics,
     required this.secondaryMetrics,
     this.onTitleTap,
@@ -50,8 +48,6 @@ class ActiveFundOverviewHeroCard extends StatelessWidget {
   final Color statusForegroundColor;
   final String totalBenefitLabel;
   final String totalBenefitValue;
-  final String totalHistoricalBenefitLabel;
-  final String totalHistoricalBenefitValue;
   final List<ActiveFundOverviewMetricData> primaryMetrics;
   final List<ActiveFundOverviewMetricData> secondaryMetrics;
   final VoidCallback? onTitleTap;
@@ -187,43 +183,6 @@ class ActiveFundOverviewHeroCard extends StatelessWidget {
                 ActiveFundBenefitBalanceCard(
                   title: totalBenefitLabel,
                   value: totalBenefitValue,
-                ),
-                const SizedBox(height: 12),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 14),
-                  decoration: BoxDecoration(
-                    color: colors.surface.withValues(alpha: 0.9),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: colors.primary.withValues(alpha: 0.18),
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        totalHistoricalBenefitLabel,
-                        style: appText.caption.copyWith(
-                          color: colors.textSecondary,
-                        ),
-                      ),
-                      
-                      const SizedBox(height: 8),
-                      Divider(
-                        height: 1,
-                        color: colors.primary.withValues(alpha: 0.18),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        totalHistoricalBenefitValue,
-                        style: appText.numericTitle.copyWith(
-                          color: colors.highlightGold,
-                          height: 1.0,
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
                 if (primaryMetrics.isNotEmpty) ...<Widget>[
                   const SizedBox(height: 12),
