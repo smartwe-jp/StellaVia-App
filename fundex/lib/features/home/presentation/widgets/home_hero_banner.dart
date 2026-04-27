@@ -12,9 +12,6 @@ class HomeHeroBanner extends StatelessWidget {
     required this.registerLabel,
     required this.loginLabel,
     required this.showGuestActions,
-    this.showNotificationDot = false,
-    this.onSettingsTap,
-    this.onNotificationTap,
     this.onRegisterTap,
     this.onLoginTap,
   });
@@ -24,9 +21,6 @@ class HomeHeroBanner extends StatelessWidget {
   final String registerLabel;
   final String loginLabel;
   final bool showGuestActions;
-  final bool showNotificationDot;
-  final VoidCallback? onSettingsTap;
-  final VoidCallback? onNotificationTap;
   final VoidCallback? onRegisterTap;
   final VoidCallback? onLoginTap;
 
@@ -38,10 +32,12 @@ class HomeHeroBanner extends StatelessWidget {
     const arcDepth = 12.0;
 
     return ClipPath(
-      clipper: showGuestActions ? const _HomeHeroBannerArcClipper(
-        edgeLift: arcLift,
-        arcDepth: arcDepth,
-      ):null,
+      clipper: showGuestActions
+          ? const _HomeHeroBannerArcClipper(
+              edgeLift: arcLift,
+              arcDepth: arcDepth,
+            )
+          : null,
       child: DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -52,35 +48,9 @@ class HomeHeroBanner extends StatelessWidget {
         ),
         child: Padding(
           padding: EdgeInsets.only(bottom: showGuestActions ? 6.0 : 0),
-          child:  Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 4, 20, 4),
-                child: Row(
-                  children: <Widget>[
-                    const Image(image: 
-                      AssetImage(
-                        'assets/images/stellavia.nav.logo.png'), 
-                      height: 34),
-                    
-                    const Spacer(),
-                    if (showGuestActions)
-                      AppNavigationIconButton(
-                        icon: Icons.menu_rounded,
-                        size: 40,
-                        borderRadius: 12,
-                        backgroundColor: colors.onDark.withValues(alpha: 0.08),
-                        onTap: onSettingsTap,
-                      )
-                    else
-                      _HomeHeroNotificationButton(
-                        showDot: showNotificationDot,
-                        onTap: onNotificationTap,
-                      ),
-                  ],
-                ),
-              ),
               const _HomeHeroVisual(),
               if (showGuestActions)
                 Padding(
@@ -119,9 +89,63 @@ class HomeHeroBanner extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class HomeHeroTopBar extends StatelessWidget {
+  const HomeHeroTopBar({
+    super.key,
+    required this.showGuestActions,
+    this.showNotificationDot = false,
+    this.onSettingsTap,
+    this.onNotificationTap,
+  });
+
+  final bool showGuestActions;
+  final bool showNotificationDot;
+  final VoidCallback? onSettingsTap;
+  final VoidCallback? onNotificationTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[colors.heroStart, colors.heroMiddle],
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 4),
+        child: Row(
+          children: <Widget>[
+            const Image(
+              image: AssetImage('assets/images/stellavia.nav.logo.png'),
+              height: 34,
+            ),
+            const Spacer(),
+            if (showGuestActions)
+              AppNavigationIconButton(
+                icon: Icons.menu_rounded,
+                size: 40,
+                borderRadius: 12,
+                backgroundColor: colors.onDark.withValues(alpha: 0.08),
+                onTap: onSettingsTap,
+              )
+            else
+              _HomeHeroNotificationButton(
+                showDot: showNotificationDot,
+                onTap: onNotificationTap,
+              ),
+          ],
         ),
       ),
     );

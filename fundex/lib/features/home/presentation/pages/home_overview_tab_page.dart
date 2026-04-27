@@ -25,7 +25,6 @@ import '../../../member_profile/presentation/providers/member_profile_providers.
 import '../../../notifications/presentation/providers/notifications_providers.dart';
 import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 
-const Set<int> _featuredProjectStatuses = <int>{0, 1};
 final Uri _officialSiteUri = Uri.parse('https://stellavia.co.jp/');
 
 class HomeOverviewTabPage extends ConsumerWidget {
@@ -152,23 +151,23 @@ class HomeOverviewTabPage extends ConsumerWidget {
         verificationStatus?.isPhoneVerified == false ||
         verificationStatus?.isRealPersonVerified == false;
 
-    final topSection = switch ((authState.isLoading, isAuthenticated)) {
-      (true, _) => const SizedBox(height: UiTokens.spacing12),
-      _ => HomeHeroBanner(
-        registerBonusTitle: l10n.homeGuestRegisterBonusTitle,
-        registerBonusBody: l10n.homeGuestRegisterBonusBar,
-        registerLabel: l10n.homeTopBannerRegisterAction,
-        loginLabel: l10n.loginSubmit,
-        onLoginTap: isAuthenticated ? null : () => context.push('/login'),
-        onRegisterTap: isAuthenticated
-            ? null
-            : () => context.push('/login?openRegister=1'),
-        onSettingsTap: () => context.push('/profile/settings'),
-        onNotificationTap: () => context.push('/profile/notifications'),
-        showNotificationDot: hasUnreadNotifications,
-        showGuestActions: !isAuthenticated,
-      ),
-    };
+    final topNavigationBar = HomeHeroTopBar(
+      onSettingsTap: () => context.push('/profile/settings'),
+      onNotificationTap: () => context.push('/profile/notifications'),
+      showNotificationDot: hasUnreadNotifications,
+      showGuestActions: !isAuthenticated,
+    );
+    final topSection = HomeHeroBanner(
+      registerBonusTitle: l10n.homeGuestRegisterBonusTitle,
+      registerBonusBody: l10n.homeGuestRegisterBonusBar,
+      registerLabel: l10n.homeTopBannerRegisterAction,
+      loginLabel: l10n.loginSubmit,
+      onLoginTap: isAuthenticated ? null : () => context.push('/login'),
+      onRegisterTap: isAuthenticated
+          ? null
+          : () => context.push('/login?openRegister=1'),
+      showGuestActions: !isAuthenticated,
+    );
     final attractionSection = HomeAttractionSection(
       title: l10n.homeAttractionSectionTitle,
       items: <HomeAttractionItemData>[
@@ -196,142 +195,153 @@ class HomeOverviewTabPage extends ConsumerWidget {
       ],
     );
 
-    return MainShellTabRefreshScope(
-      tabIndex: 0,
-      onRefresh: _refreshHomeOverviewTab,
-      child: RefreshIndicator(
-        onRefresh: () => _refreshHomeOverviewTab(ref),
-        child: ListView(
-          key: const Key('home_tab_content'),
-          padding: EdgeInsets.zero,
-          physics: const AlwaysScrollableScrollPhysics(),
-          children: <Widget>[
-            if (networkAccessState == AppNetworkAccessState.denied ||
-                (_isApplePlatform &&
-                    networkAvailability == AppNetworkAvailability.offline))
-              AppNetworkStatusBar(
-                title: l10n.networkAccessDeniedBannerTitle,
-                message: l10n.networkAccessDeniedBannerMessage,
-                icon: Icons.wifi_find_outlined,
-              )
-            else if (networkAvailability == AppNetworkAvailability.offline)
-              AppNetworkStatusBar(
-                title: l10n.networkOfflineBannerTitle,
-                message: l10n.networkOfflineBannerMessage,
-              ),
-            topSection,
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
-              child: Column(
-                spacing: UiTokens.spacing16,
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      children: <Widget>[
+        topNavigationBar,
+        Expanded(
+          child: MainShellTabRefreshScope(
+            tabIndex: 0,
+            onRefresh: _refreshHomeOverviewTab,
+            child: RefreshIndicator(
+              onRefresh: () => _refreshHomeOverviewTab(ref),
+              child: ListView(
+                key: const Key('home_tab_content'),
+                padding: EdgeInsets.zero,
+                physics: const AlwaysScrollableScrollPhysics(),
                 children: <Widget>[
-                  if (isAuthenticated)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: UiTokens.spacing16,
-                      ),
-                      child: FundReminderFeed(items: reminders),
+                  if (networkAccessState == AppNetworkAccessState.denied ||
+                      (_isApplePlatform &&
+                          networkAvailability ==
+                              AppNetworkAvailability.offline))
+                    AppNetworkStatusBar(
+                      title: l10n.networkAccessDeniedBannerTitle,
+                      message: l10n.networkAccessDeniedBannerMessage,
+                      icon: Icons.wifi_find_outlined,
+                    )
+                  else if (networkAvailability ==
+                      AppNetworkAvailability.offline)
+                    AppNetworkStatusBar(
+                      title: l10n.networkOfflineBannerTitle,
+                      message: l10n.networkOfflineBannerMessage,
                     ),
-                  //if (!isAuthenticated)
+                  topSection,
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: UiTokens.spacing16,
-                    ),
-                    child: attractionSection,
-                  ),
-                  if (asyncProjects.isLoading && projects.isEmpty)
-                    const Center(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: UiTokens.spacing16,
-                        ),
-                        child: CircularProgressIndicator.adaptive(),
-                      ),
-                    ),
-                  if (loadError != null && projects.isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: UiTokens.spacing16,
-                      ),
-                      child: Center(
-                        child: Column(
-                          children: <Widget>[
-                            Text(
-                              l10n.fundListLoadError,
-                              textAlign: TextAlign.center,
-                              style:
-                                  (Theme.of(context).textTheme.bodyMedium ??
-                                          const TextStyle())
-                                      .copyWith(
-                                        color:
-                                            AppColorTokens.fundexTextSecondary,
-                                      ),
+                    padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
+                    child: Column(
+                      spacing: UiTokens.spacing16,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        if (isAuthenticated)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: UiTokens.spacing16,
                             ),
-                            const SizedBox(height: UiTokens.spacing12),
-                            OutlinedButton(
-                              onPressed: () =>
-                                  ref.invalidate(fundProjectListProvider),
-                              child: Text(l10n.fundListRetry),
-                            ),
-                          ],
+                            child: FundReminderFeed(items: reminders),
+                          ),
+                        //if (!isAuthenticated)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: UiTokens.spacing16,
+                          ),
+                          child: attractionSection,
                         ),
-                      ),
-                    ),
-                  if (featuredFundCards.isNotEmpty)
-                    FundFeaturedFundCarousel(
-                      title: l10n.homeFeaturedFundsTitle,
-                      actionLabel: l10n.homeViewAllAction,
-                      onActionTap: () => context.go('/funds'),
-                      height: 350,
-                      children: featuredFundCards,
-                    ),
-                  if (showGuide)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: UiTokens.spacing16,
-                      ),
-                      child: HomeInvestmentFlowSection(
-                        title: l10n.homeInvestmentFlowTitle,
-                        steps: <HomeInvestmentFlowStepData>[
-                          HomeInvestmentFlowStepData(
-                            stepNumber: 1,
-                            icon: Icons.person_outline_rounded,
-                            title: l10n.homeInvestmentFlowStep1Title,
-                            body: l10n.homeInvestmentFlowStep1Body,
+                        if (asyncProjects.isLoading && projects.isEmpty)
+                          const Center(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: UiTokens.spacing16,
+                              ),
+                              child: CircularProgressIndicator.adaptive(),
+                            ),
                           ),
-                          HomeInvestmentFlowStepData(
-                            stepNumber: 2,
-                            icon: Icons.badge_outlined,
-                            title: l10n.homeInvestmentFlowStep2Title,
-                            body: l10n.homeInvestmentFlowStep2Body,
+                        if (loadError != null && projects.isEmpty)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: UiTokens.spacing16,
+                            ),
+                            child: Center(
+                              child: Column(
+                                children: <Widget>[
+                                  Text(
+                                    l10n.fundListLoadError,
+                                    textAlign: TextAlign.center,
+                                    style:
+                                        (Theme.of(
+                                                  context,
+                                                ).textTheme.bodyMedium ??
+                                                const TextStyle())
+                                            .copyWith(
+                                              color: AppColorTokens
+                                                  .fundexTextSecondary,
+                                            ),
+                                  ),
+                                  const SizedBox(height: UiTokens.spacing12),
+                                  OutlinedButton(
+                                    onPressed: () =>
+                                        ref.invalidate(fundProjectListProvider),
+                                    child: Text(l10n.fundListRetry),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          HomeInvestmentFlowStepData(
-                            stepNumber: 3,
-                            icon: Icons.bar_chart_rounded,
-                            title: l10n.homeInvestmentFlowStep3Title,
-                            body: l10n.homeInvestmentFlowStep3Body,
+                        if (featuredFundCards.isNotEmpty)
+                          FundFeaturedFundCarousel(
+                            title: l10n.homeFeaturedFundsTitle,
+                            actionLabel: l10n.homeViewAllAction,
+                            onActionTap: () => context.go('/funds'),
+                            height: 350,
+                            children: featuredFundCards,
                           ),
-                        ],
-                      ),
-                    ),
-                  const SizedBox(height: UiTokens.spacing32),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: UiTokens.spacing16,
-                    ),
-                    child: HomeOfficialSiteLink(
-                      label: l10n.homeOfficialSiteAction,
-                      onTap: () => _openOfficialSite(context),
+                        if (showGuide)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: UiTokens.spacing16,
+                            ),
+                            child: HomeInvestmentFlowSection(
+                              title: l10n.homeInvestmentFlowTitle,
+                              steps: <HomeInvestmentFlowStepData>[
+                                HomeInvestmentFlowStepData(
+                                  stepNumber: 1,
+                                  icon: Icons.person_outline_rounded,
+                                  title: l10n.homeInvestmentFlowStep1Title,
+                                  body: l10n.homeInvestmentFlowStep1Body,
+                                ),
+                                HomeInvestmentFlowStepData(
+                                  stepNumber: 2,
+                                  icon: Icons.badge_outlined,
+                                  title: l10n.homeInvestmentFlowStep2Title,
+                                  body: l10n.homeInvestmentFlowStep2Body,
+                                ),
+                                HomeInvestmentFlowStepData(
+                                  stepNumber: 3,
+                                  icon: Icons.bar_chart_rounded,
+                                  title: l10n.homeInvestmentFlowStep3Title,
+                                  body: l10n.homeInvestmentFlowStep3Body,
+                                ),
+                              ],
+                            ),
+                          ),
+                        const SizedBox(height: UiTokens.spacing32),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: UiTokens.spacing16,
+                          ),
+                          child: HomeOfficialSiteLink(
+                            label: l10n.homeOfficialSiteAction,
+                            onTap: () => _openOfficialSite(context),
+                          ),
+                        ),
+                        const HomeLicenseBar(),
+                      ],
                     ),
                   ),
-                  const HomeLicenseBar(),
                 ],
               ),
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
