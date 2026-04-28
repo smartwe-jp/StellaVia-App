@@ -68,7 +68,7 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
             borderRadius: cardRadius,
             onTap: data.onTap,
             child: SizedBox(
-              height: 98,
+              height: 108,
               child: Padding(
                 padding: const EdgeInsets.all(18),
                 child: Row(
@@ -82,7 +82,7 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
                           children: <Widget>[
                             Text(
                               data.title,
-                              maxLines: 1,
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: appText.cardTitle.copyWith(
                                 color: colors.textPrimary,
@@ -114,25 +114,25 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
-                            // Text(
-                            //   data.annualYield,
-                            //   textAlign: TextAlign.right,
-                            //   style: appText.numericTitle.copyWith(
-                            //     color: colors.highlightGold,
-                            //     fontSize: 17,
-                            //     height: 1.1,
-                            //     fontWeight: FontWeight.w800,
-                            //   ),
-                            // ),
-                            // const SizedBox(height: 2),
-                            // Text(
-                            //   data.yieldLabel,
-                            //   textAlign: TextAlign.right,
-                            //   style: appText.micro.copyWith(
-                            //     color: colors.textTertiary,
-                            //     fontWeight: FontWeight.w700,
-                            //   ),
-                            // ),
+                            Text(
+                              data.annualYield,
+                              textAlign: TextAlign.right,
+                              style: appText.numericTitle.copyWith(
+                                color: colors.highlightGold,
+                                fontSize: 17,
+                                height: 1.1,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              data.yieldLabel,
+                              textAlign: TextAlign.right,
+                              style: appText.micro.copyWith(
+                                color: colors.textTertiary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                             const Spacer(),
                             _ActiveFundStatusBadge(
                               label: data.statusLabel,
