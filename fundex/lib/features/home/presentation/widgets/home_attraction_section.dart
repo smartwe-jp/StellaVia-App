@@ -18,15 +18,17 @@ class HomeAttractionSection extends StatelessWidget {
       children: <Widget>[
         Text(title, style: Theme.of(context).appTextTheme.heroMetricSecondary),
         const SizedBox(height: UiTokens.spacing12),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            for (var index = 0; index < items.length; index++) ...<Widget>[
-              Expanded(child: _HomeAttractionCard(data: items[index])),
-              if (index < items.length - 1)
-                const SizedBox(width: UiTokens.spacing12),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              for (var index = 0; index < items.length; index++) ...<Widget>[
+                Expanded(child: _HomeAttractionCard(data: items[index])),
+                if (index < items.length - 1)
+                  const SizedBox(width: UiTokens.spacing12),
+              ],
             ],
-          ],
+          ),
         ),
       ],
     );
@@ -69,7 +71,6 @@ class _HomeAttractionCard extends StatelessWidget {
     final radius = BorderRadius.circular(UiTokens.radius12);
 
     return Container(
-      height: 180,
       decoration: BoxDecoration(
         color: colors.surfaceAlt,
         borderRadius: radius,
@@ -89,9 +90,10 @@ class _HomeAttractionCard extends StatelessWidget {
           borderRadius: radius,
           onTap: data.onTap,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(14, 6, 14, 6),
+            padding: const EdgeInsets.fromLTRB(14, 8, 14, 8),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
@@ -103,14 +105,14 @@ class _HomeAttractionCard extends StatelessWidget {
                 Text(
                   _headlineText,
                   textAlign: TextAlign.center,
-                  maxLines: 4,
+                  maxLines: 10,
                   overflow: TextOverflow.ellipsis,
                   style: appText.bodyStrong.copyWith(
                     color: colors.textPrimary,
                     height: 1.45,
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(height: 4),
                 Icon(
                   Icons.arrow_forward_rounded,
                   size: 18,
