@@ -220,9 +220,10 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                                           ).copyWith(color: colors.textPrimary),
                                         ),
                                         if (row.copyable)
-                                          _CopyButton(
+                                          AppCopyButton(
                                             label: copyButtonLabel,
-                                            onTap: () => onCopyValue(row.value),
+                                            onPressed: () =>
+                                                onCopyValue(row.value),
                                           ),
                                       ],
                                     ),
@@ -312,38 +313,6 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _CopyButton extends StatelessWidget {
-  const _CopyButton({required this.label, required this.onTap});
-
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    return Material(
-      color: colors.primarySubtle,
-      borderRadius: BorderRadius.circular(7),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(7),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: Text(
-            label,
-            style: appText.meta.copyWith(
-              color: colors.primary,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

@@ -515,8 +515,8 @@ class _CopyableBankInfoRow extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
                   hasValue ? value! : '--',
@@ -524,7 +524,8 @@ class _CopyableBankInfoRow extends StatelessWidget {
                 ),
                 if (copyLabel != null && hasValue) ...<Widget>[
                   const SizedBox(height: 4),
-                  TextButton(
+                  AppCopyButton(
+                    label: copyLabel!,
                     onPressed: () async {
                       await Clipboard.setData(ClipboardData(text: value!));
                       if (context.mounted) {
@@ -534,13 +535,7 @@ class _CopyableBankInfoRow extends StatelessWidget {
                         );
                       }
                     },
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      foregroundColor: colors.primary,
-                    ),
-                    child: Text(copyLabel!, style: appText.caption),
+                    textStyle: appText.caption,
                   ),
                 ],
               ],

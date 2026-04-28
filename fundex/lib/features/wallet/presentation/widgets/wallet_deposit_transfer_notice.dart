@@ -56,7 +56,8 @@ class WalletDepositTransferNotice extends StatelessWidget {
             ),
             if (normalizedTransferName.isNotEmpty) ...<Widget>[
               const SizedBox(height: 8),
-              TextButton(
+              AppCopyButton(
+                label: copyButtonLabel,
                 onPressed: () async {
                   await Clipboard.setData(
                     ClipboardData(text: normalizedTransferName),
@@ -65,21 +66,11 @@ class WalletDepositTransferNotice extends StatelessWidget {
                     AppNotice.show(context, message: copyDoneMessage);
                   }
                 },
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  foregroundColor: colors.highlightGold,
-                ),
-                child: Text(
-                  copyButtonLabel,
-                  style: appText.caption.copyWith(
-                    color: colors.highlightGold,
-                    fontWeight: FontWeight.w800,
-                  ),
+                backgroundColor: colors.highlightGold.withValues(alpha: 0.10),
+                foregroundColor: colors.highlightGold,
+                borderColor: colors.highlightGold.withValues(alpha: 0.28),
+                textStyle: appText.caption.copyWith(
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ],
