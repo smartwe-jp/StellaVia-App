@@ -15,6 +15,7 @@ import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../providers/wallet_providers.dart';
 import '../support/wallet_deposit_transfer_notice_support.dart';
+import '../support/wallet_standby_purchase_dialog.dart';
 import '../widgets/wallet_deposit_transfer_notice.dart';
 import 'deposit_list_page.dart';
 
@@ -171,13 +172,44 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
         _isReportingDeposit) {
       return;
     }
+    final processId = _resolveDepositProcessId(widget.record);
+    if (processId == null) {
+      AppNotice.show(
+        context,
+        message: context.l10n.lotteryApplyStandbyPurchaseMissingProcess,
+      );
+      return;
+    }
+    final formatter = NumberFormat.currency(
+      locale: Localizations.localeOf(context).toLanguageTag(),
+      symbol: '¥',
+      decimalDigits: 0,
+    );
+    final projectName = _resolveDepositProjectName(
+      widget.record,
+      widget.project,
+    );
+    final confirmed = await showWalletStandbyPurchaseConfirmDialog(
+      context,
+      projectName: projectName,
+      amountText: formatter.format(amount),
+    );
+    if (!mounted || !confirmed) {
+      return;
+    }
+    final failureMessage = context.l10n.lotteryApplyStandbyPurchaseFailure;
 
     setState(() {
       _isPurchasingWithStandbyBalance = true;
     });
 
     try {
-      await ref.read(confirmWalletPaymentUseCaseProvider).call(amount: amount);
+      final succeeded = await ref
+          .read(autoFundDeductionUseCaseProvider)
+          .call(processId: processId);
+      if (!succeeded) {
+        throw StateError(failureMessage);
+      }
       ref.invalidate(myPageAccountStatisticProvider);
       ref.invalidate(walletDepositPageViewDataProvider);
       ref.invalidate(walletPendingDepositListProvider);
@@ -284,6 +316,30 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
       ],
     );
   }
+}
+
+String? _resolveDepositProcessId(MyPageApplyRecord record) {
+  final processId = record.processId?.trim();
+  if (processId != null && processId.isNotEmpty) {
+    return processId;
+  }
+  final fallback = record.fromProcessId?.trim();
+  if (fallback == null || fallback.isEmpty) {
+    return null;
+  }
+  return fallback;
+}
+
+String _resolveDepositProjectName(
+  MyPageApplyRecord record,
+  FundProject project,
+) {
+  final recordName = record.projectName.trim();
+  if (recordName.isNotEmpty) {
+    return recordName;
+  }
+  final projectName = project.projectName.trim();
+  return projectName.isEmpty ? '--' : projectName;
 }
 
 class _StandbyBalancePaymentCard extends StatelessWidget {
@@ -439,15 +495,40 @@ class _ProjectDepositBankCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              title,
-              style: appText.sectionTitle.copyWith(color: colors.textPrimary),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: appText.sectionTitle.copyWith(
+                    color: colors.textPrimary,
+                  ),
+                ),
+                AppCopyButton(
+                  label: l10n.lotteryApplyCopyAction,
+                  onPressed: () async {
+                    await Clipboard.setData(
+                      ClipboardData(
+                        text:
+                            "${bank.bankName}\n${bank.branchBankName}\n${bank.bankNumber}\n${bank.bankAccountOwnerName}",
+                      ),
+                    );
+                    if (context.mounted) {
+                      AppNotice.show(
+                        context,
+                        message: l10n.lotteryApplyCopyDoneToast,
+                      );
+                    }
+                  },
+                  textStyle: appText.caption,
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 26),
             _CopyableBankInfoRow(
               label: l10n.walletBankNameLabel,
               value: bank.bankName,
-              copyLabel: l10n.lotteryApplyCopyAction,
+              copyLabel: null,
             ),
             _CopyableBankInfoRow(
               label: l10n.walletBranchNameLabel,
@@ -525,7 +606,7 @@ class _CopyableBankInfoRow extends StatelessWidget {
                 if (copyLabel != null && hasValue) ...<Widget>[
                   const SizedBox(height: 4),
                   AppCopyButton(
-                    label: copyLabel!,
+                    label: copyLabel ?? l10n.lotteryApplyCopyAction,
                     onPressed: () async {
                       await Clipboard.setData(ClipboardData(text: value!));
                       if (context.mounted) {

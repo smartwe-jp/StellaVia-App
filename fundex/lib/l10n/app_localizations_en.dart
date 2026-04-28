@@ -2284,6 +2284,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lotteryApplyStandbyPurchaseAction => 'Purchase with standby cash';
 
   @override
+  String get lotteryApplyStandbyPurchaseConfirmTitle =>
+      'Purchase with standby cash?';
+
+  @override
+  String lotteryApplyStandbyPurchaseConfirmBody(
+    Object projectName,
+    Object amount,
+  ) {
+    return 'Project: $projectName\nTransaction amount: $amount';
+  }
+
+  @override
+  String get lotteryApplyStandbyPurchaseConfirmAction => 'Purchase';
+
+  @override
+  String get lotteryApplyStandbyPurchaseMissingProcess =>
+      'Unable to confirm the purchase information. Please refresh and try again.';
+
+  @override
   String get lotteryApplyStandbyShortageLabel => 'Shortage';
 
   @override
@@ -2310,6 +2329,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lotteryApplyCopyAction => 'Copy';
+
+  @override
+  String get lotteryApplyCopyAccountInfoAction => 'Copy account info';
 
   @override
   String get lotteryApplyCopyDoneToast => 'Copied';

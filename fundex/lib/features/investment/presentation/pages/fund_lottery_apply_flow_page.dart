@@ -23,6 +23,7 @@ import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../../member_profile/presentation/support/mypage_section_support.dart';
 import '../../../wallet/presentation/providers/wallet_providers.dart';
 import '../../../wallet/presentation/support/wallet_deposit_transfer_notice_support.dart';
+import '../../../wallet/presentation/support/wallet_standby_purchase_dialog.dart';
 
 class FundLotteryApplyFlowPage extends ConsumerStatefulWidget {
   const FundLotteryApplyFlowPage({
@@ -581,17 +582,40 @@ class _FundLotteryApplyFlowPageState
     }
   }
 
-  Future<void> _purchaseWithStandbyBalance({required int amount}) async {
-    if (_isPurchasingWithStandbyBalance || _isReportingDeposit) {
+  Future<void> _purchaseWithStandbyBalance({
+    required int amount,
+    required String amountText,
+    required String projectName,
+  }) async {
+    if (amount <= 0 || _isPurchasingWithStandbyBalance || _isReportingDeposit) {
       return;
     }
+    final processId = widget.initialSeed?.processId?.trim();
+    if (processId == null || processId.isEmpty) {
+      _showToast(context.l10n.lotteryApplyStandbyPurchaseMissingProcess);
+      return;
+    }
+    final confirmed = await showWalletStandbyPurchaseConfirmDialog(
+      context,
+      projectName: projectName,
+      amountText: amountText,
+    );
+    if (!mounted || !confirmed) {
+      return;
+    }
+    final failureMessage = context.l10n.lotteryApplyStandbyPurchaseFailure;
 
     setState(() {
       _isPurchasingWithStandbyBalance = true;
     });
 
     try {
-      await ref.read(confirmWalletPaymentUseCaseProvider).call(amount: amount);
+      final succeeded = await ref
+          .read(autoFundDeductionUseCaseProvider)
+          .call(processId: processId);
+      if (!succeeded) {
+        throw StateError(failureMessage);
+      }
       ref.invalidate(myPageAccountStatisticProvider);
       ref.invalidate(walletDepositPageViewDataProvider);
       if (!mounted) {
@@ -1033,6 +1057,8 @@ class _FundLotteryApplyFlowPageState
                             onPurchaseWithStandbyBalance: () =>
                                 _purchaseWithStandbyBalance(
                                   amount: totalAmount,
+                                  amountText: amountText,
+                                  projectName: projectName,
                                 ),
                             reportDepositButtonLabel:
                                 l10n.lotteryApplyReportDepositAction,
@@ -1049,6 +1075,8 @@ class _FundLotteryApplyFlowPageState
                                 l10n.lotteryApplyDepositReportBackAction,
                             onReportCompletedBack: _back,
                             copyButtonLabel: l10n.lotteryApplyCopyAction,
+                            accountInfoCopyButtonLabel:
+                                l10n.lotteryApplyCopyAccountInfoAction,
                             copyDoneMessage: l10n.lotteryApplyCopyDoneToast,
                             onCopyValue: (String value) {
                               Clipboard.setData(ClipboardData(text: value));

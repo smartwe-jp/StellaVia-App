@@ -21,6 +21,8 @@ abstract class WalletRepository {
 
   Future<void> confirmPayment({required Object amount});
 
+  Future<bool> autoFundDeduction({required String processId});
+
   Future<void> applyWithdraw(WalletWithdrawApplyDraft draft);
 
   Future<void> cancelWithdraw(WalletWithdrawRecord record);

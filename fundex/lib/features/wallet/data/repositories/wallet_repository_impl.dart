@@ -64,6 +64,11 @@ class WalletRepositoryImpl implements WalletRepository {
   }
 
   @override
+  Future<bool> autoFundDeduction({required String processId}) {
+    return _remote.autoFundDeduction(processId: processId);
+  }
+
+  @override
   Future<void> applyWithdraw(WalletWithdrawApplyDraft draft) {
     return _remote.applyWithdraw(draft.toDto());
   }

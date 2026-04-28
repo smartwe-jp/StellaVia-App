@@ -801,6 +801,16 @@
   "lotteryApplyReportDepositFailure": "发送失败，请稍后重试。",
   "lotteryApplyStandbyBalanceLabel": "待机资金余额",
   "lotteryApplyStandbyPurchaseAction": "使用待机资金购买",
+  "lotteryApplyStandbyPurchaseConfirmTitle": "确认使用待机资金购买？",
+  "lotteryApplyStandbyPurchaseConfirmBody": "项目：{projectName}\n交易金额：{amount}",
+  "@lotteryApplyStandbyPurchaseConfirmBody": {
+    "placeholders": {
+      "projectName": {},
+      "amount": {}
+    }
+  },
+  "lotteryApplyStandbyPurchaseConfirmAction": "确认购买",
+  "lotteryApplyStandbyPurchaseMissingProcess": "无法确认购买信息，请刷新页面后重试。",
   "lotteryApplyStandbyShortageLabel": "不足额",
   "lotteryApplyStandbyPurchaseSuccess": "已使用待机资金购买。",
   "lotteryApplyStandbyPurchaseFailure": "使用待机资金购买失败。",
@@ -809,6 +819,7 @@
   "lotteryApplyDepositReportBackAction": "返回",
   "lotteryApplyLaterDepositAction": "稍后入金",
   "lotteryApplyCopyAction": "复制",
+  "lotteryApplyCopyAccountInfoAction": "复制账户信息",
   "lotteryApplyCopyDoneToast": "已复制",
   "walletDepositTransferNameCopyAction": "复制汇款名义",
   "lotteryApplyStep6Headline": "出资手续已完成",

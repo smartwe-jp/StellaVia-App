@@ -25,6 +25,8 @@ abstract class WalletRemoteDataSource {
 
   Future<void> confirmPayment({required Object amount});
 
+  Future<bool> autoFundDeduction({required String processId});
+
   Future<void> applyWithdraw(WalletWithdrawApplyRequestDto request);
 
   Future<void> cancelWithdraw(WalletWithdrawCancelRequestDto request);
@@ -103,6 +105,11 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   @override
   Future<void> confirmPayment({required Object amount}) {
     return _apiClient.confirmPayment(amount: amount);
+  }
+
+  @override
+  Future<bool> autoFundDeduction({required String processId}) {
+    return _apiClient.autoFundDeduction(processId: processId);
   }
 
   @override

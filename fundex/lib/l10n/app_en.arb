@@ -801,6 +801,16 @@
   "lotteryApplyReportDepositFailure": "Failed to send the payment completion report. Please try again later.",
   "lotteryApplyStandbyBalanceLabel": "Standby cash balance",
   "lotteryApplyStandbyPurchaseAction": "Purchase with standby cash",
+  "lotteryApplyStandbyPurchaseConfirmTitle": "Purchase with standby cash?",
+  "lotteryApplyStandbyPurchaseConfirmBody": "Project: {projectName}\nTransaction amount: {amount}",
+  "@lotteryApplyStandbyPurchaseConfirmBody": {
+    "placeholders": {
+      "projectName": {},
+      "amount": {}
+    }
+  },
+  "lotteryApplyStandbyPurchaseConfirmAction": "Purchase",
+  "lotteryApplyStandbyPurchaseMissingProcess": "Unable to confirm the purchase information. Please refresh and try again.",
   "lotteryApplyStandbyShortageLabel": "Shortage",
   "lotteryApplyStandbyPurchaseSuccess": "Purchased with standby cash.",
   "lotteryApplyStandbyPurchaseFailure": "Failed to purchase with standby cash.",
@@ -809,6 +819,7 @@
   "lotteryApplyDepositReportBackAction": "Back",
   "lotteryApplyLaterDepositAction": "Pay later",
   "lotteryApplyCopyAction": "Copy",
+  "lotteryApplyCopyAccountInfoAction": "Copy account info",
   "lotteryApplyCopyDoneToast": "Copied",
   "walletDepositTransferNameCopyAction": "Copy payer name",
   "lotteryApplyStep6Headline": "Investment process completed",

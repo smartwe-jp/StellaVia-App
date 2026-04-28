@@ -4238,6 +4238,33 @@ abstract class AppLocalizations {
   /// **'Purchase with standby cash'**
   String get lotteryApplyStandbyPurchaseAction;
 
+  /// No description provided for @lotteryApplyStandbyPurchaseConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase with standby cash?'**
+  String get lotteryApplyStandbyPurchaseConfirmTitle;
+
+  /// No description provided for @lotteryApplyStandbyPurchaseConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Project: {projectName}\nTransaction amount: {amount}'**
+  String lotteryApplyStandbyPurchaseConfirmBody(
+    Object projectName,
+    Object amount,
+  );
+
+  /// No description provided for @lotteryApplyStandbyPurchaseConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase'**
+  String get lotteryApplyStandbyPurchaseConfirmAction;
+
+  /// No description provided for @lotteryApplyStandbyPurchaseMissingProcess.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to confirm the purchase information. Please refresh and try again.'**
+  String get lotteryApplyStandbyPurchaseMissingProcess;
+
   /// No description provided for @lotteryApplyStandbyShortageLabel.
   ///
   /// In en, this message translates to:
@@ -4285,6 +4312,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copy'**
   String get lotteryApplyCopyAction;
+
+  /// No description provided for @lotteryApplyCopyAccountInfoAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy account info'**
+  String get lotteryApplyCopyAccountInfoAction;
 
   /// No description provided for @lotteryApplyCopyDoneToast.
   ///

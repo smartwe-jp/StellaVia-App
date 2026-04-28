@@ -455,6 +455,7 @@ FundLotteryApplyFlowSeed _buildLotteryApplyFlowSeed(MyPageApplyRecord record) {
   return FundLotteryApplyFlowSeed(
     units: units != null && units > 0 ? units : null,
     amount: _positiveIntOrNull(amount),
+    processId: resolveApplyWithdrawProcessId(record),
   );
 }
 

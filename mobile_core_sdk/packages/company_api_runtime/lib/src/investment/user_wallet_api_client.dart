@@ -14,6 +14,8 @@ class UserWalletApiPaths {
   static const String withdrawCost = '/member/wx/account/withdraw/cost';
   static const String paymentConfirmation =
       '/member/wx/account/payment-confirmation';
+  static const String autoFundDeduction =
+      '/member/wx/account/auto-fund-dudection';
   static const String withdrawApplySendCode =
       '/member/wx/account/withdraw-apply-send-code';
   static const String withdrawHistory = '/member/wx/account/withdraw-list';
@@ -34,6 +36,7 @@ class UserWalletApiClient {
     this.withdrawCancelPath = UserWalletApiPaths.withdrawCancel,
     this.withdrawCostPath = UserWalletApiPaths.withdrawCost,
     this.paymentConfirmationPath = UserWalletApiPaths.paymentConfirmation,
+    this.autoFundDeductionPath = UserWalletApiPaths.autoFundDeduction,
     this.withdrawApplySendCodePath = UserWalletApiPaths.withdrawApplySendCode,
     this.withdrawHistoryPath = UserWalletApiPaths.withdrawHistory,
     this.withdrawingListPath = UserWalletApiPaths.withdrawingList,
@@ -57,6 +60,7 @@ class UserWalletApiClient {
   final String withdrawCancelPath;
   final String withdrawCostPath;
   final String paymentConfirmationPath;
+  final String autoFundDeductionPath;
   final String withdrawApplySendCodePath;
   final String withdrawHistoryPath;
   final String withdrawingListPath;
@@ -107,7 +111,9 @@ class UserWalletApiClient {
     );
   }
 
-  Future<void> cancelWithdraw(UserWalletWithdrawCancelRequestDto request) async {
+  Future<void> cancelWithdraw(
+    UserWalletWithdrawCancelRequestDto request,
+  ) async {
     final response = await _dioForPath(withdrawCancelPath)
         .put<Map<String, dynamic>>(
           withdrawCancelPath,
@@ -125,11 +131,12 @@ class UserWalletApiClient {
   }
 
   Future<num> fetchWithdrawCost({required Object bankId}) async {
-    final response = await _dioForPath(withdrawCostPath).get<Map<String, dynamic>>(
-      withdrawCostPath,
-      queryParameters: <String, dynamic>{'bankId': bankId},
-      options: authRequired(true),
-    );
+    final response = await _dioForPath(withdrawCostPath)
+        .get<Map<String, dynamic>>(
+          withdrawCostPath,
+          queryParameters: <String, dynamic>{'bankId': bankId},
+          options: authRequired(true),
+        );
     final payload = _envelopeCodec.toJsonMap(response.data);
     if (payload.isEmpty) {
       return 0;
@@ -156,6 +163,27 @@ class UserWalletApiClient {
       payload,
       fallbackMessage: 'Failed to confirm payment.',
     );
+  }
+
+  Future<bool> autoFundDeduction({required String processId}) async {
+    final response = await _dioForPath(autoFundDeductionPath)
+        .get<Map<String, dynamic>>(
+          autoFundDeductionPath,
+          queryParameters: <String, dynamic>{'processId': processId},
+          options: authRequired(true),
+        );
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    if (payload.isEmpty) {
+      return false;
+    }
+    if (_envelopeCodec.looksLikeEnvelope(payload)) {
+      _envelopeCodec.assertSuccessIfEnvelope(
+        payload,
+        fallbackMessage: 'Failed to purchase with standby funds.',
+      );
+      return _asBool(payload['data']);
+    }
+    return _asBool(payload['data']);
   }
 
   Future<void> sendWithdrawApplyCode() async {
@@ -340,5 +368,19 @@ class UserWalletApiClient {
       return value;
     }
     return num.tryParse(value.toString()) ?? 0;
+  }
+
+  bool _asBool(dynamic value) {
+    if (value is bool) {
+      return value;
+    }
+    if (value is num) {
+      return value != 0;
+    }
+    if (value is String) {
+      final normalized = value.trim().toLowerCase();
+      return normalized == 'true' || normalized == '1';
+    }
+    return false;
   }
 }

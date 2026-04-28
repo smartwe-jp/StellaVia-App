@@ -75,9 +75,7 @@ class AppCopyButton extends StatelessWidget {
     );
     final shape = RoundedRectangleBorder(
       borderRadius: effectiveBorderRadius,
-      side: borderColor == null
-          ? BorderSide.none
-          : BorderSide(color: borderColor!),
+      side: BorderSide(color: borderColor),
     );
 
     return Semantics(

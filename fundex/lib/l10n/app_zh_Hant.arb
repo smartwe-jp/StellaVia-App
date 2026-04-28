@@ -801,6 +801,16 @@
   "lotteryApplyReportDepositFailure": "發送失敗，請稍後重試。",
   "lotteryApplyStandbyBalanceLabel": "待機資金餘額",
   "lotteryApplyStandbyPurchaseAction": "使用待機資金購買",
+  "lotteryApplyStandbyPurchaseConfirmTitle": "確認使用待機資金購買？",
+  "lotteryApplyStandbyPurchaseConfirmBody": "項目：{projectName}\n交易金額：{amount}",
+  "@lotteryApplyStandbyPurchaseConfirmBody": {
+    "placeholders": {
+      "projectName": {},
+      "amount": {}
+    }
+  },
+  "lotteryApplyStandbyPurchaseConfirmAction": "確認購買",
+  "lotteryApplyStandbyPurchaseMissingProcess": "無法確認購買資訊，請重新整理頁面後再試。",
   "lotteryApplyStandbyShortageLabel": "不足額",
   "lotteryApplyStandbyPurchaseSuccess": "已使用待機資金購買。",
   "lotteryApplyStandbyPurchaseFailure": "使用待機資金購買失敗。",
@@ -809,6 +819,7 @@
   "lotteryApplyDepositReportBackAction": "返回",
   "lotteryApplyLaterDepositAction": "稍後入金",
   "lotteryApplyCopyAction": "複製",
+  "lotteryApplyCopyAccountInfoAction": "複製帳戶資訊",
   "lotteryApplyCopyDoneToast": "已複製",
   "walletDepositTransferNameCopyAction": "複製匯款名義",
   "lotteryApplyStep6Headline": "出資流程已完成",

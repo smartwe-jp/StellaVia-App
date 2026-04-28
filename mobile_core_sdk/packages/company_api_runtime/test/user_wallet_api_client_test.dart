@@ -174,6 +174,37 @@ void main() {
       await api.confirmPayment(amount: 10000);
     });
 
+    test('autoFundDeduction sends GET with processId query', () async {
+      final dio = _buildDio((options) async {
+        expect(options.method, equals('GET'));
+        expect(options.path, equals(UserWalletApiPaths.autoFundDeduction));
+        expect(
+          options.queryParameters,
+          equals(<String, dynamic>{'processId': '452422794258546688'}),
+        );
+        expect(options.extra['auth_required'], isTrue);
+        return _jsonOk('{"msg":"success","code":200,"data":true}');
+      });
+      final api = UserWalletApiClient(dioForPath: (_) => dio);
+
+      final result = await api.autoFundDeduction(
+        processId: '452422794258546688',
+      );
+
+      expect(result, isTrue);
+    });
+
+    test('autoFundDeduction returns false when data is false', () async {
+      final dio = _buildDio((_) async {
+        return _jsonOk('{"msg":"success","code":200,"data":false}');
+      });
+      final api = UserWalletApiClient(dioForPath: (_) => dio);
+
+      final result = await api.autoFundDeduction(processId: 'process-1');
+
+      expect(result, isFalse);
+    });
+
     test(
       'fetchWithdrawHistory sends POST and maps withdraw-list fields',
       () async {

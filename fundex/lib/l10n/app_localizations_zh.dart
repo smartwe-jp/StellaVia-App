@@ -2136,6 +2136,23 @@ class AppLocalizationsZh extends AppLocalizations {
   String get lotteryApplyStandbyPurchaseAction => '使用待机资金购买';
 
   @override
+  String get lotteryApplyStandbyPurchaseConfirmTitle => '确认使用待机资金购买？';
+
+  @override
+  String lotteryApplyStandbyPurchaseConfirmBody(
+    Object projectName,
+    Object amount,
+  ) {
+    return '项目：$projectName\n交易金额：$amount';
+  }
+
+  @override
+  String get lotteryApplyStandbyPurchaseConfirmAction => '确认购买';
+
+  @override
+  String get lotteryApplyStandbyPurchaseMissingProcess => '无法确认购买信息，请刷新页面后重试。';
+
+  @override
   String get lotteryApplyStandbyShortageLabel => '不足额';
 
   @override
@@ -2159,6 +2176,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get lotteryApplyCopyAction => '复制';
+
+  @override
+  String get lotteryApplyCopyAccountInfoAction => '复制账户信息';
 
   @override
   String get lotteryApplyCopyDoneToast => '已复制';
@@ -6256,6 +6276,24 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get lotteryApplyStandbyPurchaseAction => '使用待機資金購買';
 
   @override
+  String get lotteryApplyStandbyPurchaseConfirmTitle => '確認使用待機資金購買？';
+
+  @override
+  String lotteryApplyStandbyPurchaseConfirmBody(
+    Object projectName,
+    Object amount,
+  ) {
+    return '項目：$projectName\n交易金額：$amount';
+  }
+
+  @override
+  String get lotteryApplyStandbyPurchaseConfirmAction => '確認購買';
+
+  @override
+  String get lotteryApplyStandbyPurchaseMissingProcess =>
+      '無法確認購買資訊，請重新整理頁面後再試。';
+
+  @override
   String get lotteryApplyStandbyShortageLabel => '不足額';
 
   @override
@@ -6279,6 +6317,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get lotteryApplyCopyAction => '複製';
+
+  @override
+  String get lotteryApplyCopyAccountInfoAction => '複製帳戶資訊';
 
   @override
   String get lotteryApplyCopyDoneToast => '已複製';

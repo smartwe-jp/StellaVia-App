@@ -36,6 +36,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
     this.reportCompletedBackButtonLabel,
     this.onReportCompletedBack,
     required this.copyButtonLabel,
+    required this.accountInfoCopyButtonLabel,
     required this.copyDoneMessage,
     required this.onCopyValue,
   });
@@ -69,6 +70,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
   final String? reportCompletedBackButtonLabel;
   final VoidCallback? onReportCompletedBack;
   final String copyButtonLabel;
+  final String accountInfoCopyButtonLabel;
   final String copyDoneMessage;
   final ValueChanged<String> onCopyValue;
 
@@ -77,6 +79,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
+    final accountInfoCopyText = _formatDepositRowsCopyText(depositRows);
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 40, 20, 32),
       children: <Widget>[
@@ -183,64 +186,81 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                     border: Border.all(color: colors.border),
                   ),
                   child: Column(
-                    children: List<Widget>.generate(depositRows.length, (
-                      int index,
-                    ) {
-                      final row = depositRows[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text(
-                                    row.label,
-                                    style: appText.caption.copyWith(
-                                      color: colors.textSecondary,
+                    children: <Widget>[
+                      ...List<Widget>.generate(depositRows.length, (int index) {
+                        final row = depositRows[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      row.label,
+                                      style: appText.caption.copyWith(
+                                        color: colors.textSecondary,
+                                      ),
                                     ),
-                                  ),
-                                  Flexible(
-                                    child: Wrap(
-                                      spacing: 8,
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      alignment: WrapAlignment.end,
-                                      children: <Widget>[
-                                        Text(
-                                          row.value,
-                                          textAlign: TextAlign.end,
-                                          style: _depositValueStyle(
-                                            appText,
+                                    Flexible(
+                                      child: Wrap(
+                                        spacing: 8,
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.center,
+                                        alignment: WrapAlignment.end,
+                                        children: <Widget>[
+                                          Text(
                                             row.value,
-                                          ).copyWith(color: colors.textPrimary),
-                                        ),
-                                        if (row.copyable)
-                                          AppCopyButton(
-                                            label: copyButtonLabel,
-                                            onPressed: () =>
-                                                onCopyValue(row.value),
+                                            textAlign: TextAlign.end,
+                                            style:
+                                                _depositValueStyle(
+                                                  appText,
+                                                  row.value,
+                                                ).copyWith(
+                                                  color: colors.textPrimary,
+                                                ),
                                           ),
-                                      ],
+                                          if (row.copyable)
+                                            AppCopyButton(
+                                              label: copyButtonLabel,
+                                              onPressed: () =>
+                                                  onCopyValue(row.value),
+                                            ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                            if (index < depositRows.length - 1)
-                              Divider(
-                                height: 1,
-                                thickness: 1,
-                                color: colors.border,
-                              ),
-                          ],
+                              if (index < depositRows.length - 1)
+                                Divider(
+                                  height: 1,
+                                  thickness: 1,
+                                  color: colors.border,
+                                ),
+                            ],
+                          ),
+                        );
+                      }),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(12, 2, 12, 12),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: AppCopyButton(
+                            label: accountInfoCopyButtonLabel,
+                            onPressed: accountInfoCopyText.isEmpty
+                                ? null
+                                : () => onCopyValue(accountInfoCopyText),
+                          ),
                         ),
-                      );
-                    }),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -315,6 +335,13 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
       ],
     );
   }
+}
+
+String _formatDepositRowsCopyText(List<FundLotteryDepositRow> rows) {
+  return rows
+      .where((FundLotteryDepositRow row) => row.value.trim().isNotEmpty)
+      .map((FundLotteryDepositRow row) => '${row.label}: ${row.value}')
+      .join('\n');
 }
 
 class _StandbyBalancePaymentCard extends StatelessWidget {

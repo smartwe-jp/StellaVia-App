@@ -20,10 +20,11 @@ class FundLotteryDocumentGroup {
 }
 
 class FundLotteryApplyFlowSeed {
-  const FundLotteryApplyFlowSeed({this.units, this.amount});
+  const FundLotteryApplyFlowSeed({this.units, this.amount, this.processId});
 
   final int? units;
   final int? amount;
+  final String? processId;
 }
 
 class FundLotterySummaryRow {

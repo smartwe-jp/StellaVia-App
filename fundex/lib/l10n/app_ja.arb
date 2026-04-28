@@ -801,6 +801,16 @@
   "lotteryApplyReportDepositFailure": "入金完了報告の送信に失敗しました。しばらくしてから再度お試しください。",
   "lotteryApplyStandbyBalanceLabel": "待機資金残高",
   "lotteryApplyStandbyPurchaseAction": "待機資金で購入",
+  "lotteryApplyStandbyPurchaseConfirmTitle": "待機資金で購入しますか？",
+  "lotteryApplyStandbyPurchaseConfirmBody": "プロジェクト：{projectName}\n取引金額：{amount}",
+  "@lotteryApplyStandbyPurchaseConfirmBody": {
+    "placeholders": {
+      "projectName": {},
+      "amount": {}
+    }
+  },
+  "lotteryApplyStandbyPurchaseConfirmAction": "購入する",
+  "lotteryApplyStandbyPurchaseMissingProcess": "購入情報を確認できません。画面を更新してから再度お試しください。",
   "lotteryApplyStandbyShortageLabel": "不足額",
   "lotteryApplyStandbyPurchaseSuccess": "待機資金で購入しました。",
   "lotteryApplyStandbyPurchaseFailure": "待機資金での購入に失敗しました。",
@@ -809,6 +819,7 @@
   "lotteryApplyDepositReportBackAction": "戻る",
   "lotteryApplyLaterDepositAction": "あとで入金する",
   "lotteryApplyCopyAction": "コピー",
+  "lotteryApplyCopyAccountInfoAction": "口座情報をコピー",
   "lotteryApplyCopyDoneToast": "コピーしました",
   "walletDepositTransferNameCopyAction": "振込名義 コピー",
   "lotteryApplyStep6Headline": "出資手続きが完了しました",

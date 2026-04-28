@@ -2162,6 +2162,24 @@ class AppLocalizationsJa extends AppLocalizations {
   String get lotteryApplyStandbyPurchaseAction => '待機資金で購入';
 
   @override
+  String get lotteryApplyStandbyPurchaseConfirmTitle => '待機資金で購入しますか？';
+
+  @override
+  String lotteryApplyStandbyPurchaseConfirmBody(
+    Object projectName,
+    Object amount,
+  ) {
+    return 'プロジェクト：$projectName\n取引金額：$amount';
+  }
+
+  @override
+  String get lotteryApplyStandbyPurchaseConfirmAction => '購入する';
+
+  @override
+  String get lotteryApplyStandbyPurchaseMissingProcess =>
+      '購入情報を確認できません。画面を更新してから再度お試しください。';
+
+  @override
   String get lotteryApplyStandbyShortageLabel => '不足額';
 
   @override
@@ -2185,6 +2203,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get lotteryApplyCopyAction => 'コピー';
+
+  @override
+  String get lotteryApplyCopyAccountInfoAction => '口座情報をコピー';
 
   @override
   String get lotteryApplyCopyDoneToast => 'コピーしました';
