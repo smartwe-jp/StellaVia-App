@@ -2,6 +2,7 @@ import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
 import '../../support/fund_lottery_apply_models.dart';
+import '../../../../wallet/presentation/widgets/wallet_deposit_transfer_notice.dart';
 
 class FundLotteryApplySelectedStep extends StatelessWidget {
   const FundLotteryApplySelectedStep({
@@ -13,6 +14,8 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
     required this.coolingOffTitle,
     required this.coolingOffBody,
     required this.bankTips,
+    required this.bankTipsTransferName,
+    required this.transferNameCopyButtonLabel,
     required this.depositRows,
     required this.jumpDepositButtonLabel,
     required this.standbyBalanceLabel,
@@ -33,6 +36,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
     this.reportCompletedBackButtonLabel,
     this.onReportCompletedBack,
     required this.copyButtonLabel,
+    required this.copyDoneMessage,
     required this.onCopyValue,
   });
 
@@ -43,6 +47,8 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
   final String coolingOffTitle;
   final String coolingOffBody;
   final String bankTips;
+  final String bankTipsTransferName;
+  final String transferNameCopyButtonLabel;
   final List<FundLotteryDepositRow> depositRows;
   final String jumpDepositButtonLabel;
   final String standbyBalanceLabel;
@@ -63,6 +69,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
   final String? reportCompletedBackButtonLabel;
   final VoidCallback? onReportCompletedBack;
   final String copyButtonLabel;
+  final String copyDoneMessage;
   final ValueChanged<String> onCopyValue;
 
   @override
@@ -236,14 +243,11 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                FundDetailContentCard(
-                  child: Text(
-                    bankTips,
-                    style: appText.caption.copyWith(
-                      color: colors.textSecondary,
-                      height: 1.7,
-                    ),
-                  ),
+                WalletDepositTransferNotice(
+                  message: bankTips,
+                  transferName: bankTipsTransferName,
+                  copyButtonLabel: transferNameCopyButtonLabel,
+                  copyDoneMessage: copyDoneMessage,
                 ),
                 const SizedBox(height: 16),
                 if (isReportCompleted)

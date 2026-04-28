@@ -22,6 +22,7 @@ import '../../../member_profile/presentation/providers/member_profile_providers.
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../../member_profile/presentation/support/mypage_section_support.dart';
 import '../../../wallet/presentation/providers/wallet_providers.dart';
+import '../../../wallet/presentation/support/wallet_deposit_transfer_notice_support.dart';
 
 class FundLotteryApplyFlowPage extends ConsumerStatefulWidget {
   const FundLotteryApplyFlowPage({
@@ -745,8 +746,9 @@ class _FundLotteryApplyFlowPageState
         );
         final liveJapanBank = project.liveJapanBank;
         final transferNoticeAccountId =
-            ref.watch(currentAuthUserProvider).valueOrNull?.accountId?.trim() ??
-            '';
+            formatWalletDepositTransferNoticeAccountId(
+              ref.watch(currentAuthUserProvider).valueOrNull,
+            );
 
         return PopScope<void>(
           canPop: _currentStep.isFirst,
@@ -977,6 +979,9 @@ class _FundLotteryApplyFlowPageState
                             bankTips: l10n.walletDepositTransferNotice(
                               transferNoticeAccountId,
                             ),
+                            bankTipsTransferName: transferNoticeAccountId,
+                            transferNameCopyButtonLabel:
+                                l10n.walletDepositTransferNameCopyAction,
                             depositRows: <FundLotteryDepositRow>[
                               FundLotteryDepositRow(
                                 label: l10n.lotteryApplyDepositAmountLabel,
@@ -1044,6 +1049,7 @@ class _FundLotteryApplyFlowPageState
                                 l10n.lotteryApplyDepositReportBackAction,
                             onReportCompletedBack: _back,
                             copyButtonLabel: l10n.lotteryApplyCopyAction,
+                            copyDoneMessage: l10n.lotteryApplyCopyDoneToast,
                             onCopyValue: (String value) {
                               Clipboard.setData(ClipboardData(text: value));
                               _showToast(l10n.lotteryApplyCopyDoneToast);

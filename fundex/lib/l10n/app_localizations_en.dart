@@ -2315,6 +2315,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lotteryApplyCopyDoneToast => 'Copied';
 
   @override
+  String get walletDepositTransferNameCopyAction => 'Copy payer name';
+
+  @override
   String get lotteryApplyStep6Headline => 'Investment process completed';
 
   @override
@@ -2818,7 +2821,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String walletDepositTransferNotice(Object accountId) {
-    return 'Bank transfer fees for investment deposits are borne by the customer. Deposits under a name other than your own cannot be accepted.\n* When making a transfer, please enter\n【カタカナ マヤ $accountId】 in the payer name or remarks.';
+    return 'Bank transfer fees for investment deposits are borne by the customer. Deposits under a name other than your own cannot be accepted.\n* When making a transfer, please enter\n【$accountId】 in the payer name or remarks.';
   }
 
   @override

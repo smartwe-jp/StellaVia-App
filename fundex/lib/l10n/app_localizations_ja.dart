@@ -2190,6 +2190,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get lotteryApplyCopyDoneToast => 'コピーしました';
 
   @override
+  String get walletDepositTransferNameCopyAction => '振込名義 コピー';
+
+  @override
   String get lotteryApplyStep6Headline => '出資手続きが完了しました';
 
   @override
@@ -2667,7 +2670,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String walletDepositTransferNotice(Object accountId) {
-    return '出資金のご入金にあたっての振込手数料はお客様のご負担になります。ご本人様以外の振込名義での入金は受付できません。\n※お振込みの際、振込人名義または備考に\n【カタカナ マヤ $accountId】とご記入ください。';
+    return '出資金のご入金にあたっての振込手数料はお客様のご負担になります。ご本人様以外の振込名義での入金は受付できません。\n※お振込みの際、振込人名義または備考に\n【$accountId】とご記入ください。';
   }
 
   @override

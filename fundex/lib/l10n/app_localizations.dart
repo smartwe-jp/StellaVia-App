@@ -4292,6 +4292,12 @@ abstract class AppLocalizations {
   /// **'Copied'**
   String get lotteryApplyCopyDoneToast;
 
+  /// No description provided for @walletDepositTransferNameCopyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy payer name'**
+  String get walletDepositTransferNameCopyAction;
+
   /// No description provided for @lotteryApplyStep6Headline.
   ///
   /// In en, this message translates to:
@@ -5213,7 +5219,7 @@ abstract class AppLocalizations {
   /// No description provided for @walletDepositTransferNotice.
   ///
   /// In en, this message translates to:
-  /// **'Bank transfer fees for investment deposits are borne by the customer. Deposits under a name other than your own cannot be accepted.\n* When making a transfer, please enter\n【カタカナ マヤ {accountId}】 in the payer name or remarks.'**
+  /// **'Bank transfer fees for investment deposits are borne by the customer. Deposits under a name other than your own cannot be accepted.\n* When making a transfer, please enter\n【{accountId}】 in the payer name or remarks.'**
   String walletDepositTransferNotice(Object accountId);
 
   /// No description provided for @walletBankNameLabel.

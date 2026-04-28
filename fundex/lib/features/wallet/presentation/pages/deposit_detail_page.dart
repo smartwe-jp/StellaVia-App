@@ -14,6 +14,8 @@ import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../providers/wallet_providers.dart';
+import '../support/wallet_deposit_transfer_notice_support.dart';
+import '../widgets/wallet_deposit_transfer_notice.dart';
 import 'deposit_list_page.dart';
 
 class DepositDetailPage extends ConsumerWidget {
@@ -234,8 +236,10 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
         depositAmount != null &&
         depositAmount > 0 &&
         standbyBalance >= depositAmount;
-    final transferNoticeAccountId =
-        ref.watch(currentAuthUserProvider).valueOrNull?.accountId?.trim() ?? '';
+    final currentUser = ref.watch(currentAuthUserProvider).valueOrNull;
+    final transferNoticeAccountId = formatWalletDepositTransferNoticeAccountId(
+      currentUser,
+    );
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
@@ -278,50 +282,6 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
           shadowColor: colors.primary.withValues(alpha: 0.34),
         ),
       ],
-    );
-  }
-}
-
-class _DepositTransferNotice extends StatelessWidget {
-  const _DepositTransferNotice({required this.message});
-
-  final String message;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: colors.highlightGold),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Icon(
-              Icons.info_outline_rounded,
-              size: 18,
-              color: colors.highlightGold,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                message,
-                style: appText.caption.copyWith(
-                  color: colors.textSecondary,
-                  height: 1.45,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -505,10 +465,13 @@ class _ProjectDepositBankCard extends StatelessWidget {
               copyLabel: null,
             ),
             const SizedBox(height: 12),
-            _DepositTransferNotice(
+            WalletDepositTransferNotice(
               message: l10n.walletDepositTransferNotice(
                 transferNoticeAccountId,
               ),
+              transferName: transferNoticeAccountId,
+              copyButtonLabel: l10n.walletDepositTransferNameCopyAction,
+              copyDoneMessage: l10n.lotteryApplyCopyDoneToast,
             ),
           ],
         ),
