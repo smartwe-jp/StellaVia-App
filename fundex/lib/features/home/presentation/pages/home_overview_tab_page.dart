@@ -110,18 +110,18 @@ class HomeOverviewTabPage extends ConsumerWidget {
           onActionTap: () => context.push('/profile/settings/two-factor/phone'),
           onTap: () => context.push('/profile/settings/two-factor/phone'),
         ),
-      if (!shouldShowMemberProfileReminder &&
-          verificationStatus?.isRealPersonVerified == false)
-        FundReminderData(
-          leading: const Icon(Icons.verified_user_outlined, size: 30),
-          title: l10n.homeReminderRealPersonVerificationTitle,
-          message: l10n.homeReminderRealPersonVerificationBody,
-          tone: FundReminderTone.danger,
-          badgeLabel: l10n.homeReminderProfileBadge,
-          actionLabel: l10n.homeReminderVerifyAction,
-          onActionTap: () => context.push('/profile/settings/two-factor/face'),
-          onTap: () => context.push('/profile/settings/two-factor/face'),
-        ),
+      // if (!shouldShowMemberProfileReminder &&
+      //     verificationStatus?.isRealPersonVerified == false)
+      //   FundReminderData(
+      //     leading: const Icon(Icons.verified_user_outlined, size: 30),
+      //     title: l10n.homeReminderRealPersonVerificationTitle,
+      //     message: l10n.homeReminderRealPersonVerificationBody,
+      //     tone: FundReminderTone.danger,
+      //     badgeLabel: l10n.homeReminderProfileBadge,
+      //     actionLabel: l10n.homeReminderVerifyAction,
+      //     onActionTap: () => context.push('/profile/settings/two-factor/face'),
+      //     onTap: () => context.push('/profile/settings/two-factor/face'),
+      //   ),
     ];
 
     final featuredProjects = projects
