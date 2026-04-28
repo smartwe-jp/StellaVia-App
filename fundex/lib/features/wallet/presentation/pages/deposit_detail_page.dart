@@ -14,6 +14,7 @@ import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../providers/wallet_providers.dart';
+import '../support/wallet_application_payment_refresh.dart';
 import '../support/wallet_deposit_transfer_notice_support.dart';
 import '../support/wallet_standby_purchase_dialog.dart';
 import '../widgets/wallet_deposit_transfer_notice.dart';
@@ -119,6 +120,15 @@ class _DepositDetailBody extends ConsumerStatefulWidget {
 class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
   bool _isReportingDeposit = false;
   bool _isPurchasingWithStandbyBalance = false;
+  bool _isOperationCompleted = false;
+
+  void _back() {
+    if (context.canPop()) {
+      context.pop();
+      return;
+    }
+    context.go('/wallet/deposit');
+  }
 
   Future<void> _reportDepositCompleted() async {
     final amount = resolveDepositAmount(widget.record)?.round();
@@ -135,11 +145,16 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
 
     try {
       await ref.read(confirmWalletPaymentUseCaseProvider).call(amount: amount);
-      ref.invalidate(walletPendingDepositListProvider);
-      ref.invalidate(walletPendingDepositRecordProvider(widget.projectId));
+      await refreshWalletApplicationPaymentState(
+        ref,
+        projectId: widget.projectId,
+      );
       if (!mounted) {
         return;
       }
+      setState(() {
+        _isOperationCompleted = true;
+      });
       AppNotice.show(
         context,
         message: context.l10n.lotteryApplyReportDepositSuccess,
@@ -210,13 +225,16 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
       if (!succeeded) {
         throw StateError(failureMessage);
       }
-      ref.invalidate(myPageAccountStatisticProvider);
-      ref.invalidate(walletDepositPageViewDataProvider);
-      ref.invalidate(walletPendingDepositListProvider);
-      ref.invalidate(walletPendingDepositRecordProvider(widget.projectId));
+      await refreshWalletApplicationPaymentState(
+        ref,
+        projectId: widget.projectId,
+      );
       if (!mounted) {
         return;
       }
+      setState(() {
+        _isOperationCompleted = true;
+      });
       AppNotice.show(
         context,
         message: context.l10n.lotteryApplyStandbyPurchaseSuccess,
@@ -245,6 +263,7 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
+    final appText = theme.appTextTheme;
     final l10n = context.l10n;
     final bank = widget.project.liveJapanBank;
     final depositAmount = resolveDepositAmount(widget.record)?.round();
@@ -290,29 +309,46 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
             transferNoticeAccountId: transferNoticeAccountId,
           ),
         const SizedBox(height: 20),
-        _StandbyBalancePaymentCard(
-          balanceLabel: l10n.lotteryApplyStandbyBalanceLabel,
-          balanceValue: formatter.format(standbyBalance),
-          purchaseButtonLabel: l10n.lotteryApplyStandbyPurchaseAction,
-          shortageLabel: l10n.lotteryApplyStandbyShortageLabel,
-          shortageValue: standbyShortage > 0
-              ? formatter.format(standbyShortage)
-              : null,
-          canPurchase: canPurchaseWithStandbyBalance && !_isReportingDeposit,
-          isLoading: _isPurchasingWithStandbyBalance,
-          onPurchase: _purchaseWithStandbyBalance,
-        ),
-        const SizedBox(height: 16),
-        PrimaryCtaButton(
-          label: l10n.lotteryApplyReportDepositAction,
-          onPressed: depositAmount == null || depositAmount <= 0
-              ? null
-              : _reportDepositCompleted,
-          isLoading: _isReportingDeposit,
-          horizontalPadding: 0,
-          backgroundColor: colors.primary,
-          shadowColor: colors.primary.withValues(alpha: 0.34),
-        ),
+        if (_isOperationCompleted)
+          OutlinedButton(
+            onPressed: _back,
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 48),
+              side: BorderSide(color: colors.primary),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: Text(
+              l10n.lotteryApplyDepositReportBackAction,
+              style: appText.button.copyWith(color: colors.primary),
+            ),
+          )
+        else ...<Widget>[
+          _StandbyBalancePaymentCard(
+            balanceLabel: l10n.lotteryApplyStandbyBalanceLabel,
+            balanceValue: formatter.format(standbyBalance),
+            purchaseButtonLabel: l10n.lotteryApplyStandbyPurchaseAction,
+            shortageLabel: l10n.lotteryApplyStandbyShortageLabel,
+            shortageValue: standbyShortage > 0
+                ? formatter.format(standbyShortage)
+                : null,
+            canPurchase: canPurchaseWithStandbyBalance && !_isReportingDeposit,
+            isLoading: _isPurchasingWithStandbyBalance,
+            onPurchase: _purchaseWithStandbyBalance,
+          ),
+          const SizedBox(height: 16),
+          PrimaryCtaButton(
+            label: l10n.lotteryApplyReportDepositAction,
+            onPressed: depositAmount == null || depositAmount <= 0
+                ? null
+                : _reportDepositCompleted,
+            isLoading: _isReportingDeposit,
+            horizontalPadding: 0,
+            backgroundColor: colors.primary,
+            shadowColor: colors.primary.withValues(alpha: 0.34),
+          ),
+        ],
       ],
     );
   }

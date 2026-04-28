@@ -178,6 +178,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                 //     ),
                 //   ),
                 // ),
+
                 const SizedBox(height: 12),
                 DecoratedBox(
                   decoration: BoxDecoration(
@@ -297,12 +298,12 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                     isLoading: isPurchasingWithStandbyBalance,
                     onPurchase: onPurchaseWithStandbyBalance,
                   ),
-                  const SizedBox(height: 16),
-                  PrimaryCtaButton(
-                    label: jumpDepositButtonLabel,
-                    onPressed: onJumpDeposit,
-                    horizontalPadding: 0,
-                  ),
+                  // const SizedBox(height: 16),
+                  // PrimaryCtaButton(
+                  //   label: jumpDepositButtonLabel,
+                  //   onPressed: onJumpDeposit,
+                  //   horizontalPadding: 0,
+                  // ),
                   const SizedBox(height: 16),
                   PrimaryCtaButton(
                     label: reportDepositButtonLabel,

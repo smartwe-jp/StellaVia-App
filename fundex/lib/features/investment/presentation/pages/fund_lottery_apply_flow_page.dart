@@ -22,6 +22,7 @@ import '../../../member_profile/presentation/providers/member_profile_providers.
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../../member_profile/presentation/support/mypage_section_support.dart';
 import '../../../wallet/presentation/providers/wallet_providers.dart';
+import '../../../wallet/presentation/support/wallet_application_payment_refresh.dart';
 import '../../../wallet/presentation/support/wallet_deposit_transfer_notice_support.dart';
 import '../../../wallet/presentation/support/wallet_standby_purchase_dialog.dart';
 
@@ -616,8 +617,10 @@ class _FundLotteryApplyFlowPageState
       if (!succeeded) {
         throw StateError(failureMessage);
       }
-      ref.invalidate(myPageAccountStatisticProvider);
-      ref.invalidate(walletDepositPageViewDataProvider);
+      await refreshWalletApplicationPaymentState(
+        ref,
+        projectId: widget.projectId,
+      );
       if (!mounted) {
         return;
       }
