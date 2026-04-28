@@ -23,6 +23,7 @@ import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../../member_profile/presentation/support/mypage_section_support.dart';
 import '../../../wallet/presentation/providers/wallet_providers.dart';
 import '../../../wallet/presentation/support/wallet_application_payment_refresh.dart';
+import '../../../wallet/presentation/support/wallet_deposit_copy_support.dart';
 import '../../../wallet/presentation/support/wallet_deposit_transfer_notice_support.dart';
 import '../../../wallet/presentation/support/wallet_standby_purchase_dialog.dart';
 
@@ -1014,6 +1015,7 @@ class _FundLotteryApplyFlowPageState
                               FundLotteryDepositRow(
                                 label: l10n.lotteryApplyDepositAmountLabel,
                                 value: amountText,
+                                includeInFullCopy: false,
                               ),
                               FundLotteryDepositRow(
                                 label: l10n.lotteryApplyBankNameLabel,
@@ -1026,14 +1028,22 @@ class _FundLotteryApplyFlowPageState
                                 value: _formatBankValue(
                                   liveJapanBank?.branchBankName,
                                 ),
+                                copyable: true,
+                                copyValue: resolveWalletDepositBranchCopyValue(
+                                  liveJapanBank?.branchBankName,
+                                ),
                               ),
                               FundLotteryDepositRow(
                                 label: l10n.lotteryApplyBankAccountLabel,
                                 value: _formatBankAccountValue(liveJapanBank),
                                 copyable: true,
+                                copyValue:
+                                    resolveWalletDepositAccountNumberCopyValue(
+                                      liveJapanBank?.bankNumber,
+                                    ),
                               ),
                               FundLotteryDepositRow(
-                                label: l10n.lotteryApplyBankHolderLabel,
+                                label: l10n.walletAccountHolderLabel,
                                 value: _formatBankValue(
                                   liveJapanBank?.bankAccountOwnerName,
                                 ),

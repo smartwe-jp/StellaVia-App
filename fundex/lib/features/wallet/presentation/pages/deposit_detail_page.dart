@@ -15,6 +15,7 @@ import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../providers/wallet_providers.dart';
 import '../support/wallet_application_payment_refresh.dart';
+import '../support/wallet_deposit_copy_support.dart';
 import '../support/wallet_deposit_transfer_notice_support.dart';
 import '../support/wallet_standby_purchase_dialog.dart';
 import '../widgets/wallet_deposit_transfer_notice.dart';
@@ -515,6 +516,30 @@ class _ProjectDepositBankCard extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final l10n = context.l10n;
+    final branchCopyValue = resolveWalletDepositBranchCopyValue(
+      bank.branchBankName,
+    );
+    final accountNumberCopyValue = resolveWalletDepositAccountNumberCopyValue(
+      bank.bankNumber,
+    );
+    final fullCopyText = formatWalletDepositCopyText(<WalletDepositCopyRow>[
+      WalletDepositCopyRow(
+        label: l10n.walletBankNameLabel,
+        value: bank.bankName,
+      ),
+      WalletDepositCopyRow(
+        label: l10n.walletBranchNameLabel,
+        value: branchCopyValue,
+      ),
+      WalletDepositCopyRow(
+        label: l10n.walletAccountNumberLabel,
+        value: accountNumberCopyValue,
+      ),
+      WalletDepositCopyRow(
+        label: l10n.walletAccountHolderLabel,
+        value: bank.bankAccountOwnerName,
+      ),
+    ]);
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -538,20 +563,19 @@ class _ProjectDepositBankCard extends StatelessWidget {
                 ),
                 AppCopyButton(
                   label: l10n.lotteryApplyCopyAction,
-                  onPressed: () async {
-                    await Clipboard.setData(
-                      ClipboardData(
-                        text:
-                            "${bank.bankName}\n${bank.branchBankName}\n${bank.bankNumber}\n${bank.bankAccountOwnerName}",
-                      ),
-                    );
-                    if (context.mounted) {
-                      AppNotice.show(
-                        context,
-                        message: l10n.lotteryApplyCopyDoneToast,
-                      );
-                    }
-                  },
+                  onPressed: fullCopyText.isEmpty
+                      ? null
+                      : () async {
+                          await Clipboard.setData(
+                            ClipboardData(text: fullCopyText),
+                          );
+                          if (context.mounted) {
+                            AppNotice.show(
+                              context,
+                              message: l10n.lotteryApplyCopyDoneToast,
+                            );
+                          }
+                        },
                   textStyle: appText.caption,
                 ),
               ],
@@ -565,12 +589,14 @@ class _ProjectDepositBankCard extends StatelessWidget {
             _CopyableBankInfoRow(
               label: l10n.walletBranchNameLabel,
               value: bank.branchBankName,
-              copyLabel: null,
+              copyLabel: l10n.lotteryApplyCopyAction,
+              copyValue: branchCopyValue,
             ),
             _CopyableBankInfoRow(
               label: l10n.walletAccountNumberLabel,
               value: bank.bankNumber,
               copyLabel: l10n.lotteryApplyCopyAction,
+              copyValue: accountNumberCopyValue,
             ),
             _CopyableBankInfoRow(
               label: l10n.walletAccountHolderLabel,
@@ -598,11 +624,13 @@ class _CopyableBankInfoRow extends StatelessWidget {
     required this.label,
     required this.value,
     required this.copyLabel,
+    this.copyValue,
   });
 
   final String label;
   final String? value;
   final String? copyLabel;
+  final String? copyValue;
 
   @override
   Widget build(BuildContext context) {
@@ -611,6 +639,7 @@ class _CopyableBankInfoRow extends StatelessWidget {
     final appText = theme.appTextTheme;
     final l10n = context.l10n;
     final hasValue = value != null && value!.trim().isNotEmpty;
+    final resolvedCopyValue = copyValue?.trim() ?? value?.trim() ?? '';
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -635,12 +664,16 @@ class _CopyableBankInfoRow extends StatelessWidget {
                   hasValue ? value! : '--',
                   style: appText.bodyStrong.copyWith(color: colors.textPrimary),
                 ),
-                if (copyLabel != null && hasValue) ...<Widget>[
+                if (copyLabel != null &&
+                    hasValue &&
+                    resolvedCopyValue.isNotEmpty) ...<Widget>[
                   const SizedBox(height: 4),
                   AppCopyButton(
                     label: copyLabel ?? l10n.lotteryApplyCopyAction,
                     onPressed: () async {
-                      await Clipboard.setData(ClipboardData(text: value!));
+                      await Clipboard.setData(
+                        ClipboardData(text: resolvedCopyValue),
+                      );
                       if (context.mounted) {
                         AppNotice.show(
                           context,

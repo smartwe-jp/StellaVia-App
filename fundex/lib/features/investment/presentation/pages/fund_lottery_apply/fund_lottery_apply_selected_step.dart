@@ -109,6 +109,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                     height: 1.7,
                   ),
                 ),
+
                 //const SizedBox(height: 12),
                 // Container(
                 //   width: double.infinity,
@@ -178,7 +179,6 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                 //     ),
                 //   ),
                 // ),
-
                 const SizedBox(height: 12),
                 DecoratedBox(
                   decoration: BoxDecoration(
@@ -227,11 +227,15 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                                                   color: colors.textPrimary,
                                                 ),
                                           ),
-                                          if (row.copyable)
+                                          if (row.copyable &&
+                                              row.effectiveCopyValue
+                                                  .trim()
+                                                  .isNotEmpty)
                                             AppCopyButton(
                                               label: copyButtonLabel,
-                                              onPressed: () =>
-                                                  onCopyValue(row.value),
+                                              onPressed: () => onCopyValue(
+                                                row.effectiveCopyValue,
+                                              ),
                                             ),
                                         ],
                                       ),
@@ -340,8 +344,14 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
 
 String _formatDepositRowsCopyText(List<FundLotteryDepositRow> rows) {
   return rows
-      .where((FundLotteryDepositRow row) => row.value.trim().isNotEmpty)
-      .map((FundLotteryDepositRow row) => '${row.label}: ${row.value}')
+      .where(
+        (FundLotteryDepositRow row) =>
+            row.includeInFullCopy && row.effectiveCopyValue.trim().isNotEmpty,
+      )
+      .map(
+        (FundLotteryDepositRow row) =>
+            '${row.label}: ${row.effectiveCopyValue}',
+      )
       .join('\n');
 }
 

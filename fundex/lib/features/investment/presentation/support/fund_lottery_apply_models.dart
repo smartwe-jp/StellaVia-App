@@ -39,9 +39,20 @@ class FundLotteryDepositRow {
     required this.label,
     required this.value,
     this.copyable = false,
+    this.copyValue,
+    this.includeInFullCopy = true,
   });
 
   final String label;
   final String value;
   final bool copyable;
+  final String? copyValue;
+  final bool includeInFullCopy;
+
+  String get effectiveCopyValue {
+    if (copyValue != null) {
+      return copyValue!.trim();
+    }
+    return value;
+  }
 }
