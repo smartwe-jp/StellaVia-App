@@ -922,6 +922,7 @@ class _FundLotteryApplyFlowPageState
                             deadlineValue: _formatDateTime(context, deadlineAt),
                             coolingOffTitle: l10n.lotteryApplyCoolingOffTitle,
                             coolingOffBody: l10n.lotteryApplyCoolingOffBody,
+                            bankTips:l10n.walletDepositTransferNotice(_formatBankAccountValue(liveJapanBank)),
                             depositRows: <FundLotteryDepositRow>[
                               FundLotteryDepositRow(
                                 label: l10n.lotteryApplyDepositAmountLabel,

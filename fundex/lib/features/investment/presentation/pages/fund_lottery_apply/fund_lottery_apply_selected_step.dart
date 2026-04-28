@@ -12,6 +12,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
     required this.deadlineValue,
     required this.coolingOffTitle,
     required this.coolingOffBody,
+    required this.bankTips,
     required this.depositRows,
     required this.jumpDepositButtonLabel,
     required this.reportDepositButtonLabel,
@@ -33,6 +34,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
   final String deadlineValue;
   final String coolingOffTitle;
   final String coolingOffBody;
+  final String bankTips;
   final List<FundLotteryDepositRow> depositRows;
   final String jumpDepositButtonLabel;
   final String reportDepositButtonLabel;
@@ -215,6 +217,16 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                         ),
                       );
                     }),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                FundDetailContentCard(
+                  child: Text(
+                    bankTips,
+                    style: appText.caption.copyWith(
+                      color: colors.textSecondary,
+                      height: 1.7,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
