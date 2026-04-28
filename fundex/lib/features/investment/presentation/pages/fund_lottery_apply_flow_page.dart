@@ -64,6 +64,7 @@ class _FundLotteryApplyFlowPageState
   bool _agreedToApply = false;
   bool _isApplying = false;
   bool _isReportingDeposit = false;
+  bool _hasReportedDepositCompleted = false;
   bool _blocksBackOnSubmittedStep = false;
 
   @override
@@ -295,6 +296,27 @@ class _FundLotteryApplyFlowPageState
 
   String _formatCurrency(BuildContext context, int value) {
     return _currencyFormatter(context).format(value);
+  }
+
+  String _formatBankValue(String? value) {
+    final trimmed = value?.trim();
+    if (trimmed == null || trimmed.isEmpty) {
+      return '--';
+    }
+    return trimmed;
+  }
+
+  String _formatBankAccountValue(FundProjectLiveJapanBank? bank) {
+    final accountType = bank?.bankAccountType?.trim();
+    final bankNumber = bank?.bankNumber?.trim();
+    final parts = <String>[
+      if (accountType != null && accountType.isNotEmpty) accountType,
+      if (bankNumber != null && bankNumber.isNotEmpty) bankNumber,
+    ];
+    if (parts.isEmpty) {
+      return '--';
+    }
+    return parts.join(' ');
   }
 
   int _resolveTotalAmount(int calculatedTotalAmount) {
@@ -533,8 +555,9 @@ class _FundLotteryApplyFlowPageState
       if (!mounted) {
         return;
       }
-      _showToast(context.l10n.lotteryApplyReportDepositSuccess);
-      _goNextStep();
+      setState(() {
+        _hasReportedDepositCompleted = true;
+      });
     } catch (error) {
       if (!mounted) {
         return;
@@ -671,6 +694,7 @@ class _FundLotteryApplyFlowPageState
           (int total, FundLotteryDocumentGroup group) =>
               total + group.items.length,
         );
+        final liveJapanBank = project.liveJapanBank;
 
         return PopScope<void>(
           canPop: _currentStep.isFirst,
@@ -888,8 +912,12 @@ class _FundLotteryApplyFlowPageState
                           ),
                         FundLotteryApplyStep.selected =>
                           FundLotteryApplySelectedStep(
-                            headline: l10n.lotteryApplyStep5Headline,
-                            body: l10n.lotteryApplyStep5Body(projectName),
+                            headline: _hasReportedDepositCompleted
+                                ? l10n.lotteryApplyDepositReportConfirmedTitle
+                                : l10n.lotteryApplyStep5Headline,
+                            body: _hasReportedDepositCompleted
+                                ? l10n.lotteryApplyDepositReportConfirmedBody
+                                : l10n.lotteryApplyStep5Body(projectName),
                             deadlineLabel: l10n.lotteryApplyDeadlineLabel,
                             deadlineValue: _formatDateTime(context, deadlineAt),
                             coolingOffTitle: l10n.lotteryApplyCoolingOffTitle,
@@ -901,20 +929,26 @@ class _FundLotteryApplyFlowPageState
                               ),
                               FundLotteryDepositRow(
                                 label: l10n.lotteryApplyBankNameLabel,
-                                value: l10n.lotteryApplyMockBankName,
+                                value: _formatBankValue(
+                                  liveJapanBank?.bankName,
+                                ),
                               ),
                               FundLotteryDepositRow(
                                 label: l10n.lotteryApplyBankBranchLabel,
-                                value: l10n.lotteryApplyMockBankBranch,
+                                value: _formatBankValue(
+                                  liveJapanBank?.branchBankName,
+                                ),
                               ),
                               FundLotteryDepositRow(
                                 label: l10n.lotteryApplyBankAccountLabel,
-                                value: l10n.lotteryApplyMockBankAccount,
+                                value: _formatBankAccountValue(liveJapanBank),
                                 copyable: true,
                               ),
                               FundLotteryDepositRow(
                                 label: l10n.lotteryApplyBankHolderLabel,
-                                value: l10n.lotteryApplyMockBankHolder,
+                                value: _formatBankValue(
+                                  liveJapanBank?.bankAccountOwnerName,
+                                ),
                               ),
                             ],
                             jumpDepositButtonLabel:
@@ -922,6 +956,7 @@ class _FundLotteryApplyFlowPageState
                             reportDepositButtonLabel:
                                 l10n.lotteryApplyReportDepositAction,
                             isReportingDeposit: _isReportingDeposit,
+                            isReportCompleted: _hasReportedDepositCompleted,
                             onReportDeposit: () =>
                                 _reportDepositCompleted(amount: totalAmount),
                             onJumpDeposit: () =>
@@ -929,6 +964,9 @@ class _FundLotteryApplyFlowPageState
                             laterButtonLabel:
                                 l10n.lotteryApplyLaterDepositAction,
                             onLaterDeposit: _goHome,
+                            reportCompletedBackButtonLabel:
+                                l10n.lotteryApplyDepositReportBackAction,
+                            onReportCompletedBack: _back,
                             copyButtonLabel: l10n.lotteryApplyCopyAction,
                             onCopyValue: (String value) {
                               Clipboard.setData(ClipboardData(text: value));

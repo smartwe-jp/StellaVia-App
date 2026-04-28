@@ -16,10 +16,13 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
     required this.jumpDepositButtonLabel,
     required this.reportDepositButtonLabel,
     required this.isReportingDeposit,
+    this.isReportCompleted = false,
     required this.onReportDeposit,
     required this.onJumpDeposit,
     required this.laterButtonLabel,
     required this.onLaterDeposit,
+    this.reportCompletedBackButtonLabel,
+    this.onReportCompletedBack,
     required this.copyButtonLabel,
     required this.onCopyValue,
   });
@@ -34,10 +37,13 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
   final String jumpDepositButtonLabel;
   final String reportDepositButtonLabel;
   final bool isReportingDeposit;
+  final bool isReportCompleted;
   final VoidCallback onJumpDeposit;
   final VoidCallback onReportDeposit;
   final String laterButtonLabel;
   final VoidCallback onLaterDeposit;
+  final String? reportCompletedBackButtonLabel;
+  final VoidCallback? onReportCompletedBack;
   final String copyButtonLabel;
   final ValueChanged<String> onCopyValue;
 
@@ -212,35 +218,52 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                PrimaryCtaButton(
-                  label: jumpDepositButtonLabel,
-                  onPressed: onJumpDeposit,
-                  horizontalPadding: 0,
-                ),
-                const SizedBox(height: 16),
-                PrimaryCtaButton(
-                  label: reportDepositButtonLabel,
-                  onPressed: onReportDeposit,
-                  isLoading: isReportingDeposit,
-                  horizontalPadding: 0,
-                  backgroundColor: colors.primary,
-                  shadowColor: colors.primary.withValues(alpha: 0.34),
-                ),
-                const SizedBox(height: 16),
-                OutlinedButton(
-                  onPressed: onLaterDeposit,
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 48),
-                    side: BorderSide(color: colors.border),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                if (isReportCompleted)
+                  OutlinedButton(
+                    onPressed: onReportCompletedBack,
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 48),
+                      side: BorderSide(color: colors.primary),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      reportCompletedBackButtonLabel ?? laterButtonLabel,
+                      style: appText.button.copyWith(color: colors.primary),
+                    ),
+                  )
+                else ...<Widget>[
+                  PrimaryCtaButton(
+                    label: jumpDepositButtonLabel,
+                    onPressed: onJumpDeposit,
+                    horizontalPadding: 0,
+                  ),
+                  const SizedBox(height: 16),
+                  PrimaryCtaButton(
+                    label: reportDepositButtonLabel,
+                    onPressed: onReportDeposit,
+                    isLoading: isReportingDeposit,
+                    horizontalPadding: 0,
+                    backgroundColor: colors.primary,
+                    shadowColor: colors.primary.withValues(alpha: 0.34),
+                  ),
+                  const SizedBox(height: 16),
+                  OutlinedButton(
+                    onPressed: onLaterDeposit,
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 48),
+                      side: BorderSide(color: colors.border),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      laterButtonLabel,
+                      style: appText.button.copyWith(color: colors.textPrimary),
                     ),
                   ),
-                  child: Text(
-                    laterButtonLabel,
-                    style: appText.button.copyWith(color: colors.textPrimary),
-                  ),
-                ),
+                ],
               ],
             ),
           ),

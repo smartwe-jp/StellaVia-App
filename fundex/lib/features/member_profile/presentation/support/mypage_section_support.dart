@@ -387,6 +387,11 @@ void handlePendingApplyTap(BuildContext context, MyPageApplyRecord record) {
   final seed = _buildLotteryApplyFlowSeed(record);
   switch (record.status) {
     case 0:
+      context.push(
+        '/funds/$projectId/lottery-apply?step=${FundLotteryApplyStep.submitted.queryValue}&allowSubmittedAdvance=false',
+        extra: seed,
+      );
+      return;
     case 2:
       context.push(
         '/funds/$projectId/lottery-apply?step=${FundLotteryApplyStep.selected.queryValue}&allowSubmittedAdvance=false',

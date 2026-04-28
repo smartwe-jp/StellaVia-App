@@ -777,7 +777,7 @@
   "lotteryApplyBackHomeAction": "返回首页",
   "lotteryApplyDemoCheckResultAction": "查看抽签结果 →",
   "lotteryApplyStep5Headline": "中签通知",
-  "lotteryApplyStep5Body": "恭喜，你已中签「{projectName}」。请在下方期限前转账至指定账户。",
+  "lotteryApplyStep5Body": "恭喜，你已中签「{projectName}」。请转账至指定账户。",
   "@lotteryApplyStep5Body": {
     "placeholders": {
       "projectName": {}
@@ -798,6 +798,9 @@
   "lotteryApplyReportDepositAction": "报告已完成入金",
   "lotteryApplyReportDepositSuccess": "发送成功",
   "lotteryApplyReportDepositFailure": "发送失败，请稍后重试。",
+  "lotteryApplyDepositReportConfirmedTitle": "已确认您的入金完成通知。",
+  "lotteryApplyDepositReportConfirmedBody": "感谢您的配合。\n我们会确认内容，并尽快继续处理。",
+  "lotteryApplyDepositReportBackAction": "返回",
   "lotteryApplyLaterDepositAction": "稍后入金",
   "lotteryApplyCopyAction": "复制",
   "lotteryApplyCopyDoneToast": "已复制",

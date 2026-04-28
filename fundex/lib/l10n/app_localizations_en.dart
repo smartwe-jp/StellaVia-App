@@ -2222,7 +2222,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String lotteryApplyStep5Body(Object projectName) {
-    return 'Congratulations! You were selected in the \"$projectName\" lottery. Please transfer funds to the designated account by the deadline below.';
+    return 'Congratulations! You were selected in the \"$projectName\" lottery. Please transfer funds to the designated account.';
   }
 
   @override
@@ -2273,6 +2273,17 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get lotteryApplyReportDepositFailure =>
       'Failed to send the payment completion report. Please try again later.';
+
+  @override
+  String get lotteryApplyDepositReportConfirmedTitle =>
+      'We have received your payment completion notice.';
+
+  @override
+  String get lotteryApplyDepositReportConfirmedBody =>
+      'Thank you for your response.\nWe will review the details and proceed as quickly as possible.';
+
+  @override
+  String get lotteryApplyDepositReportBackAction => 'Back';
 
   @override
   String get lotteryApplyLaterDepositAction => 'Pay later';

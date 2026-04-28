@@ -4127,7 +4127,7 @@ abstract class AppLocalizations {
   /// No description provided for @lotteryApplyStep5Body.
   ///
   /// In en, this message translates to:
-  /// **'Congratulations! You were selected in the \"{projectName}\" lottery. Please transfer funds to the designated account by the deadline below.'**
+  /// **'Congratulations! You were selected in the \"{projectName}\" lottery. Please transfer funds to the designated account.'**
   String lotteryApplyStep5Body(Object projectName);
 
   /// No description provided for @lotteryApplyDeadlineLabel.
@@ -4219,6 +4219,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to send the payment completion report. Please try again later.'**
   String get lotteryApplyReportDepositFailure;
+
+  /// No description provided for @lotteryApplyDepositReportConfirmedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We have received your payment completion notice.'**
+  String get lotteryApplyDepositReportConfirmedTitle;
+
+  /// No description provided for @lotteryApplyDepositReportConfirmedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for your response.\nWe will review the details and proceed as quickly as possible.'**
+  String get lotteryApplyDepositReportConfirmedBody;
+
+  /// No description provided for @lotteryApplyDepositReportBackAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get lotteryApplyDepositReportBackAction;
 
   /// No description provided for @lotteryApplyLaterDepositAction.
   ///

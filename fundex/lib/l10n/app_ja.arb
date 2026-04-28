@@ -777,7 +777,7 @@
   "lotteryApplyBackHomeAction": "ホームに戻る",
   "lotteryApplyDemoCheckResultAction": "抽選結果を確認する →",
   "lotteryApplyStep5Headline": "当選のお知らせ",
-  "lotteryApplyStep5Body": "「{projectName}」の抽選に当選しました。下記の入金期限までに指定口座へお振込みください。",
+  "lotteryApplyStep5Body": "「{projectName}」の抽選に当選しました。下記の指定口座へお振込みください。",
   "@lotteryApplyStep5Body": {
     "placeholders": {
       "projectName": {}
@@ -798,6 +798,9 @@
   "lotteryApplyReportDepositAction": "入金完了を報告",
   "lotteryApplyReportDepositSuccess": "入金完了報告を送信しました。",
   "lotteryApplyReportDepositFailure": "入金完了報告の送信に失敗しました。しばらくしてから再度お試しください。",
+  "lotteryApplyDepositReportConfirmedTitle": "入金完了の通知を確認いたしました。",
+  "lotteryApplyDepositReportConfirmedBody": "ご対応いただき、誠にありがとうございます。\n内容を確認のうえ、速やかに処理を進めさせていただきます。",
+  "lotteryApplyDepositReportBackAction": "戻る",
   "lotteryApplyLaterDepositAction": "あとで入金する",
   "lotteryApplyCopyAction": "コピー",
   "lotteryApplyCopyDoneToast": "コピーしました",

@@ -777,7 +777,7 @@
   "lotteryApplyBackHomeAction": "Back to Home",
   "lotteryApplyDemoCheckResultAction": "View lottery result →",
   "lotteryApplyStep5Headline": "Selection notice",
-  "lotteryApplyStep5Body": "Congratulations! You were selected in the \"{projectName}\" lottery. Please transfer funds to the designated account by the deadline below.",
+  "lotteryApplyStep5Body": "Congratulations! You were selected in the \"{projectName}\" lottery. Please transfer funds to the designated account.",
   "@lotteryApplyStep5Body": {
     "placeholders": {
       "projectName": {}
@@ -798,6 +798,9 @@
   "lotteryApplyReportDepositAction": "Report payment completed",
   "lotteryApplyReportDepositSuccess": "Payment completion report sent.",
   "lotteryApplyReportDepositFailure": "Failed to send the payment completion report. Please try again later.",
+  "lotteryApplyDepositReportConfirmedTitle": "We have received your payment completion notice.",
+  "lotteryApplyDepositReportConfirmedBody": "Thank you for your response.\nWe will review the details and proceed as quickly as possible.",
+  "lotteryApplyDepositReportBackAction": "Back",
   "lotteryApplyLaterDepositAction": "Pay later",
   "lotteryApplyCopyAction": "Copy",
   "lotteryApplyCopyDoneToast": "Copied",

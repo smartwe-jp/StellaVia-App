@@ -2077,7 +2077,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String lotteryApplyStep5Body(Object projectName) {
-    return '恭喜，你已中签「$projectName」。请在下方期限前转账至指定账户。';
+    return '恭喜，你已中签「$projectName」。请转账至指定账户。';
   }
 
   @override
@@ -2125,6 +2125,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get lotteryApplyReportDepositFailure => '发送失败，请稍后重试。';
+
+  @override
+  String get lotteryApplyDepositReportConfirmedTitle => '已确认您的入金完成通知。';
+
+  @override
+  String get lotteryApplyDepositReportConfirmedBody =>
+      '感谢您的配合。\n我们会确认内容，并尽快继续处理。';
+
+  @override
+  String get lotteryApplyDepositReportBackAction => '返回';
 
   @override
   String get lotteryApplyLaterDepositAction => '稍后入金';
@@ -6136,7 +6146,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String lotteryApplyStep5Body(Object projectName) {
-    return '恭喜，你已中選「$projectName」。請於下方期限前匯款至指定帳戶。';
+    return '恭喜，你已中選「$projectName」。請匯款至指定帳戶。';
   }
 
   @override
@@ -6184,6 +6194,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get lotteryApplyReportDepositFailure => '發送失敗，請稍後重試。';
+
+  @override
+  String get lotteryApplyDepositReportConfirmedTitle => '已確認您的入金完成通知。';
+
+  @override
+  String get lotteryApplyDepositReportConfirmedBody =>
+      '感謝您的配合。\n我們會確認內容，並儘快繼續處理。';
+
+  @override
+  String get lotteryApplyDepositReportBackAction => '返回';
 
   @override
   String get lotteryApplyLaterDepositAction => '稍後入金';

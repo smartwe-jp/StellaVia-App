@@ -2102,7 +2102,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String lotteryApplyStep5Body(Object projectName) {
-    return '「$projectName」の抽選に当選しました。下記の入金期限までに指定口座へお振込みください。';
+    return '「$projectName」の抽選に当選しました。下記の指定口座へお振込みください。';
   }
 
   @override
@@ -2151,6 +2151,16 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get lotteryApplyReportDepositFailure =>
       '入金完了報告の送信に失敗しました。しばらくしてから再度お試しください。';
+
+  @override
+  String get lotteryApplyDepositReportConfirmedTitle => '入金完了の通知を確認いたしました。';
+
+  @override
+  String get lotteryApplyDepositReportConfirmedBody =>
+      'ご対応いただき、誠にありがとうございます。\n内容を確認のうえ、速やかに処理を進めさせていただきます。';
+
+  @override
+  String get lotteryApplyDepositReportBackAction => '戻る';
 
   @override
   String get lotteryApplyLaterDepositAction => 'あとで入金する';
