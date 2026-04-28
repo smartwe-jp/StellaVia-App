@@ -28,6 +28,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginSendCode => 'Send code';
 
   @override
+  String get loginSendCodeSuccess => 'Verification code sent.';
+
+  @override
   String get loginSubmit => 'Sign in';
 
   @override

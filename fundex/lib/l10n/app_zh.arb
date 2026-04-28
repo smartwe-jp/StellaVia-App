@@ -6,6 +6,7 @@
   "loginModeTitle": "请选择登录方式",
   "loginCodeLabel": "验证码",
   "loginSendCode": "发送验证码",
+  "loginSendCodeSuccess": "验证码已发送。",
   "loginSubmit": "登录",
   "loginBrowseAsGuest": "不登录直接浏览（访客模式）",
   "loginCreateAccount": "免费注册",

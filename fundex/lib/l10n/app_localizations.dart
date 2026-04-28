@@ -137,6 +137,12 @@ abstract class AppLocalizations {
   /// **'Send code'**
   String get loginSendCode;
 
+  /// No description provided for @loginSendCodeSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification code sent.'**
+  String get loginSendCodeSuccess;
+
   /// No description provided for @loginSubmit.
   ///
   /// In en, this message translates to:

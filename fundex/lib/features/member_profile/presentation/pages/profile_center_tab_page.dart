@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/network/app_network_connectivity_providers.dart';
 import '../../../../app/support/app_compact_money_formatter.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
@@ -16,6 +17,7 @@ import '../../../wallet/domain/entities/wallet_account_history.dart';
 import '../../../wallet/presentation/providers/wallet_providers.dart';
 import '../../../wallet/presentation/support/wallet_history_view_support.dart';
 import '../../../wallet/presentation/widgets/wallet_history_list_item.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/mypage_models.dart';
 import '../providers/member_profile_providers.dart';
 import '../providers/mypage_providers.dart';
@@ -43,6 +45,7 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final locale = Localizations.localeOf(context);
+    final authUserAsync = ref.watch(currentAuthUserProvider);
     final basicProfile = ref.watch(memberBasicProfileProvider);
     final localeTag = locale.toLanguageTag();
     final trendEndDate = _resolveTrendEndDate();
@@ -98,6 +101,13 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                 displayName: _resolveMyPageDisplayName(
                   locale: locale,
                   profile: basicProfile,
+                ),
+                verificationBadge: authUserAsync.whenOrNull(
+                  data: (user) => _resolveMyPageVerificationBadge(
+                    l10n,
+                    colors,
+                    user?.status,
+                  ),
                 ),
                 totalAssetsLabel: l10n.myPageTotalAssetsLabel,
                 totalAssetsValue: _formatCurrency(
@@ -807,6 +817,36 @@ String _resolveMyPageDisplayName({
   }
 
   return resolveHomeDisplayName(locale: locale, profile: profile);
+}
+
+FundMyPageVerificationBadgeData _resolveMyPageVerificationBadge(
+  AppLocalizations l10n,
+  AppSemanticColorTheme colors,
+  int? status,
+) {
+  return switch (status) {
+    4 => FundMyPageVerificationBadgeData(
+      label: l10n.memberProfileOverviewStatusVerified,
+      backgroundColor: colors.background,
+      foregroundColor: colors.highlightGold,
+      borderColor: colors.highlightGold,
+      icon: Icons.verified_rounded,
+    ),
+    2 || 5 => FundMyPageVerificationBadgeData(
+      label: l10n.memberProfileOverviewStatusPending,
+      backgroundColor: colors.warningSoft,
+      foregroundColor: colors.warningForeground,
+      borderColor: colors.warningBorder,
+      icon: Icons.schedule_rounded,
+    ),
+    _ => FundMyPageVerificationBadgeData(
+      label: l10n.memberProfileOverviewStatusUnverified,
+      backgroundColor: colors.dangerSoft,
+      foregroundColor: colors.dangerForeground,
+      borderColor: colors.dangerBorder,
+      icon: Icons.shield_outlined,
+    ),
+  };
 }
 
 DateTime? _parseApiDate(String? raw) {

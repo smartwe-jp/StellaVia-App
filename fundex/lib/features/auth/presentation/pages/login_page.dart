@@ -139,6 +139,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
     if (sent) {
       _sendCodeCooldown.start();
+      if (!mounted) {
+        return;
+      }
+      AppNotice.show(context, message: context.l10n.loginSendCodeSuccess);
     }
   }
 

@@ -27,6 +27,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get loginSendCode => '发送验证码';
 
   @override
+  String get loginSendCodeSuccess => '验证码已发送。';
+
+  @override
   String get loginSubmit => '登录';
 
   @override
@@ -4091,6 +4094,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get loginSendCode => '發送驗證碼';
+
+  @override
+  String get loginSendCodeSuccess => '驗證碼已發送。';
 
   @override
   String get loginSubmit => '登入';

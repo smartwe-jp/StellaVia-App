@@ -10,10 +10,7 @@ import '../providers/wallet_providers.dart';
 import '../support/wallet_withdraw_confirm_models.dart';
 
 class WalletWithdrawConfirmPage extends ConsumerStatefulWidget {
-  const WalletWithdrawConfirmPage({
-    super.key,
-    required this.seed,
-  });
+  const WalletWithdrawConfirmPage({super.key, required this.seed});
 
   final WalletWithdrawConfirmSeed seed;
 
@@ -55,6 +52,7 @@ class _WalletWithdrawConfirmPageState
       if (!mounted) {
         return;
       }
+      AppNotice.show(context, message: context.l10n.walletWithdrawCodeSent);
       final submitted = await context.push<bool>(
         '/wallet/withdraw/confirm/verify',
         extra: widget.seed,
@@ -138,8 +136,10 @@ class _WalletWithdrawConfirmPageState
                       accountValue: _maskBankAccountLabel(),
                       feeLabel: l10n.walletWithdrawFeeLabel,
                       feeValue: feeValueText,
-                      estimatedArrivalLabel: l10n.walletWithdrawEstimatedArrivalLabel,
-                      estimatedArrivalValue: l10n.walletWithdrawEstimatedArrivalValue,
+                      estimatedArrivalLabel:
+                          l10n.walletWithdrawEstimatedArrivalLabel,
+                      estimatedArrivalValue:
+                          l10n.walletWithdrawEstimatedArrivalValue,
                       netLabel: l10n.walletWithdrawNetAmountLabel,
                       netValue: actualArrivalValueText,
                     ),
@@ -175,7 +175,9 @@ class _WalletWithdrawConfirmPageState
                           backgroundColor: colors.surfaceAlt,
                           side: BorderSide(color: colors.border),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(UiTokens.radius14),
+                            borderRadius: BorderRadius.circular(
+                              UiTokens.radius14,
+                            ),
                           ),
                         ),
                         child: Text(
@@ -242,9 +244,7 @@ class _WithdrawConfirmCard extends StatelessWidget {
         _WithdrawConfirmRow(
           label: accountLabel,
           value: accountValue,
-          valueStyle: appText.bodySemi.copyWith(
-            fontSize: 18,
-          ),
+          valueStyle: appText.bodySemi.copyWith(fontSize: 18),
         ),
         const SizedBox(height: 22),
         Divider(height: 1, color: colors.borderSoft),
@@ -252,17 +252,13 @@ class _WithdrawConfirmCard extends StatelessWidget {
         _WithdrawConfirmRow(
           label: feeLabel,
           value: feeValue,
-          valueStyle: appText.bodySemi.copyWith(
-            fontSize: 18,
-          ),
+          valueStyle: appText.bodySemi.copyWith(fontSize: 18),
         ),
         const SizedBox(height: 16),
         _WithdrawConfirmRow(
           label: estimatedArrivalLabel,
           value: estimatedArrivalValue,
-          valueStyle: appText.bodySemi.copyWith(
-            fontSize: 18,
-          ),
+          valueStyle: appText.bodySemi.copyWith(fontSize: 18),
         ),
         const SizedBox(height: 22),
         Divider(height: 1, color: colors.borderSoft),
@@ -270,9 +266,7 @@ class _WithdrawConfirmCard extends StatelessWidget {
         _WithdrawConfirmRow(
           label: netLabel,
           value: netValue,
-          labelStyle: appText.bodySemi.copyWith(
-            fontSize: 18,
-          ),
+          labelStyle: appText.bodySemi.copyWith(fontSize: 18),
           valueStyle: appText.pageTitle.copyWith(
             fontSize: 34,
             fontWeight: FontWeight.w800,

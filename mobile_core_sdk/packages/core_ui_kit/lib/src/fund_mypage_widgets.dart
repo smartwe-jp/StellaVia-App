@@ -36,6 +36,22 @@ class FundMyPageQuickActionData {
   final Color? borderColor;
 }
 
+class FundMyPageVerificationBadgeData {
+  const FundMyPageVerificationBadgeData({
+    required this.label,
+    required this.backgroundColor,
+    required this.foregroundColor,
+    this.borderColor,
+    this.icon,
+  });
+
+  final String label;
+  final Color backgroundColor;
+  final Color foregroundColor;
+  final Color? borderColor;
+  final IconData? icon;
+}
+
 class FundMyPageAssetOverview extends StatelessWidget {
   const FundMyPageAssetOverview({
     super.key,
@@ -47,6 +63,7 @@ class FundMyPageAssetOverview extends StatelessWidget {
     required this.totalAssetsCaption,
     required this.metrics,
     required this.quickActions,
+    this.verificationBadge,
     this.headerActions = const <Widget>[],
   });
 
@@ -58,6 +75,7 @@ class FundMyPageAssetOverview extends StatelessWidget {
   final String totalAssetsCaption;
   final List<FundMyPageMetricData> metrics;
   final List<FundMyPageQuickActionData> quickActions;
+  final FundMyPageVerificationBadgeData? verificationBadge;
   final List<Widget> headerActions;
 
   @override
@@ -110,13 +128,26 @@ class FundMyPageAssetOverview extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            Text(
-              displayName,
-              style: appText.pageTitle.copyWith(
-                color: colors.onDark,
-                fontWeight: FontWeight.w800,
-                height: 1.15,
-              ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Flexible(
+                  child: Text(
+                    displayName,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: appText.pageTitle.copyWith(
+                      color: colors.onDark,
+                      fontWeight: FontWeight.w800,
+                      height: 1.15,
+                    ),
+                  ),
+                ),
+                if (verificationBadge != null) ...<Widget>[
+                  const SizedBox(width: 8),
+                  _FundMyPageVerificationBadge(data: verificationBadge!),
+                ],
+              ],
             ),
             const SizedBox(height: 22),
             Text(
@@ -181,6 +212,48 @@ class FundMyPageAssetOverview extends StatelessWidget {
                 ],
               ),
             ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FundMyPageVerificationBadge extends StatelessWidget {
+  const _FundMyPageVerificationBadge({required this.data});
+
+  final FundMyPageVerificationBadgeData data;
+
+  @override
+  Widget build(BuildContext context) {
+    final appText = Theme.of(context).appTextTheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: data.backgroundColor,
+        borderRadius: BorderRadius.circular(999),
+        border: data.borderColor == null
+            ? null
+            : Border.all(color: data.borderColor!),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            if (data.icon != null) ...<Widget>[
+              Icon(data.icon, size: 12, color: data.foregroundColor),
+              const SizedBox(width: 4),
+            ],
+            Text(
+              data.label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: appText.meta.copyWith(
+                color: data.foregroundColor,
+                fontWeight: FontWeight.w800,
+                height: 1,
+              ),
+            ),
           ],
         ),
       ),

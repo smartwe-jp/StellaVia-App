@@ -6,6 +6,7 @@
   "loginModeTitle": "Choose login method",
   "loginCodeLabel": "Verification code",
   "loginSendCode": "Send code",
+  "loginSendCodeSuccess": "Verification code sent.",
   "loginSubmit": "Sign in",
   "loginBrowseAsGuest": "Browse without signing in (Guest mode)",
   "loginCreateAccount": "Create account",

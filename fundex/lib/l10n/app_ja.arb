@@ -6,6 +6,7 @@
   "loginModeTitle": "ログイン方法を選択",
   "loginCodeLabel": "認証コード",
   "loginSendCode": "コード送信",
+  "loginSendCodeSuccess": "認証コードを送信しました。",
   "loginSubmit": "ログイン",
   "loginBrowseAsGuest": "ログインせずに閲覧する（ゲストモード）",
   "loginCreateAccount": "新規登録",

@@ -27,6 +27,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get loginSendCode => 'コード送信';
 
   @override
+  String get loginSendCodeSuccess => '認証コードを送信しました。';
+
+  @override
   String get loginSubmit => 'ログイン';
 
   @override
