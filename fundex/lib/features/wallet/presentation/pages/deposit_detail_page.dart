@@ -145,10 +145,6 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
 
     try {
       await ref.read(confirmWalletPaymentUseCaseProvider).call(amount: amount);
-      await refreshWalletApplicationPaymentState(
-        ref,
-        projectId: widget.projectId,
-      );
       if (!mounted) {
         return;
       }

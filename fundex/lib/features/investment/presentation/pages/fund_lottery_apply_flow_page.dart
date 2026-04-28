@@ -626,6 +626,7 @@ class _FundLotteryApplyFlowPageState
       }
       setState(() {
         _hasReportedDepositCompleted = true;
+        _currentStep = FundLotteryApplyStep.depositCompleted;
       });
     } catch (error) {
       if (!mounted) {

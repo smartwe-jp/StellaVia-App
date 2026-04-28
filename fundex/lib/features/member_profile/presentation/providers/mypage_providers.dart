@@ -113,6 +113,8 @@ final submitMyPageUserWithdrawUseCaseProvider =
       );
     });
 
+final myPageSectionListRefreshSignalProvider = StateProvider<int>((ref) => 0);
+
 final myPageApplyListProvider =
     FutureProvider.autoDispose<List<MyPageApplyRecord>>((ref) async {
       return ref.watch(fetchMyPageApplyListUseCaseProvider).call();

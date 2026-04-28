@@ -251,6 +251,13 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<int>(myPageSectionListRefreshSignalProvider, (_, __) {
+      if (widget.sectionType != MyPageSectionType.pendingApplications) {
+        return;
+      }
+      _loadInitial(preserveContent: true);
+    });
+
     final l10n = context.l10n;
     final colors = Theme.of(context).appColors;
     final localeTag = Localizations.localeOf(context).toLanguageTag();

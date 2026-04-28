@@ -41,6 +41,8 @@ Future<void> refreshWalletApplicationPaymentState(
       ),
     );
   }
+
+  ref.read(myPageSectionListRefreshSignalProvider.notifier).state++;
 }
 
 Future<void> _refreshIgnoringError(Future<Object?> Function() refresh) async {
