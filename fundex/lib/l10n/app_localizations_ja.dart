@@ -2156,6 +2156,21 @@ class AppLocalizationsJa extends AppLocalizations {
       '入金完了報告の送信に失敗しました。しばらくしてから再度お試しください。';
 
   @override
+  String get lotteryApplyStandbyBalanceLabel => '待機資金残高';
+
+  @override
+  String get lotteryApplyStandbyPurchaseAction => '待機資金で購入';
+
+  @override
+  String get lotteryApplyStandbyShortageLabel => '不足額';
+
+  @override
+  String get lotteryApplyStandbyPurchaseSuccess => '待機資金で購入しました。';
+
+  @override
+  String get lotteryApplyStandbyPurchaseFailure => '待機資金での購入に失敗しました。';
+
+  @override
   String get lotteryApplyDepositReportConfirmedTitle => '入金完了の通知を確認いたしました。';
 
   @override

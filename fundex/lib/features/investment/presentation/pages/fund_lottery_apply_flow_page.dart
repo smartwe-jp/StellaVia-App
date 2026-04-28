@@ -19,6 +19,7 @@ import 'fund_lottery_apply/fund_lottery_apply_documents_step.dart';
 import 'fund_lottery_apply/fund_lottery_apply_selected_step.dart';
 import 'fund_lottery_apply/fund_lottery_apply_submitted_step.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
+import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../../member_profile/presentation/support/mypage_section_support.dart';
 import '../../../wallet/presentation/providers/wallet_providers.dart';
 
@@ -64,6 +65,7 @@ class _FundLotteryApplyFlowPageState
   bool _agreedToApply = false;
   bool _isApplying = false;
   bool _isReportingDeposit = false;
+  bool _isPurchasingWithStandbyBalance = false;
   bool _hasReportedDepositCompleted = false;
   bool _blocksBackOnSubmittedStep = false;
 
@@ -542,7 +544,7 @@ class _FundLotteryApplyFlowPageState
   }
 
   Future<void> _reportDepositCompleted({required int amount}) async {
-    if (_isReportingDeposit) {
+    if (_isReportingDeposit || _isPurchasingWithStandbyBalance) {
       return;
     }
 
@@ -573,6 +575,45 @@ class _FundLotteryApplyFlowPageState
       if (mounted) {
         setState(() {
           _isReportingDeposit = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _purchaseWithStandbyBalance({required int amount}) async {
+    if (_isPurchasingWithStandbyBalance || _isReportingDeposit) {
+      return;
+    }
+
+    setState(() {
+      _isPurchasingWithStandbyBalance = true;
+    });
+
+    try {
+      await ref.read(confirmWalletPaymentUseCaseProvider).call(amount: amount);
+      ref.invalidate(myPageAccountStatisticProvider);
+      ref.invalidate(walletDepositPageViewDataProvider);
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _hasReportedDepositCompleted = true;
+      });
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      _showToast(
+        _resolveRequestErrorMessage(
+          context,
+          error,
+          fallbackMessage: context.l10n.lotteryApplyStandbyPurchaseFailure,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isPurchasingWithStandbyBalance = false;
         });
       }
     }
@@ -632,6 +673,7 @@ class _FundLotteryApplyFlowPageState
     final applyDetailAsync = ref.watch(
       fundProjectApplyDetailProvider(widget.projectId),
     );
+    final accountStatisticAsync = ref.watch(myPageAccountStatisticProvider);
 
     return detailAsync.when(
       loading: () => _FlowLoadingScaffold(title: l10n.lotteryApplyFlowTitle),
@@ -680,6 +722,13 @@ class _FundLotteryApplyFlowPageState
             (totalAmount * _resolveYield(project) / 100).round();
         final formatter = _currencyFormatter(context);
         final amountText = formatter.format(totalAmount);
+        final standbyBalance =
+            accountStatisticAsync.asData?.value?.firstLevelAccountTotal ?? 0;
+        final standbyShortage = totalAmount > standbyBalance
+            ? totalAmount - standbyBalance
+            : 0;
+        final canPurchaseWithStandbyBalance =
+            totalAmount > 0 && standbyBalance >= totalAmount;
         final deadline = DateTime.now().add(const Duration(days: 8));
         final deadlineAt = DateTime(
           deadline.year,
@@ -959,6 +1008,27 @@ class _FundLotteryApplyFlowPageState
                             ],
                             jumpDepositButtonLabel:
                                 l10n.lotteryApplyStep1DepositAction,
+                            standbyBalanceLabel:
+                                l10n.lotteryApplyStandbyBalanceLabel,
+                            standbyBalanceValue: formatter.format(
+                              standbyBalance,
+                            ),
+                            standbyPurchaseButtonLabel:
+                                l10n.lotteryApplyStandbyPurchaseAction,
+                            standbyShortageLabel:
+                                l10n.lotteryApplyStandbyShortageLabel,
+                            standbyShortageValue: standbyShortage > 0
+                                ? formatter.format(standbyShortage)
+                                : null,
+                            canPurchaseWithStandbyBalance:
+                                canPurchaseWithStandbyBalance &&
+                                !_isReportingDeposit,
+                            isPurchasingWithStandbyBalance:
+                                _isPurchasingWithStandbyBalance,
+                            onPurchaseWithStandbyBalance: () =>
+                                _purchaseWithStandbyBalance(
+                                  amount: totalAmount,
+                                ),
                             reportDepositButtonLabel:
                                 l10n.lotteryApplyReportDepositAction,
                             isReportingDeposit: _isReportingDeposit,

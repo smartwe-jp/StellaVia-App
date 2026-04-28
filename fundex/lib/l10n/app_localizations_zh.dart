@@ -2130,6 +2130,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get lotteryApplyReportDepositFailure => '发送失败，请稍后重试。';
 
   @override
+  String get lotteryApplyStandbyBalanceLabel => '待机资金余额';
+
+  @override
+  String get lotteryApplyStandbyPurchaseAction => '使用待机资金购买';
+
+  @override
+  String get lotteryApplyStandbyShortageLabel => '不足额';
+
+  @override
+  String get lotteryApplyStandbyPurchaseSuccess => '已使用待机资金购买。';
+
+  @override
+  String get lotteryApplyStandbyPurchaseFailure => '使用待机资金购买失败。';
+
+  @override
   String get lotteryApplyDepositReportConfirmedTitle => '已确认您的入金完成通知。';
 
   @override
@@ -6230,6 +6245,21 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get lotteryApplyReportDepositFailure => '發送失敗，請稍後重試。';
+
+  @override
+  String get lotteryApplyStandbyBalanceLabel => '待機資金餘額';
+
+  @override
+  String get lotteryApplyStandbyPurchaseAction => '使用待機資金購買';
+
+  @override
+  String get lotteryApplyStandbyShortageLabel => '不足額';
+
+  @override
+  String get lotteryApplyStandbyPurchaseSuccess => '已使用待機資金購買。';
+
+  @override
+  String get lotteryApplyStandbyPurchaseFailure => '使用待機資金購買失敗。';
 
   @override
   String get lotteryApplyDepositReportConfirmedTitle => '已確認您的入金完成通知。';

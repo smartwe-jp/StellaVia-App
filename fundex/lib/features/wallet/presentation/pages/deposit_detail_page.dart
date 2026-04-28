@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/navigation/app_root_route_refresh_scope.dart';
@@ -11,6 +12,7 @@ import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
+import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../providers/wallet_providers.dart';
 import 'deposit_list_page.dart';
 
@@ -113,10 +115,14 @@ class _DepositDetailBody extends ConsumerStatefulWidget {
 
 class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
   bool _isReportingDeposit = false;
+  bool _isPurchasingWithStandbyBalance = false;
 
   Future<void> _reportDepositCompleted() async {
     final amount = resolveDepositAmount(widget.record)?.round();
-    if (amount == null || amount <= 0 || _isReportingDeposit) {
+    if (amount == null ||
+        amount <= 0 ||
+        _isReportingDeposit ||
+        _isPurchasingWithStandbyBalance) {
       return;
     }
 
@@ -155,6 +161,52 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
     }
   }
 
+  Future<void> _purchaseWithStandbyBalance() async {
+    final amount = resolveDepositAmount(widget.record)?.round();
+    if (amount == null ||
+        amount <= 0 ||
+        _isPurchasingWithStandbyBalance ||
+        _isReportingDeposit) {
+      return;
+    }
+
+    setState(() {
+      _isPurchasingWithStandbyBalance = true;
+    });
+
+    try {
+      await ref.read(confirmWalletPaymentUseCaseProvider).call(amount: amount);
+      ref.invalidate(myPageAccountStatisticProvider);
+      ref.invalidate(walletDepositPageViewDataProvider);
+      ref.invalidate(walletPendingDepositListProvider);
+      ref.invalidate(walletPendingDepositRecordProvider(widget.projectId));
+      if (!mounted) {
+        return;
+      }
+      AppNotice.show(
+        context,
+        message: context.l10n.lotteryApplyStandbyPurchaseSuccess,
+      );
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      AppNotice.show(
+        context,
+        message: resolveAppRequestErrorMessage(
+          error,
+          context.l10n.lotteryApplyStandbyPurchaseFailure,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isPurchasingWithStandbyBalance = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -162,6 +214,26 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
     final l10n = context.l10n;
     final bank = widget.project.liveJapanBank;
     final depositAmount = resolveDepositAmount(widget.record)?.round();
+    final formatter = NumberFormat.currency(
+      locale: Localizations.localeOf(context).toLanguageTag(),
+      symbol: '¥',
+      decimalDigits: 0,
+    );
+    final standbyBalance =
+        ref
+            .watch(myPageAccountStatisticProvider)
+            .asData
+            ?.value
+            ?.firstLevelAccountTotal ??
+        0;
+    final standbyShortage =
+        depositAmount != null && depositAmount > standbyBalance
+        ? depositAmount - standbyBalance
+        : 0;
+    final canPurchaseWithStandbyBalance =
+        depositAmount != null &&
+        depositAmount > 0 &&
+        standbyBalance >= depositAmount;
     final transferNoticeAccountId =
         ref.watch(currentAuthUserProvider).valueOrNull?.accountId?.trim() ?? '';
 
@@ -182,6 +254,19 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
             transferNoticeAccountId: transferNoticeAccountId,
           ),
         const SizedBox(height: 20),
+        _StandbyBalancePaymentCard(
+          balanceLabel: l10n.lotteryApplyStandbyBalanceLabel,
+          balanceValue: formatter.format(standbyBalance),
+          purchaseButtonLabel: l10n.lotteryApplyStandbyPurchaseAction,
+          shortageLabel: l10n.lotteryApplyStandbyShortageLabel,
+          shortageValue: standbyShortage > 0
+              ? formatter.format(standbyShortage)
+              : null,
+          canPurchase: canPurchaseWithStandbyBalance && !_isReportingDeposit,
+          isLoading: _isPurchasingWithStandbyBalance,
+          onPurchase: _purchaseWithStandbyBalance,
+        ),
+        const SizedBox(height: 16),
         PrimaryCtaButton(
           label: l10n.lotteryApplyReportDepositAction,
           onPressed: depositAmount == null || depositAmount <= 0
@@ -235,6 +320,130 @@ class _DepositTransferNotice extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _StandbyBalancePaymentCard extends StatelessWidget {
+  const _StandbyBalancePaymentCard({
+    required this.balanceLabel,
+    required this.balanceValue,
+    required this.purchaseButtonLabel,
+    required this.shortageLabel,
+    required this.shortageValue,
+    required this.canPurchase,
+    required this.isLoading,
+    required this.onPurchase,
+  });
+
+  final String balanceLabel;
+  final String balanceValue;
+  final String purchaseButtonLabel;
+  final String shortageLabel;
+  final String? shortageValue;
+  final bool canPurchase;
+  final bool isLoading;
+  final VoidCallback onPurchase;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final shortageText = shortageValue == null
+        ? null
+        : '$shortageLabel $shortageValue';
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surfaceAlt,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: colors.border),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    balanceLabel,
+                    style: appText.caption.copyWith(
+                      color: colors.textSecondary,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                if (shortageText != null) ...<Widget>[
+                  const SizedBox(width: 12),
+                  _StandbyShortageBadge(label: shortageText),
+                ],
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              balanceValue,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: appText.numericTitle.copyWith(
+                color: colors.textPrimary,
+                fontSize: 28,
+                fontWeight: FontWeight.w900,
+                height: 1.05,
+              ),
+            ),
+            if (canPurchase) ...<Widget>[
+              const SizedBox(height: 14),
+              PrimaryCtaButton(
+                label: purchaseButtonLabel,
+                onPressed: isLoading ? null : onPurchase,
+                isLoading: isLoading,
+                height: 48,
+                horizontalPadding: 0,
+                backgroundColor: colors.highlightGold,
+                shadowColor: colors.highlightGold.withValues(alpha: 0.22),
+                textStyle: appText.button.copyWith(color: colors.onDark),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _StandbyShortageBadge extends StatelessWidget {
+  const _StandbyShortageBadge({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.dangerSoft,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: colors.dangerBorder),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: appText.caption.copyWith(
+            color: colors.dangerForeground,
+            fontWeight: FontWeight.w800,
+          ),
         ),
       ),
     );

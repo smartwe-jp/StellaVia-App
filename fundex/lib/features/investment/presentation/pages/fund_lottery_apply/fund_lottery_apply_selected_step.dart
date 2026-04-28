@@ -15,6 +15,14 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
     required this.bankTips,
     required this.depositRows,
     required this.jumpDepositButtonLabel,
+    required this.standbyBalanceLabel,
+    required this.standbyBalanceValue,
+    required this.standbyPurchaseButtonLabel,
+    required this.standbyShortageLabel,
+    this.standbyShortageValue,
+    required this.canPurchaseWithStandbyBalance,
+    required this.isPurchasingWithStandbyBalance,
+    required this.onPurchaseWithStandbyBalance,
     required this.reportDepositButtonLabel,
     required this.isReportingDeposit,
     this.isReportCompleted = false,
@@ -37,6 +45,14 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
   final String bankTips;
   final List<FundLotteryDepositRow> depositRows;
   final String jumpDepositButtonLabel;
+  final String standbyBalanceLabel;
+  final String standbyBalanceValue;
+  final String standbyPurchaseButtonLabel;
+  final String standbyShortageLabel;
+  final String? standbyShortageValue;
+  final bool canPurchaseWithStandbyBalance;
+  final bool isPurchasingWithStandbyBalance;
+  final VoidCallback onPurchaseWithStandbyBalance;
   final String reportDepositButtonLabel;
   final bool isReportingDeposit;
   final bool isReportCompleted;
@@ -246,6 +262,17 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                     ),
                   )
                 else ...<Widget>[
+                  _StandbyBalancePaymentCard(
+                    balanceLabel: standbyBalanceLabel,
+                    balanceValue: standbyBalanceValue,
+                    purchaseButtonLabel: standbyPurchaseButtonLabel,
+                    shortageLabel: standbyShortageLabel,
+                    shortageValue: standbyShortageValue,
+                    canPurchase: canPurchaseWithStandbyBalance,
+                    isLoading: isPurchasingWithStandbyBalance,
+                    onPurchase: onPurchaseWithStandbyBalance,
+                  ),
+                  const SizedBox(height: 16),
                   PrimaryCtaButton(
                     label: jumpDepositButtonLabel,
                     onPressed: onJumpDeposit,
@@ -310,6 +337,130 @@ class _CopyButton extends StatelessWidget {
               color: colors.primary,
               fontWeight: FontWeight.w700,
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _StandbyBalancePaymentCard extends StatelessWidget {
+  const _StandbyBalancePaymentCard({
+    required this.balanceLabel,
+    required this.balanceValue,
+    required this.purchaseButtonLabel,
+    required this.shortageLabel,
+    required this.shortageValue,
+    required this.canPurchase,
+    required this.isLoading,
+    required this.onPurchase,
+  });
+
+  final String balanceLabel;
+  final String balanceValue;
+  final String purchaseButtonLabel;
+  final String shortageLabel;
+  final String? shortageValue;
+  final bool canPurchase;
+  final bool isLoading;
+  final VoidCallback onPurchase;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final shortageText = shortageValue == null
+        ? null
+        : '$shortageLabel $shortageValue';
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surfaceAlt,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: colors.border),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    balanceLabel,
+                    style: appText.caption.copyWith(
+                      color: colors.textSecondary,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                if (shortageText != null) ...<Widget>[
+                  const SizedBox(width: 12),
+                  _StandbyShortageBadge(label: shortageText),
+                ],
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              balanceValue,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: appText.numericTitle.copyWith(
+                color: colors.textPrimary,
+                fontSize: 28,
+                fontWeight: FontWeight.w900,
+                height: 1.05,
+              ),
+            ),
+            if (canPurchase) ...<Widget>[
+              const SizedBox(height: 14),
+              PrimaryCtaButton(
+                label: purchaseButtonLabel,
+                onPressed: isLoading ? null : onPurchase,
+                isLoading: isLoading,
+                height: 48,
+                horizontalPadding: 0,
+                backgroundColor: colors.highlightGold,
+                shadowColor: colors.highlightGold.withValues(alpha: 0.22),
+                textStyle: appText.button.copyWith(color: colors.onDark),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _StandbyShortageBadge extends StatelessWidget {
+  const _StandbyShortageBadge({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.dangerSoft,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: colors.dangerBorder),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: appText.caption.copyWith(
+            color: colors.dangerForeground,
+            fontWeight: FontWeight.w800,
           ),
         ),
       ),

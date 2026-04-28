@@ -4226,6 +4226,36 @@ abstract class AppLocalizations {
   /// **'Failed to send the payment completion report. Please try again later.'**
   String get lotteryApplyReportDepositFailure;
 
+  /// No description provided for @lotteryApplyStandbyBalanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Standby cash balance'**
+  String get lotteryApplyStandbyBalanceLabel;
+
+  /// No description provided for @lotteryApplyStandbyPurchaseAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase with standby cash'**
+  String get lotteryApplyStandbyPurchaseAction;
+
+  /// No description provided for @lotteryApplyStandbyShortageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Shortage'**
+  String get lotteryApplyStandbyShortageLabel;
+
+  /// No description provided for @lotteryApplyStandbyPurchaseSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchased with standby cash.'**
+  String get lotteryApplyStandbyPurchaseSuccess;
+
+  /// No description provided for @lotteryApplyStandbyPurchaseFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to purchase with standby cash.'**
+  String get lotteryApplyStandbyPurchaseFailure;
+
   /// No description provided for @lotteryApplyDepositReportConfirmedTitle.
   ///
   /// In en, this message translates to:

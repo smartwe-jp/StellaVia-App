@@ -2278,6 +2278,23 @@ class AppLocalizationsEn extends AppLocalizations {
       'Failed to send the payment completion report. Please try again later.';
 
   @override
+  String get lotteryApplyStandbyBalanceLabel => 'Standby cash balance';
+
+  @override
+  String get lotteryApplyStandbyPurchaseAction => 'Purchase with standby cash';
+
+  @override
+  String get lotteryApplyStandbyShortageLabel => 'Shortage';
+
+  @override
+  String get lotteryApplyStandbyPurchaseSuccess =>
+      'Purchased with standby cash.';
+
+  @override
+  String get lotteryApplyStandbyPurchaseFailure =>
+      'Failed to purchase with standby cash.';
+
+  @override
   String get lotteryApplyDepositReportConfirmedTitle =>
       'We have received your payment completion notice.';
 
