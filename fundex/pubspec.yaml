@@ -1,7 +1,7 @@
 name: fundex
 description: Company template app based on Clean Architecture + Riverpod.
 publish_to: 'none'
-version: 1.0.5+34
+version: 1.0.6+34
 
 environment:
   sdk: '>=3.11.0 <4.0.0'
