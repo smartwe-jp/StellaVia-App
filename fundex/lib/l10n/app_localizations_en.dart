@@ -2783,6 +2783,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'This is your dedicated deposit account. Deposits are reflected automatically (minimum: ¥10,000). If unused for 3 months, the account may be changed.';
 
   @override
+  String walletDepositTransferNotice(Object accountId) {
+    return 'Bank transfer fees for investment deposits are borne by the customer. Deposits under a name other than your own cannot be accepted.\n* When making a transfer, please enter 【$accountId】 in the payer name or remarks.';
+  }
+
+  @override
   String get walletBankNameLabel => 'Bank';
 
   @override

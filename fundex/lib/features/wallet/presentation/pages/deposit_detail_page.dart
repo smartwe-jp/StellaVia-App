@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/navigation/app_root_route_refresh_scope.dart';
 import '../../../../app/support/app_request_error_message_resolver.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
@@ -193,6 +194,50 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
   }
 }
 
+class _DepositTransferNotice extends StatelessWidget {
+  const _DepositTransferNotice({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: colors.highlightGold),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Icon(
+              Icons.info_outline_rounded,
+              size: 18,
+              color: colors.highlightGold,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                message,
+                style: appText.caption.copyWith(
+                  color: colors.textSecondary,
+                  height: 1.45,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _ProjectDepositBankCard extends StatelessWidget {
   const _ProjectDepositBankCard({required this.bank, required this.title});
 
@@ -230,7 +275,7 @@ class _ProjectDepositBankCard extends StatelessWidget {
             _CopyableBankInfoRow(
               label: l10n.walletBranchNameLabel,
               value: bank.branchBankName,
-              copyLabel: l10n.lotteryApplyCopyAction,
+              copyLabel: null,
             ),
             _CopyableBankInfoRow(
               label: l10n.walletAccountNumberLabel,
@@ -241,6 +286,10 @@ class _ProjectDepositBankCard extends StatelessWidget {
               label: l10n.walletAccountHolderLabel,
               value: bank.bankAccountOwnerName,
               copyLabel: null,
+            ),
+            const SizedBox(height: 12),
+            _DepositTransferNotice(
+              message: l10n.walletDepositTransferNotice(bank.bankNumber ?? ''),
             ),
           ],
         ),
@@ -309,7 +358,7 @@ class _CopyableBankInfoRow extends StatelessWidget {
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       foregroundColor: colors.primary,
                     ),
-                    child: Text(copyLabel!),
+                    child: Text(copyLabel!, style: appText.caption),
                   ),
                 ],
               ],

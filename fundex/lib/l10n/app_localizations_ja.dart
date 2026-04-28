@@ -749,7 +749,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeAttractionStructureBody => '実際に泊まれる。';
 
   @override
-  String get homeAttractionFundsTitle => 'ダブルガードで、';
+  String get homeAttractionFundsTitle => '二重構造で、';
 
   @override
   String get homeAttractionFundsBody => '資産を守る。';
@@ -2634,6 +2634,11 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get walletDedicatedAccountDescription =>
       'この口座はお客様専用の入金口座です。入金は自動的に口座に反映されます。（最低入金額：¥10,000）\n3ヶ月間利用がない場合、入金口座が変更される場合があります。';
+
+  @override
+  String walletDepositTransferNotice(Object accountId) {
+    return '出資金のご入金にあたっての振込手数料はお客様のご負担になります。ご本人様以外の振込名義での入金は受付できません。\n※お振込みの際、振込人名義または備考に【$accountId】とご記入ください。';
+  }
 
   @override
   String get walletBankNameLabel => '銀行名';

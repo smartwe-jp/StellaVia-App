@@ -2607,6 +2607,11 @@ class AppLocalizationsZh extends AppLocalizations {
       '该账户为您的专用入金账户。入金会自动反映到账户（最低入金额：¥10,000）。\n若连续3个月未使用，入金账户可能会变更。';
 
   @override
+  String walletDepositTransferNotice(Object accountId) {
+    return '出资金入金时产生的转账手续费由客户承担。非本人名义的转账入金无法受理。\n※转账时，请在汇款人名义或备注中填写【$accountId】。';
+  }
+
+  @override
   String get walletBankNameLabel => '银行名称';
 
   @override
@@ -6659,6 +6664,11 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String get walletDedicatedAccountDescription =>
       '此帳戶為您的專用入金帳戶。入金會自動反映到帳戶（最低入金額：¥10,000）。\n若連續3個月未使用，入金帳戶可能會變更。';
+
+  @override
+  String walletDepositTransferNotice(Object accountId) {
+    return '出資金入金時產生的轉帳手續費由客戶承擔。非本人名義的轉帳入金無法受理。\n※轉帳時，請在匯款人名義或備註中填寫【$accountId】。';
+  }
 
   @override
   String get walletBankNameLabel => '銀行名稱';

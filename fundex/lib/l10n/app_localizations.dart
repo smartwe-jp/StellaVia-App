@@ -5150,6 +5150,12 @@ abstract class AppLocalizations {
   /// **'This is your dedicated deposit account. Deposits are reflected automatically (minimum: ¥10,000). If unused for 3 months, the account may be changed.'**
   String get walletDedicatedAccountDescription;
 
+  /// No description provided for @walletDepositTransferNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank transfer fees for investment deposits are borne by the customer. Deposits under a name other than your own cannot be accepted.\n* When making a transfer, please enter 【{accountId}】 in the payer name or remarks.'**
+  String walletDepositTransferNotice(Object accountId);
+
   /// No description provided for @walletBankNameLabel.
   ///
   /// In en, this message translates to:

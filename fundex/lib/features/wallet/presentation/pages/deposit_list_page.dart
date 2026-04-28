@@ -163,7 +163,7 @@ class DepositProjectCard extends StatelessWidget {
                 backgroundColor: colors.highlightGold,
                 shadowColor: colors.highlightGold.withValues(alpha: 0.22),
                 textStyle: appText.button.copyWith(
-                  color: colors.brandPrimaryDark,
+                  color: colors.onDark,
                 ),
               ),
             ],
