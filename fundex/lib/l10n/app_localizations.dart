@@ -4907,7 +4907,7 @@ abstract class AppLocalizations {
   /// No description provided for @myPageLicenseNotice.
   ///
   /// In en, this message translates to:
-  /// **'Osaka Prefectural Governor Permit No. 22 (Official Permit) | Type I, Type II, and Electronic Transaction Services'**
+  /// **'Osaka Prefectural Governor Permit No. 22 (Official Permit) \n Type I, Type II, and Electronic Transaction Services'**
   String get myPageLicenseNotice;
 
   /// No description provided for @myPageActiveFundHeroEyebrow.

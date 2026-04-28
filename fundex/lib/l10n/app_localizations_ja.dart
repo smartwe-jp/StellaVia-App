@@ -2512,7 +2512,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageOperatingFundsTitle => '運用中ファンド';
 
   @override
-  String get myPageLicenseNotice => '大阪府知事許可 第22号（本許可）｜ 第1号・第2号・電子取引業務';
+  String get myPageLicenseNotice => '大阪府知事許可 第22号（本許可）\n 第1号・第2号・電子取引業務';
 
   @override
   String get myPageActiveFundHeroEyebrow => '保有ファンド';

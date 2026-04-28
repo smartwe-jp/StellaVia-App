@@ -2651,7 +2651,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myPageLicenseNotice =>
-      'Osaka Prefectural Governor Permit No. 22 (Official Permit) | Type I, Type II, and Electronic Transaction Services';
+      'Osaka Prefectural Governor Permit No. 22 (Official Permit) \n Type I, Type II, and Electronic Transaction Services';
 
   @override
   String get myPageActiveFundHeroEyebrow => 'MY FUND';
