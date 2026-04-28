@@ -389,13 +389,13 @@ void handlePendingApplyTap(BuildContext context, MyPageApplyRecord record) {
     case 0:
     case 2:
       context.push(
-        '/funds/$projectId/lottery-apply?step=${FundLotteryApplyStep.submitted.queryValue}&allowSubmittedAdvance=false',
+        '/funds/$projectId/lottery-apply?step=${FundLotteryApplyStep.selected.queryValue}&allowSubmittedAdvance=false',
         extra: seed,
       );
       return;
     case 3:
       context.push(
-        '/funds/$projectId/lottery-apply?step=${FundLotteryApplyStep.selected.queryValue}',
+        '/funds/$projectId/lottery-apply?step=${FundLotteryApplyStep.depositCompleted.queryValue}',
         extra: seed,
       );
       return;
