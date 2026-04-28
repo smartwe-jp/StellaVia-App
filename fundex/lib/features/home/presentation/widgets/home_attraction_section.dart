@@ -92,7 +92,7 @@ class _HomeAttractionCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(14, 8, 14, 8),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -112,7 +112,8 @@ class _HomeAttractionCard extends StatelessWidget {
                     height: 1.45,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const Spacer(),
+                const SizedBox(height: 8),
                 Icon(
                   Icons.arrow_forward_rounded,
                   size: 18,
