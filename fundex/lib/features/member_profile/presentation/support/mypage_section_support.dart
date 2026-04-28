@@ -111,7 +111,7 @@ String resolveApplyHistoryFilterLabel(
     MyPageApplyHistoryFilter.all => l10n.myPageApplyFilterAll,
     MyPageApplyHistoryFilter.applying => l10n.myPageApplyFilterApplying,
     MyPageApplyHistoryFilter.pendingConfirmation =>
-      l10n.myPageApplyFilterPendingConfirmation,
+      l10n.myPageApplyStatusAwaitingPayment,
     MyPageApplyHistoryFilter.completed => l10n.myPageApplyFilterCompleted,
     MyPageApplyHistoryFilter.invalid => l10n.myPageApplyFilterInvalid,
   };
@@ -324,7 +324,7 @@ String resolveApplyStatusLabel(
 ) {
   return switch (record.status) {
     0 => l10n.myPageApplyStatusApplying,
-    2 => l10n.myPageApplyStatusPendingConfirmation,
+    2 => l10n.myPageApplyStatusAwaitingPayment,
     3 => l10n.myPageApplyStatusCompleted,
     1 || 4 || 5 => l10n.myPageApplyStatusInvalid,
     _ => l10n.myPageApplyStatusApplying,

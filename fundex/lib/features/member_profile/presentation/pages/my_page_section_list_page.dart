@@ -355,7 +355,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
       trailing: _StatusBadge(
         label: resolveApplyStatusLabel(l10n, record),
         backgroundColor: AppColorTokens.fundexHighlightGold,
-        foregroundColor: AppColorTokens.fundexText,
+        foregroundColor: AppColorTokens.darkOnSurface,
       ),
       rows: <FundLabeledValue>[
         FundLabeledValue(
