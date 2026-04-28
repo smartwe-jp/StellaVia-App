@@ -806,7 +806,7 @@
   "lotteryApplyCopyAction": "Copy",
   "lotteryApplyCopyDoneToast": "Copied",
   "lotteryApplyStep6Headline": "Investment process completed",
-  "lotteryApplyStep6Body": "We have confirmed your payment. Please wait for operation start. Distribution schedules will be sent via notifications.",
+  "lotteryApplyStep6Body": "We have confirmed your payment. \nDistribution schedules will be sent via notifications.",
   "lotteryApplyReceiptLabel": "Receipt No:",
   "fundApplyVerificationRequiredTitle": "Verification required",
   "fundApplyVerificationRequiredMessage": "Fund applications are available only to verified members. Please complete verification first.",
@@ -982,7 +982,7 @@
   "walletDedicatedAccountTitle": "Your Dedicated Deposit Account",
   "walletProjectDepositAccountTitle": "Project Deposit Account",
   "walletDedicatedAccountDescription": "This is your dedicated deposit account. Deposits are reflected automatically (minimum: ¥10,000). If unused for 3 months, the account may be changed.",
-  "walletDepositTransferNotice": "Bank transfer fees for investment deposits are borne by the customer. Deposits under a name other than your own cannot be accepted.\n* When making a transfer, please enter 【{accountId}】 in the payer name or remarks.",
+  "walletDepositTransferNotice": "Bank transfer fees for investment deposits are borne by the customer. Deposits under a name other than your own cannot be accepted.\n* When making a transfer, please enter\n【カタカナ マヤ {accountId}】 in the payer name or remarks.",
   "@walletDepositTransferNotice": {
     "placeholders": {
       "accountId": {}

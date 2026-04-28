@@ -4271,7 +4271,7 @@ abstract class AppLocalizations {
   /// No description provided for @lotteryApplyStep6Body.
   ///
   /// In en, this message translates to:
-  /// **'We have confirmed your payment. Please wait for operation start. Distribution schedules will be sent via notifications.'**
+  /// **'We have confirmed your payment. \nDistribution schedules will be sent via notifications.'**
   String get lotteryApplyStep6Body;
 
   /// No description provided for @lotteryApplyReceiptLabel.
@@ -5177,7 +5177,7 @@ abstract class AppLocalizations {
   /// No description provided for @walletDepositTransferNotice.
   ///
   /// In en, this message translates to:
-  /// **'Bank transfer fees for investment deposits are borne by the customer. Deposits under a name other than your own cannot be accepted.\n* When making a transfer, please enter 【{accountId}】 in the payer name or remarks.'**
+  /// **'Bank transfer fees for investment deposits are borne by the customer. Deposits under a name other than your own cannot be accepted.\n* When making a transfer, please enter\n【カタカナ マヤ {accountId}】 in the payer name or remarks.'**
   String walletDepositTransferNotice(Object accountId);
 
   /// No description provided for @walletBankNameLabel.

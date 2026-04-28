@@ -827,9 +827,9 @@ FundMyPageVerificationBadgeData _resolveMyPageVerificationBadge(
   return switch (status) {
     4 => FundMyPageVerificationBadgeData(
       label: l10n.memberProfileOverviewStatusVerified,
-      backgroundColor: colors.background,
-      foregroundColor: colors.highlightGold,
-      borderColor: colors.highlightGold,
+      backgroundColor: colors.successSoft,
+      foregroundColor: colors.successForeground,
+      borderColor: colors.successBorder,
       icon: Icons.verified_rounded,
     ),
     2 || 5 => FundMyPageVerificationBadgeData(

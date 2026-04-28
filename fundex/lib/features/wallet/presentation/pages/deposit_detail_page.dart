@@ -162,6 +162,8 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
     final l10n = context.l10n;
     final bank = widget.project.liveJapanBank;
     final depositAmount = resolveDepositAmount(widget.record)?.round();
+    final transferNoticeAccountId =
+        ref.watch(currentAuthUserProvider).valueOrNull?.accountId?.trim() ?? '';
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
@@ -177,6 +179,7 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
           _ProjectDepositBankCard(
             bank: bank,
             title: l10n.walletProjectDepositAccountTitle,
+            transferNoticeAccountId: transferNoticeAccountId,
           ),
         const SizedBox(height: 20),
         PrimaryCtaButton(
@@ -239,10 +242,15 @@ class _DepositTransferNotice extends StatelessWidget {
 }
 
 class _ProjectDepositBankCard extends StatelessWidget {
-  const _ProjectDepositBankCard({required this.bank, required this.title});
+  const _ProjectDepositBankCard({
+    required this.bank,
+    required this.title,
+    required this.transferNoticeAccountId,
+  });
 
   final FundProjectLiveJapanBank bank;
   final String title;
+  final String transferNoticeAccountId;
 
   @override
   Widget build(BuildContext context) {
@@ -289,7 +297,9 @@ class _ProjectDepositBankCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             _DepositTransferNotice(
-              message: l10n.walletDepositTransferNotice(bank.bankNumber ?? ''),
+              message: l10n.walletDepositTransferNotice(
+                transferNoticeAccountId,
+              ),
             ),
           ],
         ),

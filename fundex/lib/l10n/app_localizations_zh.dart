@@ -2152,7 +2152,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get lotteryApplyStep6Headline => '出资手续已完成';
 
   @override
-  String get lotteryApplyStep6Body => '我们已确认你的入金。请等待运用开始，分配计划会通过通知告知。';
+  String get lotteryApplyStep6Body => '我们已确认你的入金。\n分配计划会通过通知告知。';
 
   @override
   String get lotteryApplyReceiptLabel => '受理编号：';
@@ -2621,7 +2621,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String walletDepositTransferNotice(Object accountId) {
-    return '出资金入金时产生的转账手续费由客户承担。非本人名义的转账入金无法受理。\n※转账时，请在汇款人名义或备注中填写【$accountId】。';
+    return '出资金入金时产生的转账手续费由客户承担。非本人名义的转账入金无法受理。\n※转账时，请在汇款人名义或备注中填写\n【カタカナ マヤ $accountId】。';
   }
 
   @override
@@ -6224,7 +6224,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get lotteryApplyStep6Headline => '出資流程已完成';
 
   @override
-  String get lotteryApplyStep6Body => '我們已確認你的入金。請等待運用開始，分配排程將透過通知告知。';
+  String get lotteryApplyStep6Body => '我們已確認你的入金。\n分配排程將透過通知告知。';
 
   @override
   String get lotteryApplyReceiptLabel => '受理編號：';
@@ -6693,7 +6693,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String walletDepositTransferNotice(Object accountId) {
-    return '出資金入金時產生的轉帳手續費由客戶承擔。非本人名義的轉帳入金無法受理。\n※轉帳時，請在匯款人名義或備註中填寫【$accountId】。';
+    return '出資金入金時產生的轉帳手續費由客戶承擔。非本人名義的轉帳入金無法受理。\n※轉帳時，請在匯款人名義或備註中填寫\n【カタカナ マヤ $accountId】。';
   }
 
   @override

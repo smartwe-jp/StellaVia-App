@@ -695,6 +695,9 @@ class _FundLotteryApplyFlowPageState
               total + group.items.length,
         );
         final liveJapanBank = project.liveJapanBank;
+        final transferNoticeAccountId =
+            ref.watch(currentAuthUserProvider).valueOrNull?.accountId?.trim() ??
+            '';
 
         return PopScope<void>(
           canPop: _currentStep.isFirst,
@@ -922,7 +925,9 @@ class _FundLotteryApplyFlowPageState
                             deadlineValue: _formatDateTime(context, deadlineAt),
                             coolingOffTitle: l10n.lotteryApplyCoolingOffTitle,
                             coolingOffBody: l10n.lotteryApplyCoolingOffBody,
-                            bankTips:l10n.walletDepositTransferNotice(_formatBankAccountValue(liveJapanBank)),
+                            bankTips: l10n.walletDepositTransferNotice(
+                              transferNoticeAccountId,
+                            ),
                             depositRows: <FundLotteryDepositRow>[
                               FundLotteryDepositRow(
                                 label: l10n.lotteryApplyDepositAmountLabel,

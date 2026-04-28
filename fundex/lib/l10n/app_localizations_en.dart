@@ -2302,7 +2302,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lotteryApplyStep6Body =>
-      'We have confirmed your payment. Please wait for operation start. Distribution schedules will be sent via notifications.';
+      'We have confirmed your payment. \nDistribution schedules will be sent via notifications.';
 
   @override
   String get lotteryApplyReceiptLabel => 'Receipt No:';
@@ -2798,7 +2798,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String walletDepositTransferNotice(Object accountId) {
-    return 'Bank transfer fees for investment deposits are borne by the customer. Deposits under a name other than your own cannot be accepted.\n* When making a transfer, please enter 【$accountId】 in the payer name or remarks.';
+    return 'Bank transfer fees for investment deposits are borne by the customer. Deposits under a name other than your own cannot be accepted.\n* When making a transfer, please enter\n【カタカナ マヤ $accountId】 in the payer name or remarks.';
   }
 
   @override

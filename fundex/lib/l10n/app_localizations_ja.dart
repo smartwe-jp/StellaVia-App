@@ -2178,8 +2178,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get lotteryApplyStep6Headline => '出資手続きが完了しました';
 
   @override
-  String get lotteryApplyStep6Body =>
-      '入金を確認しました。運用開始までお待ちください。分配スケジュールは通知でお知らせします。';
+  String get lotteryApplyStep6Body => '入金を確認しました。\n分配スケジュールは通知でお知らせします。';
 
   @override
   String get lotteryApplyReceiptLabel => '受付番号：';
@@ -2650,7 +2649,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String walletDepositTransferNotice(Object accountId) {
-    return '出資金のご入金にあたっての振込手数料はお客様のご負担になります。ご本人様以外の振込名義での入金は受付できません。\n※お振込みの際、振込人名義または備考に【$accountId】とご記入ください。';
+    return '出資金のご入金にあたっての振込手数料はお客様のご負担になります。ご本人様以外の振込名義での入金は受付できません。\n※お振込みの際、振込人名義または備考に\n【カタカナ マヤ $accountId】とご記入ください。';
   }
 
   @override
