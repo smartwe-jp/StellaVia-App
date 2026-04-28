@@ -2305,7 +2305,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'We have confirmed your payment. \nDistribution schedules will be sent via notifications.';
 
   @override
-  String get lotteryApplyReceiptLabel => 'Receipt Product:';
+  String get lotteryApplyReceiptLabel => 'Receipt No:';
 
   @override
   String get fundApplyVerificationRequiredTitle => 'Verification required';
@@ -2648,6 +2648,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myPageOperatingFundsTitle => 'Active Funds';
+
+  @override
+  String get myPageInvestmentStatusTitle => 'Investment Status';
 
   @override
   String get myPageLicenseNotice =>
@@ -3262,6 +3265,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'No contracts in the cooling-off period.';
 
   @override
+  String get myPageInvestmentStatusEmptyState =>
+      'No investment status records yet.';
+
+  @override
   String get myPageOperatingFundsEmptyState => 'No operating funds yet.';
 
   @override
@@ -3369,6 +3376,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myPageActiveFundFloatingYieldLabel => 'Floating';
+
+  @override
+  String get myPageInvestorTypeInvestment => 'Investment';
+
+  @override
+  String get myPageInvestorTypeBorrowing => 'Loan';
+
+  @override
+  String myPageInvestorReturnFixedYield(Object pct) {
+    return 'Fixed yield $pct%';
+  }
+
+  @override
+  String get myPageInvestorReturnFloating => 'Floating';
+
+  @override
+  String myPageInvestorReturnFixedFloating(Object pct) {
+    return 'Fixed + floating $pct%';
+  }
+
+  @override
+  String myPageInvestorReturnBorrowRate(Object pct) {
+    return 'Rate $pct%';
+  }
 
   @override
   String get myPageActiveFundProcessIdLabel => 'Process ID';

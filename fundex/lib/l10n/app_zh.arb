@@ -937,6 +937,7 @@
   "myPageOrderInquirySectionTitle": "卖却订单照会",
   "myPageOrderInquiryListTitle": "订单照会",
   "myPageOperatingFundsTitle": "运用中基金",
+  "myPageInvestmentStatusTitle": "运用状况",
   "myPageLicenseNotice": "大阪府知事许可 第22号（正式许可）\n 第1号、第2号及电子交易业务",
   "myPageActiveFundHeroEyebrow": "我的基金",
   "myPageTransactionHistoryAction": "查看交易记录",
@@ -1136,6 +1137,7 @@
   "myPageOrderInquiryEmptyState": "当前没有订单照会。",
   "myPageApplyHistoryEmptyState": "当前暂无申购记录。",
   "myPageCoolingOffEmptyState": "当前没有处于冷静期内的项目。",
+  "myPageInvestmentStatusEmptyState": "暂无运用状况。",
   "myPageOperatingFundsEmptyState": "当前没有运用中的基金。",
   "myPageOperatingEndedFundsEmptyState": "当前没有运用结束的基金。",
   "myPageOperatingFundsEmptyAction": "去申请",
@@ -1183,6 +1185,27 @@
   "myPageActiveFundSellingUnitsLabel": "卖出执行中",
   "myPageActiveFundRemainingUnitsLabel": "剩余口数",
   "myPageActiveFundFloatingYieldLabel": "浮动",
+  "myPageInvestorTypeInvestment": "投资",
+  "myPageInvestorTypeBorrowing": "贷付",
+  "myPageInvestorReturnFixedYield": "固定收益 {pct}%",
+  "@myPageInvestorReturnFixedYield": {
+    "placeholders": {
+      "pct": {}
+    }
+  },
+  "myPageInvestorReturnFloating": "浮动",
+  "myPageInvestorReturnFixedFloating": "固定+浮动 {pct}%",
+  "@myPageInvestorReturnFixedFloating": {
+    "placeholders": {
+      "pct": {}
+    }
+  },
+  "myPageInvestorReturnBorrowRate": "利率 {pct}%",
+  "@myPageInvestorReturnBorrowRate": {
+    "placeholders": {
+      "pct": {}
+    }
+  },
   "myPageActiveFundProcessIdLabel": "流程ID",
   "myPageActiveFundInvestorCodeLabel": "投资者区分",
   "myPageActiveFundAppliedAtLabel": "申请时间",

@@ -36,7 +36,7 @@ enum MyPageApplyHistoryFilter {
   invalid,
 }
 
-enum MyPageActiveFundFilter { operating, ended }
+enum MyPageActiveFundFilter { all, open, operating, ended }
 
 extension MyPageApplyHistoryFilterX on MyPageApplyHistoryFilter {
   String get queryValue {
@@ -70,8 +70,10 @@ extension MyPageApplyHistoryFilterX on MyPageApplyHistoryFilter {
 }
 
 extension MyPageActiveFundFilterX on MyPageActiveFundFilter {
-  List<int> get statuses {
+  List<int>? get statuses {
     return switch (this) {
+      MyPageActiveFundFilter.all => null,
+      MyPageActiveFundFilter.open => const <int>[1],
       MyPageActiveFundFilter.operating => const <int>[4],
       MyPageActiveFundFilter.ended => const <int>[5],
     };
@@ -122,6 +124,8 @@ String resolveMyPageActiveFundFilterLabel(
   MyPageActiveFundFilter filter,
 ) {
   return switch (filter) {
+    MyPageActiveFundFilter.all => l10n.myPageApplyFilterAll,
+    MyPageActiveFundFilter.open => l10n.fundListStatusOpen,
     MyPageActiveFundFilter.operating => l10n.fundListStatusOperating,
     MyPageActiveFundFilter.ended => l10n.fundListStatusOperatingEnded,
   };
@@ -132,6 +136,8 @@ String resolveMyPageActiveFundEmptyState(
   MyPageActiveFundFilter filter,
 ) {
   return switch (filter) {
+    MyPageActiveFundFilter.all => l10n.myPageInvestmentStatusEmptyState,
+    MyPageActiveFundFilter.open => l10n.fundListEmpty,
     MyPageActiveFundFilter.operating => l10n.myPageOperatingFundsEmptyState,
     MyPageActiveFundFilter.ended => l10n.myPageOperatingEndedFundsEmptyState,
   };
@@ -142,6 +148,9 @@ List<MyPageInvestmentRecord> filterInvestmentRecordsByActiveFundFilter(
   MyPageActiveFundFilter filter,
 ) {
   final statuses = filter.statuses;
+  if (statuses == null) {
+    return records;
+  }
   return records
       .where((record) => statuses.contains(record.projectStatus))
       .toList(growable: false);
@@ -171,10 +180,7 @@ List<MyPageOrderInquiryRecord> selectCoolingOffRecords(
 List<MyPageInvestmentGroup> groupActiveInvestmentRecords(
   List<MyPageInvestmentRecord> records,
 ) {
-  final source = records
-      .where((record) => record.projectStatus == 4 || record.projectStatus == 5)
-      .toList();
-  final filtered = source.isEmpty ? [...records] : source;
+  final filtered = [...records];
   filtered.sort((a, b) => compareByDateDesc(a.createTime, b.createTime));
 
   final groups = <String, _InvestmentGroupAccumulator>{};
@@ -191,6 +197,22 @@ List<MyPageInvestmentGroup> groupActiveInvestmentRecords(
     (a, b) => compareDateTimeDesc(a.latestCreateTime, b.latestCreateTime),
   );
   return values;
+}
+
+MyPageInvestmentGroup investmentRecordToGroup(MyPageInvestmentRecord record) {
+  return MyPageInvestmentGroup(
+    projectId: record.projectId,
+    projectName: record.projectName,
+    investMoney: record.investMoney ?? 0,
+    earnings: record.earnings ?? 0,
+    investNum: record.investNum ?? 0,
+    investNumValid: record.investNumValid ?? 0,
+    investNumRemaining: record.investNumRemaining ?? 0,
+    earningType: record.earningType,
+    earningRatio: record.earningRadio,
+    latestCreateTime: parseApiDate(record.createTime),
+    projectStatus: record.projectStatus,
+  );
 }
 
 MyPageActiveFundDetailSeed? resolveMyPageActiveFundDetailSeed(
@@ -220,7 +242,7 @@ String resolveSectionTitle(AppLocalizations l10n, MyPageSectionType type) {
   return switch (type) {
     MyPageSectionType.pendingApplications => l10n.myPageApplyHistoryListTitle,
     MyPageSectionType.coolingOff => l10n.myPageOrderInquiryListTitle,
-    MyPageSectionType.activeFunds => l10n.myPageOperatingFundsTitle,
+    MyPageSectionType.activeFunds => l10n.myPageInvestmentStatusTitle,
   };
 }
 
@@ -264,6 +286,7 @@ Color resolveMyPageActiveFundStatusBackgroundColor(
   return switch (projectStatus) {
     4 => Color.lerp(colors.surface, colors.successSubtle, 0.5)!,
     5 => colors.brandPrimary.withValues(alpha: 0.12),
+    1 => colors.highlightGold.withValues(alpha: 0.22),
     _ => colors.surfaceAlt,
   };
 }
@@ -536,6 +559,75 @@ String resolveYieldLabel(
   return formatYieldPercent(earningRatio);
 }
 
+class MyPageInvestorTypeDisplayText {
+  const MyPageInvestorTypeDisplayText({
+    required this.investorCode,
+    required this.investorType,
+    required this.returnText,
+  });
+
+  final String investorCode;
+  final String investorType;
+  final String returnText;
+}
+
+MyPageInvestorTypeDisplayText resolveInvestorTypeDisplayText(
+  AppLocalizations l10n,
+  MyPageInvestorType? investorType, {
+  String? fallbackInvestorCode,
+  String? fallbackEarningType,
+  double? fallbackEarningRatio,
+}) {
+  final investorCode = _normalizeInvestorCode(
+    investorType?.investorCode ?? fallbackInvestorCode,
+  );
+  if (investorType == null) {
+    return MyPageInvestorTypeDisplayText(
+      investorCode: investorCode,
+      investorType: l10n.fundDetailUnknownValue,
+      returnText: resolveYieldLabel(
+        l10n,
+        earningType: fallbackEarningType,
+        earningRatio: fallbackEarningRatio,
+      ),
+    );
+  }
+
+  final rawType = investorType.investorType?.trim();
+  final normalizedType = rawType?.toUpperCase();
+  final investorTypeLabel = _resolveInvestorTypeLabel(l10n, rawType);
+
+  if (normalizedType == 'INVESTMENT' || rawType == '投資') {
+    final earningsType = investorType.earningsType?.trim().toUpperCase();
+    final pct = _formatRatioPercentForInvestorType(investorType.earningsRadio);
+    return MyPageInvestorTypeDisplayText(
+      investorCode: investorCode,
+      investorType: investorTypeLabel,
+      returnText: switch (earningsType) {
+        'FIXED' => l10n.myPageInvestorReturnFixedYield(pct),
+        'FLOATING' => l10n.myPageInvestorReturnFloating,
+        'FIXED_FLOATING' => l10n.myPageInvestorReturnFixedFloating(pct),
+        _ => l10n.fundDetailUnknownValue,
+      },
+    );
+  }
+
+  if (normalizedType == 'BORROWING' || rawType == '貸付') {
+    final pct = _formatRatioPercentForInvestorType(investorType.interestRadio);
+    return MyPageInvestorTypeDisplayText(
+      investorCode: investorCode,
+      investorType: investorTypeLabel,
+      returnText: l10n.myPageInvestorReturnBorrowRate(pct),
+    );
+  }
+
+  return MyPageInvestorTypeDisplayText(
+    investorCode: investorCode,
+    investorType: investorTypeLabel,
+    returnText: l10n.fundDetailUnknownValue,
+  );
+}
+
 String resolveOrderInquiryStatusLabel(
   AppLocalizations l10n,
   MyPageOrderInquiryRecord record,
@@ -588,6 +680,37 @@ String formatYieldPercent(double? ratio) {
   final percentage = ratio > 1 ? ratio : ratio * 100;
   final hasFraction = percentage % 1 != 0;
   return '${percentage.toStringAsFixed(hasFraction ? 1 : 0)}%';
+}
+
+String _normalizeInvestorCode(String? value) {
+  final trimmed = value?.trim();
+  if (trimmed == null || trimmed.isEmpty) {
+    return '-';
+  }
+  return trimmed;
+}
+
+String _resolveInvestorTypeLabel(AppLocalizations l10n, String? rawType) {
+  final trimmed = rawType?.trim();
+  if (trimmed == null || trimmed.isEmpty) {
+    return l10n.fundDetailUnknownValue;
+  }
+  final normalizedType = trimmed.toUpperCase();
+  if (normalizedType == 'INVESTMENT' || trimmed == '投資') {
+    return l10n.myPageInvestorTypeInvestment;
+  }
+  if (normalizedType == 'BORROWING' || trimmed == '貸付') {
+    return l10n.myPageInvestorTypeBorrowing;
+  }
+  return trimmed;
+}
+
+String _formatRatioPercentForInvestorType(num? ratio) {
+  final value = ratio ?? 0;
+  if (value.isNaN) {
+    return '0.00';
+  }
+  return (value * 100).toStringAsFixed(2);
 }
 
 DateTime? _parseProjectDate(String? raw) {

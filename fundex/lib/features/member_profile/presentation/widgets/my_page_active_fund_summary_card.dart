@@ -5,8 +5,9 @@ class MyPageActiveFundSummaryCardData {
   const MyPageActiveFundSummaryCardData({
     required this.title,
     required this.periodText,
-    required this.yieldLabel,
-    required this.annualYield,
+    required this.investorCode,
+    required this.investorType,
+    required this.returnText,
     required this.statusLabel,
     required this.statusBackgroundColor,
     required this.statusForegroundColor,
@@ -17,8 +18,9 @@ class MyPageActiveFundSummaryCardData {
 
   final String title;
   final String periodText;
-  final String yieldLabel;
-  final String annualYield;
+  final String investorCode;
+  final String investorType;
+  final String returnText;
   final String statusLabel;
   final Color statusBackgroundColor;
   final Color statusForegroundColor;
@@ -68,82 +70,97 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
             borderRadius: cardRadius,
             onTap: data.onTap,
             child: SizedBox(
-              height: 108,
+              height: 138,
               child: Padding(
                 padding: const EdgeInsets.all(18),
                 child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      _ActiveFundThumbnail(imageUrls: data.imageUrls),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              data.title,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: appText.cardTitle.copyWith(
-                                color: colors.textPrimary,
-                                fontSize: 13,
-                                height: 1.3,
-                                fontWeight: FontWeight.w700,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    SizedBox(
+                      width: 72,
+                      child: Column(
+                        children: <Widget>[
+                          _ActiveFundThumbnail(imageUrls: data.imageUrls),
+                          const SizedBox(height: 8),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 4),
+                              child: _ActiveFundStatusBadge(
+                                label: data.statusLabel,
+                                backgroundColor: data.statusBackgroundColor,
+                                foregroundColor: data.statusForegroundColor,
                               ),
                             ),
-                            const SizedBox(height: 6),
-                            Expanded(
-                              child: Text(
-                                data.periodText,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: appText.cardTitle.copyWith(
-                                  color: colors.textSecondary,
-                                  fontSize: 12,
-                                  height: 1.35,
-                                  fontWeight: FontWeight.w600,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            data.title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: appText.cardTitle.copyWith(
+                              color: colors.textPrimary,
+                              fontSize: 13,
+                              height: 1.3,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Flexible(
+                                flex: 6,
+                                child: Text(
+                                  data.investorCode,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: appText.micro.copyWith(
+                                    color: colors.textSecondary,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(minWidth: 62),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            Text(
-                              data.annualYield,
-                              textAlign: TextAlign.right,
-                              style: appText.numericTitle.copyWith(
-                                color: colors.highlightGold,
-                                fontSize: 17,
-                                height: 1.1,
-                                fontWeight: FontWeight.w800,
+                              const SizedBox(width: 8),
+                              Flexible(
+                                flex: 5,
+                                child: Text(
+                                  data.returnText,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.right,
+                                  style: appText.micro.copyWith(
+                                    color: colors.highlightGold,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
                               ),
+                            ],
+                          ),
+                          const Spacer(),
+                          Text(
+                            data.periodText,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: appText.cardTitle.copyWith(
+                              color: colors.textSecondary,
+                              fontSize: 12,
+                              height: 1.35,
+                              fontWeight: FontWeight.w600,
                             ),
-                            const SizedBox(height: 2),
-                            Text(
-                              data.yieldLabel,
-                              textAlign: TextAlign.right,
-                              style: appText.micro.copyWith(
-                                color: colors.textTertiary,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            const Spacer(),
-                            _ActiveFundStatusBadge(
-                              label: data.statusLabel,
-                              backgroundColor: data.statusBackgroundColor,
-                              foregroundColor: data.statusForegroundColor,
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -163,25 +180,53 @@ class _ActiveFundThumbnail extends StatelessWidget {
     final colors = Theme.of(context).appColors;
     final cardRadius = BorderRadius.circular(6);
     final imageUrl = imageUrls.isEmpty ? null : imageUrls.first.trim();
+    const size = 64.0;
 
-    return SizedBox(
-      height: double.infinity,
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: ClipRRect(
-          borderRadius: cardRadius,
-          child: imageUrl != null && imageUrl.isNotEmpty
-              ? DecoratedBox(
-                  decoration: BoxDecoration(color: colors.primary),
-                  child: AppRemoteImage(
-                    imageUrl: imageUrl,
-                    fit: BoxFit.cover,
-                    errorWidget: _ActiveFundThumbnailPlaceholder(
-                      colors: colors,
-                    ),
-                  ),
-                )
-              : _ActiveFundThumbnailPlaceholder(colors: colors),
+    return SizedBox.square(
+      dimension: size,
+      child: ClipRRect(
+        borderRadius: cardRadius,
+        child: imageUrl != null && imageUrl.isNotEmpty
+            ? DecoratedBox(
+                decoration: BoxDecoration(color: colors.primary),
+                child: AppRemoteImage(
+                  imageUrl: imageUrl,
+                  fit: BoxFit.cover,
+                  errorWidget: _ActiveFundThumbnailPlaceholder(colors: colors),
+                ),
+              )
+            : _ActiveFundThumbnailPlaceholder(colors: colors),
+      ),
+    );
+  }
+}
+
+class _InvestorTypeBadge extends StatelessWidget {
+  const _InvestorTypeBadge({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 72),
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+      decoration: BoxDecoration(
+        color: colors.highlightGold.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: colors.highlightGold.withValues(alpha: 0.38)),
+      ),
+      child: Text(
+        label,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: appText.micro.copyWith(
+          color: colors.highlightGold,
+          fontWeight: FontWeight.w800,
+          height: 1.1,
         ),
       ),
     );
@@ -230,6 +275,9 @@ class _ActiveFundStatusBadge extends StatelessWidget {
       ),
       child: Text(
         label,
+        textAlign: TextAlign.center,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: appText.micro.copyWith(
           color: foregroundColor,
           fontWeight: FontWeight.w700,

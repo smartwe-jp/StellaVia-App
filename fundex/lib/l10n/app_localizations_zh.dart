@@ -2155,7 +2155,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get lotteryApplyStep6Body => '我们已确认你的入金。\n分配计划会通过通知告知。';
 
   @override
-  String get lotteryApplyReceiptLabel => '受理编号：';
+  String get lotteryApplyReceiptLabel => '受理商品：';
 
   @override
   String get fundApplyVerificationRequiredTitle => '未认证';
@@ -2482,6 +2482,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get myPageOperatingFundsTitle => '运用中基金';
+
+  @override
+  String get myPageInvestmentStatusTitle => '运用状况';
 
   @override
   String get myPageLicenseNotice => '大阪府知事许可 第22号（正式许可）\n 第1号、第2号及电子交易业务';
@@ -3047,6 +3050,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageCoolingOffEmptyState => '当前没有处于冷静期内的项目。';
 
   @override
+  String get myPageInvestmentStatusEmptyState => '暂无运用状况。';
+
+  @override
   String get myPageOperatingFundsEmptyState => '当前没有运用中的基金。';
 
   @override
@@ -3151,6 +3157,30 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get myPageActiveFundFloatingYieldLabel => '浮动';
+
+  @override
+  String get myPageInvestorTypeInvestment => '投资';
+
+  @override
+  String get myPageInvestorTypeBorrowing => '贷付';
+
+  @override
+  String myPageInvestorReturnFixedYield(Object pct) {
+    return '固定收益 $pct%';
+  }
+
+  @override
+  String get myPageInvestorReturnFloating => '浮动';
+
+  @override
+  String myPageInvestorReturnFixedFloating(Object pct) {
+    return '固定+浮动 $pct%';
+  }
+
+  @override
+  String myPageInvestorReturnBorrowRate(Object pct) {
+    return '利率 $pct%';
+  }
 
   @override
   String get myPageActiveFundProcessIdLabel => '流程ID';
@@ -6227,7 +6257,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get lotteryApplyStep6Body => '我們已確認你的入金。\n分配排程將透過通知告知。';
 
   @override
-  String get lotteryApplyReceiptLabel => '受理編號：';
+  String get lotteryApplyReceiptLabel => '受理商品：';
 
   @override
   String get fundApplyVerificationRequiredTitle => '未認證';
@@ -6554,6 +6584,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageOperatingFundsTitle => '運用中基金';
+
+  @override
+  String get myPageInvestmentStatusTitle => '運用狀況';
 
   @override
   String get myPageLicenseNotice => '大阪府知事許可 第22號（正式許可）\n 第1號、第2號及電子交易業務';
@@ -7119,6 +7152,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageCoolingOffEmptyState => '目前沒有處於冷靜期中的項目。';
 
   @override
+  String get myPageInvestmentStatusEmptyState => '暫無運用狀況。';
+
+  @override
   String get myPageOperatingFundsEmptyState => '目前沒有運用中的基金。';
 
   @override
@@ -7223,6 +7259,30 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageActiveFundFloatingYieldLabel => '浮動';
+
+  @override
+  String get myPageInvestorTypeInvestment => '投資';
+
+  @override
+  String get myPageInvestorTypeBorrowing => '貸付';
+
+  @override
+  String myPageInvestorReturnFixedYield(Object pct) {
+    return '固定收益 $pct%';
+  }
+
+  @override
+  String get myPageInvestorReturnFloating => '浮動';
+
+  @override
+  String myPageInvestorReturnFixedFloating(Object pct) {
+    return '固定+浮動 $pct%';
+  }
+
+  @override
+  String myPageInvestorReturnBorrowRate(Object pct) {
+    return '利率 $pct%';
+  }
 
   @override
   String get myPageActiveFundProcessIdLabel => '流程ID';

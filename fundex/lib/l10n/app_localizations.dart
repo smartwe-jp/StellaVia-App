@@ -4904,6 +4904,12 @@ abstract class AppLocalizations {
   /// **'Active Funds'**
   String get myPageOperatingFundsTitle;
 
+  /// No description provided for @myPageInvestmentStatusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Investment Status'**
+  String get myPageInvestmentStatusTitle;
+
   /// No description provided for @myPageLicenseNotice.
   ///
   /// In en, this message translates to:
@@ -6008,6 +6014,12 @@ abstract class AppLocalizations {
   /// **'No contracts in the cooling-off period.'**
   String get myPageCoolingOffEmptyState;
 
+  /// No description provided for @myPageInvestmentStatusEmptyState.
+  ///
+  /// In en, this message translates to:
+  /// **'No investment status records yet.'**
+  String get myPageInvestmentStatusEmptyState;
+
   /// No description provided for @myPageOperatingFundsEmptyState.
   ///
   /// In en, this message translates to:
@@ -6211,6 +6223,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Floating'**
   String get myPageActiveFundFloatingYieldLabel;
+
+  /// No description provided for @myPageInvestorTypeInvestment.
+  ///
+  /// In en, this message translates to:
+  /// **'Investment'**
+  String get myPageInvestorTypeInvestment;
+
+  /// No description provided for @myPageInvestorTypeBorrowing.
+  ///
+  /// In en, this message translates to:
+  /// **'Loan'**
+  String get myPageInvestorTypeBorrowing;
+
+  /// No description provided for @myPageInvestorReturnFixedYield.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed yield {pct}%'**
+  String myPageInvestorReturnFixedYield(Object pct);
+
+  /// No description provided for @myPageInvestorReturnFloating.
+  ///
+  /// In en, this message translates to:
+  /// **'Floating'**
+  String get myPageInvestorReturnFloating;
+
+  /// No description provided for @myPageInvestorReturnFixedFloating.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed + floating {pct}%'**
+  String myPageInvestorReturnFixedFloating(Object pct);
+
+  /// No description provided for @myPageInvestorReturnBorrowRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate {pct}%'**
+  String myPageInvestorReturnBorrowRate(Object pct);
 
   /// No description provided for @myPageActiveFundProcessIdLabel.
   ///

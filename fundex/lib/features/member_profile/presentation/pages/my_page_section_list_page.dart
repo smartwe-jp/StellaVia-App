@@ -48,7 +48,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
   int _loadGeneration = 0;
   late MyPageApplyHistoryFilter _applyFilter;
   late MyPageApplyHistoryFilter _loadedApplyFilter;
-  MyPageActiveFundFilter _activeFundFilter = MyPageActiveFundFilter.operating;
+  MyPageActiveFundFilter _activeFundFilter = MyPageActiveFundFilter.all;
 
   @override
   void initState() {
@@ -245,9 +245,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
       MyPageSectionType.coolingOff => selectCoolingOffRecords(
         _visibleOrderInquiryRecords,
       ).length,
-      MyPageSectionType.activeFunds => groupActiveInvestmentRecords(
-        _filteredInvestmentRecords,
-      ).length,
+      MyPageSectionType.activeFunds => _filteredInvestmentRecords.length,
     };
   }
 
@@ -518,22 +516,28 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     BuildContext context,
     MyPageInvestmentGroup group, {
     required Map<String, FundProject> fundProjectsById,
+    MyPageActiveFundDetailSeed? seed,
+    MyPageInvestorType? investorType,
   }) {
     final l10n = context.l10n;
     final project = fundProjectsById[group.projectId];
     final status = group.projectStatus ?? project?.projectStatus;
+    final investorTypeDisplay = resolveInvestorTypeDisplayText(
+      l10n,
+      investorType,
+      fallbackInvestorCode: seed?.investorCode,
+      fallbackEarningType: group.earningType,
+      fallbackEarningRatio: group.earningRatio,
+    );
     return MyPageActiveFundSummaryCard(
       data: MyPageActiveFundSummaryCardData(
         title: group.projectName,
         periodText: formatMyPageActiveFundPeriod(context, project) != null
             ? '${l10n.fundListPeriodLabel}：${formatMyPageActiveFundPeriod(context, project)!}'
             : l10n.myPageResultAnnouncementTbd,
-        yieldLabel: l10n.homeEstimatedYieldLabel,
-        annualYield: resolveYieldLabel(
-          l10n,
-          earningType: group.earningType,
-          earningRatio: group.earningRatio,
-        ),
+        investorCode: investorTypeDisplay.investorCode,
+        investorType: investorTypeDisplay.investorType,
+        returnText: investorTypeDisplay.returnText,
         statusLabel: resolveMyPageActiveFundStatusLabel(l10n, status),
         statusBackgroundColor: resolveMyPageActiveFundStatusBackgroundColor(
           context,
@@ -545,7 +549,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
         ),
         progress: resolveMyPageActiveFundProgress(project),
         imageUrls: project?.photos ?? const <String>[],
-        onTap: _buildActiveFundTapHandler(context, group),
+        onTap: _buildActiveFundTapHandler(context, group, seed: seed),
       ),
     );
   }
@@ -584,12 +588,14 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
             .map((record) => _buildCoolingOffCard(context, record, formatter))
             .toList(growable: false),
       MyPageSectionType.activeFunds =>
-        groupActiveInvestmentRecords(_filteredInvestmentRecords)
+        _filteredInvestmentRecords
             .map(
-              (group) => _buildActiveFundCard(
+              (record) => _buildActiveFundCard(
                 context,
-                group,
+                investmentRecordToGroup(record),
                 fundProjectsById: fundProjectsById,
+                seed: MyPageActiveFundDetailSeed.fromRecord(record),
+                investorType: record.investorType,
               ),
             )
             .toList(growable: false),
@@ -624,18 +630,23 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
 
   VoidCallback? _buildActiveFundTapHandler(
     BuildContext context,
-    MyPageInvestmentGroup group,
-  ) {
-    final seed = resolveMyPageActiveFundDetailSeed(
-      group.projectId,
-      _filteredInvestmentRecords,
-    );
-    final projectId = seed?.projectId ?? group.projectId;
+    MyPageInvestmentGroup group, {
+    MyPageActiveFundDetailSeed? seed,
+  }) {
+    final resolvedSeed =
+        seed ??
+        resolveMyPageActiveFundDetailSeed(
+          group.projectId,
+          _filteredInvestmentRecords,
+        );
+    final projectId = resolvedSeed?.projectId ?? group.projectId;
     if (projectId.trim().isEmpty) {
       return null;
     }
-    return () =>
-        context.push('/profile/my/active-funds/$projectId', extra: seed);
+    return () => context.push(
+      '/profile/my/active-funds/$projectId',
+      extra: resolvedSeed,
+    );
   }
 
   Future<void> _refreshAfterWithdraw() async {

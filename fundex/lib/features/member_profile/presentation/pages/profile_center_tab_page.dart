@@ -593,11 +593,19 @@ Widget _buildActiveFundsSection(
   return asyncValue.when(
     skipError: true,
     data: (records) {
-      final displayGroups = groupActiveInvestmentRecords(records);
-      final cards = displayGroups
-          .map((group) {
-            final project = fundProjectsById[group.projectId];
-            final status = project?.projectStatus;
+      final displayRecords = records.take(3).toList(growable: false);
+      final cards = displayRecords
+          .map((record) {
+            final group = investmentRecordToGroup(record);
+            final project = fundProjectsById[record.projectId];
+            final status = project?.projectStatus ?? record.projectStatus;
+            final investorTypeDisplay = resolveInvestorTypeDisplayText(
+              l10n,
+              record.investorType,
+              fallbackInvestorCode: record.investorCode,
+              fallbackEarningType: group.earningType,
+              fallbackEarningRatio: group.earningRatio,
+            );
             return MyPageActiveFundSummaryCard(
               data: MyPageActiveFundSummaryCardData(
                 title: group.projectName,
@@ -605,12 +613,9 @@ Widget _buildActiveFundsSection(
                     formatMyPageActiveFundPeriod(context, project) != null
                     ? '${l10n.fundListPeriodLabel}：${formatMyPageActiveFundPeriod(context, project)!}'
                     : l10n.myPageResultAnnouncementTbd,
-                yieldLabel: l10n.homeEstimatedYieldLabel,
-                annualYield: resolveYieldLabel(
-                  l10n,
-                  earningType: group.earningType,
-                  earningRatio: group.earningRatio,
-                ),
+                investorCode: investorTypeDisplay.investorCode,
+                investorType: investorTypeDisplay.investorType,
+                returnText: investorTypeDisplay.returnText,
                 statusLabel: resolveMyPageActiveFundStatusLabel(l10n, status),
                 statusBackgroundColor:
                     resolveMyPageActiveFundStatusBackgroundColor(
@@ -626,10 +631,7 @@ Widget _buildActiveFundsSection(
                 imageUrls: project?.photos ?? const <String>[],
                 onTap: _buildActiveFundDetailTapHandler(
                   context,
-                  seed: resolveMyPageActiveFundDetailSeed(
-                    group.projectId,
-                    records,
-                  ),
+                  seed: MyPageActiveFundDetailSeed.fromRecord(record),
                 ),
               ),
             );
@@ -637,7 +639,7 @@ Widget _buildActiveFundsSection(
           .toList(growable: false);
 
       return FundSectionList(
-        title: l10n.myPageOperatingFundsTitle,
+        title: l10n.myPageInvestmentStatusTitle,
         initialVisibleCount: cards.isEmpty ? 1 : 3,
         actionLabel: l10n.homeViewAllAction,
         children: cards.isEmpty
@@ -654,12 +656,12 @@ Widget _buildActiveFundsSection(
       );
     },
     loading: () => FundSectionList(
-      title: l10n.myPageOperatingFundsTitle,
+      title: l10n.myPageInvestmentStatusTitle,
       initialVisibleCount: 1,
       children: const <Widget>[_SectionLoadingCard()],
     ),
     error: (_, __) => FundSectionList(
-      title: l10n.myPageOperatingFundsTitle,
+      title: l10n.myPageInvestmentStatusTitle,
       initialVisibleCount: 1,
       children: <Widget>[
         _SectionStateCard(

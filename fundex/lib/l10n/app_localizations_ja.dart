@@ -2181,7 +2181,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get lotteryApplyStep6Body => '入金を確認しました。\n分配スケジュールは通知でお知らせします。';
 
   @override
-  String get lotteryApplyReceiptLabel => '受付番号：';
+  String get lotteryApplyReceiptLabel => '受付商品：';
 
   @override
   String get fundApplyVerificationRequiredTitle => '未認証';
@@ -2509,6 +2509,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get myPageOperatingFundsTitle => '運用中ファンド';
+
+  @override
+  String get myPageInvestmentStatusTitle => '運用状況';
 
   @override
   String get myPageLicenseNotice => '大阪府知事許可 第22号（本許可）\n 第1号・第2号・電子取引業務';
@@ -3083,6 +3086,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageCoolingOffEmptyState => 'クーリングオフ期間中の案件はありません。';
 
   @override
+  String get myPageInvestmentStatusEmptyState => '運用状況はありません。';
+
+  @override
   String get myPageOperatingFundsEmptyState => '運用中のファンドはありません。';
 
   @override
@@ -3187,6 +3193,30 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get myPageActiveFundFloatingYieldLabel => '変動';
+
+  @override
+  String get myPageInvestorTypeInvestment => '投資';
+
+  @override
+  String get myPageInvestorTypeBorrowing => '貸付';
+
+  @override
+  String myPageInvestorReturnFixedYield(Object pct) {
+    return '固定利回り $pct%';
+  }
+
+  @override
+  String get myPageInvestorReturnFloating => '変動';
+
+  @override
+  String myPageInvestorReturnFixedFloating(Object pct) {
+    return '固定＋変動 $pct%';
+  }
+
+  @override
+  String myPageInvestorReturnBorrowRate(Object pct) {
+    return '利率 $pct%';
+  }
 
   @override
   String get myPageActiveFundProcessIdLabel => 'プロセスID';

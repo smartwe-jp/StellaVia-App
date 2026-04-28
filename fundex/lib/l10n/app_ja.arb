@@ -937,6 +937,7 @@
   "myPageOrderInquirySectionTitle": "売却注文照会",
   "myPageOrderInquiryListTitle": "注文照会",
   "myPageOperatingFundsTitle": "運用中ファンド",
+  "myPageInvestmentStatusTitle": "運用状況",
   "myPageLicenseNotice": "大阪府知事許可 第22号（本許可）\n 第1号・第2号・電子取引業務",
   "myPageActiveFundHeroEyebrow": "保有ファンド",
   "myPageTransactionHistoryAction": "取引履歴を見る",
@@ -1136,6 +1137,7 @@
   "myPageOrderInquiryEmptyState": "注文照会はありません。",
   "myPageApplyHistoryEmptyState": "お申込み履歴はありません。",
   "myPageCoolingOffEmptyState": "クーリングオフ期間中の案件はありません。",
+  "myPageInvestmentStatusEmptyState": "運用状況はありません。",
   "myPageOperatingFundsEmptyState": "運用中のファンドはありません。",
   "myPageOperatingEndedFundsEmptyState": "運用終了のファンドはありません。",
   "myPageOperatingFundsEmptyAction": "ファンド一覧へ",
@@ -1183,6 +1185,27 @@
   "myPageActiveFundSellingUnitsLabel": "売却執行中",
   "myPageActiveFundRemainingUnitsLabel": "残口数",
   "myPageActiveFundFloatingYieldLabel": "変動",
+  "myPageInvestorTypeInvestment": "投資",
+  "myPageInvestorTypeBorrowing": "貸付",
+  "myPageInvestorReturnFixedYield": "固定利回り {pct}%",
+  "@myPageInvestorReturnFixedYield": {
+    "placeholders": {
+      "pct": {}
+    }
+  },
+  "myPageInvestorReturnFloating": "変動",
+  "myPageInvestorReturnFixedFloating": "固定＋変動 {pct}%",
+  "@myPageInvestorReturnFixedFloating": {
+    "placeholders": {
+      "pct": {}
+    }
+  },
+  "myPageInvestorReturnBorrowRate": "利率 {pct}%",
+  "@myPageInvestorReturnBorrowRate": {
+    "placeholders": {
+      "pct": {}
+    }
+  },
   "myPageActiveFundProcessIdLabel": "プロセスID",
   "myPageActiveFundInvestorCodeLabel": "投資者区分",
   "myPageActiveFundAppliedAtLabel": "申込日時",
