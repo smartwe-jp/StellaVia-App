@@ -2305,7 +2305,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'We have confirmed your payment. \nDistribution schedules will be sent via notifications.';
 
   @override
-  String get lotteryApplyReceiptLabel => 'Receipt No:';
+  String get lotteryApplyReceiptLabel => 'Receipt Product:';
 
   @override
   String get fundApplyVerificationRequiredTitle => 'Verification required';

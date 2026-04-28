@@ -807,7 +807,7 @@
   "lotteryApplyCopyDoneToast": "コピーしました",
   "lotteryApplyStep6Headline": "出資手続きが完了しました",
   "lotteryApplyStep6Body": "入金を確認しました。\n分配スケジュールは通知でお知らせします。",
-  "lotteryApplyReceiptLabel": "受付番号：",
+  "lotteryApplyReceiptLabel": "受付商品：",
   "fundApplyVerificationRequiredTitle": "未認証",
   "fundApplyVerificationRequiredMessage": "ファンド申込は認証済み会員のみご利用いただけます。先に認証を完了してください。",
   "fundDetailUnknownValue": "--",

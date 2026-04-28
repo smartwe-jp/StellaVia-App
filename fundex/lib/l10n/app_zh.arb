@@ -807,7 +807,7 @@
   "lotteryApplyCopyDoneToast": "已复制",
   "lotteryApplyStep6Headline": "出资手续已完成",
   "lotteryApplyStep6Body": "我们已确认你的入金。\n分配计划会通过通知告知。",
-  "lotteryApplyReceiptLabel": "受理编号：",
+  "lotteryApplyReceiptLabel": "受理商品：",
   "fundApplyVerificationRequiredTitle": "未认证",
   "fundApplyVerificationRequiredMessage": "基金申请仅限已认证用户。请先完成认证。",
   "fundDetailUnknownValue": "--",
