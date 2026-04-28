@@ -833,7 +833,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeAttractionShieldFootnote =>
-      'Subordinated investment amounts vary by project. Please see each project overview for details.';
+      'The amount of subordinated investment varies for each project (starting from 10%). Please see the project overview for details.';
 
   @override
   String get homeInvestmentFlowTitle => 'How to Invest';

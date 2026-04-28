@@ -1604,7 +1604,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeAttractionShieldFootnote.
   ///
   /// In en, this message translates to:
-  /// **'Subordinated investment amounts vary by project. Please see each project overview for details.'**
+  /// **'The amount of subordinated investment varies for each project (starting from 10%). Please see the project overview for details.'**
   String get homeAttractionShieldFootnote;
 
   /// No description provided for @homeInvestmentFlowTitle.

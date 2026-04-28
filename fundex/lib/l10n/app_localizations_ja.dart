@@ -749,7 +749,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeAttractionStructureBody => '実際に泊まれる。';
 
   @override
-  String get homeAttractionFundsTitle => '二段階の盾で、';
+  String get homeAttractionFundsTitle => 'ダブルガードで、';
 
   @override
   String get homeAttractionFundsBody => '資産を守る。';
@@ -767,17 +767,17 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeAttractionShieldFirstLabel => '第1の盾';
 
   @override
-  String get homeAttractionShieldFirstBody => 'Stella Asset株式会社の劣後出資';
+  String get homeAttractionShieldFirstBody => 'Stella Asset株式会社\nの劣後出資';
 
   @override
   String get homeAttractionShieldSecondLabel => '第2の盾';
 
   @override
-  String get homeAttractionShieldSecondBody => '運営会社の出資（TJ BROTHERS GROUP）';
+  String get homeAttractionShieldSecondBody => '宿泊運営会社\nの劣後出資';
 
   @override
   String get homeAttractionShieldFootnote =>
-      '案件ごとに劣後出資額は異なります。詳しくは案件概要欄をご覧ください。';
+      '案件ごとに劣後出資額は異なります（10%から）。詳しくは案件概要欄をご覧ください。';
 
   @override
   String get homeInvestmentFlowTitle => '投資の流れ';

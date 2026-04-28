@@ -765,7 +765,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeAttractionShieldSecondLabel => '第2道盾';
 
   @override
-  String get homeAttractionShieldSecondBody => '运营公司的出资（TJ BROTHERS GROUP）';
+  String get homeAttractionShieldSecondBody => '运营公司的劣后出资';
 
   @override
   String get homeAttractionShieldFootnote => '每个项目的劣后出资金额不同。详情请查看项目概要栏。';
@@ -4816,10 +4816,11 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeAttractionShieldSecondLabel => '第2道盾';
 
   @override
-  String get homeAttractionShieldSecondBody => '營運公司的出資（TJ BROTHERS GROUP）';
+  String get homeAttractionShieldSecondBody => '營運公司的劣後出資';
 
   @override
-  String get homeAttractionShieldFootnote => '每個項目的劣後出資金額不同。詳情請查看項目概要欄。';
+  String get homeAttractionShieldFootnote =>
+      '每個項目的次級投資額度各不相同（最低為10%）。詳情請參閱項目概覽。';
 
   @override
   String get homeInvestmentFlowTitle => '投資流程';
