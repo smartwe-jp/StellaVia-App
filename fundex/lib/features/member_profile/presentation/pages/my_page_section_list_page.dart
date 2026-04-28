@@ -45,13 +45,16 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
   bool _hasMore = true;
   Object? _error;
   int _nextPage = 1;
+  int _loadGeneration = 0;
   late MyPageApplyHistoryFilter _applyFilter;
+  late MyPageApplyHistoryFilter _loadedApplyFilter;
   MyPageActiveFundFilter _activeFundFilter = MyPageActiveFundFilter.operating;
 
   @override
   void initState() {
     super.initState();
     _applyFilter = widget.initialApplyFilter;
+    _loadedApplyFilter = widget.initialApplyFilter;
     _scrollController.addListener(_handleScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadInitial();
@@ -80,51 +83,44 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     }
   }
 
-  Future<void> _loadInitial() async {
+  Future<void> _loadInitial({bool preserveContent = false}) async {
+    final requestGeneration = ++_loadGeneration;
+    final shouldPreserveContent = preserveContent && _visibleItemCount > 0;
+    final targetApplyFilter = _applyFilter;
     setState(() {
-      _isInitialLoading = true;
-      _isLoadingMore = false;
+      _isInitialLoading = !shouldPreserveContent;
+      _isLoadingMore = shouldPreserveContent;
       _hasMore = true;
       _error = null;
       _nextPage = 1;
-      _applyRecords.clear();
-      _hiddenOrderInquiryIds.clear();
-      _orderInquiryRecords.clear();
-      _investmentRecords.clear();
+      if (!shouldPreserveContent) {
+        _applyRecords.clear();
+        _hiddenOrderInquiryIds.clear();
+        _orderInquiryRecords.clear();
+        _investmentRecords.clear();
+        _loadedApplyFilter = targetApplyFilter;
+      }
     });
-    await _loadNextPage();
-  }
-
-  Future<void> _loadNextPage() async {
-    if (_isLoadingMore || !_hasMore) {
-      return;
-    }
-
-    if (mounted) {
-      setState(() {
-        _isLoadingMore = true;
-        _error = null;
-      });
-    }
 
     try {
-      final fetchedCount = await _fetchPage(_nextPage);
-      _nextPage += 1;
-      _hasMore = fetchedCount >= _pageSize;
-      _error = null;
-
-      if (mounted) {
-        setState(() {
-          _isInitialLoading = false;
-          _isLoadingMore = false;
-        });
+      final pageData = await _fetchPageData(1, applyFilter: targetApplyFilter);
+      if (!mounted || requestGeneration != _loadGeneration) {
+        return;
       }
+      setState(() {
+        _replaceRecords(pageData);
+        _nextPage = 2;
+        _hasMore = pageData.fetchedCount >= _pageSize;
+        _error = null;
+        _isInitialLoading = false;
+        _isLoadingMore = false;
+      });
 
       if (_hasMore && _visibleItemCount == 0) {
         await _loadNextPage();
       }
     } catch (error) {
-      if (!mounted) {
+      if (!mounted || requestGeneration != _loadGeneration) {
         return;
       }
       setState(() {
@@ -135,32 +131,112 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     }
   }
 
-  Future<int> _fetchPage(int page) async {
+  Future<void> _loadNextPage() async {
+    if (_isLoadingMore || !_hasMore) {
+      return;
+    }
+    final requestGeneration = _loadGeneration;
+
+    if (mounted) {
+      setState(() {
+        _isLoadingMore = true;
+        _error = null;
+      });
+    }
+
+    try {
+      final pageData = await _fetchPageData(
+        _nextPage,
+        applyFilter: _loadedApplyFilter,
+      );
+      if (!mounted || requestGeneration != _loadGeneration) {
+        return;
+      }
+      setState(() {
+        _appendRecords(pageData);
+        _nextPage += 1;
+        _hasMore = pageData.fetchedCount >= _pageSize;
+        _error = null;
+        _isInitialLoading = false;
+        _isLoadingMore = false;
+      });
+
+      if (_hasMore && _visibleItemCount == 0) {
+        await _loadNextPage();
+      }
+    } catch (error) {
+      if (!mounted || requestGeneration != _loadGeneration) {
+        return;
+      }
+      setState(() {
+        _error = error;
+        _isInitialLoading = false;
+        _isLoadingMore = false;
+      });
+    }
+  }
+
+  Future<_MyPageSectionPageData> _fetchPageData(
+    int page, {
+    required MyPageApplyHistoryFilter applyFilter,
+  }) async {
     switch (widget.sectionType) {
       case MyPageSectionType.pendingApplications:
         final records = await ref
             .read(fetchMyPageApplyListUseCaseProvider)
-            .call(startPage: page, limit: _pageSize);
-        _applyRecords.addAll(records);
-        return records.length;
+            .call(
+              startPage: page,
+              limit: _pageSize,
+              statuses: applyFilter.statuses,
+            );
+        return _MyPageSectionPageData(
+          applyRecords: records,
+          applyFilter: applyFilter,
+          fetchedCount: records.length,
+        );
       case MyPageSectionType.coolingOff:
         final user = await ref.read(currentAuthUserProvider.future);
         final userId = user?.userId;
         if (userId == null) {
-          return 0;
+          return const _MyPageSectionPageData(fetchedCount: 0);
         }
         final records = await ref
             .read(fetchMyPageOrderInquiryListUseCaseProvider)
             .call(userId: userId, startPage: page, limit: _pageSize);
-        _orderInquiryRecords.addAll(records);
-        return records.length;
+        return _MyPageSectionPageData(
+          orderInquiryRecords: records,
+          fetchedCount: records.length,
+        );
       case MyPageSectionType.activeFunds:
         final records = await ref
             .read(fetchMyPageInvestmentListUseCaseProvider)
             .call(startPage: page, limit: _pageSize);
-        _investmentRecords.addAll(records);
-        return records.length;
+        return _MyPageSectionPageData(
+          investmentRecords: records,
+          fetchedCount: records.length,
+        );
     }
+  }
+
+  void _replaceRecords(_MyPageSectionPageData pageData) {
+    _applyRecords
+      ..clear()
+      ..addAll(pageData.applyRecords);
+    _hiddenOrderInquiryIds.clear();
+    _orderInquiryRecords
+      ..clear()
+      ..addAll(pageData.orderInquiryRecords);
+    _investmentRecords
+      ..clear()
+      ..addAll(pageData.investmentRecords);
+    _loadedApplyFilter = pageData.applyFilter ?? _applyFilter;
+  }
+
+  void _appendRecords(_MyPageSectionPageData pageData) {
+    _applyRecords.addAll(pageData.applyRecords);
+    _orderInquiryRecords.addAll(pageData.orderInquiryRecords);
+    _investmentRecords.addAll(pageData.investmentRecords);
+    _loadedApplyFilter = pageData.applyFilter ?? _loadedApplyFilter;
   }
 
   int get _visibleItemCount {
@@ -212,12 +288,13 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
             AppFilterBar<MyPageApplyHistoryFilter>(
               value: _applyFilter,
               onChanged: (MyPageApplyHistoryFilter value) {
+                if (_applyFilter == value) {
+                  return;
+                }
                 setState(() {
                   _applyFilter = value;
                 });
-                if (_visibleItemCount == 0 && _hasMore) {
-                  _loadNextPage();
-                }
+                _loadInitial(preserveContent: true);
               },
               backgroundColor: colors.surface,
               showBottomDivider: true,
@@ -278,7 +355,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
   }
 
   List<MyPageApplyRecord> get _filteredApplyRecords {
-    return filterApplyRecordsByHistoryFilter(_applyRecords, _applyFilter);
+    return filterApplyRecordsByHistoryFilter(_applyRecords, _loadedApplyFilter);
   }
 
   List<MyPageOrderInquiryRecord> get _visibleOrderInquiryRecords {
@@ -632,6 +709,22 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
       textStyle: appText.chip,
     );
   }
+}
+
+class _MyPageSectionPageData {
+  const _MyPageSectionPageData({
+    this.applyRecords = const <MyPageApplyRecord>[],
+    this.applyFilter,
+    this.orderInquiryRecords = const <MyPageOrderInquiryRecord>[],
+    this.investmentRecords = const <MyPageInvestmentRecord>[],
+    required this.fetchedCount,
+  });
+
+  final List<MyPageApplyRecord> applyRecords;
+  final MyPageApplyHistoryFilter? applyFilter;
+  final List<MyPageOrderInquiryRecord> orderInquiryRecords;
+  final List<MyPageInvestmentRecord> investmentRecords;
+  final int fetchedCount;
 }
 
 class _StatusBadge extends StatelessWidget {
