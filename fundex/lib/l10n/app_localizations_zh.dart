@@ -3225,7 +3225,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String myPageInvestorReturnFixedFloating(Object pct) {
-    return '固定+浮动 $pct%';
+    return '固定$pct%+浮动';
   }
 
   @override
@@ -7379,7 +7379,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String myPageInvestorReturnFixedFloating(Object pct) {
-    return '固定+浮動 $pct%';
+    return '固定$pct%+浮動';
   }
 
   @override

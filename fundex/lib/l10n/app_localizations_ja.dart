@@ -3262,7 +3262,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String myPageInvestorReturnFixedFloating(Object pct) {
-    return '固定＋変動 $pct%';
+    return '固定$pct%＋変動';
   }
 
   @override

@@ -3447,7 +3447,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String myPageInvestorReturnFixedFloating(Object pct) {
-    return 'Fixed + floating $pct%';
+    return 'Fixed$pct% + floating';
   }
 
   @override

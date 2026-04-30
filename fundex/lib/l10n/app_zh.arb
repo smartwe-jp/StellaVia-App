@@ -1215,7 +1215,7 @@
     }
   },
   "myPageInvestorReturnFloating": "浮动",
-  "myPageInvestorReturnFixedFloating": "固定+浮动 {pct}%",
+  "myPageInvestorReturnFixedFloating": "固定{pct}%+浮动",
   "@myPageInvestorReturnFixedFloating": {
     "placeholders": {
       "pct": {}

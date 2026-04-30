@@ -6344,7 +6344,7 @@ abstract class AppLocalizations {
   /// No description provided for @myPageInvestorReturnFixedFloating.
   ///
   /// In en, this message translates to:
-  /// **'Fixed + floating {pct}%'**
+  /// **'Fixed{pct}% + floating'**
   String myPageInvestorReturnFixedFloating(Object pct);
 
   /// No description provided for @myPageInvestorReturnBorrowRate.

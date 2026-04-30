@@ -1220,7 +1220,7 @@
     }
   },
   "myPageInvestorReturnFloating": "Floating",
-  "myPageInvestorReturnFixedFloating": "Fixed + floating {pct}%",
+  "myPageInvestorReturnFixedFloating": "Fixed{pct}% + floating",
   "@myPageInvestorReturnFixedFloating": {
     "placeholders": {
       "pct": {}
