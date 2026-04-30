@@ -547,7 +547,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get registerInviteCodeLabel => '邀请码（选填）';
 
   @override
-  String get registerAcceptPolicy => '我已阅读并同意《服务条款》与《隐私政策》。';
+  String get registerAcceptPolicy => '我已阅读并同意《服务条款》';
 
   @override
   String get registerElectronicDeliveryDocumentTitle => '关于以电子方式交付书面的同意书';
@@ -2547,6 +2547,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageApplyAmountLabel => '申请金额';
 
   @override
+  String get myPageApplyUnitsAmountLabel => '申请口数/金额';
+
+  @override
   String get myPageResultAnnouncementLabel => '结果公布';
 
   @override
@@ -3125,7 +3128,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageApplyFilterPendingConfirmation => '待确认';
 
   @override
-  String get myPageApplyFilterCompleted => '已完成';
+  String get myPageApplyFilterCompleted => '购买成功';
 
   @override
   String get myPageApplyFilterInvalid => '已失效';
@@ -3137,7 +3140,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageApplyStatusPendingConfirmation => '待确认';
 
   @override
-  String get myPageApplyStatusCompleted => '已完成';
+  String get myPageApplyStatusCompleted => '购买成功';
 
   @override
   String get myPageApplyStatusInvalid => '已失效';
@@ -3214,7 +3217,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String myPageInvestorReturnFixedYield(Object pct) {
-    return '固定收益 $pct%';
+    return '预期收益率 $pct%';
   }
 
   @override
@@ -4694,7 +4697,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get registerInviteCodeLabel => '邀請碼（選填）';
 
   @override
-  String get registerAcceptPolicy => '我已閱讀並同意《服務條款》與《隱私政策》。';
+  String get registerAcceptPolicy => '我已閱讀並同意《服務條款》';
 
   @override
   String get registerElectronicDeliveryDocumentTitle => '關於以電子方式交付書面的同意書';
@@ -6698,6 +6701,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageApplyAmountLabel => '申請金額';
 
   @override
+  String get myPageApplyUnitsAmountLabel => '申請口數/金額';
+
+  @override
   String get myPageResultAnnouncementLabel => '結果公布';
 
   @override
@@ -7276,7 +7282,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageApplyFilterPendingConfirmation => '待確認';
 
   @override
-  String get myPageApplyFilterCompleted => '已完成';
+  String get myPageApplyFilterCompleted => '購買成功';
 
   @override
   String get myPageApplyFilterInvalid => '已失效';
@@ -7288,7 +7294,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageApplyStatusPendingConfirmation => '待確認';
 
   @override
-  String get myPageApplyStatusCompleted => '已完成';
+  String get myPageApplyStatusCompleted => '購買成功';
 
   @override
   String get myPageApplyStatusInvalid => '已失效';
@@ -7365,7 +7371,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String myPageInvestorReturnFixedYield(Object pct) {
-    return '固定收益 $pct%';
+    return '预期收益率 $pct%';
   }
 
   @override

@@ -8,6 +8,8 @@ class MyPageActiveFundSummaryCardData {
     required this.investorCode,
     required this.investorType,
     required this.returnText,
+    required this.accumulatedEarningsLabel,
+    required this.accumulatedEarningsValue,
     required this.statusLabel,
     required this.statusBackgroundColor,
     required this.statusForegroundColor,
@@ -21,6 +23,8 @@ class MyPageActiveFundSummaryCardData {
   final String investorCode;
   final String investorType;
   final String returnText;
+  final String accumulatedEarningsLabel;
+  final String accumulatedEarningsValue;
   final String statusLabel;
   final Color statusBackgroundColor;
   final Color statusForegroundColor;
@@ -70,7 +74,7 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
             borderRadius: cardRadius,
             onTap: data.onTap,
             child: SizedBox(
-              height: 138,
+              height: 172,
               child: Padding(
                 padding: const EdgeInsets.all(18),
                 child: Row(
@@ -81,11 +85,13 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
                       child: Column(
                         children: <Widget>[
                           _ActiveFundThumbnail(imageUrls: data.imageUrls),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 12),
                           SizedBox(
                             width: double.infinity,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                              ),
                               child: _ActiveFundStatusBadge(
                                 label: data.statusLabel,
                                 backgroundColor: data.statusBackgroundColor,
@@ -112,39 +118,16 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Flexible(
-                                flex: 6,
-                                child: Text(
-                                  data.investorCode,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: appText.micro.copyWith(
-                                    color: colors.textSecondary,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Flexible(
-                                flex: 5,
-                                child: Text(
-                                  data.returnText,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.right,
-                                  style: appText.micro.copyWith(
-                                    color: colors.highlightGold,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
                           const Spacer(),
+                          _ActiveFundMiddlePanel(
+                            investorCode: data.investorCode,
+                            returnText: data.returnText,
+                            accumulatedEarningsLabel:
+                                data.accumulatedEarningsLabel,
+                            accumulatedEarningsValue:
+                                data.accumulatedEarningsValue,
+                          ),
+                          const SizedBox(height: 4),
                           Text(
                             data.periodText,
                             maxLines: 2,
@@ -165,6 +148,120 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _ActiveFundMiddlePanel extends StatelessWidget {
+  const _ActiveFundMiddlePanel({
+    required this.investorCode,
+    required this.returnText,
+    required this.accumulatedEarningsLabel,
+    required this.accumulatedEarningsValue,
+  });
+
+  final String investorCode;
+  final String returnText;
+  final String accumulatedEarningsLabel;
+  final String accumulatedEarningsValue;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(UiTokens.radius8),
+        border: Border.all(color: colors.borderSoft),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                  investorCode,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: appText.micro.copyWith(
+                    color: colors.textSecondary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              Text(
+                  returnText,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.right,
+                  style: appText.micro.copyWith(
+                    color: colors.highlightGold,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              
+            ],
+          ),
+          const SizedBox(height: 5),
+          _AccumulatedEarningsPill(
+            label: accumulatedEarningsLabel,
+            value: accumulatedEarningsValue,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AccumulatedEarningsPill extends StatelessWidget {
+  const _AccumulatedEarningsPill({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      decoration: BoxDecoration(
+        color: colors.highlightGold.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: appText.micro.copyWith(
+                color: colors.textSecondary,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const SizedBox(width: 6),
+          Text(
+            value,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: appText.caption.copyWith(
+              color: colors.highlightGold,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -196,38 +293,6 @@ class _ActiveFundThumbnail extends StatelessWidget {
                 ),
               )
             : _ActiveFundThumbnailPlaceholder(colors: colors),
-      ),
-    );
-  }
-}
-
-class _InvestorTypeBadge extends StatelessWidget {
-  const _InvestorTypeBadge({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    return Container(
-      constraints: const BoxConstraints(maxWidth: 72),
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-      decoration: BoxDecoration(
-        color: colors.highlightGold.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: colors.highlightGold.withValues(alpha: 0.38)),
-      ),
-      child: Text(
-        label,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: appText.micro.copyWith(
-          color: colors.highlightGold,
-          fontWeight: FontWeight.w800,
-          height: 1.1,
-        ),
       ),
     );
   }

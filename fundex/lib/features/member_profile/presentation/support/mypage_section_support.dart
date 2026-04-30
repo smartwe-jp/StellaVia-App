@@ -738,6 +738,15 @@ String formatCurrency(num? amount, NumberFormat formatter) {
   return formatter.format(amount);
 }
 
+String formatApplyUnitsAmountLabel(
+  MyPageApplyRecord record,
+  NumberFormat formatter,
+) {
+  final units = record.applyNum;
+  final unitsText = units == null ? '--' : '$units口';
+  return '$unitsText / ${formatCurrency(record.applyMoney, formatter)}';
+}
+
 String? formatDateOrNull(String? raw) {
   final date = parseApiDate(raw);
   if (date == null) {

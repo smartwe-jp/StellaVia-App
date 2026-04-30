@@ -23,6 +23,7 @@ import '../providers/member_profile_providers.dart';
 import '../providers/mypage_providers.dart';
 import '../support/mypage_section_support.dart';
 import '../support/mypage_withdraw_action.dart';
+import '../widgets/my_page_apply_investor_type_panel.dart';
 import '../widgets/my_page_active_fund_summary_card.dart';
 import '../widgets/my_page_asset_trend_card.dart';
 
@@ -419,8 +420,13 @@ Widget _buildPendingApplicationsSection(
     data: (records) {
       final displayRecords = sortApplyRecords(records, maxItems: 3);
       final cards = displayRecords
-          .map(
-            (record) => FundMyPageProjectCard(
+          .map((record) {
+            final investorTypeDisplay = resolveInvestorTypeDisplayText(
+              l10n,
+              record.investorType,
+              fallbackInvestorCode: record.investorCode,
+            );
+            return FundMyPageProjectCard(
               title: record.projectName,
               accentColor: AppColorTokens.fundexHighlightGold,
               trailing: _PendingStatusBadge(
@@ -430,11 +436,16 @@ Widget _buildPendingApplicationsSection(
               ),
               rows: <FundLabeledValue>[
                 FundLabeledValue(
-                  label: l10n.myPageApplyAmountLabel,
-                  value: _formatCurrency(record.applyMoney, formatter),
+                  label: l10n.myPageApplyUnitsAmountLabel,
+                  value: formatApplyUnitsAmountLabel(record, formatter),
                 ),
                 buildApplySecondaryRow(l10n, record),
               ],
+              detail: MyPageApplyInvestorTypePanel(
+                label: l10n.myPageOrderInvestorTypeLabel,
+                investorCode: investorTypeDisplay.investorCode,
+                returnText: investorTypeDisplay.returnText,
+              ),
               footer: canSubmitApplyWithdraw(record)
                   ? OutlinedButton(
                       onPressed: () =>
@@ -448,8 +459,8 @@ Widget _buildPendingApplicationsSection(
                     )
                   : null,
               onTap: () => handlePendingApplyTap(context, record),
-            ),
-          )
+            );
+          })
           .toList(growable: false);
 
       return FundSectionList(
@@ -481,6 +492,7 @@ Widget _buildPendingApplicationsSection(
   );
 }
 
+// ignore: unused_element
 Widget _buildCoolingOffSection(
   BuildContext context,
   WidgetRef ref, {
@@ -589,6 +601,11 @@ Widget _buildActiveFundsSection(
   required Map<String, FundProject> fundProjectsById,
 }) {
   final l10n = context.l10n;
+  final currencyFormatter = NumberFormat.currency(
+    locale: Localizations.localeOf(context).toLanguageTag(),
+    symbol: '¥',
+    decimalDigits: 0,
+  );
 
   return asyncValue.when(
     skipError: true,
@@ -616,6 +633,12 @@ Widget _buildActiveFundsSection(
                 investorCode: investorTypeDisplay.investorCode,
                 investorType: investorTypeDisplay.investorType,
                 returnText: investorTypeDisplay.returnText,
+                accumulatedEarningsLabel:
+                    l10n.myPageAccumulatedDistributionLabel,
+                accumulatedEarningsValue: _formatCurrency(
+                  group.earnings,
+                  currencyFormatter,
+                ),
                 statusLabel: resolveMyPageActiveFundStatusLabel(l10n, status),
                 statusBackgroundColor:
                     resolveMyPageActiveFundStatusBackgroundColor(
@@ -1004,6 +1027,7 @@ bool _shouldShowHomePendingSection(
   );
 }
 
+// ignore: unused_element
 bool _shouldShowHomeOrderInquirySection(
   AsyncValue<List<MyPageOrderInquiryRecord>> asyncValue,
   Set<String> hiddenOrderInquiryIds,

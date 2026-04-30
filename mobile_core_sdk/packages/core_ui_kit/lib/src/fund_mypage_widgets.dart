@@ -268,6 +268,7 @@ class FundMyPageProjectCard extends StatelessWidget {
     required this.rows,
     this.trailing,
     this.accentColor,
+    this.detail,
     this.footnote,
     this.footer,
     this.onTap,
@@ -278,6 +279,7 @@ class FundMyPageProjectCard extends StatelessWidget {
   final List<FundLabeledValue> rows;
   final Widget? trailing;
   final Color? accentColor;
+  final Widget? detail;
   final String? footnote;
   final Widget? footer;
   final VoidCallback? onTap;
@@ -375,6 +377,10 @@ class FundMyPageProjectCard extends StatelessWidget {
                       ],
                     ),
                     if (index < rows.length - 1) const SizedBox(height: 4),
+                  ],
+                  if (detail != null) ...<Widget>[
+                    const SizedBox(height: 8),
+                    detail!,
                   ],
                   if (footnote != null) ...<Widget>[
                     const SizedBox(height: 4),

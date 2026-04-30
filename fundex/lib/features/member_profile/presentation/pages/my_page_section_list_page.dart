@@ -12,6 +12,7 @@ import '../../domain/entities/mypage_models.dart';
 import '../providers/mypage_providers.dart';
 import '../support/mypage_section_support.dart';
 import '../support/mypage_withdraw_action.dart';
+import '../widgets/my_page_apply_investor_type_panel.dart';
 import '../widgets/my_page_active_fund_summary_card.dart';
 
 class MyPageSectionListPage extends ConsumerStatefulWidget {
@@ -431,6 +432,11 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
   ) {
     final l10n = context.l10n;
     final colors = Theme.of(context).appColors;
+    final investorTypeDisplay = resolveInvestorTypeDisplayText(
+      l10n,
+      record.investorType,
+      fallbackInvestorCode: record.investorCode,
+    );
     return FundMyPageProjectCard(
       title: record.projectName,
       accentColor: AppColorTokens.fundexHighlightGold,
@@ -441,11 +447,16 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
       ),
       rows: <FundLabeledValue>[
         FundLabeledValue(
-          label: l10n.myPageApplyAmountLabel,
-          value: formatCurrency(record.applyMoney, formatter),
+          label: l10n.myPageApplyUnitsAmountLabel,
+          value: formatApplyUnitsAmountLabel(record, formatter),
         ),
         buildApplySecondaryRow(l10n, record),
       ],
+      detail: MyPageApplyInvestorTypePanel(
+        label: l10n.myPageOrderInvestorTypeLabel,
+        investorCode: investorTypeDisplay.investorCode,
+        returnText: investorTypeDisplay.returnText,
+      ),
       footer: canSubmitApplyWithdraw(record)
           ? OutlinedButton(
               onPressed: () => _handleApplyWithdraw(record),
@@ -527,6 +538,11 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     MyPageInvestorType? investorType,
   }) {
     final l10n = context.l10n;
+    final formatter = NumberFormat.currency(
+      locale: Localizations.localeOf(context).toLanguageTag(),
+      symbol: '¥',
+      decimalDigits: 0,
+    );
     final project = fundProjectsById[group.projectId];
     final status = group.projectStatus ?? project?.projectStatus;
     final investorTypeDisplay = resolveInvestorTypeDisplayText(
@@ -545,6 +561,8 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
         investorCode: investorTypeDisplay.investorCode,
         investorType: investorTypeDisplay.investorType,
         returnText: investorTypeDisplay.returnText,
+        accumulatedEarningsLabel: l10n.myPageAccumulatedDistributionLabel,
+        accumulatedEarningsValue: formatCurrency(group.earnings, formatter),
         statusLabel: resolveMyPageActiveFundStatusLabel(l10n, status),
         statusBackgroundColor: resolveMyPageActiveFundStatusBackgroundColor(
           context,

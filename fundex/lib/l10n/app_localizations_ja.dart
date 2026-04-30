@@ -554,7 +554,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get registerInviteCodeLabel => '招待コード（任意）';
 
   @override
-  String get registerAcceptPolicy => '利用規約とプライバシーポリシーに同意します。';
+  String get registerAcceptPolicy => '利用規約に同意します。';
 
   @override
   String get registerElectronicDeliveryDocumentTitle => '書面の電磁的方法による交付等の承諾書';
@@ -2575,6 +2575,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageApplyAmountLabel => '応募金額';
 
   @override
+  String get myPageApplyUnitsAmountLabel => '応募口数/金額';
+
+  @override
   String get myPageResultAnnouncementLabel => '結果発表';
 
   @override
@@ -3162,7 +3165,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageApplyFilterPendingConfirmation => '確認待ち';
 
   @override
-  String get myPageApplyFilterCompleted => '完了';
+  String get myPageApplyFilterCompleted => '購入成功';
 
   @override
   String get myPageApplyFilterInvalid => '失効';
@@ -3174,7 +3177,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageApplyStatusPendingConfirmation => '確認待ち';
 
   @override
-  String get myPageApplyStatusCompleted => '完了';
+  String get myPageApplyStatusCompleted => '購入成功';
 
   @override
   String get myPageApplyStatusInvalid => '失効';
@@ -3251,7 +3254,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String myPageInvestorReturnFixedYield(Object pct) {
-    return '固定利回り $pct%';
+    return '想定利回り $pct%';
   }
 
   @override

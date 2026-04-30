@@ -588,8 +588,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get registerInviteCodeLabel => 'Invite code (optional)';
 
   @override
-  String get registerAcceptPolicy =>
-      'I agree to the Terms of Service and Privacy Policy.';
+  String get registerAcceptPolicy => 'I agree to the Terms of Service';
 
   @override
   String get registerElectronicDeliveryDocumentTitle =>
@@ -2718,6 +2717,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageApplyAmountLabel => 'Application amount';
 
   @override
+  String get myPageApplyUnitsAmountLabel => 'Application units / amount';
+
+  @override
   String get myPageResultAnnouncementLabel => 'Result date';
 
   @override
@@ -3347,7 +3349,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageApplyFilterPendingConfirmation => 'Pending';
 
   @override
-  String get myPageApplyFilterCompleted => 'Completed';
+  String get myPageApplyFilterCompleted => 'Purchase successful';
 
   @override
   String get myPageApplyFilterInvalid => 'Invalid';
@@ -3359,7 +3361,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageApplyStatusPendingConfirmation => 'Pending';
 
   @override
-  String get myPageApplyStatusCompleted => 'Completed';
+  String get myPageApplyStatusCompleted => 'Purchase successful';
 
   @override
   String get myPageApplyStatusInvalid => 'Invalid';
@@ -3437,7 +3439,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String myPageInvestorReturnFixedYield(Object pct) {
-    return 'Fixed yield $pct%';
+    return 'Assumed yield $pct%';
   }
 
   @override

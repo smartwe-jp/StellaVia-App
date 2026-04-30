@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -702,7 +703,7 @@ class _ComposerFundPickerSheet extends ConsumerStatefulWidget {
 class _ComposerFundPickerSheetState
     extends ConsumerState<_ComposerFundPickerSheet> {
   static const int _pageSize = 20;
-  static const double _cardScrollExtent = 148;
+  static const double _cardScrollExtent = 166;
   static const List<MyPageActiveFundFilter> _filters = <MyPageActiveFundFilter>[
     MyPageActiveFundFilter.all,
     MyPageActiveFundFilter.open,
@@ -1000,6 +1001,11 @@ class _ComposerFundPickerSheetState
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final l10n = context.l10n;
+    final currencyFormatter = NumberFormat.currency(
+      locale: Localizations.localeOf(context).toLanguageTag(),
+      symbol: '¥',
+      decimalDigits: 0,
+    );
     final displayRecords = _filteredRecords;
     _scheduleScrollToSelected(displayRecords, widget.currentSelection);
 
@@ -1116,6 +1122,11 @@ class _ComposerFundPickerSheetState
               investorCode: investorTypeDisplay.investorCode,
               investorType: investorTypeDisplay.investorType,
               returnText: investorTypeDisplay.returnText,
+              accumulatedEarningsLabel: l10n.myPageAccumulatedDistributionLabel,
+              accumulatedEarningsValue: formatCurrency(
+                group.earnings,
+                currencyFormatter,
+              ),
               statusLabel: resolveMyPageActiveFundStatusLabel(l10n, status),
               statusBackgroundColor:
                   resolveMyPageActiveFundStatusBackgroundColor(context, status),

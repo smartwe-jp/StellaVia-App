@@ -1166,7 +1166,7 @@ abstract class AppLocalizations {
   /// No description provided for @registerAcceptPolicy.
   ///
   /// In en, this message translates to:
-  /// **'I agree to the Terms of Service and Privacy Policy.'**
+  /// **'I agree to the Terms of Service'**
   String get registerAcceptPolicy;
 
   /// No description provided for @registerElectronicDeliveryDocumentTitle.
@@ -5021,6 +5021,12 @@ abstract class AppLocalizations {
   /// **'Application amount'**
   String get myPageApplyAmountLabel;
 
+  /// No description provided for @myPageApplyUnitsAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Application units / amount'**
+  String get myPageApplyUnitsAmountLabel;
+
   /// No description provided for @myPageResultAnnouncementLabel.
   ///
   /// In en, this message translates to:
@@ -6158,7 +6164,7 @@ abstract class AppLocalizations {
   /// No description provided for @myPageApplyFilterCompleted.
   ///
   /// In en, this message translates to:
-  /// **'Completed'**
+  /// **'Purchase successful'**
   String get myPageApplyFilterCompleted;
 
   /// No description provided for @myPageApplyFilterInvalid.
@@ -6182,7 +6188,7 @@ abstract class AppLocalizations {
   /// No description provided for @myPageApplyStatusCompleted.
   ///
   /// In en, this message translates to:
-  /// **'Completed'**
+  /// **'Purchase successful'**
   String get myPageApplyStatusCompleted;
 
   /// No description provided for @myPageApplyStatusInvalid.
@@ -6326,7 +6332,7 @@ abstract class AppLocalizations {
   /// No description provided for @myPageInvestorReturnFixedYield.
   ///
   /// In en, this message translates to:
-  /// **'Fixed yield {pct}%'**
+  /// **'Assumed yield {pct}%'**
   String myPageInvestorReturnFixedYield(Object pct);
 
   /// No description provided for @myPageInvestorReturnFloating.
