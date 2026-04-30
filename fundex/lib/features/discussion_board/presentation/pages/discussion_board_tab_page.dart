@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/domain/entities/auth_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../../investment/domain/entities/fund_project.dart';
+import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
+import '../../../member_profile/presentation/support/mypage_section_support.dart';
+import '../../../member_profile/presentation/widgets/my_page_active_fund_summary_card.dart';
 import '../controllers/discussion_board_controller.dart';
 import '../providers/discussion_board_providers.dart';
 import '../state/discussion_board_state.dart';
@@ -192,6 +195,7 @@ class _DiscussionBoardTabPageState
     final selectedFund =
         await AppBottomSheet.showAdaptive<_SelectedComposerFund>(
           context: context,
+          useRootNavigator: true,
           builder: (BuildContext bottomSheetContext) {
             return _ComposerFundPickerSheet(
               currentSelection: _selectedComposerFund,
@@ -688,8 +692,6 @@ class _ComposerFundPickerButton extends StatelessWidget {
 class _ComposerFundPickerSheet extends ConsumerStatefulWidget {
   const _ComposerFundPickerSheet({required this.currentSelection});
 
-  static const double _mainShellTabBarHeight = 61;
-
   final _SelectedComposerFund? currentSelection;
 
   @override
@@ -699,45 +701,227 @@ class _ComposerFundPickerSheet extends ConsumerStatefulWidget {
 
 class _ComposerFundPickerSheetState
     extends ConsumerState<_ComposerFundPickerSheet> {
-  final Map<String, GlobalKey> _itemKeys = <String, GlobalKey>{};
+  static const int _pageSize = 20;
+  static const double _cardScrollExtent = 148;
+  static const List<MyPageActiveFundFilter> _filters = <MyPageActiveFundFilter>[
+    MyPageActiveFundFilter.all,
+    MyPageActiveFundFilter.open,
+    MyPageActiveFundFilter.operating,
+    MyPageActiveFundFilter.ended,
+  ];
+
+  final ScrollController _scrollController = ScrollController();
+  final List<MyPageInvestmentRecord> _records = <MyPageInvestmentRecord>[];
+  MyPageActiveFundFilter _selectedFilter = MyPageActiveFundFilter.all;
+  bool _isInitialLoading = true;
+  bool _isLoadingMore = false;
+  bool _hasMore = true;
+  Object? _error;
+  int _nextPage = 1;
+  int _loadGeneration = 0;
   String? _lastAutoScrolledProjectId;
 
-  GlobalKey _keyForProject(String projectId) {
-    return _itemKeys.putIfAbsent(
-      projectId,
-      () => GlobalKey(debugLabel: 'composer-fund-$projectId'),
-    );
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_handleScroll);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadInitial();
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController
+      ..removeListener(_handleScroll)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _handleScroll() {
+    if (!_scrollController.hasClients ||
+        _isInitialLoading ||
+        _isLoadingMore ||
+        !_hasMore) {
+      return;
+    }
+
+    final position = _scrollController.position;
+    if (position.pixels >= position.maxScrollExtent - 240) {
+      _loadNextPage();
+    }
   }
 
   void _scheduleScrollToSelected(
-    List<_ComposerFundGroup> groups,
-    String? projectId,
+    List<MyPageInvestmentRecord> records,
+    _SelectedComposerFund? selection,
   ) {
+    final projectId = selection?.projectId;
     if (projectId == null || projectId.isEmpty) {
       return;
     }
-    if (_lastAutoScrolledProjectId == projectId) {
+    final selectionKey = selection?.selectionKey ?? '';
+    final scrollKey = selectionKey.isNotEmpty ? selectionKey : projectId;
+    if (_lastAutoScrolledProjectId == scrollKey) {
       return;
     }
-    if (!groups.any((group) => group.projectId == projectId)) {
+    final selectedIndex = records.indexWhere((record) {
+      if (selectionKey.isEmpty) {
+        return record.projectId == projectId;
+      }
+      return _selectionKeyForRecord(record) == selectionKey;
+    });
+    if (selectedIndex < 0) {
       return;
     }
-    _lastAutoScrolledProjectId = projectId;
+    _lastAutoScrolledProjectId = scrollKey;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
+      if (!mounted || !_scrollController.hasClients) {
         return;
       }
-      final targetContext = _itemKeys[projectId]?.currentContext;
-      if (targetContext == null) {
-        return;
-      }
-      Scrollable.ensureVisible(
-        targetContext,
-        alignment: 0.18,
+      final position = _scrollController.position;
+      final targetOffset = (selectedIndex * _cardScrollExtent).clamp(
+        position.minScrollExtent,
+        position.maxScrollExtent,
+      );
+      _scrollController.animateTo(
+        targetOffset,
         duration: const Duration(milliseconds: 220),
         curve: Curves.easeOutCubic,
       );
     });
+  }
+
+  List<MyPageInvestmentRecord> get _filteredRecords {
+    return filterInvestmentRecordsByActiveFundFilter(_records, _selectedFilter);
+  }
+
+  String _selectionKeyForRecord(MyPageInvestmentRecord record) {
+    final recordIndex = _records.indexOf(record);
+    final safeIndex = recordIndex < 0 ? 0 : recordIndex;
+    final parts = <String>[
+      record.projectId,
+      record.processId ?? '',
+      record.investorCode ?? '',
+      record.createTime ?? '',
+      record.status?.toString() ?? '',
+      record.projectStatus?.toString() ?? '',
+      record.investNum?.toString() ?? '',
+      record.investMoney?.toString() ?? '',
+      safeIndex.toString(),
+    ];
+    return parts.join('::');
+  }
+
+  bool _isRecordSelected(
+    List<MyPageInvestmentRecord> records,
+    MyPageInvestmentRecord record,
+    int visibleIndex,
+  ) {
+    final selection = widget.currentSelection;
+    if (selection == null || selection.isClearSelection) {
+      return false;
+    }
+    if (selection.selectionKey.isNotEmpty) {
+      return _selectionKeyForRecord(record) == selection.selectionKey;
+    }
+    return record.projectId == selection.projectId &&
+        records.indexWhere((item) => item.projectId == selection.projectId) ==
+            visibleIndex;
+  }
+
+  Future<void> _loadInitial({bool preserveContent = false}) async {
+    final requestGeneration = ++_loadGeneration;
+    final shouldPreserveContent = preserveContent && _records.isNotEmpty;
+    setState(() {
+      _isInitialLoading = !shouldPreserveContent;
+      _isLoadingMore = shouldPreserveContent;
+      _hasMore = true;
+      _error = null;
+      _nextPage = 1;
+      if (!shouldPreserveContent) {
+        _records.clear();
+        _lastAutoScrolledProjectId = null;
+      }
+    });
+
+    try {
+      final records = await ref
+          .read(fetchMyPageInvestmentListUseCaseProvider)
+          .call(startPage: 1, limit: _pageSize);
+      if (!mounted || requestGeneration != _loadGeneration) {
+        return;
+      }
+      setState(() {
+        _records
+          ..clear()
+          ..addAll(records);
+        _nextPage = 2;
+        _hasMore = records.length >= _pageSize;
+        _error = null;
+        _isInitialLoading = false;
+        _isLoadingMore = false;
+        _lastAutoScrolledProjectId = null;
+      });
+      await _loadNextPageIfFilterHasNoVisibleRecords();
+    } catch (error) {
+      if (!mounted || requestGeneration != _loadGeneration) {
+        return;
+      }
+      setState(() {
+        _error = error;
+        _isInitialLoading = false;
+        _isLoadingMore = false;
+      });
+    }
+  }
+
+  Future<void> _loadNextPage() async {
+    if (_isLoadingMore || !_hasMore) {
+      return;
+    }
+    final requestGeneration = _loadGeneration;
+    setState(() {
+      _isLoadingMore = true;
+      _error = null;
+    });
+
+    try {
+      final records = await ref
+          .read(fetchMyPageInvestmentListUseCaseProvider)
+          .call(startPage: _nextPage, limit: _pageSize);
+      if (!mounted || requestGeneration != _loadGeneration) {
+        return;
+      }
+      setState(() {
+        _records.addAll(records);
+        _nextPage += 1;
+        _hasMore = records.length >= _pageSize;
+        _error = null;
+        _isInitialLoading = false;
+        _isLoadingMore = false;
+      });
+      await _loadNextPageIfFilterHasNoVisibleRecords();
+    } catch (error) {
+      if (!mounted || requestGeneration != _loadGeneration) {
+        return;
+      }
+      setState(() {
+        _error = error;
+        _isInitialLoading = false;
+        _isLoadingMore = false;
+      });
+    }
+  }
+
+  Future<void> _loadNextPageIfFilterHasNoVisibleRecords() async {
+    if (!mounted ||
+        _filteredRecords.isNotEmpty ||
+        !_hasMore ||
+        _isLoadingMore) {
+      return;
+    }
+    await _loadNextPage();
   }
 
   @override
@@ -747,11 +931,12 @@ class _ComposerFundPickerSheetState
     final appText = theme.appTextTheme;
     final l10n = context.l10n;
     final mediaQuery = MediaQuery.of(context);
-    final availableHeight =
-        mediaQuery.size.height -
-        _ComposerFundPickerSheet._mainShellTabBarHeight -
-        mediaQuery.padding.bottom;
-    final sheetHeight = availableHeight * 0.5;
+    final sheetHeight = mediaQuery.size.height * 0.8;
+    final fundProjects =
+        ref.watch(fundProjectListProvider).valueOrNull ?? const <FundProject>[];
+    final fundProjectsById = <String, FundProject>{
+      for (final project in fundProjects) project.id: project,
+    };
 
     return SizedBox(
       height: sheetHeight,
@@ -764,326 +949,263 @@ class _ComposerFundPickerSheetState
             style: appText.sectionTitle.copyWith(color: colors.textPrimary),
           ),
           const SizedBox(height: 12),
+          AppFilterBar<MyPageActiveFundFilter>(
+            value: _selectedFilter,
+            onChanged: (MyPageActiveFundFilter value) {
+              if (_selectedFilter == value) {
+                return;
+              }
+              setState(() {
+                _selectedFilter = value;
+                _lastAutoScrolledProjectId = null;
+              });
+              _loadNextPageIfFilterHasNoVisibleRecords();
+            },
+            backgroundColor: colors.surface,
+            borderRadius: BorderRadius.circular(999),
+            padding: EdgeInsets.zero,
+            selectedBackgroundColor: colors.primary,
+            selectedForegroundColor: colors.onDark,
+            unselectedBackgroundColor: colors.surfaceAlt,
+            unselectedForegroundColor: colors.textSecondary,
+            borderColor: colors.border,
+            items: _filters
+                .map(
+                  (filter) => AppFilterBarItem<MyPageActiveFundFilter>(
+                    value: filter,
+                    label: resolveMyPageActiveFundFilterLabel(l10n, filter),
+                  ),
+                )
+                .toList(growable: false),
+          ),
+          const SizedBox(height: 12),
           Flexible(
-            child: ref
-                .watch(myPageInvestmentListProvider)
-                .when(
-                  data: (records) {
-                    final groups = _groupComposerFundRecords(records);
-                    _scheduleScrollToSelected(
-                      groups,
-                      widget.currentSelection?.projectId,
-                    );
-                    if (groups.isEmpty) {
-                      return Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 24,
-                          ),
-                          child: Text(
-                            l10n.kizunarkAssociateFundEmpty,
-                            textAlign: TextAlign.center,
-                            style: appText.body.copyWith(
-                              color: colors.textSecondary,
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-
-                    final currencyFormatter = NumberFormat.currency(
-                      locale: Localizations.localeOf(context).toLanguageTag(),
-                      symbol: '¥',
-                      decimalDigits: 0,
-                    );
-
-                    return ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: groups.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 10),
-                      itemBuilder: (BuildContext context, int index) {
-                        final group = groups[index];
-                        final isSelected =
-                            widget.currentSelection?.projectId ==
-                            group.projectId;
-                        return _ComposerFundPickerCard(
-                          key: _keyForProject(group.projectId),
-                          data: FundActiveFundCardData(
-                            title: group.projectName,
-                            annualYield: _formatYieldPercent(
-                              group.earningRatio,
-                            ),
-                            rows: <FundLabeledValue>[
-                              FundLabeledValue(
-                                label: l10n.myPageInvestmentAmountLabel,
-                                value: currencyFormatter.format(
-                                  group.investMoney,
-                                ),
-                              ),
-                              FundLabeledValue(
-                                label: l10n.myPageAccumulatedDistributionLabel,
-                                value: currencyFormatter.format(group.earnings),
-                                valueColor: colors.highlightGold,
-                              ),
-                            ],
-                          ),
-                          isSelected: isSelected,
-                          onTap: () {
-                            Navigator.of(context).pop(
-                              isSelected
-                                  ? const _SelectedComposerFund.clear()
-                                  : _SelectedComposerFund(
-                                      projectId: group.projectId,
-                                      projectName: group.projectName,
-                                    ),
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
-                  loading: () => const Center(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 24),
-                      child: CircularProgressIndicator.adaptive(),
-                    ),
-                  ),
-                  error: (_, __) => Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 24,
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            l10n.myPageSectionLoadError,
-                            textAlign: TextAlign.center,
-                            style: appText.body.copyWith(
-                              color: colors.textSecondary,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          OutlinedButton(
-                            onPressed: () =>
-                                ref.invalidate(myPageInvestmentListProvider),
-                            child: Text(l10n.fundListRetry),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+            child: _buildFundListContent(
+              context,
+              sheetHeight: sheetHeight,
+              fundProjectsById: fundProjectsById,
+            ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildFundListContent(
+    BuildContext context, {
+    required double sheetHeight,
+    required Map<String, FundProject> fundProjectsById,
+  }) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final l10n = context.l10n;
+    final displayRecords = _filteredRecords;
+    _scheduleScrollToSelected(displayRecords, widget.currentSelection);
+
+    if (_isInitialLoading && displayRecords.isEmpty) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 24),
+          child: CircularProgressIndicator.adaptive(),
+        ),
+      );
+    }
+
+    if (_error != null && displayRecords.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                l10n.myPageSectionLoadError,
+                textAlign: TextAlign.center,
+                style: appText.body.copyWith(color: colors.textSecondary),
+              ),
+              const SizedBox(height: 10),
+              OutlinedButton(
+                onPressed: () => _loadInitial(preserveContent: true),
+                child: Text(l10n.fundListRetry),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (displayRecords.isEmpty) {
+      return RefreshIndicator(
+        onRefresh: () => _loadInitial(preserveContent: true),
+        child: ListView(
+          controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: <Widget>[
+            SizedBox(
+              height: sheetHeight * 0.48,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 24,
+                  ),
+                  child: Text(
+                    resolveMyPageActiveFundEmptyState(l10n, _selectedFilter),
+                    textAlign: TextAlign.center,
+                    style: appText.body.copyWith(color: colors.textSecondary),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return RefreshIndicator(
+      onRefresh: () => _loadInitial(preserveContent: true),
+      child: ListView.separated(
+        controller: _scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
+        itemCount:
+            displayRecords.length +
+            ((_isLoadingMore || (_error != null && _records.isNotEmpty))
+                ? 1
+                : 0),
+        separatorBuilder: (_, _) => const SizedBox(height: 10),
+        itemBuilder: (BuildContext context, int index) {
+          if (index >= displayRecords.length) {
+            if (_isLoadingMore) {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Center(child: CircularProgressIndicator.adaptive()),
+              );
+            }
+            return Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 12),
+              child: Center(
+                child: OutlinedButton(
+                  onPressed: _loadNextPage,
+                  child: Text(l10n.fundListRetry),
+                ),
+              ),
+            );
+          }
+
+          final record = displayRecords[index];
+          final selectionKey = _selectionKeyForRecord(record);
+          final group = investmentRecordToGroup(record);
+          final project = fundProjectsById[record.projectId];
+          final status = project?.projectStatus ?? record.projectStatus;
+          final periodText = formatMyPageActiveFundPeriod(context, project);
+          final investorTypeDisplay = resolveInvestorTypeDisplayText(
+            l10n,
+            record.investorType,
+            fallbackInvestorCode: record.investorCode,
+            fallbackEarningType: group.earningType,
+            fallbackEarningRatio: group.earningRatio,
+          );
+          final isSelected = _isRecordSelected(displayRecords, record, index);
+          return _ComposerFundPickerCard(
+            data: MyPageActiveFundSummaryCardData(
+              title: group.projectName,
+              periodText: periodText != null
+                  ? '${l10n.fundListPeriodLabel}：$periodText'
+                  : l10n.myPageResultAnnouncementTbd,
+              investorCode: investorTypeDisplay.investorCode,
+              investorType: investorTypeDisplay.investorType,
+              returnText: investorTypeDisplay.returnText,
+              statusLabel: resolveMyPageActiveFundStatusLabel(l10n, status),
+              statusBackgroundColor:
+                  resolveMyPageActiveFundStatusBackgroundColor(context, status),
+              statusForegroundColor:
+                  resolveMyPageActiveFundStatusForegroundColor(context, status),
+              progress: resolveMyPageActiveFundProgress(project),
+              imageUrls: project?.photos ?? const <String>[],
+              onTap: () {
+                Navigator.of(context).pop(
+                  isSelected
+                      ? const _SelectedComposerFund.clear()
+                      : _SelectedComposerFund(
+                          projectId: record.projectId,
+                          projectName: record.projectName,
+                          selectionKey: selectionKey,
+                        ),
+                );
+              },
+            ),
+            isSelected: isSelected,
+          );
+        },
       ),
     );
   }
 }
 
 class _ComposerFundPickerCard extends StatelessWidget {
-  const _ComposerFundPickerCard({
-    super.key,
-    required this.data,
-    required this.isSelected,
-    required this.onTap,
-  });
+  const _ComposerFundPickerCard({required this.data, required this.isSelected});
 
-  final FundActiveFundCardData data;
+  final MyPageActiveFundSummaryCardData data;
   final bool isSelected;
-  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 120),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(
-          color: isSelected ? colors.primary : Colors.transparent,
-          width: 2,
-        ),
-      ),
-      child: Stack(
-        children: <Widget>[
-          FundActiveFundCard(
-            data: FundActiveFundCardData(
-              title: data.title,
-              annualYield: data.annualYield,
-              rows: data.rows,
-              onTap: onTap,
-            ),
-            shadowPadding: EdgeInsets.zero,
-          ),
-          if (isSelected)
-            Positioned(
-              top: 12,
-              right: 12,
+    return Stack(
+      children: <Widget>[
+        MyPageActiveFundSummaryCard(data: data, shadowPadding: EdgeInsets.zero),
+        if (isSelected)
+          Positioned.fill(
+            child: IgnorePointer(
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: colors.primary,
-                  shape: BoxShape.circle,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: Icon(
-                    Icons.check_rounded,
-                    size: 14,
-                    color: colors.onDark,
-                  ),
+                  borderRadius: BorderRadius.circular(UiTokens.radius12),
+                  border: Border.all(color: colors.primary, width: 2),
                 ),
               ),
             ),
-        ],
-      ),
+          ),
+        if (isSelected)
+          Positioned(
+            top: 10,
+            right: 10,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: colors.primary,
+                shape: BoxShape.circle,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(4),
+                child: Icon(
+                  Icons.check_rounded,
+                  size: 14,
+                  color: colors.onDark,
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
-}
-
-List<_ComposerFundGroup> _groupComposerFundRecords(
-  List<MyPageInvestmentRecord> records,
-) {
-  final operatingRecords = records
-      .where((record) => record.projectStatus == 4)
-      .toList(growable: false);
-  final source = operatingRecords.isEmpty ? records : operatingRecords;
-  final sorted = [...source]
-    ..sort((a, b) => _compareComposerDateDesc(a.createTime, b.createTime));
-
-  final groups = <String, _ComposerFundGroupAccumulator>{};
-  for (final record in sorted) {
-    groups.putIfAbsent(
-      record.projectId,
-      () => _ComposerFundGroupAccumulator(record),
-    );
-    groups[record.projectId]!.add(record);
-  }
-
-  final values = groups.values
-      .map((accumulator) => accumulator.build())
-      .toList(growable: false);
-  values.sort(
-    (a, b) =>
-        _compareComposerDateTimeDesc(a.latestCreateTime, b.latestCreateTime),
-  );
-  return values;
-}
-
-String _formatYieldPercent(double? ratio) {
-  if (ratio == null) {
-    return '--';
-  }
-  final percentage = ratio > 1 ? ratio : ratio * 100;
-  final hasFraction = percentage % 1 != 0;
-  return '${percentage.toStringAsFixed(hasFraction ? 1 : 0)}%';
-}
-
-DateTime? _parseComposerApiDate(String? raw) {
-  if (raw == null || raw.trim().isEmpty) {
-    return null;
-  }
-
-  final value = raw.trim();
-  for (final pattern in <String>['yyyy-MM-dd HH:mm:ss', 'yyyy-MM-dd']) {
-    try {
-      return DateFormat(pattern).parseStrict(value);
-    } catch (_) {
-      continue;
-    }
-  }
-  return DateTime.tryParse(value);
-}
-
-int _compareComposerDateDesc(String? left, String? right) {
-  return _compareComposerDateTimeDesc(
-    _parseComposerApiDate(left),
-    _parseComposerApiDate(right),
-  );
-}
-
-int _compareComposerDateTimeDesc(DateTime? left, DateTime? right) {
-  if (left == null && right == null) {
-    return 0;
-  }
-  if (left == null) {
-    return 1;
-  }
-  if (right == null) {
-    return -1;
-  }
-  return right.compareTo(left);
 }
 
 class _SelectedComposerFund {
   const _SelectedComposerFund({
     required this.projectId,
     required this.projectName,
+    required this.selectionKey,
   });
 
-  const _SelectedComposerFund.clear() : projectId = '', projectName = '';
+  const _SelectedComposerFund.clear()
+    : projectId = '',
+      projectName = '',
+      selectionKey = '';
 
   final String projectId;
   final String projectName;
+  final String selectionKey;
 
   bool get isClearSelection => projectId.isEmpty;
-}
-
-class _ComposerFundGroup {
-  const _ComposerFundGroup({
-    required this.projectId,
-    required this.projectName,
-    required this.investMoney,
-    required this.earnings,
-    required this.earningRatio,
-    required this.latestCreateTime,
-  });
-
-  final String projectId;
-  final String projectName;
-  final num investMoney;
-  final num earnings;
-  final double? earningRatio;
-  final DateTime? latestCreateTime;
-}
-
-class _ComposerFundGroupAccumulator {
-  _ComposerFundGroupAccumulator(MyPageInvestmentRecord seed)
-    : projectId = seed.projectId,
-      projectName = seed.projectName,
-      investMoney = seed.investMoney ?? 0,
-      earnings = seed.earnings ?? 0,
-      latestCreateTime = _parseComposerApiDate(seed.createTime),
-      earningRatio = seed.earningRadio ?? seed.investorType?.earningsRadio;
-
-  final String projectId;
-  final String projectName;
-  num investMoney;
-  num earnings;
-  double? earningRatio;
-  DateTime? latestCreateTime;
-
-  void add(MyPageInvestmentRecord record) {
-    investMoney += record.investMoney ?? 0;
-    earnings += record.earnings ?? 0;
-    earningRatio ??= record.earningRadio ?? record.investorType?.earningsRadio;
-    final candidateDate = _parseComposerApiDate(record.createTime);
-    if (_compareComposerDateTimeDesc(latestCreateTime, candidateDate) > 0) {
-      latestCreateTime = candidateDate;
-    }
-  }
-
-  _ComposerFundGroup build() {
-    return _ComposerFundGroup(
-      projectId: projectId,
-      projectName: projectName,
-      investMoney: investMoney,
-      earnings: earnings,
-      earningRatio: earningRatio,
-      latestCreateTime: latestCreateTime,
-    );
-  }
 }
