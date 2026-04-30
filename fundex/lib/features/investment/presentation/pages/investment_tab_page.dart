@@ -77,7 +77,14 @@ class InvestmentTabPage extends ConsumerStatefulWidget {
 }
 
 class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
+  final ScrollController _scrollController = ScrollController();
   _FundListFilter _selectedFilter = _FundListFilter.all;
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   _FundListFilter get _effectiveSelectedFilter =>
       _selectedFilter == _FundListFilter.completed
@@ -390,6 +397,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
     return MainShellTabRefreshScope(
       tabIndex: 1,
       onRefresh: _refreshInvestmentTab,
+      scrollController: _scrollController,
       child: Container(
         key: const Key('investment_tab_content'),
         color: colors.background,
@@ -472,6 +480,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                     return RefreshIndicator(
                       onRefresh: _refreshProjects,
                       child: ListView(
+                        controller: _scrollController,
                         physics: const AlwaysScrollableScrollPhysics(),
                         children: <Widget>[
                           Padding(
@@ -492,6 +501,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                   return RefreshIndicator(
                     onRefresh: _refreshProjects,
                     child: ListView.separated(
+                      controller: _scrollController,
                       padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
                       itemCount: visibleProjects.length,
                       separatorBuilder: (_, __) => const SizedBox(height: 16),

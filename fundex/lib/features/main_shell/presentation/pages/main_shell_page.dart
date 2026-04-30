@@ -30,6 +30,9 @@ class MainShellPage extends ConsumerWidget {
       colors.surface,
     );
     final currentTabIndex = ref.watch(mainShellCurrentTabIndexProvider);
+    final primaryScrollController = ref
+        .watch(mainShellScrollControllerRegistryProvider)
+        .controllerFor(currentTabIndex);
     if (currentTabIndex != navigationShell.currentIndex) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!context.mounted) {
@@ -43,118 +46,125 @@ class MainShellPage extends ConsumerWidget {
       });
     }
 
-    return Scaffold(
-      key: const Key('home_page'),
-      body: SafeArea(bottom: false, child: navigationShell),
-      bottomNavigationBar: DecoratedBox(
-        decoration: BoxDecoration(color: colors.surface),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Container(height: 1, width: double.infinity, color: colors.border),
-            SafeArea(
-              top: false,
-              child: SizedBox(
-                key: const Key('main_tab_bar'),
-                height: 68,
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: _MainTabItem(
-                        label: l10n.mainTabHome,
-                        isSelected: currentTabIndex == 0,
-                        labelColor: currentTabIndex == 0
-                            ? colorScheme.primary
-                            : shellNavigationTheme.bottomTabInactiveColor,
-                        onTap: () => _onDestinationSelected(context, ref, 0),
-                        badge: _MainTabBadge(
-                          backgroundColor: currentTabIndex == 0
+    return PrimaryScrollController(
+      controller: primaryScrollController,
+      child: Scaffold(
+        key: const Key('home_page'),
+        body: SafeArea(bottom: false, child: navigationShell),
+        bottomNavigationBar: DecoratedBox(
+          decoration: BoxDecoration(color: colors.surface),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                height: 1,
+                width: double.infinity,
+                color: colors.border,
+              ),
+              SafeArea(
+                top: false,
+                child: SizedBox(
+                  key: const Key('main_tab_bar'),
+                  height: 68,
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: _MainTabItem(
+                          label: l10n.mainTabHome,
+                          isSelected: currentTabIndex == 0,
+                          labelColor: currentTabIndex == 0
                               ? colorScheme.primary
-                              : inactiveTabBackgroundColor,
-                          child: Icon(
-                            Icons.home_rounded,
-                            size: 20,
-                            color: currentTabIndex == 0
-                                ? colors.onDark
-                                : shellNavigationTheme.bottomTabInactiveColor,
+                              : shellNavigationTheme.bottomTabInactiveColor,
+                          onTap: () => _onDestinationSelected(context, ref, 0),
+                          badge: _MainTabBadge(
+                            backgroundColor: currentTabIndex == 0
+                                ? colorScheme.primary
+                                : inactiveTabBackgroundColor,
+                            child: Icon(
+                              Icons.home_rounded,
+                              size: 20,
+                              color: currentTabIndex == 0
+                                  ? colors.onDark
+                                  : shellNavigationTheme.bottomTabInactiveColor,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: _MainTabItem(
-                        label: l10n.mainTabInvestment,
-                        isSelected: currentTabIndex == 1,
-                        labelColor: currentTabIndex == 1
-                            ? colorScheme.primary
-                            : shellNavigationTheme.bottomTabInactiveColor,
-                        onTap: () => _onDestinationSelected(context, ref, 1),
-                        badge: _MainTabBadge(
-                          backgroundColor: currentTabIndex == 1
+                      Expanded(
+                        child: _MainTabItem(
+                          label: l10n.mainTabInvestment,
+                          isSelected: currentTabIndex == 1,
+                          labelColor: currentTabIndex == 1
                               ? colorScheme.primary
-                              : inactiveTabBackgroundColor,
-                          child: Icon(
-                            Icons.insert_chart_outlined_outlined,
-                            size: 20,
-                            color: currentTabIndex == 1
-                                ? colors.onDark
-                                : shellNavigationTheme.bottomTabInactiveColor,
+                              : shellNavigationTheme.bottomTabInactiveColor,
+                          onTap: () => _onDestinationSelected(context, ref, 1),
+                          badge: _MainTabBadge(
+                            backgroundColor: currentTabIndex == 1
+                                ? colorScheme.primary
+                                : inactiveTabBackgroundColor,
+                            child: Icon(
+                              Icons.insert_chart_outlined_outlined,
+                              size: 20,
+                              color: currentTabIndex == 1
+                                  ? colors.onDark
+                                  : shellNavigationTheme.bottomTabInactiveColor,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: _MainTabItem(
-                        label: l10n.mainTabKizunark,
-                        isSelected: currentTabIndex == 2,
-                        labelColor: currentTabIndex == 2
-                            ? colorScheme.primary
-                            : shellNavigationTheme.bottomTabInactiveColor,
-                        onTap: () => _onDestinationSelected(context, ref, 2),
-                        badge: _MainTabBadge(
-                          backgroundColor: currentTabIndex == 2
+                      Expanded(
+                        child: _MainTabItem(
+                          label: l10n.mainTabKizunark,
+                          isSelected: currentTabIndex == 2,
+                          labelColor: currentTabIndex == 2
                               ? colorScheme.primary
-                              : inactiveTabBackgroundColor,
-                          child: Image.asset(
-                            'assets/images/kizunark.tab.normal.png',
-                            width: 20,
-                            height: 20,
-                            fit: BoxFit.contain,
-                            color: currentTabIndex == 2
-                                ? colors.onDark
-                                : shellNavigationTheme.bottomTabInactiveColor,
-                            colorBlendMode: BlendMode.srcIn,
+                              : shellNavigationTheme.bottomTabInactiveColor,
+                          onTap: () => _onDestinationSelected(context, ref, 2),
+                          badge: _MainTabBadge(
+                            backgroundColor: currentTabIndex == 2
+                                ? colorScheme.primary
+                                : inactiveTabBackgroundColor,
+                            child: Image.asset(
+                              'assets/images/kizunark.tab.normal.png',
+                              width: 20,
+                              height: 20,
+                              fit: BoxFit.contain,
+                              color: currentTabIndex == 2
+                                  ? colors.onDark
+                                  : shellNavigationTheme.bottomTabInactiveColor,
+                              colorBlendMode: BlendMode.srcIn,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: _MainTabItem(
-                        label: l10n.mainTabProfile,
-                        isSelected: currentTabIndex == 3,
-                        labelColor: currentTabIndex == 3
-                            ? colorScheme.primary
-                            : shellNavigationTheme.bottomTabInactiveColor,
-                        onTap: () => _onDestinationSelected(context, ref, 3),
-                        badge: _MainTabBadge(
-                          backgroundColor: currentTabIndex == 3
+                      Expanded(
+                        child: _MainTabItem(
+                          label: l10n.mainTabProfile,
+                          isSelected: currentTabIndex == 3,
+                          labelColor: currentTabIndex == 3
                               ? colorScheme.primary
-                              : inactiveTabBackgroundColor,
-                          child: Icon(
-                            Icons.person_rounded,
-                            size: 20,
-                            color: currentTabIndex == 3
-                                ? colors.onDark
-                                : shellNavigationTheme.bottomTabInactiveColor,
+                              : shellNavigationTheme.bottomTabInactiveColor,
+                          onTap: () => _onDestinationSelected(context, ref, 3),
+                          badge: _MainTabBadge(
+                            backgroundColor: currentTabIndex == 3
+                                ? colorScheme.primary
+                                : inactiveTabBackgroundColor,
+                            child: Icon(
+                              Icons.person_rounded,
+                              size: 20,
+                              color: currentTabIndex == 3
+                                  ? colors.onDark
+                                  : shellNavigationTheme.bottomTabInactiveColor,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

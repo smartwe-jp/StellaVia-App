@@ -12,11 +12,13 @@ class MainShellTabRefreshScope extends ConsumerStatefulWidget {
     required this.tabIndex,
     required this.child,
     required this.onRefresh,
+    this.scrollController,
   });
 
   final int tabIndex;
   final Widget child;
   final FutureOr<void> Function(WidgetRef ref) onRefresh;
+  final ScrollController? scrollController;
 
   @override
   ConsumerState<MainShellTabRefreshScope> createState() =>
@@ -28,6 +30,47 @@ class _MainShellTabRefreshScopeState
   bool _didInitialize = false;
   bool _wasActive = false;
   bool _refreshQueued = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _attachScrollController();
+  }
+
+  @override
+  void didUpdateWidget(covariant MainShellTabRefreshScope oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.tabIndex != widget.tabIndex ||
+        oldWidget.scrollController != widget.scrollController) {
+      _detachScrollController(oldWidget.tabIndex, oldWidget.scrollController);
+      _attachScrollController();
+    }
+  }
+
+  @override
+  void dispose() {
+    _detachScrollController(widget.tabIndex, widget.scrollController);
+    super.dispose();
+  }
+
+  void _attachScrollController() {
+    final controller = widget.scrollController;
+    if (controller == null) {
+      return;
+    }
+    ref
+        .read(mainShellScrollControllerRegistryProvider)
+        .attach(widget.tabIndex, controller);
+  }
+
+  void _detachScrollController(int tabIndex, ScrollController? controller) {
+    if (controller == null) {
+      return;
+    }
+    ref
+        .read(mainShellScrollControllerRegistryProvider)
+        .detach(tabIndex, controller);
+  }
 
   void _scheduleRefresh() {
     if (_refreshQueued || !mounted) {

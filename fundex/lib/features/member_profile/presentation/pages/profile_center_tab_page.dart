@@ -36,8 +36,15 @@ class ProfileCenterTabPage extends ConsumerStatefulWidget {
 }
 
 class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
+  final ScrollController _scrollController = ScrollController();
   final Set<String> _hiddenOrderInquiryIds = <String>{};
   MyPageAssetTrendRange _selectedTrendRange = MyPageAssetTrendRange.threeMonths;
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,12 +95,14 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
     return MainShellTabRefreshScope(
       tabIndex: 3,
       onRefresh: (_) => _refreshPage(),
+      scrollController: _scrollController,
       child: ColoredBox(
         color: colors.background,
         child: RefreshIndicator(
           onRefresh: _refreshPage,
           child: ListView(
             key: const Key('profile_tab_content'),
+            controller: _scrollController,
             padding: EdgeInsets.zero,
             children: <Widget>[
               FundMyPageAssetOverview(
@@ -154,7 +163,6 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                               ? null
                               : _sumInvestmentEarnings(investmentRecords)),
                       locale: localeTag,
-                      
                     ),
                     onTap: () => context.push(
                       '/profile/my/section-list?type=${MyPageSectionType.activeFunds.queryValue}',

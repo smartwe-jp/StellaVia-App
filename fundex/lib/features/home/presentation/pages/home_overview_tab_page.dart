@@ -27,11 +27,26 @@ import '../../../settings/presentation/providers/settings_two_factor_providers.d
 
 final Uri _officialSiteUri = Uri.parse('https://stellavia.co.jp/');
 
-class HomeOverviewTabPage extends ConsumerWidget {
+class HomeOverviewTabPage extends ConsumerStatefulWidget {
   const HomeOverviewTabPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeOverviewTabPage> createState() =>
+      _HomeOverviewTabPageState();
+}
+
+class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ref = this.ref;
     final l10n = context.l10n;
     final authState = ref.watch(isAuthenticatedProvider);
     final networkAvailability =
@@ -202,10 +217,12 @@ class HomeOverviewTabPage extends ConsumerWidget {
           child: MainShellTabRefreshScope(
             tabIndex: 0,
             onRefresh: _refreshHomeOverviewTab,
+            scrollController: _scrollController,
             child: RefreshIndicator(
               onRefresh: () => _refreshHomeOverviewTab(ref),
               child: ListView(
                 key: const Key('home_tab_content'),
+                controller: _scrollController,
                 padding: EdgeInsets.zero,
                 physics: const AlwaysScrollableScrollPhysics(),
                 children: <Widget>[

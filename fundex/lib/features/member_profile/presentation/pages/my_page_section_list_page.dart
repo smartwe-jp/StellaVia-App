@@ -274,88 +274,91 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
       for (final project in projects) project.id: project,
     };
 
-    return Scaffold(
-      appBar: AppNavigationBar(
-        title: widget.sectionType == MyPageSectionType.pendingApplications
-            ? l10n.myPageApplyHistoryListTitle
-            : resolveSectionTitle(l10n, widget.sectionType),
-        backgroundColor: colors.surface,
-        foregroundColor: colors.textPrimary,
-        leading: AppNavigationIconButton(
-          icon: Icons.arrow_back_rounded,
-          onTap: () => context.pop(),
-          backgroundColor: colors.surface.withValues(alpha: 0),
+    return PrimaryScrollController(
+      controller: _scrollController,
+      child: Scaffold(
+        appBar: AppNavigationBar(
+          title: widget.sectionType == MyPageSectionType.pendingApplications
+              ? l10n.myPageApplyHistoryListTitle
+              : resolveSectionTitle(l10n, widget.sectionType),
+          backgroundColor: colors.surface,
           foregroundColor: colors.textPrimary,
+          leading: AppNavigationIconButton(
+            icon: Icons.arrow_back_rounded,
+            onTap: () => context.pop(),
+            backgroundColor: colors.surface.withValues(alpha: 0),
+            foregroundColor: colors.textPrimary,
+          ),
         ),
-      ),
-      body: Column(
-        children: <Widget>[
-          if (widget.sectionType == MyPageSectionType.pendingApplications)
-            AppFilterBar<MyPageApplyHistoryFilter>(
-              value: _applyFilter,
-              onChanged: (MyPageApplyHistoryFilter value) {
-                if (_applyFilter == value) {
-                  return;
-                }
-                setState(() {
-                  _applyFilter = value;
-                });
-                _loadInitial(preserveContent: true);
-              },
-              backgroundColor: colors.surface,
-              showBottomDivider: true,
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-              items: MyPageApplyHistoryFilter.values
-                  .map(
-                    (filter) => AppFilterBarItem<MyPageApplyHistoryFilter>(
-                      value: filter,
-                      label: resolveApplyHistoryFilterLabel(l10n, filter),
+        body: Column(
+          children: <Widget>[
+            if (widget.sectionType == MyPageSectionType.pendingApplications)
+              AppFilterBar<MyPageApplyHistoryFilter>(
+                value: _applyFilter,
+                onChanged: (MyPageApplyHistoryFilter value) {
+                  if (_applyFilter == value) {
+                    return;
+                  }
+                  setState(() {
+                    _applyFilter = value;
+                  });
+                  _loadInitial(preserveContent: true);
+                },
+                backgroundColor: colors.surface,
+                showBottomDivider: true,
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+                items: MyPageApplyHistoryFilter.values
+                    .map(
+                      (filter) => AppFilterBarItem<MyPageApplyHistoryFilter>(
+                        value: filter,
+                        label: resolveApplyHistoryFilterLabel(l10n, filter),
+                      ),
+                    )
+                    .toList(growable: false),
+              ),
+            if (widget.sectionType == MyPageSectionType.activeFunds)
+              AppFilterBar<MyPageActiveFundFilter>(
+                value: _activeFundFilter,
+                onChanged: (MyPageActiveFundFilter value) {
+                  setState(() {
+                    _activeFundFilter = value;
+                  });
+                  if (_visibleItemCount == 0 && _hasMore) {
+                    _loadNextPage();
+                  }
+                },
+                backgroundColor: colors.surface,
+                showBottomDivider: true,
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+                items: MyPageActiveFundFilter.values
+                    .map(
+                      (filter) => AppFilterBarItem<MyPageActiveFundFilter>(
+                        value: filter,
+                        label: resolveMyPageActiveFundFilterLabel(l10n, filter),
+                      ),
+                    )
+                    .toList(growable: false),
+              ),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: _loadInitial,
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  slivers: <Widget>[
+                    SliverPadding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                      sliver: _buildSliverContent(
+                        context,
+                        formatter: currencyFormatter,
+                        fundProjectsById: projectsById,
+                      ),
                     ),
-                  )
-                  .toList(growable: false),
-            ),
-          if (widget.sectionType == MyPageSectionType.activeFunds)
-            AppFilterBar<MyPageActiveFundFilter>(
-              value: _activeFundFilter,
-              onChanged: (MyPageActiveFundFilter value) {
-                setState(() {
-                  _activeFundFilter = value;
-                });
-                if (_visibleItemCount == 0 && _hasMore) {
-                  _loadNextPage();
-                }
-              },
-              backgroundColor: colors.surface,
-              showBottomDivider: true,
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-              items: MyPageActiveFundFilter.values
-                  .map(
-                    (filter) => AppFilterBarItem<MyPageActiveFundFilter>(
-                      value: filter,
-                      label: resolveMyPageActiveFundFilterLabel(l10n, filter),
-                    ),
-                  )
-                  .toList(growable: false),
-            ),
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: _loadInitial,
-              child: CustomScrollView(
-                controller: _scrollController,
-                slivers: <Widget>[
-                  SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-                    sliver: _buildSliverContent(
-                      context,
-                      formatter: currencyFormatter,
-                      fundProjectsById: projectsById,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

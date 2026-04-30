@@ -12,6 +12,7 @@ import '../../../auth/domain/entities/auth_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
+import '../../../main_shell/presentation/providers/main_shell_providers.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../../member_profile/presentation/support/mypage_section_support.dart';
@@ -42,10 +43,16 @@ class _DiscussionBoardTabPageState
     super.initState();
     _composerController = TextEditingController();
     _scrollController = ScrollController()..addListener(_handleScroll);
+    ref
+        .read(mainShellScrollControllerRegistryProvider)
+        .attach(2, _scrollController);
   }
 
   @override
   void dispose() {
+    ref
+        .read(mainShellScrollControllerRegistryProvider)
+        .detach(2, _scrollController);
     _scrollController.removeListener(_handleScroll);
     _scrollController.dispose();
     _composerController.dispose();
