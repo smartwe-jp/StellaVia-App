@@ -86,18 +86,10 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
                         children: <Widget>[
                           _ActiveFundThumbnail(imageUrls: data.imageUrls),
                           const SizedBox(height: 12),
-                          SizedBox(
-                            width: double.infinity,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 4,
-                              ),
-                              child: _ActiveFundStatusBadge(
-                                label: data.statusLabel,
-                                backgroundColor: data.statusBackgroundColor,
-                                foregroundColor: data.statusForegroundColor,
-                              ),
-                            ),
+                          _ActiveFundStatusBadge(
+                            label: data.statusLabel,
+                            backgroundColor: data.statusBackgroundColor,
+                            foregroundColor: data.statusForegroundColor,
                           ),
                         ],
                       ),
