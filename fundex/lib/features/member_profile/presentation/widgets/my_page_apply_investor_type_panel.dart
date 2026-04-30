@@ -56,7 +56,7 @@ class MyPageApplyInvestorTypePanel extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.right,
                       style: appText.micro.copyWith(
-                        color: colors.textPrimary,
+                        color: colors.highlightGold,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
