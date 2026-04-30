@@ -2975,6 +2975,24 @@ abstract class AppLocalizations {
   /// **'Your inquiry has been received.'**
   String get settingsContactSubmitSuccess;
 
+  /// No description provided for @settingsContactSuccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your inquiry has been\nreceived'**
+  String get settingsContactSuccessTitle;
+
+  /// No description provided for @settingsContactSuccessBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for contacting us.\nWe have sent a confirmation email. Please check your inbox.\nAfter reviewing your inquiry, we will generally reply within three business days.'**
+  String get settingsContactSuccessBody;
+
+  /// No description provided for @settingsContactSuccessBackAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to top page'**
+  String get settingsContactSuccessBackAction;
+
   /// No description provided for @settingsContactPhoneSectionTitle.
   ///
   /// In en, this message translates to:

@@ -1494,6 +1494,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsContactSubmitSuccess => 'お問い合わせを受け付けました。';
 
   @override
+  String get settingsContactSuccessTitle => 'お問い合わせを受け付け\nました';
+
+  @override
+  String get settingsContactSuccessBody =>
+      'ご連絡いただきありがとうございます。\n確認メールをお送りしましたので、ご確認ください。\n内容を確認のうえ、原則3営業日以内にご返信いたします。';
+
+  @override
+  String get settingsContactSuccessBackAction => 'トップページへ戻る';
+
+  @override
   String get settingsContactPhoneSectionTitle => 'お電話でのお問い合わせ';
 
   @override

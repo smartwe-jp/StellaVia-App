@@ -6,8 +6,11 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
+import '../../data/datasources/settings_contact_remote_data_source.dart';
+import '../providers/settings_contact_providers.dart';
 import '../providers/settings_content_providers.dart';
 
 enum _SettingsContactCategory { investment, account, wallet, ekyc, other }
@@ -16,6 +19,8 @@ class _SettingsContactDraft {
   const _SettingsContactDraft({
     required this.familyName,
     required this.givenName,
+    required this.furiganaFamilyName,
+    required this.furiganaGivenName,
     required this.email,
     required this.category,
     required this.message,
@@ -23,6 +28,8 @@ class _SettingsContactDraft {
 
   final String familyName;
   final String givenName;
+  final String furiganaFamilyName;
+  final String furiganaGivenName;
   final String email;
   final _SettingsContactCategory category;
   final String message;
@@ -52,6 +59,7 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
   _SettingsContactCategory? _selectedCategory;
   bool _isSubmitting = false;
   bool _didSeedInitialValues = false;
+  bool _didSubmitSuccessfully = false;
 
   @override
   void initState() {
@@ -62,11 +70,17 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
     _givenNameKanaController = TextEditingController();
     _emailController = TextEditingController();
     _messageController = TextEditingController();
+    for (final controller in _formControllers) {
+      controller.addListener(_handleFormInputChanged);
+    }
     _loadInitialValues();
   }
 
   @override
   void dispose() {
+    for (final controller in _formControllers) {
+      controller.removeListener(_handleFormInputChanged);
+    }
     _familyNameController.dispose();
     _givenNameController.dispose();
     _familyNameKanaController.dispose();
@@ -74,6 +88,22 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
     _emailController.dispose();
     _messageController.dispose();
     super.dispose();
+  }
+
+  List<TextEditingController> get _formControllers => <TextEditingController>[
+    _familyNameController,
+    _givenNameController,
+    _familyNameKanaController,
+    _givenNameKanaController,
+    _emailController,
+    _messageController,
+  ];
+
+  void _handleFormInputChanged() {
+    if (!mounted) {
+      return;
+    }
+    setState(() {});
   }
 
   Future<void> _loadInitialValues() async {
@@ -169,11 +199,17 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
     final l10n = context.l10n;
     final familyName = _familyNameController.text.trim();
     final givenName = _givenNameController.text.trim();
+    final furiganaFamilyName = _familyNameKanaController.text.trim();
+    final furiganaGivenName = _givenNameKanaController.text.trim();
     final email = _emailController.text.trim();
     final message = _messageController.text.trim();
 
     if (familyName.isEmpty || givenName.isEmpty) {
       AppNotice.show(context, message: l10n.settingsContactValidationName);
+      return null;
+    }
+    if (furiganaFamilyName.isEmpty || furiganaGivenName.isEmpty) {
+      AppNotice.show(context, message: l10n.settingsContactValidationKana);
       return null;
     }
     if (!_isValidEmail(email)) {
@@ -193,6 +229,8 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
     return _SettingsContactDraft(
       familyName: familyName,
       givenName: givenName,
+      furiganaFamilyName: furiganaFamilyName,
+      furiganaGivenName: furiganaGivenName,
       email: email,
       category: category,
       message: message,
@@ -211,7 +249,7 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
       return;
     }
 
-    await _submit();
+    await _submit(draft);
   }
 
   Future<bool?> _showConfirmDialog(_SettingsContactDraft draft) {
@@ -246,7 +284,7 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
     );
   }
 
-  Future<void> _submit() async {
+  Future<void> _submit(_SettingsContactDraft draft) async {
     if (_isSubmitting) {
       return;
     }
@@ -258,15 +296,36 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
     });
 
     try {
-      await Future<void>.delayed(Duration.zero);
+      await ref
+          .read(settingsContactRemoteDataSourceProvider)
+          .submitContact(
+            SettingsContactSubmission(
+              familyName: draft.familyName,
+              givenName: draft.givenName,
+              furiganaFamilyName: draft.furiganaFamilyName,
+              furiganaGivenName: draft.furiganaGivenName,
+              email: draft.email,
+              questionCategory: _categoryLabel(draft.category),
+              question: draft.message,
+            ),
+          );
       if (!mounted) {
         return;
       }
       setState(() {
-        _selectedCategory = null;
-        _messageController.clear();
+        _didSubmitSuccessfully = true;
       });
-      AppNotice.show(context, message: l10n.settingsContactSubmitSuccess);
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      AppNotice.show(
+        context,
+        message: resolveAppRequestErrorMessage(
+          error,
+          l10n.uiErrorRequestFailed,
+        ),
+      );
     } finally {
       if (mounted) {
         setState(() {
@@ -321,6 +380,7 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
       operatingCompanyContent?.email ?? '',
       _fallbackSupportEmail,
     ]);
+    final isFormReady = _isFormReady;
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -331,98 +391,224 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
           onTap: () => context.pop(),
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
-        children: <Widget>[
-          Text(
-            l10n.settingsContactDescription,
-            style: appText.body.copyWith(
-              color: colors.textSecondary,
-              height: 1.6,
+      body: _didSubmitSuccessfully
+          ? _SettingsContactSuccessView(
+              title: l10n.settingsContactSuccessTitle,
+              body: l10n.settingsContactSuccessBody,
+              backLabel: l10n.settingsContactSuccessBackAction,
+              onBack: () => context.go('/home'),
+            )
+          : ListView(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+              children: <Widget>[
+                Text(
+                  l10n.settingsContactDescription,
+                  style: appText.body.copyWith(
+                    color: colors.textSecondary,
+                    height: 1.6,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                MemberProfileSegmentedDualTextFieldRow(
+                  label: l10n.settingsContactNameLabel,
+                  isRequired: true,
+                  labelColor: colors.textPrimary,
+                  startSegmentLabel: l10n.profileFamilyNameLabel,
+                  startController: _familyNameController,
+                  startHintText: l10n.profileFamilyNameHint,
+                  endSegmentLabel: l10n.profileGivenNameLabel,
+                  endController: _givenNameController,
+                  endHintText: l10n.profileGivenNameHint,
+                ),
+                const SizedBox(height: 16),
+                MemberProfileSegmentedDualTextFieldRow(
+                  label: l10n.settingsContactKanaLabel,
+                  isRequired: true,
+                  labelColor: colors.textPrimary,
+                  startSegmentLabel: l10n.settingsContactKanaFamilySegment,
+                  startController: _familyNameKanaController,
+                  startHintText: l10n.memberProfileFamilyNameKanaHint,
+                  startInputFormatters: <TextInputFormatter>[
+                    MemberProfileInputFormatters.katakanaOnly,
+                  ],
+                  endSegmentLabel: l10n.settingsContactKanaGivenSegment,
+                  endController: _givenNameKanaController,
+                  endHintText: l10n.memberProfileGivenNameKanaHint,
+                  endInputFormatters: <TextInputFormatter>[
+                    MemberProfileInputFormatters.katakanaOnly,
+                  ],
+                ),
+                const SizedBox(height: 16),
+                MemberProfileTextField(
+                  label: l10n.settingsContactEmailLabel,
+                  controller: _emailController,
+                  hintText: l10n.settingsContactEmailHint,
+                  keyboardType: TextInputType.emailAddress,
+                  isRequired: true,
+                  labelColor: colors.textPrimary,
+                ),
+                const SizedBox(height: 16),
+                _ContactCategoryField(
+                  label: l10n.settingsContactCategoryLabel,
+                  isRequired: true,
+                  value: _selectedCategory,
+                  placeholder: l10n.settingsContactCategoryPlaceholder,
+                  items: _SettingsContactCategory.values,
+                  itemLabelBuilder: _categoryLabel,
+                  onChanged: (_SettingsContactCategory? value) {
+                    setState(() {
+                      _selectedCategory = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                MemberProfileTextField(
+                  label: l10n.settingsContactMessageLabel,
+                  controller: _messageController,
+                  hintText: l10n.settingsContactMessageHint,
+                  maxLines: 6,
+                  isRequired: true,
+                  labelColor: colors.textPrimary,
+                ),
+                const SizedBox(height: 20),
+                PrimaryCtaButton(
+                  label: l10n.settingsContactConfirmAction,
+                  onPressed: _isSubmitting || !isFormReady
+                      ? null
+                      : _confirmAndSubmit,
+                  isLoading: _isSubmitting,
+                ),
+                const SizedBox(height: 16),
+                _ContactSupportTile(
+                  title: l10n.settingsContactPhoneSectionTitle,
+                  value: supportPhone,
+                  helper: l10n.settingsContactPhoneHours,
+                  onTap: () => _callSupportPhone(supportPhone),
+                ),
+                const SizedBox(height: 8),
+                _ContactSupportTile(
+                  title: l10n.settingsCompanyEmailLabel,
+                  value: supportEmail,
+                  onTap: () => _sendSupportEmail(supportEmail),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 20),
-          MemberProfileSegmentedDualTextFieldRow(
-            label: l10n.settingsContactNameLabel,
-            isRequired: true,
-            labelColor: colors.textPrimary,
-            startSegmentLabel: l10n.profileFamilyNameLabel,
-            startController: _familyNameController,
-            startHintText: l10n.profileFamilyNameHint,
-            endSegmentLabel: l10n.profileGivenNameLabel,
-            endController: _givenNameController,
-            endHintText: l10n.profileGivenNameHint,
-          ),
-          const SizedBox(height: 16),
-          MemberProfileSegmentedDualTextFieldRow(
-            label: l10n.settingsContactKanaLabel,
-            isRequired: false,
-            labelColor: colors.textPrimary,
-            startSegmentLabel: l10n.settingsContactKanaFamilySegment,
-            startController: _familyNameKanaController,
-            startHintText: l10n.memberProfileFamilyNameKanaHint,
-            startInputFormatters: <TextInputFormatter>[
-              MemberProfileInputFormatters.katakanaOnly,
+    );
+  }
+
+  bool get _isFormReady {
+    return _familyNameController.text.trim().isNotEmpty &&
+        _givenNameController.text.trim().isNotEmpty &&
+        _familyNameKanaController.text.trim().isNotEmpty &&
+        _givenNameKanaController.text.trim().isNotEmpty &&
+        _isValidEmail(_emailController.text) &&
+        _selectedCategory != null &&
+        _messageController.text.trim().isNotEmpty;
+  }
+}
+
+class _SettingsContactSuccessView extends StatelessWidget {
+  const _SettingsContactSuccessView({
+    required this.title,
+    required this.body,
+    required this.backLabel,
+    required this.onBack,
+  });
+
+  final String title;
+  final String body;
+  final String backLabel;
+  final VoidCallback onBack;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    return SafeArea(
+      top: false,
+      child: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(32, 48, 32, 40),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                width: 96,
+                height: 96,
+                decoration: BoxDecoration(
+                  color: colors.surface,
+                  border: Border.all(color: colors.border, width: 1.5),
+                ),
+                child: Icon(
+                  Icons.check_rounded,
+                  color: colors.primary,
+                  size: 34,
+                ),
+              ),
+              const SizedBox(height: 58),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: appText.pageTitle.copyWith(
+                  color: colors.textPrimary,
+                  height: 1.75,
+                  fontSize: 28,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 42),
+              Text(
+                body,
+                textAlign: TextAlign.center,
+                style: appText.body.copyWith(
+                  color: colors.textSecondary,
+                  height: 2.05,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 54),
+              TextButton(
+                onPressed: onBack,
+                style: TextButton.styleFrom(
+                  foregroundColor: colors.primary,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                    vertical: 10,
+                  ),
+                ),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: colors.border, width: 1),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(4, 0, 4, 12),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          backLabel,
+                          style: appText.bodyStrong.copyWith(
+                            color: colors.primary,
+                            letterSpacing: 0.08,
+                          ),
+                        ),
+                        const SizedBox(width: 18),
+                        Icon(
+                          Icons.chevron_right_rounded,
+                          color: colors.primary,
+                          size: 22,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ],
-            endSegmentLabel: l10n.settingsContactKanaGivenSegment,
-            endController: _givenNameKanaController,
-            endHintText: l10n.memberProfileGivenNameKanaHint,
-            endInputFormatters: <TextInputFormatter>[
-              MemberProfileInputFormatters.katakanaOnly,
-            ],
           ),
-          const SizedBox(height: 16),
-          MemberProfileTextField(
-            label: l10n.settingsContactEmailLabel,
-            controller: _emailController,
-            hintText: l10n.settingsContactEmailHint,
-            keyboardType: TextInputType.emailAddress,
-            isRequired: true,
-            labelColor: colors.textPrimary,
-          ),
-          const SizedBox(height: 16),
-          _ContactCategoryField(
-            label: l10n.settingsContactCategoryLabel,
-            isRequired: true,
-            value: _selectedCategory,
-            placeholder: l10n.settingsContactCategoryPlaceholder,
-            items: _SettingsContactCategory.values,
-            itemLabelBuilder: _categoryLabel,
-            onChanged: (_SettingsContactCategory? value) {
-              setState(() {
-                _selectedCategory = value;
-              });
-            },
-          ),
-          const SizedBox(height: 16),
-          MemberProfileTextField(
-            label: l10n.settingsContactMessageLabel,
-            controller: _messageController,
-            hintText: l10n.settingsContactMessageHint,
-            maxLines: 6,
-            isRequired: true,
-            labelColor: colors.textPrimary,
-          ),
-          const SizedBox(height: 20),
-          PrimaryCtaButton(
-            label: l10n.settingsContactConfirmAction,
-            onPressed: _isSubmitting ? null : _confirmAndSubmit,
-            isLoading: _isSubmitting,
-          ),
-          const SizedBox(height: 16),
-          _ContactSupportTile(
-            title: l10n.settingsContactPhoneSectionTitle,
-            value: supportPhone,
-            helper: l10n.settingsContactPhoneHours,
-            onTap: () => _callSupportPhone(supportPhone),
-          ),
-          const SizedBox(height: 8),
-          _ContactSupportTile(
-            title: l10n.settingsCompanyEmailLabel,
-            value: supportEmail,
-            onTap: () => _sendSupportEmail(supportEmail),
-          ),
-        ],
+        ),
       ),
     );
   }

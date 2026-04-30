@@ -1579,6 +1579,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsContactSubmitSuccess => 'Your inquiry has been received.';
 
   @override
+  String get settingsContactSuccessTitle => 'Your inquiry has been\nreceived';
+
+  @override
+  String get settingsContactSuccessBody =>
+      'Thank you for contacting us.\nWe have sent a confirmation email. Please check your inbox.\nAfter reviewing your inquiry, we will generally reply within three business days.';
+
+  @override
+  String get settingsContactSuccessBackAction => 'Back to top page';
+
+  @override
   String get settingsContactPhoneSectionTitle => 'Phone inquiries';
 
   @override

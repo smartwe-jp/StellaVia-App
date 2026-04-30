@@ -1475,6 +1475,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsContactSubmitSuccess => '已收到您的咨询。';
 
   @override
+  String get settingsContactSuccessTitle => '已收到您的咨询';
+
+  @override
+  String get settingsContactSuccessBody =>
+      '感谢您的联系。\n我们已发送确认邮件，请注意查收。\n确认内容后，原则上会在3个工作日内回复。';
+
+  @override
+  String get settingsContactSuccessBackAction => '返回首页';
+
+  @override
   String get settingsContactPhoneSectionTitle => '电话咨询';
 
   @override
@@ -5613,6 +5623,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get settingsContactSubmitSuccess => '已收到您的諮詢。';
+
+  @override
+  String get settingsContactSuccessTitle => '已收到您的諮詢';
+
+  @override
+  String get settingsContactSuccessBody =>
+      '感謝您的聯絡。\n我們已發送確認郵件，請留意查收。\n確認內容後，原則上會在3個工作日內回覆。';
+
+  @override
+  String get settingsContactSuccessBackAction => '返回首頁';
 
   @override
   String get settingsContactPhoneSectionTitle => '電話諮詢';

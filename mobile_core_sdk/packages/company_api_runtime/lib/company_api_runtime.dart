@@ -3,6 +3,8 @@ export 'src/envelope/company_api_response_profiles.dart';
 export 'src/routing/api_cluster_router.dart';
 export 'src/auth/auth_api_client.dart';
 export 'src/auth/auth_dtos.dart';
+export 'src/contact/contact_api_client.dart';
+export 'src/contact/contact_dtos.dart';
 export 'src/discussion_board/discussion_board_api_client.dart';
 export 'src/discussion_board/discussion_comment_dto.dart';
 export 'src/investment/fund_project_api_client.dart';
