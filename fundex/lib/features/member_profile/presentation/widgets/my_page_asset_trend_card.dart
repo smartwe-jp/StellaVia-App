@@ -60,7 +60,13 @@ class MyPageAssetTrendCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
-    final chartValues = _resolveChartValues(records);
+    final chartPoints = _resolveChartPoints(records);
+    final chartValues = chartPoints
+        .map((point) => point.value)
+        .toList(growable: false);
+    final yAxisScale = _resolveYAxisScale(chartValues);
+    final xAxisLabels = _resolveXAxisLabels(chartPoints);
+    final yAxisLabels = _resolveYAxisLabels(yAxisScale);
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -100,17 +106,22 @@ class MyPageAssetTrendCard extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             SizedBox(
-              height: 144,
+              height: 178,
               width: double.infinity,
               child: Stack(
                 children: <Widget>[
                   Positioned.fill(
-                    child: CustomPaint(
-                      painter: _MyPageAssetTrendPainter(
-                        values: chartValues,
-                        lineColor: colors.highlightGold,
-                        fillColor: colors.highlightGold.withValues(alpha: 0.08),
-                        guideColor: colors.borderSoft,
+                    child: _MyPageAssetTrendChart(
+                      values: chartValues,
+                      yAxisScale: yAxisScale,
+                      xAxisLabels: xAxisLabels,
+                      yAxisLabels: yAxisLabels,
+                      lineColor: colors.highlightGold,
+                      fillColor: colors.highlightGold.withValues(alpha: 0.08),
+                      guideColor: colors.borderSoft,
+                      labelStyle: appText.micro.copyWith(
+                        color: colors.textTertiary,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
@@ -174,7 +185,9 @@ class _TrendRangeSelector extends StatelessWidget {
                 left: range == MyPageAssetTrendRange.oneMonth ? 0 : 8,
               ),
               child: Material(
-                color: isSelected ? colors.primary : colors.highlightGold.withValues(alpha: 0.18),
+                color: isSelected
+                    ? colors.primary
+                    : colors.highlightGold.withValues(alpha: 0.18),
                 borderRadius: BorderRadius.circular(UiTokens.radius8),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(UiTokens.radius8),
@@ -205,7 +218,9 @@ class _TrendRangeSelector extends StatelessWidget {
   }
 }
 
-List<double> _resolveChartValues(List<MyPageAssetTrend> records) {
+List<_AssetTrendChartPoint> _resolveChartPoints(
+  List<MyPageAssetTrend> records,
+) {
   final sorted = [...records]
     ..sort(
       (lhs, rhs) => _parseTrendDate(
@@ -213,11 +228,20 @@ List<double> _resolveChartValues(List<MyPageAssetTrend> records) {
       ).compareTo(_parseTrendDate(rhs.recordDate)),
     );
 
-  final values = sorted
-      .map(_resolveTrendValue)
-      .whereType<double>()
-      .toList(growable: false);
-  return values;
+  final points = <_AssetTrendChartPoint>[];
+  for (final record in sorted) {
+    final value = _resolveTrendValue(record);
+    if (value == null) {
+      continue;
+    }
+    points.add(
+      _AssetTrendChartPoint(
+        date: _parseTrendDate(record.recordDate),
+        value: value,
+      ),
+    );
+  }
+  return points;
 }
 
 double? _resolveTrendValue(MyPageAssetTrend record) {
@@ -240,15 +264,192 @@ DateTime _parseTrendDate(String? raw) {
   return DateTime.tryParse(trimmed) ?? DateTime.fromMillisecondsSinceEpoch(0);
 }
 
+class _AssetTrendChartPoint {
+  const _AssetTrendChartPoint({required this.date, required this.value});
+
+  final DateTime date;
+  final double value;
+}
+
+class _AssetTrendChartScale {
+  const _AssetTrendChartScale({required this.min, required this.max});
+
+  final double min;
+  final double max;
+
+  double get range => math.max(1.0, max - min);
+  double get middle => min + range / 2;
+}
+
+class _MyPageAssetTrendChart extends StatelessWidget {
+  const _MyPageAssetTrendChart({
+    required this.values,
+    required this.yAxisScale,
+    required this.xAxisLabels,
+    required this.yAxisLabels,
+    required this.lineColor,
+    required this.fillColor,
+    required this.guideColor,
+    required this.labelStyle,
+  });
+
+  final List<double> values;
+  final _AssetTrendChartScale yAxisScale;
+  final List<String> xAxisLabels;
+  final List<String> yAxisLabels;
+  final Color lineColor;
+  final Color fillColor;
+  final Color guideColor;
+  final TextStyle labelStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    const leftAxisWidth = 42.0;
+    const bottomAxisHeight = 24.0;
+
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: Row(
+            children: <Widget>[
+              SizedBox(
+                width: leftAxisWidth,
+                child: _AxisLabelColumn(labels: yAxisLabels, style: labelStyle),
+              ),
+              Expanded(
+                // CustomPaint has a zero preferred size without a child.
+                // Force it to fill the Row's cross-axis height.
+                child: SizedBox.expand(
+                  child: CustomPaint(
+                    painter: _MyPageAssetTrendPainter(
+                      values: values,
+                      yAxisScale: yAxisScale,
+                      lineColor: lineColor,
+                      fillColor: fillColor,
+                      guideColor: guideColor,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: bottomAxisHeight,
+          child: Padding(
+            padding: const EdgeInsets.only(left: leftAxisWidth),
+            child: _AxisLabelRow(labels: xAxisLabels, style: labelStyle),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AxisLabelColumn extends StatelessWidget {
+  const _AxisLabelColumn({required this.labels, required this.style});
+
+  final List<String> labels;
+  final TextStyle style;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: labels
+          .map(
+            (label) => Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.right,
+              style: style,
+            ),
+          )
+          .toList(growable: false),
+    );
+  }
+}
+
+class _AxisLabelRow extends StatelessWidget {
+  const _AxisLabelRow({required this.labels, required this.style});
+
+  final List<String> labels;
+  final TextStyle style;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: labels
+          .map(
+            (label) => Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: style,
+            ),
+          )
+          .toList(growable: false),
+    );
+  }
+}
+
+List<String> _resolveXAxisLabels(List<_AssetTrendChartPoint> points) {
+  if (points.isEmpty) {
+    return const <String>['--', '--', '--'];
+  }
+  final middleIndex = (points.length - 1) ~/ 2;
+  return <String>[
+    _formatAxisDate(points.first.date),
+    _formatAxisDate(points[middleIndex].date),
+    _formatAxisDate(points.last.date),
+  ];
+}
+
+_AssetTrendChartScale _resolveYAxisScale(List<double> values) {
+  if (values.isEmpty) {
+    return const _AssetTrendChartScale(min: 0, max: 1);
+  }
+
+  final maxValue = values.reduce(math.max);
+  return _AssetTrendChartScale(min: 0, max: math.max(1.0, maxValue));
+}
+
+List<String> _resolveYAxisLabels(_AssetTrendChartScale scale) {
+  return <String>[
+    _formatAxisAmount(scale.max),
+    _formatAxisAmount(scale.middle),
+    _formatAxisAmount(scale.min),
+  ];
+}
+
+String _formatAxisDate(DateTime value) {
+  return '${value.year}-${value.month}/${value.day}';
+}
+
+String _formatAxisAmount(double value) {
+  if (value >= 100000000) {
+    return '${(value / 100000000).toStringAsFixed(1)}億';
+  }
+  if (value >= 10000) {
+    return '${(value / 10000).toStringAsFixed(0)}万';
+  }
+  return '${value.round()}';
+}
+
 class _MyPageAssetTrendPainter extends CustomPainter {
   const _MyPageAssetTrendPainter({
     required this.values,
+    required this.yAxisScale,
     required this.lineColor,
     required this.fillColor,
     required this.guideColor,
   });
 
   final List<double> values;
+  final _AssetTrendChartScale yAxisScale;
   final Color lineColor;
   final Color fillColor;
   final Color guideColor;
@@ -258,45 +459,52 @@ class _MyPageAssetTrendPainter extends CustomPainter {
     const horizontalInset = 10.0;
     const topInset = 14.0;
     const bottomInset = 14.0;
+    final chartWidth = math.max(1.0, size.width - horizontalInset * 2);
+    final chartHeight = math.max(1.0, size.height - topInset - bottomInset);
+    final middleY = topInset + chartHeight / 2;
+    final bottomY = topInset + chartHeight;
 
     final guidePaint = Paint()
       ..color = guideColor.withValues(alpha: 0.55)
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
-    canvas.drawLine(
-      Offset(horizontalInset, size.height - bottomInset),
-      Offset(size.width - horizontalInset, size.height - bottomInset),
-      guidePaint,
-    );
+    canvas
+      ..drawLine(
+        const Offset(horizontalInset, topInset),
+        Offset(size.width - horizontalInset, topInset),
+        guidePaint,
+      )
+      ..drawLine(
+        Offset(horizontalInset, middleY),
+        Offset(size.width - horizontalInset, middleY),
+        guidePaint,
+      )
+      ..drawLine(
+        Offset(horizontalInset, bottomY),
+        Offset(size.width - horizontalInset, bottomY),
+        guidePaint,
+      );
 
     if (values.length < 2) {
       return;
     }
 
-    final chartWidth = math.max(1.0, size.width - horizontalInset * 2);
-    final chartHeight = math.max(1.0, size.height - topInset - bottomInset);
-    final minValue = values.reduce(math.min);
-    final maxValue = values.reduce(math.max);
-    final range = maxValue - minValue;
-    final paddedRange = range == 0 ? math.max(1.0, maxValue * 0.08) : range;
-    final baselineMin = minValue - paddedRange * 0.18;
-    final baselineMax = maxValue + paddedRange * 0.18;
-    final baselineRange = math.max(1.0, baselineMax - baselineMin);
+    final baselineRange = yAxisScale.range;
 
     final points = <Offset>[];
     for (var index = 0; index < values.length; index++) {
       final x =
           horizontalInset +
           (chartWidth * index / math.max(1, values.length - 1));
-      final normalized = (values[index] - baselineMin) / baselineRange;
+      final normalized = (values[index] - yAxisScale.min) / baselineRange;
       final y = topInset + chartHeight * (1 - normalized);
       points.add(Offset(x, y));
     }
 
     final linePath = _buildSmoothPath(points);
     final fillPath = Path.from(linePath)
-      ..lineTo(points.last.dx, size.height - bottomInset)
-      ..lineTo(points.first.dx, size.height - bottomInset)
+      ..lineTo(points.last.dx, bottomY)
+      ..lineTo(points.first.dx, bottomY)
       ..close();
 
     final fillPaint = Paint()
@@ -323,19 +531,24 @@ class _MyPageAssetTrendPainter extends CustomPainter {
     for (var index = 0; index < points.length - 1; index++) {
       final current = points[index];
       final next = points[index + 1];
-      final control = Offset(
-        (current.dx + next.dx) / 2,
-        (current.dy + next.dy) / 2,
+      final controlDistance = (next.dx - current.dx) * 0.42;
+      path.cubicTo(
+        current.dx + controlDistance,
+        current.dy,
+        next.dx - controlDistance,
+        next.dy,
+        next.dx,
+        next.dy,
       );
-      path.quadraticBezierTo(current.dx, current.dy, control.dx, control.dy);
     }
-    path.lineTo(points.last.dx, points.last.dy);
     return path;
   }
 
   @override
   bool shouldRepaint(covariant _MyPageAssetTrendPainter oldDelegate) {
     return oldDelegate.values != values ||
+        oldDelegate.yAxisScale.min != yAxisScale.min ||
+        oldDelegate.yAxisScale.max != yAxisScale.max ||
         oldDelegate.lineColor != lineColor ||
         oldDelegate.fillColor != fillColor ||
         oldDelegate.guideColor != guideColor;
