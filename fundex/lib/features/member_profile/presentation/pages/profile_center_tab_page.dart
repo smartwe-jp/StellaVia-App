@@ -452,8 +452,8 @@ Widget _buildPendingApplicationsSection(
                           _handleApplyWithdraw(context, ref, record),
                       style: _myPageOutlineButtonStyle(
                         context,
-                        borderColor: colors.danger,
-                        foregroundColor: colors.danger,
+                        borderColor: colors.border,
+                        foregroundColor: colors.textSecondary,
                       ),
                       child: Text(l10n.myPageCancelRequestAction),
                     )

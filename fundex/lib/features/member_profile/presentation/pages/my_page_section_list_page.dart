@@ -462,8 +462,8 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
               onPressed: () => _handleApplyWithdraw(record),
               style: _myPageOutlineButtonStyle(
                 context,
-                borderColor: colors.danger,
-                foregroundColor: colors.danger,
+                borderColor: colors.border,
+                foregroundColor: colors.textSecondary,
               ),
               child: Text(l10n.myPageCancelRequestAction),
             )
@@ -520,8 +520,8 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
               onPressed: () => _handleOrderWithdraw(record),
               style: _myPageOutlineButtonStyle(
                 context,
-                borderColor: colors.danger,
-                foregroundColor: colors.danger,
+                borderColor: colors.border,
+                foregroundColor: colors.textSecondary,
               ),
               child: Text(l10n.myPageCancelOrderAction),
             )
