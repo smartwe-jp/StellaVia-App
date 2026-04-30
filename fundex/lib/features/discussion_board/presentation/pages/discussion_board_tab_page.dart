@@ -34,6 +34,7 @@ class _DiscussionBoardTabPageState
     extends ConsumerState<DiscussionBoardTabPage> {
   late final TextEditingController _composerController;
   late final ScrollController _scrollController;
+  late final MainShellScrollControllerRegistry _scrollControllerRegistry;
   final Map<String, TextEditingController> _replyControllers =
       <String, TextEditingController>{};
   _SelectedComposerFund? _selectedComposerFund;
@@ -43,16 +44,15 @@ class _DiscussionBoardTabPageState
     super.initState();
     _composerController = TextEditingController();
     _scrollController = ScrollController()..addListener(_handleScroll);
-    ref
-        .read(mainShellScrollControllerRegistryProvider)
-        .attach(2, _scrollController);
+    _scrollControllerRegistry = ref.read(
+      mainShellScrollControllerRegistryProvider,
+    );
+    _scrollControllerRegistry.attach(2, _scrollController);
   }
 
   @override
   void dispose() {
-    ref
-        .read(mainShellScrollControllerRegistryProvider)
-        .detach(2, _scrollController);
+    _scrollControllerRegistry.detach(2, _scrollController);
     _scrollController.removeListener(_handleScroll);
     _scrollController.dispose();
     _composerController.dispose();

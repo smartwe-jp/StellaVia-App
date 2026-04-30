@@ -27,6 +27,7 @@ class MainShellTabRefreshScope extends ConsumerStatefulWidget {
 
 class _MainShellTabRefreshScopeState
     extends ConsumerState<MainShellTabRefreshScope> {
+  late final MainShellScrollControllerRegistry _scrollControllerRegistry;
   bool _didInitialize = false;
   bool _wasActive = false;
   bool _refreshQueued = false;
@@ -34,6 +35,9 @@ class _MainShellTabRefreshScopeState
   @override
   void initState() {
     super.initState();
+    _scrollControllerRegistry = ref.read(
+      mainShellScrollControllerRegistryProvider,
+    );
     _attachScrollController();
   }
 
@@ -58,18 +62,14 @@ class _MainShellTabRefreshScopeState
     if (controller == null) {
       return;
     }
-    ref
-        .read(mainShellScrollControllerRegistryProvider)
-        .attach(widget.tabIndex, controller);
+    _scrollControllerRegistry.attach(widget.tabIndex, controller);
   }
 
   void _detachScrollController(int tabIndex, ScrollController? controller) {
     if (controller == null) {
       return;
     }
-    ref
-        .read(mainShellScrollControllerRegistryProvider)
-        .detach(tabIndex, controller);
+    _scrollControllerRegistry.detach(tabIndex, controller);
   }
 
   void _scheduleRefresh() {

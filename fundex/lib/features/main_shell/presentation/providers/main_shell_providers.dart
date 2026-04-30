@@ -19,6 +19,9 @@ class MainShellScrollControllerRegistry extends ChangeNotifier {
   }
 
   void attach(int tabIndex, ScrollController controller) {
+    if (_isDisposed) {
+      return;
+    }
     if (_controllers[tabIndex] == controller) {
       return;
     }
@@ -27,6 +30,9 @@ class MainShellScrollControllerRegistry extends ChangeNotifier {
   }
 
   void detach(int tabIndex, ScrollController controller) {
+    if (_isDisposed) {
+      return;
+    }
     if (_controllers[tabIndex] != controller) {
       return;
     }
