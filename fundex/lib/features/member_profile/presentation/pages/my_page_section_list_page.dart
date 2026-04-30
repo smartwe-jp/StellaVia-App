@@ -561,6 +561,8 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
         investorCode: investorTypeDisplay.investorCode,
         investorType: investorTypeDisplay.investorType,
         returnText: investorTypeDisplay.returnText,
+        investmentAmountLabel: l10n.myPageInvestmentAmountLabel,
+        investmentAmountValue: formatCurrency(group.investMoney, formatter),
         accumulatedEarningsLabel: l10n.myPageAccumulatedDistributionLabel,
         accumulatedEarningsValue: formatCurrency(group.earnings, formatter),
         statusLabel: resolveMyPageActiveFundStatusLabel(l10n, status),

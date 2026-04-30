@@ -8,6 +8,8 @@ class MyPageActiveFundSummaryCardData {
     required this.investorCode,
     required this.investorType,
     required this.returnText,
+    required this.investmentAmountLabel,
+    required this.investmentAmountValue,
     required this.accumulatedEarningsLabel,
     required this.accumulatedEarningsValue,
     required this.statusLabel,
@@ -23,6 +25,8 @@ class MyPageActiveFundSummaryCardData {
   final String investorCode;
   final String investorType;
   final String returnText;
+  final String investmentAmountLabel;
+  final String investmentAmountValue;
   final String accumulatedEarningsLabel;
   final String accumulatedEarningsValue;
   final String statusLabel;
@@ -74,7 +78,7 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
             borderRadius: cardRadius,
             onTap: data.onTap,
             child: SizedBox(
-              height: 172,
+              height: 185,
               child: Padding(
                 padding: const EdgeInsets.all(18),
                 child: Row(
@@ -114,6 +118,8 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
                           _ActiveFundMiddlePanel(
                             investorCode: data.investorCode,
                             returnText: data.returnText,
+                            investmentAmountLabel: data.investmentAmountLabel,
+                            investmentAmountValue: data.investmentAmountValue,
                             accumulatedEarningsLabel:
                                 data.accumulatedEarningsLabel,
                             accumulatedEarningsValue:
@@ -149,12 +155,16 @@ class _ActiveFundMiddlePanel extends StatelessWidget {
   const _ActiveFundMiddlePanel({
     required this.investorCode,
     required this.returnText,
+    required this.investmentAmountLabel,
+    required this.investmentAmountValue,
     required this.accumulatedEarningsLabel,
     required this.accumulatedEarningsValue,
   });
 
   final String investorCode;
   final String returnText;
+  final String investmentAmountLabel;
+  final String investmentAmountValue;
   final String accumulatedEarningsLabel;
   final String accumulatedEarningsValue;
 
@@ -174,7 +184,34 @@ class _ActiveFundMiddlePanel extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 6,
         children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                  investmentAmountLabel,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: appText.micro.copyWith(
+                    color: colors.textSecondary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              Text(
+                  investmentAmountValue,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.right,
+                  style: appText.caption.copyWith(
+                    color: colors.highlightGold,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              
+            ],
+          ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -200,7 +237,7 @@ class _ActiveFundMiddlePanel extends StatelessWidget {
               
             ],
           ),
-          const SizedBox(height: 5),
+
           _AccumulatedEarningsPill(
             label: accumulatedEarningsLabel,
             value: accumulatedEarningsValue,

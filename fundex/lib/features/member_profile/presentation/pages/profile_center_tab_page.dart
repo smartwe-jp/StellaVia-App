@@ -144,7 +144,7 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                       accountStatistic?.firstLevelAccountTotal,
                       locale: localeTag,
                     ),
-                    onTap: () => context.push('/wallet/deposit'),
+                    onTap: () => context.push('/wallet/history'),
                   ),
                   FundMyPageMetricData(
                     label: l10n.myPageMetricAccumulatedDistribution,
@@ -154,6 +154,10 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                               ? null
                               : _sumInvestmentEarnings(investmentRecords)),
                       locale: localeTag,
+                      
+                    ),
+                    onTap: () => context.push(
+                      '/profile/my/section-list?type=${MyPageSectionType.activeFunds.queryValue}',
                     ),
                   ),
                 ],
@@ -633,6 +637,11 @@ Widget _buildActiveFundsSection(
                 investorCode: investorTypeDisplay.investorCode,
                 investorType: investorTypeDisplay.investorType,
                 returnText: investorTypeDisplay.returnText,
+                investmentAmountLabel: l10n.myPageInvestmentAmountLabel,
+                investmentAmountValue: _formatCurrency(
+                  group.investMoney,
+                  currencyFormatter,
+                ),
                 accumulatedEarningsLabel:
                     l10n.myPageAccumulatedDistributionLabel,
                 accumulatedEarningsValue: _formatCurrency(

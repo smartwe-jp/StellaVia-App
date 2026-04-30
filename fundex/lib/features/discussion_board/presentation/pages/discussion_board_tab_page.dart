@@ -1122,6 +1122,11 @@ class _ComposerFundPickerSheetState
               investorCode: investorTypeDisplay.investorCode,
               investorType: investorTypeDisplay.investorType,
               returnText: investorTypeDisplay.returnText,
+              investmentAmountLabel: l10n.myPageInvestmentAmountLabel,
+              investmentAmountValue: formatCurrency(
+                group.investMoney,
+                currencyFormatter,
+              ),
               accumulatedEarningsLabel: l10n.myPageAccumulatedDistributionLabel,
               accumulatedEarningsValue: formatCurrency(
                 group.earnings,
