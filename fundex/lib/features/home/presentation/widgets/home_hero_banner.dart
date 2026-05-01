@@ -5,6 +5,8 @@ import 'home_register_bonus_campaign_bar.dart';
 
 const String _homeHeroBannerBaseUrl = 'https://stellavia.co.jp/img';
 const int _homeHeroBannerImageCount = 3;
+final String _homeHeroBannerCacheVersion = DateTime.now().millisecondsSinceEpoch
+    .toString();
 
 class HomeHeroBanner extends StatelessWidget {
   const HomeHeroBanner({
@@ -276,7 +278,9 @@ List<String> _resolveHomeHeroImageUrls(Locale locale) {
   final localeSuffix = _resolveHomeHeroLocaleSuffix(locale);
   return List<String>.generate(
     _homeHeroBannerImageCount,
-    (index) => '$_homeHeroBannerBaseUrl/banner.${index + 1}.$localeSuffix.jpg',
+    (index) =>
+        '$_homeHeroBannerBaseUrl/banner.${index + 1}.$localeSuffix.jpg'
+        '?v=$_homeHeroBannerCacheVersion',
     growable: false,
   );
 }
