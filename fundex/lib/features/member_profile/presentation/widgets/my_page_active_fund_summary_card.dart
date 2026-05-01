@@ -78,7 +78,7 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
             borderRadius: cardRadius,
             onTap: data.onTap,
             child: SizedBox(
-              height: 185,
+              height: 192,
               child: Padding(
                 padding: const EdgeInsets.all(18),
                 child: Row(
@@ -114,6 +114,7 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
+                          const SizedBox(height: 6),
                           const Spacer(),
                           _ActiveFundMiddlePanel(
                             investorCode: data.investorCode,
