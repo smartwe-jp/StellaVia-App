@@ -738,6 +738,23 @@ String formatCurrency(num? amount, NumberFormat formatter) {
   return formatter.format(amount);
 }
 
+String resolveActiveFundInvestmentAmountUnitsLabel(AppLocalizations l10n) {
+  final unitsLabel = l10n.localeName.toLowerCase().contains('hant')
+      ? '口數'
+      : l10n.localeName.toLowerCase().startsWith('en')
+      ? 'Units'
+      : '口数';
+  return '${l10n.myPageInvestmentAmountLabel}/$unitsLabel';
+}
+
+String formatActiveFundInvestmentAmountUnitsValue(
+  MyPageInvestmentGroup group,
+  NumberFormat formatter,
+  AppLocalizations l10n,
+) {
+  return '${formatCurrency(group.investMoney, formatter)} / ${group.investNum}${l10n.myPageResaleUnitsSuffix}';
+}
+
 String formatApplyUnitsAmountLabel(
   MyPageApplyRecord record,
   NumberFormat formatter,
