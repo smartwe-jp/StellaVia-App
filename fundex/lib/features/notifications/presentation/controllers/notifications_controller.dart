@@ -34,6 +34,9 @@ class NotificationsController extends StateNotifier<NotificationsState> {
   }
 
   Future<void> loadNotices({bool refresh = false}) async {
+    if (!mounted) {
+      return;
+    }
     if (!refresh && state.isLoading && state.hasData) {
       return;
     }
@@ -53,6 +56,9 @@ class NotificationsController extends StateNotifier<NotificationsState> {
         limit: _defaultLimit,
       );
       final localReadIds = await _localDataSource.readReadNoticeIds();
+      if (!mounted) {
+        return;
+      }
 
       final mapped = notices
           .map((notice) {
@@ -77,6 +83,9 @@ class NotificationsController extends StateNotifier<NotificationsState> {
         clearError: true,
       );
     } catch (error) {
+      if (!mounted) {
+        return;
+      }
       state = state.copyWith(
         isLoading: false,
         isRefreshing: false,
@@ -92,6 +101,9 @@ class NotificationsController extends StateNotifier<NotificationsState> {
   Future<NotificationItemViewData?> openNotice(
     NotificationItemViewData item,
   ) async {
+    if (!mounted) {
+      return item;
+    }
     final itemId = item.id;
     if (itemId == null || item.isRead) {
       return item;
@@ -108,6 +120,9 @@ class NotificationsController extends StateNotifier<NotificationsState> {
     try {
       final checked = await _remoteDataSource.checkNotice(id: itemId);
       await _localDataSource.markNoticeRead(itemId);
+      if (!mounted) {
+        return item;
+      }
       final checkedItem = NotificationItemViewData.fromNoticeDto(checked);
       final updated = checkedItem.copyWith(
         isRead: true,
@@ -133,6 +148,9 @@ class NotificationsController extends StateNotifier<NotificationsState> {
         orElse: () => updated,
       );
     } catch (error) {
+      if (!mounted) {
+        return item;
+      }
       final nextKeys = Set<String>.from(state.updatingNoticeKeys)
         ..remove(item.key);
       state = state.copyWith(

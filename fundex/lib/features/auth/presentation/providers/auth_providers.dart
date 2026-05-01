@@ -77,13 +77,18 @@ class AuthSessionController extends StateNotifier<AsyncValue<bool>> {
   Future<void> refresh() async {
     try {
       final accessToken = await _tokenStore.readAccessToken();
+      final refreshToken = await _tokenStore.readRefreshToken();
       if (accessToken != null && accessToken.trim().isNotEmpty) {
+        if (refreshToken == null || refreshToken.trim().isEmpty) {
+          await _clearPersistedAuth();
+          state = const AsyncValue.data(false);
+          return;
+        }
         await _syncCurrentUserCacheBestEffort();
         state = const AsyncValue.data(true);
         return;
       }
 
-      final refreshToken = await _tokenStore.readRefreshToken();
       if (refreshToken == null || refreshToken.trim().isEmpty) {
         await _clearPersistedAuth();
         state = const AsyncValue.data(false);

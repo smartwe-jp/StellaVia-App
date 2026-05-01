@@ -147,6 +147,11 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<bool> restoreSession() async {
     final accessToken = await _tokenStore.readAccessToken();
     if (accessToken != null && accessToken.trim().isNotEmpty) {
+      final refreshToken = await _tokenStore.readRefreshToken();
+      if (refreshToken == null || refreshToken.trim().isEmpty) {
+        await _clearPersistedAuth();
+        return false;
+      }
       return true;
     }
 
