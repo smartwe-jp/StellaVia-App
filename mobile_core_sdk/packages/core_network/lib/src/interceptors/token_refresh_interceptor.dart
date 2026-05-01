@@ -8,6 +8,12 @@ import 'auth_interceptor.dart';
 
 const String _retryAttemptExtraKey = 'token_retry_attempt';
 
+void _logTokenRefreshProbe(String message) {
+  // Temporary probe log: use print so it is visible in the Flutter console.
+  // ignore: avoid_print
+  print(message);
+}
+
 class TokenRefreshInterceptor extends Interceptor {
   TokenRefreshInterceptor({
     required Dio dio,
@@ -48,8 +54,17 @@ class TokenRefreshInterceptor extends Interceptor {
       return;
     }
 
+    _logTokenRefreshProbe(
+      '[TokenRefreshProbe] 401 received; starting refresh. '
+      'path=${err.requestOptions.path}',
+    );
+
     final refreshToken = await _tokenStore.readRefreshToken();
     if (refreshToken == null || refreshToken.isEmpty) {
+      _logTokenRefreshProbe(
+        '[TokenRefreshProbe] refresh skipped; missing refreshToken. '
+        'path=${err.requestOptions.path}',
+      );
       await _handleAuthFailure(AuthFailureReason.missingRefreshToken);
       handler.next(err);
       return;
@@ -59,30 +74,54 @@ class TokenRefreshInterceptor extends Interceptor {
     try {
       pair = await _queueRefresh(refreshToken);
     } on DioException {
+      _logTokenRefreshProbe(
+        '[TokenRefreshProbe] refresh request failed. '
+        'path=${err.requestOptions.path}',
+      );
       await _handleAuthFailure(AuthFailureReason.refreshRequestFailed);
       handler.next(err);
       return;
     } catch (_) {
+      _logTokenRefreshProbe(
+        '[TokenRefreshProbe] refresh request failed. '
+        'path=${err.requestOptions.path}',
+      );
       await _handleAuthFailure(AuthFailureReason.refreshRequestFailed);
       handler.next(err);
       return;
     }
 
     if (pair == null) {
+      _logTokenRefreshProbe(
+        '[TokenRefreshProbe] refresh returned null. '
+        'path=${err.requestOptions.path}',
+      );
       await _handleAuthFailure(AuthFailureReason.refreshReturnedNull);
       handler.next(err);
       return;
     }
 
     await _tokenStore.save(pair);
+    _logTokenRefreshProbe(
+      '[TokenRefreshProbe] refresh succeeded; retrying original request. '
+      'path=${err.requestOptions.path}',
+    );
 
     try {
       final response = await _retryWithToken(
         err.requestOptions,
         pair.accessToken,
       );
+      _logTokenRefreshProbe(
+        '[TokenRefreshProbe] retry resolved. '
+        'path=${err.requestOptions.path}, status=${response.statusCode}',
+      );
       handler.resolve(response);
     } on DioException catch (retryErr) {
+      _logTokenRefreshProbe(
+        '[TokenRefreshProbe] retry failed. '
+        'path=${err.requestOptions.path}, status=${retryErr.response?.statusCode}',
+      );
       if (_isUnauthorized(
             retryErr.requestOptions,
             retryErr.response?.statusCode,

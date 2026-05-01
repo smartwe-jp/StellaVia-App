@@ -1,3 +1,4 @@
+import 'package:core_network/core_network.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +8,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../app/config/environment_provider.dart';
 import '../../../../app/localization/app_locale_providers.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/network/app_network_providers.dart';
+import '../../../../app/observability/app_observability_providers.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../providers/settings_content_providers.dart';
 
@@ -20,6 +23,7 @@ class SettingsPage extends ConsumerStatefulWidget {
 class _SettingsPageState extends ConsumerState<SettingsPage> {
   bool _showLanguageOptions = false;
   bool _isLoggingOut = false;
+  bool _isRunningTokenRefreshProbe = false;
 
   Future<void> _openAvatarEditor() async {
     final uploadedUrl = await context.push<String>('/profile/avatar');
@@ -168,6 +172,83 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         );
       },
     );
+  }
+
+  Future<void> _runTokenRefreshProbe() async {
+    if (_isRunningTokenRefreshProbe) {
+      return;
+    }
+
+    setState(() {
+      _isRunningTokenRefreshProbe = true;
+    });
+
+    final logger = ref.read(appLoggerProvider);
+    final tokenStore = ref.read(tokenStoreProvider);
+    const expiredAccessToken = 'expired.invalid.token';
+
+    try {
+      final originalAccessToken = await tokenStore.readAccessToken();
+      final originalRefreshToken = await tokenStore.readRefreshToken();
+      final hasAccessToken = originalAccessToken?.trim().isNotEmpty ?? false;
+      final hasRefreshToken = originalRefreshToken?.trim().isNotEmpty ?? false;
+
+      logger.info(
+        'Manual token corruption started.',
+        context: <String, Object?>{
+          'hasAccessToken': hasAccessToken,
+          'hasRefreshToken': hasRefreshToken,
+        },
+      );
+
+      if (!hasAccessToken || !hasRefreshToken) {
+        logger.warning(
+          'Manual token corruption skipped.',
+          context: <String, Object?>{'reason': 'missing_token'},
+        );
+        if (mounted) {
+          AppNotice.show(
+            context,
+            message: 'Token corruption skipped: missing token',
+          );
+        }
+        return;
+      }
+
+      await tokenStore.save(
+        TokenPair(
+          accessToken: expiredAccessToken,
+          refreshToken: originalRefreshToken!.trim(),
+        ),
+      );
+
+      logger.info(
+        'Manual token corruption completed.',
+        context: <String, Object?>{'accessTokenCorrupted': true},
+      );
+
+      if (mounted) {
+        AppNotice.show(
+          context,
+          message: 'Access token corrupted. Trigger any authenticated action.',
+        );
+      }
+    } catch (error, stackTrace) {
+      logger.error(
+        'Manual token corruption failed.',
+        error: error,
+        stackTrace: stackTrace,
+      );
+      if (mounted) {
+        AppNotice.show(context, message: 'Token corruption failed: check logs');
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isRunningTokenRefreshProbe = false;
+        });
+      }
+    }
   }
 
   String _languageLabel(AppLanguage language) {
@@ -431,6 +512,23 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               ),
             ],
           ),
+          if (isAuthenticated && !environment.isProduction)
+            AppMenuSection(
+              title: 'Debug',
+              children: <Widget>[
+                AppMenuItem(
+                  icon: Icons.refresh_rounded,
+                  label: _isRunningTokenRefreshProbe
+                      ? 'Corrupting access token...'
+                      : 'Corrupt access token',
+                  iconBackgroundColor: colors.warningSubtle,
+                  iconForegroundColor: colors.warning,
+                  onTap: _isRunningTokenRefreshProbe
+                      ? null
+                      : _runTokenRefreshProbe,
+                ),
+              ],
+            ),
           Padding(
             padding: const EdgeInsets.only(top: 8, bottom: 20),
             child: Text(
