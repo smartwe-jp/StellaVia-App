@@ -426,6 +426,14 @@ class _FundProjectDetailYoutubePlayerState
         controller: controller,
         aspectRatio: 16 / 9,
         showVideoProgressIndicator: true,
+        bottomActions: const <Widget>[
+          SizedBox(width: 14),
+          CurrentPosition(),
+          SizedBox(width: 8),
+          ProgressBar(isExpanded: true),
+          RemainingDuration(),
+          SizedBox(width: 14),
+        ],
         progressIndicatorColor: colors.highlightGold,
         progressColors: ProgressBarColors(
           playedColor: colors.highlightGold,
