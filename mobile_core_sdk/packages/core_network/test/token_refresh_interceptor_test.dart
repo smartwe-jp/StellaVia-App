@@ -283,7 +283,7 @@ void main() {
           final body = options.data as Map<String, dynamic>;
           expect(body['grant_type'], 'refresh_token');
           expect(body['refresh_token'], 'oldR');
-          expect(body['scope'], 'app');
+          expect(body['stellavia_app'], 'app');
 
           return ResponseBody.fromString(
             '{"access_token":"newA","refresh_token":"newR"}',

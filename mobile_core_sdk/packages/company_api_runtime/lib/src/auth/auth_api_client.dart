@@ -10,7 +10,8 @@ class AuthApiDefaults {
   const AuthApiDefaults._();
 
   static const String defaultIntlCode = '81';
-  static const String oauthClientAuthorization = 'Basic d2ViQXBwOndlYkFwcA==';
+  static const String oauthClientAuthorization =
+      'Basic c3RlbGxhdmlhX2FwcDpzdGVsbGF2aWFfYXBw';
 }
 
 class AuthApiPaths {
@@ -328,7 +329,7 @@ class AuthApiClient {
           'password': code.trim(),
           'grant_type': 'password',
           'auth_type': isEmail ? 'email' : 'mobile',
-          'scope': 'app',
+          'scope': 'stellavia_app',
           if (!isEmail) 'code': normalizedIntlCode,
         },
         options: authRequired(false).copyWith(
