@@ -377,7 +377,9 @@ class MemberProfileApiPayloadMapper {
     const map = <String, String>{
       'lt_3m': 'UNDER_3M',
       '3_5m': 'FROM_3M_TO_5M',
-      '5_10m': 'FROM_5M_TO_7M',
+      '5_7m': 'FROM_5M_TO_7M',
+      '7_10m': 'FROM_7M_TO_10M',
+      '5_10m': 'FROM_7M_TO_10M',
       'gt_10m': 'OVER_10M',
     };
     return _mapEnum(raw, map, fallback: 'UNDER_3M');
@@ -386,9 +388,13 @@ class MemberProfileApiPayloadMapper {
   static String _mapFinancialAssets(String raw) {
     const map = <String, String>{
       'lt_1m': 'UNDER_1M',
-      '1_5m': 'FROM_1M_TO_3M',
+      '1_3m': 'FROM_1M_TO_3M',
+      '3_5m': 'FROM_3M_TO_5M',
+      '1_5m': 'FROM_3M_TO_5M',
       '5_10m': 'FROM_5M_TO_10M',
+      '10_30m': 'FROM_10M_TO_30M',
       'gt_10m': 'FROM_10M_TO_30M',
+      'gt_30m': 'OVER_30M',
     };
     return _mapEnum(raw, map, fallback: 'UNDER_1M');
   }

@@ -4274,25 +4274,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String get incomeUnder3m => 'Under JPY 3M';
 
   @override
-  String get income3to5m => 'JPY 3M to 5M';
+  String get income3to5m => 'JPY 3M to under 5M';
 
   @override
-  String get income5to10m => 'JPY 5M to 10M';
+  String get income5to7m => 'JPY 5M to under 7M';
 
   @override
-  String get incomeOver10m => 'Over JPY 10M';
+  String get income7to10m => 'JPY 7M to under 10M';
+
+  @override
+  String get income5to10m => 'JPY 5M to under 10M';
+
+  @override
+  String get incomeOver10m => 'JPY 10M or more';
 
   @override
   String get assetsUnder1m => 'Under JPY 1M';
 
   @override
-  String get assets1to5m => 'JPY 1M to 5M';
+  String get assets1to3m => 'JPY 1M to under 3M';
 
   @override
-  String get assets5to10m => 'JPY 5M to 10M';
+  String get assets3to5m => 'JPY 3M to under 5M';
 
   @override
-  String get assetsOver10m => 'Over JPY 10M';
+  String get assets1to5m => 'JPY 1M to under 5M';
+
+  @override
+  String get assets5to10m => 'JPY 5M to under 10M';
+
+  @override
+  String get assets10to30m => 'JPY 10M to under 30M';
+
+  @override
+  String get assetsOver10m => 'JPY 10M or more';
+
+  @override
+  String get assetsOver30m => 'JPY 30M or more';
 
   @override
   String get purposeAssetGrowth => 'Asset growth';

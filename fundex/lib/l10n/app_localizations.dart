@@ -7832,19 +7832,31 @@ abstract class AppLocalizations {
   /// No description provided for @income3to5m.
   ///
   /// In en, this message translates to:
-  /// **'JPY 3M to 5M'**
+  /// **'JPY 3M to under 5M'**
   String get income3to5m;
+
+  /// No description provided for @income5to7m.
+  ///
+  /// In en, this message translates to:
+  /// **'JPY 5M to under 7M'**
+  String get income5to7m;
+
+  /// No description provided for @income7to10m.
+  ///
+  /// In en, this message translates to:
+  /// **'JPY 7M to under 10M'**
+  String get income7to10m;
 
   /// No description provided for @income5to10m.
   ///
   /// In en, this message translates to:
-  /// **'JPY 5M to 10M'**
+  /// **'JPY 5M to under 10M'**
   String get income5to10m;
 
   /// No description provided for @incomeOver10m.
   ///
   /// In en, this message translates to:
-  /// **'Over JPY 10M'**
+  /// **'JPY 10M or more'**
   String get incomeOver10m;
 
   /// No description provided for @assetsUnder1m.
@@ -7853,23 +7865,47 @@ abstract class AppLocalizations {
   /// **'Under JPY 1M'**
   String get assetsUnder1m;
 
+  /// No description provided for @assets1to3m.
+  ///
+  /// In en, this message translates to:
+  /// **'JPY 1M to under 3M'**
+  String get assets1to3m;
+
+  /// No description provided for @assets3to5m.
+  ///
+  /// In en, this message translates to:
+  /// **'JPY 3M to under 5M'**
+  String get assets3to5m;
+
   /// No description provided for @assets1to5m.
   ///
   /// In en, this message translates to:
-  /// **'JPY 1M to 5M'**
+  /// **'JPY 1M to under 5M'**
   String get assets1to5m;
 
   /// No description provided for @assets5to10m.
   ///
   /// In en, this message translates to:
-  /// **'JPY 5M to 10M'**
+  /// **'JPY 5M to under 10M'**
   String get assets5to10m;
+
+  /// No description provided for @assets10to30m.
+  ///
+  /// In en, this message translates to:
+  /// **'JPY 10M to under 30M'**
+  String get assets10to30m;
 
   /// No description provided for @assetsOver10m.
   ///
   /// In en, this message translates to:
-  /// **'Over JPY 10M'**
+  /// **'JPY 10M or more'**
   String get assetsOver10m;
+
+  /// No description provided for @assetsOver30m.
+  ///
+  /// In en, this message translates to:
+  /// **'JPY 30M or more'**
+  String get assetsOver30m;
 
   /// No description provided for @purposeAssetGrowth.
   ///

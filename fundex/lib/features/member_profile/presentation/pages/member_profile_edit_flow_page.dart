@@ -1275,7 +1275,8 @@ class _MemberProfileEditFlowPageState
     return <MemberProfileOptionItem>[
       MemberProfileOptionItem(value: 'lt_3m', label: l10n.incomeUnder3m),
       MemberProfileOptionItem(value: '3_5m', label: l10n.income3to5m),
-      MemberProfileOptionItem(value: '5_10m', label: l10n.income5to10m),
+      MemberProfileOptionItem(value: '5_7m', label: l10n.income5to7m),
+      MemberProfileOptionItem(value: '7_10m', label: l10n.income7to10m),
       MemberProfileOptionItem(value: 'gt_10m', label: l10n.incomeOver10m),
     ];
   }
@@ -1284,9 +1285,11 @@ class _MemberProfileEditFlowPageState
     final l10n = context.l10n;
     return <MemberProfileOptionItem>[
       MemberProfileOptionItem(value: 'lt_1m', label: l10n.assetsUnder1m),
-      MemberProfileOptionItem(value: '1_5m', label: l10n.assets1to5m),
+      MemberProfileOptionItem(value: '1_3m', label: l10n.assets1to3m),
+      MemberProfileOptionItem(value: '3_5m', label: l10n.assets3to5m),
       MemberProfileOptionItem(value: '5_10m', label: l10n.assets5to10m),
-      MemberProfileOptionItem(value: 'gt_10m', label: l10n.assetsOver10m),
+      MemberProfileOptionItem(value: '10_30m', label: l10n.assets10to30m),
+      MemberProfileOptionItem(value: 'gt_30m', label: l10n.assetsOver30m),
     ];
   }
 

@@ -962,6 +962,8 @@ String _incomeLabel(AppLocalizations l10n, String raw) {
   return switch (raw.trim()) {
     'lt_3m' => l10n.incomeUnder3m,
     '3_5m' => l10n.income3to5m,
+    '5_7m' => l10n.income5to7m,
+    '7_10m' => l10n.income7to10m,
     '5_10m' => l10n.income5to10m,
     'gt_10m' => l10n.incomeOver10m,
     _ => raw.trim(),
@@ -971,9 +973,13 @@ String _incomeLabel(AppLocalizations l10n, String raw) {
 String _financialAssetLabel(AppLocalizations l10n, String raw) {
   return switch (raw.trim()) {
     'lt_1m' => l10n.assetsUnder1m,
+    '1_3m' => l10n.assets1to3m,
+    '3_5m' => l10n.assets3to5m,
     '1_5m' => l10n.assets1to5m,
     '5_10m' => l10n.assets5to10m,
+    '10_30m' => l10n.assets10to30m,
     'gt_10m' => l10n.assetsOver10m,
+    'gt_30m' => l10n.assetsOver30m,
     _ => raw.trim(),
   };
 }

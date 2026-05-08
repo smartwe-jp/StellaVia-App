@@ -4040,10 +4040,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get incomeUnder3m => '300万円未満';
 
   @override
-  String get income3to5m => '300〜500万円';
+  String get income3to5m => '300万円～500万円未満';
 
   @override
-  String get income5to10m => '500〜1000万円';
+  String get income5to7m => '500万円～700万円未満';
+
+  @override
+  String get income7to10m => '700万円～1000万円未満';
+
+  @override
+  String get income5to10m => '500万円～1000万円未満';
 
   @override
   String get incomeOver10m => '1000万円以上';
@@ -4052,13 +4058,25 @@ class AppLocalizationsJa extends AppLocalizations {
   String get assetsUnder1m => '100万円未満';
 
   @override
-  String get assets1to5m => '100〜500万円';
+  String get assets1to3m => '100万円～300万円未満';
 
   @override
-  String get assets5to10m => '500〜1000万円';
+  String get assets3to5m => '300万円～500万円未満';
+
+  @override
+  String get assets1to5m => '100万円～500万円未満';
+
+  @override
+  String get assets5to10m => '500万円～1000万円未満';
+
+  @override
+  String get assets10to30m => '1000万円～3000万円未満';
 
   @override
   String get assetsOver10m => '1000万円以上';
+
+  @override
+  String get assetsOver30m => '3000万円以上';
 
   @override
   String get purposeAssetGrowth => '資産形成（長期的な資産の増加）';

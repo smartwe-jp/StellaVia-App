@@ -3994,10 +3994,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get incomeUnder3m => '300万日元以下';
 
   @override
-  String get income3to5m => '300万〜500万日元';
+  String get income3to5m => '300万日元～500万日元以下';
 
   @override
-  String get income5to10m => '500万〜1000万日元';
+  String get income5to7m => '500万日元～700万日元以下';
+
+  @override
+  String get income7to10m => '700万日元～1000万日元以下';
+
+  @override
+  String get income5to10m => '500万日元～1000万日元以下';
 
   @override
   String get incomeOver10m => '1000万日元以上';
@@ -4006,13 +4012,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get assetsUnder1m => '100万日元以下';
 
   @override
-  String get assets1to5m => '100万〜500万日元';
+  String get assets1to3m => '100万日元～300万日元以下';
 
   @override
-  String get assets5to10m => '500万〜1000万日元';
+  String get assets3to5m => '300万日元～500万日元以下';
+
+  @override
+  String get assets1to5m => '100万日元～500万日元以下';
+
+  @override
+  String get assets5to10m => '500万日元～1000万日元以下';
+
+  @override
+  String get assets10to30m => '1000万日元～3000万日元以下';
 
   @override
   String get assetsOver10m => '1000万日元以上';
+
+  @override
+  String get assetsOver30m => '3000万日元以上';
 
   @override
   String get purposeAssetGrowth => '长期资产增值';
@@ -8148,10 +8166,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get incomeUnder3m => '300萬日圓以下';
 
   @override
-  String get income3to5m => '300萬〜500萬日圓';
+  String get income3to5m => '300萬日圓～500萬日圓以下';
 
   @override
-  String get income5to10m => '500萬〜1000萬日圓';
+  String get income5to7m => '500萬日圓～700萬日圓以下';
+
+  @override
+  String get income7to10m => '700萬日圓～1000萬日圓以下';
+
+  @override
+  String get income5to10m => '500萬日圓～1000萬日圓以下';
 
   @override
   String get incomeOver10m => '1000萬日圓以上';
@@ -8160,13 +8184,25 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get assetsUnder1m => '100萬日圓以下';
 
   @override
-  String get assets1to5m => '100萬〜500萬日圓';
+  String get assets1to3m => '100萬日圓～300萬日圓以下';
 
   @override
-  String get assets5to10m => '500萬〜1000萬日圓';
+  String get assets3to5m => '300萬日圓～500萬日圓以下';
+
+  @override
+  String get assets1to5m => '100萬日圓～500萬日圓以下';
+
+  @override
+  String get assets5to10m => '500萬日圓～1000萬日圓以下';
+
+  @override
+  String get assets10to30m => '1000萬日圓～3000萬日圓以下';
 
   @override
   String get assetsOver10m => '1000萬日圓以上';
+
+  @override
+  String get assetsOver30m => '3000萬日圓以上';
 
   @override
   String get purposeAssetGrowth => '長期資產增值';

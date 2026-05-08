@@ -256,8 +256,8 @@ class MemberProfileCurrentUserPayloadMapper {
     const mapping = <String, String>{
       'UNDER_3M': 'lt_3m',
       'FROM_3M_TO_5M': '3_5m',
-      'FROM_5M_TO_7M': '5_10m',
-      'FROM_7M_TO_10M': '5_10m',
+      'FROM_5M_TO_7M': '5_7m',
+      'FROM_7M_TO_10M': '7_10m',
       'OVER_10M': 'gt_10m',
     };
     return _reverseMap(raw, mapping);
@@ -266,11 +266,11 @@ class MemberProfileCurrentUserPayloadMapper {
   static String _mapFinancialAssetsFromRemote(String raw) {
     const mapping = <String, String>{
       'UNDER_1M': 'lt_1m',
-      'FROM_1M_TO_3M': '1_5m',
-      'FROM_3M_TO_5M': '1_5m',
+      'FROM_1M_TO_3M': '1_3m',
+      'FROM_3M_TO_5M': '3_5m',
       'FROM_5M_TO_10M': '5_10m',
-      'FROM_10M_TO_30M': 'gt_10m',
-      'OVER_30M': 'gt_10m',
+      'FROM_10M_TO_30M': '10_30m',
+      'OVER_30M': 'gt_30m',
     };
     return _reverseMap(raw, mapping);
   }
