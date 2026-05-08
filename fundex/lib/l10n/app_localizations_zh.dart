@@ -2766,6 +2766,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletBankSettingsRequiredError => '请填写全部字段。';
 
   @override
+  String get walletBankSettingsAccountHolderMismatchError =>
+      '口座名义与本人认证信息中的姓名不一致。';
+
+  @override
   String get walletBankSettingsDomesticTip => '日本国内账户出金手续费为 1,000 日元。';
 
   @override
@@ -6936,6 +6940,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletBankSettingsRequiredError => '請填寫所有欄位。';
+
+  @override
+  String get walletBankSettingsAccountHolderMismatchError =>
+      '口座名義與本人認證資訊中的姓名不一致。';
 
   @override
   String get walletBankSettingsDomesticTip => '日本國內帳戶出金手續費為 1,000 日圓。';

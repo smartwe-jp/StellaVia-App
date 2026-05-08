@@ -1034,6 +1034,7 @@
   "walletBankSettingsAddSuccess": "銀行口座を追加しました。",
   "walletBankSettingsAddFailure": "銀行口座の追加に失敗しました。時間をおいて再度お試しください。",
   "walletBankSettingsRequiredError": "すべての項目を入力してください。",
+  "walletBankSettingsAccountHolderMismatchError": "口座名義が本人確認情報の氏名と一致しません。",
   "walletBankSettingsDomesticTip": "国内口座からの出金手数料は 1,000 円です。",
   "walletBankSettingsOverseasBankNameHint": "Example National Bank",
   "walletBankSettingsOverseasBranchNameHint": "New York Main Branch",

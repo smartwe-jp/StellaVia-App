@@ -5453,6 +5453,12 @@ abstract class AppLocalizations {
   /// **'Please fill in all fields.'**
   String get walletBankSettingsRequiredError;
 
+  /// No description provided for @walletBankSettingsAccountHolderMismatchError.
+  ///
+  /// In en, this message translates to:
+  /// **'The account holder name does not match your verified name.'**
+  String get walletBankSettingsAccountHolderMismatchError;
+
   /// No description provided for @walletBankSettingsDomesticTip.
   ///
   /// In en, this message translates to:

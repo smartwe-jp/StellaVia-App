@@ -2954,6 +2954,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletBankSettingsRequiredError => 'Please fill in all fields.';
 
   @override
+  String get walletBankSettingsAccountHolderMismatchError =>
+      'The account holder name does not match your verified name.';
+
+  @override
   String get walletBankSettingsDomesticTip =>
       'The withdrawal fee for domestic bank accounts is JPY 1,000.';
 

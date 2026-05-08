@@ -1039,6 +1039,7 @@
   "walletBankSettingsAddSuccess": "Bank account added.",
   "walletBankSettingsAddFailure": "Failed to add bank account. Please try again later.",
   "walletBankSettingsRequiredError": "Please fill in all fields.",
+  "walletBankSettingsAccountHolderMismatchError": "The account holder name does not match your verified name.",
   "walletBankSettingsDomesticTip": "The withdrawal fee for domestic bank accounts is JPY 1,000.",
   "walletBankSettingsOverseasBankNameHint": "Example National Bank",
   "walletBankSettingsOverseasBranchNameHint": "New York Main Branch",

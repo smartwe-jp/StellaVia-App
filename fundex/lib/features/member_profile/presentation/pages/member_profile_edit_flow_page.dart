@@ -19,6 +19,7 @@ import '../pages/edit_flow_steps/member_profile_consent_step_page.dart';
 import '../pages/edit_flow_steps/member_profile_ekyc_step_page.dart';
 import '../pages/edit_flow_steps/member_profile_suitability_step_page.dart';
 import '../providers/member_profile_providers.dart';
+import '../support/member_profile_bank_account_owner_matcher.dart';
 import '../support/member_profile_edit_step.dart';
 import '../support/member_profile_edit_step_presenter.dart';
 import '../support/member_profile_option_item.dart';
@@ -695,6 +696,9 @@ class _MemberProfileEditFlowPageState
     if (!mounted) {
       return;
     }
+    if (!_validateBankAccountOwnerNameIfNeeded()) {
+      return;
+    }
 
     await _advanceToNextStep();
   }
@@ -781,6 +785,9 @@ class _MemberProfileEditFlowPageState
     if (!mounted) {
       return;
     }
+    if (!_validateBankAccountOwnerNameIfNeeded()) {
+      return;
+    }
 
     final l10n = context.l10n;
     setState(() {
@@ -860,6 +867,29 @@ class _MemberProfileEditFlowPageState
       case MemberProfileEditStep.consent:
         return _isConsentStepReady;
     }
+  }
+
+  bool _validateBankAccountOwnerNameIfNeeded() {
+    if (_currentStep != MemberProfileEditStep.bankAccount) {
+      return true;
+    }
+    final profileDraft = _buildDraft(
+      completedAtOverride: _completedAt,
+      editingStep: _currentStep.index,
+    );
+    final isMatched = isBankAccountOwnerNameMatchedToVerifiedName(
+      accountHolderName: _accountHolderController.text,
+      profile: profileDraft,
+      authUser: null,
+    );
+    if (isMatched) {
+      return true;
+    }
+    AppNotice.show(
+      context,
+      message: context.l10n.walletBankSettingsAccountHolderMismatchError,
+    );
+    return false;
   }
 
   List<MemberProfileEditStep> _flowSteps() {

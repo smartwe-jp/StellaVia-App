@@ -5,6 +5,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/support/app_request_error_message_resolver.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../../member_profile/presentation/providers/member_profile_providers.dart';
+import '../../../member_profile/presentation/support/member_profile_bank_account_owner_matcher.dart';
 import '../../domain/entities/wallet_bank_account_draft.dart';
 import '../providers/wallet_providers.dart';
 
@@ -78,10 +81,34 @@ class _WalletBankAccountAddPageState
         .toList(growable: false);
   }
 
+  Future<bool> _isAccountHolderMatchedToVerifiedName() async {
+    final profile = await ref
+        .read(memberProfileDetailsProvider.future)
+        .catchError((Object _) => null);
+    final authUser = await ref
+        .read(currentAuthUserProvider.future)
+        .catchError((Object _) => null);
+    return isBankAccountOwnerNameMatchedToVerifiedName(
+      accountHolderName: _accountHolderController.text,
+      profile: profile,
+      authUser: authUser,
+    );
+  }
+
   Future<void> _submit() async {
     final l10n = context.l10n;
     if (!_canSubmit) {
       AppNotice.show(context, message: l10n.walletBankSettingsRequiredError);
+      return;
+    }
+    if (!await _isAccountHolderMatchedToVerifiedName()) {
+      if (!mounted) {
+        return;
+      }
+      AppNotice.show(
+        context,
+        message: l10n.walletBankSettingsAccountHolderMismatchError,
+      );
       return;
     }
 

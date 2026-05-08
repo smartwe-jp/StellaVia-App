@@ -2799,6 +2799,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletBankSettingsRequiredError => 'すべての項目を入力してください。';
 
   @override
+  String get walletBankSettingsAccountHolderMismatchError =>
+      '口座名義が本人確認情報の氏名と一致しません。';
+
+  @override
   String get walletBankSettingsDomesticTip => '国内口座からの出金手数料は 1,000 円です。';
 
   @override

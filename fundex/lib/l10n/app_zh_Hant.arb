@@ -1034,6 +1034,7 @@
   "walletBankSettingsAddSuccess": "銀行帳戶已新增。",
   "walletBankSettingsAddFailure": "銀行帳戶新增失敗，請稍後再試。",
   "walletBankSettingsRequiredError": "請填寫所有欄位。",
+  "walletBankSettingsAccountHolderMismatchError": "口座名義與本人認證資訊中的姓名不一致。",
   "walletBankSettingsDomesticTip": "日本國內帳戶出金手續費為 1,000 日圓。",
   "walletBankSettingsOverseasBankNameHint": "Example National Bank",
   "walletBankSettingsOverseasBranchNameHint": "New York Main Branch",
