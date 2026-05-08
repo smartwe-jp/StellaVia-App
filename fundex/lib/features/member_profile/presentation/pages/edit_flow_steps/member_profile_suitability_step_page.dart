@@ -94,27 +94,18 @@ class MemberProfileSuitabilityStepPage extends StatelessWidget {
             onChanged: onOccupationChanged,
           ),
           const SizedBox(height: 14),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: MemberProfileSelectField<String>(
-                  label: l10n.memberProfileAnnualIncomeLabel,
-                  value: annualIncome,
-                  items: annualIncomeItems,
-                  onChanged: onAnnualIncomeChanged,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: MemberProfileSelectField<String>(
-                  label: l10n.memberProfileFinancialAssetsLabel,
-                  value: financialAssets,
-                  items: financialAssetItems,
-                  onChanged: onFinancialAssetsChanged,
-                ),
-              ),
-            ],
+          MemberProfileSelectField<String>(
+            label: l10n.memberProfileAnnualIncomeLabel,
+            value: annualIncome,
+            items: annualIncomeItems,
+            onChanged: onAnnualIncomeChanged,
+          ),
+          const SizedBox(height: 14),
+          MemberProfileSelectField<String>(
+            label: l10n.memberProfileFinancialAssetsLabel,
+            value: financialAssets,
+            items: financialAssetItems,
+            onChanged: onFinancialAssetsChanged,
           ),
           const SizedBox(height: 14),
           Text(
