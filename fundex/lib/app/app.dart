@@ -46,6 +46,7 @@ class MemberTemplateApp extends ConsumerWidget {
     final router = ref.watch(appRouterProvider);
     final environment = ref.watch(appEnvironmentProvider);
     final locale = ref.watch(appLocaleProvider);
+    final effectiveLocale = ref.watch(appEffectiveLocaleProvider);
 
     ref.listen<AppUiMessage?>(appUiMessageProvider, (previous, next) {
       if (next == null) {
@@ -174,8 +175,8 @@ class MemberTemplateApp extends ConsumerWidget {
       locale: locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: AppThemeFactory.light(locale: locale),
-      darkTheme: AppThemeFactory.light(locale: locale),
+      theme: AppThemeFactory.light(locale: effectiveLocale),
+      darkTheme: AppThemeFactory.light(locale: effectiveLocale),
       themeMode: ThemeMode.light,
     );
   }

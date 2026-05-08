@@ -137,6 +137,11 @@ final appLocaleProvider = Provider<Locale?>((ref) {
   return ref.watch(appLanguageProvider).toLocale();
 });
 
+final appEffectiveLocaleProvider = Provider<Locale>((ref) {
+  return ref.watch(appLocaleProvider) ??
+      WidgetsBinding.instance.platformDispatcher.locale;
+});
+
 final appApiLanguageTagProvider = Provider<String>((ref) {
   return resolveAppApiLanguageTag(ref.watch(appLanguageProvider));
 });
