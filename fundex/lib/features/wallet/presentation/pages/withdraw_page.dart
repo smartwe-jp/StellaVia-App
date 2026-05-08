@@ -151,25 +151,57 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
                   itemBuilder: (BuildContext context, int index) {
                     final account = accounts[index];
                     final checked = _isSameAccount(account, selected);
-                    return ListTile(
-                      onTap: () => Navigator.of(sheetContext).pop(account),
-                      title: Text(
-                        _buildAccountSummary(account),
-                        style: appText.cardTitle,
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        bottom: index == accounts.length - 1 ? 0 : 10,
                       ),
-                      subtitle: Text(
-                        '${account.accountType} ${account.accountNumber}',
-                        style: appText.bodyMuted,
-                      ),
-                      trailing: checked
-                          ? Icon(
-                              Icons.check_circle_rounded,
-                              color: colors.primary,
-                            )
-                          : Icon(
-                              Icons.circle_outlined,
-                              color: colors.textTertiary,
+                      child: InkWell(
+                        onTap: () => Navigator.of(sheetContext).pop(account),
+                        borderRadius: BorderRadius.circular(14),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 160),
+                          padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+                          decoration: BoxDecoration(
+                            color: checked
+                                ? colors.primary.withValues(alpha: 0.06)
+                                : colors.surfaceAlt,
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                              color: checked ? colors.primary : colors.border,
+                              width: checked ? 1.5 : 1,
                             ),
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      _buildAccountSummary(account),
+                                      style: appText.cardTitle,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      '${account.accountType} ${account.accountNumber}',
+                                      style: appText.bodyMuted,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Icon(
+                                checked
+                                    ? Icons.check_circle_rounded
+                                    : Icons.circle_outlined,
+                                color: checked
+                                    ? colors.primary
+                                    : colors.textTertiary,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     );
                   },
                 ),
