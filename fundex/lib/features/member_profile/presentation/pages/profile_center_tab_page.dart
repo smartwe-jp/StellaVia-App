@@ -721,6 +721,7 @@ Future<void> refreshProfileCenterTabPage(WidgetRef ref) async {
   if (shouldSkipAppNetworkRefresh(ref)) {
     return;
   }
+  await refreshMemberProfileVerificationState(ref);
   ref.invalidate(fundProjectListProvider);
   ref.invalidate(myPageAssetTrendProvider);
   await Future.wait<void>(<Future<void>>[

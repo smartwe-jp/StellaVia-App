@@ -2959,6 +2959,23 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletWithdrawNeedAccountAction => '出金口座を追加';
 
   @override
+  String get walletWithdrawProfileVerificationRequiredTitle => '本人確認が必要です';
+
+  @override
+  String get walletWithdrawProfileVerificationRequiredMessage =>
+      '出金申請を行うには、先に本人確認を完了してください。';
+
+  @override
+  String get walletWithdrawProfileVerificationRequiredAction => '本人確認へ進む';
+
+  @override
+  String get walletWithdrawProfileVerificationPendingTitle => '本人確認の審査中です';
+
+  @override
+  String get walletWithdrawProfileVerificationPendingMessage =>
+      '審査完了後に出金申請を行ってください。';
+
+  @override
   String get walletWithdrawPhoneVerificationRequiredMessage =>
       '出金するには、先に電話認証を完了してください。';
 

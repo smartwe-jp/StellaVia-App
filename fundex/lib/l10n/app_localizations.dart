@@ -5759,6 +5759,36 @@ abstract class AppLocalizations {
   /// **'Add withdrawal account'**
   String get walletWithdrawNeedAccountAction;
 
+  /// No description provided for @walletWithdrawProfileVerificationRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Identity verification required'**
+  String get walletWithdrawProfileVerificationRequiredTitle;
+
+  /// No description provided for @walletWithdrawProfileVerificationRequiredMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete identity verification before submitting a withdrawal request.'**
+  String get walletWithdrawProfileVerificationRequiredMessage;
+
+  /// No description provided for @walletWithdrawProfileVerificationRequiredAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to identity verification'**
+  String get walletWithdrawProfileVerificationRequiredAction;
+
+  /// No description provided for @walletWithdrawProfileVerificationPendingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Identity verification is under review'**
+  String get walletWithdrawProfileVerificationPendingTitle;
+
+  /// No description provided for @walletWithdrawProfileVerificationPendingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please submit your withdrawal request after the review is complete.'**
+  String get walletWithdrawProfileVerificationPendingMessage;
+
   /// No description provided for @walletWithdrawPhoneVerificationRequiredMessage.
   ///
   /// In en, this message translates to:

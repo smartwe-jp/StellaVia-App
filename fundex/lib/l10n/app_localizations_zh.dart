@@ -2924,6 +2924,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletWithdrawNeedAccountAction => '添加出金账户';
 
   @override
+  String get walletWithdrawProfileVerificationRequiredTitle => '需要本人认证';
+
+  @override
+  String get walletWithdrawProfileVerificationRequiredMessage =>
+      '提交出金申请前，请先完成本人认证。';
+
+  @override
+  String get walletWithdrawProfileVerificationRequiredAction => '前往本人认证';
+
+  @override
+  String get walletWithdrawProfileVerificationPendingTitle => '本人认证审核中';
+
+  @override
+  String get walletWithdrawProfileVerificationPendingMessage => '请在审核完成后再操作提现。';
+
+  @override
   String get walletWithdrawPhoneVerificationRequiredMessage => '出金前需要先完成手机号认证。';
 
   @override
@@ -7098,6 +7114,22 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletWithdrawNeedAccountAction => '新增出金帳戶';
+
+  @override
+  String get walletWithdrawProfileVerificationRequiredTitle => '需要本人認證';
+
+  @override
+  String get walletWithdrawProfileVerificationRequiredMessage =>
+      '提交出金申請前，請先完成本人認證。';
+
+  @override
+  String get walletWithdrawProfileVerificationRequiredAction => '前往本人認證';
+
+  @override
+  String get walletWithdrawProfileVerificationPendingTitle => '本人認證審核中';
+
+  @override
+  String get walletWithdrawProfileVerificationPendingMessage => '請在審核完成後再操作提現。';
 
   @override
   String get walletWithdrawPhoneVerificationRequiredMessage => '出金前需要先完成手機號認證。';

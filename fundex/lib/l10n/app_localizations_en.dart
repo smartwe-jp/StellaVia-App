@@ -3122,6 +3122,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletWithdrawNeedAccountAction => 'Add withdrawal account';
 
   @override
+  String get walletWithdrawProfileVerificationRequiredTitle =>
+      'Identity verification required';
+
+  @override
+  String get walletWithdrawProfileVerificationRequiredMessage =>
+      'Complete identity verification before submitting a withdrawal request.';
+
+  @override
+  String get walletWithdrawProfileVerificationRequiredAction =>
+      'Go to identity verification';
+
+  @override
+  String get walletWithdrawProfileVerificationPendingTitle =>
+      'Identity verification is under review';
+
+  @override
+  String get walletWithdrawProfileVerificationPendingMessage =>
+      'Please submit your withdrawal request after the review is complete.';
+
+  @override
   String get walletWithdrawPhoneVerificationRequiredMessage =>
       'Phone verification is required before you can submit a withdrawal.';
 

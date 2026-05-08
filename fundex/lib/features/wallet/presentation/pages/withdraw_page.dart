@@ -7,8 +7,11 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/navigation/app_root_route_refresh_scope.dart';
+import '../../../auth/domain/entities/auth_user.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../auth/presentation/support/identity_auth_guard.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
+import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 import '../../domain/entities/wallet_bank_account_info.dart';
@@ -200,6 +203,14 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
     AppNotice.show(context, message: context.l10n.walletBankSettingsAddSuccess);
   }
 
+  Future<void> _openMemberProfileVerificationPage() async {
+    await context.push('/member-profile/onboarding');
+    if (!mounted) {
+      return;
+    }
+    await refreshMemberProfileVerificationState(ref);
+  }
+
   num? _parseAmountOrNull() {
     final raw = _amountController.text.trim();
     if (raw.isEmpty) {
@@ -284,6 +295,22 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
     required num? availableAmount,
     required num? feeAmount,
   }) async {
+    await refreshMemberProfileVerificationState(ref);
+    final refreshedUser = await ref
+        .read(currentAuthUserProvider.future)
+        .catchError((Object _) => null);
+    if (!mounted) {
+      return;
+    }
+    final verificationGate = _resolveWithdrawProfileVerificationGateData(
+      context,
+      refreshedUser,
+    );
+    if (verificationGate != null) {
+      AppNotice.show(context, message: verificationGate.message);
+      return;
+    }
+
     final allowed = await ensureRealPersonVerifiedAndAuthorizeSensitiveAction(
       context,
       ref,
@@ -317,6 +344,12 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
     final accountsAsync = ref.watch(walletBankAccountListProvider);
     final availableAmountAsync = ref.watch(myPageAccountStatisticProvider);
     final phoneVerifiedAsync = ref.watch(settingsPhoneVerifiedProvider);
+    final authUserAsync = ref.watch(currentAuthUserProvider);
+    final profileVerificationGate = _resolveWithdrawProfileVerificationGateData(
+      context,
+      authUserAsync.asData?.value,
+    );
+    final isProfileVerified = profileVerificationGate == null;
     final accountStatistic = availableAmountAsync.asData?.value;
     final availableAmount = accountStatistic?.withdrawableAmount;
     _latestAvailableAmount = availableAmount;
@@ -337,17 +370,20 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
       error: (_, __) => '--',
     );
     final feeValue = feeAsync.asData?.value;
-    final canSubmit = _canSubmitWithdraw(
-      selected: selected,
-      availableAmount: availableAmount,
-      feeAmount: feeValue,
-    );
+    final canSubmit =
+        isProfileVerified &&
+        _canSubmitWithdraw(
+          selected: selected,
+          availableAmount: availableAmount,
+          feeAmount: feeValue,
+        );
     final bool? phoneVerified = phoneVerifiedAsync.asData?.value;
 
     return AppRootRouteRefreshScope(
       onRefresh: (WidgetRef ref) async {
         ref.invalidate(walletBankAccountListProvider);
         ref.invalidate(myPageAccountStatisticProvider);
+        await refreshMemberProfileVerificationState(ref);
         await Future.wait<void>(<Future<void>>[
           ref.refresh(walletBankAccountListProvider.future).then((_) {}),
           ref.refresh(myPageAccountStatisticProvider.future).then((_) {}),
@@ -390,6 +426,15 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
                   value: currency.format(availableAmount ?? 0),
                   onTapHistory: () => context.push('/wallet/withdraw/history'),
                 ),
+                if (profileVerificationGate != null) ...<Widget>[
+                  const SizedBox(height: 12),
+                  _WithdrawProfileVerificationGateCard(
+                    data: profileVerificationGate,
+                    onTap: profileVerificationGate.canStartVerification
+                        ? _openMemberProfileVerificationPage
+                        : null,
+                  ),
+                ],
                 const SizedBox(height: 16),
                 if (lockedAmount > 0 || lockedItems.isNotEmpty) ...<Widget>[
                   _WithdrawLockedAmountSection(
@@ -459,6 +504,152 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _WithdrawProfileVerificationGateData {
+  const _WithdrawProfileVerificationGateData({
+    required this.title,
+    required this.message,
+    required this.icon,
+    required this.tone,
+    this.actionLabel,
+  });
+
+  final String title;
+  final String message;
+  final IconData icon;
+  final _WithdrawProfileVerificationGateTone tone;
+  final String? actionLabel;
+
+  bool get canStartVerification => actionLabel != null;
+}
+
+enum _WithdrawProfileVerificationGateTone { warning, danger }
+
+_WithdrawProfileVerificationGateData?
+_resolveWithdrawProfileVerificationGateData(
+  BuildContext context,
+  AuthUser? user,
+) {
+  final l10n = context.l10n;
+  return switch (user?.status) {
+    4 => null,
+    2 || 5 => _WithdrawProfileVerificationGateData(
+      title: l10n.walletWithdrawProfileVerificationPendingTitle,
+      message: l10n.walletWithdrawProfileVerificationPendingMessage,
+      icon: Icons.pending_actions_rounded,
+      tone: _WithdrawProfileVerificationGateTone.warning,
+    ),
+    _ => _WithdrawProfileVerificationGateData(
+      title: l10n.walletWithdrawProfileVerificationRequiredTitle,
+      message: l10n.walletWithdrawProfileVerificationRequiredMessage,
+      actionLabel: l10n.walletWithdrawProfileVerificationRequiredAction,
+      icon: Icons.verified_user_outlined,
+      tone: _WithdrawProfileVerificationGateTone.danger,
+    ),
+  };
+}
+
+class _WithdrawProfileVerificationGateCard extends StatelessWidget {
+  const _WithdrawProfileVerificationGateCard({
+    required this.data,
+    required this.onTap,
+  });
+
+  final _WithdrawProfileVerificationGateData data;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final (
+      Color backgroundColor,
+      Color foregroundColor,
+      Color borderColor,
+    ) = switch (data.tone) {
+      _WithdrawProfileVerificationGateTone.warning => (
+        colors.warningSoft,
+        colors.warningForeground,
+        colors.warningBorder,
+      ),
+      _WithdrawProfileVerificationGateTone.danger => (
+        colors.dangerSoft,
+        colors.dangerForeground,
+        colors.dangerBorder,
+      ),
+    };
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: borderColor),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            width: 34,
+            height: 34,
+            decoration: BoxDecoration(
+              color: colors.surface.withValues(alpha: 0.52),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(data.icon, size: 18, color: foregroundColor),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  data.title,
+                  style: appText.bodyStrong.copyWith(
+                    color: foregroundColor,
+                    height: 1.35,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  data.message,
+                  style: appText.body.copyWith(
+                    color: foregroundColor,
+                    height: 1.5,
+                  ),
+                ),
+                if (data.actionLabel != null) ...<Widget>[
+                  const SizedBox(height: 10),
+                  TextButton(
+                    onPressed: onTap,
+                    style: TextButton.styleFrom(
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 0,
+                        vertical: 0,
+                      ),
+                      foregroundColor: foregroundColor,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(data.actionLabel!),
+                        const SizedBox(width: 4),
+                        const Icon(Icons.chevron_right_rounded, size: 18),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
