@@ -46,7 +46,7 @@ class NotificationsListItem extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Expanded(
                   child: Column(
@@ -73,6 +73,17 @@ class NotificationsListItem extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
+                if (isUnread) ...<Widget>[
+                  Container(
+                    width: 8,
+                    height: 8,
+                    margin: const EdgeInsets.only(right: 8),
+                    decoration: BoxDecoration(
+                      color: colors.danger,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ],
                 if (isUpdating)
                   SizedBox(
                     width: 16,
