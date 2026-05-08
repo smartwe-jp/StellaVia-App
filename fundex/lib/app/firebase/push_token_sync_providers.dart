@@ -4,6 +4,7 @@ import 'package:company_api_runtime/company_api_runtime.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../localization/app_locale_providers.dart';
+import '../../features/auth/domain/entities/auth_user.dart';
 import '../../features/auth/presentation/providers/auth_providers.dart';
 import '../network/app_network_providers.dart';
 import '../observability/app_observability_providers.dart';
@@ -46,15 +47,31 @@ final pushTokenSyncServiceProvider = Provider<PushTokenSyncService>((ref) {
 final pushTokenSyncBootstrapProvider = Provider<void>((ref) {
   final service = ref.watch(pushTokenSyncServiceProvider);
   final pushRuntime = ref.watch(appPushRuntimeProvider);
+  String? currentUserSyncScope;
 
   void updateAuth(AsyncValue<bool> authState) {
     service.updateAuthentication(authState.asData?.value ?? false);
   }
 
+  void updateUser(AsyncValue<AuthUser?> userState) {
+    final user = userState.asData?.value;
+    final nextScope = _pushSyncUserScope(user);
+    if (nextScope == null || nextScope == currentUserSyncScope) {
+      return;
+    }
+    currentUserSyncScope = nextScope;
+    service.resetSyncState(reason: 'auth_user_changed');
+  }
+
   updateAuth(ref.read(isAuthenticatedProvider));
+  updateUser(ref.read(currentAuthUserProvider));
 
   ref.listen<AsyncValue<bool>>(isAuthenticatedProvider, (previous, next) {
     updateAuth(next);
+  });
+
+  ref.listen<AsyncValue<AuthUser?>>(currentAuthUserProvider, (previous, next) {
+    updateUser(next);
   });
 
   final tokenSubscription = pushRuntime.tokenStream.listen(
@@ -79,3 +96,14 @@ final pushTokenSyncBootstrapProvider = Provider<void>((ref) {
     );
   }
 });
+
+String? _pushSyncUserScope(AuthUser? user) {
+  if (user == null) {
+    return null;
+  }
+  return user.userId?.toString() ??
+      user.memberId?.toString() ??
+      user.id?.trim() ??
+      user.accountId?.trim() ??
+      user.username.trim();
+}

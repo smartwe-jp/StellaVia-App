@@ -90,6 +90,7 @@ class PushTokenSyncService {
     _isAuthenticated = authenticated;
     if (!_isAuthenticated) {
       _retryTimer?.cancel();
+      _lastSyncedToken = null;
       return;
     }
 
@@ -97,6 +98,19 @@ class PushTokenSyncService {
     if (pending == null || pending.isEmpty || pending == _lastSyncedToken) {
       return;
     }
+    _scheduleSync(const Duration(milliseconds: 50));
+  }
+
+  void resetSyncState({String reason = 'manual'}) {
+    _lastSyncedToken = null;
+    final token = _pendingToken;
+    if (!_isAuthenticated || token == null || token.isEmpty) {
+      return;
+    }
+    _logger.info(
+      'Push token sync state reset; scheduling backend sync.',
+      context: <String, Object?>{'reason': reason, 'token': _maskToken(token)},
+    );
     _scheduleSync(const Duration(milliseconds: 50));
   }
 
