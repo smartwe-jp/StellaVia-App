@@ -566,8 +566,8 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PGU4LJ2SPF;
+				DEVELOPMENT_TEAM = AY756KKKWF;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = AY756KKKWF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StellaVia;
@@ -578,7 +578,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.fund.stellavia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_release_Profile;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_prod_Profile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -762,8 +762,8 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PGU4LJ2SPF;
+				DEVELOPMENT_TEAM = AY756KKKWF;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = AY756KKKWF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StellaVia;
@@ -774,7 +774,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.fund.stellavia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Funding-Stellavia-Dev-Profile";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_dev_profile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -795,9 +795,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerProd.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = AY756KKKWF;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = AY756KKKWF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StellaVia;
@@ -808,6 +810,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.fund.stellavia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_dev_profile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1317,8 +1320,8 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerDev.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = 3583NXG8VV;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PGU4LJ2SPF;
+				DEVELOPMENT_TEAM = AY756KKKWF;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = AY756KKKWF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StellaVia;
@@ -1328,7 +1331,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fund.stellavia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Funding-Stellavia-Dev-Profile";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_dev_profile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1349,8 +1352,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerDev.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = 3583NXG8VV;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PGU4LJ2SPF;
+				DEVELOPMENT_TEAM = AY756KKKWF;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = AY756KKKWF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StellaVia;
@@ -1360,7 +1363,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fund.stellavia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Funding-Stellavia-Dev-Profile";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_dev_profile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1379,9 +1382,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerDev.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = 3583NXG8VV;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PGU4LJ2SPF;
+				DEVELOPMENT_TEAM = AY756KKKWF;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = AY756KKKWF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StellaVia;
@@ -1391,7 +1395,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fund.stellavia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Funding-Stellavia-Dev-Profile";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_prod_Profile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1411,8 +1415,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerDev.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = 3583NXG8VV;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PGU4LJ2SPF;
+				DEVELOPMENT_TEAM = AY756KKKWF;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = AY756KKKWF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StellaVia;
@@ -1422,7 +1426,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fund.stellavia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Funding-Stellavia-Dev-Profile";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_dev_profile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1444,8 +1448,8 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerDev.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = 3583NXG8VV;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PGU4LJ2SPF;
+				DEVELOPMENT_TEAM = AY756KKKWF;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = AY756KKKWF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StellaVia;
@@ -1455,7 +1459,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fund.stellavia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_release_Profile;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_prod_Profile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1476,8 +1480,8 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerDev.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = 3583NXG8VV;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PGU4LJ2SPF;
+				DEVELOPMENT_TEAM = AY756KKKWF;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = AY756KKKWF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StellaVia;
@@ -1487,7 +1491,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fund.stellavia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_release_Profile;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_prod_Profile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1507,8 +1511,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerDev.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = 3583NXG8VV;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PGU4LJ2SPF;
+				DEVELOPMENT_TEAM = AY756KKKWF;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = AY756KKKWF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StellaVia;
@@ -1518,7 +1522,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fund.stellavia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Funding-Stellavia-Dev-Profile";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_dev_profile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1542,8 +1546,8 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = 3583NXG8VV;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PGU4LJ2SPF;
+				DEVELOPMENT_TEAM = AY756KKKWF;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = AY756KKKWF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StellaVia;
@@ -1553,7 +1557,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fund.stellavia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_release_Profile;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_prod_Profile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1576,8 +1580,8 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-				DEVELOPMENT_TEAM = 3583NXG8VV;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = PGU4LJ2SPF;
+				DEVELOPMENT_TEAM = AY756KKKWF;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = AY756KKKWF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StellaVia;
@@ -1587,7 +1591,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.fund.stellavia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_release_Profile;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Stellavia_prod_Profile;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
