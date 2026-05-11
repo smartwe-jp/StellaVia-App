@@ -259,18 +259,27 @@ class _FundHeroMediaBackgroundState extends State<FundHeroMediaBackground>
         },
         itemBuilder: (BuildContext context, int page) {
           final logicalIndex = _logicalIndexForPage(page, images.length);
+          final imageProvider = appCachedImageProvider(images[logicalIndex]);
           return GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: widget.onImageTap == null
                 ? null
                 : () => widget.onImageTap!(logicalIndex),
             child: SizedBox.expand(
-              child: AppRemoteImage(
-                imageUrl: images[logicalIndex],
-                fit: BoxFit.cover,
-                placeholder: const SizedBox.shrink(),
-                errorWidget: const SizedBox.shrink(),
-              ),
+              child: imageProvider == null
+                  ? const SizedBox.shrink()
+                  : Image(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                      filterQuality: FilterQuality.low,
+                      gaplessPlayback: true,
+                      errorBuilder:
+                          (
+                            BuildContext context,
+                            Object error,
+                            StackTrace? stackTrace,
+                          ) => const SizedBox.shrink(),
+                    ),
             ),
           );
         },
