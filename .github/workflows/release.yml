@@ -389,9 +389,9 @@ jobs:
           BUILD_NUMBER: ${{ steps.ios_meta.outputs.build_number }}
           IPA_OUTPUT_NAME: ${{ steps.ios_meta.outputs.ipa_filename }}
           UPLOAD_IOS: ${{ inputs.upload_ios }}
-          IOS_TEAM_ID: PGU4LJ2SPF
+          IOS_TEAM_ID: AY756KKKWF
           IOS_BUNDLE_ID: com.fund.stellavia
-          IOS_PROVISIONING_PROFILE_NAME: Stellavia_release_Profile
+          IOS_PROVISIONING_PROFILE_NAME: Stellavia_prod_Profile
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.STELLAVIA_APP_STORE_CONNECT_API_KEY_ID }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.STELLAVIA_APP_STORE_CONNECT_ISSUER_ID }}
           APP_STORE_CONNECT_API_KEY_PATH: ${{ env.APP_STORE_CONNECT_API_KEY_PATH }}
