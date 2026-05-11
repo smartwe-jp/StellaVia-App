@@ -2437,6 +2437,28 @@ class AppLocalizationsEn extends AppLocalizations {
       'Subordinated investment ratio';
 
   @override
+  String get fundDetailDistributionInfoTitle => 'Distribution details';
+
+  @override
+  String get fundDetailDistributionCalculationPeriodLabel =>
+      'Distribution calculation period';
+
+  @override
+  String get fundDetailDistributionCalculationPeriodSeason =>
+      'Calculated for each natural quarter. A natural quarter means each period from January 1 to March 31, April 1 to June 30, July 1 to September 30, and October 1 to December 31 of every year.';
+
+  @override
+  String get fundDetailDistributionCalculationPeriodYear =>
+      'Calculated for each natural year. A natural year means the period from January 1 to December 31 of every year.';
+
+  @override
+  String get fundDetailDistributionScheduleLabel => 'Planned distribution';
+
+  @override
+  String get fundDetailDistributionScheduleDefault =>
+      'By the last business day of the corresponding month, two months after each calculation period';
+
+  @override
   String get fundDetailGainTypeDescriptionTitle => 'About the Type of Return';
 
   @override

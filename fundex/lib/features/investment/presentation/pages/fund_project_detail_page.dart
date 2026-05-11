@@ -360,6 +360,16 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                         child: FundDetailInfoTable(items: infoItems),
                       ),
                     ],
+                    if (viewData.distributionItems.isNotEmpty) ...<Widget>[
+                      const SizedBox(height: UiTokens.spacing16),
+                      FundDetailSection(
+                        title: context.l10n.fundDetailDistributionInfoTitle,
+                        child: FundDetailInfoTable(
+                          items: viewData.distributionItems,
+                          columns: 1,
+                        ),
+                      ),
+                    ],
                     if (viewData.contractScheduleItems.isNotEmpty) ...<Widget>[
                       const SizedBox(height: UiTokens.spacing16),
                       FundDetailSection(

@@ -4499,6 +4499,42 @@ abstract class AppLocalizations {
   /// **'Subordinated investment ratio'**
   String get fundDetailSubordinatedRatioLabel;
 
+  /// No description provided for @fundDetailDistributionInfoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Distribution details'**
+  String get fundDetailDistributionInfoTitle;
+
+  /// No description provided for @fundDetailDistributionCalculationPeriodLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Distribution calculation period'**
+  String get fundDetailDistributionCalculationPeriodLabel;
+
+  /// No description provided for @fundDetailDistributionCalculationPeriodSeason.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculated for each natural quarter. A natural quarter means each period from January 1 to March 31, April 1 to June 30, July 1 to September 30, and October 1 to December 31 of every year.'**
+  String get fundDetailDistributionCalculationPeriodSeason;
+
+  /// No description provided for @fundDetailDistributionCalculationPeriodYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculated for each natural year. A natural year means the period from January 1 to December 31 of every year.'**
+  String get fundDetailDistributionCalculationPeriodYear;
+
+  /// No description provided for @fundDetailDistributionScheduleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Planned distribution'**
+  String get fundDetailDistributionScheduleLabel;
+
+  /// No description provided for @fundDetailDistributionScheduleDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'By the last business day of the corresponding month, two months after each calculation period'**
+  String get fundDetailDistributionScheduleDefault;
+
   /// No description provided for @fundDetailGainTypeDescriptionTitle.
   ///
   /// In en, this message translates to:

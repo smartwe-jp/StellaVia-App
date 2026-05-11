@@ -2279,6 +2279,27 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailSubordinatedRatioLabel => '劣后出资比例';
 
   @override
+  String get fundDetailDistributionInfoTitle => '分配相关';
+
+  @override
+  String get fundDetailDistributionCalculationPeriodLabel => '分配计算时间';
+
+  @override
+  String get fundDetailDistributionCalculationPeriodSeason =>
+      '按自然季度计算。自然季度是指每年1月1日至3月31日、4月1日至6月30日、7月1日至9月30日、10月1日至12月31日的各期间。';
+
+  @override
+  String get fundDetailDistributionCalculationPeriodYear =>
+      '按自然年计算。自然年是指每年1月1日至12月31日的期间。';
+
+  @override
+  String get fundDetailDistributionScheduleLabel => '分配预定';
+
+  @override
+  String get fundDetailDistributionScheduleDefault =>
+      '各计算期间结束后2个月的对应月份最后一个营业日前';
+
+  @override
   String get fundDetailGainTypeDescriptionTitle => '收益种类说明';
 
   @override
@@ -6469,6 +6490,27 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get fundDetailSubordinatedRatioLabel => '劣後出資比例';
+
+  @override
+  String get fundDetailDistributionInfoTitle => '分配相關';
+
+  @override
+  String get fundDetailDistributionCalculationPeriodLabel => '分配計算時間';
+
+  @override
+  String get fundDetailDistributionCalculationPeriodSeason =>
+      '按自然季度計算。自然季度是指每年1月1日至3月31日、4月1日至6月30日、7月1日至9月30日、10月1日至12月31日的各期間。';
+
+  @override
+  String get fundDetailDistributionCalculationPeriodYear =>
+      '按自然年計算。自然年是指每年1月1日至12月31日的期間。';
+
+  @override
+  String get fundDetailDistributionScheduleLabel => '分配預定';
+
+  @override
+  String get fundDetailDistributionScheduleDefault =>
+      '各計算期間結束後2個月的對應月份最後一個營業日前';
 
   @override
   String get fundDetailGainTypeDescriptionTitle => '收益種類說明';

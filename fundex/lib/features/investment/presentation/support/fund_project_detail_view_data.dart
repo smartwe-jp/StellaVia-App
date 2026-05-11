@@ -12,6 +12,7 @@ import '../widgets/fund_project_detail_protection_structure_card.dart';
 class FundProjectDetailViewData {
   const FundProjectDetailViewData({
     required this.infoItems,
+    required this.distributionItems,
     required this.propertyItems,
     required this.contractOverviewItems,
     required this.contractScheduleItems,
@@ -29,6 +30,7 @@ class FundProjectDetailViewData {
   });
 
   final List<FundDetailInfoItemData> infoItems;
+  final List<FundDetailInfoItemData> distributionItems;
   final List<FundDetailInfoItemData> propertyItems;
   final List<FundDetailInfoItemData> contractOverviewItems;
   final List<FundDetailInfoItemData> contractScheduleItems;
@@ -86,6 +88,7 @@ class FundProjectDetailViewDataBuilder {
 
     return FundProjectDetailViewData(
       infoItems: _buildPrimaryInfoItems(context, project, decimalFormatter),
+      distributionItems: _buildDistributionInfoItems(context, project),
       propertyItems: _buildPropertyInfoItems(
         context,
         project,
@@ -117,6 +120,35 @@ class FundProjectDetailViewDataBuilder {
       protectionStructure: _buildProtectionStructure(context, project),
     );
   }
+}
+
+List<FundDetailInfoItemData> _buildDistributionInfoItems(
+  BuildContext context,
+  FundProject project,
+) {
+  return <FundDetailInfoItemData>[
+    FundDetailInfoItemData(
+      label: context.l10n.fundDetailDistributionCalculationPeriodLabel,
+      value: _resolveDistributionCalculationPeriodText(context, project),
+    ),
+    FundDetailInfoItemData(
+      label: context.l10n.fundDetailDistributionScheduleLabel,
+      value: context.l10n.fundDetailDistributionScheduleDefault,
+    ),
+  ];
+}
+
+String _resolveDistributionCalculationPeriodText(
+  BuildContext context,
+  FundProject project,
+) {
+  switch (project.periodType?.trim().toUpperCase()) {
+    case 'SEASON':
+      return context.l10n.fundDetailDistributionCalculationPeriodSeason;
+    case 'YEAR':
+      return context.l10n.fundDetailDistributionCalculationPeriodYear;
+  }
+  return context.l10n.fundDetailUnknownValue;
 }
 
 List<FundDetailInfoItemData> _buildPrimaryInfoItems(

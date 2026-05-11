@@ -2307,6 +2307,26 @@ class AppLocalizationsJa extends AppLocalizations {
   String get fundDetailSubordinatedRatioLabel => '劣後出資比率';
 
   @override
+  String get fundDetailDistributionInfoTitle => '分配関連';
+
+  @override
+  String get fundDetailDistributionCalculationPeriodLabel => '分配計算期間';
+
+  @override
+  String get fundDetailDistributionCalculationPeriodSeason =>
+      '自然四半期ごとに計算するものとし、自然四半期とは、毎年１月１日から３月３１日まで、４月１日から６月３０日まで、７月１日から９月３０日まで、１０月１日から１２月３１日までの各期間をいう。';
+
+  @override
+  String get fundDetailDistributionCalculationPeriodYear =>
+      '自然年ごとに計算するものとし、自然年とは、毎年１月１日から１２月３１日までの期間をいう。';
+
+  @override
+  String get fundDetailDistributionScheduleLabel => '分配予定';
+
+  @override
+  String get fundDetailDistributionScheduleDefault => '各計算期間の2ヶ月後、応当月の最終営業日まで';
+
+  @override
   String get fundDetailGainTypeDescriptionTitle => '収益の種類の説明';
 
   @override
