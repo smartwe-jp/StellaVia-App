@@ -110,7 +110,7 @@ void main() {
 
   group('AuthApiClient /member/login/index', () {
     test(
-      'fetchMemberLoginIndexStatus posts full device payload and parses flags',
+      'fetchMemberLoginIndexStatus posts full device payload and parses status',
       () async {
         final dio = _buildDio((options) async {
           expect(options.method, equals('POST'));
@@ -127,7 +127,7 @@ void main() {
             }),
           );
           return _jsonOk(
-            '{"code":0,"msg":"success","data":{"mobileAuth":1,"verificationStatus":0,"currentDeviceVerificationStatus":1,"ownerName":"张三"}}',
+            '{"code":0,"msg":"success","data":{"phone":"08012345678","mobileAuth":0,"verificationStatus":0,"currentDeviceVerificationStatus":1,"ownerName":"张三"}}',
           );
         });
         final api = AuthApiClient(dioForPath: (_) => dio);
@@ -140,10 +140,36 @@ void main() {
         );
 
         expect(result, isNotNull);
-        expect(result!.isPhoneVerified, isTrue);
+        expect(result!.phone, equals('08012345678'));
+        expect(result.isPhoneVerified, isTrue);
         expect(result.isRealPersonVerified, isFalse);
         expect(result.isCurrentDeviceVerified, isTrue);
         expect(result.ownerName, equals('张三'));
+      },
+    );
+
+    test(
+      'fetchMemberLoginIndexStatus ignores mobileAuth for phone status',
+      () async {
+        final dio = _buildDio((options) async {
+          expect(options.method, equals('POST'));
+          expect(options.path, equals(AuthApiPaths.memberLoginIndex));
+          return _jsonOk(
+            '{"code":0,"msg":"success","data":{"mobileAuth":1,"verificationStatus":1}}',
+          );
+        });
+        final api = AuthApiClient(dioForPath: (_) => dio);
+
+        final result = await api.fetchMemberLoginIndexStatus(
+          deviceId: 'device-abc',
+          deviceType: 1,
+          languageTag: 'ja',
+          version: '1.2.3',
+        );
+
+        expect(result, isNotNull);
+        expect(result!.phone, isNull);
+        expect(result.isPhoneVerified, isFalse);
       },
     );
 

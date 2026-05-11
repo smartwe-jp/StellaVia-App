@@ -104,6 +104,7 @@ class AuthMemberLoginIndexDto {
     required this.mobileAuth,
     required this.ownerId,
     required this.ownerName,
+    this.phone,
     required this.verificationStatus,
   });
 
@@ -119,6 +120,7 @@ class AuthMemberLoginIndexDto {
       mobileAuth: json['mobileAuth'],
       ownerId: _intOrNull(json['ownerId']),
       ownerName: _normalizedOptionalString(json['ownerName']),
+      phone: _normalizedOptionalString(json['phone']),
       verificationStatus: json['verificationStatus'],
     );
   }
@@ -133,9 +135,10 @@ class AuthMemberLoginIndexDto {
   final Object? mobileAuth;
   final int? ownerId;
   final String? ownerName;
+  final String? phone;
   final Object? verificationStatus;
 
-  bool get isPhoneVerified => _isVerifiedFlag(mobileAuth);
+  bool get isPhoneVerified => phone?.trim().isNotEmpty ?? false;
   bool get isEmailVerified => _isVerifiedFlag(emailAuth);
   bool get isRealPersonVerified => _isVerifiedFlag(verificationStatus);
   bool get isCurrentDeviceVerified =>

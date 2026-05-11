@@ -16,10 +16,7 @@ import '../providers/wallet_providers.dart';
 import '../support/wallet_withdraw_confirm_models.dart';
 
 class WalletWithdrawVerifyPage extends ConsumerStatefulWidget {
-  const WalletWithdrawVerifyPage({
-    super.key,
-    required this.seed,
-  });
+  const WalletWithdrawVerifyPage({super.key, required this.seed});
 
   final WalletWithdrawConfirmSeed seed;
 
@@ -75,10 +72,6 @@ class _WalletWithdrawVerifyPageState
   }
 
   String _resolvePhone(AuthUser? user) {
-    final mobile = user?.mobile?.trim() ?? '';
-    if (mobile.isNotEmpty) {
-      return mobile;
-    }
     return user?.phone?.trim() ?? '';
   }
 
@@ -156,7 +149,10 @@ class _WalletWithdrawVerifyPageState
       if (!mounted) {
         return;
       }
-      AppNotice.show(context, message: context.l10n.walletWithdrawSubmitSuccess);
+      AppNotice.show(
+        context,
+        message: context.l10n.walletWithdrawSubmitSuccess,
+      );
       context.pop(true);
     } catch (error) {
       if (!mounted) {
@@ -355,7 +351,8 @@ class _WithdrawOtpCodeField extends StatelessWidget {
                       final hasValue = index < code.length;
                       final isActive =
                           enabled &&
-                          (index == code.length || (code.length == 6 && hasValue));
+                          (index == code.length ||
+                              (code.length == 6 && hasValue));
                       return Container(
                         width: boxWidth,
                         height: 56,
@@ -370,7 +367,9 @@ class _WithdrawOtpCodeField extends StatelessWidget {
                             color: hasValue || (isFocused && isActive)
                                 ? colors.primary
                                 : colors.border,
-                            width: hasValue || (isFocused && isActive) ? 1.8 : 1.2,
+                            width: hasValue || (isFocused && isActive)
+                                ? 1.8
+                                : 1.2,
                           ),
                         ),
                         child: Text(

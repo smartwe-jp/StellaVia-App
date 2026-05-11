@@ -56,15 +56,7 @@ class _SettingsPhoneVerificationPageState
     super.dispose();
   }
 
-  String _resolvePhone(AuthUser? user, MemberProfileDetails? profile) {
-    final profilePhone = profile?.phone.trim() ?? '';
-    if (profilePhone.isNotEmpty) {
-      return profilePhone;
-    }
-    final mobile = user?.mobile?.trim() ?? '';
-    if (mobile.isNotEmpty) {
-      return mobile;
-    }
+  String _resolvePhone(AuthUser? user, MemberProfileDetails? _) {
     return user?.phone?.trim() ?? '';
   }
 
@@ -105,10 +97,7 @@ class _SettingsPhoneVerificationPageState
     return '${'•' * maskedCount}${trimmed.substring(trimmed.length - 4)}';
   }
 
-  void _beginPhoneEdit({
-    required String phone,
-    required String intlCode,
-  }) {
+  void _beginPhoneEdit({required String phone, required String intlCode}) {
     _sendCodeCooldown.reset();
     _codeController.clear();
     setState(() {
@@ -419,9 +408,9 @@ class _SettingsPhoneVerificationPageState
                     onChanged: (_) => setState(() {}),
                     onSendCode: canSendCode
                         ? () => _sendCode(
-                              phone: activePhone,
-                              intlCode: activeIntlCode,
-                            )
+                            phone: activePhone,
+                            intlCode: activeIntlCode,
+                          )
                         : null,
                     autofillHints: const <String>[AutofillHints.oneTimeCode],
                   ),
