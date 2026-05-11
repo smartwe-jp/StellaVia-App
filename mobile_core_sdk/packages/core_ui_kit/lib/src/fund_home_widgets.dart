@@ -920,8 +920,8 @@ class FundFeaturedFundCard extends StatelessWidget {
     final artworkGradientColors = data.artworkGradientColors.isEmpty
         ? <Color>[colors.heroStart, colors.heroMiddle, colors.heroEnd]
         : data.artworkGradientColors;
-    final primaryTextColor = colors.onDark;
-    final secondaryTextColor = colors.onDark.withValues(alpha: 0.74);
+    final primaryTextColor = colors.textPrimary;
+    final secondaryTextColor = colors.textPrimary.withValues(alpha: 0.74);
 
     return SizedBox(
       width: width,
@@ -940,7 +940,7 @@ class FundFeaturedFundCard extends StatelessWidget {
             ],
           ),
           child: Material(
-            color: cardBackgroundColor,
+            color: colors.surfaceAlt,
             shape: RoundedRectangleBorder(
               borderRadius: cardRadius,
               side: BorderSide(color: borderColor),
@@ -949,98 +949,118 @@ class FundFeaturedFundCard extends StatelessWidget {
             child: InkWell(
               borderRadius: cardRadius,
               onTap: data.onTap,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(14, 14, 14, 26),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    if (data.tags.isNotEmpty)
-                    Row(
-                      spacing: 6,
-                      children: [
-                        ...data.tags.map(
-                          (FundFeaturedFundTagData tag) => Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: tag.backgroundColor,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Align(
-                              alignment: Alignment.center,
-                              widthFactor: 1,
-                              heightFactor: 1,
-                              child: Text(
-                                tag.label,
-                                textHeightBehavior:
-                                    const TextHeightBehavior(
-                                      applyHeightToFirstAscent: false,
-                                      applyHeightToLastDescent: false,
-                                    ),
-                                style: appText.micro.copyWith(
-                                  color: tag.foregroundColor,
-                                  height: 1,
-                                  fontSize: 11,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 12),
+                    decoration: BoxDecoration(
+                      color: cardBackgroundColor,
+                      borderRadius: BorderRadius.vertical(
+                        bottom: Radius.circular(UiTokens.radius16),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        if (data.tags.isNotEmpty)
+                        Row(
+                          spacing: 6,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          ...data.tags.map(
+                            (FundFeaturedFundTagData tag) => Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: tag.backgroundColor,
+                                borderRadius: BorderRadius.circular(999),
+                              ),
+                              child: Align(
+                                alignment: Alignment.center,
+                                widthFactor: 1,
+                                heightFactor: 1,
+                                child: Text(
+                                  tag.label,
+                                  textHeightBehavior:
+                                      const TextHeightBehavior(
+                                        applyHeightToFirstAscent: false,
+                                        applyHeightToLastDescent: false,
+                                      ),
+                                  style: appText.micro.copyWith(
+                                    color: tag.foregroundColor,
+                                    height: 1,
+                                    fontSize: 11,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(UiTokens.radius16),
-                        child: !hasArtwork
-                            ? const _FundFeaturedArtworkPlaceholder()
-                            : FundHeroMediaBackground(
-                                gradientColors: artworkGradientColors,
-                                imageUrls: data.imageUrls,
-                                showArtworkOverlay: false,
-                              ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            data.title,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: appText.cardTitle.copyWith(
-                              color: primaryTextColor,
-                              fontSize: 16,
-                              height: 1.35,
-                            ),
-                          ),
-                          const Spacer(),
-                          Text(
-                            yieldLabel,
-                            style: appText.bodyMuted.copyWith(
-                              color: secondaryTextColor,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            data.annualYield,
-                            style: appText.numericHeadline.copyWith(
-                              color: colors.highlightGold,
-                              height: 1.0,
-                              fontSize: 28,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
                         ],
                       ),
+                      const SizedBox(height: 8),
+                      AspectRatio(
+                        aspectRatio: 16 / 10,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(UiTokens.radius16),
+                          child: !hasArtwork
+                              ? const _FundFeaturedArtworkPlaceholder()
+                              : FundHeroMediaBackground(
+                                  gradientColors: artworkGradientColors,
+                                  imageUrls: data.imageUrls,
+                                  showArtworkOverlay: false,
+                                ),
+                        ),
+                      ),
+                      
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+                        decoration: BoxDecoration(
+                          color: colors.surfaceAlt,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              data.title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: appText.cardTitle.copyWith(
+                                color: primaryTextColor,
+                                fontSize: 16,
+                                height: 1.35,
+                              ),
+                            ),
+                          
+                            const Spacer(),
+                            Text(
+                              yieldLabel,
+                              style: appText.bodyMuted.copyWith(
+                                color: secondaryTextColor,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              data.annualYield,
+                              style: appText.numericHeadline.copyWith(
+                                color: colors.highlightGold,
+                                height: 1.0,
+                                fontSize: 28,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                ]
               ),
             ),
           ),
