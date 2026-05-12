@@ -53,7 +53,10 @@ rtk fvm flutter gen-l10n
 ## UI Rules
 
 - Reuse `core_ui_kit` tokens/components before creating page-local styles.
-- Do not hardcode colors/fonts/shadows in business pages unless there is a scoped reason.
+- Business feature pages must not hardcode colors. Use `Theme.of(context)`, `core_ui_kit` tokens/components, or an existing feature theme/helper. Raw `Color(0x...)`, `Colors.*`, and page-local hex color constants are allowed only inside theme/token definitions or with a narrow documented exception.
+- Do not hardcode fonts/shadows in business pages unless there is a scoped reason; prefer theme text styles and shared visual tokens.
+- Page files should stay focused on screen composition, route argument binding, provider watching, and event wiring. Move non-trivial child UI into separate files under the feature's `presentation/widgets/` directory, and move display mapping/formatting into `presentation/support`.
+- Before ending a UI task, scan touched UI files for hardcoded `Color(` / `Colors.` usage and confirm child widgets were split out when the page would otherwise grow into a large private-widget block.
 - Shared controls such as dialogs, bottom sheets, copy buttons, avatar, cards, PDF/image viewers should live in SDK if reused.
 - For frontend/design work, preserve the established StellaVia visual language unless the user asks for a new direction.
 - Root tab pages should support refresh behavior and should not clear useful old content on transient network failure unless explicitly intended.
