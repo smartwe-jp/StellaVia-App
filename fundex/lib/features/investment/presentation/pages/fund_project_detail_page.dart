@@ -75,7 +75,13 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
     }
     var isFundApplyVerified = false;
     try {
-      await refreshMemberProfileVerificationState(ref);
+      await refreshMemberProfileVerificationState(
+        ref,
+        isMounted: () => mounted,
+      );
+      if (!mounted) {
+        return;
+      }
       isFundApplyVerified = await ref.read(isFundApplyVerifiedProvider.future);
     } catch (_) {
       isFundApplyVerified = false;
