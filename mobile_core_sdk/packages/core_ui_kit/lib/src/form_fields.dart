@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'app_theme_extensions.dart';
 import 'ui_buttons.dart';
@@ -214,6 +215,9 @@ class VerificationCodeField extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 textInputAction: TextInputAction.done,
                 autofillHints: autofillHints,
+                inputFormatters: <TextInputFormatter>[
+                  const _VerificationCodeInputFormatter(),
+                ],
                 leadingIcon: Icons.sms_outlined,
                 onChanged: onChanged,
               ),
@@ -236,6 +240,37 @@ class VerificationCodeField extends StatelessWidget {
   }
 }
 
+class _VerificationCodeInputFormatter extends TextInputFormatter {
+  const _VerificationCodeInputFormatter();
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final oldDigits = _digitsOnly(oldValue.text);
+    var nextDigits = _digitsOnly(newValue.text);
+    if (oldDigits.isNotEmpty && nextDigits.startsWith(oldDigits)) {
+      final appendedDigits = nextDigits.substring(oldDigits.length);
+      if (appendedDigits.length > 1) {
+        nextDigits = appendedDigits;
+      }
+    }
+    return TextEditingValue(
+      text: nextDigits,
+      selection: TextSelection.collapsed(offset: nextDigits.length),
+      composing: TextRange.empty,
+    );
+  }
+
+  static String _digitsOnly(String value) {
+    return value.runes
+        .where((int rune) => rune >= 48 && rune <= 57)
+        .map(String.fromCharCode)
+        .join();
+  }
+}
+
 class _BaseInputField extends StatefulWidget {
   const _BaseInputField({
     this.fieldKey,
@@ -250,6 +285,7 @@ class _BaseInputField extends StatefulWidget {
     this.keyboardType,
     this.textInputAction,
     this.autofillHints,
+    this.inputFormatters,
     this.obscureText = false,
   });
 
@@ -265,6 +301,7 @@ class _BaseInputField extends StatefulWidget {
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final Iterable<String>? autofillHints;
+  final List<TextInputFormatter>? inputFormatters;
   final bool obscureText;
 
   @override
@@ -368,6 +405,7 @@ class _BaseInputFieldState extends State<_BaseInputField> {
                 onChanged: widget.onChanged,
                 autofocus: false,
                 autofillHints: widget.autofillHints,
+                inputFormatters: widget.inputFormatters,
                 style: textStyle,
                 textAlignVertical: TextAlignVertical.center,
                 cursorColor: hotelTheme.primaryButtonColor,
