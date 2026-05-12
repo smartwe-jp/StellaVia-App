@@ -15,3 +15,10 @@ The scaffolds are intentionally minimal but runnable as a starting point for mig
 - Version manager: `fvm`
 
 Use `fvm` prefix for all Flutter/Dart commands in both repos.
+
+## Long-running project workflow
+
+- Codex/task rules: `AGENTS.md`
+- AI project control memory: `docs/ai-project-control.md`
+- Hotel booking roadmap: `docs/hotel-booking-roadmap.md`
+- Release/CI flow: `docs/github-actions-release-flow.md`
