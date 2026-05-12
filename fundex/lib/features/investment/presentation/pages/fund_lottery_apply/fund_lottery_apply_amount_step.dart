@@ -60,6 +60,15 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
   final VoidCallback? onBalanceWarningActionTap;
   final bool showEstimatedDistribution;
 
+  void _moveUnitCountSelectionToEnd() {
+    final text = unitCountController.text;
+    final selection = TextSelection.collapsed(offset: text.length);
+    if (unitCountController.selection == selection) {
+      return;
+    }
+    unitCountController.selection = selection;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -151,8 +160,14 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
                                       controller: unitCountController,
                                       textAlign: TextAlign.center,
                                       keyboardType: TextInputType.number,
+                                      showCursor: false,
+                                      enableInteractiveSelection: false,
+                                      onTap: _moveUnitCountSelectionToEnd,
+                                      onChanged: (_) =>
+                                          _moveUnitCountSelectionToEnd(),
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.digitsOnly,
+                                        const _TrailingSelectionFormatter(),
                                       ],
                                       style: appText.numericHeadline.copyWith(
                                         fontSize: 28,
@@ -282,6 +297,21 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
           horizontalPadding: 0,
         ),
       ],
+    );
+  }
+}
+
+class _TrailingSelectionFormatter extends TextInputFormatter {
+  const _TrailingSelectionFormatter();
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    return newValue.copyWith(
+      selection: TextSelection.collapsed(offset: newValue.text.length),
+      composing: TextRange.empty,
     );
   }
 }
