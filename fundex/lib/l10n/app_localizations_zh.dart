@@ -45,6 +45,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonCancel => '取消';
 
   @override
+  String get commonApply => '应用';
+
+  @override
+  String get commonRetry => '重试';
+
+  @override
   String get pushDialogDefaultBlockTitle => '当前 App 无法使用';
 
   @override
@@ -1060,10 +1066,113 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get hotelTabHeadline => '酒店预订模块（框架）';
+  String get hotelBrandMark => 'STELLAVIA STAY';
 
   @override
-  String get hotelTabSubtitle => '后续在此接入搜索、列表、详情、下单流程。';
+  String get hotelTabHeadline => '京都町家与精选民宿';
+
+  @override
+  String get hotelTabSubtitle => '从投资人的城市资产，到可预订的真实旅宿体验。';
+
+  @override
+  String get hotelDestinationLabel => '目的地';
+
+  @override
+  String get hotelDefaultDestination => '京都市下京区';
+
+  @override
+  String get hotelPropertyTypeLabel => '房源类型';
+
+  @override
+  String get hotelCheckInDateLabel => '入住日期';
+
+  @override
+  String get hotelGuestFieldLabel => '入住人数';
+
+  @override
+  String get hotelSearchKeywordHint => '酒店名、区域或车站';
+
+  @override
+  String get hotelSearchAction => '查询空房';
+
+  @override
+  String hotelSearchNights(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count晚',
+      one: '1晚',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get hotelFilterAllTypes => '全部旅宿';
+
+  @override
+  String get hotelSortRecommended => '精选推荐';
+
+  @override
+  String get hotelSortPriceLow => '价格排序';
+
+  @override
+  String get hotelSortPriceHigh => '价格排序';
+
+  @override
+  String get hotelToolbarFilter => '筛选';
+
+  @override
+  String get hotelToolbarMap => '地图';
+
+  @override
+  String get hotelGuestAdults => '成人';
+
+  @override
+  String get hotelGuestChildren => '儿童';
+
+  @override
+  String get hotelGuestRooms => '房间';
+
+  @override
+  String hotelGuestSummary(int guests, int rooms) {
+    return '$guests位成人 · $rooms间';
+  }
+
+  @override
+  String hotelResultsCount(int count) {
+    return '$count个住宿';
+  }
+
+  @override
+  String get hotelUnnamedProperty => '酒店';
+
+  @override
+  String get hotelUnavailable => '暂不可订';
+
+  @override
+  String get hotelPriceAsk => '价格待确认';
+
+  @override
+  String get hotelPricePerNight => ' 起 / 晚';
+
+  @override
+  String hotelCardMeta(Object location, int count) {
+    return '位置 $location · 最大住宿人数 $count';
+  }
+
+  @override
+  String hotelRemainingRooms(int count) {
+    return '剩余 $count 间';
+  }
+
+  @override
+  String get hotelRefreshFailed => '刷新失败，已保留上次结果。';
+
+  @override
+  String get hotelLoadFailed => '酒店列表加载失败。';
+
+  @override
+  String get hotelEmptyResults => '当前条件下没有可显示的酒店。';
 
   @override
   String get discussionTabHeadline => '投资讨论板块（框架）';
@@ -4254,6 +4363,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get commonCancel => '取消';
 
   @override
+  String get commonApply => '套用';
+
+  @override
+  String get commonRetry => '重試';
+
+  @override
   String get pushDialogDefaultBlockTitle => '目前 App 無法使用';
 
   @override
@@ -5270,10 +5385,113 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
-  String get hotelTabHeadline => '酒店預訂模組（框架）';
+  String get hotelBrandMark => 'STELLAVIA STAY';
 
   @override
-  String get hotelTabSubtitle => '後續在此接入搜尋、列表、詳情、下單流程。';
+  String get hotelTabHeadline => '京都町家與精選民宿';
+
+  @override
+  String get hotelTabSubtitle => '從投資人的城市資產，到可預訂的真實旅宿體驗。';
+
+  @override
+  String get hotelDestinationLabel => '目的地';
+
+  @override
+  String get hotelDefaultDestination => '京都市下京區';
+
+  @override
+  String get hotelPropertyTypeLabel => '房源類型';
+
+  @override
+  String get hotelCheckInDateLabel => '入住日期';
+
+  @override
+  String get hotelGuestFieldLabel => '入住人數';
+
+  @override
+  String get hotelSearchKeywordHint => '酒店名、區域或車站';
+
+  @override
+  String get hotelSearchAction => '查詢空房';
+
+  @override
+  String hotelSearchNights(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count晚',
+      one: '1晚',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get hotelFilterAllTypes => '全部旅宿';
+
+  @override
+  String get hotelSortRecommended => '精選推薦';
+
+  @override
+  String get hotelSortPriceLow => '價格排序';
+
+  @override
+  String get hotelSortPriceHigh => '價格排序';
+
+  @override
+  String get hotelToolbarFilter => '篩選';
+
+  @override
+  String get hotelToolbarMap => '地圖';
+
+  @override
+  String get hotelGuestAdults => '成人';
+
+  @override
+  String get hotelGuestChildren => '兒童';
+
+  @override
+  String get hotelGuestRooms => '房間';
+
+  @override
+  String hotelGuestSummary(int guests, int rooms) {
+    return '$guests位成人 · $rooms間';
+  }
+
+  @override
+  String hotelResultsCount(int count) {
+    return '$count個住宿';
+  }
+
+  @override
+  String get hotelUnnamedProperty => '酒店';
+
+  @override
+  String get hotelUnavailable => '暫不可訂';
+
+  @override
+  String get hotelPriceAsk => '價格待確認';
+
+  @override
+  String get hotelPricePerNight => ' 起 / 晚';
+
+  @override
+  String hotelCardMeta(Object location, int count) {
+    return '位置 $location · 最大住宿人數 $count';
+  }
+
+  @override
+  String hotelRemainingRooms(int count) {
+    return '剩餘 $count 間';
+  }
+
+  @override
+  String get hotelRefreshFailed => '重新整理失敗，已保留上次結果。';
+
+  @override
+  String get hotelLoadFailed => '酒店列表載入失敗。';
+
+  @override
+  String get hotelEmptyResults => '目前條件下沒有可顯示的酒店。';
 
   @override
   String get discussionTabHeadline => '投資討論板塊（框架）';

@@ -46,6 +46,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonCancel => 'Cancel';
 
   @override
+  String get commonApply => 'Apply';
+
+  @override
+  String get commonRetry => 'Retry';
+
+  @override
   String get pushDialogDefaultBlockTitle => 'This app is unavailable';
 
   @override
@@ -1139,11 +1145,115 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get hotelTabHeadline => 'Hotel Booking Module (Framework)';
+  String get hotelBrandMark => 'STELLAVIA STAY';
+
+  @override
+  String get hotelTabHeadline => 'Kyoto Machiya & Selected Stays';
 
   @override
   String get hotelTabSubtitle =>
-      'Search, list, detail, and booking flows will be integrated here next.';
+      'From urban assets to bookable, real stay experiences.';
+
+  @override
+  String get hotelDestinationLabel => 'Destination';
+
+  @override
+  String get hotelDefaultDestination => 'Shimogyo, Kyoto';
+
+  @override
+  String get hotelPropertyTypeLabel => 'Stay type';
+
+  @override
+  String get hotelCheckInDateLabel => 'Stay dates';
+
+  @override
+  String get hotelGuestFieldLabel => 'Guests';
+
+  @override
+  String get hotelSearchKeywordHint => 'Hotel name, area, or station';
+
+  @override
+  String get hotelSearchAction => 'Check availability';
+
+  @override
+  String hotelSearchNights(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count nights',
+      one: '1 night',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get hotelFilterAllTypes => 'All stays';
+
+  @override
+  String get hotelSortRecommended => 'Featured';
+
+  @override
+  String get hotelSortPriceLow => 'Price sort';
+
+  @override
+  String get hotelSortPriceHigh => 'Price sort';
+
+  @override
+  String get hotelToolbarFilter => 'Filter';
+
+  @override
+  String get hotelToolbarMap => 'Map';
+
+  @override
+  String get hotelGuestAdults => 'Adults';
+
+  @override
+  String get hotelGuestChildren => 'Children';
+
+  @override
+  String get hotelGuestRooms => 'Rooms';
+
+  @override
+  String hotelGuestSummary(int guests, int rooms) {
+    return '$guests adults · $rooms rooms';
+  }
+
+  @override
+  String hotelResultsCount(int count) {
+    return '$count stays';
+  }
+
+  @override
+  String get hotelUnnamedProperty => 'Hotel';
+
+  @override
+  String get hotelUnavailable => 'Unavailable';
+
+  @override
+  String get hotelPriceAsk => 'Price on request';
+
+  @override
+  String get hotelPricePerNight => ' from / night';
+
+  @override
+  String hotelCardMeta(Object location, int count) {
+    return 'Location $location · Up to $count guests';
+  }
+
+  @override
+  String hotelRemainingRooms(int count) {
+    return '$count rooms left';
+  }
+
+  @override
+  String get hotelRefreshFailed =>
+      'Unable to refresh. Showing the previous results.';
+
+  @override
+  String get hotelLoadFailed => 'Unable to load hotels.';
+
+  @override
+  String get hotelEmptyResults => 'No hotels match the current search.';
 
   @override
   String get discussionTabHeadline => 'Investment Discussion Board (Framework)';

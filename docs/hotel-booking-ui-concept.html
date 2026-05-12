@@ -1,0 +1,989 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hotel Booking UI Concept - StellaVia</title>
+  <style>
+    :root {
+      --brand-navy: #0c1c50;
+      --brand-navy-deep: #09153b;
+      --brand-blue: #5e7de0;
+      --brand-teal: #2495a3;
+      --brand-gold: #b8954f;
+      --brand-alert: #f9675f;
+      --cream: #eee8e0;
+      --cream-light: #f5f1eb;
+      --cream-lighter: #f8f4ef;
+      --ink: #0f172a;
+      --muted: #475569;
+      --soft: #7a899f;
+      --line: #e3d7c3;
+      --white: #ffffff;
+      --shadow: 0 18px 50px rgba(12, 28, 80, .14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(135deg, rgba(12, 28, 80, .08), rgba(184, 149, 79, .08)),
+        var(--cream-light);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans GB", "Noto Sans CJK SC", "PingFang SC", "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    .page {
+      width: min(1440px, 100%);
+      margin: 0 auto;
+      padding: 32px;
+    }
+
+    .brief {
+      display: grid;
+      grid-template-columns: minmax(280px, 420px) 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .panel {
+      position: sticky;
+      top: 24px;
+      border: 1px solid rgba(12, 28, 80, .08);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .72);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+    }
+
+    .panel-hero {
+      padding: 28px;
+      color: var(--white);
+      background:
+        linear-gradient(145deg, rgba(9, 21, 59, .95), rgba(12, 28, 80, .92)),
+        var(--brand-navy);
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: rgba(255, 255, 255, .76);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 14px;
+      font-size: 34px;
+      line-height: 1.12;
+      font-weight: 850;
+    }
+
+    .lead {
+      margin-bottom: 0;
+      color: rgba(255, 255, 255, .74);
+      font-size: 15px;
+      line-height: 1.72;
+    }
+
+    .panel-body {
+      padding: 24px 28px 28px;
+    }
+
+    .rule {
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(12, 28, 80, .08);
+    }
+
+    .rule:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .rule h3 {
+      margin-bottom: 8px;
+      color: var(--brand-navy);
+      font-size: 16px;
+    }
+
+    .rule p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .swatch {
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(12, 28, 80, .12);
+    }
+
+    .canvas {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 64px;
+      align-items: start;
+      justify-items: center;
+      overflow: visible;
+      padding: 2px 2px 56px;
+    }
+
+    .phone {
+      width: 390px;
+      height: 844px;
+      border: 10px solid #172033;
+      border-radius: 42px;
+      background: var(--cream-lighter);
+      box-shadow: 0 28px 70px rgba(15, 23, 42, .24);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .screen {
+      height: 100%;
+      overflow: hidden;
+      background: var(--cream-lighter);
+      position: relative;
+    }
+
+    .status {
+      height: 42px;
+      padding: 12px 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      font-size: 14px;
+      font-weight: 800;
+      color: currentColor;
+      position: relative;
+      z-index: 4;
+    }
+
+    .status-icons {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .hotel-hero {
+      margin-top: -42px;
+      padding: 58px 20px 18px;
+      color: var(--white);
+      background:
+        linear-gradient(180deg, rgba(9, 21, 59, .30), rgba(9, 21, 59, .88)),
+        url("assets/hotel-booking-ui/detail-room-01.png") center 14% / cover;
+      min-height: 246px;
+    }
+
+    .top-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 36px;
+    }
+
+    .brand-mark {
+      font-size: 12px;
+      font-weight: 800;
+      opacity: .82;
+    }
+
+    .round-icon {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .18);
+      color: var(--white);
+      font-weight: 800;
+    }
+
+    .hotel-hero h2 {
+      margin-bottom: 8px;
+      font-size: 26px;
+      line-height: 1.18;
+    }
+
+    .hotel-hero p {
+      margin-bottom: 0;
+      color: rgba(255, 255, 255, .78);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .search-card {
+      margin: -22px 16px 14px;
+      padding: 14px;
+      border: 1px solid rgba(210, 192, 157, .7);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, .95);
+      box-shadow: 0 12px 34px rgba(12, 28, 80, .16);
+      position: relative;
+      z-index: 5;
+    }
+
+    .search-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .field {
+      min-height: 54px;
+      padding: 10px 11px;
+      border-radius: 14px;
+      background: var(--cream-lighter);
+      border: 1px solid rgba(227, 215, 195, .9);
+    }
+
+    .field .label {
+      color: var(--soft);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .field .value {
+      margin-top: 4px;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 750;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .primary-button {
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--brand-navy), #18306f);
+      font-size: 15px;
+      font-weight: 800;
+      box-shadow: 0 12px 24px rgba(12, 28, 80, .26);
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      padding: 0 16px 12px;
+      overflow: hidden;
+    }
+
+    .chip {
+      flex: 0 0 auto;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .78);
+      color: var(--brand-navy);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .chip.active {
+      color: var(--white);
+      border-color: var(--brand-navy);
+      background: var(--brand-navy);
+    }
+
+    .list {
+      height: 526px;
+      overflow: hidden;
+      padding: 0 16px 92px;
+    }
+
+    .hotel-card {
+      margin-bottom: 14px;
+      border: 1px solid rgba(210, 192, 157, .58);
+      border-radius: 22px;
+      background: var(--white);
+      overflow: hidden;
+      box-shadow: 0 14px 34px rgba(12, 28, 80, .10);
+    }
+
+    .hotel-card img {
+      width: 100%;
+      height: 154px;
+      display: block;
+      object-fit: cover;
+    }
+
+    .hotel-card-body {
+      padding: 14px 14px 16px;
+    }
+
+    .card-title {
+      margin-bottom: 8px;
+      font-size: 18px;
+      font-weight: 850;
+      color: var(--ink);
+    }
+
+    .meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .tag-row {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .tag {
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(184, 149, 79, .14);
+      color: #7c6129;
+      font-size: 11px;
+      font-weight: 750;
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      margin-top: 14px;
+    }
+
+    .old-price {
+      color: var(--soft);
+      font-size: 12px;
+      text-decoration: line-through;
+    }
+
+    .price {
+      color: var(--brand-navy-deep);
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .price span {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .reserve-badge {
+      color: var(--brand-teal);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .bottom-nav {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      height: 78px;
+      border-top: 1px solid rgba(12, 28, 80, .08);
+      background: rgba(255, 255, 255, .94);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav-item {
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 4px;
+      color: var(--soft);
+      font-size: 11px;
+      font-weight: 750;
+    }
+
+    .nav-item.active {
+      color: var(--brand-navy);
+    }
+
+    .map-screen {
+      color: #111827;
+      background:
+        linear-gradient(90deg, rgba(94, 125, 224, .18) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(94, 125, 224, .15) 1px, transparent 1px),
+        linear-gradient(135deg, rgba(36, 149, 163, .13), rgba(184, 149, 79, .12)),
+        var(--cream-lighter);
+      background-size: 62px 62px, 62px 62px, auto;
+    }
+
+    .map-status {
+      color: #111827;
+    }
+
+    .map-search {
+      margin: 74px 16px 0;
+      padding: 14px 14px 14px 12px;
+      display: grid;
+      grid-template-columns: 34px 1fr 36px;
+      gap: 10px;
+      align-items: center;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, .94);
+      box-shadow: 0 14px 40px rgba(12, 28, 80, .18);
+    }
+
+    .map-search strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .map-search span {
+      display: block;
+      margin-top: 3px;
+      color: var(--soft);
+      font-size: 11px;
+      line-height: 1.3;
+    }
+
+    .map-tools {
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px;
+    }
+
+    .map-price {
+      position: absolute;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: var(--white);
+      background: var(--brand-teal);
+      font-size: 12px;
+      font-weight: 850;
+      box-shadow: 0 8px 20px rgba(36, 149, 163, .30);
+    }
+
+    .map-price.selected {
+      background: var(--brand-navy);
+    }
+
+    .map-result {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 22px;
+      display: grid;
+      grid-template-columns: 126px 1fr;
+      gap: 14px;
+      min-height: 172px;
+      padding: 12px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .96);
+      box-shadow: 0 18px 46px rgba(12, 28, 80, .22);
+    }
+
+    .map-result img {
+      width: 126px;
+      height: 148px;
+      border-radius: 18px;
+      object-fit: cover;
+    }
+
+    .map-result h2 {
+      margin: 8px 0 8px;
+      font-size: 18px;
+      line-height: 1.22;
+    }
+
+    .mini-label {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 9px;
+      border-radius: 999px;
+      color: #6e5420;
+      background: rgba(184, 149, 79, .16);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .detail-screen {
+      overflow-y: hidden;
+      background: var(--cream-lighter);
+    }
+
+    .detail-photo {
+      height: 328px;
+      margin-top: -42px;
+      padding: 58px 18px 0;
+      color: var(--white);
+      background:
+        linear-gradient(180deg, rgba(9, 21, 59, .34), rgba(9, 21, 59, .04) 44%, rgba(9, 21, 59, .72)),
+        url("assets/hotel-booking-ui/detail-room-01.png") center / cover;
+      position: relative;
+    }
+
+    .detail-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .gallery-dots {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .52);
+    }
+
+    .dot.active {
+      width: 22px;
+      background: var(--brand-gold);
+    }
+
+    .booking-strip {
+      margin: -20px 16px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid rgba(210, 192, 157, .66);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, .96);
+      box-shadow: 0 12px 32px rgba(12, 28, 80, .15);
+      overflow: hidden;
+      position: relative;
+      z-index: 3;
+    }
+
+    .strip-cell {
+      padding: 14px;
+      border-right: 1px solid rgba(12, 28, 80, .08);
+    }
+
+    .strip-cell:last-child {
+      border-right: 0;
+    }
+
+    .strip-cell small {
+      display: block;
+      color: var(--brand-teal);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .strip-cell strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 15px;
+    }
+
+    .detail-body {
+      padding: 18px 16px 116px;
+    }
+
+    .detail-body h2 {
+      margin-bottom: 8px;
+      font-size: 24px;
+      line-height: 1.2;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 18px 0 10px;
+    }
+
+    .section-head h3 {
+      margin: 0;
+      font-size: 16px;
+      color: var(--brand-navy);
+    }
+
+    .room-card {
+      display: grid;
+      grid-template-columns: 116px 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding: 10px;
+      border: 1px solid rgba(210, 192, 157, .58);
+      border-radius: 22px;
+      background: var(--white);
+      box-shadow: 0 12px 30px rgba(12, 28, 80, .10);
+    }
+
+    .room-card img {
+      width: 116px;
+      height: 136px;
+      border-radius: 16px;
+      object-fit: cover;
+    }
+
+    .room-card h3 {
+      margin: 3px 0 8px;
+      font-size: 17px;
+    }
+
+    .feature-line {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    .discount {
+      display: inline-flex;
+      margin-top: 8px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      color: var(--brand-alert);
+      background: rgba(249, 103, 95, .10);
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .room-price {
+      margin-top: 10px;
+      text-align: right;
+      color: var(--brand-navy-deep);
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .room-price span {
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .stepper {
+      margin-left: auto;
+      margin-top: 8px;
+      width: 118px;
+      display: grid;
+      grid-template-columns: 36px 1fr 36px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      overflow: hidden;
+      color: var(--brand-navy);
+      background: var(--cream-lighter);
+      font-weight: 900;
+      text-align: center;
+      line-height: 32px;
+    }
+
+    .checkout-bar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 96px;
+      display: grid;
+      grid-template-columns: 1fr 150px;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 16px 18px;
+      border-top: 1px solid rgba(12, 28, 80, .08);
+      background: rgba(255, 255, 255, .96);
+      box-shadow: 0 -12px 30px rgba(12, 28, 80, .10);
+      backdrop-filter: blur(14px);
+    }
+
+    .total-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .total-price {
+      margin-top: 5px;
+      color: var(--brand-alert);
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    @media (max-width: 1060px) {
+      .brief {
+        display: block;
+      }
+
+      .panel {
+        position: static;
+        margin-bottom: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="brief">
+      <aside class="panel">
+        <section class="panel-hero">
+          <p class="eyebrow">Hotel booking redesign concept</p>
+          <h1>典雅旅宿预约 UI 方向</h1>
+          <p class="lead">保留老 App 的列表、地图、详情房型三段流程，但把视觉重心从功能堆叠改成“沉稳搜索、图片叙事、价格清晰、行动明确”。适配当前 StellaVia 深海军蓝、奶油底、金色高光与少量 teal 的品牌体系。</p>
+        </section>
+        <section class="panel-body">
+          <div class="rule">
+            <h3>推荐使用的 skill</h3>
+            <p>本次最合适的是静态 HTML/CSS 设计稿配合 Browser 预览验证。若后续要补充原创旅馆氛围图，再加 imagegen；HyperFrames 更适合视频稿，不适合作为普通 UI 设计文稿的主工具。</p>
+          </div>
+          <div class="rule">
+            <h3>视觉基调</h3>
+            <p>首页使用沉稳图片 hero 和浮层搜索卡，减少旧版大面积青色，按钮与价格强调回归品牌海军蓝和告警红，少量 teal 只用于筛选、地图价签和可操作状态。</p>
+          </div>
+          <div class="rule">
+            <h3>信息架构</h3>
+            <p>列表页突出目的地、日期、人数和推荐房源；地图页保留价格气泡和底部卡片；详情页把日期人数固定为强可见入口，房型卡片维持原有信息密度但降低杂乱感。</p>
+          </div>
+          <div class="rule">
+            <h3>品牌色板</h3>
+            <div class="swatches" aria-label="palette">
+              <span class="swatch" style="background:#0c1c50"></span>
+              <span class="swatch" style="background:#5e7de0"></span>
+              <span class="swatch" style="background:#2495a3"></span>
+              <span class="swatch" style="background:#b8954f"></span>
+              <span class="swatch" style="background:#f9675f"></span>
+            </div>
+          </div>
+        </section>
+      </aside>
+
+      <section class="canvas" aria-label="mobile concepts">
+        <article class="phone">
+          <div class="screen">
+            <div class="status">
+              <span>15:13</span>
+              <span class="status-icons">LTE WI 82%</span>
+            </div>
+            <section class="hotel-hero">
+              <div class="top-line">
+                <span class="brand-mark">STELLAVIA STAY</span>
+                <span class="round-icon">S</span>
+              </div>
+              <h2>京都町家与精选民宿</h2>
+              <p>从投资人的城市资产，到可预订的真实旅宿体验。</p>
+            </section>
+
+            <section class="search-card">
+              <div class="search-grid">
+                <div class="field">
+                  <div class="label">目的地</div>
+                  <div class="value">京都市下京区</div>
+                </div>
+                <div class="field">
+                  <div class="label">房源类型</div>
+                  <div class="value">全部旅宿</div>
+                </div>
+                <div class="field">
+                  <div class="label">入住日期</div>
+                  <div class="value">05/12 - 05/13</div>
+                </div>
+                <div class="field">
+                  <div class="label">入住人数</div>
+                  <div class="value">1位成人 · 1间</div>
+                </div>
+              </div>
+              <div class="primary-button">查询空房</div>
+            </section>
+
+            <nav class="toolbar">
+              <span class="chip active">精选推荐</span>
+              <span class="chip">价格排序</span>
+              <span class="chip">筛选</span>
+              <span class="chip">地图</span>
+            </nav>
+
+            <section class="list">
+              <article class="hotel-card">
+                <img src="assets/hotel-booking-ui/detail-room-01.png" alt="hotel room">
+                <div class="hotel-card-body">
+                  <div class="card-title">谷町君 Hotel · Crush On</div>
+                  <div class="meta-row">位置 京都市下京区 · 最大住宿人数 10</div>
+                  <div class="tag-row">
+                    <span class="tag">町家景观</span>
+                    <span class="tag">按房间预订</span>
+                    <span class="tag">33% OFF</span>
+                  </div>
+                  <div class="price-row">
+                    <div>
+                      <div class="old-price">¥27,000</div>
+                      <div class="reserve-badge">剩余 2 间</div>
+                    </div>
+                    <div class="price">¥18,090<span> 起 / 晚</span></div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="hotel-card">
+                <img src="assets/hotel-booking-ui/list-room-02.png" alt="hotel room">
+                <div class="hotel-card-body">
+                  <div class="card-title">谷町君 · Hotel · 惠美须町72</div>
+                  <div class="meta-row">位置 大阪 · 明亮套房 · 适合家庭入住</div>
+                  <div class="tag-row">
+                    <span class="tag">家庭房</span>
+                    <span class="tag">会员优惠</span>
+                  </div>
+                </div>
+              </article>
+            </section>
+
+            <nav class="bottom-nav">
+              <div class="nav-item">首页</div>
+              <div class="nav-item active">民宿酒店</div>
+              <div class="nav-item">个人中心</div>
+            </nav>
+          </div>
+        </article>
+
+        <article class="phone">
+          <div class="screen map-screen">
+            <div class="status map-status">
+              <span>15:13</span>
+              <span class="status-icons">LTE WI 82%</span>
+            </div>
+
+            <section class="map-search">
+              <span class="round-icon" style="background:rgba(12,28,80,.08);color:var(--brand-navy)">‹</span>
+              <div>
+                <strong>全部、05/12-05/13、共1天</strong>
+                <span>1位成人 · 0名儿童 · 1间客房</span>
+              </div>
+              <span class="round-icon" style="background:rgba(12,28,80,.08);color:var(--soft)">⌕</span>
+            </section>
+
+            <div class="map-tools">
+              <span class="chip active">筛选</span>
+              <span class="chip">列表</span>
+              <span class="chip">附近</span>
+            </div>
+
+            <span class="map-price" style="left:46px;top:270px">¥33,800</span>
+            <span class="map-price" style="left:184px;top:318px">¥19,500</span>
+            <span class="map-price selected" style="left:142px;top:398px">¥42,120</span>
+            <span class="map-price" style="right:34px;top:458px">¥27,300</span>
+            <span class="map-price" style="left:72px;top:520px">¥31,200</span>
+
+            <article class="map-result">
+              <img src="assets/hotel-booking-ui/list-room-02.png" alt="map selected hotel">
+              <div>
+                <h2>谷町君 · 星屋 · 朝雾</h2>
+                <div class="meta-row">600-8303 京都府京都市下京...</div>
+                <div style="margin:12px 0 8px"><span class="mini-label">年間割引 35% OFF</span></div>
+                <div style="color:var(--brand-alert);font-weight:800;font-size:13px">无空房</div>
+                <div class="price-row" style="margin-top:14px">
+                  <span class="old-price">¥64,800</span>
+                  <span class="price" style="font-size:20px">¥42,120<span> / 晚</span></span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </article>
+
+        <article class="phone">
+          <div class="screen detail-screen">
+            <div class="status" style="color:var(--white)">
+              <span>15:13</span>
+              <span class="status-icons">LTE WI 82%</span>
+            </div>
+
+            <section class="detail-photo">
+              <div class="detail-controls">
+                <span class="round-icon">‹</span>
+                <span class="round-icon">♡</span>
+              </div>
+              <div class="gallery-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+            </section>
+
+            <section class="booking-strip">
+              <div class="strip-cell">
+                <small>入住日期 · 退房日期</small>
+                <strong>05/12-05/13、1晚</strong>
+              </div>
+              <div class="strip-cell">
+                <small>入住人数 · 客房</small>
+                <strong>1位成人、1间</strong>
+              </div>
+            </section>
+
+            <section class="detail-body">
+              <h2>谷町君Hotel · Crush On</h2>
+              <div class="meta-row">京都市下京区泉正寺町 · 町家景观 · 按房间预订</div>
+              <div class="section-head">
+                <h3>可选房型</h3>
+                <span class="reserve-badge">仅剩 2 间</span>
+              </div>
+
+              <article class="room-card">
+                <img src="assets/hotel-booking-ui/detail-room-01.png" alt="room">
+                <div>
+                  <h3>双床房</h3>
+                  <div class="feature-line">可住 2 人 · 面积 23.0㎡</div>
+                  <div class="feature-line">卧室 1 间 · 浴室 1 间</div>
+                  <span class="discount">累计折扣 33% OFF</span>
+                  <div class="room-price">¥20,100<span> / 1晚</span></div>
+                  <div class="stepper"><span>-</span><span>0</span><span>+</span></div>
+                </div>
+              </article>
+
+              <article class="room-card">
+                <img src="assets/hotel-booking-ui/room-card-02.png" alt="room">
+                <div>
+                  <h3>大床房</h3>
+                  <div class="feature-line">可住 2 人 · 面积 19.0㎡</div>
+                  <div class="feature-line">双人床 1 张 · 无烟</div>
+                  <span class="discount">累计折扣 33% OFF</span>
+                  <div class="room-price">¥18,090<span> / 1晚</span></div>
+                  <div class="stepper"><span>-</span><span>1</span><span>+</span></div>
+                </div>
+              </article>
+            </section>
+
+            <footer class="checkout-bar">
+              <div>
+                <div class="total-label">应付金额</div>
+                <div class="total-price">¥18,090 JPY</div>
+                <div class="meta-row">1天 · 1间 · 含税费说明</div>
+              </div>
+              <div class="primary-button">立即预订</div>
+            </footer>
+          </div>
+        </article>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

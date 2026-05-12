@@ -12,6 +12,8 @@
   "loginCreateAccount": "新規登録",
   "commonClose": "閉じる",
   "commonCancel": "キャンセル",
+  "commonApply": "適用",
+  "commonRetry": "再試行",
   "pushDialogDefaultBlockTitle": "このアプリは利用できません",
   "pushDialogDefaultBlockBody": "指定されたアプリをご利用ください。",
   "pushDialogDefaultUpdateTitle": "新しいバージョンがあります",
@@ -380,8 +382,76 @@
       "number": {}
     }
   },
-  "hotelTabHeadline": "ホテル予約モジュール（枠組み）",
-  "hotelTabSubtitle": "今後ここに検索・一覧・詳細・予約フローを実装します。",
+  "hotelBrandMark": "STELLAVIA STAY",
+  "hotelTabHeadline": "京都町家と厳選民泊",
+  "hotelTabSubtitle": "投資家の都市資産から、予約できるリアルな宿泊体験へ。",
+  "hotelDestinationLabel": "目的地",
+  "hotelDefaultDestination": "京都市下京区",
+  "hotelPropertyTypeLabel": "宿泊タイプ",
+  "hotelCheckInDateLabel": "宿泊日",
+  "hotelGuestFieldLabel": "宿泊人数",
+  "hotelSearchKeywordHint": "ホテル名・エリア・駅名",
+  "hotelSearchAction": "空室を検索",
+  "hotelSearchNights": "{count, plural, =1{1泊} other{{count}泊}}",
+  "@hotelSearchNights": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelFilterAllTypes": "すべての宿",
+  "hotelSortRecommended": "厳選おすすめ",
+  "hotelSortPriceLow": "価格順",
+  "hotelSortPriceHigh": "価格順",
+  "hotelToolbarFilter": "絞り込み",
+  "hotelToolbarMap": "地図",
+  "hotelGuestAdults": "大人",
+  "hotelGuestChildren": "子ども",
+  "hotelGuestRooms": "部屋数",
+  "hotelGuestSummary": "大人{guests}名・{rooms}室",
+  "@hotelGuestSummary": {
+    "placeholders": {
+      "guests": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelResultsCount": "{count}件の宿泊施設",
+  "@hotelResultsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelUnnamedProperty": "ホテル",
+  "hotelUnavailable": "予約不可",
+  "hotelPriceAsk": "料金確認",
+  "hotelPricePerNight": " 〜 / 泊",
+  "hotelCardMeta": "所在地 {location} · 最大 {count} 名",
+  "@hotelCardMeta": {
+    "placeholders": {
+      "location": {},
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelRemainingRooms": "残り {count} 室",
+  "@hotelRemainingRooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelRefreshFailed": "更新できませんでした。前回の結果を表示しています。",
+  "hotelLoadFailed": "ホテル情報を読み込めませんでした。",
+  "hotelEmptyResults": "条件に一致するホテルがありません。",
   "discussionTabHeadline": "投資ディスカッション掲示板（枠組み）",
   "discussionTabSubtitle": "返信・いいね・固定表示・審査に対応する掲示板型UIを今後実装します。",
   "discussionTabReplyAction": "返信",

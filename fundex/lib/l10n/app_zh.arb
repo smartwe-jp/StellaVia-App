@@ -12,6 +12,8 @@
   "loginCreateAccount": "免费注册",
   "commonClose": "关闭",
   "commonCancel": "取消",
+  "commonApply": "应用",
+  "commonRetry": "重试",
   "pushDialogDefaultBlockTitle": "当前 App 无法使用",
   "pushDialogDefaultBlockBody": "请使用指定的其他 App。",
   "pushDialogDefaultUpdateTitle": "发现新版本",
@@ -380,8 +382,76 @@
       "number": {}
     }
   },
-  "hotelTabHeadline": "酒店预订模块（框架）",
-  "hotelTabSubtitle": "后续在此接入搜索、列表、详情、下单流程。",
+  "hotelBrandMark": "STELLAVIA STAY",
+  "hotelTabHeadline": "京都町家与精选民宿",
+  "hotelTabSubtitle": "从投资人的城市资产，到可预订的真实旅宿体验。",
+  "hotelDestinationLabel": "目的地",
+  "hotelDefaultDestination": "京都市下京区",
+  "hotelPropertyTypeLabel": "房源类型",
+  "hotelCheckInDateLabel": "入住日期",
+  "hotelGuestFieldLabel": "入住人数",
+  "hotelSearchKeywordHint": "酒店名、区域或车站",
+  "hotelSearchAction": "查询空房",
+  "hotelSearchNights": "{count, plural, =1{1晚} other{{count}晚}}",
+  "@hotelSearchNights": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelFilterAllTypes": "全部旅宿",
+  "hotelSortRecommended": "精选推荐",
+  "hotelSortPriceLow": "价格排序",
+  "hotelSortPriceHigh": "价格排序",
+  "hotelToolbarFilter": "筛选",
+  "hotelToolbarMap": "地图",
+  "hotelGuestAdults": "成人",
+  "hotelGuestChildren": "儿童",
+  "hotelGuestRooms": "房间",
+  "hotelGuestSummary": "{guests}位成人 · {rooms}间",
+  "@hotelGuestSummary": {
+    "placeholders": {
+      "guests": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelResultsCount": "{count}个住宿",
+  "@hotelResultsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelUnnamedProperty": "酒店",
+  "hotelUnavailable": "暂不可订",
+  "hotelPriceAsk": "价格待确认",
+  "hotelPricePerNight": " 起 / 晚",
+  "hotelCardMeta": "位置 {location} · 最大住宿人数 {count}",
+  "@hotelCardMeta": {
+    "placeholders": {
+      "location": {},
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelRemainingRooms": "剩余 {count} 间",
+  "@hotelRemainingRooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelRefreshFailed": "刷新失败，已保留上次结果。",
+  "hotelLoadFailed": "酒店列表加载失败。",
+  "hotelEmptyResults": "当前条件下没有可显示的酒店。",
   "discussionTabHeadline": "投资讨论板块（框架）",
   "discussionTabSubtitle": "类似留言版的互动区，后续支持回复、点赞、置顶与审核。",
   "discussionTabReplyAction": "回复",

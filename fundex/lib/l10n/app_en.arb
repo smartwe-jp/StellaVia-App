@@ -12,6 +12,8 @@
   "loginCreateAccount": "Create account",
   "commonClose": "Close",
   "commonCancel": "Cancel",
+  "commonApply": "Apply",
+  "commonRetry": "Retry",
   "pushDialogDefaultBlockTitle": "This app is unavailable",
   "pushDialogDefaultBlockBody": "Please use the specified app instead.",
   "pushDialogDefaultUpdateTitle": "A new version is available",
@@ -380,8 +382,76 @@
       "number": {}
     }
   },
-  "hotelTabHeadline": "Hotel Booking Module (Framework)",
-  "hotelTabSubtitle": "Search, list, detail, and booking flows will be integrated here next.",
+  "hotelBrandMark": "STELLAVIA STAY",
+  "hotelTabHeadline": "Kyoto Machiya & Selected Stays",
+  "hotelTabSubtitle": "From urban assets to bookable, real stay experiences.",
+  "hotelDestinationLabel": "Destination",
+  "hotelDefaultDestination": "Shimogyo, Kyoto",
+  "hotelPropertyTypeLabel": "Stay type",
+  "hotelCheckInDateLabel": "Stay dates",
+  "hotelGuestFieldLabel": "Guests",
+  "hotelSearchKeywordHint": "Hotel name, area, or station",
+  "hotelSearchAction": "Check availability",
+  "hotelSearchNights": "{count, plural, =1{1 night} other{{count} nights}}",
+  "@hotelSearchNights": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelFilterAllTypes": "All stays",
+  "hotelSortRecommended": "Featured",
+  "hotelSortPriceLow": "Price sort",
+  "hotelSortPriceHigh": "Price sort",
+  "hotelToolbarFilter": "Filter",
+  "hotelToolbarMap": "Map",
+  "hotelGuestAdults": "Adults",
+  "hotelGuestChildren": "Children",
+  "hotelGuestRooms": "Rooms",
+  "hotelGuestSummary": "{guests} adults · {rooms} rooms",
+  "@hotelGuestSummary": {
+    "placeholders": {
+      "guests": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelResultsCount": "{count} stays",
+  "@hotelResultsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelUnnamedProperty": "Hotel",
+  "hotelUnavailable": "Unavailable",
+  "hotelPriceAsk": "Price on request",
+  "hotelPricePerNight": " from / night",
+  "hotelCardMeta": "Location {location} · Up to {count} guests",
+  "@hotelCardMeta": {
+    "placeholders": {
+      "location": {},
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelRemainingRooms": "{count} rooms left",
+  "@hotelRemainingRooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelRefreshFailed": "Unable to refresh. Showing the previous results.",
+  "hotelLoadFailed": "Unable to load hotels.",
+  "hotelEmptyResults": "No hotels match the current search.",
   "discussionTabHeadline": "Investment Discussion Board (Framework)",
   "discussionTabSubtitle": "Interactive message-board area for replies, likes, pinning, and moderation.",
   "discussionTabReplyAction": "Reply",

@@ -139,7 +139,7 @@ class MainShellPage extends ConsumerWidget {
                       ),
                       Expanded(
                         child: _MainTabItem(
-                          label: l10n.mainTabProfile,
+                          label: l10n.mainTabHotel,
                           isSelected: currentTabIndex == 3,
                           labelColor: currentTabIndex == 3
                               ? colorScheme.primary
@@ -150,9 +150,31 @@ class MainShellPage extends ConsumerWidget {
                                 ? colorScheme.primary
                                 : inactiveTabBackgroundColor,
                             child: Icon(
-                              Icons.person_rounded,
+                              Icons.hotel_rounded,
                               size: 20,
                               color: currentTabIndex == 3
+                                  ? colors.onDark
+                                  : shellNavigationTheme.bottomTabInactiveColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: _MainTabItem(
+                          label: l10n.mainTabProfile,
+                          isSelected: currentTabIndex == 4,
+                          labelColor: currentTabIndex == 4
+                              ? colorScheme.primary
+                              : shellNavigationTheme.bottomTabInactiveColor,
+                          onTap: () => _onDestinationSelected(context, ref, 4),
+                          badge: _MainTabBadge(
+                            backgroundColor: currentTabIndex == 4
+                                ? colorScheme.primary
+                                : inactiveTabBackgroundColor,
+                            child: Icon(
+                              Icons.person_rounded,
+                              size: 20,
+                              color: currentTabIndex == 4
                                   ? colors.onDark
                                   : shellNavigationTheme.bottomTabInactiveColor,
                             ),

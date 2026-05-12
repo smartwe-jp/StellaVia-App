@@ -11,6 +11,7 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/real_person_auth_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/discussion_board/presentation/pages/discussion_board_tab_page.dart';
+import '../../features/hotel_booking/presentation/pages/hotel_booking_tab_page.dart';
 import '../../features/home/presentation/pages/home_overview_tab_page.dart';
 import '../../features/investment/presentation/pages/fund_project_detail_page.dart';
 import '../../features/investment/presentation/pages/fund_lottery_apply_flow_page.dart';
@@ -75,6 +76,7 @@ String? resolveAuthRedirect({
       location == '/home/free-market' ||
       location.startsWith('/home/free-market/') ||
       location == '/discussion-board' ||
+      location == '/hotel-booking' ||
       location == '/funds' ||
       location.startsWith('/funds/') ||
       location == '/profile/settings' ||
@@ -267,6 +269,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 path: '/discussion-board',
                 builder: (BuildContext context, GoRouterState state) {
                   return const DiscussionBoardTabPage();
+                },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              GoRoute(
+                path: '/hotel-booking',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const HotelBookingTabPage();
                 },
               ),
             ],
@@ -628,10 +640,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/investment',
-        redirect: (BuildContext context, GoRouterState state) => '/funds',
-      ),
-      GoRoute(
-        path: '/hotel-booking',
         redirect: (BuildContext context, GoRouterState state) => '/funds',
       ),
       GoRoute(

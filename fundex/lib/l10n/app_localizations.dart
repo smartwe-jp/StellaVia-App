@@ -173,6 +173,18 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get commonCancel;
 
+  /// No description provided for @commonApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get commonApply;
+
+  /// No description provided for @commonRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get commonRetry;
+
   /// No description provided for @pushDialogDefaultBlockTitle.
   ///
   /// In en, this message translates to:
@@ -2165,17 +2177,191 @@ abstract class AppLocalizations {
   /// **'Vol. {number}'**
   String fundListVolume(Object number);
 
+  /// No description provided for @hotelBrandMark.
+  ///
+  /// In en, this message translates to:
+  /// **'STELLAVIA STAY'**
+  String get hotelBrandMark;
+
   /// No description provided for @hotelTabHeadline.
   ///
   /// In en, this message translates to:
-  /// **'Hotel Booking Module (Framework)'**
+  /// **'Kyoto Machiya & Selected Stays'**
   String get hotelTabHeadline;
 
   /// No description provided for @hotelTabSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Search, list, detail, and booking flows will be integrated here next.'**
+  /// **'From urban assets to bookable, real stay experiences.'**
   String get hotelTabSubtitle;
+
+  /// No description provided for @hotelDestinationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Destination'**
+  String get hotelDestinationLabel;
+
+  /// No description provided for @hotelDefaultDestination.
+  ///
+  /// In en, this message translates to:
+  /// **'Shimogyo, Kyoto'**
+  String get hotelDefaultDestination;
+
+  /// No description provided for @hotelPropertyTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay type'**
+  String get hotelPropertyTypeLabel;
+
+  /// No description provided for @hotelCheckInDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay dates'**
+  String get hotelCheckInDateLabel;
+
+  /// No description provided for @hotelGuestFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Guests'**
+  String get hotelGuestFieldLabel;
+
+  /// No description provided for @hotelSearchKeywordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Hotel name, area, or station'**
+  String get hotelSearchKeywordHint;
+
+  /// No description provided for @hotelSearchAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Check availability'**
+  String get hotelSearchAction;
+
+  /// No description provided for @hotelSearchNights.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 night} other{{count} nights}}'**
+  String hotelSearchNights(int count);
+
+  /// No description provided for @hotelFilterAllTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'All stays'**
+  String get hotelFilterAllTypes;
+
+  /// No description provided for @hotelSortRecommended.
+  ///
+  /// In en, this message translates to:
+  /// **'Featured'**
+  String get hotelSortRecommended;
+
+  /// No description provided for @hotelSortPriceLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Price sort'**
+  String get hotelSortPriceLow;
+
+  /// No description provided for @hotelSortPriceHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'Price sort'**
+  String get hotelSortPriceHigh;
+
+  /// No description provided for @hotelToolbarFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get hotelToolbarFilter;
+
+  /// No description provided for @hotelToolbarMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Map'**
+  String get hotelToolbarMap;
+
+  /// No description provided for @hotelGuestAdults.
+  ///
+  /// In en, this message translates to:
+  /// **'Adults'**
+  String get hotelGuestAdults;
+
+  /// No description provided for @hotelGuestChildren.
+  ///
+  /// In en, this message translates to:
+  /// **'Children'**
+  String get hotelGuestChildren;
+
+  /// No description provided for @hotelGuestRooms.
+  ///
+  /// In en, this message translates to:
+  /// **'Rooms'**
+  String get hotelGuestRooms;
+
+  /// No description provided for @hotelGuestSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{guests} adults · {rooms} rooms'**
+  String hotelGuestSummary(int guests, int rooms);
+
+  /// No description provided for @hotelResultsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} stays'**
+  String hotelResultsCount(int count);
+
+  /// No description provided for @hotelUnnamedProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'Hotel'**
+  String get hotelUnnamedProperty;
+
+  /// No description provided for @hotelUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable'**
+  String get hotelUnavailable;
+
+  /// No description provided for @hotelPriceAsk.
+  ///
+  /// In en, this message translates to:
+  /// **'Price on request'**
+  String get hotelPriceAsk;
+
+  /// No description provided for @hotelPricePerNight.
+  ///
+  /// In en, this message translates to:
+  /// **' from / night'**
+  String get hotelPricePerNight;
+
+  /// No description provided for @hotelCardMeta.
+  ///
+  /// In en, this message translates to:
+  /// **'Location {location} · Up to {count} guests'**
+  String hotelCardMeta(Object location, int count);
+
+  /// No description provided for @hotelRemainingRooms.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} rooms left'**
+  String hotelRemainingRooms(int count);
+
+  /// No description provided for @hotelRefreshFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to refresh. Showing the previous results.'**
+  String get hotelRefreshFailed;
+
+  /// No description provided for @hotelLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load hotels.'**
+  String get hotelLoadFailed;
+
+  /// No description provided for @hotelEmptyResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No hotels match the current search.'**
+  String get hotelEmptyResults;
 
   /// No description provided for @discussionTabHeadline.
   ///

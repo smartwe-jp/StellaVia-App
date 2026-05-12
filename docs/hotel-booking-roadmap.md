@@ -15,17 +15,16 @@ Existing code:
 
 Current behavior:
 
-- Placeholder hotel page file exists and demonstrates `memberProfileActionGuardProvider.ensureCompleted(...)`, but it is not wired into the active root tab shell.
-- Current `/hotel-booking` route redirects to `/funds`.
+- Hotel page is wired as the fourth bottom tab at `/hotel-booking`; Profile remains as the fifth bottom tab.
+- Hotel tab implements the first home/list/search slice using the SDK `HotelApiClient`.
+- Hotel browsing is public. The current booking action still uses `memberProfileActionGuardProvider.ensureCompleted(...)` until the real booking flow is implemented.
+- Hotel home hero temporarily reuses the same remote banner image URL pattern as the home tab.
 - SDK-level hotel API client/DTO foundation exists for the first migration slice.
-- No app-side hotel data/domain implementation yet.
 
 Current gaps:
 
-- No app-side hotel entity/repository/usecase/provider layer.
-- No hotel list/detail/search/room/booking/order pages.
+- No hotel detail/room/booking/order pages.
 - No hotel payment/refund/cancel policy flow.
-- No hotel-specific l10n beyond placeholder tab labels.
 - Hotel API success-code contract is still unresolved: old app checks `code == 200`, while current architecture notes say hotel uses `code == 0`.
 
 ## API And Legacy Reference Sources
@@ -292,8 +291,9 @@ Recommended task threads:
    - Keep remote datasource thin over SDK client.
 
 4. Hotel list tab replacement
-   - Replace placeholder tab with list/search UI.
-   - Pull-to-refresh and non-destructive offline failure behavior.
+   - Done for first slice.
+   - Current search fields are keyword, date range, building type, price sort, adults, children, and room count.
+   - Pull-to-refresh preserves old content on refresh failure.
 
 5. Hotel detail page
    - Route, detail data, image gallery, room-plan entry.

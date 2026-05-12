@@ -45,6 +45,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get commonCancel => 'キャンセル';
 
   @override
+  String get commonApply => '適用';
+
+  @override
+  String get commonRetry => '再試行';
+
+  @override
   String get pushDialogDefaultBlockTitle => 'このアプリは利用できません';
 
   @override
@@ -1074,10 +1080,113 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get hotelTabHeadline => 'ホテル予約モジュール（枠組み）';
+  String get hotelBrandMark => 'STELLAVIA STAY';
 
   @override
-  String get hotelTabSubtitle => '今後ここに検索・一覧・詳細・予約フローを実装します。';
+  String get hotelTabHeadline => '京都町家と厳選民泊';
+
+  @override
+  String get hotelTabSubtitle => '投資家の都市資産から、予約できるリアルな宿泊体験へ。';
+
+  @override
+  String get hotelDestinationLabel => '目的地';
+
+  @override
+  String get hotelDefaultDestination => '京都市下京区';
+
+  @override
+  String get hotelPropertyTypeLabel => '宿泊タイプ';
+
+  @override
+  String get hotelCheckInDateLabel => '宿泊日';
+
+  @override
+  String get hotelGuestFieldLabel => '宿泊人数';
+
+  @override
+  String get hotelSearchKeywordHint => 'ホテル名・エリア・駅名';
+
+  @override
+  String get hotelSearchAction => '空室を検索';
+
+  @override
+  String hotelSearchNights(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count泊',
+      one: '1泊',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get hotelFilterAllTypes => 'すべての宿';
+
+  @override
+  String get hotelSortRecommended => '厳選おすすめ';
+
+  @override
+  String get hotelSortPriceLow => '価格順';
+
+  @override
+  String get hotelSortPriceHigh => '価格順';
+
+  @override
+  String get hotelToolbarFilter => '絞り込み';
+
+  @override
+  String get hotelToolbarMap => '地図';
+
+  @override
+  String get hotelGuestAdults => '大人';
+
+  @override
+  String get hotelGuestChildren => '子ども';
+
+  @override
+  String get hotelGuestRooms => '部屋数';
+
+  @override
+  String hotelGuestSummary(int guests, int rooms) {
+    return '大人$guests名・$rooms室';
+  }
+
+  @override
+  String hotelResultsCount(int count) {
+    return '$count件の宿泊施設';
+  }
+
+  @override
+  String get hotelUnnamedProperty => 'ホテル';
+
+  @override
+  String get hotelUnavailable => '予約不可';
+
+  @override
+  String get hotelPriceAsk => '料金確認';
+
+  @override
+  String get hotelPricePerNight => ' 〜 / 泊';
+
+  @override
+  String hotelCardMeta(Object location, int count) {
+    return '所在地 $location · 最大 $count 名';
+  }
+
+  @override
+  String hotelRemainingRooms(int count) {
+    return '残り $count 室';
+  }
+
+  @override
+  String get hotelRefreshFailed => '更新できませんでした。前回の結果を表示しています。';
+
+  @override
+  String get hotelLoadFailed => 'ホテル情報を読み込めませんでした。';
+
+  @override
+  String get hotelEmptyResults => '条件に一致するホテルがありません。';
 
   @override
   String get discussionTabHeadline => '投資ディスカッション掲示板（枠組み）';

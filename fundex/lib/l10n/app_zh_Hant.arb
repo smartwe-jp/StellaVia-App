@@ -12,6 +12,8 @@
   "loginCreateAccount": "免費註冊",
   "commonClose": "關閉",
   "commonCancel": "取消",
+  "commonApply": "套用",
+  "commonRetry": "重試",
   "pushDialogDefaultBlockTitle": "目前 App 無法使用",
   "pushDialogDefaultBlockBody": "請使用指定的其他 App。",
   "pushDialogDefaultUpdateTitle": "發現新版本",
@@ -380,8 +382,76 @@
       "number": {}
     }
   },
-  "hotelTabHeadline": "酒店預訂模組（框架）",
-  "hotelTabSubtitle": "後續在此接入搜尋、列表、詳情、下單流程。",
+  "hotelBrandMark": "STELLAVIA STAY",
+  "hotelTabHeadline": "京都町家與精選民宿",
+  "hotelTabSubtitle": "從投資人的城市資產，到可預訂的真實旅宿體驗。",
+  "hotelDestinationLabel": "目的地",
+  "hotelDefaultDestination": "京都市下京區",
+  "hotelPropertyTypeLabel": "房源類型",
+  "hotelCheckInDateLabel": "入住日期",
+  "hotelGuestFieldLabel": "入住人數",
+  "hotelSearchKeywordHint": "酒店名、區域或車站",
+  "hotelSearchAction": "查詢空房",
+  "hotelSearchNights": "{count, plural, =1{1晚} other{{count}晚}}",
+  "@hotelSearchNights": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelFilterAllTypes": "全部旅宿",
+  "hotelSortRecommended": "精選推薦",
+  "hotelSortPriceLow": "價格排序",
+  "hotelSortPriceHigh": "價格排序",
+  "hotelToolbarFilter": "篩選",
+  "hotelToolbarMap": "地圖",
+  "hotelGuestAdults": "成人",
+  "hotelGuestChildren": "兒童",
+  "hotelGuestRooms": "房間",
+  "hotelGuestSummary": "{guests}位成人 · {rooms}間",
+  "@hotelGuestSummary": {
+    "placeholders": {
+      "guests": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelResultsCount": "{count}個住宿",
+  "@hotelResultsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelUnnamedProperty": "酒店",
+  "hotelUnavailable": "暫不可訂",
+  "hotelPriceAsk": "價格待確認",
+  "hotelPricePerNight": " 起 / 晚",
+  "hotelCardMeta": "位置 {location} · 最大住宿人數 {count}",
+  "@hotelCardMeta": {
+    "placeholders": {
+      "location": {},
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelRemainingRooms": "剩餘 {count} 間",
+  "@hotelRemainingRooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelRefreshFailed": "重新整理失敗，已保留上次結果。",
+  "hotelLoadFailed": "酒店列表載入失敗。",
+  "hotelEmptyResults": "目前條件下沒有可顯示的酒店。",
   "discussionTabHeadline": "投資討論板塊（框架）",
   "discussionTabSubtitle": "類似留言板的互動區，後續支援回覆、按讚、置頂與審核。",
   "discussionTabReplyAction": "回覆",

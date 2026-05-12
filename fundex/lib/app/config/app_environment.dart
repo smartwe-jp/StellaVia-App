@@ -73,7 +73,7 @@ class EnvironmentFactory {
           flavor: AppFlavor.dev,
           appName: 'StellaVia Dev',
           memberApiBaseUrl: 'https://testoa.gutingjun.com/api',
-          hotelApiBaseUrl: 'https://testoa.gutingjun.com/api',
+          hotelApiBaseUrl: 'https://hotel-sit.gutingjun.com/api',
           oaApiBaseUrl: 'https://testoa.gutingjun.com/api',
           enableHttpLog: true,
         );
@@ -82,7 +82,7 @@ class EnvironmentFactory {
           flavor: AppFlavor.staging,
           appName: 'StellaVia Staging',
           memberApiBaseUrl: 'https://testoa.gutingjun.com/api',
-          hotelApiBaseUrl: 'https://testoa.gutingjun.com/api',
+          hotelApiBaseUrl: 'https://hotel-sit.gutingjun.com/api',
           oaApiBaseUrl: 'https://testoa.gutingjun.com/api',
           enableHttpLog: true,
         );
