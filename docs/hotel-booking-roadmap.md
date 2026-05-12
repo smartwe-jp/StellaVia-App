@@ -28,18 +28,23 @@ Current gaps:
 - No hotel-specific l10n beyond placeholder tab labels.
 - Hotel API success-code contract is still unresolved: old app checks `code == 200`, while current architecture notes say hotel uses `code == 0`.
 
-## Legacy Reference Sources
+## API And Legacy Reference Sources
 
 Hotel booking is a migration-and-redesign effort, not a greenfield feature.
 
-Primary functional/API references:
+Primary API reference:
+
+- Swagger UI: `https://hotel-sit.gutingjun.com/api/swagger-ui/index.html#/`
+- OpenAPI JSON: `https://hotel-sit.gutingjun.com/api/v3/api-docs`
+
+Legacy functional references:
 
 - API path source: `/Users/aaronhou/Documents/financing-flutter-getx/lib/app/config/http_conf.dart`
 - Legacy feature source: `/Users/aaronhou/Documents/financing-flutter-getx/lib/app/modules/hotel`
 
 Reference scope:
 
-- Use the old project to understand hotel API paths, request/response fields, flow order, edge cases, and business behavior.
+- Use Swagger to understand hotel API paths, request/response fields, and schemas.
 - Use the old hotel module to understand what the existing app already supports: list, detail, room selection, calendar price, booking, payment, order list/detail, cancellation/refund, contacts, receipts, coupons, member discount, and credit-card flows.
 - Do not copy the old project architecture, GetX state model, route structure, untyped map parsing, or page implementation style.
 - New implementation must follow this app's Clean Architecture + Riverpod + SDK-client strategy.
@@ -47,9 +52,10 @@ Reference scope:
 
 Migration principle:
 
-1. First migrate API paths, data fields, and behavior flow from the old app.
-2. Then model them as typed SDK DTOs and app domain entities.
-3. Then rebuild the UI and page state with current app architecture.
+1. First bind API paths and data fields to Swagger.
+2. Use the old app only to fill behavior/flow gaps not covered by Swagger.
+3. Then model them as typed SDK DTOs and app domain entities.
+4. Then rebuild the UI and page state with current app architecture.
 
 ## Product Goal
 
@@ -144,12 +150,17 @@ mobile_core_sdk/packages/company_api_runtime/lib/src/hotel/
 
 ## API Strategy
 
-Current primary source is the old app's `http_conf.dart` hotel section. If a newer hotel Swagger/OpenAPI source is provided later, treat it as authoritative and update this roadmap before changing code.
+Current primary source is the hotel Swagger/OpenAPI:
+
+- Swagger UI: `https://hotel-sit.gutingjun.com/api/swagger-ui/index.html#/`
+- OpenAPI JSON: `https://hotel-sit.gutingjun.com/api/v3/api-docs`
+
+The old app's `http_conf.dart` hotel section is now a legacy compatibility/reference source only.
 
 Before implementing hotel API calls, confirm:
 
 - Base cluster: `AppApiCluster.hotel` or another configured cluster.
-- Swagger/OpenAPI source if available.
+- Swagger/OpenAPI operation and schema.
 - Envelope success code. Existing architecture notes say Hotel uses `code == 0`.
 - Pagination structure.
 - Auth requirement per endpoint.
@@ -163,12 +174,14 @@ Current SDK implementation note:
 
 - `HotelApiClient` currently accepts both `code == 0` and `code == 200` because the legacy app checks `200` while the new architecture notes mention `0`.
 - This compatibility is temporary. Tighten the success profile once the authoritative hotel API contract is confirmed.
-- Implemented first-slice methods: hotel search, building code, room facility filters, hotel detail, price calendar, booking create v2, order list/detail, member pay info, cancel rule, cancel order, and pay-for-order trigger.
+- Implemented Swagger-backed methods: `/hotel/hotelSearch`, `/pms/hotelinfobyidapp`, `/booking/order` Airhost booking creation, `/booking/order/sendPaymentLink`, and `/pms/pay4order`.
+- Swagger currently emits several request schema property keys as Chinese labels while placing the real wire field name in `example` values, for example `房源档案ID` -> `hotelInfoID` and `预订平台ID` -> `siteID`. The SDK DTOs use the wire field names observed from these examples and the legacy request payloads.
+- Implemented legacy-compatible methods pending Swagger confirmation or replacement: building code, room facility filters, price calendar, booking create v2, order list/detail, member pay info, cancel rule, and cancel order.
 - Hotel DTOs are generated with `freezed_annotation` / `json_serializable`; do not add hand-written model parsing functions for new hotel DTOs.
 
 If Swagger is incomplete:
 
-- Use the old app `http_conf.dart`, old module request payloads, and real request/response examples as temporary sources.
+- Use the old app `http_conf.dart`, old module request payloads, and real request/response examples as temporary sources only when Swagger lacks the needed contract.
 - Mark temporary assumptions in code comments near API path/client definitions.
 - Update this roadmap once backend contract is confirmed.
 
@@ -265,8 +278,8 @@ Use existing guards instead of creating hotel-specific duplicated checks:
 Recommended task threads:
 
 1. Hotel API contract discovery
-   - Start from old `http_conf.dart` hotel endpoint keys and old module requests.
-   - Locate Swagger/OpenAPI if available, or collect backend examples.
+   - Start from hotel Swagger/OpenAPI.
+   - Use old `http_conf.dart` hotel endpoint keys and old module requests only for behavior gaps or missing Swagger contracts.
    - Produce endpoint list, request payloads, response samples, and field mapping.
    - Update this roadmap.
 
@@ -323,7 +336,6 @@ Run broader `flutter analyze` / `flutter test` only when the change affects shar
 
 ## Open Questions
 
-- Is there a newer authoritative hotel API documentation URL, or should the old app remain the primary source for now?
 - Is hotel browsing public or login-only?
 - Does booking require full member profile completion, phone verification, real-person verification, or all of them?
 - What payment method is used for hotel booking?

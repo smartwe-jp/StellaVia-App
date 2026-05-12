@@ -55,7 +55,7 @@ CoreHttpClient _buildClient(
 
 void main() {
   group('HotelApiClient', () {
-    test('searchHotels posts legacy payload and parses hotel list', () async {
+    test('searchHotels follows Swagger path and parses hotel list', () async {
       final client = _buildClient((options) async {
         expect(options.method, equals('POST'));
         expect(options.path, equals(HotelApiPaths.hotelSearch));
@@ -69,7 +69,10 @@ void main() {
             'endDate': '2026-06-03',
             'keyWord': 'Tokyo',
             'lang': 'JP',
+            'price': <String, dynamic>{'minPrice': 10000, 'maxPrice': 30000},
+            'filterVal': <Object?>['wifi'],
             'area': 'tokyo',
+            'bookingType': 2,
             'buildingCode': 'hotel',
             'priceSort': 'asc',
             'occupancy': 2,
@@ -79,7 +82,7 @@ void main() {
         );
 
         return _jsonOk(
-          '{"code":200,"msg":"success","data":{"count":1,"showStatus":"2","showStatusStr":"limited","hotels":[{"id":"h1","hotelName":"Tokyo Business Stay","address":"Shinagawa","image":"https://cdn.example.com/h1.jpg","price":18000,"bookingType":2,"bookingStatus":true,"lat":35.628,"lng":139.738,"tags":["station","business"]}]}}',
+          '{"code":200,"msg":"success","data":{"count":1,"showStatus":"2","showStatusStr":"limited","hotels":[{"hotelId":"h1","hotelName":"Tokyo Business Stay","address":"Shinagawa","image":"https://cdn.example.com/h1.jpg","basePrice":18000,"bookingType":"2","bookingStatus":true,"lat":35.628,"lng":139.738,"tags":["station","business"]}]}}',
         );
       });
       final api = HotelApiClient(client);
@@ -90,7 +93,10 @@ void main() {
           endDate: '2026-06-03',
           keyWord: 'Tokyo',
           lang: 'JP',
+          price: <String, Object?>{'minPrice': 10000, 'maxPrice': 30000},
+          filterVal: <Object?>['wifi'],
           area: 'tokyo',
+          bookingType: 2,
           buildingCode: 'hotel',
           priceSort: 'asc',
           occupancy: 2,
@@ -103,7 +109,8 @@ void main() {
       expect(result.hotels, hasLength(1));
       expect(result.hotels.first.id, equals('h1'));
       expect(result.hotels.first.hotelName, equals('Tokyo Business Stay'));
-      expect(result.hotels.first.price, equals(18000));
+      expect(result.hotels.first.basePrice, equals(18000));
+      expect(result.hotels.first.bookingType, equals('2'));
       expect(result.hotels.first.tags, equals(<String>['station', 'business']));
     });
 
@@ -235,6 +242,124 @@ void main() {
         expect(orderId, equals('order-1'));
       },
     );
+
+    test(
+      'createAirhostBooking follows Swagger /booking/order contract',
+      () async {
+        final client = _buildClient((options) async {
+          expect(options.method, equals('POST'));
+          expect(options.path, equals(HotelApiPaths.bookingOrder));
+          expect(options.extra['auth_required'], isTrue);
+          expect(
+            options.data,
+            equals(<String, dynamic>{
+              'checkIn': '2026-06-01',
+              'checkOut': '2026-06-03',
+              'firstName': 'Taro',
+              'lastName': 'Yamada',
+              'lang': 'JP',
+              'hotelInfoID': 1001,
+              'roomCount': 1,
+              'totalCount': 2,
+              'receiptTitle': 'Yamada Taro',
+              'contactIntlCode': '81',
+              'contactMobile': '09000000000',
+              'contactEmail': 'taro@example.com',
+              'siteID': 146671713176780822,
+              'totalAmount': 36000,
+              'brandStr': 'glhotel_app',
+              'nationality': 'JP',
+              'orderRoomTypeData': <Map<String, dynamic>>[
+                <String, dynamic>{
+                  'roomTypeID': 2001,
+                  'roomCount': 1,
+                  'roomCusts': <Map<String, dynamic>>[
+                    <String, dynamic>{
+                      'firstName': 'Taro',
+                      'lastName': 'Yamada',
+                      'contactEmail': 'taro@example.com',
+                      'adultCount': 2,
+                      'nationality': 'JP',
+                    },
+                  ],
+                },
+              ],
+              'couponsCounts': <int>[],
+            }),
+          );
+          return _jsonOk('{"code":200,"msg":"success","data":12345}');
+        });
+        final api = HotelApiClient(client);
+
+        final orderId = await api.createAirhostBooking(
+          const AirhostBookingOrderRequestDto(
+            checkIn: '2026-06-01',
+            checkOut: '2026-06-03',
+            firstName: 'Taro',
+            lastName: 'Yamada',
+            lang: 'JP',
+            hotelInfoId: 1001,
+            roomCount: 1,
+            totalCount: 2,
+            receiptTitle: 'Yamada Taro',
+            contactIntlCode: '81',
+            contactMobile: '09000000000',
+            contactEmail: 'taro@example.com',
+            siteId: 146671713176780822,
+            totalAmount: 36000,
+            brandStr: 'glhotel_app',
+            nationality: 'JP',
+            orderRoomTypeData: <AirhostOrderRoomTypeDataDto>[
+              AirhostOrderRoomTypeDataDto(
+                roomTypeId: 2001,
+                roomCount: 1,
+                roomCusts: <AirhostOrderRoomCustDto>[
+                  AirhostOrderRoomCustDto(
+                    firstName: 'Taro',
+                    lastName: 'Yamada',
+                    contactEmail: 'taro@example.com',
+                    adultCount: 2,
+                    nationality: 'JP',
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+
+        expect(orderId, equals(12345));
+      },
+    );
+
+    test('sendAirhostPaymentLink follows Swagger contract', () async {
+      final client = _buildClient((options) async {
+        expect(options.method, equals('POST'));
+        expect(options.path, equals(HotelApiPaths.bookingOrderSendPaymentLink));
+        expect(options.extra['auth_required'], isTrue);
+        expect(
+          options.data,
+          equals(<String, dynamic>{
+            'id': 12345,
+            'lang': 'JP',
+            'email': 'taro@example.com',
+          }),
+        );
+        return _jsonOk(
+          '{"code":200,"msg":"success","data":"https://pay.example.com/order/12345"}',
+        );
+      });
+      final api = HotelApiClient(client);
+
+      final link = await api.sendAirhostPaymentLink(
+        const OrderSendPaymentLinkRequestDto(
+          id: 12345,
+          lang: 'JP',
+          email: 'taro@example.com',
+        ),
+      );
+
+      expect(link, equals('https://pay.example.com/order/12345'));
+    });
 
     test('fetchOrderList and cancelOrder use authenticated endpoints', () async {
       var call = 0;

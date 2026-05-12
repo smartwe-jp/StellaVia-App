@@ -7,6 +7,9 @@ class HotelApiPaths {
   const HotelApiPaths._();
 
   static const String hotelSearch = '/hotel/hotelSearch';
+  static const String bookingOrder = '/booking/order';
+  static const String bookingOrderSendPaymentLink =
+      '/booking/order/sendPaymentLink';
   static const String buildingCode = '/hotel/buildingCode';
   static const String page = '/pms/page';
   static const String refundStrategyText = '/pms/refundStrategyText';
@@ -44,6 +47,9 @@ class HotelApiClient {
     this._client, {
     LegacyEnvelopeCodec? envelopeCodec,
     this.hotelSearchPath = HotelApiPaths.hotelSearch,
+    this.bookingOrderPath = HotelApiPaths.bookingOrder,
+    this.bookingOrderSendPaymentLinkPath =
+        HotelApiPaths.bookingOrderSendPaymentLink,
     this.buildingCodePath = HotelApiPaths.buildingCode,
     this.roomFacilityPath = HotelApiPaths.roomFacility,
     this.hotelDetailPath = HotelApiPaths.hotelDetail,
@@ -64,6 +70,8 @@ class HotelApiClient {
   final CoreHttpClient _client;
   final LegacyEnvelopeCodec _envelopeCodec;
   final String hotelSearchPath;
+  final String bookingOrderPath;
+  final String bookingOrderSendPaymentLinkPath;
   final String buildingCodePath;
   final String roomFacilityPath;
   final String hotelDetailPath;
@@ -90,6 +98,37 @@ class HotelApiClient {
       fallbackMessage: 'Failed to load hotel list.',
     );
     return HotelSearchResultDto.fromJson(data);
+  }
+
+  Future<int> createAirhostBooking(
+    AirhostBookingOrderRequestDto request,
+  ) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      bookingOrderPath,
+      data: request.toJson(),
+      options: authRequired(true),
+    );
+
+    final data = _envelopeCodec.extractDataString(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to create Airhost booking.',
+    );
+    return int.parse(data);
+  }
+
+  Future<String> sendAirhostPaymentLink(
+    OrderSendPaymentLinkRequestDto request,
+  ) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      bookingOrderSendPaymentLinkPath,
+      data: request.toJson(),
+      options: authRequired(true),
+    );
+
+    return _envelopeCodec.extractDataString(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to send Airhost payment link.',
+    );
   }
 
   Future<List<HotelBuildingCodeDto>> fetchBuildingCodes({
@@ -264,24 +303,10 @@ class HotelApiClient {
     );
   }
 
-  Future<HotelPaymentResultDto> payForOrder({
-    required String bookingOrderId,
-    required String paymentCode,
-    required Object totalAmount,
-    required String lang,
-    String? token,
-    bool? isCheck,
-  }) async {
+  Future<HotelPaymentResultDto> payForOrder(Pay4OrderRequestDto request) async {
     final response = await _client.dio.post<Map<String, dynamic>>(
       payForOrderPath,
-      data: <String, dynamic>{
-        'bookingOrderID': bookingOrderId,
-        'paymentCode': paymentCode,
-        'totalAmount': totalAmount,
-        'lang': lang,
-        if (token != null && token.isNotEmpty) 'token': token,
-        if (isCheck != null) 'isCheck': isCheck,
-      },
+      data: request.toJson(),
       options: authRequired(true),
     );
 

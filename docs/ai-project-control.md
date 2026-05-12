@@ -101,10 +101,13 @@ Use three layers of coordination:
 - The placeholder page demonstrates use of `memberProfileActionGuardProvider` for protected booking actions.
 - SDK-level hotel API client/DTO foundation is implemented under `mobile_core_sdk/packages/company_api_runtime/lib/src/hotel`.
 - No app-side hotel entities, repository, providers, or booking flow pages are implemented yet.
-- Hotel API and functional behavior should be migrated from the old app references:
+- Hotel API contract source of truth is the hotel Swagger:
+  - Swagger UI: `https://hotel-sit.gutingjun.com/api/swagger-ui/index.html#/`
+  - OpenAPI JSON: `https://hotel-sit.gutingjun.com/api/v3/api-docs`
+- Legacy hotel behavior can be checked from the old app references:
   - API paths: `/Users/aaronhou/Documents/financing-flutter-getx/lib/app/config/http_conf.dart`
   - Legacy hotel module: `/Users/aaronhou/Documents/financing-flutter-getx/lib/app/modules/hotel`
-- The old app is only a functional/data reference. Do not copy its GetX architecture, untyped map parsing, route structure, or UI implementation style.
+- The old app is only a functional/behavior reference. Do not copy its GetX architecture, untyped map parsing, route structure, or UI implementation style.
 
 ## Architecture Rules To Preserve
 

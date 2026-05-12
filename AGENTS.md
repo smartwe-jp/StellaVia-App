@@ -76,10 +76,13 @@ rtk fvm flutter gen-l10n
 
 - Start hotel work from `docs/hotel-booking-roadmap.md`.
 - Current hotel module is only a placeholder tab with profile guard demonstration.
-- Hotel API and feature behavior primarily reference the old app:
+- Hotel API contract source of truth is the hotel Swagger:
+  - Swagger UI: `https://hotel-sit.gutingjun.com/api/swagger-ui/index.html#/`
+  - OpenAPI JSON: `https://hotel-sit.gutingjun.com/api/v3/api-docs`
+- Legacy feature behavior can reference the old app:
   - API paths: `/Users/aaronhou/Documents/financing-flutter-getx/lib/app/config/http_conf.dart`
   - Legacy feature flow: `/Users/aaronhou/Documents/financing-flutter-getx/lib/app/modules/hotel`
-- Use the old app for API paths, fields, request/response examples, flow order, and business behavior only.
+- Use the old app for flow order and behavior only when Swagger does not explain product behavior.
 - Do not copy the old app's GetX architecture, untyped map parsing, route structure, or UI implementation style.
 - New hotel code must use current app architecture: Clean Architecture, Riverpod, typed DTO/entity mapping, SDK API clients where reusable, and `core_ui_kit` UI primitives.
 - Confirm hotel API cluster, envelope success code, pagination, auth requirement, and payment model before implementing booking submission.

@@ -15,9 +15,10 @@ abstract class HotelSearchRequestDto with _$HotelSearchRequestDto {
     required String endDate,
     String? keyWord,
     String? lang,
-    String? price,
-    String? filterVal,
+    Map<String, Object?>? price,
+    List<Object?>? filterVal,
     String? area,
+    int? bookingType,
     String? buildingCode,
     String? priceSort,
     @Default(1) int occupancy,
@@ -45,14 +46,20 @@ abstract class HotelSearchResultDto with _$HotelSearchResultDto {
 @freezed
 abstract class HotelSummaryDto with _$HotelSummaryDto {
   const factory HotelSummaryDto({
-    @Default('') String id,
+    @JsonKey(name: 'hotelId') @Default('') String id,
     @Default('') String hotelName,
     String? address,
     String? area,
     String? image,
     num? price,
+    num? basePrice,
+    num? beforeDiscountPrice,
+    num? discount,
+    String? discountName,
     num? entirePrice,
-    int? bookingType,
+    Object? bookingType,
+    String? buildingCode,
+    String? buildingType,
     bool? bookingStatus,
     Object? lat,
     Object? lng,
@@ -194,6 +201,81 @@ abstract class HotelBookingCreateRequestDto
 }
 
 @freezed
+abstract class AirhostBookingOrderRequestDto
+    with _$AirhostBookingOrderRequestDto {
+  @JsonSerializable(includeIfNull: false, explicitToJson: true)
+  const factory AirhostBookingOrderRequestDto({
+    required String checkIn,
+    required String checkOut,
+    required String firstName,
+    required String lastName,
+    required String lang,
+    @JsonKey(name: 'hotelInfoID') required int hotelInfoId,
+    required int roomCount,
+    required int totalCount,
+    String? receiptTitle,
+    required String contactIntlCode,
+    required String contactMobile,
+    required String contactEmail,
+    String? comment,
+    @JsonKey(name: 'siteID') required int siteId,
+    required int totalAmount,
+    String? brandStr,
+    required String nationality,
+    @Default(<AirhostOrderRoomTypeDataDto>[])
+    List<AirhostOrderRoomTypeDataDto> orderRoomTypeData,
+    @Default(<int>[]) List<int> couponsCounts,
+  }) = _AirhostBookingOrderRequestDto;
+
+  factory AirhostBookingOrderRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$AirhostBookingOrderRequestDtoFromJson(json);
+}
+
+@freezed
+abstract class AirhostOrderRoomTypeDataDto with _$AirhostOrderRoomTypeDataDto {
+  @JsonSerializable(includeIfNull: false, explicitToJson: true)
+  const factory AirhostOrderRoomTypeDataDto({
+    @JsonKey(name: 'roomTypeID') required int roomTypeId,
+    required int roomCount,
+    @Default(<AirhostOrderRoomCustDto>[])
+    List<AirhostOrderRoomCustDto> roomCusts,
+  }) = _AirhostOrderRoomTypeDataDto;
+
+  factory AirhostOrderRoomTypeDataDto.fromJson(Map<String, dynamic> json) =>
+      _$AirhostOrderRoomTypeDataDtoFromJson(json);
+}
+
+@freezed
+abstract class AirhostOrderRoomCustDto with _$AirhostOrderRoomCustDto {
+  @JsonSerializable(includeIfNull: false)
+  const factory AirhostOrderRoomCustDto({
+    int? id,
+    String? firstName,
+    String? lastName,
+    String? contactEmail,
+    int? adultCount,
+    int? childCount,
+    String? nationality,
+  }) = _AirhostOrderRoomCustDto;
+
+  factory AirhostOrderRoomCustDto.fromJson(Map<String, dynamic> json) =>
+      _$AirhostOrderRoomCustDtoFromJson(json);
+}
+
+@freezed
+abstract class OrderSendPaymentLinkRequestDto
+    with _$OrderSendPaymentLinkRequestDto {
+  const factory OrderSendPaymentLinkRequestDto({
+    required int id,
+    required String lang,
+    required String email,
+  }) = _OrderSendPaymentLinkRequestDto;
+
+  factory OrderSendPaymentLinkRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$OrderSendPaymentLinkRequestDtoFromJson(json);
+}
+
+@freezed
 abstract class HotelBookingCreateParentDto with _$HotelBookingCreateParentDto {
   @JsonSerializable(explicitToJson: true)
   const factory HotelBookingCreateParentDto({
@@ -322,4 +404,24 @@ abstract class HotelPaymentResultDto with _$HotelPaymentResultDto {
 
   factory HotelPaymentResultDto.fromJson(Map<String, dynamic> json) =>
       _$HotelPaymentResultDtoFromJson(json);
+}
+
+@freezed
+abstract class Pay4OrderRequestDto with _$Pay4OrderRequestDto {
+  @JsonSerializable(includeIfNull: false)
+  const factory Pay4OrderRequestDto({
+    @JsonKey(name: 'bookingOrderID') required int bookingOrderId,
+    required String paymentCode,
+    String? cardNumber,
+    String? cardExpire,
+    String? securityCode,
+    String? cardholderName,
+    String? cardInfo,
+    String? lang,
+    bool? isCheck,
+    String? system,
+  }) = _Pay4OrderRequestDto;
+
+  factory Pay4OrderRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$Pay4OrderRequestDtoFromJson(json);
 }
