@@ -257,8 +257,9 @@ Keep DTOs separate from entities. Do not expose backend field names directly to 
 
 - Do not keep the placeholder `Card/ListTile` visual style for final hotel pages.
 - Reuse `core_ui_kit` primitives but define a hotel-specific visual language if needed.
+- Hotel pages must use theme/token colors, not hardcoded `Color(0x...)`, `Colors.*`, or page-local hex constants.
 - Shared reusable hotel cards should move to SDK only when they are not product-specific.
-- Prefer page-level widgets split into small files once a page grows beyond easy review.
+- Keep page files focused on composition and provider/event binding. Put non-trivial child UI in separate files under `presentation/widgets/`, and put display mapping/formatting in `presentation/support`.
 - All user text must be in ARB.
 - Images should use existing cached image approach to avoid placeholder flicker.
 - Root tab content should support pull-to-refresh and should avoid clearing old content on transient network failure.

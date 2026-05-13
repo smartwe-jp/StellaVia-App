@@ -111,14 +111,24 @@ class _FundLotteryApplyFlowPageState
         .where((int rune) => rune >= 48 && rune <= 57)
         .map(String.fromCharCode)
         .join();
-    final parsed = int.tryParse(digits) ?? _minimumUnits;
-    if (digits.isEmpty || parsed < _minimumUnits) {
-      _showToast(
-        context.l10n.lotteryApplyStep1MinimumUnitsNotice(
-          _minimumUnits.toString(),
-        ),
-      );
-      _setSelectedUnits(_minimumUnits);
+    if (digits.isEmpty) {
+      if (_selectedUnits == 0 || !mounted) {
+        return;
+      }
+      setState(() {
+        _selectedUnits = 0;
+      });
+      return;
+    }
+
+    final parsed = int.tryParse(digits) ?? 0;
+    if (parsed < _minimumUnits) {
+      if (_selectedUnits == parsed || !mounted) {
+        return;
+      }
+      setState(() {
+        _selectedUnits = parsed;
+      });
       return;
     }
     if (parsed > _currentMaximumUnits) {
@@ -269,7 +279,13 @@ class _FundLotteryApplyFlowPageState
 
     var isFundApplyVerified = false;
     try {
-      await refreshMemberProfileVerificationState(ref);
+      await refreshMemberProfileVerificationState(
+        ref,
+        isMounted: () => mounted,
+      );
+      if (!mounted) {
+        return;
+      }
       isFundApplyVerified = await ref.read(isFundApplyVerifiedProvider.future);
     } catch (_) {
       isFundApplyVerified = false;

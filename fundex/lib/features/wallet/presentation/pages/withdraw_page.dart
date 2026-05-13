@@ -240,7 +240,7 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
     if (!mounted) {
       return;
     }
-    await refreshMemberProfileVerificationState(ref);
+    await refreshMemberProfileVerificationState(ref, isMounted: () => mounted);
   }
 
   num? _parseAmountOrNull() {
@@ -327,7 +327,10 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
     required num? availableAmount,
     required num? feeAmount,
   }) async {
-    await refreshMemberProfileVerificationState(ref);
+    await refreshMemberProfileVerificationState(ref, isMounted: () => mounted);
+    if (!mounted) {
+      return;
+    }
     final refreshedUser = await ref
         .read(currentAuthUserProvider.future)
         .catchError((Object _) => null);
@@ -415,7 +418,13 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
       onRefresh: (WidgetRef ref) async {
         ref.invalidate(walletBankAccountListProvider);
         ref.invalidate(myPageAccountStatisticProvider);
-        await refreshMemberProfileVerificationState(ref);
+        await refreshMemberProfileVerificationState(
+          ref,
+          isMounted: () => mounted,
+        );
+        if (!mounted) {
+          return;
+        }
         await Future.wait<void>(<Future<void>>[
           ref.refresh(walletBankAccountListProvider.future).then((_) {}),
           ref.refresh(myPageAccountStatisticProvider.future).then((_) {}),

@@ -218,8 +218,17 @@ final isFundApplyVerifiedProvider = FutureProvider<bool>((ref) async {
   return status == 4 || status == 5;
 });
 
-Future<void> refreshMemberProfileVerificationState(WidgetRef ref) async {
-  await ref.read(syncMemberProfileFromRemoteUseCaseProvider).call();
+Future<void> refreshMemberProfileVerificationState(
+  WidgetRef ref, {
+  bool Function()? isMounted,
+}) async {
+  final syncMemberProfileFromRemote = ref.read(
+    syncMemberProfileFromRemoteUseCaseProvider,
+  );
+  await syncMemberProfileFromRemote.call();
+  if (isMounted != null && !isMounted()) {
+    return;
+  }
   ref.invalidate(currentAuthUserProvider);
   ref.invalidate(memberProfileDetailsProvider);
   ref.invalidate(isMemberProfileCompletedProvider);

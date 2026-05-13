@@ -127,7 +127,9 @@ Use three layers of coordination:
 4. Keep UI design-system driven.
    - Reuse `core_ui_kit` tokens/components first.
    - Add shared components to SDK if they will be reused across areas.
-   - Avoid hardcoding colors, fonts, shadows, and button styles in business pages unless there is a scoped visual reason.
+   - Business feature pages must not hardcode colors. Use `Theme.of(context)`, `core_ui_kit` tokens/components, or an existing feature theme/helper. Raw `Color(0x...)`, `Colors.*`, and page-local hex constants are exceptions only inside theme/token definitions or when explicitly documented.
+   - Avoid hardcoding fonts, shadows, and button styles in business pages unless there is a scoped visual reason.
+   - Keep page files focused on screen composition, route argument binding, provider watching, and event wiring. Extract non-trivial child UI into separate files under `presentation/widgets/`, and move display mapping/formatting into `presentation/support`.
 
 5. Always localize user-facing text.
    - Edit ARB files first.
@@ -161,6 +163,7 @@ Validation:
 - <targeted analyze/test/build command>
 Constraints:
 - <business rules, UI reference, API contract, no-go areas>
+- UI implementation must use theme/token colors and split non-trivial child widgets into separate files.
 ```
 
 ## Task Thread End Checklist
@@ -170,6 +173,7 @@ Each implementation thread should end with:
 - Changed files summary.
 - Business behavior summary.
 - Validation commands and results.
+- UI self-check for touched pages: no unintended hardcoded `Color(` / `Colors.` usage, and non-trivial child widgets split into `presentation/widgets/`.
 - Any remaining assumptions or backend/API gaps.
 - Documentation update if the implementation changed module direction, API contract, shared components, or business rules.
 
