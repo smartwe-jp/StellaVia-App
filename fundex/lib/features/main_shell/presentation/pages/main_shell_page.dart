@@ -52,8 +52,9 @@ class MainShellPage extends ConsumerWidget {
         key: const Key('home_page'),
         body: SafeArea(
           top: navigationShell.currentIndex != 3,
-          bottom: false, 
-          child: navigationShell),
+          bottom: false,
+          child: navigationShell,
+        ),
         bottomNavigationBar: DecoratedBox(
           decoration: BoxDecoration(color: colors.surface),
           child: Column(

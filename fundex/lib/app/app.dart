@@ -24,6 +24,7 @@ import '../features/auth/presentation/providers/auth_providers.dart';
 import '../features/investment/presentation/providers/fund_project_providers.dart';
 import '../features/home/presentation/providers/home_celebration_providers.dart';
 import '../features/home/presentation/widgets/home_celebration_dialog.dart';
+import '../features/main_shell/presentation/providers/main_shell_providers.dart';
 import '../features/member_profile/presentation/providers/member_profile_providers.dart';
 import '../features/settings/presentation/providers/settings_content_providers.dart';
 
@@ -47,6 +48,7 @@ class MemberTemplateApp extends ConsumerWidget {
     final environment = ref.watch(appEnvironmentProvider);
     final locale = ref.watch(appLocaleProvider);
     final effectiveLocale = ref.watch(appEffectiveLocaleProvider);
+    final isHotelTabActive = ref.watch(mainShellCurrentTabIndexProvider) == 3;
 
     ref.listen<AppUiMessage?>(appUiMessageProvider, (previous, next) {
       if (next == null) {
@@ -129,12 +131,20 @@ class MemberTemplateApp extends ConsumerWidget {
       builder: (BuildContext context, Widget? child) {
         final mediaQuery = MediaQuery.of(context);
         final brightness = Theme.of(context).brightness;
-        final statusBarColor = brightness == Brightness.dark
+        final defaultStatusBarColor = brightness == Brightness.dark
             ? AppColorTokens.statusBarBackgroundDark
             : AppColorTokens.statusBarBackgroundLight;
-        final statusBarOverlayStyle = AppThemeFactory.statusBarOverlayStyleFor(
-          brightness,
-        ).copyWith(statusBarColor: statusBarColor);
+        final statusBarColor = isHotelTabActive
+            ? Colors.transparent
+            : defaultStatusBarColor;
+        final statusBarOverlayStyle =
+            AppThemeFactory.statusBarOverlayStyleFor(brightness).copyWith(
+              statusBarColor: statusBarColor,
+              statusBarIconBrightness: isHotelTabActive
+                  ? Brightness.light
+                  : null,
+              statusBarBrightness: isHotelTabActive ? Brightness.dark : null,
+            );
         SystemChrome.setSystemUIOverlayStyle(statusBarOverlayStyle);
         final appChild = AppLifecycleRefreshScope(
           child: _GlobalKeyboardDismissLayer(
@@ -147,7 +157,7 @@ class MemberTemplateApp extends ConsumerWidget {
             fit: StackFit.expand,
             children: <Widget>[
               appChild,
-              if (mediaQuery.viewPadding.top > 0)
+              if (!isHotelTabActive && mediaQuery.viewPadding.top > 0)
                 Positioned(
                   top: 0,
                   left: 0,

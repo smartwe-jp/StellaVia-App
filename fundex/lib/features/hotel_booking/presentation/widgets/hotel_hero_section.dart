@@ -204,25 +204,26 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
           aspectRatio: 16 / 9,
           child: _HeroPhoto(),
         ),
-        
-        Container(
-          margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-          child: 
-          _SearchCard(
-          destination: destination,
-          buildingTypeLabel:
-              buildingTypeLabel ?? context.l10n.hotelFilterAllTypes,
-          stayRange: widget.presenter.stayRange(widget.criteria),
-          guestsLabel: context.l10n.hotelGuestSummary(
-            widget.criteria.occupancy,
-            widget.criteria.roomCount,
-          ),
-          onDestinationTap: _selectDestination,
-          onBuildingTypeTap: () => _selectBuildingType(filters),
-          onDateTap: _pickDates,
-          onGuestsTap: _editGuests,
-          onSearchTap: () => widget.onSearch(),
-        ),
+        Transform.translate(
+            offset: const Offset(0, -16),
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                child: _SearchCard(
+                  destination: destination,
+                  buildingTypeLabel:
+                      buildingTypeLabel ?? context.l10n.hotelFilterAllTypes,
+                  stayRange: widget.presenter.stayRange(widget.criteria),
+                  guestsLabel: context.l10n.hotelGuestSummary(
+                    widget.criteria.occupancy,
+                    widget.criteria.roomCount,
+                  ),
+                  onDestinationTap: _selectDestination,
+                  onBuildingTypeTap: () => _selectBuildingType(filters),
+                  onDateTap: _pickDates,
+                  onGuestsTap: _editGuests,
+                  onSearchTap: () => widget.onSearch(),
+            ),
+          )
         )
         
       ],
@@ -426,6 +427,7 @@ class _SearchCard extends StatelessWidget {
         child: Column(
           children: <Widget>[
             GridView(
+              padding: EdgeInsets.zero,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
