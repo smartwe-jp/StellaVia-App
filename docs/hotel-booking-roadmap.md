@@ -1,6 +1,6 @@
 # Hotel Booking Roadmap
 
-Last updated: 2026-05-12
+Last updated: 2026-05-13
 
 This document defines the working plan for the upcoming hotel booking feature. It should be read before opening task threads related to hotel list, hotel detail, room selection, booking, payment, or hotel orders.
 
@@ -19,6 +19,7 @@ Current behavior:
 - Hotel tab implements the first home/list/search slice using the SDK `HotelApiClient`.
 - Hotel browsing is public. The current booking action still uses `memberProfileActionGuardProvider.ensureCompleted(...)` until the real booking flow is implemented.
 - Hotel home hero temporarily reuses the same remote banner image URL pattern as the home tab.
+- Hotel list search uses fixed area choices only: all areas as `area: ""`, plus `osaka`, `kyoto`, and `tokyo`. Building/property type choices come from `/hotel/buildingCode`, including the empty-code "all" option returned by the API.
 - SDK-level hotel API client/DTO foundation exists for the first migration slice.
 
 Current gaps:

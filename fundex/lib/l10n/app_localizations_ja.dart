@@ -1092,7 +1092,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelDestinationLabel => '目的地';
 
   @override
-  String get hotelDefaultDestination => '京都市下京区';
+  String get hotelDefaultDestination => 'すべての地域';
+
+  @override
+  String get hotelAreaOsaka => '大阪';
+
+  @override
+  String get hotelAreaKyoto => '京都';
+
+  @override
+  String get hotelAreaTokyo => '東京';
 
   @override
   String get hotelPropertyTypeLabel => '宿泊タイプ';

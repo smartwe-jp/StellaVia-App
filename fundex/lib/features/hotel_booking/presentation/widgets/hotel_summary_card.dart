@@ -10,31 +10,26 @@ class HotelSummaryCard extends StatelessWidget {
     super.key,
     required this.hotel,
     required this.presenter,
-    required this.imageAsset,
   });
 
   final HotelSummary hotel;
   final HotelBookingPresenter presenter;
-  final String imageAsset;
 
   @override
   Widget build(BuildContext context) {
-    const navyDeep = Color(0xFF09153B);
-    const goldText = Color(0xFF7C6129);
+    final colors = Theme.of(context).appColors;
     final price = presenter.price(hotel.lowestPrice);
     final oldPrice = presenter.price(hotel.beforeDiscountPrice);
     final location = _resolveLocation(context);
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.brandWhite,
         borderRadius: BorderRadius.circular(22),
-        border: Border.all(
-          color: const Color(0xFFE3D7C3).withValues(alpha: 0.58),
-        ),
+        border: Border.all(color: colors.borderSoft.withValues(alpha: 0.58)),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: const Color(0xFF0C1C50).withValues(alpha: 0.10),
+            color: colors.brandPrimary.withValues(alpha: 0.10),
             blurRadius: 34,
             offset: const Offset(0, 14),
           ),
@@ -48,13 +43,13 @@ class HotelSummaryCard extends StatelessWidget {
             SizedBox(
               height: 154,
               width: double.infinity,
-              child: hotel.imageUrl.isEmpty
-                  ? Image.asset(imageAsset, fit: BoxFit.cover)
-                  : AppRemoteImage(
-                      imageUrl: hotel.imageUrl,
-                      fit: BoxFit.cover,
-                      errorWidget: Image.asset(imageAsset, fit: BoxFit.cover),
-                    ),
+              child: AppRemoteImage(
+                imageUrl: hotel.imageUrl,
+                fit: BoxFit.cover,
+                errorWidget: const _HotelImagePlaceholder(
+                  icon: Icons.image_not_supported_outlined,
+                ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(14, 14, 14, 16),
@@ -68,7 +63,7 @@ class HotelSummaryCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: navyDeep,
+                      color: colors.brandPrimaryDark,
                       fontWeight: FontWeight.w900,
                       height: 1.2,
                     ),
@@ -79,7 +74,7 @@ class HotelSummaryCard extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: const Color(0xFF475569),
+                      color: colors.textSecondary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -91,9 +86,9 @@ class HotelSummaryCard extends StatelessWidget {
                         .map(
                           (tag) => DecoratedBox(
                             decoration: BoxDecoration(
-                              color: const Color(
-                                0xFFB8954F,
-                              ).withValues(alpha: 0.14),
+                              color: colors.highlightGold.withValues(
+                                alpha: 0.14,
+                              ),
                               borderRadius: BorderRadius.circular(999),
                             ),
                             child: Padding(
@@ -105,7 +100,7 @@ class HotelSummaryCard extends StatelessWidget {
                                 tag,
                                 style: Theme.of(context).textTheme.labelSmall
                                     ?.copyWith(
-                                      color: goldText,
+                                      color: colors.highlightGold,
                                       fontWeight: FontWeight.w800,
                                     ),
                               ),
@@ -127,7 +122,7 @@ class HotelSummaryCard extends StatelessWidget {
                                 oldPrice,
                                 style: Theme.of(context).textTheme.bodySmall
                                     ?.copyWith(
-                                      color: const Color(0xFF7A899F),
+                                      color: colors.textTertiary,
                                       decoration: TextDecoration.lineThrough,
                                     ),
                               ),
@@ -137,7 +132,7 @@ class HotelSummaryCard extends StatelessWidget {
                                   : context.l10n.hotelUnavailable,
                               style: Theme.of(context).textTheme.labelMedium
                                   ?.copyWith(
-                                    color: const Color(0xFF2495A3),
+                                    color: colors.brandSecondary,
                                     fontWeight: FontWeight.w900,
                                   ),
                             ),
@@ -152,7 +147,7 @@ class HotelSummaryCard extends StatelessWidget {
                                 text: price,
                                 style: Theme.of(context).textTheme.headlineSmall
                                     ?.copyWith(
-                                      color: navyDeep,
+                                      color: colors.brandPrimaryDark,
                                       fontWeight: FontWeight.w900,
                                     ),
                               ),
@@ -160,7 +155,7 @@ class HotelSummaryCard extends StatelessWidget {
                                 text: context.l10n.hotelPricePerNight,
                                 style: Theme.of(context).textTheme.labelMedium
                                     ?.copyWith(
-                                      color: navyDeep,
+                                      color: colors.brandPrimaryDark,
                                       fontWeight: FontWeight.w700,
                                     ),
                               ),
@@ -172,7 +167,7 @@ class HotelSummaryCard extends StatelessWidget {
                           context.l10n.hotelPriceAsk,
                           style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(
-                                color: navyDeep,
+                                color: colors.brandPrimaryDark,
                                 fontWeight: FontWeight.w900,
                               ),
                         ),
@@ -210,5 +205,20 @@ class HotelSummaryCard extends StatelessWidget {
       ];
     }
     return tags.take(3).toList(growable: false);
+  }
+}
+
+class _HotelImagePlaceholder extends StatelessWidget {
+  const _HotelImagePlaceholder({required this.icon});
+
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    return DecoratedBox(
+      decoration: BoxDecoration(color: colors.surface),
+      child: Center(child: Icon(icon, color: colors.textTertiary, size: 32)),
+    );
   }
 }

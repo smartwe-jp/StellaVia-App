@@ -1158,7 +1158,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hotelDestinationLabel => 'Destination';
 
   @override
-  String get hotelDefaultDestination => 'Shimogyo, Kyoto';
+  String get hotelDefaultDestination => 'All areas';
+
+  @override
+  String get hotelAreaOsaka => 'Osaka';
+
+  @override
+  String get hotelAreaKyoto => 'Kyoto';
+
+  @override
+  String get hotelAreaTokyo => 'Tokyo';
 
   @override
   String get hotelPropertyTypeLabel => 'Stay type';

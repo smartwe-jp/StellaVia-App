@@ -1,3 +1,4 @@
+import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,12 +25,13 @@ class _HotelBookingTabContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(hotelBookingControllerProvider);
     final controller = ref.read(hotelBookingControllerProvider.notifier);
+    final colors = Theme.of(context).appColors;
     final presenter = HotelBookingPresenter(
       Localizations.localeOf(context).toLanguageTag(),
     );
 
     return ColoredBox(
-      color: const Color(0xFFF8F4EF),
+      color: colors.surfaceAlt,
       child: RefreshIndicator(
         onRefresh: controller.refresh,
         child: CustomScrollView(
@@ -80,9 +82,6 @@ class _HotelBookingTabContent extends ConsumerWidget {
                     return HotelSummaryCard(
                       hotel: state.hotels[index],
                       presenter: presenter,
-                      imageAsset: index.isEven
-                          ? 'assets/images/hotel-booking-ui/detail-room-01.png'
-                          : 'assets/images/hotel-booking-ui/list-room-02.png',
                     );
                   },
                 ),

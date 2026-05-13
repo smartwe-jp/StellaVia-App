@@ -2204,8 +2204,26 @@ abstract class AppLocalizations {
   /// No description provided for @hotelDefaultDestination.
   ///
   /// In en, this message translates to:
-  /// **'Shimogyo, Kyoto'**
+  /// **'All areas'**
   String get hotelDefaultDestination;
+
+  /// No description provided for @hotelAreaOsaka.
+  ///
+  /// In en, this message translates to:
+  /// **'Osaka'**
+  String get hotelAreaOsaka;
+
+  /// No description provided for @hotelAreaKyoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Kyoto'**
+  String get hotelAreaKyoto;
+
+  /// No description provided for @hotelAreaTokyo.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokyo'**
+  String get hotelAreaTokyo;
 
   /// No description provided for @hotelPropertyTypeLabel.
   ///

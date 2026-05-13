@@ -29,12 +29,9 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
             ? null
             : criteria.keyword.trim(),
         lang: languageCode,
-        area: criteria.area.trim().isEmpty ? null : criteria.area.trim(),
+        area: criteria.area.trim(),
         bookingType: criteria.bookingType,
-        buildingCode:
-            criteria.buildingCode == null || criteria.buildingCode!.isEmpty
-            ? null
-            : criteria.buildingCode,
+        buildingCode: criteria.buildingCode?.trim() ?? '',
         priceSort: switch (criteria.priceSort) {
           HotelPriceSort.none => null,
           HotelPriceSort.ascending => 'asc',
@@ -58,17 +55,26 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
   }) async {
     final rows = await _remote.fetchBuildingCodes(languageCode: languageCode);
     return rows
-        .where((row) => row.buildingCode.trim().isNotEmpty)
         .map(
           (row) => HotelBuildingFilter(
             code: row.buildingCode.trim(),
-            name: row.buildingName.trim().isEmpty
-                ? row.buildingCode.trim()
-                : row.buildingName.trim(),
+            name: _formatBuildingName(row, languageCode),
           ),
         )
         .toList(growable: false);
   }
+}
+
+String _formatBuildingName(HotelBuildingCodeDto dto, String languageCode) {
+  final localizedName = dto.localizedNames[languageCode]?.trim();
+  if (localizedName != null && localizedName.isNotEmpty) {
+    return localizedName;
+  }
+  final defaultName = dto.buildingName.trim();
+  if (defaultName.isNotEmpty) {
+    return defaultName;
+  }
+  return dto.buildingCode.trim();
 }
 
 HotelSummary _mapHotelSummary(HotelSummaryDto dto) {

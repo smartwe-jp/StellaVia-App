@@ -926,7 +926,7 @@ as List<String>,
 /// @nodoc
 mixin _$HotelBuildingCodeDto {
 
- String get buildingCode; String get buildingName;
+ String get buildingCode; String get buildingName; Map<String, String> get localizedNames;
 /// Create a copy of HotelBuildingCodeDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -939,16 +939,16 @@ $HotelBuildingCodeDtoCopyWith<HotelBuildingCodeDto> get copyWith => _$HotelBuild
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HotelBuildingCodeDto&&(identical(other.buildingCode, buildingCode) || other.buildingCode == buildingCode)&&(identical(other.buildingName, buildingName) || other.buildingName == buildingName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HotelBuildingCodeDto&&(identical(other.buildingCode, buildingCode) || other.buildingCode == buildingCode)&&(identical(other.buildingName, buildingName) || other.buildingName == buildingName)&&const DeepCollectionEquality().equals(other.localizedNames, localizedNames));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,buildingCode,buildingName);
+int get hashCode => Object.hash(runtimeType,buildingCode,buildingName,const DeepCollectionEquality().hash(localizedNames));
 
 @override
 String toString() {
-  return 'HotelBuildingCodeDto(buildingCode: $buildingCode, buildingName: $buildingName)';
+  return 'HotelBuildingCodeDto(buildingCode: $buildingCode, buildingName: $buildingName, localizedNames: $localizedNames)';
 }
 
 
@@ -959,7 +959,7 @@ abstract mixin class $HotelBuildingCodeDtoCopyWith<$Res>  {
   factory $HotelBuildingCodeDtoCopyWith(HotelBuildingCodeDto value, $Res Function(HotelBuildingCodeDto) _then) = _$HotelBuildingCodeDtoCopyWithImpl;
 @useResult
 $Res call({
- String buildingCode, String buildingName
+ String buildingCode, String buildingName, Map<String, String> localizedNames
 });
 
 
@@ -976,11 +976,12 @@ class _$HotelBuildingCodeDtoCopyWithImpl<$Res>
 
 /// Create a copy of HotelBuildingCodeDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? buildingCode = null,Object? buildingName = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? buildingCode = null,Object? buildingName = null,Object? localizedNames = null,}) {
   return _then(_self.copyWith(
 buildingCode: null == buildingCode ? _self.buildingCode : buildingCode // ignore: cast_nullable_to_non_nullable
 as String,buildingName: null == buildingName ? _self.buildingName : buildingName // ignore: cast_nullable_to_non_nullable
-as String,
+as String,localizedNames: null == localizedNames ? _self.localizedNames : localizedNames // ignore: cast_nullable_to_non_nullable
+as Map<String, String>,
   ));
 }
 
@@ -1065,10 +1066,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String buildingCode,  String buildingName)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String buildingCode,  String buildingName,  Map<String, String> localizedNames)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HotelBuildingCodeDto() when $default != null:
-return $default(_that.buildingCode,_that.buildingName);case _:
+return $default(_that.buildingCode,_that.buildingName,_that.localizedNames);case _:
   return orElse();
 
 }
@@ -1086,10 +1087,10 @@ return $default(_that.buildingCode,_that.buildingName);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String buildingCode,  String buildingName)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String buildingCode,  String buildingName,  Map<String, String> localizedNames)  $default,) {final _that = this;
 switch (_that) {
 case _HotelBuildingCodeDto():
-return $default(_that.buildingCode,_that.buildingName);case _:
+return $default(_that.buildingCode,_that.buildingName,_that.localizedNames);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1106,10 +1107,10 @@ return $default(_that.buildingCode,_that.buildingName);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String buildingCode,  String buildingName)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String buildingCode,  String buildingName,  Map<String, String> localizedNames)?  $default,) {final _that = this;
 switch (_that) {
 case _HotelBuildingCodeDto() when $default != null:
-return $default(_that.buildingCode,_that.buildingName);case _:
+return $default(_that.buildingCode,_that.buildingName,_that.localizedNames);case _:
   return null;
 
 }
@@ -1121,11 +1122,18 @@ return $default(_that.buildingCode,_that.buildingName);case _:
 @JsonSerializable()
 
 class _HotelBuildingCodeDto implements HotelBuildingCodeDto {
-  const _HotelBuildingCodeDto({this.buildingCode = '', this.buildingName = ''});
+  const _HotelBuildingCodeDto({this.buildingCode = '', this.buildingName = '', final  Map<String, String> localizedNames = const <String, String>{}}): _localizedNames = localizedNames;
   factory _HotelBuildingCodeDto.fromJson(Map<String, dynamic> json) => _$HotelBuildingCodeDtoFromJson(json);
 
 @override@JsonKey() final  String buildingCode;
 @override@JsonKey() final  String buildingName;
+ final  Map<String, String> _localizedNames;
+@override@JsonKey() Map<String, String> get localizedNames {
+  if (_localizedNames is EqualUnmodifiableMapView) return _localizedNames;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_localizedNames);
+}
+
 
 /// Create a copy of HotelBuildingCodeDto
 /// with the given fields replaced by the non-null parameter values.
@@ -1140,16 +1148,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HotelBuildingCodeDto&&(identical(other.buildingCode, buildingCode) || other.buildingCode == buildingCode)&&(identical(other.buildingName, buildingName) || other.buildingName == buildingName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HotelBuildingCodeDto&&(identical(other.buildingCode, buildingCode) || other.buildingCode == buildingCode)&&(identical(other.buildingName, buildingName) || other.buildingName == buildingName)&&const DeepCollectionEquality().equals(other._localizedNames, _localizedNames));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,buildingCode,buildingName);
+int get hashCode => Object.hash(runtimeType,buildingCode,buildingName,const DeepCollectionEquality().hash(_localizedNames));
 
 @override
 String toString() {
-  return 'HotelBuildingCodeDto(buildingCode: $buildingCode, buildingName: $buildingName)';
+  return 'HotelBuildingCodeDto(buildingCode: $buildingCode, buildingName: $buildingName, localizedNames: $localizedNames)';
 }
 
 
@@ -1160,7 +1168,7 @@ abstract mixin class _$HotelBuildingCodeDtoCopyWith<$Res> implements $HotelBuild
   factory _$HotelBuildingCodeDtoCopyWith(_HotelBuildingCodeDto value, $Res Function(_HotelBuildingCodeDto) _then) = __$HotelBuildingCodeDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String buildingCode, String buildingName
+ String buildingCode, String buildingName, Map<String, String> localizedNames
 });
 
 
@@ -1177,11 +1185,12 @@ class __$HotelBuildingCodeDtoCopyWithImpl<$Res>
 
 /// Create a copy of HotelBuildingCodeDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? buildingCode = null,Object? buildingName = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? buildingCode = null,Object? buildingName = null,Object? localizedNames = null,}) {
   return _then(_HotelBuildingCodeDto(
 buildingCode: null == buildingCode ? _self.buildingCode : buildingCode // ignore: cast_nullable_to_non_nullable
 as String,buildingName: null == buildingName ? _self.buildingName : buildingName // ignore: cast_nullable_to_non_nullable
-as String,
+as String,localizedNames: null == localizedNames ? _self._localizedNames : localizedNames // ignore: cast_nullable_to_non_nullable
+as Map<String, String>,
   ));
 }
 

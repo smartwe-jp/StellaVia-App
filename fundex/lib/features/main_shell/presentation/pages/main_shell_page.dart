@@ -50,7 +50,10 @@ class MainShellPage extends ConsumerWidget {
       controller: primaryScrollController,
       child: Scaffold(
         key: const Key('home_page'),
-        body: SafeArea(bottom: false, child: navigationShell),
+        body: SafeArea(
+          top: navigationShell.currentIndex != 3,
+          bottom: false, 
+          child: navigationShell),
         bottomNavigationBar: DecoratedBox(
           decoration: BoxDecoration(color: colors.surface),
           child: Column(

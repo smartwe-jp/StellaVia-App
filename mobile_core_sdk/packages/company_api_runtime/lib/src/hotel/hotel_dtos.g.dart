@@ -119,6 +119,11 @@ _HotelBuildingCodeDto _$HotelBuildingCodeDtoFromJson(
 ) => _HotelBuildingCodeDto(
   buildingCode: json['buildingCode'] as String? ?? '',
   buildingName: json['buildingName'] as String? ?? '',
+  localizedNames:
+      (json['localizedNames'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ) ??
+      const <String, String>{},
 );
 
 Map<String, dynamic> _$HotelBuildingCodeDtoToJson(
@@ -126,6 +131,7 @@ Map<String, dynamic> _$HotelBuildingCodeDtoToJson(
 ) => <String, dynamic>{
   'buildingCode': instance.buildingCode,
   'buildingName': instance.buildingName,
+  'localizedNames': instance.localizedNames,
 };
 
 _HotelFacilityFilterDto _$HotelFacilityFilterDtoFromJson(

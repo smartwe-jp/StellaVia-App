@@ -71,6 +71,7 @@ class HotelBookingController extends StateNotifier<HotelBookingState> {
       final result = await _searchHotels(
         criteria: state.criteria,
         languageCode: _languageCode,
+        limit: 9,
       );
       state = state.copyWith(
         hotels: result.hotels,

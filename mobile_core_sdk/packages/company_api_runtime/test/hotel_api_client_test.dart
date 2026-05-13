@@ -114,6 +114,28 @@ void main() {
       expect(result.hotels.first.tags, equals(<String>['station', 'business']));
     });
 
+    test('fetchBuildingCodes preserves all option and localized names', () async {
+      final client = _buildClient((options) async {
+        expect(options.method, equals('POST'));
+        expect(options.path, equals(HotelApiPaths.buildingCode));
+        expect(options.extra['auth_required'], isFalse);
+        expect(options.data, equals(<String, dynamic>{'lang': 'CH'}));
+
+        return _jsonOk(
+          '{"code":200,"msg":"success","data":[{"buildingCode":"","buildingName":"すべて","localizedNames":{"EN":"All","CH":"全部","JP":"すべて"}},{"buildingCode":"01","buildingName":"アパートメントホテル","localizedNames":{"EN":"Aparthotel","CH":"公寓式酒店","JP":"アパートメントホテル"}}]}',
+        );
+      });
+      final api = HotelApiClient(client);
+
+      final result = await api.fetchBuildingCodes(lang: 'CH');
+
+      expect(result, hasLength(2));
+      expect(result.first.buildingCode, isEmpty);
+      expect(result.first.localizedNames['CH'], equals('全部'));
+      expect(result.last.buildingCode, equals('01'));
+      expect(result.last.localizedNames['EN'], equals('Aparthotel'));
+    });
+
     test('fetchHotelDetail accepts code 0 and parses rooms/pictures', () async {
       final client = _buildClient((options) async {
         expect(options.method, equals('POST'));

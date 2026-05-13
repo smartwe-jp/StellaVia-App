@@ -1078,7 +1078,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelDestinationLabel => '目的地';
 
   @override
-  String get hotelDefaultDestination => '京都市下京区';
+  String get hotelDefaultDestination => '所有地区';
+
+  @override
+  String get hotelAreaOsaka => '大阪';
+
+  @override
+  String get hotelAreaKyoto => '京都';
+
+  @override
+  String get hotelAreaTokyo => '东京';
 
   @override
   String get hotelPropertyTypeLabel => '房源类型';
@@ -5397,7 +5406,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hotelDestinationLabel => '目的地';
 
   @override
-  String get hotelDefaultDestination => '京都市下京區';
+  String get hotelDefaultDestination => '所有地區';
+
+  @override
+  String get hotelAreaOsaka => '大阪';
+
+  @override
+  String get hotelAreaKyoto => '京都';
+
+  @override
+  String get hotelAreaTokyo => '東京';
 
   @override
   String get hotelPropertyTypeLabel => '房源類型';

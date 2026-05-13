@@ -75,6 +75,7 @@ abstract class HotelBuildingCodeDto with _$HotelBuildingCodeDto {
   const factory HotelBuildingCodeDto({
     @Default('') String buildingCode,
     @Default('') String buildingName,
+    @Default(<String, String>{}) Map<String, String> localizedNames,
   }) = _HotelBuildingCodeDto;
 
   factory HotelBuildingCodeDto.fromJson(Map<String, dynamic> json) =>

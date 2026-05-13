@@ -7,6 +7,12 @@ import '../../domain/entities/hotel_models.dart';
 import '../providers/hotel_booking_providers.dart';
 import '../support/hotel_booking_presenter.dart';
 
+const String _hotelHeroBannerBaseUrl = 'https://stellavia.co.jp/img';
+const int _hotelHeroBannerImageCount = 3;
+final String _hotelHeroBannerCacheVersion = DateTime.now()
+    .millisecondsSinceEpoch
+    .toString();
+
 class HotelHeroSection extends ConsumerStatefulWidget {
   const HotelHeroSection({
     super.key,
@@ -39,12 +45,6 @@ class HotelHeroSection extends ConsumerStatefulWidget {
 }
 
 class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
-  static const _navy = Color(0xFF0C1C50);
-  static const _navyDeep = Color(0xFF09153B);
-  static const _creamLighter = Color(0xFFF8F4EF);
-  static const _line = Color(0xFFE3D7C3);
-  static const _soft = Color(0xFF7A899F);
-
   Future<void> _pickDates() async {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -63,70 +63,52 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
     await widget.onSearch(checkInDate: range.start, checkOutDate: range.end);
   }
 
-  Future<void> _editDestination() async {
-    final controller = TextEditingController(
-      text: widget.criteria.keyword.trim().isEmpty
-          ? context.l10n.hotelDefaultDestination
-          : widget.criteria.keyword.trim(),
-    );
-    final keyword = await showModalBottomSheet<String>(
+  Future<void> _selectDestination() async {
+    final selected = await showModalBottomSheet<String>(
       context: context,
+      useRootNavigator: true,
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.fromLTRB(
-            20,
-            20,
-            20,
-            MediaQuery.viewInsetsOf(context).bottom + 28,
-          ),
+        final colors = Theme.of(context).appColors;
+        final options = _hotelAreaOptions(context);
+        return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              TextField(
-                controller: controller,
-                autofocus: true,
-                textInputAction: TextInputAction.search,
-                decoration: InputDecoration(
-                  labelText: context.l10n.hotelDestinationLabel,
-                  hintText: context.l10n.hotelSearchKeywordHint,
+              for (final option in options)
+                ListTile(
+                  title: Text(option.label),
+                  trailing: widget.criteria.area == option.value
+                      ? Icon(Icons.check_rounded, color: colors.primary)
+                      : null,
+                  onTap: () => Navigator.of(context).pop(option.value),
                 ),
-                onSubmitted: (value) => Navigator.of(context).pop(value),
-              ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: () => Navigator.of(context).pop(controller.text),
-                  child: Text(context.l10n.commonApply),
-                ),
-              ),
             ],
           ),
         );
       },
     );
-    controller.dispose();
-    if (keyword == null) {
+    if (selected == null || !mounted) {
       return;
     }
-    await widget.onSearch(keyword: keyword.trim());
+    await widget.onSearch(area: selected);
   }
 
   Future<void> _selectBuildingType(List<HotelBuildingFilter> filters) async {
     final selected = await showModalBottomSheet<String>(
       context: context,
+      useRootNavigator: true,
       builder: (context) {
+        final colors = Theme.of(context).appColors;
         return SafeArea(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              ListTile(
-                title: Text(context.l10n.hotelFilterAllTypes),
-                onTap: () => Navigator.of(context).pop(''),
-              ),
               for (final filter in filters)
                 ListTile(
                   title: Text(filter.name),
+                  trailing: (widget.criteria.buildingCode ?? '') == filter.code
+                      ? Icon(Icons.check_rounded, color: colors.primary)
+                      : null,
                   onTap: () => Navigator.of(context).pop(filter.code),
                 ),
             ],
@@ -137,7 +119,7 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
     if (selected == null || !mounted) {
       return;
     }
-    await widget.onBuildingSelected(selected.isEmpty ? null : selected);
+    await widget.onBuildingSelected(selected);
   }
 
   Future<void> _editGuests() async {
@@ -146,6 +128,7 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
     var rooms = widget.criteria.roomCount;
     final result = await showModalBottomSheet<(int, int, int)>(
       context: context,
+      useRootNavigator: true,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setSheetState) {
@@ -208,75 +191,165 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
         );
     String? buildingTypeLabel;
     for (final item in filters) {
-      if (item.code == widget.criteria.buildingCode) {
+      if (item.code == (widget.criteria.buildingCode ?? '')) {
         buildingTypeLabel = item.name;
         break;
       }
     }
-    final destination = widget.criteria.keyword.trim().isEmpty
-        ? context.l10n.hotelDefaultDestination
-        : widget.criteria.keyword.trim();
+    final destination = _hotelAreaLabel(context, widget.criteria.area);
 
-    return SizedBox(
-      height: 432,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: <Widget>[
-          Positioned.fill(bottom: 186, child: _HeroPhoto()),
-          Positioned(left: 20, right: 20, top: 94, child: _HeroCopy()),
-          Positioned(
-            left: 16,
-            right: 16,
-            top: 224,
-            child: _SearchCard(
-              destination: destination,
-              buildingTypeLabel:
-                  buildingTypeLabel ?? context.l10n.hotelFilterAllTypes,
-              stayRange: widget.presenter.stayRange(widget.criteria),
-              guestsLabel: context.l10n.hotelGuestSummary(
-                widget.criteria.occupancy,
-                widget.criteria.roomCount,
-              ),
-              onDestinationTap: _editDestination,
-              onBuildingTypeTap: () => _selectBuildingType(filters),
-              onDateTap: _pickDates,
-              onGuestsTap: _editGuests,
-              onSearchTap: () => widget.onSearch(),
-            ),
+    return Column(
+      children: <Widget>[
+        AspectRatio(
+          aspectRatio: 16 / 9,
+          child: _HeroPhoto(),
+        ),
+        
+        Container(
+          margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+          child: 
+          _SearchCard(
+          destination: destination,
+          buildingTypeLabel:
+              buildingTypeLabel ?? context.l10n.hotelFilterAllTypes,
+          stayRange: widget.presenter.stayRange(widget.criteria),
+          guestsLabel: context.l10n.hotelGuestSummary(
+            widget.criteria.occupancy,
+            widget.criteria.roomCount,
           ),
-        ],
-      ),
+          onDestinationTap: _selectDestination,
+          onBuildingTypeTap: () => _selectBuildingType(filters),
+          onDateTap: _pickDates,
+          onGuestsTap: _editGuests,
+          onSearchTap: () => widget.onSearch(),
+        ),
+        )
+        
+      ],
     );
   }
+}
+
+class _HotelAreaOption {
+  const _HotelAreaOption({required this.value, required this.label});
+
+  final String value;
+  final String label;
+}
+
+List<_HotelAreaOption> _hotelAreaOptions(BuildContext context) {
+  return <_HotelAreaOption>[
+    _HotelAreaOption(value: '', label: context.l10n.hotelDefaultDestination),
+    _HotelAreaOption(value: 'osaka', label: context.l10n.hotelAreaOsaka),
+    _HotelAreaOption(value: 'kyoto', label: context.l10n.hotelAreaKyoto),
+    _HotelAreaOption(value: 'tokyo', label: context.l10n.hotelAreaTokyo),
+  ];
+}
+
+String _hotelAreaLabel(BuildContext context, String area) {
+  final normalized = area.trim();
+  for (final option in _hotelAreaOptions(context)) {
+    if (option.value == normalized) {
+      return option.label;
+    }
+  }
+  return context.l10n.hotelDefaultDestination;
 }
 
 class _HeroPhoto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final heroImageUrls = _hotelHeroImageUrls(Localizations.localeOf(context));
     return DecoratedBox(
-      decoration: const BoxDecoration(color: _HotelHeroSectionState._navy),
+      decoration: BoxDecoration(color: colors.brandPrimary),
       child: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Image.asset(
-            'assets/images/hotel-booking-ui/detail-room-01.png',
-            fit: BoxFit.cover,
-            alignment: const Alignment(0, -0.72),
+          _HeroImagePlaceholder(
+            colors: colors,
+            icon: Icons.image_not_supported_outlined,
           ),
+          FundHeroMediaBackground(
+            gradientColors: <Color>[colors.heroMiddle, colors.primaryAlt],
+            imageUrls: heroImageUrls,
+            showArtworkOverlay: false,
+            autoPlay: heroImageUrls.length > 1,
+            autoPlayInterval: const Duration(seconds: 25),
+          ),
+          
+          if (heroImageUrls.isEmpty)
+            _HeroImagePlaceholder(
+              colors: colors,
+              icon: Icons.image_not_supported_outlined,
+            ),
           DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: <Color>[
-                  _HotelHeroSectionState._navyDeep.withValues(alpha: 0.30),
-                  _HotelHeroSectionState._navyDeep.withValues(alpha: 0.88),
+                  colors.brandPrimaryDark.withValues(alpha: 0.10),
+                  colors.brandPrimaryDark.withValues(alpha: 0.88),
                 ],
               ),
             ),
           ),
+          Positioned(left: 20, top: 120, child: _HeroCopy()),
         ],
       ),
+    );
+  }
+}
+
+List<String> _hotelHeroImageUrls(Locale locale) {
+  final localeSuffix = _hotelHeroLocaleSuffix(locale);
+  return List<String>.generate(
+    _hotelHeroBannerImageCount,
+    (index) =>
+        '$_hotelHeroBannerBaseUrl/banner.${index + 1}.$localeSuffix.jpg'
+        '?v=$_hotelHeroBannerCacheVersion',
+    growable: false,
+  );
+}
+
+String _hotelHeroLocaleSuffix(Locale locale) {
+  final languageCode = locale.languageCode.toLowerCase();
+  if (languageCode == 'ja') {
+    return 'ja';
+  }
+  if (languageCode == 'zh') {
+    final scriptCode = locale.scriptCode?.toLowerCase();
+    return scriptCode == 'hant' ? 'zh-hant' : 'zh-hans';
+  }
+  return 'en';
+}
+
+class _HeroImagePlaceholder extends StatelessWidget {
+  const _HeroImagePlaceholder({required this.colors, this.icon});
+
+  final AppSemanticColorTheme colors;
+  final IconData? icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[colors.heroStart, colors.heroMiddle],
+        ),
+      ),
+      child: icon == null
+          ? null
+          : Center(
+              child: Icon(
+                icon,
+                color: colors.onDark.withValues(alpha: 0.72),
+                size: 40,
+              ),
+            ),
     );
   }
 }
@@ -284,48 +357,23 @@ class _HeroPhoto extends StatelessWidget {
 class _HeroCopy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text(
-              context.l10n.hotelBrandMark,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 0,
-              ),
-            ),
-            const Spacer(),
-            const CircleAvatar(
-              radius: 27,
-              backgroundColor: Color(0x55FFFFFF),
-              child: Text(
-                'S',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 62),
         Text(
-          context.l10n.hotelTabHeadline,
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            color: Colors.white,
+          context.l10n.hotelBrandMark,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            color: colors.onDark,
             fontWeight: FontWeight.w900,
-            height: 1.12,
+            letterSpacing: 0,
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 22),
         Text(
           context.l10n.hotelTabSubtitle,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: Colors.white.withValues(alpha: 0.80),
+            color: colors.onDark.withValues(alpha: 0.80),
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -362,12 +410,12 @@ class _SearchCard extends StatelessWidget {
     final colors = Theme.of(context).appColors;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.96),
+        color: colors.brandWhite.withValues(alpha: 0.96),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: _HotelHeroSectionState._line),
+        border: Border.all(color: colors.borderSoft),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: _HotelHeroSectionState._navy.withValues(alpha: 0.16),
+            color: colors.brandPrimary.withValues(alpha: 0.16),
             blurRadius: 34,
             offset: const Offset(0, 12),
           ),
@@ -415,8 +463,8 @@ class _SearchCard extends StatelessWidget {
               height: 52,
               child: FilledButton(
                 style: FilledButton.styleFrom(
-                  backgroundColor: _HotelHeroSectionState._navy,
-                  foregroundColor: Colors.white,
+                  backgroundColor: colors.brandPrimary,
+                  foregroundColor: colors.onDark,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),
                   ),
@@ -451,8 +499,9 @@ class _SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
     return Material(
-      color: _HotelHeroSectionState._creamLighter,
+      color: colors.surfaceAlt,
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
         borderRadius: BorderRadius.circular(14),
@@ -461,7 +510,7 @@ class _SearchField extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: _HotelHeroSectionState._line),
+            border: Border.all(color: colors.borderSoft),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -470,7 +519,7 @@ class _SearchField extends StatelessWidget {
               Text(
                 label,
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: _HotelHeroSectionState._soft,
+                  color: colors.textTertiary,
                   fontWeight: FontWeight.w800,
                 ),
               ),
@@ -480,7 +529,7 @@ class _SearchField extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: _HotelHeroSectionState._navyDeep,
+                  color: colors.brandPrimaryDark,
                   fontWeight: FontWeight.w900,
                 ),
               ),

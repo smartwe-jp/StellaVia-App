@@ -1,3 +1,4 @@
+import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
@@ -57,12 +58,13 @@ class _ToolbarChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const navy = Color(0xFF0C1C50);
-    const line = Color(0xFFE3D7C3);
+    final colors = Theme.of(context).appColors;
     return Padding(
       padding: const EdgeInsets.only(right: 10),
       child: Material(
-        color: selected ? navy : Colors.white.withValues(alpha: 0.78),
+        color: selected
+            ? colors.brandPrimary
+            : colors.brandWhite.withValues(alpha: 0.78),
         borderRadius: BorderRadius.circular(999),
         child: InkWell(
           borderRadius: BorderRadius.circular(999),
@@ -73,12 +75,14 @@ class _ToolbarChip extends StatelessWidget {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(999),
-              border: Border.all(color: selected ? navy : line),
+              border: Border.all(
+                color: selected ? colors.brandPrimary : colors.borderSoft,
+              ),
             ),
             child: Text(
               label,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: selected ? Colors.white : navy,
+                color: selected ? colors.onDark : colors.brandPrimary,
                 fontWeight: FontWeight.w900,
               ),
             ),
