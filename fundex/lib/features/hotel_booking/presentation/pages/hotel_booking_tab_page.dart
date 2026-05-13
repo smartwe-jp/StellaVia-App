@@ -46,15 +46,17 @@ class _HotelBookingTabContent extends ConsumerWidget {
               ),
             ),
             SliverToBoxAdapter(
-              child: 
-              Transform(
+              child: Transform(
                 transform: Matrix4.translationValues(0, -8, 0),
-                child: Padding(padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                   child: HotelFilterSection(
                     state: state,
-                      onPriceSortSelected: controller.setPriceSort,
-                    )
+                    presenter: presenter,
+                    onPriceSortSelected: controller.setPriceSort,
+                    onCriteriaApplied: controller.applyCriteria,
                   ),
+                ),
               ),
             ),
             if (state.error != null && state.hasContent)

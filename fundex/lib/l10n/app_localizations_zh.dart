@@ -1143,6 +1143,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelSortPriceHigh => '价格排序';
 
   @override
+  String get hotelSortPriceAscending => '价格从低到高';
+
+  @override
+  String get hotelSortPriceDescending => '价格从高到低';
+
+  @override
   String get hotelToolbarSort => '排序';
 
   @override
@@ -5492,6 +5498,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelSortPriceHigh => '價格排序';
+
+  @override
+  String get hotelSortPriceAscending => '價格從低到高';
+
+  @override
+  String get hotelSortPriceDescending => '價格從高到低';
 
   @override
   String get hotelToolbarSort => '排序';

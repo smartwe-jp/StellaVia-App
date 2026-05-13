@@ -1223,6 +1223,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hotelSortPriceHigh => 'Price sort';
 
   @override
+  String get hotelSortPriceAscending => 'Price low to high';
+
+  @override
+  String get hotelSortPriceDescending => 'Price high to low';
+
+  @override
   String get hotelToolbarSort => 'Sort';
 
   @override

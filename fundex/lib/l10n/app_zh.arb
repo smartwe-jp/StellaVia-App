@@ -417,6 +417,8 @@
   "hotelSortRecommended": "精选推荐",
   "hotelSortPriceLow": "价格排序",
   "hotelSortPriceHigh": "价格排序",
+  "hotelSortPriceAscending": "价格从低到高",
+  "hotelSortPriceDescending": "价格从高到低",
   "hotelToolbarSort": "排序",
   "hotelToolbarFilter": "筛选",
   "hotelToolbarMap": "地图",

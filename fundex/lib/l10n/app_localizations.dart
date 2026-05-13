@@ -2307,6 +2307,18 @@ abstract class AppLocalizations {
   /// **'Price sort'**
   String get hotelSortPriceHigh;
 
+  /// No description provided for @hotelSortPriceAscending.
+  ///
+  /// In en, this message translates to:
+  /// **'Price low to high'**
+  String get hotelSortPriceAscending;
+
+  /// No description provided for @hotelSortPriceDescending.
+  ///
+  /// In en, this message translates to:
+  /// **'Price high to low'**
+  String get hotelSortPriceDescending;
+
   /// No description provided for @hotelToolbarSort.
   ///
   /// In en, this message translates to:

@@ -1157,6 +1157,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelSortPriceHigh => '価格順';
 
   @override
+  String get hotelSortPriceAscending => '価格の低い順';
+
+  @override
+  String get hotelSortPriceDescending => '価格の高い順';
+
+  @override
   String get hotelToolbarSort => '並び替え';
 
   @override

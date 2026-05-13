@@ -417,6 +417,8 @@
   "hotelSortRecommended": "Featured",
   "hotelSortPriceLow": "Price sort",
   "hotelSortPriceHigh": "Price sort",
+  "hotelSortPriceAscending": "Price low to high",
+  "hotelSortPriceDescending": "Price high to low",
   "hotelToolbarSort": "Sort",
   "hotelToolbarFilter": "Filter",
   "hotelToolbarMap": "Map",

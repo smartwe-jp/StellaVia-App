@@ -253,31 +253,17 @@ class _HotelSearchConditionsSheetState
               ),
               child: const SizedBox(width: 84, height: 6),
             ),
-            const SizedBox(height: 26),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    context.l10n.hotelSearchConditionsTitle,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: colors.brandPrimary,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
+            const SizedBox(height: 16),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                context.l10n.hotelSearchConditionsTitle,
+                textAlign: TextAlign.left,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: colors.brandPrimary,
+                  fontWeight: FontWeight.w900,
                 ),
-                Flexible(
-                  child: Text(
-                    context.l10n.hotelSearchConditionsHint,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.end,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: colors.primaryAlt,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
             const SizedBox(height: 22),
             HotelSearchConditionRow(
@@ -285,19 +271,19 @@ class _HotelSearchConditionsSheetState
               value: hotelAreaLabel(context, _criteria.area),
               onTap: _selectDestination,
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 12),
             HotelSearchConditionRow(
               label: context.l10n.hotelPropertyTypeLabel,
               value: _buildingTypeLabel,
               onTap: _selectBuildingType,
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 12),
             HotelSearchConditionRow(
               label: context.l10n.hotelCheckInDateLabel,
               value: widget.presenter.stayRange(_criteria),
               onTap: _pickDates,
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 12),
             HotelSearchConditionRow(
               label: context.l10n.hotelGuestFieldLabel,
               value: context.l10n.hotelGuestDetailedSummary(
@@ -359,8 +345,8 @@ class HotelSearchConditionRow extends StatelessWidget {
         borderRadius: borderRadius,
         onTap: onTap,
         child: Ink(
-          height: 82,
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          height: 52,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
             borderRadius: borderRadius,
             border: Border.all(color: colors.borderSoft),
@@ -372,26 +358,25 @@ class HotelSearchConditionRow extends StatelessWidget {
                   label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: colors.textTertiary,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
-              Flexible(
-                child: Text(
+              const Spacer(),
+              Text(
                   value,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.end,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: colors.brandPrimaryDark,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
-              ),
-              const SizedBox(width: 10),
+              
+              const SizedBox(width: 6),
               Icon(
                 Icons.keyboard_arrow_down_rounded,
                 color: colors.textTertiary,

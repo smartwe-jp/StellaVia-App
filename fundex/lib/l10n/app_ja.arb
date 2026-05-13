@@ -417,6 +417,8 @@
   "hotelSortRecommended": "厳選おすすめ",
   "hotelSortPriceLow": "価格順",
   "hotelSortPriceHigh": "価格順",
+  "hotelSortPriceAscending": "価格の低い順",
+  "hotelSortPriceDescending": "価格の高い順",
   "hotelToolbarSort": "並び替え",
   "hotelToolbarFilter": "絞り込み",
   "hotelToolbarMap": "地図",

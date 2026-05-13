@@ -23,7 +23,7 @@ class HotelSearchSummaryBar extends StatelessWidget {
         borderRadius: borderRadius,
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: colors.brandPrimaryDark.withValues(alpha: 0.10),
+            color: colors.brandPrimaryDark.withValues(alpha: 0.24),
             blurRadius: 22,
             spreadRadius: -4,
             offset: const Offset(0, 10),
