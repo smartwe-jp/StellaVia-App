@@ -60,7 +60,7 @@ class HotelFilterSection extends ConsumerWidget {
       color: colors.brandWhite.withValues(alpha: 0.88),
       borderRadius: BorderRadius.circular(28),
       child: Ink(
-        height: 50,
+        height: 42,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
           border: Border.all(color: colors.borderSoft),
@@ -221,14 +221,14 @@ class _ToolbarSegmentBody extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(icon, color: colors.brandPrimary, size: 30),
-            const SizedBox(width: 8),
+            Icon(icon, color: colors.brandPrimary, size: 20),
+            const SizedBox(width: 2),
             Flexible(
               child: Text(
                 label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: colors.brandPrimary,
                   fontWeight: FontWeight.w600,
                 ),

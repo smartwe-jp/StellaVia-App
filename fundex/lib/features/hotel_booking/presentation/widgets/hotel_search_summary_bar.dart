@@ -40,7 +40,7 @@ class HotelSearchSummaryBar extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           child: SizedBox(
-            height: 78,
+            height: 72,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(24, 12, 12, 12),
               child: Row(
@@ -57,7 +57,7 @@ class HotelSearchSummaryBar extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(
                                 color: colors.brandPrimaryDark,
-                                fontWeight: FontWeight.w900,
+                                fontWeight: FontWeight.w600,
                                 letterSpacing: 0,
                               ),
                         ),
@@ -69,25 +69,25 @@ class HotelSearchSummaryBar extends StatelessWidget {
                           style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(
                                 color: colors.textSecondary,
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w600,
                               ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 14),
+                  const SizedBox(width: 10),
                   DecoratedBox(
                     decoration: BoxDecoration(
                       color: colors.brandPrimary,
-                      borderRadius: BorderRadius.circular(25),
+                      borderRadius: BorderRadius.circular(18),
                     ),
                     child: SizedBox(
-                      width: 50,
-                      height: 50,
+                      width: 36,
+                      height: 36,
                       child: Icon(
                         Icons.search_rounded,
                         color: colors.onDark,
-                        size: 42,
+                        size: 22,
                       ),
                     ),
                   ),

@@ -337,7 +337,7 @@ class HotelSearchConditionRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
-    final borderRadius = BorderRadius.circular(18);
+    final borderRadius = BorderRadius.circular(12);
     return Material(
       color: colors.surfaceAlt,
       borderRadius: borderRadius,
@@ -346,7 +346,7 @@ class HotelSearchConditionRow extends StatelessWidget {
         onTap: onTap,
         child: Ink(
           height: 52,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
             borderRadius: borderRadius,
             border: Border.all(color: colors.borderSoft),

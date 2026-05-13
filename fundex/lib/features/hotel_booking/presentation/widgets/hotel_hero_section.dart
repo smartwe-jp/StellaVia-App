@@ -76,7 +76,7 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
 
     return Column(
       children: <Widget>[
-        AspectRatio(aspectRatio: 16 / 10, child: _HeroPhoto()),
+        AspectRatio(aspectRatio: 16 / 9, child: _HeroPhoto()),
         Transform.translate(
           offset: const Offset(0, -16),
           child: Container(
@@ -132,7 +132,7 @@ class _HeroPhoto extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(left: 20, top: 100, right: 16, child: _HeroCopy()),
+          Positioned(left: 20, top: 80, right: 16, child: _HeroCopy()),
         ],
       ),
     );
@@ -207,14 +207,14 @@ class _HeroCopy extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 20),
-        Text(
-          context.l10n.hotelTabHeadline,
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            color: colors.onDark,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 0,
-          ),
-        ),
+        // Text(
+        //   context.l10n.hotelTabHeadline,
+        //   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+        //     color: colors.onDark,
+        //     fontWeight: FontWeight.w900,
+        //     letterSpacing: 0,
+        //   ),
+        // ),
         const SizedBox(height: 12),
         Text(
           context.l10n.hotelTabSubtitle,
