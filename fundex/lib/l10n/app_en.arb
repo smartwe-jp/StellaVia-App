@@ -403,10 +403,21 @@
       }
     }
   },
+  "hotelSearchSummaryLine": "{destination}, {dateRange}, {nights}",
+  "@hotelSearchSummaryLine": {
+    "placeholders": {
+      "destination": {},
+      "dateRange": {},
+      "nights": {}
+    }
+  },
+  "hotelSearchConditionsTitle": "Search conditions",
+  "hotelSearchConditionsHint": "Opens from summary",
   "hotelFilterAllTypes": "All stays",
   "hotelSortRecommended": "Featured",
   "hotelSortPriceLow": "Price sort",
   "hotelSortPriceHigh": "Price sort",
+  "hotelToolbarSort": "Sort",
   "hotelToolbarFilter": "Filter",
   "hotelToolbarMap": "Map",
   "hotelGuestAdults": "Adults",
@@ -416,6 +427,20 @@
   "@hotelGuestSummary": {
     "placeholders": {
       "guests": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelGuestDetailedSummary": "{adults} adults · {children} children · {rooms} rooms",
+  "@hotelGuestDetailedSummary": {
+    "placeholders": {
+      "adults": {
+        "type": "int"
+      },
+      "children": {
         "type": "int"
       },
       "rooms": {

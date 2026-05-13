@@ -403,10 +403,21 @@
       }
     }
   },
+  "hotelSearchSummaryLine": "{destination}、 {dateRange}、 {nights}",
+  "@hotelSearchSummaryLine": {
+    "placeholders": {
+      "destination": {},
+      "dateRange": {},
+      "nights": {}
+    }
+  },
+  "hotelSearchConditionsTitle": "搜索条件",
+  "hotelSearchConditionsHint": "点击摘要条后弹出",
   "hotelFilterAllTypes": "全部旅宿",
   "hotelSortRecommended": "精选推荐",
   "hotelSortPriceLow": "价格排序",
   "hotelSortPriceHigh": "价格排序",
+  "hotelToolbarSort": "排序",
   "hotelToolbarFilter": "筛选",
   "hotelToolbarMap": "地图",
   "hotelGuestAdults": "成人",
@@ -416,6 +427,20 @@
   "@hotelGuestSummary": {
     "placeholders": {
       "guests": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelGuestDetailedSummary": "{adults}位成人・{children}名儿童・{rooms}间客房",
+  "@hotelGuestDetailedSummary": {
+    "placeholders": {
+      "adults": {
+        "type": "int"
+      },
+      "children": {
         "type": "int"
       },
       "rooms": {

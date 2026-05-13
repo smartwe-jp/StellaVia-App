@@ -1196,6 +1196,21 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String hotelSearchSummaryLine(
+    Object destination,
+    Object dateRange,
+    Object nights,
+  ) {
+    return '$destination, $dateRange, $nights';
+  }
+
+  @override
+  String get hotelSearchConditionsTitle => 'Search conditions';
+
+  @override
+  String get hotelSearchConditionsHint => 'Opens from summary';
+
+  @override
   String get hotelFilterAllTypes => 'All stays';
 
   @override
@@ -1206,6 +1221,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hotelSortPriceHigh => 'Price sort';
+
+  @override
+  String get hotelToolbarSort => 'Sort';
 
   @override
   String get hotelToolbarFilter => 'Filter';
@@ -1225,6 +1243,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String hotelGuestSummary(int guests, int rooms) {
     return '$guests adults · $rooms rooms';
+  }
+
+  @override
+  String hotelGuestDetailedSummary(int adults, int children, int rooms) {
+    return '$adults adults · $children children · $rooms rooms';
   }
 
   @override

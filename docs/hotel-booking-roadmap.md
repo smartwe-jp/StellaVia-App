@@ -20,6 +20,7 @@ Current behavior:
 - Hotel browsing is public. The current booking action still uses `memberProfileActionGuardProvider.ensureCompleted(...)` until the real booking flow is implemented.
 - Hotel home hero temporarily reuses the same remote banner image URL pattern as the home tab.
 - Hotel list search uses fixed area choices only: all areas as `area: ""`, plus `osaka`, `kyoto`, and `tokyo`. Building/property type choices come from `/hotel/buildingCode`, including the empty-code "all" option returned by the API.
+- Hotel home shows selected search conditions as a compact summary bar; tapping the summary bar or search icon opens the full four-row search condition sheet over the tab bar. The sheet edits a local draft and refreshes the list only after "Check availability".
 - SDK-level hotel API client/DTO foundation exists for the first migration slice.
 
 Current gaps:
@@ -294,7 +295,8 @@ Recommended task threads:
 
 4. Hotel list tab replacement
    - Done for first slice.
-   - Current search fields are keyword, date range, building type, price sort, adults, children, and room count.
+   - Current home search summary includes destination, date range, stay nights, adults, children, and room count.
+   - Full search condition sheet fields are destination, building type, date range, adults, children, and room count.
    - Pull-to-refresh preserves old content on refresh failure.
 
 5. Hotel detail page

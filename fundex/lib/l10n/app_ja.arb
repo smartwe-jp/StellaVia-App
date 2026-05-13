@@ -403,10 +403,21 @@
       }
     }
   },
+  "hotelSearchSummaryLine": "{destination}、 {dateRange}、 {nights}",
+  "@hotelSearchSummaryLine": {
+    "placeholders": {
+      "destination": {},
+      "dateRange": {},
+      "nights": {}
+    }
+  },
+  "hotelSearchConditionsTitle": "検索条件",
+  "hotelSearchConditionsHint": "概要バーから表示",
   "hotelFilterAllTypes": "すべての宿",
   "hotelSortRecommended": "厳選おすすめ",
   "hotelSortPriceLow": "価格順",
   "hotelSortPriceHigh": "価格順",
+  "hotelToolbarSort": "並び替え",
   "hotelToolbarFilter": "絞り込み",
   "hotelToolbarMap": "地図",
   "hotelGuestAdults": "大人",
@@ -416,6 +427,20 @@
   "@hotelGuestSummary": {
     "placeholders": {
       "guests": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelGuestDetailedSummary": "大人{adults}名・子ども{children}名・{rooms}室",
+  "@hotelGuestDetailedSummary": {
+    "placeholders": {
+      "adults": {
+        "type": "int"
+      },
+      "children": {
         "type": "int"
       },
       "rooms": {

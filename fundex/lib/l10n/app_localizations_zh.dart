@@ -1116,6 +1116,21 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String hotelSearchSummaryLine(
+    Object destination,
+    Object dateRange,
+    Object nights,
+  ) {
+    return '$destination、 $dateRange、 $nights';
+  }
+
+  @override
+  String get hotelSearchConditionsTitle => '搜索条件';
+
+  @override
+  String get hotelSearchConditionsHint => '点击摘要条后弹出';
+
+  @override
   String get hotelFilterAllTypes => '全部旅宿';
 
   @override
@@ -1126,6 +1141,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get hotelSortPriceHigh => '价格排序';
+
+  @override
+  String get hotelToolbarSort => '排序';
 
   @override
   String get hotelToolbarFilter => '筛选';
@@ -1145,6 +1163,11 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String hotelGuestSummary(int guests, int rooms) {
     return '$guests位成人 · $rooms间';
+  }
+
+  @override
+  String hotelGuestDetailedSummary(int adults, int children, int rooms) {
+    return '$adults位成人・$children名儿童・$rooms间客房';
   }
 
   @override
@@ -5444,6 +5467,21 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
+  String hotelSearchSummaryLine(
+    Object destination,
+    Object dateRange,
+    Object nights,
+  ) {
+    return '$destination、 $dateRange、 $nights';
+  }
+
+  @override
+  String get hotelSearchConditionsTitle => '搜索條件';
+
+  @override
+  String get hotelSearchConditionsHint => '點擊摘要條後彈出';
+
+  @override
   String get hotelFilterAllTypes => '全部旅宿';
 
   @override
@@ -5454,6 +5492,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelSortPriceHigh => '價格排序';
+
+  @override
+  String get hotelToolbarSort => '排序';
 
   @override
   String get hotelToolbarFilter => '篩選';
@@ -5473,6 +5514,11 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String hotelGuestSummary(int guests, int rooms) {
     return '$guests位成人 · $rooms間';
+  }
+
+  @override
+  String hotelGuestDetailedSummary(int adults, int children, int rooms) {
+    return '$adults位成人・$children名兒童・$rooms間客房';
   }
 
   @override

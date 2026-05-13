@@ -1130,6 +1130,21 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String hotelSearchSummaryLine(
+    Object destination,
+    Object dateRange,
+    Object nights,
+  ) {
+    return '$destination、 $dateRange、 $nights';
+  }
+
+  @override
+  String get hotelSearchConditionsTitle => '検索条件';
+
+  @override
+  String get hotelSearchConditionsHint => '概要バーから表示';
+
+  @override
   String get hotelFilterAllTypes => 'すべての宿';
 
   @override
@@ -1140,6 +1155,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get hotelSortPriceHigh => '価格順';
+
+  @override
+  String get hotelToolbarSort => '並び替え';
 
   @override
   String get hotelToolbarFilter => '絞り込み';
@@ -1159,6 +1177,11 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String hotelGuestSummary(int guests, int rooms) {
     return '大人$guests名・$rooms室';
+  }
+
+  @override
+  String hotelGuestDetailedSummary(int adults, int children, int rooms) {
+    return '大人$adults名・子ども$children名・$rooms室';
   }
 
   @override

@@ -1,11 +1,14 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fundex/features/hotel_booking/presentation/widgets/hotel_filter_section.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../providers/hotel_booking_providers.dart';
 import '../support/hotel_booking_presenter.dart';
+import 'hotel_search_conditions_sheet.dart';
+import 'hotel_search_summary_bar.dart';
 
 const String _hotelHeroBannerBaseUrl = 'https://stellavia.co.jp/img';
 const int _hotelHeroBannerImageCount = 3;
@@ -18,166 +21,36 @@ class HotelHeroSection extends ConsumerStatefulWidget {
     super.key,
     required this.criteria,
     required this.presenter,
-    required this.onSearch,
-    required this.onBuildingSelected,
-    required this.onGuestsChanged,
+    required this.onCriteriaApplied,
   });
 
   final HotelSearchCriteria criteria;
   final HotelBookingPresenter presenter;
-  final Future<void> Function({
-    String? keyword,
-    String? area,
-    DateTime? checkInDate,
-    DateTime? checkOutDate,
-  })
-  onSearch;
-  final Future<void> Function(String? buildingCode) onBuildingSelected;
-  final Future<void> Function({
-    required int adults,
-    required int children,
-    required int rooms,
-  })
-  onGuestsChanged;
+  final Future<void> Function(HotelSearchCriteria criteria) onCriteriaApplied;
 
   @override
   ConsumerState<HotelHeroSection> createState() => _HotelHeroSectionState();
 }
 
 class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
-  Future<void> _pickDates() async {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final range = await showDateRangePicker(
+  Future<void> _openSearchConditions(List<HotelBuildingFilter> filters) async {
+    final colors = Theme.of(context).appColors;
+    await showModalBottomSheet<void>(
       context: context,
-      firstDate: today,
-      lastDate: today.add(const Duration(days: 365)),
-      initialDateRange: DateTimeRange(
-        start: widget.criteria.checkInDate,
-        end: widget.criteria.checkOutDate,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      backgroundColor: colors.brandWhite,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
-    );
-    if (range == null) {
-      return;
-    }
-    await widget.onSearch(checkInDate: range.start, checkOutDate: range.end);
-  }
-
-  Future<void> _selectDestination() async {
-    final selected = await showModalBottomSheet<String>(
-      context: context,
-      useRootNavigator: true,
-      builder: (context) {
-        final colors = Theme.of(context).appColors;
-        final options = _hotelAreaOptions(context);
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              for (final option in options)
-                ListTile(
-                  title: Text(option.label),
-                  trailing: widget.criteria.area == option.value
-                      ? Icon(Icons.check_rounded, color: colors.primary)
-                      : null,
-                  onTap: () => Navigator.of(context).pop(option.value),
-                ),
-            ],
-          ),
+      builder: (_) {
+        return HotelSearchConditionsSheet(
+          criteria: widget.criteria,
+          presenter: widget.presenter,
+          buildingFilters: filters,
+          onApply: widget.onCriteriaApplied,
         );
       },
-    );
-    if (selected == null || !mounted) {
-      return;
-    }
-    await widget.onSearch(area: selected);
-  }
-
-  Future<void> _selectBuildingType(List<HotelBuildingFilter> filters) async {
-    final selected = await showModalBottomSheet<String>(
-      context: context,
-      useRootNavigator: true,
-      builder: (context) {
-        final colors = Theme.of(context).appColors;
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              for (final filter in filters)
-                ListTile(
-                  title: Text(filter.name),
-                  trailing: (widget.criteria.buildingCode ?? '') == filter.code
-                      ? Icon(Icons.check_rounded, color: colors.primary)
-                      : null,
-                  onTap: () => Navigator.of(context).pop(filter.code),
-                ),
-            ],
-          ),
-        );
-      },
-    );
-    if (selected == null || !mounted) {
-      return;
-    }
-    await widget.onBuildingSelected(selected);
-  }
-
-  Future<void> _editGuests() async {
-    var adults = widget.criteria.occupancy;
-    var children = widget.criteria.kids;
-    var rooms = widget.criteria.roomCount;
-    final result = await showModalBottomSheet<(int, int, int)>(
-      context: context,
-      useRootNavigator: true,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setSheetState) {
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  _StepperRow(
-                    label: context.l10n.hotelGuestAdults,
-                    value: adults,
-                    min: 1,
-                    onChanged: (value) => setSheetState(() => adults = value),
-                  ),
-                  _StepperRow(
-                    label: context.l10n.hotelGuestChildren,
-                    value: children,
-                    min: 0,
-                    onChanged: (value) => setSheetState(() => children = value),
-                  ),
-                  _StepperRow(
-                    label: context.l10n.hotelGuestRooms,
-                    value: rooms,
-                    min: 1,
-                    onChanged: (value) => setSheetState(() => rooms = value),
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: () =>
-                          Navigator.of(context).pop((adults, children, rooms)),
-                      child: Text(context.l10n.commonApply),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-    if (result == null) {
-      return;
-    }
-    await widget.onGuestsChanged(
-      adults: result.$1,
-      children: result.$2,
-      rooms: result.$3,
     );
   }
 
@@ -189,72 +62,35 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
           data: (items) => items,
           orElse: () => const <HotelBuildingFilter>[],
         );
-    String? buildingTypeLabel;
-    for (final item in filters) {
-      if (item.code == (widget.criteria.buildingCode ?? '')) {
-        buildingTypeLabel = item.name;
-        break;
-      }
-    }
-    final destination = _hotelAreaLabel(context, widget.criteria.area);
+    final destination = hotelAreaLabel(context, widget.criteria.area);
+    final summaryLine = context.l10n.hotelSearchSummaryLine(
+      destination,
+      widget.presenter.stayRange(widget.criteria),
+      context.l10n.hotelSearchNights(widget.criteria.nights),
+    );
+    final guestLine = context.l10n.hotelGuestDetailedSummary(
+      widget.criteria.occupancy,
+      widget.criteria.kids,
+      widget.criteria.roomCount,
+    );
 
     return Column(
       children: <Widget>[
-        AspectRatio(
-          aspectRatio: 16 / 9,
-          child: _HeroPhoto(),
-        ),
+        AspectRatio(aspectRatio: 16 / 10, child: _HeroPhoto()),
         Transform.translate(
-            offset: const Offset(0, -16),
-              child: Container(
-                margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                child: _SearchCard(
-                  destination: destination,
-                  buildingTypeLabel:
-                      buildingTypeLabel ?? context.l10n.hotelFilterAllTypes,
-                  stayRange: widget.presenter.stayRange(widget.criteria),
-                  guestsLabel: context.l10n.hotelGuestSummary(
-                    widget.criteria.occupancy,
-                    widget.criteria.roomCount,
-                  ),
-                  onDestinationTap: _selectDestination,
-                  onBuildingTypeTap: () => _selectBuildingType(filters),
-                  onDateTap: _pickDates,
-                  onGuestsTap: _editGuests,
-                  onSearchTap: () => widget.onSearch(),
+          offset: const Offset(0, -16),
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+            child: HotelSearchSummaryBar(
+              summaryLine: summaryLine,
+              guestLine: guestLine,
+              onTap: () => _openSearchConditions(filters),
             ),
-          )
-        )
-        
+          ),
+        ),
       ],
     );
   }
-}
-
-class _HotelAreaOption {
-  const _HotelAreaOption({required this.value, required this.label});
-
-  final String value;
-  final String label;
-}
-
-List<_HotelAreaOption> _hotelAreaOptions(BuildContext context) {
-  return <_HotelAreaOption>[
-    _HotelAreaOption(value: '', label: context.l10n.hotelDefaultDestination),
-    _HotelAreaOption(value: 'osaka', label: context.l10n.hotelAreaOsaka),
-    _HotelAreaOption(value: 'kyoto', label: context.l10n.hotelAreaKyoto),
-    _HotelAreaOption(value: 'tokyo', label: context.l10n.hotelAreaTokyo),
-  ];
-}
-
-String _hotelAreaLabel(BuildContext context, String area) {
-  final normalized = area.trim();
-  for (final option in _hotelAreaOptions(context)) {
-    if (option.value == normalized) {
-      return option.label;
-    }
-  }
-  return context.l10n.hotelDefaultDestination;
 }
 
 class _HeroPhoto extends StatelessWidget {
@@ -278,7 +114,7 @@ class _HeroPhoto extends StatelessWidget {
             autoPlay: heroImageUrls.length > 1,
             autoPlayInterval: const Duration(seconds: 25),
           ),
-          
+
           if (heroImageUrls.isEmpty)
             _HeroImagePlaceholder(
               colors: colors,
@@ -296,7 +132,7 @@ class _HeroPhoto extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(left: 20, top: 120, child: _HeroCopy()),
+          Positioned(left: 20, top: 100, right: 16, child: _HeroCopy()),
         ],
       ),
     );
@@ -364,13 +200,22 @@ class _HeroCopy extends StatelessWidget {
       children: <Widget>[
         Text(
           context.l10n.hotelBrandMark,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
             color: colors.onDark,
             fontWeight: FontWeight.w900,
             letterSpacing: 0,
           ),
         ),
-        const SizedBox(height: 22),
+        const SizedBox(height: 20),
+        Text(
+          context.l10n.hotelTabHeadline,
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            color: colors.onDark,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 0,
+          ),
+        ),
+        const SizedBox(height: 12),
         Text(
           context.l10n.hotelTabSubtitle,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -379,208 +224,6 @@ class _HeroCopy extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _SearchCard extends StatelessWidget {
-  const _SearchCard({
-    required this.destination,
-    required this.buildingTypeLabel,
-    required this.stayRange,
-    required this.guestsLabel,
-    required this.onDestinationTap,
-    required this.onBuildingTypeTap,
-    required this.onDateTap,
-    required this.onGuestsTap,
-    required this.onSearchTap,
-  });
-
-  final String destination;
-  final String buildingTypeLabel;
-  final String stayRange;
-  final String guestsLabel;
-  final VoidCallback onDestinationTap;
-  final VoidCallback onBuildingTypeTap;
-  final VoidCallback onDateTap;
-  final VoidCallback onGuestsTap;
-  final VoidCallback onSearchTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).appColors;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.brandWhite.withValues(alpha: 0.96),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: colors.borderSoft),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: colors.brandPrimary.withValues(alpha: 0.16),
-            blurRadius: 34,
-            offset: const Offset(0, 12),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          children: <Widget>[
-            GridView(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                mainAxisExtent: 72,
-              ),
-              children: <Widget>[
-                _SearchField(
-                  label: context.l10n.hotelDestinationLabel,
-                  value: destination,
-                  onTap: onDestinationTap,
-                ),
-                _SearchField(
-                  label: context.l10n.hotelPropertyTypeLabel,
-                  value: buildingTypeLabel,
-                  onTap: onBuildingTypeTap,
-                ),
-                _SearchField(
-                  label: context.l10n.hotelCheckInDateLabel,
-                  value: stayRange,
-                  onTap: onDateTap,
-                ),
-                _SearchField(
-                  label: context.l10n.hotelGuestFieldLabel,
-                  value: guestsLabel,
-                  onTap: onGuestsTap,
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            SizedBox(
-              width: double.infinity,
-              height: 52,
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: colors.brandPrimary,
-                  foregroundColor: colors.onDark,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-                onPressed: onSearchTap,
-                child: Text(
-                  context.l10n.hotelSearchAction,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: colors.onDark,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _SearchField extends StatelessWidget {
-  const _SearchField({
-    required this.label,
-    required this.value,
-    required this.onTap,
-  });
-
-  final String label;
-  final String value;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).appColors;
-    return Material(
-      color: colors.surfaceAlt,
-      borderRadius: BorderRadius.circular(14),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(14),
-        onTap: onTap,
-        child: Ink(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: colors.borderSoft),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                label,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: colors.textTertiary,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                value,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: colors.brandPrimaryDark,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _StepperRow extends StatelessWidget {
-  const _StepperRow({
-    required this.label,
-    required this.value,
-    required this.min,
-    required this.onChanged,
-  });
-
-  final String label;
-  final int value;
-  final int min;
-  final ValueChanged<int> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: <Widget>[
-          Expanded(child: Text(label)),
-          IconButton(
-            onPressed: value <= min ? null : () => onChanged(value - 1),
-            icon: const Icon(Icons.remove_rounded),
-          ),
-          SizedBox(
-            width: 34,
-            child: Text(
-              '$value',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          ),
-          IconButton(
-            onPressed: () => onChanged(value + 1),
-            icon: const Icon(Icons.add_rounded),
-          ),
-        ],
-      ),
     );
   }
 }

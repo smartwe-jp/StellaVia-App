@@ -111,6 +111,24 @@ class HotelBookingController extends StateNotifier<HotelBookingState> {
     return refresh();
   }
 
+  Future<void> applyCriteria(HotelSearchCriteria criteria) {
+    final nextCheckIn = criteria.checkInDate;
+    var nextCheckOut = criteria.checkOutDate;
+    if (!nextCheckOut.isAfter(nextCheckIn)) {
+      nextCheckOut = nextCheckIn.add(const Duration(days: 1));
+    }
+    state = state.copyWith(
+      criteria: criteria.copyWith(
+        checkInDate: nextCheckIn,
+        checkOutDate: nextCheckOut,
+        occupancy: criteria.occupancy.clamp(1, 20),
+        kids: criteria.kids.clamp(0, 20),
+        roomCount: criteria.roomCount.clamp(1, 10),
+      ),
+    );
+    return refresh();
+  }
+
   Future<void> selectBuildingCode(String? buildingCode) {
     state = state.copyWith(
       criteria: state.criteria.copyWith(buildingCode: buildingCode),

@@ -17,75 +17,113 @@ class HotelFilterSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
-      child: Row(
-        children: <Widget>[
-          _ToolbarChip(
-            label: context.l10n.hotelSortRecommended,
-            selected: state.criteria.priceSort == HotelPriceSort.none,
-            onTap: () => onPriceSortSelected(HotelPriceSort.none),
+    final colors = Theme.of(context).appColors;
+    return Material(
+        color: colors.brandWhite.withValues(alpha: 0.88),
+        borderRadius: BorderRadius.circular(28),
+        child: Ink(
+          height: 60,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(color: colors.borderSoft),
           ),
-          _ToolbarChip(
-            label: context.l10n.hotelSortPriceLow,
-            selected: state.criteria.priceSort != HotelPriceSort.none,
-            onTap: () {
-              final next = state.criteria.priceSort == HotelPriceSort.ascending
-                  ? HotelPriceSort.descending
-                  : HotelPriceSort.ascending;
-              onPriceSortSelected(next);
-            },
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: _ToolbarSegment(
+                  icon: Icons.swap_vert_rounded,
+                  label: context.l10n.hotelToolbarSort,
+                  onTap: () {
+                    final next =
+                        state.criteria.priceSort == HotelPriceSort.ascending
+                        ? HotelPriceSort.descending
+                        : HotelPriceSort.ascending;
+                    onPriceSortSelected(next);
+                  },
+                ),
+              ),
+              _ToolbarDivider(color: colors.borderSoft),
+              Expanded(
+                child: _ToolbarSegment(
+                  icon: Icons.tune_rounded,
+                  label: context.l10n.hotelToolbarFilter,
+                  onTap: () {},
+                ),
+              ),
+              _ToolbarDivider(color: colors.borderSoft),
+              Expanded(
+                child: _ToolbarSegment(
+                  icon: Icons.map_outlined,
+                  label: context.l10n.hotelToolbarMap,
+                  onTap: () {},
+                ),
+              ),
+            ],
           ),
-          _ToolbarChip(label: context.l10n.hotelToolbarFilter, onTap: () {}),
-          _ToolbarChip(label: context.l10n.hotelToolbarMap, onTap: () {}),
-        ],
-      ),
+        ),
+      
     );
   }
 }
 
-class _ToolbarChip extends StatelessWidget {
-  const _ToolbarChip({
+class _ToolbarSegment extends StatelessWidget {
+  const _ToolbarSegment({
+    required this.icon,
     required this.label,
     required this.onTap,
-    this.selected = false,
   });
 
+  final IconData icon;
   final String label;
-  final bool selected;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
-    return Padding(
-      padding: const EdgeInsets.only(right: 10),
-      child: Material(
-        color: selected
-            ? colors.brandPrimary
-            : colors.brandWhite.withValues(alpha: 0.78),
-        borderRadius: BorderRadius.circular(999),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(999),
-          onTap: onTap,
-          child: Container(
-            height: 44,
-            padding: const EdgeInsets.symmetric(horizontal: 18),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(999),
-              border: Border.all(
-                color: selected ? colors.brandPrimary : colors.borderSoft,
+    return InkWell(
+      borderRadius: BorderRadius.circular(28),
+      onTap: onTap,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(icon, color: colors.brandPrimary, size: 30),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: colors.brandPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
-            ),
-            child: Text(
-              label,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: selected ? colors.onDark : colors.brandPrimary,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ToolbarDivider extends StatelessWidget {
+  const _ToolbarDivider({required this.color});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.center,
+      child: SizedBox(
+        height: 72,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border(left: BorderSide(color: color)),
           ),
         ),
       ),

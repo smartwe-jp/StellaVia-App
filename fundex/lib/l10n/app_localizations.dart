@@ -2261,6 +2261,28 @@ abstract class AppLocalizations {
   /// **'{count, plural, =1{1 night} other{{count} nights}}'**
   String hotelSearchNights(int count);
 
+  /// No description provided for @hotelSearchSummaryLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{destination}, {dateRange}, {nights}'**
+  String hotelSearchSummaryLine(
+    Object destination,
+    Object dateRange,
+    Object nights,
+  );
+
+  /// No description provided for @hotelSearchConditionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search conditions'**
+  String get hotelSearchConditionsTitle;
+
+  /// No description provided for @hotelSearchConditionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens from summary'**
+  String get hotelSearchConditionsHint;
+
   /// No description provided for @hotelFilterAllTypes.
   ///
   /// In en, this message translates to:
@@ -2284,6 +2306,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Price sort'**
   String get hotelSortPriceHigh;
+
+  /// No description provided for @hotelToolbarSort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort'**
+  String get hotelToolbarSort;
 
   /// No description provided for @hotelToolbarFilter.
   ///
@@ -2320,6 +2348,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{guests} adults · {rooms} rooms'**
   String hotelGuestSummary(int guests, int rooms);
+
+  /// No description provided for @hotelGuestDetailedSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{adults} adults · {children} children · {rooms} rooms'**
+  String hotelGuestDetailedSummary(int adults, int children, int rooms);
 
   /// No description provided for @hotelResultsCount.
   ///

@@ -1,0 +1,463 @@
+import 'package:core_ui_kit/core_ui_kit.dart';
+import 'package:flutter/material.dart';
+
+import '../../../../app/localization/app_localizations_ext.dart';
+import '../../domain/entities/hotel_models.dart';
+import '../support/hotel_booking_presenter.dart';
+
+class HotelAreaOption {
+  const HotelAreaOption({required this.value, required this.label});
+
+  final String value;
+  final String label;
+}
+
+List<HotelAreaOption> hotelAreaOptions(BuildContext context) {
+  return <HotelAreaOption>[
+    HotelAreaOption(value: '', label: context.l10n.hotelDefaultDestination),
+    HotelAreaOption(value: 'osaka', label: context.l10n.hotelAreaOsaka),
+    HotelAreaOption(value: 'kyoto', label: context.l10n.hotelAreaKyoto),
+    HotelAreaOption(value: 'tokyo', label: context.l10n.hotelAreaTokyo),
+  ];
+}
+
+String hotelAreaLabel(BuildContext context, String area) {
+  final normalized = area.trim();
+  for (final option in hotelAreaOptions(context)) {
+    if (option.value == normalized) {
+      return option.label;
+    }
+  }
+  return context.l10n.hotelDefaultDestination;
+}
+
+class HotelSearchConditionsSheet extends StatefulWidget {
+  const HotelSearchConditionsSheet({
+    super.key,
+    required this.criteria,
+    required this.presenter,
+    required this.buildingFilters,
+    required this.onApply,
+  });
+
+  final HotelSearchCriteria criteria;
+  final HotelBookingPresenter presenter;
+  final List<HotelBuildingFilter> buildingFilters;
+  final Future<void> Function(HotelSearchCriteria criteria) onApply;
+
+  @override
+  State<HotelSearchConditionsSheet> createState() =>
+      _HotelSearchConditionsSheetState();
+}
+
+class _HotelSearchConditionsSheetState
+    extends State<HotelSearchConditionsSheet> {
+  late HotelSearchCriteria _criteria = widget.criteria;
+
+  List<HotelBuildingFilter> get _buildingFilters {
+    if (widget.buildingFilters.isNotEmpty) {
+      return widget.buildingFilters;
+    }
+    return <HotelBuildingFilter>[
+      HotelBuildingFilter(code: '', name: context.l10n.hotelFilterAllTypes),
+    ];
+  }
+
+  String get _buildingTypeLabel {
+    final code = _criteria.buildingCode ?? '';
+    for (final filter in _buildingFilters) {
+      if (filter.code == code) {
+        return filter.name;
+      }
+    }
+    return context.l10n.hotelFilterAllTypes;
+  }
+
+  Future<void> _selectDestination() async {
+    final selected = await showModalBottomSheet<String>(
+      context: context,
+      useRootNavigator: true,
+      builder: (context) {
+        final colors = Theme.of(context).appColors;
+        final options = hotelAreaOptions(context);
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              for (final option in options)
+                ListTile(
+                  title: Text(option.label),
+                  trailing: _criteria.area == option.value
+                      ? Icon(Icons.check_rounded, color: colors.primary)
+                      : null,
+                  onTap: () => Navigator.of(context).pop(option.value),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+    if (selected == null || !mounted) {
+      return;
+    }
+    setState(() {
+      _criteria = _criteria.copyWith(area: selected);
+    });
+  }
+
+  Future<void> _selectBuildingType() async {
+    final selected = await showModalBottomSheet<String>(
+      context: context,
+      useRootNavigator: true,
+      builder: (context) {
+        final colors = Theme.of(context).appColors;
+        final filters = _buildingFilters;
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              for (final filter in filters)
+                ListTile(
+                  title: Text(filter.name),
+                  trailing: (_criteria.buildingCode ?? '') == filter.code
+                      ? Icon(Icons.check_rounded, color: colors.primary)
+                      : null,
+                  onTap: () => Navigator.of(context).pop(filter.code),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+    if (selected == null || !mounted) {
+      return;
+    }
+    setState(() {
+      _criteria = _criteria.copyWith(buildingCode: selected);
+    });
+  }
+
+  Future<void> _pickDates() async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final range = await showDateRangePicker(
+      context: context,
+      firstDate: today,
+      lastDate: today.add(const Duration(days: 365)),
+      initialDateRange: DateTimeRange(
+        start: _criteria.checkInDate,
+        end: _criteria.checkOutDate,
+      ),
+    );
+    if (range == null || !mounted) {
+      return;
+    }
+    setState(() {
+      _criteria = _criteria.copyWith(
+        checkInDate: range.start,
+        checkOutDate: range.end,
+      );
+    });
+  }
+
+  Future<void> _editGuests() async {
+    var adults = _criteria.occupancy;
+    var children = _criteria.kids;
+    var rooms = _criteria.roomCount;
+    final result = await showModalBottomSheet<(int, int, int)>(
+      context: context,
+      useRootNavigator: true,
+      builder: (context) {
+        final colors = Theme.of(context).appColors;
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    HotelGuestStepperRow(
+                      label: context.l10n.hotelGuestAdults,
+                      value: adults,
+                      min: 1,
+                      onChanged: (value) => setSheetState(() => adults = value),
+                    ),
+                    HotelGuestStepperRow(
+                      label: context.l10n.hotelGuestChildren,
+                      value: children,
+                      min: 0,
+                      onChanged: (value) =>
+                          setSheetState(() => children = value),
+                    ),
+                    HotelGuestStepperRow(
+                      label: context.l10n.hotelGuestRooms,
+                      value: rooms,
+                      min: 1,
+                      onChanged: (value) => setSheetState(() => rooms = value),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: FilledButton(
+                        style: FilledButton.styleFrom(
+                          backgroundColor: colors.brandPrimary,
+                          foregroundColor: colors.onDark,
+                        ),
+                        onPressed: () => Navigator.of(
+                          context,
+                        ).pop((adults, children, rooms)),
+                        child: Text(context.l10n.commonApply),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+    if (result == null || !mounted) {
+      return;
+    }
+    setState(() {
+      _criteria = _criteria.copyWith(
+        occupancy: result.$1,
+        kids: result.$2,
+        roomCount: result.$3,
+      );
+    });
+  }
+
+  Future<void> _apply() async {
+    Navigator.of(context).pop();
+    await widget.onApply(_criteria);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final bottomPadding = MediaQuery.viewInsetsOf(context).bottom;
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(20, 14, 20, 20 + bottomPadding),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: colors.borderSoft,
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: const SizedBox(width: 84, height: 6),
+            ),
+            const SizedBox(height: 26),
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    context.l10n.hotelSearchConditionsTitle,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: colors.brandPrimary,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Text(
+                    context.l10n.hotelSearchConditionsHint,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: colors.primaryAlt,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 22),
+            HotelSearchConditionRow(
+              label: context.l10n.hotelDestinationLabel,
+              value: hotelAreaLabel(context, _criteria.area),
+              onTap: _selectDestination,
+            ),
+            const SizedBox(height: 14),
+            HotelSearchConditionRow(
+              label: context.l10n.hotelPropertyTypeLabel,
+              value: _buildingTypeLabel,
+              onTap: _selectBuildingType,
+            ),
+            const SizedBox(height: 14),
+            HotelSearchConditionRow(
+              label: context.l10n.hotelCheckInDateLabel,
+              value: widget.presenter.stayRange(_criteria),
+              onTap: _pickDates,
+            ),
+            const SizedBox(height: 14),
+            HotelSearchConditionRow(
+              label: context.l10n.hotelGuestFieldLabel,
+              value: context.l10n.hotelGuestDetailedSummary(
+                _criteria.occupancy,
+                _criteria.kids,
+                _criteria.roomCount,
+              ),
+              onTap: _editGuests,
+            ),
+            const SizedBox(height: 28),
+            SizedBox(
+              width: double.infinity,
+              height: 58,
+              child: FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: colors.brandPrimary,
+                  foregroundColor: colors.onDark,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                ),
+                onPressed: _apply,
+                child: Text(
+                  context.l10n.hotelSearchAction,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: colors.onDark,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HotelSearchConditionRow extends StatelessWidget {
+  const HotelSearchConditionRow({
+    super.key,
+    required this.label,
+    required this.value,
+    required this.onTap,
+  });
+
+  final String label;
+  final String value;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final borderRadius = BorderRadius.circular(18);
+    return Material(
+      color: colors.surfaceAlt,
+      borderRadius: borderRadius,
+      child: InkWell(
+        borderRadius: borderRadius,
+        onTap: onTap,
+        child: Ink(
+          height: 82,
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          decoration: BoxDecoration(
+            borderRadius: borderRadius,
+            border: Border.all(color: colors.borderSoft),
+          ),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: colors.textTertiary,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Flexible(
+                child: Text(
+                  value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.end,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: colors.brandPrimaryDark,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: colors.textTertiary,
+                size: 28,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class HotelGuestStepperRow extends StatelessWidget {
+  const HotelGuestStepperRow({
+    super.key,
+    required this.label,
+    required this.value,
+    required this.min,
+    required this.onChanged,
+  });
+
+  final String label;
+  final int value;
+  final int min;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: colors.brandPrimaryDark,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: value <= min ? null : () => onChanged(value - 1),
+            color: colors.brandPrimary,
+            icon: const Icon(Icons.remove_rounded),
+          ),
+          SizedBox(
+            width: 34,
+            child: Text(
+              '$value',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: colors.brandPrimaryDark,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: () => onChanged(value + 1),
+            color: colors.brandPrimary,
+            icon: const Icon(Icons.add_rounded),
+          ),
+        ],
+      ),
+    );
+  }
+}

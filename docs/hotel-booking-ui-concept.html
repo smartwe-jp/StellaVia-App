@@ -231,15 +231,70 @@
       line-height: 1.45;
     }
 
-    .search-card {
-      margin: -22px 16px 14px;
-      padding: 14px;
+    .compact-search {
+      margin: -24px 16px 12px;
+      min-height: 76px;
+      display: grid;
+      grid-template-columns: 1fr 44px;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 14px 14px 18px;
       border: 1px solid rgba(210, 192, 157, .7);
       border-radius: 20px;
       background: rgba(255, 255, 255, .95);
       box-shadow: 0 12px 34px rgba(12, 28, 80, .16);
       position: relative;
       z-index: 5;
+    }
+
+    .compact-search strong {
+      display: block;
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.35;
+      font-weight: 760;
+    }
+
+    .compact-search span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+      font-weight: 650;
+    }
+
+    .search-action {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: var(--white);
+      background: var(--brand-navy);
+      box-shadow: 0 10px 20px rgba(12, 28, 80, .22);
+    }
+
+    .search-lens {
+      width: 15px;
+      height: 15px;
+      border: 3px solid var(--white);
+      border-radius: 999px;
+      position: relative;
+      display: block;
+    }
+
+    .search-lens::after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 3px;
+      right: -7px;
+      bottom: -5px;
+      border-radius: 999px;
+      background: var(--white);
+      transform: rotate(45deg);
+      transform-origin: left center;
     }
 
     .search-grid {
@@ -309,8 +364,186 @@
       background: var(--brand-navy);
     }
 
+    .segment-toolbar {
+      margin: 0 16px 12px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid rgba(210, 192, 157, .74);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, .88);
+      box-shadow: 0 10px 24px rgba(12, 28, 80, .08);
+      overflow: hidden;
+    }
+
+    .segment-button {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-right: 1px solid rgba(210, 192, 157, .64);
+      color: var(--brand-navy);
+      font-size: 15px;
+      font-weight: 850;
+      background: rgba(255, 255, 255, .72);
+    }
+
+    .segment-button:last-child {
+      border-right: 0;
+    }
+
+    .segment-icon {
+      width: 20px;
+      height: 20px;
+      position: relative;
+      display: inline-block;
+      color: var(--ink);
+      flex: 0 0 auto;
+    }
+
+    .segment-icon.sort::before,
+    .segment-icon.sort::after {
+      position: absolute;
+      left: 5px;
+      font-size: 15px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .segment-icon.sort::before {
+      content: "↑";
+      top: -1px;
+    }
+
+    .segment-icon.sort::after {
+      content: "↓";
+      right: 3px;
+      left: auto;
+      bottom: -1px;
+    }
+
+    .segment-icon.filter::before {
+      content: "";
+      position: absolute;
+      inset: 3px 2px;
+      background:
+        linear-gradient(var(--ink), var(--ink)) 0 2px / 16px 2px no-repeat,
+        linear-gradient(var(--ink), var(--ink)) 0 8px / 16px 2px no-repeat,
+        linear-gradient(var(--ink), var(--ink)) 0 14px / 16px 2px no-repeat;
+    }
+
+    .segment-icon.filter::after {
+      content: "";
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--ink);
+      left: 4px;
+      top: 4px;
+      box-shadow: 8px 6px 0 var(--ink), 3px 12px 0 var(--ink);
+    }
+
+    .segment-icon.map::before {
+      content: "";
+      position: absolute;
+      left: 2px;
+      top: 3px;
+      width: 15px;
+      height: 14px;
+      border: 2px solid var(--ink);
+      border-radius: 2px;
+      transform: skewY(-10deg);
+    }
+
+    .segment-icon.map::after {
+      content: "";
+      position: absolute;
+      top: 4px;
+      bottom: 3px;
+      left: 8px;
+      width: 2px;
+      background: var(--ink);
+      box-shadow: 6px 0 0 var(--ink);
+      transform: skewY(-10deg);
+    }
+
+    .selector-sheet {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 20;
+      padding: 10px 16px 22px;
+      border: 1px solid rgba(210, 192, 157, .74);
+      border-right: 0;
+      border-left: 0;
+      border-bottom: 0;
+      border-radius: 28px 28px 0 0;
+      background: rgba(255, 255, 255, .97);
+      box-shadow: 0 -16px 44px rgba(12, 28, 80, .18);
+      backdrop-filter: blur(18px);
+    }
+
+    .sheet-handle {
+      width: 42px;
+      height: 4px;
+      margin: 0 auto 12px;
+      border-radius: 999px;
+      background: rgba(71, 85, 105, .24);
+    }
+
+    .sheet-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      color: var(--brand-navy);
+      font-size: 15px;
+      font-weight: 850;
+    }
+
+    .sheet-title span {
+      color: var(--brand-teal);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .selector-sheet .search-grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .selector-sheet .field {
+      min-height: 58px;
+      display: grid;
+      grid-template-columns: 92px 1fr 18px;
+      align-items: center;
+      padding: 10px 12px 10px 14px;
+      background: var(--cream-lighter);
+    }
+
+    .selector-sheet .field::after {
+      content: "⌄";
+      color: var(--soft);
+      font-size: 18px;
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .selector-sheet .field .label {
+      font-size: 12px;
+    }
+
+    .selector-sheet .field .value {
+      margin-top: 0;
+      font-size: 14px;
+      text-align: right;
+    }
+
     .list {
-      height: 526px;
+      height: 608px;
       overflow: hidden;
       padding: 0 16px 92px;
     }
@@ -793,33 +1026,27 @@
               <p>从投资人的城市资产，到可预订的真实旅宿体验。</p>
             </section>
 
-            <section class="search-card">
-              <div class="search-grid">
-                <div class="field">
-                  <div class="label">目的地</div>
-                  <div class="value">京都市下京区</div>
-                </div>
-                <div class="field">
-                  <div class="label">房源类型</div>
-                  <div class="value">全部旅宿</div>
-                </div>
-                <div class="field">
-                  <div class="label">入住日期</div>
-                  <div class="value">05/12 - 05/13</div>
-                </div>
-                <div class="field">
-                  <div class="label">入住人数</div>
-                  <div class="value">1位成人 · 1间</div>
-                </div>
+            <section class="compact-search" aria-label="selected search summary">
+              <div>
+                <strong>全部、05/12-05/13、共1天</strong>
+                <span>1位成人 · 0名儿童 · 1间客房</span>
               </div>
-              <div class="primary-button">查询空房</div>
+              <div class="search-action"><span class="search-lens"></span></div>
             </section>
 
-            <nav class="toolbar">
-              <span class="chip active">精选推荐</span>
-              <span class="chip">价格排序</span>
-              <span class="chip">筛选</span>
-              <span class="chip">地图</span>
+            <nav class="segment-toolbar" aria-label="list controls">
+              <span class="segment-button">
+                <span class="segment-icon sort"></span>
+                <span>排序</span>
+              </span>
+              <span class="segment-button">
+                <span class="segment-icon filter"></span>
+                <span>筛选</span>
+              </span>
+              <span class="segment-button">
+                <span class="segment-icon map"></span>
+                <span>地图</span>
+              </span>
             </nav>
 
             <section class="list">
@@ -854,6 +1081,33 @@
                   </div>
                 </div>
               </article>
+            </section>
+
+            <section class="selector-sheet" aria-label="search selector bottom sheet">
+              <div class="sheet-handle"></div>
+              <div class="sheet-title">
+                <strong>搜索条件</strong>
+                <span>点击摘要条后弹出</span>
+              </div>
+              <div class="search-grid">
+                <div class="field">
+                  <div class="label">目的地</div>
+                  <div class="value">京都市下京区</div>
+                </div>
+                <div class="field">
+                  <div class="label">房源类型</div>
+                  <div class="value">全部旅宿</div>
+                </div>
+                <div class="field">
+                  <div class="label">入住日期</div>
+                  <div class="value">05/12 - 05/13</div>
+                </div>
+                <div class="field">
+                  <div class="label">入住人数</div>
+                  <div class="value">1位成人 · 1间</div>
+                </div>
+              </div>
+              <div class="primary-button">查询空房</div>
             </section>
 
             <nav class="bottom-nav">
