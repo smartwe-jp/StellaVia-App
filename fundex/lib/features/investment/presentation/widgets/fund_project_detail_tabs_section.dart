@@ -1,5 +1,6 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../support/fund_project_detail_structured_data.dart';
@@ -601,7 +602,10 @@ class _FundIncomeSchemeTab extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  _valueOrDash(structuredData.distributedCapital, context),
+                  _schemeMoneyValueOrDash(
+                    structuredData.distributedCapital,
+                    context,
+                  ),
                   style: appText.numericHeadline.copyWith(
                     color: colors.highlightGold,
                   ),
@@ -740,7 +744,7 @@ class _FundSchemeRow extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Text(
-            _valueOrDash(item.value, context),
+            _schemeMoneyValueOrDash(item.value, context),
             style: appText.numericBody.copyWith(
               color: valueColor,
               fontWeight: valueWeight,
@@ -758,6 +762,49 @@ String _valueOrDash(String value, BuildContext context) {
     return context.l10n.fundDetailUnknownValue;
   }
   return trimmed;
+}
+
+String _schemeMoneyValueOrDash(String value, BuildContext context) {
+  final trimmed = value.trim();
+  if (trimmed.isEmpty) {
+    return context.l10n.fundDetailUnknownValue;
+  }
+  final amount = _parseSchemeMoneyAmount(trimmed);
+  if (amount == null) {
+    return trimmed;
+  }
+  final formatter = NumberFormat.decimalPattern(
+    Localizations.localeOf(context).toLanguageTag(),
+  )..maximumFractionDigits = 0;
+  return '${formatter.format(amount)}${context.l10n.fundDetailSchemeCurrencyUnit}';
+}
+
+num? _parseSchemeMoneyAmount(String value) {
+  if (value.contains('万') || value.contains('萬')) {
+    return null;
+  }
+  final buffer = StringBuffer();
+  var hasDigit = false;
+  var hasDecimalPoint = false;
+  for (final rune in value.runes) {
+    if (rune >= 48 && rune <= 57) {
+      buffer.writeCharCode(rune);
+      hasDigit = true;
+      continue;
+    }
+    if (rune == 46 && !hasDecimalPoint) {
+      buffer.writeCharCode(rune);
+      hasDecimalPoint = true;
+      continue;
+    }
+    if ((rune == 45 || rune == 8722) && buffer.isEmpty) {
+      buffer.write('-');
+    }
+  }
+  if (!hasDigit) {
+    return null;
+  }
+  return num.tryParse(buffer.toString());
 }
 
 enum _FundSchemeTone { normal, info, danger }

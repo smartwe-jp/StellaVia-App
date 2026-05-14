@@ -2505,6 +2505,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailSchemeDistributedCapitalTitle => '可分配原资';
 
   @override
+  String get fundDetailSchemeCurrencyUnit => '日元';
+
+  @override
   String get myPageTitle => '我的页面';
 
   @override
@@ -6716,6 +6719,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get fundDetailSchemeDistributedCapitalTitle => '可分配原資';
+
+  @override
+  String get fundDetailSchemeCurrencyUnit => '日圓';
 
   @override
   String get myPageTitle => '個人中心';

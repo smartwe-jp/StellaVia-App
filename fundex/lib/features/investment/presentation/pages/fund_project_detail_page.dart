@@ -366,13 +366,16 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                         child: FundDetailInfoTable(items: infoItems),
                       ),
                     ],
-                    if (viewData.distributionItems.isNotEmpty) ...<Widget>[
-                      const SizedBox(height: UiTokens.spacing16),
-                      FundDetailSection(
-                        title: context.l10n.fundDetailDistributionInfoTitle,
-                        child: FundDetailInfoTable(
-                          items: viewData.distributionItems,
-                          columns: 1,
+                    if (project.achievementRate != null) ...<Widget>[
+                      const SizedBox(height: UiTokens.spacing12),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: _FundDetailAchievementBanner(
+                          label: context.l10n.fundDetailAchievementRateLabel,
+                          value: _formatAchievementRate(
+                            project.achievementRate,
+                          ),
+                          achievementRate: project.achievementRate,
                         ),
                       ),
                     ],
@@ -385,16 +388,15 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                         ),
                       ),
                     ],
-                    if (project.achievementRate != null) ...<Widget>[
-                      const SizedBox(height: UiTokens.spacing12),
+                    if (viewData.distributionItems.isNotEmpty) ...<Widget>[
+                      const SizedBox(height: UiTokens.spacing16),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: _FundDetailAchievementBanner(
-                          label: context.l10n.fundDetailAchievementRateLabel,
-                          value: _formatAchievementRate(
-                            project.achievementRate,
+                        child: FundDetailDisclosureCard(
+                          title: context.l10n.fundDetailDistributionInfoTitle,
+                          child: _FundDetailDistributionDisclosureBody(
+                            items: viewData.distributionItems,
                           ),
-                          achievementRate: project.achievementRate,
                         ),
                       ),
                     ],
@@ -688,6 +690,62 @@ class _FundDetailGainTypeExplanationCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _FundDetailDistributionDisclosureBody extends StatelessWidget {
+  const _FundDetailDistributionDisclosureBody({required this.items});
+
+  final List<FundDetailInfoItemData> items;
+
+  @override
+  Widget build(BuildContext context) {
+    if (items.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+
+    return Column(
+      children: <Widget>[
+        for (var index = 0; index < items.length; index++) ...<Widget>[
+          _FundDetailDistributionDisclosureRow(item: items[index]),
+          if (index < items.length - 1)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Divider(color: colors.borderSoft, height: 1),
+            ),
+        ],
+      ],
+    );
+  }
+}
+
+class _FundDetailDistributionDisclosureRow extends StatelessWidget {
+  const _FundDetailDistributionDisclosureRow({required this.item});
+
+  final FundDetailInfoItemData item;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          item.label,
+          style: appText.tableLabel.copyWith(color: colors.textTertiary),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          item.value,
+          style: appText.tableValue.copyWith(color: colors.textPrimary),
+        ),
+      ],
     );
   }
 }

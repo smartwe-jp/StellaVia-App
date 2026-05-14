@@ -2295,7 +2295,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get fundDetailAnnualDistribution => '年1回';
 
   @override
-  String get fundDetailPlannedDistributionRateLabel => '予定分配率（税引前）';
+  String get fundDetailPlannedDistributionRateLabel => '想定利回り（税引前）';
 
   @override
   String get fundDetailAchievementRateLabel => '募集達成率';
@@ -2530,6 +2530,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get fundDetailSchemeDistributedCapitalTitle => '分配原資';
+
+  @override
+  String get fundDetailSchemeCurrencyUnit => '円';
 
   @override
   String get myPageTitle => 'マイページ';

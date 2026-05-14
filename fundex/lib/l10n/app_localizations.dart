@@ -4931,6 +4931,12 @@ abstract class AppLocalizations {
   /// **'Distributable capital'**
   String get fundDetailSchemeDistributedCapitalTitle;
 
+  /// No description provided for @fundDetailSchemeCurrencyUnit.
+  ///
+  /// In en, this message translates to:
+  /// **' JPY'**
+  String get fundDetailSchemeCurrencyUnit;
+
   /// No description provided for @myPageTitle.
   ///
   /// In en, this message translates to:
