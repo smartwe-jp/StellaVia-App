@@ -399,7 +399,6 @@ class KizunarkPostCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: colors.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: colors.border),
           boxShadow: <BoxShadow>[
             BoxShadow(
               color: colors.scrim.withValues(alpha: 0.08),

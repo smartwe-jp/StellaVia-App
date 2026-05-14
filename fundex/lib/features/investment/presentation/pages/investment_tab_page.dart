@@ -502,9 +502,9 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                     onRefresh: _refreshProjects,
                     child: ListView.separated(
                       controller: _scrollController,
-                      padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
+                      padding: const EdgeInsets.fromLTRB(16, 14, 16, 20),
                       itemCount: visibleProjects.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 16),
+                      separatorBuilder: (_, __) => const SizedBox(height: 10),
                       itemBuilder: (BuildContext context, int index) {
                         final project = visibleProjects[index];
                         final projectId = project.id.trim();
@@ -663,7 +663,7 @@ class _FundProjectCard extends StatelessWidget {
           color: colors.surface,
           shape: RoundedRectangleBorder(
             borderRadius: cardRadius,
-            side: BorderSide(color: colors.border),
+            //side: BorderSide(color: colors.border),
           ),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
