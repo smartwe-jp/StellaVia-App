@@ -87,9 +87,9 @@ _HotelSummaryDto _$HotelSummaryDtoFromJson(Map<String, dynamic> json) =>
       bookingStatus: json['bookingStatus'] as bool?,
       lat: json['lat'],
       lng: json['lng'],
-      tags:
-          (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-          const <String>[],
+      tags: json['tags'] == null
+          ? const <String>[]
+          : hotelStringListFromJson(json['tags']),
     );
 
 Map<String, dynamic> _$HotelSummaryDtoToJson(_HotelSummaryDto instance) =>
@@ -177,6 +177,19 @@ _HotelDetailDto _$HotelDetailDtoFromJson(Map<String, dynamic> json) =>
       bookingStatus: json['bookingStatus'] as bool?,
       entirePrice: json['entirePrice'] as num?,
       checkInMessage: json['checkInMessage'] as String?,
+      checkInTime: json['checkInTime'] as String?,
+      checkOutTime: json['checkOutTime'] as String?,
+      detail: json['detail'] as String?,
+      surrounding: json['surrounding'] as String?,
+      travel: json['travel'] as String?,
+      checkInGuide: json['checkInGuide'] as String?,
+      rule: json['rule'] as String?,
+      telNo: json['telNo'] as String?,
+      propertyFacilities:
+          json['propertyFacilities'] as List<dynamic>? ?? const <Object?>[],
+      propertyFacilityNames:
+          json['propertyFacilityNames'] as Map<String, dynamic>? ??
+          const <String, Object?>{},
       pictures:
           (json['hotelPictures'] as List<dynamic>?)
               ?.map((e) => HotelPictureDto.fromJson(e as Map<String, dynamic>))
@@ -187,9 +200,9 @@ _HotelDetailDto _$HotelDetailDtoFromJson(Map<String, dynamic> json) =>
               ?.map((e) => HotelRoomTypeDto.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const <HotelRoomTypeDto>[],
-      tags:
-          (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-          const <String>[],
+      tags: json['tags'] == null
+          ? const <String>[]
+          : hotelStringListFromJson(json['tags']),
     );
 
 Map<String, dynamic> _$HotelDetailDtoToJson(_HotelDetailDto instance) =>
@@ -204,6 +217,16 @@ Map<String, dynamic> _$HotelDetailDtoToJson(_HotelDetailDto instance) =>
       'bookingStatus': instance.bookingStatus,
       'entirePrice': instance.entirePrice,
       'checkInMessage': instance.checkInMessage,
+      'checkInTime': instance.checkInTime,
+      'checkOutTime': instance.checkOutTime,
+      'detail': instance.detail,
+      'surrounding': instance.surrounding,
+      'travel': instance.travel,
+      'checkInGuide': instance.checkInGuide,
+      'rule': instance.rule,
+      'telNo': instance.telNo,
+      'propertyFacilities': instance.propertyFacilities,
+      'propertyFacilityNames': instance.propertyFacilityNames,
       'hotelPictures': instance.pictures,
       'roomTypeDTO4APPs': instance.roomTypes,
       'tags': instance.tags,
@@ -225,13 +248,22 @@ _HotelRoomTypeDto _$HotelRoomTypeDtoFromJson(Map<String, dynamic> json) =>
     _HotelRoomTypeDto(
       id: json['id'] as String? ?? '',
       name: json['name'] as String? ?? '',
+      showName: json['showName'] as String?,
       price: json['price'] as num?,
+      beforeDiscountPrice: json['beforeDiscountPrice'] as num?,
+      discount: json['discount'] as num?,
+      discountName: json['discountName'] as String?,
+      discount2: json['discount2'] as num?,
+      discountName2: json['discountName2'] as String?,
       occupancy: (json['occupancy'] as num?)?.toInt(),
-      roomIds:
-          (json['roomIds'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const <String>[],
+      occupantsForBaseRate: (json['occupantsForBaseRate'] as num?)?.toInt(),
+      roomSize: json['roomSize'],
+      bedRoomCount: (json['bedRoomCount'] as num?)?.toInt(),
+      bathRoomCount: (json['bathRoomCount'] as num?)?.toInt(),
+      roomCount: (json['roomCount'] as num?)?.toInt(),
+      roomIds: json['roomIds'] == null
+          ? const <String>[]
+          : hotelStringListFromJson(json['roomIds']),
       pictures:
           (json['roomPictures'] as List<dynamic>?)
               ?.map((e) => HotelPictureDto.fromJson(e as Map<String, dynamic>))
@@ -248,8 +280,19 @@ Map<String, dynamic> _$HotelRoomTypeDtoToJson(_HotelRoomTypeDto instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'showName': instance.showName,
       'price': instance.price,
+      'beforeDiscountPrice': instance.beforeDiscountPrice,
+      'discount': instance.discount,
+      'discountName': instance.discountName,
+      'discount2': instance.discount2,
+      'discountName2': instance.discountName2,
       'occupancy': instance.occupancy,
+      'occupantsForBaseRate': instance.occupantsForBaseRate,
+      'roomSize': instance.roomSize,
+      'bedRoomCount': instance.bedRoomCount,
+      'bathRoomCount': instance.bathRoomCount,
+      'roomCount': instance.roomCount,
       'roomIds': instance.roomIds,
       'roomPictures': instance.pictures,
       'roomTypeBeds': instance.beds,
@@ -260,6 +303,9 @@ _HotelRoomBedDto _$HotelRoomBedDtoFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String? ?? '',
       count: (json['count'] as num?)?.toInt(),
       num: (json['num'] as num?)?.toInt(),
+      quantity: (json['quantity'] as num?)?.toInt(),
+      width: json['width'],
+      extent: json['extent'],
     );
 
 Map<String, dynamic> _$HotelRoomBedDtoToJson(_HotelRoomBedDto instance) =>
@@ -267,6 +313,9 @@ Map<String, dynamic> _$HotelRoomBedDtoToJson(_HotelRoomBedDto instance) =>
       'name': instance.name,
       'count': instance.count,
       'num': instance.num,
+      'quantity': instance.quantity,
+      'width': instance.width,
+      'extent': instance.extent,
     };
 
 _HotelPriceCalendarDto _$HotelPriceCalendarDtoFromJson(

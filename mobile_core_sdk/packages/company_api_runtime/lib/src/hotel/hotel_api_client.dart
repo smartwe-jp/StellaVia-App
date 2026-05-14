@@ -51,6 +51,7 @@ class HotelApiClient {
     this.bookingOrderSendPaymentLinkPath =
         HotelApiPaths.bookingOrderSendPaymentLink,
     this.buildingCodePath = HotelApiPaths.buildingCode,
+    this.refundStrategyTextPath = HotelApiPaths.refundStrategyText,
     this.roomFacilityPath = HotelApiPaths.roomFacility,
     this.hotelDetailPath = HotelApiPaths.hotelDetail,
     this.bookingOrderSaveV2Path = HotelApiPaths.bookingOrderSaveV2,
@@ -73,6 +74,7 @@ class HotelApiClient {
   final String bookingOrderPath;
   final String bookingOrderSendPaymentLinkPath;
   final String buildingCodePath;
+  final String refundStrategyTextPath;
   final String roomFacilityPath;
   final String hotelDetailPath;
   final String bookingOrderSaveV2Path;
@@ -161,6 +163,30 @@ class HotelApiClient {
       fallbackMessage: 'Failed to load hotel room facilities.',
     );
     return rows.map(HotelFacilityFilterDto.fromJson).toList(growable: false);
+  }
+
+  Future<String> fetchRefundStrategyText({
+    required String lang,
+    required String siteCode,
+    required String checkIn,
+    required String hotelId,
+    bool authRequiredForRequest = false,
+  }) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      refundStrategyTextPath,
+      data: <String, dynamic>{
+        'lang': lang,
+        'siteCode': siteCode,
+        'checkIn': checkIn,
+        'hotelId': hotelId,
+      },
+      options: authRequired(authRequiredForRequest),
+    );
+
+    return _envelopeCodec.extractDataString(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load hotel refund policy.',
+    );
   }
 
   Future<HotelDetailDto> fetchHotelDetail(

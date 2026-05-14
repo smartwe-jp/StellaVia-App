@@ -1,6 +1,7 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../providers/hotel_booking_providers.dart';
 import '../support/hotel_booking_presenter.dart';
@@ -85,9 +86,16 @@ class _HotelBookingTabContent extends ConsumerWidget {
                   itemCount: state.hotels.length,
                   separatorBuilder: (_, __) => const SizedBox(height: 12),
                   itemBuilder: (context, index) {
+                    final hotel = state.hotels[index];
                     return HotelSummaryCard(
-                      hotel: state.hotels[index],
+                      hotel: hotel,
                       presenter: presenter,
+                      onTap: hotel.id.trim().isEmpty
+                          ? null
+                          : () => context.push(
+                              '/hotel-booking/${Uri.encodeComponent(hotel.id)}',
+                              extra: state.criteria,
+                            ),
                     );
                   },
                 ),

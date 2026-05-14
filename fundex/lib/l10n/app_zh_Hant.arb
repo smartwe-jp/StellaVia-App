@@ -450,6 +450,118 @@
       }
     }
   },
+  "hotelDetailStayDateLabel": "入住日期 · 退房日期",
+  "hotelDetailGuestRoomLabel": "入住人數 · 客房",
+  "hotelDetailAvailableRooms": "可選房型",
+  "hotelDetailRemainingRoomsShort": "僅剩 {count} 間",
+  "@hotelDetailRemainingRoomsShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailRoomCapacity": "可住 {count} 人",
+  "@hotelDetailRoomCapacity": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailRoomBaseOccupancy": "基礎人數 {count} 人",
+  "@hotelDetailRoomBaseOccupancy": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailRoomArea": "面積 {size}㎡",
+  "@hotelDetailRoomArea": {
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "hotelDetailBedrooms": "臥室 {count} 間",
+  "@hotelDetailBedrooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailBathrooms": "浴室 {count} 間",
+  "@hotelDetailBathrooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailBedSummary": "{name}：{quantity}張{width}",
+  "@hotelDetailBedSummary": {
+    "placeholders": {
+      "name": {},
+      "quantity": {
+        "type": "int"
+      },
+      "width": {}
+    }
+  },
+  "hotelDetailPayableAmount": "應付金額",
+  "hotelDetailTaxNote": "{nights}天 · {rooms}間 · 含稅費說明",
+  "@hotelDetailTaxNote": {
+    "placeholders": {
+      "nights": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailBookNow": "立即預訂",
+  "hotelDetailSelectRoomFirst": "請先選擇房型",
+  "hotelDetailBookingComingSoon": "預訂流程稍後接入",
+  "hotelCurrencyCode": "JPY",
+  "hotelDetailNoRooms": "暫無可訂房型",
+  "hotelDetailFacilities": "設施設備",
+  "hotelDetailDescription": "房源詳情",
+  "hotelDetailSurrounding": "周邊環境",
+  "hotelDetailTravel": "出行資訊",
+  "hotelDetailCheckInGuide": "入住指南",
+  "hotelDetailPolicy": "房屋守則",
+  "hotelDetailRefundPolicy": "取消政策",
+  "hotelDetailCheckInTime": "入住/退房時間",
+  "hotelDetailCheckInAfter": "{time} 後入住",
+  "@hotelDetailCheckInAfter": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "hotelDetailCheckOutBefore": "{time} 前退房",
+  "@hotelDetailCheckOutBefore": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "hotelDetailContact": "聯絡電話",
+  "hotelDetailAddress": "位置",
+  "hotelDetailPerStay": " / {nights}晚",
+  "@hotelDetailPerStay": {
+    "placeholders": {
+      "nights": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailDiscount": "{discount}% OFF",
+  "@hotelDetailDiscount": {
+    "placeholders": {
+      "discount": {}
+    }
+  },
   "hotelResultsCount": "{count}個住宿",
   "@hotelResultsCount": {
     "placeholders": {

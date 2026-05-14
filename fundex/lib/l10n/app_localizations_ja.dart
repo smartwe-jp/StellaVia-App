@@ -1191,6 +1191,123 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get hotelDetailStayDateLabel => '宿泊日 · 退室日';
+
+  @override
+  String get hotelDetailGuestRoomLabel => '宿泊人数 · 客室';
+
+  @override
+  String get hotelDetailAvailableRooms => '選べる客室';
+
+  @override
+  String hotelDetailRemainingRoomsShort(int count) {
+    return '残り $count 室';
+  }
+
+  @override
+  String hotelDetailRoomCapacity(int count) {
+    return '$count名まで';
+  }
+
+  @override
+  String hotelDetailRoomBaseOccupancy(int count) {
+    return '基本人数 $count名';
+  }
+
+  @override
+  String hotelDetailRoomArea(Object size) {
+    return '面積 $size㎡';
+  }
+
+  @override
+  String hotelDetailBedrooms(int count) {
+    return '寝室 $count室';
+  }
+
+  @override
+  String hotelDetailBathrooms(int count) {
+    return '浴室 $count室';
+  }
+
+  @override
+  String hotelDetailBedSummary(Object name, int quantity, Object width) {
+    return '$name: $quantity台 $width';
+  }
+
+  @override
+  String get hotelDetailPayableAmount => 'お支払い金額';
+
+  @override
+  String hotelDetailTaxNote(int nights, int rooms) {
+    return '$nights日 · $rooms室 · 税込説明';
+  }
+
+  @override
+  String get hotelDetailBookNow => '今すぐ予約';
+
+  @override
+  String get hotelDetailSelectRoomFirst => '客室を選択してください';
+
+  @override
+  String get hotelDetailBookingComingSoon => '予約フローは後で接続します';
+
+  @override
+  String get hotelCurrencyCode => 'JPY';
+
+  @override
+  String get hotelDetailNoRooms => '予約可能な客室はありません';
+
+  @override
+  String get hotelDetailFacilities => '設備';
+
+  @override
+  String get hotelDetailDescription => '宿泊施設の詳細';
+
+  @override
+  String get hotelDetailSurrounding => '周辺環境';
+
+  @override
+  String get hotelDetailTravel => 'アクセス';
+
+  @override
+  String get hotelDetailCheckInGuide => 'チェックイン案内';
+
+  @override
+  String get hotelDetailPolicy => 'ハウスルール';
+
+  @override
+  String get hotelDetailRefundPolicy => 'キャンセルポリシー';
+
+  @override
+  String get hotelDetailCheckInTime => 'チェックイン/アウト時間';
+
+  @override
+  String hotelDetailCheckInAfter(Object time) {
+    return '$time以降チェックイン';
+  }
+
+  @override
+  String hotelDetailCheckOutBefore(Object time) {
+    return '$timeまでにチェックアウト';
+  }
+
+  @override
+  String get hotelDetailContact => '電話番号';
+
+  @override
+  String get hotelDetailAddress => '所在地';
+
+  @override
+  String hotelDetailPerStay(int nights) {
+    return ' / $nights泊';
+  }
+
+  @override
+  String hotelDetailDiscount(Object discount) {
+    return '$discount% OFF';
+  }
+
+  @override
   String hotelResultsCount(int count) {
     return '$count件の宿泊施設';
   }

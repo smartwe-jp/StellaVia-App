@@ -1177,6 +1177,123 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get hotelDetailStayDateLabel => '入住日期 · 退房日期';
+
+  @override
+  String get hotelDetailGuestRoomLabel => '入住人数 · 客房';
+
+  @override
+  String get hotelDetailAvailableRooms => '可选房型';
+
+  @override
+  String hotelDetailRemainingRoomsShort(int count) {
+    return '仅剩 $count 间';
+  }
+
+  @override
+  String hotelDetailRoomCapacity(int count) {
+    return '可住 $count 人';
+  }
+
+  @override
+  String hotelDetailRoomBaseOccupancy(int count) {
+    return '基础人数 $count 人';
+  }
+
+  @override
+  String hotelDetailRoomArea(Object size) {
+    return '面积 $size㎡';
+  }
+
+  @override
+  String hotelDetailBedrooms(int count) {
+    return '卧室 $count 间';
+  }
+
+  @override
+  String hotelDetailBathrooms(int count) {
+    return '浴室 $count 间';
+  }
+
+  @override
+  String hotelDetailBedSummary(Object name, int quantity, Object width) {
+    return '$name：$quantity张$width';
+  }
+
+  @override
+  String get hotelDetailPayableAmount => '应付金额';
+
+  @override
+  String hotelDetailTaxNote(int nights, int rooms) {
+    return '$nights天 · $rooms间 · 含税费说明';
+  }
+
+  @override
+  String get hotelDetailBookNow => '立即预订';
+
+  @override
+  String get hotelDetailSelectRoomFirst => '请先选择房型';
+
+  @override
+  String get hotelDetailBookingComingSoon => '预订流程稍后接入';
+
+  @override
+  String get hotelCurrencyCode => 'JPY';
+
+  @override
+  String get hotelDetailNoRooms => '暂无可订房型';
+
+  @override
+  String get hotelDetailFacilities => '设施设备';
+
+  @override
+  String get hotelDetailDescription => '房源详情';
+
+  @override
+  String get hotelDetailSurrounding => '周边环境';
+
+  @override
+  String get hotelDetailTravel => '出行信息';
+
+  @override
+  String get hotelDetailCheckInGuide => '入住指南';
+
+  @override
+  String get hotelDetailPolicy => '房屋守则';
+
+  @override
+  String get hotelDetailRefundPolicy => '取消政策';
+
+  @override
+  String get hotelDetailCheckInTime => '入住/退房时间';
+
+  @override
+  String hotelDetailCheckInAfter(Object time) {
+    return '$time 后入住';
+  }
+
+  @override
+  String hotelDetailCheckOutBefore(Object time) {
+    return '$time 前退房';
+  }
+
+  @override
+  String get hotelDetailContact => '联系电话';
+
+  @override
+  String get hotelDetailAddress => '位置';
+
+  @override
+  String hotelDetailPerStay(int nights) {
+    return ' / $nights晚';
+  }
+
+  @override
+  String hotelDetailDiscount(Object discount) {
+    return '$discount% OFF';
+  }
+
+  @override
   String hotelResultsCount(int count) {
     return '$count个住宿';
   }
@@ -5531,6 +5648,123 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String hotelGuestDetailedSummary(int adults, int children, int rooms) {
     return '$adults位成人・$children名兒童・$rooms間客房';
+  }
+
+  @override
+  String get hotelDetailStayDateLabel => '入住日期 · 退房日期';
+
+  @override
+  String get hotelDetailGuestRoomLabel => '入住人數 · 客房';
+
+  @override
+  String get hotelDetailAvailableRooms => '可選房型';
+
+  @override
+  String hotelDetailRemainingRoomsShort(int count) {
+    return '僅剩 $count 間';
+  }
+
+  @override
+  String hotelDetailRoomCapacity(int count) {
+    return '可住 $count 人';
+  }
+
+  @override
+  String hotelDetailRoomBaseOccupancy(int count) {
+    return '基礎人數 $count 人';
+  }
+
+  @override
+  String hotelDetailRoomArea(Object size) {
+    return '面積 $size㎡';
+  }
+
+  @override
+  String hotelDetailBedrooms(int count) {
+    return '臥室 $count 間';
+  }
+
+  @override
+  String hotelDetailBathrooms(int count) {
+    return '浴室 $count 間';
+  }
+
+  @override
+  String hotelDetailBedSummary(Object name, int quantity, Object width) {
+    return '$name：$quantity張$width';
+  }
+
+  @override
+  String get hotelDetailPayableAmount => '應付金額';
+
+  @override
+  String hotelDetailTaxNote(int nights, int rooms) {
+    return '$nights天 · $rooms間 · 含稅費說明';
+  }
+
+  @override
+  String get hotelDetailBookNow => '立即預訂';
+
+  @override
+  String get hotelDetailSelectRoomFirst => '請先選擇房型';
+
+  @override
+  String get hotelDetailBookingComingSoon => '預訂流程稍後接入';
+
+  @override
+  String get hotelCurrencyCode => 'JPY';
+
+  @override
+  String get hotelDetailNoRooms => '暫無可訂房型';
+
+  @override
+  String get hotelDetailFacilities => '設施設備';
+
+  @override
+  String get hotelDetailDescription => '房源詳情';
+
+  @override
+  String get hotelDetailSurrounding => '周邊環境';
+
+  @override
+  String get hotelDetailTravel => '出行資訊';
+
+  @override
+  String get hotelDetailCheckInGuide => '入住指南';
+
+  @override
+  String get hotelDetailPolicy => '房屋守則';
+
+  @override
+  String get hotelDetailRefundPolicy => '取消政策';
+
+  @override
+  String get hotelDetailCheckInTime => '入住/退房時間';
+
+  @override
+  String hotelDetailCheckInAfter(Object time) {
+    return '$time 後入住';
+  }
+
+  @override
+  String hotelDetailCheckOutBefore(Object time) {
+    return '$time 前退房';
+  }
+
+  @override
+  String get hotelDetailContact => '聯絡電話';
+
+  @override
+  String get hotelDetailAddress => '位置';
+
+  @override
+  String hotelDetailPerStay(int nights) {
+    return ' / $nights晚';
+  }
+
+  @override
+  String hotelDetailDiscount(Object discount) {
+    return '$discount% OFF';
   }
 
   @override

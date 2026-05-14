@@ -1,0 +1,454 @@
+import 'package:core_ui_kit/core_ui_kit.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../app/localization/app_localizations_ext.dart';
+import '../../domain/entities/hotel_models.dart';
+import '../providers/hotel_booking_providers.dart';
+import '../support/hotel_booking_presenter.dart';
+import '../widgets/hotel_detail_bottom_bar.dart';
+import '../widgets/hotel_detail_hero_gallery.dart';
+import '../widgets/hotel_detail_info_section.dart';
+import '../widgets/hotel_detail_stay_summary_bar.dart';
+import '../widgets/hotel_room_plan_card.dart';
+import '../widgets/hotel_state_views.dart';
+
+class HotelDetailPage extends ConsumerStatefulWidget {
+  const HotelDetailPage({
+    super.key,
+    required this.hotelId,
+    required this.initialCriteria,
+  });
+
+  final String hotelId;
+  final HotelSearchCriteria initialCriteria;
+
+  @override
+  ConsumerState<HotelDetailPage> createState() => _HotelDetailPageState();
+}
+
+class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
+  final Map<String, int> _roomQuantities = <String, int>{};
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final presenter = HotelBookingPresenter(
+      Localizations.localeOf(context).toLanguageTag(),
+    );
+    final query = HotelDetailQuery(
+      hotelId: widget.hotelId,
+      criteria: widget.initialCriteria,
+    );
+    final detailState = ref.watch(hotelDetailProvider(query));
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: colors.scrim.withValues(alpha: 0),
+        systemNavigationBarColor: colors.brandWhite,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        body: ColoredBox(
+          color: colors.surfaceAlt,
+          child: detailState.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (_, __) => HotelFullPageError(
+              onRetry: () => ref.refresh(hotelDetailProvider(query)),
+            ),
+            data: (detail) => _HotelDetailContent(
+              detail: detail,
+              criteria: widget.initialCriteria,
+              presenter: presenter,
+              roomQuantities: _roomQuantities,
+              onBack: _handleBack,
+              onRoomQuantityChanged: (change) =>
+                  _setRoomQuantity(change.key, change.value),
+              onBookNow: () => _handleBookNow(detail),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _handleBack() {
+    if (context.canPop()) {
+      context.pop();
+      return;
+    }
+    context.go('/hotel-booking');
+  }
+
+  void _setRoomQuantity(String key, int value) {
+    setState(() {
+      if (value <= 0) {
+        _roomQuantities.remove(key);
+      } else {
+        _roomQuantities[key] = value;
+      }
+    });
+  }
+
+  void _handleBookNow(HotelDetail detail) {
+    final selectedRooms = _selectedRooms(detail);
+    final message = selectedRooms == 0
+        ? context.l10n.hotelDetailSelectRoomFirst
+        : context.l10n.hotelDetailBookingComingSoon;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  int _selectedRooms(HotelDetail detail) {
+    var selectedRooms = 0;
+    for (var index = 0; index < detail.roomPlans.length; index++) {
+      selectedRooms +=
+          _roomQuantities[_roomKey(detail.roomPlans[index], index)] ?? 0;
+    }
+    return selectedRooms;
+  }
+}
+
+class _HotelDetailContent extends StatelessWidget {
+  const _HotelDetailContent({
+    required this.detail,
+    required this.criteria,
+    required this.presenter,
+    required this.roomQuantities,
+    required this.onBack,
+    required this.onRoomQuantityChanged,
+    required this.onBookNow,
+  });
+
+  final HotelDetail detail;
+  final HotelSearchCriteria criteria;
+  final HotelBookingPresenter presenter;
+  final Map<String, int> roomQuantities;
+  final VoidCallback onBack;
+  final ValueChanged<_RoomQuantityChange> onRoomQuantityChanged;
+  final VoidCallback onBookNow;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final selectedRooms = _selectedRooms;
+    final amount = _payableAmount;
+    final roomsForNote = selectedRooms > 0 ? selectedRooms : criteria.roomCount;
+
+    return Stack(
+      children: <Widget>[
+        CustomScrollView(
+          slivers: <Widget>[
+            SliverToBoxAdapter(
+              child: HotelDetailHeroGallery(
+                images: detail.images,
+                onBack: onBack,
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Transform.translate(
+                offset: const Offset(0, -40),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 22),
+                  child: HotelDetailStaySummaryBar(
+                    criteria: criteria,
+                    presenter: presenter,
+                  ),
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(22, 0, 22, 18),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate(<Widget>[
+                  Transform.translate(
+                    offset: const Offset(0, -18),
+                    child: _HotelDetailHeading(detail: detail),
+                  ),
+                  const SizedBox(height: 12),
+                  _AvailableRoomsHeader(detail: detail),
+                  const SizedBox(height: 14),
+                  if (detail.roomPlans.isEmpty)
+                    _NoRoomsNotice(colors: colors)
+                  else
+                    ...List<Widget>.generate(detail.roomPlans.length, (index) {
+                      final room = detail.roomPlans[index];
+                      final key = _roomKey(room, index);
+                      final quantity = roomQuantities[key] ?? 0;
+                      final remainingRooms = room.remainingRooms;
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          bottom: index == detail.roomPlans.length - 1 ? 0 : 14,
+                        ),
+                        child: HotelRoomPlanCard(
+                          room: room,
+                          presenter: presenter,
+                          quantity: quantity,
+                          nights: criteria.nights,
+                          onDecrement: () => onRoomQuantityChanged(
+                            _RoomQuantityChange(key, quantity - 1),
+                          ),
+                          onIncrement: () {
+                            if (remainingRooms != null &&
+                                quantity >= remainingRooms) {
+                              return;
+                            }
+                            onRoomQuantityChanged(
+                              _RoomQuantityChange(key, quantity + 1),
+                            );
+                          },
+                        ),
+                      );
+                    }),
+                  const SizedBox(height: 18),
+                  ..._detailInfoSections(context),
+                  const SizedBox(height: 142),
+                ]),
+              ),
+            ),
+          ],
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: HotelDetailBottomBar(
+            amount: amount,
+            nights: criteria.nights,
+            rooms: roomsForNote,
+            presenter: presenter,
+            onBookNow: onBookNow,
+          ),
+        ),
+      ],
+    );
+  }
+
+  int get _selectedRooms {
+    var selectedRooms = 0;
+    for (var index = 0; index < detail.roomPlans.length; index++) {
+      selectedRooms +=
+          roomQuantities[_roomKey(detail.roomPlans[index], index)] ?? 0;
+    }
+    return selectedRooms;
+  }
+
+  num? get _payableAmount {
+    num selectedTotal = 0;
+    var hasSelection = false;
+    for (var index = 0; index < detail.roomPlans.length; index++) {
+      final room = detail.roomPlans[index];
+      final quantity = roomQuantities[_roomKey(room, index)] ?? 0;
+      if (quantity <= 0) {
+        continue;
+      }
+      hasSelection = true;
+      selectedTotal += (room.price ?? 0) * quantity;
+    }
+    if (hasSelection) {
+      return selectedTotal;
+    }
+    return detail.lowestRoomPrice;
+  }
+
+  List<Widget> _detailInfoSections(BuildContext context) {
+    final sections = <Widget>[];
+    void addTextSection(String title, String body, IconData icon) {
+      if (body.trim().isEmpty) {
+        return;
+      }
+      sections.add(
+        HotelDetailInfoSection(title: title, body: body, icon: icon),
+      );
+    }
+
+    addTextSection(
+      context.l10n.hotelDetailCheckInGuide,
+      detail.checkInMessage,
+      Icons.fact_check_outlined,
+    );
+    addTextSection(
+      context.l10n.hotelDetailAddress,
+      detail.address,
+      Icons.place_outlined,
+    );
+    addTextSection(
+      context.l10n.hotelDetailCheckInTime,
+      _checkInOutTimeText(context),
+      Icons.schedule_outlined,
+    );
+    if (detail.facilities.isNotEmpty) {
+      sections.add(
+        HotelDetailFacilitySection(
+          title: context.l10n.hotelDetailFacilities,
+          facilities: detail.facilities,
+        ),
+      );
+    }
+    addTextSection(
+      context.l10n.hotelDetailDescription,
+      detail.detailText.isNotEmpty ? detail.detailText : detail.description,
+      Icons.notes_outlined,
+    );
+    addTextSection(
+      context.l10n.hotelDetailSurrounding,
+      detail.surroundingText,
+      Icons.apartment_outlined,
+    );
+    addTextSection(
+      context.l10n.hotelDetailTravel,
+      detail.travelText,
+      Icons.route_outlined,
+    );
+    addTextSection(
+      context.l10n.hotelDetailPolicy,
+      detail.ruleText,
+      Icons.rule_outlined,
+    );
+    addTextSection(
+      context.l10n.hotelDetailRefundPolicy,
+      detail.refundPolicyText,
+      Icons.currency_exchange_outlined,
+    );
+    addTextSection(
+      context.l10n.hotelDetailContact,
+      detail.telNo,
+      Icons.call_outlined,
+    );
+
+    return sections
+        .expand((section) => <Widget>[section, const SizedBox(height: 12)])
+        .toList(growable: false);
+  }
+
+  String _checkInOutTimeText(BuildContext context) {
+    final values = <String>[
+      if (detail.checkInTime.isNotEmpty)
+        context.l10n.hotelDetailCheckInAfter(detail.checkInTime),
+      if (detail.checkOutTime.isNotEmpty)
+        context.l10n.hotelDetailCheckOutBefore(detail.checkOutTime),
+    ];
+    return values.join('\n');
+  }
+}
+
+class _HotelDetailHeading extends StatelessWidget {
+  const _HotelDetailHeading({required this.detail});
+
+  final HotelDetail detail;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final subtitle = <String>[
+      if (detail.address.isNotEmpty) detail.address,
+      if (detail.description.isNotEmpty) detail.description,
+    ].join(' · ');
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          detail.name.isEmpty ? context.l10n.hotelUnnamedProperty : detail.name,
+          style: Theme.of(context).textTheme.displaySmall?.copyWith(
+            color: colors.brandPrimaryDark,
+            fontWeight: FontWeight.w900,
+            height: 1.08,
+          ),
+        ),
+        if (subtitle.isNotEmpty) ...<Widget>[
+          const SizedBox(height: 12),
+          Text(
+            subtitle,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: colors.textSecondary,
+              fontWeight: FontWeight.w700,
+              height: 1.35,
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _AvailableRoomsHeader extends StatelessWidget {
+  const _AvailableRoomsHeader({required this.detail});
+
+  final HotelDetail detail;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final remainingRooms = detail.roomPlans
+        .map((room) => room.remainingRooms)
+        .whereType<int>()
+        .fold<int>(0, (sum, value) => sum + value);
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Text(
+            context.l10n.hotelDetailAvailableRooms,
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              color: colors.brandPrimaryDark,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ),
+        if (remainingRooms > 0)
+          Text(
+            context.l10n.hotelDetailRemainingRoomsShort(remainingRooms),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              color: colors.brandSecondary,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _NoRoomsNotice extends StatelessWidget {
+  const _NoRoomsNotice({required this.colors});
+
+  final AppSemanticColorTheme colors;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.brandWhite,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: colors.borderSoft),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Text(
+          context.l10n.hotelDetailNoRooms,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: colors.textSecondary,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RoomQuantityChange {
+  const _RoomQuantityChange(this.key, this.value);
+
+  final String key;
+  final int value;
+}
+
+String _roomKey(HotelRoomPlan room, int index) {
+  final id = room.id.trim();
+  if (id.isNotEmpty) {
+    return id;
+  }
+  return '${room.name}-$index';
+}

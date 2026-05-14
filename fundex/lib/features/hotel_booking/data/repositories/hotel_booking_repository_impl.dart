@@ -63,6 +63,45 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
         )
         .toList(growable: false);
   }
+
+  @override
+  Future<HotelDetail> fetchHotelDetail({
+    required String hotelId,
+    required HotelSearchCriteria criteria,
+    required String languageCode,
+  }) async {
+    final checkIn = _wireDateFormat.format(criteria.checkInDate);
+    final checkOut = _wireDateFormat.format(criteria.checkOutDate);
+    final detailFuture = _remote.fetchHotelDetail(
+      HotelDetailRequestDto(
+        id: hotelId,
+        lang: languageCode,
+        startDate: checkIn,
+        endDate: checkOut,
+        occupancy: criteria.occupancy,
+      ),
+    );
+    final refundPolicyFuture = _remote
+        .fetchRefundStrategyText(
+          languageCode: languageCode,
+          siteCode: 'gl',
+          checkIn: checkIn,
+          hotelId: hotelId,
+        )
+        .catchError((_) => '');
+    final priceCalendarFuture = _remote
+        .fetchPriceByDate(hotelInfoId: hotelId)
+        .catchError((_) => const HotelPriceCalendarDto());
+
+    final detail = await detailFuture;
+    final refundPolicyText = await refundPolicyFuture;
+    final priceCalendar = await priceCalendarFuture;
+    return _mapHotelDetail(
+      detail,
+      refundPolicyText: refundPolicyText,
+      priceCalendarByDate: priceCalendar.pricesByDate,
+    );
+  }
 }
 
 String _formatBuildingName(HotelBuildingCodeDto dto, String languageCode) {
@@ -106,4 +145,101 @@ String _formatBookingType(Object? raw) {
     '2' => 'Hotel',
     _ => '',
   };
+}
+
+HotelDetail _mapHotelDetail(
+  HotelDetailDto dto, {
+  required String refundPolicyText,
+  required Map<String, Object?> priceCalendarByDate,
+}) {
+  return HotelDetail(
+    id: dto.id.trim(),
+    name: dto.name.trim(),
+    address: dto.address?.trim() ?? '',
+    description: dto.description?.trim() ?? '',
+    latitude: _doubleOrNull(dto.lat),
+    longitude: _doubleOrNull(dto.lng),
+    bookingType: dto.bookingType,
+    isBookable: dto.bookingStatus ?? true,
+    entirePrice: dto.entirePrice,
+    checkInMessage: dto.checkInMessage?.trim() ?? '',
+    checkInTime: dto.checkInTime?.trim() ?? '',
+    checkOutTime: dto.checkOutTime?.trim() ?? '',
+    detailText: dto.detail?.trim() ?? '',
+    surroundingText: dto.surrounding?.trim() ?? '',
+    travelText: dto.travel?.trim() ?? '',
+    checkInGuide: dto.checkInGuide?.trim() ?? '',
+    ruleText: dto.rule?.trim() ?? '',
+    refundPolicyText: refundPolicyText.trim(),
+    telNo: dto.telNo?.trim() ?? '',
+    facilities: _mapFacilities(dto),
+    images: dto.pictures.map(_mapDetailImage).toList(growable: false),
+    roomPlans: dto.roomTypes.map(_mapRoomPlan).toList(growable: false),
+    tags: dto.tags
+        .map((tag) => tag.trim())
+        .where((tag) => tag.isNotEmpty)
+        .toList(growable: false),
+    priceCalendarByDate: Map<String, Object?>.unmodifiable(priceCalendarByDate),
+  );
+}
+
+HotelDetailImage _mapDetailImage(HotelPictureDto dto) {
+  return HotelDetailImage(
+    url: dto.relativeUrl.trim(),
+    description: dto.description?.trim() ?? '',
+  );
+}
+
+HotelRoomPlan _mapRoomPlan(HotelRoomTypeDto dto) {
+  final discount = dto.discount2 ?? dto.discount;
+  final discountName = dto.discountName2 ?? dto.discountName ?? '';
+  return HotelRoomPlan(
+    id: dto.id.trim(),
+    name: (dto.showName?.trim().isNotEmpty ?? false)
+        ? dto.showName!.trim()
+        : dto.name.trim(),
+    price: dto.price,
+    beforeDiscountPrice: dto.beforeDiscountPrice,
+    discount: discount,
+    discountName: discountName.trim(),
+    occupancy: dto.occupancy,
+    baseOccupancy: dto.occupantsForBaseRate,
+    roomSize: _stringOrEmpty(dto.roomSize),
+    bedroomCount: dto.bedRoomCount,
+    bathroomCount: dto.bathRoomCount,
+    remainingRooms: dto.roomCount,
+    images: dto.pictures.map(_mapDetailImage).toList(growable: false),
+    beds: dto.beds.map(_mapRoomBed).toList(growable: false),
+  );
+}
+
+HotelRoomBed _mapRoomBed(HotelRoomBedDto dto) {
+  return HotelRoomBed(
+    name: dto.name.trim(),
+    quantity: dto.quantity ?? dto.num ?? dto.count,
+    width: _stringOrEmpty(dto.width),
+  );
+}
+
+List<String> _mapFacilities(HotelDetailDto dto) {
+  final values = <String>[
+    for (final value in dto.propertyFacilities) _stringOrEmpty(value),
+    for (final value in dto.propertyFacilityNames.values) _stringOrEmpty(value),
+  ];
+  return values
+      .map((value) => value.trim())
+      .where((value) => value.isNotEmpty)
+      .toSet()
+      .toList(growable: false);
+}
+
+double? _doubleOrNull(Object? raw) {
+  if (raw is num) {
+    return raw.toDouble();
+  }
+  return double.tryParse(raw?.toString().trim() ?? '');
+}
+
+String _stringOrEmpty(Object? raw) {
+  return raw?.toString().trim() ?? '';
 }

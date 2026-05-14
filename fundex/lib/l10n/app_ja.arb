@@ -450,6 +450,118 @@
       }
     }
   },
+  "hotelDetailStayDateLabel": "宿泊日 · 退室日",
+  "hotelDetailGuestRoomLabel": "宿泊人数 · 客室",
+  "hotelDetailAvailableRooms": "選べる客室",
+  "hotelDetailRemainingRoomsShort": "残り {count} 室",
+  "@hotelDetailRemainingRoomsShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailRoomCapacity": "{count}名まで",
+  "@hotelDetailRoomCapacity": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailRoomBaseOccupancy": "基本人数 {count}名",
+  "@hotelDetailRoomBaseOccupancy": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailRoomArea": "面積 {size}㎡",
+  "@hotelDetailRoomArea": {
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "hotelDetailBedrooms": "寝室 {count}室",
+  "@hotelDetailBedrooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailBathrooms": "浴室 {count}室",
+  "@hotelDetailBathrooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailBedSummary": "{name}: {quantity}台 {width}",
+  "@hotelDetailBedSummary": {
+    "placeholders": {
+      "name": {},
+      "quantity": {
+        "type": "int"
+      },
+      "width": {}
+    }
+  },
+  "hotelDetailPayableAmount": "お支払い金額",
+  "hotelDetailTaxNote": "{nights}日 · {rooms}室 · 税込説明",
+  "@hotelDetailTaxNote": {
+    "placeholders": {
+      "nights": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailBookNow": "今すぐ予約",
+  "hotelDetailSelectRoomFirst": "客室を選択してください",
+  "hotelDetailBookingComingSoon": "予約フローは後で接続します",
+  "hotelCurrencyCode": "JPY",
+  "hotelDetailNoRooms": "予約可能な客室はありません",
+  "hotelDetailFacilities": "設備",
+  "hotelDetailDescription": "宿泊施設の詳細",
+  "hotelDetailSurrounding": "周辺環境",
+  "hotelDetailTravel": "アクセス",
+  "hotelDetailCheckInGuide": "チェックイン案内",
+  "hotelDetailPolicy": "ハウスルール",
+  "hotelDetailRefundPolicy": "キャンセルポリシー",
+  "hotelDetailCheckInTime": "チェックイン/アウト時間",
+  "hotelDetailCheckInAfter": "{time}以降チェックイン",
+  "@hotelDetailCheckInAfter": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "hotelDetailCheckOutBefore": "{time}までにチェックアウト",
+  "@hotelDetailCheckOutBefore": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "hotelDetailContact": "電話番号",
+  "hotelDetailAddress": "所在地",
+  "hotelDetailPerStay": " / {nights}泊",
+  "@hotelDetailPerStay": {
+    "placeholders": {
+      "nights": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailDiscount": "{discount}% OFF",
+  "@hotelDetailDiscount": {
+    "placeholders": {
+      "discount": {}
+    }
+  },
   "hotelResultsCount": "{count}件の宿泊施設",
   "@hotelResultsCount": {
     "placeholders": {

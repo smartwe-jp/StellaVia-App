@@ -9,6 +9,7 @@ import '../../data/repositories/hotel_booking_repository_impl.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../../domain/repositories/hotel_booking_repository.dart';
 import '../../domain/usecases/fetch_hotel_building_filters_usecase.dart';
+import '../../domain/usecases/fetch_hotel_detail_usecase.dart';
 import '../../domain/usecases/search_hotels_usecase.dart';
 import '../controllers/hotel_booking_controller.dart';
 
@@ -40,6 +41,12 @@ final fetchHotelBuildingFiltersUseCaseProvider =
       );
     });
 
+final fetchHotelDetailUseCaseProvider = Provider<FetchHotelDetailUseCase>((
+  ref,
+) {
+  return FetchHotelDetailUseCase(ref.watch(hotelBookingRepositoryProvider));
+});
+
 final hotelLocaleLanguageCodeProvider = Provider<String>((ref) {
   return resolveHotelApiLanguageCode(ref.watch(appEffectiveLocaleProvider));
 });
@@ -62,6 +69,47 @@ final hotelBookingControllerProvider =
         languageCode: ref.watch(hotelLocaleLanguageCodeProvider),
       );
     });
+
+final hotelDetailProvider =
+    FutureProvider.autoDispose.family<HotelDetail, HotelDetailQuery>((
+      ref,
+      query,
+    ) {
+      final languageCode = ref.watch(hotelLocaleLanguageCodeProvider);
+      return ref.watch(fetchHotelDetailUseCaseProvider)(
+        hotelId: query.hotelId,
+        criteria: query.criteria,
+        languageCode: languageCode,
+      );
+    });
+
+class HotelDetailQuery {
+  const HotelDetailQuery({required this.hotelId, required this.criteria});
+
+  final String hotelId;
+  final HotelSearchCriteria criteria;
+
+  @override
+  bool operator ==(Object other) {
+    return other is HotelDetailQuery &&
+        other.hotelId == hotelId &&
+        other.criteria.checkInDate == criteria.checkInDate &&
+        other.criteria.checkOutDate == criteria.checkOutDate &&
+        other.criteria.occupancy == criteria.occupancy &&
+        other.criteria.kids == criteria.kids &&
+        other.criteria.roomCount == criteria.roomCount;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    hotelId,
+    criteria.checkInDate,
+    criteria.checkOutDate,
+    criteria.occupancy,
+    criteria.kids,
+    criteria.roomCount,
+  );
+}
 
 String resolveHotelApiLanguageCode(Locale locale) {
   return switch (locale.languageCode.toLowerCase()) {

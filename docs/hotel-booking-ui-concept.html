@@ -963,6 +963,274 @@
       font-weight: 900;
     }
 
+    .long-phone {
+      height: 2140px;
+    }
+
+    .long-detail-screen {
+      overflow: hidden;
+      background: var(--cream-lighter);
+    }
+
+    .long-detail-photo {
+      height: 300px;
+      margin-top: -42px;
+      padding: 58px 18px 0;
+      color: var(--white);
+      background:
+        linear-gradient(180deg, rgba(9, 21, 59, .48), rgba(9, 21, 59, .08) 42%, rgba(9, 21, 59, .82)),
+        url("assets/hotel-booking-ui/detail-room-01.png") center / cover;
+      position: relative;
+    }
+
+    .photo-count {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(9, 21, 59, .58);
+      color: var(--white);
+      font-size: 11px;
+      font-weight: 800;
+      backdrop-filter: blur(10px);
+    }
+
+    .long-detail-content {
+      padding: 0 16px 116px;
+    }
+
+    .long-summary-card {
+      margin-top: -34px;
+      padding: 16px;
+      border: 1px solid rgba(210, 192, 157, .7);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .97);
+      box-shadow: 0 16px 40px rgba(12, 28, 80, .15);
+      position: relative;
+      z-index: 2;
+    }
+
+    .long-summary-card h2 {
+      margin: 2px 0 8px;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .summary-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .outline-button {
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--brand-navy);
+      background: var(--cream-lighter);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .info-band {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .info-pill {
+      min-height: 62px;
+      padding: 9px 8px;
+      border-radius: 16px;
+      background: var(--cream-lighter);
+      border: 1px solid rgba(227, 215, 195, .85);
+    }
+
+    .info-pill small {
+      display: block;
+      color: var(--soft);
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .info-pill strong {
+      display: block;
+      margin-top: 5px;
+      color: var(--brand-navy);
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .detail-section {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid rgba(210, 192, 157, .58);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, .92);
+      box-shadow: 0 12px 30px rgba(12, 28, 80, .08);
+    }
+
+    .detail-section h3 {
+      margin: 0 0 12px;
+      color: var(--brand-navy);
+      font-size: 17px;
+      line-height: 1.25;
+    }
+
+    .detail-copy {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.72;
+    }
+
+    .line-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .line-item {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(12, 28, 80, .07);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .line-item:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .line-item strong {
+      color: var(--brand-navy);
+      font-size: 13px;
+    }
+
+    .facility-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .facility-cell {
+      min-height: 54px;
+      display: grid;
+      place-items: center;
+      padding: 8px;
+      border-radius: 15px;
+      background: var(--cream-lighter);
+      border: 1px solid rgba(227, 215, 195, .8);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 760;
+      text-align: center;
+    }
+
+    .room-compact {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 12px;
+      padding: 10px;
+      border: 1px solid rgba(210, 192, 157, .58);
+      border-radius: 20px;
+      background: var(--cream-lighter);
+    }
+
+    .room-compact + .room-compact {
+      margin-top: 10px;
+    }
+
+    .room-compact img {
+      width: 92px;
+      height: 118px;
+      border-radius: 14px;
+      object-fit: cover;
+    }
+
+    .room-compact h4 {
+      margin: 2px 0 7px;
+      color: var(--ink);
+      font-size: 15px;
+    }
+
+    .room-compact-price {
+      margin-top: 8px;
+      color: var(--brand-navy);
+      font-size: 17px;
+      font-weight: 900;
+      text-align: right;
+    }
+
+    .muted-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .muted-chip {
+      padding: 7px 9px;
+      border-radius: 999px;
+      color: var(--muted);
+      background: var(--cream-lighter);
+      border: 1px solid rgba(227, 215, 195, .82);
+      font-size: 11px;
+      font-weight: 760;
+    }
+
+    .map-card {
+      height: 156px;
+      margin-top: 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(94, 125, 224, .22);
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(94, 125, 224, .20) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(94, 125, 224, .17) 1px, transparent 1px),
+        linear-gradient(135deg, rgba(36, 149, 163, .10), rgba(184, 149, 79, .12)),
+        var(--cream-lighter);
+      background-size: 42px 42px, 42px 42px, auto;
+      position: relative;
+    }
+
+    .map-pin {
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px 999px 999px 4px;
+      background: var(--brand-alert);
+      transform: translate(-50%, -50%) rotate(-45deg);
+      box-shadow: 0 8px 20px rgba(249, 103, 95, .34);
+    }
+
+    .map-pin::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--white);
+      left: 9px;
+      top: 9px;
+    }
+
+    .contact-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
     @media (max-width: 1060px) {
       .brief {
         display: block;
@@ -1233,6 +1501,182 @@
                 <div class="meta-row">1天 · 1间 · 含税费说明</div>
               </div>
               <div class="primary-button">立即预订</div>
+            </footer>
+          </div>
+        </article>
+
+        <article class="phone long-phone" id="hotel-detail-long">
+          <div class="screen long-detail-screen">
+            <div class="status" style="color:var(--white)">
+              <span>15:13</span>
+              <span class="status-icons">LTE WI 82%</span>
+            </div>
+
+            <section class="long-detail-photo">
+              <div class="detail-controls">
+                <span class="round-icon">‹</span>
+                <span class="round-icon">♡</span>
+              </div>
+              <span class="photo-count">34 张照片</span>
+            </section>
+
+            <section class="long-detail-content">
+              <article class="long-summary-card">
+                <div class="tag-row" style="margin-top:0">
+                  <span class="tag">公寓式酒店</span>
+                  <span class="tag">按房间预订</span>
+                  <span class="tag">预约开放中</span>
+                </div>
+                <h2>谷町君Hotel・Crush On</h2>
+                <div class="meta-row">〒600-8076 京都府京都市下京区泉正寺町</div>
+                <div class="info-band">
+                  <div class="info-pill">
+                    <small>入住</small>
+                    <strong>下午03:00</strong>
+                  </div>
+                  <div class="info-pill">
+                    <small>退房</small>
+                    <strong>上午11:00</strong>
+                  </div>
+                  <div class="info-pill">
+                    <small>最低价格</small>
+                    <strong>¥16,200起</strong>
+                  </div>
+                </div>
+                <div class="summary-actions">
+                  <div class="outline-button">查看地图</div>
+                  <div class="outline-button">联系酒店</div>
+                </div>
+              </article>
+
+              <section class="booking-strip" style="margin:14px 0 0">
+                <div class="strip-cell">
+                  <small>入住日期 · 退房日期</small>
+                  <strong>05/13-05/14、1晚</strong>
+                </div>
+                <div class="strip-cell">
+                  <small>入住人数 · 客房</small>
+                  <strong>1位成人、1间</strong>
+                </div>
+              </section>
+
+              <section class="detail-section">
+                <h3>可选房型</h3>
+                <article class="room-compact">
+                  <img src="assets/hotel-booking-ui/detail-room-01.png" alt="双床房">
+                  <div>
+                    <h4>双床房</h4>
+                    <div class="feature-line">可住2人 · 23.0㎡ · 单人床2张</div>
+                    <div class="feature-line">卧室1间 · 浴室1间 · 剩余1间</div>
+                    <span class="discount">累计折扣 40% OFF</span>
+                    <div class="room-compact-price">¥16,200 / 晚</div>
+                  </div>
+                </article>
+                <article class="room-compact">
+                  <img src="assets/hotel-booking-ui/room-card-02.png" alt="大床房">
+                  <div>
+                    <h4>大床房</h4>
+                    <div class="feature-line">可住2人 · 19.0㎡ · 双人床1张</div>
+                    <div class="feature-line">卧室1间 · 浴室1间 · 剩余2间</div>
+                    <span class="discount">累计折扣 40% OFF</span>
+                    <div class="room-compact-price">¥16,200 / 晚</div>
+                  </div>
+                </article>
+              </section>
+
+              <section class="detail-section">
+                <h3>旅宿介绍</h3>
+                <p class="detail-copy">住在谷町君，体验京都风韵。CRUSH ON旅馆是2019年谷町君倾情打造的精品旅馆，各房间风格不一，独具特色。房间内可将佛光寺的美景尽收眼底，距离京都第一商圈河原町步行约十分钟。</p>
+                <div class="muted-chip-row" style="margin-top:12px">
+                  <span class="muted-chip">Simmons 27cm 床垫</span>
+                  <span class="muted-chip">TOTO 温感卫洗丽</span>
+                  <span class="muted-chip">鹅绒羽绒被</span>
+                  <span class="muted-chip">中日英接待</span>
+                </div>
+              </section>
+
+              <section class="detail-section">
+                <h3>设施设备</h3>
+                <div class="facility-grid">
+                  <div class="facility-cell">电梯</div>
+                  <div class="facility-cell">互联网</div>
+                  <div class="facility-cell">Wi-Fi</div>
+                  <div class="facility-cell">电视机</div>
+                  <div class="facility-cell">空调/暖气</div>
+                  <div class="facility-cell">热水</div>
+                  <div class="facility-cell">冰箱</div>
+                  <div class="facility-cell">热水浴缸</div>
+                  <div class="facility-cell">洗发水</div>
+                  <div class="facility-cell">毛巾</div>
+                  <div class="facility-cell">电吹风</div>
+                  <div class="facility-cell">衣架</div>
+                </div>
+              </section>
+
+              <section class="detail-section">
+                <h3>入住指南</h3>
+                <div class="line-list">
+                  <div class="line-item">
+                    <strong>钥匙方式</strong>
+                    <span>酒店使用密码锁。入住当天中午12点左右，会将入住信息发送至您的电子邮箱，请注意查收。</span>
+                  </div>
+                  <div class="line-item">
+                    <strong>服务联系</strong>
+                    <span>如果有任何问题，请随时联系工作人员。电子信箱：kyoto@travel.gutingjun.com</span>
+                  </div>
+                  <div class="line-item">
+                    <strong>住宿规则</strong>
+                    <span>晚上22:00至早上7:00请保持安静；暂不允许携带宠物入住；室内及阳台禁止吸烟。</span>
+                  </div>
+                </div>
+              </section>
+
+              <section class="detail-section">
+                <h3>周边与交通</h3>
+                <div class="line-list">
+                  <div class="line-item">
+                    <strong>热门周边</strong>
+                    <span>祈园、八坂神社、花见小路步行15分钟；河原町站、锦市场步行约8分钟。</span>
+                  </div>
+                  <div class="line-item">
+                    <strong>地铁</strong>
+                    <span>五条站约400米，步行7分钟；四条站约400米，步行5分钟。</span>
+                  </div>
+                  <div class="line-item">
+                    <strong>公交</strong>
+                    <span>乌丸松原站约170米，步行3分钟；乌丸五条站约400米，步行6分钟。</span>
+                  </div>
+                </div>
+              </section>
+
+              <section class="detail-section">
+                <h3>位置与联系</h3>
+                <div class="meta-row">〒600-8076 京都府京都市下京区泉正寺町</div>
+                <div class="map-card"><span class="map-pin"></span></div>
+                <div class="contact-row">
+                  <div class="outline-button">电话 +81-(0)6-6948-5889</div>
+                  <div class="outline-button">复制地址</div>
+                </div>
+              </section>
+
+              <section class="detail-section">
+                <h3>房屋守则</h3>
+                <div class="muted-chip-row">
+                  <span class="muted-chip">禁止吸烟</span>
+                  <span class="muted-chip">安静时段 22:00-07:00</span>
+                  <span class="muted-chip">不可携带宠物</span>
+                  <span class="muted-chip">请遵守公共空间秩序</span>
+                </div>
+              </section>
+            </section>
+
+            <footer class="checkout-bar">
+              <div>
+                <div class="total-label">最低价格</div>
+                <div class="total-price">¥16,200 JPY</div>
+                <div class="meta-row">1晚 · 按房间预订</div>
+              </div>
+              <div class="primary-button">选择房型</div>
             </footer>
           </div>
         </article>

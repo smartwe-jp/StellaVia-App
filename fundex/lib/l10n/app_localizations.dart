@@ -2367,6 +2367,192 @@ abstract class AppLocalizations {
   /// **'{adults} adults · {children} children · {rooms} rooms'**
   String hotelGuestDetailedSummary(int adults, int children, int rooms);
 
+  /// No description provided for @hotelDetailStayDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-in · Check-out'**
+  String get hotelDetailStayDateLabel;
+
+  /// No description provided for @hotelDetailGuestRoomLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Guests · Rooms'**
+  String get hotelDetailGuestRoomLabel;
+
+  /// No description provided for @hotelDetailAvailableRooms.
+  ///
+  /// In en, this message translates to:
+  /// **'Available rooms'**
+  String get hotelDetailAvailableRooms;
+
+  /// No description provided for @hotelDetailRemainingRoomsShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} rooms left'**
+  String hotelDetailRemainingRoomsShort(int count);
+
+  /// No description provided for @hotelDetailRoomCapacity.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleeps {count}'**
+  String hotelDetailRoomCapacity(int count);
+
+  /// No description provided for @hotelDetailRoomBaseOccupancy.
+  ///
+  /// In en, this message translates to:
+  /// **'Base {count} guests'**
+  String hotelDetailRoomBaseOccupancy(int count);
+
+  /// No description provided for @hotelDetailRoomArea.
+  ///
+  /// In en, this message translates to:
+  /// **'{size}㎡'**
+  String hotelDetailRoomArea(Object size);
+
+  /// No description provided for @hotelDetailBedrooms.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} bedrooms'**
+  String hotelDetailBedrooms(int count);
+
+  /// No description provided for @hotelDetailBathrooms.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} bathrooms'**
+  String hotelDetailBathrooms(int count);
+
+  /// No description provided for @hotelDetailBedSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: {quantity} beds {width}'**
+  String hotelDetailBedSummary(Object name, int quantity, Object width);
+
+  /// No description provided for @hotelDetailPayableAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount due'**
+  String get hotelDetailPayableAmount;
+
+  /// No description provided for @hotelDetailTaxNote.
+  ///
+  /// In en, this message translates to:
+  /// **'{nights} days · {rooms} rooms · Taxes included'**
+  String hotelDetailTaxNote(int nights, int rooms);
+
+  /// No description provided for @hotelDetailBookNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Book now'**
+  String get hotelDetailBookNow;
+
+  /// No description provided for @hotelDetailSelectRoomFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a room first'**
+  String get hotelDetailSelectRoomFirst;
+
+  /// No description provided for @hotelDetailBookingComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking flow will be added later'**
+  String get hotelDetailBookingComingSoon;
+
+  /// No description provided for @hotelCurrencyCode.
+  ///
+  /// In en, this message translates to:
+  /// **'JPY'**
+  String get hotelCurrencyCode;
+
+  /// No description provided for @hotelDetailNoRooms.
+  ///
+  /// In en, this message translates to:
+  /// **'No available rooms'**
+  String get hotelDetailNoRooms;
+
+  /// No description provided for @hotelDetailFacilities.
+  ///
+  /// In en, this message translates to:
+  /// **'Facilities'**
+  String get hotelDetailFacilities;
+
+  /// No description provided for @hotelDetailDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Property details'**
+  String get hotelDetailDescription;
+
+  /// No description provided for @hotelDetailSurrounding.
+  ///
+  /// In en, this message translates to:
+  /// **'Surroundings'**
+  String get hotelDetailSurrounding;
+
+  /// No description provided for @hotelDetailTravel.
+  ///
+  /// In en, this message translates to:
+  /// **'Access'**
+  String get hotelDetailTravel;
+
+  /// No description provided for @hotelDetailCheckInGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-in guide'**
+  String get hotelDetailCheckInGuide;
+
+  /// No description provided for @hotelDetailPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'House rules'**
+  String get hotelDetailPolicy;
+
+  /// No description provided for @hotelDetailRefundPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancellation policy'**
+  String get hotelDetailRefundPolicy;
+
+  /// No description provided for @hotelDetailCheckInTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-in/out time'**
+  String get hotelDetailCheckInTime;
+
+  /// No description provided for @hotelDetailCheckInAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in after {time}'**
+  String hotelDetailCheckInAfter(Object time);
+
+  /// No description provided for @hotelDetailCheckOutBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'Check out before {time}'**
+  String hotelDetailCheckOutBefore(Object time);
+
+  /// No description provided for @hotelDetailContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact phone'**
+  String get hotelDetailContact;
+
+  /// No description provided for @hotelDetailAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get hotelDetailAddress;
+
+  /// No description provided for @hotelDetailPerStay.
+  ///
+  /// In en, this message translates to:
+  /// **' / {nights} nights'**
+  String hotelDetailPerStay(int nights);
+
+  /// No description provided for @hotelDetailDiscount.
+  ///
+  /// In en, this message translates to:
+  /// **'{discount}% OFF'**
+  String hotelDetailDiscount(Object discount);
+
   /// No description provided for @hotelResultsCount.
   ///
   /// In en, this message translates to:

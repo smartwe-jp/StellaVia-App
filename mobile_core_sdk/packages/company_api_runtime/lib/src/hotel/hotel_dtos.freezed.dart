@@ -612,7 +612,7 @@ as String?,
 /// @nodoc
 mixin _$HotelSummaryDto {
 
-@JsonKey(name: 'hotelId') String get id; String get hotelName; String? get address; String? get area; String? get image; num? get price; num? get basePrice; num? get beforeDiscountPrice; num? get discount; String? get discountName; num? get entirePrice; Object? get bookingType; String? get buildingCode; String? get buildingType; bool? get bookingStatus; Object? get lat; Object? get lng; List<String> get tags;
+@JsonKey(name: 'hotelId') String get id; String get hotelName; String? get address; String? get area; String? get image; num? get price; num? get basePrice; num? get beforeDiscountPrice; num? get discount; String? get discountName; num? get entirePrice; Object? get bookingType; String? get buildingCode; String? get buildingType; bool? get bookingStatus; Object? get lat; Object? get lng;@JsonKey(fromJson: hotelStringListFromJson) List<String> get tags;
 /// Create a copy of HotelSummaryDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -645,7 +645,7 @@ abstract mixin class $HotelSummaryDtoCopyWith<$Res>  {
   factory $HotelSummaryDtoCopyWith(HotelSummaryDto value, $Res Function(HotelSummaryDto) _then) = _$HotelSummaryDtoCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'hotelId') String id, String hotelName, String? address, String? area, String? image, num? price, num? basePrice, num? beforeDiscountPrice, num? discount, String? discountName, num? entirePrice, Object? bookingType, String? buildingCode, String? buildingType, bool? bookingStatus, Object? lat, Object? lng, List<String> tags
+@JsonKey(name: 'hotelId') String id, String hotelName, String? address, String? area, String? image, num? price, num? basePrice, num? beforeDiscountPrice, num? discount, String? discountName, num? entirePrice, Object? bookingType, String? buildingCode, String? buildingType, bool? bookingStatus, Object? lat, Object? lng,@JsonKey(fromJson: hotelStringListFromJson) List<String> tags
 });
 
 
@@ -764,7 +764,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'hotelId')  String id,  String hotelName,  String? address,  String? area,  String? image,  num? price,  num? basePrice,  num? beforeDiscountPrice,  num? discount,  String? discountName,  num? entirePrice,  Object? bookingType,  String? buildingCode,  String? buildingType,  bool? bookingStatus,  Object? lat,  Object? lng,  List<String> tags)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'hotelId')  String id,  String hotelName,  String? address,  String? area,  String? image,  num? price,  num? basePrice,  num? beforeDiscountPrice,  num? discount,  String? discountName,  num? entirePrice,  Object? bookingType,  String? buildingCode,  String? buildingType,  bool? bookingStatus,  Object? lat,  Object? lng, @JsonKey(fromJson: hotelStringListFromJson)  List<String> tags)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HotelSummaryDto() when $default != null:
 return $default(_that.id,_that.hotelName,_that.address,_that.area,_that.image,_that.price,_that.basePrice,_that.beforeDiscountPrice,_that.discount,_that.discountName,_that.entirePrice,_that.bookingType,_that.buildingCode,_that.buildingType,_that.bookingStatus,_that.lat,_that.lng,_that.tags);case _:
@@ -785,7 +785,7 @@ return $default(_that.id,_that.hotelName,_that.address,_that.area,_that.image,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'hotelId')  String id,  String hotelName,  String? address,  String? area,  String? image,  num? price,  num? basePrice,  num? beforeDiscountPrice,  num? discount,  String? discountName,  num? entirePrice,  Object? bookingType,  String? buildingCode,  String? buildingType,  bool? bookingStatus,  Object? lat,  Object? lng,  List<String> tags)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'hotelId')  String id,  String hotelName,  String? address,  String? area,  String? image,  num? price,  num? basePrice,  num? beforeDiscountPrice,  num? discount,  String? discountName,  num? entirePrice,  Object? bookingType,  String? buildingCode,  String? buildingType,  bool? bookingStatus,  Object? lat,  Object? lng, @JsonKey(fromJson: hotelStringListFromJson)  List<String> tags)  $default,) {final _that = this;
 switch (_that) {
 case _HotelSummaryDto():
 return $default(_that.id,_that.hotelName,_that.address,_that.area,_that.image,_that.price,_that.basePrice,_that.beforeDiscountPrice,_that.discount,_that.discountName,_that.entirePrice,_that.bookingType,_that.buildingCode,_that.buildingType,_that.bookingStatus,_that.lat,_that.lng,_that.tags);case _:
@@ -805,7 +805,7 @@ return $default(_that.id,_that.hotelName,_that.address,_that.area,_that.image,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'hotelId')  String id,  String hotelName,  String? address,  String? area,  String? image,  num? price,  num? basePrice,  num? beforeDiscountPrice,  num? discount,  String? discountName,  num? entirePrice,  Object? bookingType,  String? buildingCode,  String? buildingType,  bool? bookingStatus,  Object? lat,  Object? lng,  List<String> tags)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'hotelId')  String id,  String hotelName,  String? address,  String? area,  String? image,  num? price,  num? basePrice,  num? beforeDiscountPrice,  num? discount,  String? discountName,  num? entirePrice,  Object? bookingType,  String? buildingCode,  String? buildingType,  bool? bookingStatus,  Object? lat,  Object? lng, @JsonKey(fromJson: hotelStringListFromJson)  List<String> tags)?  $default,) {final _that = this;
 switch (_that) {
 case _HotelSummaryDto() when $default != null:
 return $default(_that.id,_that.hotelName,_that.address,_that.area,_that.image,_that.price,_that.basePrice,_that.beforeDiscountPrice,_that.discount,_that.discountName,_that.entirePrice,_that.bookingType,_that.buildingCode,_that.buildingType,_that.bookingStatus,_that.lat,_that.lng,_that.tags);case _:
@@ -820,7 +820,7 @@ return $default(_that.id,_that.hotelName,_that.address,_that.area,_that.image,_t
 @JsonSerializable()
 
 class _HotelSummaryDto implements HotelSummaryDto {
-  const _HotelSummaryDto({@JsonKey(name: 'hotelId') this.id = '', this.hotelName = '', this.address, this.area, this.image, this.price, this.basePrice, this.beforeDiscountPrice, this.discount, this.discountName, this.entirePrice, this.bookingType, this.buildingCode, this.buildingType, this.bookingStatus, this.lat, this.lng, final  List<String> tags = const <String>[]}): _tags = tags;
+  const _HotelSummaryDto({@JsonKey(name: 'hotelId') this.id = '', this.hotelName = '', this.address, this.area, this.image, this.price, this.basePrice, this.beforeDiscountPrice, this.discount, this.discountName, this.entirePrice, this.bookingType, this.buildingCode, this.buildingType, this.bookingStatus, this.lat, this.lng, @JsonKey(fromJson: hotelStringListFromJson) final  List<String> tags = const <String>[]}): _tags = tags;
   factory _HotelSummaryDto.fromJson(Map<String, dynamic> json) => _$HotelSummaryDtoFromJson(json);
 
 @override@JsonKey(name: 'hotelId') final  String id;
@@ -841,7 +841,7 @@ class _HotelSummaryDto implements HotelSummaryDto {
 @override final  Object? lat;
 @override final  Object? lng;
  final  List<String> _tags;
-@override@JsonKey() List<String> get tags {
+@override@JsonKey(fromJson: hotelStringListFromJson) List<String> get tags {
   if (_tags is EqualUnmodifiableListView) return _tags;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_tags);
@@ -881,7 +881,7 @@ abstract mixin class _$HotelSummaryDtoCopyWith<$Res> implements $HotelSummaryDto
   factory _$HotelSummaryDtoCopyWith(_HotelSummaryDto value, $Res Function(_HotelSummaryDto) _then) = __$HotelSummaryDtoCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'hotelId') String id, String hotelName, String? address, String? area, String? image, num? price, num? basePrice, num? beforeDiscountPrice, num? discount, String? discountName, num? entirePrice, Object? bookingType, String? buildingCode, String? buildingType, bool? bookingStatus, Object? lat, Object? lng, List<String> tags
+@JsonKey(name: 'hotelId') String id, String hotelName, String? address, String? area, String? image, num? price, num? basePrice, num? beforeDiscountPrice, num? discount, String? discountName, num? entirePrice, Object? bookingType, String? buildingCode, String? buildingType, bool? bookingStatus, Object? lat, Object? lng,@JsonKey(fromJson: hotelStringListFromJson) List<String> tags
 });
 
 
@@ -1742,7 +1742,7 @@ as int?,
 /// @nodoc
 mixin _$HotelDetailDto {
 
- String get id; String get name; String? get address; String? get description; Object? get lat; Object? get lng; int? get bookingType; bool? get bookingStatus; num? get entirePrice; String? get checkInMessage;@JsonKey(name: 'hotelPictures') List<HotelPictureDto> get pictures;@JsonKey(name: 'roomTypeDTO4APPs') List<HotelRoomTypeDto> get roomTypes; List<String> get tags;
+ String get id; String get name; String? get address; String? get description; Object? get lat; Object? get lng; int? get bookingType; bool? get bookingStatus; num? get entirePrice; String? get checkInMessage; String? get checkInTime; String? get checkOutTime; String? get detail; String? get surrounding; String? get travel; String? get checkInGuide; String? get rule; String? get telNo; List<Object?> get propertyFacilities; Map<String, Object?> get propertyFacilityNames;@JsonKey(name: 'hotelPictures') List<HotelPictureDto> get pictures;@JsonKey(name: 'roomTypeDTO4APPs') List<HotelRoomTypeDto> get roomTypes;@JsonKey(fromJson: hotelStringListFromJson) List<String> get tags;
 /// Create a copy of HotelDetailDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1755,16 +1755,16 @@ $HotelDetailDtoCopyWith<HotelDetailDto> get copyWith => _$HotelDetailDtoCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HotelDetailDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.address, address) || other.address == address)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other.lat, lat)&&const DeepCollectionEquality().equals(other.lng, lng)&&(identical(other.bookingType, bookingType) || other.bookingType == bookingType)&&(identical(other.bookingStatus, bookingStatus) || other.bookingStatus == bookingStatus)&&(identical(other.entirePrice, entirePrice) || other.entirePrice == entirePrice)&&(identical(other.checkInMessage, checkInMessage) || other.checkInMessage == checkInMessage)&&const DeepCollectionEquality().equals(other.pictures, pictures)&&const DeepCollectionEquality().equals(other.roomTypes, roomTypes)&&const DeepCollectionEquality().equals(other.tags, tags));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HotelDetailDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.address, address) || other.address == address)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other.lat, lat)&&const DeepCollectionEquality().equals(other.lng, lng)&&(identical(other.bookingType, bookingType) || other.bookingType == bookingType)&&(identical(other.bookingStatus, bookingStatus) || other.bookingStatus == bookingStatus)&&(identical(other.entirePrice, entirePrice) || other.entirePrice == entirePrice)&&(identical(other.checkInMessage, checkInMessage) || other.checkInMessage == checkInMessage)&&(identical(other.checkInTime, checkInTime) || other.checkInTime == checkInTime)&&(identical(other.checkOutTime, checkOutTime) || other.checkOutTime == checkOutTime)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.surrounding, surrounding) || other.surrounding == surrounding)&&(identical(other.travel, travel) || other.travel == travel)&&(identical(other.checkInGuide, checkInGuide) || other.checkInGuide == checkInGuide)&&(identical(other.rule, rule) || other.rule == rule)&&(identical(other.telNo, telNo) || other.telNo == telNo)&&const DeepCollectionEquality().equals(other.propertyFacilities, propertyFacilities)&&const DeepCollectionEquality().equals(other.propertyFacilityNames, propertyFacilityNames)&&const DeepCollectionEquality().equals(other.pictures, pictures)&&const DeepCollectionEquality().equals(other.roomTypes, roomTypes)&&const DeepCollectionEquality().equals(other.tags, tags));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,address,description,const DeepCollectionEquality().hash(lat),const DeepCollectionEquality().hash(lng),bookingType,bookingStatus,entirePrice,checkInMessage,const DeepCollectionEquality().hash(pictures),const DeepCollectionEquality().hash(roomTypes),const DeepCollectionEquality().hash(tags));
+int get hashCode => Object.hashAll([runtimeType,id,name,address,description,const DeepCollectionEquality().hash(lat),const DeepCollectionEquality().hash(lng),bookingType,bookingStatus,entirePrice,checkInMessage,checkInTime,checkOutTime,detail,surrounding,travel,checkInGuide,rule,telNo,const DeepCollectionEquality().hash(propertyFacilities),const DeepCollectionEquality().hash(propertyFacilityNames),const DeepCollectionEquality().hash(pictures),const DeepCollectionEquality().hash(roomTypes),const DeepCollectionEquality().hash(tags)]);
 
 @override
 String toString() {
-  return 'HotelDetailDto(id: $id, name: $name, address: $address, description: $description, lat: $lat, lng: $lng, bookingType: $bookingType, bookingStatus: $bookingStatus, entirePrice: $entirePrice, checkInMessage: $checkInMessage, pictures: $pictures, roomTypes: $roomTypes, tags: $tags)';
+  return 'HotelDetailDto(id: $id, name: $name, address: $address, description: $description, lat: $lat, lng: $lng, bookingType: $bookingType, bookingStatus: $bookingStatus, entirePrice: $entirePrice, checkInMessage: $checkInMessage, checkInTime: $checkInTime, checkOutTime: $checkOutTime, detail: $detail, surrounding: $surrounding, travel: $travel, checkInGuide: $checkInGuide, rule: $rule, telNo: $telNo, propertyFacilities: $propertyFacilities, propertyFacilityNames: $propertyFacilityNames, pictures: $pictures, roomTypes: $roomTypes, tags: $tags)';
 }
 
 
@@ -1775,7 +1775,7 @@ abstract mixin class $HotelDetailDtoCopyWith<$Res>  {
   factory $HotelDetailDtoCopyWith(HotelDetailDto value, $Res Function(HotelDetailDto) _then) = _$HotelDetailDtoCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String? address, String? description, Object? lat, Object? lng, int? bookingType, bool? bookingStatus, num? entirePrice, String? checkInMessage,@JsonKey(name: 'hotelPictures') List<HotelPictureDto> pictures,@JsonKey(name: 'roomTypeDTO4APPs') List<HotelRoomTypeDto> roomTypes, List<String> tags
+ String id, String name, String? address, String? description, Object? lat, Object? lng, int? bookingType, bool? bookingStatus, num? entirePrice, String? checkInMessage, String? checkInTime, String? checkOutTime, String? detail, String? surrounding, String? travel, String? checkInGuide, String? rule, String? telNo, List<Object?> propertyFacilities, Map<String, Object?> propertyFacilityNames,@JsonKey(name: 'hotelPictures') List<HotelPictureDto> pictures,@JsonKey(name: 'roomTypeDTO4APPs') List<HotelRoomTypeDto> roomTypes,@JsonKey(fromJson: hotelStringListFromJson) List<String> tags
 });
 
 
@@ -1792,7 +1792,7 @@ class _$HotelDetailDtoCopyWithImpl<$Res>
 
 /// Create a copy of HotelDetailDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? address = freezed,Object? description = freezed,Object? lat = freezed,Object? lng = freezed,Object? bookingType = freezed,Object? bookingStatus = freezed,Object? entirePrice = freezed,Object? checkInMessage = freezed,Object? pictures = null,Object? roomTypes = null,Object? tags = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? address = freezed,Object? description = freezed,Object? lat = freezed,Object? lng = freezed,Object? bookingType = freezed,Object? bookingStatus = freezed,Object? entirePrice = freezed,Object? checkInMessage = freezed,Object? checkInTime = freezed,Object? checkOutTime = freezed,Object? detail = freezed,Object? surrounding = freezed,Object? travel = freezed,Object? checkInGuide = freezed,Object? rule = freezed,Object? telNo = freezed,Object? propertyFacilities = null,Object? propertyFacilityNames = null,Object? pictures = null,Object? roomTypes = null,Object? tags = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -1802,7 +1802,17 @@ as String?,lat: freezed == lat ? _self.lat : lat ,lng: freezed == lng ? _self.ln
 as int?,bookingStatus: freezed == bookingStatus ? _self.bookingStatus : bookingStatus // ignore: cast_nullable_to_non_nullable
 as bool?,entirePrice: freezed == entirePrice ? _self.entirePrice : entirePrice // ignore: cast_nullable_to_non_nullable
 as num?,checkInMessage: freezed == checkInMessage ? _self.checkInMessage : checkInMessage // ignore: cast_nullable_to_non_nullable
-as String?,pictures: null == pictures ? _self.pictures : pictures // ignore: cast_nullable_to_non_nullable
+as String?,checkInTime: freezed == checkInTime ? _self.checkInTime : checkInTime // ignore: cast_nullable_to_non_nullable
+as String?,checkOutTime: freezed == checkOutTime ? _self.checkOutTime : checkOutTime // ignore: cast_nullable_to_non_nullable
+as String?,detail: freezed == detail ? _self.detail : detail // ignore: cast_nullable_to_non_nullable
+as String?,surrounding: freezed == surrounding ? _self.surrounding : surrounding // ignore: cast_nullable_to_non_nullable
+as String?,travel: freezed == travel ? _self.travel : travel // ignore: cast_nullable_to_non_nullable
+as String?,checkInGuide: freezed == checkInGuide ? _self.checkInGuide : checkInGuide // ignore: cast_nullable_to_non_nullable
+as String?,rule: freezed == rule ? _self.rule : rule // ignore: cast_nullable_to_non_nullable
+as String?,telNo: freezed == telNo ? _self.telNo : telNo // ignore: cast_nullable_to_non_nullable
+as String?,propertyFacilities: null == propertyFacilities ? _self.propertyFacilities : propertyFacilities // ignore: cast_nullable_to_non_nullable
+as List<Object?>,propertyFacilityNames: null == propertyFacilityNames ? _self.propertyFacilityNames : propertyFacilityNames // ignore: cast_nullable_to_non_nullable
+as Map<String, Object?>,pictures: null == pictures ? _self.pictures : pictures // ignore: cast_nullable_to_non_nullable
 as List<HotelPictureDto>,roomTypes: null == roomTypes ? _self.roomTypes : roomTypes // ignore: cast_nullable_to_non_nullable
 as List<HotelRoomTypeDto>,tags: null == tags ? _self.tags : tags // ignore: cast_nullable_to_non_nullable
 as List<String>,
@@ -1890,10 +1900,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String? address,  String? description,  Object? lat,  Object? lng,  int? bookingType,  bool? bookingStatus,  num? entirePrice,  String? checkInMessage, @JsonKey(name: 'hotelPictures')  List<HotelPictureDto> pictures, @JsonKey(name: 'roomTypeDTO4APPs')  List<HotelRoomTypeDto> roomTypes,  List<String> tags)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String? address,  String? description,  Object? lat,  Object? lng,  int? bookingType,  bool? bookingStatus,  num? entirePrice,  String? checkInMessage,  String? checkInTime,  String? checkOutTime,  String? detail,  String? surrounding,  String? travel,  String? checkInGuide,  String? rule,  String? telNo,  List<Object?> propertyFacilities,  Map<String, Object?> propertyFacilityNames, @JsonKey(name: 'hotelPictures')  List<HotelPictureDto> pictures, @JsonKey(name: 'roomTypeDTO4APPs')  List<HotelRoomTypeDto> roomTypes, @JsonKey(fromJson: hotelStringListFromJson)  List<String> tags)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HotelDetailDto() when $default != null:
-return $default(_that.id,_that.name,_that.address,_that.description,_that.lat,_that.lng,_that.bookingType,_that.bookingStatus,_that.entirePrice,_that.checkInMessage,_that.pictures,_that.roomTypes,_that.tags);case _:
+return $default(_that.id,_that.name,_that.address,_that.description,_that.lat,_that.lng,_that.bookingType,_that.bookingStatus,_that.entirePrice,_that.checkInMessage,_that.checkInTime,_that.checkOutTime,_that.detail,_that.surrounding,_that.travel,_that.checkInGuide,_that.rule,_that.telNo,_that.propertyFacilities,_that.propertyFacilityNames,_that.pictures,_that.roomTypes,_that.tags);case _:
   return orElse();
 
 }
@@ -1911,10 +1921,10 @@ return $default(_that.id,_that.name,_that.address,_that.description,_that.lat,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String? address,  String? description,  Object? lat,  Object? lng,  int? bookingType,  bool? bookingStatus,  num? entirePrice,  String? checkInMessage, @JsonKey(name: 'hotelPictures')  List<HotelPictureDto> pictures, @JsonKey(name: 'roomTypeDTO4APPs')  List<HotelRoomTypeDto> roomTypes,  List<String> tags)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String? address,  String? description,  Object? lat,  Object? lng,  int? bookingType,  bool? bookingStatus,  num? entirePrice,  String? checkInMessage,  String? checkInTime,  String? checkOutTime,  String? detail,  String? surrounding,  String? travel,  String? checkInGuide,  String? rule,  String? telNo,  List<Object?> propertyFacilities,  Map<String, Object?> propertyFacilityNames, @JsonKey(name: 'hotelPictures')  List<HotelPictureDto> pictures, @JsonKey(name: 'roomTypeDTO4APPs')  List<HotelRoomTypeDto> roomTypes, @JsonKey(fromJson: hotelStringListFromJson)  List<String> tags)  $default,) {final _that = this;
 switch (_that) {
 case _HotelDetailDto():
-return $default(_that.id,_that.name,_that.address,_that.description,_that.lat,_that.lng,_that.bookingType,_that.bookingStatus,_that.entirePrice,_that.checkInMessage,_that.pictures,_that.roomTypes,_that.tags);case _:
+return $default(_that.id,_that.name,_that.address,_that.description,_that.lat,_that.lng,_that.bookingType,_that.bookingStatus,_that.entirePrice,_that.checkInMessage,_that.checkInTime,_that.checkOutTime,_that.detail,_that.surrounding,_that.travel,_that.checkInGuide,_that.rule,_that.telNo,_that.propertyFacilities,_that.propertyFacilityNames,_that.pictures,_that.roomTypes,_that.tags);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1931,10 +1941,10 @@ return $default(_that.id,_that.name,_that.address,_that.description,_that.lat,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String? address,  String? description,  Object? lat,  Object? lng,  int? bookingType,  bool? bookingStatus,  num? entirePrice,  String? checkInMessage, @JsonKey(name: 'hotelPictures')  List<HotelPictureDto> pictures, @JsonKey(name: 'roomTypeDTO4APPs')  List<HotelRoomTypeDto> roomTypes,  List<String> tags)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String? address,  String? description,  Object? lat,  Object? lng,  int? bookingType,  bool? bookingStatus,  num? entirePrice,  String? checkInMessage,  String? checkInTime,  String? checkOutTime,  String? detail,  String? surrounding,  String? travel,  String? checkInGuide,  String? rule,  String? telNo,  List<Object?> propertyFacilities,  Map<String, Object?> propertyFacilityNames, @JsonKey(name: 'hotelPictures')  List<HotelPictureDto> pictures, @JsonKey(name: 'roomTypeDTO4APPs')  List<HotelRoomTypeDto> roomTypes, @JsonKey(fromJson: hotelStringListFromJson)  List<String> tags)?  $default,) {final _that = this;
 switch (_that) {
 case _HotelDetailDto() when $default != null:
-return $default(_that.id,_that.name,_that.address,_that.description,_that.lat,_that.lng,_that.bookingType,_that.bookingStatus,_that.entirePrice,_that.checkInMessage,_that.pictures,_that.roomTypes,_that.tags);case _:
+return $default(_that.id,_that.name,_that.address,_that.description,_that.lat,_that.lng,_that.bookingType,_that.bookingStatus,_that.entirePrice,_that.checkInMessage,_that.checkInTime,_that.checkOutTime,_that.detail,_that.surrounding,_that.travel,_that.checkInGuide,_that.rule,_that.telNo,_that.propertyFacilities,_that.propertyFacilityNames,_that.pictures,_that.roomTypes,_that.tags);case _:
   return null;
 
 }
@@ -1946,7 +1956,7 @@ return $default(_that.id,_that.name,_that.address,_that.description,_that.lat,_t
 @JsonSerializable()
 
 class _HotelDetailDto implements HotelDetailDto {
-  const _HotelDetailDto({this.id = '', this.name = '', this.address, this.description, this.lat, this.lng, this.bookingType, this.bookingStatus, this.entirePrice, this.checkInMessage, @JsonKey(name: 'hotelPictures') final  List<HotelPictureDto> pictures = const <HotelPictureDto>[], @JsonKey(name: 'roomTypeDTO4APPs') final  List<HotelRoomTypeDto> roomTypes = const <HotelRoomTypeDto>[], final  List<String> tags = const <String>[]}): _pictures = pictures,_roomTypes = roomTypes,_tags = tags;
+  const _HotelDetailDto({this.id = '', this.name = '', this.address, this.description, this.lat, this.lng, this.bookingType, this.bookingStatus, this.entirePrice, this.checkInMessage, this.checkInTime, this.checkOutTime, this.detail, this.surrounding, this.travel, this.checkInGuide, this.rule, this.telNo, final  List<Object?> propertyFacilities = const <Object?>[], final  Map<String, Object?> propertyFacilityNames = const <String, Object?>{}, @JsonKey(name: 'hotelPictures') final  List<HotelPictureDto> pictures = const <HotelPictureDto>[], @JsonKey(name: 'roomTypeDTO4APPs') final  List<HotelRoomTypeDto> roomTypes = const <HotelRoomTypeDto>[], @JsonKey(fromJson: hotelStringListFromJson) final  List<String> tags = const <String>[]}): _propertyFacilities = propertyFacilities,_propertyFacilityNames = propertyFacilityNames,_pictures = pictures,_roomTypes = roomTypes,_tags = tags;
   factory _HotelDetailDto.fromJson(Map<String, dynamic> json) => _$HotelDetailDtoFromJson(json);
 
 @override@JsonKey() final  String id;
@@ -1959,6 +1969,28 @@ class _HotelDetailDto implements HotelDetailDto {
 @override final  bool? bookingStatus;
 @override final  num? entirePrice;
 @override final  String? checkInMessage;
+@override final  String? checkInTime;
+@override final  String? checkOutTime;
+@override final  String? detail;
+@override final  String? surrounding;
+@override final  String? travel;
+@override final  String? checkInGuide;
+@override final  String? rule;
+@override final  String? telNo;
+ final  List<Object?> _propertyFacilities;
+@override@JsonKey() List<Object?> get propertyFacilities {
+  if (_propertyFacilities is EqualUnmodifiableListView) return _propertyFacilities;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_propertyFacilities);
+}
+
+ final  Map<String, Object?> _propertyFacilityNames;
+@override@JsonKey() Map<String, Object?> get propertyFacilityNames {
+  if (_propertyFacilityNames is EqualUnmodifiableMapView) return _propertyFacilityNames;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_propertyFacilityNames);
+}
+
  final  List<HotelPictureDto> _pictures;
 @override@JsonKey(name: 'hotelPictures') List<HotelPictureDto> get pictures {
   if (_pictures is EqualUnmodifiableListView) return _pictures;
@@ -1974,7 +2006,7 @@ class _HotelDetailDto implements HotelDetailDto {
 }
 
  final  List<String> _tags;
-@override@JsonKey() List<String> get tags {
+@override@JsonKey(fromJson: hotelStringListFromJson) List<String> get tags {
   if (_tags is EqualUnmodifiableListView) return _tags;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_tags);
@@ -1994,16 +2026,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HotelDetailDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.address, address) || other.address == address)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other.lat, lat)&&const DeepCollectionEquality().equals(other.lng, lng)&&(identical(other.bookingType, bookingType) || other.bookingType == bookingType)&&(identical(other.bookingStatus, bookingStatus) || other.bookingStatus == bookingStatus)&&(identical(other.entirePrice, entirePrice) || other.entirePrice == entirePrice)&&(identical(other.checkInMessage, checkInMessage) || other.checkInMessage == checkInMessage)&&const DeepCollectionEquality().equals(other._pictures, _pictures)&&const DeepCollectionEquality().equals(other._roomTypes, _roomTypes)&&const DeepCollectionEquality().equals(other._tags, _tags));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HotelDetailDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.address, address) || other.address == address)&&(identical(other.description, description) || other.description == description)&&const DeepCollectionEquality().equals(other.lat, lat)&&const DeepCollectionEquality().equals(other.lng, lng)&&(identical(other.bookingType, bookingType) || other.bookingType == bookingType)&&(identical(other.bookingStatus, bookingStatus) || other.bookingStatus == bookingStatus)&&(identical(other.entirePrice, entirePrice) || other.entirePrice == entirePrice)&&(identical(other.checkInMessage, checkInMessage) || other.checkInMessage == checkInMessage)&&(identical(other.checkInTime, checkInTime) || other.checkInTime == checkInTime)&&(identical(other.checkOutTime, checkOutTime) || other.checkOutTime == checkOutTime)&&(identical(other.detail, detail) || other.detail == detail)&&(identical(other.surrounding, surrounding) || other.surrounding == surrounding)&&(identical(other.travel, travel) || other.travel == travel)&&(identical(other.checkInGuide, checkInGuide) || other.checkInGuide == checkInGuide)&&(identical(other.rule, rule) || other.rule == rule)&&(identical(other.telNo, telNo) || other.telNo == telNo)&&const DeepCollectionEquality().equals(other._propertyFacilities, _propertyFacilities)&&const DeepCollectionEquality().equals(other._propertyFacilityNames, _propertyFacilityNames)&&const DeepCollectionEquality().equals(other._pictures, _pictures)&&const DeepCollectionEquality().equals(other._roomTypes, _roomTypes)&&const DeepCollectionEquality().equals(other._tags, _tags));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,address,description,const DeepCollectionEquality().hash(lat),const DeepCollectionEquality().hash(lng),bookingType,bookingStatus,entirePrice,checkInMessage,const DeepCollectionEquality().hash(_pictures),const DeepCollectionEquality().hash(_roomTypes),const DeepCollectionEquality().hash(_tags));
+int get hashCode => Object.hashAll([runtimeType,id,name,address,description,const DeepCollectionEquality().hash(lat),const DeepCollectionEquality().hash(lng),bookingType,bookingStatus,entirePrice,checkInMessage,checkInTime,checkOutTime,detail,surrounding,travel,checkInGuide,rule,telNo,const DeepCollectionEquality().hash(_propertyFacilities),const DeepCollectionEquality().hash(_propertyFacilityNames),const DeepCollectionEquality().hash(_pictures),const DeepCollectionEquality().hash(_roomTypes),const DeepCollectionEquality().hash(_tags)]);
 
 @override
 String toString() {
-  return 'HotelDetailDto(id: $id, name: $name, address: $address, description: $description, lat: $lat, lng: $lng, bookingType: $bookingType, bookingStatus: $bookingStatus, entirePrice: $entirePrice, checkInMessage: $checkInMessage, pictures: $pictures, roomTypes: $roomTypes, tags: $tags)';
+  return 'HotelDetailDto(id: $id, name: $name, address: $address, description: $description, lat: $lat, lng: $lng, bookingType: $bookingType, bookingStatus: $bookingStatus, entirePrice: $entirePrice, checkInMessage: $checkInMessage, checkInTime: $checkInTime, checkOutTime: $checkOutTime, detail: $detail, surrounding: $surrounding, travel: $travel, checkInGuide: $checkInGuide, rule: $rule, telNo: $telNo, propertyFacilities: $propertyFacilities, propertyFacilityNames: $propertyFacilityNames, pictures: $pictures, roomTypes: $roomTypes, tags: $tags)';
 }
 
 
@@ -2014,7 +2046,7 @@ abstract mixin class _$HotelDetailDtoCopyWith<$Res> implements $HotelDetailDtoCo
   factory _$HotelDetailDtoCopyWith(_HotelDetailDto value, $Res Function(_HotelDetailDto) _then) = __$HotelDetailDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String? address, String? description, Object? lat, Object? lng, int? bookingType, bool? bookingStatus, num? entirePrice, String? checkInMessage,@JsonKey(name: 'hotelPictures') List<HotelPictureDto> pictures,@JsonKey(name: 'roomTypeDTO4APPs') List<HotelRoomTypeDto> roomTypes, List<String> tags
+ String id, String name, String? address, String? description, Object? lat, Object? lng, int? bookingType, bool? bookingStatus, num? entirePrice, String? checkInMessage, String? checkInTime, String? checkOutTime, String? detail, String? surrounding, String? travel, String? checkInGuide, String? rule, String? telNo, List<Object?> propertyFacilities, Map<String, Object?> propertyFacilityNames,@JsonKey(name: 'hotelPictures') List<HotelPictureDto> pictures,@JsonKey(name: 'roomTypeDTO4APPs') List<HotelRoomTypeDto> roomTypes,@JsonKey(fromJson: hotelStringListFromJson) List<String> tags
 });
 
 
@@ -2031,7 +2063,7 @@ class __$HotelDetailDtoCopyWithImpl<$Res>
 
 /// Create a copy of HotelDetailDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? address = freezed,Object? description = freezed,Object? lat = freezed,Object? lng = freezed,Object? bookingType = freezed,Object? bookingStatus = freezed,Object? entirePrice = freezed,Object? checkInMessage = freezed,Object? pictures = null,Object? roomTypes = null,Object? tags = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? address = freezed,Object? description = freezed,Object? lat = freezed,Object? lng = freezed,Object? bookingType = freezed,Object? bookingStatus = freezed,Object? entirePrice = freezed,Object? checkInMessage = freezed,Object? checkInTime = freezed,Object? checkOutTime = freezed,Object? detail = freezed,Object? surrounding = freezed,Object? travel = freezed,Object? checkInGuide = freezed,Object? rule = freezed,Object? telNo = freezed,Object? propertyFacilities = null,Object? propertyFacilityNames = null,Object? pictures = null,Object? roomTypes = null,Object? tags = null,}) {
   return _then(_HotelDetailDto(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -2041,7 +2073,17 @@ as String?,lat: freezed == lat ? _self.lat : lat ,lng: freezed == lng ? _self.ln
 as int?,bookingStatus: freezed == bookingStatus ? _self.bookingStatus : bookingStatus // ignore: cast_nullable_to_non_nullable
 as bool?,entirePrice: freezed == entirePrice ? _self.entirePrice : entirePrice // ignore: cast_nullable_to_non_nullable
 as num?,checkInMessage: freezed == checkInMessage ? _self.checkInMessage : checkInMessage // ignore: cast_nullable_to_non_nullable
-as String?,pictures: null == pictures ? _self._pictures : pictures // ignore: cast_nullable_to_non_nullable
+as String?,checkInTime: freezed == checkInTime ? _self.checkInTime : checkInTime // ignore: cast_nullable_to_non_nullable
+as String?,checkOutTime: freezed == checkOutTime ? _self.checkOutTime : checkOutTime // ignore: cast_nullable_to_non_nullable
+as String?,detail: freezed == detail ? _self.detail : detail // ignore: cast_nullable_to_non_nullable
+as String?,surrounding: freezed == surrounding ? _self.surrounding : surrounding // ignore: cast_nullable_to_non_nullable
+as String?,travel: freezed == travel ? _self.travel : travel // ignore: cast_nullable_to_non_nullable
+as String?,checkInGuide: freezed == checkInGuide ? _self.checkInGuide : checkInGuide // ignore: cast_nullable_to_non_nullable
+as String?,rule: freezed == rule ? _self.rule : rule // ignore: cast_nullable_to_non_nullable
+as String?,telNo: freezed == telNo ? _self.telNo : telNo // ignore: cast_nullable_to_non_nullable
+as String?,propertyFacilities: null == propertyFacilities ? _self._propertyFacilities : propertyFacilities // ignore: cast_nullable_to_non_nullable
+as List<Object?>,propertyFacilityNames: null == propertyFacilityNames ? _self._propertyFacilityNames : propertyFacilityNames // ignore: cast_nullable_to_non_nullable
+as Map<String, Object?>,pictures: null == pictures ? _self._pictures : pictures // ignore: cast_nullable_to_non_nullable
 as List<HotelPictureDto>,roomTypes: null == roomTypes ? _self._roomTypes : roomTypes // ignore: cast_nullable_to_non_nullable
 as List<HotelRoomTypeDto>,tags: null == tags ? _self._tags : tags // ignore: cast_nullable_to_non_nullable
 as List<String>,
@@ -2321,7 +2363,7 @@ as String?,
 /// @nodoc
 mixin _$HotelRoomTypeDto {
 
- String get id; String get name; num? get price; int? get occupancy; List<String> get roomIds;@JsonKey(name: 'roomPictures') List<HotelPictureDto> get pictures;@JsonKey(name: 'roomTypeBeds') List<HotelRoomBedDto> get beds;
+ String get id; String get name; String? get showName; num? get price; num? get beforeDiscountPrice; num? get discount; String? get discountName; num? get discount2; String? get discountName2; int? get occupancy; int? get occupantsForBaseRate; Object? get roomSize; int? get bedRoomCount; int? get bathRoomCount; int? get roomCount;@JsonKey(fromJson: hotelStringListFromJson) List<String> get roomIds;@JsonKey(name: 'roomPictures') List<HotelPictureDto> get pictures;@JsonKey(name: 'roomTypeBeds') List<HotelRoomBedDto> get beds;
 /// Create a copy of HotelRoomTypeDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -2334,16 +2376,16 @@ $HotelRoomTypeDtoCopyWith<HotelRoomTypeDto> get copyWith => _$HotelRoomTypeDtoCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HotelRoomTypeDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.price, price) || other.price == price)&&(identical(other.occupancy, occupancy) || other.occupancy == occupancy)&&const DeepCollectionEquality().equals(other.roomIds, roomIds)&&const DeepCollectionEquality().equals(other.pictures, pictures)&&const DeepCollectionEquality().equals(other.beds, beds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HotelRoomTypeDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.showName, showName) || other.showName == showName)&&(identical(other.price, price) || other.price == price)&&(identical(other.beforeDiscountPrice, beforeDiscountPrice) || other.beforeDiscountPrice == beforeDiscountPrice)&&(identical(other.discount, discount) || other.discount == discount)&&(identical(other.discountName, discountName) || other.discountName == discountName)&&(identical(other.discount2, discount2) || other.discount2 == discount2)&&(identical(other.discountName2, discountName2) || other.discountName2 == discountName2)&&(identical(other.occupancy, occupancy) || other.occupancy == occupancy)&&(identical(other.occupantsForBaseRate, occupantsForBaseRate) || other.occupantsForBaseRate == occupantsForBaseRate)&&const DeepCollectionEquality().equals(other.roomSize, roomSize)&&(identical(other.bedRoomCount, bedRoomCount) || other.bedRoomCount == bedRoomCount)&&(identical(other.bathRoomCount, bathRoomCount) || other.bathRoomCount == bathRoomCount)&&(identical(other.roomCount, roomCount) || other.roomCount == roomCount)&&const DeepCollectionEquality().equals(other.roomIds, roomIds)&&const DeepCollectionEquality().equals(other.pictures, pictures)&&const DeepCollectionEquality().equals(other.beds, beds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,price,occupancy,const DeepCollectionEquality().hash(roomIds),const DeepCollectionEquality().hash(pictures),const DeepCollectionEquality().hash(beds));
+int get hashCode => Object.hash(runtimeType,id,name,showName,price,beforeDiscountPrice,discount,discountName,discount2,discountName2,occupancy,occupantsForBaseRate,const DeepCollectionEquality().hash(roomSize),bedRoomCount,bathRoomCount,roomCount,const DeepCollectionEquality().hash(roomIds),const DeepCollectionEquality().hash(pictures),const DeepCollectionEquality().hash(beds));
 
 @override
 String toString() {
-  return 'HotelRoomTypeDto(id: $id, name: $name, price: $price, occupancy: $occupancy, roomIds: $roomIds, pictures: $pictures, beds: $beds)';
+  return 'HotelRoomTypeDto(id: $id, name: $name, showName: $showName, price: $price, beforeDiscountPrice: $beforeDiscountPrice, discount: $discount, discountName: $discountName, discount2: $discount2, discountName2: $discountName2, occupancy: $occupancy, occupantsForBaseRate: $occupantsForBaseRate, roomSize: $roomSize, bedRoomCount: $bedRoomCount, bathRoomCount: $bathRoomCount, roomCount: $roomCount, roomIds: $roomIds, pictures: $pictures, beds: $beds)';
 }
 
 
@@ -2354,7 +2396,7 @@ abstract mixin class $HotelRoomTypeDtoCopyWith<$Res>  {
   factory $HotelRoomTypeDtoCopyWith(HotelRoomTypeDto value, $Res Function(HotelRoomTypeDto) _then) = _$HotelRoomTypeDtoCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, num? price, int? occupancy, List<String> roomIds,@JsonKey(name: 'roomPictures') List<HotelPictureDto> pictures,@JsonKey(name: 'roomTypeBeds') List<HotelRoomBedDto> beds
+ String id, String name, String? showName, num? price, num? beforeDiscountPrice, num? discount, String? discountName, num? discount2, String? discountName2, int? occupancy, int? occupantsForBaseRate, Object? roomSize, int? bedRoomCount, int? bathRoomCount, int? roomCount,@JsonKey(fromJson: hotelStringListFromJson) List<String> roomIds,@JsonKey(name: 'roomPictures') List<HotelPictureDto> pictures,@JsonKey(name: 'roomTypeBeds') List<HotelRoomBedDto> beds
 });
 
 
@@ -2371,12 +2413,22 @@ class _$HotelRoomTypeDtoCopyWithImpl<$Res>
 
 /// Create a copy of HotelRoomTypeDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? price = freezed,Object? occupancy = freezed,Object? roomIds = null,Object? pictures = null,Object? beds = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? showName = freezed,Object? price = freezed,Object? beforeDiscountPrice = freezed,Object? discount = freezed,Object? discountName = freezed,Object? discount2 = freezed,Object? discountName2 = freezed,Object? occupancy = freezed,Object? occupantsForBaseRate = freezed,Object? roomSize = freezed,Object? bedRoomCount = freezed,Object? bathRoomCount = freezed,Object? roomCount = freezed,Object? roomIds = null,Object? pictures = null,Object? beds = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as num?,occupancy: freezed == occupancy ? _self.occupancy : occupancy // ignore: cast_nullable_to_non_nullable
+as String,showName: freezed == showName ? _self.showName : showName // ignore: cast_nullable_to_non_nullable
+as String?,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
+as num?,beforeDiscountPrice: freezed == beforeDiscountPrice ? _self.beforeDiscountPrice : beforeDiscountPrice // ignore: cast_nullable_to_non_nullable
+as num?,discount: freezed == discount ? _self.discount : discount // ignore: cast_nullable_to_non_nullable
+as num?,discountName: freezed == discountName ? _self.discountName : discountName // ignore: cast_nullable_to_non_nullable
+as String?,discount2: freezed == discount2 ? _self.discount2 : discount2 // ignore: cast_nullable_to_non_nullable
+as num?,discountName2: freezed == discountName2 ? _self.discountName2 : discountName2 // ignore: cast_nullable_to_non_nullable
+as String?,occupancy: freezed == occupancy ? _self.occupancy : occupancy // ignore: cast_nullable_to_non_nullable
+as int?,occupantsForBaseRate: freezed == occupantsForBaseRate ? _self.occupantsForBaseRate : occupantsForBaseRate // ignore: cast_nullable_to_non_nullable
+as int?,roomSize: freezed == roomSize ? _self.roomSize : roomSize ,bedRoomCount: freezed == bedRoomCount ? _self.bedRoomCount : bedRoomCount // ignore: cast_nullable_to_non_nullable
+as int?,bathRoomCount: freezed == bathRoomCount ? _self.bathRoomCount : bathRoomCount // ignore: cast_nullable_to_non_nullable
+as int?,roomCount: freezed == roomCount ? _self.roomCount : roomCount // ignore: cast_nullable_to_non_nullable
 as int?,roomIds: null == roomIds ? _self.roomIds : roomIds // ignore: cast_nullable_to_non_nullable
 as List<String>,pictures: null == pictures ? _self.pictures : pictures // ignore: cast_nullable_to_non_nullable
 as List<HotelPictureDto>,beds: null == beds ? _self.beds : beds // ignore: cast_nullable_to_non_nullable
@@ -2465,10 +2517,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  num? price,  int? occupancy,  List<String> roomIds, @JsonKey(name: 'roomPictures')  List<HotelPictureDto> pictures, @JsonKey(name: 'roomTypeBeds')  List<HotelRoomBedDto> beds)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String? showName,  num? price,  num? beforeDiscountPrice,  num? discount,  String? discountName,  num? discount2,  String? discountName2,  int? occupancy,  int? occupantsForBaseRate,  Object? roomSize,  int? bedRoomCount,  int? bathRoomCount,  int? roomCount, @JsonKey(fromJson: hotelStringListFromJson)  List<String> roomIds, @JsonKey(name: 'roomPictures')  List<HotelPictureDto> pictures, @JsonKey(name: 'roomTypeBeds')  List<HotelRoomBedDto> beds)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HotelRoomTypeDto() when $default != null:
-return $default(_that.id,_that.name,_that.price,_that.occupancy,_that.roomIds,_that.pictures,_that.beds);case _:
+return $default(_that.id,_that.name,_that.showName,_that.price,_that.beforeDiscountPrice,_that.discount,_that.discountName,_that.discount2,_that.discountName2,_that.occupancy,_that.occupantsForBaseRate,_that.roomSize,_that.bedRoomCount,_that.bathRoomCount,_that.roomCount,_that.roomIds,_that.pictures,_that.beds);case _:
   return orElse();
 
 }
@@ -2486,10 +2538,10 @@ return $default(_that.id,_that.name,_that.price,_that.occupancy,_that.roomIds,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  num? price,  int? occupancy,  List<String> roomIds, @JsonKey(name: 'roomPictures')  List<HotelPictureDto> pictures, @JsonKey(name: 'roomTypeBeds')  List<HotelRoomBedDto> beds)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String? showName,  num? price,  num? beforeDiscountPrice,  num? discount,  String? discountName,  num? discount2,  String? discountName2,  int? occupancy,  int? occupantsForBaseRate,  Object? roomSize,  int? bedRoomCount,  int? bathRoomCount,  int? roomCount, @JsonKey(fromJson: hotelStringListFromJson)  List<String> roomIds, @JsonKey(name: 'roomPictures')  List<HotelPictureDto> pictures, @JsonKey(name: 'roomTypeBeds')  List<HotelRoomBedDto> beds)  $default,) {final _that = this;
 switch (_that) {
 case _HotelRoomTypeDto():
-return $default(_that.id,_that.name,_that.price,_that.occupancy,_that.roomIds,_that.pictures,_that.beds);case _:
+return $default(_that.id,_that.name,_that.showName,_that.price,_that.beforeDiscountPrice,_that.discount,_that.discountName,_that.discount2,_that.discountName2,_that.occupancy,_that.occupantsForBaseRate,_that.roomSize,_that.bedRoomCount,_that.bathRoomCount,_that.roomCount,_that.roomIds,_that.pictures,_that.beds);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -2506,10 +2558,10 @@ return $default(_that.id,_that.name,_that.price,_that.occupancy,_that.roomIds,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  num? price,  int? occupancy,  List<String> roomIds, @JsonKey(name: 'roomPictures')  List<HotelPictureDto> pictures, @JsonKey(name: 'roomTypeBeds')  List<HotelRoomBedDto> beds)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String? showName,  num? price,  num? beforeDiscountPrice,  num? discount,  String? discountName,  num? discount2,  String? discountName2,  int? occupancy,  int? occupantsForBaseRate,  Object? roomSize,  int? bedRoomCount,  int? bathRoomCount,  int? roomCount, @JsonKey(fromJson: hotelStringListFromJson)  List<String> roomIds, @JsonKey(name: 'roomPictures')  List<HotelPictureDto> pictures, @JsonKey(name: 'roomTypeBeds')  List<HotelRoomBedDto> beds)?  $default,) {final _that = this;
 switch (_that) {
 case _HotelRoomTypeDto() when $default != null:
-return $default(_that.id,_that.name,_that.price,_that.occupancy,_that.roomIds,_that.pictures,_that.beds);case _:
+return $default(_that.id,_that.name,_that.showName,_that.price,_that.beforeDiscountPrice,_that.discount,_that.discountName,_that.discount2,_that.discountName2,_that.occupancy,_that.occupantsForBaseRate,_that.roomSize,_that.bedRoomCount,_that.bathRoomCount,_that.roomCount,_that.roomIds,_that.pictures,_that.beds);case _:
   return null;
 
 }
@@ -2521,15 +2573,26 @@ return $default(_that.id,_that.name,_that.price,_that.occupancy,_that.roomIds,_t
 @JsonSerializable()
 
 class _HotelRoomTypeDto implements HotelRoomTypeDto {
-  const _HotelRoomTypeDto({this.id = '', this.name = '', this.price, this.occupancy, final  List<String> roomIds = const <String>[], @JsonKey(name: 'roomPictures') final  List<HotelPictureDto> pictures = const <HotelPictureDto>[], @JsonKey(name: 'roomTypeBeds') final  List<HotelRoomBedDto> beds = const <HotelRoomBedDto>[]}): _roomIds = roomIds,_pictures = pictures,_beds = beds;
+  const _HotelRoomTypeDto({this.id = '', this.name = '', this.showName, this.price, this.beforeDiscountPrice, this.discount, this.discountName, this.discount2, this.discountName2, this.occupancy, this.occupantsForBaseRate, this.roomSize, this.bedRoomCount, this.bathRoomCount, this.roomCount, @JsonKey(fromJson: hotelStringListFromJson) final  List<String> roomIds = const <String>[], @JsonKey(name: 'roomPictures') final  List<HotelPictureDto> pictures = const <HotelPictureDto>[], @JsonKey(name: 'roomTypeBeds') final  List<HotelRoomBedDto> beds = const <HotelRoomBedDto>[]}): _roomIds = roomIds,_pictures = pictures,_beds = beds;
   factory _HotelRoomTypeDto.fromJson(Map<String, dynamic> json) => _$HotelRoomTypeDtoFromJson(json);
 
 @override@JsonKey() final  String id;
 @override@JsonKey() final  String name;
+@override final  String? showName;
 @override final  num? price;
+@override final  num? beforeDiscountPrice;
+@override final  num? discount;
+@override final  String? discountName;
+@override final  num? discount2;
+@override final  String? discountName2;
 @override final  int? occupancy;
+@override final  int? occupantsForBaseRate;
+@override final  Object? roomSize;
+@override final  int? bedRoomCount;
+@override final  int? bathRoomCount;
+@override final  int? roomCount;
  final  List<String> _roomIds;
-@override@JsonKey() List<String> get roomIds {
+@override@JsonKey(fromJson: hotelStringListFromJson) List<String> get roomIds {
   if (_roomIds is EqualUnmodifiableListView) return _roomIds;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_roomIds);
@@ -2563,16 +2626,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HotelRoomTypeDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.price, price) || other.price == price)&&(identical(other.occupancy, occupancy) || other.occupancy == occupancy)&&const DeepCollectionEquality().equals(other._roomIds, _roomIds)&&const DeepCollectionEquality().equals(other._pictures, _pictures)&&const DeepCollectionEquality().equals(other._beds, _beds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HotelRoomTypeDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.showName, showName) || other.showName == showName)&&(identical(other.price, price) || other.price == price)&&(identical(other.beforeDiscountPrice, beforeDiscountPrice) || other.beforeDiscountPrice == beforeDiscountPrice)&&(identical(other.discount, discount) || other.discount == discount)&&(identical(other.discountName, discountName) || other.discountName == discountName)&&(identical(other.discount2, discount2) || other.discount2 == discount2)&&(identical(other.discountName2, discountName2) || other.discountName2 == discountName2)&&(identical(other.occupancy, occupancy) || other.occupancy == occupancy)&&(identical(other.occupantsForBaseRate, occupantsForBaseRate) || other.occupantsForBaseRate == occupantsForBaseRate)&&const DeepCollectionEquality().equals(other.roomSize, roomSize)&&(identical(other.bedRoomCount, bedRoomCount) || other.bedRoomCount == bedRoomCount)&&(identical(other.bathRoomCount, bathRoomCount) || other.bathRoomCount == bathRoomCount)&&(identical(other.roomCount, roomCount) || other.roomCount == roomCount)&&const DeepCollectionEquality().equals(other._roomIds, _roomIds)&&const DeepCollectionEquality().equals(other._pictures, _pictures)&&const DeepCollectionEquality().equals(other._beds, _beds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,price,occupancy,const DeepCollectionEquality().hash(_roomIds),const DeepCollectionEquality().hash(_pictures),const DeepCollectionEquality().hash(_beds));
+int get hashCode => Object.hash(runtimeType,id,name,showName,price,beforeDiscountPrice,discount,discountName,discount2,discountName2,occupancy,occupantsForBaseRate,const DeepCollectionEquality().hash(roomSize),bedRoomCount,bathRoomCount,roomCount,const DeepCollectionEquality().hash(_roomIds),const DeepCollectionEquality().hash(_pictures),const DeepCollectionEquality().hash(_beds));
 
 @override
 String toString() {
-  return 'HotelRoomTypeDto(id: $id, name: $name, price: $price, occupancy: $occupancy, roomIds: $roomIds, pictures: $pictures, beds: $beds)';
+  return 'HotelRoomTypeDto(id: $id, name: $name, showName: $showName, price: $price, beforeDiscountPrice: $beforeDiscountPrice, discount: $discount, discountName: $discountName, discount2: $discount2, discountName2: $discountName2, occupancy: $occupancy, occupantsForBaseRate: $occupantsForBaseRate, roomSize: $roomSize, bedRoomCount: $bedRoomCount, bathRoomCount: $bathRoomCount, roomCount: $roomCount, roomIds: $roomIds, pictures: $pictures, beds: $beds)';
 }
 
 
@@ -2583,7 +2646,7 @@ abstract mixin class _$HotelRoomTypeDtoCopyWith<$Res> implements $HotelRoomTypeD
   factory _$HotelRoomTypeDtoCopyWith(_HotelRoomTypeDto value, $Res Function(_HotelRoomTypeDto) _then) = __$HotelRoomTypeDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, num? price, int? occupancy, List<String> roomIds,@JsonKey(name: 'roomPictures') List<HotelPictureDto> pictures,@JsonKey(name: 'roomTypeBeds') List<HotelRoomBedDto> beds
+ String id, String name, String? showName, num? price, num? beforeDiscountPrice, num? discount, String? discountName, num? discount2, String? discountName2, int? occupancy, int? occupantsForBaseRate, Object? roomSize, int? bedRoomCount, int? bathRoomCount, int? roomCount,@JsonKey(fromJson: hotelStringListFromJson) List<String> roomIds,@JsonKey(name: 'roomPictures') List<HotelPictureDto> pictures,@JsonKey(name: 'roomTypeBeds') List<HotelRoomBedDto> beds
 });
 
 
@@ -2600,12 +2663,22 @@ class __$HotelRoomTypeDtoCopyWithImpl<$Res>
 
 /// Create a copy of HotelRoomTypeDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? price = freezed,Object? occupancy = freezed,Object? roomIds = null,Object? pictures = null,Object? beds = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? showName = freezed,Object? price = freezed,Object? beforeDiscountPrice = freezed,Object? discount = freezed,Object? discountName = freezed,Object? discount2 = freezed,Object? discountName2 = freezed,Object? occupancy = freezed,Object? occupantsForBaseRate = freezed,Object? roomSize = freezed,Object? bedRoomCount = freezed,Object? bathRoomCount = freezed,Object? roomCount = freezed,Object? roomIds = null,Object? pictures = null,Object? beds = null,}) {
   return _then(_HotelRoomTypeDto(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
-as num?,occupancy: freezed == occupancy ? _self.occupancy : occupancy // ignore: cast_nullable_to_non_nullable
+as String,showName: freezed == showName ? _self.showName : showName // ignore: cast_nullable_to_non_nullable
+as String?,price: freezed == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
+as num?,beforeDiscountPrice: freezed == beforeDiscountPrice ? _self.beforeDiscountPrice : beforeDiscountPrice // ignore: cast_nullable_to_non_nullable
+as num?,discount: freezed == discount ? _self.discount : discount // ignore: cast_nullable_to_non_nullable
+as num?,discountName: freezed == discountName ? _self.discountName : discountName // ignore: cast_nullable_to_non_nullable
+as String?,discount2: freezed == discount2 ? _self.discount2 : discount2 // ignore: cast_nullable_to_non_nullable
+as num?,discountName2: freezed == discountName2 ? _self.discountName2 : discountName2 // ignore: cast_nullable_to_non_nullable
+as String?,occupancy: freezed == occupancy ? _self.occupancy : occupancy // ignore: cast_nullable_to_non_nullable
+as int?,occupantsForBaseRate: freezed == occupantsForBaseRate ? _self.occupantsForBaseRate : occupantsForBaseRate // ignore: cast_nullable_to_non_nullable
+as int?,roomSize: freezed == roomSize ? _self.roomSize : roomSize ,bedRoomCount: freezed == bedRoomCount ? _self.bedRoomCount : bedRoomCount // ignore: cast_nullable_to_non_nullable
+as int?,bathRoomCount: freezed == bathRoomCount ? _self.bathRoomCount : bathRoomCount // ignore: cast_nullable_to_non_nullable
+as int?,roomCount: freezed == roomCount ? _self.roomCount : roomCount // ignore: cast_nullable_to_non_nullable
 as int?,roomIds: null == roomIds ? _self._roomIds : roomIds // ignore: cast_nullable_to_non_nullable
 as List<String>,pictures: null == pictures ? _self._pictures : pictures // ignore: cast_nullable_to_non_nullable
 as List<HotelPictureDto>,beds: null == beds ? _self._beds : beds // ignore: cast_nullable_to_non_nullable
@@ -2620,7 +2693,7 @@ as List<HotelRoomBedDto>,
 /// @nodoc
 mixin _$HotelRoomBedDto {
 
- String get name; int? get count; int? get num;
+ String get name; int? get count; int? get num; int? get quantity; Object? get width; Object? get extent;
 /// Create a copy of HotelRoomBedDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -2633,16 +2706,16 @@ $HotelRoomBedDtoCopyWith<HotelRoomBedDto> get copyWith => _$HotelRoomBedDtoCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HotelRoomBedDto&&(identical(other.name, name) || other.name == name)&&(identical(other.count, count) || other.count == count)&&(identical(other.num, num) || other.num == num));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HotelRoomBedDto&&(identical(other.name, name) || other.name == name)&&(identical(other.count, count) || other.count == count)&&(identical(other.num, num) || other.num == num)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&const DeepCollectionEquality().equals(other.width, width)&&const DeepCollectionEquality().equals(other.extent, extent));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,count,num);
+int get hashCode => Object.hash(runtimeType,name,count,num,quantity,const DeepCollectionEquality().hash(width),const DeepCollectionEquality().hash(extent));
 
 @override
 String toString() {
-  return 'HotelRoomBedDto(name: $name, count: $count, num: $num)';
+  return 'HotelRoomBedDto(name: $name, count: $count, num: $num, quantity: $quantity, width: $width, extent: $extent)';
 }
 
 
@@ -2653,7 +2726,7 @@ abstract mixin class $HotelRoomBedDtoCopyWith<$Res>  {
   factory $HotelRoomBedDtoCopyWith(HotelRoomBedDto value, $Res Function(HotelRoomBedDto) _then) = _$HotelRoomBedDtoCopyWithImpl;
 @useResult
 $Res call({
- String name, int? count, int? num
+ String name, int? count, int? num, int? quantity, Object? width, Object? extent
 });
 
 
@@ -2670,12 +2743,13 @@ class _$HotelRoomBedDtoCopyWithImpl<$Res>
 
 /// Create a copy of HotelRoomBedDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? count = freezed,Object? num = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? count = freezed,Object? num = freezed,Object? quantity = freezed,Object? width = freezed,Object? extent = freezed,}) {
   return _then(_self.copyWith(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,count: freezed == count ? _self.count : count // ignore: cast_nullable_to_non_nullable
 as int?,num: freezed == num ? _self.num : num // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,quantity: freezed == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
+as int?,width: freezed == width ? _self.width : width ,extent: freezed == extent ? _self.extent : extent ,
   ));
 }
 
@@ -2760,10 +2834,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  int? count,  int? num)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  int? count,  int? num,  int? quantity,  Object? width,  Object? extent)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HotelRoomBedDto() when $default != null:
-return $default(_that.name,_that.count,_that.num);case _:
+return $default(_that.name,_that.count,_that.num,_that.quantity,_that.width,_that.extent);case _:
   return orElse();
 
 }
@@ -2781,10 +2855,10 @@ return $default(_that.name,_that.count,_that.num);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  int? count,  int? num)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  int? count,  int? num,  int? quantity,  Object? width,  Object? extent)  $default,) {final _that = this;
 switch (_that) {
 case _HotelRoomBedDto():
-return $default(_that.name,_that.count,_that.num);case _:
+return $default(_that.name,_that.count,_that.num,_that.quantity,_that.width,_that.extent);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -2801,10 +2875,10 @@ return $default(_that.name,_that.count,_that.num);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  int? count,  int? num)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  int? count,  int? num,  int? quantity,  Object? width,  Object? extent)?  $default,) {final _that = this;
 switch (_that) {
 case _HotelRoomBedDto() when $default != null:
-return $default(_that.name,_that.count,_that.num);case _:
+return $default(_that.name,_that.count,_that.num,_that.quantity,_that.width,_that.extent);case _:
   return null;
 
 }
@@ -2816,12 +2890,15 @@ return $default(_that.name,_that.count,_that.num);case _:
 @JsonSerializable()
 
 class _HotelRoomBedDto implements HotelRoomBedDto {
-  const _HotelRoomBedDto({this.name = '', this.count, this.num});
+  const _HotelRoomBedDto({this.name = '', this.count, this.num, this.quantity, this.width, this.extent});
   factory _HotelRoomBedDto.fromJson(Map<String, dynamic> json) => _$HotelRoomBedDtoFromJson(json);
 
 @override@JsonKey() final  String name;
 @override final  int? count;
 @override final  int? num;
+@override final  int? quantity;
+@override final  Object? width;
+@override final  Object? extent;
 
 /// Create a copy of HotelRoomBedDto
 /// with the given fields replaced by the non-null parameter values.
@@ -2836,16 +2913,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HotelRoomBedDto&&(identical(other.name, name) || other.name == name)&&(identical(other.count, count) || other.count == count)&&(identical(other.num, num) || other.num == num));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HotelRoomBedDto&&(identical(other.name, name) || other.name == name)&&(identical(other.count, count) || other.count == count)&&(identical(other.num, num) || other.num == num)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&const DeepCollectionEquality().equals(other.width, width)&&const DeepCollectionEquality().equals(other.extent, extent));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,name,count,num);
+int get hashCode => Object.hash(runtimeType,name,count,num,quantity,const DeepCollectionEquality().hash(width),const DeepCollectionEquality().hash(extent));
 
 @override
 String toString() {
-  return 'HotelRoomBedDto(name: $name, count: $count, num: $num)';
+  return 'HotelRoomBedDto(name: $name, count: $count, num: $num, quantity: $quantity, width: $width, extent: $extent)';
 }
 
 
@@ -2856,7 +2933,7 @@ abstract mixin class _$HotelRoomBedDtoCopyWith<$Res> implements $HotelRoomBedDto
   factory _$HotelRoomBedDtoCopyWith(_HotelRoomBedDto value, $Res Function(_HotelRoomBedDto) _then) = __$HotelRoomBedDtoCopyWithImpl;
 @override @useResult
 $Res call({
- String name, int? count, int? num
+ String name, int? count, int? num, int? quantity, Object? width, Object? extent
 });
 
 
@@ -2873,12 +2950,13 @@ class __$HotelRoomBedDtoCopyWithImpl<$Res>
 
 /// Create a copy of HotelRoomBedDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? count = freezed,Object? num = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? count = freezed,Object? num = freezed,Object? quantity = freezed,Object? width = freezed,Object? extent = freezed,}) {
   return _then(_HotelRoomBedDto(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,count: freezed == count ? _self.count : count // ignore: cast_nullable_to_non_nullable
 as int?,num: freezed == num ? _self.num : num // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,quantity: freezed == quantity ? _self.quantity : quantity // ignore: cast_nullable_to_non_nullable
+as int?,width: freezed == width ? _self.width : width ,extent: freezed == extent ? _self.extent : extent ,
   ));
 }
 

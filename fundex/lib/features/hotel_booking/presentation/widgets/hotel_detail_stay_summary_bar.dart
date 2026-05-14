@@ -1,0 +1,121 @@
+import 'package:core_ui_kit/core_ui_kit.dart';
+import 'package:flutter/material.dart';
+
+import '../../../../app/localization/app_localizations_ext.dart';
+import '../../domain/entities/hotel_models.dart';
+import '../support/hotel_booking_presenter.dart';
+
+class HotelDetailStaySummaryBar extends StatelessWidget {
+  const HotelDetailStaySummaryBar({
+    super.key,
+    required this.criteria,
+    required this.presenter,
+  });
+
+  final HotelSearchCriteria criteria;
+  final HotelBookingPresenter presenter;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.brandWhite,
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: colors.highlightGold.withValues(alpha: 0.45)),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: colors.brandPrimaryDark.withValues(alpha: 0.12),
+            blurRadius: 30,
+            offset: const Offset(0, 14),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(30),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: _SummaryItem(
+                icon: Icons.calendar_month_outlined,
+                label: context.l10n.hotelDetailStayDateLabel,
+                value:
+                    '${presenter.stayRange(criteria)}、 '
+                    '${context.l10n.hotelSearchNights(criteria.nights)}',
+              ),
+            ),
+            SizedBox(
+              width: 1,
+              height: 96,
+              child: ColoredBox(color: colors.borderSoft),
+            ),
+            Expanded(
+              child: _SummaryItem(
+                icon: Icons.person_outline_rounded,
+                label: context.l10n.hotelDetailGuestRoomLabel,
+                value: context.l10n.hotelGuestSummary(
+                  criteria.occupancy,
+                  criteria.roomCount,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SummaryItem extends StatelessWidget {
+  const _SummaryItem({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Icon(icon, size: 18, color: colors.brandSecondary),
+              const SizedBox(width: 4),
+              Expanded(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: colors.brandSecondary,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            value,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              color: colors.brandPrimaryDark,
+              fontWeight: FontWeight.w900,
+              height: 1.12,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

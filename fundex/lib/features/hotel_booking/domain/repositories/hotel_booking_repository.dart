@@ -11,4 +11,10 @@ abstract class HotelBookingRepository {
   Future<List<HotelBuildingFilter>> fetchBuildingFilters({
     required String languageCode,
   });
+
+  Future<HotelDetail> fetchHotelDetail({
+    required String hotelId,
+    required HotelSearchCriteria criteria,
+    required String languageCode,
+  });
 }

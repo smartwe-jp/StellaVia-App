@@ -11,6 +11,8 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/real_person_auth_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/discussion_board/presentation/pages/discussion_board_tab_page.dart';
+import '../../features/hotel_booking/domain/entities/hotel_models.dart';
+import '../../features/hotel_booking/presentation/pages/hotel_detail_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_booking_tab_page.dart';
 import '../../features/home/presentation/pages/home_overview_tab_page.dart';
 import '../../features/investment/presentation/pages/fund_project_detail_page.dart';
@@ -77,6 +79,7 @@ String? resolveAuthRedirect({
       location.startsWith('/home/free-market/') ||
       location == '/discussion-board' ||
       location == '/hotel-booking' ||
+      location.startsWith('/hotel-booking/') ||
       location == '/funds' ||
       location.startsWith('/funds/') ||
       location == '/profile/settings' ||
@@ -280,6 +283,22 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 builder: (BuildContext context, GoRouterState state) {
                   return const HotelBookingTabPage();
                 },
+                routes: <RouteBase>[
+                  GoRoute(
+                    path: ':id',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (BuildContext context, GoRouterState state) {
+                      final id = state.pathParameters['id'] ?? '';
+                      final extra = state.extra;
+                      return HotelDetailPage(
+                        hotelId: id,
+                        initialCriteria: extra is HotelSearchCriteria
+                            ? extra
+                            : HotelSearchCriteria.initial(DateTime.now()),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),

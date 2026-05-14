@@ -1257,6 +1257,123 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get hotelDetailStayDateLabel => 'Check-in · Check-out';
+
+  @override
+  String get hotelDetailGuestRoomLabel => 'Guests · Rooms';
+
+  @override
+  String get hotelDetailAvailableRooms => 'Available rooms';
+
+  @override
+  String hotelDetailRemainingRoomsShort(int count) {
+    return '$count rooms left';
+  }
+
+  @override
+  String hotelDetailRoomCapacity(int count) {
+    return 'Sleeps $count';
+  }
+
+  @override
+  String hotelDetailRoomBaseOccupancy(int count) {
+    return 'Base $count guests';
+  }
+
+  @override
+  String hotelDetailRoomArea(Object size) {
+    return '$size㎡';
+  }
+
+  @override
+  String hotelDetailBedrooms(int count) {
+    return '$count bedrooms';
+  }
+
+  @override
+  String hotelDetailBathrooms(int count) {
+    return '$count bathrooms';
+  }
+
+  @override
+  String hotelDetailBedSummary(Object name, int quantity, Object width) {
+    return '$name: $quantity beds $width';
+  }
+
+  @override
+  String get hotelDetailPayableAmount => 'Amount due';
+
+  @override
+  String hotelDetailTaxNote(int nights, int rooms) {
+    return '$nights days · $rooms rooms · Taxes included';
+  }
+
+  @override
+  String get hotelDetailBookNow => 'Book now';
+
+  @override
+  String get hotelDetailSelectRoomFirst => 'Select a room first';
+
+  @override
+  String get hotelDetailBookingComingSoon => 'Booking flow will be added later';
+
+  @override
+  String get hotelCurrencyCode => 'JPY';
+
+  @override
+  String get hotelDetailNoRooms => 'No available rooms';
+
+  @override
+  String get hotelDetailFacilities => 'Facilities';
+
+  @override
+  String get hotelDetailDescription => 'Property details';
+
+  @override
+  String get hotelDetailSurrounding => 'Surroundings';
+
+  @override
+  String get hotelDetailTravel => 'Access';
+
+  @override
+  String get hotelDetailCheckInGuide => 'Check-in guide';
+
+  @override
+  String get hotelDetailPolicy => 'House rules';
+
+  @override
+  String get hotelDetailRefundPolicy => 'Cancellation policy';
+
+  @override
+  String get hotelDetailCheckInTime => 'Check-in/out time';
+
+  @override
+  String hotelDetailCheckInAfter(Object time) {
+    return 'Check in after $time';
+  }
+
+  @override
+  String hotelDetailCheckOutBefore(Object time) {
+    return 'Check out before $time';
+  }
+
+  @override
+  String get hotelDetailContact => 'Contact phone';
+
+  @override
+  String get hotelDetailAddress => 'Location';
+
+  @override
+  String hotelDetailPerStay(int nights) {
+    return ' / $nights nights';
+  }
+
+  @override
+  String hotelDetailDiscount(Object discount) {
+    return '$discount% OFF';
+  }
+
+  @override
   String hotelResultsCount(int count) {
     return '$count stays';
   }

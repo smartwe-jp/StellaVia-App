@@ -450,6 +450,118 @@
       }
     }
   },
+  "hotelDetailStayDateLabel": "Check-in · Check-out",
+  "hotelDetailGuestRoomLabel": "Guests · Rooms",
+  "hotelDetailAvailableRooms": "Available rooms",
+  "hotelDetailRemainingRoomsShort": "{count} rooms left",
+  "@hotelDetailRemainingRoomsShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailRoomCapacity": "Sleeps {count}",
+  "@hotelDetailRoomCapacity": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailRoomBaseOccupancy": "Base {count} guests",
+  "@hotelDetailRoomBaseOccupancy": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailRoomArea": "{size}㎡",
+  "@hotelDetailRoomArea": {
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "hotelDetailBedrooms": "{count} bedrooms",
+  "@hotelDetailBedrooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailBathrooms": "{count} bathrooms",
+  "@hotelDetailBathrooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailBedSummary": "{name}: {quantity} beds {width}",
+  "@hotelDetailBedSummary": {
+    "placeholders": {
+      "name": {},
+      "quantity": {
+        "type": "int"
+      },
+      "width": {}
+    }
+  },
+  "hotelDetailPayableAmount": "Amount due",
+  "hotelDetailTaxNote": "{nights} days · {rooms} rooms · Taxes included",
+  "@hotelDetailTaxNote": {
+    "placeholders": {
+      "nights": {
+        "type": "int"
+      },
+      "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailBookNow": "Book now",
+  "hotelDetailSelectRoomFirst": "Select a room first",
+  "hotelDetailBookingComingSoon": "Booking flow will be added later",
+  "hotelCurrencyCode": "JPY",
+  "hotelDetailNoRooms": "No available rooms",
+  "hotelDetailFacilities": "Facilities",
+  "hotelDetailDescription": "Property details",
+  "hotelDetailSurrounding": "Surroundings",
+  "hotelDetailTravel": "Access",
+  "hotelDetailCheckInGuide": "Check-in guide",
+  "hotelDetailPolicy": "House rules",
+  "hotelDetailRefundPolicy": "Cancellation policy",
+  "hotelDetailCheckInTime": "Check-in/out time",
+  "hotelDetailCheckInAfter": "Check in after {time}",
+  "@hotelDetailCheckInAfter": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "hotelDetailCheckOutBefore": "Check out before {time}",
+  "@hotelDetailCheckOutBefore": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "hotelDetailContact": "Contact phone",
+  "hotelDetailAddress": "Location",
+  "hotelDetailPerStay": " / {nights} nights",
+  "@hotelDetailPerStay": {
+    "placeholders": {
+      "nights": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelDetailDiscount": "{discount}% OFF",
+  "@hotelDetailDiscount": {
+    "placeholders": {
+      "discount": {}
+    }
+  },
   "hotelResultsCount": "{count} stays",
   "@hotelResultsCount": {
     "placeholders": {

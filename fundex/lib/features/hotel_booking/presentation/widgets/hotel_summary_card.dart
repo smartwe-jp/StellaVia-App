@@ -10,10 +10,12 @@ class HotelSummaryCard extends StatelessWidget {
     super.key,
     required this.hotel,
     required this.presenter,
+    this.onTap,
   });
 
   final HotelSummary hotel;
   final HotelBookingPresenter presenter;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class HotelSummaryCard extends StatelessWidget {
     final oldPrice = presenter.price(hotel.beforeDiscountPrice);
     final location = _resolveLocation(context);
 
-    return DecoratedBox(
+    final card = DecoratedBox(
       decoration: BoxDecoration(
         color: colors.brandWhite,
         borderRadius: BorderRadius.circular(22),
@@ -179,6 +181,14 @@ class HotelSummaryCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+    if (onTap == null) {
+      return card;
+    }
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: card,
     );
   }
 

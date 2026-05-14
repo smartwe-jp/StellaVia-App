@@ -1,5 +1,7 @@
 // ignore_for_file: invalid_annotation_target
 
+import 'dart:convert';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'hotel_dtos.freezed.dart';
@@ -63,7 +65,9 @@ abstract class HotelSummaryDto with _$HotelSummaryDto {
     bool? bookingStatus,
     Object? lat,
     Object? lng,
-    @Default(<String>[]) List<String> tags,
+    @JsonKey(fromJson: hotelStringListFromJson)
+    @Default(<String>[])
+    List<String> tags,
   }) = _HotelSummaryDto;
 
   factory HotelSummaryDto.fromJson(Map<String, dynamic> json) =>
@@ -121,13 +125,25 @@ abstract class HotelDetailDto with _$HotelDetailDto {
     bool? bookingStatus,
     num? entirePrice,
     String? checkInMessage,
+    String? checkInTime,
+    String? checkOutTime,
+    String? detail,
+    String? surrounding,
+    String? travel,
+    String? checkInGuide,
+    String? rule,
+    String? telNo,
+    @Default(<Object?>[]) List<Object?> propertyFacilities,
+    @Default(<String, Object?>{}) Map<String, Object?> propertyFacilityNames,
     @JsonKey(name: 'hotelPictures')
     @Default(<HotelPictureDto>[])
     List<HotelPictureDto> pictures,
     @JsonKey(name: 'roomTypeDTO4APPs')
     @Default(<HotelRoomTypeDto>[])
     List<HotelRoomTypeDto> roomTypes,
-    @Default(<String>[]) List<String> tags,
+    @JsonKey(fromJson: hotelStringListFromJson)
+    @Default(<String>[])
+    List<String> tags,
   }) = _HotelDetailDto;
 
   factory HotelDetailDto.fromJson(Map<String, dynamic> json) =>
@@ -150,9 +166,22 @@ abstract class HotelRoomTypeDto with _$HotelRoomTypeDto {
   const factory HotelRoomTypeDto({
     @Default('') String id,
     @Default('') String name,
+    String? showName,
     num? price,
+    num? beforeDiscountPrice,
+    num? discount,
+    String? discountName,
+    num? discount2,
+    String? discountName2,
     int? occupancy,
-    @Default(<String>[]) List<String> roomIds,
+    int? occupantsForBaseRate,
+    Object? roomSize,
+    int? bedRoomCount,
+    int? bathRoomCount,
+    int? roomCount,
+    @JsonKey(fromJson: hotelStringListFromJson)
+    @Default(<String>[])
+    List<String> roomIds,
     @JsonKey(name: 'roomPictures')
     @Default(<HotelPictureDto>[])
     List<HotelPictureDto> pictures,
@@ -171,6 +200,9 @@ abstract class HotelRoomBedDto with _$HotelRoomBedDto {
     @Default('') String name,
     int? count,
     int? num,
+    int? quantity,
+    Object? width,
+    Object? extent,
   }) = _HotelRoomBedDto;
 
   factory HotelRoomBedDto.fromJson(Map<String, dynamic> json) =>
@@ -185,6 +217,34 @@ abstract class HotelPriceCalendarDto with _$HotelPriceCalendarDto {
 
   factory HotelPriceCalendarDto.fromJson(Map<String, dynamic> json) =>
       _$HotelPriceCalendarDtoFromJson(json);
+}
+
+List<String> hotelStringListFromJson(Object? raw) {
+  if (raw == null) {
+    return const <String>[];
+  }
+  if (raw is List) {
+    return raw
+        .map((value) => value?.toString().trim() ?? '')
+        .where((value) => value.isNotEmpty)
+        .toList(growable: false);
+  }
+  if (raw is String) {
+    final trimmed = raw.trim();
+    if (trimmed.isEmpty) {
+      return const <String>[];
+    }
+    try {
+      final decoded = jsonDecode(trimmed);
+      if (decoded is Map && decoded['tags'] != null) {
+        return hotelStringListFromJson(decoded['tags']);
+      }
+      return hotelStringListFromJson(decoded);
+    } catch (_) {
+      return <String>[trimmed];
+    }
+  }
+  return <String>[raw.toString()];
 }
 
 @freezed

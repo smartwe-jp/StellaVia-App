@@ -153,7 +153,7 @@ void main() {
         );
 
         return _jsonOk(
-          '{"code":0,"msg":"success","data":{"id":"h1","name":"Tokyo Business Stay","address":"Shinagawa","bookingType":0,"bookingStatus":true,"entirePrice":36000,"checkInMessage":"ok","hotelPictures":[{"relativeUrl":"https://cdn.example.com/h1-1.jpg","description":"front"}],"roomTypeDTO4APPs":[{"id":"r1","name":"Twin","price":18000,"occupancy":2,"roomIds":["101","102"],"roomPictures":[{"relativeUrl":"https://cdn.example.com/r1.jpg"}],"roomTypeBeds":[{"name":"Single","num":2}]}]}}',
+          '{"code":0,"msg":"success","data":{"id":"h1","name":"Tokyo Business Stay","address":"Shinagawa","tags":"{\\"tags\\":[]}","bookingType":0,"bookingStatus":true,"entirePrice":36000,"checkInMessage":"ok","hotelPictures":[{"relativeUrl":"https://cdn.example.com/h1-1.jpg","description":"front"}],"roomTypeDTO4APPs":[{"id":"r1","name":"Twin","price":18000,"occupancy":2,"roomIds":[101,"102"],"roomPictures":[{"relativeUrl":"https://cdn.example.com/r1.jpg"}],"roomTypeBeds":[{"name":"Single","num":2}]}]}}',
         );
       });
       final api = HotelApiClient(client);
@@ -174,6 +174,8 @@ void main() {
       expect(detail.roomTypes, hasLength(1));
       expect(detail.roomTypes.first.id, equals('r1'));
       expect(detail.roomTypes.first.price, equals(18000));
+      expect(detail.tags, isEmpty);
+      expect(detail.roomTypes.first.roomIds, equals(<String>['101', '102']));
       expect(detail.roomTypes.first.beds.first.num, equals(2));
     });
 
@@ -262,6 +264,54 @@ void main() {
         );
 
         expect(orderId, equals('order-1'));
+      },
+    );
+
+    test(
+      'fetchRefundStrategyText and fetchPriceByDate use PMS endpoints',
+      () async {
+        var call = 0;
+        final client = _buildClient((options) async {
+          call++;
+          if (call == 1) {
+            expect(options.method, equals('POST'));
+            expect(options.path, equals(HotelApiPaths.refundStrategyText));
+            expect(options.extra['auth_required'], isFalse);
+            expect(
+              options.data,
+              equals(<String, dynamic>{
+                'lang': 'CH',
+                'siteCode': 'gl',
+                'checkIn': '2026-05-13',
+                'hotelId': '1',
+              }),
+            );
+            return _jsonOk(
+              '{"code":200,"msg":"success","data":"Free cancellation before check-in."}',
+            );
+          }
+
+          expect(options.method, equals('POST'));
+          expect(options.path, equals(HotelApiPaths.priceByDate));
+          expect(options.extra['auth_required'], isFalse);
+          expect(options.data, equals(<String, dynamic>{'hotelInfoID': '1'}));
+          return _jsonOk(
+            '{"code":200,"msg":"success","data":{"2026-05-13":"20100","2026-05-14":"21900"}}',
+          );
+        });
+        final api = HotelApiClient(client);
+
+        final refundText = await api.fetchRefundStrategyText(
+          lang: 'CH',
+          siteCode: 'gl',
+          checkIn: '2026-05-13',
+          hotelId: '1',
+        );
+        final priceCalendar = await api.fetchPriceByDate(hotelInfoId: '1');
+
+        expect(refundText, equals('Free cancellation before check-in.'));
+        expect(priceCalendar.pricesByDate['2026-05-13'], equals('20100'));
+        expect(call, equals(2));
       },
     );
 
