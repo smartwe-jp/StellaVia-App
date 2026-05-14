@@ -34,7 +34,7 @@ class HotelFilterSection extends ConsumerWidget {
       isScrollControlled: true,
       backgroundColor: colors.brandWhite,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(UiTokens.radius28)),
       ),
       builder: (_) {
         return HotelSearchConditionsSheet(

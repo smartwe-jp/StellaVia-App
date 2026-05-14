@@ -27,7 +27,7 @@ class HotelSummaryCard extends StatelessWidget {
     final card = DecoratedBox(
       decoration: BoxDecoration(
         color: colors.brandWhite,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(UiTokens.radius20),
         border: Border.all(color: colors.borderSoft.withValues(alpha: 0.58)),
         boxShadow: <BoxShadow>[
           BoxShadow(
@@ -38,7 +38,7 @@ class HotelSummaryCard extends StatelessWidget {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(UiTokens.radius20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[

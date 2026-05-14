@@ -16,7 +16,7 @@ class HotelSearchSummaryBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
-    final borderRadius = BorderRadius.circular(28);
+    final borderRadius = BorderRadius.circular(UiTokens.radius28);
     return DecoratedBox(
       decoration: BoxDecoration(
         color: colors.brandWhite.withValues(alpha: 0.96),
