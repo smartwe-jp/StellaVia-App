@@ -38,7 +38,7 @@ class HotelDetailBottomBar extends StatelessWidget {
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 18, 24, 18),
+          padding: const EdgeInsets.fromLTRB(24, 18, 18, 0),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -90,7 +90,7 @@ class HotelDetailBottomBar extends StatelessWidget {
                     backgroundColor: colors.brandPrimary,
                     foregroundColor: colors.onDark,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius: BorderRadius.circular(UiTokens.radius16),
                     ),
                   ),
                   child: Text(

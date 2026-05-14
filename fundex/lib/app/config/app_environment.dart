@@ -91,7 +91,7 @@ class EnvironmentFactory {
           flavor: AppFlavor.prod,
           appName: 'StellaVia',
           memberApiBaseUrl: 'https://stellavia.co.jp/api',
-          hotelApiBaseUrl: 'https://stellavia.co.jp/api',
+          hotelApiBaseUrl: 'https://hotel.gutingjun.com/api',
           oaApiBaseUrl: 'https://stellavia.co.jp/api',
           enableHttpLog: false,
         );

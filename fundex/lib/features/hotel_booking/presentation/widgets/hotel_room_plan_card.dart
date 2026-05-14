@@ -36,69 +36,41 @@ class HotelRoomPlanCard extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: colors.brandWhite,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: colors.highlightGold.withValues(alpha: 0.42)),
+        borderRadius: BorderRadius.circular(UiTokens.radius16,),
+        //border: Border.all(color: colors.highlightGold.withValues(alpha: 0.42)),
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: colors.brandPrimaryDark.withValues(alpha: 0.08),
-            blurRadius: 26,
+            blurRadius: UiTokens.radius16,
             offset: const Offset(0, 12),
           ),
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: SizedBox(
-                    width: 116,
-                    height: 116,
-                    child: AppRemoteImage(
-                      imageUrl: imageUrl,
-                      fit: BoxFit.cover,
-                      placeholder: const HotelDetailImagePlaceholder(),
-                      errorWidget: const HotelDetailImagePlaceholder(),
+                Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(UiTokens.radius12),
+                      child: SizedBox(
+                        width: 116,
+                        height: 126,
+                        child: AppRemoteImage(
+                          imageUrl: imageUrl,
+                          fit: BoxFit.cover,
+                          placeholder: const HotelDetailImagePlaceholder(),
+                          errorWidget: const HotelDetailImagePlaceholder(),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        room.name.isEmpty
-                            ? context.l10n.hotelUnnamedProperty
-                            : room.name,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.headlineSmall
-                            ?.copyWith(
-                              color: colors.brandPrimaryDark,
-                              fontWeight: FontWeight.w900,
-                              height: 1.12,
-                            ),
-                      ),
-                      const SizedBox(height: 10),
-                      Wrap(
-                        spacing: 10,
-                        runSpacing: 8,
-                        children: facts
-                            .map(
-                              (fact) => _RoomFactChip(
-                                icon: fact.icon,
-                                label: fact.label,
-                              ),
-                            )
-                            .toList(growable: false),
-                      ),
-                      if (discountLabel.isNotEmpty) ...<Widget>[
+
+                    if (discountLabel.isNotEmpty) ...<Widget>[
                         const SizedBox(height: 12),
                         DecoratedBox(
                           decoration: BoxDecoration(
@@ -115,12 +87,46 @@ class HotelRoomPlanCard extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelLarge
                                   ?.copyWith(
                                     color: colors.brandAlert,
-                                    fontWeight: FontWeight.w900,
+                                    fontWeight: FontWeight.w600,
                                   ),
                             ),
                           ),
                         ),
                       ],
+                  ],
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        room.name.isEmpty
+                            ? context.l10n.hotelUnnamedProperty
+                            : room.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleLarge
+                            ?.copyWith(
+                              color: colors.brandPrimaryDark,
+                              fontWeight: FontWeight.w900,
+                              height: 1.12,
+                            ),
+                      ),
+                      const SizedBox(height: 20),
+                      Wrap(
+                        spacing: 10,
+                        runSpacing: 8,
+                        children: facts
+                            .map(
+                              (fact) => _RoomFactChip(
+                                icon: fact.icon,
+                                label: fact.label,
+                              ),
+                            )
+                            .toList(growable: false),
+                      ),
+                      
                     ],
                   ),
                 ),
@@ -161,7 +167,7 @@ class HotelRoomPlanCard extends StatelessWidget {
                       if (oldPrice.isNotEmpty)
                         Text(
                           oldPrice,
-                          style: Theme.of(context).textTheme.labelMedium
+                          style: Theme.of(context).textTheme.labelLarge
                               ?.copyWith(
                                 color: colors.textTertiary,
                                 decoration: TextDecoration.lineThrough,
@@ -179,7 +185,7 @@ class HotelRoomPlanCard extends StatelessWidget {
                               style: Theme.of(context).textTheme.headlineMedium
                                   ?.copyWith(
                                     color: colors.brandPrimaryDark,
-                                    fontWeight: FontWeight.w900,
+                                    fontWeight: FontWeight.w800,
                                     height: 1,
                                   ),
                             ),
@@ -273,9 +279,9 @@ class _RoomFactChip extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           label,
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: colors.textSecondary,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ],
@@ -297,35 +303,42 @@ class _RoomQuantityStepper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: colors.highlightGold.withValues(alpha: 0.50)),
-      ),
-      child: SizedBox(
-        height: 46,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            _StepperButton(
-              icon: Icons.remove_rounded,
-              onTap: quantity > 0 ? onDecrement : null,
-            ),
-            SizedBox(
-              width: 44,
-              child: Text(
-                quantity.toString(),
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: colors.brandPrimaryDark,
-                  fontWeight: FontWeight.w900,
+    return Column(
+      children: [
+        //text: how many rooms left if quantity > 0 or show empty text if quantity == 0
+
+
+        DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(color: colors.highlightGold.withValues(alpha: 0.50)),
+          ),
+          child: SizedBox(
+            height: 46,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                _StepperButton(
+                  icon: Icons.remove_rounded,
+                  onTap: quantity > 0 ? onDecrement : null,
                 ),
-              ),
+                SizedBox(
+                  width: 44,
+                  child: Text(
+                    quantity.toString(),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: colors.brandPrimaryDark,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+                _StepperButton(icon: Icons.add_rounded, onTap: onIncrement),
+              ],
             ),
-            _StepperButton(icon: Icons.add_rounded, onTap: onIncrement),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }

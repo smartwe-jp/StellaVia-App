@@ -10,13 +10,13 @@ class HotelDetailHeroGallery extends StatefulWidget {
     required this.images,
     required this.onBack,
     this.onFavorite,
-    this.height = 360,
+    this.aspectRatio = 1,
   });
 
   final List<HotelDetailImage> images;
   final VoidCallback onBack;
   final VoidCallback? onFavorite;
-  final double height;
+  final double aspectRatio;
 
   @override
   State<HotelDetailHeroGallery> createState() => _HotelDetailHeroGalleryState();
@@ -66,9 +66,8 @@ class _HotelDetailHeroGalleryState extends State<HotelDetailHeroGallery> {
     final dotCount = imageUrls.length > 5 ? 5 : imageUrls.length;
     final topPadding = MediaQuery.paddingOf(context).top;
 
-    return SizedBox(
-      height: widget.height,
-      width: double.infinity,
+    return AspectRatio(
+      aspectRatio: widget.aspectRatio,
       child: Stack(
         fit: StackFit.expand,
         children: <Widget>[

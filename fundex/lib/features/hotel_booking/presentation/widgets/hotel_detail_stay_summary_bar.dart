@@ -21,18 +21,18 @@ class HotelDetailStaySummaryBar extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: colors.brandWhite,
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(UiTokens.radius16),
         border: Border.all(color: colors.highlightGold.withValues(alpha: 0.45)),
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: colors.brandPrimaryDark.withValues(alpha: 0.12),
-            blurRadius: 30,
+            blurRadius: UiTokens.radius16,
             offset: const Offset(0, 14),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(UiTokens.radius16),
         child: Row(
           children: <Widget>[
             Expanded(
@@ -46,7 +46,7 @@ class HotelDetailStaySummaryBar extends StatelessWidget {
             ),
             SizedBox(
               width: 1,
-              height: 96,
+              height: 60,
               child: ColoredBox(color: colors.borderSoft),
             ),
             Expanded(
@@ -81,26 +81,25 @@ class _SummaryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Icon(icon, size: 18, color: colors.brandSecondary),
               const SizedBox(width: 4),
-              Expanded(
-                child: Text(
+              Text(
                   label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: colors.brandSecondary,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -108,9 +107,9 @@ class _SummaryItem extends StatelessWidget {
             value,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
               color: colors.brandPrimaryDark,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w600,
               height: 1.12,
             ),
           ),

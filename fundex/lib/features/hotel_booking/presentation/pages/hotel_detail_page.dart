@@ -144,32 +144,28 @@ class _HotelDetailContent extends StatelessWidget {
         CustomScrollView(
           slivers: <Widget>[
             SliverToBoxAdapter(
-              child: HotelDetailHeroGallery(
-                images: detail.images,
-                onBack: onBack,
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Transform.translate(
-                offset: const Offset(0, -40),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 22),
-                  child: HotelDetailStaySummaryBar(
-                    criteria: criteria,
-                    presenter: presenter,
+              child: Column(
+                children: <Widget>[
+                  HotelDetailHeroGallery(images: detail.images, onBack: onBack),
+                  Transform.translate(
+                    offset: const Offset(0, -20),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: HotelDetailStaySummaryBar(
+                        criteria: criteria,
+                        presenter: presenter,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(22, 0, 22, 18),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 18),
               sliver: SliverList(
                 delegate: SliverChildListDelegate(<Widget>[
-                  Transform.translate(
-                    offset: const Offset(0, -18),
-                    child: _HotelDetailHeading(detail: detail),
-                  ),
-                  const SizedBox(height: 12),
+                  _HotelDetailHeading(detail: detail),
+                  const SizedBox(height: 24),
                   _AvailableRoomsHeader(detail: detail),
                   const SizedBox(height: 14),
                   if (detail.roomPlans.isEmpty)
@@ -206,7 +202,7 @@ class _HotelDetailContent extends StatelessWidget {
                     }),
                   const SizedBox(height: 18),
                   ..._detailInfoSections(context),
-                  const SizedBox(height: 142),
+                  const SizedBox(height: 122),
                 ]),
               ),
             ),
@@ -363,9 +359,9 @@ class _HotelDetailHeading extends StatelessWidget {
             subtitle,
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: colors.textSecondary,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               height: 1.35,
             ),
           ),
@@ -392,18 +388,18 @@ class _AvailableRoomsHeader extends StatelessWidget {
         Expanded(
           child: Text(
             context.l10n.hotelDetailAvailableRooms,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
               color: colors.brandPrimaryDark,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
         if (remainingRooms > 0)
           Text(
             context.l10n.hotelDetailRemainingRoomsShort(remainingRooms),
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
               color: colors.brandSecondary,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w600,
             ),
           ),
       ],
