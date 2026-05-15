@@ -1,6 +1,8 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fundex/features/hotel_booking/presentation/controllers/hotel_booking_controller.dart';
+import 'package:fundex/features/hotel_booking/presentation/widgets/hotel_filter_section.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
@@ -10,7 +12,7 @@ import 'hotel_search_conditions_sheet.dart';
 import 'hotel_search_summary_bar.dart';
 
 const String _hotelHeroBannerBaseUrl = 'https://stellavia.co.jp/img';
-const int _hotelHeroBannerImageCount = 3;
+const int _hotelHeroBannerImageCount = 1;
 final String _hotelHeroBannerCacheVersion = DateTime.now()
     .millisecondsSinceEpoch
     .toString();
@@ -18,14 +20,18 @@ final String _hotelHeroBannerCacheVersion = DateTime.now()
 class HotelHeroSection extends ConsumerStatefulWidget {
   const HotelHeroSection({
     super.key,
+    required this.state,
     required this.criteria,
     required this.presenter,
+    required this.onPriceSortSelected,
     required this.onCriteriaApplied,
   });
-
+  
+  final HotelBookingState state;
   final HotelSearchCriteria criteria;
   final HotelBookingPresenter presenter;
   final Future<void> Function(HotelSearchCriteria criteria) onCriteriaApplied;
+  final Future<void> Function(HotelPriceSort criteria) onPriceSortSelected;
 
   @override
   ConsumerState<HotelHeroSection> createState() => _HotelHeroSectionState();
@@ -73,20 +79,26 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
       widget.criteria.roomCount,
     );
 
-    return Column(
+    return Stack(
       children: <Widget>[
-        AspectRatio(aspectRatio: 16 / 9, child: _HeroPhoto()),
-        Transform.translate(
-          offset: const Offset(0, -16),
-          child: Container(
-            margin: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-            child: HotelSearchSummaryBar(
+        AspectRatio(aspectRatio: 16/13, child: _HeroPhoto()),
+
+
+        Positioned(top: 180, left: 16, right: 16,child: HotelSearchSummaryBar(
               summaryLine: summaryLine,
               guestLine: guestLine,
               onTap: () => _openSearchConditions(filters),
-            ),
-          ),
-        ),
+            )),
+
+        Positioned(bottom: 10, left: 16, right: 16,child: 
+              HotelFilterSection(
+                state: widget.state,
+                presenter: widget.presenter,
+                onPriceSortSelected: widget.onPriceSortSelected,
+                onCriteriaApplied: widget.onCriteriaApplied,
+              )
+        )
+        
       ],
     );
   }
@@ -102,9 +114,9 @@ class _HeroPhoto extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          _HeroImagePlaceholder(
-            colors: colors,
-            icon: Icons.image_not_supported_outlined,
+          Image.asset(
+            'assets/images/hotel-booking-ui/hotelbg.jpg',
+            fit: BoxFit.fitWidth,
           ),
           FundHeroMediaBackground(
             gradientColors: <Color>[colors.heroMiddle, colors.primaryAlt],
@@ -114,24 +126,24 @@ class _HeroPhoto extends StatelessWidget {
             autoPlayInterval: const Duration(seconds: 25),
           ),
 
-          if (heroImageUrls.isEmpty)
-            _HeroImagePlaceholder(
-              colors: colors,
-              icon: Icons.image_not_supported_outlined,
-            ),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: <Color>[
-                  colors.brandPrimaryDark.withValues(alpha: 0.10),
-                  colors.brandPrimaryDark.withValues(alpha: 0.88),
-                ],
-              ),
-            ),
-          ),
-          Positioned(left: 20, top: 80, right: 16, child: _HeroCopy()),
+          // if (heroImageUrls.isEmpty)
+          //   _HeroImagePlaceholder(
+          //     colors: colors,
+          //     icon: Icons.image_not_supported_outlined,
+          //   ),
+          // DecoratedBox(
+          //   decoration: BoxDecoration(
+          //     gradient: LinearGradient(
+          //       begin: Alignment.topCenter,
+          //       end: Alignment.bottomCenter,
+          //       colors: <Color>[
+          //         colors.brandPrimaryDark.withValues(alpha: 0.10),
+          //         colors.brandPrimaryDark.withValues(alpha: 0.88),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          Positioned(left: 20, top: 60, right: 16, child: _HeroCopy()),
         ],
       ),
     );
@@ -143,7 +155,7 @@ List<String> _hotelHeroImageUrls(Locale locale) {
   return List<String>.generate(
     _hotelHeroBannerImageCount,
     (index) =>
-        '$_hotelHeroBannerBaseUrl/banner.${index + 1}.$localeSuffix.jpg'
+        '$_hotelHeroBannerBaseUrl/hotel.${index + 1}.$localeSuffix.jpg'
         '?v=$_hotelHeroBannerCacheVersion',
     growable: false,
   );
@@ -205,7 +217,7 @@ class _HeroCopy extends StatelessWidget {
             letterSpacing: 0,
           ),
         ),
-        const SizedBox(height: 20),
+        //const SizedBox(height: 10),
         // Text(
         //   context.l10n.hotelTabHeadline,
         //   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -214,7 +226,7 @@ class _HeroCopy extends StatelessWidget {
         //     letterSpacing: 0,
         //   ),
         // ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 22),
         Text(
           context.l10n.hotelTabSubtitle,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
