@@ -12,6 +12,7 @@ import '../../features/auth/presentation/pages/real_person_auth_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/discussion_board/presentation/pages/discussion_board_tab_page.dart';
 import '../../features/hotel_booking/domain/entities/hotel_models.dart';
+import '../../features/hotel_booking/presentation/pages/hotel_booking_confirm_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_detail_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_booking_tab_page.dart';
 import '../../features/home/presentation/pages/home_overview_tab_page.dart';
@@ -79,7 +80,8 @@ String? resolveAuthRedirect({
       location.startsWith('/home/free-market/') ||
       location == '/discussion-board' ||
       location == '/hotel-booking' ||
-      location.startsWith('/hotel-booking/') ||
+      (location.startsWith('/hotel-booking/') &&
+          !location.endsWith('/confirm')) ||
       location == '/funds' ||
       location.startsWith('/funds/') ||
       location == '/profile/settings' ||
@@ -296,6 +298,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                             ? extra
                             : HotelSearchCriteria.initial(DateTime.now()),
                       );
+                    },
+                  ),
+                  GoRoute(
+                    path: ':id/confirm',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (BuildContext context, GoRouterState state) {
+                      final extra = state.extra;
+                      if (extra is! HotelBookingConfirmSeed) {
+                        return const _HotelBookingConfirmMissingSeedRedirect();
+                      }
+                      return HotelBookingConfirmPage(seed: extra);
                     },
                   ),
                 ],
@@ -694,3 +707,25 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+
+class _HotelBookingConfirmMissingSeedRedirect extends ConsumerWidget {
+  const _HotelBookingConfirmMissingSeedRedirect();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(isAuthenticatedProvider);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!context.mounted) {
+        return;
+      }
+      if (authState.hasError || authState.asData?.value == false) {
+        context.go('/login');
+        return;
+      }
+      if (authState.asData?.value == true) {
+        context.go('/hotel-booking');
+      }
+    });
+    return const Scaffold(body: Center(child: CircularProgressIndicator()));
+  }
+}

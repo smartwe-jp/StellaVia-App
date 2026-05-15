@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../../member_profile/presentation/support/member_profile_action_guard.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../providers/hotel_booking_providers.dart';
 import '../support/hotel_booking_presenter.dart';
@@ -31,6 +33,8 @@ class HotelDetailPage extends ConsumerStatefulWidget {
 
 class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
   final Map<String, int> _roomQuantities = <String, int>{};
+  bool _isAssigningOccupancy = false;
+  HotelAssignOccupancyResult? _assignOccupancyResult;
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +68,11 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
               criteria: widget.initialCriteria,
               presenter: presenter,
               roomQuantities: _roomQuantities,
+              assignedPrice: _assignOccupancyResult?.price,
+              isAssigningOccupancy: _isAssigningOccupancy,
               onBack: _handleBack,
               onRoomQuantityChanged: (change) =>
-                  _setRoomQuantity(change.key, change.value),
+                  _setRoomQuantity(detail, change.key, change.value),
               onBookNow: () => _handleBookNow(detail),
             ),
           ),
@@ -83,31 +89,112 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
     context.go('/hotel-booking');
   }
 
-  void _setRoomQuantity(String key, int value) {
+  Future<void> _setRoomQuantity(
+    HotelDetail detail,
+    String key,
+    int value,
+  ) async {
+    if (_isAssigningOccupancy) {
+      return;
+    }
+    final nextQuantities = Map<String, int>.from(_roomQuantities);
+    if (value <= 0) {
+      nextQuantities.remove(key);
+    } else {
+      nextQuantities[key] = value;
+    }
+    final nextSelections = _selectedRoomsFor(detail, nextQuantities);
+    if (nextSelections.isEmpty) {
+      setState(() {
+        _roomQuantities.clear();
+        _assignOccupancyResult = null;
+      });
+      return;
+    }
+
     setState(() {
-      if (value <= 0) {
-        _roomQuantities.remove(key);
-      } else {
-        _roomQuantities[key] = value;
-      }
+      _isAssigningOccupancy = true;
     });
+    try {
+      final result = await ref.read(assignHotelOccupancyUseCaseProvider)(
+        hotelId: detail.id,
+        criteria: widget.initialCriteria,
+        selectedRooms: nextSelections,
+        languageCode: ref.read(hotelLocaleLanguageCodeProvider),
+      );
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _roomQuantities
+          ..clear()
+          ..addAll(nextQuantities);
+        _assignOccupancyResult = result;
+        _isAssigningOccupancy = false;
+      });
+      if (result.message.isNotEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(result.message)));
+      }
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _isAssigningOccupancy = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.hotelAssignOccupancyFailed)),
+      );
+    }
   }
 
-  void _handleBookNow(HotelDetail detail) {
-    final selectedRooms = _selectedRooms(detail);
-    final message = selectedRooms == 0
-        ? context.l10n.hotelDetailSelectRoomFirst
-        : context.l10n.hotelDetailBookingComingSoon;
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
+  Future<void> _handleBookNow(HotelDetail detail) async {
+    final selectedRooms = _selectedRoomsFor(detail, _roomQuantities);
+    if (selectedRooms.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.hotelDetailSelectRoomFirst)),
+      );
+      return;
+    }
+    final isAuthenticated =
+        ref.read(isAuthenticatedProvider).asData?.value ?? false;
+    if (!mounted) {
+      return;
+    }
+    if (!isAuthenticated) {
+      context.push('/login');
+      return;
+    }
+    final allowed = await ref
+        .read(memberProfileActionGuardProvider)
+        .ensureCompleted(context, actionLabel: context.l10n.hotelDetailBookNow);
+    if (!mounted || !allowed) {
+      return;
+    }
+    context.push(
+      '/hotel-booking/${Uri.encodeComponent(detail.id)}/confirm',
+      extra: HotelBookingConfirmSeed(
+        detail: detail,
+        criteria: widget.initialCriteria,
+        selectedRooms: selectedRooms,
+        assignedPrice: _assignOccupancyResult?.price,
+      ),
+    );
   }
 
-  int _selectedRooms(HotelDetail detail) {
-    var selectedRooms = 0;
+  List<HotelSelectedRoom> _selectedRoomsFor(
+    HotelDetail detail,
+    Map<String, int> quantities,
+  ) {
+    final selectedRooms = <HotelSelectedRoom>[];
     for (var index = 0; index < detail.roomPlans.length; index++) {
-      selectedRooms +=
-          _roomQuantities[_roomKey(detail.roomPlans[index], index)] ?? 0;
+      final room = detail.roomPlans[index];
+      final quantity = quantities[_roomKey(room, index)] ?? 0;
+      if (quantity > 0) {
+        selectedRooms.add(HotelSelectedRoom(room: room, quantity: quantity));
+      }
     }
     return selectedRooms;
   }
@@ -119,6 +206,8 @@ class _HotelDetailContent extends StatelessWidget {
     required this.criteria,
     required this.presenter,
     required this.roomQuantities,
+    required this.assignedPrice,
+    required this.isAssigningOccupancy,
     required this.onBack,
     required this.onRoomQuantityChanged,
     required this.onBookNow,
@@ -128,6 +217,8 @@ class _HotelDetailContent extends StatelessWidget {
   final HotelSearchCriteria criteria;
   final HotelBookingPresenter presenter;
   final Map<String, int> roomQuantities;
+  final num? assignedPrice;
+  final bool isAssigningOccupancy;
   final VoidCallback onBack;
   final ValueChanged<_RoomQuantityChange> onRoomQuantityChanged;
   final VoidCallback onBookNow;
@@ -185,6 +276,7 @@ class _HotelDetailContent extends StatelessWidget {
                           presenter: presenter,
                           quantity: quantity,
                           nights: criteria.nights,
+                          isBusy: isAssigningOccupancy,
                           onDecrement: () => onRoomQuantityChanged(
                             _RoomQuantityChange(key, quantity - 1),
                           ),
@@ -215,6 +307,7 @@ class _HotelDetailContent extends StatelessWidget {
             nights: criteria.nights,
             rooms: roomsForNote,
             presenter: presenter,
+            isLoading: isAssigningOccupancy,
             onBookNow: onBookNow,
           ),
         ),
@@ -232,6 +325,9 @@ class _HotelDetailContent extends StatelessWidget {
   }
 
   num? get _payableAmount {
+    if (assignedPrice != null) {
+      return assignedPrice;
+    }
     num selectedTotal = 0;
     var hasSelection = false;
     for (var index = 0; index < detail.roomPlans.length; index++) {

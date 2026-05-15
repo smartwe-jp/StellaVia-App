@@ -315,6 +315,140 @@ void main() {
       },
     );
 
+    test('booking confirmation helpers use PMS endpoints', () async {
+      var call = 0;
+      final client = _buildClient((options) async {
+        call++;
+        switch (call) {
+          case 1:
+            expect(options.method, equals('POST'));
+            expect(options.path, equals(HotelApiPaths.assignOccupancy));
+            expect(options.extra['auth_required'], isFalse);
+            expect(
+              options.data,
+              equals(<String, dynamic>{
+                'lang': 'CH',
+                'hotelId': '1',
+                'checkIn': '2026-05-13',
+                'checkOut': '2026-05-14',
+                'occupancy': 1,
+                'roomTypeRoomNums': <Map<String, dynamic>>[
+                  <String, dynamic>{'roomTypeID': '10', 'roomNumber': 1},
+                ],
+              }),
+            );
+            return _jsonOk(
+              '{"code":200,"msg":"success","data":{"roomTypeCustNums":[{"roomTypeID":10,"occupancy":1}],"roomTypeExtraGuestPrices":[{"roomTypeID":10,"custNumber":2,"price":3000}],"message":null,"price":30586}}',
+            );
+          case 2:
+            expect(options.method, equals('POST'));
+            expect(options.path, equals(HotelApiPaths.page));
+            expect(options.extra['auth_required'], isFalse);
+            expect(
+              options.data,
+              equals(<String, dynamic>{'lang': 'CH', 'pageCode': 'APP011'}),
+            );
+            return _jsonOk(
+              '{"code":200,"msg":"success","data":{"pageTemplateDetailDTO":[{"pageTemplateDetailEntity":{"resCatalog":"TITLE","resID":"001","showName":"入住说明"}}]}}',
+            );
+          case 3:
+            expect(options.method, equals('POST'));
+            expect(options.path, equals(HotelApiPaths.countryCodeList));
+            expect(options.extra['auth_required'], isFalse);
+            expect(options.data, equals(<String, dynamic>{'lang': 'CH'}));
+            return _jsonOk(
+              '{"code":200,"msg":"success","data":{"JP-日本":"JP","CN-中国":"CN"}}',
+            );
+          case 4:
+            expect(options.method, equals('POST'));
+            expect(options.path, equals(HotelApiPaths.roomExtraPerson));
+            expect(options.extra['auth_required'], isTrue);
+            expect(
+              options.data,
+              equals(<String, dynamic>{
+                'checkIn': '2026-05-13',
+                'checkOut': '2026-05-14',
+                'hotelId': '1',
+                'lang': 'CH',
+                'roomTypeCustNums': <Map<String, dynamic>>[
+                  <String, dynamic>{'roomTypeID': '10', 'occupancy': '1'},
+                ],
+                'couponsCounts': <Object?>[],
+              }),
+            );
+            return _jsonOk(
+              '{"code":200,"msg":"success","data":{"priceElement":{"price":30586,"originalPrice":33000,"roomPriceElements":[{"roomTypeId":10,"freeUserPrice":0,"priceTip":"base"}]}}}',
+            );
+          case 5:
+            expect(options.method, equals('POST'));
+            expect(options.path, equals(HotelApiPaths.couponsOrderCustList));
+            expect(options.extra['auth_required'], isTrue);
+            expect(
+              options.data,
+              equals(<String, dynamic>{'lang': 'CH', 'hotelId': '1'}),
+            );
+            return _jsonOk(
+              '{"code":200,"msg":"success","data":{"list":[{"id":"c1"}]}}',
+            );
+          case 6:
+            expect(options.method, equals('POST'));
+            expect(options.path, equals(HotelApiPaths.memberContactsList));
+            expect(options.extra['auth_required'], isTrue);
+            expect(options.data, equals(<String, dynamic>{'lang': 'CH'}));
+            return _jsonOk('{"code":200,"msg":"success","data":[{"id":"m1"}]}');
+          case 7:
+            expect(options.method, equals('POST'));
+            expect(options.path, equals(HotelApiPaths.cardRegisterList));
+            expect(options.extra['auth_required'], isTrue);
+            expect(options.data, equals(<String, dynamic>{}));
+            return _jsonOk(
+              '{"code":200,"msg":"success","data":[{"id":"card1"}]}',
+            );
+        }
+        fail('Unexpected call $call to ${options.path}');
+      });
+      final api = HotelApiClient(client);
+
+      final assigned = await api.assignOccupancy(
+        const HotelAssignOccupancyRequestDto(
+          lang: 'CH',
+          hotelId: '1',
+          checkIn: '2026-05-13',
+          checkOut: '2026-05-14',
+          occupancy: 1,
+          roomTypeRoomNums: <HotelRoomTypeRoomNumDto>[
+            HotelRoomTypeRoomNumDto(roomTypeId: '10', roomNumber: 1),
+          ],
+        ),
+      );
+      final pageText = await api.fetchPageText(lang: 'CH', pageCode: 'APP011');
+      final countries = await api.fetchCountryCodeList(lang: 'CH');
+      final extra = await api.fetchRoomExtraPerson(
+        const HotelRoomExtraPersonRequestDto(
+          checkIn: '2026-05-13',
+          checkOut: '2026-05-14',
+          hotelId: '1',
+          lang: 'CH',
+          roomTypeCustNums: <HotelRoomTypeCustNumRequestDto>[
+            HotelRoomTypeCustNumRequestDto(roomTypeId: '10', occupancy: '1'),
+          ],
+        ),
+      );
+      final coupons = await api.fetchOrderCoupons(lang: 'CH', hotelId: '1');
+      final contacts = await api.fetchMemberContacts(lang: 'CH');
+      final cards = await api.fetchRegisteredCards();
+
+      expect(assigned.price, equals(30586));
+      expect(assigned.roomTypeCustNums.first.roomTypeId, equals(10));
+      expect(pageText['TITLE001'], equals('入住说明'));
+      expect(countries['JP-日本'], equals('JP'));
+      expect(extra.priceElement?.price, equals(30586));
+      expect(coupons['list'], isA<List<Object?>>());
+      expect(contacts, hasLength(1));
+      expect(cards, hasLength(1));
+      expect(call, equals(7));
+    });
+
     test(
       'createAirhostBooking follows Swagger /booking/order contract',
       () async {

@@ -11,6 +11,7 @@ class HotelDetailBottomBar extends StatelessWidget {
     required this.nights,
     required this.rooms,
     required this.presenter,
+    this.isLoading = false,
     required this.onBookNow,
   });
 
@@ -18,6 +19,7 @@ class HotelDetailBottomBar extends StatelessWidget {
   final int nights;
   final int rooms;
   final HotelBookingPresenter presenter;
+  final bool isLoading;
   final VoidCallback onBookNow;
 
   @override
@@ -85,7 +87,7 @@ class HotelDetailBottomBar extends StatelessWidget {
                 width: 150,
                 height: 58,
                 child: FilledButton(
-                  onPressed: onBookNow,
+                  onPressed: isLoading ? null : onBookNow,
                   style: FilledButton.styleFrom(
                     backgroundColor: colors.brandPrimary,
                     foregroundColor: colors.onDark,
@@ -93,13 +95,23 @@ class HotelDetailBottomBar extends StatelessWidget {
                       borderRadius: BorderRadius.circular(UiTokens.radius16),
                     ),
                   ),
-                  child: Text(
-                    context.l10n.hotelDetailBookNow,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: colors.onDark,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
+                  child: isLoading
+                      ? SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.5,
+                            color: colors.onDark,
+                          ),
+                        )
+                      : Text(
+                          context.l10n.hotelDetailBookNow,
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                color: colors.onDark,
+                                fontWeight: FontWeight.w900,
+                              ),
+                        ),
                 ),
               ),
             ],

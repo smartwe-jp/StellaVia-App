@@ -8,7 +8,9 @@ import '../../data/datasources/hotel_booking_remote_data_source.dart';
 import '../../data/repositories/hotel_booking_repository_impl.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../../domain/repositories/hotel_booking_repository.dart';
+import '../../domain/usecases/assign_hotel_occupancy_usecase.dart';
 import '../../domain/usecases/fetch_hotel_building_filters_usecase.dart';
+import '../../domain/usecases/fetch_hotel_booking_preparation_usecase.dart';
 import '../../domain/usecases/fetch_hotel_detail_usecase.dart';
 import '../../domain/usecases/search_hotels_usecase.dart';
 import '../controllers/hotel_booking_controller.dart';
@@ -47,6 +49,20 @@ final fetchHotelDetailUseCaseProvider = Provider<FetchHotelDetailUseCase>((
   return FetchHotelDetailUseCase(ref.watch(hotelBookingRepositoryProvider));
 });
 
+final assignHotelOccupancyUseCaseProvider =
+    Provider<AssignHotelOccupancyUseCase>((ref) {
+      return AssignHotelOccupancyUseCase(
+        ref.watch(hotelBookingRepositoryProvider),
+      );
+    });
+
+final fetchHotelBookingPreparationUseCaseProvider =
+    Provider<FetchHotelBookingPreparationUseCase>((ref) {
+      return FetchHotelBookingPreparationUseCase(
+        ref.watch(hotelBookingRepositoryProvider),
+      );
+    });
+
 final hotelLocaleLanguageCodeProvider = Provider<String>((ref) {
   return resolveHotelApiLanguageCode(ref.watch(appEffectiveLocaleProvider));
 });
@@ -70,15 +86,21 @@ final hotelBookingControllerProvider =
       );
     });
 
-final hotelDetailProvider =
-    FutureProvider.autoDispose.family<HotelDetail, HotelDetailQuery>((
-      ref,
-      query,
-    ) {
+final hotelDetailProvider = FutureProvider.autoDispose
+    .family<HotelDetail, HotelDetailQuery>((ref, query) {
       final languageCode = ref.watch(hotelLocaleLanguageCodeProvider);
       return ref.watch(fetchHotelDetailUseCaseProvider)(
         hotelId: query.hotelId,
         criteria: query.criteria,
+        languageCode: languageCode,
+      );
+    });
+
+final hotelBookingPreparationProvider = FutureProvider.autoDispose
+    .family<HotelBookingPreparation, HotelBookingConfirmSeed>((ref, seed) {
+      final languageCode = ref.watch(hotelLocaleLanguageCodeProvider);
+      return ref.watch(fetchHotelBookingPreparationUseCaseProvider)(
+        seed: seed,
         languageCode: languageCode,
       );
     });

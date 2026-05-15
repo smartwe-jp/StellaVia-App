@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:core_network/core_network.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fundex/features/auth/data/datasources/auth_local_data_source.dart';
@@ -50,11 +52,16 @@ class _FakeAuthLocalDataSource implements AuthLocalDataSource {
   bool clearCalled = false;
   AuthUserDto? cachedUser;
   String? lastSignedOutAccount;
+  Completer<void>? clearCompleter;
 
   @override
   Future<void> clearCurrentUser() async {
     clearCalled = true;
     cachedUser = null;
+    final completer = clearCompleter;
+    if (completer != null) {
+      await completer.future;
+    }
   }
 
   @override
@@ -175,6 +182,31 @@ void main() {
         expect(await tokenStore.readRefreshToken(), isNull);
         expect(local.clearCalled, isTrue);
         expect(local.cachedUser, isNull);
+      },
+    );
+
+    test(
+      'marks unauthenticated before cached user cleanup completes',
+      () async {
+        final tokenStore = _SeededTokenStore(
+          accessToken: 'cached-access',
+          refreshToken: 'cached-refresh',
+        );
+        final refresher = _FakeTokenRefresher((_) async => null);
+        final local = _FakeAuthLocalDataSource()
+          ..cachedUser = const AuthUserDto(username: 'cached-user')
+          ..clearCompleter = Completer<void>();
+
+        final controller = AuthSessionController(tokenStore, refresher, local);
+        await controller.refresh();
+        expect(controller.state.value, isTrue);
+
+        final markFuture = controller.markUnauthenticated();
+
+        expect(controller.state.value, isFalse);
+        expect(local.clearCalled, isTrue);
+        local.clearCompleter!.complete();
+        await markFuture;
       },
     );
   });

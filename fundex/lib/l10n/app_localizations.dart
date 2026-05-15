@@ -2451,6 +2451,12 @@ abstract class AppLocalizations {
   /// **'Select a room first'**
   String get hotelDetailSelectRoomFirst;
 
+  /// No description provided for @hotelAssignOccupancyFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not update the room quantity. Please try again.'**
+  String get hotelAssignOccupancyFailed;
+
   /// No description provided for @hotelDetailBookingComingSoon.
   ///
   /// In en, this message translates to:
@@ -2462,6 +2468,198 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'JPY'**
   String get hotelCurrencyCode;
+
+  /// No description provided for @hotelBookingConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking confirmation'**
+  String get hotelBookingConfirmTitle;
+
+  /// No description provided for @hotelBookingCheckInDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-in date'**
+  String get hotelBookingCheckInDate;
+
+  /// No description provided for @hotelBookingCheckOutDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-out date'**
+  String get hotelBookingCheckOutDate;
+
+  /// No description provided for @hotelBookingOfficialBooking.
+  ///
+  /// In en, this message translates to:
+  /// **'Aparthotel · Room booking'**
+  String get hotelBookingOfficialBooking;
+
+  /// No description provided for @hotelBookingSelectedRooms.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected rooms:'**
+  String get hotelBookingSelectedRooms;
+
+  /// No description provided for @hotelBookingEditContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Change booking details'**
+  String get hotelBookingEditContent;
+
+  /// No description provided for @hotelBookingCouponOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Coupon available'**
+  String get hotelBookingCouponOff;
+
+  /// No description provided for @hotelBookingCoupons.
+  ///
+  /// In en, this message translates to:
+  /// **'Coupons'**
+  String get hotelBookingCoupons;
+
+  /// No description provided for @hotelBookingCouponsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} available'**
+  String hotelBookingCouponsAvailable(int count);
+
+  /// No description provided for @hotelBookingNoCoupons.
+  ///
+  /// In en, this message translates to:
+  /// **'None available'**
+  String get hotelBookingNoCoupons;
+
+  /// No description provided for @hotelBookingPaymentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select payment method'**
+  String get hotelBookingPaymentTitle;
+
+  /// No description provided for @hotelBookingCreditCardPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit card'**
+  String get hotelBookingCreditCardPay;
+
+  /// No description provided for @hotelBookingRegisteredCards.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} saved cards'**
+  String hotelBookingRegisteredCards(int count);
+
+  /// No description provided for @hotelBookingAddCreditCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Add credit card'**
+  String get hotelBookingAddCreditCard;
+
+  /// No description provided for @hotelBookingAlipay.
+  ///
+  /// In en, this message translates to:
+  /// **'Alipay'**
+  String get hotelBookingAlipay;
+
+  /// No description provided for @hotelBookingWechatPay.
+  ///
+  /// In en, this message translates to:
+  /// **'WechatPay'**
+  String get hotelBookingWechatPay;
+
+  /// No description provided for @hotelBookingBookerInfoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest booking information'**
+  String get hotelBookingBookerInfoTitle;
+
+  /// No description provided for @hotelBookingRoomGuestInfoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Room guest information'**
+  String get hotelBookingRoomGuestInfoTitle;
+
+  /// No description provided for @hotelBookingGuestName.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest name'**
+  String get hotelBookingGuestName;
+
+  /// No description provided for @hotelBookingLastName.
+  ///
+  /// In en, this message translates to:
+  /// **'Last name'**
+  String get hotelBookingLastName;
+
+  /// No description provided for @hotelBookingFirstName.
+  ///
+  /// In en, this message translates to:
+  /// **'First name'**
+  String get hotelBookingFirstName;
+
+  /// No description provided for @hotelBookingCountryRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'Country/region'**
+  String get hotelBookingCountryRegion;
+
+  /// No description provided for @hotelBookingEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get hotelBookingEmail;
+
+  /// No description provided for @hotelBookingPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get hotelBookingPhoneNumber;
+
+  /// No description provided for @hotelBookingAdults.
+  ///
+  /// In en, this message translates to:
+  /// **'Adults'**
+  String get hotelBookingAdults;
+
+  /// No description provided for @hotelBookingChildren.
+  ///
+  /// In en, this message translates to:
+  /// **'Children'**
+  String get hotelBookingChildren;
+
+  /// No description provided for @hotelBookingInvoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Invoice'**
+  String get hotelBookingInvoice;
+
+  /// No description provided for @hotelBookingUseGuestName.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the booking guest name by default'**
+  String get hotelBookingUseGuestName;
+
+  /// No description provided for @hotelBookingInvoiceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Invoice title'**
+  String get hotelBookingInvoiceTitle;
+
+  /// No description provided for @hotelBookingMessageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking note'**
+  String get hotelBookingMessageTitle;
+
+  /// No description provided for @hotelBookingMessageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Special requests cannot be guaranteed, but we will do our best.'**
+  String get hotelBookingMessageHint;
+
+  /// No description provided for @hotelBookingConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm booking'**
+  String get hotelBookingConfirmAction;
 
   /// No description provided for @hotelDetailNoRooms.
   ///

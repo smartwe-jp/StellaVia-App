@@ -1235,10 +1235,113 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelDetailSelectRoomFirst => '请先选择房型';
 
   @override
+  String get hotelAssignOccupancyFailed => '房间数量更新失败，请稍后再试。';
+
+  @override
   String get hotelDetailBookingComingSoon => '预订流程稍后接入';
 
   @override
   String get hotelCurrencyCode => 'JPY';
+
+  @override
+  String get hotelBookingConfirmTitle => '预订确认';
+
+  @override
+  String get hotelBookingCheckInDate => '入住日期';
+
+  @override
+  String get hotelBookingCheckOutDate => '退房日期';
+
+  @override
+  String get hotelBookingOfficialBooking => '公寓式酒店 · 按房间预订';
+
+  @override
+  String get hotelBookingSelectedRooms => '已选择的房型：';
+
+  @override
+  String get hotelBookingEditContent => '更改预约内容';
+
+  @override
+  String get hotelBookingCouponOff => '优惠券可用';
+
+  @override
+  String get hotelBookingCoupons => '优惠券';
+
+  @override
+  String hotelBookingCouponsAvailable(int count) {
+    return '$count张可用';
+  }
+
+  @override
+  String get hotelBookingNoCoupons => '暂无可用';
+
+  @override
+  String get hotelBookingPaymentTitle => '请选择支付方式';
+
+  @override
+  String get hotelBookingCreditCardPay => '信用卡支付';
+
+  @override
+  String hotelBookingRegisteredCards(int count) {
+    return '$count张已绑定信用卡';
+  }
+
+  @override
+  String get hotelBookingAddCreditCard => '新增信用卡';
+
+  @override
+  String get hotelBookingAlipay => 'Alipay';
+
+  @override
+  String get hotelBookingWechatPay => 'WechatPay';
+
+  @override
+  String get hotelBookingBookerInfoTitle => '请填写预约人的信息';
+
+  @override
+  String get hotelBookingRoomGuestInfoTitle => '请填写房间入住人的信息';
+
+  @override
+  String get hotelBookingGuestName => '入住人姓名';
+
+  @override
+  String get hotelBookingLastName => '姓氏';
+
+  @override
+  String get hotelBookingFirstName => '名字';
+
+  @override
+  String get hotelBookingCountryRegion => '国家/地区';
+
+  @override
+  String get hotelBookingEmail => '电子邮件';
+
+  @override
+  String get hotelBookingPhoneNumber => '手机号码';
+
+  @override
+  String get hotelBookingAdults => '成人数量';
+
+  @override
+  String get hotelBookingChildren => '儿童数量';
+
+  @override
+  String get hotelBookingInvoice => '发票';
+
+  @override
+  String get hotelBookingUseGuestName => '默认使用预订人姓名';
+
+  @override
+  String get hotelBookingInvoiceTitle => '抬头';
+
+  @override
+  String get hotelBookingMessageTitle => '预订留言';
+
+  @override
+  String get hotelBookingMessageHint => '无法保证满足您的特殊要求，但我们将尽力满足您的要求';
+
+  @override
+  String get hotelBookingConfirmAction => '确认预订';
 
   @override
   String get hotelDetailNoRooms => '暂无可订房型';
@@ -5712,10 +5815,113 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hotelDetailSelectRoomFirst => '請先選擇房型';
 
   @override
+  String get hotelAssignOccupancyFailed => '房間數量更新失敗，請稍後再試。';
+
+  @override
   String get hotelDetailBookingComingSoon => '預訂流程稍後接入';
 
   @override
   String get hotelCurrencyCode => 'JPY';
+
+  @override
+  String get hotelBookingConfirmTitle => '預訂確認';
+
+  @override
+  String get hotelBookingCheckInDate => '入住日期';
+
+  @override
+  String get hotelBookingCheckOutDate => '退房日期';
+
+  @override
+  String get hotelBookingOfficialBooking => '公寓式酒店 · 按房間預訂';
+
+  @override
+  String get hotelBookingSelectedRooms => '已選擇的房型：';
+
+  @override
+  String get hotelBookingEditContent => '更改預約內容';
+
+  @override
+  String get hotelBookingCouponOff => '優惠券可用';
+
+  @override
+  String get hotelBookingCoupons => '優惠券';
+
+  @override
+  String hotelBookingCouponsAvailable(int count) {
+    return '$count張可用';
+  }
+
+  @override
+  String get hotelBookingNoCoupons => '暫無可用';
+
+  @override
+  String get hotelBookingPaymentTitle => '請選擇付款方式';
+
+  @override
+  String get hotelBookingCreditCardPay => '信用卡付款';
+
+  @override
+  String hotelBookingRegisteredCards(int count) {
+    return '$count張已綁定信用卡';
+  }
+
+  @override
+  String get hotelBookingAddCreditCard => '新增信用卡';
+
+  @override
+  String get hotelBookingAlipay => 'Alipay';
+
+  @override
+  String get hotelBookingWechatPay => 'WechatPay';
+
+  @override
+  String get hotelBookingBookerInfoTitle => '請填寫預約人的資訊';
+
+  @override
+  String get hotelBookingRoomGuestInfoTitle => '請填寫房間入住人的資訊';
+
+  @override
+  String get hotelBookingGuestName => '入住人姓名';
+
+  @override
+  String get hotelBookingLastName => '姓氏';
+
+  @override
+  String get hotelBookingFirstName => '名字';
+
+  @override
+  String get hotelBookingCountryRegion => '國家/地區';
+
+  @override
+  String get hotelBookingEmail => '電子郵件';
+
+  @override
+  String get hotelBookingPhoneNumber => '手機號碼';
+
+  @override
+  String get hotelBookingAdults => '成人數量';
+
+  @override
+  String get hotelBookingChildren => '兒童數量';
+
+  @override
+  String get hotelBookingInvoice => '發票';
+
+  @override
+  String get hotelBookingUseGuestName => '預設使用預訂人姓名';
+
+  @override
+  String get hotelBookingInvoiceTitle => '抬頭';
+
+  @override
+  String get hotelBookingMessageTitle => '預訂留言';
+
+  @override
+  String get hotelBookingMessageHint => '無法保證滿足您的特殊要求，但我們將盡力滿足您的要求';
+
+  @override
+  String get hotelBookingConfirmAction => '確認預訂';
 
   @override
   String get hotelDetailNoRooms => '暫無可訂房型';

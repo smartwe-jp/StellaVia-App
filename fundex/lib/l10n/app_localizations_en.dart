@@ -1315,10 +1315,116 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hotelDetailSelectRoomFirst => 'Select a room first';
 
   @override
+  String get hotelAssignOccupancyFailed =>
+      'Could not update the room quantity. Please try again.';
+
+  @override
   String get hotelDetailBookingComingSoon => 'Booking flow will be added later';
 
   @override
   String get hotelCurrencyCode => 'JPY';
+
+  @override
+  String get hotelBookingConfirmTitle => 'Booking confirmation';
+
+  @override
+  String get hotelBookingCheckInDate => 'Check-in date';
+
+  @override
+  String get hotelBookingCheckOutDate => 'Check-out date';
+
+  @override
+  String get hotelBookingOfficialBooking => 'Aparthotel · Room booking';
+
+  @override
+  String get hotelBookingSelectedRooms => 'Selected rooms:';
+
+  @override
+  String get hotelBookingEditContent => 'Change booking details';
+
+  @override
+  String get hotelBookingCouponOff => 'Coupon available';
+
+  @override
+  String get hotelBookingCoupons => 'Coupons';
+
+  @override
+  String hotelBookingCouponsAvailable(int count) {
+    return '$count available';
+  }
+
+  @override
+  String get hotelBookingNoCoupons => 'None available';
+
+  @override
+  String get hotelBookingPaymentTitle => 'Select payment method';
+
+  @override
+  String get hotelBookingCreditCardPay => 'Credit card';
+
+  @override
+  String hotelBookingRegisteredCards(int count) {
+    return '$count saved cards';
+  }
+
+  @override
+  String get hotelBookingAddCreditCard => 'Add credit card';
+
+  @override
+  String get hotelBookingAlipay => 'Alipay';
+
+  @override
+  String get hotelBookingWechatPay => 'WechatPay';
+
+  @override
+  String get hotelBookingBookerInfoTitle => 'Guest booking information';
+
+  @override
+  String get hotelBookingRoomGuestInfoTitle => 'Room guest information';
+
+  @override
+  String get hotelBookingGuestName => 'Guest name';
+
+  @override
+  String get hotelBookingLastName => 'Last name';
+
+  @override
+  String get hotelBookingFirstName => 'First name';
+
+  @override
+  String get hotelBookingCountryRegion => 'Country/region';
+
+  @override
+  String get hotelBookingEmail => 'Email';
+
+  @override
+  String get hotelBookingPhoneNumber => 'Phone number';
+
+  @override
+  String get hotelBookingAdults => 'Adults';
+
+  @override
+  String get hotelBookingChildren => 'Children';
+
+  @override
+  String get hotelBookingInvoice => 'Invoice';
+
+  @override
+  String get hotelBookingUseGuestName =>
+      'Use the booking guest name by default';
+
+  @override
+  String get hotelBookingInvoiceTitle => 'Invoice title';
+
+  @override
+  String get hotelBookingMessageTitle => 'Booking note';
+
+  @override
+  String get hotelBookingMessageHint =>
+      'Special requests cannot be guaranteed, but we will do our best.';
+
+  @override
+  String get hotelBookingConfirmAction => 'Confirm booking';
 
   @override
   String get hotelDetailNoRooms => 'No available rooms';

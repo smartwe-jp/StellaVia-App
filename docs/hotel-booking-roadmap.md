@@ -1,6 +1,6 @@
 # Hotel Booking Roadmap
 
-Last updated: 2026-05-13
+Last updated: 2026-05-15
 
 This document defines the working plan for the upcoming hotel booking feature. It should be read before opening task threads related to hotel list, hotel detail, room selection, booking, payment, or hotel orders.
 
@@ -24,11 +24,14 @@ Current behavior:
 - Hotel list cards navigate to the public detail route `/hotel-booking/:id` with the current search criteria.
 - Hotel detail has a first UI/data slice: hero gallery, stay summary, room-plan selection, detail sections, refund policy text, and sticky booking amount bar. Booking submit is still a placeholder action.
 - Entering hotel detail triggers the legacy-compatible detail request set: `/pms/hotelinfobyidapp`, `/pms/refundStrategyText`, and `/pms/priceByDate`.
+- Hotel detail room quantity changes call `/pms/assign/occupancy` and use the returned assigned price for the booking amount before entering confirmation.
+- Hotel booking confirmation has a first UI/data slice at `/hotel-booking/:id/confirm`: order summary, coupon entry row, payment method selection, booker form, room guest form, invoice, note, and sticky amount bar. The submit action is still a placeholder.
+- Entering hotel booking confirmation initializes the legacy-compatible preparation request set: `/pms/page` for `APP011`, `APP003`, `APP004`, and `APP012`, plus `/pms/countryCodeList`, `/pms/order/room/extraPerson`, `/pms/coupons/order/custListV2`, `/pms/member/memberContactsList`, and `/creditCard/register/list`.
 - SDK-level hotel API client/DTO foundation exists for the first migration slice.
 
 Current gaps:
 
-- No booking confirmation/submit/result/order pages.
+- No booking submit/result/order pages.
 - No hotel payment/refund/cancel policy flow.
 - Hotel API success-code contract is still unresolved: old app checks `code == 200`, while current architecture notes say hotel uses `code == 0`.
 
@@ -180,7 +183,7 @@ Current SDK implementation note:
 - This compatibility is temporary. Tighten the success profile once the authoritative hotel API contract is confirmed.
 - Implemented Swagger-backed methods: `/hotel/hotelSearch`, `/pms/hotelinfobyidapp`, `/booking/order` Airhost booking creation, `/booking/order/sendPaymentLink`, and `/pms/pay4order`.
 - Swagger currently emits several request schema property keys as Chinese labels while placing the real wire field name in `example` values, for example `房源档案ID` -> `hotelInfoID` and `预订平台ID` -> `siteID`. The SDK DTOs use the wire field names observed from these examples and the legacy request payloads.
-- Implemented legacy-compatible methods pending Swagger confirmation or replacement: building code, room facility filters, refund strategy text, price calendar, booking create v2, order list/detail, member pay info, cancel rule, and cancel order.
+- Implemented legacy-compatible methods pending Swagger confirmation or replacement: building code, room facility filters, refund strategy text, price calendar, assign occupancy, booking confirmation page text/country/coupon/contact/card preparation, booking create v2, order list/detail, member pay info, cancel rule, and cancel order.
 - Hotel DTOs are generated with `freezed_annotation` / `json_serializable`; do not add hand-written model parsing functions for new hotel DTOs.
 
 If Swagger is incomplete:

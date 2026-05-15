@@ -91,6 +91,24 @@ void main() {
       },
     );
 
+    test('keeps unauthenticated user on public hotel detail route', () {
+      final redirect = resolveAuthRedirect(
+        authState: const AsyncData<bool>(false),
+        location: '/hotel-booking/1',
+      );
+
+      expect(redirect, isNull);
+    });
+
+    test('redirects unauthenticated user from hotel confirmation route', () {
+      final redirect = resolveAuthRedirect(
+        authState: const AsyncData<bool>(false),
+        location: '/hotel-booking/1/confirm',
+      );
+
+      expect(redirect, '/login');
+    });
+
     test('redirects unauthenticated user to login from profile route', () {
       final redirect = resolveAuthRedirect(
         authState: const AsyncData<bool>(false),

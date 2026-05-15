@@ -218,6 +218,89 @@ class HotelRoomPlan {
   final List<HotelRoomBed> beds;
 }
 
+class HotelSelectedRoom {
+  const HotelSelectedRoom({required this.room, required this.quantity});
+
+  final HotelRoomPlan room;
+  final int quantity;
+
+  num get subtotal => (room.price ?? 0) * quantity;
+}
+
+class HotelRoomOccupancyAssignment {
+  const HotelRoomOccupancyAssignment({
+    required this.roomTypeId,
+    required this.occupancy,
+  });
+
+  final String roomTypeId;
+  final int occupancy;
+}
+
+class HotelAssignOccupancyResult {
+  const HotelAssignOccupancyResult({
+    required this.price,
+    required this.message,
+    required this.roomTypeCustNums,
+  });
+
+  final num? price;
+  final String message;
+  final List<HotelRoomOccupancyAssignment> roomTypeCustNums;
+}
+
+class HotelCountryCode {
+  const HotelCountryCode({required this.code, required this.name});
+
+  final String code;
+  final String name;
+}
+
+class HotelBookingPreparation {
+  const HotelBookingPreparation({
+    required this.pageTexts,
+    required this.countryCodes,
+    required this.couponsAvailableCount,
+    required this.contactsCount,
+    required this.registeredCardCount,
+    required this.quotedPrice,
+    required this.originalPrice,
+  });
+
+  final Map<String, String> pageTexts;
+  final List<HotelCountryCode> countryCodes;
+  final int couponsAvailableCount;
+  final int contactsCount;
+  final int registeredCardCount;
+  final num? quotedPrice;
+  final num? originalPrice;
+}
+
+class HotelBookingConfirmSeed {
+  const HotelBookingConfirmSeed({
+    required this.detail,
+    required this.criteria,
+    required this.selectedRooms,
+    required this.assignedPrice,
+  });
+
+  final HotelDetail detail;
+  final HotelSearchCriteria criteria;
+  final List<HotelSelectedRoom> selectedRooms;
+  final num? assignedPrice;
+
+  num? get fallbackAmount {
+    if (assignedPrice != null) {
+      return assignedPrice;
+    }
+    final total = selectedRooms.fold<num>(
+      0,
+      (sum, selection) => sum + selection.subtotal,
+    );
+    return total > 0 ? total : detail.lowestRoomPrice;
+  }
+}
+
 class HotelRoomBed {
   const HotelRoomBed({
     required this.name,

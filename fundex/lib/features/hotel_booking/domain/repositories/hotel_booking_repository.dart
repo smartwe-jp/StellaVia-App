@@ -17,4 +17,16 @@ abstract class HotelBookingRepository {
     required HotelSearchCriteria criteria,
     required String languageCode,
   });
+
+  Future<HotelAssignOccupancyResult> assignOccupancy({
+    required String hotelId,
+    required HotelSearchCriteria criteria,
+    required List<HotelSelectedRoom> selectedRooms,
+    required String languageCode,
+  });
+
+  Future<HotelBookingPreparation> fetchBookingPreparation({
+    required HotelBookingConfirmSeed seed,
+    required String languageCode,
+  });
 }

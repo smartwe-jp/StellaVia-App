@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 
 import '../providers/hotel_booking_providers.dart';
 import '../support/hotel_booking_presenter.dart';
-import '../widgets/hotel_filter_section.dart';
 import '../widgets/hotel_hero_section.dart';
 import '../widgets/hotel_state_views.dart';
 import '../widgets/hotel_summary_card.dart';

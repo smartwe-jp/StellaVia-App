@@ -26,7 +26,7 @@ class HotelHeroSection extends ConsumerStatefulWidget {
     required this.onPriceSortSelected,
     required this.onCriteriaApplied,
   });
-  
+
   final HotelBookingState state;
   final HotelSearchCriteria criteria;
   final HotelBookingPresenter presenter;
@@ -81,24 +81,30 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
 
     return Stack(
       children: <Widget>[
-        AspectRatio(aspectRatio: 16/13, child: _HeroPhoto()),
+        AspectRatio(aspectRatio: 16 / 13, child: _HeroPhoto()),
 
+        Positioned(
+          top: 180,
+          left: 16,
+          right: 16,
+          child: HotelSearchSummaryBar(
+            summaryLine: summaryLine,
+            guestLine: guestLine,
+            onTap: () => _openSearchConditions(filters),
+          ),
+        ),
 
-        Positioned(top: 180, left: 16, right: 16,child: HotelSearchSummaryBar(
-              summaryLine: summaryLine,
-              guestLine: guestLine,
-              onTap: () => _openSearchConditions(filters),
-            )),
-
-        Positioned(bottom: 10, left: 16, right: 16,child: 
-              HotelFilterSection(
-                state: widget.state,
-                presenter: widget.presenter,
-                onPriceSortSelected: widget.onPriceSortSelected,
-                onCriteriaApplied: widget.onCriteriaApplied,
-              )
-        )
-        
+        Positioned(
+          bottom: 10,
+          left: 16,
+          right: 16,
+          child: HotelFilterSection(
+            state: widget.state,
+            presenter: widget.presenter,
+            onPriceSortSelected: widget.onPriceSortSelected,
+            onCriteriaApplied: widget.onCriteriaApplied,
+          ),
+        ),
       ],
     );
   }
@@ -125,24 +131,6 @@ class _HeroPhoto extends StatelessWidget {
             autoPlay: heroImageUrls.length > 1,
             autoPlayInterval: const Duration(seconds: 25),
           ),
-
-          // if (heroImageUrls.isEmpty)
-          //   _HeroImagePlaceholder(
-          //     colors: colors,
-          //     icon: Icons.image_not_supported_outlined,
-          //   ),
-          // DecoratedBox(
-          //   decoration: BoxDecoration(
-          //     gradient: LinearGradient(
-          //       begin: Alignment.topCenter,
-          //       end: Alignment.bottomCenter,
-          //       colors: <Color>[
-          //         colors.brandPrimaryDark.withValues(alpha: 0.10),
-          //         colors.brandPrimaryDark.withValues(alpha: 0.88),
-          //       ],
-          //     ),
-          //   ),
-          // ),
           Positioned(left: 20, top: 60, right: 16, child: _HeroCopy()),
         ],
       ),
@@ -171,35 +159,6 @@ String _hotelHeroLocaleSuffix(Locale locale) {
     return scriptCode == 'hant' ? 'zh-hant' : 'zh-hans';
   }
   return 'en';
-}
-
-class _HeroImagePlaceholder extends StatelessWidget {
-  const _HeroImagePlaceholder({required this.colors, this.icon});
-
-  final AppSemanticColorTheme colors;
-  final IconData? icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: <Color>[colors.heroStart, colors.heroMiddle],
-        ),
-      ),
-      child: icon == null
-          ? null
-          : Center(
-              child: Icon(
-                icon,
-                color: colors.onDark.withValues(alpha: 0.72),
-                size: 40,
-              ),
-            ),
-    );
-  }
 }
 
 class _HeroCopy extends StatelessWidget {

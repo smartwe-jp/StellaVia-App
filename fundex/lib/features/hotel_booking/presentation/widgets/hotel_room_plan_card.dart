@@ -13,6 +13,7 @@ class HotelRoomPlanCard extends StatelessWidget {
     required this.presenter,
     required this.quantity,
     required this.nights,
+    this.isBusy = false,
     required this.onDecrement,
     required this.onIncrement,
   });
@@ -21,6 +22,7 @@ class HotelRoomPlanCard extends StatelessWidget {
   final HotelBookingPresenter presenter;
   final int quantity;
   final int nights;
+  final bool isBusy;
   final VoidCallback onDecrement;
   final VoidCallback onIncrement;
 
@@ -36,7 +38,7 @@ class HotelRoomPlanCard extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: colors.brandWhite,
-        borderRadius: BorderRadius.circular(UiTokens.radius16,),
+        borderRadius: BorderRadius.circular(UiTokens.radius16),
         //border: Border.all(color: colors.highlightGold.withValues(alpha: 0.42)),
         boxShadow: <BoxShadow>[
           BoxShadow(
@@ -71,28 +73,28 @@ class HotelRoomPlanCard extends StatelessWidget {
                     ),
 
                     if (discountLabel.isNotEmpty) ...<Widget>[
-                        const SizedBox(height: 12),
-                        DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: colors.brandAlert.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(999),
+                      const SizedBox(height: 12),
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: colors.brandAlert.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            child: Text(
-                              discountLabel,
-                              style: Theme.of(context).textTheme.labelLarge
-                                  ?.copyWith(
-                                    color: colors.brandAlert,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                            ),
+                          child: Text(
+                            discountLabel,
+                            style: Theme.of(context).textTheme.labelLarge
+                                ?.copyWith(
+                                  color: colors.brandAlert,
+                                  fontWeight: FontWeight.w600,
+                                ),
                           ),
                         ),
-                      ],
+                      ),
+                    ],
                   ],
                 ),
                 const SizedBox(width: 16),
@@ -106,12 +108,11 @@ class HotelRoomPlanCard extends StatelessWidget {
                             : room.name,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleLarge
-                            ?.copyWith(
-                              color: colors.brandPrimaryDark,
-                              fontWeight: FontWeight.w900,
-                              height: 1.12,
-                            ),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: colors.brandPrimaryDark,
+                          fontWeight: FontWeight.w900,
+                          height: 1.12,
+                        ),
                       ),
                       const SizedBox(height: 20),
                       Wrap(
@@ -126,7 +127,6 @@ class HotelRoomPlanCard extends StatelessWidget {
                             )
                             .toList(growable: false),
                       ),
-                      
                     ],
                   ),
                 ),
@@ -207,8 +207,8 @@ class HotelRoomPlanCard extends StatelessWidget {
                 const SizedBox(width: 12),
                 _RoomQuantityStepper(
                   quantity: quantity,
-                  onDecrement: onDecrement,
-                  onIncrement: onIncrement,
+                  onDecrement: isBusy ? null : onDecrement,
+                  onIncrement: isBusy ? null : onIncrement,
                 ),
               ],
             ),
@@ -297,8 +297,8 @@ class _RoomQuantityStepper extends StatelessWidget {
   });
 
   final int quantity;
-  final VoidCallback onDecrement;
-  final VoidCallback onIncrement;
+  final VoidCallback? onDecrement;
+  final VoidCallback? onIncrement;
 
   @override
   Widget build(BuildContext context) {
@@ -306,12 +306,12 @@ class _RoomQuantityStepper extends StatelessWidget {
     return Column(
       children: [
         //text: how many rooms left if quantity > 0 or show empty text if quantity == 0
-
-
         DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(999),
-            border: Border.all(color: colors.highlightGold.withValues(alpha: 0.50)),
+            border: Border.all(
+              color: colors.highlightGold.withValues(alpha: 0.50),
+            ),
           ),
           child: SizedBox(
             height: 46,

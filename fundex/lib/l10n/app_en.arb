@@ -523,8 +523,55 @@
   },
   "hotelDetailBookNow": "Book now",
   "hotelDetailSelectRoomFirst": "Select a room first",
+  "hotelAssignOccupancyFailed": "Could not update the room quantity. Please try again.",
   "hotelDetailBookingComingSoon": "Booking flow will be added later",
   "hotelCurrencyCode": "JPY",
+  "hotelBookingConfirmTitle": "Booking confirmation",
+  "hotelBookingCheckInDate": "Check-in date",
+  "hotelBookingCheckOutDate": "Check-out date",
+  "hotelBookingOfficialBooking": "Aparthotel · Room booking",
+  "hotelBookingSelectedRooms": "Selected rooms:",
+  "hotelBookingEditContent": "Change booking details",
+  "hotelBookingCouponOff": "Coupon available",
+  "hotelBookingCoupons": "Coupons",
+  "hotelBookingCouponsAvailable": "{count} available",
+  "@hotelBookingCouponsAvailable": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelBookingNoCoupons": "None available",
+  "hotelBookingPaymentTitle": "Select payment method",
+  "hotelBookingCreditCardPay": "Credit card",
+  "hotelBookingRegisteredCards": "{count} saved cards",
+  "@hotelBookingRegisteredCards": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelBookingAddCreditCard": "Add credit card",
+  "hotelBookingAlipay": "Alipay",
+  "hotelBookingWechatPay": "WechatPay",
+  "hotelBookingBookerInfoTitle": "Guest booking information",
+  "hotelBookingRoomGuestInfoTitle": "Room guest information",
+  "hotelBookingGuestName": "Guest name",
+  "hotelBookingLastName": "Last name",
+  "hotelBookingFirstName": "First name",
+  "hotelBookingCountryRegion": "Country/region",
+  "hotelBookingEmail": "Email",
+  "hotelBookingPhoneNumber": "Phone number",
+  "hotelBookingAdults": "Adults",
+  "hotelBookingChildren": "Children",
+  "hotelBookingInvoice": "Invoice",
+  "hotelBookingUseGuestName": "Use the booking guest name by default",
+  "hotelBookingInvoiceTitle": "Invoice title",
+  "hotelBookingMessageTitle": "Booking note",
+  "hotelBookingMessageHint": "Special requests cannot be guaranteed, but we will do our best.",
+  "hotelBookingConfirmAction": "Confirm booking",
   "hotelDetailNoRooms": "No available rooms",
   "hotelDetailFacilities": "Facilities",
   "hotelDetailDescription": "Property details",

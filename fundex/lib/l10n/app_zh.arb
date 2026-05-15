@@ -523,8 +523,55 @@
   },
   "hotelDetailBookNow": "立即预订",
   "hotelDetailSelectRoomFirst": "请先选择房型",
+  "hotelAssignOccupancyFailed": "房间数量更新失败，请稍后再试。",
   "hotelDetailBookingComingSoon": "预订流程稍后接入",
   "hotelCurrencyCode": "JPY",
+  "hotelBookingConfirmTitle": "预订确认",
+  "hotelBookingCheckInDate": "入住日期",
+  "hotelBookingCheckOutDate": "退房日期",
+  "hotelBookingOfficialBooking": "公寓式酒店 · 按房间预订",
+  "hotelBookingSelectedRooms": "已选择的房型：",
+  "hotelBookingEditContent": "更改预约内容",
+  "hotelBookingCouponOff": "优惠券可用",
+  "hotelBookingCoupons": "优惠券",
+  "hotelBookingCouponsAvailable": "{count}张可用",
+  "@hotelBookingCouponsAvailable": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelBookingNoCoupons": "暂无可用",
+  "hotelBookingPaymentTitle": "请选择支付方式",
+  "hotelBookingCreditCardPay": "信用卡支付",
+  "hotelBookingRegisteredCards": "{count}张已绑定信用卡",
+  "@hotelBookingRegisteredCards": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelBookingAddCreditCard": "新增信用卡",
+  "hotelBookingAlipay": "Alipay",
+  "hotelBookingWechatPay": "WechatPay",
+  "hotelBookingBookerInfoTitle": "请填写预约人的信息",
+  "hotelBookingRoomGuestInfoTitle": "请填写房间入住人的信息",
+  "hotelBookingGuestName": "入住人姓名",
+  "hotelBookingLastName": "姓氏",
+  "hotelBookingFirstName": "名字",
+  "hotelBookingCountryRegion": "国家/地区",
+  "hotelBookingEmail": "电子邮件",
+  "hotelBookingPhoneNumber": "手机号码",
+  "hotelBookingAdults": "成人数量",
+  "hotelBookingChildren": "儿童数量",
+  "hotelBookingInvoice": "发票",
+  "hotelBookingUseGuestName": "默认使用预订人姓名",
+  "hotelBookingInvoiceTitle": "抬头",
+  "hotelBookingMessageTitle": "预订留言",
+  "hotelBookingMessageHint": "无法保证满足您的特殊要求，但我们将尽力满足您的要求",
+  "hotelBookingConfirmAction": "确认预订",
   "hotelDetailNoRooms": "暂无可订房型",
   "hotelDetailFacilities": "设施设备",
   "hotelDetailDescription": "房源详情",

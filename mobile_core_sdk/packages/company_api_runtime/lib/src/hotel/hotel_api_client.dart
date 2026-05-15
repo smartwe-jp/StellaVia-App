@@ -28,6 +28,8 @@ class HotelApiPaths {
   static const String priceByDate = '/pms/priceByDate';
   static const String assignOccupancy = '/pms/assign/occupancy';
   static const String countryCodeList = '/pms/countryCodeList';
+  static const String roomExtraPerson = '/pms/order/room/extraPerson';
+  static const String couponsOrderCustList = '/pms/coupons/order/custListV2';
   static const String memberContactsList = '/pms/member/memberContactsList';
   static const String memberContactsUpdate =
       '/pms/member/memberContactsSaveOrUpdate';
@@ -51,6 +53,7 @@ class HotelApiClient {
     this.bookingOrderSendPaymentLinkPath =
         HotelApiPaths.bookingOrderSendPaymentLink,
     this.buildingCodePath = HotelApiPaths.buildingCode,
+    this.pagePath = HotelApiPaths.page,
     this.refundStrategyTextPath = HotelApiPaths.refundStrategyText,
     this.roomFacilityPath = HotelApiPaths.roomFacility,
     this.hotelDetailPath = HotelApiPaths.hotelDetail,
@@ -62,6 +65,12 @@ class HotelApiClient {
     this.cancelOrderRulePath = HotelApiPaths.cancelOrderRule,
     this.cancelOrderPath = HotelApiPaths.cancelOrder,
     this.priceByDatePath = HotelApiPaths.priceByDate,
+    this.assignOccupancyPath = HotelApiPaths.assignOccupancy,
+    this.countryCodeListPath = HotelApiPaths.countryCodeList,
+    this.roomExtraPersonPath = HotelApiPaths.roomExtraPerson,
+    this.couponsOrderCustListPath = HotelApiPaths.couponsOrderCustList,
+    this.memberContactsListPath = HotelApiPaths.memberContactsList,
+    this.cardRegisterListPath = HotelApiPaths.cardRegisterList,
   }) : _envelopeCodec =
            envelopeCodec ??
            const LegacyEnvelopeCodec(
@@ -74,6 +83,7 @@ class HotelApiClient {
   final String bookingOrderPath;
   final String bookingOrderSendPaymentLinkPath;
   final String buildingCodePath;
+  final String pagePath;
   final String refundStrategyTextPath;
   final String roomFacilityPath;
   final String hotelDetailPath;
@@ -85,6 +95,12 @@ class HotelApiClient {
   final String cancelOrderRulePath;
   final String cancelOrderPath;
   final String priceByDatePath;
+  final String assignOccupancyPath;
+  final String countryCodeListPath;
+  final String roomExtraPersonPath;
+  final String couponsOrderCustListPath;
+  final String memberContactsListPath;
+  final String cardRegisterListPath;
 
   Future<HotelSearchResultDto> searchHotels(
     HotelSearchRequestDto request,
@@ -163,6 +179,133 @@ class HotelApiClient {
       fallbackMessage: 'Failed to load hotel room facilities.',
     );
     return rows.map(HotelFacilityFilterDto.fromJson).toList(growable: false);
+  }
+
+  Future<Map<String, String>> fetchPageText({
+    required String lang,
+    required String pageCode,
+  }) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      pagePath,
+      data: <String, dynamic>{'lang': lang, 'pageCode': pageCode},
+      options: authRequired(false),
+    );
+
+    final data = _envelopeCodec.extractDataMap(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load hotel page text.',
+    );
+    final rows = data['pageTemplateDetailDTO'];
+    if (rows is! List) {
+      return const <String, String>{};
+    }
+    return Map<String, String>.fromEntries(
+      rows
+          .map((row) {
+            final rowMap = _envelopeCodec.toJsonMap(row);
+            final entity = _envelopeCodec.toJsonMap(
+              rowMap['pageTemplateDetailEntity'],
+            );
+            final key = '${entity['resCatalog'] ?? ''}${entity['resID'] ?? ''}';
+            final value = entity['showName']?.toString().trim() ?? '';
+            return MapEntry(key, value);
+          })
+          .where((entry) => entry.key.isNotEmpty && entry.value.isNotEmpty),
+    );
+  }
+
+  Future<HotelAssignOccupancyResultDto> assignOccupancy(
+    HotelAssignOccupancyRequestDto request, {
+    bool authRequiredForRequest = false,
+  }) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      assignOccupancyPath,
+      data: request.toJson(),
+      options: authRequired(authRequiredForRequest),
+    );
+
+    final data = _envelopeCodec.extractDataMap(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to assign hotel occupancy.',
+    );
+    return HotelAssignOccupancyResultDto.fromJson(data);
+  }
+
+  Future<Map<String, String>> fetchCountryCodeList({
+    required String lang,
+    bool authRequiredForRequest = false,
+  }) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      countryCodeListPath,
+      data: <String, dynamic>{'lang': lang},
+      options: authRequired(authRequiredForRequest),
+    );
+
+    final data = _envelopeCodec.extractDataMap(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load hotel country codes.',
+    );
+    return data.map((key, value) => MapEntry(key, value.toString()));
+  }
+
+  Future<HotelRoomExtraPersonResultDto> fetchRoomExtraPerson(
+    HotelRoomExtraPersonRequestDto request,
+  ) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      roomExtraPersonPath,
+      data: request.toJson(),
+      options: authRequired(true),
+    );
+
+    final data = _envelopeCodec.extractDataMap(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load hotel room extra person quote.',
+    );
+    return HotelRoomExtraPersonResultDto.fromJson(data);
+  }
+
+  Future<Map<String, dynamic>> fetchOrderCoupons({
+    required String lang,
+    required String hotelId,
+  }) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      couponsOrderCustListPath,
+      data: <String, dynamic>{'lang': lang, 'hotelId': hotelId},
+      options: authRequired(true),
+    );
+
+    return _envelopeCodec.extractDataMap(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load hotel coupons.',
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> fetchMemberContacts({
+    required String lang,
+  }) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      memberContactsListPath,
+      data: <String, dynamic>{'lang': lang},
+      options: authRequired(true),
+    );
+
+    return _envelopeCodec.extractDataList(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load hotel member contacts.',
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> fetchRegisteredCards() async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      cardRegisterListPath,
+      data: <String, dynamic>{},
+      options: authRequired(true),
+    );
+
+    return _envelopeCodec.extractDataList(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load registered credit cards.',
+    );
   }
 
   Future<String> fetchRefundStrategyText({

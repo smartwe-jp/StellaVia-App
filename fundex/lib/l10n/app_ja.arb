@@ -523,8 +523,55 @@
   },
   "hotelDetailBookNow": "今すぐ予約",
   "hotelDetailSelectRoomFirst": "客室を選択してください",
+  "hotelAssignOccupancyFailed": "客室数を更新できませんでした。しばらくしてからもう一度お試しください。",
   "hotelDetailBookingComingSoon": "予約フローは後で接続します",
   "hotelCurrencyCode": "JPY",
+  "hotelBookingConfirmTitle": "予約確認",
+  "hotelBookingCheckInDate": "チェックイン日",
+  "hotelBookingCheckOutDate": "チェックアウト日",
+  "hotelBookingOfficialBooking": "アパートメントホテル · 客室予約",
+  "hotelBookingSelectedRooms": "選択した客室：",
+  "hotelBookingEditContent": "予約内容を変更",
+  "hotelBookingCouponOff": "クーポン利用可",
+  "hotelBookingCoupons": "クーポン",
+  "hotelBookingCouponsAvailable": "{count}件利用可",
+  "@hotelBookingCouponsAvailable": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelBookingNoCoupons": "利用できません",
+  "hotelBookingPaymentTitle": "お支払い方法を選択",
+  "hotelBookingCreditCardPay": "クレジットカード決済",
+  "hotelBookingRegisteredCards": "登録済みカード {count}件",
+  "@hotelBookingRegisteredCards": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelBookingAddCreditCard": "クレジットカードを追加",
+  "hotelBookingAlipay": "Alipay",
+  "hotelBookingWechatPay": "WechatPay",
+  "hotelBookingBookerInfoTitle": "予約者情報を入力",
+  "hotelBookingRoomGuestInfoTitle": "宿泊者情報を入力",
+  "hotelBookingGuestName": "宿泊者氏名",
+  "hotelBookingLastName": "姓",
+  "hotelBookingFirstName": "名",
+  "hotelBookingCountryRegion": "国/地域",
+  "hotelBookingEmail": "メールアドレス",
+  "hotelBookingPhoneNumber": "携帯電話番号",
+  "hotelBookingAdults": "大人人数",
+  "hotelBookingChildren": "子供人数",
+  "hotelBookingInvoice": "領収書",
+  "hotelBookingUseGuestName": "予約者名を使用",
+  "hotelBookingInvoiceTitle": "宛名",
+  "hotelBookingMessageTitle": "予約メッセージ",
+  "hotelBookingMessageHint": "特別なご要望は保証できませんが、できる限り対応いたします",
+  "hotelBookingConfirmAction": "予約を確認",
   "hotelDetailNoRooms": "予約可能な客室はありません",
   "hotelDetailFacilities": "設備",
   "hotelDetailDescription": "宿泊施設の詳細",

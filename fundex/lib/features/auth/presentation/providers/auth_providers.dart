@@ -116,12 +116,12 @@ class AuthSessionController extends StateNotifier<AsyncValue<bool>> {
   }
 
   Future<void> markUnauthenticated() async {
+    state = const AsyncValue.data(false);
     try {
       await _authLocal.clearCurrentUser();
     } catch (_) {
       // Hive may be unavailable in lightweight test environments.
     }
-    state = const AsyncValue.data(false);
   }
 }
 

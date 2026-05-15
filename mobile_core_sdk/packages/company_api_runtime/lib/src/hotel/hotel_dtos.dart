@@ -219,6 +219,146 @@ abstract class HotelPriceCalendarDto with _$HotelPriceCalendarDto {
       _$HotelPriceCalendarDtoFromJson(json);
 }
 
+@freezed
+abstract class HotelRoomTypeRoomNumDto with _$HotelRoomTypeRoomNumDto {
+  @JsonSerializable(includeIfNull: false)
+  const factory HotelRoomTypeRoomNumDto({
+    @JsonKey(name: 'roomTypeID') required String roomTypeId,
+    required int roomNumber,
+  }) = _HotelRoomTypeRoomNumDto;
+
+  factory HotelRoomTypeRoomNumDto.fromJson(Map<String, dynamic> json) =>
+      _$HotelRoomTypeRoomNumDtoFromJson(json);
+}
+
+@freezed
+abstract class HotelAssignOccupancyRequestDto
+    with _$HotelAssignOccupancyRequestDto {
+  @JsonSerializable(includeIfNull: false, explicitToJson: true)
+  const factory HotelAssignOccupancyRequestDto({
+    required String lang,
+    required String hotelId,
+    required String checkIn,
+    required String checkOut,
+    required int occupancy,
+    @Default(<HotelRoomTypeRoomNumDto>[])
+    List<HotelRoomTypeRoomNumDto> roomTypeRoomNums,
+  }) = _HotelAssignOccupancyRequestDto;
+
+  factory HotelAssignOccupancyRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$HotelAssignOccupancyRequestDtoFromJson(json);
+}
+
+@freezed
+abstract class HotelAssignOccupancyResultDto
+    with _$HotelAssignOccupancyResultDto {
+  const factory HotelAssignOccupancyResultDto({
+    @Default(<HotelRoomTypeCustNumDto>[])
+    List<HotelRoomTypeCustNumDto> roomTypeCustNums,
+    @Default(<HotelRoomTypeExtraGuestPriceDto>[])
+    List<HotelRoomTypeExtraGuestPriceDto> roomTypeExtraGuestPrices,
+    String? message,
+    num? price,
+  }) = _HotelAssignOccupancyResultDto;
+
+  factory HotelAssignOccupancyResultDto.fromJson(Map<String, dynamic> json) =>
+      _$HotelAssignOccupancyResultDtoFromJson(json);
+}
+
+@freezed
+abstract class HotelRoomTypeCustNumDto with _$HotelRoomTypeCustNumDto {
+  const factory HotelRoomTypeCustNumDto({
+    @JsonKey(name: 'roomTypeID') Object? roomTypeId,
+    int? occupancy,
+  }) = _HotelRoomTypeCustNumDto;
+
+  factory HotelRoomTypeCustNumDto.fromJson(Map<String, dynamic> json) =>
+      _$HotelRoomTypeCustNumDtoFromJson(json);
+}
+
+@freezed
+abstract class HotelRoomTypeExtraGuestPriceDto
+    with _$HotelRoomTypeExtraGuestPriceDto {
+  const factory HotelRoomTypeExtraGuestPriceDto({
+    Object? roomTypeId,
+    String? roomTypeName,
+    int? roomCount,
+    int? totalGuestCount,
+    int? extraGuestCount,
+    num? extraGuestPrice,
+  }) = _HotelRoomTypeExtraGuestPriceDto;
+
+  factory HotelRoomTypeExtraGuestPriceDto.fromJson(Map<String, dynamic> json) =>
+      _$HotelRoomTypeExtraGuestPriceDtoFromJson(json);
+}
+
+@freezed
+abstract class HotelRoomTypeCustNumRequestDto
+    with _$HotelRoomTypeCustNumRequestDto {
+  @JsonSerializable(includeIfNull: false)
+  const factory HotelRoomTypeCustNumRequestDto({
+    @JsonKey(name: 'roomTypeID') required String roomTypeId,
+    required String occupancy,
+  }) = _HotelRoomTypeCustNumRequestDto;
+
+  factory HotelRoomTypeCustNumRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$HotelRoomTypeCustNumRequestDtoFromJson(json);
+}
+
+@freezed
+abstract class HotelRoomExtraPersonRequestDto
+    with _$HotelRoomExtraPersonRequestDto {
+  @JsonSerializable(includeIfNull: false, explicitToJson: true)
+  const factory HotelRoomExtraPersonRequestDto({
+    required String hotelId,
+    required String checkIn,
+    required String checkOut,
+    required String lang,
+    @Default(<HotelRoomTypeCustNumRequestDto>[])
+    List<HotelRoomTypeCustNumRequestDto> roomTypeCustNums,
+    @Default(<Object?>[]) List<Object?> couponsCounts,
+  }) = _HotelRoomExtraPersonRequestDto;
+
+  factory HotelRoomExtraPersonRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$HotelRoomExtraPersonRequestDtoFromJson(json);
+}
+
+@freezed
+abstract class HotelRoomExtraPersonResultDto
+    with _$HotelRoomExtraPersonResultDto {
+  const factory HotelRoomExtraPersonResultDto({
+    HotelPriceElementDto? priceElement,
+  }) = _HotelRoomExtraPersonResultDto;
+
+  factory HotelRoomExtraPersonResultDto.fromJson(Map<String, dynamic> json) =>
+      _$HotelRoomExtraPersonResultDtoFromJson(json);
+}
+
+@freezed
+abstract class HotelPriceElementDto with _$HotelPriceElementDto {
+  const factory HotelPriceElementDto({
+    num? price,
+    num? originalPrice,
+    @Default(<HotelRoomPriceElementDto>[])
+    List<HotelRoomPriceElementDto> roomPriceElements,
+  }) = _HotelPriceElementDto;
+
+  factory HotelPriceElementDto.fromJson(Map<String, dynamic> json) =>
+      _$HotelPriceElementDtoFromJson(json);
+}
+
+@freezed
+abstract class HotelRoomPriceElementDto with _$HotelRoomPriceElementDto {
+  const factory HotelRoomPriceElementDto({
+    Object? roomTypeId,
+    int? freeUserPrice,
+    String? priceTip,
+  }) = _HotelRoomPriceElementDto;
+
+  factory HotelRoomPriceElementDto.fromJson(Map<String, dynamic> json) =>
+      _$HotelRoomPriceElementDtoFromJson(json);
+}
+
 List<String> hotelStringListFromJson(Object? raw) {
   if (raw == null) {
     return const <String>[];

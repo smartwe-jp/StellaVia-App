@@ -102,6 +102,107 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
       priceCalendarByDate: priceCalendar.pricesByDate,
     );
   }
+
+  @override
+  Future<HotelAssignOccupancyResult> assignOccupancy({
+    required String hotelId,
+    required HotelSearchCriteria criteria,
+    required List<HotelSelectedRoom> selectedRooms,
+    required String languageCode,
+  }) async {
+    final result = await _remote.assignOccupancy(
+      HotelAssignOccupancyRequestDto(
+        lang: languageCode,
+        hotelId: hotelId,
+        checkIn: _wireDateFormat.format(criteria.checkInDate),
+        checkOut: _wireDateFormat.format(criteria.checkOutDate),
+        occupancy: criteria.occupancy,
+        roomTypeRoomNums: selectedRooms
+            .where((selection) => selection.quantity > 0)
+            .map(
+              (selection) => HotelRoomTypeRoomNumDto(
+                roomTypeId: selection.room.id,
+                roomNumber: selection.quantity,
+              ),
+            )
+            .toList(growable: false),
+      ),
+    );
+    return _mapAssignOccupancyResult(result);
+  }
+
+  @override
+  Future<HotelBookingPreparation> fetchBookingPreparation({
+    required HotelBookingConfirmSeed seed,
+    required String languageCode,
+  }) async {
+    final checkIn = _wireDateFormat.format(seed.criteria.checkInDate);
+    final checkOut = _wireDateFormat.format(seed.criteria.checkOutDate);
+    final pageTextFutures = <Future<Map<String, String>>>[
+      for (final pageCode in const <String>[
+        'APP011',
+        'APP003',
+        'APP004',
+        'APP012',
+      ])
+        _remote
+            .fetchPageText(languageCode: languageCode, pageCode: pageCode)
+            .catchError((_) => const <String, String>{}),
+    ];
+    final countryCodesFuture = _remote
+        .fetchCountryCodeList(languageCode: languageCode)
+        .catchError((_) => const <String, String>{});
+    final quoteFuture = _remote
+        .fetchRoomExtraPerson(
+          HotelRoomExtraPersonRequestDto(
+            hotelId: seed.detail.id,
+            checkIn: checkIn,
+            checkOut: checkOut,
+            lang: languageCode,
+            roomTypeCustNums: seed.selectedRooms
+                .map(
+                  (selection) => HotelRoomTypeCustNumRequestDto(
+                    roomTypeId: selection.room.id,
+                    occupancy:
+                        (selection.room.occupancy ?? seed.criteria.occupancy)
+                            .toString(),
+                  ),
+                )
+                .toList(growable: false),
+          ),
+        )
+        .catchError((_) => const HotelRoomExtraPersonResultDto());
+    final couponsFuture = _remote
+        .fetchOrderCoupons(languageCode: languageCode, hotelId: seed.detail.id)
+        .catchError((_) => const <String, dynamic>{});
+    final contactsFuture = _remote
+        .fetchMemberContacts(languageCode: languageCode)
+        .catchError((_) => const <Map<String, dynamic>>[]);
+    final cardsFuture = _remote.fetchRegisteredCards().catchError(
+      (_) => const <Map<String, dynamic>>[],
+    );
+
+    final pageTextMaps = await Future.wait(pageTextFutures);
+    final pageTexts = <String, String>{};
+    for (final pageText in pageTextMaps) {
+      pageTexts.addAll(pageText);
+    }
+    final countryCodes = await countryCodesFuture;
+    final quote = await quoteFuture;
+    final coupons = await couponsFuture;
+    final contacts = await contactsFuture;
+    final cards = await cardsFuture;
+
+    return HotelBookingPreparation(
+      pageTexts: Map<String, String>.unmodifiable(pageTexts),
+      countryCodes: _mapCountryCodes(countryCodes),
+      couponsAvailableCount: _listCount(coupons['availableList']),
+      contactsCount: contacts.length,
+      registeredCardCount: cards.length,
+      quotedPrice: quote.priceElement?.price,
+      originalPrice: quote.priceElement?.originalPrice,
+    );
+  }
 }
 
 String _formatBuildingName(HotelBuildingCodeDto dto, String languageCode) {
@@ -219,6 +320,44 @@ HotelRoomBed _mapRoomBed(HotelRoomBedDto dto) {
     quantity: dto.quantity ?? dto.num ?? dto.count,
     width: _stringOrEmpty(dto.width),
   );
+}
+
+HotelAssignOccupancyResult _mapAssignOccupancyResult(
+  HotelAssignOccupancyResultDto dto,
+) {
+  return HotelAssignOccupancyResult(
+    price: dto.price,
+    message: dto.message?.trim() ?? '',
+    roomTypeCustNums: dto.roomTypeCustNums
+        .map(
+          (item) => HotelRoomOccupancyAssignment(
+            roomTypeId: _stringOrEmpty(item.roomTypeId),
+            occupancy: item.occupancy ?? 0,
+          ),
+        )
+        .where((item) => item.roomTypeId.isNotEmpty)
+        .toList(growable: false),
+  );
+}
+
+List<HotelCountryCode> _mapCountryCodes(Map<String, String> rows) {
+  final values = rows.entries
+      .map((entry) {
+        final label = entry.key.trim();
+        final code = entry.value.trim();
+        return HotelCountryCode(code: code, name: label);
+      })
+      .where((item) => item.code.isNotEmpty && item.name.isNotEmpty)
+      .toList();
+  values.sort((a, b) => a.code.compareTo(b.code));
+  return values;
+}
+
+int _listCount(Object? raw) {
+  if (raw is List) {
+    return raw.length;
+  }
+  return 0;
 }
 
 List<String> _mapFacilities(HotelDetailDto dto) {

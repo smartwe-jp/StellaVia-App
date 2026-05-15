@@ -1249,10 +1249,114 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelDetailSelectRoomFirst => '客室を選択してください';
 
   @override
+  String get hotelAssignOccupancyFailed =>
+      '客室数を更新できませんでした。しばらくしてからもう一度お試しください。';
+
+  @override
   String get hotelDetailBookingComingSoon => '予約フローは後で接続します';
 
   @override
   String get hotelCurrencyCode => 'JPY';
+
+  @override
+  String get hotelBookingConfirmTitle => '予約確認';
+
+  @override
+  String get hotelBookingCheckInDate => 'チェックイン日';
+
+  @override
+  String get hotelBookingCheckOutDate => 'チェックアウト日';
+
+  @override
+  String get hotelBookingOfficialBooking => 'アパートメントホテル · 客室予約';
+
+  @override
+  String get hotelBookingSelectedRooms => '選択した客室：';
+
+  @override
+  String get hotelBookingEditContent => '予約内容を変更';
+
+  @override
+  String get hotelBookingCouponOff => 'クーポン利用可';
+
+  @override
+  String get hotelBookingCoupons => 'クーポン';
+
+  @override
+  String hotelBookingCouponsAvailable(int count) {
+    return '$count件利用可';
+  }
+
+  @override
+  String get hotelBookingNoCoupons => '利用できません';
+
+  @override
+  String get hotelBookingPaymentTitle => 'お支払い方法を選択';
+
+  @override
+  String get hotelBookingCreditCardPay => 'クレジットカード決済';
+
+  @override
+  String hotelBookingRegisteredCards(int count) {
+    return '登録済みカード $count件';
+  }
+
+  @override
+  String get hotelBookingAddCreditCard => 'クレジットカードを追加';
+
+  @override
+  String get hotelBookingAlipay => 'Alipay';
+
+  @override
+  String get hotelBookingWechatPay => 'WechatPay';
+
+  @override
+  String get hotelBookingBookerInfoTitle => '予約者情報を入力';
+
+  @override
+  String get hotelBookingRoomGuestInfoTitle => '宿泊者情報を入力';
+
+  @override
+  String get hotelBookingGuestName => '宿泊者氏名';
+
+  @override
+  String get hotelBookingLastName => '姓';
+
+  @override
+  String get hotelBookingFirstName => '名';
+
+  @override
+  String get hotelBookingCountryRegion => '国/地域';
+
+  @override
+  String get hotelBookingEmail => 'メールアドレス';
+
+  @override
+  String get hotelBookingPhoneNumber => '携帯電話番号';
+
+  @override
+  String get hotelBookingAdults => '大人人数';
+
+  @override
+  String get hotelBookingChildren => '子供人数';
+
+  @override
+  String get hotelBookingInvoice => '領収書';
+
+  @override
+  String get hotelBookingUseGuestName => '予約者名を使用';
+
+  @override
+  String get hotelBookingInvoiceTitle => '宛名';
+
+  @override
+  String get hotelBookingMessageTitle => '予約メッセージ';
+
+  @override
+  String get hotelBookingMessageHint => '特別なご要望は保証できませんが、できる限り対応いたします';
+
+  @override
+  String get hotelBookingConfirmAction => '予約を確認';
 
   @override
   String get hotelDetailNoRooms => '予約可能な客室はありません';

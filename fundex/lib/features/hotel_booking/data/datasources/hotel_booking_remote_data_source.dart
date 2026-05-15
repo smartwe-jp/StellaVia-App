@@ -17,6 +17,34 @@ abstract class HotelBookingRemoteDataSource {
   Future<List<HotelBuildingCodeDto>> fetchBuildingCodes({
     required String languageCode,
   });
+
+  Future<HotelAssignOccupancyResultDto> assignOccupancy(
+    HotelAssignOccupancyRequestDto request,
+  );
+
+  Future<Map<String, String>> fetchPageText({
+    required String languageCode,
+    required String pageCode,
+  });
+
+  Future<Map<String, String>> fetchCountryCodeList({
+    required String languageCode,
+  });
+
+  Future<HotelRoomExtraPersonResultDto> fetchRoomExtraPerson(
+    HotelRoomExtraPersonRequestDto request,
+  );
+
+  Future<Map<String, dynamic>> fetchOrderCoupons({
+    required String languageCode,
+    required String hotelId,
+  });
+
+  Future<List<Map<String, dynamic>>> fetchMemberContacts({
+    required String languageCode,
+  });
+
+  Future<List<Map<String, dynamic>>> fetchRegisteredCards();
 }
 
 class HotelBookingRemoteDataSourceImpl implements HotelBookingRemoteDataSource {
@@ -61,5 +89,54 @@ class HotelBookingRemoteDataSourceImpl implements HotelBookingRemoteDataSource {
     required String languageCode,
   }) {
     return _client.fetchBuildingCodes(lang: languageCode);
+  }
+
+  @override
+  Future<HotelAssignOccupancyResultDto> assignOccupancy(
+    HotelAssignOccupancyRequestDto request,
+  ) {
+    return _client.assignOccupancy(request);
+  }
+
+  @override
+  Future<Map<String, String>> fetchPageText({
+    required String languageCode,
+    required String pageCode,
+  }) {
+    return _client.fetchPageText(lang: languageCode, pageCode: pageCode);
+  }
+
+  @override
+  Future<Map<String, String>> fetchCountryCodeList({
+    required String languageCode,
+  }) {
+    return _client.fetchCountryCodeList(lang: languageCode);
+  }
+
+  @override
+  Future<HotelRoomExtraPersonResultDto> fetchRoomExtraPerson(
+    HotelRoomExtraPersonRequestDto request,
+  ) {
+    return _client.fetchRoomExtraPerson(request);
+  }
+
+  @override
+  Future<Map<String, dynamic>> fetchOrderCoupons({
+    required String languageCode,
+    required String hotelId,
+  }) {
+    return _client.fetchOrderCoupons(lang: languageCode, hotelId: hotelId);
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> fetchMemberContacts({
+    required String languageCode,
+  }) {
+    return _client.fetchMemberContacts(lang: languageCode);
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> fetchRegisteredCards() {
+    return _client.fetchRegisteredCards();
   }
 }
