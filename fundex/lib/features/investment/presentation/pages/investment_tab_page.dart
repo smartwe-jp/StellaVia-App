@@ -406,19 +406,22 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
             Container(
               width: double.infinity,
               color: colors.surface,
-              padding: const EdgeInsets.fromLTRB(20, 14, 20, 12),
+              padding: const EdgeInsets.fromLTRB(0, 14, 0, 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    l10n.fundListTitle,
-                    style: appText.pageTitle.copyWith(
-                      color: colors.textPrimary,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: Text(
+                      l10n.fundListTitle,
+                      style: appText.pageTitle.copyWith(
+                        color: colors.textPrimary,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
                   AppFilterBar<_FundListFilter>(
-                    padding: EdgeInsets.zero,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     value: _effectiveSelectedFilter,
                     onChanged: (_FundListFilter value) {
                       setState(() {
