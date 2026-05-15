@@ -1061,7 +1061,9 @@ class _CardStatCell extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text(label, style: appText.meta.copyWith(color: colors.textTertiary)),
+        Text(label, 
+        maxLines: 1,
+        style: appText.meta.copyWith(color: colors.textTertiary)),
         const SizedBox(height: 2),
         Text(
           value,

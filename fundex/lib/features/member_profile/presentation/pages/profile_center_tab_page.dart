@@ -1088,7 +1088,14 @@ class _SectionStateCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface,
         borderRadius: BorderRadius.circular(UiTokens.radius16),
-        border: Border.all(color: colors.border),
+        //border: Border.all(color: colors.border),
+        boxShadow: [
+          BoxShadow(
+            color: colors.scrim.withValues(alpha: 0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
