@@ -18,7 +18,7 @@
         },
         {
           "question": "What is the flow for StellaVia Co., Ltd.'s real estate crowdfunding?",
-          "answer": "(1) Register as a member on the website.\n(2) Complete identity verification and screening procedures.\n(3) Apply for funds that are currently accepting applications.\n(4) After making a deposit to the Tanimachikun system account, the investment operation starts.\n(5) Receive distributions."
+          "answer": "(1) Register as a member on the website.\n(2) Complete identity verification and screening procedures.\n(3) Apply for funds that are currently accepting applications.\n(4) After making a deposit to the Stella Asset system account, the investment operation starts.\n(5) Receive distributions."
         }
       ]
     },
@@ -154,7 +154,7 @@
         },
         {
           "question": "How are distributions and redemption amounts paid?",
-          "answer": "If you wish to withdraw funds, please complete the withdrawal procedure. First, use the withdrawal request function in Investment History List > Investment Distribution Status List at the top of My Page.\nAfter applying for withdrawal, the funds will be deposited into the Tanimachikun first-class account. To withdraw to a financial institution, please perform the withdrawal operation from the Tanimachikun app."
+          "answer": "If you wish to withdraw funds, please complete the withdrawal procedure. First, use the withdrawal request function in Investment History List > Investment Distribution Status List at the top of My Page.\nAfter applying for withdrawal, the funds will be deposited into the Stella Asset first-class account. To withdraw to a financial institution, please perform the withdrawal operation from the Stella Asset app."
         },
         {
           "question": "What is a property management report?",
