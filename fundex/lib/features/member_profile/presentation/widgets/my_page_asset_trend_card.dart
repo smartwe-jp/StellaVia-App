@@ -72,7 +72,7 @@ class MyPageAssetTrendCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface,
         borderRadius: BorderRadius.circular(UiTokens.radius16),
-        border: Border.all(color: colors.border),
+        //border: Border.all(color: colors.border),
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: colors.scrim.withValues(alpha: 0.04),

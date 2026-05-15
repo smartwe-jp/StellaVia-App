@@ -1159,6 +1159,7 @@
   "fundDetailSchemeExpenseTotalLabel": "支出合计 ②",
   "fundDetailSchemeDistributedCapitalFormula": "收入① − 支出②",
   "fundDetailSchemeDistributedCapitalTitle": "可分配原资",
+  "fundDetailSchemeCurrencyUnit": "日元",
   "myPageTitle": "我的页面",
   "myPageTotalAssetsLabel": "总资产",
   "myPageWelcomeBack": "欢迎回来",

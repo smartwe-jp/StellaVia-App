@@ -406,19 +406,22 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
             Container(
               width: double.infinity,
               color: colors.surface,
-              padding: const EdgeInsets.fromLTRB(20, 14, 20, 12),
+              padding: const EdgeInsets.fromLTRB(0, 14, 0, 12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    l10n.fundListTitle,
-                    style: appText.pageTitle.copyWith(
-                      color: colors.textPrimary,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: Text(
+                      l10n.fundListTitle,
+                      style: appText.pageTitle.copyWith(
+                        color: colors.textPrimary,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 10),
                   AppFilterBar<_FundListFilter>(
-                    padding: EdgeInsets.zero,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     value: _effectiveSelectedFilter,
                     onChanged: (_FundListFilter value) {
                       setState(() {
@@ -502,9 +505,9 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                     onRefresh: _refreshProjects,
                     child: ListView.separated(
                       controller: _scrollController,
-                      padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
+                      padding: const EdgeInsets.fromLTRB(16, 14, 16, 20),
                       itemCount: visibleProjects.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 16),
+                      separatorBuilder: (_, __) => const SizedBox(height: 10),
                       itemBuilder: (BuildContext context, int index) {
                         final project = visibleProjects[index];
                         final projectId = project.id.trim();
@@ -663,7 +666,7 @@ class _FundProjectCard extends StatelessWidget {
           color: colors.surface,
           shape: RoundedRectangleBorder(
             borderRadius: cardRadius,
-            side: BorderSide(color: colors.border),
+            //side: BorderSide(color: colors.border),
           ),
           clipBehavior: Clip.antiAlias,
           child: InkWell(
@@ -1061,15 +1064,14 @@ class _CardStatCell extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text(label, style: appText.meta.copyWith(color: colors.textTertiary)),
+        Text(label,style: appText.meta.copyWith(color: colors.textTertiary)),
         const SizedBox(height: 2),
         Text(
           value,
+          maxLines: 1,
           style:
-              (useNumericValueStyle
-                      ? appText.sectionTitle
-                      : appText.sectionTitle)
-                  .copyWith(color: valueColor ?? colors.textPrimary),
+              appText.body
+                  .copyWith(color: valueColor ?? colors.textPrimary, fontWeight: FontWeight.w600),
         ),
       ],
     );

@@ -2940,6 +2940,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundDetailSchemeDistributedCapitalTitle => 'Distributable capital';
 
   @override
+  String get fundDetailSchemeCurrencyUnit => ' JPY';
+
+  @override
   String get myPageTitle => 'My Page';
 
   @override

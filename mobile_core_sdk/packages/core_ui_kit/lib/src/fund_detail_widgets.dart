@@ -866,11 +866,23 @@ class FundDetailDisclosureList extends StatelessWidget {
     if (items.isEmpty) {
       return const SizedBox.shrink();
     }
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
 
     return Column(
       children: <Widget>[
         for (var index = 0; index < items.length; index++) ...<Widget>[
-          _DisclosureTile(item: items[index]),
+          FundDetailDisclosureCard(
+            title: items[index].title,
+            child: Text(
+              items[index].body,
+              style: appText.bodyMuted.copyWith(
+                color: colors.textSecondary,
+                height: 1.7,
+              ),
+            ),
+          ),
           if (index < items.length - 1) const SizedBox(height: 8),
         ],
       ],
@@ -1190,10 +1202,15 @@ class _DetailGlassIconButton extends StatelessWidget {
   }
 }
 
-class _DisclosureTile extends StatelessWidget {
-  const _DisclosureTile({required this.item});
+class FundDetailDisclosureCard extends StatelessWidget {
+  const FundDetailDisclosureCard({
+    super.key,
+    required this.title,
+    required this.child,
+  });
 
-  final FundDetailDisclosureItemData item;
+  final String title;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -1223,16 +1240,8 @@ class _DisclosureTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(UiTokens.radius16),
               side: BorderSide(color: colors.border),
             ),
-            title: Text(item.title, style: appText.bodyStrong),
-            children: <Widget>[
-              Text(
-                item.body,
-                style: appText.bodyMuted.copyWith(
-                  color: colors.textSecondary,
-                  height: 1.7,
-                ),
-              ),
-            ],
+            title: Text(title, style: appText.bodyStrong),
+            children: <Widget>[child],
           ),
         ),
       ),

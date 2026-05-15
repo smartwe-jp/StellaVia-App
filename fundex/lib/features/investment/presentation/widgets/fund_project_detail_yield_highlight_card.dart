@@ -57,14 +57,14 @@ class FundProjectDetailYieldHighlightCard extends StatelessWidget {
           const SizedBox(height: 10),
           _YieldValueText(value: value),
           const SizedBox(height: 6),
-          Text(
-            disclaimer,
-            textAlign: TextAlign.center,
-            style: appText.meta.copyWith(
-              color: colors.textTertiary,
-              height: 1.4,
-            ),
-          ),
+          // Text(
+          //   disclaimer,
+          //   textAlign: TextAlign.center,
+          //   style: appText.meta.copyWith(
+          //     color: colors.textTertiary,
+          //     height: 1.4,
+          //   ),
+          // ),
         ],
       ),
     );

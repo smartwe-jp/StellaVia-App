@@ -1159,6 +1159,7 @@
   "fundDetailSchemeExpenseTotalLabel": "Expense total ②",
   "fundDetailSchemeDistributedCapitalFormula": "Income ① − Expense ②",
   "fundDetailSchemeDistributedCapitalTitle": "Distributable capital",
+  "fundDetailSchemeCurrencyUnit": " JPY",
   "myPageTitle": "My Page",
   "myPageTotalAssetsLabel": "Total assets",
   "myPageWelcomeBack": "Welcome back",

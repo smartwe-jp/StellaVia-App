@@ -196,7 +196,7 @@ class _DiscussionBoardTabPageState
     if (normalized.isEmpty) {
       return;
     }
-    context.go('/funds/$normalized');
+    context.push('/funds/$normalized');
   }
 
   Future<void> _showComposerFundPicker() async {
@@ -358,7 +358,7 @@ class _DiscussionBoardTabPageState
                 //   ),
                 // ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
                   child: isAuthenticated
                       ? KizunarkComposerCard(
                           leading: GestureDetector(
@@ -396,7 +396,7 @@ class _DiscussionBoardTabPageState
                         ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
                   child: _buildFeedSection(
                     l10n: l10n,
                     state: state,
