@@ -196,7 +196,7 @@ class _DiscussionBoardTabPageState
     if (normalized.isEmpty) {
       return;
     }
-    context.go('/funds/$normalized');
+    context.push('/funds/$normalized');
   }
 
   Future<void> _showComposerFundPicker() async {
