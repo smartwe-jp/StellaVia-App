@@ -146,7 +146,7 @@
         },
         {
           "question": "How can I check distributions and redemption amounts?",
-          "answer": "After logging in to My Page, you can check them from the Investment History List > Investment Distribution Status List screen."
+          "answer": "After logging in to My Page, you can check them from the 'Total Distributions' screen."
         },
         {
           "question": "When are distributions and redemption payments made to investors?",
@@ -154,7 +154,7 @@
         },
         {
           "question": "How are distributions and redemption amounts paid?",
-          "answer": "If you wish to withdraw funds, please complete the withdrawal procedure. First, use the withdrawal request function in Investment History List > Investment Distribution Status List at the top of My Page.\nAfter applying for withdrawal, the funds will be deposited into the Stella Asset first-class account. To withdraw to a financial institution, please perform the withdrawal operation from the Stella Asset app."
+          "answer": "If you wish to withdraw funds, please complete the withdrawal procedure. First, use the withdrawal request function in 'Withdrawal' at the top of My Page.\nAfter applying for withdrawal, the funds will be deposited into the Stella Asset first-class account. To withdraw to a financial institution, please perform the withdrawal operation from the Stella Asset app."
         },
         {
           "question": "What is a property management report?",
