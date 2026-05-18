@@ -850,8 +850,8 @@ String _resolveMyPageDisplayName({
 
   if (languageCode == 'en') {
     final fullName = <String>[
-      profile?.familyNameEn.trim() ?? '',
       profile?.givenNameEn.trim() ?? '',
+      profile?.familyNameEn.trim() ?? '',
     ].where((String part) => part.isNotEmpty).join(' ');
     if (fullName.isNotEmpty) {
       return switch (profile?.sex) {

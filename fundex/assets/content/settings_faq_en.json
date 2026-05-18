@@ -17,8 +17,8 @@
           "answer": "Advantages: 1. You can start with a small amount. 2. Higher returns may be expected. 3. You can invest without much operational effort.\nDisadvantages: 1. Liquidity and convertibility to cash are limited. 2. There is a risk of loss of principal. 3. There are no tax-saving benefits."
         },
         {
-          "question": "What is the flow for StellaVia Co., Ltd.'s real estate crowdfunding?",
-          "answer": "(1) Register as a member on the website.\n(2) Complete identity verification and screening procedures.\n(3) Apply for funds that are currently accepting applications.\n(4) After making a deposit to the Tanimachikun system account, the investment operation starts.\n(5) Receive distributions."
+          "question": "What is the flow for Stella Asset Co., Ltd.'s real estate crowdfunding?",
+          "answer": "(1) Register as a member on the website.\n(2) Complete identity verification and screening procedures.\n(3) Apply for funds that are currently accepting applications.\n(4) After making a deposit to the Stella Asset system account, the investment operation starts.\n(5) Receive distributions."
         }
       ]
     },
@@ -54,10 +54,6 @@
           "answer": "Under tax law, when the profits distributed to a customer exceed a certain amount, the operator is required to prepare and submit payment records. The payment records must include the customer's Individual Number (My Number), or the corporate number for corporate customers. For this reason, customers who have a My Number are asked to register it."
         },
         {
-          "question": "What should I submit for My Number, and how?",
-          "answer": "Customers who need to submit it will see a message at the top of My Page stating, \"My Number image has not been registered. Please register it here.\" Please click it and submit the information according to the on-screen instructions."
-        },
-        {
           "question": "I made a mistake in the information entered during member registration.",
           "answer": "If the information you entered differs from the identity verification documents you submitted, we will send you an email requesting re-registration. We apologize for the inconvenience, but please register again.\nFor changes to name, date of birth, address, or withdrawal account, please contact us from the Inquiry screen."
         }
@@ -73,10 +69,6 @@
         {
           "question": "I cannot log in to My Page.",
           "answer": "Please check that your email address and password have been entered correctly.\nWhen doing so, please note the following.\n・Are you entering the information using half-width characters?\n・Are uppercase and lowercase letters entered correctly?\n・Is Caps Lock turned off in your PC settings?\n・Are there any extra characters or spaces?"
-        },
-        {
-          "question": "I forgot my ID or password.",
-          "answer": "Your login ID is the email address you registered. If you have forgotten your password, please request a reissue from \"Forgot your password?\" at the bottom of the login screen."
         }
       ]
     },
@@ -113,7 +105,7 @@
         },
         {
           "question": "How can I confirm that my deposit has been received?",
-          "answer": "After logging in to My Page, you can confirm the deposit from the Application History List screen on the top page. Please note that it may take about 3 business days after the transfer for the deposit to be reflected."
+          "answer": "After logging in to My Page, you can confirm the deposit from the Application History List screen on it. Please note that it may take about 3 business days after the transfer for the deposit to be reflected."
         },
         {
           "question": "Can someone other than the member make a deposit?",
@@ -146,7 +138,7 @@
         },
         {
           "question": "How can I check distributions and redemption amounts?",
-          "answer": "After logging in to My Page, you can check them from the Investment History List > Investment Distribution Status List screen."
+          "answer": "After logging in to My Page, you can check them from the 'Total Distributions' screen."
         },
         {
           "question": "When are distributions and redemption payments made to investors?",
@@ -154,11 +146,11 @@
         },
         {
           "question": "How are distributions and redemption amounts paid?",
-          "answer": "If you wish to withdraw funds, please complete the withdrawal procedure. First, use the withdrawal request function in Investment History List > Investment Distribution Status List at the top of My Page.\nAfter applying for withdrawal, the funds will be deposited into the Tanimachikun first-class account. To withdraw to a financial institution, please perform the withdrawal operation from the Tanimachikun app."
+          "answer": "If you wish to withdraw funds, please complete the withdrawal procedure. First, use the withdrawal request function in 'Withdrawal' at the top of My Page.\nAfter applying for withdrawal, the funds will be deposited into the Stella Asset first-class account. To withdraw to a financial institution, please perform the withdrawal operation from the Stella Asset app."
         },
         {
           "question": "What is a property management report?",
-          "answer": "A property management report is a report provided to customers by the operator, based on the Real Estate Specified Joint Enterprise Act, on the management status of the relevant assets at intervals not exceeding one year. After logging in to My Page, you can check it from the Delivered Documents List screen."
+          "answer": "A property management report is a report provided to customers by the operator, based on the Real Estate Specified Joint Enterprise Act, on the management status of the relevant assets at intervals not exceeding one year. After logging in to My Page, you can check it from the Contract Documents List screen."
         }
       ]
     },
@@ -183,7 +175,7 @@
         },
         {
           "question": "Are there documents I can use for filing a tax return?",
-          "answer": "The payment record for tax return filing can be downloaded from the Delivered Documents List page after logging in to My Page.\nIt reports the total amount of distributions finalized between January 1 and December 31 each year, and is issued around January to early February of the following year."
+          "answer": "The payment record for tax return filing can be downloaded from the Contract Documents List page after logging in to My Page.\nIt reports the total amount of distributions finalized between January 1 and December 31 each year, and is issued around January to early February of the following year."
         }
       ]
     },
