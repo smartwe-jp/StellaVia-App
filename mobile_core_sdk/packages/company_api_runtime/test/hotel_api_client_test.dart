@@ -82,7 +82,7 @@ void main() {
         );
 
         return _jsonOk(
-          '{"code":200,"msg":"success","data":{"count":1,"showStatus":"2","showStatusStr":"limited","hotels":[{"hotelId":"h1","hotelName":"Tokyo Business Stay","address":"Shinagawa","image":"https://cdn.example.com/h1.jpg","basePrice":18000,"bookingType":"2","bookingStatus":true,"remainRoomNum":"残り4部屋以上","lat":35.628,"lng":139.738,"tags":["station","business"]}]}}',
+          '{"code":200,"msg":"success","data":{"count":1,"showStatus":"2","showStatusStr":"limited","hotels":[{"hotelId":"h1","hotelName":"Tokyo Business Stay","address":"Shinagawa","image":"https://cdn.example.com/h1.jpg","basePrice":18000,"basePrice2":12000,"discountName2":"T1会員割引","discount2":59,"bookingType":"2","bookingStatus":true,"remainRoomNum":"残り4部屋以上","lat":35.628,"lng":139.738,"tags":["station","business"]}]}}',
         );
       });
       final api = HotelApiClient(client);
@@ -110,6 +110,9 @@ void main() {
       expect(result.hotels.first.id, equals('h1'));
       expect(result.hotels.first.hotelName, equals('Tokyo Business Stay'));
       expect(result.hotels.first.basePrice, equals(18000));
+      expect(result.hotels.first.basePrice2, equals(12000));
+      expect(result.hotels.first.discountName2, equals('T1会員割引'));
+      expect(result.hotels.first.discount2, equals(59));
       expect(result.hotels.first.bookingType, equals('2'));
       expect(result.hotels.first.remainRoomNum, equals('残り4部屋以上'));
       expect(result.hotels.first.tags, equals(<String>['station', 'business']));

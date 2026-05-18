@@ -1301,6 +1301,27 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get hotelRoomBedUnitDefault => 'bed(s)';
+
+  @override
+  String get hotelRoomBedUnitFuton => 'futon(s)';
+
+  @override
+  String hotelRoomBedSummary(Object name, int quantity, Object unit) {
+    return '$name: $quantity $unit';
+  }
+
+  @override
+  String hotelRoomBedSummaryWithWidth(Object summary, Object width) {
+    return '$summary ($width)';
+  }
+
+  @override
+  String hotelRoomBedWidth(Object width) {
+    return 'width ${width}cm';
+  }
+
+  @override
   String get hotelDetailPayableAmount => 'Amount due';
 
   @override
@@ -1467,6 +1488,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hotelDetailContact => 'Contact phone';
 
   @override
+  String get hotelDetailShowMoreAction => 'Show more';
+
+  @override
   String get hotelDetailAddress => 'Location';
 
   @override
@@ -1477,6 +1501,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String hotelDetailDiscount(Object discount) {
     return '$discount% OFF';
+  }
+
+  @override
+  String hotelDiscountBadgeValue(Object discount) {
+    return '$discount%OFF';
   }
 
   @override

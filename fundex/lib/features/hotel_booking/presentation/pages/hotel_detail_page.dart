@@ -34,6 +34,7 @@ class HotelDetailPage extends ConsumerStatefulWidget {
 
 class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
   final Map<String, int> _roomQuantities = <String, int>{};
+  final Set<String> _expandedInfoSectionIds = <String>{};
   bool _isAssigningOccupancy = false;
   HotelAssignOccupancyResult? _assignOccupancyResult;
 
@@ -69,9 +70,11 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
               criteria: widget.initialCriteria,
               presenter: presenter,
               roomQuantities: _roomQuantities,
+              expandedInfoSectionIds: _expandedInfoSectionIds,
               assignedPrice: _assignOccupancyResult?.price,
               isAssigningOccupancy: _isAssigningOccupancy,
               onBack: _handleBack,
+              onInfoSectionExpandedChanged: _setInfoSectionExpanded,
               onRoomQuantityChanged: (change) =>
                   _setRoomQuantity(detail, change.key, change.value),
               onBookNow: () => _handleBookNow(detail),
@@ -88,6 +91,16 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
       return;
     }
     context.go('/hotel-booking');
+  }
+
+  void _setInfoSectionExpanded(String sectionId, bool expanded) {
+    setState(() {
+      if (expanded) {
+        _expandedInfoSectionIds.add(sectionId);
+      } else {
+        _expandedInfoSectionIds.remove(sectionId);
+      }
+    });
   }
 
   Future<void> _setRoomQuantity(
@@ -201,9 +214,11 @@ class _HotelDetailContent extends StatelessWidget {
     required this.criteria,
     required this.presenter,
     required this.roomQuantities,
+    required this.expandedInfoSectionIds,
     required this.assignedPrice,
     required this.isAssigningOccupancy,
     required this.onBack,
+    required this.onInfoSectionExpandedChanged,
     required this.onRoomQuantityChanged,
     required this.onBookNow,
   });
@@ -212,9 +227,12 @@ class _HotelDetailContent extends StatelessWidget {
   final HotelSearchCriteria criteria;
   final HotelBookingPresenter presenter;
   final Map<String, int> roomQuantities;
+  final Set<String> expandedInfoSectionIds;
   final num? assignedPrice;
   final bool isAssigningOccupancy;
   final VoidCallback onBack;
+  final void Function(String sectionId, bool expanded)
+  onInfoSectionExpandedChanged;
   final ValueChanged<_RoomQuantityChange> onRoomQuantityChanged;
   final VoidCallback onBookNow;
 
@@ -342,26 +360,41 @@ class _HotelDetailContent extends StatelessWidget {
 
   List<Widget> _detailInfoSections(BuildContext context) {
     final sections = <Widget>[];
-    void addTextSection(String title, String body, IconData icon) {
+    void addTextSection(
+      String sectionId,
+      String title,
+      String body,
+      IconData icon,
+    ) {
       if (body.trim().isEmpty) {
         return;
       }
       sections.add(
-        HotelDetailInfoSection(title: title, body: body, icon: icon),
+        HotelDetailInfoSection(
+          title: title,
+          body: body,
+          icon: icon,
+          expanded: expandedInfoSectionIds.contains(sectionId),
+          onExpandedChanged: (expanded) =>
+              onInfoSectionExpandedChanged(sectionId, expanded),
+        ),
       );
     }
 
     addTextSection(
+      'checkInGuide',
       context.l10n.hotelDetailCheckInGuide,
       detail.checkInMessage,
       Icons.fact_check_outlined,
     );
     addTextSection(
+      'address',
       context.l10n.hotelDetailAddress,
       detail.address,
       Icons.place_outlined,
     );
     addTextSection(
+      'checkInTime',
       context.l10n.hotelDetailCheckInTime,
       _checkInOutTimeText(context),
       Icons.schedule_outlined,
@@ -375,31 +408,37 @@ class _HotelDetailContent extends StatelessWidget {
       );
     }
     addTextSection(
+      'description',
       context.l10n.hotelDetailDescription,
       detail.detailText.isNotEmpty ? detail.detailText : detail.description,
       Icons.notes_outlined,
     );
     addTextSection(
+      'surrounding',
       context.l10n.hotelDetailSurrounding,
       detail.surroundingText,
       Icons.apartment_outlined,
     );
     addTextSection(
+      'travel',
       context.l10n.hotelDetailTravel,
       detail.travelText,
       Icons.route_outlined,
     );
     addTextSection(
+      'policy',
       context.l10n.hotelDetailPolicy,
       detail.ruleText,
       Icons.rule_outlined,
     );
     addTextSection(
+      'refundPolicy',
       context.l10n.hotelDetailRefundPolicy,
       detail.refundPolicyText,
       Icons.currency_exchange_outlined,
     );
     addTextSection(
+      'contact',
       context.l10n.hotelDetailContact,
       detail.telNo,
       Icons.call_outlined,

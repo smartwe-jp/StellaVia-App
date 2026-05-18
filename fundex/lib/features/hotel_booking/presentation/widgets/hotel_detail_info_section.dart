@@ -1,17 +1,23 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
+import 'hotel_expandable_text.dart';
+
 class HotelDetailInfoSection extends StatelessWidget {
   const HotelDetailInfoSection({
     super.key,
     required this.title,
     required this.body,
     this.icon,
+    this.expanded = false,
+    this.onExpandedChanged,
   });
 
   final String title;
   final String body;
   final IconData? icon;
+  final bool expanded;
+  final ValueChanged<bool>? onExpandedChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +55,10 @@ class HotelDetailInfoSection extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            Text(
-              normalizedBody,
+            HotelExpandableText(
+              text: normalizedBody,
+              expanded: expanded,
+              onExpandedChanged: onExpandedChanged,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: colors.textSecondary,
                 height: 1.55,

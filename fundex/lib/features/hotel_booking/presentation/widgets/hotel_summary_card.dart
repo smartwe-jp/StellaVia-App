@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
+import 'hotel_discount_badge.dart';
 import 'hotel_remaining_rooms_label.dart';
+import 'hotel_type_badge.dart';
 
 class HotelSummaryCard extends StatelessWidget {
   const HotelSummaryCard({
@@ -22,7 +24,10 @@ class HotelSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
     final price = presenter.price(hotel.lowestPrice);
-    final oldPrice = presenter.price(hotel.beforeDiscountPrice);
+    final shouldShowOldPrice = _shouldShowOldPrice;
+    final oldPrice = shouldShowOldPrice
+        ? presenter.price(hotel.beforeDiscountPrice)
+        : '';
     final location = _resolveLocation(context);
     final remainingRooms = hotel.remainingRooms;
 
@@ -47,12 +52,22 @@ class HotelSummaryCard extends StatelessWidget {
             SizedBox(
               height: 154,
               width: double.infinity,
-              child: AppRemoteImage(
-                imageUrl: hotel.imageUrl,
-                fit: BoxFit.cover,
-                errorWidget: const _HotelImagePlaceholder(
-                  icon: Icons.image_not_supported_outlined,
-                ),
+              child: Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  AppRemoteImage(
+                    imageUrl: hotel.imageUrl,
+                    fit: BoxFit.cover,
+                    errorWidget: const _HotelImagePlaceholder(
+                      icon: Icons.image_not_supported_outlined,
+                    ),
+                  ),
+                  Positioned(
+                    top: 12,
+                    left: 12,
+                    child: HotelTypeBadge(label: _resolveTypeLabel()),
+                  ),
+                ],
               ),
             ),
             Padding(
@@ -121,53 +136,69 @@ class HotelSummaryCard extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            if (oldPrice.isNotEmpty)
-                              Text(
-                                oldPrice,
-                                style: Theme.of(context).textTheme.bodySmall
-                                    ?.copyWith(
-                                      color: colors.textTertiary,
-                                      decoration: TextDecoration.lineThrough,
-                                    ),
-                              ),
+                            HotelDiscountBadge(
+                              name: hotel.discountName,
+                              discount: hotel.discount,
+                            ),
+                            if (hotel.discountName.isNotEmpty &&
+                                (hotel.discount ?? 0) > 0)
+                              const SizedBox(height: 8),
                             HotelRemainingRoomsLabel(
                               count: hotel.isBookable ? remainingRooms ?? 0 : 0,
                             ),
                           ],
                         ),
                       ),
-                      if (price.isNotEmpty)
-                        RichText(
-                          text: TextSpan(
-                            children: <InlineSpan>[
-                              TextSpan(
-                                text: price,
-                                style: Theme.of(context).textTheme.headlineSmall
-                                    ?.copyWith(
-                                      color: colors.brandPrimaryDark,
-                                      fontWeight: FontWeight.w900,
-                                    ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          if (oldPrice.isNotEmpty)
+                            Text(
+                              oldPrice,
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: colors.textTertiary,
+                                    decoration: TextDecoration.lineThrough,
+                                  ),
+                            ),
+                          if (price.isNotEmpty)
+                            RichText(
+                              text: TextSpan(
+                                children: <InlineSpan>[
+                                  TextSpan(
+                                    text: price,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall
+                                        ?.copyWith(
+                                          color: colors.brandPrimaryDark,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                  ),
+                                  TextSpan(
+                                    text: context.l10n.hotelPricePerNight,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium
+                                        ?.copyWith(
+                                          color: colors.brandPrimaryDark,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                  ),
+                                ],
                               ),
-                              TextSpan(
-                                text: context.l10n.hotelPricePerNight,
-                                style: Theme.of(context).textTheme.labelMedium
-                                    ?.copyWith(
-                                      color: colors.brandPrimaryDark,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        )
-                      else
-                        Text(
-                          context.l10n.hotelPriceAsk,
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(
-                                color: colors.brandPrimaryDark,
-                                fontWeight: FontWeight.w900,
-                              ),
-                        ),
+                            )
+                          else
+                            Text(
+                              context.l10n.hotelPriceAsk,
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(
+                                    color: colors.brandPrimaryDark,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                            ),
+                        ],
+                      ),
                     ],
                   ),
                 ],
@@ -198,11 +229,7 @@ class HotelSummaryCard extends StatelessWidget {
   }
 
   List<String> _resolveTags(BuildContext context) {
-    final tags = <String>[
-      if (hotel.buildingType.isNotEmpty) hotel.buildingType,
-      ...hotel.tags,
-      if (hotel.discountName.isNotEmpty) hotel.discountName,
-    ];
+    final tags = <String>[...hotel.tags];
     if (tags.isEmpty) {
       return <String>[
         context.l10n.hotelFilterAllTypes,
@@ -210,6 +237,22 @@ class HotelSummaryCard extends StatelessWidget {
       ];
     }
     return tags.take(3).toList(growable: false);
+  }
+
+  String _resolveTypeLabel() {
+    if (hotel.buildingType.isNotEmpty) {
+      return hotel.buildingType;
+    }
+    return hotel.bookingTypeLabel;
+  }
+
+  bool get _shouldShowOldPrice {
+    final current = hotel.lowestPrice;
+    final original = hotel.beforeDiscountPrice;
+    if (current == null || original == null) {
+      return false;
+    }
+    return original > current;
   }
 }
 

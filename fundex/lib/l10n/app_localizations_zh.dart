@@ -1221,6 +1221,27 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get hotelRoomBedUnitDefault => '张';
+
+  @override
+  String get hotelRoomBedUnitFuton => '张';
+
+  @override
+  String hotelRoomBedSummary(Object name, int quantity, Object unit) {
+    return '$name：$quantity$unit';
+  }
+
+  @override
+  String hotelRoomBedSummaryWithWidth(Object summary, Object width) {
+    return '$summary（$width）';
+  }
+
+  @override
+  String hotelRoomBedWidth(Object width) {
+    return '宽${width}cm';
+  }
+
+  @override
   String get hotelDetailPayableAmount => '应付金额';
 
   @override
@@ -1384,6 +1405,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelDetailContact => '联系电话';
 
   @override
+  String get hotelDetailShowMoreAction => '查看更多';
+
+  @override
   String get hotelDetailAddress => '位置';
 
   @override
@@ -1394,6 +1418,11 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String hotelDetailDiscount(Object discount) {
     return '$discount% OFF';
+  }
+
+  @override
+  String hotelDiscountBadgeValue(Object discount) {
+    return '$discount%OFF';
   }
 
   @override
@@ -5812,6 +5841,27 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   }
 
   @override
+  String get hotelRoomBedUnitDefault => '張';
+
+  @override
+  String get hotelRoomBedUnitFuton => '張';
+
+  @override
+  String hotelRoomBedSummary(Object name, int quantity, Object unit) {
+    return '$name：$quantity$unit';
+  }
+
+  @override
+  String hotelRoomBedSummaryWithWidth(Object summary, Object width) {
+    return '$summary（$width）';
+  }
+
+  @override
+  String hotelRoomBedWidth(Object width) {
+    return '寬${width}cm';
+  }
+
+  @override
   String get hotelDetailPayableAmount => '應付金額';
 
   @override
@@ -5975,6 +6025,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hotelDetailContact => '聯絡電話';
 
   @override
+  String get hotelDetailShowMoreAction => '查看更多';
+
+  @override
   String get hotelDetailAddress => '位置';
 
   @override
@@ -5985,6 +6038,11 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String hotelDetailDiscount(Object discount) {
     return '$discount% OFF';
+  }
+
+  @override
+  String hotelDiscountBadgeValue(Object discount) {
+    return '$discount%OFF';
   }
 
   @override

@@ -2427,6 +2427,36 @@ abstract class AppLocalizations {
   /// **'{name}: {quantity} beds {width}'**
   String hotelDetailBedSummary(Object name, int quantity, Object width);
 
+  /// No description provided for @hotelRoomBedUnitDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'bed(s)'**
+  String get hotelRoomBedUnitDefault;
+
+  /// No description provided for @hotelRoomBedUnitFuton.
+  ///
+  /// In en, this message translates to:
+  /// **'futon(s)'**
+  String get hotelRoomBedUnitFuton;
+
+  /// No description provided for @hotelRoomBedSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: {quantity} {unit}'**
+  String hotelRoomBedSummary(Object name, int quantity, Object unit);
+
+  /// No description provided for @hotelRoomBedSummaryWithWidth.
+  ///
+  /// In en, this message translates to:
+  /// **'{summary} ({width})'**
+  String hotelRoomBedSummaryWithWidth(Object summary, Object width);
+
+  /// No description provided for @hotelRoomBedWidth.
+  ///
+  /// In en, this message translates to:
+  /// **'width {width}cm'**
+  String hotelRoomBedWidth(Object width);
+
   /// No description provided for @hotelDetailPayableAmount.
   ///
   /// In en, this message translates to:
@@ -2733,6 +2763,12 @@ abstract class AppLocalizations {
   /// **'Contact phone'**
   String get hotelDetailContact;
 
+  /// No description provided for @hotelDetailShowMoreAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Show more'**
+  String get hotelDetailShowMoreAction;
+
   /// No description provided for @hotelDetailAddress.
   ///
   /// In en, this message translates to:
@@ -2750,6 +2786,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{discount}% OFF'**
   String hotelDetailDiscount(Object discount);
+
+  /// No description provided for @hotelDiscountBadgeValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{discount}%OFF'**
+  String hotelDiscountBadgeValue(Object discount);
 
   /// No description provided for @hotelResultsCount.
   ///

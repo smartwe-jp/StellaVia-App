@@ -509,6 +509,31 @@
       "width": {}
     }
   },
+  "hotelRoomBedUnitDefault": "張",
+  "hotelRoomBedUnitFuton": "張",
+  "hotelRoomBedSummary": "{name}：{quantity}{unit}",
+  "@hotelRoomBedSummary": {
+    "placeholders": {
+      "name": {},
+      "quantity": {
+        "type": "int"
+      },
+      "unit": {}
+    }
+  },
+  "hotelRoomBedSummaryWithWidth": "{summary}（{width}）",
+  "@hotelRoomBedSummaryWithWidth": {
+    "placeholders": {
+      "summary": {},
+      "width": {}
+    }
+  },
+  "hotelRoomBedWidth": "寬{width}cm",
+  "@hotelRoomBedWidth": {
+    "placeholders": {
+      "width": {}
+    }
+  },
   "hotelDetailPayableAmount": "應付金額",
   "hotelDetailTaxNote": "{nights}天 · {rooms}間 · 含稅費說明",
   "@hotelDetailTaxNote": {
@@ -594,6 +619,7 @@
     }
   },
   "hotelDetailContact": "聯絡電話",
+  "hotelDetailShowMoreAction": "查看更多",
   "hotelDetailAddress": "位置",
   "hotelDetailPerStay": " / {nights}晚",
   "@hotelDetailPerStay": {
@@ -605,6 +631,12 @@
   },
   "hotelDetailDiscount": "{discount}% OFF",
   "@hotelDetailDiscount": {
+    "placeholders": {
+      "discount": {}
+    }
+  },
+  "hotelDiscountBadgeValue": "{discount}%OFF",
+  "@hotelDiscountBadgeValue": {
     "placeholders": {
       "discount": {}
     }

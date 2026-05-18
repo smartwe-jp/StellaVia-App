@@ -1,5 +1,6 @@
 import 'package:company_api_runtime/company_api_runtime.dart';
 import 'package:core_network/core_network.dart';
+import 'package:core_tool_kit/core_tool_kit.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../auth/app_auth_failure_handler.dart';
@@ -102,7 +103,7 @@ final coreHttpClientByClusterProvider =
           LogInterceptor(
             requestBody: true,
             responseBody: enableHttpResponseLog,
-            logPrint: (Object value) => logger.debug(value.toString()),
+            logPrint: (Object value) => _logLongHttpDebug(logger, value),
           ),
         );
       }
@@ -129,3 +130,23 @@ final apiClusterRouterProvider = Provider<ApiClusterRouter>((ref) {
     hotelClient: ref.watch(hotelCoreHttpClientProvider),
   );
 });
+
+void _logLongHttpDebug(AppLogger logger, Object value) {
+  final text = value.toString();
+  const chunkSize = 800;
+  if (text.length <= chunkSize) {
+    logger.debug(text);
+    return;
+  }
+
+  final totalChunks = (text.length + chunkSize - 1) ~/ chunkSize;
+  for (var offset = 0, chunk = 1; offset < text.length; offset += chunkSize) {
+    final end = offset + chunkSize > text.length
+        ? text.length
+        : offset + chunkSize;
+    logger.debug(
+      '[HTTP log chunk $chunk/$totalChunks] ${text.substring(offset, end)}',
+    );
+    chunk += 1;
+  }
+}

@@ -5,6 +5,7 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
 import 'hotel_detail_image_placeholder.dart';
+import 'hotel_discount_badge.dart';
 import 'hotel_remaining_rooms_label.dart';
 
 class HotelRoomPlanCard extends StatelessWidget {
@@ -31,10 +32,13 @@ class HotelRoomPlanCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
     final price = presenter.price(room.price);
-    final oldPrice = presenter.price(room.beforeDiscountPrice);
+    final oldPrice = _shouldShowOldPrice
+        ? presenter.price(room.beforeDiscountPrice)
+        : '';
     final imageUrl = room.images.isEmpty ? '' : room.images.first.url;
     final facts = _roomFacts(context);
-    final discountLabel = _discountLabel(context);
+    final hasDiscount =
+        room.discountName.isNotEmpty && (room.discount ?? 0) > 0;
     final remainingRooms = room.remainingRooms;
     final canIncrement =
         remainingRooms == null ||
@@ -62,46 +66,18 @@ class HotelRoomPlanCard extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Column(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(UiTokens.radius12),
-                      child: SizedBox(
-                        width: 116,
-                        height: 126,
-                        child: AppRemoteImage(
-                          imageUrl: imageUrl,
-                          fit: BoxFit.cover,
-                          placeholder: const HotelDetailImagePlaceholder(),
-                          errorWidget: const HotelDetailImagePlaceholder(),
-                        ),
-                      ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(UiTokens.radius12),
+                  child: SizedBox(
+                    width: 116,
+                    height: 126,
+                    child: AppRemoteImage(
+                      imageUrl: imageUrl,
+                      fit: BoxFit.cover,
+                      placeholder: const HotelDetailImagePlaceholder(),
+                      errorWidget: const HotelDetailImagePlaceholder(),
                     ),
-
-                    if (discountLabel.isNotEmpty) ...<Widget>[
-                      const SizedBox(height: 12),
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: colors.brandAlert.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
-                          child: Text(
-                            discountLabel,
-                            style: Theme.of(context).textTheme.labelLarge
-                                ?.copyWith(
-                                  color: colors.brandAlert,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ],
+                  ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -138,30 +114,6 @@ class HotelRoomPlanCard extends StatelessWidget {
                 ),
               ],
             ),
-            if (room.beds.isNotEmpty) ...<Widget>[
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                runSpacing: 6,
-                children: room.beds
-                    .where((bed) => bed.name.isNotEmpty)
-                    .map(
-                      (bed) => Text(
-                        context.l10n.hotelDetailBedSummary(
-                          bed.name,
-                          bed.quantity ?? 1,
-                          bed.width,
-                        ),
-                        style: Theme.of(context).textTheme.labelMedium
-                            ?.copyWith(
-                              color: colors.textSecondary,
-                              fontWeight: FontWeight.w700,
-                            ),
-                      ),
-                    )
-                    .toList(growable: false),
-              ),
-            ],
             const SizedBox(height: 16),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -170,6 +122,11 @@ class HotelRoomPlanCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      HotelDiscountBadge(
+                        name: room.discountName,
+                        discount: room.discount,
+                      ),
+                      if (hasDiscount) const SizedBox(height: 8),
                       if (oldPrice.isNotEmpty)
                         Text(
                           oldPrice,
@@ -252,21 +209,63 @@ class HotelRoomPlanCard extends StatelessWidget {
           Icons.bathtub_outlined,
           context.l10n.hotelDetailBathrooms(room.bathroomCount!),
         ),
+      ...room.beds
+          .where((bed) => bed.name.trim().isNotEmpty)
+          .map(
+            (bed) => _RoomFact(
+              Icons.king_bed_outlined,
+              _formatBedSummary(context, bed),
+            ),
+          ),
     ];
   }
 
-  String _discountLabel(BuildContext context) {
-    if (room.discountName.isNotEmpty) {
-      return room.discountName;
+  String _formatBedSummary(BuildContext context, HotelRoomBed bed) {
+    final unit = _isFuton(bed.name)
+        ? context.l10n.hotelRoomBedUnitFuton
+        : context.l10n.hotelRoomBedUnitDefault;
+    final summary = context.l10n.hotelRoomBedSummary(
+      bed.name.trim(),
+      bed.quantity ?? 1,
+      unit,
+    );
+    final width = _formatBedWidth(context, bed.width);
+    if (width.isEmpty) {
+      return summary;
     }
-    final discount = room.discount;
-    if (discount == null) {
+    return context.l10n.hotelRoomBedSummaryWithWidth(summary, width);
+  }
+
+  String _formatBedWidth(BuildContext context, String raw) {
+    final value = _normalizeBedWidth(raw);
+    if (value.isEmpty) {
       return '';
     }
-    final text = discount % 1 == 0
-        ? discount.toInt().toString()
-        : discount.toString();
-    return context.l10n.hotelDetailDiscount(text);
+    return context.l10n.hotelRoomBedWidth(value);
+  }
+
+  String _normalizeBedWidth(String raw) {
+    return raw
+        .trim()
+        .replaceAll(RegExp(r'cm$', caseSensitive: false), '')
+        .replaceAll(RegExp(r'^(幅|宽|寬)'), '')
+        .trim();
+  }
+
+  bool _isFuton(String name) {
+    final lower = name.toLowerCase();
+    return name.contains('布団') ||
+        name.contains('布团') ||
+        lower.contains('futon');
+  }
+
+  bool get _shouldShowOldPrice {
+    final current = room.price;
+    final original = room.beforeDiscountPrice;
+    if (current == null || original == null) {
+      return false;
+    }
+    return original > current;
   }
 }
 
@@ -288,7 +287,7 @@ class _RoomFactChip extends StatelessWidget {
           label,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: colors.textSecondary,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w400,
           ),
         ),
       ],

@@ -218,7 +218,9 @@ String _formatBuildingName(HotelBuildingCodeDto dto, String languageCode) {
 }
 
 HotelSummary _mapHotelSummary(HotelSummaryDto dto) {
-  final price = dto.basePrice ?? dto.price ?? dto.entirePrice;
+  final price = dto.basePrice2 ?? dto.basePrice ?? dto.price ?? dto.entirePrice;
+  final discount = dto.discount2 ?? dto.discount;
+  final discountName = dto.discountName2 ?? '';
   return HotelSummary(
     id: dto.id,
     name: dto.hotelName.trim(),
@@ -226,8 +228,9 @@ HotelSummary _mapHotelSummary(HotelSummaryDto dto) {
     area: dto.area?.trim() ?? '',
     imageUrl: dto.image?.trim() ?? '',
     lowestPrice: price,
-    beforeDiscountPrice: dto.beforeDiscountPrice,
-    discountName: dto.discountName?.trim() ?? '',
+    beforeDiscountPrice: dto.beforeDiscountPrice ?? dto.basePrice,
+    discount: discount,
+    discountName: discountName.trim(),
     bookingTypeLabel: _formatBookingType(dto.bookingType),
     buildingType: dto.buildingType?.trim() ?? '',
     isBookable: dto.bookingStatus ?? true,
@@ -323,7 +326,7 @@ HotelDetailImage _mapDetailImage(HotelPictureDto dto) {
 
 HotelRoomPlan _mapRoomPlan(HotelRoomTypeDto dto) {
   final discount = dto.discount2 ?? dto.discount;
-  final discountName = dto.discountName2 ?? dto.discountName ?? '';
+  final discountName = dto.discountName2 ?? '';
   return HotelRoomPlan(
     id: dto.id.trim(),
     name: (dto.showName?.trim().isNotEmpty ?? false)

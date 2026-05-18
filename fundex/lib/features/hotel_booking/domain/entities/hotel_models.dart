@@ -83,6 +83,7 @@ class HotelSummary {
     required this.imageUrl,
     required this.lowestPrice,
     required this.beforeDiscountPrice,
+    required this.discount,
     required this.discountName,
     required this.bookingTypeLabel,
     required this.buildingType,
@@ -98,6 +99,7 @@ class HotelSummary {
   final String imageUrl;
   final num? lowestPrice;
   final num? beforeDiscountPrice;
+  final num? discount;
   final String discountName;
   final String bookingTypeLabel;
   final String buildingType;

@@ -509,6 +509,31 @@
       "width": {}
     }
   },
+  "hotelRoomBedUnitDefault": "bed(s)",
+  "hotelRoomBedUnitFuton": "futon(s)",
+  "hotelRoomBedSummary": "{name}: {quantity} {unit}",
+  "@hotelRoomBedSummary": {
+    "placeholders": {
+      "name": {},
+      "quantity": {
+        "type": "int"
+      },
+      "unit": {}
+    }
+  },
+  "hotelRoomBedSummaryWithWidth": "{summary} ({width})",
+  "@hotelRoomBedSummaryWithWidth": {
+    "placeholders": {
+      "summary": {},
+      "width": {}
+    }
+  },
+  "hotelRoomBedWidth": "width {width}cm",
+  "@hotelRoomBedWidth": {
+    "placeholders": {
+      "width": {}
+    }
+  },
   "hotelDetailPayableAmount": "Amount due",
   "hotelDetailTaxNote": "{nights} days · {rooms} rooms · Taxes included",
   "@hotelDetailTaxNote": {
@@ -594,6 +619,7 @@
     }
   },
   "hotelDetailContact": "Contact phone",
+  "hotelDetailShowMoreAction": "Show more",
   "hotelDetailAddress": "Location",
   "hotelDetailPerStay": " / {nights} nights",
   "@hotelDetailPerStay": {
@@ -605,6 +631,12 @@
   },
   "hotelDetailDiscount": "{discount}% OFF",
   "@hotelDetailDiscount": {
+    "placeholders": {
+      "discount": {}
+    }
+  },
+  "hotelDiscountBadgeValue": "{discount}%OFF",
+  "@hotelDiscountBadgeValue": {
     "placeholders": {
       "discount": {}
     }
