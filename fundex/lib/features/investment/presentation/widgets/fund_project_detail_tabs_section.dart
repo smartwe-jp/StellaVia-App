@@ -278,7 +278,10 @@ class _FundPropertyHouseCardState extends State<_FundPropertyHouseCard> {
                     ),
                     _FundPropertyInfoRow(
                       label: context.l10n.fundDetailMonthlyRentLabel,
-                      value: widget.houseData.monthlyRent,
+                      value: _moneyValueOrDash(
+                        widget.houseData.monthlyRent,
+                        context,
+                      ),
                       alternateBackground: true,
                     ),
                     _FundPropertyInfoRow(
@@ -602,10 +605,7 @@ class _FundIncomeSchemeTab extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  _schemeMoneyValueOrDash(
-                    structuredData.distributedCapital,
-                    context,
-                  ),
+                  _moneyValueOrDash(structuredData.distributedCapital, context),
                   style: appText.numericHeadline.copyWith(
                     color: colors.highlightGold,
                   ),
@@ -744,7 +744,7 @@ class _FundSchemeRow extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Text(
-            _schemeMoneyValueOrDash(item.value, context),
+            _moneyValueOrDash(item.value, context),
             style: appText.numericBody.copyWith(
               color: valueColor,
               fontWeight: valueWeight,
@@ -764,12 +764,12 @@ String _valueOrDash(String value, BuildContext context) {
   return trimmed;
 }
 
-String _schemeMoneyValueOrDash(String value, BuildContext context) {
+String _moneyValueOrDash(String value, BuildContext context) {
   final trimmed = value.trim();
   if (trimmed.isEmpty) {
     return context.l10n.fundDetailUnknownValue;
   }
-  final amount = _parseSchemeMoneyAmount(trimmed);
+  final amount = _parseMoneyAmount(trimmed);
   if (amount == null) {
     return trimmed;
   }
@@ -779,7 +779,7 @@ String _schemeMoneyValueOrDash(String value, BuildContext context) {
   return '${formatter.format(amount)}${context.l10n.fundDetailSchemeCurrencyUnit}';
 }
 
-num? _parseSchemeMoneyAmount(String value) {
+num? _parseMoneyAmount(String value) {
   if (value.contains('万') || value.contains('萬')) {
     return null;
   }
