@@ -1424,6 +1424,17 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String hotelRemainingRoomsFew(int count) {
+    return '仅剩余：$count间';
+  }
+
+  @override
+  String get hotelRemainingRoomsMany => '剩余4间房以上';
+
+  @override
+  String get hotelNoRooms => '无空房';
+
+  @override
   String get hotelRefreshFailed => '刷新失败，已保留上次结果。';
 
   @override
@@ -6002,6 +6013,17 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String hotelRemainingRooms(int count) {
     return '剩餘 $count 間';
   }
+
+  @override
+  String hotelRemainingRoomsFew(int count) {
+    return '僅剩餘：$count間';
+  }
+
+  @override
+  String get hotelRemainingRoomsMany => '剩餘4間房以上';
+
+  @override
+  String get hotelNoRooms => '無空房';
 
   @override
   String get hotelRefreshFailed => '重新整理失敗，已保留上次結果。';

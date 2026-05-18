@@ -14,6 +14,7 @@ import '../widgets/hotel_detail_bottom_bar.dart';
 import '../widgets/hotel_detail_hero_gallery.dart';
 import '../widgets/hotel_detail_info_section.dart';
 import '../widgets/hotel_detail_stay_summary_bar.dart';
+import '../widgets/hotel_remaining_rooms_label.dart';
 import '../widgets/hotel_room_plan_card.dart';
 import '../widgets/hotel_state_views.dart';
 
@@ -133,9 +134,7 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
         _isAssigningOccupancy = false;
       });
       if (result.message.isNotEmpty) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(result.message)));
+        AppNotice.show(context, message: result.message);
       }
     } catch (_) {
       if (!mounted) {
@@ -144,18 +143,14 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
       setState(() {
         _isAssigningOccupancy = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.hotelAssignOccupancyFailed)),
-      );
+      AppNotice.show(context, message: context.l10n.hotelAssignOccupancyFailed);
     }
   }
 
   Future<void> _handleBookNow(HotelDetail detail) async {
     final selectedRooms = _selectedRoomsFor(detail, _roomQuantities);
     if (selectedRooms.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.hotelDetailSelectRoomFirst)),
-      );
+      AppNotice.show(context, message: context.l10n.hotelDetailSelectRoomFirst);
       return;
     }
     final isAuthenticated =
@@ -490,14 +485,10 @@ class _AvailableRoomsHeader extends StatelessWidget {
             ),
           ),
         ),
-        if (remainingRooms > 0)
-          Text(
-            context.l10n.hotelDetailRemainingRoomsShort(remainingRooms),
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: colors.brandSecondary,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+        HotelRemainingRoomsLabel(
+          count: remainingRooms,
+          textAlign: TextAlign.end,
+        ),
       ],
     );
   }

@@ -638,6 +638,16 @@
       }
     }
   },
+  "hotelRemainingRoomsFew": "Only {count} rooms left",
+  "@hotelRemainingRoomsFew": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelRemainingRoomsMany": "4+ rooms left",
+  "hotelNoRooms": "No vacancy",
   "hotelRefreshFailed": "Unable to refresh. Showing the previous results.",
   "hotelLoadFailed": "Unable to load hotels.",
   "hotelEmptyResults": "No hotels match the current search.",

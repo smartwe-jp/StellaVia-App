@@ -85,6 +85,8 @@ _HotelSummaryDto _$HotelSummaryDtoFromJson(Map<String, dynamic> json) =>
       buildingCode: json['buildingCode'] as String?,
       buildingType: json['buildingType'] as String?,
       bookingStatus: json['bookingStatus'] as bool?,
+      roomCount: (json['roomCount'] as num?)?.toInt(),
+      remainRoomNum: json['remainRoomNum'],
       lat: json['lat'],
       lng: json['lng'],
       tags: json['tags'] == null
@@ -109,6 +111,8 @@ Map<String, dynamic> _$HotelSummaryDtoToJson(_HotelSummaryDto instance) =>
       'buildingCode': instance.buildingCode,
       'buildingType': instance.buildingType,
       'bookingStatus': instance.bookingStatus,
+      'roomCount': instance.roomCount,
+      'remainRoomNum': instance.remainRoomNum,
       'lat': instance.lat,
       'lng': instance.lng,
       'tags': instance.tags,

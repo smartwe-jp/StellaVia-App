@@ -231,11 +231,41 @@ HotelSummary _mapHotelSummary(HotelSummaryDto dto) {
     bookingTypeLabel: _formatBookingType(dto.bookingType),
     buildingType: dto.buildingType?.trim() ?? '',
     isBookable: dto.bookingStatus ?? true,
+    remainingRooms: _mapSummaryRemainingRooms(dto),
     tags: dto.tags
         .map((tag) => tag.trim())
         .where((tag) => tag.isNotEmpty)
         .toList(growable: false),
   );
+}
+
+int? _mapSummaryRemainingRooms(HotelSummaryDto dto) {
+  if (dto.roomCount != null) {
+    return dto.roomCount;
+  }
+  return _parseRemainingRoomsText(dto.remainRoomNum);
+}
+
+int? _parseRemainingRoomsText(Object? raw) {
+  final text = raw?.toString().trim() ?? '';
+  if (text.isEmpty) {
+    return null;
+  }
+  final lower = text.toLowerCase();
+  if (text.contains('無') ||
+      text.contains('无') ||
+      text.contains('なし') ||
+      lower.contains('no ')) {
+    return 0;
+  }
+  if (text.contains('以上') || text.contains('+') || lower.contains('more')) {
+    return 5;
+  }
+  final match = RegExp(r'\d+').firstMatch(text);
+  if (match == null) {
+    return null;
+  }
+  return int.tryParse(match.group(0)!);
 }
 
 String _formatBookingType(Object? raw) {

@@ -237,8 +237,6 @@ class _HotelBookingConfirmPageState
   }
 
   void _showComingSoon() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(context.l10n.hotelDetailBookingComingSoon)),
-    );
+    AppNotice.show(context, message: context.l10n.hotelDetailBookingComingSoon);
   }
 }

@@ -5,6 +5,7 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
 import 'hotel_detail_image_placeholder.dart';
+import 'hotel_remaining_rooms_label.dart';
 
 class HotelRoomPlanCard extends StatelessWidget {
   const HotelRoomPlanCard({
@@ -34,6 +35,11 @@ class HotelRoomPlanCard extends StatelessWidget {
     final imageUrl = room.images.isEmpty ? '' : room.images.first.url;
     final facts = _roomFacts(context);
     final discountLabel = _discountLabel(context);
+    final remainingRooms = room.remainingRooms;
+    final canIncrement =
+        remainingRooms == null ||
+        remainingRooms < 0 ||
+        quantity < remainingRooms;
 
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -207,8 +213,9 @@ class HotelRoomPlanCard extends StatelessWidget {
                 const SizedBox(width: 12),
                 _RoomQuantityStepper(
                   quantity: quantity,
+                  remainingRooms: remainingRooms,
                   onDecrement: isBusy ? null : onDecrement,
-                  onIncrement: isBusy ? null : onIncrement,
+                  onIncrement: isBusy || !canIncrement ? null : onIncrement,
                 ),
               ],
             ),
@@ -292,20 +299,30 @@ class _RoomFactChip extends StatelessWidget {
 class _RoomQuantityStepper extends StatelessWidget {
   const _RoomQuantityStepper({
     required this.quantity,
+    required this.remainingRooms,
     required this.onDecrement,
     required this.onIncrement,
   });
 
   final int quantity;
+  final int? remainingRooms;
   final VoidCallback? onDecrement;
   final VoidCallback? onIncrement;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
+    final shouldShowRemaining = remainingRooms != null && remainingRooms! >= 0;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        //text: how many rooms left if quantity > 0 or show empty text if quantity == 0
+        if (shouldShowRemaining) ...<Widget>[
+          HotelRemainingRoomsLabel(
+            count: remainingRooms!,
+            textAlign: TextAlign.end,
+          ),
+          const SizedBox(height: 6),
+        ],
         DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(999),

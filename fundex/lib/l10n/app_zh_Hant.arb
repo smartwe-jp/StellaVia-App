@@ -638,6 +638,16 @@
       }
     }
   },
+  "hotelRemainingRoomsFew": "僅剩餘：{count}間",
+  "@hotelRemainingRoomsFew": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelRemainingRoomsMany": "剩餘4間房以上",
+  "hotelNoRooms": "無空房",
   "hotelRefreshFailed": "重新整理失敗，已保留上次結果。",
   "hotelLoadFailed": "酒店列表載入失敗。",
   "hotelEmptyResults": "目前條件下沒有可顯示的酒店。",

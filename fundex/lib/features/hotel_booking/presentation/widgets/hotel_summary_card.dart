@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
+import 'hotel_remaining_rooms_label.dart';
 
 class HotelSummaryCard extends StatelessWidget {
   const HotelSummaryCard({
@@ -23,6 +24,7 @@ class HotelSummaryCard extends StatelessWidget {
     final price = presenter.price(hotel.lowestPrice);
     final oldPrice = presenter.price(hotel.beforeDiscountPrice);
     final location = _resolveLocation(context);
+    final remainingRooms = hotel.remainingRooms;
 
     final card = DecoratedBox(
       decoration: BoxDecoration(
@@ -128,15 +130,8 @@ class HotelSummaryCard extends StatelessWidget {
                                       decoration: TextDecoration.lineThrough,
                                     ),
                               ),
-                            Text(
-                              hotel.isBookable
-                                  ? context.l10n.hotelRemainingRooms(2)
-                                  : context.l10n.hotelUnavailable,
-                              style: Theme.of(context).textTheme.labelMedium
-                                  ?.copyWith(
-                                    color: colors.brandSecondary,
-                                    fontWeight: FontWeight.w900,
-                                  ),
+                            HotelRemainingRoomsLabel(
+                              count: hotel.isBookable ? remainingRooms ?? 0 : 0,
                             ),
                           ],
                         ),

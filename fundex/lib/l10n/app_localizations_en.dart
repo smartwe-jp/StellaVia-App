@@ -1507,6 +1507,17 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String hotelRemainingRoomsFew(int count) {
+    return 'Only $count rooms left';
+  }
+
+  @override
+  String get hotelRemainingRoomsMany => '4+ rooms left';
+
+  @override
+  String get hotelNoRooms => 'No vacancy';
+
+  @override
   String get hotelRefreshFailed =>
       'Unable to refresh. Showing the previous results.';
 
