@@ -228,6 +228,8 @@ release 构建优先使用 release signing；如果没有签名配置，会 fall
 ALIYUN_PUSH_ANDROID_APP_KEY
 ALIYUN_PUSH_ANDROID_APP_SECRET
 HONOR_PUSH_APP_ID
+GOOGLE_MAPS_API_KEY
+GOOGLE_MAPS_ANDROID_API_KEY
 ```
 
 它们写入 Android manifest placeholders：
@@ -236,7 +238,24 @@ HONOR_PUSH_APP_ID
 manifestPlaceholders["aliyunPushAppKey"]
 manifestPlaceholders["aliyunPushAppSecret"]
 manifestPlaceholders["honorPushAppId"]
+manifestPlaceholders["googleMapsApiKey"]
 ```
+
+Google Maps Android key 使用 `GOOGLE_MAPS_ANDROID_API_KEY`，为空时 fallback 到共享的
+`GOOGLE_MAPS_API_KEY`。
+
+### iOS native 配置来源
+
+`Runner/Info.plist` 会把 Flutter 生成的 `DART_DEFINES` 注入到 App bundle。
+`AppDelegate.swift` 解析其中的 Google Maps key：
+
+```text
+GOOGLE_MAPS_IOS_API_KEY
+GOOGLE_MAPS_API_KEY
+```
+
+Google Maps iOS key 优先使用 `GOOGLE_MAPS_IOS_API_KEY`，为空时 fallback 到共享的
+`GOOGLE_MAPS_API_KEY`。
 
 ### AAB 输出与 artifact
 
@@ -675,4 +694,3 @@ STELLAVIA_APP_STORE_CONNECT_API_KEY_P8_BASE64
    - JSON 是对象
    - `ENABLE_IDENTITY_AUTH=true`
    - Android 推送相关 key 可被 `build.gradle.kts` 读取
-

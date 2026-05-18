@@ -60,9 +60,23 @@ fun resolveBuildConfigValue(key: String, defaultValue: String = ""): String {
     return defaultValue
 }
 
+fun resolveFirstBuildConfigValue(vararg keys: String): String {
+    for (key in keys) {
+        val value = resolveBuildConfigValue(key).trim()
+        if (value.isNotEmpty()) {
+            return value
+        }
+    }
+    return ""
+}
+
 val aliyunPushAndroidAppKey = resolveBuildConfigValue("ALIYUN_PUSH_ANDROID_APP_KEY")
 val aliyunPushAndroidAppSecret = resolveBuildConfigValue("ALIYUN_PUSH_ANDROID_APP_SECRET")
 val honorPushAppId = resolveBuildConfigValue("HONOR_PUSH_APP_ID")
+val googleMapsAndroidApiKey = resolveFirstBuildConfigValue(
+    "GOOGLE_MAPS_ANDROID_API_KEY",
+    "GOOGLE_MAPS_API_KEY",
+)
 
 val hasReleaseSigning = listOf("storeFile", "storePassword", "keyAlias", "keyPassword").all {
     !keystoreProperties.getProperty(it).isNullOrBlank()
@@ -94,6 +108,7 @@ android {
         manifestPlaceholders["aliyunPushAppKey"] = aliyunPushAndroidAppKey
         manifestPlaceholders["aliyunPushAppSecret"] = aliyunPushAndroidAppSecret
         manifestPlaceholders["honorPushAppId"] = honorPushAppId
+        manifestPlaceholders["googleMapsApiKey"] = googleMapsAndroidApiKey
     }
 
     flavorDimensions += "environment"

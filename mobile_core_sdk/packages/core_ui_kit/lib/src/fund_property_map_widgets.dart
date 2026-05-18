@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmaps;
 import 'package:url_launcher/url_launcher.dart';
 
 import 'app_dialogs.dart';
@@ -19,7 +18,7 @@ class FundPropertyCoordinate {
   final double latitude;
   final double longitude;
 
-  LatLng toLatLng() => LatLng(latitude, longitude);
+  gmaps.LatLng toGoogleLatLng() => gmaps.LatLng(latitude, longitude);
 }
 
 class FundPropertyMapSheetStrings {
@@ -54,11 +53,13 @@ class FundPropertyMapPreviewCard extends StatelessWidget {
   const FundPropertyMapPreviewCard({
     super.key,
     required this.addressLabel,
+    this.destination,
     this.height = 164,
     this.onTap,
   });
 
   final String addressLabel;
+  final FundPropertyCoordinate? destination;
   final double height;
   final VoidCallback? onTap;
 
@@ -76,27 +77,73 @@ class FundPropertyMapPreviewCard extends StatelessWidget {
         child: SizedBox(
           width: double.infinity,
           height: height,
-          child: Center(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
-              decoration: BoxDecoration(
-                color: colors.surface.withValues(alpha: 0.94),
-                borderRadius: BorderRadius.circular(14),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: colors.scrim.withValues(alpha: 0.10),
-                    blurRadius: 10,
-                    offset: Offset(0, 4),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(UiTokens.radius16),
+            child: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                if (destination != null)
+                  IgnorePointer(
+                    child: gmaps.GoogleMap(
+                      initialCameraPosition: gmaps.CameraPosition(
+                        target: destination!.toGoogleLatLng(),
+                        zoom: 14.2,
+                      ),
+                      markers: <gmaps.Marker>{
+                        gmaps.Marker(
+                          markerId: const gmaps.MarkerId('destination'),
+                          position: destination!.toGoogleLatLng(),
+                        ),
+                      },
+                      compassEnabled: false,
+                      liteModeEnabled: true,
+                      mapToolbarEnabled: false,
+                      myLocationButtonEnabled: false,
+                      myLocationEnabled: false,
+                      rotateGesturesEnabled: false,
+                      scrollGesturesEnabled: false,
+                      tiltGesturesEnabled: false,
+                      zoomControlsEnabled: false,
+                      zoomGesturesEnabled: false,
+                    ),
+                  )
+                else
+                  ColoredBox(color: colors.infoSubtle),
+                Align(
+                  alignment: destination == null
+                      ? Alignment.center
+                      : Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 13,
+                      ),
+                      decoration: BoxDecoration(
+                        color: colors.surface.withValues(alpha: 0.94),
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: <BoxShadow>[
+                          BoxShadow(
+                            color: colors.scrim.withValues(alpha: 0.10),
+                            blurRadius: 10,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        addressLabel,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: appText.sectionTitle.copyWith(
+                          color: colors.primary,
+                        ),
+                      ),
+                    ),
                   ),
-                ],
-              ),
-              child: Text(
-                addressLabel,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: appText.sectionTitle.copyWith(color: colors.primary),
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -150,8 +197,11 @@ class FundPropertyMapBottomSheet extends StatefulWidget {
 
 class _FundPropertyMapBottomSheetState
     extends State<FundPropertyMapBottomSheet> {
-  final MapController _mapController = MapController();
-  LatLng? _currentLatLng;
+  static const _destinationMarkerId = gmaps.MarkerId('destination');
+  static const _currentMarkerId = gmaps.MarkerId('current');
+
+  gmaps.GoogleMapController? _mapController;
+  gmaps.LatLng? _currentLatLng;
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +209,7 @@ class _FundPropertyMapBottomSheetState
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final topPadding = MediaQuery.paddingOf(context).top;
-    final destinationLatLng = widget.destination.toLatLng();
+    final destinationLatLng = widget.destination.toGoogleLatLng();
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(22)),
       child: ColoredBox(
@@ -167,36 +217,21 @@ class _FundPropertyMapBottomSheetState
         child: Stack(
           children: <Widget>[
             Positioned.fill(
-              child: FlutterMap(
-                mapController: _mapController,
-                options: MapOptions(
-                  initialCenter: destinationLatLng,
-                  initialZoom: 5.6,
+              child: gmaps.GoogleMap(
+                initialCameraPosition: gmaps.CameraPosition(
+                  target: destinationLatLng,
+                  zoom: 13,
                 ),
-                children: <Widget>[
-                  TileLayer(
-                    urlTemplate:
-                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'fun.d.ex',
-                  ),
-                  MarkerLayer(
-                    markers: <Marker>[
-                      Marker(
-                        point: destinationLatLng,
-                        width: 40,
-                        height: 40,
-                        child: const _DestinationMarker(),
-                      ),
-                      if (_currentLatLng != null)
-                        Marker(
-                          point: _currentLatLng!,
-                          width: 22,
-                          height: 22,
-                          child: const _CurrentLocationMarker(),
-                        ),
-                    ],
-                  ),
-                ],
+                markers: _buildMarkers(destinationLatLng),
+                compassEnabled: true,
+                mapToolbarEnabled: false,
+                myLocationButtonEnabled: false,
+                myLocationEnabled: false,
+                zoomControlsEnabled: false,
+                onMapCreated: (gmaps.GoogleMapController controller) {
+                  _mapController = controller;
+                  controller.showMarkerInfoWindow(_destinationMarkerId);
+                },
               ),
             ),
             Positioned(
@@ -254,6 +289,31 @@ class _FundPropertyMapBottomSheetState
             ),
             Positioned(
               right: 12,
+              bottom: 102 + MediaQuery.paddingOf(context).bottom,
+              child: Column(
+                children: <Widget>[
+                  _MapRoundIconButton(
+                    icon: Icons.add,
+                    onTap: () {
+                      _mapController?.animateCamera(
+                        gmaps.CameraUpdate.zoomIn(),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  _MapRoundIconButton(
+                    icon: Icons.remove,
+                    onTap: () {
+                      _mapController?.animateCamera(
+                        gmaps.CameraUpdate.zoomOut(),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              right: 12,
               bottom: 16 + MediaQuery.paddingOf(context).bottom,
               child: Row(
                 children: <Widget>[
@@ -283,8 +343,30 @@ class _FundPropertyMapBottomSheetState
     );
   }
 
-  void _moveToDestination(LatLng destination) {
-    _mapController.move(destination, 15.8);
+  Set<gmaps.Marker> _buildMarkers(gmaps.LatLng destination) {
+    return <gmaps.Marker>{
+      gmaps.Marker(
+        markerId: _destinationMarkerId,
+        position: destination,
+        infoWindow: gmaps.InfoWindow(title: widget.title),
+      ),
+      if (_currentLatLng != null)
+        gmaps.Marker(
+          markerId: _currentMarkerId,
+          position: _currentLatLng!,
+          icon: gmaps.BitmapDescriptor.defaultMarkerWithHue(
+            gmaps.BitmapDescriptor.hueAzure,
+          ),
+          infoWindow: gmaps.InfoWindow(title: widget.strings.currentLocation),
+        ),
+    };
+  }
+
+  void _moveToDestination(gmaps.LatLng destination) {
+    _mapController?.animateCamera(
+      gmaps.CameraUpdate.newLatLngZoom(destination, 15.8),
+    );
+    _mapController?.showMarkerInfoWindow(_destinationMarkerId);
   }
 
   Future<void> _moveToCurrentLocation() async {
@@ -336,11 +418,14 @@ class _FundPropertyMapBottomSheetState
         return;
       }
 
-      final current = LatLng(position.latitude, position.longitude);
+      final current = gmaps.LatLng(position.latitude, position.longitude);
       setState(() {
         _currentLatLng = current;
       });
-      _mapController.move(current, 14.6);
+      await _mapController?.animateCamera(
+        gmaps.CameraUpdate.newLatLngZoom(current, 14.6),
+      );
+      _mapController?.showMarkerInfoWindow(_currentMarkerId);
     } catch (_) {
       if (!mounted) {
         return;
@@ -465,37 +550,30 @@ class _MapFloatingActionButton extends StatelessWidget {
   }
 }
 
-class _DestinationMarker extends StatelessWidget {
-  const _DestinationMarker();
+class _MapRoundIconButton extends StatelessWidget {
+  const _MapRoundIconButton({required this.icon, required this.onTap});
 
-  @override
-  Widget build(BuildContext context) {
-    return Icon(
-      Icons.location_pin,
-      size: 40,
-      color: Theme.of(context).appColors.danger,
-    );
-  }
-}
-
-class _CurrentLocationMarker extends StatelessWidget {
-  const _CurrentLocationMarker();
+  final IconData icon;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
-    return Container(
-      decoration: BoxDecoration(
-        color: colors.primary,
-        shape: BoxShape.circle,
-        border: Border.all(color: colors.surface, width: 2.4),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: colors.scrim.withValues(alpha: 0.18),
-            blurRadius: 6,
-            offset: Offset(0, 2),
-          ),
-        ],
+    return Material(
+      color: colors.surface.withValues(alpha: 0.94),
+      elevation: 1.5,
+      shadowColor: colors.scrim.withValues(alpha: 0.15),
+      shape: CircleBorder(
+        side: BorderSide(color: colors.border.withValues(alpha: 0.72)),
+      ),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: SizedBox(
+          width: 44,
+          height: 44,
+          child: Icon(icon, color: colors.textPrimary, size: 24),
+        ),
       ),
     );
   }

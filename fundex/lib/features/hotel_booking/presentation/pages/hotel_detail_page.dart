@@ -13,6 +13,7 @@ import '../support/hotel_booking_presenter.dart';
 import '../widgets/hotel_detail_bottom_bar.dart';
 import '../widgets/hotel_detail_hero_gallery.dart';
 import '../widgets/hotel_detail_info_section.dart';
+import '../widgets/hotel_detail_map_section.dart';
 import '../widgets/hotel_detail_stay_summary_bar.dart';
 import '../widgets/hotel_remaining_rooms_label.dart';
 import '../widgets/hotel_room_plan_card.dart';
@@ -393,6 +394,9 @@ class _HotelDetailContent extends StatelessWidget {
       detail.address,
       Icons.place_outlined,
     );
+    if (HotelDetailMapSection.canShow(detail)) {
+      sections.add(HotelDetailMapSection(detail: detail));
+    }
     addTextSection(
       'checkInTime',
       context.l10n.hotelDetailCheckInTime,

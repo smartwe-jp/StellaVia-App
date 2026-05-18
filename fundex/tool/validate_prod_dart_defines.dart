@@ -32,6 +32,16 @@ void main(List<String> args) {
   );
 
   _requireEnabled(values, key: 'ENABLE_IDENTITY_AUTH');
+  _requireAnyNonEmpty(
+    values,
+    label: 'Google Maps Android API key',
+    keys: ['GOOGLE_MAPS_ANDROID_API_KEY', 'GOOGLE_MAPS_API_KEY'],
+  );
+  _requireAnyNonEmpty(
+    values,
+    label: 'Google Maps iOS API key',
+    keys: ['GOOGLE_MAPS_IOS_API_KEY', 'GOOGLE_MAPS_API_KEY'],
+  );
 }
 
 void _requireEnabled(Map<String, String> values, {required String key}) {
@@ -43,6 +53,23 @@ void _requireEnabled(Map<String, String> values, {required String key}) {
 
   stderr.writeln(
     'Production build requires "$key" to be explicitly set to "true".',
+  );
+  exitCode = 1;
+}
+
+void _requireAnyNonEmpty(
+  Map<String, String> values, {
+  required String label,
+  required List<String> keys,
+}) {
+  final hasValue = keys.any((key) => (values[key] ?? '').trim().isNotEmpty);
+  if (hasValue) {
+    stdout.writeln('$label configured');
+    return;
+  }
+
+  stderr.writeln(
+    'Production build requires $label in one of: ${keys.join(', ')}.',
   );
   exitCode = 1;
 }
