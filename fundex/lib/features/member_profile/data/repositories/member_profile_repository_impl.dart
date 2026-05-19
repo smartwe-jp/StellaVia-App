@@ -129,10 +129,12 @@ class MemberProfileRepositoryImpl implements MemberProfileRepository {
     final frontUrl =
         _optionalRemotePhotoUrl(profile.idDocumentPhotoPath) ??
         _optionalRemotePhotoUrl(authUser?.frontUrl);
-    final backUrl =
-        _optionalRemotePhotoUrl(profile.idDocumentBackPhotoPath) ??
-        _optionalRemotePhotoUrl(authUser?.backUrl) ??
-        frontUrl;
+    final isMyNumber =
+        profile.ekycDocumentType.trim().toLowerCase() == 'my_number';
+    final backUrl = isMyNumber
+        ? frontUrl
+        : _optionalRemotePhotoUrl(profile.idDocumentBackPhotoPath) ??
+              _optionalRemotePhotoUrl(authUser?.backUrl);
     final payload = MemberProfileApiPayloadMapper.toSaveMemberInfoRequest(
       profile: profile,
       documentFrontImage: frontUrl,

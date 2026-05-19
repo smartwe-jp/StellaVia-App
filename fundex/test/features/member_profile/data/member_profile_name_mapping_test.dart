@@ -42,4 +42,36 @@ void main() {
       expect(baseInfo['lastNameEn'], 'Diao');
     });
   });
+
+  group('member profile document image mapping', () {
+    test('uses front image as back image for My Number documents', () {
+      final payload = MemberProfileApiPayloadMapper.toSaveMemberInfoRequest(
+        profile: const MemberProfileDetails(ekycDocumentType: 'my_number'),
+        documentFrontImage: 'https://example.com/front.jpg',
+      );
+
+      final identityVerification =
+          payload['identityVerification'] as Map<String, dynamic>;
+      expect(identityVerification['documentType'], 12);
+      expect(
+        identityVerification['documentFrontImage'],
+        'https://example.com/front.jpg',
+      );
+      expect(
+        identityVerification['documentBackImage'],
+        'https://example.com/front.jpg',
+      );
+    });
+
+    test('does not default back image for two-sided documents', () {
+      final payload = MemberProfileApiPayloadMapper.toSaveMemberInfoRequest(
+        profile: const MemberProfileDetails(
+          ekycDocumentType: 'drivers_license',
+        ),
+        documentFrontImage: 'https://example.com/front.jpg',
+      );
+
+      expect(payload.containsKey('identityVerification'), isFalse);
+    });
+  });
 }
