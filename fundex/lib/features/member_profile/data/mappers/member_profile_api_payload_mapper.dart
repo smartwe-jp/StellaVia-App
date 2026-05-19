@@ -216,14 +216,23 @@ class MemberProfileApiPayloadMapper {
   }) {
     final normalizedFrontImage = documentFrontImage?.trim() ?? '';
     final normalizedBackImage = documentBackImage?.trim() ?? '';
-    if (normalizedFrontImage.isEmpty || normalizedBackImage.isEmpty) {
+    final effectiveBackImage =
+        _documentTypeRequiresBack(profile.ekycDocumentType)
+        ? normalizedBackImage
+        : normalizedFrontImage;
+    if (normalizedFrontImage.isEmpty || effectiveBackImage.isEmpty) {
       return const <String, dynamic>{};
     }
     return <String, dynamic>{
       'documentType': _mapDocumentType(profile.ekycDocumentType),
       'documentFrontImage': normalizedFrontImage,
-      'documentBackImage': normalizedBackImage,
+      'documentBackImage': effectiveBackImage,
     };
+  }
+
+  static bool _documentTypeRequiresBack(String raw) {
+    final normalized = raw.trim().toLowerCase();
+    return normalized != 'my_number' && normalized != '12';
   }
 
   static Map<String, dynamic> _buildSuitabilityRequest(
