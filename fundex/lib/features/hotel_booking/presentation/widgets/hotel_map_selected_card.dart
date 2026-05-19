@@ -46,8 +46,8 @@ class HotelMapSelectedCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(18),
                     child: SizedBox(
-                      width: 126,
-                      height: 126,
+                      width: 146,
+                      height: 146,
                       child: AppRemoteImage(
                         imageUrl: hotel.imageUrl,
                         fit: BoxFit.cover,
@@ -61,7 +61,7 @@ class HotelMapSelectedCard extends StatelessWidget {
                   const SizedBox(width: 14),
                   Expanded(
                     child: SizedBox(
-                      height: 126,
+                      height: 146,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -69,7 +69,7 @@ class HotelMapSelectedCard extends StatelessWidget {
                             hotel.name.isEmpty
                                 ? context.l10n.hotelUnnamedProperty
                                 : hotel.name,
-                            maxLines: 2,
+                            maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.titleLarge
                                 ?.copyWith(
@@ -81,7 +81,7 @@ class HotelMapSelectedCard extends StatelessWidget {
                           const SizedBox(height: 7),
                           Text(
                             _locationText(context),
-                            maxLines: 1,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
