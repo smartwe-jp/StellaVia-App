@@ -1533,7 +1533,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String hotelCardMeta(Object location, int count) {
-    return 'Location $location · Up to $count guests';
+    return '$location · Up to $count guests';
   }
 
   @override

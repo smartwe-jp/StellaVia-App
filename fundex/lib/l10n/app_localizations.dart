@@ -2838,7 +2838,7 @@ abstract class AppLocalizations {
   /// No description provided for @hotelCardMeta.
   ///
   /// In en, this message translates to:
-  /// **'Location {location} · Up to {count} guests'**
+  /// **'{location} · Up to {count} guests'**
   String hotelCardMeta(Object location, int count);
 
   /// No description provided for @hotelRemainingRooms.

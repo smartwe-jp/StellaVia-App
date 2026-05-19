@@ -655,7 +655,7 @@
   "hotelUnavailable": "Unavailable",
   "hotelPriceAsk": "Price on request",
   "hotelPricePerNight": " from / night",
-  "hotelCardMeta": "Location {location} · Up to {count} guests",
+  "hotelCardMeta": "{location} · Up to {count} guests",
   "@hotelCardMeta": {
     "placeholders": {
       "location": {},

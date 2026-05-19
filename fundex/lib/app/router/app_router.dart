@@ -16,6 +16,7 @@ import '../../features/hotel_booking/presentation/pages/hotel_booking_confirm_pa
 import '../../features/hotel_booking/presentation/pages/hotel_detail_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_map_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_booking_tab_page.dart';
+import '../../features/hotel_booking/presentation/support/hotel_map_route_args.dart';
 import '../../features/home/presentation/pages/home_overview_tab_page.dart';
 import '../../features/investment/presentation/pages/fund_project_detail_page.dart';
 import '../../features/investment/presentation/pages/fund_lottery_apply_flow_page.dart';
@@ -293,8 +294,22 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     builder: (BuildContext context, GoRouterState state) {
                       final extra = state.extra;
                       return HotelMapPage(
-                        initialCriteria: extra is HotelSearchCriteria
-                            ? extra
+                        initialCriteria: switch (extra) {
+                          HotelMapRouteArgs(:final criteria) => criteria,
+                          HotelSearchCriteria() => extra,
+                          _ => null,
+                        },
+                        initialHotel: extra is HotelMapRouteArgs
+                            ? extra.selectedHotel
+                            : null,
+                        initialSelectedHotelId: extra is HotelMapRouteArgs
+                            ? extra.selectedHotelId
+                            : null,
+                        initialLatitude: extra is HotelMapRouteArgs
+                            ? extra.latitude
+                            : null,
+                        initialLongitude: extra is HotelMapRouteArgs
+                            ? extra.longitude
                             : null,
                       );
                     },

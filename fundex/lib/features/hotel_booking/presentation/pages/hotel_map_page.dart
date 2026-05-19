@@ -15,9 +15,20 @@ import '../widgets/hotel_search_conditions_sheet.dart';
 import '../widgets/hotel_state_views.dart';
 
 class HotelMapPage extends ConsumerStatefulWidget {
-  const HotelMapPage({super.key, this.initialCriteria});
+  const HotelMapPage({
+    super.key,
+    this.initialCriteria,
+    this.initialHotel,
+    this.initialSelectedHotelId,
+    this.initialLatitude,
+    this.initialLongitude,
+  });
 
   final HotelSearchCriteria? initialCriteria;
+  final HotelSummary? initialHotel;
+  final String? initialSelectedHotelId;
+  final double? initialLatitude;
+  final double? initialLongitude;
 
   @override
   ConsumerState<HotelMapPage> createState() => _HotelMapPageState();
@@ -31,6 +42,7 @@ class _HotelMapPageState extends ConsumerState<HotelMapPage> {
   @override
   void initState() {
     super.initState();
+    _selectedHotelId = widget.initialSelectedHotelId ?? widget.initialHotel?.id;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _applyInitialCriteria();
     });
@@ -44,12 +56,13 @@ class _HotelMapPageState extends ConsumerState<HotelMapPage> {
       Localizations.localeOf(context).toLanguageTag(),
     );
     final mapResult = ref.watch(hotelMapSearchProvider(state.criteria));
-    final hotels = mapResult.maybeWhen(
+    final fetchedHotels = mapResult.maybeWhen(
       data: (result) => result.hotels,
       orElse: () => state.hotels,
     );
+    final hotels = _mergeInitialHotel(fetchedHotels);
     final selectedHotel = _selectedHotel(hotels);
-    _syncSelectedHotel(hotels);
+    _syncSelectedHotel(hotels, isLoading: mapResult.isLoading);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
@@ -191,7 +204,10 @@ class _HotelMapPageState extends ConsumerState<HotelMapPage> {
         .applyCriteria(initialCriteria);
   }
 
-  void _syncSelectedHotel(List<HotelSummary> hotels) {
+  void _syncSelectedHotel(
+    List<HotelSummary> hotels, {
+    required bool isLoading,
+  }) {
     final validHotels = hotels
         .where((hotel) => _coordinateFor(hotel) != null)
         .toList(growable: false);
@@ -200,6 +216,9 @@ class _HotelMapPageState extends ConsumerState<HotelMapPage> {
         selectedHotelId != null &&
         validHotels.any((hotel) => hotel.id == selectedHotelId);
     if (selectionStillValid) {
+      return;
+    }
+    if (selectedHotelId != null && isLoading) {
       return;
     }
     final nextSelectedId = validHotels.isEmpty ? null : validHotels.first.id;
@@ -232,6 +251,22 @@ class _HotelMapPageState extends ConsumerState<HotelMapPage> {
     return null;
   }
 
+  List<HotelSummary> _mergeInitialHotel(List<HotelSummary> hotels) {
+    final initialHotel = widget.initialHotel;
+    if (initialHotel == null || _coordinateFor(initialHotel) == null) {
+      return hotels;
+    }
+    final initialHotelId = initialHotel.id.trim();
+    if (initialHotelId.isNotEmpty &&
+        hotels.any(
+          (hotel) =>
+              hotel.id == initialHotelId && _coordinateFor(hotel) != null,
+        )) {
+      return hotels;
+    }
+    return <HotelSummary>[initialHotel, ...hotels];
+  }
+
   gmaps.LatLng? _coordinateFor(HotelSummary hotel) {
     final latitude = hotel.latitude;
     final longitude = hotel.longitude;
@@ -248,6 +283,10 @@ class _HotelMapPageState extends ConsumerState<HotelMapPage> {
   }
 
   gmaps.LatLng _fallbackTarget(HotelSearchCriteria criteria) {
+    final initialTarget = _initialTarget;
+    if (initialTarget != null) {
+      return initialTarget;
+    }
     switch (criteria.area.trim()) {
       case 'kyoto':
         return const gmaps.LatLng(35.0028469, 135.7566056);
@@ -257,6 +296,21 @@ class _HotelMapPageState extends ConsumerState<HotelMapPage> {
       default:
         return const gmaps.LatLng(34.6552488, 135.5011531);
     }
+  }
+
+  gmaps.LatLng? get _initialTarget {
+    final latitude = widget.initialLatitude ?? widget.initialHotel?.latitude;
+    final longitude = widget.initialLongitude ?? widget.initialHotel?.longitude;
+    if (latitude == null || longitude == null) {
+      return null;
+    }
+    if (latitude < -90 ||
+        latitude > 90 ||
+        longitude < -180 ||
+        longitude > 180) {
+      return null;
+    }
+    return gmaps.LatLng(latitude, longitude);
   }
 
   bool _sameCriteria(HotelSearchCriteria a, HotelSearchCriteria b) {

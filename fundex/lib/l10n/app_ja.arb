@@ -655,7 +655,7 @@
   "hotelUnavailable": "予約不可",
   "hotelPriceAsk": "料金確認",
   "hotelPricePerNight": " 〜 / 泊",
-  "hotelCardMeta": "所在地 {location} · 最大 {count} 名",
+  "hotelCardMeta": "{location} · 最大 {count} 名",
   "@hotelCardMeta": {
     "placeholders": {
       "location": {},

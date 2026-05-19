@@ -1450,7 +1450,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String hotelCardMeta(Object location, int count) {
-    return '位置 $location · 最大住宿人数 $count';
+    return '$location · 最大住宿人数 $count';
   }
 
   @override
@@ -6080,7 +6080,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String hotelCardMeta(Object location, int count) {
-    return '位置 $location · 最大住宿人數 $count';
+    return '$location · 最大住宿人數 $count';
   }
 
   @override

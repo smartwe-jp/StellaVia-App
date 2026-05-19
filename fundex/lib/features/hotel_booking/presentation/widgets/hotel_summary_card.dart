@@ -14,11 +14,13 @@ class HotelSummaryCard extends StatelessWidget {
     required this.hotel,
     required this.presenter,
     this.onTap,
+    this.onMapTap,
   });
 
   final HotelSummary hotel;
   final HotelBookingPresenter presenter;
   final VoidCallback? onTap;
+  final VoidCallback? onMapTap;
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +66,7 @@ class HotelSummaryCard extends StatelessWidget {
                   ),
                   Positioned(
                     top: 12,
-                    left: 12,
+                    right: 12,
                     child: HotelTypeBadge(label: _resolveTypeLabel()),
                   ),
                 ],
@@ -88,47 +90,40 @@ class HotelSummaryCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    context.l10n.hotelCardMeta(location, 10),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colors.textSecondary,
-                      fontWeight: FontWeight.w600,
-                    ),
+                  Row(
+                    children: [
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints.tightFor(
+                          width: 28,
+                          height: 20,
+                        ),
+                        visualDensity: VisualDensity.compact,
+                        iconSize: 22,
+                        icon: Icon(
+                          Icons.location_on_outlined,
+                          color: onMapTap == null
+                              ? colors.textTertiary
+                              : colors.brandSecondary,
+                        ),
+                        onPressed: onMapTap,
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          context.l10n.hotelCardMeta(location, 10),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: colors.textSecondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 12),
-                  Wrap(
-                    spacing: 7,
-                    runSpacing: 7,
-                    children: _resolveTags(context)
-                        .map(
-                          (tag) => DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: colors.highlightGold.withValues(
-                                alpha: 0.14,
-                              ),
-                              borderRadius: BorderRadius.circular(999),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 9,
-                                vertical: 5,
-                              ),
-                              child: Text(
-                                tag,
-                                style: Theme.of(context).textTheme.labelSmall
-                                    ?.copyWith(
-                                      color: colors.highlightGold,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                              ),
-                            ),
-                          ),
-                        )
-                        .toList(growable: false),
-                  ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 4),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
@@ -226,17 +221,6 @@ class HotelSummaryCard extends StatelessWidget {
       return hotel.area;
     }
     return context.l10n.hotelDefaultDestination;
-  }
-
-  List<String> _resolveTags(BuildContext context) {
-    final tags = <String>[...hotel.tags];
-    if (tags.isEmpty) {
-      return <String>[
-        context.l10n.hotelFilterAllTypes,
-        context.l10n.hotelSortRecommended,
-      ];
-    }
-    return tags.take(3).toList(growable: false);
   }
 
   String _resolveTypeLabel() {

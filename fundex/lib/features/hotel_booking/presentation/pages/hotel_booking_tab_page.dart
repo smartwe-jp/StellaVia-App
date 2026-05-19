@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../providers/hotel_booking_providers.dart';
 import '../support/hotel_booking_presenter.dart';
+import '../support/hotel_map_route_args.dart';
 import '../widgets/hotel_hero_section.dart';
 import '../widgets/hotel_state_views.dart';
 import '../widgets/hotel_summary_card.dart';
@@ -76,6 +77,10 @@ class _HotelBookingTabContent extends ConsumerWidget {
                   separatorBuilder: (_, __) => const SizedBox(height: 12),
                   itemBuilder: (context, index) {
                     final hotel = state.hotels[index];
+                    final mapArgs = HotelMapRouteArgs.fromHotel(
+                      criteria: state.criteria,
+                      hotel: hotel,
+                    );
                     return HotelSummaryCard(
                       hotel: hotel,
                       presenter: presenter,
@@ -85,6 +90,12 @@ class _HotelBookingTabContent extends ConsumerWidget {
                               '/hotel-booking/${Uri.encodeComponent(hotel.id)}',
                               extra: state.criteria,
                             ),
+                      onMapTap: mapArgs.hasValidTarget
+                          ? () => context.push(
+                              '/hotel-booking/map',
+                              extra: mapArgs,
+                            )
+                          : null,
                     );
                   },
                 ),

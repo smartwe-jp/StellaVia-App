@@ -1465,7 +1465,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String hotelCardMeta(Object location, int count) {
-    return '所在地 $location · 最大 $count 名';
+    return '$location · 最大 $count 名';
   }
 
   @override

@@ -655,7 +655,7 @@
   "hotelUnavailable": "暫不可訂",
   "hotelPriceAsk": "價格待確認",
   "hotelPricePerNight": " 起 / 晚",
-  "hotelCardMeta": "位置 {location} · 最大住宿人數 {count}",
+  "hotelCardMeta": "{location} · 最大住宿人數 {count}",
   "@hotelCardMeta": {
     "placeholders": {
       "location": {},
