@@ -2337,6 +2337,18 @@ abstract class AppLocalizations {
   /// **'Map'**
   String get hotelToolbarMap;
 
+  /// No description provided for @hotelMapListButton.
+  ///
+  /// In en, this message translates to:
+  /// **'List'**
+  String get hotelMapListButton;
+
+  /// No description provided for @hotelMapNearbyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearby'**
+  String get hotelMapNearbyButton;
+
   /// No description provided for @hotelGuestAdults.
   ///
   /// In en, this message translates to:

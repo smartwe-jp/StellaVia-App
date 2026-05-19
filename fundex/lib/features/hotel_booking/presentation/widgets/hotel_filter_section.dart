@@ -16,12 +16,14 @@ class HotelFilterSection extends ConsumerWidget {
     required this.presenter,
     required this.onPriceSortSelected,
     required this.onCriteriaApplied,
+    this.onMapTap,
   });
 
   final HotelBookingState state;
   final HotelBookingPresenter presenter;
   final Future<void> Function(HotelPriceSort priceSort) onPriceSortSelected;
   final Future<void> Function(HotelSearchCriteria criteria) onCriteriaApplied;
+  final VoidCallback? onMapTap;
 
   Future<void> _openSearchConditions(
     BuildContext context,
@@ -34,7 +36,9 @@ class HotelFilterSection extends ConsumerWidget {
       isScrollControlled: true,
       backgroundColor: colors.brandWhite,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(UiTokens.radius28)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(UiTokens.radius28),
+        ),
       ),
       builder: (_) {
         return HotelSearchConditionsSheet(
@@ -91,7 +95,7 @@ class HotelFilterSection extends ConsumerWidget {
               child: _ToolbarSegment(
                 icon: Icons.map_outlined,
                 label: context.l10n.hotelToolbarMap,
-                onTap: () {},
+                onTap: onMapTap ?? () {},
               ),
             ),
           ],

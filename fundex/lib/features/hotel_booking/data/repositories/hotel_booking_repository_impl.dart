@@ -227,6 +227,8 @@ HotelSummary _mapHotelSummary(HotelSummaryDto dto) {
     address: dto.address?.trim() ?? '',
     area: dto.area?.trim() ?? '',
     imageUrl: dto.image?.trim() ?? '',
+    latitude: _doubleOrNull(dto.lat),
+    longitude: _doubleOrNull(dto.lng),
     lowestPrice: price,
     beforeDiscountPrice: dto.beforeDiscountPrice ?? dto.basePrice,
     discount: discount,

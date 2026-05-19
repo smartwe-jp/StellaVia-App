@@ -422,6 +422,8 @@
   "hotelToolbarSort": "排序",
   "hotelToolbarFilter": "篩選",
   "hotelToolbarMap": "地圖",
+  "hotelMapListButton": "列表",
+  "hotelMapNearbyButton": "附近",
   "hotelGuestAdults": "成人",
   "hotelGuestChildren": "兒童",
   "hotelGuestRooms": "房間",

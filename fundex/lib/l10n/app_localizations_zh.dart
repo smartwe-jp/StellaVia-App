@@ -1158,6 +1158,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelToolbarMap => '地图';
 
   @override
+  String get hotelMapListButton => '列表';
+
+  @override
+  String get hotelMapNearbyButton => '附近';
+
+  @override
   String get hotelGuestAdults => '成人';
 
   @override
@@ -5780,6 +5786,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelToolbarMap => '地圖';
+
+  @override
+  String get hotelMapListButton => '列表';
+
+  @override
+  String get hotelMapNearbyButton => '附近';
 
   @override
   String get hotelGuestAdults => '成人';

@@ -7,11 +7,15 @@ class HotelSearchSummaryBar extends StatelessWidget {
     required this.summaryLine,
     required this.guestLine,
     required this.onTap,
+    this.leading,
+    this.actionIcon = Icons.search_rounded,
   });
 
   final String summaryLine;
   final String guestLine;
   final VoidCallback onTap;
+  final Widget? leading;
+  final IconData actionIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +49,10 @@ class HotelSearchSummaryBar extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(24, 12, 12, 12),
               child: Row(
                 children: <Widget>[
+                  if (leading != null) ...<Widget>[
+                    leading!,
+                    const SizedBox(width: 12),
+                  ],
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -84,11 +92,7 @@ class HotelSearchSummaryBar extends StatelessWidget {
                     child: SizedBox(
                       width: 36,
                       height: 36,
-                      child: Icon(
-                        Icons.search_rounded,
-                        color: colors.onDark,
-                        size: 22,
-                      ),
+                      child: Icon(actionIcon, color: colors.onDark, size: 22),
                     ),
                   ),
                 ],

@@ -81,6 +81,8 @@ class HotelSummary {
     required this.address,
     required this.area,
     required this.imageUrl,
+    required this.latitude,
+    required this.longitude,
     required this.lowestPrice,
     required this.beforeDiscountPrice,
     required this.discount,
@@ -97,6 +99,8 @@ class HotelSummary {
   final String address;
   final String area;
   final String imageUrl;
+  final double? latitude;
+  final double? longitude;
   final num? lowestPrice;
   final num? beforeDiscountPrice;
   final num? discount;

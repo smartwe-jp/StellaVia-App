@@ -422,6 +422,8 @@
   "hotelToolbarSort": "並び替え",
   "hotelToolbarFilter": "絞り込み",
   "hotelToolbarMap": "地図",
+  "hotelMapListButton": "リスト",
+  "hotelMapNearbyButton": "周辺",
   "hotelGuestAdults": "大人",
   "hotelGuestChildren": "子ども",
   "hotelGuestRooms": "部屋数",

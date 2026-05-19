@@ -1172,6 +1172,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelToolbarMap => '地図';
 
   @override
+  String get hotelMapListButton => 'リスト';
+
+  @override
+  String get hotelMapNearbyButton => '周辺';
+
+  @override
   String get hotelGuestAdults => '大人';
 
   @override

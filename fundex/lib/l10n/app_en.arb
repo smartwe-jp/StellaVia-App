@@ -422,6 +422,8 @@
   "hotelToolbarSort": "Sort",
   "hotelToolbarFilter": "Filter",
   "hotelToolbarMap": "Map",
+  "hotelMapListButton": "List",
+  "hotelMapNearbyButton": "Nearby",
   "hotelGuestAdults": "Adults",
   "hotelGuestChildren": "Children",
   "hotelGuestRooms": "Rooms",

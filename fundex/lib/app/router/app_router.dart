@@ -14,6 +14,7 @@ import '../../features/discussion_board/presentation/pages/discussion_board_tab_
 import '../../features/hotel_booking/domain/entities/hotel_models.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_booking_confirm_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_detail_page.dart';
+import '../../features/hotel_booking/presentation/pages/hotel_map_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_booking_tab_page.dart';
 import '../../features/home/presentation/pages/home_overview_tab_page.dart';
 import '../../features/investment/presentation/pages/fund_project_detail_page.dart';
@@ -286,6 +287,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   return const HotelBookingTabPage();
                 },
                 routes: <RouteBase>[
+                  GoRoute(
+                    path: 'map',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (BuildContext context, GoRouterState state) {
+                      final extra = state.extra;
+                      return HotelMapPage(
+                        initialCriteria: extra is HotelSearchCriteria
+                            ? extra
+                            : null,
+                      );
+                    },
+                  ),
                   GoRoute(
                     path: ':id',
                     parentNavigatorKey: _rootNavigatorKey,

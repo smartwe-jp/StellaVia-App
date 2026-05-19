@@ -25,6 +25,7 @@ class HotelHeroSection extends ConsumerStatefulWidget {
     required this.presenter,
     required this.onPriceSortSelected,
     required this.onCriteriaApplied,
+    this.onMapTap,
   });
 
   final HotelBookingState state;
@@ -32,6 +33,7 @@ class HotelHeroSection extends ConsumerStatefulWidget {
   final HotelBookingPresenter presenter;
   final Future<void> Function(HotelSearchCriteria criteria) onCriteriaApplied;
   final Future<void> Function(HotelPriceSort criteria) onPriceSortSelected;
+  final VoidCallback? onMapTap;
 
   @override
   ConsumerState<HotelHeroSection> createState() => _HotelHeroSectionState();
@@ -103,6 +105,7 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
             presenter: widget.presenter,
             onPriceSortSelected: widget.onPriceSortSelected,
             onCriteriaApplied: widget.onCriteriaApplied,
+            onMapTap: widget.onMapTap,
           ),
         ),
       ],

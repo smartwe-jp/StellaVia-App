@@ -1238,6 +1238,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hotelToolbarMap => 'Map';
 
   @override
+  String get hotelMapListButton => 'List';
+
+  @override
+  String get hotelMapNearbyButton => 'Nearby';
+
+  @override
   String get hotelGuestAdults => 'Adults';
 
   @override

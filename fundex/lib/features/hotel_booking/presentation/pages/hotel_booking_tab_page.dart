@@ -45,6 +45,8 @@ class _HotelBookingTabContent extends ConsumerWidget {
                 presenter: presenter,
                 onCriteriaApplied: controller.applyCriteria,
                 onPriceSortSelected: controller.setPriceSort,
+                onMapTap: () =>
+                    context.push('/hotel-booking/map', extra: state.criteria),
               ),
             ),
             if (state.error != null && state.hasContent)
