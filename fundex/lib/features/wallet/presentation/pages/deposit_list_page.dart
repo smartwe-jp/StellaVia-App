@@ -9,6 +9,7 @@ import '../../../../app/navigation/app_root_route_refresh_scope.dart';
 import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../providers/wallet_providers.dart';
+import '../widgets/wallet_pending_deposit_empty_card.dart';
 
 class DepositListPage extends ConsumerWidget {
   const DepositListPage({super.key});
@@ -59,9 +60,16 @@ class _DepositListBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     if (records.isEmpty) {
-      return DepositLoadState(
-        icon: Icons.account_balance_wallet_outlined,
-        message: l10n.walletPendingDepositEmptyMessage,
+      return Padding(
+                padding: const EdgeInsets.fromLTRB(16, 24, 16, 32),
+                child: WalletPendingDepositEmptyCard(
+                    message: l10n.walletPendingDepositEmptyMessage,
+                    actionLabel: l10n.walletPendingDepositEmptyAction,
+                    onActionPressed: () => context.go('/funds'),
+                  
+                ),
+              
+
       );
     }
 
@@ -162,9 +170,7 @@ class DepositProjectCard extends StatelessWidget {
                 horizontalPadding: 0,
                 backgroundColor: colors.highlightGold,
                 shadowColor: colors.highlightGold.withValues(alpha: 0.22),
-                textStyle: appText.button.copyWith(
-                  color: colors.onDark,
-                ),
+                textStyle: appText.button.copyWith(color: colors.onDark),
               ),
             ],
           ],

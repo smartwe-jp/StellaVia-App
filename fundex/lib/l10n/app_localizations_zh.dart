@@ -3304,7 +3304,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletDataLoadError => '入金信息读取失败。';
 
   @override
-  String get walletPendingDepositEmptyMessage => '当前没有需要入金的项目。';
+  String get walletPendingDepositEmptyMessage =>
+      '当前没有申请中且等待入金的基金。本公司不接受在申购前预先存放出资金。请务必在完成投资商品申购并中签后再进行入金。';
+
+  @override
+  String get walletPendingDepositEmptyAction => '查看基金列表';
 
   @override
   String get walletPendingDepositUnavailableMessage => '未找到需要入金的申请信息。';
@@ -7927,7 +7931,11 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get walletDataLoadError => '入金資訊讀取失敗。';
 
   @override
-  String get walletPendingDepositEmptyMessage => '目前沒有需要入金的項目。';
+  String get walletPendingDepositEmptyMessage =>
+      '目前沒有申請中且等待入金的基金。本公司不接受在申購前預先存放出資金。請務必在完成投資商品申購並中選後再進行入金。';
+
+  @override
+  String get walletPendingDepositEmptyAction => '查看基金列表';
 
   @override
   String get walletPendingDepositUnavailableMessage => '找不到需要入金的申請資訊。';

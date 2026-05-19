@@ -3504,7 +3504,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletPendingDepositEmptyMessage =>
-      'There are no projects requiring a deposit.';
+      'There are currently no applied funds awaiting deposit. We do not accept custody of investment funds before an application is made. Please make a deposit only after you have completed an application for an investment product and have been selected.';
+
+  @override
+  String get walletPendingDepositEmptyAction => 'View fund list';
 
   @override
   String get walletPendingDepositUnavailableMessage =>

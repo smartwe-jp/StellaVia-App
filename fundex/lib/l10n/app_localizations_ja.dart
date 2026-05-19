@@ -3338,7 +3338,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletDataLoadError => '入金情報の取得に失敗しました。';
 
   @override
-  String get walletPendingDepositEmptyMessage => '入金が必要な案件はありません。';
+  String get walletPendingDepositEmptyMessage =>
+      '現在、申請中で入金待ちのファンドはございません。当社では、お申込み前の出資金のお預かりは一切受け付けておりません。必ず、投資商品へのお申込みが完了し、中選されてからご入金をお願いいたします。';
+
+  @override
+  String get walletPendingDepositEmptyAction => 'ファンド一覧を見る';
 
   @override
   String get walletPendingDepositUnavailableMessage => '入金対象の申込情報が見つかりません。';

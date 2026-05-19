@@ -6396,8 +6396,14 @@ abstract class AppLocalizations {
   /// No description provided for @walletPendingDepositEmptyMessage.
   ///
   /// In en, this message translates to:
-  /// **'There are no projects requiring a deposit.'**
+  /// **'There are currently no applied funds awaiting deposit. We do not accept custody of investment funds before an application is made. Please make a deposit only after you have completed an application for an investment product and have been selected.'**
   String get walletPendingDepositEmptyMessage;
+
+  /// No description provided for @walletPendingDepositEmptyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'View fund list'**
+  String get walletPendingDepositEmptyAction;
 
   /// No description provided for @walletPendingDepositUnavailableMessage.
   ///
