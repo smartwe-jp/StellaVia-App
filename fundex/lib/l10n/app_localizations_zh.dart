@@ -1417,6 +1417,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelDetailAddress => '位置';
 
   @override
+  String get hotelMapAppPickerTitle => '请选择';
+
+  @override
+  String get hotelMapAppNotInstalled => '未安装该应用。';
+
+  @override
   String hotelDetailPerStay(int nights) {
     return ' / $nights晚';
   }
@@ -6045,6 +6051,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelDetailAddress => '位置';
+
+  @override
+  String get hotelMapAppPickerTitle => '請選擇';
+
+  @override
+  String get hotelMapAppNotInstalled => '未安裝該應用程式。';
 
   @override
   String hotelDetailPerStay(int nights) {

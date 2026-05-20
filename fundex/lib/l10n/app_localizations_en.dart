@@ -1500,6 +1500,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hotelDetailAddress => 'Location';
 
   @override
+  String get hotelMapAppPickerTitle => 'Please select';
+
+  @override
+  String get hotelMapAppNotInstalled => 'This app is not installed.';
+
+  @override
   String hotelDetailPerStay(int nights) {
     return ' / $nights nights';
   }

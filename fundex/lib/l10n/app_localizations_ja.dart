@@ -1432,6 +1432,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelDetailAddress => '所在地';
 
   @override
+  String get hotelMapAppPickerTitle => '選択してください';
+
+  @override
+  String get hotelMapAppNotInstalled => 'このアプリはインストールされていません。';
+
+  @override
   String hotelDetailPerStay(int nights) {
     return ' / $nights泊';
   }

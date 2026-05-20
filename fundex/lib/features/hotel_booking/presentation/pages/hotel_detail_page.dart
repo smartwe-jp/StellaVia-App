@@ -388,12 +388,6 @@ class _HotelDetailContent extends StatelessWidget {
       detail.checkInMessage,
       Icons.fact_check_outlined,
     );
-    addTextSection(
-      'address',
-      context.l10n.hotelDetailAddress,
-      detail.address,
-      Icons.place_outlined,
-    );
     if (HotelDetailMapSection.canShow(detail)) {
       sections.add(HotelDetailMapSection(detail: detail));
     }

@@ -623,6 +623,8 @@
   "hotelDetailContact": "Contact phone",
   "hotelDetailShowMoreAction": "Show more",
   "hotelDetailAddress": "Location",
+  "hotelMapAppPickerTitle": "Please select",
+  "hotelMapAppNotInstalled": "This app is not installed.",
   "hotelDetailPerStay": " / {nights} nights",
   "@hotelDetailPerStay": {
     "placeholders": {

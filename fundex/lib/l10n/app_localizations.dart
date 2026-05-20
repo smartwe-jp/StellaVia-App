@@ -2787,6 +2787,18 @@ abstract class AppLocalizations {
   /// **'Location'**
   String get hotelDetailAddress;
 
+  /// No description provided for @hotelMapAppPickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select'**
+  String get hotelMapAppPickerTitle;
+
+  /// No description provided for @hotelMapAppNotInstalled.
+  ///
+  /// In en, this message translates to:
+  /// **'This app is not installed.'**
+  String get hotelMapAppNotInstalled;
+
   /// No description provided for @hotelDetailPerStay.
   ///
   /// In en, this message translates to:

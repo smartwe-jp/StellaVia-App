@@ -623,6 +623,8 @@
   "hotelDetailContact": "联系电话",
   "hotelDetailShowMoreAction": "查看更多",
   "hotelDetailAddress": "位置",
+  "hotelMapAppPickerTitle": "请选择",
+  "hotelMapAppNotInstalled": "未安装该应用。",
   "hotelDetailPerStay": " / {nights}晚",
   "@hotelDetailPerStay": {
     "placeholders": {

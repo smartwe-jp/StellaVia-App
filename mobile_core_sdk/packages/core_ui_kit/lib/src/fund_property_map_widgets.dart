@@ -49,19 +49,38 @@ class FundPropertyMapSheetStrings {
   final String locationPermissionSettingsMessage;
 }
 
-class FundPropertyMapPreviewCard extends StatelessWidget {
+class FundPropertyMapPreviewCard extends StatefulWidget {
   const FundPropertyMapPreviewCard({
     super.key,
     required this.addressLabel,
     this.destination,
     this.height = 164,
+    this.showAddressOverlay = true,
+    this.showZoomControls = false,
     this.onTap,
   });
 
   final String addressLabel;
   final FundPropertyCoordinate? destination;
   final double height;
+  final bool showAddressOverlay;
+  final bool showZoomControls;
   final VoidCallback? onTap;
+
+  @override
+  State<FundPropertyMapPreviewCard> createState() =>
+      _FundPropertyMapPreviewCardState();
+}
+
+class _FundPropertyMapPreviewCardState
+    extends State<FundPropertyMapPreviewCard> {
+  gmaps.GoogleMapController? _mapController;
+
+  @override
+  void dispose() {
+    _mapController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,31 +91,31 @@ class FundPropertyMapPreviewCard extends StatelessWidget {
       color: colors.infoSubtle,
       borderRadius: BorderRadius.circular(UiTokens.radius16),
       child: InkWell(
-        onTap: onTap,
+        onTap: widget.onTap,
         borderRadius: BorderRadius.circular(UiTokens.radius16),
         child: SizedBox(
           width: double.infinity,
-          height: height,
+          height: widget.height,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(UiTokens.radius16),
             child: Stack(
               fit: StackFit.expand,
               children: <Widget>[
-                if (destination != null)
+                if (widget.destination != null)
                   IgnorePointer(
                     child: gmaps.GoogleMap(
                       initialCameraPosition: gmaps.CameraPosition(
-                        target: destination!.toGoogleLatLng(),
+                        target: widget.destination!.toGoogleLatLng(),
                         zoom: 14.2,
                       ),
                       markers: <gmaps.Marker>{
                         gmaps.Marker(
                           markerId: const gmaps.MarkerId('destination'),
-                          position: destination!.toGoogleLatLng(),
+                          position: widget.destination!.toGoogleLatLng(),
                         ),
                       },
                       compassEnabled: false,
-                      liteModeEnabled: true,
+                      liteModeEnabled: !widget.showZoomControls,
                       mapToolbarEnabled: false,
                       myLocationButtonEnabled: false,
                       myLocationEnabled: false,
@@ -105,44 +124,78 @@ class FundPropertyMapPreviewCard extends StatelessWidget {
                       tiltGesturesEnabled: false,
                       zoomControlsEnabled: false,
                       zoomGesturesEnabled: false,
+                      onMapCreated: (controller) {
+                        _mapController = controller;
+                      },
                     ),
                   )
                 else
                   ColoredBox(color: colors.infoSubtle),
-                Align(
-                  alignment: destination == null
-                      ? Alignment.center
-                      : Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 18,
-                        vertical: 13,
-                      ),
-                      decoration: BoxDecoration(
-                        color: colors.surface.withValues(alpha: 0.94),
-                        borderRadius: BorderRadius.circular(14),
-                        boxShadow: <BoxShadow>[
-                          BoxShadow(
-                            color: colors.scrim.withValues(alpha: 0.10),
-                            blurRadius: 10,
-                            offset: Offset(0, 4),
+                if (widget.showAddressOverlay)
+                  Align(
+                    alignment: widget.destination == null
+                        ? Alignment.center
+                        : Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 18,
+                          vertical: 13,
+                        ),
+                        decoration: BoxDecoration(
+                          color: colors.surface.withValues(alpha: 0.94),
+                          borderRadius: BorderRadius.circular(14),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                              color: colors.scrim.withValues(alpha: 0.10),
+                              blurRadius: 10,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Text(
+                          widget.addressLabel,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: appText.sectionTitle.copyWith(
+                            color: colors.primary,
                           ),
-                        ],
-                      ),
-                      child: Text(
-                        addressLabel,
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: appText.sectionTitle.copyWith(
-                          color: colors.primary,
                         ),
                       ),
                     ),
                   ),
-                ),
+                if (widget.showZoomControls && widget.destination != null)
+                  Positioned(
+                    right: 12,
+                    bottom: 12,
+                    child: Column(
+                      children: <Widget>[
+                        _MapRoundIconButton(
+                          icon: Icons.add,
+                          size: 36,
+                          iconSize: 21,
+                          onTap: () {
+                            _mapController?.animateCamera(
+                              gmaps.CameraUpdate.zoomIn(),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 8),
+                        _MapRoundIconButton(
+                          icon: Icons.remove,
+                          size: 36,
+                          iconSize: 21,
+                          onTap: () {
+                            _mapController?.animateCamera(
+                              gmaps.CameraUpdate.zoomOut(),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ),
@@ -551,10 +604,17 @@ class _MapFloatingActionButton extends StatelessWidget {
 }
 
 class _MapRoundIconButton extends StatelessWidget {
-  const _MapRoundIconButton({required this.icon, required this.onTap});
+  const _MapRoundIconButton({
+    required this.icon,
+    required this.onTap,
+    this.size = 44,
+    this.iconSize = 24,
+  });
 
   final IconData icon;
   final VoidCallback onTap;
+  final double size;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -570,9 +630,9 @@ class _MapRoundIconButton extends StatelessWidget {
         customBorder: const CircleBorder(),
         onTap: onTap,
         child: SizedBox(
-          width: 44,
-          height: 44,
-          child: Icon(icon, color: colors.textPrimary, size: 24),
+          width: size,
+          height: size,
+          child: Icon(icon, color: colors.textPrimary, size: iconSize),
         ),
       ),
     );

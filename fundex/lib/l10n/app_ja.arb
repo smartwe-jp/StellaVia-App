@@ -623,6 +623,8 @@
   "hotelDetailContact": "電話番号",
   "hotelDetailShowMoreAction": "もっと見る",
   "hotelDetailAddress": "所在地",
+  "hotelMapAppPickerTitle": "選択してください",
+  "hotelMapAppNotInstalled": "このアプリはインストールされていません。",
   "hotelDetailPerStay": " / {nights}泊",
   "@hotelDetailPerStay": {
     "placeholders": {
