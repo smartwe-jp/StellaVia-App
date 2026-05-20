@@ -17,6 +17,8 @@ import '../widgets/hotel_detail_map_section.dart';
 import '../widgets/hotel_detail_stay_summary_bar.dart';
 import '../widgets/hotel_remaining_rooms_label.dart';
 import '../widgets/hotel_room_plan_card.dart';
+import '../widgets/hotel_room_list_notice_card.dart';
+import '../widgets/hotel_search_condition_pickers.dart';
 import '../widgets/hotel_state_views.dart';
 
 class HotelDetailPage extends ConsumerStatefulWidget {
@@ -36,8 +38,27 @@ class HotelDetailPage extends ConsumerStatefulWidget {
 class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
   final Map<String, int> _roomQuantities = <String, int>{};
   final Set<String> _expandedInfoSectionIds = <String>{};
+  late HotelSearchCriteria _criteria;
+  int _criteriaRevision = 0;
   bool _isAssigningOccupancy = false;
   HotelAssignOccupancyResult? _assignOccupancyResult;
+
+  @override
+  void initState() {
+    super.initState();
+    _criteria = widget.initialCriteria;
+  }
+
+  @override
+  void didUpdateWidget(covariant HotelDetailPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.hotelId == widget.hotelId &&
+        _sameCriteria(oldWidget.initialCriteria, widget.initialCriteria)) {
+      return;
+    }
+    _criteria = widget.initialCriteria;
+    _resetRoomSelection();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +68,7 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
     );
     final query = HotelDetailQuery(
       hotelId: widget.hotelId,
-      criteria: widget.initialCriteria,
+      criteria: _criteria,
     );
     final detailState = ref.watch(hotelDetailProvider(query));
 
@@ -68,13 +89,15 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
             ),
             data: (detail) => _HotelDetailContent(
               detail: detail,
-              criteria: widget.initialCriteria,
+              criteria: _criteria,
               presenter: presenter,
               roomQuantities: _roomQuantities,
               expandedInfoSectionIds: _expandedInfoSectionIds,
               assignedPrice: _assignOccupancyResult?.price,
               isAssigningOccupancy: _isAssigningOccupancy,
               onBack: _handleBack,
+              onEditDates: _editStayDates,
+              onEditGuests: _editGuests,
               onInfoSectionExpandedChanged: _setInfoSectionExpanded,
               onRoomQuantityChanged: (change) =>
                   _setRoomQuantity(detail, change.key, change.value),
@@ -92,6 +115,39 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
       return;
     }
     context.go('/hotel-booking');
+  }
+
+  Future<void> _editStayDates() async {
+    final nextCriteria = await pickHotelStayDates(
+      context: context,
+      criteria: _criteria,
+    );
+    if (nextCriteria == null || !mounted) {
+      return;
+    }
+    _applyCriteria(nextCriteria);
+  }
+
+  Future<void> _editGuests() async {
+    final nextCriteria = await editHotelGuests(
+      context: context,
+      criteria: _criteria,
+      includeRooms: false,
+    );
+    if (nextCriteria == null || !mounted) {
+      return;
+    }
+    _applyCriteria(nextCriteria);
+  }
+
+  void _applyCriteria(HotelSearchCriteria nextCriteria) {
+    if (_sameCriteria(_criteria, nextCriteria)) {
+      return;
+    }
+    setState(() {
+      _criteria = nextCriteria;
+      _resetRoomSelection();
+    });
   }
 
   void _setInfoSectionExpanded(String sectionId, bool expanded) {
@@ -127,17 +183,22 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
       return;
     }
 
+    final requestCriteria = _criteria;
+    final requestRevision = _criteriaRevision;
     setState(() {
       _isAssigningOccupancy = true;
     });
     try {
       final result = await ref.read(assignHotelOccupancyUseCaseProvider)(
         hotelId: detail.id,
-        criteria: widget.initialCriteria,
+        criteria: requestCriteria,
         selectedRooms: nextSelections,
         languageCode: ref.read(hotelLocaleLanguageCodeProvider),
       );
       if (!mounted) {
+        return;
+      }
+      if (requestRevision != _criteriaRevision) {
         return;
       }
       setState(() {
@@ -147,11 +208,11 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
         _assignOccupancyResult = result;
         _isAssigningOccupancy = false;
       });
-      if (result.message.isNotEmpty) {
-        AppNotice.show(context, message: result.message);
-      }
     } catch (_) {
       if (!mounted) {
+        return;
+      }
+      if (requestRevision != _criteriaRevision) {
         return;
       }
       setState(() {
@@ -182,15 +243,89 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
     if (!mounted || !allowed) {
       return;
     }
+
+    if (_isAssigningOccupancy) {
+      return;
+    }
+    final finalAssignResult = await _runFinalAssignOccupancyCheck(
+      detail,
+      selectedRooms,
+    );
+    if (!mounted || finalAssignResult == null) {
+      return;
+    }
+    final assignMessage = finalAssignResult.message.trim();
+    if (assignMessage.isNotEmpty) {
+      final shouldContinue = await _showAssignOccupancyMessageDialog(
+        assignMessage,
+      );
+      if (!mounted || !shouldContinue) {
+        return;
+      }
+    }
+
     context.push(
       '/hotel-booking/${Uri.encodeComponent(detail.id)}/confirm',
       extra: HotelBookingConfirmSeed(
         detail: detail,
-        criteria: widget.initialCriteria,
+        criteria: _criteria,
         selectedRooms: selectedRooms,
-        assignedPrice: _assignOccupancyResult?.price,
+        assignedPrice: finalAssignResult.price,
       ),
     );
+  }
+
+  Future<HotelAssignOccupancyResult?> _runFinalAssignOccupancyCheck(
+    HotelDetail detail,
+    List<HotelSelectedRoom> selectedRooms,
+  ) async {
+    final requestCriteria = _criteria;
+    final requestRevision = _criteriaRevision;
+    setState(() {
+      _isAssigningOccupancy = true;
+    });
+    try {
+      final result = await ref.read(assignHotelOccupancyUseCaseProvider)(
+        hotelId: detail.id,
+        criteria: requestCriteria,
+        selectedRooms: selectedRooms,
+        languageCode: ref.read(hotelLocaleLanguageCodeProvider),
+      );
+      if (!mounted || requestRevision != _criteriaRevision) {
+        return null;
+      }
+      setState(() {
+        _assignOccupancyResult = result;
+        _isAssigningOccupancy = false;
+      });
+      return result;
+    } catch (_) {
+      if (!mounted || requestRevision != _criteriaRevision) {
+        return null;
+      }
+      setState(() {
+        _isAssigningOccupancy = false;
+      });
+      AppNotice.show(context, message: context.l10n.hotelAssignOccupancyFailed);
+      return null;
+    }
+  }
+
+  Future<bool> _showAssignOccupancyMessageDialog(String message) async {
+    final result = await AppDialogs.showAdaptiveAlert<bool>(
+      context: context,
+      title: context.l10n.hotelAssignOccupancyDialogTitle,
+      message: message,
+      actions: <AppDialogAction<bool>>[
+        AppDialogAction<bool>(label: context.l10n.commonCancel, value: false),
+        AppDialogAction<bool>(
+          label: context.l10n.hotelAssignOccupancyDialogConfirm,
+          value: true,
+          isDefaultAction: true,
+        ),
+      ],
+    );
+    return result ?? false;
   }
 
   List<HotelSelectedRoom> _selectedRoomsFor(
@@ -207,6 +342,13 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
     }
     return selectedRooms;
   }
+
+  void _resetRoomSelection() {
+    _criteriaRevision += 1;
+    _roomQuantities.clear();
+    _assignOccupancyResult = null;
+    _isAssigningOccupancy = false;
+  }
 }
 
 class _HotelDetailContent extends StatelessWidget {
@@ -219,6 +361,8 @@ class _HotelDetailContent extends StatelessWidget {
     required this.assignedPrice,
     required this.isAssigningOccupancy,
     required this.onBack,
+    required this.onEditDates,
+    required this.onEditGuests,
     required this.onInfoSectionExpandedChanged,
     required this.onRoomQuantityChanged,
     required this.onBookNow,
@@ -232,6 +376,8 @@ class _HotelDetailContent extends StatelessWidget {
   final num? assignedPrice;
   final bool isAssigningOccupancy;
   final VoidCallback onBack;
+  final VoidCallback onEditDates;
+  final VoidCallback onEditGuests;
   final void Function(String sectionId, bool expanded)
   onInfoSectionExpandedChanged;
   final ValueChanged<_RoomQuantityChange> onRoomQuantityChanged;
@@ -242,7 +388,9 @@ class _HotelDetailContent extends StatelessWidget {
     final colors = Theme.of(context).appColors;
     final selectedRooms = _selectedRooms;
     final amount = _payableAmount;
-    final roomsForNote = selectedRooms > 0 ? selectedRooms : criteria.roomCount;
+    final roomsForNote = _usesRoomPlanSelection
+        ? selectedRooms
+        : criteria.roomCount;
 
     return Stack(
       children: <Widget>[
@@ -259,6 +407,8 @@ class _HotelDetailContent extends StatelessWidget {
                       child: HotelDetailStaySummaryBar(
                         criteria: criteria,
                         presenter: presenter,
+                        onDatesTap: onEditDates,
+                        onGuestsTap: onEditGuests,
                       ),
                     ),
                   ),
@@ -272,6 +422,10 @@ class _HotelDetailContent extends StatelessWidget {
                   _HotelDetailHeading(detail: detail),
                   const SizedBox(height: 24),
                   _AvailableRoomsHeader(detail: detail),
+                  if (detail.checkInMessage.trim().isNotEmpty) ...<Widget>[
+                    const SizedBox(height: 12),
+                    HotelRoomListNoticeCard(message: detail.checkInMessage),
+                  ],
                   const SizedBox(height: 14),
                   if (detail.roomPlans.isEmpty)
                     _NoRoomsNotice(colors: colors)
@@ -356,7 +510,14 @@ class _HotelDetailContent extends StatelessWidget {
     if (hasSelection) {
       return selectedTotal;
     }
+    if (_usesRoomPlanSelection) {
+      return 0;
+    }
     return detail.lowestRoomPrice;
+  }
+
+  bool get _usesRoomPlanSelection {
+    return detail.bookingType == 0 || detail.roomPlans.isNotEmpty;
   }
 
   List<Widget> _detailInfoSections(BuildContext context) {
@@ -385,7 +546,7 @@ class _HotelDetailContent extends StatelessWidget {
     addTextSection(
       'checkInGuide',
       context.l10n.hotelDetailCheckInGuide,
-      detail.checkInMessage,
+      detail.checkInGuide,
       Icons.fact_check_outlined,
     );
     if (HotelDetailMapSection.canShow(detail)) {
@@ -571,4 +732,17 @@ String _roomKey(HotelRoomPlan room, int index) {
     return id;
   }
   return '${room.name}-$index';
+}
+
+bool _sameCriteria(HotelSearchCriteria a, HotelSearchCriteria b) {
+  return a.checkInDate == b.checkInDate &&
+      a.checkOutDate == b.checkOutDate &&
+      a.keyword == b.keyword &&
+      a.area == b.area &&
+      a.bookingType == b.bookingType &&
+      a.buildingCode == b.buildingCode &&
+      a.priceSort == b.priceSort &&
+      a.occupancy == b.occupancy &&
+      a.kids == b.kids &&
+      a.roomCount == b.roomCount;
 }

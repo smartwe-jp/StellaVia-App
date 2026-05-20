@@ -2499,6 +2499,18 @@ abstract class AppLocalizations {
   /// **'Could not update the room quantity. Please try again.'**
   String get hotelAssignOccupancyFailed;
 
+  /// No description provided for @hotelAssignOccupancyDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notice'**
+  String get hotelAssignOccupancyDialogTitle;
+
+  /// No description provided for @hotelAssignOccupancyDialogConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get hotelAssignOccupancyDialogConfirm;
+
   /// No description provided for @hotelDetailBookingComingSoon.
   ///
   /// In en, this message translates to:

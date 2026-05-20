@@ -1346,6 +1346,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not update the room quantity. Please try again.';
 
   @override
+  String get hotelAssignOccupancyDialogTitle => 'Notice';
+
+  @override
+  String get hotelAssignOccupancyDialogConfirm => 'Confirm';
+
+  @override
   String get hotelDetailBookingComingSoon => 'Booking flow will be added later';
 
   @override

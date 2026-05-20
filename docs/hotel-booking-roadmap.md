@@ -24,7 +24,10 @@ Current behavior:
 - Hotel list cards navigate to the public detail route `/hotel-booking/:id` with the current search criteria.
 - Hotel detail has a first UI/data slice: hero gallery, stay summary, room-plan selection, detail sections, refund policy text, and sticky booking amount bar. Booking submit is still a placeholder action.
 - Entering hotel detail triggers the legacy-compatible detail request set: `/pms/hotelinfobyidapp`, `/pms/refundStrategyText`, and `/pms/priceByDate`.
+- Hotel detail stay-date and guest changes follow the legacy detail-page behavior: date or adult/child changes reload the detail data and reset selected room-plan quantities and assigned occupancy price; the detail guest popup does not edit the search room-count field.
+- Hotel detail shows `checkInMessage` as a yellow notice card above the room list when it is non-empty. Do not display request/assign `message` values there.
 - Hotel detail room quantity changes call `/pms/assign/occupancy` and use the returned assigned price for the booking amount before entering confirmation.
+- Tapping the hotel detail booking button re-runs `/pms/assign/occupancy`; if the response contains `message`, show it in a cancel/confirm dialog and continue to confirmation only after confirm.
 - Hotel booking confirmation has a first UI/data slice at `/hotel-booking/:id/confirm`: order summary, coupon entry row, payment method selection, booker form, room guest form, invoice, note, and sticky amount bar. The submit action is still a placeholder.
 - Entering hotel booking confirmation initializes the legacy-compatible preparation request set: `/pms/page` for `APP011`, `APP003`, `APP004`, and `APP012`, plus `/pms/countryCodeList`, `/pms/order/room/extraPerson`, `/pms/coupons/order/custListV2`, `/pms/member/memberContactsList`, and `/creditCard/register/list`.
 - SDK-level hotel API client/DTO foundation exists for the first migration slice.

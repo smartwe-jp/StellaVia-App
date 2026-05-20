@@ -1265,6 +1265,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelAssignOccupancyFailed => '房间数量更新失败，请稍后再试。';
 
   @override
+  String get hotelAssignOccupancyDialogTitle => '提示';
+
+  @override
+  String get hotelAssignOccupancyDialogConfirm => '确定';
+
+  @override
   String get hotelDetailBookingComingSoon => '预订流程稍后接入';
 
   @override
@@ -5899,6 +5905,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelAssignOccupancyFailed => '房間數量更新失敗，請稍後再試。';
+
+  @override
+  String get hotelAssignOccupancyDialogTitle => '提示';
+
+  @override
+  String get hotelAssignOccupancyDialogConfirm => '確定';
 
   @override
   String get hotelDetailBookingComingSoon => '預訂流程稍後接入';

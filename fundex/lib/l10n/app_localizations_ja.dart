@@ -1280,6 +1280,12 @@ class AppLocalizationsJa extends AppLocalizations {
       '客室数を更新できませんでした。しばらくしてからもう一度お試しください。';
 
   @override
+  String get hotelAssignOccupancyDialogTitle => 'ご案内';
+
+  @override
+  String get hotelAssignOccupancyDialogConfirm => '確認';
+
+  @override
   String get hotelDetailBookingComingSoon => '予約フローは後で接続します';
 
   @override

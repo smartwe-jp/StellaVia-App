@@ -551,6 +551,8 @@
   "hotelDetailBookNow": "立即预订",
   "hotelDetailSelectRoomFirst": "请先选择房型",
   "hotelAssignOccupancyFailed": "房间数量更新失败，请稍后再试。",
+  "hotelAssignOccupancyDialogTitle": "提示",
+  "hotelAssignOccupancyDialogConfirm": "确定",
   "hotelDetailBookingComingSoon": "预订流程稍后接入",
   "hotelCurrencyCode": "JPY",
   "hotelBookingConfirmTitle": "预订确认",

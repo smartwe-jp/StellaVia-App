@@ -10,10 +10,14 @@ class HotelDetailStaySummaryBar extends StatelessWidget {
     super.key,
     required this.criteria,
     required this.presenter,
+    this.onDatesTap,
+    this.onGuestsTap,
   });
 
   final HotelSearchCriteria criteria;
   final HotelBookingPresenter presenter;
+  final VoidCallback? onDatesTap;
+  final VoidCallback? onGuestsTap;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +46,7 @@ class HotelDetailStaySummaryBar extends StatelessWidget {
                 value:
                     '${presenter.stayRange(criteria)}、 '
                     '${context.l10n.hotelSearchNights(criteria.nights)}',
+                onTap: onDatesTap,
               ),
             ),
             SizedBox(
@@ -53,10 +58,12 @@ class HotelDetailStaySummaryBar extends StatelessWidget {
               child: _SummaryItem(
                 icon: Icons.person_outline_rounded,
                 label: context.l10n.hotelDetailGuestRoomLabel,
-                value: context.l10n.hotelGuestSummary(
+                value: context.l10n.hotelGuestDetailedSummary(
                   criteria.occupancy,
+                  criteria.kids,
                   criteria.roomCount,
                 ),
+                onTap: onGuestsTap,
               ),
             ),
           ],
@@ -71,16 +78,18 @@ class _SummaryItem extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.value,
+    this.onTap,
   });
 
   final IconData icon;
   final String label;
   final String value;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
-    return Padding(
+    final content = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,14 +101,14 @@ class _SummaryItem extends StatelessWidget {
               Icon(icon, size: 18, color: colors.brandSecondary),
               const SizedBox(width: 4),
               Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: colors.brandSecondary,
-                    fontWeight: FontWeight.w600,
-                  ),
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: colors.brandSecondary,
+                  fontWeight: FontWeight.w600,
                 ),
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -115,6 +124,13 @@ class _SummaryItem extends StatelessWidget {
           ),
         ],
       ),
+    );
+    if (onTap == null) {
+      return content;
+    }
+    return Material(
+      type: MaterialType.transparency,
+      child: InkWell(onTap: onTap, child: content),
     );
   }
 }

@@ -551,6 +551,8 @@
   "hotelDetailBookNow": "Book now",
   "hotelDetailSelectRoomFirst": "Select a room first",
   "hotelAssignOccupancyFailed": "Could not update the room quantity. Please try again.",
+  "hotelAssignOccupancyDialogTitle": "Notice",
+  "hotelAssignOccupancyDialogConfirm": "Confirm",
   "hotelDetailBookingComingSoon": "Booking flow will be added later",
   "hotelCurrencyCode": "JPY",
   "hotelBookingConfirmTitle": "Booking confirmation",
