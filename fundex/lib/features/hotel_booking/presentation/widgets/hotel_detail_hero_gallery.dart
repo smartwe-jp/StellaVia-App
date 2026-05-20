@@ -1,6 +1,7 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import 'hotel_detail_image_placeholder.dart';
 
@@ -74,29 +75,27 @@ class _HotelDetailHeroGalleryState extends State<HotelDetailHeroGallery> {
           if (imageUrls.isEmpty)
             const HotelDetailImagePlaceholder(iconSize: 44)
           else
-            PageView.builder(
-              controller: _pageController,
-              itemCount: imageUrls.length,
+            FundHeroMediaBackground(
+              gradientColors: <Color>[colors.heroMiddle, colors.primaryAlt],
+              imageUrls: imageUrls,
+              showArtworkOverlay: false,
+              pageController: _pageController,
+              autoPlay: false,
+              onImageTap: (index) => _openImageViewer(context, index),
               onPageChanged: (index) => setState(() => _currentIndex = index),
-              itemBuilder: (context, index) {
-                return AppRemoteImage(
-                  imageUrl: imageUrls[index],
-                  fit: BoxFit.cover,
-                  placeholder: const HotelDetailImagePlaceholder(iconSize: 44),
-                  errorWidget: const HotelDetailImagePlaceholder(iconSize: 44),
-                );
-              },
             ),
-          DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: <Color>[
-                  colors.scrim.withValues(alpha: 0.25),
-                  colors.scrim.withValues(alpha: 0.08),
-                  colors.brandPrimaryDark.withValues(alpha: 0.42),
-                ],
+          IgnorePointer(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: <Color>[
+                    colors.scrim.withValues(alpha: 0.25),
+                    colors.scrim.withValues(alpha: 0.08),
+                    colors.brandPrimaryDark.withValues(alpha: 0.42),
+                  ],
+                ),
               ),
             ),
           ),
@@ -144,6 +143,24 @@ class _HotelDetailHeroGalleryState extends State<HotelDetailHeroGallery> {
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  Future<void> _openImageViewer(BuildContext context, int initialIndex) {
+    final imageUrls = _imageUrls;
+    return openAppImageViewer(
+      context,
+      initialIndex: initialIndex,
+      items: imageUrls
+          .map((url) => AppImageViewerItem(source: url))
+          .toList(growable: false),
+      texts: AppImageViewerTexts(
+        loadingLabel: context.l10n.imageViewerLoadingLabel,
+        loadFailedLabel: context.l10n.imageViewerLoadFailedLabel,
+        retryLabel: context.l10n.imageViewerRetryLabel,
+        invalidSourceNotice: context.l10n.imageViewerInvalidSourceNotice,
+        closeTooltip: context.l10n.imageViewerCloseTooltip,
       ),
     );
   }
