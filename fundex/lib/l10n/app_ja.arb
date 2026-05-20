@@ -536,6 +536,12 @@
       "width": {}
     }
   },
+  "hotelRoomFacilitiesTitle": "部屋の設備",
+  "hotelRoomDescriptionTitle": "部屋詳細",
+  "hotelRoomFacilityGuestRoom": "客室",
+  "hotelRoomFacilityBathroomAmenities": "浴室設備",
+  "hotelRoomFacilitySupplies": "備品",
+  "hotelRoomFacilityLending": "貸出品",
   "hotelDetailPayableAmount": "お支払い金額",
   "hotelDetailTaxNote": "{nights}日 · {rooms}室 · 税込説明",
   "@hotelDetailTaxNote": {

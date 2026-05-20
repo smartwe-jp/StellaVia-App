@@ -536,6 +536,12 @@
       "width": {}
     }
   },
+  "hotelRoomFacilitiesTitle": "房間設施",
+  "hotelRoomDescriptionTitle": "房間詳情",
+  "hotelRoomFacilityGuestRoom": "客房",
+  "hotelRoomFacilityBathroomAmenities": "浴室設備",
+  "hotelRoomFacilitySupplies": "備品",
+  "hotelRoomFacilityLending": "借用品",
   "hotelDetailPayableAmount": "應付金額",
   "hotelDetailTaxNote": "{nights}天 · {rooms}間 · 含稅費說明",
   "@hotelDetailTaxNote": {

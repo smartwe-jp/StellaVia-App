@@ -28,6 +28,7 @@ Current behavior:
 - Hotel detail shows `checkInMessage` as a yellow notice card above the room list when it is non-empty. Do not display request/assign `message` values there.
 - Hotel detail room quantity changes call `/pms/assign/occupancy` and use the returned assigned price for the booking amount before entering confirmation.
 - Tapping the hotel detail booking button re-runs `/pms/assign/occupancy`; if the response contains `message`, show it in a cancel/confirm dialog and continue to confirmation only after confirm.
+- Tapping a room plan card opens a room-detail bottom sheet with room photos, facts, facility categories, and room description from the detail API room-type fields.
 - Hotel booking confirmation has a first UI/data slice at `/hotel-booking/:id/confirm`: order summary, coupon entry row, payment method selection, booker form, room guest form, invoice, note, and sticky amount bar. The submit action is still a placeholder.
 - Entering hotel booking confirmation initializes the legacy-compatible preparation request set: `/pms/page` for `APP011`, `APP003`, `APP004`, and `APP012`, plus `/pms/countryCodeList`, `/pms/order/room/extraPerson`, `/pms/coupons/order/custListV2`, `/pms/member/memberContactsList`, and `/creditCard/register/list`.
 - SDK-level hotel API client/DTO foundation exists for the first migration slice.

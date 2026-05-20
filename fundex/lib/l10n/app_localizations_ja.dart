@@ -1262,6 +1262,24 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get hotelRoomFacilitiesTitle => '部屋の設備';
+
+  @override
+  String get hotelRoomDescriptionTitle => '部屋詳細';
+
+  @override
+  String get hotelRoomFacilityGuestRoom => '客室';
+
+  @override
+  String get hotelRoomFacilityBathroomAmenities => '浴室設備';
+
+  @override
+  String get hotelRoomFacilitySupplies => '備品';
+
+  @override
+  String get hotelRoomFacilityLending => '貸出品';
+
+  @override
   String get hotelDetailPayableAmount => 'お支払い金額';
 
   @override

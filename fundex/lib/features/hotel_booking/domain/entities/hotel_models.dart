@@ -206,6 +206,8 @@ class HotelRoomPlan {
     required this.bedroomCount,
     required this.bathroomCount,
     required this.remainingRooms,
+    required this.description,
+    required this.facilityCategories,
     required this.images,
     required this.beds,
   });
@@ -222,6 +224,8 @@ class HotelRoomPlan {
   final int? bedroomCount;
   final int? bathroomCount;
   final int? remainingRooms;
+  final String description;
+  final List<HotelRoomFacilityCategory> facilityCategories;
   final List<HotelDetailImage> images;
   final List<HotelRoomBed> beds;
 }
@@ -319,6 +323,18 @@ class HotelRoomBed {
   final String name;
   final int? quantity;
   final String width;
+}
+
+class HotelRoomFacilityCategory {
+  const HotelRoomFacilityCategory({
+    required this.code,
+    required this.name,
+    required this.items,
+  });
+
+  final String code;
+  final String name;
+  final List<String> items;
 }
 
 const Object _unset = Object();

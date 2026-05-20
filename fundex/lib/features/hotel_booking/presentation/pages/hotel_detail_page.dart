@@ -16,6 +16,7 @@ import '../widgets/hotel_detail_info_section.dart';
 import '../widgets/hotel_detail_map_section.dart';
 import '../widgets/hotel_detail_stay_summary_bar.dart';
 import '../widgets/hotel_remaining_rooms_label.dart';
+import '../widgets/hotel_room_detail_sheet.dart';
 import '../widgets/hotel_room_plan_card.dart';
 import '../widgets/hotel_room_list_notice_card.dart';
 import '../widgets/hotel_search_condition_pickers.dart';
@@ -445,6 +446,11 @@ class _HotelDetailContent extends StatelessWidget {
                           quantity: quantity,
                           nights: criteria.nights,
                           isBusy: isAssigningOccupancy,
+                          onTap: () => showHotelRoomDetailSheet(
+                            context: context,
+                            detail: detail,
+                            room: room,
+                          ),
                           onDecrement: () => onRoomQuantityChanged(
                             _RoomQuantityChange(key, quantity - 1),
                           ),

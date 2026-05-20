@@ -536,6 +536,12 @@
       "width": {}
     }
   },
+  "hotelRoomFacilitiesTitle": "Room facilities",
+  "hotelRoomDescriptionTitle": "Room details",
+  "hotelRoomFacilityGuestRoom": "Guest room",
+  "hotelRoomFacilityBathroomAmenities": "Bathroom amenities",
+  "hotelRoomFacilitySupplies": "Supplies",
+  "hotelRoomFacilityLending": "Lending items",
   "hotelDetailPayableAmount": "Amount due",
   "hotelDetailTaxNote": "{nights} days · {rooms} rooms · Taxes included",
   "@hotelDetailTaxNote": {

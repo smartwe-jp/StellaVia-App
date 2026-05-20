@@ -1248,6 +1248,24 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get hotelRoomFacilitiesTitle => '房间设施';
+
+  @override
+  String get hotelRoomDescriptionTitle => '房间详情';
+
+  @override
+  String get hotelRoomFacilityGuestRoom => '客房';
+
+  @override
+  String get hotelRoomFacilityBathroomAmenities => '浴室设备';
+
+  @override
+  String get hotelRoomFacilitySupplies => '备品';
+
+  @override
+  String get hotelRoomFacilityLending => '借用品';
+
+  @override
   String get hotelDetailPayableAmount => '应付金额';
 
   @override
@@ -5888,6 +5906,24 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String hotelRoomBedWidth(Object width) {
     return '寬${width}cm';
   }
+
+  @override
+  String get hotelRoomFacilitiesTitle => '房間設施';
+
+  @override
+  String get hotelRoomDescriptionTitle => '房間詳情';
+
+  @override
+  String get hotelRoomFacilityGuestRoom => '客房';
+
+  @override
+  String get hotelRoomFacilityBathroomAmenities => '浴室設備';
+
+  @override
+  String get hotelRoomFacilitySupplies => '備品';
+
+  @override
+  String get hotelRoomFacilityLending => '借用品';
 
   @override
   String get hotelDetailPayableAmount => '應付金額';

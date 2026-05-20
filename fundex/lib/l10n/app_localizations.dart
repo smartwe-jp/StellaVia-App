@@ -2469,6 +2469,42 @@ abstract class AppLocalizations {
   /// **'width {width}cm'**
   String hotelRoomBedWidth(Object width);
 
+  /// No description provided for @hotelRoomFacilitiesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Room facilities'**
+  String get hotelRoomFacilitiesTitle;
+
+  /// No description provided for @hotelRoomDescriptionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Room details'**
+  String get hotelRoomDescriptionTitle;
+
+  /// No description provided for @hotelRoomFacilityGuestRoom.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest room'**
+  String get hotelRoomFacilityGuestRoom;
+
+  /// No description provided for @hotelRoomFacilityBathroomAmenities.
+  ///
+  /// In en, this message translates to:
+  /// **'Bathroom amenities'**
+  String get hotelRoomFacilityBathroomAmenities;
+
+  /// No description provided for @hotelRoomFacilitySupplies.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplies'**
+  String get hotelRoomFacilitySupplies;
+
+  /// No description provided for @hotelRoomFacilityLending.
+  ///
+  /// In en, this message translates to:
+  /// **'Lending items'**
+  String get hotelRoomFacilityLending;
+
   /// No description provided for @hotelDetailPayableAmount.
   ///
   /// In en, this message translates to:

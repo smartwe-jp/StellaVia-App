@@ -184,6 +184,11 @@ abstract class HotelRoomTypeDto with _$HotelRoomTypeDto {
     int? bedRoomCount,
     int? bathRoomCount,
     int? roomCount,
+    Object? roomFacility,
+    @JsonKey(fromJson: hotelMapListFromJson)
+    @Default(<Map<String, Object?>>[])
+    List<Map<String, Object?>> roomTypeFacilities,
+    String? description,
     @JsonKey(fromJson: hotelStringListFromJson)
     @Default(<String>[])
     List<String> roomIds,
@@ -390,6 +395,37 @@ List<String> hotelStringListFromJson(Object? raw) {
     }
   }
   return <String>[raw.toString()];
+}
+
+List<Map<String, Object?>> hotelMapListFromJson(Object? raw) {
+  if (raw == null) {
+    return const <Map<String, Object?>>[];
+  }
+  if (raw is List) {
+    return raw
+        .whereType<Map>()
+        .map(
+          (value) => value.map((key, value) => MapEntry(key.toString(), value)),
+        )
+        .toList(growable: false);
+  }
+  if (raw is String) {
+    final trimmed = raw.trim();
+    if (trimmed.isEmpty) {
+      return const <Map<String, Object?>>[];
+    }
+    try {
+      return hotelMapListFromJson(jsonDecode(trimmed));
+    } catch (_) {
+      return const <Map<String, Object?>>[];
+    }
+  }
+  if (raw is Map) {
+    return <Map<String, Object?>>[
+      raw.map((key, value) => MapEntry(key.toString(), value)),
+    ];
+  }
+  return const <Map<String, Object?>>[];
 }
 
 @freezed

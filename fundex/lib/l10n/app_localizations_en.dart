@@ -1328,6 +1328,24 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get hotelRoomFacilitiesTitle => 'Room facilities';
+
+  @override
+  String get hotelRoomDescriptionTitle => 'Room details';
+
+  @override
+  String get hotelRoomFacilityGuestRoom => 'Guest room';
+
+  @override
+  String get hotelRoomFacilityBathroomAmenities => 'Bathroom amenities';
+
+  @override
+  String get hotelRoomFacilitySupplies => 'Supplies';
+
+  @override
+  String get hotelRoomFacilityLending => 'Lending items';
+
+  @override
   String get hotelDetailPayableAmount => 'Amount due';
 
   @override

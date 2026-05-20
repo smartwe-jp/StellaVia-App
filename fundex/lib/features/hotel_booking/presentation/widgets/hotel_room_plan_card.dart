@@ -16,6 +16,7 @@ class HotelRoomPlanCard extends StatelessWidget {
     required this.quantity,
     required this.nights,
     this.isBusy = false,
+    this.onTap,
     required this.onDecrement,
     required this.onIncrement,
   });
@@ -25,6 +26,7 @@ class HotelRoomPlanCard extends StatelessWidget {
   final int quantity;
   final int nights;
   final bool isBusy;
+  final VoidCallback? onTap;
   final VoidCallback onDecrement;
   final VoidCallback onIncrement;
 
@@ -49,7 +51,6 @@ class HotelRoomPlanCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.brandWhite,
         borderRadius: BorderRadius.circular(UiTokens.radius16),
-        //border: Border.all(color: colors.highlightGold.withValues(alpha: 0.42)),
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: colors.brandPrimaryDark.withValues(alpha: 0.08),
@@ -58,125 +59,30 @@ class HotelRoomPlanCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(UiTokens.radius12),
-                  child: SizedBox(
-                    width: 116,
-                    height: 126,
-                    child: AppRemoteImage(
-                      imageUrl: imageUrl,
-                      fit: BoxFit.cover,
-                      placeholder: const HotelDetailImagePlaceholder(),
-                      errorWidget: const HotelDetailImagePlaceholder(),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        room.name.isEmpty
-                            ? context.l10n.hotelUnnamedProperty
-                            : room.name,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: colors.brandPrimaryDark,
-                          fontWeight: FontWeight.w900,
-                          height: 1.12,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Wrap(
-                        spacing: 10,
-                        runSpacing: 8,
-                        children: facts
-                            .map(
-                              (fact) => _RoomFactChip(
-                                icon: fact.icon,
-                                label: fact.label,
-                              ),
-                            )
-                            .toList(growable: false),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+      child: Material(
+        color: colors.brandWhite,
+        borderRadius: BorderRadius.circular(UiTokens.radius16),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(UiTokens.radius16),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: _RoomPlanCardContent(
+              room: room,
+              quantity: quantity,
+              nights: nights,
+              imageUrl: imageUrl,
+              facts: facts,
+              price: price,
+              oldPrice: oldPrice,
+              hasDiscount: hasDiscount,
+              remainingRooms: remainingRooms,
+              canIncrement: canIncrement,
+              isBusy: isBusy,
+              onDecrement: onDecrement,
+              onIncrement: onIncrement,
             ),
-            const SizedBox(height: 16),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      HotelDiscountBadge(
-                        name: room.discountName,
-                        discount: room.discount,
-                      ),
-                      if (hasDiscount) const SizedBox(height: 8),
-                      if (oldPrice.isNotEmpty)
-                        Text(
-                          oldPrice,
-                          style: Theme.of(context).textTheme.labelLarge
-                              ?.copyWith(
-                                color: colors.textTertiary,
-                                decoration: TextDecoration.lineThrough,
-                              ),
-                        ),
-                      RichText(
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        text: TextSpan(
-                          children: <InlineSpan>[
-                            TextSpan(
-                              text: price.isEmpty
-                                  ? context.l10n.hotelPriceAsk
-                                  : price,
-                              style: Theme.of(context).textTheme.headlineMedium
-                                  ?.copyWith(
-                                    color: colors.brandPrimaryDark,
-                                    fontWeight: FontWeight.w800,
-                                    height: 1,
-                                  ),
-                            ),
-                            if (price.isNotEmpty)
-                              TextSpan(
-                                text: context.l10n.hotelDetailPerStay(nights),
-                                style: Theme.of(context).textTheme.labelLarge
-                                    ?.copyWith(
-                                      color: colors.brandPrimaryDark,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 12),
-                _RoomQuantityStepper(
-                  quantity: quantity,
-                  remainingRooms: remainingRooms,
-                  onDecrement: isBusy ? null : onDecrement,
-                  onIncrement: isBusy || !canIncrement ? null : onIncrement,
-                ),
-              ],
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -266,6 +172,158 @@ class HotelRoomPlanCard extends StatelessWidget {
       return false;
     }
     return original > current;
+  }
+}
+
+class _RoomPlanCardContent extends StatelessWidget {
+  const _RoomPlanCardContent({
+    required this.room,
+    required this.quantity,
+    required this.nights,
+    required this.imageUrl,
+    required this.facts,
+    required this.price,
+    required this.oldPrice,
+    required this.hasDiscount,
+    required this.remainingRooms,
+    required this.canIncrement,
+    required this.isBusy,
+    required this.onDecrement,
+    required this.onIncrement,
+  });
+
+  final HotelRoomPlan room;
+  final int quantity;
+  final int nights;
+  final String imageUrl;
+  final List<_RoomFact> facts;
+  final String price;
+  final String oldPrice;
+  final bool hasDiscount;
+  final int? remainingRooms;
+  final bool canIncrement;
+  final bool isBusy;
+  final VoidCallback onDecrement;
+  final VoidCallback onIncrement;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(UiTokens.radius12),
+              child: SizedBox(
+                width: 116,
+                height: 126,
+                child: AppRemoteImage(
+                  imageUrl: imageUrl,
+                  fit: BoxFit.cover,
+                  placeholder: const HotelDetailImagePlaceholder(),
+                  errorWidget: const HotelDetailImagePlaceholder(),
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    room.name.isEmpty
+                        ? context.l10n.hotelUnnamedProperty
+                        : room.name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: colors.brandPrimaryDark,
+                      fontWeight: FontWeight.w900,
+                      height: 1.12,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 8,
+                    children: facts
+                        .map(
+                          (fact) =>
+                              _RoomFactChip(icon: fact.icon, label: fact.label),
+                        )
+                        .toList(growable: false),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  HotelDiscountBadge(
+                    name: room.discountName,
+                    discount: room.discount,
+                  ),
+                  if (hasDiscount) const SizedBox(height: 8),
+                  if (oldPrice.isNotEmpty)
+                    Text(
+                      oldPrice,
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: colors.textTertiary,
+                        decoration: TextDecoration.lineThrough,
+                      ),
+                    ),
+                  RichText(
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    text: TextSpan(
+                      children: <InlineSpan>[
+                        TextSpan(
+                          text: price.isEmpty
+                              ? context.l10n.hotelPriceAsk
+                              : price,
+                          style: Theme.of(context).textTheme.headlineMedium
+                              ?.copyWith(
+                                color: colors.brandPrimaryDark,
+                                fontWeight: FontWeight.w800,
+                                height: 1,
+                              ),
+                        ),
+                        if (price.isNotEmpty)
+                          TextSpan(
+                            text: context.l10n.hotelDetailPerStay(nights),
+                            style: Theme.of(context).textTheme.labelLarge
+                                ?.copyWith(
+                                  color: colors.brandPrimaryDark,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            _RoomQuantityStepper(
+              quantity: quantity,
+              remainingRooms: remainingRooms,
+              onDecrement: isBusy ? null : onDecrement,
+              onIncrement: isBusy || !canIncrement ? null : onIncrement,
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
 

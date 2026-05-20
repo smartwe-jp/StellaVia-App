@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:company_api_runtime/company_api_runtime.dart';
 import 'package:intl/intl.dart';
 
@@ -344,6 +346,8 @@ HotelRoomPlan _mapRoomPlan(HotelRoomTypeDto dto) {
     bedroomCount: dto.bedRoomCount,
     bathroomCount: dto.bathRoomCount,
     remainingRooms: dto.roomCount,
+    description: dto.description?.trim() ?? '',
+    facilityCategories: _mapRoomFacilityCategories(dto),
     images: dto.pictures.map(_mapDetailImage).toList(growable: false),
     beds: dto.beds.map(_mapRoomBed).toList(growable: false),
   );
@@ -405,6 +409,64 @@ List<String> _mapFacilities(HotelDetailDto dto) {
       .where((value) => value.isNotEmpty)
       .toSet()
       .toList(growable: false);
+}
+
+List<HotelRoomFacilityCategory> _mapRoomFacilityCategories(
+  HotelRoomTypeDto dto,
+) {
+  final typedCategories = dto.roomTypeFacilities
+      .map(_mapRoomFacilityCategory)
+      .where((category) => category.items.isNotEmpty)
+      .toList(growable: false);
+  if (typedCategories.isNotEmpty) {
+    return typedCategories;
+  }
+
+  final legacyItems = _roomFacilityItemsFromRaw(dto.roomFacility);
+  if (legacyItems.isEmpty) {
+    return const <HotelRoomFacilityCategory>[];
+  }
+  return <HotelRoomFacilityCategory>[
+    HotelRoomFacilityCategory(code: 'all', name: '', items: legacyItems),
+  ];
+}
+
+HotelRoomFacilityCategory _mapRoomFacilityCategory(Map<String, Object?> raw) {
+  return HotelRoomFacilityCategory(
+    code: _stringOrEmpty(raw['categoryCode']),
+    name: _stringOrEmpty(raw['categoryName']),
+    items: _roomFacilityItemsFromRaw(raw['items']),
+  );
+}
+
+List<String> _roomFacilityItemsFromRaw(Object? raw) {
+  if (raw == null) {
+    return const <String>[];
+  }
+  if (raw is List) {
+    return raw
+        .map(_stringOrEmpty)
+        .where((value) => value.isNotEmpty)
+        .toSet()
+        .toList(growable: false);
+  }
+  if (raw is Map) {
+    return _roomFacilityItemsFromRaw(raw['id'] ?? raw['items']);
+  }
+  if (raw is String) {
+    final trimmed = raw.trim();
+    if (trimmed.isEmpty) {
+      return const <String>[];
+    }
+    try {
+      return _roomFacilityItemsFromRaw(jsonDecode(trimmed));
+    } catch (_) {
+      return <String>[trimmed];
+    }
+  }
+  return <String>[
+    _stringOrEmpty(raw),
+  ].where((value) => value.isNotEmpty).toList();
 }
 
 double? _doubleOrNull(Object? raw) {
