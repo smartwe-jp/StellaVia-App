@@ -103,7 +103,7 @@ class _HotelDetailHeroGalleryState extends State<HotelDetailHeroGallery> {
             top: topPadding + 12,
             left: 16,
             child: _HeroCircleButton(
-              icon: Icons.arrow_back_rounded,
+              icon: Icons.arrow_back_ios_new_rounded,
               onPressed: widget.onBack,
             ),
           ),
@@ -182,8 +182,8 @@ class _HeroCircleButton extends StatelessWidget {
         customBorder: const CircleBorder(),
         onTap: onPressed,
         child: SizedBox(
-          width: 54,
-          height: 54,
+          width: 44,
+          height: 44,
           child: Icon(icon, color: colors.onDark, size: 28),
         ),
       ),

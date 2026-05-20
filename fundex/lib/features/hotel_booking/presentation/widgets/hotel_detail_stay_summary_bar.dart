@@ -37,36 +37,39 @@ class HotelDetailStaySummaryBar extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(UiTokens.radius16),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: _SummaryItem(
-                icon: Icons.calendar_month_outlined,
-                label: context.l10n.hotelDetailStayDateLabel,
-                value:
-                    '${presenter.stayRange(criteria)}、 '
-                    '${context.l10n.hotelSearchNights(criteria.nights)}',
-                onTap: onDatesTap,
-              ),
-            ),
-            SizedBox(
-              width: 1,
-              height: 60,
-              child: ColoredBox(color: colors.borderSoft),
-            ),
-            Expanded(
-              child: _SummaryItem(
-                icon: Icons.person_outline_rounded,
-                label: context.l10n.hotelDetailGuestRoomLabel,
-                value: context.l10n.hotelGuestDetailedSummary(
-                  criteria.occupancy,
-                  criteria.kids,
-                  criteria.roomCount,
+        child: SizedBox(
+          height: 92,
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: _SummaryItem(
+                  icon: Icons.calendar_month_outlined,
+                  label: context.l10n.hotelDetailStayDateLabel,
+                  value:
+                      '${presenter.stayRange(criteria)}、 '
+                      '${context.l10n.hotelSearchNights(criteria.nights)}',
+                  onTap: onDatesTap,
                 ),
-                onTap: onGuestsTap,
               ),
-            ),
-          ],
+              SizedBox(
+                width: 1,
+                height: 60,
+                child: ColoredBox(color: colors.borderSoft),
+              ),
+              Expanded(
+                child: _SummaryItem(
+                  icon: Icons.person_outline_rounded,
+                  label: context.l10n.hotelDetailGuestRoomLabel,
+                  value: context.l10n.hotelGuestDetailedSummary(
+                    criteria.occupancy,
+                    criteria.kids,
+                    criteria.roomCount,
+                  ),
+                  onTap: onGuestsTap,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -92,8 +95,8 @@ class _SummaryItem extends StatelessWidget {
     final content = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -111,7 +114,7 @@ class _SummaryItem extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 6),
           Text(
             value,
             maxLines: 2,
