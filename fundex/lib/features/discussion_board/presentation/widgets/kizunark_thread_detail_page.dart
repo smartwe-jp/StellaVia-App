@@ -1,11 +1,37 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/discussion_board_models.dart';
 import '../providers/discussion_board_providers.dart';
 import '../support/discussion_board_time_label.dart';
+
+class KizunarkThreadDetailRouteArgs {
+  const KizunarkThreadDetailRouteArgs({
+    required this.thread,
+    required this.isAuthenticated,
+    required this.currentUserId,
+    required this.onOpenImageViewer,
+    required this.onReply,
+    required this.onMessageLongPress,
+  });
+
+  final DiscussionThread thread;
+  final bool isAuthenticated;
+  final String currentUserId;
+  final Future<void> Function(List<String> imageUrls, int index)
+  onOpenImageViewer;
+  final VoidCallback onReply;
+  final Future<void> Function({
+    required String commentId,
+    required String messageBody,
+    required bool canDelete,
+    required bool isDeleting,
+  })
+  onMessageLongPress;
+}
 
 class KizunarkThreadDetailPage extends ConsumerWidget {
   const KizunarkThreadDetailPage({
@@ -45,14 +71,17 @@ class KizunarkThreadDetailPage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: colors.background,
-      appBar: AppBar(
-        title: Text(l10n.kizunarkRepliesTitle(liveThread.replies.length)),
-        actions: <Widget>[
-          TextButton(
-            onPressed: onReply,
-            child: Text(l10n.kizunarkReplySendAction),
-          ),
-        ],
+      appBar: AppNavigationBar(
+        title: l10n.kizunarkRepliesTitle(liveThread.replies.length),
+        backgroundColor: colors.surface,
+        foregroundColor: colors.textPrimary,
+        leading: AppNavigationIconButton(
+          icon: Icons.arrow_back_rounded,
+          onTap: () => context.pop(),
+          backgroundColor: colors.surface.withValues(alpha: 0),
+          foregroundColor: colors.textPrimary,
+        ),
+        
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 96),

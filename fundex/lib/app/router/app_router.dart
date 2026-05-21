@@ -11,6 +11,8 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/real_person_auth_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/discussion_board/presentation/pages/discussion_board_tab_page.dart';
+import '../../features/discussion_board/presentation/widgets/kizunark_comment_composer_widgets.dart';
+import '../../features/discussion_board/presentation/widgets/kizunark_thread_detail_page.dart';
 import '../../features/home/presentation/pages/home_overview_tab_page.dart';
 import '../../features/investment/presentation/pages/fund_project_detail_page.dart';
 import '../../features/investment/presentation/pages/fund_lottery_apply_flow_page.dart';
@@ -66,6 +68,38 @@ final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(
 
 GlobalKey<NavigatorState> get appRootNavigatorKey => _rootNavigatorKey;
 
+CustomTransitionPage<void> _buildDiscussionBoardBottomUpPage({
+  required GoRouterState state,
+  required Widget child,
+}) {
+  return CustomTransitionPage<void>(
+    key: state.pageKey,
+    transitionDuration: const Duration(milliseconds: 240),
+    reverseTransitionDuration: const Duration(milliseconds: 200),
+    child: child,
+    transitionsBuilder:
+        (
+          BuildContext context,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+          Widget child,
+        ) {
+          final curved = CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeOutCubic,
+            reverseCurve: Curves.easeInCubic,
+          );
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 1),
+              end: Offset.zero,
+            ).animate(curved),
+            child: child,
+          );
+        },
+  );
+}
+
 String? resolveAuthRedirect({
   required AsyncValue<bool> authState,
   required String location,
@@ -75,6 +109,7 @@ String? resolveAuthRedirect({
       location == '/home/free-market' ||
       location.startsWith('/home/free-market/') ||
       location == '/discussion-board' ||
+      location.startsWith('/discussion-board/') ||
       location == '/funds' ||
       location.startsWith('/funds/') ||
       location == '/profile/settings' ||
@@ -174,6 +209,50 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/auth/real-person',
         builder: (BuildContext context, GoRouterState state) {
           return const RealPersonAuthPage();
+        },
+      ),
+      GoRoute(
+        path: '/discussion-board/post',
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          final extra = state.extra;
+          return _buildDiscussionBoardBottomUpPage(
+            state: state,
+            child: extra is KizunarkPostComposeRouteArgs
+                ? extra.child
+                : const DiscussionBoardTabPage(),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/discussion-board/reply/:threadId',
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          final extra = state.extra;
+          return _buildDiscussionBoardBottomUpPage(
+            state: state,
+            child: extra is KizunarkReplyComposeRouteArgs
+                ? extra.child
+                : const DiscussionBoardTabPage(),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/discussion-board/thread/:threadId',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (BuildContext context, GoRouterState state) {
+          final extra = state.extra;
+          if (extra is! KizunarkThreadDetailRouteArgs) {
+            return const DiscussionBoardTabPage();
+          }
+          return KizunarkThreadDetailPage(
+            thread: extra.thread,
+            isAuthenticated: extra.isAuthenticated,
+            currentUserId: extra.currentUserId,
+            onOpenImageViewer: extra.onOpenImageViewer,
+            onReply: extra.onReply,
+            onMessageLongPress: extra.onMessageLongPress,
+          );
         },
       ),
       StatefulShellRoute.indexedStack(

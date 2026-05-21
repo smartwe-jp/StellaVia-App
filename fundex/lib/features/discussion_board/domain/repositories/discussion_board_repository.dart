@@ -23,6 +23,7 @@ abstract class DiscussionBoardRepository {
     required String fallbackHandle,
     required String fallbackBadgeLabel,
     List<String> imageUrls = const <String>[],
+    int? linkedProjectId,
   });
 
   Future<List<String>> uploadImages({required List<String> filePaths});

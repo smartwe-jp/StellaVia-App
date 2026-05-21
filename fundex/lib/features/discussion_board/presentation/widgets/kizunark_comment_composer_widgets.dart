@@ -25,6 +25,18 @@ class SelectedComposerFund {
   bool get isClearSelection => projectId.isEmpty;
 }
 
+class KizunarkReplyComposeRouteArgs {
+  const KizunarkReplyComposeRouteArgs({required this.child});
+
+  final Widget child;
+}
+
+class KizunarkPostComposeRouteArgs {
+  const KizunarkPostComposeRouteArgs({required this.child});
+
+  final Widget child;
+}
+
 class KizunarkPostEntry extends StatelessWidget {
   const KizunarkPostEntry({
     required this.avatar,
@@ -131,6 +143,7 @@ class KizunarkComposeSheet extends StatefulWidget {
     required this.onPickFund,
     required this.onTextChanged,
     required this.onSubmit,
+    this.fullPage = false,
     super.key,
   });
 
@@ -150,6 +163,7 @@ class KizunarkComposeSheet extends StatefulWidget {
   final Future<void> Function() onPickFund;
   final ValueChanged<String> onTextChanged;
   final Future<bool> Function(List<String> imageFilePaths) onSubmit;
+  final bool fullPage;
 
   @override
   State<KizunarkComposeSheet> createState() => _KizunarkComposeSheetState();
@@ -176,6 +190,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
 
   bool get _hasDraftContent =>
       widget.controller.text.trim().isNotEmpty || _imageFilePaths.isNotEmpty;
+  bool get _canSubmit => widget.controller.text.trim().isNotEmpty;
 
   void _syncInputContentState() {
     final nextHasContent = _hasDraftContent;
@@ -202,6 +217,10 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
   }
 
   Future<void> _confirmClose() async {
+    if (!_hasDraftContent) {
+      Navigator.of(context).pop();
+      return;
+    }
     await showModalBottomSheet<void>(
       context: context,
       useRootNavigator: true,
@@ -212,6 +231,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
           onDelete: () {
             Navigator.of(sheetContext).pop();
             widget.controller.clear();
+            widget.onTextChanged('');
             _imageFilePaths.clear();
             Navigator.of(context).pop();
           },
@@ -225,7 +245,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
   }
 
   Future<void> _submit() async {
-    if (_isSubmitting) {
+    if (_isSubmitting || !_canSubmit) {
       return;
     }
     setState(() {
@@ -247,81 +267,87 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
     final l10n = context.l10n;
-    return SafeArea(
+    final content = Material(
+      color: colors.surface,
+      borderRadius: widget.fullPage
+          ? BorderRadius.zero
+          : const BorderRadius.vertical(top: Radius.circular(24)),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: <Widget>[
+          _PostComposeHeader(
+            closeLabel: widget.closeLabel,
+            draftLabel: l10n.kizunarkComposeDraftAction,
+            submitLabel: widget.submitLabel,
+            isSubmitting: _isSubmitting,
+            canSubmit: _canSubmit,
+            showDraftAction: !_hasInputContent,
+            onClose: _confirmClose,
+            onDraftTap: () {},
+            onSubmit: _submit,
+          ),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
+              children: <Widget>[
+                _PostInputComposer(
+                  avatarUrl: widget.currentUser?.avatar,
+                  avatarSeed: widget.avatarSeed,
+                  authorLabel: widget.authorLabel,
+                  placeholder: widget.placeholder,
+                  controller: widget.controller,
+                  onChanged: widget.onTextChanged,
+                  imageFilePaths: _imageFilePaths,
+                  onRemoveImage: (int index) {
+                    setState(() {
+                      _imageFilePaths.removeAt(index);
+                      _hasInputContent = _hasDraftContent;
+                    });
+                  },
+                ),
+                if (widget.selectedFund != null) ...<Widget>[
+                  const SizedBox(height: 10),
+                  _LinkedFundPreview(fund: widget.selectedFund!),
+                ],
+              ],
+            ),
+          ),
+          _ComposeDock(
+            addImageLabel: widget.addImageLabel,
+            linkedFundLabel: widget.linkedFundLabel,
+            imageCounter: widget.imageCounterBuilder(_imageFilePaths.length),
+            canAddImage: _imageFilePaths.length < _maxImages,
+            onAddImage: _addImage,
+            onPickFund: widget.onPickFund,
+          ),
+        ],
+      ),
+    );
+    final page = SafeArea(
       top: true,
       bottom: false,
-      minimum: const EdgeInsets.only(top: 8),
+      minimum: widget.fullPage
+          ? EdgeInsets.zero
+          : const EdgeInsets.only(top: 8),
       child: Padding(
         padding: EdgeInsets.only(
           bottom: MediaQuery.viewInsetsOf(context).bottom,
         ),
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: FractionallySizedBox(
-            heightFactor: 0.92,
-            alignment: Alignment.bottomCenter,
-            child: Material(
-              color: colors.surface,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(24),
+        child: widget.fullPage
+            ? content
+            : Align(
+                alignment: Alignment.bottomCenter,
+                child: FractionallySizedBox(
+                  heightFactor: 0.92,
+                  alignment: Alignment.bottomCenter,
+                  child: content,
+                ),
               ),
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                children: <Widget>[
-                  _PostComposeHeader(
-                    closeLabel: widget.closeLabel,
-                    draftLabel: l10n.kizunarkComposeDraftAction,
-                    submitLabel: widget.submitLabel,
-                    isSubmitting: _isSubmitting,
-                    canSubmit: _hasInputContent,
-                    showDraftAction: !_hasInputContent,
-                    onClose: _confirmClose,
-                    onDraftTap: () {},
-                    onSubmit: _submit,
-                  ),
-                  Expanded(
-                    child: ListView(
-                      padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
-                      children: <Widget>[
-                        _PostInputComposer(
-                          avatarUrl: widget.currentUser?.avatar,
-                          avatarSeed: widget.avatarSeed,
-                          authorLabel: widget.authorLabel,
-                          placeholder: widget.placeholder,
-                          controller: widget.controller,
-                          onChanged: widget.onTextChanged,
-                          imageFilePaths: _imageFilePaths,
-                          onRemoveImage: (int index) {
-                            setState(() {
-                              _imageFilePaths.removeAt(index);
-                              _hasInputContent = _hasDraftContent;
-                            });
-                          },
-                        ),
-                        if (widget.selectedFund != null) ...<Widget>[
-                          const SizedBox(height: 10),
-                          _LinkedFundPreview(fund: widget.selectedFund!),
-                        ],
-                      ],
-                    ),
-                  ),
-                  _ComposeDock(
-                    addImageLabel: widget.addImageLabel,
-                    linkedFundLabel: widget.linkedFundLabel,
-                    imageCounter: widget.imageCounterBuilder(
-                      _imageFilePaths.length,
-                    ),
-                    canAddImage: _imageFilePaths.length < _maxImages,
-                    onAddImage: _addImage,
-                    onPickFund: widget.onPickFund,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
       ),
     );
+    return widget.fullPage
+        ? ColoredBox(color: colors.surface, child: page)
+        : page;
   }
 }
 
@@ -342,11 +368,14 @@ class KizunarkReplyComposeSheet extends StatefulWidget {
     required this.targetImageUrls,
     required this.onTargetImageTap,
     required this.addImageLabel,
+    required this.linkedFundLabel,
     required this.imageCounterBuilder,
     required this.controller,
     required this.onChanged,
     required this.onPickImage,
+    required this.onPickFund,
     required this.onSubmit,
+    this.fullPage = false,
     super.key,
   });
 
@@ -365,11 +394,14 @@ class KizunarkReplyComposeSheet extends StatefulWidget {
   final List<String> targetImageUrls;
   final ValueChanged<int> onTargetImageTap;
   final String addImageLabel;
+  final String linkedFundLabel;
   final String Function(int count) imageCounterBuilder;
   final TextEditingController controller;
   final ValueChanged<String> onChanged;
   final Future<String?> Function() onPickImage;
+  final Future<void> Function() onPickFund;
   final Future<bool> Function(List<String> imageFilePaths) onSubmit;
+  final bool fullPage;
 
   @override
   State<KizunarkReplyComposeSheet> createState() =>
@@ -380,6 +412,34 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
   static const int _maxImages = 4;
   final List<String> _imageFilePaths = <String>[];
   bool _isSubmitting = false;
+  bool _hasInputContent = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _hasInputContent = _hasDraftContent;
+    widget.controller.addListener(_syncInputContentState);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_syncInputContentState);
+    super.dispose();
+  }
+
+  bool get _hasDraftContent =>
+      widget.controller.text.trim().isNotEmpty || _imageFilePaths.isNotEmpty;
+  bool get _canSubmit => widget.controller.text.trim().isNotEmpty;
+
+  void _syncInputContentState() {
+    final nextHasContent = _hasDraftContent;
+    if (nextHasContent == _hasInputContent || !mounted) {
+      return;
+    }
+    setState(() {
+      _hasInputContent = nextHasContent;
+    });
+  }
 
   Future<void> _addImage() async {
     if (_imageFilePaths.length >= _maxImages) {
@@ -391,11 +451,40 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
     }
     setState(() {
       _imageFilePaths.add(path);
+      _hasInputContent = true;
     });
   }
 
+  Future<void> _confirmClose() async {
+    if (!_hasDraftContent) {
+      Navigator.of(context).pop();
+      return;
+    }
+    await showModalBottomSheet<void>(
+      context: context,
+      useRootNavigator: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext sheetContext) {
+        return _ComposeCloseMenu(
+          onDelete: () {
+            Navigator.of(sheetContext).pop();
+            widget.controller.clear();
+            widget.onChanged('');
+            _imageFilePaths.clear();
+            Navigator.of(context).pop();
+          },
+          onSaveDraft: () {
+            Navigator.of(sheetContext).pop();
+            Navigator.of(context).pop();
+          },
+        );
+      },
+    );
+  }
+
   Future<void> _submit() async {
-    if (_isSubmitting) {
+    if (_isSubmitting || !_canSubmit) {
       return;
     }
     setState(() {
@@ -416,78 +505,89 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
-    return SafeArea(
+    final content = Material(
+      color: colors.surface,
+      borderRadius: widget.fullPage
+          ? BorderRadius.zero
+          : const BorderRadius.vertical(top: Radius.circular(24)),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: <Widget>[
+          _ReplyComposeHeader(
+            closeLabel: widget.closeLabel,
+            submitLabel: widget.submitLabel,
+            isSubmitting: _isSubmitting,
+            canSubmit: _canSubmit,
+            onClose: _confirmClose,
+            onSubmit: _submit,
+          ),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 18, 16, 20),
+              children: <Widget>[
+                _ReplyTargetPostPreview(
+                  avatarUrl: widget.targetAvatarUrl,
+                  gradientColorValues: widget.targetAvatarGradientColorValues,
+                  name: widget.targetName,
+                  body: widget.targetBody,
+                  imageUrls: widget.targetImageUrls,
+                  onImageTap: widget.onTargetImageTap,
+                ),
+                _ReplyInputComposer(
+                  avatarUrl: widget.currentUser?.avatar,
+                  avatarSeed: widget.avatarSeed,
+                  replyLabel: widget.targetLabel,
+                  targetName: widget.targetName,
+                  placeholder: widget.placeholder,
+                  controller: widget.controller,
+                  onChanged: widget.onChanged,
+                  imageFilePaths: _imageFilePaths,
+                  onRemoveImage: (int index) {
+                    setState(() {
+                      _imageFilePaths.removeAt(index);
+                      _hasInputContent = _hasDraftContent;
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+          _ComposeDock(
+            addImageLabel: widget.addImageLabel,
+            linkedFundLabel: widget.linkedFundLabel,
+            imageCounter: widget.imageCounterBuilder(_imageFilePaths.length),
+            canAddImage: _imageFilePaths.length < _maxImages,
+            onAddImage: _addImage,
+            onPickFund: widget.onPickFund,
+          ),
+        ],
+      ),
+    );
+    final page = SafeArea(
       top: true,
       bottom: false,
-      minimum: const EdgeInsets.only(top: 8),
+      minimum: widget.fullPage
+          ? EdgeInsets.zero
+          : const EdgeInsets.only(top: 8),
       child: Padding(
         padding: EdgeInsets.only(
           bottom: MediaQuery.viewInsetsOf(context).bottom,
         ),
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: FractionallySizedBox(
-            heightFactor: 0.92,
-            alignment: Alignment.bottomCenter,
-            child: Material(
-              color: colors.surface,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(24),
+        child: widget.fullPage
+            ? content
+            : Align(
+                alignment: Alignment.bottomCenter,
+                child: FractionallySizedBox(
+                  heightFactor: 0.92,
+                  alignment: Alignment.bottomCenter,
+                  child: content,
+                ),
               ),
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                children: <Widget>[
-                  _ReplyComposeHeader(
-                    closeLabel: widget.closeLabel,
-                    submitLabel: widget.submitLabel,
-                    isSubmitting: _isSubmitting,
-                    onClose: () => Navigator.of(context).pop(),
-                    onSubmit: _submit,
-                  ),
-                  Expanded(
-                    child: ListView(
-                      padding: const EdgeInsets.fromLTRB(16, 18, 16, 20),
-                      children: <Widget>[
-                        _ReplyTargetPostPreview(
-                          avatarUrl: widget.targetAvatarUrl,
-                          gradientColorValues:
-                              widget.targetAvatarGradientColorValues,
-                          name: widget.targetName,
-                          body: widget.targetBody,
-                          imageUrls: widget.targetImageUrls,
-                          onImageTap: widget.onTargetImageTap,
-                        ),
-                        _ReplyInputComposer(
-                          avatarUrl: widget.currentUser?.avatar,
-                          avatarSeed: widget.avatarSeed,
-                          replyLabel: widget.targetLabel,
-                          targetName: widget.targetName,
-                          placeholder: widget.placeholder,
-                          controller: widget.controller,
-                          onChanged: widget.onChanged,
-                          imageFilePaths: _imageFilePaths,
-                          onRemoveImage: (int index) {
-                            setState(() => _imageFilePaths.removeAt(index));
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  _ComposeDock(
-                    addImageLabel: widget.addImageLabel,
-                    imageCounter: widget.imageCounterBuilder(
-                      _imageFilePaths.length,
-                    ),
-                    canAddImage: _imageFilePaths.length < _maxImages,
-                    onAddImage: _addImage,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
       ),
     );
+    return widget.fullPage
+        ? ColoredBox(color: colors.surface, child: page)
+        : page;
   }
 }
 
@@ -582,7 +682,10 @@ class _PostComposeHeader extends StatelessWidget {
               onPressed: onClose,
               child: Text(
                 closeLabel,
-                style: appText.body.copyWith(color: colors.textPrimary, fontWeight: FontWeight.bold),
+                style: appText.body.copyWith(
+                  color: colors.textPrimary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const Spacer(),
@@ -628,6 +731,7 @@ class _ReplyComposeHeader extends StatelessWidget {
     required this.closeLabel,
     required this.submitLabel,
     required this.isSubmitting,
+    required this.canSubmit,
     required this.onClose,
     required this.onSubmit,
   });
@@ -635,6 +739,7 @@ class _ReplyComposeHeader extends StatelessWidget {
   final String closeLabel;
   final String submitLabel;
   final bool isSubmitting;
+  final bool canSubmit;
   final VoidCallback onClose;
   final VoidCallback onSubmit;
 
@@ -654,12 +759,15 @@ class _ReplyComposeHeader extends StatelessWidget {
               onPressed: onClose,
               child: Text(
                 closeLabel,
-                style: appText.body.copyWith(color: colors.textPrimary, fontWeight: FontWeight.bold),
+                style: appText.body.copyWith(
+                  color: colors.textPrimary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const Spacer(),
             FilledButton(
-              onPressed: isSubmitting ? null : onSubmit,
+              onPressed: isSubmitting || !canSubmit ? null : onSubmit,
               style: FilledButton.styleFrom(
                 minimumSize: const Size(74, 38),
                 maximumSize: const Size(120, 42),
@@ -1018,22 +1126,30 @@ class _ReplyTargetPostPreview extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    body,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: appText.body.copyWith(color: colors.textSecondary),
-                  ),
-                  if (imageUrls.isNotEmpty) ...<Widget>[
-                    const SizedBox(height: 8),
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 220),
-                      child: KizunarkImageGrid(
-                        imageUrls: imageUrls,
-                        onImageTap: onImageTap,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          body,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: appText.body.copyWith(color: colors.textSecondary),
+                        ),
                       ),
-                    ),
-                  ],
+                      if (imageUrls.isNotEmpty) 
+                        Expanded(
+                          flex: 1,
+                          child: KizunarkImageGrid(
+                              imageUrls: imageUrls,
+                              //onImageTap: onImageTap,
+                            ),
+                        ),
+                      ],
+                    
+                  ),
+                  
                 ],
               ),
             ),
@@ -1104,7 +1220,7 @@ class _ReplyInputComposer extends StatelessWidget {
               TextField(
                 controller: controller,
                 autofocus: true,
-                minLines: 2,
+                minLines: 1,
                 maxLines: 9,
                 onChanged: onChanged,
                 style: appText.inputText.copyWith(

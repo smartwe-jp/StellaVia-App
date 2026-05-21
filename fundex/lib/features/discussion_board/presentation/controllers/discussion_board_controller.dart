@@ -195,6 +195,7 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
     required String fallbackBadgeLabel,
     List<String> imageUrls = const <String>[],
     List<String> imageFilePaths = const <String>[],
+    int? linkedProjectId,
   }) async {
     final draft = (state.replyDrafts[threadId] ?? '').trim();
     if (draft.isEmpty || state.replySubmittingThreadIds.contains(threadId)) {
@@ -221,6 +222,7 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
         fallbackHandle: fallbackHandle,
         fallbackBadgeLabel: fallbackBadgeLabel,
         imageUrls: preparedImageUrls,
+        linkedProjectId: linkedProjectId,
       );
 
       final nextDrafts = Map<String, String>.from(state.replyDrafts)

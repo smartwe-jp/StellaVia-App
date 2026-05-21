@@ -163,9 +163,13 @@ class _DiscussionBoardTabPageState
       fallbackName: l10n.kizunarkFallbackDisplayName,
       fallbackHandle: l10n.kizunarkFallbackHandle,
       fallbackBadgeLabel: l10n.kizunarkInvestorBadge,
+      linkedProjectId: int.tryParse(_selectedComposerFund?.projectId ?? ''),
       imageFilePaths: imageFilePaths,
     );
     if (submitted && mounted) {
+      setState(() {
+        _selectedComposerFund = null;
+      });
       AppNotice.show(context, message: l10n.kizunarkReplySuccessNotice);
     }
   }
@@ -293,14 +297,10 @@ class _DiscussionBoardTabPageState
       locale: Localizations.localeOf(context),
       profile: ref.read(memberBasicProfileProvider),
     );
-    await showModalBottomSheet<void>(
-      context: context,
-      useRootNavigator: true,
-      isScrollControlled: true,
-      useSafeArea: true,
-      backgroundColor: Colors.transparent,
-      builder: (BuildContext sheetContext) {
-        return KizunarkComposeSheet(
+    await context.push<void>(
+      '/discussion-board/post',
+      extra: KizunarkPostComposeRouteArgs(
+        child: KizunarkComposeSheet(
           title: context.l10n.kizunarkComposeSheetTitle,
           closeLabel: context.l10n.kizunarkComposeCloseAction,
           submitLabel: context.l10n.kizunarkPostAction,
@@ -330,8 +330,9 @@ class _DiscussionBoardTabPageState
                       .isEmpty
                 : false;
           },
-        );
-      },
+          fullPage: true,
+        ),
+      ),
     );
   }
 
@@ -347,14 +348,21 @@ class _DiscussionBoardTabPageState
       return;
     }
     final replyController = _replyControllerFor(thread.id);
-    await showModalBottomSheet<void>(
-      context: context,
-      useRootNavigator: true,
-      isScrollControlled: true,
-      useSafeArea: true,
-      backgroundColor: Colors.transparent,
-      builder: (BuildContext sheetContext) {
-        return KizunarkReplyComposeSheet(
+    final currentDraft =
+        ref
+            .read(discussionBoardControllerProvider(null))
+            .replyDrafts[thread.id] ??
+        '';
+    if (replyController.text != currentDraft) {
+      replyController.value = TextEditingValue(
+        text: currentDraft,
+        selection: TextSelection.collapsed(offset: currentDraft.length),
+      );
+    }
+    await context.push<void>(
+      '/discussion-board/reply/${Uri.encodeComponent(thread.id)}',
+      extra: KizunarkReplyComposeRouteArgs(
+        child: KizunarkReplyComposeSheet(
           title: context.l10n.kizunarkReplySheetTitle,
           closeLabel: context.l10n.kizunarkComposeCloseAction,
           submitLabel: context.l10n.kizunarkReplySendAction,
@@ -376,27 +384,35 @@ class _DiscussionBoardTabPageState
           onTargetImageTap: (int index) =>
               _openCommentImageViewer(thread.imageUrls, index),
           addImageLabel: context.l10n.kizunarkAddImageAction,
+          linkedFundLabel: context.l10n.kizunarkAssociateFundAction,
           imageCounterBuilder: context.l10n.kizunarkImageCounter,
           controller: replyController,
           onChanged: (String value) => ref
               .read(discussionBoardControllerProvider(null).notifier)
               .updateReplyDraft(thread.id, value),
           onPickImage: _pickDiscussionImage,
+          onPickFund: _showComposerFundPicker,
           onSubmit: (List<String> imageFilePaths) async {
             await _submitReplyWithImages(
               thread.id,
               isAuthenticated: isAuthenticated,
               imageFilePaths: imageFilePaths,
             );
-            return mounted &&
+            final shouldClose =
+                mounted &&
                 (ref
                             .read(discussionBoardControllerProvider(null))
                             .replyDrafts[thread.id] ??
                         '')
                     .isEmpty;
+            if (shouldClose) {
+              replyController.clear();
+            }
+            return shouldClose;
           },
-        );
-      },
+          fullPage: true,
+        ),
+      ),
     );
   }
 
@@ -405,19 +421,18 @@ class _DiscussionBoardTabPageState
     required bool isAuthenticated,
     required String currentUserId,
   }) async {
-    await Navigator.of(context, rootNavigator: true).push<void>(
-      MaterialPageRoute<void>(
-        builder: (_) => KizunarkThreadDetailPage(
+    await context.push<void>(
+      '/discussion-board/thread/${Uri.encodeComponent(thread.id)}',
+      extra: KizunarkThreadDetailRouteArgs(
+        thread: thread,
+        isAuthenticated: isAuthenticated,
+        currentUserId: currentUserId,
+        onOpenImageViewer: _openCommentImageViewer,
+        onReply: () => _openReplyComposer(
           thread: thread,
           isAuthenticated: isAuthenticated,
-          currentUserId: currentUserId,
-          onOpenImageViewer: _openCommentImageViewer,
-          onReply: () => _openReplyComposer(
-            thread: thread,
-            isAuthenticated: isAuthenticated,
-          ),
-          onMessageLongPress: _showMessageActionSheet,
         ),
+        onMessageLongPress: _showMessageActionSheet,
       ),
     );
   }

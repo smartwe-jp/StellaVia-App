@@ -65,11 +65,12 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
       projectId: effectiveProjectId,
     );
     final refreshed = await _refreshFirstPageAfterMutation();
-    if (_containsRecentlyPostedThread(
-      refreshed,
-      trimmed,
-      postedAtUtc: postedAtUtc,
-    )) {
+    if (trimmed.isNotEmpty &&
+        _containsRecentlyPostedThread(
+          refreshed,
+          trimmed,
+          postedAtUtc: postedAtUtc,
+        )) {
       return refreshed;
     }
 
@@ -102,6 +103,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
     required String fallbackHandle,
     required String fallbackBadgeLabel,
     List<String> imageUrls = const <String>[],
+    int? linkedProjectId,
   }) async {
     final trimmed = content.trim();
     if (trimmed.isEmpty) {
@@ -115,7 +117,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
       content: trimmed,
       imageUrls: imageUrls,
       parentId: remoteParentId,
-      projectId: projectId,
+      projectId: linkedProjectId ?? projectId,
     );
     return _refreshFirstPageAfterMutation();
   }

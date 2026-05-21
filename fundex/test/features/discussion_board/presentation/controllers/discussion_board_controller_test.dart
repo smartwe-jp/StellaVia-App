@@ -46,6 +46,7 @@ class _FakeDiscussionBoardRepository implements DiscussionBoardRepository {
     required String fallbackHandle,
     required String fallbackBadgeLabel,
     List<String> imageUrls = const <String>[],
+    int? linkedProjectId,
   }) async {
     lastSubmittedImageUrls = imageUrls;
     return const <DiscussionThread>[];
