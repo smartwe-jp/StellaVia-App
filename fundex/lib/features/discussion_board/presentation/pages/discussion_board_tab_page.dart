@@ -394,7 +394,7 @@ class _DiscussionBoardTabPageState
     required bool isAuthenticated,
     required String currentUserId,
   }) async {
-    await Navigator.of(context).push<void>(
+    await Navigator.of(context, rootNavigator: true).push<void>(
       MaterialPageRoute<void>(
         builder: (_) => KizunarkThreadDetailPage(
           thread: thread,
