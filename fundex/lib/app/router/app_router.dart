@@ -12,6 +12,7 @@ import '../../features/auth/presentation/pages/real_person_auth_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/discussion_board/presentation/pages/discussion_board_tab_page.dart';
 import '../../features/discussion_board/presentation/widgets/kizunark_comment_composer_widgets.dart';
+import '../../features/discussion_board/presentation/widgets/kizunark_draft_list_page.dart';
 import '../../features/discussion_board/presentation/widgets/kizunark_thread_detail_page.dart';
 import '../../features/home/presentation/pages/home_overview_tab_page.dart';
 import '../../features/investment/presentation/pages/fund_project_detail_page.dart';
@@ -209,6 +210,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/auth/real-person',
         builder: (BuildContext context, GoRouterState state) {
           return const RealPersonAuthPage();
+        },
+      ),
+      GoRoute(
+        path: '/discussion-board/drafts',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (BuildContext context, GoRouterState state) {
+          final extra = state.extra;
+          if (extra is! KizunarkDraftListRouteArgs) {
+            return const DiscussionBoardTabPage();
+          }
+          return KizunarkDraftListPage(kind: extra.kind);
         },
       ),
       GoRoute(

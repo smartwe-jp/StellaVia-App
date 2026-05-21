@@ -2423,6 +2423,36 @@ abstract class AppLocalizations {
   /// **'Save draft'**
   String get kizunarkComposeSaveDraftAction;
 
+  /// No description provided for @kizunarkDraftListTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Drafts'**
+  String get kizunarkDraftListTitle;
+
+  /// No description provided for @kizunarkDraftEmptyState.
+  ///
+  /// In en, this message translates to:
+  /// **'No drafts yet.'**
+  String get kizunarkDraftEmptyState;
+
+  /// No description provided for @kizunarkDraftLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load drafts.'**
+  String get kizunarkDraftLoadError;
+
+  /// No description provided for @kizunarkDraftDeleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get kizunarkDraftDeleteAction;
+
+  /// No description provided for @kizunarkDraftImageOnlyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Image draft'**
+  String get kizunarkDraftImageOnlyLabel;
+
   /// No description provided for @kizunarkComposeAudienceEveryone.
   ///
   /// In en, this message translates to:

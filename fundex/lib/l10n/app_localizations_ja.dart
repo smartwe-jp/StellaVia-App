@@ -1207,6 +1207,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get kizunarkComposeSaveDraftAction => '下書きを保存';
 
   @override
+  String get kizunarkDraftListTitle => '下書き';
+
+  @override
+  String get kizunarkDraftEmptyState => '下書きはありません。';
+
+  @override
+  String get kizunarkDraftLoadError => '下書きの読み込みに失敗しました。';
+
+  @override
+  String get kizunarkDraftDeleteAction => '削除';
+
+  @override
+  String get kizunarkDraftImageOnlyLabel => '画像の下書き';
+
+  @override
   String get kizunarkComposeAudienceEveryone => '全員';
 
   @override

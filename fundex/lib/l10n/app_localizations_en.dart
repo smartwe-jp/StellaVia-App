@@ -1278,6 +1278,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kizunarkComposeSaveDraftAction => 'Save draft';
 
   @override
+  String get kizunarkDraftListTitle => 'Drafts';
+
+  @override
+  String get kizunarkDraftEmptyState => 'No drafts yet.';
+
+  @override
+  String get kizunarkDraftLoadError => 'Failed to load drafts.';
+
+  @override
+  String get kizunarkDraftDeleteAction => 'Delete';
+
+  @override
+  String get kizunarkDraftImageOnlyLabel => 'Image draft';
+
+  @override
   String get kizunarkComposeAudienceEveryone => 'Everyone';
 
   @override

@@ -13,12 +13,14 @@ import '../../../home/presentation/support/home_display_name_resolver.dart';
 import '../../../main_shell/presentation/providers/main_shell_providers.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../member_profile/presentation/support/profile_document_image_picker.dart';
+import '../../domain/entities/discussion_board_draft.dart';
 import '../../domain/entities/discussion_board_models.dart';
 import '../providers/discussion_board_providers.dart';
 import '../state/discussion_board_state.dart';
 import '../support/discussion_board_time_label.dart';
 import '../widgets/kizunark_comment_composer_widgets.dart';
 import '../widgets/kizunark_composer_fund_picker_sheet.dart';
+import '../widgets/kizunark_draft_list_page.dart';
 import '../widgets/kizunark_thread_detail_page.dart';
 
 class DiscussionBoardTabPage extends ConsumerStatefulWidget {
@@ -167,11 +169,98 @@ class _DiscussionBoardTabPageState
       imageFilePaths: imageFilePaths,
     );
     if (submitted && mounted) {
+      final draftStore = ref.read(discussionBoardDraftLocalDataSourceProvider);
+      final storedDrafts = await draftStore.readDrafts();
+      for (final draft in storedDrafts.where(
+        (DiscussionBoardDraft draft) =>
+            draft.kind == DiscussionDraftKind.reply &&
+            draft.replyThreadId == threadId,
+      )) {
+        await draftStore.deleteDraft(draft.id);
+      }
+      ref.invalidate(discussionBoardDraftsProvider);
+      if (!mounted) {
+        return;
+      }
       setState(() {
         _selectedComposerFund = null;
       });
       AppNotice.show(context, message: l10n.kizunarkReplySuccessNotice);
     }
+  }
+
+  Future<void> _savePostDraft(List<String> imageFilePaths) async {
+    final content = _composerController.text.trim();
+    if (content.isEmpty && imageFilePaths.isEmpty) {
+      return;
+    }
+    final now = DateTime.now().toUtc();
+    final draft = DiscussionBoardDraft(
+      id: 'post_${now.microsecondsSinceEpoch}',
+      kind: DiscussionDraftKind.post,
+      content: content,
+      imageFilePaths: imageFilePaths,
+      updatedAtIso: now.toIso8601String(),
+      projectId: _selectedComposerFund?.projectId,
+      projectName: _selectedComposerFund?.projectName,
+    );
+    await ref
+        .read(discussionBoardDraftLocalDataSourceProvider)
+        .saveDraft(draft);
+    ref.invalidate(discussionBoardDraftsProvider);
+    _composerController.clear();
+    ref
+        .read(discussionBoardControllerProvider(null).notifier)
+        .updateComposerText('');
+    if (mounted) {
+      setState(() {
+        _selectedComposerFund = null;
+      });
+    }
+  }
+
+  Future<void> _saveReplyDraft({
+    required DiscussionThread thread,
+    required TextEditingController controller,
+    required List<String> imageFilePaths,
+  }) async {
+    final content = controller.text.trim();
+    if (content.isEmpty && imageFilePaths.isEmpty) {
+      return;
+    }
+    final now = DateTime.now().toUtc();
+    final draft = DiscussionBoardDraft(
+      id: 'reply_${thread.id}_${now.microsecondsSinceEpoch}',
+      kind: DiscussionDraftKind.reply,
+      content: content,
+      imageFilePaths: imageFilePaths,
+      updatedAtIso: now.toIso8601String(),
+      projectId: _selectedComposerFund?.projectId,
+      projectName: _selectedComposerFund?.projectName,
+      replyThreadId: thread.id,
+      replyTargetName: thread.author.displayName,
+      replyTargetBody: thread.body,
+    );
+    await ref
+        .read(discussionBoardDraftLocalDataSourceProvider)
+        .saveDraft(draft);
+    ref.invalidate(discussionBoardDraftsProvider);
+    controller.clear();
+    ref
+        .read(discussionBoardControllerProvider(null).notifier)
+        .updateReplyDraft(thread.id, '');
+    if (mounted) {
+      setState(() {
+        _selectedComposerFund = null;
+      });
+    }
+  }
+
+  Future<DiscussionBoardDraft?> _openPostDraftList() {
+    return context.push<DiscussionBoardDraft>(
+      '/discussion-board/drafts',
+      extra: const KizunarkDraftListRouteArgs(kind: DiscussionDraftKind.post),
+    );
   }
 
   Future<String?> _pickDiscussionImage() async {
@@ -261,7 +350,7 @@ class _DiscussionBoardTabPageState
     );
   }
 
-  Future<void> _showComposerFundPicker() async {
+  Future<SelectedComposerFund?> _showComposerFundPicker() async {
     final selectedFund =
         await AppBottomSheet.showAdaptive<SelectedComposerFund>(
           context: context,
@@ -273,13 +362,13 @@ class _DiscussionBoardTabPageState
           },
         );
     if (!mounted || selectedFund == null) {
-      return;
+      return null;
     }
+    final nextFund = selectedFund.isClearSelection ? null : selectedFund;
     setState(() {
-      _selectedComposerFund = selectedFund.isClearSelection
-          ? null
-          : selectedFund;
+      _selectedComposerFund = nextFund;
     });
+    return nextFund;
   }
 
   Future<void> _openPostComposer({
@@ -315,9 +404,16 @@ class _DiscussionBoardTabPageState
           selectedFund: _selectedComposerFund,
           onPickImage: _pickDiscussionImage,
           onPickFund: _showComposerFundPicker,
+          onOpenDrafts: _openPostDraftList,
+          onSelectedFundChanged: (SelectedComposerFund? fund) {
+            setState(() {
+              _selectedComposerFund = fund;
+            });
+          },
           onTextChanged: ref
               .read(discussionBoardControllerProvider(null).notifier)
               .updateComposerText,
+          onSaveDraft: _savePostDraft,
           onSubmit: (List<String> imageFilePaths) async {
             await _submitPostWithImages(
               isAuthenticated: isAuthenticated,
@@ -348,16 +444,58 @@ class _DiscussionBoardTabPageState
       return;
     }
     final replyController = _replyControllerFor(thread.id);
-    final currentDraft =
+    final storedDrafts = await ref
+        .read(discussionBoardDraftLocalDataSourceProvider)
+        .readDrafts();
+    if (!mounted) {
+      return;
+    }
+    final storedReplyDrafts =
+        storedDrafts
+            .where(
+              (DiscussionBoardDraft draft) =>
+                  draft.kind == DiscussionDraftKind.reply &&
+                  draft.replyThreadId == thread.id,
+            )
+            .toList()
+          ..sort(
+            (DiscussionBoardDraft left, DiscussionBoardDraft right) =>
+                right.updatedAtIso.compareTo(left.updatedAtIso),
+          );
+    final storedReplyDraft = storedReplyDrafts.isEmpty
+        ? null
+        : storedReplyDrafts.first;
+    final liveDraft =
         ref
             .read(discussionBoardControllerProvider(null))
             .replyDrafts[thread.id] ??
         '';
+    final activeStoredDraft = liveDraft.trim().isEmpty
+        ? storedReplyDraft
+        : null;
+    final currentDraft = liveDraft.trim().isNotEmpty
+        ? liveDraft
+        : activeStoredDraft?.content ?? '';
     if (replyController.text != currentDraft) {
       replyController.value = TextEditingValue(
         text: currentDraft,
         selection: TextSelection.collapsed(offset: currentDraft.length),
       );
+    }
+    if (currentDraft != liveDraft) {
+      ref
+          .read(discussionBoardControllerProvider(null).notifier)
+          .updateReplyDraft(thread.id, currentDraft);
+    }
+    final draftProjectId = activeStoredDraft?.projectId?.trim() ?? '';
+    if (draftProjectId.isNotEmpty) {
+      setState(() {
+        _selectedComposerFund = SelectedComposerFund(
+          projectId: draftProjectId,
+          projectName: activeStoredDraft?.projectName ?? '',
+          selectionKey: draftProjectId,
+        );
+      });
     }
     await context.push<void>(
       '/discussion-board/reply/${Uri.encodeComponent(thread.id)}',
@@ -391,7 +529,16 @@ class _DiscussionBoardTabPageState
               .read(discussionBoardControllerProvider(null).notifier)
               .updateReplyDraft(thread.id, value),
           onPickImage: _pickDiscussionImage,
-          onPickFund: _showComposerFundPicker,
+          onPickFund: () async {
+            await _showComposerFundPicker();
+          },
+          onSaveDraft: (List<String> imageFilePaths) => _saveReplyDraft(
+            thread: thread,
+            controller: replyController,
+            imageFilePaths: imageFilePaths,
+          ),
+          initialImageFilePaths:
+              activeStoredDraft?.imageFilePaths ?? const <String>[],
           onSubmit: (List<String> imageFilePaths) async {
             await _submitReplyWithImages(
               thread.id,

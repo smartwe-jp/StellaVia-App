@@ -1193,6 +1193,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get kizunarkComposeSaveDraftAction => '保存草稿';
 
   @override
+  String get kizunarkDraftListTitle => '草稿';
+
+  @override
+  String get kizunarkDraftEmptyState => '暂无草稿';
+
+  @override
+  String get kizunarkDraftLoadError => '草稿读取失败';
+
+  @override
+  String get kizunarkDraftDeleteAction => '删除';
+
+  @override
+  String get kizunarkDraftImageOnlyLabel => '图片草稿';
+
+  @override
   String get kizunarkComposeAudienceEveryone => '每个人';
 
   @override
@@ -5468,6 +5483,21 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get kizunarkComposeSaveDraftAction => '儲存草稿';
+
+  @override
+  String get kizunarkDraftListTitle => '草稿';
+
+  @override
+  String get kizunarkDraftEmptyState => '暫無草稿';
+
+  @override
+  String get kizunarkDraftLoadError => '草稿讀取失敗';
+
+  @override
+  String get kizunarkDraftDeleteAction => '刪除';
+
+  @override
+  String get kizunarkDraftImageOnlyLabel => '圖片草稿';
 
   @override
   String get kizunarkComposeAudienceEveryone => '每個人';

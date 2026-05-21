@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/domain/entities/auth_user.dart';
+import '../../domain/entities/discussion_board_draft.dart';
 
 class SelectedComposerFund {
   const SelectedComposerFund({
@@ -141,7 +142,10 @@ class KizunarkComposeSheet extends StatefulWidget {
     required this.selectedFund,
     required this.onPickImage,
     required this.onPickFund,
+    required this.onOpenDrafts,
+    required this.onSelectedFundChanged,
     required this.onTextChanged,
+    required this.onSaveDraft,
     required this.onSubmit,
     this.fullPage = false,
     super.key,
@@ -160,8 +164,11 @@ class KizunarkComposeSheet extends StatefulWidget {
   final TextEditingController controller;
   final SelectedComposerFund? selectedFund;
   final Future<String?> Function() onPickImage;
-  final Future<void> Function() onPickFund;
+  final Future<SelectedComposerFund?> Function() onPickFund;
+  final Future<DiscussionBoardDraft?> Function() onOpenDrafts;
+  final ValueChanged<SelectedComposerFund?> onSelectedFundChanged;
   final ValueChanged<String> onTextChanged;
+  final Future<void> Function(List<String> imageFilePaths) onSaveDraft;
   final Future<bool> Function(List<String> imageFilePaths) onSubmit;
   final bool fullPage;
 
@@ -172,12 +179,14 @@ class KizunarkComposeSheet extends StatefulWidget {
 class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
   static const int _maxImages = 4;
   final List<String> _imageFilePaths = <String>[];
+  SelectedComposerFund? _selectedFund;
   bool _isSubmitting = false;
   bool _hasInputContent = false;
 
   @override
   void initState() {
     super.initState();
+    _selectedFund = widget.selectedFund;
     _hasInputContent = _hasDraftContent;
     widget.controller.addListener(_syncInputContentState);
   }
@@ -235,13 +244,57 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
             _imageFilePaths.clear();
             Navigator.of(context).pop();
           },
-          onSaveDraft: () {
+          onSaveDraft: () async {
             Navigator.of(sheetContext).pop();
-            Navigator.of(context).pop();
+            await widget.onSaveDraft(List<String>.of(_imageFilePaths));
+            if (mounted) {
+              Navigator.of(context).pop();
+            }
           },
         );
       },
     );
+  }
+
+  Future<void> _openDrafts() async {
+    final draft = await widget.onOpenDrafts();
+    if (!mounted || draft == null) {
+      return;
+    }
+    widget.controller.value = TextEditingValue(
+      text: draft.content,
+      selection: TextSelection.collapsed(offset: draft.content.length),
+    );
+    widget.onTextChanged(draft.content);
+    setState(() {
+      _imageFilePaths
+        ..clear()
+        ..addAll(draft.imageFilePaths.take(_maxImages));
+      _hasInputContent = _hasDraftContent;
+    });
+    final projectId = draft.projectId?.trim() ?? '';
+    final projectName = draft.projectName?.trim() ?? '';
+    final fund = projectId.isEmpty
+        ? null
+        : SelectedComposerFund(
+            projectId: projectId,
+            projectName: projectName,
+            selectionKey: projectId,
+          );
+    setState(() {
+      _selectedFund = fund;
+    });
+    widget.onSelectedFundChanged(fund);
+  }
+
+  Future<void> _pickFund() async {
+    final fund = await widget.onPickFund();
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _selectedFund = fund;
+    });
   }
 
   Future<void> _submit() async {
@@ -283,7 +336,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
             canSubmit: _canSubmit,
             showDraftAction: !_hasInputContent,
             onClose: _confirmClose,
-            onDraftTap: () {},
+            onDraftTap: _openDrafts,
             onSubmit: _submit,
           ),
           Expanded(
@@ -305,9 +358,9 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
                     });
                   },
                 ),
-                if (widget.selectedFund != null) ...<Widget>[
+                if (_selectedFund != null) ...<Widget>[
                   const SizedBox(height: 10),
-                  _LinkedFundPreview(fund: widget.selectedFund!),
+                  _LinkedFundPreview(fund: _selectedFund!),
                 ],
               ],
             ),
@@ -318,7 +371,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
             imageCounter: widget.imageCounterBuilder(_imageFilePaths.length),
             canAddImage: _imageFilePaths.length < _maxImages,
             onAddImage: _addImage,
-            onPickFund: widget.onPickFund,
+            onPickFund: _pickFund,
           ),
         ],
       ),
@@ -374,7 +427,9 @@ class KizunarkReplyComposeSheet extends StatefulWidget {
     required this.onChanged,
     required this.onPickImage,
     required this.onPickFund,
+    required this.onSaveDraft,
     required this.onSubmit,
+    this.initialImageFilePaths = const <String>[],
     this.fullPage = false,
     super.key,
   });
@@ -400,7 +455,9 @@ class KizunarkReplyComposeSheet extends StatefulWidget {
   final ValueChanged<String> onChanged;
   final Future<String?> Function() onPickImage;
   final Future<void> Function() onPickFund;
+  final Future<void> Function(List<String> imageFilePaths) onSaveDraft;
   final Future<bool> Function(List<String> imageFilePaths) onSubmit;
+  final List<String> initialImageFilePaths;
   final bool fullPage;
 
   @override
@@ -417,6 +474,11 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
   @override
   void initState() {
     super.initState();
+    _imageFilePaths.addAll(
+      widget.initialImageFilePaths
+          .where((path) => path.trim().isNotEmpty)
+          .take(_maxImages),
+    );
     _hasInputContent = _hasDraftContent;
     widget.controller.addListener(_syncInputContentState);
   }
@@ -474,9 +536,12 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
             _imageFilePaths.clear();
             Navigator.of(context).pop();
           },
-          onSaveDraft: () {
+          onSaveDraft: () async {
             Navigator.of(sheetContext).pop();
-            Navigator.of(context).pop();
+            await widget.onSaveDraft(List<String>.of(_imageFilePaths));
+            if (mounted) {
+              Navigator.of(context).pop();
+            }
           },
         );
       },
@@ -1135,21 +1200,21 @@ class _ReplyTargetPostPreview extends StatelessWidget {
                           body,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
-                          style: appText.body.copyWith(color: colors.textSecondary),
+                          style: appText.body.copyWith(
+                            color: colors.textSecondary,
+                          ),
                         ),
                       ),
-                      if (imageUrls.isNotEmpty) 
+                      if (imageUrls.isNotEmpty)
                         Expanded(
                           flex: 1,
                           child: KizunarkImageGrid(
-                              imageUrls: imageUrls,
-                              //onImageTap: onImageTap,
-                            ),
+                            imageUrls: imageUrls,
+                            //onImageTap: onImageTap,
+                          ),
                         ),
-                      ],
-                    
+                    ],
                   ),
-                  
                 ],
               ),
             ),
