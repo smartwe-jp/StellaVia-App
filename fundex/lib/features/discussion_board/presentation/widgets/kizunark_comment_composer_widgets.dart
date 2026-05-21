@@ -99,6 +99,9 @@ class KizunarkPostEntry extends StatelessWidget {
                 style: FilledButton.styleFrom(
                   minimumSize: const Size(64, 34),
                   padding: const EdgeInsets.symmetric(horizontal: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
                 child: Text(actionLabel),
               ),
@@ -404,16 +407,19 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
                           label: widget.authorLabel,
                         ),
                         const SizedBox(height: 14),
-                        _ReplyTargetPreview(
-                          label: widget.targetLabel,
-                          name: widget.targetName,
-                          body: widget.targetBody,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 44),
+                          child: _ReplyTargetPreview(
+                            label: widget.targetLabel,
+                            name: widget.targetName,
+                            body: widget.targetBody,
+                          ),
                         ),
                         const SizedBox(height: 12),
                         TextField(
                           controller: widget.controller,
                           autofocus: true,
-                          minLines: 5,
+                          minLines: 2,
                           maxLines: 9,
                           onChanged: widget.onChanged,
                           style: appText.inputText.copyWith(
@@ -423,6 +429,9 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
                           decoration: InputDecoration(
                             hintText: widget.placeholder,
                             border: InputBorder.none,
+                            // enabledBorder: InputBorder.none,
+                            // focusedBorder: InputBorder.none,
+                            // contentPadding: EdgeInsets.zero,
                           ),
                         ),
                         _SelectedImageStrip(
@@ -549,6 +558,9 @@ class _ComposeSheetHeader extends StatelessWidget {
                 minimumSize: const Size(64, 36),
                 maximumSize: const Size(120, 40),
                 padding: const EdgeInsets.symmetric(horizontal: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               child: Text(submitLabel),
             ),
@@ -681,41 +693,43 @@ class _SelectedImageStrip extends StatelessWidget {
     }
     final colors = Theme.of(context).appColors;
     return SizedBox(
-      height: 92,
+      height: 200,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: imageFilePaths.length,
         separatorBuilder: (_, _) => const SizedBox(width: 10),
         itemBuilder: (BuildContext context, int index) {
           return Stack(
-            children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(14),
-                child: Image.file(
-                  File(imageFilePaths[index]),
-                  width: 82,
-                  height: 82,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => ColoredBox(
-                    color: colors.surfaceAlt,
-                    child: const SizedBox(width: 82, height: 82),
+              children: <Widget>[
+                AspectRatio(
+                  aspectRatio: 3/4,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(14),
+                    child: Image.file(
+                      File(imageFilePaths[index]),
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => ColoredBox(
+                        color: colors.surfaceAlt,
+                        child: const SizedBox(width: 82, height: 82),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              Positioned(
-                top: 4,
-                right: 4,
-                child: Material(
-                  color: colors.scrim.withValues(alpha: 0.72),
-                  shape: const CircleBorder(),
-                  child: InkWell(
-                    customBorder: const CircleBorder(),
-                    onTap: () => onRemove(index),
-                    child: Icon(Icons.close, size: 18, color: colors.onDark),
+                Positioned(
+                  top: 4,
+                  right: 4,
+                  child: Material(
+                    color: colors.scrim.withValues(alpha: 0.72),
+                    shape: const CircleBorder(),
+                    child: InkWell(
+                      customBorder: const CircleBorder(),
+                      onTap: () => onRemove(index),
+                      child: Icon(Icons.close, size: 26, color: colors.onDark),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            
           );
         },
       ),
@@ -766,9 +780,9 @@ class _ReplyTargetPreview extends StatelessWidget {
     final appText = Theme.of(context).appTextTheme;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: colors.warningSubtle,
+        color: colors.highlightGold.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: colors.warningSoft),
+        border: Border.all(color: colors.highlightGold),
       ),
       child: Padding(
         padding: const EdgeInsets.all(12),
