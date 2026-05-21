@@ -1,7 +1,16 @@
 import 'package:core_foundation/core_foundation.dart';
 import 'package:core_network/core_network.dart';
 
+import 'upload_image_optimizer.dart';
+
 String resolveAppRequestErrorMessage(Object error, String fallbackMessage) {
+  if (error is UploadImageSizeLimitException) {
+    final text = error.message?.trim() ?? '';
+    if (_isMeaningfulUserFacingMessage(text)) {
+      return text;
+    }
+    return fallbackMessage;
+  }
   if (error is StateError) {
     final dynamic raw = error.message;
     final String text = raw?.toString().trim() ?? '';

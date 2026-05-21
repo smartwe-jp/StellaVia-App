@@ -429,6 +429,40 @@
   "kizunarkLoginRequiredToPost": "发帖和评论需要先登录",
   "kizunarkGuestLoginPrompt": "如需评论，请登录或注册。",
   "kizunarkEmptyState": "还没有帖子，来发起第一条讨论吧。",
+  "kizunarkEntryTitle": "分享投资话题",
+  "kizunarkEntrySubtitle": "可以附加关联基金和图片",
+  "kizunarkComposeSheetTitle": "创建帖子",
+  "kizunarkComposeCloseAction": "关闭",
+  "kizunarkComposeAuthorLabel": "你的投资话题",
+  "kizunarkAddImageAction": "添加图片",
+  "kizunarkImageCounter": "{count} / 4",
+  "@kizunarkImageCounter": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkReplySheetTitle": "创建回复",
+  "kizunarkReplyAuthorLabel": "回复 {name} 先生/女士",
+  "@kizunarkReplyAuthorLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "kizunarkReplyTargetLabel": "回复对象",
+  "kizunarkRepliesTitle": "{count} 条回复",
+  "@kizunarkRepliesTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkRepliesSectionTitle": "回复",
+  "kizunarkWriteReplyAction": "写回复",
   "investmentTabHeadline": "投资相关模块（框架）",
   "investmentTabSubtitle": "后续承接产品列表、持仓、申购赎回、账单等能力。",
   "investmentTabPortfolioLabel": "持仓项目",

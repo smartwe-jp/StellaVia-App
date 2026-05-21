@@ -429,6 +429,40 @@
   "kizunarkLoginRequiredToPost": "投稿・コメントにはログインが必要です",
   "kizunarkGuestLoginPrompt": "コメントするには、ログインまたは新規登録してください。",
   "kizunarkEmptyState": "まだ投稿がありません。最初の話題を投稿しましょう。",
+  "kizunarkEntryTitle": "投資の話題を共有しよう",
+  "kizunarkEntrySubtitle": "関連ファンドや画像も添付できます",
+  "kizunarkComposeSheetTitle": "投稿を作成",
+  "kizunarkComposeCloseAction": "閉じる",
+  "kizunarkComposeAuthorLabel": "あなたの投資トピック",
+  "kizunarkAddImageAction": "画像を追加",
+  "kizunarkImageCounter": "{count} / 4",
+  "@kizunarkImageCounter": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkReplySheetTitle": "返信を作成",
+  "kizunarkReplyAuthorLabel": "{name}さまへ返信",
+  "@kizunarkReplyAuthorLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "kizunarkReplyTargetLabel": "返信先",
+  "kizunarkRepliesTitle": "返信 {count}件",
+  "@kizunarkRepliesTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkRepliesSectionTitle": "返信",
+  "kizunarkWriteReplyAction": "返信を書く",
   "investmentTabHeadline": "投資関連モジュール（枠組み）",
   "investmentTabSubtitle": "商品一覧、保有、申込/解約、明細などを今後実装します。",
   "investmentTabPortfolioLabel": "保有案件",

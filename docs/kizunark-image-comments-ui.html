@@ -1,0 +1,1230 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KIZUNARK image comments UI prototype</title>
+  <style>
+    :root {
+      --navy: #07163e;
+      --navy-2: #10276a;
+      --blue: #5475dc;
+      --ink: #111827;
+      --muted: #77869d;
+      --paper: #fbf7ef;
+      --surface: #fffdf8;
+      --line: #ddcda9;
+      --soft: #f2eadc;
+      --chip: #f4f7ff;
+      --danger: #d94a4a;
+      --shadow: 0 14px 32px rgba(26, 26, 26, .08);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #ece6dc;
+    }
+
+    button,
+    textarea {
+      font: inherit;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(320px, 390px));
+      gap: 28px;
+      align-items: start;
+      min-height: 100vh;
+      padding: 28px;
+    }
+
+    .panel-title {
+      margin: 0 0 12px;
+      color: #26314d;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
+    .phone {
+      position: relative;
+      width: 100%;
+      height: 844px;
+      overflow: hidden;
+      border: 1px solid rgba(7, 22, 62, .16);
+      border-radius: 34px;
+      background: var(--paper);
+      box-shadow: 0 18px 52px rgba(7, 22, 62, .16);
+    }
+
+    .status {
+      height: 54px;
+      padding: 15px 24px 0;
+      color: #fff;
+      background: var(--navy);
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .status::after {
+      content: "";
+      position: absolute;
+      top: 13px;
+      left: 50%;
+      width: 118px;
+      height: 34px;
+      transform: translateX(-50%);
+      border-radius: 20px;
+      background: #000;
+    }
+
+    .logo-bar {
+      display: grid;
+      place-items: center;
+      height: 104px;
+      border-bottom: 1px solid #e6d9bf;
+      background: #faf7f0;
+    }
+
+    .logo {
+      color: #ff8a85;
+      font-size: 24px;
+      font-weight: 300;
+      line-height: 1.02;
+      letter-spacing: .23em;
+      text-align: center;
+    }
+
+    .logo span {
+      display: block;
+      color: #969886;
+      letter-spacing: .15em;
+    }
+
+    .content {
+      height: calc(100% - 54px - 104px - 90px);
+      overflow: auto;
+      padding: 14px 16px 24px;
+    }
+
+    .post-entry {
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+      padding: 14px;
+      border: 2px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 253, 248, .72);
+    }
+
+    .avatar {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      color: #fff;
+      background: linear-gradient(135deg, #f04faa, #f78b62);
+      font-weight: 800;
+    }
+
+    .entry-copy strong {
+      display: block;
+      color: #24324b;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .entry-copy span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .primary-btn {
+      border: 0;
+      border-radius: 14px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--navy-2), var(--blue));
+      padding: 11px 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .feed-card {
+      margin-bottom: 14px;
+      padding: 18px 16px 14px;
+      border-radius: 18px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .feed-card[role="button"] {
+      cursor: pointer;
+    }
+
+    .feed-head {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .name {
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .date {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .body {
+      margin: 0 0 14px;
+      font-size: 15px;
+      font-weight: 750;
+      line-height: 1.85;
+    }
+
+    .fund-chip {
+      display: inline-flex;
+      gap: 7px;
+      align-items: center;
+      margin: 0 0 12px;
+      padding: 8px 10px;
+      border: 1px solid #d8e0f6;
+      border-radius: 12px;
+      color: var(--navy-2);
+      background: var(--chip);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin: 0 0 14px;
+    }
+
+    .image-grid.one {
+      grid-template-columns: 1fr;
+      max-width: 230px;
+    }
+
+    .image-grid img,
+    .thumb img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-grid img {
+      aspect-ratio: 1;
+      border-radius: 10px;
+      background: var(--soft);
+    }
+
+    .meta-line {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .meta-button {
+      border: 0;
+      color: inherit;
+      background: transparent;
+      padding: 0;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .tabs {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      height: 90px;
+      border-top: 1px solid var(--line);
+      background: #fbf8f1;
+    }
+
+    .tab {
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 6px;
+      color: #666d7a;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .tab i {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #eee5d4;
+      font-style: normal;
+    }
+
+    .tab.active {
+      color: var(--navy);
+    }
+
+    .tab.active i {
+      color: #fff;
+      background: var(--navy);
+    }
+
+    .sheet-backdrop {
+      position: absolute;
+      inset: 0;
+      display: none;
+      background: rgba(7, 22, 62, .26);
+      z-index: 5;
+    }
+
+    .phone.sheet-open .sheet-backdrop,
+    .phone.reply-open .sheet-backdrop {
+      display: block;
+    }
+
+    .compose {
+      position: absolute;
+      inset: auto 0 0;
+      height: 91%;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      transform: translateY(105%);
+      transition: transform .22s ease;
+      border-radius: 26px 26px 0 0;
+      background: var(--surface);
+      z-index: 6;
+    }
+
+    .phone.sheet-open .post-compose,
+    .phone.reply-open .reply-compose {
+      transform: translateY(0);
+    }
+
+    .replies-page {
+      position: absolute;
+      inset: 54px 0 0;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      transform: translateX(105%);
+      transition: transform .24s ease;
+      background: var(--paper);
+      z-index: 4;
+    }
+
+    .phone.replies-open .replies-page {
+      transform: translateX(0);
+    }
+
+    .page-top {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      min-height: 58px;
+      padding: 10px 16px;
+      border-bottom: 1px solid #e6d9bf;
+      background: #faf7f0;
+    }
+
+    .page-title {
+      color: var(--navy);
+      text-align: center;
+      font-weight: 900;
+    }
+
+    .page-body {
+      overflow: auto;
+      padding: 16px 16px 96px;
+    }
+
+    .page-bottom {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding: 10px 16px 18px;
+      border-top: 1px solid #e6d9bf;
+      background: rgba(251, 248, 241, .98);
+    }
+
+    .compose-top {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 16px;
+      border-bottom: 1px solid #eee4d0;
+    }
+
+    .ghost-btn {
+      border: 0;
+      color: var(--muted);
+      background: transparent;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .compose-title {
+      text-align: center;
+      font-weight: 900;
+    }
+
+    .compose-body {
+      overflow: auto;
+      padding: 18px 16px 0;
+    }
+
+    .author-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 190px;
+      resize: none;
+      border: 0;
+      outline: none;
+      color: var(--ink);
+      background: transparent;
+      font-size: 18px;
+      line-height: 1.65;
+    }
+
+    textarea::placeholder {
+      color: #93a0b2;
+    }
+
+    .fund-preview {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 12px 50px;
+      padding: 10px;
+      border: 1px solid #e2d5b9;
+      border-radius: 14px;
+      background: #fffaf1;
+      font-size: 12px;
+    }
+
+    .fund-preview.show {
+      display: flex;
+    }
+
+    .reply-target {
+      margin: 0 0 16px 50px;
+      padding: 12px;
+      border: 1px solid #e4d5b7;
+      border-radius: 14px;
+      background: #fff9ed;
+    }
+
+    .reply-target-label {
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .reply-target strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--navy);
+      font-size: 13px;
+    }
+
+    .reply-target p {
+      margin: 0;
+      color: #30394b;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .section-label {
+      margin: 18px 0 8px;
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .reply-list {
+      display: grid;
+      gap: 12px;
+      padding-bottom: 16px;
+    }
+
+    .reply-list-item {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee4d0;
+    }
+
+    .reply-list-item .avatar {
+      width: 34px;
+      height: 34px;
+      font-size: 12px;
+    }
+
+    .reply-list-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+
+    .reply-list-head strong {
+      color: var(--navy);
+    }
+
+    .reply-list-head span {
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .reply-list-item p {
+      margin: 0;
+      color: #202a3d;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .reply-list-item .image-grid {
+      margin-top: 10px;
+    }
+
+    .fund-thumb {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #e7c988, #829d7a);
+    }
+
+    .thumb-strip {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      min-height: 96px;
+      padding: 4px 0 10px 50px;
+    }
+
+    .thumb {
+      position: relative;
+      flex: 0 0 82px;
+      height: 82px;
+      overflow: hidden;
+      border-radius: 14px;
+      background: var(--soft);
+    }
+
+    .delete {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      display: grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      border: 0;
+      border-radius: 50%;
+      color: #fff;
+      background: rgba(17, 24, 39, .78);
+      cursor: pointer;
+    }
+
+    .compose-dock {
+      position: relative;
+      padding: 10px 14px max(14px, env(safe-area-inset-bottom));
+      border-top: 1px solid #eee4d0;
+      background: rgba(255, 253, 248, .98);
+      transition: transform .22s ease;
+      z-index: 2;
+    }
+
+    .dock-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .dock-btn {
+      display: inline-flex;
+      gap: 7px;
+      align-items: center;
+      min-height: 40px;
+      border: 1px solid #d8e0f6;
+      border-radius: 14px;
+      color: var(--navy-2);
+      background: var(--chip);
+      padding: 0 12px;
+      font-size: 13px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+
+    .counter {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .keyboard {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 0;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 6px;
+      padding: 0 12px;
+      background: #d6d8dd;
+      transition: height .22s ease, padding .22s ease;
+      z-index: 1;
+    }
+
+    .phone.keyboard-on .keyboard {
+      height: 262px;
+      padding-top: 14px;
+      padding-bottom: 18px;
+    }
+
+    .phone.keyboard-on .compose-dock {
+      transform: translateY(-262px);
+      box-shadow: 0 -10px 24px rgba(7, 22, 62, .08);
+    }
+
+    .phone.keyboard-on .compose-body {
+      padding-bottom: 268px;
+    }
+
+    .key {
+      height: 34px;
+      border-radius: 7px;
+      background: #fff;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, .22);
+    }
+
+    .fund-picker {
+      position: absolute;
+      right: 10px;
+      bottom: 78px;
+      left: 10px;
+      display: none;
+      padding: 12px;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 20px 50px rgba(7, 22, 62, .22);
+      z-index: 7;
+    }
+
+    .fund-picker.show {
+      display: block;
+    }
+
+    .fund-option {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border-radius: 14px;
+      cursor: pointer;
+    }
+
+    .fund-option + .fund-option {
+      border-top: 1px solid #f0e6d5;
+    }
+
+    .fund-option strong {
+      display: block;
+      font-size: 13px;
+    }
+
+    .fund-option span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .flow-card {
+      padding: 20px;
+      border-radius: 24px;
+      background: var(--surface);
+    }
+
+    .flow-card h2 {
+      margin: 0 0 14px;
+      color: var(--navy);
+      font-size: 20px;
+    }
+
+    .flow-step {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      margin: 12px 0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .flow-step b {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--navy);
+      font-size: 12px;
+    }
+
+    @media (max-width: 1120px) {
+      .board {
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+
+      .panel {
+        width: min(100%, 390px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <section class="panel">
+      <h1 class="panel-title">1. コメント一覧：投稿入口を軽量化し、画像付き投稿を表示</h1>
+      <div class="phone" id="feedPhone">
+        <div class="status">17:13</div>
+        <div class="logo-bar">
+          <div class="logo">KIZU<span>NARK</span></div>
+        </div>
+        <div class="content">
+          <div class="post-entry">
+            <div class="avatar">犬</div>
+            <div class="entry-copy">
+              <strong>投資の話題を共有しよう</strong>
+              <span>関連ファンドや画像も添付できます</span>
+            </div>
+            <button class="primary-btn" data-open-compose>投稿</button>
+          </div>
+
+          <article class="feed-card" role="button" tabindex="0" data-open-replies>
+            <div class="feed-head">
+              <div class="avatar">S</div>
+              <div class="name">S.Cさま</div>
+              <div class="date">2026/05/20</div>
+            </div>
+            <div class="fund-chip">▣ 関連ファンド：浅草ホテル再生ファンド</div>
+            <p class="body">現地写真を見ながら投資先の雰囲気を確認できると、家族にも説明しやすくなります。</p>
+            <div class="image-grid">
+              <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=400&q=80" alt="hotel lobby">
+              <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80" alt="hotel room">
+              <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=400&q=80" alt="building exterior">
+            </div>
+            <div class="meta-line">
+              <button class="meta-button" data-open-reply>□ 2 回复</button>
+              <span>♡ 18</span>
+            </div>
+          </article>
+
+          <article class="feed-card" role="button" tabindex="0" data-open-replies>
+            <div class="feed-head">
+              <div class="avatar" style="background:linear-gradient(135deg,#ffb21a,#f6d465)">N</div>
+              <div class="name">N.Tさま</div>
+              <div class="date">2026/05/13</div>
+            </div>
+            <p class="body">小口で投資できるので、初心者でも始めやすく、気軽にチャレンジできるのが魅力です！</p>
+            <div class="meta-line">
+              <button class="meta-button" data-open-reply>□ 0 回复</button>
+              <span>♡ 6</span>
+            </div>
+          </article>
+        </div>
+        <nav class="tabs">
+          <div class="tab"><i>⌂</i>ホーム</div>
+          <div class="tab"><i>▥</i>ファンド</div>
+          <div class="tab active"><i>☷</i>KIZUNARK</div>
+          <div class="tab"><i>▰</i>ホテル</div>
+          <div class="tab"><i>●</i>マイページ</div>
+        </nav>
+        <div class="sheet-backdrop" data-close-compose data-close-replies data-close-reply></div>
+        <section class="compose post-compose" aria-label="投稿ページ">
+          <div class="compose-top">
+            <button class="ghost-btn" data-close-compose>閉じる</button>
+            <div class="compose-title">投稿を作成</div>
+            <button class="primary-btn">投稿</button>
+          </div>
+          <div class="compose-body">
+            <div class="author-row">
+              <div class="avatar">犬</div>
+              <span>あなたの投資トピック</span>
+            </div>
+            <textarea id="composer" placeholder="投資の話題を共有しよう..."></textarea>
+            <div class="fund-preview" id="fundPreview">
+              <div class="fund-thumb"></div>
+              <div><strong>浅草ホテル再生ファンド</strong><br><span>関連ファンドとして表示されます</span></div>
+            </div>
+            <div class="thumb-strip" id="thumbStrip"></div>
+          </div>
+          <div class="compose-dock">
+            <div class="dock-actions">
+              <button class="dock-btn" id="fundButton">▣ 関連ファンド</button>
+              <button class="dock-btn" id="imageButton">▧ 画像を追加</button>
+              <span class="counter" id="counter">0 / 6</span>
+            </div>
+          </div>
+          <div class="fund-picker" id="fundPicker">
+            <div class="fund-option" data-pick-fund>
+              <div class="fund-thumb"></div>
+              <div><strong>浅草ホテル再生ファンド</strong><span>運用中・関連付け可能</span></div>
+            </div>
+            <div class="fund-option" data-pick-fund>
+              <div class="fund-thumb" style="background:linear-gradient(135deg,#8bb9a6,#d1b070)"></div>
+              <div><strong>大阪レジデンスファンド</strong><span>投資済みファンド</span></div>
+            </div>
+          </div>
+          <div class="keyboard" aria-hidden="true">
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+          </div>
+        </section>
+        <section class="replies-page" aria-label="返信一覧ページ">
+          <div class="page-top">
+            <button class="ghost-btn" data-close-replies>戻る</button>
+            <div class="page-title">返信 2件</div>
+            <button class="primary-btn" data-open-reply>返信</button>
+          </div>
+          <div class="page-body">
+            <article class="feed-card">
+              <div class="feed-head">
+                <div class="avatar">S</div>
+                <div class="name">S.Cさま</div>
+                <div class="date">2026/05/20</div>
+              </div>
+              <div class="fund-chip">▣ 関連ファンド：浅草ホテル再生ファンド</div>
+              <p>現地写真を見ながら投資先の雰囲気を確認できると、家族にも説明しやすくなります。</p>
+              <div class="image-grid">
+                <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=400&q=80" alt="hotel lobby">
+                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80" alt="hotel room">
+                <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=400&q=80" alt="building exterior">
+              </div>
+            </article>
+            <div class="section-label">返信</div>
+            <div class="reply-list">
+              <article class="reply-list-item">
+                <div class="avatar" style="background:linear-gradient(135deg,#ffb21a,#f6d465)">N</div>
+                <div>
+                  <div class="reply-list-head">
+                    <strong>N.Tさま</strong>
+                    <span>2026/05/20</span>
+                  </div>
+                  <p>写真があると投資先のイメージがつかみやすいですね。共有ありがとうございます。</p>
+                </div>
+              </article>
+              <article class="reply-list-item">
+                <div class="avatar" style="background:linear-gradient(135deg,#8fd6ff,#6d7df0)">Y</div>
+                <div>
+                  <div class="reply-list-head">
+                    <strong>Y.Tさま</strong>
+                    <span>2026/05/20</span>
+                  </div>
+                  <p>資料だけでは分からないところが見えるので助かります。追加の写真も見てみたいです。</p>
+                  <div class="image-grid one">
+                    <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=360&q=80" alt="hotel exterior">
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+          <div class="page-bottom">
+            <button class="primary-btn" style="width:100%" data-open-reply>返信を書く</button>
+          </div>
+        </section>
+        <section class="compose reply-compose" aria-label="返信ページ">
+          <div class="compose-top">
+            <button class="ghost-btn" data-close-reply>閉じる</button>
+            <div class="compose-title">返信を作成</div>
+            <button class="primary-btn">返信</button>
+          </div>
+          <div class="compose-body">
+            <div class="author-row">
+              <div class="avatar">犬</div>
+              <span>S.Cさまへ返信</span>
+            </div>
+            <div class="reply-target">
+              <div class="reply-target-label">返信先</div>
+              <strong>S.Cさま</strong>
+              <p>現地写真を見ながら投資先の雰囲気を確認できると、家族にも説明しやすくなります。</p>
+            </div>
+            <textarea id="replyComposer" placeholder="返信を入力..."></textarea>
+            <div class="thumb-strip" id="replyThumbStrip"></div>
+          </div>
+          <div class="compose-dock">
+            <div class="dock-actions">
+              <button class="dock-btn" id="replyImageButton">▧ 画像を追加</button>
+              <span class="counter" id="replyCounter">0 / 6</span>
+            </div>
+          </div>
+          <div class="keyboard" aria-hidden="true">
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h1 class="panel-title">2. 投稿ページ：X 型の全画面シート + 下部ツールバー</h1>
+      <div class="phone sheet-open keyboard-on" id="composePhone">
+        <div class="status">17:14</div>
+        <div class="logo-bar">
+          <div class="logo">KIZU<span>NARK</span></div>
+        </div>
+        <div class="sheet-backdrop"></div>
+        <section class="compose post-compose" style="transform:translateY(0)">
+          <div class="compose-top">
+            <button class="ghost-btn">閉じる</button>
+            <div class="compose-title">投稿を作成</div>
+            <button class="primary-btn">投稿</button>
+          </div>
+          <div class="compose-body">
+            <div class="author-row">
+              <div class="avatar">犬</div>
+              <span>あなたの投資トピック</span>
+            </div>
+            <textarea placeholder="投資の話題を共有しよう...">ホテル案件の進捗写真を共有します。現地の雰囲気が見えると安心材料になります。</textarea>
+            <div class="fund-preview show">
+              <div class="fund-thumb"></div>
+              <div><strong>浅草ホテル再生ファンド</strong><br><span>関連ファンドとして表示されます</span></div>
+            </div>
+            <div class="thumb-strip">
+              <div class="thumb"><img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=240&q=80" alt=""><button class="delete">×</button></div>
+              <div class="thumb"><img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=240&q=80" alt=""><button class="delete">×</button></div>
+              <div class="thumb"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=240&q=80" alt=""><button class="delete">×</button></div>
+            </div>
+          </div>
+          <div class="compose-dock">
+            <div class="dock-actions">
+              <button class="dock-btn">▣ 関連ファンド</button>
+              <button class="dock-btn">▧ 画像を追加</button>
+              <span class="counter">3 / 6</span>
+            </div>
+          </div>
+          <div class="keyboard" aria-hidden="true">
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h1 class="panel-title">3. 返信一覧：既存返信をここで表示し、新しい返信へ進む</h1>
+      <div class="phone replies-open">
+        <div class="status">17:15</div>
+        <div class="logo-bar">
+          <div class="logo">KIZU<span>NARK</span></div>
+        </div>
+        <section class="replies-page" style="transform:translateX(0)">
+          <div class="page-top">
+            <button class="ghost-btn">戻る</button>
+            <div class="page-title">返信 2件</div>
+            <button class="primary-btn">返信</button>
+          </div>
+          <div class="page-body">
+            <article class="feed-card">
+              <div class="feed-head">
+                <div class="avatar">S</div>
+                <div class="name">S.Cさま</div>
+                <div class="date">2026/05/20</div>
+              </div>
+              <div class="fund-chip">▣ 関連ファンド：浅草ホテル再生ファンド</div>
+              <p>現地写真を見ながら投資先の雰囲気を確認できると、家族にも説明しやすくなります。</p>
+              <div class="image-grid">
+                <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=400&q=80" alt="">
+                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80" alt="">
+                <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=400&q=80" alt="">
+              </div>
+            </article>
+            <div class="section-label">返信</div>
+            <div class="reply-list">
+              <article class="reply-list-item">
+                <div class="avatar" style="background:linear-gradient(135deg,#ffb21a,#f6d465)">N</div>
+                <div>
+                  <div class="reply-list-head">
+                    <strong>N.Tさま</strong>
+                    <span>2026/05/20</span>
+                  </div>
+                  <p>写真があると投資先のイメージがつかみやすいですね。共有ありがとうございます。</p>
+                </div>
+              </article>
+              <article class="reply-list-item">
+                <div class="avatar" style="background:linear-gradient(135deg,#8fd6ff,#6d7df0)">Y</div>
+                <div>
+                  <div class="reply-list-head">
+                    <strong>Y.Tさま</strong>
+                    <span>2026/05/20</span>
+                  </div>
+                  <p>資料だけでは分からないところが見えるので助かります。追加の写真も見てみたいです。</p>
+                  <div class="image-grid one">
+                    <img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=360&q=80" alt="">
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+          <div class="page-bottom">
+            <button class="primary-btn" style="width:100%">返信を書く</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h1 class="panel-title">4. 返信ページ：引用付きの X 型返信 UI</h1>
+      <div class="phone reply-open keyboard-on">
+        <div class="status">17:15</div>
+        <div class="logo-bar">
+          <div class="logo">KIZU<span>NARK</span></div>
+        </div>
+        <div class="sheet-backdrop"></div>
+        <section class="compose reply-compose" style="transform:translateY(0)">
+          <div class="compose-top">
+            <button class="ghost-btn">閉じる</button>
+            <div class="compose-title">返信を作成</div>
+            <button class="primary-btn">返信</button>
+          </div>
+          <div class="compose-body">
+            <div class="author-row">
+              <div class="avatar">犬</div>
+              <span>N.Tさまへ返信</span>
+            </div>
+            <div class="reply-target">
+              <div class="reply-target-label">返信先</div>
+              <strong>N.Tさま</strong>
+              <p>写真があると投資先のイメージがつかみやすいですね。共有ありがとうございます。</p>
+            </div>
+            <textarea placeholder="返信を入力...">このファンドは資料だけでは分かりにくい部分もあるので、現地写真をまとめて投稿してみます。</textarea>
+            <div class="thumb-strip">
+              <div class="thumb"><img src="https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?auto=format&fit=crop&w=240&q=80" alt=""><button class="delete">×</button></div>
+              <div class="thumb"><img src="https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=240&q=80" alt=""><button class="delete">×</button></div>
+            </div>
+          </div>
+          <div class="compose-dock">
+            <div class="dock-actions">
+              <button class="dock-btn">▧ 画像を追加</button>
+              <span class="counter">2 / 6</span>
+            </div>
+          </div>
+          <div class="keyboard" aria-hidden="true">
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+            <span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span><span class="key"></span>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h1 class="panel-title">5. 実装フロー：状態と操作の分離</h1>
+      <div class="flow-card">
+        <h2>画像コメント導線</h2>
+        <div class="flow-step"><b>1</b><span>一覧上部は入力カードを廃止し、「投資の話題を共有しよう」テキスト + 投稿ボタンの軽い入口にする。</span></div>
+        <div class="flow-step"><b>2</b><span>投稿ボタンで全画面寄りの投稿シートを開く。閉じる、本文、投稿ボタンは上部に固定し、本文入力領域は広く取る。</span></div>
+        <div class="flow-step"><b>3</b><span>関連ファンドと画像追加は下部ツールバーへ配置する。キーボード表示中はツールバーも一緒に上がる。</span></div>
+        <div class="flow-step"><b>4</b><span>画像追加後は本文下から底部にかけて横スクロールのサムネイルを表示し、各画像右上の × で削除できる。</span></div>
+        <div class="flow-step"><b>5</b><span>一覧カードは本文の後に画像グリッドを表示する。1枚は大きめ、2から3枚は均等グリッド、4枚以上は3列グリッド + 残数表示が自然。</span></div>
+        <div class="flow-step"><b>6</b><span>评论卡只显示回复数量，不在卡片内直接展示回复内容；点击卡片本体进入评论详情和返信一覧，列表内展示已有回复和图片。</span></div>
+        <div class="flow-step"><b>7</b><span>点击卡片上的回复数量按钮直接打开独立返信 Sheet；返信一覧里的“返信を書く”也打开同一个回复编辑页。</span></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const feedPhone = document.getElementById('feedPhone');
+    const composer = document.getElementById('composer');
+    const thumbStrip = document.getElementById('thumbStrip');
+    const counter = document.getElementById('counter');
+    const fundButton = document.getElementById('fundButton');
+    const imageButton = document.getElementById('imageButton');
+    const fundPicker = document.getElementById('fundPicker');
+    const fundPreview = document.getElementById('fundPreview');
+    const replyComposer = document.getElementById('replyComposer');
+    const replyImageButton = document.getElementById('replyImageButton');
+    const replyThumbStrip = document.getElementById('replyThumbStrip');
+    const replyCounter = document.getElementById('replyCounter');
+    const imageUrls = [
+      'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=240&q=80',
+      'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=240&q=80',
+      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=240&q=80',
+      'https://images.unsplash.com/photo-1528909514045-2fa4ac7a08ba?auto=format&fit=crop&w=240&q=80',
+      'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?auto=format&fit=crop&w=240&q=80',
+      'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=240&q=80'
+    ];
+    let imageCount = 0;
+    let replyImageCount = 0;
+
+    document.querySelectorAll('[data-open-compose]').forEach((button) => {
+      button.addEventListener('click', () => {
+        feedPhone.classList.remove('replies-open', 'reply-open');
+        feedPhone.classList.add('sheet-open');
+        setTimeout(() => composer.focus(), 160);
+      });
+    });
+
+    document.querySelectorAll('[data-close-compose]').forEach((button) => {
+      button.addEventListener('click', () => {
+        feedPhone.classList.remove('sheet-open', 'keyboard-on');
+        fundPicker.classList.remove('show');
+      });
+    });
+
+    document.querySelectorAll('[data-open-replies]').forEach((button) => {
+      button.addEventListener('click', (event) => {
+        if (event.target.closest('[data-open-reply], button')) return;
+        feedPhone.classList.remove('sheet-open', 'reply-open', 'keyboard-on');
+        fundPicker.classList.remove('show');
+        feedPhone.classList.add('replies-open');
+      });
+      button.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        feedPhone.classList.remove('sheet-open', 'reply-open', 'keyboard-on');
+        fundPicker.classList.remove('show');
+        feedPhone.classList.add('replies-open');
+      });
+    });
+
+    document.querySelectorAll('[data-close-replies]').forEach((button) => {
+      button.addEventListener('click', () => {
+        feedPhone.classList.remove('replies-open');
+      });
+    });
+
+    document.querySelectorAll('[data-open-reply]').forEach((button) => {
+      button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        feedPhone.classList.remove('sheet-open', 'replies-open');
+        fundPicker.classList.remove('show');
+        feedPhone.classList.add('reply-open');
+        setTimeout(() => replyComposer.focus(), 160);
+      });
+    });
+
+    document.querySelectorAll('[data-close-reply]').forEach((button) => {
+      button.addEventListener('click', () => {
+        feedPhone.classList.remove('reply-open', 'keyboard-on');
+      });
+    });
+
+    composer.addEventListener('focus', () => feedPhone.classList.add('keyboard-on'));
+    composer.addEventListener('blur', () => {
+      if (!fundPicker.classList.contains('show')) {
+        feedPhone.classList.remove('keyboard-on');
+      }
+    });
+
+    replyComposer.addEventListener('focus', () => feedPhone.classList.add('keyboard-on'));
+    replyComposer.addEventListener('blur', () => feedPhone.classList.remove('keyboard-on'));
+
+    fundButton.addEventListener('click', () => {
+      fundPicker.classList.toggle('show');
+      feedPhone.classList.add('keyboard-on');
+    });
+
+    document.querySelectorAll('[data-pick-fund]').forEach((option) => {
+      option.addEventListener('click', () => {
+        fundPreview.classList.add('show');
+        fundPicker.classList.remove('show');
+      });
+    });
+
+    imageButton.addEventListener('click', () => {
+      if (imageCount >= 6) return;
+      const index = imageCount;
+      imageCount += 1;
+      const item = document.createElement('div');
+      item.className = 'thumb';
+      item.innerHTML = `<img src="${imageUrls[index]}" alt=""><button class="delete" type="button">×</button>`;
+      item.querySelector('button').addEventListener('click', () => {
+        item.remove();
+        imageCount -= 1;
+        counter.textContent = `${imageCount} / 6`;
+      });
+      thumbStrip.appendChild(item);
+      counter.textContent = `${imageCount} / 6`;
+      feedPhone.classList.add('keyboard-on');
+    });
+
+    replyImageButton.addEventListener('click', () => {
+      if (replyImageCount >= 6) return;
+      const index = replyImageCount + 3;
+      replyImageCount += 1;
+      const item = document.createElement('div');
+      item.className = 'thumb';
+      item.innerHTML = `<img src="${imageUrls[index % imageUrls.length]}" alt=""><button class="delete" type="button">×</button>`;
+      item.querySelector('button').addEventListener('click', () => {
+        item.remove();
+        replyImageCount -= 1;
+        replyCounter.textContent = `${replyImageCount} / 6`;
+      });
+      replyThumbStrip.appendChild(item);
+      replyCounter.textContent = `${replyImageCount} / 6`;
+      feedPhone.classList.add('keyboard-on');
+    });
+  </script>
+</body>
+</html>

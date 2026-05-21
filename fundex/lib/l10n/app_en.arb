@@ -429,6 +429,40 @@
   "kizunarkLoginRequiredToPost": "Please sign in to post and comment.",
   "kizunarkGuestLoginPrompt": "Sign in or create an account to comment.",
   "kizunarkEmptyState": "No posts yet. Start the first discussion.",
+  "kizunarkEntryTitle": "Share an investment topic",
+  "kizunarkEntrySubtitle": "Attach related funds and photos",
+  "kizunarkComposeSheetTitle": "Create post",
+  "kizunarkComposeCloseAction": "Close",
+  "kizunarkComposeAuthorLabel": "Your investment topic",
+  "kizunarkAddImageAction": "Add image",
+  "kizunarkImageCounter": "{count} / 4",
+  "@kizunarkImageCounter": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkReplySheetTitle": "Create reply",
+  "kizunarkReplyAuthorLabel": "Replying to {name}",
+  "@kizunarkReplyAuthorLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "kizunarkReplyTargetLabel": "Replying to",
+  "kizunarkRepliesTitle": "{count} replies",
+  "@kizunarkRepliesTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkRepliesSectionTitle": "Replies",
+  "kizunarkWriteReplyAction": "Write a reply",
   "investmentTabHeadline": "Investment Module (Framework)",
   "investmentTabSubtitle": "Products, portfolio, subscriptions/redemptions, and statements will be added here.",
   "investmentTabPortfolioLabel": "Holdings",

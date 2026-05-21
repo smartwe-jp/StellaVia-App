@@ -1169,6 +1169,51 @@ class AppLocalizationsZh extends AppLocalizations {
   String get kizunarkEmptyState => '还没有帖子，来发起第一条讨论吧。';
 
   @override
+  String get kizunarkEntryTitle => '分享投资话题';
+
+  @override
+  String get kizunarkEntrySubtitle => '可以附加关联基金和图片';
+
+  @override
+  String get kizunarkComposeSheetTitle => '创建帖子';
+
+  @override
+  String get kizunarkComposeCloseAction => '关闭';
+
+  @override
+  String get kizunarkComposeAuthorLabel => '你的投资话题';
+
+  @override
+  String get kizunarkAddImageAction => '添加图片';
+
+  @override
+  String kizunarkImageCounter(int count) {
+    return '$count / 4';
+  }
+
+  @override
+  String get kizunarkReplySheetTitle => '创建回复';
+
+  @override
+  String kizunarkReplyAuthorLabel(String name) {
+    return '回复 $name 先生/女士';
+  }
+
+  @override
+  String get kizunarkReplyTargetLabel => '回复对象';
+
+  @override
+  String kizunarkRepliesTitle(int count) {
+    return '$count 条回复';
+  }
+
+  @override
+  String get kizunarkRepliesSectionTitle => '回复';
+
+  @override
+  String get kizunarkWriteReplyAction => '写回复';
+
+  @override
   String get investmentTabHeadline => '投资相关模块（框架）';
 
   @override
@@ -5384,6 +5429,51 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get kizunarkEmptyState => '還沒有貼文，來發起第一則討論吧。';
+
+  @override
+  String get kizunarkEntryTitle => '分享投資話題';
+
+  @override
+  String get kizunarkEntrySubtitle => '可以附加關聯基金和圖片';
+
+  @override
+  String get kizunarkComposeSheetTitle => '建立貼文';
+
+  @override
+  String get kizunarkComposeCloseAction => '關閉';
+
+  @override
+  String get kizunarkComposeAuthorLabel => '你的投資話題';
+
+  @override
+  String get kizunarkAddImageAction => '新增圖片';
+
+  @override
+  String kizunarkImageCounter(int count) {
+    return '$count / 4';
+  }
+
+  @override
+  String get kizunarkReplySheetTitle => '建立回覆';
+
+  @override
+  String kizunarkReplyAuthorLabel(String name) {
+    return '回覆 $name';
+  }
+
+  @override
+  String get kizunarkReplyTargetLabel => '回覆對象';
+
+  @override
+  String kizunarkRepliesTitle(int count) {
+    return '$count 則回覆';
+  }
+
+  @override
+  String get kizunarkRepliesSectionTitle => '回覆';
+
+  @override
+  String get kizunarkWriteReplyAction => '寫回覆';
 
   @override
   String get investmentTabHeadline => '投資相關模組（框架）';

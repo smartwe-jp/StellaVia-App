@@ -9,6 +9,7 @@ abstract class DiscussionBoardRepository {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    List<String> imageUrls = const <String>[],
     String? fallbackAvatarUrl,
     int? linkedProjectId,
     String? linkedProjectName,
@@ -21,7 +22,10 @@ abstract class DiscussionBoardRepository {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    List<String> imageUrls = const <String>[],
   });
+
+  Future<List<String>> uploadImages({required List<String> filePaths});
 
   Future<List<DiscussionThread>> deleteComment({required String commentId});
 }

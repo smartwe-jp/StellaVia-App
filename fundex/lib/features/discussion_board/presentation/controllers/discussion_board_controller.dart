@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/support/app_request_error_message_resolver.dart';
+import '../../../../app/support/upload_image_optimizer.dart';
 import '../../domain/usecases/delete_discussion_comment_usecase.dart';
 import '../../domain/usecases/load_discussion_threads_usecase.dart';
 import '../../domain/usecases/submit_discussion_post_usecase.dart';
 import '../../domain/usecases/submit_discussion_reply_usecase.dart';
+import '../../domain/usecases/upload_discussion_image_usecase.dart';
 import '../../domain/entities/discussion_board_models.dart';
 import '../state/discussion_board_state.dart';
 
@@ -16,7 +18,10 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
     this._submitPostUseCase,
     this._submitReplyUseCase,
     this._deleteCommentUseCase,
-  ) : super(const DiscussionBoardState.initial()) {
+    this._uploadImageUseCase, {
+    UploadImageOptimizer imageOptimizer = const UploadImageOptimizer(),
+  }) : _imageOptimizer = imageOptimizer,
+       super(const DiscussionBoardState.initial()) {
     unawaited(loadThreads());
   }
 
@@ -24,6 +29,8 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
   final SubmitDiscussionPostUseCase _submitPostUseCase;
   final SubmitDiscussionReplyUseCase _submitReplyUseCase;
   final DeleteDiscussionCommentUseCase _deleteCommentUseCase;
+  final UploadDiscussionImageUseCase _uploadImageUseCase;
+  final UploadImageOptimizer _imageOptimizer;
   static const int _defaultPageLimit = 10;
 
   Future<void> loadThreads({bool refresh = false}) async {
@@ -134,6 +141,8 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    List<String> imageUrls = const <String>[],
+    List<String> imageFilePaths = const <String>[],
     String? fallbackAvatarUrl,
     int? linkedProjectId,
     String? linkedProjectName,
@@ -145,12 +154,17 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
 
     state = state.copyWith(isPosting: true, clearError: true);
     try {
+      final preparedImageUrls = await _prepareImageUrls(
+        imageUrls: imageUrls,
+        imageFilePaths: imageFilePaths,
+      );
       final threads = await _submitPostUseCase.call(
         content: content,
         nowLabel: nowLabel,
         fallbackName: fallbackName,
         fallbackHandle: fallbackHandle,
         fallbackBadgeLabel: fallbackBadgeLabel,
+        imageUrls: preparedImageUrls,
         fallbackAvatarUrl: fallbackAvatarUrl,
         linkedProjectId: linkedProjectId,
         linkedProjectName: linkedProjectName,
@@ -179,6 +193,8 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    List<String> imageUrls = const <String>[],
+    List<String> imageFilePaths = const <String>[],
   }) async {
     final draft = (state.replyDrafts[threadId] ?? '').trim();
     if (draft.isEmpty || state.replySubmittingThreadIds.contains(threadId)) {
@@ -193,6 +209,10 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
     );
 
     try {
+      final preparedImageUrls = await _prepareImageUrls(
+        imageUrls: imageUrls,
+        imageFilePaths: imageFilePaths,
+      );
       final threads = await _submitReplyUseCase.call(
         threadId: threadId,
         content: draft,
@@ -200,6 +220,7 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
         fallbackName: fallbackName,
         fallbackHandle: fallbackHandle,
         fallbackBadgeLabel: fallbackBadgeLabel,
+        imageUrls: preparedImageUrls,
       );
 
       final nextDrafts = Map<String, String>.from(state.replyDrafts)
@@ -264,6 +285,40 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
       return;
     }
     state = state.copyWith(clearError: true);
+  }
+
+  Future<List<String>> _prepareImageUrls({
+    required List<String> imageUrls,
+    required List<String> imageFilePaths,
+  }) async {
+    final preparedUrls = <String>[
+      ...imageUrls
+          .map((String url) => url.trim())
+          .where((String url) => url.isNotEmpty),
+    ];
+
+    final optimizedPaths = <String>[];
+    for (final rawPath in imageFilePaths) {
+      final path = rawPath.trim();
+      if (path.isEmpty) {
+        continue;
+      }
+      final optimizedPath = await _imageOptimizer.ensureWithinUploadLimit(path);
+      optimizedPaths.add(optimizedPath);
+    }
+
+    if (optimizedPaths.isNotEmpty) {
+      final uploadedUrls = await _uploadImageUseCase.call(
+        filePaths: optimizedPaths,
+      );
+      preparedUrls.addAll(
+        uploadedUrls
+            .map((String url) => url.trim())
+            .where((String url) => url.isNotEmpty),
+      );
+    }
+
+    return preparedUrls;
   }
 
   List<DiscussionThread> _mergeThreadsById(

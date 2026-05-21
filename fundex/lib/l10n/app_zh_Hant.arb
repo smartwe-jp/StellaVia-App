@@ -429,6 +429,40 @@
   "kizunarkLoginRequiredToPost": "發文與留言需要先登入",
   "kizunarkGuestLoginPrompt": "如需留言，請登入或註冊。",
   "kizunarkEmptyState": "還沒有貼文，來發起第一則討論吧。",
+  "kizunarkEntryTitle": "分享投資話題",
+  "kizunarkEntrySubtitle": "可以附加關聯基金和圖片",
+  "kizunarkComposeSheetTitle": "建立貼文",
+  "kizunarkComposeCloseAction": "關閉",
+  "kizunarkComposeAuthorLabel": "你的投資話題",
+  "kizunarkAddImageAction": "新增圖片",
+  "kizunarkImageCounter": "{count} / 4",
+  "@kizunarkImageCounter": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkReplySheetTitle": "建立回覆",
+  "kizunarkReplyAuthorLabel": "回覆 {name}",
+  "@kizunarkReplyAuthorLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "kizunarkReplyTargetLabel": "回覆對象",
+  "kizunarkRepliesTitle": "{count} 則回覆",
+  "@kizunarkRepliesTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkRepliesSectionTitle": "回覆",
+  "kizunarkWriteReplyAction": "寫回覆",
   "investmentTabHeadline": "投資相關模組（框架）",
   "investmentTabSubtitle": "後續承接產品列表、持倉、申購贖回、帳單等能力。",
   "investmentTabPortfolioLabel": "持倉项目",

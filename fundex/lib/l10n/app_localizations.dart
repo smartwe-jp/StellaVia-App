@@ -2375,6 +2375,84 @@ abstract class AppLocalizations {
   /// **'No posts yet. Start the first discussion.'**
   String get kizunarkEmptyState;
 
+  /// No description provided for @kizunarkEntryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share an investment topic'**
+  String get kizunarkEntryTitle;
+
+  /// No description provided for @kizunarkEntrySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach related funds and photos'**
+  String get kizunarkEntrySubtitle;
+
+  /// No description provided for @kizunarkComposeSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create post'**
+  String get kizunarkComposeSheetTitle;
+
+  /// No description provided for @kizunarkComposeCloseAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get kizunarkComposeCloseAction;
+
+  /// No description provided for @kizunarkComposeAuthorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your investment topic'**
+  String get kizunarkComposeAuthorLabel;
+
+  /// No description provided for @kizunarkAddImageAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add image'**
+  String get kizunarkAddImageAction;
+
+  /// No description provided for @kizunarkImageCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} / 4'**
+  String kizunarkImageCounter(int count);
+
+  /// No description provided for @kizunarkReplySheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create reply'**
+  String get kizunarkReplySheetTitle;
+
+  /// No description provided for @kizunarkReplyAuthorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Replying to {name}'**
+  String kizunarkReplyAuthorLabel(String name);
+
+  /// No description provided for @kizunarkReplyTargetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Replying to'**
+  String get kizunarkReplyTargetLabel;
+
+  /// No description provided for @kizunarkRepliesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} replies'**
+  String kizunarkRepliesTitle(int count);
+
+  /// No description provided for @kizunarkRepliesSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replies'**
+  String get kizunarkRepliesSectionTitle;
+
+  /// No description provided for @kizunarkWriteReplyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a reply'**
+  String get kizunarkWriteReplyAction;
+
   /// No description provided for @investmentTabHeadline.
   ///
   /// In en, this message translates to:

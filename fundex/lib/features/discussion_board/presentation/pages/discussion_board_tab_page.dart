@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +17,15 @@ import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../main_shell/presentation/providers/main_shell_providers.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
+import '../../../member_profile/presentation/providers/member_profile_providers.dart';
+import '../../../member_profile/presentation/support/profile_document_image_picker.dart';
 import '../../../member_profile/presentation/support/mypage_section_support.dart';
 import '../../../member_profile/presentation/widgets/my_page_active_fund_summary_card.dart';
-import '../controllers/discussion_board_controller.dart';
+import '../../domain/entities/discussion_board_models.dart';
 import '../providers/discussion_board_providers.dart';
 import '../state/discussion_board_state.dart';
 import '../support/discussion_board_time_label.dart';
+import '../widgets/kizunark_thread_detail_page.dart';
 
 class DiscussionBoardTabPage extends ConsumerStatefulWidget {
   const DiscussionBoardTabPage({super.key});
@@ -111,7 +116,10 @@ class _DiscussionBoardTabPageState
     return normalized.hashCode;
   }
 
-  Future<void> _submitPost({required bool isAuthenticated}) async {
+  Future<void> _submitPostWithImages({
+    required bool isAuthenticated,
+    required List<String> imageFilePaths,
+  }) async {
     final l10n = context.l10n;
     final controller = ref.read(
       discussionBoardControllerProvider(null).notifier,
@@ -132,6 +140,7 @@ class _DiscussionBoardTabPageState
           ?.avatar,
       linkedProjectId: int.tryParse(_selectedComposerFund?.projectId ?? ''),
       linkedProjectName: _selectedComposerFund?.projectName,
+      imageFilePaths: imageFilePaths,
     );
     if (submitted && mounted) {
       setState(() {
@@ -141,9 +150,10 @@ class _DiscussionBoardTabPageState
     }
   }
 
-  Future<void> _submitReply(
+  Future<void> _submitReplyWithImages(
     String threadId, {
     required bool isAuthenticated,
+    required List<String> imageFilePaths,
   }) async {
     final l10n = context.l10n;
     final controller = ref.read(
@@ -159,9 +169,43 @@ class _DiscussionBoardTabPageState
       fallbackName: l10n.kizunarkFallbackDisplayName,
       fallbackHandle: l10n.kizunarkFallbackHandle,
       fallbackBadgeLabel: l10n.kizunarkInvestorBadge,
+      imageFilePaths: imageFilePaths,
     );
     if (submitted && mounted) {
       AppNotice.show(context, message: l10n.kizunarkReplySuccessNotice);
+    }
+  }
+
+  Future<String?> _pickDiscussionImage() async {
+    final result = await ref
+        .read(profileDocumentImagePickerProvider)
+        .pick(ProfileDocumentImageSource.gallery);
+    if (!mounted) {
+      return null;
+    }
+    switch (result.status) {
+      case ProfileDocumentImagePickStatus.success:
+        return result.path?.trim();
+      case ProfileDocumentImagePickStatus.canceled:
+        return null;
+      case ProfileDocumentImagePickStatus.permissionDenied:
+      case ProfileDocumentImagePickStatus.permissionSettingsRequired:
+        AppNotice.show(
+          context,
+          message: context.l10n.permissionSettingsPhotosMessage,
+        );
+        return null;
+      case ProfileDocumentImagePickStatus.sizeLimitExceeded:
+        AppNotice.show(context, message: context.l10n.profileImageSizeTooLarge);
+        return null;
+      case ProfileDocumentImagePickStatus.failed:
+        AppNotice.show(
+          context,
+          message: result.errorMessage?.trim().isNotEmpty == true
+              ? result.errorMessage!.trim()
+              : context.l10n.discussionAvatarPickFailed,
+        );
+        return null;
     }
   }
 
@@ -199,6 +243,26 @@ class _DiscussionBoardTabPageState
     context.push('/funds/$normalized');
   }
 
+  Future<void> _openCommentImageViewer(
+    List<String> imageUrls,
+    int initialIndex,
+  ) {
+    return openAppImageViewer(
+      context,
+      initialIndex: initialIndex,
+      items: imageUrls
+          .map((String url) => AppImageViewerItem(source: url))
+          .toList(growable: false),
+      texts: AppImageViewerTexts(
+        loadingLabel: context.l10n.imageViewerLoadingLabel,
+        loadFailedLabel: context.l10n.imageViewerLoadFailedLabel,
+        retryLabel: context.l10n.imageViewerRetryLabel,
+        invalidSourceNotice: context.l10n.imageViewerInvalidSourceNotice,
+        closeTooltip: context.l10n.imageViewerCloseTooltip,
+      ),
+    );
+  }
+
   Future<void> _showComposerFundPicker() async {
     final selectedFund =
         await AppBottomSheet.showAdaptive<_SelectedComposerFund>(
@@ -218,6 +282,138 @@ class _DiscussionBoardTabPageState
           ? null
           : selectedFund;
     });
+  }
+
+  Future<void> _openPostComposer({
+    required bool isAuthenticated,
+    required AuthUser? currentUser,
+  }) async {
+    if (!isAuthenticated) {
+      AppNotice.show(
+        context,
+        message: context.l10n.kizunarkLoginRequiredToPost,
+      );
+      return;
+    }
+    await showModalBottomSheet<void>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext sheetContext) {
+        return _KizunarkComposeSheet(
+          title: context.l10n.kizunarkComposeSheetTitle,
+          closeLabel: context.l10n.kizunarkComposeCloseAction,
+          submitLabel: context.l10n.kizunarkPostAction,
+          placeholder: context.l10n.kizunarkComposePlaceholder,
+          currentUser: currentUser,
+          avatarSeed: _resolveCurrentUserAvatarSeed(currentUser),
+          authorLabel: context.l10n.kizunarkComposeAuthorLabel,
+          addImageLabel: context.l10n.kizunarkAddImageAction,
+          linkedFundLabel: context.l10n.kizunarkAssociateFundAction,
+          imageCounterBuilder: context.l10n.kizunarkImageCounter,
+          controller: _composerController,
+          selectedFund: _selectedComposerFund,
+          onPickImage: _pickDiscussionImage,
+          onPickFund: _showComposerFundPicker,
+          onTextChanged: ref
+              .read(discussionBoardControllerProvider(null).notifier)
+              .updateComposerText,
+          onSubmit: (List<String> imageFilePaths) async {
+            await _submitPostWithImages(
+              isAuthenticated: isAuthenticated,
+              imageFilePaths: imageFilePaths,
+            );
+            return mounted
+                ? ref
+                      .read(discussionBoardControllerProvider(null))
+                      .composerText
+                      .isEmpty
+                : false;
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _openReplyComposer({
+    required DiscussionThread thread,
+    required bool isAuthenticated,
+  }) async {
+    if (!isAuthenticated) {
+      AppNotice.show(
+        context,
+        message: context.l10n.kizunarkLoginRequiredToPost,
+      );
+      return;
+    }
+    final replyController = _replyControllerFor(thread.id);
+    await showModalBottomSheet<void>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext sheetContext) {
+        return _KizunarkReplyComposeSheet(
+          title: context.l10n.kizunarkReplySheetTitle,
+          closeLabel: context.l10n.kizunarkComposeCloseAction,
+          submitLabel: context.l10n.kizunarkReplySendAction,
+          placeholder: context.l10n.kizunarkReplyPlaceholder,
+          currentUser: ref.read(currentAuthUserProvider).asData?.value,
+          avatarSeed: _resolveCurrentUserAvatarSeed(
+            ref.read(currentAuthUserProvider).asData?.value,
+          ),
+          authorLabel: context.l10n.kizunarkReplyAuthorLabel(
+            thread.author.displayName,
+          ),
+          targetLabel: context.l10n.kizunarkReplyTargetLabel,
+          targetName: thread.author.displayName,
+          targetBody: thread.body,
+          addImageLabel: context.l10n.kizunarkAddImageAction,
+          imageCounterBuilder: context.l10n.kizunarkImageCounter,
+          controller: replyController,
+          onChanged: (String value) => ref
+              .read(discussionBoardControllerProvider(null).notifier)
+              .updateReplyDraft(thread.id, value),
+          onPickImage: _pickDiscussionImage,
+          onSubmit: (List<String> imageFilePaths) async {
+            await _submitReplyWithImages(
+              thread.id,
+              isAuthenticated: isAuthenticated,
+              imageFilePaths: imageFilePaths,
+            );
+            return mounted &&
+                (ref
+                            .read(discussionBoardControllerProvider(null))
+                            .replyDrafts[thread.id] ??
+                        '')
+                    .isEmpty;
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _openThreadDetail({
+    required DiscussionThread thread,
+    required bool isAuthenticated,
+    required String currentUserId,
+  }) async {
+    await Navigator.of(context).push<void>(
+      MaterialPageRoute<void>(
+        builder: (_) => KizunarkThreadDetailPage(
+          thread: thread,
+          isAuthenticated: isAuthenticated,
+          currentUserId: currentUserId,
+          onOpenImageViewer: _openCommentImageViewer,
+          onReply: () => _openReplyComposer(
+            thread: thread,
+            isAuthenticated: isAuthenticated,
+          ),
+          onMessageLongPress: _showMessageActionSheet,
+        ),
+      ),
+    );
   }
 
   Future<void> _showMessageActionSheet({
@@ -360,8 +556,8 @@ class _DiscussionBoardTabPageState
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
                   child: isAuthenticated
-                      ? KizunarkComposerCard(
-                          leading: GestureDetector(
+                      ? _KizunarkPostEntry(
+                          avatar: GestureDetector(
                             onTap: _openAvatarEditor,
                             behavior: HitTestBehavior.opaque,
                             child: AppUserAvatar(
@@ -369,24 +565,18 @@ class _DiscussionBoardTabPageState
                               avatarSeed: _resolveCurrentUserAvatarSeed(
                                 currentUser,
                               ),
-                              size: 32,
-                              fontSize: 13,
+                              size: 36,
+                              fontSize: 14,
                             ),
                           ),
-                          footerLeading: Align(
-                            alignment: Alignment.centerLeft,
-                            child: _ComposerFundPickerButton(
-                              fundName: _selectedComposerFund?.projectName,
-                              onTap: _showComposerFundPicker,
-                            ),
+                          title: l10n.kizunarkEntryTitle,
+                          subtitle: l10n.kizunarkEntrySubtitle,
+                          actionLabel: l10n.kizunarkPostAction,
+                          enabled: !state.isPosting,
+                          onTap: () => _openPostComposer(
+                            isAuthenticated: isAuthenticated,
+                            currentUser: currentUser,
                           ),
-                          controller: _composerController,
-                          placeholder: l10n.kizunarkComposePlaceholder,
-                          postLabel: l10n.kizunarkPostAction,
-                          enabled: !state.isPosting && isAuthenticated,
-                          onChanged: controller.updateComposerText,
-                          onPostTap: () =>
-                              _submitPost(isAuthenticated: isAuthenticated),
                         )
                       : _KizunarkGuestPrompt(
                           message: l10n.kizunarkGuestLoginPrompt,
@@ -400,7 +590,6 @@ class _DiscussionBoardTabPageState
                   child: _buildFeedSection(
                     l10n: l10n,
                     state: state,
-                    controller: controller,
                     isAuthenticated: isAuthenticated,
                     currentUserId: currentUserId,
                   ),
@@ -416,7 +605,6 @@ class _DiscussionBoardTabPageState
   Widget _buildFeedSection({
     required AppLocalizations l10n,
     required DiscussionBoardState state,
-    required DiscussionBoardController controller,
     required bool isAuthenticated,
     required String currentUserId,
   }) {
@@ -454,69 +642,6 @@ class _DiscussionBoardTabPageState
 
     final threadCards = state.threads
         .map<Widget>((thread) {
-          final expanded = state.expandedThreadIds.contains(thread.id);
-          final replyController = _replyControllerFor(thread.id);
-          final draft = state.replyDrafts[thread.id] ?? '';
-          if (replyController.text != draft) {
-            replyController.value = TextEditingValue(
-              text: draft,
-              selection: TextSelection.collapsed(offset: draft.length),
-            );
-          }
-
-          final replies = thread.replies
-              .map<Widget>(
-                (reply) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: KizunarkReplyTile(
-                    avatar: AppUserAvatar(
-                      avatarUrl: reply.author.avatarUrl,
-                      gradientColorValues:
-                          reply.author.avatarGradientColorValues,
-                      size: 24,
-                      fontSize: 10,
-                    ),
-                    displayName: reply.author.displayName,
-                    timeLabel: buildDiscussionBoardTimeLabel(
-                      context,
-                      createdAtIso: reply.createdAtIso,
-                      fallbackLabel: reply.timeLabel,
-                    ),
-                    body: reply.body,
-                    quoteTitle: reply.quote?.sourceText,
-                    quoteBody: reply.quote?.body,
-                    onLongPress: () => _showMessageActionSheet(
-                      commentId: reply.id,
-                      messageBody: reply.body,
-                      canDelete:
-                          reply.author.id == currentUserId &&
-                          currentUserId.isNotEmpty,
-                      isDeleting: state.deletingCommentIds.contains(reply.id),
-                    ),
-                  ),
-                ),
-              )
-              .toList(growable: false);
-
-          final replySection = Column(
-            children: <Widget>[
-              ...replies,
-              if (isAuthenticated)
-                KizunarkReplyComposer(
-                  controller: replyController,
-                  placeholder: l10n.kizunarkReplyPlaceholder,
-                  sendLabel: l10n.kizunarkReplySendAction,
-                  enabled:
-                      !state.replySubmittingThreadIds.contains(thread.id) &&
-                      isAuthenticated,
-                  onChanged: (String value) =>
-                      controller.updateReplyDraft(thread.id, value),
-                  onSendTap: () =>
-                      _submitReply(thread.id, isAuthenticated: isAuthenticated),
-                ),
-            ],
-          );
-
           return Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: KizunarkPostCard(
@@ -541,6 +666,9 @@ class _DiscussionBoardTabPageState
                 fallbackLabel: thread.timeLabel,
               ),
               body: thread.body,
+              imageUrls: thread.imageUrls,
+              onImageTap: (int index) =>
+                  _openCommentImageViewer(thread.imageUrls, index),
               fundReferenceChip: thread.fundReferenceLabel == null
                   ? null
                   : KizunarkFundReferenceChip(
@@ -549,9 +677,16 @@ class _DiscussionBoardTabPageState
                           _openLinkedFundDetail(thread.fundReferenceId),
                     ),
               commentCount: thread.commentCount,
-              onToggleRepliesTap: () => controller.toggleReplies(thread.id),
-              showReplies: expanded,
-              replySection: replySection,
+              onTap: () => _openThreadDetail(
+                thread: thread,
+                isAuthenticated: isAuthenticated,
+                currentUserId: currentUserId,
+              ),
+              onToggleRepliesTap: () => _openReplyComposer(
+                thread: thread,
+                isAuthenticated: isAuthenticated,
+              ),
+              showReplies: false,
               onLongPress: () => _showMessageActionSheet(
                 commentId: thread.id,
                 messageBody: thread.body,
@@ -578,6 +713,710 @@ class _DiscussionBoardTabPageState
             ),
           ),
       ],
+    );
+  }
+}
+
+class _KizunarkPostEntry extends StatelessWidget {
+  const _KizunarkPostEntry({
+    required this.avatar,
+    required this.title,
+    required this.subtitle,
+    required this.actionLabel,
+    required this.enabled,
+    required this.onTap,
+  });
+
+  final Widget avatar;
+  final String title;
+  final String subtitle;
+  final String actionLabel;
+  final bool enabled;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    return Material(
+      color: colors.surface,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        onTap: enabled ? onTap : null,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: colors.borderSoft),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: colors.scrim.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            children: <Widget>[
+              avatar,
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: appText.bodyStrong.copyWith(
+                        color: colors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: appText.meta.copyWith(color: colors.textTertiary),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 10),
+              FilledButton(
+                onPressed: enabled ? onTap : null,
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size(64, 34),
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                ),
+                child: Text(actionLabel),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _KizunarkComposeSheet extends StatefulWidget {
+  const _KizunarkComposeSheet({
+    required this.title,
+    required this.closeLabel,
+    required this.submitLabel,
+    required this.placeholder,
+    required this.currentUser,
+    required this.avatarSeed,
+    required this.authorLabel,
+    required this.addImageLabel,
+    required this.linkedFundLabel,
+    required this.imageCounterBuilder,
+    required this.controller,
+    required this.selectedFund,
+    required this.onPickImage,
+    required this.onPickFund,
+    required this.onTextChanged,
+    required this.onSubmit,
+  });
+
+  final String title;
+  final String closeLabel;
+  final String submitLabel;
+  final String placeholder;
+  final AuthUser? currentUser;
+  final int? avatarSeed;
+  final String authorLabel;
+  final String addImageLabel;
+  final String linkedFundLabel;
+  final String Function(int count) imageCounterBuilder;
+  final TextEditingController controller;
+  final _SelectedComposerFund? selectedFund;
+  final Future<String?> Function() onPickImage;
+  final Future<void> Function() onPickFund;
+  final ValueChanged<String> onTextChanged;
+  final Future<bool> Function(List<String> imageFilePaths) onSubmit;
+
+  @override
+  State<_KizunarkComposeSheet> createState() => _KizunarkComposeSheetState();
+}
+
+class _KizunarkComposeSheetState extends State<_KizunarkComposeSheet> {
+  static const int _maxImages = 4;
+  final List<String> _imageFilePaths = <String>[];
+  bool _isSubmitting = false;
+
+  Future<void> _addImage() async {
+    if (_imageFilePaths.length >= _maxImages) {
+      return;
+    }
+    final path = await widget.onPickImage();
+    if (!mounted || path == null || path.isEmpty) {
+      return;
+    }
+    setState(() {
+      _imageFilePaths.add(path);
+    });
+  }
+
+  Future<void> _submit() async {
+    if (_isSubmitting) {
+      return;
+    }
+    setState(() {
+      _isSubmitting = true;
+    });
+    final shouldClose = await widget.onSubmit(List<String>.of(_imageFilePaths));
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _isSubmitting = false;
+    });
+    if (shouldClose) {
+      Navigator.of(context).pop();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
+    final height = MediaQuery.sizeOf(context).height * 0.92;
+    return Padding(
+      padding: EdgeInsets.only(bottom: bottomInset),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: SizedBox(
+          height: height,
+          child: Material(
+            color: colors.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              children: <Widget>[
+                _ComposeSheetHeader(
+                  title: widget.title,
+                  closeLabel: widget.closeLabel,
+                  submitLabel: widget.submitLabel,
+                  isSubmitting: _isSubmitting,
+                  onClose: () => Navigator.of(context).pop(),
+                  onSubmit: _submit,
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
+                    children: <Widget>[
+                      _ComposeAuthorRow(
+                        avatarUrl: widget.currentUser?.avatar,
+                        avatarSeed: widget.avatarSeed,
+                        label: widget.authorLabel,
+                      ),
+                      TextField(
+                        controller: widget.controller,
+                        autofocus: true,
+                        minLines: 6,
+                        maxLines: 10,
+                        onChanged: widget.onTextChanged,
+                        style: appText.inputText.copyWith(
+                          color: colors.textPrimary,
+                          height: 1.55,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: widget.placeholder,
+                          border: InputBorder.none,
+                        ),
+                      ),
+                      if (widget.selectedFund != null) ...<Widget>[
+                        const SizedBox(height: 10),
+                        _LinkedFundPreview(fund: widget.selectedFund!),
+                      ],
+                      _SelectedImageStrip(
+                        imageFilePaths: _imageFilePaths,
+                        onRemove: (int index) {
+                          setState(() {
+                            _imageFilePaths.removeAt(index);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                _ComposeDock(
+                  addImageLabel: widget.addImageLabel,
+                  linkedFundLabel: widget.linkedFundLabel,
+                  imageCounter: widget.imageCounterBuilder(
+                    _imageFilePaths.length,
+                  ),
+                  canAddImage: _imageFilePaths.length < _maxImages,
+                  onAddImage: _addImage,
+                  onPickFund: widget.onPickFund,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _KizunarkReplyComposeSheet extends StatefulWidget {
+  const _KizunarkReplyComposeSheet({
+    required this.title,
+    required this.closeLabel,
+    required this.submitLabel,
+    required this.placeholder,
+    required this.currentUser,
+    required this.avatarSeed,
+    required this.authorLabel,
+    required this.targetLabel,
+    required this.targetName,
+    required this.targetBody,
+    required this.addImageLabel,
+    required this.imageCounterBuilder,
+    required this.controller,
+    required this.onChanged,
+    required this.onPickImage,
+    required this.onSubmit,
+  });
+
+  final String title;
+  final String closeLabel;
+  final String submitLabel;
+  final String placeholder;
+  final AuthUser? currentUser;
+  final int? avatarSeed;
+  final String authorLabel;
+  final String targetLabel;
+  final String targetName;
+  final String targetBody;
+  final String addImageLabel;
+  final String Function(int count) imageCounterBuilder;
+  final TextEditingController controller;
+  final ValueChanged<String> onChanged;
+  final Future<String?> Function() onPickImage;
+  final Future<bool> Function(List<String> imageFilePaths) onSubmit;
+
+  @override
+  State<_KizunarkReplyComposeSheet> createState() =>
+      _KizunarkReplyComposeSheetState();
+}
+
+class _KizunarkReplyComposeSheetState
+    extends State<_KizunarkReplyComposeSheet> {
+  static const int _maxImages = 4;
+  final List<String> _imageFilePaths = <String>[];
+  bool _isSubmitting = false;
+
+  Future<void> _addImage() async {
+    if (_imageFilePaths.length >= _maxImages) {
+      return;
+    }
+    final path = await widget.onPickImage();
+    if (!mounted || path == null || path.isEmpty) {
+      return;
+    }
+    setState(() {
+      _imageFilePaths.add(path);
+    });
+  }
+
+  Future<void> _submit() async {
+    if (_isSubmitting) {
+      return;
+    }
+    setState(() {
+      _isSubmitting = true;
+    });
+    final shouldClose = await widget.onSubmit(List<String>.of(_imageFilePaths));
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _isSubmitting = false;
+    });
+    if (shouldClose) {
+      Navigator.of(context).pop();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final appText = Theme.of(context).appTextTheme;
+    final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
+    final height = MediaQuery.sizeOf(context).height * 0.92;
+    return Padding(
+      padding: EdgeInsets.only(bottom: bottomInset),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: SizedBox(
+          height: height,
+          child: Material(
+            color: colors.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            clipBehavior: Clip.antiAlias,
+            child: Column(
+              children: <Widget>[
+                _ComposeSheetHeader(
+                  title: widget.title,
+                  closeLabel: widget.closeLabel,
+                  submitLabel: widget.submitLabel,
+                  isSubmitting: _isSubmitting,
+                  onClose: () => Navigator.of(context).pop(),
+                  onSubmit: _submit,
+                ),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
+                    children: <Widget>[
+                      _ComposeAuthorRow(
+                        avatarUrl: widget.currentUser?.avatar,
+                        avatarSeed: widget.avatarSeed,
+                        label: widget.authorLabel,
+                      ),
+                      const SizedBox(height: 14),
+                      _ReplyTargetPreview(
+                        label: widget.targetLabel,
+                        name: widget.targetName,
+                        body: widget.targetBody,
+                      ),
+                      const SizedBox(height: 12),
+                      TextField(
+                        controller: widget.controller,
+                        autofocus: true,
+                        minLines: 5,
+                        maxLines: 9,
+                        onChanged: widget.onChanged,
+                        style: appText.inputText.copyWith(
+                          color: colors.textPrimary,
+                          height: 1.55,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: widget.placeholder,
+                          border: InputBorder.none,
+                        ),
+                      ),
+                      _SelectedImageStrip(
+                        imageFilePaths: _imageFilePaths,
+                        onRemove: (int index) {
+                          setState(() {
+                            _imageFilePaths.removeAt(index);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                _ComposeDock(
+                  addImageLabel: widget.addImageLabel,
+                  imageCounter: widget.imageCounterBuilder(
+                    _imageFilePaths.length,
+                  ),
+                  canAddImage: _imageFilePaths.length < _maxImages,
+                  onAddImage: _addImage,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ComposeSheetHeader extends StatelessWidget {
+  const _ComposeSheetHeader({
+    required this.title,
+    required this.closeLabel,
+    required this.submitLabel,
+    required this.isSubmitting,
+    required this.onClose,
+    required this.onSubmit,
+  });
+
+  final String title;
+  final String closeLabel;
+  final String submitLabel;
+  final bool isSubmitting;
+  final VoidCallback onClose;
+  final VoidCallback onSubmit;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final appText = Theme.of(context).appTextTheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: colors.borderSoft)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(8, 10, 12, 10),
+        child: Row(
+          children: <Widget>[
+            TextButton(onPressed: onClose, child: Text(closeLabel)),
+            Expanded(
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: appText.bodyStrong.copyWith(color: colors.textPrimary),
+              ),
+            ),
+            FilledButton(
+              onPressed: isSubmitting ? null : onSubmit,
+              style: FilledButton.styleFrom(
+                minimumSize: const Size(64, 36),
+                maximumSize: const Size(120, 40),
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+              ),
+              child: Text(submitLabel),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ComposeAuthorRow extends StatelessWidget {
+  const _ComposeAuthorRow({
+    required this.avatarUrl,
+    required this.avatarSeed,
+    required this.label,
+  });
+
+  final String? avatarUrl;
+  final int? avatarSeed;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final appText = Theme.of(context).appTextTheme;
+    return Row(
+      children: <Widget>[
+        AppUserAvatar(avatarUrl: avatarUrl, avatarSeed: avatarSeed, size: 36),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            label,
+            style: appText.bodyStrong.copyWith(color: colors.textPrimary),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ComposeDock extends StatelessWidget {
+  const _ComposeDock({
+    required this.addImageLabel,
+    required this.imageCounter,
+    required this.canAddImage,
+    required this.onAddImage,
+    this.linkedFundLabel,
+    this.onPickFund,
+  });
+
+  final String addImageLabel;
+  final String? linkedFundLabel;
+  final String imageCounter;
+  final bool canAddImage;
+  final VoidCallback onAddImage;
+  final VoidCallback? onPickFund;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final appText = Theme.of(context).appTextTheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surface,
+        border: Border(top: BorderSide(color: colors.borderSoft)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
+          child: Row(
+            children: <Widget>[
+              if (linkedFundLabel != null && onPickFund != null) ...<Widget>[
+                OutlinedButton.icon(
+                  onPressed: onPickFund,
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(0, 36),
+                    maximumSize: const Size(180, 40),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                  ),
+                  icon: const Icon(Icons.account_balance_wallet_outlined),
+                  label: Text(
+                    linkedFundLabel!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: 8),
+              ],
+              OutlinedButton.icon(
+                onPressed: canAddImage ? onAddImage : null,
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(0, 36),
+                  maximumSize: const Size(140, 40),
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                ),
+                icon: const Icon(Icons.image_outlined),
+                label: Text(
+                  addImageLabel,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                imageCounter,
+                style: appText.meta.copyWith(color: colors.textTertiary),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SelectedImageStrip extends StatelessWidget {
+  const _SelectedImageStrip({
+    required this.imageFilePaths,
+    required this.onRemove,
+  });
+
+  final List<String> imageFilePaths;
+  final ValueChanged<int> onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    if (imageFilePaths.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    final colors = Theme.of(context).appColors;
+    return SizedBox(
+      height: 92,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: imageFilePaths.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 10),
+        itemBuilder: (BuildContext context, int index) {
+          return Stack(
+            children: <Widget>[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: Image.file(
+                  File(imageFilePaths[index]),
+                  width: 82,
+                  height: 82,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, _, _) => ColoredBox(
+                    color: colors.surfaceAlt,
+                    child: const SizedBox(width: 82, height: 82),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 4,
+                right: 4,
+                child: Material(
+                  color: colors.scrim.withValues(alpha: 0.72),
+                  shape: const CircleBorder(),
+                  child: InkWell(
+                    customBorder: const CircleBorder(),
+                    onTap: () => onRemove(index),
+                    child: Icon(Icons.close, size: 18, color: colors.onDark),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _LinkedFundPreview extends StatelessWidget {
+  const _LinkedFundPreview({required this.fund});
+
+  final _SelectedComposerFund fund;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final appText = Theme.of(context).appTextTheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.primarySubtle,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: colors.primarySoft),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Text(
+          fund.projectName,
+          style: appText.bodyStrong.copyWith(color: colors.primary),
+        ),
+      ),
+    );
+  }
+}
+
+class _ReplyTargetPreview extends StatelessWidget {
+  const _ReplyTargetPreview({
+    required this.label,
+    required this.name,
+    required this.body,
+  });
+
+  final String label;
+  final String name;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final appText = Theme.of(context).appTextTheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.warningSubtle,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: colors.warningSoft),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              label,
+              style: appText.meta.copyWith(color: colors.textTertiary),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              name,
+              style: appText.bodyStrong.copyWith(color: colors.textPrimary),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              body,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: appText.body.copyWith(color: colors.textSecondary),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -627,70 +1466,6 @@ class _KizunarkGuestPrompt extends StatelessWidget {
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ComposerFundPickerButton extends StatelessWidget {
-  const _ComposerFundPickerButton({
-    required this.fundName,
-    required this.onTap,
-  });
-
-  final String? fundName;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    final label = (fundName?.trim().isNotEmpty ?? false)
-        ? fundName!.trim()
-        : context.l10n.kizunarkAssociateFundAction;
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(10),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 220, minHeight: 36),
-          child: Ink(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-            decoration: BoxDecoration(
-              color: colors.primarySubtle,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: colors.primarySoft),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Icon(
-                  Icons.account_balance_wallet_outlined,
-                  size: 16,
-                  color: colors.primary,
-                ),
-                const SizedBox(width: 6),
-                Flexible(
-                  child: Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: appText.chip.copyWith(color: colors.primary),
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Icon(
-                  Icons.keyboard_arrow_up_rounded,
-                  size: 16,
-                  color: colors.primary,
-                ),
-              ],
-            ),
-          ),
         ),
       ),
     );

@@ -1183,6 +1183,51 @@ class AppLocalizationsJa extends AppLocalizations {
   String get kizunarkEmptyState => 'まだ投稿がありません。最初の話題を投稿しましょう。';
 
   @override
+  String get kizunarkEntryTitle => '投資の話題を共有しよう';
+
+  @override
+  String get kizunarkEntrySubtitle => '関連ファンドや画像も添付できます';
+
+  @override
+  String get kizunarkComposeSheetTitle => '投稿を作成';
+
+  @override
+  String get kizunarkComposeCloseAction => '閉じる';
+
+  @override
+  String get kizunarkComposeAuthorLabel => 'あなたの投資トピック';
+
+  @override
+  String get kizunarkAddImageAction => '画像を追加';
+
+  @override
+  String kizunarkImageCounter(int count) {
+    return '$count / 4';
+  }
+
+  @override
+  String get kizunarkReplySheetTitle => '返信を作成';
+
+  @override
+  String kizunarkReplyAuthorLabel(String name) {
+    return '$nameさまへ返信';
+  }
+
+  @override
+  String get kizunarkReplyTargetLabel => '返信先';
+
+  @override
+  String kizunarkRepliesTitle(int count) {
+    return '返信 $count件';
+  }
+
+  @override
+  String get kizunarkRepliesSectionTitle => '返信';
+
+  @override
+  String get kizunarkWriteReplyAction => '返信を書く';
+
+  @override
   String get investmentTabHeadline => '投資関連モジュール（枠組み）';
 
   @override

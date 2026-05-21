@@ -48,6 +48,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    List<String> imageUrls = const <String>[],
     String? fallbackAvatarUrl,
     int? linkedProjectId,
     String? linkedProjectName,
@@ -58,7 +59,11 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
     }
     final postedAtUtc = DateTime.now().toUtc();
     final effectiveProjectId = linkedProjectId ?? projectId;
-    await _remote.sendComment(content: trimmed, projectId: effectiveProjectId);
+    await _remote.sendComment(
+      content: trimmed,
+      imageUrls: imageUrls,
+      projectId: effectiveProjectId,
+    );
     final refreshed = await _refreshFirstPageAfterMutation();
     if (_containsRecentlyPostedThread(
       refreshed,
@@ -75,6 +80,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
       fallbackHandle: fallbackHandle,
       fallbackBadgeLabel: fallbackBadgeLabel,
       fallbackAvatarUrl: fallbackAvatarUrl,
+      imageUrls: imageUrls,
       linkedProjectId: effectiveProjectId,
       linkedProjectName: linkedProjectName,
       postedAtUtc: postedAtUtc,
@@ -95,6 +101,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    List<String> imageUrls = const <String>[],
   }) async {
     final trimmed = content.trim();
     if (trimmed.isEmpty) {
@@ -106,6 +113,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
     }
     await _remote.sendComment(
       content: trimmed,
+      imageUrls: imageUrls,
       parentId: remoteParentId,
       projectId: projectId,
     );
@@ -128,6 +136,11 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
 
     await _remote.deleteComment(commentId: remoteCommentId);
     return _refreshFirstPageAfterMutation();
+  }
+
+  @override
+  Future<List<String>> uploadImages({required List<String> filePaths}) {
+    return _remote.uploadImages(filePaths: filePaths);
   }
 
   Future<List<DiscussionThread>> _loadRemoteThreads({
@@ -215,6 +228,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
             author: _mapAuthor(root),
             timeLabel: _formatTimeLabel(root.createTime),
             body: root.content,
+            imageUrls: root.imageUrls,
             createdAtIso: _normalizeCreatedAt(root.createTime),
             commentCount: mappedReplies.length,
             replies: mappedReplies,
@@ -240,6 +254,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
                   author: _mapQuoteAuthor(quote, entry.key),
                   timeLabel: _formatTimeLabel(quote.createTime),
                   body: quote.content,
+                  imageUrls: quote.imageUrls,
                   createdAtIso: _normalizeCreatedAt(quote.createTime),
                   commentCount: mappedReplies.length,
                   replies: mappedReplies,
@@ -259,6 +274,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
             author: _mapAuthor(row),
             timeLabel: _formatTimeLabel(row.createTime),
             body: row.content,
+            imageUrls: row.imageUrls,
             createdAtIso: _normalizeCreatedAt(row.createTime),
             commentCount: 0,
             replies: const <DiscussionReply>[],
@@ -297,10 +313,15 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
       author: _mapAuthor(row),
       timeLabel: _formatTimeLabel(row.createTime),
       body: row.content,
+      imageUrls: row.imageUrls,
       createdAtIso: _normalizeCreatedAt(row.createTime),
       quote: quote == null
           ? null
-          : DiscussionQuote(sourceText: quote.username, body: quote.content),
+          : DiscussionQuote(
+              sourceText: quote.username,
+              body: quote.content,
+              imageUrls: quote.imageUrls,
+            ),
     );
   }
 
@@ -512,6 +533,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
     required String fallbackHandle,
     required String fallbackBadgeLabel,
     String? fallbackAvatarUrl,
+    required List<String> imageUrls,
     required int? linkedProjectId,
     required String? linkedProjectName,
     required DateTime postedAtUtc,
@@ -540,6 +562,7 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
       ),
       timeLabel: nowLabel,
       body: content,
+      imageUrls: imageUrls,
       createdAtIso: postedAtUtc.toIso8601String(),
       commentCount: 0,
       replies: const <DiscussionReply>[],

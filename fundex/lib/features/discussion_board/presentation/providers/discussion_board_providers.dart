@@ -12,6 +12,7 @@ import '../../domain/usecases/delete_discussion_comment_usecase.dart';
 import '../../domain/usecases/load_discussion_threads_usecase.dart';
 import '../../domain/usecases/submit_discussion_post_usecase.dart';
 import '../../domain/usecases/submit_discussion_reply_usecase.dart';
+import '../../domain/usecases/upload_discussion_image_usecase.dart';
 import '../controllers/discussion_board_controller.dart';
 import '../state/discussion_board_state.dart';
 
@@ -61,5 +62,6 @@ final discussionBoardControllerProvider = StateNotifierProvider.autoDispose
         SubmitDiscussionPostUseCase(repository),
         SubmitDiscussionReplyUseCase(repository),
         DeleteDiscussionCommentUseCase(repository),
+        UploadDiscussionImageUseCase(repository),
       );
     });

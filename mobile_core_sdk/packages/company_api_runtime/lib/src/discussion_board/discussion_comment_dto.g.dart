@@ -12,6 +12,9 @@ _DiscussionQuoteDto _$DiscussionQuoteDtoFromJson(Map<String, dynamic> json) =>
       username: json['username'] as String? ?? '',
       avatar: json['avatar'] as String?,
       content: json['content'] as String? ?? '',
+      imageUrls: json['imageUrls'] == null
+          ? const <String>[]
+          : _toStringList(json['imageUrls']),
       createTime: json['createTime'] as String? ?? '',
     );
 
@@ -21,6 +24,7 @@ Map<String, dynamic> _$DiscussionQuoteDtoToJson(_DiscussionQuoteDto instance) =>
       'username': instance.username,
       'avatar': instance.avatar,
       'content': instance.content,
+      'imageUrls': instance.imageUrls,
       'createTime': instance.createTime,
     };
 
@@ -32,6 +36,9 @@ _DiscussionCommentDto _$DiscussionCommentDtoFromJson(
   username: json['username'] as String? ?? '',
   avatar: json['avatar'] as String?,
   content: json['content'] as String? ?? '',
+  imageUrls: json['imageUrls'] == null
+      ? const <String>[]
+      : _toStringList(json['imageUrls']),
   createTime: json['createTime'] as String? ?? '',
   projectId: _toNullableInt(json['projectId']),
   projectName: json['projectName'] as String? ?? '',
@@ -46,6 +53,7 @@ Map<String, dynamic> _$DiscussionCommentDtoToJson(
   'username': instance.username,
   'avatar': instance.avatar,
   'content': instance.content,
+  'imageUrls': instance.imageUrls,
   'createTime': instance.createTime,
   'projectId': instance.projectId,
   'projectName': instance.projectName,

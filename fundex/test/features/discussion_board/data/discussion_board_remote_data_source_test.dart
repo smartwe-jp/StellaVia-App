@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:company_api_runtime/company_api_runtime.dart';
 import 'package:core_network/core_network.dart';
@@ -56,6 +57,23 @@ CoreHttpClient _buildClient(
 
 void main() {
   group('DiscussionBoardRemoteDataSourceImpl', () {
+    late Directory tempDir;
+    late File imageFile;
+
+    setUp(() async {
+      tempDir = await Directory.systemTemp.createTemp(
+        'discussion_board_remote_data_source_test',
+      );
+      imageFile = File('${tempDir.path}/comment.jpg');
+      await imageFile.writeAsBytes(const <int>[1, 2, 3, 4]);
+    });
+
+    tearDown(() async {
+      if (tempDir.existsSync()) {
+        await tempDir.delete(recursive: true);
+      }
+    });
+
     test('comment endpoints should include crowdfunding prefix', () {
       expect(
         DiscussionBoardApiPaths.commentPage,
@@ -80,7 +98,7 @@ void main() {
         });
 
         return _jsonOk(
-          '{"msg":"success","code":200,"data":{"total":2,"limit":50,"currentPage":1,"rows":[{"id":101,"userId":1001,"username":"佐藤","content":"主贴内容","createTime":"2026-03-12T08:00:00Z","projectId":123,"projectName":"プレミアムレジデンス赤坂"},{"id":102,"userId":1002,"username":"高橋","content":"回复内容","createTime":"2026-03-12T08:30:00Z","projectId":123,"projectName":"プレミアムレジデンス赤坂","quote":{"id":101,"username":"佐藤","content":"主贴内容","createTime":"2026-03-12T08:00:00Z"}}]}}',
+          '{"msg":"success","code":200,"data":{"total":2,"limit":50,"currentPage":1,"rows":[{"id":101,"userId":1001,"username":"佐藤","content":"主贴内容","imageUrls":["https://cdn.example.com/root.png"],"createTime":"2026-03-12T08:00:00Z","projectId":123,"projectName":"プレミアムレジデンス赤坂"},{"id":102,"userId":1002,"username":"高橋","content":"回复内容","imageUrls":["https://cdn.example.com/reply.png"],"createTime":"2026-03-12T08:30:00Z","projectId":123,"projectName":"プレミアムレジデンス赤坂","quote":{"id":101,"username":"佐藤","content":"主贴内容","imageUrls":["https://cdn.example.com/quote.png"],"createTime":"2026-03-12T08:00:00Z"}}]}}',
         );
       });
       final source = DiscussionBoardRemoteDataSourceImpl(client);
@@ -92,8 +110,17 @@ void main() {
       expect(rows.first.userId, 1001);
       expect(rows.first.username, '佐藤');
       expect(rows.first.projectId, 123);
+      expect(rows.first.imageUrls, <String>[
+        'https://cdn.example.com/root.png',
+      ]);
       expect(rows.last.quote?.id, 101);
       expect(rows.last.quote?.username, '佐藤');
+      expect(rows.last.imageUrls, <String>[
+        'https://cdn.example.com/reply.png',
+      ]);
+      expect(rows.last.quote?.imageUrls, <String>[
+        'https://cdn.example.com/quote.png',
+      ]);
     });
 
     test('sendComment posts payload and validates success envelope', () async {
@@ -103,6 +130,7 @@ void main() {
         expect(options.extra['auth_required'], true);
         expect(options.data, <String, dynamic>{
           'content': '新留言',
+          'imageUrls': <String>['https://cdn.example.com/comment.png'],
           'parentId': 101,
           'projectId': 123,
         });
@@ -110,8 +138,42 @@ void main() {
       });
       final source = DiscussionBoardRemoteDataSourceImpl(client);
 
-      await source.sendComment(content: '新留言', parentId: 101, projectId: 123);
+      await source.sendComment(
+        content: '新留言',
+        imageUrls: const <String>['https://cdn.example.com/comment.png'],
+        parentId: 101,
+        projectId: 123,
+      );
     });
+
+    test(
+      'uploadImages posts multipart files and returns uploaded urls',
+      () async {
+        final client = _buildClient((options) async {
+          expect(options.method, 'POST');
+          expect(options.path, DiscussionBoardApiPaths.imageUpload);
+          expect(options.extra['auth_required'], true);
+          expect(
+            options.contentType,
+            startsWith(Headers.multipartFormDataContentType),
+          );
+          expect(options.data, isA<FormData>());
+          final formData = options.data as FormData;
+          expect(formData.files, hasLength(1));
+          expect(formData.files.single.key, 'files');
+          return _jsonOk(
+            '{"msg":"success","code":200,"data":["https://cdn.example.com/comment.jpg"]}',
+          );
+        });
+        final source = DiscussionBoardRemoteDataSourceImpl(client);
+
+        final urls = await source.uploadImages(
+          filePaths: <String>[imageFile.path],
+        );
+
+        expect(urls, <String>['https://cdn.example.com/comment.jpg']);
+      },
+    );
 
     test('deleteComment hits delete endpoint with commentId', () async {
       final client = _buildClient((options) async {

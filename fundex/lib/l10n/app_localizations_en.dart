@@ -1254,6 +1254,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kizunarkEmptyState => 'No posts yet. Start the first discussion.';
 
   @override
+  String get kizunarkEntryTitle => 'Share an investment topic';
+
+  @override
+  String get kizunarkEntrySubtitle => 'Attach related funds and photos';
+
+  @override
+  String get kizunarkComposeSheetTitle => 'Create post';
+
+  @override
+  String get kizunarkComposeCloseAction => 'Close';
+
+  @override
+  String get kizunarkComposeAuthorLabel => 'Your investment topic';
+
+  @override
+  String get kizunarkAddImageAction => 'Add image';
+
+  @override
+  String kizunarkImageCounter(int count) {
+    return '$count / 4';
+  }
+
+  @override
+  String get kizunarkReplySheetTitle => 'Create reply';
+
+  @override
+  String kizunarkReplyAuthorLabel(String name) {
+    return 'Replying to $name';
+  }
+
+  @override
+  String get kizunarkReplyTargetLabel => 'Replying to';
+
+  @override
+  String kizunarkRepliesTitle(int count) {
+    return '$count replies';
+  }
+
+  @override
+  String get kizunarkRepliesSectionTitle => 'Replies';
+
+  @override
+  String get kizunarkWriteReplyAction => 'Write a reply';
+
+  @override
   String get investmentTabHeadline => 'Investment Module (Framework)';
 
   @override

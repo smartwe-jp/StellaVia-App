@@ -10,9 +10,12 @@ abstract class DiscussionBoardRemoteDataSource {
 
   Future<void> sendComment({
     required String content,
+    List<String> imageUrls = const <String>[],
     int? parentId,
     int? projectId,
   });
+
+  Future<List<String>> uploadImages({required List<String> filePaths});
 
   Future<void> deleteComment({required int commentId});
 }
@@ -21,8 +24,14 @@ class DiscussionBoardRemoteDataSourceImpl
     implements DiscussionBoardRemoteDataSource {
   DiscussionBoardRemoteDataSourceImpl(
     CoreHttpClient client, {
+    CoreHttpClient? imageUploadClient,
     DiscussionBoardApiClient? apiClient,
-  }) : _apiClient = apiClient ?? DiscussionBoardApiClient(client);
+  }) : _apiClient =
+           apiClient ??
+           DiscussionBoardApiClient(
+             client,
+             imageUploadClient: imageUploadClient,
+           );
 
   final DiscussionBoardApiClient _apiClient;
 
@@ -42,14 +51,21 @@ class DiscussionBoardRemoteDataSourceImpl
   @override
   Future<void> sendComment({
     required String content,
+    List<String> imageUrls = const <String>[],
     int? parentId,
     int? projectId,
   }) async {
     await _apiClient.sendComment(
       content: content,
+      imageUrls: imageUrls,
       parentId: parentId,
       projectId: projectId,
     );
+  }
+
+  @override
+  Future<List<String>> uploadImages({required List<String> filePaths}) async {
+    return _apiClient.uploadImages(filePaths: filePaths);
   }
 
   @override
