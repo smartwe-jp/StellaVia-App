@@ -9,6 +9,7 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/domain/entities/auth_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../../home/presentation/support/home_display_name_resolver.dart';
 import '../../../main_shell/presentation/providers/main_shell_providers.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../member_profile/presentation/support/profile_document_image_picker.dart';
@@ -288,6 +289,10 @@ class _DiscussionBoardTabPageState
       );
       return;
     }
+    final authorLabel = resolveHomeDisplayName(
+      locale: Localizations.localeOf(context),
+      profile: ref.read(memberBasicProfileProvider),
+    );
     await showModalBottomSheet<void>(
       context: context,
       useRootNavigator: true,
@@ -302,7 +307,7 @@ class _DiscussionBoardTabPageState
           placeholder: context.l10n.kizunarkComposePlaceholder,
           currentUser: currentUser,
           avatarSeed: _resolveCurrentUserAvatarSeed(currentUser),
-          authorLabel: context.l10n.kizunarkComposeAuthorLabel,
+          authorLabel: authorLabel,
           addImageLabel: context.l10n.kizunarkAddImageAction,
           linkedFundLabel: context.l10n.kizunarkAssociateFundAction,
           imageCounterBuilder: context.l10n.kizunarkImageCounter,
@@ -364,6 +369,12 @@ class _DiscussionBoardTabPageState
           targetLabel: context.l10n.kizunarkReplyTargetLabel,
           targetName: thread.author.displayName,
           targetBody: thread.body,
+          targetAvatarUrl: thread.author.avatarUrl,
+          targetAvatarGradientColorValues:
+              thread.author.avatarGradientColorValues,
+          targetImageUrls: thread.imageUrls,
+          onTargetImageTap: (int index) =>
+              _openCommentImageViewer(thread.imageUrls, index),
           addImageLabel: context.l10n.kizunarkAddImageAction,
           imageCounterBuilder: context.l10n.kizunarkImageCounter,
           controller: replyController,

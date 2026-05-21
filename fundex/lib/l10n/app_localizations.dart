@@ -2396,7 +2396,7 @@ abstract class AppLocalizations {
   /// No description provided for @kizunarkComposeCloseAction.
   ///
   /// In en, this message translates to:
-  /// **'Close'**
+  /// **'Cancel'**
   String get kizunarkComposeCloseAction;
 
   /// No description provided for @kizunarkComposeAuthorLabel.
@@ -2404,6 +2404,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your investment topic'**
   String get kizunarkComposeAuthorLabel;
+
+  /// No description provided for @kizunarkComposeDraftAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Drafts'**
+  String get kizunarkComposeDraftAction;
+
+  /// No description provided for @kizunarkComposeDeleteDraftAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get kizunarkComposeDeleteDraftAction;
+
+  /// No description provided for @kizunarkComposeSaveDraftAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save draft'**
+  String get kizunarkComposeSaveDraftAction;
+
+  /// No description provided for @kizunarkComposeAudienceEveryone.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone'**
+  String get kizunarkComposeAudienceEveryone;
+
+  /// No description provided for @kizunarkComposeReplyPermissionEveryone.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone can reply'**
+  String get kizunarkComposeReplyPermissionEveryone;
 
   /// No description provided for @kizunarkAddImageAction.
   ///

@@ -1263,10 +1263,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kizunarkComposeSheetTitle => 'Create post';
 
   @override
-  String get kizunarkComposeCloseAction => 'Close';
+  String get kizunarkComposeCloseAction => 'Cancel';
 
   @override
   String get kizunarkComposeAuthorLabel => 'Your investment topic';
+
+  @override
+  String get kizunarkComposeDraftAction => 'Drafts';
+
+  @override
+  String get kizunarkComposeDeleteDraftAction => 'Delete';
+
+  @override
+  String get kizunarkComposeSaveDraftAction => 'Save draft';
+
+  @override
+  String get kizunarkComposeAudienceEveryone => 'Everyone';
+
+  @override
+  String get kizunarkComposeReplyPermissionEveryone => 'Everyone can reply';
 
   @override
   String get kizunarkAddImageAction => 'Add image';

@@ -1178,10 +1178,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get kizunarkComposeSheetTitle => '创建帖子';
 
   @override
-  String get kizunarkComposeCloseAction => '关闭';
+  String get kizunarkComposeCloseAction => '取消';
 
   @override
   String get kizunarkComposeAuthorLabel => '你的投资话题';
+
+  @override
+  String get kizunarkComposeDraftAction => '草稿';
+
+  @override
+  String get kizunarkComposeDeleteDraftAction => '删除';
+
+  @override
+  String get kizunarkComposeSaveDraftAction => '保存草稿';
+
+  @override
+  String get kizunarkComposeAudienceEveryone => '每个人';
+
+  @override
+  String get kizunarkComposeReplyPermissionEveryone => '所有人可以回复';
 
   @override
   String get kizunarkAddImageAction => '添加图片';
@@ -5440,10 +5455,25 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get kizunarkComposeSheetTitle => '建立貼文';
 
   @override
-  String get kizunarkComposeCloseAction => '關閉';
+  String get kizunarkComposeCloseAction => '取消';
 
   @override
   String get kizunarkComposeAuthorLabel => '你的投資話題';
+
+  @override
+  String get kizunarkComposeDraftAction => '草稿';
+
+  @override
+  String get kizunarkComposeDeleteDraftAction => '刪除';
+
+  @override
+  String get kizunarkComposeSaveDraftAction => '儲存草稿';
+
+  @override
+  String get kizunarkComposeAudienceEveryone => '每個人';
+
+  @override
+  String get kizunarkComposeReplyPermissionEveryone => '所有人可以回覆';
 
   @override
   String get kizunarkAddImageAction => '新增圖片';

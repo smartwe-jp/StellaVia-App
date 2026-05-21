@@ -1192,10 +1192,25 @@ class AppLocalizationsJa extends AppLocalizations {
   String get kizunarkComposeSheetTitle => '投稿を作成';
 
   @override
-  String get kizunarkComposeCloseAction => '閉じる';
+  String get kizunarkComposeCloseAction => 'キャンセル';
 
   @override
   String get kizunarkComposeAuthorLabel => 'あなたの投資トピック';
+
+  @override
+  String get kizunarkComposeDraftAction => '下書き';
+
+  @override
+  String get kizunarkComposeDeleteDraftAction => '削除';
+
+  @override
+  String get kizunarkComposeSaveDraftAction => '下書きを保存';
+
+  @override
+  String get kizunarkComposeAudienceEveryone => '全員';
+
+  @override
+  String get kizunarkComposeReplyPermissionEveryone => '全員が返信できます';
 
   @override
   String get kizunarkAddImageAction => '画像を追加';

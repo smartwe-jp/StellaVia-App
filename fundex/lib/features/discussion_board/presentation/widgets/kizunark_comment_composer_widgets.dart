@@ -159,6 +159,33 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
   static const int _maxImages = 4;
   final List<String> _imageFilePaths = <String>[];
   bool _isSubmitting = false;
+  bool _hasInputContent = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _hasInputContent = _hasDraftContent;
+    widget.controller.addListener(_syncInputContentState);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_syncInputContentState);
+    super.dispose();
+  }
+
+  bool get _hasDraftContent =>
+      widget.controller.text.trim().isNotEmpty || _imageFilePaths.isNotEmpty;
+
+  void _syncInputContentState() {
+    final nextHasContent = _hasDraftContent;
+    if (nextHasContent == _hasInputContent || !mounted) {
+      return;
+    }
+    setState(() {
+      _hasInputContent = nextHasContent;
+    });
+  }
 
   Future<void> _addImage() async {
     if (_imageFilePaths.length >= _maxImages) {
@@ -170,7 +197,31 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
     }
     setState(() {
       _imageFilePaths.add(path);
+      _hasInputContent = true;
     });
+  }
+
+  Future<void> _confirmClose() async {
+    await showModalBottomSheet<void>(
+      context: context,
+      useRootNavigator: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext sheetContext) {
+        return _ComposeCloseMenu(
+          onDelete: () {
+            Navigator.of(sheetContext).pop();
+            widget.controller.clear();
+            _imageFilePaths.clear();
+            Navigator.of(context).pop();
+          },
+          onSaveDraft: () {
+            Navigator.of(sheetContext).pop();
+            Navigator.of(context).pop();
+          },
+        );
+      },
+    );
   }
 
   Future<void> _submit() async {
@@ -195,7 +246,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
-    final appText = Theme.of(context).appTextTheme;
+    final l10n = context.l10n;
     return SafeArea(
       top: true,
       bottom: false,
@@ -217,50 +268,40 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
               clipBehavior: Clip.antiAlias,
               child: Column(
                 children: <Widget>[
-                  _ComposeSheetHeader(
-                    title: widget.title,
+                  _PostComposeHeader(
                     closeLabel: widget.closeLabel,
+                    draftLabel: l10n.kizunarkComposeDraftAction,
                     submitLabel: widget.submitLabel,
                     isSubmitting: _isSubmitting,
-                    onClose: () => Navigator.of(context).pop(),
+                    canSubmit: _hasInputContent,
+                    showDraftAction: !_hasInputContent,
+                    onClose: _confirmClose,
+                    onDraftTap: () {},
                     onSubmit: _submit,
                   ),
                   Expanded(
                     child: ListView(
                       padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
                       children: <Widget>[
-                        _ComposeAuthorRow(
+                        _PostInputComposer(
                           avatarUrl: widget.currentUser?.avatar,
                           avatarSeed: widget.avatarSeed,
-                          label: widget.authorLabel,
-                        ),
-                        TextField(
+                          authorLabel: widget.authorLabel,
+                          placeholder: widget.placeholder,
                           controller: widget.controller,
-                          autofocus: true,
-                          minLines: 6,
-                          maxLines: 10,
                           onChanged: widget.onTextChanged,
-                          style: appText.inputText.copyWith(
-                            color: colors.textPrimary,
-                            height: 1.55,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: widget.placeholder,
-                            border: InputBorder.none,
-                          ),
+                          imageFilePaths: _imageFilePaths,
+                          onRemoveImage: (int index) {
+                            setState(() {
+                              _imageFilePaths.removeAt(index);
+                              _hasInputContent = _hasDraftContent;
+                            });
+                          },
                         ),
                         if (widget.selectedFund != null) ...<Widget>[
                           const SizedBox(height: 10),
                           _LinkedFundPreview(fund: widget.selectedFund!),
                         ],
-                        _SelectedImageStrip(
-                          imageFilePaths: _imageFilePaths,
-                          onRemove: (int index) {
-                            setState(() {
-                              _imageFilePaths.removeAt(index);
-                            });
-                          },
-                        ),
                       ],
                     ),
                   ),
@@ -296,6 +337,10 @@ class KizunarkReplyComposeSheet extends StatefulWidget {
     required this.targetLabel,
     required this.targetName,
     required this.targetBody,
+    required this.targetAvatarUrl,
+    required this.targetAvatarGradientColorValues,
+    required this.targetImageUrls,
+    required this.onTargetImageTap,
     required this.addImageLabel,
     required this.imageCounterBuilder,
     required this.controller,
@@ -315,6 +360,10 @@ class KizunarkReplyComposeSheet extends StatefulWidget {
   final String targetLabel;
   final String targetName;
   final String targetBody;
+  final String? targetAvatarUrl;
+  final List<int> targetAvatarGradientColorValues;
+  final List<String> targetImageUrls;
+  final ValueChanged<int> onTargetImageTap;
   final String addImageLabel;
   final String Function(int count) imageCounterBuilder;
   final TextEditingController controller;
@@ -367,7 +416,6 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
-    final appText = Theme.of(context).appTextTheme;
     return SafeArea(
       top: true,
       bottom: false,
@@ -389,8 +437,7 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
               clipBehavior: Clip.antiAlias,
               child: Column(
                 children: <Widget>[
-                  _ComposeSheetHeader(
-                    title: widget.title,
+                  _ReplyComposeHeader(
                     closeLabel: widget.closeLabel,
                     submitLabel: widget.submitLabel,
                     isSubmitting: _isSubmitting,
@@ -399,47 +446,28 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
                   ),
                   Expanded(
                     child: ListView(
-                      padding: const EdgeInsets.fromLTRB(16, 18, 16, 16),
+                      padding: const EdgeInsets.fromLTRB(16, 18, 16, 20),
                       children: <Widget>[
-                        _ComposeAuthorRow(
+                        _ReplyTargetPostPreview(
+                          avatarUrl: widget.targetAvatarUrl,
+                          gradientColorValues:
+                              widget.targetAvatarGradientColorValues,
+                          name: widget.targetName,
+                          body: widget.targetBody,
+                          imageUrls: widget.targetImageUrls,
+                          onImageTap: widget.onTargetImageTap,
+                        ),
+                        _ReplyInputComposer(
                           avatarUrl: widget.currentUser?.avatar,
                           avatarSeed: widget.avatarSeed,
-                          label: widget.authorLabel,
-                        ),
-                        const SizedBox(height: 14),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 44),
-                          child: _ReplyTargetPreview(
-                            label: widget.targetLabel,
-                            name: widget.targetName,
-                            body: widget.targetBody,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        TextField(
+                          replyLabel: widget.targetLabel,
+                          targetName: widget.targetName,
+                          placeholder: widget.placeholder,
                           controller: widget.controller,
-                          autofocus: true,
-                          minLines: 2,
-                          maxLines: 9,
                           onChanged: widget.onChanged,
-                          style: appText.inputText.copyWith(
-                            color: colors.textPrimary,
-                            height: 1.55,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: widget.placeholder,
-                            border: InputBorder.none,
-                            // enabledBorder: InputBorder.none,
-                            // focusedBorder: InputBorder.none,
-                            // contentPadding: EdgeInsets.zero,
-                          ),
-                        ),
-                        _SelectedImageStrip(
                           imageFilePaths: _imageFilePaths,
-                          onRemove: (int index) {
-                            setState(() {
-                              _imageFilePaths.removeAt(index);
-                            });
+                          onRemoveImage: (int index) {
+                            setState(() => _imageFilePaths.removeAt(index));
                           },
                         ),
                       ],
@@ -515,9 +543,88 @@ class KizunarkGuestPrompt extends StatelessWidget {
   }
 }
 
-class _ComposeSheetHeader extends StatelessWidget {
-  const _ComposeSheetHeader({
-    required this.title,
+class _PostComposeHeader extends StatelessWidget {
+  const _PostComposeHeader({
+    required this.closeLabel,
+    required this.draftLabel,
+    required this.submitLabel,
+    required this.isSubmitting,
+    required this.canSubmit,
+    required this.showDraftAction,
+    required this.onClose,
+    required this.onDraftTap,
+    required this.onSubmit,
+  });
+
+  final String closeLabel;
+  final String draftLabel;
+  final String submitLabel;
+  final bool isSubmitting;
+  final bool canSubmit;
+  final bool showDraftAction;
+  final VoidCallback onClose;
+  final VoidCallback onDraftTap;
+  final VoidCallback onSubmit;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final appText = Theme.of(context).appTextTheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: colors.borderSoft)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(8, 10, 12, 10),
+        child: Row(
+          children: <Widget>[
+            TextButton(
+              onPressed: onClose,
+              child: Text(
+                closeLabel,
+                style: appText.body.copyWith(color: colors.textPrimary, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const Spacer(),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 160),
+              child: showDraftAction
+                  ? TextButton(
+                      key: const ValueKey<String>('draft-action'),
+                      onPressed: onDraftTap,
+                      child: Text(
+                        draftLabel,
+                        style: appText.bodyStrong.copyWith(
+                          color: colors.primary,
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(
+                      key: ValueKey<String>('draft-action-empty'),
+                    ),
+            ),
+            const SizedBox(width: 8),
+            FilledButton(
+              onPressed: isSubmitting || !canSubmit ? null : onSubmit,
+              style: FilledButton.styleFrom(
+                minimumSize: const Size(74, 42),
+                maximumSize: const Size(120, 46),
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(999),
+                ),
+              ),
+              child: Text(submitLabel),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ReplyComposeHeader extends StatelessWidget {
+  const _ReplyComposeHeader({
     required this.closeLabel,
     required this.submitLabel,
     required this.isSubmitting,
@@ -525,7 +632,6 @@ class _ComposeSheetHeader extends StatelessWidget {
     required this.onSubmit,
   });
 
-  final String title;
   final String closeLabel;
   final String submitLabel;
   final bool isSubmitting;
@@ -544,22 +650,22 @@ class _ComposeSheetHeader extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(8, 10, 12, 10),
         child: Row(
           children: <Widget>[
-            TextButton(onPressed: onClose, child: Text(closeLabel)),
-            Expanded(
+            TextButton(
+              onPressed: onClose,
               child: Text(
-                title,
-                textAlign: TextAlign.center,
-                style: appText.bodyStrong.copyWith(color: colors.textPrimary),
+                closeLabel,
+                style: appText.body.copyWith(color: colors.textPrimary, fontWeight: FontWeight.bold),
               ),
             ),
+            const Spacer(),
             FilledButton(
               onPressed: isSubmitting ? null : onSubmit,
               style: FilledButton.styleFrom(
-                minimumSize: const Size(64, 36),
-                maximumSize: const Size(120, 40),
-                padding: const EdgeInsets.symmetric(horizontal: 14),
+                minimumSize: const Size(74, 38),
+                maximumSize: const Size(120, 42),
+                padding: const EdgeInsets.symmetric(horizontal: 18),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(999),
                 ),
               ),
               child: Text(submitLabel),
@@ -571,29 +677,123 @@ class _ComposeSheetHeader extends StatelessWidget {
   }
 }
 
-class _ComposeAuthorRow extends StatelessWidget {
-  const _ComposeAuthorRow({
+class _ComposeCloseMenu extends StatelessWidget {
+  const _ComposeCloseMenu({required this.onDelete, required this.onSaveDraft});
+
+  final VoidCallback onDelete;
+  final VoidCallback onSaveDraft;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final appText = Theme.of(context).appTextTheme;
+    final l10n = context.l10n;
+    return Material(
+      color: colors.surface,
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+      clipBehavior: Clip.antiAlias,
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.delete_outline, color: colors.danger),
+                title: Text(
+                  l10n.kizunarkComposeDeleteDraftAction,
+                  style: appText.bodyStrong.copyWith(color: colors.danger),
+                ),
+                onTap: onDelete,
+              ),
+              ListTile(
+                leading: Icon(Icons.bookmark_border, color: colors.textPrimary),
+                title: Text(
+                  l10n.kizunarkComposeSaveDraftAction,
+                  style: appText.bodyStrong.copyWith(color: colors.textPrimary),
+                ),
+                onTap: onSaveDraft,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PostInputComposer extends StatelessWidget {
+  const _PostInputComposer({
     required this.avatarUrl,
     required this.avatarSeed,
-    required this.label,
+    required this.authorLabel,
+    required this.placeholder,
+    required this.controller,
+    required this.onChanged,
+    required this.imageFilePaths,
+    required this.onRemoveImage,
   });
 
   final String? avatarUrl;
   final int? avatarSeed;
-  final String label;
+  final String authorLabel;
+  final String placeholder;
+  final TextEditingController controller;
+  final ValueChanged<String> onChanged;
+  final List<String> imageFilePaths;
+  final ValueChanged<int> onRemoveImage;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
     final appText = Theme.of(context).appTextTheme;
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        AppUserAvatar(avatarUrl: avatarUrl, avatarSeed: avatarSeed, size: 36),
-        const SizedBox(width: 10),
+        SizedBox(
+          width: 40,
+          child: AppUserAvatar(
+            avatarUrl: avatarUrl,
+            avatarSeed: avatarSeed,
+            size: 36,
+            fontSize: 12,
+          ),
+        ),
+        const SizedBox(width: 12),
         Expanded(
-          child: Text(
-            label,
-            style: appText.bodyStrong.copyWith(color: colors.textPrimary),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                authorLabel,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: appText.bodyStrong.copyWith(color: colors.textPrimary),
+              ),
+              TextField(
+                controller: controller,
+                autofocus: true,
+                minLines: 5,
+                maxLines: 10,
+                onChanged: onChanged,
+                style: appText.inputText.copyWith(
+                  color: colors.textPrimary,
+                  height: 1.45,
+                ),
+                decoration: InputDecoration(
+                  hintText: placeholder,
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  contentPadding: const EdgeInsets.only(top: 12),
+                ),
+              ),
+              _SelectedImageStrip(
+                imageFilePaths: imageFilePaths,
+                onRemove: onRemoveImage,
+              ),
+            ],
           ),
         ),
       ],
@@ -700,36 +900,35 @@ class _SelectedImageStrip extends StatelessWidget {
         separatorBuilder: (_, _) => const SizedBox(width: 10),
         itemBuilder: (BuildContext context, int index) {
           return Stack(
-              children: <Widget>[
-                AspectRatio(
-                  aspectRatio: 3/4,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(14),
-                    child: Image.file(
-                      File(imageFilePaths[index]),
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => ColoredBox(
-                        color: colors.surfaceAlt,
-                        child: const SizedBox(width: 82, height: 82),
-                      ),
+            children: <Widget>[
+              AspectRatio(
+                aspectRatio: 3 / 4,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: Image.file(
+                    File(imageFilePaths[index]),
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, _, _) => ColoredBox(
+                      color: colors.surfaceAlt,
+                      child: const SizedBox(width: 82, height: 82),
                     ),
                   ),
                 ),
-                Positioned(
-                  top: 4,
-                  right: 4,
-                  child: Material(
-                    color: colors.scrim.withValues(alpha: 0.72),
-                    shape: const CircleBorder(),
-                    child: InkWell(
-                      customBorder: const CircleBorder(),
-                      onTap: () => onRemove(index),
-                      child: Icon(Icons.close, size: 26, color: colors.onDark),
-                    ),
+              ),
+              Positioned(
+                top: 4,
+                right: 4,
+                child: Material(
+                  color: colors.scrim.withValues(alpha: 0.72),
+                  shape: const CircleBorder(),
+                  child: InkWell(
+                    customBorder: const CircleBorder(),
+                    onTap: () => onRemove(index),
+                    child: Icon(Icons.close, size: 26, color: colors.onDark),
                   ),
                 ),
-              ],
-            
+              ),
+            ],
           );
         },
       ),
@@ -763,51 +962,171 @@ class _LinkedFundPreview extends StatelessWidget {
   }
 }
 
-class _ReplyTargetPreview extends StatelessWidget {
-  const _ReplyTargetPreview({
-    required this.label,
+class _ReplyTargetPostPreview extends StatelessWidget {
+  const _ReplyTargetPostPreview({
+    required this.avatarUrl,
+    required this.gradientColorValues,
     required this.name,
     required this.body,
+    required this.imageUrls,
+    required this.onImageTap,
   });
 
-  final String label;
+  final String? avatarUrl;
+  final List<int> gradientColorValues;
   final String name;
   final String body;
+  final List<String> imageUrls;
+  final ValueChanged<int> onImageTap;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
     final appText = Theme.of(context).appTextTheme;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.highlightGold.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: colors.highlightGold),
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          SizedBox(
+            width: 40,
+            child: Column(
+              children: <Widget>[
+                AppUserAvatar(
+                  avatarUrl: avatarUrl,
+                  gradientColorValues: gradientColorValues,
+                  size: 36,
+                  fontSize: 12,
+                ),
+                const SizedBox(height: 8),
+                Expanded(child: Container(width: 2, color: colors.border)),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: appText.bodyStrong.copyWith(
+                      color: colors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    body,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: appText.body.copyWith(color: colors.textSecondary),
+                  ),
+                  if (imageUrls.isNotEmpty) ...<Widget>[
+                    const SizedBox(height: 8),
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 220),
+                      child: KizunarkImageGrid(
+                        imageUrls: imageUrls,
+                        onImageTap: onImageTap,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              label,
-              style: appText.meta.copyWith(color: colors.textTertiary),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              name,
-              style: appText.bodyStrong.copyWith(color: colors.textPrimary),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              body,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: appText.body.copyWith(color: colors.textSecondary),
-            ),
-          ],
+    );
+  }
+}
+
+class _ReplyInputComposer extends StatelessWidget {
+  const _ReplyInputComposer({
+    required this.avatarUrl,
+    required this.avatarSeed,
+    required this.replyLabel,
+    required this.targetName,
+    required this.placeholder,
+    required this.controller,
+    required this.onChanged,
+    required this.imageFilePaths,
+    required this.onRemoveImage,
+  });
+
+  final String? avatarUrl;
+  final int? avatarSeed;
+  final String replyLabel;
+  final String targetName;
+  final String placeholder;
+  final TextEditingController controller;
+  final ValueChanged<String> onChanged;
+  final List<String> imageFilePaths;
+  final ValueChanged<int> onRemoveImage;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final appText = Theme.of(context).appTextTheme;
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(
+          width: 40,
+          child: AppUserAvatar(
+            avatarUrl: avatarUrl,
+            avatarSeed: avatarSeed,
+            size: 36,
+            fontSize: 12,
+          ),
         ),
-      ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text.rich(
+                TextSpan(
+                  text: '$replyLabel ',
+                  style: appText.meta.copyWith(color: colors.textTertiary),
+                  children: <InlineSpan>[
+                    TextSpan(
+                      text: '@$targetName',
+                      style: appText.meta.copyWith(color: colors.primary),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 4),
+              TextField(
+                controller: controller,
+                autofocus: true,
+                minLines: 2,
+                maxLines: 9,
+                onChanged: onChanged,
+                style: appText.inputText.copyWith(
+                  color: colors.textPrimary,
+                  height: 1.55,
+                ),
+                decoration: InputDecoration(
+                  hintText: placeholder,
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  contentPadding: EdgeInsets.zero,
+                ),
+              ),
+              _SelectedImageStrip(
+                imageFilePaths: imageFilePaths,
+                onRemove: onRemoveImage,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
