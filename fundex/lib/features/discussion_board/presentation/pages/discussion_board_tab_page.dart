@@ -709,6 +709,13 @@ class _DiscussionBoardTabPageState
       locale: Localizations.localeOf(context),
       profile: ref.read(memberBasicProfileProvider),
     );
+    final hasDrafts = await ref
+        .read(discussionBoardDraftsProvider.future)
+        .then((List<DiscussionBoardDraft> drafts) => drafts.isNotEmpty)
+        .catchError((Object _) => false);
+    if (!mounted) {
+      return;
+    }
     await context.push<void>(
       '/discussion-board/post',
       extra: KizunarkPostComposeRouteArgs(
@@ -725,6 +732,7 @@ class _DiscussionBoardTabPageState
           imageCounterBuilder: context.l10n.kizunarkImageCounter,
           controller: _composerController,
           selectedFund: _selectedComposerFund,
+          hasDrafts: hasDrafts,
           onPickImage: _pickDiscussionImage,
           onPickFund: _showComposerFundPicker,
           onOpenDrafts: _openDraftList,

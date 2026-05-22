@@ -169,6 +169,7 @@ class KizunarkComposeSheet extends StatefulWidget {
     required this.onTextChanged,
     required this.onSaveDraft,
     required this.onSubmit,
+    this.hasDrafts = false,
     this.fullPage = false,
     super.key,
   });
@@ -193,6 +194,7 @@ class KizunarkComposeSheet extends StatefulWidget {
   final ValueChanged<String> onTextChanged;
   final Future<void> Function(List<String> imageFilePaths) onSaveDraft;
   final Future<bool> Function(List<String> imageFilePaths) onSubmit;
+  final bool hasDrafts;
   final bool fullPage;
 
   @override
@@ -373,7 +375,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
             submitLabel: widget.submitLabel,
             isSubmitting: _isSubmitting,
             canSubmit: _canSubmit,
-            showDraftAction: !_hasInputContent,
+            showDraftAction: widget.hasDrafts && !_hasInputContent,
             onClose: _confirmClose,
             onDraftTap: _openDrafts,
             onSubmit: _submit,

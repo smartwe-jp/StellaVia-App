@@ -259,6 +259,7 @@ class _DraftTile extends StatelessWidget {
           constraints: const BoxConstraints(minHeight: 96),
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
+            color: colors.highlightGold.withValues(alpha: 0.18),
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: colors.borderSoft),
           ),
