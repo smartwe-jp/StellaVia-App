@@ -10,12 +10,14 @@ class KizunarkGradientHeader extends StatelessWidget {
     required this.subtitle,
     this.titleLightAssetPath,
     this.titleDarkAssetPath,
+    this.trailing,
   });
 
   final String title;
   final String subtitle;
   final String? titleLightAssetPath;
   final String? titleDarkAssetPath;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -42,26 +44,33 @@ class KizunarkGradientHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          if (titleAssetPath?.trim().isNotEmpty ?? false)
-            Semantics(
-              label: title,
-              child: ExcludeSemantics(
-                child: Image.asset(
-                  titleAssetPath!,
-                  height: 34,
-                  fit: BoxFit.contain,
-                  alignment: Alignment.centerLeft,
+          Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              if (titleAssetPath?.trim().isNotEmpty ?? false)
+                Semantics(
+                  label: title,
+                  child: ExcludeSemantics(
+                    child: Image.asset(
+                      titleAssetPath!,
+                      height: 34,
+                      fit: BoxFit.contain,
+                      alignment: Alignment.centerLeft,
+                    ),
+                  ),
+                )
+              else
+                Text(
+                  title,
+                  style: appText.pageTitle.copyWith(
+                    color: colors.textPrimary,
+                    letterSpacing: -0.2,
+                  ),
                 ),
-              ),
-            )
-          else
-            Text(
-              title,
-              style: appText.pageTitle.copyWith(
-                color: colors.textPrimary,
-                letterSpacing: -0.2,
-              ),
-            ),
+              if (trailing != null)
+                Align(alignment: Alignment.centerRight, child: trailing!),
+            ],
+          ),
           const SizedBox(height: 2),
           if (!(titleAssetPath?.trim().isNotEmpty ?? false))
             Text(

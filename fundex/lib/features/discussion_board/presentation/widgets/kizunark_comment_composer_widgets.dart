@@ -39,6 +39,33 @@ class KizunarkPostComposeRouteArgs {
   final Widget child;
 }
 
+class KizunarkSendActionButton extends StatelessWidget {
+  const KizunarkSendActionButton({
+    required this.label,
+    required this.onPressed,
+    super.key,
+  });
+
+  final String label;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return FilledButton(
+      onPressed: onPressed,
+      style: FilledButton.styleFrom(
+        minimumSize: const Size(74, 38),
+        maximumSize: const Size(120, 42),
+        padding: const EdgeInsets.symmetric(horizontal: 18),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        visualDensity: VisualDensity.compact,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      child: Text(label),
+    );
+  }
+}
+
 class KizunarkPostEntry extends StatelessWidget {
   const KizunarkPostEntry({
     required this.avatar,
@@ -108,16 +135,9 @@ class KizunarkPostEntry extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              FilledButton(
+              KizunarkSendActionButton(
+                label: actionLabel,
                 onPressed: enabled ? onTap : null,
-                style: FilledButton.styleFrom(
-                  minimumSize: const Size(64, 34),
-                  padding: const EdgeInsets.symmetric(horizontal: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: Text(actionLabel),
               ),
             ],
           ),
@@ -797,17 +817,9 @@ class _PostComposeHeader extends StatelessWidget {
                     ),
             ),
             const SizedBox(width: 8),
-            FilledButton(
+            KizunarkSendActionButton(
+              label: submitLabel,
               onPressed: isSubmitting || !canSubmit ? null : onSubmit,
-              style: FilledButton.styleFrom(
-                minimumSize: const Size(74, 42),
-                maximumSize: const Size(120, 46),
-                padding: const EdgeInsets.symmetric(horizontal: 18),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(999),
-                ),
-              ),
-              child: Text(submitLabel),
             ),
           ],
         ),
@@ -856,17 +868,9 @@ class _ReplyComposeHeader extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            FilledButton(
+            KizunarkSendActionButton(
+              label: submitLabel,
               onPressed: isSubmitting || !canSubmit ? null : onSubmit,
-              style: FilledButton.styleFrom(
-                minimumSize: const Size(74, 38),
-                maximumSize: const Size(120, 42),
-                padding: const EdgeInsets.symmetric(horizontal: 18),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(999),
-                ),
-              ),
-              child: Text(submitLabel),
             ),
           ],
         ),

@@ -14,7 +14,6 @@ import '../../../auth/domain/entities/auth_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../home/presentation/support/home_display_name_resolver.dart';
 import '../../../main_shell/presentation/providers/main_shell_providers.dart';
-import '../../../main_shell/presentation/widgets/main_shell_chrome_visibility.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../member_profile/presentation/support/profile_document_image_picker.dart';
 import '../../domain/entities/discussion_board_draft.dart';
@@ -61,6 +60,8 @@ class _PendingDiscussionSendJob {
 
 class _DiscussionBoardTabPageState
     extends ConsumerState<DiscussionBoardTabPage> {
+  static const double _headerPostActionThreshold = 84;
+
   late final TextEditingController _composerController;
   late final ScrollController _scrollController;
   late final MainShellScrollControllerRegistry _scrollControllerRegistry;
@@ -70,6 +71,7 @@ class _DiscussionBoardTabPageState
       Queue<_PendingDiscussionSendJob>();
   SelectedComposerFund? _selectedComposerFund;
   bool _isProcessingSendQueue = false;
+  bool _showHeaderPostAction = false;
 
   @override
   void initState() {
@@ -99,6 +101,13 @@ class _DiscussionBoardTabPageState
       return;
     }
     final position = _scrollController.position;
+    final shouldShowHeaderPostAction =
+        position.pixels > _headerPostActionThreshold;
+    if (shouldShowHeaderPostAction != _showHeaderPostAction && mounted) {
+      setState(() {
+        _showHeaderPostAction = shouldShowHeaderPostAction;
+      });
+    }
     if (position.pixels < position.maxScrollExtent - 140) {
       return;
     }
@@ -975,14 +984,26 @@ class _DiscussionBoardTabPageState
 
     return Column(
       children: <Widget>[
-        MainShellChromeVisibility(
-          child: KizunarkGradientHeader(
-            title: l10n.mainTabKizunark,
-            subtitle: l10n.kizunarkSubtitle,
-            titleLightAssetPath: 'assets/images/kizunark.nav.light.png',
-            titleDarkAssetPath: 'assets/images/kizunark.nav.dark.png',
-          ),
+        // MainShellChromeVisibility(
+        //   child:
+        KizunarkGradientHeader(
+          title: l10n.mainTabKizunark,
+          subtitle: l10n.kizunarkSubtitle,
+          titleLightAssetPath: 'assets/images/kizunark.nav.light.png',
+          titleDarkAssetPath: 'assets/images/kizunark.nav.dark.png',
+          trailing: isAuthenticated
+              ? _HeaderPostAction(
+                  label: l10n.kizunarkPostAction,
+                  isVisible: _showHeaderPostAction,
+                  enabled: !state.isPosting,
+                  onTap: () => _openPostComposer(
+                    isAuthenticated: isAuthenticated,
+                    currentUser: currentUser,
+                  ),
+                )
+              : null,
         ),
+        //),
         Expanded(
           child: RefreshIndicator(
             onRefresh: () => controller.refreshThreads(),
@@ -1160,6 +1181,40 @@ class _DiscussionBoardTabPageState
             ),
           ),
       ],
+    );
+  }
+}
+
+class _HeaderPostAction extends StatelessWidget {
+  const _HeaderPostAction({
+    required this.label,
+    required this.isVisible,
+    required this.enabled,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool isVisible;
+  final bool enabled;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSlide(
+      duration: const Duration(milliseconds: 160),
+      curve: Curves.easeOutCubic,
+      offset: isVisible ? Offset.zero : const Offset(0.2, 0),
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 140),
+        opacity: isVisible ? 1 : 0,
+        child: IgnorePointer(
+          ignoring: !isVisible,
+          child: KizunarkSendActionButton(
+            label: label,
+            onPressed: enabled ? onTap : null,
+          ),
+        ),
+      ),
     );
   }
 }
