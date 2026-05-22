@@ -174,10 +174,7 @@ class _DraftTile extends StatelessWidget {
     final text = draft.content.trim().isEmpty
         ? context.l10n.kizunarkDraftImageOnlyLabel
         : draft.content.trim();
-    final typeLabel = switch (draft.kind) {
-      DiscussionDraftKind.post => context.l10n.kizunarkDraftPostTypeLabel,
-      DiscussionDraftKind.reply => context.l10n.kizunarkDraftReplyTypeLabel,
-    };
+    final replyTargetName = draft.replyTargetName?.trim() ?? '';
     return Material(
       color: colors.surface,
       borderRadius: BorderRadius.circular(14),
@@ -201,12 +198,15 @@ class _DraftTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      typeLabel,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: appText.meta.copyWith(color: colors.primary),
-                    ),
+                    if (draft.kind == DiscussionDraftKind.reply &&
+                        replyTargetName.isNotEmpty)
+                      _DraftReplyTargetLabel(targetName: replyTargetName)
+                    else
+                      Icon(
+                        Icons.edit_calendar,
+                        size: 22,
+                        color: colors.textTertiary,
+                      ),
                     const SizedBox(height: 6),
                     Text(
                       text,
@@ -234,6 +234,32 @@ class _DraftTile extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _DraftReplyTargetLabel extends StatelessWidget {
+  const _DraftReplyTargetLabel({required this.targetName});
+
+  final String targetName;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final appText = Theme.of(context).appTextTheme;
+    return Row(
+      children: <Widget>[
+        Icon(Icons.reply_rounded, size: 16, color: colors.textTertiary),
+        const SizedBox(width: 5),
+        Expanded(
+          child: Text(
+            '@$targetName',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: appText.bodyStrong.copyWith(color: colors.textSecondary),
+          ),
+        ),
+      ],
     );
   }
 }
