@@ -84,45 +84,52 @@ class KizunarkThreadDetailPage extends ConsumerWidget {
         
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 96),
+        padding: const EdgeInsets.fromLTRB(0, 12, 0, 96),
         children: <Widget>[
-          KizunarkPostCard(
-            avatar: AppUserAvatar(
-              avatarUrl: liveThread.author.avatarUrl,
-              gradientColorValues: liveThread.author.avatarGradientColorValues,
-              size: 32,
-              fontSize: 12,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: KizunarkPostCard(
+              avatar: AppUserAvatar(
+                avatarUrl: liveThread.author.avatarUrl,
+                gradientColorValues: liveThread.author.avatarGradientColorValues,
+                size: 32,
+                fontSize: 12,
+              ),
+              displayName: liveThread.author.displayName,
+              accountText: liveThread.author.accountHandle,
+              badgeLabel: liveThread.author.badge.label,
+              badgeBackgroundColor: Color(
+                liveThread.author.badge.backgroundColorValue,
+              ),
+              badgeForegroundColor: Color(
+                liveThread.author.badge.foregroundColorValue,
+              ),
+              timeLabel: buildDiscussionBoardTimeLabel(
+                context,
+                createdAtIso: liveThread.createdAtIso,
+                fallbackLabel: liveThread.timeLabel,
+              ),
+              body: liveThread.body,
+              imageUrls: liveThread.imageUrls,
+              onImageTap: (int index) =>
+                  onOpenImageViewer(liveThread.imageUrls, index),
+              fundReferenceChip: liveThread.fundReferenceLabel == null
+                  ? null
+                  : KizunarkFundReferenceChip(
+                      label: liveThread.fundReferenceLabel!,
+                    ),
+              commentCount: liveThread.commentCount,
+              onToggleRepliesTap: onReply,
+              showReplies: false,
             ),
-            displayName: liveThread.author.displayName,
-            accountText: liveThread.author.accountHandle,
-            badgeLabel: liveThread.author.badge.label,
-            badgeBackgroundColor: Color(
-              liveThread.author.badge.backgroundColorValue,
-            ),
-            badgeForegroundColor: Color(
-              liveThread.author.badge.foregroundColorValue,
-            ),
-            timeLabel: buildDiscussionBoardTimeLabel(
-              context,
-              createdAtIso: liveThread.createdAtIso,
-              fallbackLabel: liveThread.timeLabel,
-            ),
-            body: liveThread.body,
-            imageUrls: liveThread.imageUrls,
-            onImageTap: (int index) =>
-                onOpenImageViewer(liveThread.imageUrls, index),
-            fundReferenceChip: liveThread.fundReferenceLabel == null
-                ? null
-                : KizunarkFundReferenceChip(
-                    label: liveThread.fundReferenceLabel!,
-                  ),
-            commentCount: liveThread.commentCount,
-            onToggleRepliesTap: onReply,
-            showReplies: false,
           ),
-          Text(
-            l10n.kizunarkRepliesSectionTitle,
-            style: appText.bodyStrong.copyWith(color: colors.textPrimary),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              l10n.kizunarkRepliesSectionTitle,
+              style: appText.bodyStrong.copyWith(color: colors.textPrimary),
+            ),
           ),
           const SizedBox(height: 8),
           ...liveThread.replies.map((reply) {
@@ -158,16 +165,16 @@ class KizunarkThreadDetailPage extends ConsumerWidget {
           }),
         ],
       ),
-      // bottomNavigationBar: SafeArea(
-      //   top: false,
-      //   child: Padding(
-      //     padding: const EdgeInsets.fromLTRB(16, 10, 16, 14),
-      //     child: FilledButton(
-      //       onPressed: isAuthenticated ? onReply : null,
-      //       child: Text(l10n.kizunarkWriteReplyAction),
-      //     ),
-      //   ),
-      // ),
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 14),
+          child: FilledButton(
+            onPressed: isAuthenticated ? onReply : null,
+            child: Text(l10n.kizunarkWriteReplyAction),
+          ),
+        ),
+      ),
     );
   }
 }

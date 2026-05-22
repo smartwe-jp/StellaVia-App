@@ -185,12 +185,14 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
   SelectedComposerFund? _selectedFund;
   bool _isSubmitting = false;
   bool _hasInputContent = false;
+  bool _canSubmitContent = false;
 
   @override
   void initState() {
     super.initState();
     _selectedFund = widget.selectedFund;
     _hasInputContent = _hasDraftContent;
+    _canSubmitContent = _hasSubmitContent;
     widget.controller.addListener(_syncInputContentState);
   }
 
@@ -202,7 +204,8 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
 
   bool get _hasDraftContent =>
       widget.controller.text.trim().isNotEmpty || _imageFilePaths.isNotEmpty;
-  bool get _canSubmit => widget.controller.text.trim().isNotEmpty;
+  bool get _hasSubmitContent => widget.controller.text.trim().isNotEmpty;
+  bool get _canSubmit => _hasSubmitContent;
 
   Iterable<String> get _validImageFilePaths => _imageFilePaths.where(
     (path) => path.trim().isNotEmpty && File(path).existsSync(),
@@ -210,11 +213,15 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
 
   void _syncInputContentState() {
     final nextHasContent = _hasDraftContent;
-    if (nextHasContent == _hasInputContent || !mounted) {
+    final nextCanSubmit = _hasSubmitContent;
+    if ((nextHasContent == _hasInputContent &&
+            nextCanSubmit == _canSubmitContent) ||
+        !mounted) {
       return;
     }
     setState(() {
       _hasInputContent = nextHasContent;
+      _canSubmitContent = nextCanSubmit;
     });
   }
 
@@ -229,6 +236,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
     setState(() {
       _imageFilePaths.add(path);
       _hasInputContent = true;
+      _canSubmitContent = _hasSubmitContent;
     });
   }
 
@@ -289,6 +297,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
               .take(_maxImages),
         );
       _hasInputContent = _hasDraftContent;
+      _canSubmitContent = _hasSubmitContent;
     });
     final projectId = draft.projectId?.trim() ?? '';
     final projectName = draft.projectName?.trim() ?? '';
@@ -365,6 +374,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
                     setState(() {
                       _imageFilePaths.removeAt(index);
                       _hasInputContent = _hasDraftContent;
+                      _canSubmitContent = _hasSubmitContent;
                     });
                   },
                 ),
@@ -480,6 +490,7 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
   final List<String> _imageFilePaths = <String>[];
   bool _isSubmitting = false;
   bool _hasInputContent = false;
+  bool _canSubmitContent = false;
 
   @override
   void initState() {
@@ -490,6 +501,7 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
           .take(_maxImages),
     );
     _hasInputContent = _hasDraftContent;
+    _canSubmitContent = _hasSubmitContent;
     widget.controller.addListener(_syncInputContentState);
   }
 
@@ -501,7 +513,8 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
 
   bool get _hasDraftContent =>
       widget.controller.text.trim().isNotEmpty || _imageFilePaths.isNotEmpty;
-  bool get _canSubmit => widget.controller.text.trim().isNotEmpty;
+  bool get _hasSubmitContent => widget.controller.text.trim().isNotEmpty;
+  bool get _canSubmit => _hasSubmitContent;
 
   Iterable<String> get _validImageFilePaths => _imageFilePaths.where(
     (path) => path.trim().isNotEmpty && File(path).existsSync(),
@@ -509,11 +522,15 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
 
   void _syncInputContentState() {
     final nextHasContent = _hasDraftContent;
-    if (nextHasContent == _hasInputContent || !mounted) {
+    final nextCanSubmit = _hasSubmitContent;
+    if ((nextHasContent == _hasInputContent &&
+            nextCanSubmit == _canSubmitContent) ||
+        !mounted) {
       return;
     }
     setState(() {
       _hasInputContent = nextHasContent;
+      _canSubmitContent = nextCanSubmit;
     });
   }
 
@@ -528,6 +545,7 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
     setState(() {
       _imageFilePaths.add(path);
       _hasInputContent = true;
+      _canSubmitContent = _hasSubmitContent;
     });
   }
 
@@ -617,6 +635,7 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
                     setState(() {
                       _imageFilePaths.removeAt(index);
                       _hasInputContent = _hasDraftContent;
+                      _canSubmitContent = _hasSubmitContent;
                     });
                   },
                 ),
