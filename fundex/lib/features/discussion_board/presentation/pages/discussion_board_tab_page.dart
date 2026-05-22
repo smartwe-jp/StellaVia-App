@@ -480,9 +480,21 @@ class _DiscussionBoardTabPageState
   }
 
   Future<DiscussionBoardDraft?> _openDraftList() {
-    return context.push<DiscussionBoardDraft>(
-      '/discussion-board/drafts',
-      extra: const KizunarkDraftListRouteArgs(),
+    final colors = Theme.of(context).appColors;
+    return showModalBottomSheet<DiscussionBoardDraft>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      useRootNavigator: true,
+      showDragHandle: false,
+      backgroundColor: colors.surface.withValues(alpha: 0),
+      builder: (BuildContext sheetContext) {
+        return const FractionallySizedBox(
+          heightFactor: 0.86,
+          alignment: Alignment.bottomCenter,
+          child: KizunarkDraftListSheet(),
+        );
+      },
     );
   }
 

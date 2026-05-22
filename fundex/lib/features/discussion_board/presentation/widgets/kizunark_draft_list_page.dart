@@ -24,7 +24,6 @@ class KizunarkDraftListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).appColors;
     final l10n = context.l10n;
-    final draftsAsync = ref.watch(discussionBoardDraftsProvider);
     return Scaffold(
       backgroundColor: colors.background,
       appBar: AppNavigationBar(
@@ -34,47 +33,120 @@ class KizunarkDraftListPage extends ConsumerWidget {
           onTap: () => context.pop(),
         ),
       ),
-      body: draftsAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, _) => _DraftEmptyState(message: l10n.kizunarkDraftLoadError),
-        data: (drafts) {
-          final visibleDrafts = kind == null
-              ? drafts
-              : drafts
-                    .where((draft) => draft.kind == kind)
-                    .toList(growable: false);
-          if (visibleDrafts.isEmpty) {
-            return _DraftEmptyState(message: l10n.kizunarkDraftEmptyState);
-          }
-          return ListView.separated(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
-            itemBuilder: (BuildContext context, int index) {
-              final draft = visibleDrafts[index];
-              return _DraftDismissibleTile(
-                draft: draft,
-                onTap: () async {
-                  await ref
-                      .read(discussionBoardDraftLocalDataSourceProvider)
-                      .deleteDraft(draft.id);
-                  ref.invalidate(discussionBoardDraftsProvider);
-                  if (!context.mounted) {
-                    return;
-                  }
-                  context.pop(draft);
-                },
-                onDelete: () async {
-                  await ref
-                      .read(discussionBoardDraftLocalDataSourceProvider)
-                      .deleteDraft(draft.id);
-                  ref.invalidate(discussionBoardDraftsProvider);
-                },
-              );
-            },
-            separatorBuilder: (_, _) => const SizedBox(height: 10),
-            itemCount: visibleDrafts.length,
-          );
-        },
+      body: _DraftListBody(
+        kind: kind,
+        onSelected: (DiscussionBoardDraft draft) => context.pop(draft),
       ),
+    );
+  }
+}
+
+class KizunarkDraftListSheet extends StatelessWidget {
+  const KizunarkDraftListSheet({this.kind, super.key});
+
+  final DiscussionDraftKind? kind;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    final l10n = context.l10n;
+    return ClipRRect(
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+      child: ColoredBox(
+        color: colors.surface,
+        child: SafeArea(
+          top: false,
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 56,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text(l10n.commonCancel),
+                      ),
+                    ),
+                    Text(
+                      l10n.kizunarkDraftListTitle,
+                      style: appText.sectionTitle.copyWith(
+                        color: colors.textPrimary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(height: 1, thickness: 1, color: colors.borderSoft),
+              Expanded(
+                child: _DraftListBody(
+                  kind: kind,
+                  onSelected: (DiscussionBoardDraft draft) =>
+                      Navigator.of(context).pop(draft),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DraftListBody extends ConsumerWidget {
+  const _DraftListBody({required this.kind, required this.onSelected});
+
+  final DiscussionDraftKind? kind;
+  final ValueChanged<DiscussionBoardDraft> onSelected;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final draftsAsync = ref.watch(discussionBoardDraftsProvider);
+    return draftsAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (_, _) => _DraftEmptyState(message: l10n.kizunarkDraftLoadError),
+      data: (drafts) {
+        final visibleDrafts = kind == null
+            ? drafts
+            : drafts
+                  .where((draft) => draft.kind == kind)
+                  .toList(growable: false);
+        if (visibleDrafts.isEmpty) {
+          return _DraftEmptyState(message: l10n.kizunarkDraftEmptyState);
+        }
+        return ListView.separated(
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
+          itemBuilder: (BuildContext context, int index) {
+            final draft = visibleDrafts[index];
+            return _DraftDismissibleTile(
+              draft: draft,
+              onTap: () async {
+                await ref
+                    .read(discussionBoardDraftLocalDataSourceProvider)
+                    .deleteDraft(draft.id);
+                ref.invalidate(discussionBoardDraftsProvider);
+                if (!context.mounted) {
+                  return;
+                }
+                onSelected(draft);
+              },
+              onDelete: () async {
+                await ref
+                    .read(discussionBoardDraftLocalDataSourceProvider)
+                    .deleteDraft(draft.id);
+                ref.invalidate(discussionBoardDraftsProvider);
+              },
+            );
+          },
+          separatorBuilder: (_, _) => const SizedBox(height: 10),
+          itemCount: visibleDrafts.length,
+        );
+      },
     );
   }
 }
