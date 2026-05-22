@@ -100,8 +100,7 @@ class _MainShellPageState extends ConsumerState<MainShellPage>
       _snapChromeReveal();
       return false;
     }
-    if (notification is! ScrollUpdateNotification ||
-        notification.dragDetails == null) {
+    if (notification is! ScrollUpdateNotification) {
       return false;
     }
 
