@@ -490,7 +490,7 @@ class _DiscussionBoardTabPageState
       backgroundColor: colors.surface.withValues(alpha: 0),
       builder: (BuildContext sheetContext) {
         return const FractionallySizedBox(
-          heightFactor: 0.86,
+          heightFactor: 0.98,
           alignment: Alignment.bottomCenter,
           child: KizunarkDraftListSheet(),
         );
