@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:core_ui_kit/core_ui_kit.dart';
@@ -314,25 +315,15 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
     });
   }
 
-  Future<void> _submit() async {
+  void _submit() {
     if (_isSubmitting || !_canSubmit) {
       return;
     }
     setState(() {
       _isSubmitting = true;
     });
-    final shouldClose = await widget.onSubmit(
-      List<String>.of(_validImageFilePaths),
-    );
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      _isSubmitting = false;
-    });
-    if (shouldClose) {
-      Navigator.of(context).pop();
-    }
+    unawaited(widget.onSubmit(List<String>.of(_validImageFilePaths)));
+    Navigator.of(context).pop();
   }
 
   @override
@@ -571,25 +562,15 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
     );
   }
 
-  Future<void> _submit() async {
+  void _submit() {
     if (_isSubmitting || !_canSubmit) {
       return;
     }
     setState(() {
       _isSubmitting = true;
     });
-    final shouldClose = await widget.onSubmit(
-      List<String>.of(_validImageFilePaths),
-    );
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      _isSubmitting = false;
-    });
-    if (shouldClose) {
-      Navigator.of(context).pop();
-    }
+    unawaited(widget.onSubmit(List<String>.of(_validImageFilePaths)));
+    Navigator.of(context).pop();
   }
 
   @override

@@ -1213,6 +1213,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kizunarkReplySuccessNotice => 'Comment sent.';
 
   @override
+  String get kizunarkSendFailedDialogTitle => 'Send failed';
+
+  @override
+  String get kizunarkSendFailedDraftSavedMessage =>
+      'Sending failed. It has been saved to drafts.';
+
+  @override
+  String get kizunarkSendFailedRetryAction => 'Send again';
+
+  @override
+  String kizunarkSendingQueueTitle(int count) {
+    return 'Sending $count posts...';
+  }
+
+  @override
   String get kizunarkDeleteAction => 'Delete';
 
   @override

@@ -5,7 +5,13 @@ class UploadDiscussionImageUseCase {
 
   final DiscussionBoardRepository _repository;
 
-  Future<List<String>> call({required List<String> filePaths}) {
-    return _repository.uploadImages(filePaths: filePaths);
+  Future<List<String>> call({
+    required List<String> filePaths,
+    DiscussionUploadProgressCallback? onSendProgress,
+  }) {
+    return _repository.uploadImages(
+      filePaths: filePaths,
+      onSendProgress: onSendProgress,
+    );
   }
 }

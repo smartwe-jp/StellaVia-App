@@ -13,6 +13,8 @@ import '../../domain/usecases/upload_discussion_image_usecase.dart';
 import '../../domain/entities/discussion_board_models.dart';
 import '../state/discussion_board_state.dart';
 
+typedef DiscussionSendProgressCallback = void Function(double progress);
+
 class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
   DiscussionBoardController(
     this._loadUseCase,
@@ -147,8 +149,10 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
     String? fallbackAvatarUrl,
     int? linkedProjectId,
     String? linkedProjectName,
+    DiscussionSendProgressCallback? onProgress,
+    String? contentOverride,
   }) async {
-    final content = state.composerText.trim();
+    final content = (contentOverride ?? state.composerText).trim();
     if (content.isEmpty || state.isPosting) {
       return false;
     }
@@ -158,7 +162,9 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
       final preparedImageUrls = await _prepareImageUrls(
         imageUrls: imageUrls,
         imageFilePaths: imageFilePaths,
+        onProgress: onProgress,
       );
+      onProgress?.call(0.86);
       final threads = await _submitPostUseCase.call(
         content: content,
         nowLabel: nowLabel,
@@ -178,6 +184,7 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
         hasMore: threads.isNotEmpty,
         clearError: true,
       );
+      onProgress?.call(1);
       return true;
     } catch (error) {
       state = state.copyWith(
@@ -197,8 +204,10 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
     List<String> imageUrls = const <String>[],
     List<String> imageFilePaths = const <String>[],
     int? linkedProjectId,
+    DiscussionSendProgressCallback? onProgress,
+    String? contentOverride,
   }) async {
-    final draft = (state.replyDrafts[threadId] ?? '').trim();
+    final draft = (contentOverride ?? state.replyDrafts[threadId] ?? '').trim();
     if (draft.isEmpty || state.replySubmittingThreadIds.contains(threadId)) {
       return false;
     }
@@ -214,7 +223,9 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
       final preparedImageUrls = await _prepareImageUrls(
         imageUrls: imageUrls,
         imageFilePaths: imageFilePaths,
+        onProgress: onProgress,
       );
+      onProgress?.call(0.86);
       final threads = await _submitReplyUseCase.call(
         threadId: threadId,
         content: draft,
@@ -238,6 +249,7 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
         replySubmittingThreadIds: nextSubmitting,
         clearError: true,
       );
+      onProgress?.call(1);
       return true;
     } catch (error) {
       final nextSubmitting = Set<String>.from(state.replySubmittingThreadIds)
@@ -293,6 +305,7 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
   Future<List<String>> _prepareImageUrls({
     required List<String> imageUrls,
     required List<String> imageFilePaths,
+    DiscussionSendProgressCallback? onProgress,
   }) async {
     final preparedUrls = <String>[
       ...imageUrls
@@ -300,20 +313,37 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
           .where((String url) => url.isNotEmpty),
     ];
 
+    onProgress?.call(0.08);
     final optimizedPaths = <String>[];
-    for (final rawPath in imageFilePaths) {
-      final path = rawPath.trim();
-      if (path.isEmpty || !File(path).existsSync()) {
-        continue;
-      }
+    final normalizedPaths = imageFilePaths
+        .map((String path) => path.trim())
+        .where((String path) => path.isNotEmpty && File(path).existsSync())
+        .toList(growable: false);
+    if (normalizedPaths.isEmpty) {
+      onProgress?.call(0.72);
+      return preparedUrls;
+    }
+
+    var imageIndex = 0;
+    for (final path in normalizedPaths) {
       final optimizedPath = await _imageOptimizer.ensureWithinUploadLimit(path);
       optimizedPaths.add(optimizedPath);
+      imageIndex += 1;
+      onProgress?.call(0.12 + (imageIndex / normalizedPaths.length) * 0.42);
     }
 
     if (optimizedPaths.isNotEmpty) {
+      onProgress?.call(0.62);
       final uploadedUrls = await _uploadImageUseCase.call(
         filePaths: optimizedPaths,
+        onSendProgress: (int sent, int total) {
+          if (total <= 0) {
+            return;
+          }
+          onProgress?.call(0.62 + (sent / total) * 0.16);
+        },
       );
+      onProgress?.call(0.78);
       preparedUrls.addAll(
         uploadedUrls
             .map((String url) => url.trim())

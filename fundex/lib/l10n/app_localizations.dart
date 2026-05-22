@@ -2297,6 +2297,30 @@ abstract class AppLocalizations {
   /// **'Comment sent.'**
   String get kizunarkReplySuccessNotice;
 
+  /// No description provided for @kizunarkSendFailedDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send failed'**
+  String get kizunarkSendFailedDialogTitle;
+
+  /// No description provided for @kizunarkSendFailedDraftSavedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending failed. It has been saved to drafts.'**
+  String get kizunarkSendFailedDraftSavedMessage;
+
+  /// No description provided for @kizunarkSendFailedRetryAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Send again'**
+  String get kizunarkSendFailedRetryAction;
+
+  /// No description provided for @kizunarkSendingQueueTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending {count} posts...'**
+  String kizunarkSendingQueueTitle(int count);
+
   /// No description provided for @kizunarkDeleteAction.
   ///
   /// In en, this message translates to:

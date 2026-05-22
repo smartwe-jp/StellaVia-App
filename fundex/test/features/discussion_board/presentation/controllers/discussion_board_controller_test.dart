@@ -55,7 +55,11 @@ class _FakeDiscussionBoardRepository implements DiscussionBoardRepository {
   }
 
   @override
-  Future<List<String>> uploadImages({required List<String> filePaths}) async {
+  Future<List<String>> uploadImages({
+    required List<String> filePaths,
+    DiscussionUploadProgressCallback? onSendProgress,
+  }) async {
+    onSendProgress?.call(1, 1);
     uploadedFilePaths.addAll(filePaths);
     return filePaths
         .map(

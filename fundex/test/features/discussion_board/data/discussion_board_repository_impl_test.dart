@@ -69,10 +69,14 @@ class _FakeDiscussionBoardRemoteDataSource
   }
 
   @override
-  Future<List<String>> uploadImages({required List<String> filePaths}) async {
+  Future<List<String>> uploadImages({
+    required List<String> filePaths,
+    void Function(int sent, int total)? onSendProgress,
+  }) async {
     if (uploadError != null) {
       throw uploadError!;
     }
+    onSendProgress?.call(1, 1);
     uploadCallCount += 1;
     lastUploadFilePaths = filePaths;
     return filePaths

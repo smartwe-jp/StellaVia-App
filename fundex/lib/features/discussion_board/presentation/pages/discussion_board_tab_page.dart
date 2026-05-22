@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:collection';
+
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +34,30 @@ class DiscussionBoardTabPage extends ConsumerStatefulWidget {
       _DiscussionBoardTabPageState();
 }
 
+enum _DiscussionSendJobKind { post, reply }
+
+class _PendingDiscussionSendJob {
+  const _PendingDiscussionSendJob.post({
+    required this.content,
+    required this.imageFilePaths,
+    required this.selectedFund,
+  }) : kind = _DiscussionSendJobKind.post,
+       thread = null;
+
+  const _PendingDiscussionSendJob.reply({
+    required this.content,
+    required this.imageFilePaths,
+    required this.selectedFund,
+    required DiscussionThread this.thread,
+  }) : kind = _DiscussionSendJobKind.reply;
+
+  final _DiscussionSendJobKind kind;
+  final String content;
+  final List<String> imageFilePaths;
+  final SelectedComposerFund? selectedFund;
+  final DiscussionThread? thread;
+}
+
 class _DiscussionBoardTabPageState
     extends ConsumerState<DiscussionBoardTabPage> {
   late final TextEditingController _composerController;
@@ -38,7 +65,10 @@ class _DiscussionBoardTabPageState
   late final MainShellScrollControllerRegistry _scrollControllerRegistry;
   final Map<String, TextEditingController> _replyControllers =
       <String, TextEditingController>{};
+  final Queue<_PendingDiscussionSendJob> _sendQueue =
+      Queue<_PendingDiscussionSendJob>();
   SelectedComposerFund? _selectedComposerFund;
+  bool _isProcessingSendQueue = false;
 
   @override
   void initState() {
@@ -112,18 +142,47 @@ class _DiscussionBoardTabPageState
     return normalized.hashCode;
   }
 
-  Future<void> _submitPostWithImages({
+  Future<bool> _submitPostWithImages({
     required bool isAuthenticated,
     required List<String> imageFilePaths,
+  }) async {
+    final l10n = context.l10n;
+    if (!isAuthenticated) {
+      AppNotice.show(context, message: l10n.kizunarkLoginRequiredToPost);
+      return false;
+    }
+    final content = _composerController.text.trim();
+    if (content.isEmpty) {
+      return false;
+    }
+    final job = _PendingDiscussionSendJob.post(
+      content: content,
+      imageFilePaths: List<String>.of(imageFilePaths),
+      selectedFund: _selectedComposerFund,
+    );
+    _enqueueSendJob(job);
+    _composerController.clear();
+    ref
+        .read(discussionBoardControllerProvider(null).notifier)
+        .updateComposerText('');
+    if (mounted) {
+      setState(() {
+        _selectedComposerFund = null;
+      });
+    }
+    return true;
+  }
+
+  Future<bool> _sendPostJob(
+    _PendingDiscussionSendJob job, {
+    required int generation,
   }) async {
     final l10n = context.l10n;
     final controller = ref.read(
       discussionBoardControllerProvider(null).notifier,
     );
-    if (!isAuthenticated) {
-      AppNotice.show(context, message: l10n.kizunarkLoginRequiredToPost);
-      return;
-    }
+    final progressController = ref.read(discussionSendQueueProvider.notifier);
+    progressController.updateProgress(0.04);
     final submitted = await controller.submitPost(
       nowLabel: l10n.kizunarkJustNow,
       fallbackName: l10n.kizunarkFallbackDisplayName,
@@ -134,50 +193,192 @@ class _DiscussionBoardTabPageState
           .asData
           ?.value
           ?.avatar,
-      linkedProjectId: int.tryParse(_selectedComposerFund?.projectId ?? ''),
-      linkedProjectName: _selectedComposerFund?.projectName,
-      imageFilePaths: imageFilePaths,
+      linkedProjectId: int.tryParse(job.selectedFund?.projectId ?? ''),
+      linkedProjectName: job.selectedFund?.projectName,
+      imageFilePaths: job.imageFilePaths,
+      onProgress: (double progress) {
+        if (_isSendGenerationActive(generation)) {
+          progressController.updateProgress(progress);
+        }
+      },
+      contentOverride: job.content,
     );
-    if (submitted && mounted) {
-      setState(() {
-        _selectedComposerFund = null;
-      });
-      AppNotice.show(context, message: l10n.kizunarkPostSuccessNotice);
+    if (!_isSendGenerationActive(generation)) {
+      return false;
     }
+    if (submitted && mounted) {
+      AppNotice.show(context, message: l10n.kizunarkPostSuccessNotice);
+      return true;
+    }
+    if (!mounted) {
+      return false;
+    }
+    await _savePostDraftData(
+      content: job.content,
+      imageFilePaths: job.imageFilePaths,
+      selectedFund: job.selectedFund,
+      clearComposer: false,
+    );
+    await _showSendFailureDialog(onRetry: () => _retrySendJob(job));
+    return false;
   }
 
-  Future<void> _submitReplyWithImages(
+  Future<bool> _submitReplyWithImages(
     String threadId, {
     required bool isAuthenticated,
     required List<String> imageFilePaths,
+    required DiscussionThread thread,
+    required TextEditingController controller,
   }) async {
     final l10n = context.l10n;
-    final controller = ref.read(
-      discussionBoardControllerProvider(null).notifier,
-    );
     if (!isAuthenticated) {
       AppNotice.show(context, message: l10n.kizunarkLoginRequiredToPost);
-      return;
+      return false;
     }
-    final submitted = await controller.submitReply(
-      threadId,
+    final content = controller.text.trim();
+    if (content.isEmpty) {
+      return false;
+    }
+    final job = _PendingDiscussionSendJob.reply(
+      content: content,
+      imageFilePaths: List<String>.of(imageFilePaths),
+      selectedFund: _selectedComposerFund,
+      thread: thread,
+    );
+    _enqueueSendJob(job);
+    controller.clear();
+    ref
+        .read(discussionBoardControllerProvider(null).notifier)
+        .updateReplyDraft(thread.id, '');
+    if (mounted) {
+      setState(() {
+        _selectedComposerFund = null;
+      });
+    }
+    return true;
+  }
+
+  Future<bool> _sendReplyJob(
+    _PendingDiscussionSendJob job, {
+    required int generation,
+  }) async {
+    final thread = job.thread;
+    if (thread == null) {
+      return false;
+    }
+    final l10n = context.l10n;
+    final boardController = ref.read(
+      discussionBoardControllerProvider(null).notifier,
+    );
+    final progressController = ref.read(discussionSendQueueProvider.notifier);
+    progressController.updateProgress(0.04);
+    final submitted = await boardController.submitReply(
+      thread.id,
       nowLabel: l10n.kizunarkJustNow,
       fallbackName: l10n.kizunarkFallbackDisplayName,
       fallbackHandle: l10n.kizunarkFallbackHandle,
       fallbackBadgeLabel: l10n.kizunarkInvestorBadge,
-      linkedProjectId: int.tryParse(_selectedComposerFund?.projectId ?? ''),
-      imageFilePaths: imageFilePaths,
+      linkedProjectId: int.tryParse(job.selectedFund?.projectId ?? ''),
+      imageFilePaths: job.imageFilePaths,
+      onProgress: (double progress) {
+        if (_isSendGenerationActive(generation)) {
+          progressController.updateProgress(progress);
+        }
+      },
+      contentOverride: job.content,
     );
+    if (!_isSendGenerationActive(generation)) {
+      return false;
+    }
     if (submitted && mounted) {
-      setState(() {
-        _selectedComposerFund = null;
-      });
       AppNotice.show(context, message: l10n.kizunarkReplySuccessNotice);
+      return true;
+    }
+    if (!mounted) {
+      return false;
+    }
+    await _saveReplyDraftData(
+      thread: thread,
+      content: job.content,
+      imageFilePaths: job.imageFilePaths,
+      selectedFund: job.selectedFund,
+      clearComposer: false,
+    );
+    await _showSendFailureDialog(onRetry: () => _retrySendJob(job));
+    return false;
+  }
+
+  void _enqueueSendJob(_PendingDiscussionSendJob job) {
+    _sendQueue.add(job);
+    ref.read(discussionSendQueueProvider.notifier).enqueue();
+    unawaited(_processSendQueue());
+  }
+
+  Future<bool> _retrySendJob(_PendingDiscussionSendJob job) async {
+    _enqueueSendJob(job);
+    return true;
+  }
+
+  bool _isSendGenerationActive(int generation) {
+    return mounted &&
+        ref.read(discussionSendQueueProvider).cancelGeneration == generation;
+  }
+
+  Future<void> _processSendQueue() async {
+    if (_isProcessingSendQueue) {
+      return;
+    }
+    _isProcessingSendQueue = true;
+    try {
+      while (_sendQueue.isNotEmpty && mounted) {
+        final generation = ref
+            .read(discussionSendQueueProvider)
+            .cancelGeneration;
+        final job = _sendQueue.removeFirst();
+        var completed = false;
+        try {
+          switch (job.kind) {
+            case _DiscussionSendJobKind.post:
+              completed = await _sendPostJob(job, generation: generation);
+            case _DiscussionSendJobKind.reply:
+              completed = await _sendReplyJob(job, generation: generation);
+          }
+        } finally {
+          if (_isSendGenerationActive(generation)) {
+            final progressController = ref.read(
+              discussionSendQueueProvider.notifier,
+            );
+            if (completed) {
+              progressController.updateProgress(1);
+              await Future<void>.delayed(const Duration(milliseconds: 220));
+            }
+            progressController.completeOne();
+          }
+        }
+      }
+    } finally {
+      _isProcessingSendQueue = false;
     }
   }
 
-  Future<void> _savePostDraft(List<String> imageFilePaths) async {
-    final content = _composerController.text.trim();
+  Future<void> _savePostDraft(
+    List<String> imageFilePaths, {
+    bool clearComposer = true,
+  }) async {
+    await _savePostDraftData(
+      content: _composerController.text.trim(),
+      imageFilePaths: imageFilePaths,
+      selectedFund: _selectedComposerFund,
+      clearComposer: clearComposer,
+    );
+  }
+
+  Future<void> _savePostDraftData({
+    required String content,
+    required List<String> imageFilePaths,
+    required SelectedComposerFund? selectedFund,
+    bool clearComposer = true,
+  }) async {
     if (content.isEmpty && imageFilePaths.isEmpty) {
       return;
     }
@@ -188,13 +389,16 @@ class _DiscussionBoardTabPageState
       content: content,
       imageFilePaths: imageFilePaths,
       updatedAtIso: now.toIso8601String(),
-      projectId: _selectedComposerFund?.projectId,
-      projectName: _selectedComposerFund?.projectName,
+      projectId: selectedFund?.projectId,
+      projectName: selectedFund?.projectName,
     );
     await ref
         .read(discussionBoardDraftLocalDataSourceProvider)
         .saveDraft(draft);
     ref.invalidate(discussionBoardDraftsProvider);
+    if (!clearComposer) {
+      return;
+    }
     _composerController.clear();
     ref
         .read(discussionBoardControllerProvider(null).notifier)
@@ -210,8 +414,26 @@ class _DiscussionBoardTabPageState
     required DiscussionThread thread,
     required TextEditingController controller,
     required List<String> imageFilePaths,
+    bool clearComposer = true,
   }) async {
-    final content = controller.text.trim();
+    await _saveReplyDraftData(
+      thread: thread,
+      content: controller.text.trim(),
+      imageFilePaths: imageFilePaths,
+      selectedFund: _selectedComposerFund,
+      clearComposer: clearComposer,
+      controller: controller,
+    );
+  }
+
+  Future<void> _saveReplyDraftData({
+    required DiscussionThread thread,
+    required String content,
+    required List<String> imageFilePaths,
+    required SelectedComposerFund? selectedFund,
+    bool clearComposer = true,
+    TextEditingController? controller,
+  }) async {
     if (content.isEmpty && imageFilePaths.isEmpty) {
       return;
     }
@@ -222,8 +444,8 @@ class _DiscussionBoardTabPageState
       content: content,
       imageFilePaths: imageFilePaths,
       updatedAtIso: now.toIso8601String(),
-      projectId: _selectedComposerFund?.projectId,
-      projectName: _selectedComposerFund?.projectName,
+      projectId: selectedFund?.projectId,
+      projectName: selectedFund?.projectName,
       replyThreadId: thread.id,
       replyTargetName: thread.author.displayName,
       replyTargetBody: thread.body,
@@ -233,7 +455,10 @@ class _DiscussionBoardTabPageState
         .read(discussionBoardDraftLocalDataSourceProvider)
         .saveDraft(draft);
     ref.invalidate(discussionBoardDraftsProvider);
-    controller.clear();
+    if (!clearComposer) {
+      return;
+    }
+    controller?.clear();
     ref
         .read(discussionBoardControllerProvider(null).notifier)
         .updateReplyDraft(thread.id, '');
@@ -249,6 +474,33 @@ class _DiscussionBoardTabPageState
       '/discussion-board/drafts',
       extra: const KizunarkDraftListRouteArgs(),
     );
+  }
+
+  Future<void> _showSendFailureDialog({
+    required Future<bool> Function() onRetry,
+  }) async {
+    if (!mounted) {
+      return;
+    }
+    final retry = await AppDialogs.showAdaptiveAlert<bool>(
+      context: context,
+      title: context.l10n.kizunarkSendFailedDialogTitle,
+      message: context.l10n.kizunarkSendFailedDraftSavedMessage,
+      actions: <AppDialogAction<bool>>[
+        AppDialogAction<bool>(
+          label: context.l10n.commonOk,
+          value: false,
+          isDefaultAction: true,
+        ),
+        AppDialogAction<bool>(
+          label: context.l10n.kizunarkSendFailedRetryAction,
+          value: true,
+        ),
+      ],
+    );
+    if (retry == true && mounted) {
+      await onRetry();
+    }
   }
 
   Future<void> _openReplyDraft(DiscussionBoardDraft draft) async {
@@ -465,16 +717,10 @@ class _DiscussionBoardTabPageState
               .updateComposerText,
           onSaveDraft: _savePostDraft,
           onSubmit: (List<String> imageFilePaths) async {
-            await _submitPostWithImages(
+            return _submitPostWithImages(
               isAuthenticated: isAuthenticated,
               imageFilePaths: imageFilePaths,
             );
-            return mounted
-                ? ref
-                      .read(discussionBoardControllerProvider(null))
-                      .composerText
-                      .isEmpty
-                : false;
           },
           fullPage: true,
         ),
@@ -565,18 +811,13 @@ class _DiscussionBoardTabPageState
           initialImageFilePaths:
               initialDraft?.imageFilePaths ?? const <String>[],
           onSubmit: (List<String> imageFilePaths) async {
-            await _submitReplyWithImages(
+            final shouldClose = await _submitReplyWithImages(
               thread.id,
               isAuthenticated: isAuthenticated,
               imageFilePaths: imageFilePaths,
+              thread: thread,
+              controller: replyController,
             );
-            final shouldClose =
-                mounted &&
-                (ref
-                            .read(discussionBoardControllerProvider(null))
-                            .replyDrafts[thread.id] ??
-                        '')
-                    .isEmpty;
             if (shouldClose) {
               replyController.clear();
             }
@@ -703,6 +944,16 @@ class _DiscussionBoardTabPageState
       }
       ref.read(discussionBoardControllerProvider(null).notifier).loadThreads();
     });
+
+    ref.listen<int>(
+      discussionSendQueueProvider.select((state) => state.cancelGeneration),
+      (previous, next) {
+        if (previous == null || previous == next) {
+          return;
+        }
+        _sendQueue.clear();
+      },
+    );
 
     final l10n = context.l10n;
     final state = ref.watch(discussionBoardControllerProvider(null));

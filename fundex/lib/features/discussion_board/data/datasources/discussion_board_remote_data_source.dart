@@ -15,7 +15,10 @@ abstract class DiscussionBoardRemoteDataSource {
     int? projectId,
   });
 
-  Future<List<String>> uploadImages({required List<String> filePaths});
+  Future<List<String>> uploadImages({
+    required List<String> filePaths,
+    void Function(int sent, int total)? onSendProgress,
+  });
 
   Future<void> deleteComment({required int commentId});
 }
@@ -64,8 +67,14 @@ class DiscussionBoardRemoteDataSourceImpl
   }
 
   @override
-  Future<List<String>> uploadImages({required List<String> filePaths}) async {
-    return _apiClient.uploadImages(filePaths: filePaths);
+  Future<List<String>> uploadImages({
+    required List<String> filePaths,
+    void Function(int sent, int total)? onSendProgress,
+  }) async {
+    return _apiClient.uploadImages(
+      filePaths: filePaths,
+      onSendProgress: onSendProgress,
+    );
   }
 
   @override

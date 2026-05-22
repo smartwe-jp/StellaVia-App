@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../discussion_board/presentation/providers/discussion_board_providers.dart';
+import '../../../discussion_board/presentation/state/discussion_send_queue_state.dart';
 import '../providers/main_shell_providers.dart';
 
 class MainShellPage extends ConsumerWidget {
@@ -25,6 +27,7 @@ class MainShellPage extends ConsumerWidget {
     final colors = theme.appColors;
     final colorScheme = theme.colorScheme;
     final shellNavigationTheme = theme.extension<AppShellNavigationTheme>()!;
+    final sendQueueState = ref.watch(discussionSendQueueProvider);
     final inactiveTabBackgroundColor = Color.alphaBlend(
       colors.highlightGold.withValues(alpha: 0.18),
       colors.surface,
@@ -60,6 +63,15 @@ class MainShellPage extends ConsumerWidget {
                 height: 1,
                 width: double.infinity,
                 color: colors.border,
+              ),
+              _DiscussionSendQueueBar(
+                state: sendQueueState,
+                title: l10n.kizunarkSendingQueueTitle(
+                  sendQueueState.pendingCount,
+                ),
+                cancelLabel: l10n.commonCancel,
+                onCancel: () =>
+                    ref.read(discussionSendQueueProvider.notifier).cancelAll(),
               ),
               SafeArea(
                 top: false,
@@ -167,6 +179,78 @@ class MainShellPage extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _DiscussionSendQueueBar extends StatelessWidget {
+  const _DiscussionSendQueueBar({
+    required this.state,
+    required this.title,
+    required this.cancelLabel,
+    required this.onCancel,
+  });
+
+  final DiscussionSendQueueState state;
+  final String title;
+  final String cancelLabel;
+  final VoidCallback onCancel;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.appColors;
+    final appText = theme.appTextTheme;
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 180),
+      switchInCurve: Curves.easeOutCubic,
+      switchOutCurve: Curves.easeInCubic,
+      child: state.isActive
+          ? ColoredBox(
+              key: const ValueKey<String>('discussion-send-queue-bar'),
+              color: colors.surface,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 2, 12, 2),
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: appText.bodyStrong.copyWith(
+                              color: colors.textPrimary,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        TextButton(
+                          onPressed: onCancel,
+                          style: TextButton.styleFrom(
+                            minimumSize: const Size(48, 24),
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            foregroundColor: colors.primary,
+                            textStyle: appText.bodyStrong,
+                          ),
+                          child: Text(cancelLabel),
+                        ),
+                      ],
+                    ),
+                  ),
+                  LinearProgressIndicator(
+                    value: state.progress.clamp(0, 1).toDouble(),
+                    minHeight: 3,
+                    backgroundColor: colors.borderSoft,
+                    valueColor: AlwaysStoppedAnimation<Color>(colors.primary),
+                  ),
+                ],
+              ),
+            )
+          : const SizedBox.shrink(),
     );
   }
 }

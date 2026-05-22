@@ -141,8 +141,14 @@ class DiscussionBoardRepositoryImpl implements DiscussionBoardRepository {
   }
 
   @override
-  Future<List<String>> uploadImages({required List<String> filePaths}) {
-    return _remote.uploadImages(filePaths: filePaths);
+  Future<List<String>> uploadImages({
+    required List<String> filePaths,
+    DiscussionUploadProgressCallback? onSendProgress,
+  }) {
+    return _remote.uploadImages(
+      filePaths: filePaths,
+      onSendProgress: onSendProgress,
+    );
   }
 
   Future<List<DiscussionThread>> _loadRemoteThreads({

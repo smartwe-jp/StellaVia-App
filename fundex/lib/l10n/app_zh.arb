@@ -416,6 +416,17 @@
   "kizunarkInvestorBadge": "投资者",
   "kizunarkPostSuccessNotice": "发布成功！",
   "kizunarkReplySuccessNotice": "评论已发送！",
+  "kizunarkSendFailedDialogTitle": "发送失败",
+  "kizunarkSendFailedDraftSavedMessage": "发送失败，已经保存到草稿箱。",
+  "kizunarkSendFailedRetryAction": "再次发送",
+  "kizunarkSendingQueueTitle": "正在发送 {count} 个帖子...",
+  "@kizunarkSendingQueueTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "kizunarkDeleteAction": "删除",
   "kizunarkDeleteConfirmTitle": "确认删除这条评论？",
   "kizunarkDeleteConfirmBody": "删除后无法恢复。",

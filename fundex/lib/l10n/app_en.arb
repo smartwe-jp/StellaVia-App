@@ -416,6 +416,17 @@
   "kizunarkInvestorBadge": "Investor",
   "kizunarkPostSuccessNotice": "Post submitted.",
   "kizunarkReplySuccessNotice": "Comment sent.",
+  "kizunarkSendFailedDialogTitle": "Send failed",
+  "kizunarkSendFailedDraftSavedMessage": "Sending failed. It has been saved to drafts.",
+  "kizunarkSendFailedRetryAction": "Send again",
+  "kizunarkSendingQueueTitle": "Sending {count} posts...",
+  "@kizunarkSendingQueueTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "kizunarkDeleteAction": "Delete",
   "kizunarkDeleteConfirmTitle": "Delete this comment?",
   "kizunarkDeleteConfirmBody": "This action cannot be undone.",

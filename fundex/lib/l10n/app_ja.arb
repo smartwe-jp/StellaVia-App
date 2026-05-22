@@ -416,6 +416,17 @@
   "kizunarkInvestorBadge": "投資家",
   "kizunarkPostSuccessNotice": "投稿しました！",
   "kizunarkReplySuccessNotice": "コメントを投稿しました！",
+  "kizunarkSendFailedDialogTitle": "送信に失敗しました",
+  "kizunarkSendFailedDraftSavedMessage": "送信に失敗しました。下書きに保存しました。",
+  "kizunarkSendFailedRetryAction": "もう一度送信",
+  "kizunarkSendingQueueTitle": "{count}件の投稿を送信中...",
+  "@kizunarkSendingQueueTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "kizunarkDeleteAction": "削除",
   "kizunarkDeleteConfirmTitle": "このコメントを削除しますか？",
   "kizunarkDeleteConfirmBody": "削除したコメントは元に戻せません。",

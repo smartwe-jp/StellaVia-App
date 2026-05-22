@@ -158,16 +158,16 @@ class KizunarkThreadDetailPage extends ConsumerWidget {
           }),
         ],
       ),
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 14),
-          child: FilledButton(
-            onPressed: isAuthenticated ? onReply : null,
-            child: Text(l10n.kizunarkWriteReplyAction),
-          ),
-        ),
-      ),
+      // bottomNavigationBar: SafeArea(
+      //   top: false,
+      //   child: Padding(
+      //     padding: const EdgeInsets.fromLTRB(16, 10, 16, 14),
+      //     child: FilledButton(
+      //       onPressed: isAuthenticated ? onReply : null,
+      //       child: Text(l10n.kizunarkWriteReplyAction),
+      //     ),
+      //   ),
+      // ),
     );
   }
 }

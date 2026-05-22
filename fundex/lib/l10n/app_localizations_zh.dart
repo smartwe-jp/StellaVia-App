@@ -1130,6 +1130,20 @@ class AppLocalizationsZh extends AppLocalizations {
   String get kizunarkReplySuccessNotice => '评论已发送！';
 
   @override
+  String get kizunarkSendFailedDialogTitle => '发送失败';
+
+  @override
+  String get kizunarkSendFailedDraftSavedMessage => '发送失败，已经保存到草稿箱。';
+
+  @override
+  String get kizunarkSendFailedRetryAction => '再次发送';
+
+  @override
+  String kizunarkSendingQueueTitle(int count) {
+    return '正在发送 $count 个帖子...';
+  }
+
+  @override
   String get kizunarkDeleteAction => '删除';
 
   @override
@@ -5435,6 +5449,20 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get kizunarkReplySuccessNotice => '留言已送出！';
+
+  @override
+  String get kizunarkSendFailedDialogTitle => '發送失敗';
+
+  @override
+  String get kizunarkSendFailedDraftSavedMessage => '發送失敗，已經保存到草稿箱。';
+
+  @override
+  String get kizunarkSendFailedRetryAction => '再次發送';
+
+  @override
+  String kizunarkSendingQueueTitle(int count) {
+    return '正在發送 $count 個帖子...';
+  }
 
   @override
   String get kizunarkDeleteAction => '刪除';

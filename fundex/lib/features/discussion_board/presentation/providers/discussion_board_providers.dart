@@ -18,6 +18,7 @@ import '../../domain/usecases/submit_discussion_reply_usecase.dart';
 import '../../domain/usecases/upload_discussion_image_usecase.dart';
 import '../controllers/discussion_board_controller.dart';
 import '../state/discussion_board_state.dart';
+import '../state/discussion_send_queue_state.dart';
 
 final discussionBoardRemoteDataSourceProvider =
     Provider<DiscussionBoardRemoteDataSource>((ref) {
@@ -44,6 +45,14 @@ final discussionBoardDraftsProvider =
 final discussionBoardDraftImageStoreProvider =
     Provider<DiscussionBoardDraftImageStore>((ref) {
       return const DiscussionBoardDraftImageStore();
+    });
+
+final discussionSendQueueProvider =
+    StateNotifierProvider<
+      DiscussionSendQueueController,
+      DiscussionSendQueueState
+    >((ref) {
+      return DiscussionSendQueueController();
     });
 
 final discussionBoardLocalDataSourceProvider = Provider.family

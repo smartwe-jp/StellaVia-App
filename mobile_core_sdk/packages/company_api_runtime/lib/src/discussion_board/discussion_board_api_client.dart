@@ -89,7 +89,10 @@ class DiscussionBoardApiClient {
     );
   }
 
-  Future<List<String>> uploadImages({required List<String> filePaths}) async {
+  Future<List<String>> uploadImages({
+    required List<String> filePaths,
+    ProgressCallback? onSendProgress,
+  }) async {
     final normalizedPaths = filePaths
         .map(_normalizeAndValidatePath)
         .toList(growable: false);
@@ -113,6 +116,7 @@ class DiscussionBoardApiClient {
       options: authRequired(
         true,
       ).copyWith(contentType: Headers.multipartFormDataContentType),
+      onSendProgress: onSendProgress,
     );
 
     return _extractUploadedUrls(_envelopeCodec.toJsonMap(response.data));

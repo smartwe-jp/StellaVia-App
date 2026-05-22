@@ -1144,6 +1144,20 @@ class AppLocalizationsJa extends AppLocalizations {
   String get kizunarkReplySuccessNotice => 'コメントを投稿しました！';
 
   @override
+  String get kizunarkSendFailedDialogTitle => '送信に失敗しました';
+
+  @override
+  String get kizunarkSendFailedDraftSavedMessage => '送信に失敗しました。下書きに保存しました。';
+
+  @override
+  String get kizunarkSendFailedRetryAction => 'もう一度送信';
+
+  @override
+  String kizunarkSendingQueueTitle(int count) {
+    return '$count件の投稿を送信中...';
+  }
+
+  @override
   String get kizunarkDeleteAction => '削除';
 
   @override

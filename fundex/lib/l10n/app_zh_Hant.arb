@@ -416,6 +416,17 @@
   "kizunarkInvestorBadge": "投資者",
   "kizunarkPostSuccessNotice": "發佈成功！",
   "kizunarkReplySuccessNotice": "留言已送出！",
+  "kizunarkSendFailedDialogTitle": "發送失敗",
+  "kizunarkSendFailedDraftSavedMessage": "發送失敗，已經保存到草稿箱。",
+  "kizunarkSendFailedRetryAction": "再次發送",
+  "kizunarkSendingQueueTitle": "正在發送 {count} 個帖子...",
+  "@kizunarkSendingQueueTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "kizunarkDeleteAction": "刪除",
   "kizunarkDeleteConfirmTitle": "確認刪除這則留言？",
   "kizunarkDeleteConfirmBody": "刪除後無法復原。",

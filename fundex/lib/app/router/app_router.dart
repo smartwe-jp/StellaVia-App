@@ -249,24 +249,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           );
         },
       ),
-      GoRoute(
-        path: '/discussion-board/thread/:threadId',
-        parentNavigatorKey: _rootNavigatorKey,
-        builder: (BuildContext context, GoRouterState state) {
-          final extra = state.extra;
-          if (extra is! KizunarkThreadDetailRouteArgs) {
-            return const DiscussionBoardTabPage();
-          }
-          return KizunarkThreadDetailPage(
-            thread: extra.thread,
-            isAuthenticated: extra.isAuthenticated,
-            currentUserId: extra.currentUserId,
-            onOpenImageViewer: extra.onOpenImageViewer,
-            onReply: extra.onReply,
-            onMessageLongPress: extra.onMessageLongPress,
-          );
-        },
-      ),
       StatefulShellRoute.indexedStack(
         builder:
             (
@@ -359,6 +341,25 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 builder: (BuildContext context, GoRouterState state) {
                   return const DiscussionBoardTabPage();
                 },
+                routes: <RouteBase>[
+                  GoRoute(
+                    path: 'thread/:threadId',
+                    builder: (BuildContext context, GoRouterState state) {
+                      final extra = state.extra;
+                      if (extra is! KizunarkThreadDetailRouteArgs) {
+                        return const DiscussionBoardTabPage();
+                      }
+                      return KizunarkThreadDetailPage(
+                        thread: extra.thread,
+                        isAuthenticated: extra.isAuthenticated,
+                        currentUserId: extra.currentUserId,
+                        onOpenImageViewer: extra.onOpenImageViewer,
+                        onReply: extra.onReply,
+                        onMessageLongPress: extra.onMessageLongPress,
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
