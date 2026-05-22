@@ -161,7 +161,7 @@ class KizunarkComposeSheet extends StatefulWidget {
     required this.imageCounterBuilder,
     required this.controller,
     required this.selectedFund,
-    required this.onPickImage,
+    required this.onPickImages,
     required this.onPickFund,
     required this.onOpenDrafts,
     required this.onOpenReplyDraft,
@@ -186,7 +186,7 @@ class KizunarkComposeSheet extends StatefulWidget {
   final String Function(int count) imageCounterBuilder;
   final TextEditingController controller;
   final SelectedComposerFund? selectedFund;
-  final Future<String?> Function() onPickImage;
+  final Future<List<String>> Function(int remainingCount) onPickImages;
   final Future<SelectedComposerFund?> Function() onPickFund;
   final Future<DiscussionBoardDraft?> Function() onOpenDrafts;
   final Future<void> Function(DiscussionBoardDraft draft) onOpenReplyDraft;
@@ -248,15 +248,18 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
   }
 
   Future<void> _addImage() async {
-    if (_imageFilePaths.length >= _maxImages) {
+    final remainingCount = _maxImages - _imageFilePaths.length;
+    if (remainingCount <= 0) {
       return;
     }
-    final path = await widget.onPickImage();
-    if (!mounted || path == null || path.isEmpty) {
+    final paths = await widget.onPickImages(remainingCount);
+    if (!mounted || paths.isEmpty) {
       return;
     }
     setState(() {
-      _imageFilePaths.add(path);
+      _imageFilePaths.addAll(
+        paths.where((path) => path.trim().isNotEmpty).take(remainingCount),
+      );
       _hasInputContent = true;
       _canSubmitContent = _hasSubmitContent;
     });
@@ -467,7 +470,7 @@ class KizunarkReplyComposeSheet extends StatefulWidget {
     required this.imageCounterBuilder,
     required this.controller,
     required this.onChanged,
-    required this.onPickImage,
+    required this.onPickImages,
     required this.onPickFund,
     required this.onSaveDraft,
     required this.onSubmit,
@@ -495,7 +498,7 @@ class KizunarkReplyComposeSheet extends StatefulWidget {
   final String Function(int count) imageCounterBuilder;
   final TextEditingController controller;
   final ValueChanged<String> onChanged;
-  final Future<String?> Function() onPickImage;
+  final Future<List<String>> Function(int remainingCount) onPickImages;
   final Future<void> Function() onPickFund;
   final Future<void> Function(List<String> imageFilePaths) onSaveDraft;
   final Future<bool> Function(List<String> imageFilePaths) onSubmit;
@@ -557,15 +560,18 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
   }
 
   Future<void> _addImage() async {
-    if (_imageFilePaths.length >= _maxImages) {
+    final remainingCount = _maxImages - _imageFilePaths.length;
+    if (remainingCount <= 0) {
       return;
     }
-    final path = await widget.onPickImage();
-    if (!mounted || path == null || path.isEmpty) {
+    final paths = await widget.onPickImages(remainingCount);
+    if (!mounted || paths.isEmpty) {
       return;
     }
     setState(() {
-      _imageFilePaths.add(path);
+      _imageFilePaths.addAll(
+        paths.where((path) => path.trim().isNotEmpty).take(remainingCount),
+      );
       _hasInputContent = true;
       _canSubmitContent = _hasSubmitContent;
     });

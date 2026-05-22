@@ -572,42 +572,49 @@ class _DiscussionBoardTabPageState
     return thread.id.trim().isEmpty ? null : thread;
   }
 
-  Future<String?> _pickDiscussionImage() async {
+  Future<List<String>> _pickDiscussionImages(int remainingCount) async {
+    if (remainingCount <= 0) {
+      return const <String>[];
+    }
     final result = await ref
         .read(profileDocumentImagePickerProvider)
-        .pick(ProfileDocumentImageSource.gallery);
+        .pickMultipleFromGallery(limit: remainingCount);
     if (!mounted) {
-      return null;
+      return const <String>[];
     }
     switch (result.status) {
       case ProfileDocumentImagePickStatus.success:
-        final sourcePath = result.path?.trim() ?? '';
-        final persistedPath = await ref
-            .read(discussionBoardDraftImageStoreProvider)
-            .persist(sourcePath);
-        if (!mounted) {
-          return null;
+        final imageStore = ref.read(discussionBoardDraftImageStoreProvider);
+        final persistedPaths = <String>[];
+        for (final sourcePath in result.paths.take(remainingCount)) {
+          final persistedPath = await imageStore.persist(sourcePath);
+          if (persistedPath != null && persistedPath.isNotEmpty) {
+            persistedPaths.add(persistedPath);
+          }
         }
-        if (persistedPath == null || persistedPath.isEmpty) {
+        if (!mounted) {
+          return const <String>[];
+        }
+        if (persistedPaths.isEmpty) {
           AppNotice.show(
             context,
             message: context.l10n.discussionAvatarPickFailed,
           );
-          return null;
+          return const <String>[];
         }
-        return persistedPath;
+        return persistedPaths;
       case ProfileDocumentImagePickStatus.canceled:
-        return null;
+        return const <String>[];
       case ProfileDocumentImagePickStatus.permissionDenied:
       case ProfileDocumentImagePickStatus.permissionSettingsRequired:
         AppNotice.show(
           context,
           message: context.l10n.permissionSettingsPhotosMessage,
         );
-        return null;
+        return const <String>[];
       case ProfileDocumentImagePickStatus.sizeLimitExceeded:
         AppNotice.show(context, message: context.l10n.profileImageSizeTooLarge);
-        return null;
+        return const <String>[];
       case ProfileDocumentImagePickStatus.failed:
         AppNotice.show(
           context,
@@ -615,7 +622,7 @@ class _DiscussionBoardTabPageState
               ? result.errorMessage!.trim()
               : context.l10n.discussionAvatarPickFailed,
         );
-        return null;
+        return const <String>[];
     }
   }
 
@@ -733,7 +740,7 @@ class _DiscussionBoardTabPageState
           controller: _composerController,
           selectedFund: _selectedComposerFund,
           hasDrafts: hasDrafts,
-          onPickImage: _pickDiscussionImage,
+          onPickImages: _pickDiscussionImages,
           onPickFund: _showComposerFundPicker,
           onOpenDrafts: _openDraftList,
           onOpenReplyDraft: _openReplyDraft,
@@ -829,7 +836,7 @@ class _DiscussionBoardTabPageState
           onChanged: (String value) => ref
               .read(discussionBoardControllerProvider(null).notifier)
               .updateReplyDraft(thread.id, value),
-          onPickImage: _pickDiscussionImage,
+          onPickImages: _pickDiscussionImages,
           onPickFund: () async {
             await _showComposerFundPicker();
           },
