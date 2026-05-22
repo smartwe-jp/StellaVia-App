@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../main_shell/presentation/widgets/main_shell_chrome_visibility.dart';
 import '../../domain/entities/discussion_board_models.dart';
 import '../providers/discussion_board_providers.dart';
 import '../support/discussion_board_time_label.dart';
@@ -71,98 +72,109 @@ class KizunarkThreadDetailPage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: colors.background,
-      appBar: AppNavigationBar(
-        title: l10n.kizunarkRepliesTitle(liveThread.replies.length),
-        backgroundColor: colors.surface,
-        foregroundColor: colors.textPrimary,
-        leading: AppNavigationIconButton(
-          icon: Icons.arrow_back_rounded,
-          onTap: () => context.pop(),
-          backgroundColor: colors.surface.withValues(alpha: 0),
-          foregroundColor: colors.textPrimary,
-        ),
-        
-      ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(0, 12, 0, 96),
+      body: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: KizunarkPostCard(
-              avatar: AppUserAvatar(
-                avatarUrl: liveThread.author.avatarUrl,
-                gradientColorValues: liveThread.author.avatarGradientColorValues,
-                size: 32,
-                fontSize: 12,
+          MainShellChromeVisibility(
+            child: AppNavigationBar(
+              title: l10n.kizunarkRepliesTitle(liveThread.replies.length),
+              backgroundColor: colors.surface,
+              foregroundColor: colors.textPrimary,
+              leading: AppNavigationIconButton(
+                icon: Icons.arrow_back_rounded,
+                onTap: () => context.pop(),
+                backgroundColor: colors.surface.withValues(alpha: 0),
+                foregroundColor: colors.textPrimary,
               ),
-              displayName: liveThread.author.displayName,
-              accountText: liveThread.author.accountHandle,
-              badgeLabel: liveThread.author.badge.label,
-              badgeBackgroundColor: Color(
-                liveThread.author.badge.backgroundColorValue,
-              ),
-              badgeForegroundColor: Color(
-                liveThread.author.badge.foregroundColorValue,
-              ),
-              timeLabel: buildDiscussionBoardTimeLabel(
-                context,
-                createdAtIso: liveThread.createdAtIso,
-                fallbackLabel: liveThread.timeLabel,
-              ),
-              body: liveThread.body,
-              imageUrls: liveThread.imageUrls,
-              onImageTap: (int index) =>
-                  onOpenImageViewer(liveThread.imageUrls, index),
-              fundReferenceChip: liveThread.fundReferenceLabel == null
-                  ? null
-                  : KizunarkFundReferenceChip(
-                      label: liveThread.fundReferenceLabel!,
+            ),
+          ),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(0, 12, 0, 96),
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: KizunarkPostCard(
+                    avatar: AppUserAvatar(
+                      avatarUrl: liveThread.author.avatarUrl,
+                      gradientColorValues:
+                          liveThread.author.avatarGradientColorValues,
+                      size: 32,
+                      fontSize: 12,
                     ),
-              commentCount: liveThread.commentCount,
-              onToggleRepliesTap: onReply,
-              showReplies: false,
+                    displayName: liveThread.author.displayName,
+                    accountText: liveThread.author.accountHandle,
+                    badgeLabel: liveThread.author.badge.label,
+                    badgeBackgroundColor: Color(
+                      liveThread.author.badge.backgroundColorValue,
+                    ),
+                    badgeForegroundColor: Color(
+                      liveThread.author.badge.foregroundColorValue,
+                    ),
+                    timeLabel: buildDiscussionBoardTimeLabel(
+                      context,
+                      createdAtIso: liveThread.createdAtIso,
+                      fallbackLabel: liveThread.timeLabel,
+                    ),
+                    body: liveThread.body,
+                    imageUrls: liveThread.imageUrls,
+                    onImageTap: (int index) =>
+                        onOpenImageViewer(liveThread.imageUrls, index),
+                    fundReferenceChip: liveThread.fundReferenceLabel == null
+                        ? null
+                        : KizunarkFundReferenceChip(
+                            label: liveThread.fundReferenceLabel!,
+                          ),
+                    commentCount: liveThread.commentCount,
+                    onToggleRepliesTap: onReply,
+                    showReplies: false,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    l10n.kizunarkRepliesSectionTitle,
+                    style: appText.bodyStrong.copyWith(
+                      color: colors.textPrimary,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ...liveThread.replies.map((reply) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: KizunarkReplyTile(
+                      avatar: AppUserAvatar(
+                        avatarUrl: reply.author.avatarUrl,
+                        gradientColorValues:
+                            reply.author.avatarGradientColorValues,
+                        size: 28,
+                        fontSize: 11,
+                      ),
+                      displayName: reply.author.displayName,
+                      timeLabel: buildDiscussionBoardTimeLabel(
+                        context,
+                        createdAtIso: reply.createdAtIso,
+                        fallbackLabel: reply.timeLabel,
+                      ),
+                      body: reply.body,
+                      imageUrls: reply.imageUrls,
+                      onImageTap: (int index) =>
+                          onOpenImageViewer(reply.imageUrls, index),
+                      onLongPress: () => onMessageLongPress(
+                        commentId: reply.id,
+                        messageBody: reply.body,
+                        canDelete:
+                            reply.author.id == currentUserId &&
+                            currentUserId.isNotEmpty,
+                        isDeleting: state.deletingCommentIds.contains(reply.id),
+                      ),
+                    ),
+                  );
+                }),
+              ],
             ),
           ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              l10n.kizunarkRepliesSectionTitle,
-              style: appText.bodyStrong.copyWith(color: colors.textPrimary),
-            ),
-          ),
-          const SizedBox(height: 8),
-          ...liveThread.replies.map((reply) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: KizunarkReplyTile(
-                avatar: AppUserAvatar(
-                  avatarUrl: reply.author.avatarUrl,
-                  gradientColorValues: reply.author.avatarGradientColorValues,
-                  size: 28,
-                  fontSize: 11,
-                ),
-                displayName: reply.author.displayName,
-                timeLabel: buildDiscussionBoardTimeLabel(
-                  context,
-                  createdAtIso: reply.createdAtIso,
-                  fallbackLabel: reply.timeLabel,
-                ),
-                body: reply.body,
-                imageUrls: reply.imageUrls,
-                onImageTap: (int index) =>
-                    onOpenImageViewer(reply.imageUrls, index),
-                onLongPress: () => onMessageLongPress(
-                  commentId: reply.id,
-                  messageBody: reply.body,
-                  canDelete:
-                      reply.author.id == currentUserId &&
-                      currentUserId.isNotEmpty,
-                  isDeleting: state.deletingCommentIds.contains(reply.id),
-                ),
-              ),
-            );
-          }),
         ],
       ),
       bottomNavigationBar: SafeArea(
