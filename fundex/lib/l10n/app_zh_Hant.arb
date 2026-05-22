@@ -441,6 +441,8 @@
   "kizunarkDraftEmptyState": "暫無草稿",
   "kizunarkDraftLoadError": "草稿讀取失敗",
   "kizunarkDraftDeleteAction": "刪除",
+  "kizunarkDraftDeleteConfirmTitle": "刪除草稿？",
+  "kizunarkDraftDeleteConfirmBody": "刪除後無法復原。",
   "kizunarkDraftImageOnlyLabel": "圖片草稿",
   "kizunarkDraftPostTypeLabel": "留言",
   "kizunarkDraftReplyTypeLabel": "回覆",

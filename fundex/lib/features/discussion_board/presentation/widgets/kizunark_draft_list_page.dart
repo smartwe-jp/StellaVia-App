@@ -119,6 +119,25 @@ class _DraftDismissibleTile extends StatelessWidget {
     return Dismissible(
       key: ValueKey<String>(draft.id),
       direction: DismissDirection.endToStart,
+      confirmDismiss: (_) async {
+        final confirmed = await AppDialogs.showAdaptiveAlert<bool>(
+          context: context,
+          title: l10n.kizunarkDraftDeleteConfirmTitle,
+          message: l10n.kizunarkDraftDeleteConfirmBody,
+          actions: <AppDialogAction<bool>>[
+            AppDialogAction<bool>(label: l10n.commonCancel, value: false),
+            AppDialogAction<bool>(
+              label: l10n.kizunarkDraftDeleteAction,
+              value: true,
+              isDestructive: true,
+            ),
+          ],
+        );
+        if (confirmed == true) {
+          await onDelete();
+        }
+        return false;
+      },
       background: DecoratedBox(
         decoration: BoxDecoration(
           color: colors.danger,
@@ -137,7 +156,6 @@ class _DraftDismissibleTile extends StatelessWidget {
           ),
         ),
       ),
-      onDismissed: (_) => onDelete(),
       child: _DraftTile(draft: draft, onTap: onTap),
     );
   }
@@ -228,7 +246,7 @@ class _DraftImagePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final normalized = imageFilePaths
-        .where((path) => path.trim().isNotEmpty)
+        .where((path) => path.trim().isNotEmpty && File(path).existsSync())
         .take(4)
         .toList(growable: false);
     final colors = Theme.of(context).appColors;

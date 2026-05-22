@@ -1219,6 +1219,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get kizunarkDraftDeleteAction => '削除';
 
   @override
+  String get kizunarkDraftDeleteConfirmTitle => '下書きを削除しますか？';
+
+  @override
+  String get kizunarkDraftDeleteConfirmBody => '削除すると元に戻せません。';
+
+  @override
   String get kizunarkDraftImageOnlyLabel => '画像の下書き';
 
   @override

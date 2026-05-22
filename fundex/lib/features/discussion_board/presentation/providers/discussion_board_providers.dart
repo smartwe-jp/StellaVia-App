@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/network/app_network_providers.dart';
 import '../../../../app/storage/app_storage_providers.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../data/datasources/discussion_board_draft_image_store.dart';
 import '../../data/datasources/discussion_board_draft_local_data_source.dart';
 import '../../data/datasources/discussion_board_local_data_source.dart';
 import '../../data/datasources/discussion_board_remote_data_source.dart';
@@ -38,6 +39,11 @@ final discussionBoardDraftsProvider =
       return ref
           .watch(discussionBoardDraftLocalDataSourceProvider)
           .readDrafts();
+    });
+
+final discussionBoardDraftImageStoreProvider =
+    Provider<DiscussionBoardDraftImageStore>((ref) {
+      return const DiscussionBoardDraftImageStore();
     });
 
 final discussionBoardLocalDataSourceProvider = Provider.family

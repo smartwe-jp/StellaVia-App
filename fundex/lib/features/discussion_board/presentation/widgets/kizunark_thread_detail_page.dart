@@ -120,7 +120,6 @@ class KizunarkThreadDetailPage extends ConsumerWidget {
             onToggleRepliesTap: onReply,
             showReplies: false,
           ),
-          const SizedBox(height: 18),
           Text(
             l10n.kizunarkRepliesSectionTitle,
             style: appText.bodyStrong.copyWith(color: colors.textPrimary),

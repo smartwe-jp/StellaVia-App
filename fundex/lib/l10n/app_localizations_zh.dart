@@ -1205,6 +1205,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get kizunarkDraftDeleteAction => '删除';
 
   @override
+  String get kizunarkDraftDeleteConfirmTitle => '删除草稿？';
+
+  @override
+  String get kizunarkDraftDeleteConfirmBody => '删除后无法恢复。';
+
+  @override
   String get kizunarkDraftImageOnlyLabel => '图片草稿';
 
   @override
@@ -5504,6 +5510,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get kizunarkDraftDeleteAction => '刪除';
+
+  @override
+  String get kizunarkDraftDeleteConfirmTitle => '刪除草稿？';
+
+  @override
+  String get kizunarkDraftDeleteConfirmBody => '刪除後無法復原。';
 
   @override
   String get kizunarkDraftImageOnlyLabel => '圖片草稿';

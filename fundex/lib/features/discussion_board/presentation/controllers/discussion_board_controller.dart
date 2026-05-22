@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -302,7 +303,7 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
     final optimizedPaths = <String>[];
     for (final rawPath in imageFilePaths) {
       final path = rawPath.trim();
-      if (path.isEmpty) {
+      if (path.isEmpty || !File(path).existsSync()) {
         continue;
       }
       final optimizedPath = await _imageOptimizer.ensureWithinUploadLimit(path);

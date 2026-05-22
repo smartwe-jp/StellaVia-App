@@ -441,6 +441,8 @@
   "kizunarkDraftEmptyState": "下書きはありません。",
   "kizunarkDraftLoadError": "下書きの読み込みに失敗しました。",
   "kizunarkDraftDeleteAction": "削除",
+  "kizunarkDraftDeleteConfirmTitle": "下書きを削除しますか？",
+  "kizunarkDraftDeleteConfirmBody": "削除すると元に戻せません。",
   "kizunarkDraftImageOnlyLabel": "画像の下書き",
   "kizunarkDraftPostTypeLabel": "投稿",
   "kizunarkDraftReplyTypeLabel": "返信",

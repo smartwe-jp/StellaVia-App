@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fundex/app/support/upload_image_optimizer.dart';
 import 'package:fundex/features/discussion_board/domain/entities/discussion_board_models.dart';
@@ -87,10 +89,24 @@ void main() {
     test(
       'submitPost uploads local image files before sending comment',
       () async {
+        final tempDirectory = await Directory.systemTemp.createTemp(
+          'discussion_board_controller_test_',
+        );
+        addTearDown(() async {
+          if (await tempDirectory.exists()) {
+            await tempDirectory.delete(recursive: true);
+          }
+        });
+        final imageA = File('${tempDirectory.path}/a.png')
+          ..writeAsBytesSync(<int>[1, 2, 3]);
+        final imageB = File('${tempDirectory.path}/b.png')
+          ..writeAsBytesSync(<int>[4, 5, 6]);
+        final optimizedA = '${tempDirectory.path}/optimized-a.jpg';
+        final optimizedB = '${tempDirectory.path}/optimized-b.jpg';
         final repository = _FakeDiscussionBoardRepository();
         final optimizer = _FakeUploadImageOptimizer(<String, String>{
-          '/tmp/a.png': '/tmp/optimized-a.jpg',
-          '/tmp/b.png': '/tmp/optimized-b.jpg',
+          imageA.path: optimizedA,
+          imageB.path: optimizedB,
         });
         final controller = DiscussionBoardController(
           LoadDiscussionThreadsUseCase(repository),
@@ -109,18 +125,15 @@ void main() {
           fallbackHandle: 'usr***@',
           fallbackBadgeLabel: 'badge',
           imageUrls: const <String>['https://cdn.example.com/existing.jpg'],
-          imageFilePaths: const <String>['/tmp/a.png', '/tmp/b.png'],
+          imageFilePaths: <String>[imageA.path, imageB.path],
         );
 
         expect(submitted, isTrue);
         expect(optimizer.optimizedSourcePaths, <String>[
-          '/tmp/a.png',
-          '/tmp/b.png',
+          imageA.path,
+          imageB.path,
         ]);
-        expect(repository.uploadedFilePaths, <String>[
-          '/tmp/optimized-a.jpg',
-          '/tmp/optimized-b.jpg',
-        ]);
+        expect(repository.uploadedFilePaths, <String>[optimizedA, optimizedB]);
         expect(repository.lastSubmittedImageUrls, <String>[
           'https://cdn.example.com/existing.jpg',
           'https://cdn.example.com/optimized-a.jpg',

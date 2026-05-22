@@ -307,7 +307,21 @@ class _DiscussionBoardTabPageState
     }
     switch (result.status) {
       case ProfileDocumentImagePickStatus.success:
-        return result.path?.trim();
+        final sourcePath = result.path?.trim() ?? '';
+        final persistedPath = await ref
+            .read(discussionBoardDraftImageStoreProvider)
+            .persist(sourcePath);
+        if (!mounted) {
+          return null;
+        }
+        if (persistedPath == null || persistedPath.isEmpty) {
+          AppNotice.show(
+            context,
+            message: context.l10n.discussionAvatarPickFailed,
+          );
+          return null;
+        }
+        return persistedPath;
       case ProfileDocumentImagePickStatus.canceled:
         return null;
       case ProfileDocumentImagePickStatus.permissionDenied:

@@ -441,6 +441,8 @@
   "kizunarkDraftEmptyState": "No drafts yet.",
   "kizunarkDraftLoadError": "Failed to load drafts.",
   "kizunarkDraftDeleteAction": "Delete",
+  "kizunarkDraftDeleteConfirmTitle": "Delete draft?",
+  "kizunarkDraftDeleteConfirmBody": "This draft cannot be restored after deletion.",
   "kizunarkDraftImageOnlyLabel": "Image draft",
   "kizunarkDraftPostTypeLabel": "Post",
   "kizunarkDraftReplyTypeLabel": "Reply",

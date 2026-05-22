@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:core_storage/core_storage.dart';
 
@@ -80,6 +81,7 @@ class DiscussionBoardDraftLocalDataSourceImpl
             (item) =>
                 DiscussionBoardDraft.fromJson(Map<String, dynamic>.from(item)),
           )
+          .map(_sanitizeDraft)
           .where((draft) => draft.id.trim().isNotEmpty && draft.hasContent)
           .toList(growable: false);
       return drafts;
@@ -117,5 +119,23 @@ class DiscussionBoardDraftLocalDataSourceImpl
     final key = await _resolveStorageKey();
     final payload = drafts.map((item) => item.toJson()).toList(growable: false);
     await _largeDataStore.put<String>(key, jsonEncode(payload));
+  }
+
+  DiscussionBoardDraft _sanitizeDraft(DiscussionBoardDraft draft) {
+    return DiscussionBoardDraft(
+      id: draft.id,
+      kind: draft.kind,
+      content: draft.content,
+      imageFilePaths: draft.imageFilePaths
+          .where((path) => path.trim().isNotEmpty && File(path).existsSync())
+          .toList(growable: false),
+      updatedAtIso: draft.updatedAtIso,
+      projectId: draft.projectId,
+      projectName: draft.projectName,
+      replyThreadId: draft.replyThreadId,
+      replyTargetName: draft.replyTargetName,
+      replyTargetBody: draft.replyTargetBody,
+      replyTargetThreadJson: draft.replyTargetThreadJson,
+    );
   }
 }

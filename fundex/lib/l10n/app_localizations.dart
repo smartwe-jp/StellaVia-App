@@ -2447,6 +2447,18 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get kizunarkDraftDeleteAction;
 
+  /// No description provided for @kizunarkDraftDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete draft?'**
+  String get kizunarkDraftDeleteConfirmTitle;
+
+  /// No description provided for @kizunarkDraftDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This draft cannot be restored after deletion.'**
+  String get kizunarkDraftDeleteConfirmBody;
+
   /// No description provided for @kizunarkDraftImageOnlyLabel.
   ///
   /// In en, this message translates to:

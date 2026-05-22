@@ -1290,6 +1290,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kizunarkDraftDeleteAction => 'Delete';
 
   @override
+  String get kizunarkDraftDeleteConfirmTitle => 'Delete draft?';
+
+  @override
+  String get kizunarkDraftDeleteConfirmBody =>
+      'This draft cannot be restored after deletion.';
+
+  @override
   String get kizunarkDraftImageOnlyLabel => 'Image draft';
 
   @override

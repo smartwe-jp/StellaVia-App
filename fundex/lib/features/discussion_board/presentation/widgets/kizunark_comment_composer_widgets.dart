@@ -203,6 +203,10 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
       widget.controller.text.trim().isNotEmpty || _imageFilePaths.isNotEmpty;
   bool get _canSubmit => widget.controller.text.trim().isNotEmpty;
 
+  Iterable<String> get _validImageFilePaths => _imageFilePaths.where(
+    (path) => path.trim().isNotEmpty && File(path).existsSync(),
+  );
+
   void _syncInputContentState() {
     final nextHasContent = _hasDraftContent;
     if (nextHasContent == _hasInputContent || !mounted) {
@@ -248,7 +252,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
           },
           onSaveDraft: () async {
             Navigator.of(sheetContext).pop();
-            await widget.onSaveDraft(List<String>.of(_imageFilePaths));
+            await widget.onSaveDraft(List<String>.of(_validImageFilePaths));
             if (mounted) {
               Navigator.of(context).pop();
             }
@@ -276,7 +280,13 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
     setState(() {
       _imageFilePaths
         ..clear()
-        ..addAll(draft.imageFilePaths.take(_maxImages));
+        ..addAll(
+          draft.imageFilePaths
+              .where(
+                (path) => path.trim().isNotEmpty && File(path).existsSync(),
+              )
+              .take(_maxImages),
+        );
       _hasInputContent = _hasDraftContent;
     });
     final projectId = draft.projectId?.trim() ?? '';
@@ -311,7 +321,9 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
     setState(() {
       _isSubmitting = true;
     });
-    final shouldClose = await widget.onSubmit(List<String>.of(_imageFilePaths));
+    final shouldClose = await widget.onSubmit(
+      List<String>.of(_validImageFilePaths),
+    );
     if (!mounted) {
       return;
     }
@@ -357,7 +369,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
                   placeholder: widget.placeholder,
                   controller: widget.controller,
                   onChanged: widget.onTextChanged,
-                  imageFilePaths: _imageFilePaths,
+                  imageFilePaths: List<String>.of(_validImageFilePaths),
                   onRemoveImage: (int index) {
                     setState(() {
                       _imageFilePaths.removeAt(index);
@@ -483,7 +495,7 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
     super.initState();
     _imageFilePaths.addAll(
       widget.initialImageFilePaths
-          .where((path) => path.trim().isNotEmpty)
+          .where((path) => path.trim().isNotEmpty && File(path).existsSync())
           .take(_maxImages),
     );
     _hasInputContent = _hasDraftContent;
@@ -499,6 +511,10 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
   bool get _hasDraftContent =>
       widget.controller.text.trim().isNotEmpty || _imageFilePaths.isNotEmpty;
   bool get _canSubmit => widget.controller.text.trim().isNotEmpty;
+
+  Iterable<String> get _validImageFilePaths => _imageFilePaths.where(
+    (path) => path.trim().isNotEmpty && File(path).existsSync(),
+  );
 
   void _syncInputContentState() {
     final nextHasContent = _hasDraftContent;
@@ -545,7 +561,7 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
           },
           onSaveDraft: () async {
             Navigator.of(sheetContext).pop();
-            await widget.onSaveDraft(List<String>.of(_imageFilePaths));
+            await widget.onSaveDraft(List<String>.of(_validImageFilePaths));
             if (mounted) {
               Navigator.of(context).pop();
             }
@@ -562,7 +578,9 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
     setState(() {
       _isSubmitting = true;
     });
-    final shouldClose = await widget.onSubmit(List<String>.of(_imageFilePaths));
+    final shouldClose = await widget.onSubmit(
+      List<String>.of(_validImageFilePaths),
+    );
     if (!mounted) {
       return;
     }
@@ -613,7 +631,7 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
                   placeholder: widget.placeholder,
                   controller: widget.controller,
                   onChanged: widget.onChanged,
-                  imageFilePaths: _imageFilePaths,
+                  imageFilePaths: List<String>.of(_validImageFilePaths),
                   onRemoveImage: (int index) {
                     setState(() {
                       _imageFilePaths.removeAt(index);
