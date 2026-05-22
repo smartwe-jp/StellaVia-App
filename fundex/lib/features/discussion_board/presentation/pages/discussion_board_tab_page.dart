@@ -14,6 +14,7 @@ import '../../../auth/domain/entities/auth_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../home/presentation/support/home_display_name_resolver.dart';
 import '../../../main_shell/presentation/providers/main_shell_providers.dart';
+import '../../../main_shell/presentation/widgets/main_shell_chrome_visibility.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../member_profile/presentation/support/profile_document_image_picker.dart';
 import '../../domain/entities/discussion_board_draft.dart';
@@ -974,11 +975,13 @@ class _DiscussionBoardTabPageState
 
     return Column(
       children: <Widget>[
-        KizunarkGradientHeader(
-          title: l10n.mainTabKizunark,
-          subtitle: l10n.kizunarkSubtitle,
-          titleLightAssetPath: 'assets/images/kizunark.nav.light.png',
-          titleDarkAssetPath: 'assets/images/kizunark.nav.dark.png',
+        MainShellChromeVisibility(
+          child: KizunarkGradientHeader(
+            title: l10n.mainTabKizunark,
+            subtitle: l10n.kizunarkSubtitle,
+            titleLightAssetPath: 'assets/images/kizunark.nav.light.png',
+            titleDarkAssetPath: 'assets/images/kizunark.nav.dark.png',
+          ),
         ),
         Expanded(
           child: RefreshIndicator(
