@@ -1222,6 +1222,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get kizunarkDraftImageOnlyLabel => '画像の下書き';
 
   @override
+  String get kizunarkDraftPostTypeLabel => '投稿';
+
+  @override
+  String get kizunarkDraftReplyTypeLabel => '返信';
+
+  @override
+  String get kizunarkDraftThreadUnavailableNotice =>
+      '元のメッセージを現在開けません。更新してから再度お試しください。';
+
+  @override
   String get kizunarkComposeAudienceEveryone => '全員';
 
   @override

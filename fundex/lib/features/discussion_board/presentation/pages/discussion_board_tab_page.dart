@@ -169,19 +169,6 @@ class _DiscussionBoardTabPageState
       imageFilePaths: imageFilePaths,
     );
     if (submitted && mounted) {
-      final draftStore = ref.read(discussionBoardDraftLocalDataSourceProvider);
-      final storedDrafts = await draftStore.readDrafts();
-      for (final draft in storedDrafts.where(
-        (DiscussionBoardDraft draft) =>
-            draft.kind == DiscussionDraftKind.reply &&
-            draft.replyThreadId == threadId,
-      )) {
-        await draftStore.deleteDraft(draft.id);
-      }
-      ref.invalidate(discussionBoardDraftsProvider);
-      if (!mounted) {
-        return;
-      }
       setState(() {
         _selectedComposerFund = null;
       });
@@ -240,6 +227,7 @@ class _DiscussionBoardTabPageState
       replyThreadId: thread.id,
       replyTargetName: thread.author.displayName,
       replyTargetBody: thread.body,
+      replyTargetThreadJson: thread.toJson(),
     );
     await ref
         .read(discussionBoardDraftLocalDataSourceProvider)
@@ -256,11 +244,58 @@ class _DiscussionBoardTabPageState
     }
   }
 
-  Future<DiscussionBoardDraft?> _openPostDraftList() {
+  Future<DiscussionBoardDraft?> _openDraftList() {
     return context.push<DiscussionBoardDraft>(
       '/discussion-board/drafts',
-      extra: const KizunarkDraftListRouteArgs(kind: DiscussionDraftKind.post),
+      extra: const KizunarkDraftListRouteArgs(),
     );
+  }
+
+  Future<void> _openReplyDraft(DiscussionBoardDraft draft) async {
+    final threadId = draft.replyThreadId?.trim() ?? '';
+    if (threadId.isEmpty) {
+      return;
+    }
+    final thread = _findThread(threadId) ?? _threadFromDraft(draft);
+    if (thread == null) {
+      if (mounted) {
+        AppNotice.show(
+          context,
+          message: context.l10n.kizunarkDraftThreadUnavailableNotice,
+        );
+      }
+      return;
+    }
+    final isAuthenticated =
+        ref.read(currentAuthUserProvider).asData?.value != null;
+    await _openReplyComposer(
+      thread: thread,
+      isAuthenticated: isAuthenticated,
+      initialDraft: draft,
+    );
+  }
+
+  DiscussionThread? _findThread(String threadId) {
+    final normalized = threadId.trim();
+    if (normalized.isEmpty) {
+      return null;
+    }
+    final threads = ref.read(discussionBoardControllerProvider(null)).threads;
+    for (final thread in threads) {
+      if (thread.id == normalized) {
+        return thread;
+      }
+    }
+    return null;
+  }
+
+  DiscussionThread? _threadFromDraft(DiscussionBoardDraft draft) {
+    final snapshot = draft.replyTargetThreadJson;
+    if (snapshot == null) {
+      return null;
+    }
+    final thread = DiscussionThread.fromJson(snapshot);
+    return thread.id.trim().isEmpty ? null : thread;
   }
 
   Future<String?> _pickDiscussionImage() async {
@@ -404,7 +439,8 @@ class _DiscussionBoardTabPageState
           selectedFund: _selectedComposerFund,
           onPickImage: _pickDiscussionImage,
           onPickFund: _showComposerFundPicker,
-          onOpenDrafts: _openPostDraftList,
+          onOpenDrafts: _openDraftList,
+          onOpenReplyDraft: _openReplyDraft,
           onSelectedFundChanged: (SelectedComposerFund? fund) {
             setState(() {
               _selectedComposerFund = fund;
@@ -435,6 +471,7 @@ class _DiscussionBoardTabPageState
   Future<void> _openReplyComposer({
     required DiscussionThread thread,
     required bool isAuthenticated,
+    DiscussionBoardDraft? initialDraft,
   }) async {
     if (!isAuthenticated) {
       AppNotice.show(
@@ -444,38 +481,12 @@ class _DiscussionBoardTabPageState
       return;
     }
     final replyController = _replyControllerFor(thread.id);
-    final storedDrafts = await ref
-        .read(discussionBoardDraftLocalDataSourceProvider)
-        .readDrafts();
-    if (!mounted) {
-      return;
-    }
-    final storedReplyDrafts =
-        storedDrafts
-            .where(
-              (DiscussionBoardDraft draft) =>
-                  draft.kind == DiscussionDraftKind.reply &&
-                  draft.replyThreadId == thread.id,
-            )
-            .toList()
-          ..sort(
-            (DiscussionBoardDraft left, DiscussionBoardDraft right) =>
-                right.updatedAtIso.compareTo(left.updatedAtIso),
-          );
-    final storedReplyDraft = storedReplyDrafts.isEmpty
-        ? null
-        : storedReplyDrafts.first;
     final liveDraft =
         ref
             .read(discussionBoardControllerProvider(null))
             .replyDrafts[thread.id] ??
         '';
-    final activeStoredDraft = liveDraft.trim().isEmpty
-        ? storedReplyDraft
-        : null;
-    final currentDraft = liveDraft.trim().isNotEmpty
-        ? liveDraft
-        : activeStoredDraft?.content ?? '';
+    final currentDraft = initialDraft?.content ?? liveDraft;
     if (replyController.text != currentDraft) {
       replyController.value = TextEditingValue(
         text: currentDraft,
@@ -487,12 +498,12 @@ class _DiscussionBoardTabPageState
           .read(discussionBoardControllerProvider(null).notifier)
           .updateReplyDraft(thread.id, currentDraft);
     }
-    final draftProjectId = activeStoredDraft?.projectId?.trim() ?? '';
+    final draftProjectId = initialDraft?.projectId?.trim() ?? '';
     if (draftProjectId.isNotEmpty) {
       setState(() {
         _selectedComposerFund = SelectedComposerFund(
           projectId: draftProjectId,
-          projectName: activeStoredDraft?.projectName ?? '',
+          projectName: initialDraft?.projectName ?? '',
           selectionKey: draftProjectId,
         );
       });
@@ -538,7 +549,7 @@ class _DiscussionBoardTabPageState
             imageFilePaths: imageFilePaths,
           ),
           initialImageFilePaths:
-              activeStoredDraft?.imageFilePaths ?? const <String>[],
+              initialDraft?.imageFilePaths ?? const <String>[],
           onSubmit: (List<String> imageFilePaths) async {
             await _submitReplyWithImages(
               thread.id,

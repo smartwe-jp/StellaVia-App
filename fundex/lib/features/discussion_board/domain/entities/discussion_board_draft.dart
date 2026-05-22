@@ -12,6 +12,7 @@ class DiscussionBoardDraft {
     this.replyThreadId,
     this.replyTargetName,
     this.replyTargetBody,
+    this.replyTargetThreadJson,
   });
 
   final String id;
@@ -24,6 +25,7 @@ class DiscussionBoardDraft {
   final String? replyThreadId;
   final String? replyTargetName;
   final String? replyTargetBody;
+  final Map<String, dynamic>? replyTargetThreadJson;
 
   bool get hasContent =>
       content.trim().isNotEmpty ||
@@ -41,6 +43,7 @@ class DiscussionBoardDraft {
       'replyThreadId': replyThreadId,
       'replyTargetName': replyTargetName,
       'replyTargetBody': replyTargetBody,
+      'replyTargetThreadJson': replyTargetThreadJson,
     };
   }
 
@@ -65,6 +68,7 @@ class DiscussionBoardDraft {
       replyThreadId: _nullableTrimmedString(json['replyThreadId']),
       replyTargetName: _nullableTrimmedString(json['replyTargetName']),
       replyTargetBody: _nullableTrimmedString(json['replyTargetBody']),
+      replyTargetThreadJson: _nullableMap(json['replyTargetThreadJson']),
     );
   }
 }
@@ -75,4 +79,11 @@ String? _nullableTrimmedString(Object? value) {
     return null;
   }
   return normalized;
+}
+
+Map<String, dynamic>? _nullableMap(Object? value) {
+  if (value is! Map) {
+    return null;
+  }
+  return Map<String, dynamic>.from(value);
 }

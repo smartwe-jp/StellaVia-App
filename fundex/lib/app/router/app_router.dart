@@ -218,7 +218,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (BuildContext context, GoRouterState state) {
           final extra = state.extra;
           if (extra is! KizunarkDraftListRouteArgs) {
-            return const DiscussionBoardTabPage();
+            return const KizunarkDraftListPage();
           }
           return KizunarkDraftListPage(kind: extra.kind);
         },

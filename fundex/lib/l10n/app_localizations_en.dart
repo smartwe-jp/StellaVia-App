@@ -1293,6 +1293,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kizunarkDraftImageOnlyLabel => 'Image draft';
 
   @override
+  String get kizunarkDraftPostTypeLabel => 'Post';
+
+  @override
+  String get kizunarkDraftReplyTypeLabel => 'Reply';
+
+  @override
+  String get kizunarkDraftThreadUnavailableNotice =>
+      'The original message cannot be opened right now. Please refresh and try again.';
+
+  @override
   String get kizunarkComposeAudienceEveryone => 'Everyone';
 
   @override

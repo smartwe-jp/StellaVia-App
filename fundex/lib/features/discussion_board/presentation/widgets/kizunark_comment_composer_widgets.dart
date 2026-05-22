@@ -143,6 +143,7 @@ class KizunarkComposeSheet extends StatefulWidget {
     required this.onPickImage,
     required this.onPickFund,
     required this.onOpenDrafts,
+    required this.onOpenReplyDraft,
     required this.onSelectedFundChanged,
     required this.onTextChanged,
     required this.onSaveDraft,
@@ -166,6 +167,7 @@ class KizunarkComposeSheet extends StatefulWidget {
   final Future<String?> Function() onPickImage;
   final Future<SelectedComposerFund?> Function() onPickFund;
   final Future<DiscussionBoardDraft?> Function() onOpenDrafts;
+  final Future<void> Function(DiscussionBoardDraft draft) onOpenReplyDraft;
   final ValueChanged<SelectedComposerFund?> onSelectedFundChanged;
   final ValueChanged<String> onTextChanged;
   final Future<void> Function(List<String> imageFilePaths) onSaveDraft;
@@ -259,6 +261,11 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
   Future<void> _openDrafts() async {
     final draft = await widget.onOpenDrafts();
     if (!mounted || draft == null) {
+      return;
+    }
+    if (draft.kind == DiscussionDraftKind.reply) {
+      Navigator.of(context).pop();
+      await widget.onOpenReplyDraft(draft);
       return;
     }
     widget.controller.value = TextEditingValue(

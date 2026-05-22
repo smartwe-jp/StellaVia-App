@@ -2453,6 +2453,24 @@ abstract class AppLocalizations {
   /// **'Image draft'**
   String get kizunarkDraftImageOnlyLabel;
 
+  /// No description provided for @kizunarkDraftPostTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Post'**
+  String get kizunarkDraftPostTypeLabel;
+
+  /// No description provided for @kizunarkDraftReplyTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply'**
+  String get kizunarkDraftReplyTypeLabel;
+
+  /// No description provided for @kizunarkDraftThreadUnavailableNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'The original message cannot be opened right now. Please refresh and try again.'**
+  String get kizunarkDraftThreadUnavailableNotice;
+
   /// No description provided for @kizunarkComposeAudienceEveryone.
   ///
   /// In en, this message translates to:

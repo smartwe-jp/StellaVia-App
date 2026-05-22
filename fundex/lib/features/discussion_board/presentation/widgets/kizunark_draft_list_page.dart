@@ -10,15 +10,15 @@ import '../../domain/entities/discussion_board_draft.dart';
 import '../providers/discussion_board_providers.dart';
 
 class KizunarkDraftListRouteArgs {
-  const KizunarkDraftListRouteArgs({required this.kind});
+  const KizunarkDraftListRouteArgs({this.kind});
 
-  final DiscussionDraftKind kind;
+  final DiscussionDraftKind? kind;
 }
 
 class KizunarkDraftListPage extends ConsumerWidget {
-  const KizunarkDraftListPage({required this.kind, super.key});
+  const KizunarkDraftListPage({this.kind, super.key});
 
-  final DiscussionDraftKind kind;
+  final DiscussionDraftKind? kind;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,9 +38,11 @@ class KizunarkDraftListPage extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (_, _) => _DraftEmptyState(message: l10n.kizunarkDraftLoadError),
         data: (drafts) {
-          final visibleDrafts = drafts
-              .where((draft) => draft.kind == kind)
-              .toList(growable: false);
+          final visibleDrafts = kind == null
+              ? drafts
+              : drafts
+                    .where((draft) => draft.kind == kind)
+                    .toList(growable: false);
           if (visibleDrafts.isEmpty) {
             return _DraftEmptyState(message: l10n.kizunarkDraftEmptyState);
           }
@@ -50,7 +52,14 @@ class KizunarkDraftListPage extends ConsumerWidget {
               final draft = visibleDrafts[index];
               return _DraftDismissibleTile(
                 draft: draft,
-                onTap: () {
+                onTap: () async {
+                  await ref
+                      .read(discussionBoardDraftLocalDataSourceProvider)
+                      .deleteDraft(draft.id);
+                  ref.invalidate(discussionBoardDraftsProvider);
+                  if (!context.mounted) {
+                    return;
+                  }
                   context.pop(draft);
                 },
                 onDelete: () async {
@@ -100,7 +109,7 @@ class _DraftDismissibleTile extends StatelessWidget {
   });
 
   final DiscussionBoardDraft draft;
-  final VoidCallback onTap;
+  final Future<void> Function() onTap;
   final Future<void> Function() onDelete;
 
   @override
@@ -147,11 +156,17 @@ class _DraftTile extends StatelessWidget {
     final text = draft.content.trim().isEmpty
         ? context.l10n.kizunarkDraftImageOnlyLabel
         : draft.content.trim();
+    final typeLabel = switch (draft.kind) {
+      DiscussionDraftKind.post => context.l10n.kizunarkDraftPostTypeLabel,
+      DiscussionDraftKind.reply => context.l10n.kizunarkDraftReplyTypeLabel,
+    };
     return Material(
       color: colors.surface,
       borderRadius: BorderRadius.circular(14),
       child: InkWell(
-        onTap: onTap,
+        onTap: () {
+          onTap();
+        },
         borderRadius: BorderRadius.circular(14),
         child: Container(
           constraints: const BoxConstraints(minHeight: 96),
@@ -164,13 +179,26 @@ class _DraftTile extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 flex: 2,
-                child: Text(
-                  text,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: appText.sectionTitle.copyWith(
-                    color: colors.textSecondary,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      typeLabel,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: appText.meta.copyWith(color: colors.primary),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      text,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: appText.sectionTitle.copyWith(
+                        color: colors.textSecondary,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               if (draft.imageFilePaths.isNotEmpty) ...<Widget>[

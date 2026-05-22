@@ -1208,6 +1208,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get kizunarkDraftImageOnlyLabel => '图片草稿';
 
   @override
+  String get kizunarkDraftPostTypeLabel => '留言';
+
+  @override
+  String get kizunarkDraftReplyTypeLabel => '回复';
+
+  @override
+  String get kizunarkDraftThreadUnavailableNotice => '原留言暂时无法打开，请刷新后重试。';
+
+  @override
   String get kizunarkComposeAudienceEveryone => '每个人';
 
   @override
@@ -5498,6 +5507,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get kizunarkDraftImageOnlyLabel => '圖片草稿';
+
+  @override
+  String get kizunarkDraftPostTypeLabel => '留言';
+
+  @override
+  String get kizunarkDraftReplyTypeLabel => '回覆';
+
+  @override
+  String get kizunarkDraftThreadUnavailableNotice => '原留言暫時無法開啟，請重新整理後重試。';
 
   @override
   String get kizunarkComposeAudienceEveryone => '每個人';
