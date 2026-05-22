@@ -21,9 +21,11 @@ class MainShellPage extends ConsumerStatefulWidget {
 class _MainShellPageState extends ConsumerState<MainShellPage>
     with SingleTickerProviderStateMixin {
   static const double _chromeRevealScrollDistance = 96;
+  static const double _chromeRevealActivationDistance = 18;
 
   late final AnimationController _chromeSnapController;
   Animation<double>? _chromeSnapAnimation;
+  double _pendingChromeRevealDistance = 0;
 
   @override
   void initState() {
@@ -67,11 +69,17 @@ class _MainShellPageState extends ConsumerState<MainShellPage>
 
   void _showChrome() {
     _chromeSnapController.stop();
+    _pendingChromeRevealDistance = 0;
     _setChromeReveal(1);
   }
 
-  void _snapChromeReveal() {
+  void _snapChromeReveal(ScrollMetrics metrics) {
+    _pendingChromeRevealDistance = 0;
     final currentReveal = ref.read(mainShellChromeRevealProvider);
+    final isAtBottom = metrics.extentAfter <= 1;
+    if (isAtBottom && currentReveal > 0.01) {
+      return;
+    }
     final targetReveal = currentReveal >= 0.5 ? 1.0 : 0.0;
     if ((currentReveal - targetReveal).abs() < 0.001) {
       _setChromeReveal(targetReveal);
@@ -95,9 +103,12 @@ class _MainShellPageState extends ConsumerState<MainShellPage>
       _showChrome();
       return false;
     }
+    if (notification.metrics.outOfRange) {
+      return false;
+    }
     if (notification is UserScrollNotification &&
         notification.direction == ScrollDirection.idle) {
-      _snapChromeReveal();
+      _snapChromeReveal(notification.metrics);
       return false;
     }
     if (notification is! ScrollUpdateNotification) {
@@ -110,7 +121,25 @@ class _MainShellPageState extends ConsumerState<MainShellPage>
     }
     _chromeSnapController.stop();
     final currentReveal = ref.read(mainShellChromeRevealProvider);
-    final nextReveal = currentReveal - (delta / _chromeRevealScrollDistance);
+    if (delta > 0 &&
+        currentReveal > 0.01 &&
+        notification.metrics.extentAfter <= 1) {
+      return false;
+    }
+    var effectiveDelta = delta;
+    if (delta < 0 && currentReveal <= 0.01) {
+      _pendingChromeRevealDistance += -delta;
+      if (_pendingChromeRevealDistance < _chromeRevealActivationDistance) {
+        return false;
+      }
+      effectiveDelta =
+          -(_pendingChromeRevealDistance - _chromeRevealActivationDistance);
+      _pendingChromeRevealDistance = _chromeRevealActivationDistance;
+    } else if (delta > 0 || currentReveal > 0.01) {
+      _pendingChromeRevealDistance = 0;
+    }
+    final nextReveal =
+        currentReveal - (effectiveDelta / _chromeRevealScrollDistance);
     _setChromeReveal(nextReveal);
     return false;
   }
