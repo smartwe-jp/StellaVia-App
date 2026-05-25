@@ -30,6 +30,8 @@ class HotelApiPaths {
   static const String countryCodeList = '/pms/countryCodeList';
   static const String roomExtraPerson = '/pms/order/room/extraPerson';
   static const String couponsOrderCustList = '/pms/coupons/order/custListV2';
+  static const String memberInfo = '/pms/member/info';
+  static const String memberInfoUpdate = '/pms/member/custSetInfo';
   static const String memberContactsList = '/pms/member/memberContactsList';
   static const String memberContactsUpdate =
       '/pms/member/memberContactsSaveOrUpdate';
@@ -69,6 +71,8 @@ class HotelApiClient {
     this.countryCodeListPath = HotelApiPaths.countryCodeList,
     this.roomExtraPersonPath = HotelApiPaths.roomExtraPerson,
     this.couponsOrderCustListPath = HotelApiPaths.couponsOrderCustList,
+    this.memberInfoPath = HotelApiPaths.memberInfo,
+    this.memberInfoUpdatePath = HotelApiPaths.memberInfoUpdate,
     this.memberContactsListPath = HotelApiPaths.memberContactsList,
     this.cardRegisterListPath = HotelApiPaths.cardRegisterList,
   }) : _envelopeCodec =
@@ -99,6 +103,8 @@ class HotelApiClient {
   final String countryCodeListPath;
   final String roomExtraPersonPath;
   final String couponsOrderCustListPath;
+  final String memberInfoPath;
+  final String memberInfoUpdatePath;
   final String memberContactsListPath;
   final String cardRegisterListPath;
 
@@ -277,6 +283,34 @@ class HotelApiClient {
     return _envelopeCodec.extractDataMap(
       _envelopeCodec.toJsonMap(response.data),
       fallbackMessage: 'Failed to load hotel coupons.',
+    );
+  }
+
+  Future<HotelMemberInfoDto> fetchMemberInfo() async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      memberInfoPath,
+      data: <String, dynamic>{},
+      options: authRequired(true),
+    );
+
+    final data = _envelopeCodec.extractDataMap(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load hotel member info.',
+    );
+    return HotelMemberInfoDto.fromJson(data);
+  }
+
+  Future<void> updateMemberInfo(HotelMemberInfoUpdateRequestDto request) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      memberInfoUpdatePath,
+      data: request.toJson(),
+      options: authRequired(true),
+    );
+
+    _envelopeCodec.assertSuccessIfEnvelope(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to update hotel member info.',
+      requireTruthyData: true,
     );
   }
 

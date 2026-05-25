@@ -1223,6 +1223,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hotelQuickActionContact => 'Contact us';
 
   @override
+  String get hotelMemberProfileTitle => 'User info';
+
+  @override
+  String get hotelMemberProfileNickname => 'Nickname';
+
+  @override
+  String get hotelMemberProfileEmail => 'Email address';
+
+  @override
+  String get hotelMemberProfilePhone => 'Phone number';
+
+  @override
+  String get hotelMemberProfileGender => 'Gender';
+
+  @override
+  String get hotelMemberProfileBirthday => 'Birthday';
+
+  @override
+  String get hotelMemberProfileMemberLevel => 'Member level';
+
+  @override
+  String get hotelMemberProfileAboutLevel => 'About membership';
+
+  @override
+  String get hotelMemberProfileEdit => 'Edit';
+
+  @override
+  String get hotelMemberProfileUnset => 'Not set';
+
+  @override
+  String get hotelMemberProfileGenderMale => 'Male';
+
+  @override
+  String get hotelMemberProfileGenderFemale => 'Female';
+
+  @override
+  String get hotelMemberProfileSave => 'Save';
+
+  @override
+  String get hotelMemberProfilePhoneCountryCode => 'Country code';
+
+  @override
+  String get hotelMemberProfilePhoneNumber => 'Phone number';
+
+  @override
+  String get hotelMemberProfileSaveSuccess =>
+      'User information has been updated.';
+
+  @override
+  String get hotelMemberProfileSaveFailed =>
+      'Could not update user information. Please try again.';
+
+  @override
+  String hotelMemberProfileLevelWithDiscount(Object level, int discount) {
+    return '$level · $discount% OFF';
+  }
+
+  @override
   String get hotelFilterAllTypes => 'All stays';
 
   @override

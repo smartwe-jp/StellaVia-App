@@ -1157,6 +1157,62 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelQuickActionContact => 'お問い合わせ';
 
   @override
+  String get hotelMemberProfileTitle => 'プロフィール';
+
+  @override
+  String get hotelMemberProfileNickname => 'ニックネーム';
+
+  @override
+  String get hotelMemberProfileEmail => 'メールアドレス';
+
+  @override
+  String get hotelMemberProfilePhone => '電話番号';
+
+  @override
+  String get hotelMemberProfileGender => '性別';
+
+  @override
+  String get hotelMemberProfileBirthday => '誕生日';
+
+  @override
+  String get hotelMemberProfileMemberLevel => '会員レベル';
+
+  @override
+  String get hotelMemberProfileAboutLevel => '会員について';
+
+  @override
+  String get hotelMemberProfileEdit => '編集';
+
+  @override
+  String get hotelMemberProfileUnset => '未設定';
+
+  @override
+  String get hotelMemberProfileGenderMale => '男性';
+
+  @override
+  String get hotelMemberProfileGenderFemale => '女性';
+
+  @override
+  String get hotelMemberProfileSave => '保存';
+
+  @override
+  String get hotelMemberProfilePhoneCountryCode => '国番号';
+
+  @override
+  String get hotelMemberProfilePhoneNumber => '電話番号';
+
+  @override
+  String get hotelMemberProfileSaveSuccess => 'ユーザー情報を更新しました。';
+
+  @override
+  String get hotelMemberProfileSaveFailed => 'ユーザー情報を更新できませんでした。もう一度お試しください。';
+
+  @override
+  String hotelMemberProfileLevelWithDiscount(Object level, int discount) {
+    return '$level · $discount% OFF';
+  }
+
+  @override
   String get hotelFilterAllTypes => 'すべての宿';
 
   @override

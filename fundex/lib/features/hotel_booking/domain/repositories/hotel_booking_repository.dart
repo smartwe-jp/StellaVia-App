@@ -29,4 +29,8 @@ abstract class HotelBookingRepository {
     required HotelBookingConfirmSeed seed,
     required String languageCode,
   });
+
+  Future<HotelMemberProfile> fetchMemberProfile();
+
+  Future<void> updateMemberProfile(HotelMemberProfile profile);
 }

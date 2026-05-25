@@ -571,6 +571,72 @@ void main() {
       expect(link, equals('https://pay.example.com/order/12345'));
     });
 
+    test('fetchMemberInfo uses authenticated profile endpoint', () async {
+      final client = _buildClient((options) async {
+        expect(options.method, equals('POST'));
+        expect(options.path, equals(HotelApiPaths.memberInfo));
+        expect(options.extra['auth_required'], isTrue);
+        expect(options.data, equals(<String, dynamic>{}));
+
+        return _jsonOk(
+          '{"code":200,"msg":"success","data":{"id":7,"memberName":"侯景雁","email":"aaron@example.com","phoneCountryCode":"+81","phoneNumber":"08042039590","生日":"1990-01-02","gender":1,"joinDate":"2026-05-01","membersLevel":"T1","membersLevelCode":1,"discount":7,"expireDate":"2027-05-01","sourceUserId":10,"membersStatus":"ACTIVE"}}',
+        );
+      });
+      final api = HotelApiClient(client);
+
+      final profile = await api.fetchMemberInfo();
+
+      expect(profile.id, equals(7));
+      expect(profile.memberName, equals('侯景雁'));
+      expect(profile.email, equals('aaron@example.com'));
+      expect(profile.phoneCountryCode, equals('+81'));
+      expect(profile.phoneNumber, equals('08042039590'));
+      expect(profile.birthday, equals('1990-01-02'));
+      expect(profile.gender, equals(1));
+      expect(profile.membersLevel, equals('T1'));
+      expect(profile.membersLevelCode, equals(1));
+      expect(profile.discount, equals(7));
+      expect(profile.sourceUserId, equals(10));
+      expect(profile.membersStatus, equals('ACTIVE'));
+    });
+
+    test('updateMemberInfo posts authenticated customer payload', () async {
+      final client = _buildClient((options) async {
+        expect(options.method, equals('POST'));
+        expect(options.path, equals(HotelApiPaths.memberInfoUpdate));
+        expect(options.extra['auth_required'], isTrue);
+        expect(
+          options.data,
+          equals(<String, dynamic>{
+            'id': 7,
+            'memberName': '侯景雁',
+            'email': 'aaron@example.com',
+            'phoneCountryCode': '+81',
+            'phoneNumber': '08042039590',
+            'birthday': '1990-01-02',
+            'gender': 1,
+            'sourceUserId': 10,
+          }),
+        );
+
+        return _jsonOk('{"code":200,"msg":"success","data":true}');
+      });
+      final api = HotelApiClient(client);
+
+      await api.updateMemberInfo(
+        const HotelMemberInfoUpdateRequestDto(
+          id: 7,
+          memberName: '侯景雁',
+          email: 'aaron@example.com',
+          phoneCountryCode: '+81',
+          phoneNumber: '08042039590',
+          birthday: '1990-01-02',
+          gender: 1,
+          sourceUserId: 10,
+        ),
+      );
+    });
+
     test('fetchOrderList and cancelOrder use authenticated endpoints', () async {
       var call = 0;
       final client = _buildClient((options) async {

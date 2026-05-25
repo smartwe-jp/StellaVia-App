@@ -2307,6 +2307,114 @@ abstract class AppLocalizations {
   /// **'Contact us'**
   String get hotelQuickActionContact;
 
+  /// No description provided for @hotelMemberProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'User info'**
+  String get hotelMemberProfileTitle;
+
+  /// No description provided for @hotelMemberProfileNickname.
+  ///
+  /// In en, this message translates to:
+  /// **'Nickname'**
+  String get hotelMemberProfileNickname;
+
+  /// No description provided for @hotelMemberProfileEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email address'**
+  String get hotelMemberProfileEmail;
+
+  /// No description provided for @hotelMemberProfilePhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get hotelMemberProfilePhone;
+
+  /// No description provided for @hotelMemberProfileGender.
+  ///
+  /// In en, this message translates to:
+  /// **'Gender'**
+  String get hotelMemberProfileGender;
+
+  /// No description provided for @hotelMemberProfileBirthday.
+  ///
+  /// In en, this message translates to:
+  /// **'Birthday'**
+  String get hotelMemberProfileBirthday;
+
+  /// No description provided for @hotelMemberProfileMemberLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Member level'**
+  String get hotelMemberProfileMemberLevel;
+
+  /// No description provided for @hotelMemberProfileAboutLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'About membership'**
+  String get hotelMemberProfileAboutLevel;
+
+  /// No description provided for @hotelMemberProfileEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get hotelMemberProfileEdit;
+
+  /// No description provided for @hotelMemberProfileUnset.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get hotelMemberProfileUnset;
+
+  /// No description provided for @hotelMemberProfileGenderMale.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get hotelMemberProfileGenderMale;
+
+  /// No description provided for @hotelMemberProfileGenderFemale.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get hotelMemberProfileGenderFemale;
+
+  /// No description provided for @hotelMemberProfileSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get hotelMemberProfileSave;
+
+  /// No description provided for @hotelMemberProfilePhoneCountryCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Country code'**
+  String get hotelMemberProfilePhoneCountryCode;
+
+  /// No description provided for @hotelMemberProfilePhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get hotelMemberProfilePhoneNumber;
+
+  /// No description provided for @hotelMemberProfileSaveSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'User information has been updated.'**
+  String get hotelMemberProfileSaveSuccess;
+
+  /// No description provided for @hotelMemberProfileSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not update user information. Please try again.'**
+  String get hotelMemberProfileSaveFailed;
+
+  /// No description provided for @hotelMemberProfileLevelWithDiscount.
+  ///
+  /// In en, this message translates to:
+  /// **'{level} · {discount}% OFF'**
+  String hotelMemberProfileLevelWithDiscount(Object level, int discount);
+
   /// No description provided for @hotelFilterAllTypes.
   ///
   /// In en, this message translates to:

@@ -45,6 +45,10 @@ abstract class HotelBookingRemoteDataSource {
   });
 
   Future<List<Map<String, dynamic>>> fetchRegisteredCards();
+
+  Future<HotelMemberInfoDto> fetchMemberInfo();
+
+  Future<void> updateMemberInfo(HotelMemberInfoUpdateRequestDto request);
 }
 
 class HotelBookingRemoteDataSourceImpl implements HotelBookingRemoteDataSource {
@@ -138,5 +142,15 @@ class HotelBookingRemoteDataSourceImpl implements HotelBookingRemoteDataSource {
   @override
   Future<List<Map<String, dynamic>>> fetchRegisteredCards() {
     return _client.fetchRegisteredCards();
+  }
+
+  @override
+  Future<HotelMemberInfoDto> fetchMemberInfo() {
+    return _client.fetchMemberInfo();
+  }
+
+  @override
+  Future<void> updateMemberInfo(HotelMemberInfoUpdateRequestDto request) {
+    return _client.updateMemberInfo(request);
   }
 }

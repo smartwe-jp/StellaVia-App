@@ -417,6 +417,32 @@
   "hotelQuickActionOrders": "My orders",
   "hotelQuickActionCoupons": "Coupons",
   "hotelQuickActionContact": "Contact us",
+  "hotelMemberProfileTitle": "User info",
+  "hotelMemberProfileNickname": "Nickname",
+  "hotelMemberProfileEmail": "Email address",
+  "hotelMemberProfilePhone": "Phone number",
+  "hotelMemberProfileGender": "Gender",
+  "hotelMemberProfileBirthday": "Birthday",
+  "hotelMemberProfileMemberLevel": "Member level",
+  "hotelMemberProfileAboutLevel": "About membership",
+  "hotelMemberProfileEdit": "Edit",
+  "hotelMemberProfileUnset": "Not set",
+  "hotelMemberProfileGenderMale": "Male",
+  "hotelMemberProfileGenderFemale": "Female",
+  "hotelMemberProfileSave": "Save",
+  "hotelMemberProfilePhoneCountryCode": "Country code",
+  "hotelMemberProfilePhoneNumber": "Phone number",
+  "hotelMemberProfileSaveSuccess": "User information has been updated.",
+  "hotelMemberProfileSaveFailed": "Could not update user information. Please try again.",
+  "hotelMemberProfileLevelWithDiscount": "{level} · {discount}% OFF",
+  "@hotelMemberProfileLevelWithDiscount": {
+    "placeholders": {
+      "level": {},
+      "discount": {
+        "type": "int"
+      }
+    }
+  },
   "hotelFilterAllTypes": "All stays",
   "hotelSortRecommended": "Featured",
   "hotelSortPriceLow": "Price sort",

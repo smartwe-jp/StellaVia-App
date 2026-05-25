@@ -16,6 +16,7 @@ import '../../features/hotel_booking/presentation/pages/hotel_booking_confirm_pa
 import '../../features/hotel_booking/presentation/pages/hotel_detail_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_map_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_booking_tab_page.dart';
+import '../../features/hotel_booking/presentation/pages/hotel_member_profile_page.dart';
 import '../../features/hotel_booking/presentation/support/hotel_map_route_args.dart';
 import '../../features/discussion_board/presentation/widgets/kizunark_comment_composer_widgets.dart';
 import '../../features/discussion_board/presentation/widgets/kizunark_draft_list_page.dart';
@@ -111,6 +112,7 @@ String? resolveAuthRedirect({
   required AsyncValue<bool> authState,
   required String location,
 }) {
+  final isHotelMemberProfile = location == '/hotel-booking/member-profile';
   final isGuestAccessibleRoute =
       location == '/home' ||
       location == '/home/free-market' ||
@@ -118,6 +120,7 @@ String? resolveAuthRedirect({
       location == '/discussion-board' ||
       location == '/hotel-booking' ||
       (location.startsWith('/hotel-booking/') &&
+          !isHotelMemberProfile &&
           !location.endsWith('/confirm')) ||
       location.startsWith('/discussion-board/') ||
       location == '/funds' ||
@@ -404,6 +407,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                             ? extra.longitude
                             : null,
                       );
+                    },
+                  ),
+                  GoRoute(
+                    path: 'member-profile',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const HotelMemberProfilePage();
                     },
                   ),
                   GoRoute(

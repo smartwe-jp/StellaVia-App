@@ -417,6 +417,32 @@
   "hotelQuickActionOrders": "予約一覧",
   "hotelQuickActionCoupons": "クーポン",
   "hotelQuickActionContact": "お問い合わせ",
+  "hotelMemberProfileTitle": "プロフィール",
+  "hotelMemberProfileNickname": "ニックネーム",
+  "hotelMemberProfileEmail": "メールアドレス",
+  "hotelMemberProfilePhone": "電話番号",
+  "hotelMemberProfileGender": "性別",
+  "hotelMemberProfileBirthday": "誕生日",
+  "hotelMemberProfileMemberLevel": "会員レベル",
+  "hotelMemberProfileAboutLevel": "会員について",
+  "hotelMemberProfileEdit": "編集",
+  "hotelMemberProfileUnset": "未設定",
+  "hotelMemberProfileGenderMale": "男性",
+  "hotelMemberProfileGenderFemale": "女性",
+  "hotelMemberProfileSave": "保存",
+  "hotelMemberProfilePhoneCountryCode": "国番号",
+  "hotelMemberProfilePhoneNumber": "電話番号",
+  "hotelMemberProfileSaveSuccess": "ユーザー情報を更新しました。",
+  "hotelMemberProfileSaveFailed": "ユーザー情報を更新できませんでした。もう一度お試しください。",
+  "hotelMemberProfileLevelWithDiscount": "{level} · {discount}% OFF",
+  "@hotelMemberProfileLevelWithDiscount": {
+    "placeholders": {
+      "level": {},
+      "discount": {
+        "type": "int"
+      }
+    }
+  },
   "hotelFilterAllTypes": "すべての宿",
   "hotelSortRecommended": "厳選おすすめ",
   "hotelSortPriceLow": "価格順",

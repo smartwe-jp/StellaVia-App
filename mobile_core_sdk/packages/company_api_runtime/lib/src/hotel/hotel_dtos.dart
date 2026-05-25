@@ -230,6 +230,56 @@ abstract class HotelPriceCalendarDto with _$HotelPriceCalendarDto {
 }
 
 @freezed
+abstract class HotelMemberInfoDto with _$HotelMemberInfoDto {
+  const factory HotelMemberInfoDto({
+    int? id,
+    @Default('') String memberName,
+    @Default('') String email,
+    @Default('') String phoneCountryCode,
+    @Default('') String phoneNumber,
+    @JsonKey(name: 'birthday', readValue: hotelBirthdayReadValue)
+    @Default('')
+    String birthday,
+    int? gender,
+    @Default('') String joinDate,
+    @Default('') String membersLevel,
+    int? membersLevelCode,
+    int? discount,
+    @Default('') String expireDate,
+    int? sourceUserId,
+    @Default('') String membersStatus,
+  }) = _HotelMemberInfoDto;
+
+  factory HotelMemberInfoDto.fromJson(Map<String, dynamic> json) =>
+      _$HotelMemberInfoDtoFromJson(json);
+}
+
+@freezed
+abstract class HotelMemberInfoUpdateRequestDto
+    with _$HotelMemberInfoUpdateRequestDto {
+  @JsonSerializable(includeIfNull: false)
+  const factory HotelMemberInfoUpdateRequestDto({
+    int? id,
+    String? memberName,
+    String? email,
+    String? phoneCountryCode,
+    String? phoneNumber,
+    String? birthday,
+    int? gender,
+    int? sourceUserId,
+    int? emailCode,
+    int? phoneCode,
+  }) = _HotelMemberInfoUpdateRequestDto;
+
+  factory HotelMemberInfoUpdateRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$HotelMemberInfoUpdateRequestDtoFromJson(json);
+}
+
+Object? hotelBirthdayReadValue(Map<dynamic, dynamic> json, String key) {
+  return json[key] ?? json['生日'];
+}
+
+@freezed
 abstract class HotelRoomTypeRoomNumDto with _$HotelRoomTypeRoomNumDto {
   @JsonSerializable(includeIfNull: false)
   const factory HotelRoomTypeRoomNumDto({

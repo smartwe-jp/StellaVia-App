@@ -205,6 +205,28 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
       originalPrice: quote.priceElement?.originalPrice,
     );
   }
+
+  @override
+  Future<HotelMemberProfile> fetchMemberProfile() async {
+    final dto = await _remote.fetchMemberInfo();
+    return _mapMemberProfile(dto);
+  }
+
+  @override
+  Future<void> updateMemberProfile(HotelMemberProfile profile) {
+    return _remote.updateMemberInfo(
+      HotelMemberInfoUpdateRequestDto(
+        id: profile.id,
+        memberName: profile.memberName.trim(),
+        email: profile.email.trim(),
+        phoneCountryCode: profile.phoneCountryCode.trim(),
+        phoneNumber: profile.phoneNumber.trim(),
+        birthday: profile.birthday.trim(),
+        gender: profile.gender,
+        sourceUserId: profile.sourceUserId,
+      ),
+    );
+  }
 }
 
 String _formatBuildingName(HotelBuildingCodeDto dto, String languageCode) {
@@ -397,6 +419,25 @@ int _listCount(Object? raw) {
     return raw.length;
   }
   return 0;
+}
+
+HotelMemberProfile _mapMemberProfile(HotelMemberInfoDto dto) {
+  return HotelMemberProfile(
+    id: dto.id,
+    memberName: dto.memberName.trim(),
+    email: dto.email.trim(),
+    phoneCountryCode: dto.phoneCountryCode.trim(),
+    phoneNumber: dto.phoneNumber.trim(),
+    birthday: dto.birthday.trim(),
+    gender: dto.gender,
+    joinDate: dto.joinDate.trim(),
+    membersLevel: dto.membersLevel.trim(),
+    membersLevelCode: dto.membersLevelCode,
+    discount: dto.discount,
+    expireDate: dto.expireDate.trim(),
+    sourceUserId: dto.sourceUserId,
+    membersStatus: dto.membersStatus.trim(),
+  );
 }
 
 List<String> _mapFacilities(HotelDetailDto dto) {

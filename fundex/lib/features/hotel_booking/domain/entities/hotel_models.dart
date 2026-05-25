@@ -288,6 +288,92 @@ class HotelBookingPreparation {
   final num? originalPrice;
 }
 
+class HotelMemberProfile {
+  const HotelMemberProfile({
+    required this.id,
+    required this.memberName,
+    required this.email,
+    required this.phoneCountryCode,
+    required this.phoneNumber,
+    required this.birthday,
+    required this.gender,
+    required this.joinDate,
+    required this.membersLevel,
+    required this.membersLevelCode,
+    required this.discount,
+    required this.expireDate,
+    required this.sourceUserId,
+    required this.membersStatus,
+  });
+
+  final int? id;
+  final String memberName;
+  final String email;
+  final String phoneCountryCode;
+  final String phoneNumber;
+  final String birthday;
+  final int? gender;
+  final String joinDate;
+  final String membersLevel;
+  final int? membersLevelCode;
+  final int? discount;
+  final String expireDate;
+  final int? sourceUserId;
+  final String membersStatus;
+
+  String get phoneDisplay {
+    final code = phoneCountryCode.trim();
+    final number = phoneNumber.trim();
+    final normalizedCode = code.isEmpty
+        ? ''
+        : code.startsWith('+')
+        ? code
+        : '+$code';
+    return <String>[
+      normalizedCode,
+      number,
+    ].where((value) => value.isNotEmpty).join(' ');
+  }
+
+  HotelMemberProfile copyWith({
+    int? id,
+    String? memberName,
+    String? email,
+    String? phoneCountryCode,
+    String? phoneNumber,
+    String? birthday,
+    Object? gender = _unset,
+    String? joinDate,
+    String? membersLevel,
+    Object? membersLevelCode = _unset,
+    Object? discount = _unset,
+    String? expireDate,
+    Object? sourceUserId = _unset,
+    String? membersStatus,
+  }) {
+    return HotelMemberProfile(
+      id: id ?? this.id,
+      memberName: memberName ?? this.memberName,
+      email: email ?? this.email,
+      phoneCountryCode: phoneCountryCode ?? this.phoneCountryCode,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      birthday: birthday ?? this.birthday,
+      gender: identical(gender, _unset) ? this.gender : gender as int?,
+      joinDate: joinDate ?? this.joinDate,
+      membersLevel: membersLevel ?? this.membersLevel,
+      membersLevelCode: identical(membersLevelCode, _unset)
+          ? this.membersLevelCode
+          : membersLevelCode as int?,
+      discount: identical(discount, _unset) ? this.discount : discount as int?,
+      expireDate: expireDate ?? this.expireDate,
+      sourceUserId: identical(sourceUserId, _unset)
+          ? this.sourceUserId
+          : sourceUserId as int?,
+      membersStatus: membersStatus ?? this.membersStatus,
+    );
+  }
+}
+
 class HotelBookingConfirmSeed {
   const HotelBookingConfirmSeed({
     required this.detail,

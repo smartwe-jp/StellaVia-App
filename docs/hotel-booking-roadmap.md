@@ -21,7 +21,7 @@ Current behavior:
 - Hotel home hero temporarily reuses the same remote banner image URL pattern as the home tab.
 - Hotel tab home is immersive: the fourth tab disables the shell's top safe area and the page declares a transparent status bar with light icons.
 - Hotel API requests include fixed app metadata headers from the app network layer: `x-client-type: Stellavia-App` and `app-version` from `PackageInfo.version`.
-- Hotel home shows a four-entry quick action row above the search filter controls: user info, hotel orders, coupons, and contact. User info opens the member profile route, contact opens the existing contact form, and unfinished hotel order/coupon pages currently show the shared app toast.
+- Hotel home shows a four-entry quick action row above the search filter controls: user info, hotel orders, coupons, and contact. User info opens the hotel-specific profile route `/hotel-booking/member-profile` backed by `/pms/member/info` and `/pms/member/custSetInfo`, contact opens the existing contact form, and unfinished hotel order/coupon pages currently show the shared app toast.
 - Hotel list search uses fixed area choices only: all areas as `area: ""`, plus `osaka`, `kyoto`, and `tokyo`. Building/property type choices come from `/hotel/buildingCode`, including the empty-code "all" option returned by the API.
 - Hotel home shows selected search conditions as a compact summary bar; tapping the summary bar or search icon opens the full four-row search condition sheet over the tab bar. The sheet edits a local draft and refreshes the list only after "Check availability".
 - Hotel list cards navigate to the public detail route `/hotel-booking/:id` with the current search criteria.
@@ -190,7 +190,7 @@ Current SDK implementation note:
 - This compatibility is temporary. Tighten the success profile once the authoritative hotel API contract is confirmed.
 - Implemented Swagger-backed methods: `/hotel/hotelSearch`, `/pms/hotelinfobyidapp`, `/booking/order` Airhost booking creation, `/booking/order/sendPaymentLink`, and `/pms/pay4order`.
 - Swagger currently emits several request schema property keys as Chinese labels while placing the real wire field name in `example` values, for example `房源档案ID` -> `hotelInfoID` and `预订平台ID` -> `siteID`. The SDK DTOs use the wire field names observed from these examples and the legacy request payloads.
-- Implemented legacy-compatible methods pending Swagger confirmation or replacement: building code, room facility filters, refund strategy text, price calendar, assign occupancy, booking confirmation page text/country/coupon/contact/card preparation, booking create v2, order list/detail, member pay info, cancel rule, and cancel order.
+- Implemented legacy-compatible methods pending Swagger confirmation or replacement: building code, room facility filters, refund strategy text, price calendar, assign occupancy, booking confirmation page text/country/coupon/contact/card preparation, hotel member info/update, booking create v2, order list/detail, member pay info, cancel rule, and cancel order.
 - Hotel DTOs are generated with `freezed_annotation` / `json_serializable`; do not add hand-written model parsing functions for new hotel DTOs.
 
 If Swagger is incomplete:

@@ -417,6 +417,32 @@
   "hotelQuickActionOrders": "我的訂單",
   "hotelQuickActionCoupons": "優惠券",
   "hotelQuickActionContact": "聯絡我們",
+  "hotelMemberProfileTitle": "用戶資訊",
+  "hotelMemberProfileNickname": "暱稱",
+  "hotelMemberProfileEmail": "電子郵件",
+  "hotelMemberProfilePhone": "電話號碼",
+  "hotelMemberProfileGender": "性別",
+  "hotelMemberProfileBirthday": "生日",
+  "hotelMemberProfileMemberLevel": "會員等級",
+  "hotelMemberProfileAboutLevel": "會員說明",
+  "hotelMemberProfileEdit": "編輯",
+  "hotelMemberProfileUnset": "待完善",
+  "hotelMemberProfileGenderMale": "男",
+  "hotelMemberProfileGenderFemale": "女",
+  "hotelMemberProfileSave": "保存",
+  "hotelMemberProfilePhoneCountryCode": "區號",
+  "hotelMemberProfilePhoneNumber": "手機號碼",
+  "hotelMemberProfileSaveSuccess": "用戶資訊已更新。",
+  "hotelMemberProfileSaveFailed": "用戶資訊更新失敗，請重試。",
+  "hotelMemberProfileLevelWithDiscount": "{level} · {discount}% OFF",
+  "@hotelMemberProfileLevelWithDiscount": {
+    "placeholders": {
+      "level": {},
+      "discount": {
+        "type": "int"
+      }
+    }
+  },
   "hotelFilterAllTypes": "全部旅宿",
   "hotelSortRecommended": "精選推薦",
   "hotelSortPriceLow": "價格排序",

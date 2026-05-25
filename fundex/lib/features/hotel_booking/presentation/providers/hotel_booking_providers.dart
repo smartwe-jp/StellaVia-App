@@ -12,7 +12,9 @@ import '../../domain/usecases/assign_hotel_occupancy_usecase.dart';
 import '../../domain/usecases/fetch_hotel_building_filters_usecase.dart';
 import '../../domain/usecases/fetch_hotel_booking_preparation_usecase.dart';
 import '../../domain/usecases/fetch_hotel_detail_usecase.dart';
+import '../../domain/usecases/fetch_hotel_member_profile_usecase.dart';
 import '../../domain/usecases/search_hotels_usecase.dart';
+import '../../domain/usecases/update_hotel_member_profile_usecase.dart';
 import '../controllers/hotel_booking_controller.dart';
 
 final hotelApiClientProvider = Provider<HotelApiClient>((ref) {
@@ -59,6 +61,20 @@ final assignHotelOccupancyUseCaseProvider =
 final fetchHotelBookingPreparationUseCaseProvider =
     Provider<FetchHotelBookingPreparationUseCase>((ref) {
       return FetchHotelBookingPreparationUseCase(
+        ref.watch(hotelBookingRepositoryProvider),
+      );
+    });
+
+final fetchHotelMemberProfileUseCaseProvider =
+    Provider<FetchHotelMemberProfileUseCase>((ref) {
+      return FetchHotelMemberProfileUseCase(
+        ref.watch(hotelBookingRepositoryProvider),
+      );
+    });
+
+final updateHotelMemberProfileUseCaseProvider =
+    Provider<UpdateHotelMemberProfileUseCase>((ref) {
+      return UpdateHotelMemberProfileUseCase(
         ref.watch(hotelBookingRepositoryProvider),
       );
     });
@@ -113,6 +129,11 @@ final hotelBookingPreparationProvider = FutureProvider.autoDispose
         seed: seed,
         languageCode: languageCode,
       );
+    });
+
+final hotelMemberProfileProvider =
+    FutureProvider.autoDispose<HotelMemberProfile>((ref) {
+      return ref.watch(fetchHotelMemberProfileUseCaseProvider)();
     });
 
 class HotelDetailQuery {

@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -95,34 +93,36 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
     return Stack(
       children: <Widget>[
         AspectRatio(aspectRatio: 0.9, child: _HeroPhoto()),
-        Positioned(left: 20, bottom: 0, right: 16, child:
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
+        Positioned(
+          left: 20,
+          bottom: 0,
+          right: 16,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
               HotelSearchSummaryBar(
-                    summaryLine: summaryLine,
-                    guestLine: guestLine,
+                summaryLine: summaryLine,
+                guestLine: guestLine,
                 onTap: () => _openSearchConditions(filters),
               ),
-              
+
               const SizedBox(height: 30),
 
               HotelQuickActionSection(
-                  userInfoLabel: context.l10n.hotelQuickActionUserInfo,
-                  ordersLabel: context.l10n.hotelQuickActionOrders,
-                  couponsLabel: context.l10n.hotelQuickActionCoupons,
-                  contactLabel: context.l10n.hotelQuickActionContact,
-                  onUserInfoTap: () => context.push('/member-profile/edit'),
-                  onOrdersTap: () =>
-                      _showComingSoon(context.l10n.hotelQuickActionOrders),
-                  onCouponsTap: () =>
-                      _showComingSoon(context.l10n.hotelQuickActionCoupons),
-                  onContactTap: () => context.push('/profile/settings/contact'),
-                ),
-              
+                userInfoLabel: context.l10n.hotelQuickActionUserInfo,
+                ordersLabel: context.l10n.hotelQuickActionOrders,
+                couponsLabel: context.l10n.hotelQuickActionCoupons,
+                contactLabel: context.l10n.hotelQuickActionContact,
+                onUserInfoTap: () =>
+                    context.push('/hotel-booking/member-profile'),
+                onOrdersTap: () =>
+                    _showComingSoon(context.l10n.hotelQuickActionOrders),
+                onCouponsTap: () =>
+                    _showComingSoon(context.l10n.hotelQuickActionCoupons),
+                onContactTap: () => context.push('/profile/settings/contact'),
+              ),
 
               const SizedBox(height: 40),
-            
 
               HotelFilterSection(
                 state: widget.state,
@@ -131,11 +131,9 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
                 onCriteriaApplied: widget.onCriteriaApplied,
                 onMapTap: widget.onMapTap,
               ),
-            
             ],
           ),
-        )
-        
+        ),
       ],
     );
   }

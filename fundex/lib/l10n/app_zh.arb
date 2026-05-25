@@ -417,6 +417,32 @@
   "hotelQuickActionOrders": "我的订单",
   "hotelQuickActionCoupons": "优惠券",
   "hotelQuickActionContact": "联系我们",
+  "hotelMemberProfileTitle": "用户信息",
+  "hotelMemberProfileNickname": "昵称",
+  "hotelMemberProfileEmail": "邮箱地址",
+  "hotelMemberProfilePhone": "电话号码",
+  "hotelMemberProfileGender": "性别",
+  "hotelMemberProfileBirthday": "生日",
+  "hotelMemberProfileMemberLevel": "会员等级",
+  "hotelMemberProfileAboutLevel": "会员说明",
+  "hotelMemberProfileEdit": "编辑",
+  "hotelMemberProfileUnset": "待完善",
+  "hotelMemberProfileGenderMale": "男",
+  "hotelMemberProfileGenderFemale": "女",
+  "hotelMemberProfileSave": "保存",
+  "hotelMemberProfilePhoneCountryCode": "区号",
+  "hotelMemberProfilePhoneNumber": "手机号",
+  "hotelMemberProfileSaveSuccess": "用户信息已更新。",
+  "hotelMemberProfileSaveFailed": "用户信息更新失败，请重试。",
+  "hotelMemberProfileLevelWithDiscount": "{level} · {discount}% OFF",
+  "@hotelMemberProfileLevelWithDiscount": {
+    "placeholders": {
+      "level": {},
+      "discount": {
+        "type": "int"
+      }
+    }
+  },
   "hotelFilterAllTypes": "全部旅宿",
   "hotelSortRecommended": "精选推荐",
   "hotelSortPriceLow": "价格排序",

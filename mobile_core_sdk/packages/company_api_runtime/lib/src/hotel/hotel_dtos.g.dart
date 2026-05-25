@@ -348,6 +348,72 @@ Map<String, dynamic> _$HotelPriceCalendarDtoToJson(
   _HotelPriceCalendarDto instance,
 ) => <String, dynamic>{'pricesByDate': instance.pricesByDate};
 
+_HotelMemberInfoDto _$HotelMemberInfoDtoFromJson(Map<String, dynamic> json) =>
+    _HotelMemberInfoDto(
+      id: (json['id'] as num?)?.toInt(),
+      memberName: json['memberName'] as String? ?? '',
+      email: json['email'] as String? ?? '',
+      phoneCountryCode: json['phoneCountryCode'] as String? ?? '',
+      phoneNumber: json['phoneNumber'] as String? ?? '',
+      birthday: hotelBirthdayReadValue(json, 'birthday') as String? ?? '',
+      gender: (json['gender'] as num?)?.toInt(),
+      joinDate: json['joinDate'] as String? ?? '',
+      membersLevel: json['membersLevel'] as String? ?? '',
+      membersLevelCode: (json['membersLevelCode'] as num?)?.toInt(),
+      discount: (json['discount'] as num?)?.toInt(),
+      expireDate: json['expireDate'] as String? ?? '',
+      sourceUserId: (json['sourceUserId'] as num?)?.toInt(),
+      membersStatus: json['membersStatus'] as String? ?? '',
+    );
+
+Map<String, dynamic> _$HotelMemberInfoDtoToJson(_HotelMemberInfoDto instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'memberName': instance.memberName,
+      'email': instance.email,
+      'phoneCountryCode': instance.phoneCountryCode,
+      'phoneNumber': instance.phoneNumber,
+      'birthday': instance.birthday,
+      'gender': instance.gender,
+      'joinDate': instance.joinDate,
+      'membersLevel': instance.membersLevel,
+      'membersLevelCode': instance.membersLevelCode,
+      'discount': instance.discount,
+      'expireDate': instance.expireDate,
+      'sourceUserId': instance.sourceUserId,
+      'membersStatus': instance.membersStatus,
+    };
+
+_HotelMemberInfoUpdateRequestDto _$HotelMemberInfoUpdateRequestDtoFromJson(
+  Map<String, dynamic> json,
+) => _HotelMemberInfoUpdateRequestDto(
+  id: (json['id'] as num?)?.toInt(),
+  memberName: json['memberName'] as String?,
+  email: json['email'] as String?,
+  phoneCountryCode: json['phoneCountryCode'] as String?,
+  phoneNumber: json['phoneNumber'] as String?,
+  birthday: json['birthday'] as String?,
+  gender: (json['gender'] as num?)?.toInt(),
+  sourceUserId: (json['sourceUserId'] as num?)?.toInt(),
+  emailCode: (json['emailCode'] as num?)?.toInt(),
+  phoneCode: (json['phoneCode'] as num?)?.toInt(),
+);
+
+Map<String, dynamic> _$HotelMemberInfoUpdateRequestDtoToJson(
+  _HotelMemberInfoUpdateRequestDto instance,
+) => <String, dynamic>{
+  'id': ?instance.id,
+  'memberName': ?instance.memberName,
+  'email': ?instance.email,
+  'phoneCountryCode': ?instance.phoneCountryCode,
+  'phoneNumber': ?instance.phoneNumber,
+  'birthday': ?instance.birthday,
+  'gender': ?instance.gender,
+  'sourceUserId': ?instance.sourceUserId,
+  'emailCode': ?instance.emailCode,
+  'phoneCode': ?instance.phoneCode,
+};
+
 _HotelRoomTypeRoomNumDto _$HotelRoomTypeRoomNumDtoFromJson(
   Map<String, dynamic> json,
 ) => _HotelRoomTypeRoomNumDto(

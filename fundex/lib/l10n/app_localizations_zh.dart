@@ -1143,6 +1143,62 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelQuickActionContact => '联系我们';
 
   @override
+  String get hotelMemberProfileTitle => '用户信息';
+
+  @override
+  String get hotelMemberProfileNickname => '昵称';
+
+  @override
+  String get hotelMemberProfileEmail => '邮箱地址';
+
+  @override
+  String get hotelMemberProfilePhone => '电话号码';
+
+  @override
+  String get hotelMemberProfileGender => '性别';
+
+  @override
+  String get hotelMemberProfileBirthday => '生日';
+
+  @override
+  String get hotelMemberProfileMemberLevel => '会员等级';
+
+  @override
+  String get hotelMemberProfileAboutLevel => '会员说明';
+
+  @override
+  String get hotelMemberProfileEdit => '编辑';
+
+  @override
+  String get hotelMemberProfileUnset => '待完善';
+
+  @override
+  String get hotelMemberProfileGenderMale => '男';
+
+  @override
+  String get hotelMemberProfileGenderFemale => '女';
+
+  @override
+  String get hotelMemberProfileSave => '保存';
+
+  @override
+  String get hotelMemberProfilePhoneCountryCode => '区号';
+
+  @override
+  String get hotelMemberProfilePhoneNumber => '手机号';
+
+  @override
+  String get hotelMemberProfileSaveSuccess => '用户信息已更新。';
+
+  @override
+  String get hotelMemberProfileSaveFailed => '用户信息更新失败，请重试。';
+
+  @override
+  String hotelMemberProfileLevelWithDiscount(Object level, int discount) {
+    return '$level · $discount% OFF';
+  }
+
+  @override
   String get hotelFilterAllTypes => '全部旅宿';
 
   @override
@@ -5917,6 +5973,62 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelQuickActionContact => '聯絡我們';
+
+  @override
+  String get hotelMemberProfileTitle => '用戶資訊';
+
+  @override
+  String get hotelMemberProfileNickname => '暱稱';
+
+  @override
+  String get hotelMemberProfileEmail => '電子郵件';
+
+  @override
+  String get hotelMemberProfilePhone => '電話號碼';
+
+  @override
+  String get hotelMemberProfileGender => '性別';
+
+  @override
+  String get hotelMemberProfileBirthday => '生日';
+
+  @override
+  String get hotelMemberProfileMemberLevel => '會員等級';
+
+  @override
+  String get hotelMemberProfileAboutLevel => '會員說明';
+
+  @override
+  String get hotelMemberProfileEdit => '編輯';
+
+  @override
+  String get hotelMemberProfileUnset => '待完善';
+
+  @override
+  String get hotelMemberProfileGenderMale => '男';
+
+  @override
+  String get hotelMemberProfileGenderFemale => '女';
+
+  @override
+  String get hotelMemberProfileSave => '保存';
+
+  @override
+  String get hotelMemberProfilePhoneCountryCode => '區號';
+
+  @override
+  String get hotelMemberProfilePhoneNumber => '手機號碼';
+
+  @override
+  String get hotelMemberProfileSaveSuccess => '用戶資訊已更新。';
+
+  @override
+  String get hotelMemberProfileSaveFailed => '用戶資訊更新失敗，請重試。';
+
+  @override
+  String hotelMemberProfileLevelWithDiscount(Object level, int discount) {
+    return '$level · $discount% OFF';
+  }
 
   @override
   String get hotelFilterAllTypes => '全部旅宿';
