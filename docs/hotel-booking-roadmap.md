@@ -1,6 +1,6 @@
 # Hotel Booking Roadmap
 
-Last updated: 2026-05-15
+Last updated: 2026-05-25
 
 This document defines the working plan for the upcoming hotel booking feature. It should be read before opening task threads related to hotel list, hotel detail, room selection, booking, payment, or hotel orders.
 
@@ -19,6 +19,9 @@ Current behavior:
 - Hotel tab implements the first home/list/search slice using the SDK `HotelApiClient`.
 - Hotel browsing is public. The current booking action still uses `memberProfileActionGuardProvider.ensureCompleted(...)` until the real booking flow is implemented.
 - Hotel home hero temporarily reuses the same remote banner image URL pattern as the home tab.
+- Hotel tab home is immersive: the fourth tab disables the shell's top safe area and the page declares a transparent status bar with light icons.
+- Hotel API requests include fixed app metadata headers from the app network layer: `x-client-type: Stellavia-App` and `app-version` from `PackageInfo.version`.
+- Hotel home shows a four-entry quick action row above the search filter controls: user info, hotel orders, coupons, and contact. User info opens the member profile route, contact opens the existing contact form, and unfinished hotel order/coupon pages currently show the shared app toast.
 - Hotel list search uses fixed area choices only: all areas as `area: ""`, plus `osaka`, `kyoto`, and `tokyo`. Building/property type choices come from `/hotel/buildingCode`, including the empty-code "all" option returned by the API.
 - Hotel home shows selected search conditions as a compact summary bar; tapping the summary bar or search icon opens the full four-row search condition sheet over the tab bar. The sheet edits a local draft and refreshes the list only after "Check availability".
 - Hotel list cards navigate to the public detail route `/hotel-booking/:id` with the current search criteria.

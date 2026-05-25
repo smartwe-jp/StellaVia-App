@@ -8,6 +8,7 @@ import '../auth/persistent_token_store.dart';
 import '../config/environment_provider.dart';
 import '../observability/app_observability_providers.dart';
 import '../storage/app_storage_providers.dart';
+import 'app_client_metadata_interceptor.dart';
 import 'app_observability_interceptor.dart';
 import 'app_network_connectivity_providers.dart';
 
@@ -86,6 +87,10 @@ final coreHttpClientByClusterProvider =
         tokenRefresher: ref.watch(tokenRefresherProvider),
         authFailureHandler: ref.watch(authFailureHandlerProvider),
       );
+
+      if (cluster == AppApiCluster.hotel) {
+        client.dio.interceptors.add(AppClientMetadataInterceptor());
+      }
 
       client.dio.interceptors.add(
         AppObservabilityInterceptor(
