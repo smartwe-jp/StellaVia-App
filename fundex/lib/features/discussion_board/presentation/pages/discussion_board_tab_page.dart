@@ -1,26 +1,30 @@
+import 'dart:async';
+import 'dart:collection';
+
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/domain/entities/auth_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
-import '../../../investment/domain/entities/fund_project.dart';
-import '../../../investment/presentation/providers/fund_project_providers.dart';
+import '../../../home/presentation/support/home_display_name_resolver.dart';
 import '../../../main_shell/presentation/providers/main_shell_providers.dart';
-import '../../../member_profile/domain/entities/mypage_models.dart';
-import '../../../member_profile/presentation/providers/mypage_providers.dart';
-import '../../../member_profile/presentation/support/mypage_section_support.dart';
-import '../../../member_profile/presentation/widgets/my_page_active_fund_summary_card.dart';
-import '../controllers/discussion_board_controller.dart';
+import '../../../member_profile/presentation/providers/member_profile_providers.dart';
+import '../../../member_profile/presentation/support/profile_document_image_picker.dart';
+import '../../domain/entities/discussion_board_draft.dart';
+import '../../domain/entities/discussion_board_models.dart';
 import '../providers/discussion_board_providers.dart';
 import '../state/discussion_board_state.dart';
 import '../support/discussion_board_time_label.dart';
+import '../widgets/kizunark_comment_composer_widgets.dart';
+import '../widgets/kizunark_composer_fund_picker_sheet.dart';
+import '../widgets/kizunark_draft_list_page.dart';
+import '../widgets/kizunark_thread_detail_page.dart';
 
 class DiscussionBoardTabPage extends ConsumerStatefulWidget {
   const DiscussionBoardTabPage({super.key});
@@ -30,14 +34,44 @@ class DiscussionBoardTabPage extends ConsumerStatefulWidget {
       _DiscussionBoardTabPageState();
 }
 
+enum _DiscussionSendJobKind { post, reply }
+
+class _PendingDiscussionSendJob {
+  const _PendingDiscussionSendJob.post({
+    required this.content,
+    required this.imageFilePaths,
+    required this.selectedFund,
+  }) : kind = _DiscussionSendJobKind.post,
+       thread = null;
+
+  const _PendingDiscussionSendJob.reply({
+    required this.content,
+    required this.imageFilePaths,
+    required this.selectedFund,
+    required DiscussionThread this.thread,
+  }) : kind = _DiscussionSendJobKind.reply;
+
+  final _DiscussionSendJobKind kind;
+  final String content;
+  final List<String> imageFilePaths;
+  final SelectedComposerFund? selectedFund;
+  final DiscussionThread? thread;
+}
+
 class _DiscussionBoardTabPageState
     extends ConsumerState<DiscussionBoardTabPage> {
+  static const double _headerPostActionThreshold = 84;
+
   late final TextEditingController _composerController;
   late final ScrollController _scrollController;
   late final MainShellScrollControllerRegistry _scrollControllerRegistry;
   final Map<String, TextEditingController> _replyControllers =
       <String, TextEditingController>{};
-  _SelectedComposerFund? _selectedComposerFund;
+  final Queue<_PendingDiscussionSendJob> _sendQueue =
+      Queue<_PendingDiscussionSendJob>();
+  SelectedComposerFund? _selectedComposerFund;
+  bool _isProcessingSendQueue = false;
+  bool _showHeaderPostAction = false;
 
   @override
   void initState() {
@@ -67,6 +101,13 @@ class _DiscussionBoardTabPageState
       return;
     }
     final position = _scrollController.position;
+    final shouldShowHeaderPostAction =
+        position.pixels > _headerPostActionThreshold;
+    if (shouldShowHeaderPostAction != _showHeaderPostAction && mounted) {
+      setState(() {
+        _showHeaderPostAction = shouldShowHeaderPostAction;
+      });
+    }
     if (position.pixels < position.maxScrollExtent - 140) {
       return;
     }
@@ -111,15 +152,47 @@ class _DiscussionBoardTabPageState
     return normalized.hashCode;
   }
 
-  Future<void> _submitPost({required bool isAuthenticated}) async {
+  Future<bool> _submitPostWithImages({
+    required bool isAuthenticated,
+    required List<String> imageFilePaths,
+  }) async {
+    final l10n = context.l10n;
+    if (!isAuthenticated) {
+      AppNotice.show(context, message: l10n.kizunarkLoginRequiredToPost);
+      return false;
+    }
+    final content = _composerController.text.trim();
+    if (content.isEmpty) {
+      return false;
+    }
+    final job = _PendingDiscussionSendJob.post(
+      content: content,
+      imageFilePaths: List<String>.of(imageFilePaths),
+      selectedFund: _selectedComposerFund,
+    );
+    _enqueueSendJob(job);
+    _composerController.clear();
+    ref
+        .read(discussionBoardControllerProvider(null).notifier)
+        .updateComposerText('');
+    if (mounted) {
+      setState(() {
+        _selectedComposerFund = null;
+      });
+    }
+    return true;
+  }
+
+  Future<bool> _sendPostJob(
+    _PendingDiscussionSendJob job, {
+    required int generation,
+  }) async {
     final l10n = context.l10n;
     final controller = ref.read(
       discussionBoardControllerProvider(null).notifier,
     );
-    if (!isAuthenticated) {
-      AppNotice.show(context, message: l10n.kizunarkLoginRequiredToPost);
-      return;
-    }
+    final progressController = ref.read(discussionSendQueueProvider.notifier);
+    progressController.updateProgress(0.04);
     final submitted = await controller.submitPost(
       nowLabel: l10n.kizunarkJustNow,
       fallbackName: l10n.kizunarkFallbackDisplayName,
@@ -130,38 +203,426 @@ class _DiscussionBoardTabPageState
           .asData
           ?.value
           ?.avatar,
-      linkedProjectId: int.tryParse(_selectedComposerFund?.projectId ?? ''),
-      linkedProjectName: _selectedComposerFund?.projectName,
+      linkedProjectId: int.tryParse(job.selectedFund?.projectId ?? ''),
+      linkedProjectName: job.selectedFund?.projectName,
+      imageFilePaths: job.imageFilePaths,
+      onProgress: (double progress) {
+        if (_isSendGenerationActive(generation)) {
+          progressController.updateProgress(progress);
+        }
+      },
+      contentOverride: job.content,
     );
+    if (!_isSendGenerationActive(generation)) {
+      return false;
+    }
     if (submitted && mounted) {
+      AppNotice.show(context, message: l10n.kizunarkPostSuccessNotice);
+      return true;
+    }
+    if (!mounted) {
+      return false;
+    }
+    await _savePostDraftData(
+      content: job.content,
+      imageFilePaths: job.imageFilePaths,
+      selectedFund: job.selectedFund,
+      clearComposer: false,
+    );
+    await _showSendFailureDialog(onRetry: () => _retrySendJob(job));
+    return false;
+  }
+
+  Future<bool> _submitReplyWithImages(
+    String threadId, {
+    required bool isAuthenticated,
+    required List<String> imageFilePaths,
+    required DiscussionThread thread,
+    required TextEditingController controller,
+  }) async {
+    final l10n = context.l10n;
+    if (!isAuthenticated) {
+      AppNotice.show(context, message: l10n.kizunarkLoginRequiredToPost);
+      return false;
+    }
+    final content = controller.text.trim();
+    if (content.isEmpty) {
+      return false;
+    }
+    final job = _PendingDiscussionSendJob.reply(
+      content: content,
+      imageFilePaths: List<String>.of(imageFilePaths),
+      selectedFund: _selectedComposerFund,
+      thread: thread,
+    );
+    _enqueueSendJob(job);
+    controller.clear();
+    ref
+        .read(discussionBoardControllerProvider(null).notifier)
+        .updateReplyDraft(thread.id, '');
+    if (mounted) {
       setState(() {
         _selectedComposerFund = null;
       });
-      AppNotice.show(context, message: l10n.kizunarkPostSuccessNotice);
     }
+    return true;
   }
 
-  Future<void> _submitReply(
-    String threadId, {
-    required bool isAuthenticated,
+  Future<bool> _sendReplyJob(
+    _PendingDiscussionSendJob job, {
+    required int generation,
   }) async {
+    final thread = job.thread;
+    if (thread == null) {
+      return false;
+    }
     final l10n = context.l10n;
-    final controller = ref.read(
+    final boardController = ref.read(
       discussionBoardControllerProvider(null).notifier,
     );
-    if (!isAuthenticated) {
-      AppNotice.show(context, message: l10n.kizunarkLoginRequiredToPost);
-      return;
-    }
-    final submitted = await controller.submitReply(
-      threadId,
+    final progressController = ref.read(discussionSendQueueProvider.notifier);
+    progressController.updateProgress(0.04);
+    final submitted = await boardController.submitReply(
+      thread.id,
       nowLabel: l10n.kizunarkJustNow,
       fallbackName: l10n.kizunarkFallbackDisplayName,
       fallbackHandle: l10n.kizunarkFallbackHandle,
       fallbackBadgeLabel: l10n.kizunarkInvestorBadge,
+      linkedProjectId: int.tryParse(job.selectedFund?.projectId ?? ''),
+      imageFilePaths: job.imageFilePaths,
+      onProgress: (double progress) {
+        if (_isSendGenerationActive(generation)) {
+          progressController.updateProgress(progress);
+        }
+      },
+      contentOverride: job.content,
     );
+    if (!_isSendGenerationActive(generation)) {
+      return false;
+    }
     if (submitted && mounted) {
       AppNotice.show(context, message: l10n.kizunarkReplySuccessNotice);
+      return true;
+    }
+    if (!mounted) {
+      return false;
+    }
+    await _saveReplyDraftData(
+      thread: thread,
+      content: job.content,
+      imageFilePaths: job.imageFilePaths,
+      selectedFund: job.selectedFund,
+      clearComposer: false,
+    );
+    await _showSendFailureDialog(onRetry: () => _retrySendJob(job));
+    return false;
+  }
+
+  void _enqueueSendJob(_PendingDiscussionSendJob job) {
+    _sendQueue.add(job);
+    ref.read(discussionSendQueueProvider.notifier).enqueue();
+    unawaited(_processSendQueue());
+  }
+
+  Future<bool> _retrySendJob(_PendingDiscussionSendJob job) async {
+    _enqueueSendJob(job);
+    return true;
+  }
+
+  bool _isSendGenerationActive(int generation) {
+    return mounted &&
+        ref.read(discussionSendQueueProvider).cancelGeneration == generation;
+  }
+
+  Future<void> _processSendQueue() async {
+    if (_isProcessingSendQueue) {
+      return;
+    }
+    _isProcessingSendQueue = true;
+    try {
+      while (_sendQueue.isNotEmpty && mounted) {
+        final generation = ref
+            .read(discussionSendQueueProvider)
+            .cancelGeneration;
+        final job = _sendQueue.removeFirst();
+        var completed = false;
+        try {
+          switch (job.kind) {
+            case _DiscussionSendJobKind.post:
+              completed = await _sendPostJob(job, generation: generation);
+            case _DiscussionSendJobKind.reply:
+              completed = await _sendReplyJob(job, generation: generation);
+          }
+        } finally {
+          if (_isSendGenerationActive(generation)) {
+            final progressController = ref.read(
+              discussionSendQueueProvider.notifier,
+            );
+            if (completed) {
+              progressController.updateProgress(1);
+              await Future<void>.delayed(const Duration(milliseconds: 220));
+            }
+            progressController.completeOne();
+          }
+        }
+      }
+    } finally {
+      _isProcessingSendQueue = false;
+    }
+  }
+
+  Future<void> _savePostDraft(
+    List<String> imageFilePaths, {
+    bool clearComposer = true,
+  }) async {
+    await _savePostDraftData(
+      content: _composerController.text.trim(),
+      imageFilePaths: imageFilePaths,
+      selectedFund: _selectedComposerFund,
+      clearComposer: clearComposer,
+    );
+  }
+
+  Future<void> _savePostDraftData({
+    required String content,
+    required List<String> imageFilePaths,
+    required SelectedComposerFund? selectedFund,
+    bool clearComposer = true,
+  }) async {
+    if (content.isEmpty && imageFilePaths.isEmpty) {
+      return;
+    }
+    final now = DateTime.now().toUtc();
+    final draft = DiscussionBoardDraft(
+      id: 'post_${now.microsecondsSinceEpoch}',
+      kind: DiscussionDraftKind.post,
+      content: content,
+      imageFilePaths: imageFilePaths,
+      updatedAtIso: now.toIso8601String(),
+      projectId: selectedFund?.projectId,
+      projectName: selectedFund?.projectName,
+    );
+    await ref
+        .read(discussionBoardDraftLocalDataSourceProvider)
+        .saveDraft(draft);
+    ref.invalidate(discussionBoardDraftsProvider);
+    if (!clearComposer) {
+      return;
+    }
+    _composerController.clear();
+    ref
+        .read(discussionBoardControllerProvider(null).notifier)
+        .updateComposerText('');
+    if (mounted) {
+      setState(() {
+        _selectedComposerFund = null;
+      });
+    }
+  }
+
+  Future<void> _saveReplyDraft({
+    required DiscussionThread thread,
+    required TextEditingController controller,
+    required List<String> imageFilePaths,
+    bool clearComposer = true,
+  }) async {
+    await _saveReplyDraftData(
+      thread: thread,
+      content: controller.text.trim(),
+      imageFilePaths: imageFilePaths,
+      selectedFund: _selectedComposerFund,
+      clearComposer: clearComposer,
+      controller: controller,
+    );
+  }
+
+  Future<void> _saveReplyDraftData({
+    required DiscussionThread thread,
+    required String content,
+    required List<String> imageFilePaths,
+    required SelectedComposerFund? selectedFund,
+    bool clearComposer = true,
+    TextEditingController? controller,
+  }) async {
+    if (content.isEmpty && imageFilePaths.isEmpty) {
+      return;
+    }
+    final now = DateTime.now().toUtc();
+    final draft = DiscussionBoardDraft(
+      id: 'reply_${thread.id}_${now.microsecondsSinceEpoch}',
+      kind: DiscussionDraftKind.reply,
+      content: content,
+      imageFilePaths: imageFilePaths,
+      updatedAtIso: now.toIso8601String(),
+      projectId: selectedFund?.projectId,
+      projectName: selectedFund?.projectName,
+      replyThreadId: thread.id,
+      replyTargetName: thread.author.displayName,
+      replyTargetBody: thread.body,
+      replyTargetThreadJson: thread.toJson(),
+    );
+    await ref
+        .read(discussionBoardDraftLocalDataSourceProvider)
+        .saveDraft(draft);
+    ref.invalidate(discussionBoardDraftsProvider);
+    if (!clearComposer) {
+      return;
+    }
+    controller?.clear();
+    ref
+        .read(discussionBoardControllerProvider(null).notifier)
+        .updateReplyDraft(thread.id, '');
+    if (mounted) {
+      setState(() {
+        _selectedComposerFund = null;
+      });
+    }
+  }
+
+  Future<DiscussionBoardDraft?> _openDraftList() {
+    final colors = Theme.of(context).appColors;
+    return showModalBottomSheet<DiscussionBoardDraft>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      useRootNavigator: true,
+      showDragHandle: false,
+      backgroundColor: colors.surface.withValues(alpha: 0),
+      builder: (BuildContext sheetContext) {
+        return const FractionallySizedBox(
+          heightFactor: 0.98,
+          alignment: Alignment.bottomCenter,
+          child: KizunarkDraftListSheet(),
+        );
+      },
+    );
+  }
+
+  Future<void> _showSendFailureDialog({
+    required Future<bool> Function() onRetry,
+  }) async {
+    if (!mounted) {
+      return;
+    }
+    final retry = await AppDialogs.showAdaptiveAlert<bool>(
+      context: context,
+      title: context.l10n.kizunarkSendFailedDialogTitle,
+      message: context.l10n.kizunarkSendFailedDraftSavedMessage,
+      actions: <AppDialogAction<bool>>[
+        AppDialogAction<bool>(
+          label: context.l10n.commonOk,
+          value: false,
+          isDefaultAction: true,
+        ),
+        AppDialogAction<bool>(
+          label: context.l10n.kizunarkSendFailedRetryAction,
+          value: true,
+        ),
+      ],
+    );
+    if (retry == true && mounted) {
+      await onRetry();
+    }
+  }
+
+  Future<void> _openReplyDraft(DiscussionBoardDraft draft) async {
+    final threadId = draft.replyThreadId?.trim() ?? '';
+    if (threadId.isEmpty) {
+      return;
+    }
+    final thread = _findThread(threadId) ?? _threadFromDraft(draft);
+    if (thread == null) {
+      if (mounted) {
+        AppNotice.show(
+          context,
+          message: context.l10n.kizunarkDraftThreadUnavailableNotice,
+        );
+      }
+      return;
+    }
+    final isAuthenticated =
+        ref.read(currentAuthUserProvider).asData?.value != null;
+    await _openReplyComposer(
+      thread: thread,
+      isAuthenticated: isAuthenticated,
+      initialDraft: draft,
+    );
+  }
+
+  DiscussionThread? _findThread(String threadId) {
+    final normalized = threadId.trim();
+    if (normalized.isEmpty) {
+      return null;
+    }
+    final threads = ref.read(discussionBoardControllerProvider(null)).threads;
+    for (final thread in threads) {
+      if (thread.id == normalized) {
+        return thread;
+      }
+    }
+    return null;
+  }
+
+  DiscussionThread? _threadFromDraft(DiscussionBoardDraft draft) {
+    final snapshot = draft.replyTargetThreadJson;
+    if (snapshot == null) {
+      return null;
+    }
+    final thread = DiscussionThread.fromJson(snapshot);
+    return thread.id.trim().isEmpty ? null : thread;
+  }
+
+  Future<List<String>> _pickDiscussionImages(int remainingCount) async {
+    if (remainingCount <= 0) {
+      return const <String>[];
+    }
+    final result = await ref
+        .read(profileDocumentImagePickerProvider)
+        .pickMultipleFromGallery(limit: remainingCount);
+    if (!mounted) {
+      return const <String>[];
+    }
+    switch (result.status) {
+      case ProfileDocumentImagePickStatus.success:
+        final imageStore = ref.read(discussionBoardDraftImageStoreProvider);
+        final persistedPaths = <String>[];
+        for (final sourcePath in result.paths.take(remainingCount)) {
+          final persistedPath = await imageStore.persist(sourcePath);
+          if (persistedPath != null && persistedPath.isNotEmpty) {
+            persistedPaths.add(persistedPath);
+          }
+        }
+        if (!mounted) {
+          return const <String>[];
+        }
+        if (persistedPaths.isEmpty) {
+          AppNotice.show(
+            context,
+            message: context.l10n.discussionAvatarPickFailed,
+          );
+          return const <String>[];
+        }
+        return persistedPaths;
+      case ProfileDocumentImagePickStatus.canceled:
+        return const <String>[];
+      case ProfileDocumentImagePickStatus.permissionDenied:
+      case ProfileDocumentImagePickStatus.permissionSettingsRequired:
+        AppNotice.show(
+          context,
+          message: context.l10n.permissionSettingsPhotosMessage,
+        );
+        return const <String>[];
+      case ProfileDocumentImagePickStatus.sizeLimitExceeded:
+        AppNotice.show(context, message: context.l10n.profileImageSizeTooLarge);
+        return const <String>[];
+      case ProfileDocumentImagePickStatus.failed:
+        AppNotice.show(
+          context,
+          message: result.errorMessage?.trim().isNotEmpty == true
+              ? result.errorMessage!.trim()
+              : context.l10n.discussionAvatarPickFailed,
+        );
+        return const <String>[];
     }
   }
 
@@ -199,25 +660,231 @@ class _DiscussionBoardTabPageState
     context.push('/funds/$normalized');
   }
 
-  Future<void> _showComposerFundPicker() async {
+  Future<void> _openCommentImageViewer(
+    List<String> imageUrls,
+    int initialIndex,
+  ) {
+    return openAppImageViewer(
+      context,
+      initialIndex: initialIndex,
+      items: imageUrls
+          .map((String url) => AppImageViewerItem(source: url))
+          .toList(growable: false),
+      texts: AppImageViewerTexts(
+        loadingLabel: context.l10n.imageViewerLoadingLabel,
+        loadFailedLabel: context.l10n.imageViewerLoadFailedLabel,
+        retryLabel: context.l10n.imageViewerRetryLabel,
+        invalidSourceNotice: context.l10n.imageViewerInvalidSourceNotice,
+        closeTooltip: context.l10n.imageViewerCloseTooltip,
+      ),
+    );
+  }
+
+  Future<SelectedComposerFund?> _showComposerFundPicker() async {
     final selectedFund =
-        await AppBottomSheet.showAdaptive<_SelectedComposerFund>(
+        await AppBottomSheet.showAdaptive<SelectedComposerFund>(
           context: context,
           useRootNavigator: true,
           builder: (BuildContext bottomSheetContext) {
-            return _ComposerFundPickerSheet(
+            return KizunarkComposerFundPickerSheet(
               currentSelection: _selectedComposerFund,
             );
           },
         );
     if (!mounted || selectedFund == null) {
+      return null;
+    }
+    final nextFund = selectedFund.isClearSelection ? null : selectedFund;
+    setState(() {
+      _selectedComposerFund = nextFund;
+    });
+    return nextFund;
+  }
+
+  Future<void> _openPostComposer({
+    required bool isAuthenticated,
+    required AuthUser? currentUser,
+  }) async {
+    if (!isAuthenticated) {
+      AppNotice.show(
+        context,
+        message: context.l10n.kizunarkLoginRequiredToPost,
+      );
       return;
     }
-    setState(() {
-      _selectedComposerFund = selectedFund.isClearSelection
-          ? null
-          : selectedFund;
-    });
+    final authorLabel = resolveHomeDisplayName(
+      locale: Localizations.localeOf(context),
+      profile: ref.read(memberBasicProfileProvider),
+    );
+    final hasDrafts = await ref
+        .read(discussionBoardDraftsProvider.future)
+        .then((List<DiscussionBoardDraft> drafts) => drafts.isNotEmpty)
+        .catchError((Object _) => false);
+    if (!mounted) {
+      return;
+    }
+    await context.push<void>(
+      '/discussion-board/post',
+      extra: KizunarkPostComposeRouteArgs(
+        child: KizunarkComposeSheet(
+          title: context.l10n.kizunarkComposeSheetTitle,
+          closeLabel: context.l10n.kizunarkComposeCloseAction,
+          submitLabel: context.l10n.kizunarkPostAction,
+          placeholder: context.l10n.kizunarkComposePlaceholder,
+          currentUser: currentUser,
+          avatarSeed: _resolveCurrentUserAvatarSeed(currentUser),
+          authorLabel: authorLabel,
+          addImageLabel: context.l10n.kizunarkAddImageAction,
+          linkedFundLabel: context.l10n.kizunarkAssociateFundAction,
+          imageCounterBuilder: context.l10n.kizunarkImageCounter,
+          controller: _composerController,
+          selectedFund: _selectedComposerFund,
+          hasDrafts: hasDrafts,
+          onPickImages: _pickDiscussionImages,
+          onPickFund: _showComposerFundPicker,
+          onOpenDrafts: _openDraftList,
+          onOpenReplyDraft: _openReplyDraft,
+          onSelectedFundChanged: (SelectedComposerFund? fund) {
+            setState(() {
+              _selectedComposerFund = fund;
+            });
+          },
+          onTextChanged: ref
+              .read(discussionBoardControllerProvider(null).notifier)
+              .updateComposerText,
+          onSaveDraft: _savePostDraft,
+          onSubmit: (List<String> imageFilePaths) async {
+            return _submitPostWithImages(
+              isAuthenticated: isAuthenticated,
+              imageFilePaths: imageFilePaths,
+            );
+          },
+          fullPage: true,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _openReplyComposer({
+    required DiscussionThread thread,
+    required bool isAuthenticated,
+    DiscussionBoardDraft? initialDraft,
+  }) async {
+    if (!isAuthenticated) {
+      AppNotice.show(
+        context,
+        message: context.l10n.kizunarkLoginRequiredToPost,
+      );
+      return;
+    }
+    final replyController = _replyControllerFor(thread.id);
+    final liveDraft =
+        ref
+            .read(discussionBoardControllerProvider(null))
+            .replyDrafts[thread.id] ??
+        '';
+    final currentDraft = initialDraft?.content ?? liveDraft;
+    if (replyController.text != currentDraft) {
+      replyController.value = TextEditingValue(
+        text: currentDraft,
+        selection: TextSelection.collapsed(offset: currentDraft.length),
+      );
+    }
+    if (currentDraft != liveDraft) {
+      ref
+          .read(discussionBoardControllerProvider(null).notifier)
+          .updateReplyDraft(thread.id, currentDraft);
+    }
+    final draftProjectId = initialDraft?.projectId?.trim() ?? '';
+    if (draftProjectId.isNotEmpty) {
+      setState(() {
+        _selectedComposerFund = SelectedComposerFund(
+          projectId: draftProjectId,
+          projectName: initialDraft?.projectName ?? '',
+          selectionKey: draftProjectId,
+        );
+      });
+    }
+    await context.push<void>(
+      '/discussion-board/reply/${Uri.encodeComponent(thread.id)}',
+      extra: KizunarkReplyComposeRouteArgs(
+        child: KizunarkReplyComposeSheet(
+          title: context.l10n.kizunarkReplySheetTitle,
+          closeLabel: context.l10n.kizunarkComposeCloseAction,
+          submitLabel: context.l10n.kizunarkReplySendAction,
+          placeholder: context.l10n.kizunarkReplyPlaceholder,
+          currentUser: ref.read(currentAuthUserProvider).asData?.value,
+          avatarSeed: _resolveCurrentUserAvatarSeed(
+            ref.read(currentAuthUserProvider).asData?.value,
+          ),
+          authorLabel: context.l10n.kizunarkReplyAuthorLabel(
+            thread.author.displayName,
+          ),
+          targetLabel: context.l10n.kizunarkReplyTargetLabel,
+          targetName: thread.author.displayName,
+          targetBody: thread.body,
+          targetAvatarUrl: thread.author.avatarUrl,
+          targetAvatarGradientColorValues:
+              thread.author.avatarGradientColorValues,
+          targetImageUrls: thread.imageUrls,
+          onTargetImageTap: (int index) =>
+              _openCommentImageViewer(thread.imageUrls, index),
+          addImageLabel: context.l10n.kizunarkAddImageAction,
+          linkedFundLabel: context.l10n.kizunarkAssociateFundAction,
+          imageCounterBuilder: context.l10n.kizunarkImageCounter,
+          controller: replyController,
+          onChanged: (String value) => ref
+              .read(discussionBoardControllerProvider(null).notifier)
+              .updateReplyDraft(thread.id, value),
+          onPickImages: _pickDiscussionImages,
+          onPickFund: () async {
+            await _showComposerFundPicker();
+          },
+          onSaveDraft: (List<String> imageFilePaths) => _saveReplyDraft(
+            thread: thread,
+            controller: replyController,
+            imageFilePaths: imageFilePaths,
+          ),
+          initialImageFilePaths:
+              initialDraft?.imageFilePaths ?? const <String>[],
+          onSubmit: (List<String> imageFilePaths) async {
+            final shouldClose = await _submitReplyWithImages(
+              thread.id,
+              isAuthenticated: isAuthenticated,
+              imageFilePaths: imageFilePaths,
+              thread: thread,
+              controller: replyController,
+            );
+            if (shouldClose) {
+              replyController.clear();
+            }
+            return shouldClose;
+          },
+          fullPage: true,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _openThreadDetail({
+    required DiscussionThread thread,
+    required bool isAuthenticated,
+    required String currentUserId,
+  }) async {
+    await context.push<void>(
+      '/discussion-board/thread/${Uri.encodeComponent(thread.id)}',
+      extra: KizunarkThreadDetailRouteArgs(
+        thread: thread,
+        isAuthenticated: isAuthenticated,
+        currentUserId: currentUserId,
+        onOpenImageViewer: _openCommentImageViewer,
+        onReply: () => _openReplyComposer(
+          thread: thread,
+          isAuthenticated: isAuthenticated,
+        ),
+        onMessageLongPress: _showMessageActionSheet,
+      ),
+    );
   }
 
   Future<void> _showMessageActionSheet({
@@ -315,6 +982,16 @@ class _DiscussionBoardTabPageState
       ref.read(discussionBoardControllerProvider(null).notifier).loadThreads();
     });
 
+    ref.listen<int>(
+      discussionSendQueueProvider.select((state) => state.cancelGeneration),
+      (previous, next) {
+        if (previous == null || previous == next) {
+          return;
+        }
+        _sendQueue.clear();
+      },
+    );
+
     final l10n = context.l10n;
     final state = ref.watch(discussionBoardControllerProvider(null));
     final controller = ref.read(
@@ -334,12 +1011,26 @@ class _DiscussionBoardTabPageState
 
     return Column(
       children: <Widget>[
+        // MainShellChromeVisibility(
+        //   child:
         KizunarkGradientHeader(
           title: l10n.mainTabKizunark,
           subtitle: l10n.kizunarkSubtitle,
           titleLightAssetPath: 'assets/images/kizunark.nav.light.png',
           titleDarkAssetPath: 'assets/images/kizunark.nav.dark.png',
+          trailing: isAuthenticated
+              ? _HeaderPostAction(
+                  label: l10n.kizunarkPostAction,
+                  isVisible: _showHeaderPostAction,
+                  enabled: !state.isPosting,
+                  onTap: () => _openPostComposer(
+                    isAuthenticated: isAuthenticated,
+                    currentUser: currentUser,
+                  ),
+                )
+              : null,
         ),
+        //),
         Expanded(
           child: RefreshIndicator(
             onRefresh: () => controller.refreshThreads(),
@@ -360,8 +1051,8 @@ class _DiscussionBoardTabPageState
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
                   child: isAuthenticated
-                      ? KizunarkComposerCard(
-                          leading: GestureDetector(
+                      ? KizunarkPostEntry(
+                          avatar: GestureDetector(
                             onTap: _openAvatarEditor,
                             behavior: HitTestBehavior.opaque,
                             child: AppUserAvatar(
@@ -369,26 +1060,20 @@ class _DiscussionBoardTabPageState
                               avatarSeed: _resolveCurrentUserAvatarSeed(
                                 currentUser,
                               ),
-                              size: 32,
-                              fontSize: 13,
+                              size: 36,
+                              fontSize: 14,
                             ),
                           ),
-                          footerLeading: Align(
-                            alignment: Alignment.centerLeft,
-                            child: _ComposerFundPickerButton(
-                              fundName: _selectedComposerFund?.projectName,
-                              onTap: _showComposerFundPicker,
-                            ),
+                          title: l10n.kizunarkEntryTitle,
+                          subtitle: l10n.kizunarkEntrySubtitle,
+                          actionLabel: l10n.kizunarkPostAction,
+                          enabled: !state.isPosting,
+                          onTap: () => _openPostComposer(
+                            isAuthenticated: isAuthenticated,
+                            currentUser: currentUser,
                           ),
-                          controller: _composerController,
-                          placeholder: l10n.kizunarkComposePlaceholder,
-                          postLabel: l10n.kizunarkPostAction,
-                          enabled: !state.isPosting && isAuthenticated,
-                          onChanged: controller.updateComposerText,
-                          onPostTap: () =>
-                              _submitPost(isAuthenticated: isAuthenticated),
                         )
-                      : _KizunarkGuestPrompt(
+                      : KizunarkGuestPrompt(
                           message: l10n.kizunarkGuestLoginPrompt,
                           onLoginTap: () => context.push('/login'),
                           onRegisterTap: () =>
@@ -400,7 +1085,6 @@ class _DiscussionBoardTabPageState
                   child: _buildFeedSection(
                     l10n: l10n,
                     state: state,
-                    controller: controller,
                     isAuthenticated: isAuthenticated,
                     currentUserId: currentUserId,
                   ),
@@ -416,7 +1100,6 @@ class _DiscussionBoardTabPageState
   Widget _buildFeedSection({
     required AppLocalizations l10n,
     required DiscussionBoardState state,
-    required DiscussionBoardController controller,
     required bool isAuthenticated,
     required String currentUserId,
   }) {
@@ -454,69 +1137,6 @@ class _DiscussionBoardTabPageState
 
     final threadCards = state.threads
         .map<Widget>((thread) {
-          final expanded = state.expandedThreadIds.contains(thread.id);
-          final replyController = _replyControllerFor(thread.id);
-          final draft = state.replyDrafts[thread.id] ?? '';
-          if (replyController.text != draft) {
-            replyController.value = TextEditingValue(
-              text: draft,
-              selection: TextSelection.collapsed(offset: draft.length),
-            );
-          }
-
-          final replies = thread.replies
-              .map<Widget>(
-                (reply) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: KizunarkReplyTile(
-                    avatar: AppUserAvatar(
-                      avatarUrl: reply.author.avatarUrl,
-                      gradientColorValues:
-                          reply.author.avatarGradientColorValues,
-                      size: 24,
-                      fontSize: 10,
-                    ),
-                    displayName: reply.author.displayName,
-                    timeLabel: buildDiscussionBoardTimeLabel(
-                      context,
-                      createdAtIso: reply.createdAtIso,
-                      fallbackLabel: reply.timeLabel,
-                    ),
-                    body: reply.body,
-                    quoteTitle: reply.quote?.sourceText,
-                    quoteBody: reply.quote?.body,
-                    onLongPress: () => _showMessageActionSheet(
-                      commentId: reply.id,
-                      messageBody: reply.body,
-                      canDelete:
-                          reply.author.id == currentUserId &&
-                          currentUserId.isNotEmpty,
-                      isDeleting: state.deletingCommentIds.contains(reply.id),
-                    ),
-                  ),
-                ),
-              )
-              .toList(growable: false);
-
-          final replySection = Column(
-            children: <Widget>[
-              ...replies,
-              if (isAuthenticated)
-                KizunarkReplyComposer(
-                  controller: replyController,
-                  placeholder: l10n.kizunarkReplyPlaceholder,
-                  sendLabel: l10n.kizunarkReplySendAction,
-                  enabled:
-                      !state.replySubmittingThreadIds.contains(thread.id) &&
-                      isAuthenticated,
-                  onChanged: (String value) =>
-                      controller.updateReplyDraft(thread.id, value),
-                  onSendTap: () =>
-                      _submitReply(thread.id, isAuthenticated: isAuthenticated),
-                ),
-            ],
-          );
-
           return Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: KizunarkPostCard(
@@ -541,6 +1161,9 @@ class _DiscussionBoardTabPageState
                 fallbackLabel: thread.timeLabel,
               ),
               body: thread.body,
+              imageUrls: thread.imageUrls,
+              onImageTap: (int index) =>
+                  _openCommentImageViewer(thread.imageUrls, index),
               fundReferenceChip: thread.fundReferenceLabel == null
                   ? null
                   : KizunarkFundReferenceChip(
@@ -549,9 +1172,16 @@ class _DiscussionBoardTabPageState
                           _openLinkedFundDetail(thread.fundReferenceId),
                     ),
               commentCount: thread.commentCount,
-              onToggleRepliesTap: () => controller.toggleReplies(thread.id),
-              showReplies: expanded,
-              replySection: replySection,
+              onTap: () => _openThreadDetail(
+                thread: thread,
+                isAuthenticated: isAuthenticated,
+                currentUserId: currentUserId,
+              ),
+              onToggleRepliesTap: () => _openReplyComposer(
+                thread: thread,
+                isAuthenticated: isAuthenticated,
+              ),
+              showReplies: false,
               onLongPress: () => _showMessageActionSheet(
                 commentId: thread.id,
                 messageBody: thread.body,
@@ -582,653 +1212,36 @@ class _DiscussionBoardTabPageState
   }
 }
 
-class _KizunarkGuestPrompt extends StatelessWidget {
-  const _KizunarkGuestPrompt({
-    required this.message,
-    required this.onLoginTap,
-    required this.onRegisterTap,
-  });
-
-  final String message;
-  final VoidCallback onLoginTap;
-  final VoidCallback onRegisterTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    final l10n = context.l10n;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: colors.border),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              message,
-              style: appText.body.copyWith(color: colors.textSecondary),
-            ),
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 12,
-              runSpacing: 6,
-              children: <Widget>[
-                TextButton(onPressed: onLoginTap, child: Text(l10n.loginTitle)),
-                TextButton(
-                  onPressed: onRegisterTap,
-                  child: Text(l10n.loginCreateAccount),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ComposerFundPickerButton extends StatelessWidget {
-  const _ComposerFundPickerButton({
-    required this.fundName,
+class _HeaderPostAction extends StatelessWidget {
+  const _HeaderPostAction({
+    required this.label,
+    required this.isVisible,
+    required this.enabled,
     required this.onTap,
   });
 
-  final String? fundName;
+  final String label;
+  final bool isVisible;
+  final bool enabled;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    final label = (fundName?.trim().isNotEmpty ?? false)
-        ? fundName!.trim()
-        : context.l10n.kizunarkAssociateFundAction;
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(10),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 220, minHeight: 36),
-          child: Ink(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-            decoration: BoxDecoration(
-              color: colors.primarySubtle,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: colors.primarySoft),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Icon(
-                  Icons.account_balance_wallet_outlined,
-                  size: 16,
-                  color: colors.primary,
-                ),
-                const SizedBox(width: 6),
-                Flexible(
-                  child: Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: appText.chip.copyWith(color: colors.primary),
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Icon(
-                  Icons.keyboard_arrow_up_rounded,
-                  size: 16,
-                  color: colors.primary,
-                ),
-              ],
-            ),
+    return AnimatedSlide(
+      duration: const Duration(milliseconds: 160),
+      curve: Curves.easeOutCubic,
+      offset: isVisible ? Offset.zero : const Offset(0.2, 0),
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 140),
+        opacity: isVisible ? 1 : 0,
+        child: IgnorePointer(
+          ignoring: !isVisible,
+          child: KizunarkSendActionButton(
+            label: label,
+            onPressed: enabled ? onTap : null,
           ),
         ),
       ),
     );
   }
-}
-
-class _ComposerFundPickerSheet extends ConsumerStatefulWidget {
-  const _ComposerFundPickerSheet({required this.currentSelection});
-
-  final _SelectedComposerFund? currentSelection;
-
-  @override
-  ConsumerState<_ComposerFundPickerSheet> createState() =>
-      _ComposerFundPickerSheetState();
-}
-
-class _ComposerFundPickerSheetState
-    extends ConsumerState<_ComposerFundPickerSheet> {
-  static const int _pageSize = 20;
-  static const double _cardScrollExtent = 166;
-  static const List<MyPageActiveFundFilter> _filters = <MyPageActiveFundFilter>[
-    MyPageActiveFundFilter.all,
-    MyPageActiveFundFilter.open,
-    MyPageActiveFundFilter.operating,
-    MyPageActiveFundFilter.ended,
-  ];
-
-  final ScrollController _scrollController = ScrollController();
-  final List<MyPageInvestmentRecord> _records = <MyPageInvestmentRecord>[];
-  MyPageActiveFundFilter _selectedFilter = MyPageActiveFundFilter.all;
-  bool _isInitialLoading = true;
-  bool _isLoadingMore = false;
-  bool _hasMore = true;
-  Object? _error;
-  int _nextPage = 1;
-  int _loadGeneration = 0;
-  String? _lastAutoScrolledProjectId;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_handleScroll);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadInitial();
-    });
-  }
-
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_handleScroll)
-      ..dispose();
-    super.dispose();
-  }
-
-  void _handleScroll() {
-    if (!_scrollController.hasClients ||
-        _isInitialLoading ||
-        _isLoadingMore ||
-        !_hasMore) {
-      return;
-    }
-
-    final position = _scrollController.position;
-    if (position.pixels >= position.maxScrollExtent - 240) {
-      _loadNextPage();
-    }
-  }
-
-  void _scheduleScrollToSelected(
-    List<MyPageInvestmentRecord> records,
-    _SelectedComposerFund? selection,
-  ) {
-    final projectId = selection?.projectId;
-    if (projectId == null || projectId.isEmpty) {
-      return;
-    }
-    final selectionKey = selection?.selectionKey ?? '';
-    final scrollKey = selectionKey.isNotEmpty ? selectionKey : projectId;
-    if (_lastAutoScrolledProjectId == scrollKey) {
-      return;
-    }
-    final selectedIndex = records.indexWhere((record) {
-      if (selectionKey.isEmpty) {
-        return record.projectId == projectId;
-      }
-      return _selectionKeyForRecord(record) == selectionKey;
-    });
-    if (selectedIndex < 0) {
-      return;
-    }
-    _lastAutoScrolledProjectId = scrollKey;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || !_scrollController.hasClients) {
-        return;
-      }
-      final position = _scrollController.position;
-      final targetOffset = (selectedIndex * _cardScrollExtent).clamp(
-        position.minScrollExtent,
-        position.maxScrollExtent,
-      );
-      _scrollController.animateTo(
-        targetOffset,
-        duration: const Duration(milliseconds: 220),
-        curve: Curves.easeOutCubic,
-      );
-    });
-  }
-
-  List<MyPageInvestmentRecord> get _filteredRecords {
-    return filterInvestmentRecordsByActiveFundFilter(_records, _selectedFilter);
-  }
-
-  String _selectionKeyForRecord(MyPageInvestmentRecord record) {
-    final recordIndex = _records.indexOf(record);
-    final safeIndex = recordIndex < 0 ? 0 : recordIndex;
-    final parts = <String>[
-      record.projectId,
-      record.processId ?? '',
-      record.investorCode ?? '',
-      record.createTime ?? '',
-      record.status?.toString() ?? '',
-      record.projectStatus?.toString() ?? '',
-      record.investNum?.toString() ?? '',
-      record.investMoney?.toString() ?? '',
-      safeIndex.toString(),
-    ];
-    return parts.join('::');
-  }
-
-  bool _isRecordSelected(
-    List<MyPageInvestmentRecord> records,
-    MyPageInvestmentRecord record,
-    int visibleIndex,
-  ) {
-    final selection = widget.currentSelection;
-    if (selection == null || selection.isClearSelection) {
-      return false;
-    }
-    if (selection.selectionKey.isNotEmpty) {
-      return _selectionKeyForRecord(record) == selection.selectionKey;
-    }
-    return record.projectId == selection.projectId &&
-        records.indexWhere((item) => item.projectId == selection.projectId) ==
-            visibleIndex;
-  }
-
-  Future<void> _loadInitial({bool preserveContent = false}) async {
-    final requestGeneration = ++_loadGeneration;
-    final shouldPreserveContent = preserveContent && _records.isNotEmpty;
-    setState(() {
-      _isInitialLoading = !shouldPreserveContent;
-      _isLoadingMore = shouldPreserveContent;
-      _hasMore = true;
-      _error = null;
-      _nextPage = 1;
-      if (!shouldPreserveContent) {
-        _records.clear();
-        _lastAutoScrolledProjectId = null;
-      }
-    });
-
-    try {
-      final records = await ref
-          .read(fetchMyPageInvestmentListUseCaseProvider)
-          .call(startPage: 1, limit: _pageSize);
-      if (!mounted || requestGeneration != _loadGeneration) {
-        return;
-      }
-      setState(() {
-        _records
-          ..clear()
-          ..addAll(records);
-        _nextPage = 2;
-        _hasMore = records.length >= _pageSize;
-        _error = null;
-        _isInitialLoading = false;
-        _isLoadingMore = false;
-        _lastAutoScrolledProjectId = null;
-      });
-      await _loadNextPageIfFilterHasNoVisibleRecords();
-    } catch (error) {
-      if (!mounted || requestGeneration != _loadGeneration) {
-        return;
-      }
-      setState(() {
-        _error = error;
-        _isInitialLoading = false;
-        _isLoadingMore = false;
-      });
-    }
-  }
-
-  Future<void> _loadNextPage() async {
-    if (_isLoadingMore || !_hasMore) {
-      return;
-    }
-    final requestGeneration = _loadGeneration;
-    setState(() {
-      _isLoadingMore = true;
-      _error = null;
-    });
-
-    try {
-      final records = await ref
-          .read(fetchMyPageInvestmentListUseCaseProvider)
-          .call(startPage: _nextPage, limit: _pageSize);
-      if (!mounted || requestGeneration != _loadGeneration) {
-        return;
-      }
-      setState(() {
-        _records.addAll(records);
-        _nextPage += 1;
-        _hasMore = records.length >= _pageSize;
-        _error = null;
-        _isInitialLoading = false;
-        _isLoadingMore = false;
-      });
-      await _loadNextPageIfFilterHasNoVisibleRecords();
-    } catch (error) {
-      if (!mounted || requestGeneration != _loadGeneration) {
-        return;
-      }
-      setState(() {
-        _error = error;
-        _isInitialLoading = false;
-        _isLoadingMore = false;
-      });
-    }
-  }
-
-  Future<void> _loadNextPageIfFilterHasNoVisibleRecords() async {
-    if (!mounted ||
-        _filteredRecords.isNotEmpty ||
-        !_hasMore ||
-        _isLoadingMore) {
-      return;
-    }
-    await _loadNextPage();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    final l10n = context.l10n;
-    final mediaQuery = MediaQuery.of(context);
-    final sheetHeight = mediaQuery.size.height * 0.8;
-    final fundProjects =
-        ref.watch(fundProjectListProvider).valueOrNull ?? const <FundProject>[];
-    final fundProjectsById = <String, FundProject>{
-      for (final project in fundProjects) project.id: project,
-    };
-
-    return SizedBox(
-      height: sheetHeight,
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            l10n.kizunarkAssociateFundSheetTitle,
-            style: appText.sectionTitle.copyWith(color: colors.textPrimary),
-          ),
-          const SizedBox(height: 12),
-          AppFilterBar<MyPageActiveFundFilter>(
-            value: _selectedFilter,
-            onChanged: (MyPageActiveFundFilter value) {
-              if (_selectedFilter == value) {
-                return;
-              }
-              setState(() {
-                _selectedFilter = value;
-                _lastAutoScrolledProjectId = null;
-              });
-              _loadNextPageIfFilterHasNoVisibleRecords();
-            },
-            backgroundColor: colors.surface,
-            borderRadius: BorderRadius.circular(999),
-            padding: EdgeInsets.zero,
-            selectedBackgroundColor: colors.primary,
-            selectedForegroundColor: colors.onDark,
-            unselectedBackgroundColor: colors.surfaceAlt,
-            unselectedForegroundColor: colors.textSecondary,
-            borderColor: colors.border,
-            items: _filters
-                .map(
-                  (filter) => AppFilterBarItem<MyPageActiveFundFilter>(
-                    value: filter,
-                    label: resolveMyPageActiveFundFilterLabel(l10n, filter),
-                  ),
-                )
-                .toList(growable: false),
-          ),
-          const SizedBox(height: 12),
-          Flexible(
-            child: _buildFundListContent(
-              context,
-              sheetHeight: sheetHeight,
-              fundProjectsById: fundProjectsById,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFundListContent(
-    BuildContext context, {
-    required double sheetHeight,
-    required Map<String, FundProject> fundProjectsById,
-  }) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    final l10n = context.l10n;
-    final currencyFormatter = NumberFormat.currency(
-      locale: Localizations.localeOf(context).toLanguageTag(),
-      symbol: '¥',
-      decimalDigits: 0,
-    );
-    final displayRecords = _filteredRecords;
-    _scheduleScrollToSelected(displayRecords, widget.currentSelection);
-
-    if (_isInitialLoading && displayRecords.isEmpty) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 24),
-          child: CircularProgressIndicator.adaptive(),
-        ),
-      );
-    }
-
-    if (_error != null && displayRecords.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                l10n.myPageSectionLoadError,
-                textAlign: TextAlign.center,
-                style: appText.body.copyWith(color: colors.textSecondary),
-              ),
-              const SizedBox(height: 10),
-              OutlinedButton(
-                onPressed: () => _loadInitial(preserveContent: true),
-                child: Text(l10n.fundListRetry),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    if (displayRecords.isEmpty) {
-      return RefreshIndicator(
-        onRefresh: () => _loadInitial(preserveContent: true),
-        child: ListView(
-          controller: _scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
-          children: <Widget>[
-            SizedBox(
-              height: sheetHeight * 0.48,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 24,
-                  ),
-                  child: Text(
-                    resolveMyPageActiveFundEmptyState(l10n, _selectedFilter),
-                    textAlign: TextAlign.center,
-                    style: appText.body.copyWith(color: colors.textSecondary),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return RefreshIndicator(
-      onRefresh: () => _loadInitial(preserveContent: true),
-      child: ListView.separated(
-        controller: _scrollController,
-        physics: const AlwaysScrollableScrollPhysics(),
-        itemCount:
-            displayRecords.length +
-            ((_isLoadingMore || (_error != null && _records.isNotEmpty))
-                ? 1
-                : 0),
-        separatorBuilder: (_, _) => const SizedBox(height: 10),
-        itemBuilder: (BuildContext context, int index) {
-          if (index >= displayRecords.length) {
-            if (_isLoadingMore) {
-              return const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Center(child: CircularProgressIndicator.adaptive()),
-              );
-            }
-            return Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 12),
-              child: Center(
-                child: OutlinedButton(
-                  onPressed: _loadNextPage,
-                  child: Text(l10n.fundListRetry),
-                ),
-              ),
-            );
-          }
-
-          final record = displayRecords[index];
-          final selectionKey = _selectionKeyForRecord(record);
-          final group = investmentRecordToGroup(record);
-          final project = fundProjectsById[record.projectId];
-          final status = project?.projectStatus ?? record.projectStatus;
-          final periodText = formatMyPageActiveFundPeriod(context, project);
-          final investorTypeDisplay = resolveInvestorTypeDisplayText(
-            l10n,
-            record.investorType,
-            fallbackInvestorCode: record.investorCode,
-            fallbackEarningType: group.earningType,
-            fallbackEarningRatio: group.earningRatio,
-          );
-          final isSelected = _isRecordSelected(displayRecords, record, index);
-          return _ComposerFundPickerCard(
-            data: MyPageActiveFundSummaryCardData(
-              title: group.projectName,
-              periodText: periodText != null
-                  ? '${l10n.fundListPeriodLabel}：$periodText'
-                  : l10n.myPageResultAnnouncementTbd,
-              investorCode: investorTypeDisplay.investorCode,
-              investorType: investorTypeDisplay.investorType,
-              returnText: investorTypeDisplay.returnText,
-              investmentAmountLabel: l10n.myPageInvestmentAmountLabel,
-              investmentAmountValue: formatCurrency(
-                group.investMoney,
-                currencyFormatter,
-              ),
-              accumulatedEarningsLabel: l10n.myPageAccumulatedDistributionLabel,
-              accumulatedEarningsValue: formatCurrency(
-                group.earnings,
-                currencyFormatter,
-              ),
-              statusLabel: resolveMyPageActiveFundStatusLabel(l10n, status),
-              statusBackgroundColor:
-                  resolveMyPageActiveFundStatusBackgroundColor(context, status),
-              statusForegroundColor:
-                  resolveMyPageActiveFundStatusForegroundColor(context, status),
-              progress: resolveMyPageActiveFundProgress(project),
-              imageUrls: project?.photos ?? const <String>[],
-              onTap: () {
-                Navigator.of(context).pop(
-                  isSelected
-                      ? const _SelectedComposerFund.clear()
-                      : _SelectedComposerFund(
-                          projectId: record.projectId,
-                          projectName: record.projectName,
-                          selectionKey: selectionKey,
-                        ),
-                );
-              },
-            ),
-            isSelected: isSelected,
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _ComposerFundPickerCard extends StatelessWidget {
-  const _ComposerFundPickerCard({required this.data, required this.isSelected});
-
-  final MyPageActiveFundSummaryCardData data;
-  final bool isSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).appColors;
-
-    return Stack(
-      children: <Widget>[
-        MyPageActiveFundSummaryCard(data: data, shadowPadding: EdgeInsets.zero),
-        if (isSelected)
-          Positioned.fill(
-            child: IgnorePointer(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(UiTokens.radius12),
-                  border: Border.all(color: colors.primary, width: 2),
-                ),
-              ),
-            ),
-          ),
-        if (isSelected)
-          Positioned(
-            top: 10,
-            right: 10,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: colors.primary,
-                shape: BoxShape.circle,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(4),
-                child: Icon(
-                  Icons.check_rounded,
-                  size: 14,
-                  color: colors.onDark,
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class _SelectedComposerFund {
-  const _SelectedComposerFund({
-    required this.projectId,
-    required this.projectName,
-    required this.selectionKey,
-  });
-
-  const _SelectedComposerFund.clear()
-    : projectId = '',
-      projectName = '',
-      selectionKey = '';
-
-  final String projectId;
-  final String projectName;
-  final String selectionKey;
-
-  bool get isClearSelection => projectId.isEmpty;
 }

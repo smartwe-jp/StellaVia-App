@@ -3063,6 +3063,30 @@ abstract class AppLocalizations {
   /// **'Comment sent.'**
   String get kizunarkReplySuccessNotice;
 
+  /// No description provided for @kizunarkSendFailedDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send failed'**
+  String get kizunarkSendFailedDialogTitle;
+
+  /// No description provided for @kizunarkSendFailedDraftSavedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending failed. It has been saved to drafts.'**
+  String get kizunarkSendFailedDraftSavedMessage;
+
+  /// No description provided for @kizunarkSendFailedRetryAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Send again'**
+  String get kizunarkSendFailedRetryAction;
+
+  /// No description provided for @kizunarkSendingQueueTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending {count} posts...'**
+  String kizunarkSendingQueueTitle(int count);
+
   /// No description provided for @kizunarkDeleteAction.
   ///
   /// In en, this message translates to:
@@ -3140,6 +3164,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No posts yet. Start the first discussion.'**
   String get kizunarkEmptyState;
+
+  /// No description provided for @kizunarkEntryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share an investment topic'**
+  String get kizunarkEntryTitle;
+
+  /// No description provided for @kizunarkEntrySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach related funds and photos'**
+  String get kizunarkEntrySubtitle;
+
+  /// No description provided for @kizunarkComposeSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create post'**
+  String get kizunarkComposeSheetTitle;
+
+  /// No description provided for @kizunarkComposeCloseAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get kizunarkComposeCloseAction;
+
+  /// No description provided for @kizunarkComposeAuthorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your investment topic'**
+  String get kizunarkComposeAuthorLabel;
+
+  /// No description provided for @kizunarkComposeDraftAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Drafts'**
+  String get kizunarkComposeDraftAction;
+
+  /// No description provided for @kizunarkComposeDeleteDraftAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get kizunarkComposeDeleteDraftAction;
+
+  /// No description provided for @kizunarkComposeSaveDraftAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save draft'**
+  String get kizunarkComposeSaveDraftAction;
+
+  /// No description provided for @kizunarkDraftListTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Drafts'**
+  String get kizunarkDraftListTitle;
+
+  /// No description provided for @kizunarkDraftEmptyState.
+  ///
+  /// In en, this message translates to:
+  /// **'No drafts yet.'**
+  String get kizunarkDraftEmptyState;
+
+  /// No description provided for @kizunarkDraftLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load drafts.'**
+  String get kizunarkDraftLoadError;
+
+  /// No description provided for @kizunarkDraftDeleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get kizunarkDraftDeleteAction;
+
+  /// No description provided for @kizunarkDraftDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete draft?'**
+  String get kizunarkDraftDeleteConfirmTitle;
+
+  /// No description provided for @kizunarkDraftDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This draft cannot be restored after deletion.'**
+  String get kizunarkDraftDeleteConfirmBody;
+
+  /// No description provided for @kizunarkDraftImageOnlyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Image draft'**
+  String get kizunarkDraftImageOnlyLabel;
+
+  /// No description provided for @kizunarkDraftPostTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Post'**
+  String get kizunarkDraftPostTypeLabel;
+
+  /// No description provided for @kizunarkDraftReplyTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply'**
+  String get kizunarkDraftReplyTypeLabel;
+
+  /// No description provided for @kizunarkDraftThreadUnavailableNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'The original message cannot be opened right now. Please refresh and try again.'**
+  String get kizunarkDraftThreadUnavailableNotice;
+
+  /// No description provided for @kizunarkComposeAudienceEveryone.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone'**
+  String get kizunarkComposeAudienceEveryone;
+
+  /// No description provided for @kizunarkComposeReplyPermissionEveryone.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone can reply'**
+  String get kizunarkComposeReplyPermissionEveryone;
+
+  /// No description provided for @kizunarkAddImageAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add image'**
+  String get kizunarkAddImageAction;
+
+  /// No description provided for @kizunarkImageCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} / 4'**
+  String kizunarkImageCounter(int count);
+
+  /// No description provided for @kizunarkReplySheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create reply'**
+  String get kizunarkReplySheetTitle;
+
+  /// No description provided for @kizunarkReplyAuthorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Replying to {name}'**
+  String kizunarkReplyAuthorLabel(String name);
+
+  /// No description provided for @kizunarkReplyTargetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Replying to'**
+  String get kizunarkReplyTargetLabel;
+
+  /// No description provided for @kizunarkRepliesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} replies'**
+  String kizunarkRepliesTitle(int count);
+
+  /// No description provided for @kizunarkRepliesSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replies'**
+  String get kizunarkRepliesSectionTitle;
+
+  /// No description provided for @kizunarkWriteReplyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a reply'**
+  String get kizunarkWriteReplyAction;
 
   /// No description provided for @investmentTabHeadline.
   ///

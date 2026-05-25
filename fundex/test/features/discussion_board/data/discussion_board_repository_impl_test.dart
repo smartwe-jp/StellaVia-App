@@ -10,9 +10,11 @@ class _FakeDiscussionBoardRemoteDataSource
   List<DiscussionCommentDto> fetchResult = const <DiscussionCommentDto>[];
   Object? fetchError;
   Object? sendError;
+  Object? uploadError;
   Object? deleteError;
   int fetchCallCount = 0;
   int sendCallCount = 0;
+  int uploadCallCount = 0;
   int deleteCallCount = 0;
   int? lastFetchStartPage;
   int? lastFetchLimit;
@@ -20,6 +22,8 @@ class _FakeDiscussionBoardRemoteDataSource
   int? lastSendParentId;
   int? lastSendProjectId;
   String? lastSendContent;
+  List<String>? lastSendImageUrls;
+  List<String>? lastUploadFilePaths;
   int? lastDeletedCommentId;
 
   @override
@@ -50,6 +54,7 @@ class _FakeDiscussionBoardRemoteDataSource
   @override
   Future<void> sendComment({
     required String content,
+    List<String> imageUrls = const <String>[],
     int? parentId,
     int? projectId,
   }) async {
@@ -58,8 +63,25 @@ class _FakeDiscussionBoardRemoteDataSource
     }
     sendCallCount += 1;
     lastSendContent = content;
+    lastSendImageUrls = imageUrls;
     lastSendParentId = parentId;
     lastSendProjectId = projectId;
+  }
+
+  @override
+  Future<List<String>> uploadImages({
+    required List<String> filePaths,
+    void Function(int sent, int total)? onSendProgress,
+  }) async {
+    if (uploadError != null) {
+      throw uploadError!;
+    }
+    onSendProgress?.call(1, 1);
+    uploadCallCount += 1;
+    lastUploadFilePaths = filePaths;
+    return filePaths
+        .map((String path) => 'https://cdn.example.com/${path.split('/').last}')
+        .toList(growable: false);
   }
 }
 
@@ -94,6 +116,7 @@ void main() {
             username: '佐藤',
             avatar: 'https://cdn.example.com/avatar-root.png',
             content: '主贴内容',
+            imageUrls: <String>['https://cdn.example.com/root.png'],
             createTime: '2026-03-12T08:00:00Z',
             projectId: 123,
             projectName: 'プレミアムレジデンス赤坂',
@@ -104,6 +127,7 @@ void main() {
             username: '高橋',
             avatar: 'https://cdn.example.com/avatar-reply.png',
             content: '回复内容',
+            imageUrls: <String>['https://cdn.example.com/reply.png'],
             createTime: '2026-03-12T08:30:00Z',
             projectId: 123,
             projectName: 'プレミアムレジデンス赤坂',
@@ -112,6 +136,7 @@ void main() {
               username: '佐藤',
               avatar: 'https://cdn.example.com/avatar-root.png',
               content: '主贴内容',
+              imageUrls: <String>['https://cdn.example.com/quote.png'],
               createTime: '2026-03-12T08:00:00Z',
             ),
           ),
@@ -131,8 +156,17 @@ void main() {
         'https://cdn.example.com/avatar-root.png',
       );
       expect(threads.first.commentCount, 1);
+      expect(threads.first.imageUrls, <String>[
+        'https://cdn.example.com/root.png',
+      ]);
       expect(threads.first.replies, hasLength(1));
       expect(threads.first.replies.first.id, '102');
+      expect(threads.first.replies.first.imageUrls, <String>[
+        'https://cdn.example.com/reply.png',
+      ]);
+      expect(threads.first.replies.first.quote?.imageUrls, <String>[
+        'https://cdn.example.com/quote.png',
+      ]);
       expect(
         threads.first.replies.first.author.avatarUrl,
         'https://cdn.example.com/avatar-reply.png',
@@ -280,6 +314,58 @@ void main() {
       expect(remote.lastSendProjectId, 789);
       expect(remote.lastSendParentId, isNull);
       expect(remote.lastSendContent, 'scoped post');
+      expect(remote.lastSendImageUrls, isEmpty);
+    });
+
+    test('submitPost should pass image URLs to send API', () async {
+      final remote = _FakeDiscussionBoardRemoteDataSource()
+        ..fetchResult = const <DiscussionCommentDto>[];
+      final local = _FakeDiscussionBoardLocalDataSource();
+      final repository = DiscussionBoardRepositoryImpl(
+        remote: remote,
+        local: local,
+        projectId: 789,
+      );
+
+      await repository.submitPost(
+        content: 'post with image',
+        nowLabel: 'just now',
+        fallbackName: 'fallback',
+        fallbackHandle: 'usr***@',
+        fallbackBadgeLabel: 'badge',
+        imageUrls: const <String>['https://cdn.example.com/comment.png'],
+      );
+
+      expect(remote.sendCallCount, 1);
+      expect(remote.lastSendImageUrls, <String>[
+        'https://cdn.example.com/comment.png',
+      ]);
+      expect(local.storage.first.imageUrls, <String>[
+        'https://cdn.example.com/comment.png',
+      ]);
+    });
+
+    test('uploadImages delegates to remote image upload', () async {
+      final remote = _FakeDiscussionBoardRemoteDataSource();
+      final local = _FakeDiscussionBoardLocalDataSource();
+      final repository = DiscussionBoardRepositoryImpl(
+        remote: remote,
+        local: local,
+      );
+
+      final urls = await repository.uploadImages(
+        filePaths: const <String>['/tmp/comment-a.jpg', '/tmp/comment-b.jpg'],
+      );
+
+      expect(urls, <String>[
+        'https://cdn.example.com/comment-a.jpg',
+        'https://cdn.example.com/comment-b.jpg',
+      ]);
+      expect(remote.uploadCallCount, 1);
+      expect(remote.lastUploadFilePaths, <String>[
+        '/tmp/comment-a.jpg',
+        '/tmp/comment-b.jpg',
+      ]);
     });
 
     test(

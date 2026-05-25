@@ -1588,6 +1588,20 @@ class AppLocalizationsJa extends AppLocalizations {
   String get kizunarkReplySuccessNotice => 'コメントを投稿しました！';
 
   @override
+  String get kizunarkSendFailedDialogTitle => '送信に失敗しました';
+
+  @override
+  String get kizunarkSendFailedDraftSavedMessage => '送信に失敗しました。下書きに保存しました。';
+
+  @override
+  String get kizunarkSendFailedRetryAction => 'もう一度送信';
+
+  @override
+  String kizunarkSendingQueueTitle(int count) {
+    return '$count件の投稿を送信中...';
+  }
+
+  @override
   String get kizunarkDeleteAction => '削除';
 
   @override
@@ -1625,6 +1639,97 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get kizunarkEmptyState => 'まだ投稿がありません。最初の話題を投稿しましょう。';
+
+  @override
+  String get kizunarkEntryTitle => '投資の話題を共有しよう';
+
+  @override
+  String get kizunarkEntrySubtitle => '関連ファンドや画像も添付できます';
+
+  @override
+  String get kizunarkComposeSheetTitle => '投稿を作成';
+
+  @override
+  String get kizunarkComposeCloseAction => 'キャンセル';
+
+  @override
+  String get kizunarkComposeAuthorLabel => 'あなたの投資トピック';
+
+  @override
+  String get kizunarkComposeDraftAction => '下書き';
+
+  @override
+  String get kizunarkComposeDeleteDraftAction => '削除';
+
+  @override
+  String get kizunarkComposeSaveDraftAction => '下書きを保存';
+
+  @override
+  String get kizunarkDraftListTitle => '下書き';
+
+  @override
+  String get kizunarkDraftEmptyState => '下書きはありません。';
+
+  @override
+  String get kizunarkDraftLoadError => '下書きの読み込みに失敗しました。';
+
+  @override
+  String get kizunarkDraftDeleteAction => '削除';
+
+  @override
+  String get kizunarkDraftDeleteConfirmTitle => '下書きを削除しますか？';
+
+  @override
+  String get kizunarkDraftDeleteConfirmBody => '削除すると元に戻せません。';
+
+  @override
+  String get kizunarkDraftImageOnlyLabel => '画像の下書き';
+
+  @override
+  String get kizunarkDraftPostTypeLabel => '投稿';
+
+  @override
+  String get kizunarkDraftReplyTypeLabel => '返信';
+
+  @override
+  String get kizunarkDraftThreadUnavailableNotice =>
+      '元のメッセージを現在開けません。更新してから再度お試しください。';
+
+  @override
+  String get kizunarkComposeAudienceEveryone => '全員';
+
+  @override
+  String get kizunarkComposeReplyPermissionEveryone => '全員が返信できます';
+
+  @override
+  String get kizunarkAddImageAction => '画像を追加';
+
+  @override
+  String kizunarkImageCounter(int count) {
+    return '$count / 4';
+  }
+
+  @override
+  String get kizunarkReplySheetTitle => '返信を作成';
+
+  @override
+  String kizunarkReplyAuthorLabel(String name) {
+    return '$nameさまへ返信';
+  }
+
+  @override
+  String get kizunarkReplyTargetLabel => '返信先';
+
+  @override
+  String kizunarkRepliesTitle(int count) {
+    return '返信 $count件';
+  }
+
+  @override
+  String get kizunarkRepliesSectionTitle => '返信';
+
+  @override
+  String get kizunarkWriteReplyAction => '返信を書く';
 
   @override
   String get investmentTabHeadline => '投資関連モジュール（枠組み）';

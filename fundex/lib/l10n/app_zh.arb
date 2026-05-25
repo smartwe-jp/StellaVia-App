@@ -729,6 +729,17 @@
   "kizunarkInvestorBadge": "投资者",
   "kizunarkPostSuccessNotice": "发布成功！",
   "kizunarkReplySuccessNotice": "评论已发送！",
+  "kizunarkSendFailedDialogTitle": "发送失败",
+  "kizunarkSendFailedDraftSavedMessage": "发送失败，已经保存到草稿箱。",
+  "kizunarkSendFailedRetryAction": "再次发送",
+  "kizunarkSendingQueueTitle": "正在发送 {count} 个帖子...",
+  "@kizunarkSendingQueueTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "kizunarkDeleteAction": "删除",
   "kizunarkDeleteConfirmTitle": "确认删除这条评论？",
   "kizunarkDeleteConfirmBody": "删除后无法恢复。",
@@ -742,6 +753,55 @@
   "kizunarkLoginRequiredToPost": "发帖和评论需要先登录",
   "kizunarkGuestLoginPrompt": "如需评论，请登录或注册。",
   "kizunarkEmptyState": "还没有帖子，来发起第一条讨论吧。",
+  "kizunarkEntryTitle": "分享投资话题",
+  "kizunarkEntrySubtitle": "可以附加关联基金和图片",
+  "kizunarkComposeSheetTitle": "创建帖子",
+  "kizunarkComposeCloseAction": "取消",
+  "kizunarkComposeAuthorLabel": "你的投资话题",
+  "kizunarkComposeDraftAction": "草稿",
+  "kizunarkComposeDeleteDraftAction": "删除",
+  "kizunarkComposeSaveDraftAction": "保存草稿",
+  "kizunarkDraftListTitle": "草稿",
+  "kizunarkDraftEmptyState": "暂无草稿",
+  "kizunarkDraftLoadError": "草稿读取失败",
+  "kizunarkDraftDeleteAction": "删除",
+  "kizunarkDraftDeleteConfirmTitle": "删除草稿？",
+  "kizunarkDraftDeleteConfirmBody": "删除后无法恢复。",
+  "kizunarkDraftImageOnlyLabel": "图片草稿",
+  "kizunarkDraftPostTypeLabel": "留言",
+  "kizunarkDraftReplyTypeLabel": "回复",
+  "kizunarkDraftThreadUnavailableNotice": "原留言暂时无法打开，请刷新后重试。",
+  "kizunarkComposeAudienceEveryone": "每个人",
+  "kizunarkComposeReplyPermissionEveryone": "所有人可以回复",
+  "kizunarkAddImageAction": "添加图片",
+  "kizunarkImageCounter": "{count} / 4",
+  "@kizunarkImageCounter": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkReplySheetTitle": "创建回复",
+  "kizunarkReplyAuthorLabel": "回复 {name} 先生/女士",
+  "@kizunarkReplyAuthorLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "kizunarkReplyTargetLabel": "回复对象",
+  "kizunarkRepliesTitle": "{count} 条回复",
+  "@kizunarkRepliesTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkRepliesSectionTitle": "回复",
+  "kizunarkWriteReplyAction": "写回复",
   "investmentTabHeadline": "投资相关模块（框架）",
   "investmentTabSubtitle": "后续承接产品列表、持仓、申购赎回、账单等能力。",
   "investmentTabPortfolioLabel": "持仓项目",

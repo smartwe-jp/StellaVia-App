@@ -53,10 +53,53 @@ class ProfileDocumentImagePickResult {
   bool get isSuccess => status == ProfileDocumentImagePickStatus.success;
 }
 
+class ProfileDocumentImageMultiPickResult {
+  const ProfileDocumentImageMultiPickResult._({
+    required this.status,
+    this.paths = const <String>[],
+    this.errorMessage,
+  });
+
+  const ProfileDocumentImageMultiPickResult.success(List<String> paths)
+    : this._(status: ProfileDocumentImagePickStatus.success, paths: paths);
+
+  const ProfileDocumentImageMultiPickResult.canceled()
+    : this._(status: ProfileDocumentImagePickStatus.canceled);
+
+  const ProfileDocumentImageMultiPickResult.permissionDenied()
+    : this._(status: ProfileDocumentImagePickStatus.permissionDenied);
+
+  const ProfileDocumentImageMultiPickResult.permissionSettingsRequired()
+    : this._(status: ProfileDocumentImagePickStatus.permissionSettingsRequired);
+
+  const ProfileDocumentImageMultiPickResult.sizeLimitExceeded([
+    String? errorMessage,
+  ]) : this._(
+         status: ProfileDocumentImagePickStatus.sizeLimitExceeded,
+         errorMessage: errorMessage,
+       );
+
+  const ProfileDocumentImageMultiPickResult.failed([String? errorMessage])
+    : this._(
+        status: ProfileDocumentImagePickStatus.failed,
+        errorMessage: errorMessage,
+      );
+
+  final ProfileDocumentImagePickStatus status;
+  final List<String> paths;
+  final String? errorMessage;
+
+  bool get isSuccess => status == ProfileDocumentImagePickStatus.success;
+}
+
 abstract class ProfileDocumentImagePicker {
   Future<ProfileDocumentImagePickResult> pick(
     ProfileDocumentImageSource source,
   );
+
+  Future<ProfileDocumentImageMultiPickResult> pickMultipleFromGallery({
+    required int limit,
+  });
 }
 
 class DeviceProfileDocumentImagePicker implements ProfileDocumentImagePicker {
@@ -96,6 +139,95 @@ class DeviceProfileDocumentImagePicker implements ProfileDocumentImagePicker {
       return ProfileDocumentImagePickResult.sizeLimitExceeded(error.toString());
     } catch (error) {
       return ProfileDocumentImagePickResult.failed(error.toString());
+    }
+  }
+
+  @override
+  Future<ProfileDocumentImageMultiPickResult> pickMultipleFromGallery({
+    required int limit,
+  }) async {
+    if (limit <= 0) {
+      return const ProfileDocumentImageMultiPickResult.canceled();
+    }
+
+    final permissionFailure = await _ensurePermission(
+      ProfileDocumentImageSource.gallery,
+    );
+    if (permissionFailure != null) {
+      return _toMultiPickFailure(permissionFailure);
+    }
+
+    try {
+      final xFiles = await _pickMultiImageOrFallback(limit);
+      if (xFiles.isEmpty) {
+        return const ProfileDocumentImageMultiPickResult.canceled();
+      }
+      final optimizedPaths = <String>[];
+      for (final xFile in xFiles.take(limit)) {
+        final path = xFile.path.trim();
+        if (path.isEmpty) {
+          continue;
+        }
+        optimizedPaths.add(await _imageOptimizer.ensureWithinUploadLimit(path));
+      }
+      if (optimizedPaths.isEmpty) {
+        return const ProfileDocumentImageMultiPickResult.canceled();
+      }
+      return ProfileDocumentImageMultiPickResult.success(optimizedPaths);
+    } on ProfileImageSizeLimitException catch (error) {
+      return ProfileDocumentImageMultiPickResult.sizeLimitExceeded(
+        error.toString(),
+      );
+    } catch (error) {
+      return ProfileDocumentImageMultiPickResult.failed(error.toString());
+    }
+  }
+
+  Future<List<XFile>> _pickMultiImageOrFallback(int limit) async {
+    try {
+      return _imagePicker.pickMultiImage(
+        imageQuality: 88,
+        maxWidth: 1800,
+        limit: limit,
+      );
+    } on UnimplementedError {
+      final fallback = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 88,
+        maxWidth: 1800,
+      );
+      return fallback == null ? <XFile>[] : <XFile>[fallback];
+    } on UnsupportedError {
+      final fallback = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 88,
+        maxWidth: 1800,
+      );
+      return fallback == null ? <XFile>[] : <XFile>[fallback];
+    }
+  }
+
+  ProfileDocumentImageMultiPickResult _toMultiPickFailure(
+    ProfileDocumentImagePickResult result,
+  ) {
+    switch (result.status) {
+      case ProfileDocumentImagePickStatus.success:
+        final path = result.path?.trim() ?? '';
+        return path.isEmpty
+            ? const ProfileDocumentImageMultiPickResult.canceled()
+            : ProfileDocumentImageMultiPickResult.success(<String>[path]);
+      case ProfileDocumentImagePickStatus.canceled:
+        return const ProfileDocumentImageMultiPickResult.canceled();
+      case ProfileDocumentImagePickStatus.permissionDenied:
+        return const ProfileDocumentImageMultiPickResult.permissionDenied();
+      case ProfileDocumentImagePickStatus.permissionSettingsRequired:
+        return const ProfileDocumentImageMultiPickResult.permissionSettingsRequired();
+      case ProfileDocumentImagePickStatus.sizeLimitExceeded:
+        return ProfileDocumentImageMultiPickResult.sizeLimitExceeded(
+          result.errorMessage,
+        );
+      case ProfileDocumentImagePickStatus.failed:
+        return ProfileDocumentImageMultiPickResult.failed(result.errorMessage);
     }
   }
 

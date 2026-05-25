@@ -1,14 +1,19 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/support/app_request_error_message_resolver.dart';
+import '../../../../app/support/upload_image_optimizer.dart';
 import '../../domain/usecases/delete_discussion_comment_usecase.dart';
 import '../../domain/usecases/load_discussion_threads_usecase.dart';
 import '../../domain/usecases/submit_discussion_post_usecase.dart';
 import '../../domain/usecases/submit_discussion_reply_usecase.dart';
+import '../../domain/usecases/upload_discussion_image_usecase.dart';
 import '../../domain/entities/discussion_board_models.dart';
 import '../state/discussion_board_state.dart';
+
+typedef DiscussionSendProgressCallback = void Function(double progress);
 
 class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
   DiscussionBoardController(
@@ -16,7 +21,10 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
     this._submitPostUseCase,
     this._submitReplyUseCase,
     this._deleteCommentUseCase,
-  ) : super(const DiscussionBoardState.initial()) {
+    this._uploadImageUseCase, {
+    UploadImageOptimizer imageOptimizer = const UploadImageOptimizer(),
+  }) : _imageOptimizer = imageOptimizer,
+       super(const DiscussionBoardState.initial()) {
     unawaited(loadThreads());
   }
 
@@ -24,6 +32,8 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
   final SubmitDiscussionPostUseCase _submitPostUseCase;
   final SubmitDiscussionReplyUseCase _submitReplyUseCase;
   final DeleteDiscussionCommentUseCase _deleteCommentUseCase;
+  final UploadDiscussionImageUseCase _uploadImageUseCase;
+  final UploadImageOptimizer _imageOptimizer;
   static const int _defaultPageLimit = 10;
 
   Future<void> loadThreads({bool refresh = false}) async {
@@ -134,23 +144,34 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    List<String> imageUrls = const <String>[],
+    List<String> imageFilePaths = const <String>[],
     String? fallbackAvatarUrl,
     int? linkedProjectId,
     String? linkedProjectName,
+    DiscussionSendProgressCallback? onProgress,
+    String? contentOverride,
   }) async {
-    final content = state.composerText.trim();
+    final content = (contentOverride ?? state.composerText).trim();
     if (content.isEmpty || state.isPosting) {
       return false;
     }
 
     state = state.copyWith(isPosting: true, clearError: true);
     try {
+      final preparedImageUrls = await _prepareImageUrls(
+        imageUrls: imageUrls,
+        imageFilePaths: imageFilePaths,
+        onProgress: onProgress,
+      );
+      onProgress?.call(0.86);
       final threads = await _submitPostUseCase.call(
         content: content,
         nowLabel: nowLabel,
         fallbackName: fallbackName,
         fallbackHandle: fallbackHandle,
         fallbackBadgeLabel: fallbackBadgeLabel,
+        imageUrls: preparedImageUrls,
         fallbackAvatarUrl: fallbackAvatarUrl,
         linkedProjectId: linkedProjectId,
         linkedProjectName: linkedProjectName,
@@ -163,6 +184,7 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
         hasMore: threads.isNotEmpty,
         clearError: true,
       );
+      onProgress?.call(1);
       return true;
     } catch (error) {
       state = state.copyWith(
@@ -179,8 +201,13 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    List<String> imageUrls = const <String>[],
+    List<String> imageFilePaths = const <String>[],
+    int? linkedProjectId,
+    DiscussionSendProgressCallback? onProgress,
+    String? contentOverride,
   }) async {
-    final draft = (state.replyDrafts[threadId] ?? '').trim();
+    final draft = (contentOverride ?? state.replyDrafts[threadId] ?? '').trim();
     if (draft.isEmpty || state.replySubmittingThreadIds.contains(threadId)) {
       return false;
     }
@@ -193,6 +220,12 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
     );
 
     try {
+      final preparedImageUrls = await _prepareImageUrls(
+        imageUrls: imageUrls,
+        imageFilePaths: imageFilePaths,
+        onProgress: onProgress,
+      );
+      onProgress?.call(0.86);
       final threads = await _submitReplyUseCase.call(
         threadId: threadId,
         content: draft,
@@ -200,6 +233,8 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
         fallbackName: fallbackName,
         fallbackHandle: fallbackHandle,
         fallbackBadgeLabel: fallbackBadgeLabel,
+        imageUrls: preparedImageUrls,
+        linkedProjectId: linkedProjectId,
       );
 
       final nextDrafts = Map<String, String>.from(state.replyDrafts)
@@ -214,6 +249,7 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
         replySubmittingThreadIds: nextSubmitting,
         clearError: true,
       );
+      onProgress?.call(1);
       return true;
     } catch (error) {
       final nextSubmitting = Set<String>.from(state.replySubmittingThreadIds)
@@ -264,6 +300,58 @@ class DiscussionBoardController extends StateNotifier<DiscussionBoardState> {
       return;
     }
     state = state.copyWith(clearError: true);
+  }
+
+  Future<List<String>> _prepareImageUrls({
+    required List<String> imageUrls,
+    required List<String> imageFilePaths,
+    DiscussionSendProgressCallback? onProgress,
+  }) async {
+    final preparedUrls = <String>[
+      ...imageUrls
+          .map((String url) => url.trim())
+          .where((String url) => url.isNotEmpty),
+    ];
+
+    onProgress?.call(0.08);
+    final optimizedPaths = <String>[];
+    final normalizedPaths = imageFilePaths
+        .map((String path) => path.trim())
+        .where((String path) => path.isNotEmpty && File(path).existsSync())
+        .toList(growable: false);
+    if (normalizedPaths.isEmpty) {
+      onProgress?.call(0.72);
+      return preparedUrls;
+    }
+
+    var imageIndex = 0;
+    for (final path in normalizedPaths) {
+      final optimizedPath = await _imageOptimizer.ensureWithinUploadLimit(path);
+      optimizedPaths.add(optimizedPath);
+      imageIndex += 1;
+      onProgress?.call(0.12 + (imageIndex / normalizedPaths.length) * 0.42);
+    }
+
+    if (optimizedPaths.isNotEmpty) {
+      onProgress?.call(0.62);
+      final uploadedUrls = await _uploadImageUseCase.call(
+        filePaths: optimizedPaths,
+        onSendProgress: (int sent, int total) {
+          if (total <= 0) {
+            return;
+          }
+          onProgress?.call(0.62 + (sent / total) * 0.16);
+        },
+      );
+      onProgress?.call(0.78);
+      preparedUrls.addAll(
+        uploadedUrls
+            .map((String url) => url.trim())
+            .where((String url) => url.isNotEmpty),
+      );
+    }
+
+    return preparedUrls;
   }
 
   List<DiscussionThread> _mergeThreadsById(

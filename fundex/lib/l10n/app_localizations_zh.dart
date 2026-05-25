@@ -1573,6 +1573,20 @@ class AppLocalizationsZh extends AppLocalizations {
   String get kizunarkReplySuccessNotice => '评论已发送！';
 
   @override
+  String get kizunarkSendFailedDialogTitle => '发送失败';
+
+  @override
+  String get kizunarkSendFailedDraftSavedMessage => '发送失败，已经保存到草稿箱。';
+
+  @override
+  String get kizunarkSendFailedRetryAction => '再次发送';
+
+  @override
+  String kizunarkSendingQueueTitle(int count) {
+    return '正在发送 $count 个帖子...';
+  }
+
+  @override
   String get kizunarkDeleteAction => '删除';
 
   @override
@@ -1610,6 +1624,96 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get kizunarkEmptyState => '还没有帖子，来发起第一条讨论吧。';
+
+  @override
+  String get kizunarkEntryTitle => '分享投资话题';
+
+  @override
+  String get kizunarkEntrySubtitle => '可以附加关联基金和图片';
+
+  @override
+  String get kizunarkComposeSheetTitle => '创建帖子';
+
+  @override
+  String get kizunarkComposeCloseAction => '取消';
+
+  @override
+  String get kizunarkComposeAuthorLabel => '你的投资话题';
+
+  @override
+  String get kizunarkComposeDraftAction => '草稿';
+
+  @override
+  String get kizunarkComposeDeleteDraftAction => '删除';
+
+  @override
+  String get kizunarkComposeSaveDraftAction => '保存草稿';
+
+  @override
+  String get kizunarkDraftListTitle => '草稿';
+
+  @override
+  String get kizunarkDraftEmptyState => '暂无草稿';
+
+  @override
+  String get kizunarkDraftLoadError => '草稿读取失败';
+
+  @override
+  String get kizunarkDraftDeleteAction => '删除';
+
+  @override
+  String get kizunarkDraftDeleteConfirmTitle => '删除草稿？';
+
+  @override
+  String get kizunarkDraftDeleteConfirmBody => '删除后无法恢复。';
+
+  @override
+  String get kizunarkDraftImageOnlyLabel => '图片草稿';
+
+  @override
+  String get kizunarkDraftPostTypeLabel => '留言';
+
+  @override
+  String get kizunarkDraftReplyTypeLabel => '回复';
+
+  @override
+  String get kizunarkDraftThreadUnavailableNotice => '原留言暂时无法打开，请刷新后重试。';
+
+  @override
+  String get kizunarkComposeAudienceEveryone => '每个人';
+
+  @override
+  String get kizunarkComposeReplyPermissionEveryone => '所有人可以回复';
+
+  @override
+  String get kizunarkAddImageAction => '添加图片';
+
+  @override
+  String kizunarkImageCounter(int count) {
+    return '$count / 4';
+  }
+
+  @override
+  String get kizunarkReplySheetTitle => '创建回复';
+
+  @override
+  String kizunarkReplyAuthorLabel(String name) {
+    return '回复 $name 先生/女士';
+  }
+
+  @override
+  String get kizunarkReplyTargetLabel => '回复对象';
+
+  @override
+  String kizunarkRepliesTitle(int count) {
+    return '$count 条回复';
+  }
+
+  @override
+  String get kizunarkRepliesSectionTitle => '回复';
+
+  @override
+  String get kizunarkWriteReplyAction => '写回复';
 
   @override
   String get investmentTabHeadline => '投资相关模块（框架）';
@@ -6233,6 +6337,20 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get kizunarkReplySuccessNotice => '留言已送出！';
 
   @override
+  String get kizunarkSendFailedDialogTitle => '發送失敗';
+
+  @override
+  String get kizunarkSendFailedDraftSavedMessage => '發送失敗，已經保存到草稿箱。';
+
+  @override
+  String get kizunarkSendFailedRetryAction => '再次發送';
+
+  @override
+  String kizunarkSendingQueueTitle(int count) {
+    return '正在發送 $count 個帖子...';
+  }
+
+  @override
   String get kizunarkDeleteAction => '刪除';
 
   @override
@@ -6270,6 +6388,96 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get kizunarkEmptyState => '還沒有貼文，來發起第一則討論吧。';
+
+  @override
+  String get kizunarkEntryTitle => '分享投資話題';
+
+  @override
+  String get kizunarkEntrySubtitle => '可以附加關聯基金和圖片';
+
+  @override
+  String get kizunarkComposeSheetTitle => '建立貼文';
+
+  @override
+  String get kizunarkComposeCloseAction => '取消';
+
+  @override
+  String get kizunarkComposeAuthorLabel => '你的投資話題';
+
+  @override
+  String get kizunarkComposeDraftAction => '草稿';
+
+  @override
+  String get kizunarkComposeDeleteDraftAction => '刪除';
+
+  @override
+  String get kizunarkComposeSaveDraftAction => '儲存草稿';
+
+  @override
+  String get kizunarkDraftListTitle => '草稿';
+
+  @override
+  String get kizunarkDraftEmptyState => '暫無草稿';
+
+  @override
+  String get kizunarkDraftLoadError => '草稿讀取失敗';
+
+  @override
+  String get kizunarkDraftDeleteAction => '刪除';
+
+  @override
+  String get kizunarkDraftDeleteConfirmTitle => '刪除草稿？';
+
+  @override
+  String get kizunarkDraftDeleteConfirmBody => '刪除後無法復原。';
+
+  @override
+  String get kizunarkDraftImageOnlyLabel => '圖片草稿';
+
+  @override
+  String get kizunarkDraftPostTypeLabel => '留言';
+
+  @override
+  String get kizunarkDraftReplyTypeLabel => '回覆';
+
+  @override
+  String get kizunarkDraftThreadUnavailableNotice => '原留言暫時無法開啟，請重新整理後重試。';
+
+  @override
+  String get kizunarkComposeAudienceEveryone => '每個人';
+
+  @override
+  String get kizunarkComposeReplyPermissionEveryone => '所有人可以回覆';
+
+  @override
+  String get kizunarkAddImageAction => '新增圖片';
+
+  @override
+  String kizunarkImageCounter(int count) {
+    return '$count / 4';
+  }
+
+  @override
+  String get kizunarkReplySheetTitle => '建立回覆';
+
+  @override
+  String kizunarkReplyAuthorLabel(String name) {
+    return '回覆 $name';
+  }
+
+  @override
+  String get kizunarkReplyTargetLabel => '回覆對象';
+
+  @override
+  String kizunarkRepliesTitle(int count) {
+    return '$count 則回覆';
+  }
+
+  @override
+  String get kizunarkRepliesSectionTitle => '回覆';
+
+  @override
+  String get kizunarkWriteReplyAction => '寫回覆';
 
   @override
   String get investmentTabHeadline => '投資相關模組（框架）';

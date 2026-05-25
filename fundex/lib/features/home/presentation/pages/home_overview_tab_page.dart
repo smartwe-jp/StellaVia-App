@@ -20,6 +20,7 @@ import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
+import '../../../main_shell/presentation/widgets/main_shell_chrome_visibility.dart';
 import '../../../member_profile/domain/entities/member_profile_details.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../notifications/presentation/providers/notifications_providers.dart';
@@ -212,7 +213,7 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
 
     return Column(
       children: <Widget>[
-        topNavigationBar,
+        MainShellChromeVisibility(child: topNavigationBar),
         Expanded(
           child: MainShellTabRefreshScope(
             tabIndex: 0,

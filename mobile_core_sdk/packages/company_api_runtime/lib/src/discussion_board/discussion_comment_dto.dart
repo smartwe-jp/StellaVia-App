@@ -12,6 +12,9 @@ abstract class DiscussionQuoteDto with _$DiscussionQuoteDto {
     @Default('') String username,
     String? avatar,
     @Default('') String content,
+    @JsonKey(fromJson: _toStringList)
+    @Default(<String>[])
+    List<String> imageUrls,
     @Default('') String createTime,
   }) = _DiscussionQuoteDto;
 
@@ -27,6 +30,9 @@ abstract class DiscussionCommentDto with _$DiscussionCommentDto {
     @Default('') String username,
     String? avatar,
     @Default('') String content,
+    @JsonKey(fromJson: _toStringList)
+    @Default(<String>[])
+    List<String> imageUrls,
     @Default('') String createTime,
     @JsonKey(fromJson: _toNullableInt) int? projectId,
     @Default('') String projectName,
@@ -48,6 +54,17 @@ int? _toNullableInt(Object? value) {
     return value.toInt();
   }
   return int.tryParse(value.toString());
+}
+
+List<String> _toStringList(Object? value) {
+  if (value is! List) {
+    return const <String>[];
+  }
+  return value
+      .where((Object? item) => item != null)
+      .map((Object? item) => item.toString())
+      .where((String item) => item.trim().isNotEmpty)
+      .toList(growable: false);
 }
 
 DiscussionQuoteDto? _quoteFromJson(Object? value) {

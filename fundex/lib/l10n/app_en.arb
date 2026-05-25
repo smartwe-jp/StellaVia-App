@@ -729,6 +729,17 @@
   "kizunarkInvestorBadge": "Investor",
   "kizunarkPostSuccessNotice": "Post submitted.",
   "kizunarkReplySuccessNotice": "Comment sent.",
+  "kizunarkSendFailedDialogTitle": "Send failed",
+  "kizunarkSendFailedDraftSavedMessage": "Sending failed. It has been saved to drafts.",
+  "kizunarkSendFailedRetryAction": "Send again",
+  "kizunarkSendingQueueTitle": "Sending {count} posts...",
+  "@kizunarkSendingQueueTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "kizunarkDeleteAction": "Delete",
   "kizunarkDeleteConfirmTitle": "Delete this comment?",
   "kizunarkDeleteConfirmBody": "This action cannot be undone.",
@@ -742,6 +753,55 @@
   "kizunarkLoginRequiredToPost": "Please sign in to post and comment.",
   "kizunarkGuestLoginPrompt": "Sign in or create an account to comment.",
   "kizunarkEmptyState": "No posts yet. Start the first discussion.",
+  "kizunarkEntryTitle": "Share an investment topic",
+  "kizunarkEntrySubtitle": "Attach related funds and photos",
+  "kizunarkComposeSheetTitle": "Create post",
+  "kizunarkComposeCloseAction": "Cancel",
+  "kizunarkComposeAuthorLabel": "Your investment topic",
+  "kizunarkComposeDraftAction": "Drafts",
+  "kizunarkComposeDeleteDraftAction": "Delete",
+  "kizunarkComposeSaveDraftAction": "Save draft",
+  "kizunarkDraftListTitle": "Drafts",
+  "kizunarkDraftEmptyState": "No drafts yet.",
+  "kizunarkDraftLoadError": "Failed to load drafts.",
+  "kizunarkDraftDeleteAction": "Delete",
+  "kizunarkDraftDeleteConfirmTitle": "Delete draft?",
+  "kizunarkDraftDeleteConfirmBody": "This draft cannot be restored after deletion.",
+  "kizunarkDraftImageOnlyLabel": "Image draft",
+  "kizunarkDraftPostTypeLabel": "Post",
+  "kizunarkDraftReplyTypeLabel": "Reply",
+  "kizunarkDraftThreadUnavailableNotice": "The original message cannot be opened right now. Please refresh and try again.",
+  "kizunarkComposeAudienceEveryone": "Everyone",
+  "kizunarkComposeReplyPermissionEveryone": "Everyone can reply",
+  "kizunarkAddImageAction": "Add image",
+  "kizunarkImageCounter": "{count} / 4",
+  "@kizunarkImageCounter": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkReplySheetTitle": "Create reply",
+  "kizunarkReplyAuthorLabel": "Replying to {name}",
+  "@kizunarkReplyAuthorLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "kizunarkReplyTargetLabel": "Replying to",
+  "kizunarkRepliesTitle": "{count} replies",
+  "@kizunarkRepliesTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkRepliesSectionTitle": "Replies",
+  "kizunarkWriteReplyAction": "Write a reply",
   "investmentTabHeadline": "Investment Module (Framework)",
   "investmentTabSubtitle": "Products, portfolio, subscriptions/redemptions, and statements will be added here.",
   "investmentTabPortfolioLabel": "Holdings",

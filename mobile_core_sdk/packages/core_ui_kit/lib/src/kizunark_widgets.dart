@@ -10,12 +10,14 @@ class KizunarkGradientHeader extends StatelessWidget {
     required this.subtitle,
     this.titleLightAssetPath,
     this.titleDarkAssetPath,
+    this.trailing,
   });
 
   final String title;
   final String subtitle;
   final String? titleLightAssetPath;
   final String? titleDarkAssetPath;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -42,26 +44,33 @@ class KizunarkGradientHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          if (titleAssetPath?.trim().isNotEmpty ?? false)
-            Semantics(
-              label: title,
-              child: ExcludeSemantics(
-                child: Image.asset(
-                  titleAssetPath!,
-                  height: 34,
-                  fit: BoxFit.contain,
-                  alignment: Alignment.centerLeft,
+          Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              if (titleAssetPath?.trim().isNotEmpty ?? false)
+                Semantics(
+                  label: title,
+                  child: ExcludeSemantics(
+                    child: Image.asset(
+                      titleAssetPath!,
+                      height: 34,
+                      fit: BoxFit.contain,
+                      alignment: Alignment.centerLeft,
+                    ),
+                  ),
+                )
+              else
+                Text(
+                  title,
+                  style: appText.pageTitle.copyWith(
+                    color: colors.textPrimary,
+                    letterSpacing: -0.2,
+                  ),
                 ),
-              ),
-            )
-          else
-            Text(
-              title,
-              style: appText.pageTitle.copyWith(
-                color: colors.textPrimary,
-                letterSpacing: -0.2,
-              ),
-            ),
+              if (trailing != null)
+                Align(alignment: Alignment.centerRight, child: trailing!),
+            ],
+          ),
           const SizedBox(height: 2),
           if (!(titleAssetPath?.trim().isNotEmpty ?? false))
             Text(
@@ -350,6 +359,265 @@ class KizunarkFundReferenceChip extends StatelessWidget {
   }
 }
 
+class KizunarkImageGrid extends StatelessWidget {
+  const KizunarkImageGrid({
+    super.key,
+    required this.imageUrls,
+    this.onImageTap,
+  });
+
+  final List<String> imageUrls;
+  final ValueChanged<int>? onImageTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final normalized = imageUrls
+        .map((String value) => value.trim())
+        .where((String value) => value.isNotEmpty)
+        .take(4)
+        .toList(growable: false);
+    if (normalized.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    if (normalized.length == 1) {
+      return _KizunarkSingleImageTile(
+        imageUrl: normalized.first,
+        onTap: () => onImageTap?.call(0),
+      );
+    }
+
+    return AspectRatio(
+      aspectRatio: 16 / 9,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Theme.of(context).appColors.surfaceAlt,
+          ),
+          child: switch (normalized.length) {
+            2 => Row(
+              children: <Widget>[
+                Expanded(
+                  child: _KizunarkGridImage(
+                    url: normalized[0],
+                    onTap: () => onImageTap?.call(0),
+                  ),
+                ),
+                const SizedBox(width: 3),
+                Expanded(
+                  child: _KizunarkGridImage(
+                    url: normalized[1],
+                    onTap: () => onImageTap?.call(1),
+                  ),
+                ),
+              ],
+            ),
+            3 => Row(
+              children: <Widget>[
+                Expanded(
+                  child: _KizunarkGridImage(
+                    url: normalized[0],
+                    onTap: () => onImageTap?.call(0),
+                  ),
+                ),
+                const SizedBox(width: 3),
+                Expanded(
+                  child: Column(
+                    children: <Widget>[
+                      Expanded(
+                        child: _KizunarkGridImage(
+                          url: normalized[1],
+                          onTap: () => onImageTap?.call(1),
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Expanded(
+                        child: _KizunarkGridImage(
+                          url: normalized[2],
+                          onTap: () => onImageTap?.call(2),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            _ => Column(
+              children: <Widget>[
+                Expanded(
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: _KizunarkGridImage(
+                          url: normalized[0],
+                          onTap: () => onImageTap?.call(0),
+                        ),
+                      ),
+                      const SizedBox(width: 3),
+                      Expanded(
+                        child: _KizunarkGridImage(
+                          url: normalized[1],
+                          onTap: () => onImageTap?.call(1),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Expanded(
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: _KizunarkGridImage(
+                          url: normalized[2],
+                          onTap: () => onImageTap?.call(2),
+                        ),
+                      ),
+                      const SizedBox(width: 3),
+                      Expanded(
+                        child: _KizunarkGridImage(
+                          url: normalized[3],
+                          onTap: () => onImageTap?.call(3),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _KizunarkSingleImageTile extends StatefulWidget {
+  const _KizunarkSingleImageTile({required this.imageUrl, required this.onTap});
+
+  final String imageUrl;
+  final VoidCallback onTap;
+
+  @override
+  State<_KizunarkSingleImageTile> createState() =>
+      _KizunarkSingleImageTileState();
+}
+
+class _KizunarkSingleImageTileState extends State<_KizunarkSingleImageTile> {
+  ImageStream? _imageStream;
+  ImageStreamListener? _imageStreamListener;
+  double? _aspectRatio;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _resolveImage();
+  }
+
+  @override
+  void didUpdateWidget(covariant _KizunarkSingleImageTile oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.imageUrl != widget.imageUrl) {
+      _resolveImage();
+    }
+  }
+
+  @override
+  void dispose() {
+    _removeListener();
+    super.dispose();
+  }
+
+  void _resolveImage() {
+    _removeListener();
+    final provider = appCachedImageProvider(widget.imageUrl);
+    if (provider == null) {
+      return;
+    }
+    final stream = provider.resolve(createLocalImageConfiguration(context));
+    final listener = ImageStreamListener((
+      ImageInfo image,
+      bool synchronousCall,
+    ) {
+      final width = image.image.width;
+      final height = image.image.height;
+      if (width <= 0 || height <= 0 || !mounted) {
+        return;
+      }
+      setState(() {
+        _aspectRatio = width / height;
+      });
+    });
+    _imageStream = stream;
+    _imageStreamListener = listener;
+    stream.addListener(listener);
+  }
+
+  void _removeListener() {
+    final stream = _imageStream;
+    final listener = _imageStreamListener;
+    if (stream != null && listener != null) {
+      stream.removeListener(listener);
+    }
+    _imageStream = null;
+    _imageStreamListener = null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final ratio = (_aspectRatio ?? 1).clamp(9 / 16, 16 / 9).toDouble();
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: FractionallySizedBox(
+        widthFactor: 0.78,
+        child: AspectRatio(
+          aspectRatio: ratio,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Material(
+              color: colors.surfaceAlt,
+              child: InkWell(
+                onTap: widget.onTap,
+                child: AppRemoteImage(
+                  imageUrl: widget.imageUrl,
+                  width: double.infinity,
+                  height: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _KizunarkGridImage extends StatelessWidget {
+  const _KizunarkGridImage({required this.url, required this.onTap});
+
+  final String url;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        child: AppRemoteImage(
+          imageUrl: url,
+          width: double.infinity,
+          height: double.infinity,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+}
+
 class KizunarkPostCard extends StatelessWidget {
   const KizunarkPostCard({
     super.key,
@@ -361,12 +629,15 @@ class KizunarkPostCard extends StatelessWidget {
     this.badgeForegroundColor,
     required this.timeLabel,
     required this.body,
+    this.imageUrls = const <String>[],
     this.fundReferenceChip,
     required this.commentCount,
     required this.onToggleRepliesTap,
     required this.showReplies,
     this.replySection,
     this.trailingAction,
+    this.onTap,
+    this.onImageTap,
     this.onLongPress,
   });
 
@@ -378,12 +649,15 @@ class KizunarkPostCard extends StatelessWidget {
   final Color? badgeForegroundColor;
   final String timeLabel;
   final String body;
+  final List<String> imageUrls;
   final Widget? fundReferenceChip;
   final int commentCount;
   final VoidCallback onToggleRepliesTap;
   final bool showReplies;
   final Widget? replySection;
   final Widget? trailingAction;
+  final VoidCallback? onTap;
+  final ValueChanged<int>? onImageTap;
   final VoidCallback? onLongPress;
 
   @override
@@ -394,6 +668,7 @@ class KizunarkPostCard extends StatelessWidget {
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
+      onTap: onTap,
       onLongPress: onLongPress,
       child: DecoratedBox(
         decoration: BoxDecoration(
@@ -491,6 +766,10 @@ class KizunarkPostCard extends StatelessWidget {
                   height: 1.62,
                 ),
               ),
+              if (imageUrls.isNotEmpty) ...<Widget>[
+                const SizedBox(height: 10),
+                KizunarkImageGrid(imageUrls: imageUrls, onImageTap: onImageTap),
+              ],
               if (fundReferenceChip != null) ...<Widget>[
                 const SizedBox(height: 10),
                 fundReferenceChip!,
@@ -534,9 +813,11 @@ class KizunarkReplyTile extends StatelessWidget {
     required this.displayName,
     required this.timeLabel,
     required this.body,
+    this.imageUrls = const <String>[],
     this.quoteTitle,
     this.quoteBody,
     this.trailingAction,
+    this.onImageTap,
     this.onLongPress,
   });
 
@@ -544,9 +825,11 @@ class KizunarkReplyTile extends StatelessWidget {
   final String displayName;
   final String timeLabel;
   final String body;
+  final List<String> imageUrls;
   final String? quoteTitle;
   final String? quoteBody;
   final Widget? trailingAction;
+  final ValueChanged<int>? onImageTap;
   final VoidCallback? onLongPress;
 
   @override
@@ -561,10 +844,10 @@ class KizunarkReplyTile extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: colors.surfaceAlt,
-          borderRadius: BorderRadius.circular(12),
+          //borderRadius: BorderRadius.circular(12),
         ),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -645,6 +928,13 @@ class KizunarkReplyTile extends StatelessWidget {
                         height: 1.6,
                       ),
                     ),
+                    if (imageUrls.isNotEmpty) ...<Widget>[
+                      const SizedBox(height: 8),
+                      KizunarkImageGrid(
+                        imageUrls: imageUrls,
+                        onImageTap: onImageTap,
+                      ),
+                    ],
                   ],
                 ),
               ),

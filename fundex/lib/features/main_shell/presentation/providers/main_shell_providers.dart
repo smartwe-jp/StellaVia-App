@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final mainShellCurrentTabIndexProvider = StateProvider<int>((ref) => 0);
 
+final mainShellChromeVisibleProvider = StateProvider<bool>((ref) => true);
+
+final mainShellChromeRevealProvider = StateProvider<double>((ref) => 1);
+
 final mainShellScrollControllerRegistryProvider =
     ChangeNotifierProvider<MainShellScrollControllerRegistry>((ref) {
       return MainShellScrollControllerRegistry();

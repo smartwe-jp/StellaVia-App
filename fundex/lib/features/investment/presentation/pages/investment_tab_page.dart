@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/network/app_network_connectivity_providers.dart';
 import '../../domain/entities/fund_project.dart';
+import '../../../main_shell/presentation/widgets/main_shell_chrome_visibility.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
 import '../providers/fund_project_favorite_providers.dart';
 import '../providers/fund_project_providers.dart';
@@ -403,44 +404,46 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
         color: colors.background,
         child: Column(
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              color: colors.surface,
-              padding: const EdgeInsets.fromLTRB(0, 14, 0, 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16),
-                    child: Text(
-                      l10n.fundListTitle,
-                      style: appText.pageTitle.copyWith(
-                        color: colors.textPrimary,
+            MainShellChromeVisibility(
+              child: Container(
+                width: double.infinity,
+                color: colors.surface,
+                padding: const EdgeInsets.fromLTRB(0, 14, 0, 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      child: Text(
+                        l10n.fundListTitle,
+                        style: appText.pageTitle.copyWith(
+                          color: colors.textPrimary,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  AppFilterBar<_FundListFilter>(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    value: _effectiveSelectedFilter,
-                    onChanged: (_FundListFilter value) {
-                      setState(() {
-                        _selectedFilter = value;
-                      });
-                    },
-                    items: filterOptions
-                        .map(
-                          (_FundListFilterOption option) =>
-                              AppFilterBarItem<_FundListFilter>(
-                                value: option.filter,
-                                label: option.label,
-                                style: option.style,
-                                leadingIcon: option.leadingIcon,
-                              ),
-                        )
-                        .toList(growable: false),
-                  ),
-                ],
+                    const SizedBox(height: 10),
+                    AppFilterBar<_FundListFilter>(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      value: _effectiveSelectedFilter,
+                      onChanged: (_FundListFilter value) {
+                        setState(() {
+                          _selectedFilter = value;
+                        });
+                      },
+                      items: filterOptions
+                          .map(
+                            (_FundListFilterOption option) =>
+                                AppFilterBarItem<_FundListFilter>(
+                                  value: option.filter,
+                                  label: option.label,
+                                  style: option.style,
+                                  leadingIcon: option.leadingIcon,
+                                ),
+                          )
+                          .toList(growable: false),
+                    ),
+                  ],
+                ),
               ),
             ),
             Divider(height: 1, thickness: 1, color: colors.border),
@@ -1064,14 +1067,15 @@ class _CardStatCell extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Text(label,style: appText.meta.copyWith(color: colors.textTertiary)),
+        Text(label, style: appText.meta.copyWith(color: colors.textTertiary)),
         const SizedBox(height: 2),
         Text(
           value,
           maxLines: 1,
-          style:
-              appText.body
-                  .copyWith(color: valueColor ?? colors.textPrimary, fontWeight: FontWeight.w600),
+          style: appText.body.copyWith(
+            color: valueColor ?? colors.textPrimary,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ],
     );

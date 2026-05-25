@@ -729,6 +729,17 @@
   "kizunarkInvestorBadge": "投資家",
   "kizunarkPostSuccessNotice": "投稿しました！",
   "kizunarkReplySuccessNotice": "コメントを投稿しました！",
+  "kizunarkSendFailedDialogTitle": "送信に失敗しました",
+  "kizunarkSendFailedDraftSavedMessage": "送信に失敗しました。下書きに保存しました。",
+  "kizunarkSendFailedRetryAction": "もう一度送信",
+  "kizunarkSendingQueueTitle": "{count}件の投稿を送信中...",
+  "@kizunarkSendingQueueTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "kizunarkDeleteAction": "削除",
   "kizunarkDeleteConfirmTitle": "このコメントを削除しますか？",
   "kizunarkDeleteConfirmBody": "削除したコメントは元に戻せません。",
@@ -742,6 +753,55 @@
   "kizunarkLoginRequiredToPost": "投稿・コメントにはログインが必要です",
   "kizunarkGuestLoginPrompt": "コメントするには、ログインまたは新規登録してください。",
   "kizunarkEmptyState": "まだ投稿がありません。最初の話題を投稿しましょう。",
+  "kizunarkEntryTitle": "投資の話題を共有しよう",
+  "kizunarkEntrySubtitle": "関連ファンドや画像も添付できます",
+  "kizunarkComposeSheetTitle": "投稿を作成",
+  "kizunarkComposeCloseAction": "キャンセル",
+  "kizunarkComposeAuthorLabel": "あなたの投資トピック",
+  "kizunarkComposeDraftAction": "下書き",
+  "kizunarkComposeDeleteDraftAction": "削除",
+  "kizunarkComposeSaveDraftAction": "下書きを保存",
+  "kizunarkDraftListTitle": "下書き",
+  "kizunarkDraftEmptyState": "下書きはありません。",
+  "kizunarkDraftLoadError": "下書きの読み込みに失敗しました。",
+  "kizunarkDraftDeleteAction": "削除",
+  "kizunarkDraftDeleteConfirmTitle": "下書きを削除しますか？",
+  "kizunarkDraftDeleteConfirmBody": "削除すると元に戻せません。",
+  "kizunarkDraftImageOnlyLabel": "画像の下書き",
+  "kizunarkDraftPostTypeLabel": "投稿",
+  "kizunarkDraftReplyTypeLabel": "返信",
+  "kizunarkDraftThreadUnavailableNotice": "元のメッセージを現在開けません。更新してから再度お試しください。",
+  "kizunarkComposeAudienceEveryone": "全員",
+  "kizunarkComposeReplyPermissionEveryone": "全員が返信できます",
+  "kizunarkAddImageAction": "画像を追加",
+  "kizunarkImageCounter": "{count} / 4",
+  "@kizunarkImageCounter": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkReplySheetTitle": "返信を作成",
+  "kizunarkReplyAuthorLabel": "{name}さまへ返信",
+  "@kizunarkReplyAuthorLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "kizunarkReplyTargetLabel": "返信先",
+  "kizunarkRepliesTitle": "返信 {count}件",
+  "@kizunarkRepliesTitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "kizunarkRepliesSectionTitle": "返信",
+  "kizunarkWriteReplyAction": "返信を書く",
   "investmentTabHeadline": "投資関連モジュール（枠組み）",
   "investmentTabSubtitle": "商品一覧、保有、申込/解約、明細などを今後実装します。",
   "investmentTabPortfolioLabel": "保有案件",

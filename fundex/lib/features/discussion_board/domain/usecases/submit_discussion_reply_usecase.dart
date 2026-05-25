@@ -13,6 +13,8 @@ class SubmitDiscussionReplyUseCase {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    List<String> imageUrls = const <String>[],
+    int? linkedProjectId,
   }) {
     return _repository.submitReply(
       threadId: threadId,
@@ -21,6 +23,8 @@ class SubmitDiscussionReplyUseCase {
       fallbackName: fallbackName,
       fallbackHandle: fallbackHandle,
       fallbackBadgeLabel: fallbackBadgeLabel,
+      imageUrls: imageUrls,
+      linkedProjectId: linkedProjectId,
     );
   }
 }

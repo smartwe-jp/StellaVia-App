@@ -17,6 +17,9 @@ import '../../features/hotel_booking/presentation/pages/hotel_detail_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_map_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_booking_tab_page.dart';
 import '../../features/hotel_booking/presentation/support/hotel_map_route_args.dart';
+import '../../features/discussion_board/presentation/widgets/kizunark_comment_composer_widgets.dart';
+import '../../features/discussion_board/presentation/widgets/kizunark_draft_list_page.dart';
+import '../../features/discussion_board/presentation/widgets/kizunark_thread_detail_page.dart';
 import '../../features/home/presentation/pages/home_overview_tab_page.dart';
 import '../../features/investment/presentation/pages/fund_project_detail_page.dart';
 import '../../features/investment/presentation/pages/fund_lottery_apply_flow_page.dart';
@@ -72,6 +75,38 @@ final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(
 
 GlobalKey<NavigatorState> get appRootNavigatorKey => _rootNavigatorKey;
 
+CustomTransitionPage<void> _buildDiscussionBoardBottomUpPage({
+  required GoRouterState state,
+  required Widget child,
+}) {
+  return CustomTransitionPage<void>(
+    key: state.pageKey,
+    transitionDuration: const Duration(milliseconds: 240),
+    reverseTransitionDuration: const Duration(milliseconds: 200),
+    child: child,
+    transitionsBuilder:
+        (
+          BuildContext context,
+          Animation<double> animation,
+          Animation<double> secondaryAnimation,
+          Widget child,
+        ) {
+          final curved = CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeOutCubic,
+            reverseCurve: Curves.easeInCubic,
+          );
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 1),
+              end: Offset.zero,
+            ).animate(curved),
+            child: child,
+          );
+        },
+  );
+}
+
 String? resolveAuthRedirect({
   required AsyncValue<bool> authState,
   required String location,
@@ -84,6 +119,7 @@ String? resolveAuthRedirect({
       location == '/hotel-booking' ||
       (location.startsWith('/hotel-booking/') &&
           !location.endsWith('/confirm')) ||
+      location.startsWith('/discussion-board/') ||
       location == '/funds' ||
       location.startsWith('/funds/') ||
       location == '/profile/settings' ||
@@ -185,6 +221,43 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           return const RealPersonAuthPage();
         },
       ),
+      GoRoute(
+        path: '/discussion-board/drafts',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (BuildContext context, GoRouterState state) {
+          final extra = state.extra;
+          if (extra is! KizunarkDraftListRouteArgs) {
+            return const KizunarkDraftListPage();
+          }
+          return KizunarkDraftListPage(kind: extra.kind);
+        },
+      ),
+      GoRoute(
+        path: '/discussion-board/post',
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          final extra = state.extra;
+          return _buildDiscussionBoardBottomUpPage(
+            state: state,
+            child: extra is KizunarkPostComposeRouteArgs
+                ? extra.child
+                : const DiscussionBoardTabPage(),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/discussion-board/reply/:threadId',
+        parentNavigatorKey: _rootNavigatorKey,
+        pageBuilder: (BuildContext context, GoRouterState state) {
+          final extra = state.extra;
+          return _buildDiscussionBoardBottomUpPage(
+            state: state,
+            child: extra is KizunarkReplyComposeRouteArgs
+                ? extra.child
+                : const DiscussionBoardTabPage(),
+          );
+        },
+      ),
       StatefulShellRoute.indexedStack(
         builder:
             (
@@ -277,6 +350,25 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 builder: (BuildContext context, GoRouterState state) {
                   return const DiscussionBoardTabPage();
                 },
+                routes: <RouteBase>[
+                  GoRoute(
+                    path: 'thread/:threadId',
+                    builder: (BuildContext context, GoRouterState state) {
+                      final extra = state.extra;
+                      if (extra is! KizunarkThreadDetailRouteArgs) {
+                        return const DiscussionBoardTabPage();
+                      }
+                      return KizunarkThreadDetailPage(
+                        thread: extra.thread,
+                        isAuthenticated: extra.isAuthenticated,
+                        currentUserId: extra.currentUserId,
+                        onOpenImageViewer: extra.onOpenImageViewer,
+                        onReply: extra.onReply,
+                        onMessageLongPress: extra.onMessageLongPress,
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),

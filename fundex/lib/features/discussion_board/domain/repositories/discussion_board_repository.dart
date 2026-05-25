@@ -1,5 +1,7 @@
 import '../entities/discussion_board_models.dart';
 
+typedef DiscussionUploadProgressCallback = void Function(int sent, int total);
+
 abstract class DiscussionBoardRepository {
   Future<List<DiscussionThread>> loadThreads({int page = 1, int limit = 50});
 
@@ -9,6 +11,7 @@ abstract class DiscussionBoardRepository {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    List<String> imageUrls = const <String>[],
     String? fallbackAvatarUrl,
     int? linkedProjectId,
     String? linkedProjectName,
@@ -21,6 +24,13 @@ abstract class DiscussionBoardRepository {
     required String fallbackName,
     required String fallbackHandle,
     required String fallbackBadgeLabel,
+    List<String> imageUrls = const <String>[],
+    int? linkedProjectId,
+  });
+
+  Future<List<String>> uploadImages({
+    required List<String> filePaths,
+    DiscussionUploadProgressCallback? onSendProgress,
   });
 
   Future<List<DiscussionThread>> deleteComment({required String commentId});

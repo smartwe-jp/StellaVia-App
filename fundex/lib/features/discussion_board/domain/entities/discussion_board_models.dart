@@ -104,26 +104,41 @@ class DiscussionAuthor {
 }
 
 class DiscussionQuote {
-  const DiscussionQuote({required this.sourceText, required this.body});
+  const DiscussionQuote({
+    required this.sourceText,
+    required this.body,
+    this.imageUrls = const <String>[],
+  });
 
   final String sourceText;
   final String body;
+  final List<String> imageUrls;
 
-  DiscussionQuote copyWith({String? sourceText, String? body}) {
+  DiscussionQuote copyWith({
+    String? sourceText,
+    String? body,
+    List<String>? imageUrls,
+  }) {
     return DiscussionQuote(
       sourceText: sourceText ?? this.sourceText,
       body: body ?? this.body,
+      imageUrls: imageUrls ?? this.imageUrls,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return <String, dynamic>{'sourceText': sourceText, 'body': body};
+    return <String, dynamic>{
+      'sourceText': sourceText,
+      'body': body,
+      'imageUrls': imageUrls,
+    };
   }
 
   factory DiscussionQuote.fromJson(Map<String, dynamic> json) {
     return DiscussionQuote(
       sourceText: json['sourceText']?.toString() ?? '',
       body: json['body']?.toString() ?? '',
+      imageUrls: _toStringList(json['imageUrls']),
     );
   }
 }
@@ -134,6 +149,7 @@ class DiscussionReply {
     required this.author,
     required this.timeLabel,
     required this.body,
+    this.imageUrls = const <String>[],
     required this.createdAtIso,
     this.quote,
   });
@@ -142,6 +158,7 @@ class DiscussionReply {
   final DiscussionAuthor author;
   final String timeLabel;
   final String body;
+  final List<String> imageUrls;
   final String createdAtIso;
   final DiscussionQuote? quote;
 
@@ -150,6 +167,7 @@ class DiscussionReply {
     DiscussionAuthor? author,
     String? timeLabel,
     String? body,
+    List<String>? imageUrls,
     String? createdAtIso,
     DiscussionQuote? quote,
   }) {
@@ -158,6 +176,7 @@ class DiscussionReply {
       author: author ?? this.author,
       timeLabel: timeLabel ?? this.timeLabel,
       body: body ?? this.body,
+      imageUrls: imageUrls ?? this.imageUrls,
       createdAtIso: createdAtIso ?? this.createdAtIso,
       quote: quote ?? this.quote,
     );
@@ -169,6 +188,7 @@ class DiscussionReply {
       'author': author.toJson(),
       'timeLabel': timeLabel,
       'body': body,
+      'imageUrls': imageUrls,
       'createdAtIso': createdAtIso,
       'quote': quote?.toJson(),
     };
@@ -180,6 +200,7 @@ class DiscussionReply {
       author: DiscussionAuthor.fromJson(_toMap(json['author'])),
       timeLabel: json['timeLabel']?.toString() ?? '',
       body: json['body']?.toString() ?? '',
+      imageUrls: _toStringList(json['imageUrls']),
       createdAtIso: json['createdAtIso']?.toString() ?? '',
       quote: _toNullableMap(json['quote']) == null
           ? null
@@ -194,6 +215,7 @@ class DiscussionThread {
     required this.author,
     required this.timeLabel,
     required this.body,
+    this.imageUrls = const <String>[],
     required this.createdAtIso,
     required this.commentCount,
     required this.replies,
@@ -205,6 +227,7 @@ class DiscussionThread {
   final DiscussionAuthor author;
   final String timeLabel;
   final String body;
+  final List<String> imageUrls;
   final String createdAtIso;
   final int commentCount;
   final List<DiscussionReply> replies;
@@ -216,6 +239,7 @@ class DiscussionThread {
     DiscussionAuthor? author,
     String? timeLabel,
     String? body,
+    List<String>? imageUrls,
     String? createdAtIso,
     int? commentCount,
     List<DiscussionReply>? replies,
@@ -227,6 +251,7 @@ class DiscussionThread {
       author: author ?? this.author,
       timeLabel: timeLabel ?? this.timeLabel,
       body: body ?? this.body,
+      imageUrls: imageUrls ?? this.imageUrls,
       createdAtIso: createdAtIso ?? this.createdAtIso,
       commentCount: commentCount ?? this.commentCount,
       replies: replies ?? this.replies,
@@ -241,6 +266,7 @@ class DiscussionThread {
       'author': author.toJson(),
       'timeLabel': timeLabel,
       'body': body,
+      'imageUrls': imageUrls,
       'createdAtIso': createdAtIso,
       'commentCount': commentCount,
       'replies': replies.map((DiscussionReply item) => item.toJson()).toList(),
@@ -255,6 +281,7 @@ class DiscussionThread {
       author: DiscussionAuthor.fromJson(_toMap(json['author'])),
       timeLabel: json['timeLabel']?.toString() ?? '',
       body: json['body']?.toString() ?? '',
+      imageUrls: _toStringList(json['imageUrls']),
       createdAtIso: json['createdAtIso']?.toString() ?? '',
       commentCount: _toInt(json['commentCount']),
       replies: _toMapList(
@@ -314,4 +341,15 @@ List<int> _toIntList(Object? value) {
     return const <int>[];
   }
   return value.map(_toInt).toList(growable: false);
+}
+
+List<String> _toStringList(Object? value) {
+  if (value is! List) {
+    return const <String>[];
+  }
+  return value
+      .where((Object? item) => item != null)
+      .map((Object? item) => item.toString())
+      .where((String item) => item.trim().isNotEmpty)
+      .toList(growable: false);
 }

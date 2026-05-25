@@ -1660,6 +1660,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kizunarkReplySuccessNotice => 'Comment sent.';
 
   @override
+  String get kizunarkSendFailedDialogTitle => 'Send failed';
+
+  @override
+  String get kizunarkSendFailedDraftSavedMessage =>
+      'Sending failed. It has been saved to drafts.';
+
+  @override
+  String get kizunarkSendFailedRetryAction => 'Send again';
+
+  @override
+  String kizunarkSendingQueueTitle(int count) {
+    return 'Sending $count posts...';
+  }
+
+  @override
   String get kizunarkDeleteAction => 'Delete';
 
   @override
@@ -1699,6 +1714,98 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get kizunarkEmptyState => 'No posts yet. Start the first discussion.';
+
+  @override
+  String get kizunarkEntryTitle => 'Share an investment topic';
+
+  @override
+  String get kizunarkEntrySubtitle => 'Attach related funds and photos';
+
+  @override
+  String get kizunarkComposeSheetTitle => 'Create post';
+
+  @override
+  String get kizunarkComposeCloseAction => 'Cancel';
+
+  @override
+  String get kizunarkComposeAuthorLabel => 'Your investment topic';
+
+  @override
+  String get kizunarkComposeDraftAction => 'Drafts';
+
+  @override
+  String get kizunarkComposeDeleteDraftAction => 'Delete';
+
+  @override
+  String get kizunarkComposeSaveDraftAction => 'Save draft';
+
+  @override
+  String get kizunarkDraftListTitle => 'Drafts';
+
+  @override
+  String get kizunarkDraftEmptyState => 'No drafts yet.';
+
+  @override
+  String get kizunarkDraftLoadError => 'Failed to load drafts.';
+
+  @override
+  String get kizunarkDraftDeleteAction => 'Delete';
+
+  @override
+  String get kizunarkDraftDeleteConfirmTitle => 'Delete draft?';
+
+  @override
+  String get kizunarkDraftDeleteConfirmBody =>
+      'This draft cannot be restored after deletion.';
+
+  @override
+  String get kizunarkDraftImageOnlyLabel => 'Image draft';
+
+  @override
+  String get kizunarkDraftPostTypeLabel => 'Post';
+
+  @override
+  String get kizunarkDraftReplyTypeLabel => 'Reply';
+
+  @override
+  String get kizunarkDraftThreadUnavailableNotice =>
+      'The original message cannot be opened right now. Please refresh and try again.';
+
+  @override
+  String get kizunarkComposeAudienceEveryone => 'Everyone';
+
+  @override
+  String get kizunarkComposeReplyPermissionEveryone => 'Everyone can reply';
+
+  @override
+  String get kizunarkAddImageAction => 'Add image';
+
+  @override
+  String kizunarkImageCounter(int count) {
+    return '$count / 4';
+  }
+
+  @override
+  String get kizunarkReplySheetTitle => 'Create reply';
+
+  @override
+  String kizunarkReplyAuthorLabel(String name) {
+    return 'Replying to $name';
+  }
+
+  @override
+  String get kizunarkReplyTargetLabel => 'Replying to';
+
+  @override
+  String kizunarkRepliesTitle(int count) {
+    return '$count replies';
+  }
+
+  @override
+  String get kizunarkRepliesSectionTitle => 'Replies';
+
+  @override
+  String get kizunarkWriteReplyAction => 'Write a reply';
 
   @override
   String get investmentTabHeadline => 'Investment Module (Framework)';
