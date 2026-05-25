@@ -29,7 +29,7 @@ class HotelBookingPaymentSection extends StatelessWidget {
             context.l10n.hotelBookingPaymentTitle,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               color: colors.textPrimary,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 18),

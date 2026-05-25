@@ -54,7 +54,7 @@ class HotelBookingGuestFormSection extends StatelessWidget {
             title,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               color: colors.textPrimary,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w700,
             ),
           ),
           if (roomName != null && roomName!.isNotEmpty) ...<Widget>[
@@ -63,7 +63,7 @@ class HotelBookingGuestFormSection extends StatelessWidget {
               roomName!,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: colors.textPrimary,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ],
@@ -193,7 +193,10 @@ class _CountryDropdown extends StatelessWidget {
             .map(
               (country) => DropdownMenuItem<String>(
                 value: country.code,
-                child: Text(country.name, overflow: TextOverflow.ellipsis),
+                child: Text(country.name, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: colors.textPrimary,
+                      fontWeight: FontWeight.w700,
+                    )),
               ),
             )
             .toList(growable: false),
@@ -401,8 +404,8 @@ class _CounterButton extends StatelessWidget {
           ),
         ),
         child: SizedBox(
-          width: 38,
-          height: 38,
+          width: 34,
+          height: 34,
           child: Icon(
             icon,
             color: onTap == null ? colors.textTertiary : colors.onDark,

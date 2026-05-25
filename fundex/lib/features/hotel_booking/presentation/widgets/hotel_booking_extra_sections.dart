@@ -28,7 +28,7 @@ class HotelBookingCouponRow extends StatelessWidget {
                 context.l10n.hotelBookingCoupons,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   color: colors.textPrimary,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
@@ -38,7 +38,7 @@ class HotelBookingCouponRow extends StatelessWidget {
                   : context.l10n.hotelBookingNoCoupons,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: colors.textTertiary,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(width: 6),
@@ -73,7 +73,7 @@ class HotelBookingInvoiceSection extends StatelessWidget {
             context.l10n.hotelBookingInvoice,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               color: colors.textPrimary,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 10),
@@ -86,7 +86,7 @@ class HotelBookingInvoiceSection extends StatelessWidget {
               context.l10n.hotelBookingUseGuestName,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: colors.textSecondary,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -116,15 +116,15 @@ class HotelBookingMessageSection extends StatelessWidget {
             context.l10n.hotelBookingMessageTitle,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               color: colors.textPrimary,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w700,
             ),
           ),
           const SizedBox(height: 12),
           Text(
             context.l10n.hotelBookingMessageHint,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: colors.textSecondary,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(height: 8),

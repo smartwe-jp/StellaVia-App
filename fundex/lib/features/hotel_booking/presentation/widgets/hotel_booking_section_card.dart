@@ -55,13 +55,13 @@ class HotelBookingTextField extends StatelessWidget {
       maxLines: maxLines,
       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
         color: colors.textPrimary,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
       ),
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
           color: colors.textTertiary,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 14,

@@ -1,8 +1,11 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../auth/domain/entities/auth_user.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../providers/hotel_booking_providers.dart';
 import '../support/hotel_booking_presenter.dart';
@@ -43,6 +46,7 @@ class _HotelBookingConfirmPageState
   final List<String?> _roomCountryCodes = <String?>[];
   final List<String> _roomIntlCodes = <String>[];
   bool _useGuestNameForInvoice = true;
+  bool _didApplyBookerAuthUser = false;
 
   @override
   void initState() {
@@ -92,6 +96,8 @@ class _HotelBookingConfirmPageState
     super.dispose();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
@@ -101,17 +107,24 @@ class _HotelBookingConfirmPageState
     final preparationState = ref.watch(
       hotelBookingPreparationProvider(widget.seed),
     );
+    final authUserState = ref.watch(currentAuthUserProvider);
+    _scheduleBookerAuthUserApply(authUserState.valueOrNull);
     final preparation = preparationState.valueOrNull;
     final amount = preparation?.quotedPrice ?? widget.seed.fallbackAmount;
     final amountText = presenter.price(amount);
 
     return Scaffold(
       backgroundColor: colors.surfaceAlt,
-      appBar: AppBar(
-        backgroundColor: colors.surfaceAlt,
-        foregroundColor: colors.textPrimary,
-        elevation: 0,
-        title: Text(context.l10n.hotelBookingConfirmTitle),
+      appBar: AppNavigationBar(
+        title: context.l10n.hotelBookingConfirmTitle,
+        backgroundColor: colors.surface,
+          foregroundColor: colors.textPrimary,
+          leading: AppNavigationIconButton(
+            icon: Icons.arrow_back_rounded,
+            onTap: () => context.pop(),
+            backgroundColor: colors.surface.withValues(alpha: 0),
+            foregroundColor: colors.textPrimary,
+          ),
       ),
       body: Stack(
         children: <Widget>[
@@ -239,4 +252,76 @@ class _HotelBookingConfirmPageState
   void _showComingSoon() {
     AppNotice.show(context, message: context.l10n.hotelDetailBookingComingSoon);
   }
+
+  void _scheduleBookerAuthUserApply(AuthUser? user) {
+    if (user == null || _didApplyBookerAuthUser) {
+      return;
+    }
+    _didApplyBookerAuthUser = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      _applyBookerAuthUser(user);
+    });
+  }
+
+  void _applyBookerAuthUser(AuthUser user) {
+    final name = _resolveBookerAuthUserName(user);
+    _setTextIfEmpty(_bookerLastNameController, name.lastName);
+    _setTextIfEmpty(_bookerFirstNameController, name.firstName);
+    _setTextIfEmpty(_bookerEmailController, user.email ?? '');
+    _setTextIfEmpty(
+      _bookerPhoneController,
+      _firstNonEmpty(<String?>[user.phone, user.mobile]),
+    );
+
+    final intlCode = _normalizeSupportedIntlCode(user.intlTelCode ?? '');
+    if (intlCode != null && _bookerIntlCode == '+81') {
+      setState(() => _bookerIntlCode = intlCode);
+    }
+  }
+
+  void _setTextIfEmpty(TextEditingController controller, String value) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty || controller.text.trim().isNotEmpty) {
+      return;
+    }
+    controller.text = trimmed;
+  }
+
+  _BookerAuthUserName _resolveBookerAuthUserName(AuthUser user) {
+    return _BookerAuthUserName(
+      lastName: _firstNonEmpty(<String?>[user.firstName, user.firstNameEn]),
+      firstName: _firstNonEmpty(<String?>[user.lastName, user.lastNameEn]),
+    );
+  }
+
+  String _firstNonEmpty(Iterable<String?> values) {
+    for (final value in values) {
+      final trimmed = value?.trim() ?? '';
+      if (trimmed.isNotEmpty) {
+        return trimmed;
+      }
+    }
+    return '';
+  }
+
+  String? _normalizeSupportedIntlCode(String rawCode) {
+    final trimmed = rawCode.trim();
+    if (trimmed.isEmpty) {
+      return null;
+    }
+    final normalized = trimmed.startsWith('+') ? trimmed : '+$trimmed';
+    return const <String>{'+81', '+86', '+82', '+1'}.contains(normalized)
+        ? normalized
+        : null;
+  }
+}
+
+class _BookerAuthUserName {
+  const _BookerAuthUserName({required this.lastName, required this.firstName});
+
+  final String lastName;
+  final String firstName;
 }
