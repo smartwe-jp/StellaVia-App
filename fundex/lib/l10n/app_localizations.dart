@@ -2283,6 +2283,30 @@ abstract class AppLocalizations {
   /// **'Opens from summary'**
   String get hotelSearchConditionsHint;
 
+  /// No description provided for @hotelQuickActionUserInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'User info'**
+  String get hotelQuickActionUserInfo;
+
+  /// No description provided for @hotelQuickActionOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'My orders'**
+  String get hotelQuickActionOrders;
+
+  /// No description provided for @hotelQuickActionCoupons.
+  ///
+  /// In en, this message translates to:
+  /// **'Coupons'**
+  String get hotelQuickActionCoupons;
+
+  /// No description provided for @hotelQuickActionContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact us'**
+  String get hotelQuickActionContact;
+
   /// No description provided for @hotelFilterAllTypes.
   ///
   /// In en, this message translates to:

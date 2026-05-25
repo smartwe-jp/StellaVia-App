@@ -1145,6 +1145,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelSearchConditionsHint => '概要バーから表示';
 
   @override
+  String get hotelQuickActionUserInfo => 'ユーザー情報';
+
+  @override
+  String get hotelQuickActionOrders => '予約一覧';
+
+  @override
+  String get hotelQuickActionCoupons => 'クーポン';
+
+  @override
+  String get hotelQuickActionContact => 'お問い合わせ';
+
+  @override
   String get hotelFilterAllTypes => 'すべての宿';
 
   @override

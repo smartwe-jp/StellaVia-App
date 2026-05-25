@@ -1,13 +1,17 @@
+import 'dart:math' as math;
+
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fundex/features/hotel_booking/presentation/controllers/hotel_booking_controller.dart';
 import 'package:fundex/features/hotel_booking/presentation/widgets/hotel_filter_section.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../providers/hotel_booking_providers.dart';
 import '../support/hotel_booking_presenter.dart';
+import 'hotel_quick_action_section.dart';
 import 'hotel_search_conditions_sheet.dart';
 import 'hotel_search_summary_bar.dart';
 
@@ -61,6 +65,13 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
     );
   }
 
+  void _showComingSoon(String featureLabel) {
+    AppNotice.show(
+      context,
+      message: context.l10n.menuFeatureComingSoon(featureLabel),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final filters = ref
@@ -83,31 +94,48 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
 
     return Stack(
       children: <Widget>[
-        AspectRatio(aspectRatio: 16 / 13, child: _HeroPhoto()),
+        AspectRatio(aspectRatio: 0.9, child: _HeroPhoto()),
+        Positioned(left: 20, bottom: 0, right: 16, child:
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+              HotelSearchSummaryBar(
+                    summaryLine: summaryLine,
+                    guestLine: guestLine,
+                onTap: () => _openSearchConditions(filters),
+              ),
+              
+              const SizedBox(height: 30),
 
-        Positioned(
-          top: 180,
-          left: 16,
-          right: 16,
-          child: HotelSearchSummaryBar(
-            summaryLine: summaryLine,
-            guestLine: guestLine,
-            onTap: () => _openSearchConditions(filters),
-          ),
-        ),
+              HotelQuickActionSection(
+                  userInfoLabel: context.l10n.hotelQuickActionUserInfo,
+                  ordersLabel: context.l10n.hotelQuickActionOrders,
+                  couponsLabel: context.l10n.hotelQuickActionCoupons,
+                  contactLabel: context.l10n.hotelQuickActionContact,
+                  onUserInfoTap: () => context.push('/member-profile/edit'),
+                  onOrdersTap: () =>
+                      _showComingSoon(context.l10n.hotelQuickActionOrders),
+                  onCouponsTap: () =>
+                      _showComingSoon(context.l10n.hotelQuickActionCoupons),
+                  onContactTap: () => context.push('/profile/settings/contact'),
+                ),
+              
 
-        Positioned(
-          bottom: 10,
-          left: 16,
-          right: 16,
-          child: HotelFilterSection(
-            state: widget.state,
-            presenter: widget.presenter,
-            onPriceSortSelected: widget.onPriceSortSelected,
-            onCriteriaApplied: widget.onCriteriaApplied,
-            onMapTap: widget.onMapTap,
+              const SizedBox(height: 40),
+            
+
+              HotelFilterSection(
+                state: widget.state,
+                presenter: widget.presenter,
+                onPriceSortSelected: widget.onPriceSortSelected,
+                onCriteriaApplied: widget.onCriteriaApplied,
+                onMapTap: widget.onMapTap,
+              ),
+            
+            ],
           ),
-        ),
+        )
+        
       ],
     );
   }
@@ -134,7 +162,7 @@ class _HeroPhoto extends StatelessWidget {
             autoPlay: heroImageUrls.length > 1,
             autoPlayInterval: const Duration(seconds: 25),
           ),
-          Positioned(left: 20, top: 60, right: 16, child: _HeroCopy()),
+          Positioned(left: 20, top: 80, right: 16, child: _HeroCopy()),
         ],
       ),
     );

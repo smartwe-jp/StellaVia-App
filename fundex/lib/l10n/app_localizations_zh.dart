@@ -1131,6 +1131,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelSearchConditionsHint => '点击摘要条后弹出';
 
   @override
+  String get hotelQuickActionUserInfo => '用户信息';
+
+  @override
+  String get hotelQuickActionOrders => '我的订单';
+
+  @override
+  String get hotelQuickActionCoupons => '优惠券';
+
+  @override
+  String get hotelQuickActionContact => '联系我们';
+
+  @override
   String get hotelFilterAllTypes => '全部旅宿';
 
   @override
@@ -5893,6 +5905,18 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelSearchConditionsHint => '點擊摘要條後彈出';
+
+  @override
+  String get hotelQuickActionUserInfo => '用戶資訊';
+
+  @override
+  String get hotelQuickActionOrders => '我的訂單';
+
+  @override
+  String get hotelQuickActionCoupons => '優惠券';
+
+  @override
+  String get hotelQuickActionContact => '聯絡我們';
 
   @override
   String get hotelFilterAllTypes => '全部旅宿';

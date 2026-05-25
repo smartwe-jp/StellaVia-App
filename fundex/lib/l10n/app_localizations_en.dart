@@ -1211,6 +1211,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hotelSearchConditionsHint => 'Opens from summary';
 
   @override
+  String get hotelQuickActionUserInfo => 'User info';
+
+  @override
+  String get hotelQuickActionOrders => 'My orders';
+
+  @override
+  String get hotelQuickActionCoupons => 'Coupons';
+
+  @override
+  String get hotelQuickActionContact => 'Contact us';
+
+  @override
   String get hotelFilterAllTypes => 'All stays';
 
   @override
