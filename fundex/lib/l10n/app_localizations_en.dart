@@ -1565,23 +1565,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hotelBookingResultTitle => 'Your booking is not complete yet';
 
   @override
-  String get hotelBookingResultOrderNumber => 'Reservation number:';
+  String get hotelBookingResultOrderNumber => 'Reservation number';
 
   @override
-  String get hotelBookingResultPaymentMethod => 'Payment method:';
+  String get hotelBookingResultPaymentMethod => 'Payment method';
 
   @override
-  String get hotelBookingResultPaymentAmount => 'Payment amount:';
+  String get hotelBookingResultPaymentAmount => 'Payment amount';
+
+  @override
+  String get hotelBookingResultNoticeTitle => 'Please pay within 15 minutes';
 
   @override
   String get hotelBookingResultNotice =>
       'This page leads from Tanimachikun Travel to the payment information entry page. Press the button below to continue to payment. If payment is not completed within 15 minutes, the order will be cancelled.';
 
   @override
-  String get hotelBookingResultBackToOrders => 'Back to orders';
+  String get hotelBookingResultBackToOrders => 'Order history';
 
   @override
-  String get hotelBookingResultPay => 'Pay';
+  String get hotelBookingResultPay => 'Continue to payment';
 
   @override
   String get hotelOrdersTitle => 'My orders';

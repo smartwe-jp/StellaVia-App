@@ -1478,23 +1478,26 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelBookingResultTitle => '您的预订尚未完成';
 
   @override
-  String get hotelBookingResultOrderNumber => '预约番号：';
+  String get hotelBookingResultOrderNumber => '预约编号';
 
   @override
-  String get hotelBookingResultPaymentMethod => '支付方式：';
+  String get hotelBookingResultPaymentMethod => '支付方式';
 
   @override
-  String get hotelBookingResultPaymentAmount => '支付金额：';
+  String get hotelBookingResultPaymentAmount => '支付金额';
+
+  @override
+  String get hotelBookingResultNoticeTitle => '请在15分钟内完成支付';
 
   @override
   String get hotelBookingResultNotice =>
       '本页面会从谷町君旅行跳转到支付信息输入页面。点击下方按钮后将进入支付信息输入流程。若15分钟内未完成支付，订单将被取消。';
 
   @override
-  String get hotelBookingResultBackToOrders => '返回订单履历';
+  String get hotelBookingResultBackToOrders => '订单履历';
 
   @override
-  String get hotelBookingResultPay => '支付';
+  String get hotelBookingResultPay => '去支付';
 
   @override
   String get hotelOrdersTitle => '我的订单';
@@ -6389,23 +6392,26 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hotelBookingResultTitle => '您的預訂尚未完成';
 
   @override
-  String get hotelBookingResultOrderNumber => '預約番號：';
+  String get hotelBookingResultOrderNumber => '預約編號';
 
   @override
-  String get hotelBookingResultPaymentMethod => '支付方式：';
+  String get hotelBookingResultPaymentMethod => '支付方式';
 
   @override
-  String get hotelBookingResultPaymentAmount => '支付金額：';
+  String get hotelBookingResultPaymentAmount => '支付金額';
+
+  @override
+  String get hotelBookingResultNoticeTitle => '請在15分鐘內完成支付';
 
   @override
   String get hotelBookingResultNotice =>
       '本頁面會從谷町君旅行跳轉到支付資訊輸入頁面。點擊下方按鈕後將進入支付資訊輸入流程。若15分鐘內未完成支付，訂單將被取消。';
 
   @override
-  String get hotelBookingResultBackToOrders => '返回訂單履歷';
+  String get hotelBookingResultBackToOrders => '訂單履歷';
 
   @override
-  String get hotelBookingResultPay => '支付';
+  String get hotelBookingResultPay => '去支付';
 
   @override
   String get hotelOrdersTitle => '我的訂單';

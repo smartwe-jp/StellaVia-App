@@ -1493,23 +1493,26 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelBookingResultTitle => 'ご予約はまだ完了していません';
 
   @override
-  String get hotelBookingResultOrderNumber => '予約番号：';
+  String get hotelBookingResultOrderNumber => '予約番号';
 
   @override
-  String get hotelBookingResultPaymentMethod => '支払方法：';
+  String get hotelBookingResultPaymentMethod => '支払方法';
 
   @override
-  String get hotelBookingResultPaymentAmount => '支払金額：';
+  String get hotelBookingResultPaymentAmount => '支払金額';
+
+  @override
+  String get hotelBookingResultNoticeTitle => '15分以内にお支払いください';
 
   @override
   String get hotelBookingResultNotice =>
       '本画面は谷町君旅行から決済情報入力ページに誘導する画面です。下記ボタンを押すと決済情報入力画面に遷移します。15分以内に支払いがない場合、注文はキャンセルされます。';
 
   @override
-  String get hotelBookingResultBackToOrders => '注文履歴に戻るへ';
+  String get hotelBookingResultBackToOrders => '注文履歴へ';
 
   @override
-  String get hotelBookingResultPay => '支払い';
+  String get hotelBookingResultPay => '支払いへ';
 
   @override
   String get hotelOrdersTitle => '注文履歴';

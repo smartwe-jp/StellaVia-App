@@ -2916,20 +2916,26 @@ abstract class AppLocalizations {
   /// No description provided for @hotelBookingResultOrderNumber.
   ///
   /// In en, this message translates to:
-  /// **'Reservation number:'**
+  /// **'Reservation number'**
   String get hotelBookingResultOrderNumber;
 
   /// No description provided for @hotelBookingResultPaymentMethod.
   ///
   /// In en, this message translates to:
-  /// **'Payment method:'**
+  /// **'Payment method'**
   String get hotelBookingResultPaymentMethod;
 
   /// No description provided for @hotelBookingResultPaymentAmount.
   ///
   /// In en, this message translates to:
-  /// **'Payment amount:'**
+  /// **'Payment amount'**
   String get hotelBookingResultPaymentAmount;
+
+  /// No description provided for @hotelBookingResultNoticeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Please pay within 15 minutes'**
+  String get hotelBookingResultNoticeTitle;
 
   /// No description provided for @hotelBookingResultNotice.
   ///
@@ -2940,13 +2946,13 @@ abstract class AppLocalizations {
   /// No description provided for @hotelBookingResultBackToOrders.
   ///
   /// In en, this message translates to:
-  /// **'Back to orders'**
+  /// **'Order history'**
   String get hotelBookingResultBackToOrders;
 
   /// No description provided for @hotelBookingResultPay.
   ///
   /// In en, this message translates to:
-  /// **'Pay'**
+  /// **'Continue to payment'**
   String get hotelBookingResultPay;
 
   /// No description provided for @hotelOrdersTitle.

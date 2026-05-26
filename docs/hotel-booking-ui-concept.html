@@ -1452,6 +1452,143 @@
       background: var(--brand-navy);
     }
 
+    .result-screen {
+      background:
+        linear-gradient(180deg, rgba(12, 28, 80, .06), rgba(184, 149, 79, .06)),
+        var(--cream-lighter);
+      overflow: hidden;
+    }
+
+    .result-hero {
+      margin-top: -42px;
+      padding: 56px 22px 22px;
+      color: var(--white);
+      background:
+        linear-gradient(145deg, rgba(9, 21, 59, .96), rgba(24, 48, 111, .92)),
+        var(--brand-navy);
+      border-radius: 0 0 30px 30px;
+    }
+
+    .result-mark {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      margin: 12px auto 12px;
+      border-radius: 999px;
+      background: rgba(184, 149, 79, .22);
+      border: 1px solid rgba(255, 255, 255, .20);
+      color: #f7d68a;
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .result-hero h2 {
+      margin: 0;
+      text-align: center;
+      font-size: 22px;
+      line-height: 1.22;
+    }
+
+    .result-content {
+      padding: 16px;
+    }
+
+    .result-card {
+      padding: 16px;
+      border: 1px solid rgba(210, 192, 157, .66);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .96);
+      box-shadow: 0 16px 38px rgba(12, 28, 80, .11);
+    }
+
+    .result-card + .result-card {
+      margin-top: 14px;
+    }
+
+    .result-summary {
+      display: grid;
+      gap: 13px;
+    }
+
+    .result-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 13px;
+      border-bottom: 1px solid rgba(12, 28, 80, .07);
+    }
+
+    .result-row:last-child {
+      padding-bottom: 0;
+      border-bottom: 0;
+    }
+
+    .result-row span {
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .result-row strong {
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.35;
+      text-align: right;
+    }
+
+    .result-row .amount {
+      color: var(--brand-alert);
+      font-size: 24px;
+      font-weight: 950;
+    }
+
+    .result-notice {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 14px;
+      border-radius: 20px;
+      background: rgba(184, 149, 79, .14);
+      border: 1px solid rgba(184, 149, 79, .30);
+    }
+
+    .result-notice-icon {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      color: var(--white);
+      background: var(--brand-gold);
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .result-notice strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--brand-navy);
+      font-size: 14px;
+    }
+
+    .result-notice p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
+    .result-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
     @media (max-width: 1060px) {
       .brief {
         display: block;
@@ -1977,6 +2114,51 @@
                   <p class="detail-copy">列表页不展示 receiptTitle、receiptBookSent、roomNo、roomClear 等低频字段；这些进入订单详情页。卡片只保留用户判断下一步所需的信息。</p>
                 </div>
               </article>
+            </section>
+          </div>
+        </article>
+
+        <article class="phone" id="hotel-booking-result">
+          <div class="screen result-screen">
+            <div class="status" style="color:var(--white)">
+              <span>15:13</span>
+              <span class="status-icons">LTE WI 82%</span>
+            </div>
+
+            <section class="result-hero">
+              <div class="result-mark">!</div>
+              <h2>ご予約はまだ完了していません</h2>
+            </section>
+
+            <section class="result-content">
+              <article class="result-card">
+                <div class="result-summary">
+                  <div class="result-row">
+                    <span>予約番号</span>
+                    <strong>1232535</strong>
+                  </div>
+                  <div class="result-row">
+                    <span>支払方法</span>
+                    <strong>クレジットカード決済</strong>
+                  </div>
+                  <div class="result-row">
+                    <span>支払金額</span>
+                    <strong class="amount">¥19,000 JPY</strong>
+                  </div>
+                  <div class="result-notice">
+                    <div class="result-notice-icon">15</div>
+                    <div>
+                      <strong>15分以内にお支払いください</strong>
+                      <p>本画面は谷町君旅行から決済情報入力ページに誘導する画面です。下記ボタンを押すと決済情報入力画面に遷移します。15分以内に支払いがない場合、注文はキャンセルされます。</p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <div class="result-actions">
+                <div class="primary-button" style="height:50px">支払いへ</div>
+                <div class="outline-button" style="height:50px">注文履歴へ</div>
+              </div>
             </section>
           </div>
         </article>
