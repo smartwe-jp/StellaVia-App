@@ -52,11 +52,15 @@ class HotelOrderSummaryCard extends StatelessWidget {
     required this.order,
     required this.presenter,
     this.onTap,
+    this.onRebook,
+    this.onViewDetail,
   });
 
   final HotelOrderSummary order;
   final HotelBookingPresenter presenter;
   final VoidCallback? onTap;
+  final VoidCallback? onRebook;
+  final VoidCallback? onViewDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -64,122 +68,165 @@ class HotelOrderSummaryCard extends StatelessWidget {
     final title = order.hotelName.isNotEmpty
         ? order.hotelName
         : order.buildingName;
-    return Material(
-      color: colors.brandWhite,
-      borderRadius: BorderRadius.circular(UiTokens.radius12),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(UiTokens.radius12),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(UiTokens.radius12),
-            border: Border.all(color: colors.borderSoft),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: colors.brandPrimaryDark.withValues(alpha: 0.06),
-                blurRadius: 18,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        order.id,
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(
-                              color: colors.textSecondary,
-                              fontWeight: FontWeight.w700,
-                            ),
-                      ),
-                    ),
-                    Text(
-                      order.orderStatus.isNotEmpty
-                          ? order.orderStatus
-                          : order.paymentStatus,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: _statusColor(colors),
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Divider(color: colors.borderSoft, height: 1),
-                const SizedBox(height: 16),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(UiTokens.radius8),
-                      child: SizedBox(
-                        width: 108,
-                        height: 108,
-                        child: AppRemoteImage(
-                          imageUrl: order.hotelImageUrl,
-                          fit: BoxFit.cover,
-                          placeholder: const HotelDetailImagePlaceholder(),
-                          errorWidget: const HotelDetailImagePlaceholder(),
+    final checkIn = _dateTimeParts(order.checkIn);
+    final checkOut = _dateTimeParts(order.checkOut);
+    final statusBadge = _statusBadge(context, colors);
+    final viewDetailTap = onViewDetail ?? onTap;
+    final amountText = presenter.price(order.totalAmount);
+
+    return AspectRatio(
+      aspectRatio: 4.2 / 3,
+      child: Material(
+        color: colors.brandWhite,
+        elevation: 3,
+        shadowColor: colors.brandPrimaryDark.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(UiTokens.radius28),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(UiTokens.radius28),
+              border: Border.all(color: colors.borderSoft),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(18, 14, 18, 16),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          '${context.l10n.hotelOrdersOrderNoPrefix}${order.id}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                color: colors.textSecondary,
+                                fontWeight: FontWeight.w800,
+                              ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 14),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            title,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.titleLarge
-                                ?.copyWith(
-                                  color: colors.textPrimary,
-                                  fontWeight: FontWeight.w800,
-                                ),
+                      if (statusBadge != null) ...<Widget>[
+                        const SizedBox(width: 8),
+                        _OrderStatusBadge(data: statusBadge),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Divider(color: colors.borderSoft, height: 1),
+                  const SizedBox(height: 14),
+                  Row(
+                      spacing: 12,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: AspectRatio(
+                            aspectRatio: 1.0,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                UiTokens.radius12,
+                              ),
+                              child: AppRemoteImage(
+                                imageUrl: order.hotelImageUrl,
+                                fit: BoxFit.cover,
+                                placeholder: const HotelDetailImagePlaceholder(),
+                                errorWidget: const HotelDetailImagePlaceholder(),
+                              ),
+                            ),
                           ),
-                          if (order.buildingName.isNotEmpty) ...<Widget>[
-                            const SizedBox(height: 5),
+                        ),
+  
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(
+                                      color: colors.textPrimary,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                order.hotelAddress.isNotEmpty
+                                    ? order.hotelAddress
+                                    : order.buildingName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.bodySmall
+                                    ?.copyWith(
+                                      color: colors.textSecondary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ),
+                              const SizedBox(height: 10),
+                              _OrderStayDatePanel(
+                                checkIn: checkIn,
+                                checkOut: checkOut,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  
+                  const Spacer(),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
                             Text(
-                              order.buildingName,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.bodyMedium
+                              context.l10n.hotelOrdersAmountLabel,
+                              style: Theme.of(context).textTheme.labelMedium
                                   ?.copyWith(
                                     color: colors.textSecondary,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              amountText.isEmpty ? '--' : amountText,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.headlineSmall
+                                  ?.copyWith(
+                                    color: colors.brandAlert,
+                                    fontWeight: FontWeight.w800,
                                   ),
                             ),
                           ],
-                          const SizedBox(height: 8),
-                          Text(
-                            _stayRange(),
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(
-                                  color: colors.textSecondary,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            '${presenter.price(order.totalAmount)}${context.l10n.hotelCurrencyCode}',
-                            style: Theme.of(context).textTheme.titleLarge
-                                ?.copyWith(
-                                  color: colors.brandAlert,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      const SizedBox(width: 10),
+                      _OrderActionButton(
+                        label: context.l10n.hotelOrdersRebookAction,
+                        onTap: onRebook,
+                        foregroundColor: colors.brandPrimary,
+                        backgroundColor: colors.brandWhite,
+                        borderColor: colors.border,
+                      ),
+                      const SizedBox(width: 8),
+                      _OrderActionButton(
+                        label: context.l10n.hotelOrdersDetailAction,
+                        onTap: viewDetailTap,
+                        foregroundColor: colors.onDark,
+                        backgroundColor: colors.brandPrimary,
+                        borderColor: colors.brandPrimary,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -187,38 +234,263 @@ class HotelOrderSummaryCard extends StatelessWidget {
     );
   }
 
-  Color _statusColor(AppSemanticColorTheme colors) {
+  _OrderStatusBadgeData? _statusBadge(
+    BuildContext context,
+    AppSemanticColorTheme colors,
+  ) {
     if (order.orderStatusCode == 5 ||
         order.orderStatus.contains('キャンセル') ||
         order.orderStatus.contains('取消') ||
         order.orderStatus.toLowerCase().contains('cancel')) {
-      return colors.textPrimary;
+      return _OrderStatusBadgeData(
+        label: order.orderStatus.isNotEmpty
+            ? order.orderStatus
+            : context.l10n.hotelOrdersFilterCancelled,
+        foregroundColor: colors.dangerForeground,
+        backgroundColor: colors.dangerSubtle,
+        borderColor: colors.dangerBorder,
+      );
     }
     if (order.paymentStatusCode == 40 || order.canPay) {
-      return colors.brandAlert;
+      return _OrderStatusBadgeData(
+        label: order.paymentStatus.isNotEmpty
+            ? order.paymentStatus
+            : context.l10n.hotelOrdersFilterAwaitingPayment,
+        foregroundColor: colors.warningForeground,
+        backgroundColor: colors.warningSubtle,
+        borderColor: colors.warningBorder,
+      );
     }
-    return colors.brandSecondary;
+    if (order.orderStatus.isNotEmpty) {
+      return _OrderStatusBadgeData(
+        label: order.orderStatus,
+        foregroundColor: colors.successForeground,
+        backgroundColor: colors.successSubtle,
+        borderColor: colors.successBorder,
+      );
+    }
+    if (order.paymentStatus.isNotEmpty) {
+      return _OrderStatusBadgeData(
+        label: order.paymentStatus,
+        foregroundColor: colors.textSecondary,
+        backgroundColor: colors.surfaceAlt,
+        borderColor: colors.borderSoft,
+      );
+    }
+    return null;
   }
 
-  String _stayRange() {
-    final checkIn = _formatOrderDate(order.checkIn);
-    final checkOut = _formatOrderDate(order.checkOut);
-    if (checkIn.isEmpty || checkOut.isEmpty) {
-      return checkIn.isNotEmpty ? checkIn : checkOut;
-    }
-    return '$checkIn ~ $checkOut';
-  }
-
-  String _formatOrderDate(String raw) {
+  _OrderDateTimeParts _dateTimeParts(String raw) {
     final trimmed = raw.trim();
-    if (trimmed.length >= 10) {
-      return trimmed.substring(0, 10);
+    if (trimmed.isEmpty) {
+      return const _OrderDateTimeParts(date: '--/--', time: '--:--');
     }
-    final parsed = DateTime.tryParse(trimmed);
-    if (parsed == null) {
-      return trimmed;
+    final parsed = DateTime.tryParse(trimmed.replaceFirst(' ', 'T'));
+    if (parsed != null) {
+      return _OrderDateTimeParts(
+        date: DateFormat('MM/dd').format(parsed),
+        time: DateFormat('HH:mm').format(parsed),
+      );
     }
-    return DateFormat('yyyy-MM-dd').format(parsed);
+    final date = trimmed.length >= 10
+        ? trimmed.substring(5, 10).replaceAll('-', '/')
+        : trimmed;
+    final time = trimmed.length >= 16 ? trimmed.substring(11, 16) : '--:--';
+    return _OrderDateTimeParts(date: date, time: time);
+  }
+}
+
+class _OrderStatusBadgeData {
+  const _OrderStatusBadgeData({
+    required this.label,
+    required this.foregroundColor,
+    required this.backgroundColor,
+    required this.borderColor,
+  });
+
+  final String label;
+  final Color foregroundColor;
+  final Color backgroundColor;
+  final Color borderColor;
+}
+
+class _OrderStatusBadge extends StatelessWidget {
+  const _OrderStatusBadge({required this.data});
+
+  final _OrderStatusBadgeData data;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: ShapeDecoration(
+        color: data.backgroundColor,
+        shape: StadiumBorder(side: BorderSide(color: data.borderColor)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        child: Text(
+          data.label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: data.foregroundColor,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _OrderDateTimeParts {
+  const _OrderDateTimeParts({required this.date, required this.time});
+
+  final String date;
+  final String time;
+}
+
+class _OrderStayDatePanel extends StatelessWidget {
+  const _OrderStayDatePanel({required this.checkIn, required this.checkOut});
+
+  final _OrderDateTimeParts checkIn;
+  final _OrderDateTimeParts checkOut;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surface,
+        borderRadius: BorderRadius.circular(UiTokens.radius20),
+        border: Border.all(color: colors.borderSoft),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: _OrderStayDateColumn(
+                label: context.l10n.hotelOrdersCheckInLabel,
+                parts: checkIn,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Icon(
+                Icons.arrow_forward_rounded,
+                size: 20,
+                color: colors.highlightGold,
+              ),
+            ),
+            Expanded(
+              child: _OrderStayDateColumn(
+                label: context.l10n.hotelOrdersCheckOutLabel,
+                parts: checkOut,
+                alignEnd: true,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _OrderStayDateColumn extends StatelessWidget {
+  const _OrderStayDateColumn({
+    required this.label,
+    required this.parts,
+    this.alignEnd = false,
+  });
+
+  final String label;
+  final _OrderDateTimeParts parts;
+  final bool alignEnd;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final textAlign = alignEnd ? TextAlign.end : TextAlign.start;
+    return Column(
+      crossAxisAlignment: alignEnd
+          ? CrossAxisAlignment.end
+          : CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: textAlign,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: colors.textSecondary,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          parts.date,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: textAlign,
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+            color: colors.brandPrimaryDark,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        Text(
+          parts.time,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: textAlign,
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+            color: colors.brandPrimaryDark,
+            fontWeight: FontWeight.w800,
+            height: 1.05,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _OrderActionButton extends StatelessWidget {
+  const _OrderActionButton({
+    required this.label,
+    required this.foregroundColor,
+    required this.backgroundColor,
+    required this.borderColor,
+    this.onTap,
+  });
+
+  final String label;
+  final Color foregroundColor;
+  final Color backgroundColor;
+  final Color borderColor;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: backgroundColor,
+      shape: StadiumBorder(side: BorderSide(color: borderColor)),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: foregroundColor,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 

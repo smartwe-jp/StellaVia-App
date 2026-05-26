@@ -81,7 +81,7 @@ class HotelOrderListPage extends ConsumerWidget {
                   child: Center(
                     child: Text(
                       context.l10n.hotelOrdersEmpty,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         color: colors.textSecondary,
                         fontWeight: FontWeight.w700,
                       ),
@@ -108,6 +108,14 @@ class HotelOrderListPage extends ConsumerWidget {
                       return HotelOrderSummaryCard(
                         order: order,
                         presenter: presenter,
+                        onRebook: () => AppNotice.show(
+                          context,
+                          message: context.l10n.hotelOrdersRebookComingSoon,
+                        ),
+                        onViewDetail: () => AppNotice.show(
+                          context,
+                          message: context.l10n.hotelOrdersDetailComingSoon,
+                        ),
                       );
                     },
                   ),

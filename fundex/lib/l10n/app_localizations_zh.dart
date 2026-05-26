@@ -1518,6 +1518,30 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelOrdersLoadMore => '加载更多';
 
   @override
+  String get hotelOrdersOrderNoPrefix => '订单号 #';
+
+  @override
+  String get hotelOrdersAmountLabel => '订单金额';
+
+  @override
+  String get hotelOrdersCheckInLabel => '入住';
+
+  @override
+  String get hotelOrdersCheckOutLabel => '退房';
+
+  @override
+  String get hotelOrdersRebookAction => '再次预订';
+
+  @override
+  String get hotelOrdersDetailAction => '查看详情';
+
+  @override
+  String get hotelOrdersRebookComingSoon => '再次预订流程稍后接入';
+
+  @override
+  String get hotelOrdersDetailComingSoon => '订单详情稍后接入';
+
+  @override
   String get hotelDetailNoRooms => '暂无可订房型';
 
   @override
@@ -6403,6 +6427,30 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelOrdersLoadMore => '載入更多';
+
+  @override
+  String get hotelOrdersOrderNoPrefix => '訂單號 #';
+
+  @override
+  String get hotelOrdersAmountLabel => '訂單金額';
+
+  @override
+  String get hotelOrdersCheckInLabel => '入住';
+
+  @override
+  String get hotelOrdersCheckOutLabel => '退房';
+
+  @override
+  String get hotelOrdersRebookAction => '再次預訂';
+
+  @override
+  String get hotelOrdersDetailAction => '查看詳情';
+
+  @override
+  String get hotelOrdersRebookComingSoon => '再次預訂流程稍後接入';
+
+  @override
+  String get hotelOrdersDetailComingSoon => '訂單詳情稍後接入';
 
   @override
   String get hotelDetailNoRooms => '暫無可訂房型';

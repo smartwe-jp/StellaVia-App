@@ -2991,6 +2991,54 @@ abstract class AppLocalizations {
   /// **'Load more'**
   String get hotelOrdersLoadMore;
 
+  /// No description provided for @hotelOrdersOrderNoPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Order #'**
+  String get hotelOrdersOrderNoPrefix;
+
+  /// No description provided for @hotelOrdersAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Order amount'**
+  String get hotelOrdersAmountLabel;
+
+  /// No description provided for @hotelOrdersCheckInLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-in'**
+  String get hotelOrdersCheckInLabel;
+
+  /// No description provided for @hotelOrdersCheckOutLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-out'**
+  String get hotelOrdersCheckOutLabel;
+
+  /// No description provided for @hotelOrdersRebookAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Book again'**
+  String get hotelOrdersRebookAction;
+
+  /// No description provided for @hotelOrdersDetailAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get hotelOrdersDetailAction;
+
+  /// No description provided for @hotelOrdersRebookComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Book-again flow will be added later'**
+  String get hotelOrdersRebookComingSoon;
+
+  /// No description provided for @hotelOrdersDetailComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Order details will be added later'**
+  String get hotelOrdersDetailComingSoon;
+
   /// No description provided for @hotelDetailNoRooms.
   ///
   /// In en, this message translates to:

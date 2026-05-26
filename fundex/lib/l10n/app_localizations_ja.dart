@@ -1533,6 +1533,30 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelOrdersLoadMore => 'さらに表示';
 
   @override
+  String get hotelOrdersOrderNoPrefix => '注文番号 #';
+
+  @override
+  String get hotelOrdersAmountLabel => '注文金額';
+
+  @override
+  String get hotelOrdersCheckInLabel => '入室';
+
+  @override
+  String get hotelOrdersCheckOutLabel => '退室';
+
+  @override
+  String get hotelOrdersRebookAction => '再予約';
+
+  @override
+  String get hotelOrdersDetailAction => '詳細を見る';
+
+  @override
+  String get hotelOrdersRebookComingSoon => '再予約フローは後で接続します';
+
+  @override
+  String get hotelOrdersDetailComingSoon => '注文詳細は後で接続します';
+
+  @override
   String get hotelDetailNoRooms => '予約可能な客室はありません';
 
   @override

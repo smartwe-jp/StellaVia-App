@@ -1605,6 +1605,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hotelOrdersLoadMore => 'Load more';
 
   @override
+  String get hotelOrdersOrderNoPrefix => 'Order #';
+
+  @override
+  String get hotelOrdersAmountLabel => 'Order amount';
+
+  @override
+  String get hotelOrdersCheckInLabel => 'Check-in';
+
+  @override
+  String get hotelOrdersCheckOutLabel => 'Check-out';
+
+  @override
+  String get hotelOrdersRebookAction => 'Book again';
+
+  @override
+  String get hotelOrdersDetailAction => 'Details';
+
+  @override
+  String get hotelOrdersRebookComingSoon =>
+      'Book-again flow will be added later';
+
+  @override
+  String get hotelOrdersDetailComingSoon => 'Order details will be added later';
+
+  @override
   String get hotelDetailNoRooms => 'No available rooms';
 
   @override

@@ -1452,15 +1452,6 @@
       background: var(--brand-navy);
     }
 
-    .order-meta-line {
-      margin: 0 14px 12px;
-      padding-top: 11px;
-      border-top: 1px solid rgba(12, 28, 80, .07);
-      color: var(--soft);
-      font-size: 11px;
-      line-height: 1.45;
-    }
-
     @media (max-width: 1060px) {
       .brief {
         display: block;
@@ -1908,6 +1899,85 @@
               </div>
               <div class="primary-button">选择房型</div>
             </footer>
+          </div>
+        </article>
+
+        <article class="phone" id="hotel-order-card">
+          <div class="screen order-list-screen">
+            <div class="status" style="color:var(--white)">
+              <span>15:13</span>
+              <span class="status-icons">LTE WI 82%</span>
+            </div>
+
+            <section class="order-header">
+              <div class="detail-controls">
+                <span class="round-icon">‹</span>
+                <span class="round-icon">?</span>
+              </div>
+              <h2>酒店订单</h2>
+              <p>按入住时间和订单状态管理预约。列表卡片优先展示状态、日期、酒店和金额。</p>
+            </section>
+
+            <nav class="order-tabs" aria-label="order status filters">
+              <span class="order-tab active">全部</span>
+              <span class="order-tab">待支付</span>
+              <span class="order-tab">已预约</span>
+              <span class="order-tab">已取消</span>
+            </nav>
+
+            <section class="order-list">
+              <article class="order-card">
+                <div class="order-card-top">
+                  <span class="order-id">订单号 #1290827</span>
+                  <div class="status-stack">
+                    <span class="status-badge cancelled">已取消</span>
+                    <span class="status-badge pending">待支付</span>
+                  </div>
+                </div>
+
+                <div class="order-main">
+                  <img class="order-cover" src="assets/hotel-booking-ui/order-kujo27.jpg" alt="hotel order">
+                  <div>
+                    <h3 class="order-title">谷町君・星ホテル・九条27</h3>
+                    <div class="order-address">大阪府大阪市西区九条南2-24-14</div>
+                    <div class="stay-row">
+                      <div class="stay-date">
+                        <small>入住</small>
+                        <strong>05/26<br>15:00</strong>
+                      </div>
+                      <div class="stay-arrow">→</div>
+                      <div class="stay-date" style="text-align:right">
+                        <small>退房</small>
+                        <strong>05/27<br>10:00</strong>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="order-footer">
+                  <div class="order-amount">
+                    <small>订单金额</small>
+                    <strong>¥5,740</strong>
+                  </div>
+                  <div class="order-actions">
+                    <span class="order-action">再次预订</span>
+                    <span class="order-action primary">查看详情</span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="order-card">
+                <div class="order-card-top">
+                  <span class="order-id">订单信息优先级</span>
+                  <div class="status-stack">
+                    <span class="status-badge pending">设计说明</span>
+                  </div>
+                </div>
+                <div style="padding:14px">
+                  <p class="detail-copy">列表页不展示 receiptTitle、receiptBookSent、roomNo、roomClear 等低频字段；这些进入订单详情页。卡片只保留用户判断下一步所需的信息。</p>
+                </div>
+              </article>
+            </section>
           </div>
         </article>
       </section>
