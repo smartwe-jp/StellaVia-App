@@ -9,6 +9,7 @@ import '../providers/hotel_booking_providers.dart';
 import '../widgets/hotel_member_profile_edit_sheet.dart';
 import '../widgets/hotel_member_profile_fields.dart';
 import '../widgets/hotel_state_views.dart';
+import '../widgets/hotel_status_bar_preference_scope.dart';
 
 class HotelMemberProfilePage extends ConsumerStatefulWidget {
   const HotelMemberProfilePage({super.key});
@@ -153,67 +154,74 @@ class _HotelMemberProfilePageState
     final colors = Theme.of(context).appColors;
     final profileState = ref.watch(hotelMemberProfileProvider);
 
-    return Scaffold(
-      backgroundColor: colors.surfaceAlt,
-      appBar: AppBar(
+    return HotelStatusBarPreferenceScope(
+      immersive: false,
+      immersiveOnPop: true,
+      child: Scaffold(
         backgroundColor: colors.surfaceAlt,
-        foregroundColor: colors.textPrimary,
-        title: Text(context.l10n.hotelMemberProfileTitle),
-      ),
-      body: Stack(
-        children: <Widget>[
-          RefreshIndicator(
-            onRefresh: () => ref.refresh(hotelMemberProfileProvider.future),
-            child: profileState.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (_, __) => ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                children: <Widget>[
-                  SizedBox(height: MediaQuery.sizeOf(context).height * 0.22),
-                  HotelFullPageError(
-                    onRetry: () => ref.invalidate(hotelMemberProfileProvider),
-                  ),
-                ],
-              ),
-              data: (profile) => ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
-                children: <Widget>[
-                  HotelMemberProfileFields(
-                    profile: profile,
-                    onEditName: () => _editTextField(
-                      profile: profile,
-                      title: context.l10n.hotelMemberProfileNickname,
-                      label: context.l10n.hotelMemberProfileNickname,
-                      initialValue: profile.memberName,
-                      keyboardType: TextInputType.name,
-                      update: (value) => profile.copyWith(memberName: value),
-                    ),
-                    onEditEmail: () => _editTextField(
-                      profile: profile,
-                      title: context.l10n.hotelMemberProfileEmail,
-                      label: context.l10n.hotelMemberProfileEmail,
-                      initialValue: profile.email,
-                      keyboardType: TextInputType.emailAddress,
-                      update: (value) => profile.copyWith(email: value),
-                    ),
-                    onEditPhone: () => _editPhone(profile),
-                    onEditGender: () => _editGender(profile),
-                    onEditBirthday: () => _editBirthday(profile),
-                    onMemberLevelInfoTap: _showMemberLevelNotice,
-                  ),
-                ],
-              ),
-            ),
+        appBar: AppBar(
+          backgroundColor: colors.surfaceAlt,
+          foregroundColor: colors.textPrimary,
+          systemOverlayStyle: AppThemeFactory.statusBarOverlayStyleFor(
+            Theme.of(context).brightness,
           ),
-          if (_isSaving)
-            Positioned.fill(
-              child: ColoredBox(
-                color: colors.scrim.withValues(alpha: 0.10),
-                child: const Center(child: CircularProgressIndicator()),
+          title: Text(context.l10n.hotelMemberProfileTitle),
+        ),
+        body: Stack(
+          children: <Widget>[
+            RefreshIndicator(
+              onRefresh: () => ref.refresh(hotelMemberProfileProvider.future),
+              child: profileState.when(
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (_, __) => ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: <Widget>[
+                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.22),
+                    HotelFullPageError(
+                      onRetry: () => ref.invalidate(hotelMemberProfileProvider),
+                    ),
+                  ],
+                ),
+                data: (profile) => ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+                  children: <Widget>[
+                    HotelMemberProfileFields(
+                      profile: profile,
+                      onEditName: () => _editTextField(
+                        profile: profile,
+                        title: context.l10n.hotelMemberProfileNickname,
+                        label: context.l10n.hotelMemberProfileNickname,
+                        initialValue: profile.memberName,
+                        keyboardType: TextInputType.name,
+                        update: (value) => profile.copyWith(memberName: value),
+                      ),
+                      onEditEmail: () => _editTextField(
+                        profile: profile,
+                        title: context.l10n.hotelMemberProfileEmail,
+                        label: context.l10n.hotelMemberProfileEmail,
+                        initialValue: profile.email,
+                        keyboardType: TextInputType.emailAddress,
+                        update: (value) => profile.copyWith(email: value),
+                      ),
+                      onEditPhone: () => _editPhone(profile),
+                      onEditGender: () => _editGender(profile),
+                      onEditBirthday: () => _editBirthday(profile),
+                      onMemberLevelInfoTap: _showMemberLevelNotice,
+                    ),
+                  ],
+                ),
               ),
             ),
-        ],
+            if (_isSaving)
+              Positioned.fill(
+                child: ColoredBox(
+                  color: colors.scrim.withValues(alpha: 0.10),
+                  child: const Center(child: CircularProgressIndicator()),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

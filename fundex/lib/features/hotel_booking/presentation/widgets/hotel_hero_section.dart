@@ -27,6 +27,7 @@ class HotelHeroSection extends ConsumerStatefulWidget {
     required this.presenter,
     required this.onPriceSortSelected,
     required this.onCriteriaApplied,
+    required this.onOrdersTap,
     this.onMapTap,
   });
 
@@ -35,6 +36,7 @@ class HotelHeroSection extends ConsumerStatefulWidget {
   final HotelBookingPresenter presenter;
   final Future<void> Function(HotelSearchCriteria criteria) onCriteriaApplied;
   final Future<void> Function(HotelPriceSort criteria) onPriceSortSelected;
+  final VoidCallback onOrdersTap;
   final VoidCallback? onMapTap;
 
   @override
@@ -115,8 +117,7 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
                 contactLabel: context.l10n.hotelQuickActionContact,
                 onUserInfoTap: () =>
                     context.push('/hotel-booking/member-profile'),
-                onOrdersTap: () =>
-                    _showComingSoon(context.l10n.hotelQuickActionOrders),
+                onOrdersTap: widget.onOrdersTap,
                 onCouponsTap: () =>
                     _showComingSoon(context.l10n.hotelQuickActionCoupons),
                 onContactTap: () => context.push('/profile/settings/contact'),

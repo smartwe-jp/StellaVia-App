@@ -21,6 +21,7 @@ import '../widgets/hotel_room_plan_card.dart';
 import '../widgets/hotel_room_list_notice_card.dart';
 import '../widgets/hotel_search_condition_pickers.dart';
 import '../widgets/hotel_state_views.dart';
+import '../widgets/hotel_status_bar_preference_scope.dart';
 
 class HotelDetailPage extends ConsumerStatefulWidget {
   const HotelDetailPage({
@@ -73,36 +74,39 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage> {
     );
     final detailState = ref.watch(hotelDetailProvider(query));
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light.copyWith(
-        statusBarColor: colors.scrim.withValues(alpha: 0),
-        systemNavigationBarColor: colors.brandWhite,
-        systemNavigationBarIconBrightness: Brightness.dark,
-      ),
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        body: ColoredBox(
-          color: colors.surfaceAlt,
-          child: detailState.when(
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (_, __) => HotelFullPageError(
-              onRetry: () => ref.refresh(hotelDetailProvider(query)),
-            ),
-            data: (detail) => _HotelDetailContent(
-              detail: detail,
-              criteria: _criteria,
-              presenter: presenter,
-              roomQuantities: _roomQuantities,
-              expandedInfoSectionIds: _expandedInfoSectionIds,
-              assignedPrice: _assignOccupancyResult?.price,
-              isAssigningOccupancy: _isAssigningOccupancy,
-              onBack: _handleBack,
-              onEditDates: _editStayDates,
-              onEditGuests: _editGuests,
-              onInfoSectionExpandedChanged: _setInfoSectionExpanded,
-              onRoomQuantityChanged: (change) =>
-                  _setRoomQuantity(detail, change.key, change.value),
-              onBookNow: () => _handleBookNow(detail),
+    return HotelStatusBarPreferenceScope(
+      immersive: true,
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light.copyWith(
+          statusBarColor: colors.scrim.withValues(alpha: 0),
+          systemNavigationBarColor: colors.brandWhite,
+          systemNavigationBarIconBrightness: Brightness.dark,
+        ),
+        child: Scaffold(
+          extendBodyBehindAppBar: true,
+          body: ColoredBox(
+            color: colors.surfaceAlt,
+            child: detailState.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (_, __) => HotelFullPageError(
+                onRetry: () => ref.refresh(hotelDetailProvider(query)),
+              ),
+              data: (detail) => _HotelDetailContent(
+                detail: detail,
+                criteria: _criteria,
+                presenter: presenter,
+                roomQuantities: _roomQuantities,
+                expandedInfoSectionIds: _expandedInfoSectionIds,
+                assignedPrice: _assignOccupancyResult?.price,
+                isAssigningOccupancy: _isAssigningOccupancy,
+                onBack: _handleBack,
+                onEditDates: _editStayDates,
+                onEditGuests: _editGuests,
+                onInfoSectionExpandedChanged: _setInfoSectionExpanded,
+                onRoomQuantityChanged: (change) =>
+                    _setRoomQuantity(detail, change.key, change.value),
+                onBookNow: () => _handleBookNow(detail),
+              ),
             ),
           ),
         ),

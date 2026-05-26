@@ -19,7 +19,7 @@ Current behavior:
 - Hotel tab implements the first home/list/search slice using the SDK `HotelApiClient`.
 - Hotel browsing is public. The current booking action still uses `memberProfileActionGuardProvider.ensureCompleted(...)` until the real booking flow is implemented.
 - Hotel home hero temporarily reuses the same remote banner image URL pattern as the home tab.
-- Hotel tab home is immersive: the fourth tab disables the shell's top safe area and the page declares a transparent status bar with light icons.
+- Hotel home and hotel detail are immersive with transparent status bars and content extending to the top edge. Other hotel child pages, including orders, profile, confirmation, and result pages, use the default app status bar.
 - Hotel API requests include fixed app metadata headers from the app network layer: `x-client-type: Stellavia-App` and `app-version` from `PackageInfo.version`.
 - Hotel home shows a four-entry quick action row above the search filter controls: user info, hotel orders, coupons, and contact. User info opens the hotel-specific profile route `/hotel-booking/member-profile` backed by `/pms/member/info` and `/pms/member/custSetInfo`, contact opens the existing contact form, and unfinished hotel order/coupon pages currently show the shared app toast.
 - Hotel list search uses fixed area choices only: all areas as `area: ""`, plus `osaka`, `kyoto`, and `tokyo`. Building/property type choices come from `/hotel/buildingCode`, including the empty-code "all" option returned by the API.
@@ -36,11 +36,12 @@ Current behavior:
 - Entering hotel booking confirmation initializes the legacy-compatible preparation request set: `/pms/page` for `APP011`, `APP003`, `APP004`, and `APP012`, plus `/pms/countryCodeList`, `/pms/order/room/extraPerson`, `/pms/coupons/order/custListV2`, `/pms/member/memberContactsList`, and `/creditCard/register/list`.
 - Hotel booking confirmation auto-fills empty booker fields from the current App authenticated user cache. Booker name uses App `lastName`/`firstName` first and falls back to `lastNameEn`/`firstNameEn`; email, phone, and phone country code use the authenticated user fields.
 - Successful hotel pre-order creation navigates to `/hotel-booking/:id/result` with the order id, selected payment method, payable amount, and a notice that payment is still required within the backend timeout window. The payment button is still a placeholder until the hotel payment slice is implemented.
+- Hotel order list is available from the hotel home quick-action row at `/hotel-booking/orders`. It calls `/pms/order/list` with top status filters for all, awaiting payment, booked, and cancelled orders, loads 5 rows per page, and keeps list state in a Riverpod controller.
 - SDK-level hotel API client/DTO foundation exists for the first migration slice.
 
 Current gaps:
 
-- No hotel order list/detail pages.
+- No hotel order detail page.
 - No hotel payment/refund/cancel policy flow.
 - Hotel API success-code contract is still unresolved: old app checks `code == 200`, while current architecture notes say hotel uses `code == 0`.
 

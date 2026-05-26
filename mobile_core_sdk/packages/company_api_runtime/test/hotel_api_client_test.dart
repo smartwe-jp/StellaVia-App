@@ -692,11 +692,11 @@ void main() {
               'lang': 'JP',
               'startPage': 1,
               'limit': 20,
-              'status': 'paid',
+              'status': 0,
             }),
           );
           return _jsonOk(
-            '{"code":200,"msg":"success","data":{"count":1,"bookingOrderList":[{"orderId":"order-1","hotelName":"Tokyo Business Stay","paidAmount":36000,"pay":false,"refund":true,"roomTypeCount":1}]}}',
+            '{"code":200,"msg":"success","data":{"startPage":1,"limit":20,"count":1,"bookingOrderList":[{"id":"order-1","hotelName":"Tokyo Business Stay","buildingName":"Tokyo Stay","hotelImage":"https://cdn.example.com/hotel.jpg","hotelAddress":"Shinagawa","paymentStatus":"支払い待ち","paymentStatusCode":40,"orderStatusStr":"キャンセル済み","orderStatusCode":5,"totalAmount":36000,"checkIn":"2026-06-01 15:00:00","checkOut":"2026-06-03 10:00:00","pay":false,"refund":true,"roomTypeCount":1}]}}',
           );
         }
 
@@ -711,12 +711,17 @@ void main() {
       });
       final api = HotelApiClient(client);
 
-      final orders = await api.fetchOrderList(lang: 'JP', status: 'paid');
+      final orders = await api.fetchOrderList(lang: 'JP', status: 0);
       await api.cancelOrder(bookingOrderId: 'order-1', lang: 'JP');
 
+      expect(orders.startPage, equals(1));
+      expect(orders.limit, equals(20));
       expect(orders.count, equals(1));
       expect(orders.orders.first.orderId, equals('order-1'));
-      expect(orders.orders.first.paidAmount, equals(36000));
+      expect(orders.orders.first.totalAmount, equals(36000));
+      expect(orders.orders.first.hotelImage, contains('hotel.jpg'));
+      expect(orders.orders.first.paymentStatusCode, equals(40));
+      expect(orders.orders.first.orderStatusCode, equals(5));
       expect(call, equals(2));
     });
   });

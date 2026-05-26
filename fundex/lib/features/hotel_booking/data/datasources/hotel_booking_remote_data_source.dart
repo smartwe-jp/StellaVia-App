@@ -48,6 +48,13 @@ abstract class HotelBookingRemoteDataSource {
 
   Future<String> createBooking(HotelBookingCreateRequestDto request);
 
+  Future<HotelOrderListDto> fetchOrderList({
+    required String languageCode,
+    required int page,
+    required int limit,
+    required Object? status,
+  });
+
   Future<HotelMemberInfoDto> fetchMemberInfo();
 
   Future<void> updateMemberInfo(HotelMemberInfoUpdateRequestDto request);
@@ -149,6 +156,21 @@ class HotelBookingRemoteDataSourceImpl implements HotelBookingRemoteDataSource {
   @override
   Future<String> createBooking(HotelBookingCreateRequestDto request) {
     return _client.createBooking(request);
+  }
+
+  @override
+  Future<HotelOrderListDto> fetchOrderList({
+    required String languageCode,
+    required int page,
+    required int limit,
+    required Object? status,
+  }) {
+    return _client.fetchOrderList(
+      lang: languageCode,
+      startPage: page,
+      limit: limit,
+      status: status,
+    );
   }
 
   @override

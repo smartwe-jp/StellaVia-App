@@ -420,7 +420,7 @@ class HotelApiClient {
     required String lang,
     int startPage = 1,
     int limit = 20,
-    String? status,
+    Object? status,
   }) async {
     final response = await _client.dio.post<Map<String, dynamic>>(
       orderListPath,
@@ -428,7 +428,7 @@ class HotelApiClient {
         'lang': lang,
         'startPage': startPage,
         'limit': limit,
-        if (status != null && status.isNotEmpty) 'status': status,
+        'status': status,
       },
       options: authRequired(true),
     );

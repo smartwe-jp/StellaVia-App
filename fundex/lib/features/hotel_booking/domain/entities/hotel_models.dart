@@ -374,6 +374,74 @@ class HotelMemberProfile {
   }
 }
 
+enum HotelOrderStatusFilter {
+  all,
+  awaitingPayment,
+  booked,
+  cancelled;
+
+  int? get wireStatus {
+    return switch (this) {
+      HotelOrderStatusFilter.all => null,
+      HotelOrderStatusFilter.awaitingPayment => 0,
+      HotelOrderStatusFilter.booked => 1,
+      HotelOrderStatusFilter.cancelled => 3,
+    };
+  }
+}
+
+class HotelOrderListResult {
+  const HotelOrderListResult({
+    required this.orders,
+    required this.totalCount,
+    required this.page,
+    required this.limit,
+  });
+
+  final List<HotelOrderSummary> orders;
+  final int totalCount;
+  final int page;
+  final int limit;
+
+  bool get hasMore => orders.length < totalCount;
+}
+
+class HotelOrderSummary {
+  const HotelOrderSummary({
+    required this.id,
+    required this.hotelName,
+    required this.buildingName,
+    required this.hotelImageUrl,
+    required this.hotelAddress,
+    required this.checkIn,
+    required this.checkOut,
+    required this.bookingOrderTime,
+    required this.paymentStatus,
+    required this.paymentStatusCode,
+    required this.orderStatus,
+    required this.orderStatusCode,
+    required this.totalAmount,
+    required this.canPay,
+    required this.canRefund,
+  });
+
+  final String id;
+  final String hotelName;
+  final String buildingName;
+  final String hotelImageUrl;
+  final String hotelAddress;
+  final String checkIn;
+  final String checkOut;
+  final String bookingOrderTime;
+  final String paymentStatus;
+  final int? paymentStatusCode;
+  final String orderStatus;
+  final int? orderStatusCode;
+  final num? totalAmount;
+  final bool canPay;
+  final bool canRefund;
+}
+
 class HotelBookingConfirmSeed {
   const HotelBookingConfirmSeed({
     required this.detail,

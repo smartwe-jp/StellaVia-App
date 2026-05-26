@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../l10n/app_localizations.dart';
 
@@ -18,13 +19,13 @@ import 'push/app_push_dialog_providers.dart';
 import 'realtime/app_lifecycle_refresh_scope.dart';
 import 'realtime/app_realtime_refresh.dart';
 import 'router/app_router.dart';
+import 'status_bar/app_status_bar_providers.dart';
 import 'network/app_network_providers.dart';
 import 'network/app_network_connectivity_providers.dart';
 import '../features/auth/presentation/providers/auth_providers.dart';
 import '../features/investment/presentation/providers/fund_project_providers.dart';
 import '../features/home/presentation/providers/home_celebration_providers.dart';
 import '../features/home/presentation/widgets/home_celebration_dialog.dart';
-import '../features/main_shell/presentation/providers/main_shell_providers.dart';
 import '../features/member_profile/presentation/providers/member_profile_providers.dart';
 import '../features/settings/presentation/providers/settings_content_providers.dart';
 
@@ -33,6 +34,24 @@ final GlobalKey<ScaffoldMessengerState> _rootScaffoldMessengerKey =
 final GlobalKey<OverlayState> _appNoticeOverlayKey = GlobalKey<OverlayState>();
 final _networkOfflineDialogShownProvider = StateProvider<bool>((ref) => false);
 final _networkOfflineDialogOpenProvider = StateProvider<bool>((ref) => false);
+
+bool _usesImmersiveHotelStatusBar(String path) {
+  final normalized = path.length > 1 && path.endsWith('/')
+      ? path.substring(0, path.length - 1)
+      : path;
+  if (normalized == '/hotel-booking') {
+    return true;
+  }
+  const prefix = '/hotel-booking/';
+  if (!normalized.startsWith(prefix)) {
+    return false;
+  }
+  final tail = normalized.substring(prefix.length);
+  if (tail.isEmpty || tail.contains('/')) {
+    return false;
+  }
+  return !const <String>{'map', 'member-profile', 'orders'}.contains(tail);
+}
 
 class MemberTemplateApp extends ConsumerWidget {
   const MemberTemplateApp({super.key});
@@ -48,7 +67,9 @@ class MemberTemplateApp extends ConsumerWidget {
     final environment = ref.watch(appEnvironmentProvider);
     final locale = ref.watch(appLocaleProvider);
     final effectiveLocale = ref.watch(appEffectiveLocaleProvider);
-    final isHotelTabActive = ref.watch(mainShellCurrentTabIndexProvider) == 3;
+    final immersiveHotelStatusBarHint = ref.watch(
+      appImmersiveHotelStatusBarHintProvider,
+    );
 
     ref.listen<AppUiMessage?>(appUiMessageProvider, (previous, next) {
       if (next == null) {
@@ -129,44 +150,18 @@ class MemberTemplateApp extends ConsumerWidget {
       scaffoldMessengerKey: _rootScaffoldMessengerKey,
       routerConfig: router,
       builder: (BuildContext context, Widget? child) {
-        final mediaQuery = MediaQuery.of(context);
-        final brightness = Theme.of(context).brightness;
-        final defaultStatusBarColor = brightness == Brightness.dark
-            ? AppColorTokens.statusBarBackgroundDark
-            : AppColorTokens.statusBarBackgroundLight;
-        final statusBarColor = isHotelTabActive
-            ? Colors.transparent
-            : defaultStatusBarColor;
-        final statusBarOverlayStyle =
-            AppThemeFactory.statusBarOverlayStyleFor(brightness).copyWith(
-              statusBarColor: statusBarColor,
-              statusBarIconBrightness: isHotelTabActive
-                  ? Brightness.light
-                  : null,
-              statusBarBrightness: isHotelTabActive ? Brightness.dark : null,
-            );
-        SystemChrome.setSystemUIOverlayStyle(statusBarOverlayStyle);
         final appChild = AppLifecycleRefreshScope(
           child: _GlobalKeyboardDismissLayer(
             child: child ?? const SizedBox.shrink(),
           ),
         );
-        return AnnotatedRegion<SystemUiOverlayStyle>(
-          value: statusBarOverlayStyle,
+        return _AppStatusBarFrame(
+          router: router,
+          immersiveHotelStatusBarHint: immersiveHotelStatusBarHint,
           child: Stack(
             fit: StackFit.expand,
             children: <Widget>[
               appChild,
-              if (!isHotelTabActive && mediaQuery.viewPadding.top > 0)
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: mediaQuery.viewPadding.top,
-                  child: IgnorePointer(
-                    child: ColoredBox(color: statusBarColor),
-                  ),
-                ),
               const _GlobalCelebrationHost(),
               const AppPushDialogHost(),
               Overlay(
@@ -188,6 +183,103 @@ class MemberTemplateApp extends ConsumerWidget {
       theme: AppThemeFactory.light(locale: effectiveLocale),
       darkTheme: AppThemeFactory.light(locale: effectiveLocale),
       themeMode: ThemeMode.light,
+    );
+  }
+}
+
+class _AppStatusBarFrame extends StatefulWidget {
+  const _AppStatusBarFrame({
+    required this.router,
+    required this.immersiveHotelStatusBarHint,
+    required this.child,
+  });
+
+  final GoRouter router;
+  final bool? immersiveHotelStatusBarHint;
+  final Widget child;
+
+  @override
+  State<_AppStatusBarFrame> createState() => _AppStatusBarFrameState();
+}
+
+class _AppStatusBarFrameState extends State<_AppStatusBarFrame> {
+  @override
+  void initState() {
+    super.initState();
+    widget.router.routeInformationProvider.addListener(_handleRouteChanged);
+  }
+
+  @override
+  void didUpdateWidget(covariant _AppStatusBarFrame oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.router == widget.router) {
+      return;
+    }
+    oldWidget.router.routeInformationProvider.removeListener(
+      _handleRouteChanged,
+    );
+    widget.router.routeInformationProvider.addListener(_handleRouteChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.router.routeInformationProvider.removeListener(_handleRouteChanged);
+    super.dispose();
+  }
+
+  void _handleRouteChanged() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final brightness = Theme.of(context).brightness;
+    final currentLocation =
+        widget.router.routeInformationProvider.value.uri.path;
+    final isHotelRoute =
+        currentLocation == '/hotel-booking' ||
+        currentLocation.startsWith('/hotel-booking/');
+    final useImmersiveHotelStatusBar =
+        isHotelRoute &&
+        (widget.immersiveHotelStatusBarHint ??
+            _usesImmersiveHotelStatusBar(currentLocation));
+    final defaultStatusBarColor = brightness == Brightness.dark
+        ? AppColorTokens.statusBarBackgroundDark
+        : AppColorTokens.statusBarBackgroundLight;
+    final statusBarColor = useImmersiveHotelStatusBar
+        ? Colors.transparent
+        : defaultStatusBarColor;
+    final statusBarOverlayStyle =
+        AppThemeFactory.statusBarOverlayStyleFor(brightness).copyWith(
+          statusBarColor: statusBarColor,
+          statusBarIconBrightness: useImmersiveHotelStatusBar
+              ? Brightness.light
+              : null,
+          statusBarBrightness: useImmersiveHotelStatusBar
+              ? Brightness.dark
+              : null,
+        );
+    SystemChrome.setSystemUIOverlayStyle(statusBarOverlayStyle);
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: statusBarOverlayStyle,
+      child: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          widget.child,
+          if (!useImmersiveHotelStatusBar && mediaQuery.viewPadding.top > 0)
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: mediaQuery.viewPadding.top,
+              child: IgnorePointer(child: ColoredBox(color: statusBarColor)),
+            ),
+        ],
+      ),
     );
   }
 }

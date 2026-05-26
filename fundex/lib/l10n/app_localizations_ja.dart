@@ -1512,6 +1512,27 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelBookingResultPay => '支払い';
 
   @override
+  String get hotelOrdersTitle => '注文履歴';
+
+  @override
+  String get hotelOrdersFilterAll => 'すべて';
+
+  @override
+  String get hotelOrdersFilterAwaitingPayment => '支払待ち';
+
+  @override
+  String get hotelOrdersFilterBooked => '予約済み';
+
+  @override
+  String get hotelOrdersFilterCancelled => 'キャンセル済み';
+
+  @override
+  String get hotelOrdersEmpty => '注文はありません';
+
+  @override
+  String get hotelOrdersLoadMore => 'さらに表示';
+
+  @override
   String get hotelDetailNoRooms => '予約可能な客室はありません';
 
   @override

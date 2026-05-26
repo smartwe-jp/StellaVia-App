@@ -2949,6 +2949,48 @@ abstract class AppLocalizations {
   /// **'Pay'**
   String get hotelBookingResultPay;
 
+  /// No description provided for @hotelOrdersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My orders'**
+  String get hotelOrdersTitle;
+
+  /// No description provided for @hotelOrdersFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get hotelOrdersFilterAll;
+
+  /// No description provided for @hotelOrdersFilterAwaitingPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting payment'**
+  String get hotelOrdersFilterAwaitingPayment;
+
+  /// No description provided for @hotelOrdersFilterBooked.
+  ///
+  /// In en, this message translates to:
+  /// **'Booked'**
+  String get hotelOrdersFilterBooked;
+
+  /// No description provided for @hotelOrdersFilterCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get hotelOrdersFilterCancelled;
+
+  /// No description provided for @hotelOrdersEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No orders yet'**
+  String get hotelOrdersEmpty;
+
+  /// No description provided for @hotelOrdersLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get hotelOrdersLoadMore;
+
   /// No description provided for @hotelDetailNoRooms.
   ///
   /// In en, this message translates to:

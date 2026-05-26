@@ -213,6 +213,28 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
   }
 
   @override
+  Future<HotelOrderListResult> fetchOrderList({
+    required String languageCode,
+    required HotelOrderStatusFilter status,
+    int page = 1,
+    int limit = 5,
+  }) async {
+    final dto = await _remote.fetchOrderList(
+      languageCode: languageCode,
+      page: page,
+      limit: limit,
+      status: status.wireStatus,
+    );
+    final orders = dto.orders.map(_mapOrderSummary).toList(growable: false);
+    return HotelOrderListResult(
+      orders: orders,
+      totalCount: dto.count ?? orders.length,
+      page: dto.startPage ?? page,
+      limit: dto.limit ?? limit,
+    );
+  }
+
+  @override
   Future<HotelMemberProfile> fetchMemberProfile() async {
     final dto = await _remote.fetchMemberInfo();
     return _mapMemberProfile(dto);
@@ -535,6 +557,29 @@ HotelMemberProfile _mapMemberProfile(HotelMemberInfoDto dto) {
     expireDate: dto.expireDate.trim(),
     sourceUserId: dto.sourceUserId,
     membersStatus: dto.membersStatus.trim(),
+  );
+}
+
+HotelOrderSummary _mapOrderSummary(HotelOrderDto dto) {
+  return HotelOrderSummary(
+    id: (dto.orderId.isNotEmpty ? dto.orderId : dto.id ?? '').trim(),
+    hotelName: dto.hotelName?.trim() ?? '',
+    buildingName: dto.buildingName?.trim() ?? '',
+    hotelImageUrl: dto.hotelImage?.trim() ?? '',
+    hotelAddress: dto.hotelAddress?.trim() ?? '',
+    checkIn: dto.checkIn?.trim() ?? '',
+    checkOut: dto.checkOut?.trim() ?? '',
+    bookingOrderTime:
+        dto.bookingOrderTime?.trim() ?? dto.createdTime?.trim() ?? '',
+    paymentStatus: dto.paymentStatus?.trim() ?? '',
+    paymentStatusCode: dto.paymentStatusCode,
+    orderStatus: dto.orderStatusStr?.trim().isNotEmpty == true
+        ? dto.orderStatusStr!.trim()
+        : dto.orderStatus?.trim() ?? _stringOrEmpty(dto.status),
+    orderStatusCode: dto.orderStatusCode,
+    totalAmount: dto.totalAmount ?? dto.paidAmount,
+    canPay: dto.pay ?? false,
+    canRefund: dto.refund ?? false,
   );
 }
 

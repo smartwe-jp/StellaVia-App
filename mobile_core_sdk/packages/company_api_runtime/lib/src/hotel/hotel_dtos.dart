@@ -655,6 +655,8 @@ abstract class HotelRoomCustomerDto with _$HotelRoomCustomerDto {
 @freezed
 abstract class HotelOrderListDto with _$HotelOrderListDto {
   const factory HotelOrderListDto({
+    int? startPage,
+    int? limit,
     @JsonKey(name: 'bookingOrderList')
     @Default(<HotelOrderDto>[])
     List<HotelOrderDto> orders,
@@ -668,25 +670,47 @@ abstract class HotelOrderListDto with _$HotelOrderListDto {
 @freezed
 abstract class HotelOrderDto with _$HotelOrderDto {
   const factory HotelOrderDto({
-    @Default('') String orderId,
+    @JsonKey(readValue: hotelOrderIdReadValue) @Default('') String orderId,
+    @JsonKey(name: 'id') String? id,
     String? orderNo,
     String? serialNo,
     String? hotelName,
+    String? buildingName,
+    String? hotelImage,
+    String? hotelAddress,
     String? name,
     String? checkIn,
+    String? checkedIn,
     String? checkOut,
     String? bookingOrderTime,
     String? createdTime,
+    String? paymentStatus,
+    int? paymentStatusCode,
+    int? receiptBookSent,
+    String? receiptTitle,
+    String? contactEmail,
+    String? orderStatus,
+    String? orderStatusStr,
+    int? orderStatusCode,
     num? paidAmount,
     num? totalAmount,
     bool? pay,
     bool? refund,
     Object? status,
     int? roomTypeCount,
+    int? roomId,
+    String? roomNo,
+    int? bookingType,
+    Object? sendItem,
+    Object? roomClear,
   }) = _HotelOrderDto;
 
   factory HotelOrderDto.fromJson(Map<String, dynamic> json) =>
       _$HotelOrderDtoFromJson(json);
+}
+
+Object? hotelOrderIdReadValue(Map<dynamic, dynamic> json, String key) {
+  return json[key] ?? json['id'];
 }
 
 @freezed

@@ -1497,6 +1497,27 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelBookingResultPay => '支付';
 
   @override
+  String get hotelOrdersTitle => '我的订单';
+
+  @override
+  String get hotelOrdersFilterAll => '全部';
+
+  @override
+  String get hotelOrdersFilterAwaitingPayment => '待支付';
+
+  @override
+  String get hotelOrdersFilterBooked => '已预约';
+
+  @override
+  String get hotelOrdersFilterCancelled => '已取消';
+
+  @override
+  String get hotelOrdersEmpty => '暂无订单';
+
+  @override
+  String get hotelOrdersLoadMore => '加载更多';
+
+  @override
   String get hotelDetailNoRooms => '暂无可订房型';
 
   @override
@@ -6361,6 +6382,27 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelBookingResultPay => '支付';
+
+  @override
+  String get hotelOrdersTitle => '我的訂單';
+
+  @override
+  String get hotelOrdersFilterAll => '全部';
+
+  @override
+  String get hotelOrdersFilterAwaitingPayment => '待支付';
+
+  @override
+  String get hotelOrdersFilterBooked => '已預約';
+
+  @override
+  String get hotelOrdersFilterCancelled => '已取消';
+
+  @override
+  String get hotelOrdersEmpty => '暫無訂單';
+
+  @override
+  String get hotelOrdersLoadMore => '載入更多';
 
   @override
   String get hotelDetailNoRooms => '暫無可訂房型';

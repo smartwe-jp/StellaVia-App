@@ -32,6 +32,13 @@ abstract class HotelBookingRepository {
 
   Future<String> createBooking(HotelBookingCreateDraft draft);
 
+  Future<HotelOrderListResult> fetchOrderList({
+    required String languageCode,
+    required HotelOrderStatusFilter status,
+    int page = 1,
+    int limit = 5,
+  });
+
   Future<HotelMemberProfile> fetchMemberProfile();
 
   Future<void> updateMemberProfile(HotelMemberProfile profile);

@@ -1584,6 +1584,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hotelBookingResultPay => 'Pay';
 
   @override
+  String get hotelOrdersTitle => 'My orders';
+
+  @override
+  String get hotelOrdersFilterAll => 'All';
+
+  @override
+  String get hotelOrdersFilterAwaitingPayment => 'Awaiting payment';
+
+  @override
+  String get hotelOrdersFilterBooked => 'Booked';
+
+  @override
+  String get hotelOrdersFilterCancelled => 'Cancelled';
+
+  @override
+  String get hotelOrdersEmpty => 'No orders yet';
+
+  @override
+  String get hotelOrdersLoadMore => 'Load more';
+
+  @override
   String get hotelDetailNoRooms => 'No available rooms';
 
   @override

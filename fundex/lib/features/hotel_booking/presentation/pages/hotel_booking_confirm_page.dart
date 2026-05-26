@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/status_bar/app_status_bar_providers.dart';
 import '../../../auth/domain/entities/auth_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../domain/entities/hotel_models.dart';
@@ -15,6 +16,7 @@ import '../widgets/hotel_booking_guest_form_section.dart';
 import '../widgets/hotel_booking_order_summary_card.dart';
 import '../widgets/hotel_booking_payment_section.dart';
 import '../widgets/hotel_state_views.dart';
+import '../widgets/hotel_status_bar_preference_scope.dart';
 
 class HotelBookingConfirmPage extends ConsumerStatefulWidget {
   const HotelBookingConfirmPage({super.key, required this.seed});
@@ -113,139 +115,153 @@ class _HotelBookingConfirmPageState
     final amount = preparation?.quotedPrice ?? widget.seed.fallbackAmount;
     final amountText = presenter.price(amount);
 
-    return Scaffold(
-      backgroundColor: colors.surfaceAlt,
-      appBar: AppNavigationBar(
-        title: context.l10n.hotelBookingConfirmTitle,
-        backgroundColor: colors.surface,
-        foregroundColor: colors.textPrimary,
-        leading: AppNavigationIconButton(
-          icon: Icons.arrow_back_rounded,
-          onTap: () => context.pop(),
-          backgroundColor: colors.surface.withValues(alpha: 0),
+    return HotelStatusBarPreferenceScope(
+      immersive: false,
+      immersiveOnPop: true,
+      child: Scaffold(
+        backgroundColor: colors.surfaceAlt,
+        appBar: AppNavigationBar(
+          title: context.l10n.hotelBookingConfirmTitle,
+          backgroundColor: colors.surface,
           foregroundColor: colors.textPrimary,
+          leading: AppNavigationIconButton(
+            icon: Icons.arrow_back_rounded,
+            onTap: () {
+              ref.read(appImmersiveHotelStatusBarHintProvider.notifier).state =
+                  true;
+              context.pop();
+            },
+            backgroundColor: colors.surface.withValues(alpha: 0),
+            foregroundColor: colors.textPrimary,
+          ),
         ),
-      ),
-      body: Stack(
-        children: <Widget>[
-          CustomScrollView(
-            slivers: <Widget>[
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 132),
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate(<Widget>[
-                    if (preparationState.isLoading)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: LinearProgressIndicator(
-                          color: colors.brandSecondary,
-                          backgroundColor: colors.borderSoft,
+        body: Stack(
+          children: <Widget>[
+            CustomScrollView(
+              slivers: <Widget>[
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 132),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate(<Widget>[
+                      if (preparationState.isLoading)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: LinearProgressIndicator(
+                            color: colors.brandSecondary,
+                            backgroundColor: colors.borderSoft,
+                          ),
                         ),
+                      if (preparationState.hasError)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: HotelInlineErrorNotice(
+                            onRetry: () => ref.invalidate(
+                              hotelBookingPreparationProvider(widget.seed),
+                            ),
+                          ),
+                        ),
+                      HotelBookingOrderSummaryCard(
+                        seed: widget.seed,
+                        presenter: presenter,
+                        amount: amount,
+                        couponsAvailableCount:
+                            preparation?.couponsAvailableCount ?? 0,
+                        onEdit: () => Navigator.of(context).maybePop(),
                       ),
-                    if (preparationState.hasError)
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: HotelInlineErrorNotice(
-                          onRetry: () => ref.invalidate(
-                            hotelBookingPreparationProvider(widget.seed),
-                          ),
-                        ),
+                      const SizedBox(height: 14),
+                      HotelBookingCouponRow(
+                        availableCount: preparation?.couponsAvailableCount ?? 0,
+                        onTap: _showComingSoon,
                       ),
-                    HotelBookingOrderSummaryCard(
-                      seed: widget.seed,
-                      presenter: presenter,
-                      amount: amount,
-                      couponsAvailableCount:
-                          preparation?.couponsAvailableCount ?? 0,
-                      onEdit: () => Navigator.of(context).maybePop(),
-                    ),
-                    const SizedBox(height: 14),
-                    HotelBookingCouponRow(
-                      availableCount: preparation?.couponsAvailableCount ?? 0,
-                      onTap: _showComingSoon,
-                    ),
-                    const SizedBox(height: 14),
-                    HotelBookingPaymentSection(
-                      selected: _paymentMethod,
-                      registeredCardCount:
-                          preparation?.registeredCardCount ?? 0,
-                      onChanged: (value) =>
-                          setState(() => _paymentMethod = value),
-                    ),
-                    const SizedBox(height: 14),
-                    HotelBookingGuestFormSection(
-                      title: context.l10n.hotelBookingBookerInfoTitle,
-                      countryCodes: preparation?.countryCodes ?? const [],
-                      firstNameController: _bookerFirstNameController,
-                      lastNameController: _bookerLastNameController,
-                      emailController: _bookerEmailController,
-                      phoneController: _bookerPhoneController,
-                      selectedCountryCode: _bookerCountryCode,
-                      onCountryChanged: (value) =>
-                          setState(() => _bookerCountryCode = value),
-                      selectedIntlCode: _bookerIntlCode,
-                      onIntlCodeChanged: (value) =>
-                          setState(() => _bookerIntlCode = value),
-                      isRequired: true,
-                    ),
-                    const SizedBox(height: 14),
-                    ...List<Widget>.generate(widget.seed.selectedRooms.length, (
-                      index,
-                    ) {
-                      final selection = widget.seed.selectedRooms[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 14),
-                        child: HotelBookingGuestFormSection(
-                          title: context.l10n.hotelBookingRoomGuestInfoTitle,
-                          roomName: selection.room.name,
-                          countryCodes: preparation?.countryCodes ?? const [],
-                          firstNameController: _roomFirstNameControllers[index],
-                          lastNameController: _roomLastNameControllers[index],
-                          emailController: _roomEmailControllers[index],
-                          phoneController: _roomPhoneControllers[index],
-                          selectedCountryCode: _roomCountryCodes[index],
-                          onCountryChanged: (value) =>
-                              setState(() => _roomCountryCodes[index] = value),
-                          selectedIntlCode: _roomIntlCodes[index],
-                          onIntlCodeChanged: (value) =>
-                              setState(() => _roomIntlCodes[index] = value),
-                          adults: _roomAdults[index],
-                          kids: _roomKids[index],
-                          onAdultsChanged: (value) => setState(
-                            () =>
-                                _roomAdults[index] = value.clamp(1, 99).toInt(),
+                      const SizedBox(height: 14),
+                      HotelBookingPaymentSection(
+                        selected: _paymentMethod,
+                        registeredCardCount:
+                            preparation?.registeredCardCount ?? 0,
+                        onChanged: (value) =>
+                            setState(() => _paymentMethod = value),
+                      ),
+                      const SizedBox(height: 14),
+                      HotelBookingGuestFormSection(
+                        title: context.l10n.hotelBookingBookerInfoTitle,
+                        countryCodes: preparation?.countryCodes ?? const [],
+                        firstNameController: _bookerFirstNameController,
+                        lastNameController: _bookerLastNameController,
+                        emailController: _bookerEmailController,
+                        phoneController: _bookerPhoneController,
+                        selectedCountryCode: _bookerCountryCode,
+                        onCountryChanged: (value) =>
+                            setState(() => _bookerCountryCode = value),
+                        selectedIntlCode: _bookerIntlCode,
+                        onIntlCodeChanged: (value) =>
+                            setState(() => _bookerIntlCode = value),
+                        isRequired: true,
+                      ),
+                      const SizedBox(height: 14),
+                      ...List<
+                        Widget
+                      >.generate(widget.seed.selectedRooms.length, (index) {
+                        final selection = widget.seed.selectedRooms[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 14),
+                          child: HotelBookingGuestFormSection(
+                            title: context.l10n.hotelBookingRoomGuestInfoTitle,
+                            roomName: selection.room.name,
+                            countryCodes: preparation?.countryCodes ?? const [],
+                            firstNameController:
+                                _roomFirstNameControllers[index],
+                            lastNameController: _roomLastNameControllers[index],
+                            emailController: _roomEmailControllers[index],
+                            phoneController: _roomPhoneControllers[index],
+                            selectedCountryCode: _roomCountryCodes[index],
+                            onCountryChanged: (value) => setState(
+                              () => _roomCountryCodes[index] = value,
+                            ),
+                            selectedIntlCode: _roomIntlCodes[index],
+                            onIntlCodeChanged: (value) =>
+                                setState(() => _roomIntlCodes[index] = value),
+                            adults: _roomAdults[index],
+                            kids: _roomKids[index],
+                            onAdultsChanged: (value) => setState(
+                              () => _roomAdults[index] = value
+                                  .clamp(1, 99)
+                                  .toInt(),
+                            ),
+                            onKidsChanged: (value) => setState(
+                              () =>
+                                  _roomKids[index] = value.clamp(0, 99).toInt(),
+                            ),
                           ),
-                          onKidsChanged: (value) => setState(
-                            () => _roomKids[index] = value.clamp(0, 99).toInt(),
-                          ),
-                        ),
-                      );
-                    }),
-                    HotelBookingInvoiceSection(
-                      controller: _invoiceController,
-                      useGuestName: _useGuestNameForInvoice,
-                      onUseGuestNameChanged: (value) =>
-                          setState(() => _useGuestNameForInvoice = value),
-                    ),
-                    const SizedBox(height: 14),
-                    HotelBookingMessageSection(controller: _messageController),
-                  ]),
+                        );
+                      }),
+                      HotelBookingInvoiceSection(
+                        controller: _invoiceController,
+                        useGuestName: _useGuestNameForInvoice,
+                        onUseGuestNameChanged: (value) =>
+                            setState(() => _useGuestNameForInvoice = value),
+                      ),
+                      const SizedBox(height: 14),
+                      HotelBookingMessageSection(
+                        controller: _messageController,
+                      ),
+                    ]),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: HotelBookingConfirmBottomBar(
-              amount: amountText.isEmpty
-                  ? context.l10n.hotelPriceAsk
-                  : '$amountText ${context.l10n.hotelCurrencyCode}',
-              amountLabel: context.l10n.hotelDetailPayableAmount,
-              onConfirm: () => _submitBooking(amount),
-              isSubmitting: _isSubmitting,
+              ],
             ),
-          ),
-        ],
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: HotelBookingConfirmBottomBar(
+                amount: amountText.isEmpty
+                    ? context.l10n.hotelPriceAsk
+                    : '$amountText ${context.l10n.hotelCurrencyCode}',
+                amountLabel: context.l10n.hotelDetailPayableAmount,
+                onConfirm: () => _submitBooking(amount),
+                isSubmitting: _isSubmitting,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

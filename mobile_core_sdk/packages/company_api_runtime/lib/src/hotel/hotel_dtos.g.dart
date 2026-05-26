@@ -914,6 +914,8 @@ Map<String, dynamic> _$HotelRoomCustomerDtoToJson(
 
 _HotelOrderListDto _$HotelOrderListDtoFromJson(Map<String, dynamic> json) =>
     _HotelOrderListDto(
+      startPage: (json['startPage'] as num?)?.toInt(),
+      limit: (json['limit'] as num?)?.toInt(),
       orders:
           (json['bookingOrderList'] as List<dynamic>?)
               ?.map((e) => HotelOrderDto.fromJson(e as Map<String, dynamic>))
@@ -924,46 +926,84 @@ _HotelOrderListDto _$HotelOrderListDtoFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$HotelOrderListDtoToJson(_HotelOrderListDto instance) =>
     <String, dynamic>{
+      'startPage': instance.startPage,
+      'limit': instance.limit,
       'bookingOrderList': instance.orders,
       'count': instance.count,
     };
 
 _HotelOrderDto _$HotelOrderDtoFromJson(Map<String, dynamic> json) =>
     _HotelOrderDto(
-      orderId: json['orderId'] as String? ?? '',
+      orderId: hotelOrderIdReadValue(json, 'orderId') as String? ?? '',
+      id: json['id'] as String?,
       orderNo: json['orderNo'] as String?,
       serialNo: json['serialNo'] as String?,
       hotelName: json['hotelName'] as String?,
+      buildingName: json['buildingName'] as String?,
+      hotelImage: json['hotelImage'] as String?,
+      hotelAddress: json['hotelAddress'] as String?,
       name: json['name'] as String?,
       checkIn: json['checkIn'] as String?,
+      checkedIn: json['checkedIn'] as String?,
       checkOut: json['checkOut'] as String?,
       bookingOrderTime: json['bookingOrderTime'] as String?,
       createdTime: json['createdTime'] as String?,
+      paymentStatus: json['paymentStatus'] as String?,
+      paymentStatusCode: (json['paymentStatusCode'] as num?)?.toInt(),
+      receiptBookSent: (json['receiptBookSent'] as num?)?.toInt(),
+      receiptTitle: json['receiptTitle'] as String?,
+      contactEmail: json['contactEmail'] as String?,
+      orderStatus: json['orderStatus'] as String?,
+      orderStatusStr: json['orderStatusStr'] as String?,
+      orderStatusCode: (json['orderStatusCode'] as num?)?.toInt(),
       paidAmount: json['paidAmount'] as num?,
       totalAmount: json['totalAmount'] as num?,
       pay: json['pay'] as bool?,
       refund: json['refund'] as bool?,
       status: json['status'],
       roomTypeCount: (json['roomTypeCount'] as num?)?.toInt(),
+      roomId: (json['roomId'] as num?)?.toInt(),
+      roomNo: json['roomNo'] as String?,
+      bookingType: (json['bookingType'] as num?)?.toInt(),
+      sendItem: json['sendItem'],
+      roomClear: json['roomClear'],
     );
 
 Map<String, dynamic> _$HotelOrderDtoToJson(_HotelOrderDto instance) =>
     <String, dynamic>{
       'orderId': instance.orderId,
+      'id': instance.id,
       'orderNo': instance.orderNo,
       'serialNo': instance.serialNo,
       'hotelName': instance.hotelName,
+      'buildingName': instance.buildingName,
+      'hotelImage': instance.hotelImage,
+      'hotelAddress': instance.hotelAddress,
       'name': instance.name,
       'checkIn': instance.checkIn,
+      'checkedIn': instance.checkedIn,
       'checkOut': instance.checkOut,
       'bookingOrderTime': instance.bookingOrderTime,
       'createdTime': instance.createdTime,
+      'paymentStatus': instance.paymentStatus,
+      'paymentStatusCode': instance.paymentStatusCode,
+      'receiptBookSent': instance.receiptBookSent,
+      'receiptTitle': instance.receiptTitle,
+      'contactEmail': instance.contactEmail,
+      'orderStatus': instance.orderStatus,
+      'orderStatusStr': instance.orderStatusStr,
+      'orderStatusCode': instance.orderStatusCode,
       'paidAmount': instance.paidAmount,
       'totalAmount': instance.totalAmount,
       'pay': instance.pay,
       'refund': instance.refund,
       'status': instance.status,
       'roomTypeCount': instance.roomTypeCount,
+      'roomId': instance.roomId,
+      'roomNo': instance.roomNo,
+      'bookingType': instance.bookingType,
+      'sendItem': instance.sendItem,
+      'roomClear': instance.roomClear,
     };
 
 _HotelMemberPayInfoDto _$HotelMemberPayInfoDtoFromJson(

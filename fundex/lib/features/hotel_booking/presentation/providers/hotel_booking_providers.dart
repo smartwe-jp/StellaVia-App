@@ -14,9 +14,11 @@ import '../../domain/usecases/fetch_hotel_building_filters_usecase.dart';
 import '../../domain/usecases/fetch_hotel_booking_preparation_usecase.dart';
 import '../../domain/usecases/fetch_hotel_detail_usecase.dart';
 import '../../domain/usecases/fetch_hotel_member_profile_usecase.dart';
+import '../../domain/usecases/fetch_hotel_order_list_usecase.dart';
 import '../../domain/usecases/search_hotels_usecase.dart';
 import '../../domain/usecases/update_hotel_member_profile_usecase.dart';
 import '../controllers/hotel_booking_controller.dart';
+import '../controllers/hotel_order_list_controller.dart';
 
 final hotelApiClientProvider = Provider<HotelApiClient>((ref) {
   return HotelApiClient(ref.watch(hotelCoreHttpClientProvider));
@@ -71,6 +73,14 @@ final createHotelBookingUseCaseProvider = Provider<CreateHotelBookingUseCase>((
 ) {
   return CreateHotelBookingUseCase(ref.watch(hotelBookingRepositoryProvider));
 });
+
+final fetchHotelOrderListUseCaseProvider = Provider<FetchHotelOrderListUseCase>(
+  (ref) {
+    return FetchHotelOrderListUseCase(
+      ref.watch(hotelBookingRepositoryProvider),
+    );
+  },
+);
 
 final fetchHotelMemberProfileUseCaseProvider =
     Provider<FetchHotelMemberProfileUseCase>((ref) {
@@ -141,6 +151,17 @@ final hotelBookingPreparationProvider = FutureProvider.autoDispose
 final hotelMemberProfileProvider =
     FutureProvider.autoDispose<HotelMemberProfile>((ref) {
       return ref.watch(fetchHotelMemberProfileUseCaseProvider)();
+    });
+
+final hotelOrderListControllerProvider =
+    StateNotifierProvider.autoDispose<
+      HotelOrderListController,
+      HotelOrderListState
+    >((ref) {
+      return HotelOrderListController(
+        fetchOrderList: ref.watch(fetchHotelOrderListUseCaseProvider),
+        languageCode: ref.watch(hotelLocaleLanguageCodeProvider),
+      );
     });
 
 class HotelDetailQuery {
