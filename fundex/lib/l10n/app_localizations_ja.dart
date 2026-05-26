@@ -1560,6 +1560,92 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelOrdersDetailComingSoon => '注文詳細は後で接続します';
 
   @override
+  String get hotelOrderDetailTitle => '注文詳細';
+
+  @override
+  String get hotelOrderDetailBookingTypeRoom => '部屋ごと予約';
+
+  @override
+  String get hotelOrderDetailGuestCountLabel => '宿泊人数';
+
+  @override
+  String get hotelOrderDetailTotalAmount => '合計金額';
+
+  @override
+  String get hotelOrderDetailCheckInGuide => 'チェックインガイド';
+
+  @override
+  String get hotelOrderDetailNoGuide => 'チェックインガイドはありません';
+
+  @override
+  String get hotelOrderDetailGatePassword => 'ゲートパスワード';
+
+  @override
+  String get hotelOrderDetailCopy => 'コピー';
+
+  @override
+  String get hotelOrderDetailCopied => 'コピーしました';
+
+  @override
+  String get hotelOrderDetailBookerInfo => '予約者情報';
+
+  @override
+  String get hotelOrderDetailGuestInfo => '宿泊者情報';
+
+  @override
+  String hotelOrderDetailGuestBadge(Object count) {
+    return '$count名';
+  }
+
+  @override
+  String get hotelOrderDetailCustomerName => '顧客名';
+
+  @override
+  String get hotelOrderDetailNationality => '国/地域';
+
+  @override
+  String get hotelOrderDetailEmail => 'メール';
+
+  @override
+  String get hotelOrderDetailPhone => '電話番号';
+
+  @override
+  String get hotelOrderDetailCreatedAt => '作成日時';
+
+  @override
+  String get hotelOrderDetailAdult => '大人';
+
+  @override
+  String get hotelOrderDetailRoomNumber => '部屋番号';
+
+  @override
+  String get hotelOrderDetailLocation => '位置';
+
+  @override
+  String get hotelOrderDetailCancelPolicy => 'キャンセルポリシー';
+
+  @override
+  String get hotelOrderDetailPayNow => '今払う';
+
+  @override
+  String get hotelOrderDetailRefundRequest => '払い戻しをリクエストする';
+
+  @override
+  String get hotelOrderDetailNotCheckedIn => '未入居';
+
+  @override
+  String get hotelOrderDetailCheckedIn => '入居済み';
+
+  @override
+  String get hotelOrderDetailMoreComingSoon => 'その他の操作は後で接続します';
+
+  @override
+  String get hotelOrderDetailPaymentComingSoon => '支払いフローは後で接続します';
+
+  @override
+  String get hotelOrderDetailRefundComingSoon => '払い戻しフローは後で接続します';
+
+  @override
   String get hotelDetailNoRooms => '予約可能な客室はありません';
 
   @override

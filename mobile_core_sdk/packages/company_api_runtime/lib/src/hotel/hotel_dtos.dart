@@ -670,14 +670,21 @@ abstract class HotelOrderListDto with _$HotelOrderListDto {
 @freezed
 abstract class HotelOrderDto with _$HotelOrderDto {
   const factory HotelOrderDto({
-    @JsonKey(readValue: hotelOrderIdReadValue) @Default('') String orderId,
-    @JsonKey(name: 'id') String? id,
+    @JsonKey(readValue: hotelOrderIdReadValue, fromJson: hotelStringFromJson)
+    @Default('')
+    String orderId,
+    @JsonKey(name: 'id', fromJson: hotelNullableStringFromJson) String? id,
     String? orderNo,
     String? serialNo,
+    @JsonKey(fromJson: hotelNullableStringFromJson) String? hotelId,
     String? hotelName,
     String? buildingName,
     String? hotelImage,
+    String? hotelHomeImage,
     String? hotelAddress,
+    String? address,
+    Object? lat,
+    Object? lng,
     String? name,
     String? checkIn,
     String? checkedIn,
@@ -689,15 +696,34 @@ abstract class HotelOrderDto with _$HotelOrderDto {
     int? receiptBookSent,
     String? receiptTitle,
     String? contactEmail,
+    String? contactIntlCode,
+    String? contactMobile,
+    String? nationalityText,
     String? orderStatus,
     String? orderStatusStr,
     int? orderStatusCode,
+    String? checkedInText,
+    int? adultCount,
+    int? childCount,
     num? paidAmount,
     num? totalAmount,
+    String? payName,
+    String? payCode,
+    String? paymentTime,
     bool? pay,
     bool? refund,
+    bool? modify,
+    bool? canCheckIn,
     Object? status,
-    int? roomTypeCount,
+    String? comment,
+    String? checkInGuide,
+    String? cancelRule,
+    @JsonKey(fromJson: hotelMapFromJson)
+    @Default(<String, Object?>{})
+    Map<String, Object?> priceElement,
+    @JsonKey(fromJson: hotelMapListFromJson)
+    @Default(<Map<String, Object?>>[])
+    List<Map<String, Object?>> roomTypeCount,
     int? roomId,
     String? roomNo,
     int? bookingType,
@@ -711,6 +737,36 @@ abstract class HotelOrderDto with _$HotelOrderDto {
 
 Object? hotelOrderIdReadValue(Map<dynamic, dynamic> json, String key) {
   return json[key] ?? json['id'];
+}
+
+String hotelStringFromJson(Object? raw) {
+  return raw?.toString().trim() ?? '';
+}
+
+String? hotelNullableStringFromJson(Object? raw) {
+  final value = hotelStringFromJson(raw);
+  return value.isEmpty ? null : value;
+}
+
+Map<String, Object?> hotelMapFromJson(Object? raw) {
+  if (raw == null) {
+    return const <String, Object?>{};
+  }
+  if (raw is Map) {
+    return raw.map((key, value) => MapEntry(key.toString(), value));
+  }
+  if (raw is String) {
+    final trimmed = raw.trim();
+    if (trimmed.isEmpty) {
+      return const <String, Object?>{};
+    }
+    try {
+      return hotelMapFromJson(jsonDecode(trimmed));
+    } catch (_) {
+      return const <String, Object?>{};
+    }
+  }
+  return const <String, Object?>{};
 }
 
 @freezed

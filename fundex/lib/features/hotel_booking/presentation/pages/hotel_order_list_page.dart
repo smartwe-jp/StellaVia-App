@@ -105,17 +105,24 @@ class HotelOrderListPage extends ConsumerWidget {
                         );
                       }
                       final order = state.orders[index];
+                      void openDetail() {
+                        if (order.id.isEmpty) {
+                          return;
+                        }
+                        context.push(
+                          '/hotel-booking/orders/${Uri.encodeComponent(order.id)}',
+                        );
+                      }
+
                       return HotelOrderSummaryCard(
                         order: order,
                         presenter: presenter,
+                        onTap: openDetail,
                         onRebook: () => AppNotice.show(
                           context,
                           message: context.l10n.hotelOrdersRebookComingSoon,
                         ),
-                        onViewDetail: () => AppNotice.show(
-                          context,
-                          message: context.l10n.hotelOrdersDetailComingSoon,
-                        ),
+                        onViewDetail: openDetail,
                       );
                     },
                   ),

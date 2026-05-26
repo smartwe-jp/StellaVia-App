@@ -1545,6 +1545,92 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelOrdersDetailComingSoon => '订单详情稍后接入';
 
   @override
+  String get hotelOrderDetailTitle => '订单详情';
+
+  @override
+  String get hotelOrderDetailBookingTypeRoom => '按房间预订';
+
+  @override
+  String get hotelOrderDetailGuestCountLabel => '住宿人数';
+
+  @override
+  String get hotelOrderDetailTotalAmount => '合计金额';
+
+  @override
+  String get hotelOrderDetailCheckInGuide => '入住指南';
+
+  @override
+  String get hotelOrderDetailNoGuide => '暂无入住指南';
+
+  @override
+  String get hotelOrderDetailGatePassword => '大门密码';
+
+  @override
+  String get hotelOrderDetailCopy => '复制';
+
+  @override
+  String get hotelOrderDetailCopied => '已复制';
+
+  @override
+  String get hotelOrderDetailBookerInfo => '预约者信息';
+
+  @override
+  String get hotelOrderDetailGuestInfo => '入住者信息';
+
+  @override
+  String hotelOrderDetailGuestBadge(Object count) {
+    return '$count名';
+  }
+
+  @override
+  String get hotelOrderDetailCustomerName => '顾客名';
+
+  @override
+  String get hotelOrderDetailNationality => '国家/地区';
+
+  @override
+  String get hotelOrderDetailEmail => '邮箱';
+
+  @override
+  String get hotelOrderDetailPhone => '电话号码';
+
+  @override
+  String get hotelOrderDetailCreatedAt => '创建时间';
+
+  @override
+  String get hotelOrderDetailAdult => '成人';
+
+  @override
+  String get hotelOrderDetailRoomNumber => '房间号';
+
+  @override
+  String get hotelOrderDetailLocation => '位置';
+
+  @override
+  String get hotelOrderDetailCancelPolicy => '取消政策';
+
+  @override
+  String get hotelOrderDetailPayNow => '立即支付';
+
+  @override
+  String get hotelOrderDetailRefundRequest => '申请退款';
+
+  @override
+  String get hotelOrderDetailNotCheckedIn => '未入住';
+
+  @override
+  String get hotelOrderDetailCheckedIn => '已入住';
+
+  @override
+  String get hotelOrderDetailMoreComingSoon => '更多操作稍后接入';
+
+  @override
+  String get hotelOrderDetailPaymentComingSoon => '支付流程稍后接入';
+
+  @override
+  String get hotelOrderDetailRefundComingSoon => '退款流程稍后接入';
+
+  @override
   String get hotelDetailNoRooms => '暂无可订房型';
 
   @override
@@ -6457,6 +6543,92 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelOrdersDetailComingSoon => '訂單詳情稍後接入';
+
+  @override
+  String get hotelOrderDetailTitle => '訂單詳情';
+
+  @override
+  String get hotelOrderDetailBookingTypeRoom => '按房間預訂';
+
+  @override
+  String get hotelOrderDetailGuestCountLabel => '住宿人數';
+
+  @override
+  String get hotelOrderDetailTotalAmount => '合計金額';
+
+  @override
+  String get hotelOrderDetailCheckInGuide => '入住指南';
+
+  @override
+  String get hotelOrderDetailNoGuide => '暫無入住指南';
+
+  @override
+  String get hotelOrderDetailGatePassword => '大門密碼';
+
+  @override
+  String get hotelOrderDetailCopy => '複製';
+
+  @override
+  String get hotelOrderDetailCopied => '已複製';
+
+  @override
+  String get hotelOrderDetailBookerInfo => '預約者資訊';
+
+  @override
+  String get hotelOrderDetailGuestInfo => '入住者資訊';
+
+  @override
+  String hotelOrderDetailGuestBadge(Object count) {
+    return '$count名';
+  }
+
+  @override
+  String get hotelOrderDetailCustomerName => '顧客名';
+
+  @override
+  String get hotelOrderDetailNationality => '國家/地區';
+
+  @override
+  String get hotelOrderDetailEmail => '信箱';
+
+  @override
+  String get hotelOrderDetailPhone => '電話號碼';
+
+  @override
+  String get hotelOrderDetailCreatedAt => '建立時間';
+
+  @override
+  String get hotelOrderDetailAdult => '成人';
+
+  @override
+  String get hotelOrderDetailRoomNumber => '房間號';
+
+  @override
+  String get hotelOrderDetailLocation => '位置';
+
+  @override
+  String get hotelOrderDetailCancelPolicy => '取消政策';
+
+  @override
+  String get hotelOrderDetailPayNow => '立即支付';
+
+  @override
+  String get hotelOrderDetailRefundRequest => '申請退款';
+
+  @override
+  String get hotelOrderDetailNotCheckedIn => '未入住';
+
+  @override
+  String get hotelOrderDetailCheckedIn => '已入住';
+
+  @override
+  String get hotelOrderDetailMoreComingSoon => '更多操作稍後接入';
+
+  @override
+  String get hotelOrderDetailPaymentComingSoon => '支付流程稍後接入';
+
+  @override
+  String get hotelOrderDetailRefundComingSoon => '退款流程稍後接入';
 
   @override
   String get hotelDetailNoRooms => '暫無可訂房型';

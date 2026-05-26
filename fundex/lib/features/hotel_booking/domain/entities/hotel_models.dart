@@ -442,6 +442,112 @@ class HotelOrderSummary {
   final bool canRefund;
 }
 
+class HotelOrderDetail {
+  const HotelOrderDetail({
+    required this.summary,
+    required this.hotelId,
+    required this.imageUrl,
+    required this.address,
+    required this.latitude,
+    required this.longitude,
+    required this.orderNo,
+    required this.serialNo,
+    required this.guestName,
+    required this.receiptTitle,
+    required this.contactEmail,
+    required this.contactIntlCode,
+    required this.contactMobile,
+    required this.nationalityText,
+    required this.checkedInText,
+    required this.adultCount,
+    required this.childCount,
+    required this.paidAmount,
+    required this.originalAmount,
+    required this.payName,
+    required this.payCode,
+    required this.paymentTime,
+    required this.comment,
+    required this.checkInGuide,
+    required this.cancelRule,
+    required this.gatePassword,
+    required this.rooms,
+    required this.roomNo,
+    required this.bookingType,
+    required this.pageTexts,
+  });
+
+  final HotelOrderSummary summary;
+  final String hotelId;
+  final String imageUrl;
+  final String address;
+  final double? latitude;
+  final double? longitude;
+  final String orderNo;
+  final String serialNo;
+  final String guestName;
+  final String receiptTitle;
+  final String contactEmail;
+  final String contactIntlCode;
+  final String contactMobile;
+  final String nationalityText;
+  final String checkedInText;
+  final int? adultCount;
+  final int? childCount;
+  final num? paidAmount;
+  final num? originalAmount;
+  final String payName;
+  final String payCode;
+  final String paymentTime;
+  final String comment;
+  final String checkInGuide;
+  final String cancelRule;
+  final String gatePassword;
+  final List<HotelOrderRoomSummary> rooms;
+  final String roomNo;
+  final int? bookingType;
+  final Map<String, Map<String, String>> pageTexts;
+
+  List<HotelOrderRoomGuest> get guests {
+    return rooms.expand((room) => room.guests).toList(growable: false);
+  }
+}
+
+class HotelOrderRoomSummary {
+  const HotelOrderRoomSummary({
+    required this.name,
+    required this.imageUrl,
+    required this.roomCount,
+    required this.guests,
+  });
+
+  final String name;
+  final String imageUrl;
+  final int? roomCount;
+  final List<HotelOrderRoomGuest> guests;
+}
+
+class HotelOrderRoomGuest {
+  const HotelOrderRoomGuest({
+    required this.roomTypeName,
+    required this.roomNo,
+    required this.name,
+    required this.nationalityText,
+    required this.guestCount,
+    required this.email,
+    required this.checkedInText,
+    required this.password,
+  });
+
+  final String roomTypeName;
+  final String roomNo;
+  final String name;
+  final String nationalityText;
+  final int? guestCount;
+  final String email;
+  final String checkedInText;
+  final String password;
+}
+
 class HotelBookingConfirmSeed {
   const HotelBookingConfirmSeed({
     required this.detail,

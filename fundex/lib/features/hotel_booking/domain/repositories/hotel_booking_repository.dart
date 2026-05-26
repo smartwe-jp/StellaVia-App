@@ -39,6 +39,11 @@ abstract class HotelBookingRepository {
     int limit = 5,
   });
 
+  Future<HotelOrderDetail> fetchOrderDetail({
+    required String languageCode,
+    required String orderId,
+  });
+
   Future<HotelMemberProfile> fetchMemberProfile();
 
   Future<void> updateMemberProfile(HotelMemberProfile profile);

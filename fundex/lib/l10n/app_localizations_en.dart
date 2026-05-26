@@ -1633,6 +1633,95 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hotelOrdersDetailComingSoon => 'Order details will be added later';
 
   @override
+  String get hotelOrderDetailTitle => 'Order detail';
+
+  @override
+  String get hotelOrderDetailBookingTypeRoom => 'Room booking';
+
+  @override
+  String get hotelOrderDetailGuestCountLabel => 'Guests';
+
+  @override
+  String get hotelOrderDetailTotalAmount => 'Total amount';
+
+  @override
+  String get hotelOrderDetailCheckInGuide => 'Check-in guide';
+
+  @override
+  String get hotelOrderDetailNoGuide => 'No check-in guide yet';
+
+  @override
+  String get hotelOrderDetailGatePassword => 'Gate password';
+
+  @override
+  String get hotelOrderDetailCopy => 'Copy';
+
+  @override
+  String get hotelOrderDetailCopied => 'Copied';
+
+  @override
+  String get hotelOrderDetailBookerInfo => 'Booker information';
+
+  @override
+  String get hotelOrderDetailGuestInfo => 'Guest information';
+
+  @override
+  String hotelOrderDetailGuestBadge(Object count) {
+    return '$count guests';
+  }
+
+  @override
+  String get hotelOrderDetailCustomerName => 'Guest name';
+
+  @override
+  String get hotelOrderDetailNationality => 'Country/region';
+
+  @override
+  String get hotelOrderDetailEmail => 'Email';
+
+  @override
+  String get hotelOrderDetailPhone => 'Phone';
+
+  @override
+  String get hotelOrderDetailCreatedAt => 'Created at';
+
+  @override
+  String get hotelOrderDetailAdult => 'Adult';
+
+  @override
+  String get hotelOrderDetailRoomNumber => 'Room no.';
+
+  @override
+  String get hotelOrderDetailLocation => 'Location';
+
+  @override
+  String get hotelOrderDetailCancelPolicy => 'Cancellation policy';
+
+  @override
+  String get hotelOrderDetailPayNow => 'Pay now';
+
+  @override
+  String get hotelOrderDetailRefundRequest => 'Request refund';
+
+  @override
+  String get hotelOrderDetailNotCheckedIn => 'Not checked in';
+
+  @override
+  String get hotelOrderDetailCheckedIn => 'Checked in';
+
+  @override
+  String get hotelOrderDetailMoreComingSoon =>
+      'More actions will be added later';
+
+  @override
+  String get hotelOrderDetailPaymentComingSoon =>
+      'Payment flow will be added later';
+
+  @override
+  String get hotelOrderDetailRefundComingSoon =>
+      'Refund flow will be added later';
+
+  @override
   String get hotelDetailNoRooms => 'No available rooms';
 
   @override

@@ -14,6 +14,7 @@ import '../../domain/usecases/fetch_hotel_building_filters_usecase.dart';
 import '../../domain/usecases/fetch_hotel_booking_preparation_usecase.dart';
 import '../../domain/usecases/fetch_hotel_detail_usecase.dart';
 import '../../domain/usecases/fetch_hotel_member_profile_usecase.dart';
+import '../../domain/usecases/fetch_hotel_order_detail_usecase.dart';
 import '../../domain/usecases/fetch_hotel_order_list_usecase.dart';
 import '../../domain/usecases/search_hotels_usecase.dart';
 import '../../domain/usecases/update_hotel_member_profile_usecase.dart';
@@ -81,6 +82,13 @@ final fetchHotelOrderListUseCaseProvider = Provider<FetchHotelOrderListUseCase>(
     );
   },
 );
+
+final fetchHotelOrderDetailUseCaseProvider =
+    Provider<FetchHotelOrderDetailUseCase>((ref) {
+      return FetchHotelOrderDetailUseCase(
+        ref.watch(hotelBookingRepositoryProvider),
+      );
+    });
 
 final fetchHotelMemberProfileUseCaseProvider =
     Provider<FetchHotelMemberProfileUseCase>((ref) {
@@ -161,6 +169,15 @@ final hotelOrderListControllerProvider =
       return HotelOrderListController(
         fetchOrderList: ref.watch(fetchHotelOrderListUseCaseProvider),
         languageCode: ref.watch(hotelLocaleLanguageCodeProvider),
+      );
+    });
+
+final hotelOrderDetailProvider = FutureProvider.autoDispose
+    .family<HotelOrderDetail, String>((ref, orderId) {
+      final languageCode = ref.watch(hotelLocaleLanguageCodeProvider);
+      return ref.watch(fetchHotelOrderDetailUseCaseProvider)(
+        languageCode: languageCode,
+        orderId: orderId,
       );
     });
 

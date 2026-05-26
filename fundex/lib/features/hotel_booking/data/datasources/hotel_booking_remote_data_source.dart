@@ -55,6 +55,11 @@ abstract class HotelBookingRemoteDataSource {
     required Object? status,
   });
 
+  Future<HotelOrderDto> fetchOrderDetail({
+    required String languageCode,
+    required String orderId,
+  });
+
   Future<HotelMemberInfoDto> fetchMemberInfo();
 
   Future<void> updateMemberInfo(HotelMemberInfoUpdateRequestDto request);
@@ -171,6 +176,14 @@ class HotelBookingRemoteDataSourceImpl implements HotelBookingRemoteDataSource {
       limit: limit,
       status: status,
     );
+  }
+
+  @override
+  Future<HotelOrderDto> fetchOrderDetail({
+    required String languageCode,
+    required String orderId,
+  }) {
+    return _client.fetchOrderDetail(lang: languageCode, orderId: orderId);
   }
 
   @override

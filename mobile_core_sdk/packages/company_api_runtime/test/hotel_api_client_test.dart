@@ -724,5 +724,31 @@ void main() {
       expect(orders.orders.first.orderStatusCode, equals(5));
       expect(call, equals(2));
     });
+
+    test('fetchOrderDetail parses authenticated detail payload', () async {
+      final client = _buildClient((options) async {
+        expect(options.method, equals('POST'));
+        expect(options.path, equals(HotelApiPaths.orderDetail));
+        expect(options.extra['auth_required'], isTrue);
+        expect(
+          options.data,
+          equals(<String, dynamic>{'orderId': '1290689', 'lang': 'JP'}),
+        );
+        return _jsonOk(
+          '{"code":200,"msg":"success","data":{"orderId":1290689,"hotelId":7,"hotelName":"谷町君・ホテル・恵美須町72","buildingName":"谷町君･ホテル･恵美須72","hotelHomeImage":"https://img.example.com/hotel.jpg","address":"大阪府大阪市浪速区日本橋東3丁目8-5","lng":135.5,"lat":34.6,"checkIn":"2026-05-25 15:00:00","checkOut":"2026-05-26 10:00:00","contactIntlCode":"81","contactMobile":"08042039590","nationalityText":"日本","checkInGuide":"guide","cancelRule":"policy","priceElement":{"price":8528,"originalPrice":10000},"roomTypeCount":[{"name":"スーペリアツイン","roomCount":1,"roomPictures":[{"relativeUrl":"https://img.example.com/room.jpg"}],"roomIdCustNums":[{"roomTypeName":"スーペリアツイン","custName":"侯 景雁","custNum":1,"password":"1234"}]}]}}',
+        );
+      });
+      final api = HotelApiClient(client);
+
+      final detail = await api.fetchOrderDetail(orderId: '1290689', lang: 'JP');
+
+      expect(detail.orderId, equals('1290689'));
+      expect(detail.hotelId, equals('7'));
+      expect(detail.hotelHomeImage, contains('hotel.jpg'));
+      expect(detail.address, contains('大阪府'));
+      expect(detail.priceElement['price'], equals(8528));
+      expect(detail.roomTypeCount, hasLength(1));
+      expect(detail.roomTypeCount.first['name'], equals('スーペリアツイン'));
+    });
   });
 }

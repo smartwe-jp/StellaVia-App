@@ -235,6 +235,39 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
   }
 
   @override
+  Future<HotelOrderDetail> fetchOrderDetail({
+    required String languageCode,
+    required String orderId,
+  }) async {
+    const pageCodes = <String>['APP008', 'APP003', 'APP0011'];
+    final detailFuture = _remote.fetchOrderDetail(
+      languageCode: languageCode,
+      orderId: orderId,
+    );
+    final pageTextFuture = Future.wait(
+      pageCodes.map(
+        (pageCode) => _remote
+            .fetchPageText(languageCode: languageCode, pageCode: pageCode)
+            .catchError((_) => const <String, String>{}),
+      ),
+    );
+
+    final dto = await detailFuture;
+    final pageTextMaps = await pageTextFuture;
+    final pageTexts = <String, Map<String, String>>{};
+    for (var index = 0; index < pageCodes.length; index += 1) {
+      pageTexts[pageCodes[index]] = Map<String, String>.unmodifiable(
+        pageTextMaps[index],
+      );
+    }
+
+    return _mapOrderDetail(
+      dto,
+      pageTexts: Map<String, Map<String, String>>.unmodifiable(pageTexts),
+    );
+  }
+
+  @override
   Future<HotelMemberProfile> fetchMemberProfile() async {
     final dto = await _remote.fetchMemberInfo();
     return _mapMemberProfile(dto);
@@ -561,12 +594,17 @@ HotelMemberProfile _mapMemberProfile(HotelMemberInfoDto dto) {
 }
 
 HotelOrderSummary _mapOrderSummary(HotelOrderDto dto) {
+  final price = _numOrNull(dto.priceElement['price']);
+  final originalPrice = _numOrNull(dto.priceElement['originalPrice']);
   return HotelOrderSummary(
     id: (dto.orderId.isNotEmpty ? dto.orderId : dto.id ?? '').trim(),
     hotelName: dto.hotelName?.trim() ?? '',
     buildingName: dto.buildingName?.trim() ?? '',
-    hotelImageUrl: dto.hotelImage?.trim() ?? '',
-    hotelAddress: dto.hotelAddress?.trim() ?? '',
+    hotelImageUrl: _firstNotEmpty(<String?>[
+      dto.hotelImage,
+      dto.hotelHomeImage,
+    ]),
+    hotelAddress: _firstNotEmpty(<String?>[dto.hotelAddress, dto.address]),
     checkIn: dto.checkIn?.trim() ?? '',
     checkOut: dto.checkOut?.trim() ?? '',
     bookingOrderTime:
@@ -577,10 +615,105 @@ HotelOrderSummary _mapOrderSummary(HotelOrderDto dto) {
         ? dto.orderStatusStr!.trim()
         : dto.orderStatus?.trim() ?? _stringOrEmpty(dto.status),
     orderStatusCode: dto.orderStatusCode,
-    totalAmount: dto.totalAmount ?? dto.paidAmount,
+    totalAmount: dto.totalAmount ?? dto.paidAmount ?? price ?? originalPrice,
     canPay: dto.pay ?? false,
     canRefund: dto.refund ?? false,
   );
+}
+
+HotelOrderDetail _mapOrderDetail(
+  HotelOrderDto dto, {
+  required Map<String, Map<String, String>> pageTexts,
+}) {
+  final rooms = _mapOrderRooms(dto.roomTypeCount);
+  return HotelOrderDetail(
+    summary: _mapOrderSummary(dto),
+    hotelId: dto.hotelId?.trim() ?? '',
+    imageUrl: _firstNotEmpty(<String?>[dto.hotelHomeImage, dto.hotelImage]),
+    address: _firstNotEmpty(<String?>[dto.address, dto.hotelAddress]),
+    latitude: _doubleOrNull(dto.lat),
+    longitude: _doubleOrNull(dto.lng),
+    orderNo: dto.orderNo?.trim() ?? '',
+    serialNo: dto.serialNo?.trim() ?? '',
+    guestName: dto.name?.trim() ?? '',
+    receiptTitle: dto.receiptTitle?.trim() ?? '',
+    contactEmail: dto.contactEmail?.trim() ?? '',
+    contactIntlCode: dto.contactIntlCode?.trim() ?? '',
+    contactMobile: dto.contactMobile?.trim() ?? '',
+    nationalityText: dto.nationalityText?.trim() ?? '',
+    checkedInText: dto.checkedInText?.trim() ?? '',
+    adultCount: dto.adultCount,
+    childCount: dto.childCount,
+    paidAmount: dto.paidAmount,
+    originalAmount: _numOrNull(dto.priceElement['originalPrice']),
+    payName: dto.payName?.trim() ?? '',
+    payCode: dto.payCode?.trim() ?? '',
+    paymentTime: dto.paymentTime?.trim() ?? '',
+    comment: dto.comment?.trim() ?? '',
+    checkInGuide: dto.checkInGuide?.trim() ?? '',
+    cancelRule: dto.cancelRule?.trim() ?? '',
+    gatePassword: _firstNotEmpty(<String?>[
+      for (final room in rooms)
+        for (final guest in room.guests) guest.password,
+    ]),
+    rooms: rooms,
+    roomNo: dto.roomNo?.trim() ?? '',
+    bookingType: dto.bookingType,
+    pageTexts: pageTexts,
+  );
+}
+
+List<HotelOrderRoomSummary> _mapOrderRooms(
+  List<Map<String, Object?>> rawRooms,
+) {
+  return rawRooms
+      .map((room) {
+        final guests = hotelMapListFromJson(
+          room['roomIdCustNums'],
+        ).map(_mapOrderRoomGuest).toList(growable: false);
+        return HotelOrderRoomSummary(
+          name: _firstNotEmpty(<String?>[
+            _stringOrEmpty(room['showName']),
+            _stringOrEmpty(room['name']),
+            _stringOrEmpty(room['roomTypeName']),
+          ]),
+          imageUrl: _firstOrderRoomImage(room),
+          roomCount: _intOrNull(room['roomCount']),
+          guests: guests,
+        );
+      })
+      .where(
+        (room) =>
+            room.name.isNotEmpty ||
+            room.imageUrl.isNotEmpty ||
+            room.guests.isNotEmpty,
+      )
+      .toList(growable: false);
+}
+
+HotelOrderRoomGuest _mapOrderRoomGuest(Map<String, Object?> raw) {
+  return HotelOrderRoomGuest(
+    roomTypeName: _stringOrEmpty(raw['roomTypeName']),
+    roomNo: _stringOrEmpty(raw['roomNo']),
+    name: _stringOrEmpty(raw['custName']),
+    nationalityText: _stringOrEmpty(raw['nationalityText']),
+    guestCount: _intOrNull(raw['custNum']),
+    email: _stringOrEmpty(raw['email']),
+    checkedInText: _stringOrEmpty(raw['checkedInText']),
+    password: _stringOrEmpty(raw['password']),
+  );
+}
+
+String _firstOrderRoomImage(Map<String, Object?> room) {
+  final pictures = hotelMapListFromJson(room['roomPictures']);
+  if (pictures.isEmpty) {
+    return '';
+  }
+  return _firstNotEmpty(<String?>[
+    _stringOrEmpty(pictures.first['relativeUrl']),
+    _stringOrEmpty(pictures.first['thumbnail']),
+    _stringOrEmpty(pictures.first['localPath']),
+  ]);
 }
 
 List<String> _mapFacilities(HotelDetailDto dto) {
@@ -660,8 +793,25 @@ double? _doubleOrNull(Object? raw) {
   return double.tryParse(raw?.toString().trim() ?? '');
 }
 
+num? _numOrNull(Object? raw) {
+  if (raw is num) {
+    return raw;
+  }
+  return num.tryParse(raw?.toString().trim() ?? '');
+}
+
 String _stringOrEmpty(Object? raw) {
   return raw?.toString().trim() ?? '';
+}
+
+String _firstNotEmpty(Iterable<String?> values) {
+  for (final value in values) {
+    final trimmed = value?.trim() ?? '';
+    if (trimmed.isNotEmpty) {
+      return trimmed;
+    }
+  }
+  return '';
 }
 
 int? _intOrNull(Object? raw) {

@@ -3045,6 +3045,174 @@ abstract class AppLocalizations {
   /// **'Order details will be added later'**
   String get hotelOrdersDetailComingSoon;
 
+  /// No description provided for @hotelOrderDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Order detail'**
+  String get hotelOrderDetailTitle;
+
+  /// No description provided for @hotelOrderDetailBookingTypeRoom.
+  ///
+  /// In en, this message translates to:
+  /// **'Room booking'**
+  String get hotelOrderDetailBookingTypeRoom;
+
+  /// No description provided for @hotelOrderDetailGuestCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Guests'**
+  String get hotelOrderDetailGuestCountLabel;
+
+  /// No description provided for @hotelOrderDetailTotalAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Total amount'**
+  String get hotelOrderDetailTotalAmount;
+
+  /// No description provided for @hotelOrderDetailCheckInGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Check-in guide'**
+  String get hotelOrderDetailCheckInGuide;
+
+  /// No description provided for @hotelOrderDetailNoGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'No check-in guide yet'**
+  String get hotelOrderDetailNoGuide;
+
+  /// No description provided for @hotelOrderDetailGatePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Gate password'**
+  String get hotelOrderDetailGatePassword;
+
+  /// No description provided for @hotelOrderDetailCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get hotelOrderDetailCopy;
+
+  /// No description provided for @hotelOrderDetailCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get hotelOrderDetailCopied;
+
+  /// No description provided for @hotelOrderDetailBookerInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Booker information'**
+  String get hotelOrderDetailBookerInfo;
+
+  /// No description provided for @hotelOrderDetailGuestInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest information'**
+  String get hotelOrderDetailGuestInfo;
+
+  /// No description provided for @hotelOrderDetailGuestBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} guests'**
+  String hotelOrderDetailGuestBadge(Object count);
+
+  /// No description provided for @hotelOrderDetailCustomerName.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest name'**
+  String get hotelOrderDetailCustomerName;
+
+  /// No description provided for @hotelOrderDetailNationality.
+  ///
+  /// In en, this message translates to:
+  /// **'Country/region'**
+  String get hotelOrderDetailNationality;
+
+  /// No description provided for @hotelOrderDetailEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get hotelOrderDetailEmail;
+
+  /// No description provided for @hotelOrderDetailPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get hotelOrderDetailPhone;
+
+  /// No description provided for @hotelOrderDetailCreatedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Created at'**
+  String get hotelOrderDetailCreatedAt;
+
+  /// No description provided for @hotelOrderDetailAdult.
+  ///
+  /// In en, this message translates to:
+  /// **'Adult'**
+  String get hotelOrderDetailAdult;
+
+  /// No description provided for @hotelOrderDetailRoomNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Room no.'**
+  String get hotelOrderDetailRoomNumber;
+
+  /// No description provided for @hotelOrderDetailLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get hotelOrderDetailLocation;
+
+  /// No description provided for @hotelOrderDetailCancelPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancellation policy'**
+  String get hotelOrderDetailCancelPolicy;
+
+  /// No description provided for @hotelOrderDetailPayNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay now'**
+  String get hotelOrderDetailPayNow;
+
+  /// No description provided for @hotelOrderDetailRefundRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Request refund'**
+  String get hotelOrderDetailRefundRequest;
+
+  /// No description provided for @hotelOrderDetailNotCheckedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Not checked in'**
+  String get hotelOrderDetailNotCheckedIn;
+
+  /// No description provided for @hotelOrderDetailCheckedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Checked in'**
+  String get hotelOrderDetailCheckedIn;
+
+  /// No description provided for @hotelOrderDetailMoreComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'More actions will be added later'**
+  String get hotelOrderDetailMoreComingSoon;
+
+  /// No description provided for @hotelOrderDetailPaymentComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment flow will be added later'**
+  String get hotelOrderDetailPaymentComingSoon;
+
+  /// No description provided for @hotelOrderDetailRefundComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Refund flow will be added later'**
+  String get hotelOrderDetailRefundComingSoon;
+
   /// No description provided for @hotelDetailNoRooms.
   ///
   /// In en, this message translates to:
