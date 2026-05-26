@@ -32,14 +32,15 @@ Current behavior:
 - Hotel detail room quantity changes call `/pms/assign/occupancy` and use the returned assigned price for the booking amount before entering confirmation.
 - Tapping the hotel detail booking button re-runs `/pms/assign/occupancy`; if the response contains `message`, show it in a cancel/confirm dialog and continue to confirmation only after confirm.
 - Tapping a room plan card opens a room-detail bottom sheet with room photos, facts, facility categories, and room description from the detail API room-type fields.
-- Hotel booking confirmation has a first UI/data slice at `/hotel-booking/:id/confirm`: order summary, coupon entry row, payment method selection, booker form, room guest form, invoice, note, and sticky amount bar. The submit action is still a placeholder.
+- Hotel booking confirmation has a first UI/data slice at `/hotel-booking/:id/confirm`: order summary, coupon entry row, payment method selection, booker form, room guest form, invoice, note, and sticky amount bar. The submit action creates a pre-order through `/pms/bookingorder/save/v2`.
 - Entering hotel booking confirmation initializes the legacy-compatible preparation request set: `/pms/page` for `APP011`, `APP003`, `APP004`, and `APP012`, plus `/pms/countryCodeList`, `/pms/order/room/extraPerson`, `/pms/coupons/order/custListV2`, `/pms/member/memberContactsList`, and `/creditCard/register/list`.
 - Hotel booking confirmation auto-fills empty booker fields from the current App authenticated user cache. Booker name uses App `lastName`/`firstName` first and falls back to `lastNameEn`/`firstNameEn`; email, phone, and phone country code use the authenticated user fields.
+- Successful hotel pre-order creation navigates to `/hotel-booking/:id/result` with the order id, selected payment method, payable amount, and a notice that payment is still required within the backend timeout window. The payment button is still a placeholder until the hotel payment slice is implemented.
 - SDK-level hotel API client/DTO foundation exists for the first migration slice.
 
 Current gaps:
 
-- No booking submit/result/order pages.
+- No hotel order list/detail pages.
 - No hotel payment/refund/cancel policy flow.
 - Hotel API success-code contract is still unresolved: old app checks `code == 200`, while current architecture notes say hotel uses `code == 0`.
 

@@ -9,6 +9,7 @@ import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../providers/hotel_booking_providers.dart';
 import '../support/hotel_booking_presenter.dart';
+import '../support/hotel_booking_result_route_args.dart';
 import '../widgets/hotel_booking_extra_sections.dart';
 import '../widgets/hotel_booking_guest_form_section.dart';
 import '../widgets/hotel_booking_order_summary_card.dart';
@@ -47,6 +48,7 @@ class _HotelBookingConfirmPageState
   final List<String> _roomIntlCodes = <String>[];
   bool _useGuestNameForInvoice = true;
   bool _didApplyBookerAuthUser = false;
+  bool _isSubmitting = false;
 
   @override
   void initState() {
@@ -96,8 +98,6 @@ class _HotelBookingConfirmPageState
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
@@ -118,13 +118,13 @@ class _HotelBookingConfirmPageState
       appBar: AppNavigationBar(
         title: context.l10n.hotelBookingConfirmTitle,
         backgroundColor: colors.surface,
+        foregroundColor: colors.textPrimary,
+        leading: AppNavigationIconButton(
+          icon: Icons.arrow_back_rounded,
+          onTap: () => context.pop(),
+          backgroundColor: colors.surface.withValues(alpha: 0),
           foregroundColor: colors.textPrimary,
-          leading: AppNavigationIconButton(
-            icon: Icons.arrow_back_rounded,
-            onTap: () => context.pop(),
-            backgroundColor: colors.surface.withValues(alpha: 0),
-            foregroundColor: colors.textPrimary,
-          ),
+        ),
       ),
       body: Stack(
         children: <Widget>[
@@ -241,7 +241,8 @@ class _HotelBookingConfirmPageState
                   ? context.l10n.hotelPriceAsk
                   : '$amountText ${context.l10n.hotelCurrencyCode}',
               amountLabel: context.l10n.hotelDetailPayableAmount,
-              onConfirm: _showComingSoon,
+              onConfirm: () => _submitBooking(amount),
+              isSubmitting: _isSubmitting,
             ),
           ),
         ],
@@ -251,6 +252,87 @@ class _HotelBookingConfirmPageState
 
   void _showComingSoon() {
     AppNotice.show(context, message: context.l10n.hotelDetailBookingComingSoon);
+  }
+
+  Future<void> _submitBooking(num? amount) async {
+    if (_isSubmitting) {
+      return;
+    }
+    final draft = _buildCreateDraft(amount);
+    if (draft == null) {
+      return;
+    }
+    setState(() => _isSubmitting = true);
+    try {
+      final orderId = await ref.read(createHotelBookingUseCaseProvider)(draft);
+      if (!mounted) {
+        return;
+      }
+      setState(() => _isSubmitting = false);
+      context.go(
+        '/hotel-booking/${Uri.encodeComponent(widget.seed.detail.id)}/result',
+        extra: HotelBookingResultRouteArgs(
+          orderId: orderId,
+          seed: widget.seed,
+          totalAmount: draft.totalAmount,
+          paymentMethod: _paymentMethod,
+        ),
+      );
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() => _isSubmitting = false);
+      AppNotice.show(context, message: context.l10n.hotelBookingCreateFailed);
+    }
+  }
+
+  HotelBookingCreateDraft? _buildCreateDraft(num? amount) {
+    final booker = HotelBookingPersonDraft(
+      firstName: _bookerFirstNameController.text.trim(),
+      lastName: _bookerLastNameController.text.trim(),
+      nationality: (_bookerCountryCode ?? '').trim(),
+      intlCode: _bookerIntlCode.trim(),
+      mobile: _bookerPhoneController.text.trim(),
+      email: _bookerEmailController.text.trim(),
+    );
+    if (booker.firstName.isEmpty ||
+        booker.lastName.isEmpty ||
+        booker.nationality.isEmpty ||
+        booker.mobile.isEmpty ||
+        booker.email.isEmpty) {
+      AppNotice.show(
+        context,
+        message: context.l10n.hotelBookingRequiredFieldsMissing,
+      );
+      return null;
+    }
+    final totalAmount = amount ?? widget.seed.fallbackAmount ?? 0;
+    if (totalAmount <= 0) {
+      AppNotice.show(context, message: context.l10n.hotelBookingCreateFailed);
+      return null;
+    }
+    return HotelBookingCreateDraft(
+      seed: widget.seed,
+      languageCode: ref.read(hotelLocaleLanguageCodeProvider),
+      totalAmount: totalAmount,
+      booker: booker,
+      roomGuests: List<HotelBookingRoomGuestDraft>.generate(
+        widget.seed.selectedRooms.length,
+        (index) => HotelBookingRoomGuestDraft(
+          firstName: _roomFirstNameControllers[index].text.trim(),
+          lastName: _roomLastNameControllers[index].text.trim(),
+          nationality: (_roomCountryCodes[index] ?? '').trim(),
+          email: _roomEmailControllers[index].text.trim(),
+          adults: _roomAdults[index],
+          children: _roomKids[index],
+        ),
+      ),
+      receiptTitle: _useGuestNameForInvoice
+          ? booker.fullName
+          : _invoiceController.text.trim(),
+      comment: _messageController.text.trim(),
+    );
   }
 
   void _scheduleBookerAuthUserApply(AuthUser? user) {

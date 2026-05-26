@@ -1478,6 +1478,40 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelBookingConfirmAction => '予約を確認';
 
   @override
+  String get hotelBookingRequiredFieldsMissing => '予約者の必須情報を入力してください。';
+
+  @override
+  String get hotelBookingCreateFailed => '仮予約を作成できませんでした。しばらくしてからもう一度お試しください。';
+
+  @override
+  String get hotelPaymentComingSoon => '支払いフローは後で接続します';
+
+  @override
+  String get hotelBookingResultAppBarTitle => '予約結果';
+
+  @override
+  String get hotelBookingResultTitle => 'ご予約はまだ完了していません';
+
+  @override
+  String get hotelBookingResultOrderNumber => '予約番号：';
+
+  @override
+  String get hotelBookingResultPaymentMethod => '支払方法：';
+
+  @override
+  String get hotelBookingResultPaymentAmount => '支払金額：';
+
+  @override
+  String get hotelBookingResultNotice =>
+      '本画面は谷町君旅行から決済情報入力ページに誘導する画面です。下記ボタンを押すと決済情報入力画面に遷移します。15分以内に支払いがない場合、注文はキャンセルされます。';
+
+  @override
+  String get hotelBookingResultBackToOrders => '注文履歴に戻るへ';
+
+  @override
+  String get hotelBookingResultPay => '支払い';
+
+  @override
   String get hotelDetailNoRooms => '予約可能な客室はありません';
 
   @override

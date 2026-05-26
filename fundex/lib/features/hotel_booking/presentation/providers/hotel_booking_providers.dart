@@ -9,6 +9,7 @@ import '../../data/repositories/hotel_booking_repository_impl.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../../domain/repositories/hotel_booking_repository.dart';
 import '../../domain/usecases/assign_hotel_occupancy_usecase.dart';
+import '../../domain/usecases/create_hotel_booking_usecase.dart';
 import '../../domain/usecases/fetch_hotel_building_filters_usecase.dart';
 import '../../domain/usecases/fetch_hotel_booking_preparation_usecase.dart';
 import '../../domain/usecases/fetch_hotel_detail_usecase.dart';
@@ -64,6 +65,12 @@ final fetchHotelBookingPreparationUseCaseProvider =
         ref.watch(hotelBookingRepositoryProvider),
       );
     });
+
+final createHotelBookingUseCaseProvider = Provider<CreateHotelBookingUseCase>((
+  ref,
+) {
+  return CreateHotelBookingUseCase(ref.watch(hotelBookingRepositoryProvider));
+});
 
 final fetchHotelMemberProfileUseCaseProvider =
     Provider<FetchHotelMemberProfileUseCase>((ref) {

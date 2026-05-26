@@ -483,7 +483,7 @@ abstract class HotelBookingCreateRequestDto
     with _$HotelBookingCreateRequestDto {
   @JsonSerializable(includeIfNull: false, explicitToJson: true)
   const factory HotelBookingCreateRequestDto({
-    @Default(<Map<String, dynamic>>[]) List<Map<String, dynamic>> couponsCounts,
+    List<Map<String, dynamic>>? couponsCounts,
     required HotelBookingCreateParentDto parent,
     @Default('38') String site,
   }) = _HotelBookingCreateRequestDto;
@@ -582,29 +582,32 @@ abstract class HotelBookingCreateParentDto with _$HotelBookingCreateParentDto {
 abstract class HotelBookingOrderEntityDto with _$HotelBookingOrderEntityDto {
   @JsonSerializable(includeIfNull: false, explicitToJson: true)
   const factory HotelBookingOrderEntityDto({
-    @Default('glhotel_app') String brandStr,
-    required String adultCount,
+    @Default('gl_web') String brandStr,
+    String? adultCount,
     required String checkIn,
     required String checkOut,
-    required String bookingDate,
+    @Default('') String bookingDate,
     required String firstName,
     required String lastName,
+    @Default('') String name,
     required String nationality,
-    required String nationalityText,
+    String? nationalityText,
     required String lang,
     @JsonKey(name: 'hotelInfoID') required String hotelInfoId,
-    @Default('1') String roomCount,
-    required String totalCount,
-    @Default('0') String kidsCount,
-    @Default('0') String infantsCount,
+    @Default(1) int roomCount,
+    required int totalCount,
+    @Default(1) int totalRoomCount,
+    int? kidsCount,
+    int? infantsCount,
     required String contactIntlCode,
     required String contactMobile,
     required String contactEmail,
-    String? comment,
-    String? receiptTitle,
+    @Default('') String comment,
+    @Default('') String receiptTitle,
     @JsonKey(name: 'siteID') @Default('146671713176780822') String siteId,
     @Default(<HotelOrderRoomTypeDataDto>[])
     List<HotelOrderRoomTypeDataDto> orderRoomTypeData,
+    required num totalAmount,
   }) = _HotelBookingOrderEntityDto;
 
   factory HotelBookingOrderEntityDto.fromJson(Map<String, dynamic> json) =>
@@ -617,7 +620,11 @@ abstract class HotelOrderRoomTypeDataDto with _$HotelOrderRoomTypeDataDto {
   const factory HotelOrderRoomTypeDataDto({
     @JsonKey(name: 'roomTypeID') required String roomTypeId,
     required int roomCount,
-    @Default(<String>[]) List<String> roomIds,
+    String? roomTypename,
+    num? roomPrice,
+    int? occupancy,
+    HotelRoomTypeExtraGuestPriceDto? roomTypeExtraGuestPrices,
+    List<String>? roomIds,
     @Default(<HotelRoomCustomerDto>[]) List<HotelRoomCustomerDto> roomCusts,
   }) = _HotelOrderRoomTypeDataDto;
 
@@ -629,6 +636,7 @@ abstract class HotelOrderRoomTypeDataDto with _$HotelOrderRoomTypeDataDto {
 abstract class HotelRoomCustomerDto with _$HotelRoomCustomerDto {
   @JsonSerializable(includeIfNull: false)
   const factory HotelRoomCustomerDto({
+    @JsonKey(name: 'roomTypeID') int? roomTypeId,
     String? name,
     String? firstName,
     String? lastName,
@@ -636,6 +644,8 @@ abstract class HotelRoomCustomerDto with _$HotelRoomCustomerDto {
     String? nationalityText,
     String? email,
     required int count,
+    int? childCount,
+    int? maxcount,
   }) = _HotelRoomCustomerDto;
 
   factory HotelRoomCustomerDto.fromJson(Map<String, dynamic> json) =>

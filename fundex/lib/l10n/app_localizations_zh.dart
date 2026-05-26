@@ -1463,6 +1463,40 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelBookingConfirmAction => '确认预订';
 
   @override
+  String get hotelBookingRequiredFieldsMissing => '请填写预约人的必填信息。';
+
+  @override
+  String get hotelBookingCreateFailed => '预下单失败，请稍后再试。';
+
+  @override
+  String get hotelPaymentComingSoon => '支付流程稍后接入';
+
+  @override
+  String get hotelBookingResultAppBarTitle => '预订结果';
+
+  @override
+  String get hotelBookingResultTitle => '您的预订尚未完成';
+
+  @override
+  String get hotelBookingResultOrderNumber => '预约番号：';
+
+  @override
+  String get hotelBookingResultPaymentMethod => '支付方式：';
+
+  @override
+  String get hotelBookingResultPaymentAmount => '支付金额：';
+
+  @override
+  String get hotelBookingResultNotice =>
+      '本页面会从谷町君旅行跳转到支付信息输入页面。点击下方按钮后将进入支付信息输入流程。若15分钟内未完成支付，订单将被取消。';
+
+  @override
+  String get hotelBookingResultBackToOrders => '返回订单履历';
+
+  @override
+  String get hotelBookingResultPay => '支付';
+
+  @override
   String get hotelDetailNoRooms => '暂无可订房型';
 
   @override
@@ -6293,6 +6327,40 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelBookingConfirmAction => '確認預訂';
+
+  @override
+  String get hotelBookingRequiredFieldsMissing => '請填寫預約人的必填資訊。';
+
+  @override
+  String get hotelBookingCreateFailed => '預下單失敗，請稍後再試。';
+
+  @override
+  String get hotelPaymentComingSoon => '支付流程稍後接入';
+
+  @override
+  String get hotelBookingResultAppBarTitle => '預訂結果';
+
+  @override
+  String get hotelBookingResultTitle => '您的預訂尚未完成';
+
+  @override
+  String get hotelBookingResultOrderNumber => '預約番號：';
+
+  @override
+  String get hotelBookingResultPaymentMethod => '支付方式：';
+
+  @override
+  String get hotelBookingResultPaymentAmount => '支付金額：';
+
+  @override
+  String get hotelBookingResultNotice =>
+      '本頁面會從谷町君旅行跳轉到支付資訊輸入頁面。點擊下方按鈕後將進入支付資訊輸入流程。若15分鐘內未完成支付，訂單將被取消。';
+
+  @override
+  String get hotelBookingResultBackToOrders => '返回訂單履歷';
+
+  @override
+  String get hotelBookingResultPay => '支付';
 
   @override
   String get hotelDetailNoRooms => '暫無可訂房型';

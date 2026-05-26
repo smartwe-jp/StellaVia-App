@@ -13,10 +13,12 @@ import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/discussion_board/presentation/pages/discussion_board_tab_page.dart';
 import '../../features/hotel_booking/domain/entities/hotel_models.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_booking_confirm_page.dart';
+import '../../features/hotel_booking/presentation/pages/hotel_booking_result_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_detail_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_map_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_booking_tab_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_member_profile_page.dart';
+import '../../features/hotel_booking/presentation/support/hotel_booking_result_route_args.dart';
 import '../../features/hotel_booking/presentation/support/hotel_map_route_args.dart';
 import '../../features/discussion_board/presentation/widgets/kizunark_comment_composer_widgets.dart';
 import '../../features/discussion_board/presentation/widgets/kizunark_draft_list_page.dart';
@@ -113,15 +115,17 @@ String? resolveAuthRedirect({
   required String location,
 }) {
   final isHotelMemberProfile = location == '/hotel-booking/member-profile';
+  final isHotelProtectedChildRoute =
+      isHotelMemberProfile ||
+      location.endsWith('/confirm') ||
+      location.endsWith('/result');
   final isGuestAccessibleRoute =
       location == '/home' ||
       location == '/home/free-market' ||
       location.startsWith('/home/free-market/') ||
       location == '/discussion-board' ||
       location == '/hotel-booking' ||
-      (location.startsWith('/hotel-booking/') &&
-          !isHotelMemberProfile &&
-          !location.endsWith('/confirm')) ||
+      (location.startsWith('/hotel-booking/') && !isHotelProtectedChildRoute) ||
       location.startsWith('/discussion-board/') ||
       location == '/funds' ||
       location.startsWith('/funds/') ||
@@ -439,6 +443,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                         return const _HotelBookingConfirmMissingSeedRedirect();
                       }
                       return HotelBookingConfirmPage(seed: extra);
+                    },
+                  ),
+                  GoRoute(
+                    path: ':id/result',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (BuildContext context, GoRouterState state) {
+                      final extra = state.extra;
+                      if (extra is! HotelBookingResultRouteArgs) {
+                        return const _HotelBookingConfirmMissingSeedRedirect();
+                      }
+                      return HotelBookingResultPage(args: extra);
                     },
                   ),
                 ],

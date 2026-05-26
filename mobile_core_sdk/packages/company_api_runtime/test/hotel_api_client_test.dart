@@ -193,44 +193,64 @@ void main() {
           expect(
             options.data,
             equals(<String, dynamic>{
-              'couponsCounts': <Map<String, dynamic>>[],
               'parent': <String, dynamic>{
                 'bookingOrderEntity': <String, dynamic>{
-                  'brandStr': 'glhotel_app',
-                  'adultCount': '2',
+                  'brandStr': 'gl_web',
                   'checkIn': '2026-06-01 00:00:00',
                   'checkOut': '2026-06-03 00:00:00',
-                  'bookingDate': '2026-05-12 10:00:00',
+                  'bookingDate': '',
                   'firstName': 'Taro',
                   'lastName': 'Yamada',
+                  'name': 'Yamada Taro',
                   'nationality': 'JP',
-                  'nationalityText': '日本',
                   'lang': 'JP',
                   'hotelInfoID': 'h1',
-                  'roomCount': '1',
-                  'totalCount': '2',
-                  'kidsCount': '0',
-                  'infantsCount': '0',
+                  'roomCount': 1,
+                  'totalCount': 2,
+                  'totalRoomCount': 1,
                   'contactIntlCode': '81',
                   'contactMobile': '09000000000',
                   'contactEmail': 'taro@example.com',
+                  'comment': '',
+                  'receiptTitle': '',
                   'siteID': '146671713176780822',
                   'orderRoomTypeData': <Map<String, dynamic>>[
                     <String, dynamic>{
                       'roomTypeID': 'r1',
                       'roomCount': 1,
-                      'roomIds': <String>['101'],
+                      'roomTypename': 'Twin',
+                      'roomPrice': 5740,
+                      'occupancy': 2,
+                      'roomTypeExtraGuestPrices': <String, dynamic>{
+                        'roomTypeId': 1,
+                        'roomTypeName': 'Twin',
+                        'roomCount': 1,
+                        'totalGuestCount': 2,
+                        'extraGuestCount': 0,
+                        'extraGuestPrice': 0,
+                      },
                       'roomCusts': <Map<String, dynamic>>[
-                        <String, dynamic>{'firstName': 'Taro', 'count': 2},
+                        <String, dynamic>{
+                          'roomTypeID': 1,
+                          'name': 'Yamada Taro',
+                          'firstName': 'Taro',
+                          'lastName': 'Yamada',
+                          'nationality': 'JP',
+                          'email': 'taro@example.com',
+                          'count': 2,
+                          'childCount': 0,
+                          'maxcount': 2,
+                        },
                       ],
                     },
                   ],
+                  'totalAmount': 5740,
                 },
               },
               'site': '38',
             }),
           );
-          return _jsonOk('{"code":200,"msg":"success","data":"order-1"}');
+          return _jsonOk('{"code":200,"msg":"success","data":1290827}');
         });
         final api = HotelApiClient(client);
 
@@ -238,17 +258,17 @@ void main() {
           const HotelBookingCreateRequestDto(
             parent: HotelBookingCreateParentDto(
               bookingOrderEntity: HotelBookingOrderEntityDto(
-                adultCount: '2',
                 checkIn: '2026-06-01 00:00:00',
                 checkOut: '2026-06-03 00:00:00',
-                bookingDate: '2026-05-12 10:00:00',
                 firstName: 'Taro',
                 lastName: 'Yamada',
+                name: 'Yamada Taro',
                 nationality: 'JP',
-                nationalityText: '日本',
                 lang: 'JP',
                 hotelInfoId: 'h1',
-                totalCount: '2',
+                roomCount: 1,
+                totalCount: 2,
+                totalRoomCount: 1,
                 contactIntlCode: '81',
                 contactMobile: '09000000000',
                 contactEmail: 'taro@example.com',
@@ -256,18 +276,39 @@ void main() {
                   HotelOrderRoomTypeDataDto(
                     roomTypeId: 'r1',
                     roomCount: 1,
-                    roomIds: <String>['101'],
+                    roomTypename: 'Twin',
+                    roomPrice: 5740,
+                    occupancy: 2,
+                    roomTypeExtraGuestPrices: HotelRoomTypeExtraGuestPriceDto(
+                      roomTypeId: 1,
+                      roomTypeName: 'Twin',
+                      roomCount: 1,
+                      totalGuestCount: 2,
+                      extraGuestCount: 0,
+                      extraGuestPrice: 0,
+                    ),
                     roomCusts: <HotelRoomCustomerDto>[
-                      HotelRoomCustomerDto(firstName: 'Taro', count: 2),
+                      HotelRoomCustomerDto(
+                        roomTypeId: 1,
+                        name: 'Yamada Taro',
+                        firstName: 'Taro',
+                        lastName: 'Yamada',
+                        nationality: 'JP',
+                        email: 'taro@example.com',
+                        count: 2,
+                        childCount: 0,
+                        maxcount: 2,
+                      ),
                     ],
                   ),
                 ],
+                totalAmount: 5740,
               ),
             ),
           ),
         );
 
-        expect(orderId, equals('order-1'));
+        expect(orderId, equals('1290827'));
       },
     );
 

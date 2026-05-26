@@ -30,6 +30,8 @@ abstract class HotelBookingRepository {
     required String languageCode,
   });
 
+  Future<String> createBooking(HotelBookingCreateDraft draft);
+
   Future<HotelMemberProfile> fetchMemberProfile();
 
   Future<void> updateMemberProfile(HotelMemberProfile profile);

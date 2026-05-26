@@ -623,11 +623,9 @@ Map<String, dynamic> _$HotelRoomPriceElementDtoToJson(
 _HotelBookingCreateRequestDto _$HotelBookingCreateRequestDtoFromJson(
   Map<String, dynamic> json,
 ) => _HotelBookingCreateRequestDto(
-  couponsCounts:
-      (json['couponsCounts'] as List<dynamic>?)
-          ?.map((e) => e as Map<String, dynamic>)
-          .toList() ??
-      const <Map<String, dynamic>>[],
+  couponsCounts: (json['couponsCounts'] as List<dynamic>?)
+      ?.map((e) => e as Map<String, dynamic>)
+      .toList(),
   parent: HotelBookingCreateParentDto.fromJson(
     json['parent'] as Map<String, dynamic>,
   ),
@@ -637,7 +635,7 @@ _HotelBookingCreateRequestDto _$HotelBookingCreateRequestDtoFromJson(
 Map<String, dynamic> _$HotelBookingCreateRequestDtoToJson(
   _HotelBookingCreateRequestDto instance,
 ) => <String, dynamic>{
-  'couponsCounts': instance.couponsCounts,
+  'couponsCounts': ?instance.couponsCounts,
   'parent': instance.parent.toJson(),
   'site': instance.site,
 };
@@ -782,26 +780,28 @@ Map<String, dynamic> _$HotelBookingCreateParentDtoToJson(
 _HotelBookingOrderEntityDto _$HotelBookingOrderEntityDtoFromJson(
   Map<String, dynamic> json,
 ) => _HotelBookingOrderEntityDto(
-  brandStr: json['brandStr'] as String? ?? 'glhotel_app',
-  adultCount: json['adultCount'] as String,
+  brandStr: json['brandStr'] as String? ?? 'gl_web',
+  adultCount: json['adultCount'] as String?,
   checkIn: json['checkIn'] as String,
   checkOut: json['checkOut'] as String,
-  bookingDate: json['bookingDate'] as String,
+  bookingDate: json['bookingDate'] as String? ?? '',
   firstName: json['firstName'] as String,
   lastName: json['lastName'] as String,
+  name: json['name'] as String? ?? '',
   nationality: json['nationality'] as String,
-  nationalityText: json['nationalityText'] as String,
+  nationalityText: json['nationalityText'] as String?,
   lang: json['lang'] as String,
   hotelInfoId: json['hotelInfoID'] as String,
-  roomCount: json['roomCount'] as String? ?? '1',
-  totalCount: json['totalCount'] as String,
-  kidsCount: json['kidsCount'] as String? ?? '0',
-  infantsCount: json['infantsCount'] as String? ?? '0',
+  roomCount: (json['roomCount'] as num?)?.toInt() ?? 1,
+  totalCount: (json['totalCount'] as num).toInt(),
+  totalRoomCount: (json['totalRoomCount'] as num?)?.toInt() ?? 1,
+  kidsCount: (json['kidsCount'] as num?)?.toInt(),
+  infantsCount: (json['infantsCount'] as num?)?.toInt(),
   contactIntlCode: json['contactIntlCode'] as String,
   contactMobile: json['contactMobile'] as String,
   contactEmail: json['contactEmail'] as String,
-  comment: json['comment'] as String?,
-  receiptTitle: json['receiptTitle'] as String?,
+  comment: json['comment'] as String? ?? '',
+  receiptTitle: json['receiptTitle'] as String? ?? '',
   siteId: json['siteID'] as String? ?? '146671713176780822',
   orderRoomTypeData:
       (json['orderRoomTypeData'] as List<dynamic>?)
@@ -811,35 +811,39 @@ _HotelBookingOrderEntityDto _$HotelBookingOrderEntityDtoFromJson(
           )
           .toList() ??
       const <HotelOrderRoomTypeDataDto>[],
+  totalAmount: json['totalAmount'] as num,
 );
 
 Map<String, dynamic> _$HotelBookingOrderEntityDtoToJson(
   _HotelBookingOrderEntityDto instance,
 ) => <String, dynamic>{
   'brandStr': instance.brandStr,
-  'adultCount': instance.adultCount,
+  'adultCount': ?instance.adultCount,
   'checkIn': instance.checkIn,
   'checkOut': instance.checkOut,
   'bookingDate': instance.bookingDate,
   'firstName': instance.firstName,
   'lastName': instance.lastName,
+  'name': instance.name,
   'nationality': instance.nationality,
-  'nationalityText': instance.nationalityText,
+  'nationalityText': ?instance.nationalityText,
   'lang': instance.lang,
   'hotelInfoID': instance.hotelInfoId,
   'roomCount': instance.roomCount,
   'totalCount': instance.totalCount,
-  'kidsCount': instance.kidsCount,
-  'infantsCount': instance.infantsCount,
+  'totalRoomCount': instance.totalRoomCount,
+  'kidsCount': ?instance.kidsCount,
+  'infantsCount': ?instance.infantsCount,
   'contactIntlCode': instance.contactIntlCode,
   'contactMobile': instance.contactMobile,
   'contactEmail': instance.contactEmail,
-  'comment': ?instance.comment,
-  'receiptTitle': ?instance.receiptTitle,
+  'comment': instance.comment,
+  'receiptTitle': instance.receiptTitle,
   'siteID': instance.siteId,
   'orderRoomTypeData': instance.orderRoomTypeData
       .map((e) => e.toJson())
       .toList(),
+  'totalAmount': instance.totalAmount,
 };
 
 _HotelOrderRoomTypeDataDto _$HotelOrderRoomTypeDataDtoFromJson(
@@ -847,9 +851,17 @@ _HotelOrderRoomTypeDataDto _$HotelOrderRoomTypeDataDtoFromJson(
 ) => _HotelOrderRoomTypeDataDto(
   roomTypeId: json['roomTypeID'] as String,
   roomCount: (json['roomCount'] as num).toInt(),
-  roomIds:
-      (json['roomIds'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-      const <String>[],
+  roomTypename: json['roomTypename'] as String?,
+  roomPrice: json['roomPrice'] as num?,
+  occupancy: (json['occupancy'] as num?)?.toInt(),
+  roomTypeExtraGuestPrices: json['roomTypeExtraGuestPrices'] == null
+      ? null
+      : HotelRoomTypeExtraGuestPriceDto.fromJson(
+          json['roomTypeExtraGuestPrices'] as Map<String, dynamic>,
+        ),
+  roomIds: (json['roomIds'] as List<dynamic>?)
+      ?.map((e) => e as String)
+      .toList(),
   roomCusts:
       (json['roomCusts'] as List<dynamic>?)
           ?.map((e) => HotelRoomCustomerDto.fromJson(e as Map<String, dynamic>))
@@ -862,13 +874,18 @@ Map<String, dynamic> _$HotelOrderRoomTypeDataDtoToJson(
 ) => <String, dynamic>{
   'roomTypeID': instance.roomTypeId,
   'roomCount': instance.roomCount,
-  'roomIds': instance.roomIds,
+  'roomTypename': ?instance.roomTypename,
+  'roomPrice': ?instance.roomPrice,
+  'occupancy': ?instance.occupancy,
+  'roomTypeExtraGuestPrices': ?instance.roomTypeExtraGuestPrices?.toJson(),
+  'roomIds': ?instance.roomIds,
   'roomCusts': instance.roomCusts.map((e) => e.toJson()).toList(),
 };
 
 _HotelRoomCustomerDto _$HotelRoomCustomerDtoFromJson(
   Map<String, dynamic> json,
 ) => _HotelRoomCustomerDto(
+  roomTypeId: (json['roomTypeID'] as num?)?.toInt(),
   name: json['name'] as String?,
   firstName: json['firstName'] as String?,
   lastName: json['lastName'] as String?,
@@ -876,11 +893,14 @@ _HotelRoomCustomerDto _$HotelRoomCustomerDtoFromJson(
   nationalityText: json['nationalityText'] as String?,
   email: json['email'] as String?,
   count: (json['count'] as num).toInt(),
+  childCount: (json['childCount'] as num?)?.toInt(),
+  maxcount: (json['maxcount'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$HotelRoomCustomerDtoToJson(
   _HotelRoomCustomerDto instance,
 ) => <String, dynamic>{
+  'roomTypeID': ?instance.roomTypeId,
   'name': ?instance.name,
   'firstName': ?instance.firstName,
   'lastName': ?instance.lastName,
@@ -888,6 +908,8 @@ Map<String, dynamic> _$HotelRoomCustomerDtoToJson(
   'nationalityText': ?instance.nationalityText,
   'email': ?instance.email,
   'count': instance.count,
+  'childCount': ?instance.childCount,
+  'maxcount': ?instance.maxcount,
 };
 
 _HotelOrderListDto _$HotelOrderListDtoFromJson(Map<String, dynamic> json) =>

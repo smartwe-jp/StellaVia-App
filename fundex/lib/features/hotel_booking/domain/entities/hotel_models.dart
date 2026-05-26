@@ -399,6 +399,76 @@ class HotelBookingConfirmSeed {
   }
 }
 
+class HotelBookingCreateDraft {
+  const HotelBookingCreateDraft({
+    required this.seed,
+    required this.languageCode,
+    required this.totalAmount,
+    required this.booker,
+    required this.roomGuests,
+    required this.receiptTitle,
+    required this.comment,
+  });
+
+  final HotelBookingConfirmSeed seed;
+  final String languageCode;
+  final num totalAmount;
+  final HotelBookingPersonDraft booker;
+  final List<HotelBookingRoomGuestDraft> roomGuests;
+  final String receiptTitle;
+  final String comment;
+}
+
+class HotelBookingPersonDraft {
+  const HotelBookingPersonDraft({
+    required this.firstName,
+    required this.lastName,
+    required this.nationality,
+    required this.intlCode,
+    required this.mobile,
+    required this.email,
+  });
+
+  final String firstName;
+  final String lastName;
+  final String nationality;
+  final String intlCode;
+  final String mobile;
+  final String email;
+
+  String get fullName {
+    return <String>[
+      lastName.trim(),
+      firstName.trim(),
+    ].where((value) => value.isNotEmpty).join(' ');
+  }
+}
+
+class HotelBookingRoomGuestDraft {
+  const HotelBookingRoomGuestDraft({
+    required this.firstName,
+    required this.lastName,
+    required this.nationality,
+    required this.email,
+    required this.adults,
+    required this.children,
+  });
+
+  final String firstName;
+  final String lastName;
+  final String nationality;
+  final String email;
+  final int adults;
+  final int children;
+
+  String get fullName {
+    return <String>[
+      lastName.trim(),
+      firstName.trim(),
+    ].where((value) => value.isNotEmpty).join(' ');
+  }
+}
+
 class HotelRoomBed {
   const HotelRoomBed({
     required this.name,

@@ -13,6 +13,7 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
 
   final HotelBookingRemoteDataSource _remote;
   final DateFormat _wireDateFormat = DateFormat('yyyy-MM-dd');
+  final DateFormat _wireDateTimeFormat = DateFormat('yyyy-MM-dd 00:00:00');
 
   @override
   Future<HotelSearchResult> searchHotels({
@@ -207,6 +208,11 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
   }
 
   @override
+  Future<String> createBooking(HotelBookingCreateDraft draft) {
+    return _remote.createBooking(_mapBookingCreateRequest(draft));
+  }
+
+  @override
   Future<HotelMemberProfile> fetchMemberProfile() async {
     final dto = await _remote.fetchMemberInfo();
     return _mapMemberProfile(dto);
@@ -224,6 +230,98 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
         birthday: profile.birthday.trim(),
         gender: profile.gender,
         sourceUserId: profile.sourceUserId,
+      ),
+    );
+  }
+
+  HotelBookingCreateRequestDto _mapBookingCreateRequest(
+    HotelBookingCreateDraft draft,
+  ) {
+    final seed = draft.seed;
+    final totalRoomCount = seed.selectedRooms.fold<int>(
+      0,
+      (sum, selection) => sum + selection.quantity,
+    );
+    final totalGuestCount = draft.roomGuests.fold<int>(
+      0,
+      (sum, guest) => sum + guest.adults + guest.children,
+    );
+    final orderRooms = <HotelOrderRoomTypeDataDto>[];
+    for (var index = 0; index < seed.selectedRooms.length; index++) {
+      final selection = seed.selectedRooms[index];
+      final room = selection.room;
+      final guest = index < draft.roomGuests.length
+          ? draft.roomGuests[index]
+          : HotelBookingRoomGuestDraft(
+              firstName: draft.booker.firstName,
+              lastName: draft.booker.lastName,
+              nationality: draft.booker.nationality,
+              email: draft.booker.email,
+              adults: seed.criteria.occupancy,
+              children: seed.criteria.kids,
+            );
+      final roomTypeId = _intOrNull(room.id);
+      final maxAdults = room.baseOccupancy ?? room.occupancy ?? guest.adults;
+      final fallbackRoomPrice = totalRoomCount <= 0
+          ? 0
+          : draft.totalAmount / totalRoomCount;
+      final roomPrice = room.price ?? fallbackRoomPrice;
+      final guestCount = guest.adults + guest.children;
+      final extraGuestCount = (guestCount - maxAdults).clamp(0, 999).toInt();
+      orderRooms.add(
+        HotelOrderRoomTypeDataDto(
+          roomTypeId: room.id,
+          roomCount: selection.quantity,
+          roomTypename: room.name,
+          roomPrice: roomPrice,
+          occupancy: maxAdults,
+          roomTypeExtraGuestPrices: HotelRoomTypeExtraGuestPriceDto(
+            roomTypeId: roomTypeId ?? room.id,
+            roomTypeName: room.name,
+            roomCount: selection.quantity,
+            totalGuestCount: guestCount,
+            extraGuestCount: extraGuestCount,
+            extraGuestPrice: 0,
+          ),
+          roomCusts: <HotelRoomCustomerDto>[
+            HotelRoomCustomerDto(
+              roomTypeId: roomTypeId,
+              firstName: guest.firstName,
+              lastName: guest.lastName,
+              name: guest.fullName,
+              email: guest.email,
+              count: guest.adults,
+              childCount: guest.children,
+              nationality: guest.nationality,
+              maxcount: maxAdults,
+            ),
+          ],
+        ),
+      );
+    }
+
+    return HotelBookingCreateRequestDto(
+      parent: HotelBookingCreateParentDto(
+        bookingOrderEntity: HotelBookingOrderEntityDto(
+          checkIn: _wireDateTimeFormat.format(seed.criteria.checkInDate),
+          checkOut: _wireDateTimeFormat.format(seed.criteria.checkOutDate),
+          firstName: draft.booker.firstName,
+          lastName: draft.booker.lastName,
+          name: draft.booker.fullName,
+          nationality: draft.booker.nationality,
+          lang: draft.languageCode,
+          hotelInfoId: seed.detail.id,
+          roomCount: totalRoomCount,
+          totalRoomCount: totalRoomCount,
+          totalCount: totalGuestCount,
+          contactIntlCode: _normalizeIntlCode(draft.booker.intlCode),
+          contactMobile: draft.booker.mobile,
+          contactEmail: draft.booker.email,
+          receiptTitle: draft.receiptTitle,
+          comment: draft.comment,
+          orderRoomTypeData: orderRooms,
+          totalAmount: draft.totalAmount,
+        ),
       ),
     );
   }
@@ -519,4 +617,22 @@ double? _doubleOrNull(Object? raw) {
 
 String _stringOrEmpty(Object? raw) {
   return raw?.toString().trim() ?? '';
+}
+
+int? _intOrNull(Object? raw) {
+  if (raw is int) {
+    return raw;
+  }
+  if (raw is num) {
+    return raw.toInt();
+  }
+  return int.tryParse(raw?.toString().trim() ?? '');
+}
+
+String _normalizeIntlCode(String raw) {
+  final trimmed = raw.trim();
+  if (trimmed.startsWith('+')) {
+    return trimmed.substring(1);
+  }
+  return trimmed;
 }

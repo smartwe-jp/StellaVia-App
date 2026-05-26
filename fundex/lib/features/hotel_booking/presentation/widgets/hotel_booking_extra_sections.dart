@@ -141,11 +141,13 @@ class HotelBookingConfirmBottomBar extends StatelessWidget {
     required this.amount,
     required this.amountLabel,
     required this.onConfirm,
+    this.isSubmitting = false,
   });
 
   final String amount;
   final String amountLabel;
   final VoidCallback onConfirm;
+  final bool isSubmitting;
 
   @override
   Widget build(BuildContext context) {
@@ -195,21 +197,35 @@ class HotelBookingConfirmBottomBar extends StatelessWidget {
                 width: 150,
                 height: 54,
                 child: FilledButton(
-                  onPressed: onConfirm,
+                  onPressed: isSubmitting ? null : onConfirm,
                   style: FilledButton.styleFrom(
                     backgroundColor: colors.brandPrimary,
+                    disabledBackgroundColor: colors.brandPrimary.withValues(
+                      alpha: 0.64,
+                    ),
                     foregroundColor: colors.onDark,
+                    disabledForegroundColor: colors.onDark,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(UiTokens.radius16),
                     ),
                   ),
-                  child: Text(
-                    context.l10n.hotelBookingConfirmAction,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: colors.onDark,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
+                  child: isSubmitting
+                      ? SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.4,
+                            color: colors.onDark,
+                          ),
+                        )
+                      : Text(
+                          context.l10n.hotelBookingConfirmAction,
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                color: colors.onDark,
+                                fontWeight: FontWeight.w900,
+                              ),
+                        ),
                 ),
               ),
             ],

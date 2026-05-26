@@ -2883,6 +2883,72 @@ abstract class AppLocalizations {
   /// **'Confirm booking'**
   String get hotelBookingConfirmAction;
 
+  /// No description provided for @hotelBookingRequiredFieldsMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the required booker information.'**
+  String get hotelBookingRequiredFieldsMissing;
+
+  /// No description provided for @hotelBookingCreateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not create the pre-order. Please try again later.'**
+  String get hotelBookingCreateFailed;
+
+  /// No description provided for @hotelPaymentComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment flow will be added later'**
+  String get hotelPaymentComingSoon;
+
+  /// No description provided for @hotelBookingResultAppBarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking result'**
+  String get hotelBookingResultAppBarTitle;
+
+  /// No description provided for @hotelBookingResultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your booking is not complete yet'**
+  String get hotelBookingResultTitle;
+
+  /// No description provided for @hotelBookingResultOrderNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Reservation number:'**
+  String get hotelBookingResultOrderNumber;
+
+  /// No description provided for @hotelBookingResultPaymentMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment method:'**
+  String get hotelBookingResultPaymentMethod;
+
+  /// No description provided for @hotelBookingResultPaymentAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment amount:'**
+  String get hotelBookingResultPaymentAmount;
+
+  /// No description provided for @hotelBookingResultNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'This page leads from Tanimachikun Travel to the payment information entry page. Press the button below to continue to payment. If payment is not completed within 15 minutes, the order will be cancelled.'**
+  String get hotelBookingResultNotice;
+
+  /// No description provided for @hotelBookingResultBackToOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to orders'**
+  String get hotelBookingResultBackToOrders;
+
+  /// No description provided for @hotelBookingResultPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay'**
+  String get hotelBookingResultPay;
+
   /// No description provided for @hotelDetailNoRooms.
   ///
   /// In en, this message translates to:
