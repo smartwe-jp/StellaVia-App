@@ -97,10 +97,10 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
         AspectRatio(aspectRatio: 0.9, child: _HeroPhoto()),
         Positioned(
           left: 20,
-          bottom: 0,
+          top: 180,
           right: 16,
+          bottom: 0,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               HotelSearchSummaryBar(
                 summaryLine: summaryLine,
@@ -108,7 +108,7 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
                 onTap: () => _openSearchConditions(filters),
               ),
 
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
 
               HotelQuickActionSection(
                 userInfoLabel: context.l10n.hotelQuickActionUserInfo,
@@ -123,7 +123,7 @@ class _HotelHeroSectionState extends ConsumerState<HotelHeroSection> {
                 onContactTap: () => context.push('/profile/settings/contact'),
               ),
 
-              const SizedBox(height: 40),
+              const Spacer(),
 
               HotelFilterSection(
                 state: widget.state,

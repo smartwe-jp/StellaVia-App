@@ -80,7 +80,7 @@ class _HotelQuickActionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
-    final textStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+    final textStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
       color: colors.brandPrimaryDark,
       fontWeight: FontWeight.w600,
       letterSpacing: 0,
