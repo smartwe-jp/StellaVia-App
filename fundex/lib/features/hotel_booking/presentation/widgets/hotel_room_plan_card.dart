@@ -341,13 +341,18 @@ class _RoomFactChip extends StatelessWidget {
       children: <Widget>[
         Icon(icon, size: 18, color: colors.textTertiary),
         const SizedBox(width: 4),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: colors.textSecondary,
-            fontWeight: FontWeight.w400,
+        Flexible(
+          child: Text(
+            label,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: colors.textSecondary,
+              fontSize: 13,
+              fontWeight: FontWeight.w400,
+            ),
           ),
-        ),
+        )
       ],
     );
   }
