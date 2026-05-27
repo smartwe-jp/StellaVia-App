@@ -1112,6 +1112,7 @@ class _DiscussionBoardTabPageState
           return Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: KizunarkPostCard(
+              key: ValueKey<String>('discussion-thread-${thread.id}'),
               avatar: AppUserAvatar(
                 avatarUrl: thread.author.avatarUrl,
                 gradientColorValues: thread.author.avatarGradientColorValues,

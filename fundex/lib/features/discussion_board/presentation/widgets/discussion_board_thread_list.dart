@@ -54,6 +54,7 @@ class DiscussionBoardThreadList extends StatelessWidget {
                   (reply) => Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: KizunarkReplyTile(
+                      key: ValueKey<String>('discussion-reply-${reply.id}'),
                       avatar: AppUserAvatar(
                         avatarUrl: reply.author.avatarUrl,
                         gradientColorValues:
@@ -82,6 +83,7 @@ class DiscussionBoardThreadList extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: KizunarkPostCard(
+                key: ValueKey<String>('discussion-thread-${thread.id}'),
                 avatar: AppUserAvatar(
                   avatarUrl: thread.author.avatarUrl,
                   gradientColorValues: thread.author.avatarGradientColorValues,
