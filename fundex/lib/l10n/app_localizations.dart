@@ -4095,6 +4095,186 @@ abstract class AppLocalizations {
   /// **'Bank account settings'**
   String get menuItemBankSettings;
 
+  /// No description provided for @menuItemCreditCardSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit cards'**
+  String get menuItemCreditCardSettings;
+
+  /// No description provided for @creditCardListTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit cards'**
+  String get creditCardListTitle;
+
+  /// No description provided for @creditCardSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add credit card'**
+  String get creditCardSettingsTitle;
+
+  /// No description provided for @creditCardAddAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add credit card'**
+  String get creditCardAddAction;
+
+  /// No description provided for @creditCardRegisteredSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Registered cards'**
+  String get creditCardRegisteredSectionTitle;
+
+  /// No description provided for @creditCardAddSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Card information'**
+  String get creditCardAddSectionTitle;
+
+  /// No description provided for @creditCardNoRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'No registered credit cards.'**
+  String get creditCardNoRegistered;
+
+  /// No description provided for @creditCardMaskedCardFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Card information'**
+  String get creditCardMaskedCardFallback;
+
+  /// No description provided for @creditCardDefaultChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get creditCardDefaultChip;
+
+  /// No description provided for @creditCardNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Card number'**
+  String get creditCardNumberLabel;
+
+  /// No description provided for @creditCardHolderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Card holder'**
+  String get creditCardHolderLabel;
+
+  /// No description provided for @creditCardExpiryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Expiry date'**
+  String get creditCardExpiryLabel;
+
+  /// No description provided for @creditCardMonthHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get creditCardMonthHint;
+
+  /// No description provided for @creditCardYearHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get creditCardYearHint;
+
+  /// No description provided for @creditCardCvvLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'CVV'**
+  String get creditCardCvvLabel;
+
+  /// No description provided for @creditCardBankContactHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the email address or phone number registered with your bank.'**
+  String get creditCardBankContactHint;
+
+  /// No description provided for @creditCardBankEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank registered email'**
+  String get creditCardBankEmailLabel;
+
+  /// No description provided for @creditCardIntlCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Country code'**
+  String get creditCardIntlCodeLabel;
+
+  /// No description provided for @creditCardMobileLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank registered mobile phone'**
+  String get creditCardMobileLabel;
+
+  /// No description provided for @creditCardDefaultPaymentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Use as the default payment card for future orders.'**
+  String get creditCardDefaultPaymentLabel;
+
+  /// No description provided for @creditCardBackAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get creditCardBackAction;
+
+  /// No description provided for @creditCardSaveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save card information'**
+  String get creditCardSaveAction;
+
+  /// No description provided for @creditCardSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Card information saved.'**
+  String get creditCardSaved;
+
+  /// No description provided for @creditCardValidationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter card information and a contact method.'**
+  String get creditCardValidationRequired;
+
+  /// No description provided for @creditCardTokenKeyMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Card verification key is not configured.'**
+  String get creditCardTokenKeyMissing;
+
+  /// No description provided for @creditCardTokenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not verify card information.'**
+  String get creditCardTokenFailed;
+
+  /// No description provided for @creditCardPreviewCardHolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Card Holder'**
+  String get creditCardPreviewCardHolder;
+
+  /// No description provided for @creditCardPreviewFullName.
+  ///
+  /// In en, this message translates to:
+  /// **'FULL NAME'**
+  String get creditCardPreviewFullName;
+
+  /// No description provided for @creditCardPreviewExpires.
+  ///
+  /// In en, this message translates to:
+  /// **'Expires'**
+  String get creditCardPreviewExpires;
+
+  /// No description provided for @creditCardPreviewUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get creditCardPreviewUnknown;
+
   /// No description provided for @menuItemChangePassword.
   ///
   /// In en, this message translates to:

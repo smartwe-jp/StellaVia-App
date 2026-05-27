@@ -75,6 +75,7 @@ class HotelApiClient {
     this.memberInfoUpdatePath = HotelApiPaths.memberInfoUpdate,
     this.memberContactsListPath = HotelApiPaths.memberContactsList,
     this.cardRegisterListPath = HotelApiPaths.cardRegisterList,
+    this.cardRegisterPath = HotelApiPaths.cardRegister,
   }) : _envelopeCodec =
            envelopeCodec ??
            const LegacyEnvelopeCodec(
@@ -107,6 +108,7 @@ class HotelApiClient {
   final String memberInfoUpdatePath;
   final String memberContactsListPath;
   final String cardRegisterListPath;
+  final String cardRegisterPath;
 
   Future<HotelSearchResultDto> searchHotels(
     HotelSearchRequestDto request,
@@ -329,16 +331,32 @@ class HotelApiClient {
     );
   }
 
-  Future<List<Map<String, dynamic>>> fetchRegisteredCards() async {
+  Future<List<HotelCreditCardDto>> fetchRegisteredCards() async {
     final response = await _client.dio.post<Map<String, dynamic>>(
       cardRegisterListPath,
       data: <String, dynamic>{},
       options: authRequired(true),
     );
 
-    return _envelopeCodec.extractDataList(
+    final rows = _envelopeCodec.extractDataList(
       _envelopeCodec.toJsonMap(response.data),
       fallbackMessage: 'Failed to load registered credit cards.',
+    );
+    return rows.map(HotelCreditCardDto.fromJson).toList(growable: false);
+  }
+
+  Future<String> registerCreditCard(
+    HotelCreditCardRegisterRequestDto request,
+  ) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      cardRegisterPath,
+      data: request.toJson(),
+      options: authRequired(true),
+    );
+
+    return _envelopeCodec.extractDataString(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to register credit card.',
     );
   }
 

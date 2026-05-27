@@ -1,6 +1,6 @@
 # Hotel Booking Roadmap
 
-Last updated: 2026-05-26
+Last updated: 2026-05-27
 
 This document defines the working plan for the upcoming hotel booking feature. It should be read before opening task threads related to hotel list, hotel detail, room selection, booking, payment, or hotel orders.
 
@@ -22,6 +22,7 @@ Current behavior:
 - Hotel home and hotel detail are immersive with transparent status bars and content extending to the top edge. Other hotel child pages, including orders, profile, confirmation, and result pages, use the default app status bar.
 - Hotel API requests include fixed app metadata headers from the app network layer: `x-client-type: Stellavia-App` and `app-version` from `PackageInfo.version`.
 - Hotel home shows a four-entry quick action row above the search filter controls: user info, hotel orders, coupons, and contact. User info opens the hotel-specific profile route `/hotel-booking/member-profile` backed by `/pms/member/info` and `/pms/member/custSetInfo`, contact opens the existing contact form, and unfinished hotel order/coupon pages currently show the shared app toast.
+- App settings now includes a credit-card list entry under bank account settings. The list page calls `/creditCard/register/list` and opens a separate fullscreen add page at `/profile/settings/credit-card/add`; the add page validates card data through Veritrans `/4gtoken`, then registers through `/creditCard/register`. The Veritrans token API key is injected through `VERITRANS_TOKEN_API_KEY` rather than committed in code.
 - Hotel list search uses fixed area choices only: all areas as `area: ""`, plus `osaka`, `kyoto`, and `tokyo`. Building/property type choices come from `/hotel/buildingCode`, including the empty-code "all" option returned by the API.
 - Hotel home shows selected search conditions as a compact summary bar; tapping the summary bar or search icon opens the full four-row search condition sheet over the tab bar. The sheet edits a local draft and refreshes the list only after "Check availability".
 - Hotel list cards navigate to the public detail route `/hotel-booking/:id` with the current search criteria.

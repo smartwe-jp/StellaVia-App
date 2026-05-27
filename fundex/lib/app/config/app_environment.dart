@@ -7,6 +7,8 @@ class AppEnvironment {
     required this.memberApiBaseUrl,
     required this.hotelApiBaseUrl,
     required this.oaApiBaseUrl,
+    required this.veritransTokenApiBaseUrl,
+    required this.veritransTokenApiKey,
     required this.enableHttpLog,
   });
 
@@ -15,6 +17,8 @@ class AppEnvironment {
   final String memberApiBaseUrl;
   final String hotelApiBaseUrl;
   final String oaApiBaseUrl;
+  final String veritransTokenApiBaseUrl;
+  final String veritransTokenApiKey;
   final bool enableHttpLog;
 
   bool get isProduction => flavor == AppFlavor.prod;
@@ -25,6 +29,8 @@ class AppEnvironment {
     String? memberApiBaseUrl,
     String? hotelApiBaseUrl,
     String? oaApiBaseUrl,
+    String? veritransTokenApiBaseUrl,
+    String? veritransTokenApiKey,
     bool? enableHttpLog,
   }) {
     return AppEnvironment(
@@ -33,6 +39,9 @@ class AppEnvironment {
       memberApiBaseUrl: memberApiBaseUrl ?? this.memberApiBaseUrl,
       hotelApiBaseUrl: hotelApiBaseUrl ?? this.hotelApiBaseUrl,
       oaApiBaseUrl: oaApiBaseUrl ?? this.oaApiBaseUrl,
+      veritransTokenApiBaseUrl:
+          veritransTokenApiBaseUrl ?? this.veritransTokenApiBaseUrl,
+      veritransTokenApiKey: veritransTokenApiKey ?? this.veritransTokenApiKey,
       enableHttpLog: enableHttpLog ?? this.enableHttpLog,
     );
   }
@@ -46,6 +55,8 @@ class EnvironmentFactory {
     String? memberApiBaseUrlOverride,
     String? hotelApiBaseUrlOverride,
     String? oaApiBaseUrlOverride,
+    String? veritransTokenApiBaseUrlOverride,
+    String? veritransTokenApiKeyOverride,
     bool? enableHttpLogOverride,
   }) {
     final defaults = _defaults(flavor);
@@ -62,6 +73,14 @@ class EnvironmentFactory {
         override: oaApiBaseUrlOverride,
         fallback: defaults.oaApiBaseUrl,
       ),
+      veritransTokenApiBaseUrl: _pickUrl(
+        override: veritransTokenApiBaseUrlOverride,
+        fallback: defaults.veritransTokenApiBaseUrl,
+      ),
+      veritransTokenApiKey: _pickValue(
+        override: veritransTokenApiKeyOverride,
+        fallback: defaults.veritransTokenApiKey,
+      ),
       enableHttpLog: enableHttpLogOverride ?? defaults.enableHttpLog,
     );
   }
@@ -75,6 +94,8 @@ class EnvironmentFactory {
           memberApiBaseUrl: 'https://testoa.gutingjun.com/api',
           hotelApiBaseUrl: 'https://hotel-sit.gutingjun.com/api',
           oaApiBaseUrl: 'https://testoa.gutingjun.com/api',
+          veritransTokenApiBaseUrl: 'https://api3.veritrans.co.jp',
+          veritransTokenApiKey: '',
           enableHttpLog: true,
         );
       case AppFlavor.staging:
@@ -84,6 +105,8 @@ class EnvironmentFactory {
           memberApiBaseUrl: 'https://testoa.gutingjun.com/api',
           hotelApiBaseUrl: 'https://hotel-sit.gutingjun.com/api',
           oaApiBaseUrl: 'https://testoa.gutingjun.com/api',
+          veritransTokenApiBaseUrl: 'https://api3.veritrans.co.jp',
+          veritransTokenApiKey: '',
           enableHttpLog: true,
         );
       case AppFlavor.prod:
@@ -93,12 +116,21 @@ class EnvironmentFactory {
           memberApiBaseUrl: 'https://stellavia.co.jp/api',
           hotelApiBaseUrl: 'https://hotel.gutingjun.com/api',
           oaApiBaseUrl: 'https://stellavia.co.jp/api',
+          veritransTokenApiBaseUrl: 'https://api3.veritrans.co.jp',
+          veritransTokenApiKey: '',
           enableHttpLog: false,
         );
     }
   }
 
   static String _pickUrl({
+    required String? override,
+    required String fallback,
+  }) {
+    return _pickValue(override: override, fallback: fallback);
+  }
+
+  static String _pickValue({
     required String? override,
     required String fallback,
   }) {

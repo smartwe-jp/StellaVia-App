@@ -398,6 +398,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   iconForegroundColor: colors.primary,
                   onTap: () => context.push('/profile/wallet/bank-settings'),
                 ),
+                AppMenuItem(
+                  icon: Icons.credit_card_rounded,
+                  label: l10n.menuItemCreditCardSettings,
+                  iconBackgroundColor: colors.infoSubtle,
+                  iconForegroundColor: colors.info,
+                  onTap: () => context.push('/profile/settings/credit-card'),
+                ),
               ],
             ),
             AppMenuSection(

@@ -54,6 +54,7 @@ import '../../features/settings/presentation/pages/settings_face_verification_pa
 import '../../features/settings/presentation/pages/settings_contact_page.dart';
 import '../../features/settings/presentation/pages/settings_contract_document_detail_page.dart';
 import '../../features/settings/presentation/pages/settings_contract_documents_page.dart';
+import '../../features/settings/presentation/pages/settings_credit_card_page.dart';
 import '../../features/settings/presentation/pages/settings_email_verification_page.dart';
 import '../../features/settings/presentation/pages/settings_faq_page.dart';
 import '../../features/settings/presentation/pages/settings_operating_company_page.dart';
@@ -538,6 +539,27 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                         builder: (BuildContext context, GoRouterState state) {
                           return const SettingsContactPage();
                         },
+                      ),
+                      GoRoute(
+                        path: 'credit-card',
+                        parentNavigatorKey: _rootNavigatorKey,
+                        builder: (BuildContext context, GoRouterState state) {
+                          return const SettingsCreditCardPage();
+                        },
+                        routes: <RouteBase>[
+                          GoRoute(
+                            path: 'add',
+                            parentNavigatorKey: _rootNavigatorKey,
+                            pageBuilder:
+                                (BuildContext context, GoRouterState state) {
+                                  return MaterialPage<bool>(
+                                    key: state.pageKey,
+                                    fullscreenDialog: true,
+                                    child: const SettingsCreditCardAddPage(),
+                                  );
+                                },
+                          ),
+                        ],
                       ),
                       GoRoute(
                         path: 'company',

@@ -1,21 +1,29 @@
 import 'package:company_api_runtime/company_api_runtime.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/config/environment_provider.dart';
 import '../../../../app/localization/app_locale_providers.dart';
 import '../../../../app/network/app_network_providers.dart';
+import '../../data/datasources/hotel_credit_card_token_remote_data_source.dart';
 import '../../data/datasources/hotel_booking_remote_data_source.dart';
+import '../../data/repositories/hotel_credit_card_token_repository_impl.dart';
 import '../../data/repositories/hotel_booking_repository_impl.dart';
 import '../../domain/entities/hotel_models.dart';
+import '../../domain/repositories/hotel_credit_card_token_repository.dart';
 import '../../domain/repositories/hotel_booking_repository.dart';
 import '../../domain/usecases/assign_hotel_occupancy_usecase.dart';
+import '../../domain/usecases/create_hotel_credit_card_token_usecase.dart';
 import '../../domain/usecases/create_hotel_booking_usecase.dart';
 import '../../domain/usecases/fetch_hotel_building_filters_usecase.dart';
 import '../../domain/usecases/fetch_hotel_booking_preparation_usecase.dart';
+import '../../domain/usecases/fetch_hotel_credit_cards_usecase.dart';
 import '../../domain/usecases/fetch_hotel_detail_usecase.dart';
 import '../../domain/usecases/fetch_hotel_member_profile_usecase.dart';
 import '../../domain/usecases/fetch_hotel_order_detail_usecase.dart';
 import '../../domain/usecases/fetch_hotel_order_list_usecase.dart';
+import '../../domain/usecases/register_hotel_credit_card_usecase.dart';
 import '../../domain/usecases/search_hotels_usecase.dart';
 import '../../domain/usecases/update_hotel_member_profile_usecase.dart';
 import '../controllers/hotel_booking_controller.dart';
@@ -37,6 +45,20 @@ final hotelBookingRepositoryProvider = Provider<HotelBookingRepository>((ref) {
     remote: ref.watch(hotelBookingRemoteDataSourceProvider),
   );
 });
+
+final hotelCreditCardTokenRemoteDataSourceProvider =
+    Provider<HotelCreditCardTokenRemoteDataSource>((ref) {
+      return HotelCreditCardTokenRemoteDataSourceImpl(
+        Dio(BaseOptions(baseUrl: ref.watch(veritransTokenApiBaseUrlProvider))),
+      );
+    });
+
+final hotelCreditCardTokenRepositoryProvider =
+    Provider<HotelCreditCardTokenRepository>((ref) {
+      return HotelCreditCardTokenRepositoryImpl(
+        remote: ref.watch(hotelCreditCardTokenRemoteDataSourceProvider),
+      );
+    });
 
 final searchHotelsUseCaseProvider = Provider<SearchHotelsUseCase>((ref) {
   return SearchHotelsUseCase(ref.watch(hotelBookingRepositoryProvider));
@@ -74,6 +96,27 @@ final createHotelBookingUseCaseProvider = Provider<CreateHotelBookingUseCase>((
 ) {
   return CreateHotelBookingUseCase(ref.watch(hotelBookingRepositoryProvider));
 });
+
+final fetchHotelCreditCardsUseCaseProvider =
+    Provider<FetchHotelCreditCardsUseCase>((ref) {
+      return FetchHotelCreditCardsUseCase(
+        ref.watch(hotelBookingRepositoryProvider),
+      );
+    });
+
+final createHotelCreditCardTokenUseCaseProvider =
+    Provider<CreateHotelCreditCardTokenUseCase>((ref) {
+      return CreateHotelCreditCardTokenUseCase(
+        ref.watch(hotelCreditCardTokenRepositoryProvider),
+      );
+    });
+
+final registerHotelCreditCardUseCaseProvider =
+    Provider<RegisterHotelCreditCardUseCase>((ref) {
+      return RegisterHotelCreditCardUseCase(
+        ref.watch(hotelBookingRepositoryProvider),
+      );
+    });
 
 final fetchHotelOrderListUseCaseProvider = Provider<FetchHotelOrderListUseCase>(
   (ref) {
@@ -159,6 +202,11 @@ final hotelBookingPreparationProvider = FutureProvider.autoDispose
 final hotelMemberProfileProvider =
     FutureProvider.autoDispose<HotelMemberProfile>((ref) {
       return ref.watch(fetchHotelMemberProfileUseCaseProvider)();
+    });
+
+final hotelCreditCardsProvider =
+    FutureProvider.autoDispose<List<HotelCreditCard>>((ref) {
+      return ref.watch(fetchHotelCreditCardsUseCaseProvider)();
     });
 
 final hotelOrderListControllerProvider =

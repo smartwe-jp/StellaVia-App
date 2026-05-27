@@ -2103,6 +2103,96 @@ class AppLocalizationsZh extends AppLocalizations {
   String get menuItemBankSettings => '银行账户设置';
 
   @override
+  String get menuItemCreditCardSettings => '信用卡';
+
+  @override
+  String get creditCardListTitle => '信用卡';
+
+  @override
+  String get creditCardSettingsTitle => '添加信用卡';
+
+  @override
+  String get creditCardAddAction => '添加信用卡';
+
+  @override
+  String get creditCardRegisteredSectionTitle => '已绑定信用卡';
+
+  @override
+  String get creditCardAddSectionTitle => '卡片信息';
+
+  @override
+  String get creditCardNoRegistered => '暂无已绑定的信用卡。';
+
+  @override
+  String get creditCardMaskedCardFallback => '信用卡信息';
+
+  @override
+  String get creditCardDefaultChip => '默认';
+
+  @override
+  String get creditCardNumberLabel => '卡号';
+
+  @override
+  String get creditCardHolderLabel => '持卡人';
+
+  @override
+  String get creditCardExpiryLabel => '有效期限';
+
+  @override
+  String get creditCardMonthHint => 'Month';
+
+  @override
+  String get creditCardYearHint => 'Year';
+
+  @override
+  String get creditCardCvvLabel => 'CVV';
+
+  @override
+  String get creditCardBankContactHint => '请输入银行登记邮箱或电话号码';
+
+  @override
+  String get creditCardBankEmailLabel => '银行登记邮箱';
+
+  @override
+  String get creditCardIntlCodeLabel => '国际区号';
+
+  @override
+  String get creditCardMobileLabel => '银行登记手机号';
+
+  @override
+  String get creditCardDefaultPaymentLabel => '默认支付方式，将用于之后的订单支付。';
+
+  @override
+  String get creditCardBackAction => '返回';
+
+  @override
+  String get creditCardSaveAction => '保存卡片信息';
+
+  @override
+  String get creditCardSaved => '卡片信息已保存。';
+
+  @override
+  String get creditCardValidationRequired => '请填写卡片信息和联系方式。';
+
+  @override
+  String get creditCardTokenKeyMissing => '卡片校验 Key 尚未配置。';
+
+  @override
+  String get creditCardTokenFailed => '无法校验卡片信息。';
+
+  @override
+  String get creditCardPreviewCardHolder => 'Card Holder';
+
+  @override
+  String get creditCardPreviewFullName => 'FULL NAME';
+
+  @override
+  String get creditCardPreviewExpires => 'Expires';
+
+  @override
+  String get creditCardPreviewUnknown => 'Unknown';
+
+  @override
   String get menuItemChangePassword => '修改密码';
 
   @override
@@ -7158,6 +7248,96 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get menuItemBankSettings => '銀行帳戶設定';
+
+  @override
+  String get menuItemCreditCardSettings => '信用卡';
+
+  @override
+  String get creditCardListTitle => '信用卡';
+
+  @override
+  String get creditCardSettingsTitle => '新增信用卡';
+
+  @override
+  String get creditCardAddAction => '新增信用卡';
+
+  @override
+  String get creditCardRegisteredSectionTitle => '已綁定信用卡';
+
+  @override
+  String get creditCardAddSectionTitle => '卡片資訊';
+
+  @override
+  String get creditCardNoRegistered => '暫無已綁定的信用卡。';
+
+  @override
+  String get creditCardMaskedCardFallback => '信用卡資訊';
+
+  @override
+  String get creditCardDefaultChip => '預設';
+
+  @override
+  String get creditCardNumberLabel => '卡號';
+
+  @override
+  String get creditCardHolderLabel => '持卡人';
+
+  @override
+  String get creditCardExpiryLabel => '有效期限';
+
+  @override
+  String get creditCardMonthHint => 'Month';
+
+  @override
+  String get creditCardYearHint => 'Year';
+
+  @override
+  String get creditCardCvvLabel => 'CVV';
+
+  @override
+  String get creditCardBankContactHint => '請輸入銀行登記電子郵件或電話號碼';
+
+  @override
+  String get creditCardBankEmailLabel => '銀行登記電子郵件';
+
+  @override
+  String get creditCardIntlCodeLabel => '國際區號';
+
+  @override
+  String get creditCardMobileLabel => '銀行登記手機號碼';
+
+  @override
+  String get creditCardDefaultPaymentLabel => '預設付款方式，將用於之後的訂單付款。';
+
+  @override
+  String get creditCardBackAction => '返回';
+
+  @override
+  String get creditCardSaveAction => '儲存卡片資訊';
+
+  @override
+  String get creditCardSaved => '卡片資訊已儲存。';
+
+  @override
+  String get creditCardValidationRequired => '請填寫卡片資訊和聯絡方式。';
+
+  @override
+  String get creditCardTokenKeyMissing => '卡片驗證 Key 尚未設定。';
+
+  @override
+  String get creditCardTokenFailed => '無法驗證卡片資訊。';
+
+  @override
+  String get creditCardPreviewCardHolder => 'Card Holder';
+
+  @override
+  String get creditCardPreviewFullName => 'FULL NAME';
+
+  @override
+  String get creditCardPreviewExpires => 'Expires';
+
+  @override
+  String get creditCardPreviewUnknown => 'Unknown';
 
   @override
   String get menuItemChangePassword => '變更密碼';

@@ -280,6 +280,60 @@ Object? hotelBirthdayReadValue(Map<dynamic, dynamic> json, String key) {
 }
 
 @freezed
+abstract class HotelCreditCardDto with _$HotelCreditCardDto {
+  const factory HotelCreditCardDto({
+    @JsonKey(fromJson: hotelStringFromJson) @Default('') String cardId,
+    @JsonKey(fromJson: hotelStringFromJson) @Default('') String cardNumber,
+    @JsonKey(fromJson: hotelStringFromJson) @Default('') String cardExpire,
+    @JsonKey(fromJson: hotelStringFromJson) @Default('') String cardholderName,
+    @JsonKey(fromJson: hotelStringFromJson) @Default('') String defaultCard,
+    @JsonKey(fromJson: hotelNullableStringFromJson) String? acquireCode3,
+    @JsonKey(fromJson: hotelNullableStringFromJson) String? kindCode,
+    @JsonKey(fromJson: hotelNullableStringFromJson) String? originalCardId,
+  }) = _HotelCreditCardDto;
+
+  factory HotelCreditCardDto.fromJson(Map<String, dynamic> json) =>
+      _$HotelCreditCardDtoFromJson(json);
+}
+
+@freezed
+abstract class HotelCreditCardTokenDto with _$HotelCreditCardTokenDto {
+  const factory HotelCreditCardTokenDto({
+    @JsonKey(fromJson: hotelStringFromJson) @Default('') String token,
+    @JsonKey(name: 'token_expire_date', fromJson: hotelStringFromJson)
+    @Default('')
+    String tokenExpireDate,
+    @JsonKey(name: 'req_card_number', fromJson: hotelStringFromJson)
+    @Default('')
+    String reqCardNumber,
+    @JsonKey(fromJson: hotelStringFromJson) @Default('') String status,
+    @JsonKey(fromJson: hotelStringFromJson) @Default('') String code,
+    @JsonKey(fromJson: hotelStringFromJson) @Default('') String message,
+  }) = _HotelCreditCardTokenDto;
+
+  factory HotelCreditCardTokenDto.fromJson(Map<String, dynamic> json) =>
+      _$HotelCreditCardTokenDtoFromJson(json);
+}
+
+@freezed
+abstract class HotelCreditCardRegisterRequestDto
+    with _$HotelCreditCardRegisterRequestDto {
+  @JsonSerializable(includeIfNull: false, explicitToJson: true)
+  const factory HotelCreditCardRegisterRequestDto({
+    required HotelCreditCardTokenDto cardToken,
+    @Default('') String bookingOrderId,
+    @Default(1) int defaultFlag,
+    String? cardholderMobilePhoneCountry,
+    String? cardholderMobilePhoneNumber,
+    String? cardholderEmail,
+  }) = _HotelCreditCardRegisterRequestDto;
+
+  factory HotelCreditCardRegisterRequestDto.fromJson(
+    Map<String, dynamic> json,
+  ) => _$HotelCreditCardRegisterRequestDtoFromJson(json);
+}
+
+@freezed
 abstract class HotelRoomTypeRoomNumDto with _$HotelRoomTypeRoomNumDto {
   @JsonSerializable(includeIfNull: false)
   const factory HotelRoomTypeRoomNumDto({

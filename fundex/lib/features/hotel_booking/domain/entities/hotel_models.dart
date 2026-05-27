@@ -119,6 +119,76 @@ class HotelBuildingFilter {
   final String name;
 }
 
+class HotelCreditCard {
+  const HotelCreditCard({
+    required this.id,
+    required this.maskedNumber,
+    required this.expire,
+    required this.holderName,
+    required this.isDefault,
+    required this.brandCode,
+  });
+
+  final String id;
+  final String maskedNumber;
+  final String expire;
+  final String holderName;
+  final bool isDefault;
+  final String brandCode;
+}
+
+class HotelCreditCardToken {
+  const HotelCreditCardToken({
+    required this.token,
+    required this.tokenExpireDate,
+    required this.reqCardNumber,
+    required this.status,
+    required this.code,
+    required this.message,
+  });
+
+  final String token;
+  final String tokenExpireDate;
+  final String reqCardNumber;
+  final String status;
+  final String code;
+  final String message;
+}
+
+class HotelCreditCardTokenDraft {
+  const HotelCreditCardTokenDraft({
+    required this.cardNumber,
+    required this.cardExpire,
+    required this.securityCode,
+    required this.cardholderName,
+    required this.tokenApiKey,
+    this.lang = 'en',
+  });
+
+  final String cardNumber;
+  final String cardExpire;
+  final String securityCode;
+  final String cardholderName;
+  final String tokenApiKey;
+  final String lang;
+}
+
+class HotelCreditCardRegistrationDraft {
+  const HotelCreditCardRegistrationDraft({
+    required this.token,
+    required this.defaultFlag,
+    required this.mobileCountryCode,
+    required this.mobileNumber,
+    required this.email,
+  });
+
+  final HotelCreditCardToken token;
+  final bool defaultFlag;
+  final String mobileCountryCode;
+  final String mobileNumber;
+  final String email;
+}
+
 class HotelDetail {
   const HotelDetail({
     required this.id,

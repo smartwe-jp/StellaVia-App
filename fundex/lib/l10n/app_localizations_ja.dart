@@ -2119,6 +2119,96 @@ class AppLocalizationsJa extends AppLocalizations {
   String get menuItemBankSettings => '銀行口座設定';
 
   @override
+  String get menuItemCreditCardSettings => 'クレジットカード';
+
+  @override
+  String get creditCardListTitle => 'クレジットカード';
+
+  @override
+  String get creditCardSettingsTitle => 'クレジットカードを追加';
+
+  @override
+  String get creditCardAddAction => 'クレジットカードを追加';
+
+  @override
+  String get creditCardRegisteredSectionTitle => '登録済みカード';
+
+  @override
+  String get creditCardAddSectionTitle => 'カード情報';
+
+  @override
+  String get creditCardNoRegistered => '登録済みのクレジットカードはありません。';
+
+  @override
+  String get creditCardMaskedCardFallback => 'カード情報';
+
+  @override
+  String get creditCardDefaultChip => 'デフォルト';
+
+  @override
+  String get creditCardNumberLabel => 'カード番号';
+
+  @override
+  String get creditCardHolderLabel => 'カード保持者';
+
+  @override
+  String get creditCardExpiryLabel => '有効期限';
+
+  @override
+  String get creditCardMonthHint => 'Month';
+
+  @override
+  String get creditCardYearHint => 'Year';
+
+  @override
+  String get creditCardCvvLabel => 'CVV';
+
+  @override
+  String get creditCardBankContactHint => '銀行登録メールアドレスまたは電話番号を入力してください';
+
+  @override
+  String get creditCardBankEmailLabel => '銀行登録メールアドレス';
+
+  @override
+  String get creditCardIntlCodeLabel => '国際市外局番';
+
+  @override
+  String get creditCardMobileLabel => '銀行登録携帯電話';
+
+  @override
+  String get creditCardDefaultPaymentLabel => 'デフォルトの支払い、将来の注文支払いに使用されます。';
+
+  @override
+  String get creditCardBackAction => '戻る';
+
+  @override
+  String get creditCardSaveAction => 'カード情報の保存';
+
+  @override
+  String get creditCardSaved => 'カード情報を保存しました。';
+
+  @override
+  String get creditCardValidationRequired => 'カード情報と連絡先を入力してください。';
+
+  @override
+  String get creditCardTokenKeyMissing => 'カード認証キーが未設定です。';
+
+  @override
+  String get creditCardTokenFailed => 'カード情報を確認できませんでした。';
+
+  @override
+  String get creditCardPreviewCardHolder => 'Card Holder';
+
+  @override
+  String get creditCardPreviewFullName => 'FULL NAME';
+
+  @override
+  String get creditCardPreviewExpires => 'Expires';
+
+  @override
+  String get creditCardPreviewUnknown => 'Unknown';
+
+  @override
   String get menuItemChangePassword => 'パスワード変更';
 
   @override

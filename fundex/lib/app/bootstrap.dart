@@ -72,6 +72,8 @@ Future<void> bootstrap({
   String? memberApiBaseUrlOverride,
   String? hotelApiBaseUrlOverride,
   String? oaApiBaseUrlOverride,
+  String? veritransTokenApiBaseUrlOverride,
+  String? veritransTokenApiKeyOverride,
   bool? enableHttpLogOverride,
 }) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -92,6 +94,12 @@ Future<void> bootstrap({
         const String.fromEnvironment('HOTEL_API_BASE_URL'),
     oaApiBaseUrlOverride:
         oaApiBaseUrlOverride ?? const String.fromEnvironment('OA_API_BASE_URL'),
+    veritransTokenApiBaseUrlOverride:
+        veritransTokenApiBaseUrlOverride ??
+        const String.fromEnvironment('VERITRANS_TOKEN_API_BASE_URL'),
+    veritransTokenApiKeyOverride:
+        veritransTokenApiKeyOverride ??
+        const String.fromEnvironment('VERITRANS_TOKEN_API_KEY'),
     enableHttpLogOverride: enableHttpLogOverride ?? enableHttpLogFromDefine,
   );
   final logger = await FileAppLogger.create(

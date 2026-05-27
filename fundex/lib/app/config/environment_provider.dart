@@ -19,3 +19,11 @@ final hotelApiBaseUrlProvider = Provider<String>((ref) {
 final oaApiBaseUrlProvider = Provider<String>((ref) {
   return ref.watch(appEnvironmentProvider).oaApiBaseUrl;
 });
+
+final veritransTokenApiBaseUrlProvider = Provider<String>((ref) {
+  return ref.watch(appEnvironmentProvider).veritransTokenApiBaseUrl;
+});
+
+final veritransTokenApiKeyProvider = Provider<String>((ref) {
+  return ref.watch(appEnvironmentProvider).veritransTokenApiKey;
+});

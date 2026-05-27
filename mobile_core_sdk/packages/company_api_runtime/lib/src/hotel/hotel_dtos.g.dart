@@ -414,6 +414,88 @@ Map<String, dynamic> _$HotelMemberInfoUpdateRequestDtoToJson(
   'phoneCode': ?instance.phoneCode,
 };
 
+_HotelCreditCardDto _$HotelCreditCardDtoFromJson(Map<String, dynamic> json) =>
+    _HotelCreditCardDto(
+      cardId: json['cardId'] == null ? '' : hotelStringFromJson(json['cardId']),
+      cardNumber: json['cardNumber'] == null
+          ? ''
+          : hotelStringFromJson(json['cardNumber']),
+      cardExpire: json['cardExpire'] == null
+          ? ''
+          : hotelStringFromJson(json['cardExpire']),
+      cardholderName: json['cardholderName'] == null
+          ? ''
+          : hotelStringFromJson(json['cardholderName']),
+      defaultCard: json['defaultCard'] == null
+          ? ''
+          : hotelStringFromJson(json['defaultCard']),
+      acquireCode3: hotelNullableStringFromJson(json['acquireCode3']),
+      kindCode: hotelNullableStringFromJson(json['kindCode']),
+      originalCardId: hotelNullableStringFromJson(json['originalCardId']),
+    );
+
+Map<String, dynamic> _$HotelCreditCardDtoToJson(_HotelCreditCardDto instance) =>
+    <String, dynamic>{
+      'cardId': instance.cardId,
+      'cardNumber': instance.cardNumber,
+      'cardExpire': instance.cardExpire,
+      'cardholderName': instance.cardholderName,
+      'defaultCard': instance.defaultCard,
+      'acquireCode3': instance.acquireCode3,
+      'kindCode': instance.kindCode,
+      'originalCardId': instance.originalCardId,
+    };
+
+_HotelCreditCardTokenDto _$HotelCreditCardTokenDtoFromJson(
+  Map<String, dynamic> json,
+) => _HotelCreditCardTokenDto(
+  token: json['token'] == null ? '' : hotelStringFromJson(json['token']),
+  tokenExpireDate: json['token_expire_date'] == null
+      ? ''
+      : hotelStringFromJson(json['token_expire_date']),
+  reqCardNumber: json['req_card_number'] == null
+      ? ''
+      : hotelStringFromJson(json['req_card_number']),
+  status: json['status'] == null ? '' : hotelStringFromJson(json['status']),
+  code: json['code'] == null ? '' : hotelStringFromJson(json['code']),
+  message: json['message'] == null ? '' : hotelStringFromJson(json['message']),
+);
+
+Map<String, dynamic> _$HotelCreditCardTokenDtoToJson(
+  _HotelCreditCardTokenDto instance,
+) => <String, dynamic>{
+  'token': instance.token,
+  'token_expire_date': instance.tokenExpireDate,
+  'req_card_number': instance.reqCardNumber,
+  'status': instance.status,
+  'code': instance.code,
+  'message': instance.message,
+};
+
+_HotelCreditCardRegisterRequestDto _$HotelCreditCardRegisterRequestDtoFromJson(
+  Map<String, dynamic> json,
+) => _HotelCreditCardRegisterRequestDto(
+  cardToken: HotelCreditCardTokenDto.fromJson(
+    json['cardToken'] as Map<String, dynamic>,
+  ),
+  bookingOrderId: json['bookingOrderId'] as String? ?? '',
+  defaultFlag: (json['defaultFlag'] as num?)?.toInt() ?? 1,
+  cardholderMobilePhoneCountry: json['cardholderMobilePhoneCountry'] as String?,
+  cardholderMobilePhoneNumber: json['cardholderMobilePhoneNumber'] as String?,
+  cardholderEmail: json['cardholderEmail'] as String?,
+);
+
+Map<String, dynamic> _$HotelCreditCardRegisterRequestDtoToJson(
+  _HotelCreditCardRegisterRequestDto instance,
+) => <String, dynamic>{
+  'cardToken': instance.cardToken.toJson(),
+  'bookingOrderId': instance.bookingOrderId,
+  'defaultFlag': instance.defaultFlag,
+  'cardholderMobilePhoneCountry': ?instance.cardholderMobilePhoneCountry,
+  'cardholderMobilePhoneNumber': ?instance.cardholderMobilePhoneNumber,
+  'cardholderEmail': ?instance.cardholderEmail,
+};
+
 _HotelRoomTypeRoomNumDto _$HotelRoomTypeRoomNumDtoFromJson(
   Map<String, dynamic> json,
 ) => _HotelRoomTypeRoomNumDto(

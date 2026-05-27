@@ -182,7 +182,7 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
         .fetchMemberContacts(languageCode: languageCode)
         .catchError((_) => const <Map<String, dynamic>>[]);
     final cardsFuture = _remote.fetchRegisteredCards().catchError(
-      (_) => const <Map<String, dynamic>>[],
+      (_) => const <HotelCreditCardDto>[],
     );
 
     final pageTextMaps = await Future.wait(pageTextFutures);
@@ -286,6 +286,43 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
         gender: profile.gender,
         sourceUserId: profile.sourceUserId,
       ),
+    );
+  }
+
+  @override
+  Future<List<HotelCreditCard>> fetchRegisteredCreditCards() async {
+    final rows = await _remote.fetchRegisteredCards();
+    return rows.map(_mapCreditCard).toList(growable: false);
+  }
+
+  @override
+  Future<String> registerCreditCard(HotelCreditCardRegistrationDraft draft) {
+    return _remote.registerCreditCard(
+      HotelCreditCardRegisterRequestDto(
+        cardToken: HotelCreditCardTokenDto(
+          token: draft.token.token,
+          tokenExpireDate: draft.token.tokenExpireDate,
+          reqCardNumber: draft.token.reqCardNumber,
+          status: draft.token.status,
+          code: draft.token.code,
+          message: draft.token.message,
+        ),
+        defaultFlag: draft.defaultFlag ? 1 : 0,
+        cardholderMobilePhoneCountry: draft.mobileCountryCode.trim(),
+        cardholderMobilePhoneNumber: draft.mobileNumber.trim(),
+        cardholderEmail: draft.email.trim(),
+      ),
+    );
+  }
+
+  HotelCreditCard _mapCreditCard(HotelCreditCardDto dto) {
+    return HotelCreditCard(
+      id: dto.cardId.trim(),
+      maskedNumber: dto.cardNumber.trim(),
+      expire: dto.cardExpire.trim(),
+      holderName: dto.cardholderName.trim(),
+      isDefault: dto.defaultCard.trim() == '1',
+      brandCode: _firstNotEmpty(<String?>[dto.kindCode, dto.acquireCode3]),
     );
   }
 

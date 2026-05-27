@@ -44,7 +44,9 @@ abstract class HotelBookingRemoteDataSource {
     required String languageCode,
   });
 
-  Future<List<Map<String, dynamic>>> fetchRegisteredCards();
+  Future<List<HotelCreditCardDto>> fetchRegisteredCards();
+
+  Future<String> registerCreditCard(HotelCreditCardRegisterRequestDto request);
 
   Future<String> createBooking(HotelBookingCreateRequestDto request);
 
@@ -154,8 +156,13 @@ class HotelBookingRemoteDataSourceImpl implements HotelBookingRemoteDataSource {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> fetchRegisteredCards() {
+  Future<List<HotelCreditCardDto>> fetchRegisteredCards() {
     return _client.fetchRegisteredCards();
+  }
+
+  @override
+  Future<String> registerCreditCard(HotelCreditCardRegisterRequestDto request) {
+    return _client.registerCreditCard(request);
   }
 
   @override

@@ -47,4 +47,8 @@ abstract class HotelBookingRepository {
   Future<HotelMemberProfile> fetchMemberProfile();
 
   Future<void> updateMemberProfile(HotelMemberProfile profile);
+
+  Future<List<HotelCreditCard>> fetchRegisteredCreditCards();
+
+  Future<String> registerCreditCard(HotelCreditCardRegistrationDraft draft);
 }

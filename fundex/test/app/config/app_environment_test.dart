@@ -9,9 +9,11 @@ void main() {
 
       expect(env.flavor, AppFlavor.dev);
       expect(env.appName, 'StellaVia Dev');
-      expect(env.memberApiBaseUrl, 'https://sit-new.gutingjun.com/api');
+      expect(env.memberApiBaseUrl, 'https://testoa.gutingjun.com/api');
       expect(env.hotelApiBaseUrl, 'https://hotel-sit.gutingjun.com/api');
       expect(env.oaApiBaseUrl, 'https://testoa.gutingjun.com/api');
+      expect(env.veritransTokenApiBaseUrl, 'https://api3.veritrans.co.jp');
+      expect(env.veritransTokenApiKey, isEmpty);
       expect(env.enableHttpLog, isTrue);
     });
 
@@ -20,7 +22,11 @@ void main() {
 
       expect(env.flavor, AppFlavor.staging);
       expect(env.appName, 'StellaVia Staging');
-      expect(env.memberApiBaseUrl, 'https://sit-new.gutingjun.com/api');
+      expect(env.memberApiBaseUrl, 'https://testoa.gutingjun.com/api');
+      expect(env.hotelApiBaseUrl, 'https://hotel-sit.gutingjun.com/api');
+      expect(env.oaApiBaseUrl, 'https://testoa.gutingjun.com/api');
+      expect(env.veritransTokenApiBaseUrl, 'https://api3.veritrans.co.jp');
+      expect(env.veritransTokenApiKey, isEmpty);
       expect(env.enableHttpLog, isTrue);
     });
 
@@ -29,9 +35,11 @@ void main() {
 
       expect(env.flavor, AppFlavor.prod);
       expect(env.appName, 'StellaVia');
-      expect(env.memberApiBaseUrl, 'https://new.gutingjun.com/api');
+      expect(env.memberApiBaseUrl, 'https://stellavia.co.jp/api');
       expect(env.hotelApiBaseUrl, 'https://hotel.gutingjun.com/api');
-      expect(env.oaApiBaseUrl, 'https://oa.gutingjun.com/api');
+      expect(env.oaApiBaseUrl, 'https://stellavia.co.jp/api');
+      expect(env.veritransTokenApiBaseUrl, 'https://api3.veritrans.co.jp');
+      expect(env.veritransTokenApiKey, isEmpty);
       expect(env.enableHttpLog, isFalse);
     });
 
@@ -41,12 +49,20 @@ void main() {
         memberApiBaseUrlOverride: 'https://custom.example.com',
         hotelApiBaseUrlOverride: 'https://hotel.custom.example.com',
         oaApiBaseUrlOverride: 'https://oa.custom.example.com',
+        veritransTokenApiBaseUrlOverride:
+            'https://veritrans.custom.example.com',
+        veritransTokenApiKeyOverride: 'token-key',
         enableHttpLogOverride: false,
       );
 
       expect(env.memberApiBaseUrl, 'https://custom.example.com');
       expect(env.hotelApiBaseUrl, 'https://hotel.custom.example.com');
       expect(env.oaApiBaseUrl, 'https://oa.custom.example.com');
+      expect(
+        env.veritransTokenApiBaseUrl,
+        'https://veritrans.custom.example.com',
+      );
+      expect(env.veritransTokenApiKey, 'token-key');
       expect(env.enableHttpLog, isFalse);
     });
   });

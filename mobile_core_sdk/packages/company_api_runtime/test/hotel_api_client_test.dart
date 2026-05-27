@@ -447,7 +447,7 @@ void main() {
             expect(options.extra['auth_required'], isTrue);
             expect(options.data, equals(<String, dynamic>{}));
             return _jsonOk(
-              '{"code":200,"msg":"success","data":[{"id":"card1"}]}',
+              '{"code":200,"msg":"success","data":[{"cardId":"card1"}]}',
             );
         }
         fail('Unexpected call $call to ${options.path}');
@@ -491,7 +491,55 @@ void main() {
       expect(coupons['list'], isA<List<Object?>>());
       expect(contacts, hasLength(1));
       expect(cards, hasLength(1));
+      expect(cards.first.cardId, equals('card1'));
       expect(call, equals(7));
+    });
+
+    test('registerCreditCard posts token payload to hotel API', () async {
+      final client = _buildClient((options) async {
+        expect(options.method, equals('POST'));
+        expect(options.path, equals(HotelApiPaths.cardRegister));
+        expect(options.extra['auth_required'], isTrue);
+        expect(
+          options.data,
+          equals(<String, dynamic>{
+            'cardToken': <String, dynamic>{
+              'token': 'token-1',
+              'token_expire_date': '20260527135802',
+              'req_card_number': '537772********09',
+              'status': 'success',
+              'code': 'success',
+              'message': 'created',
+            },
+            'bookingOrderId': '',
+            'defaultFlag': 1,
+            'cardholderMobilePhoneCountry': '81',
+            'cardholderMobilePhoneNumber': '111111',
+            'cardholderEmail': 'card@example.com',
+          }),
+        );
+        return _jsonOk('{"code":200,"msg":"success","data":"card-id"}');
+      });
+      final api = HotelApiClient(client);
+
+      final result = await api.registerCreditCard(
+        const HotelCreditCardRegisterRequestDto(
+          cardToken: HotelCreditCardTokenDto(
+            token: 'token-1',
+            tokenExpireDate: '20260527135802',
+            reqCardNumber: '537772********09',
+            status: 'success',
+            code: 'success',
+            message: 'created',
+          ),
+          defaultFlag: 1,
+          cardholderMobilePhoneCountry: '81',
+          cardholderMobilePhoneNumber: '111111',
+          cardholderEmail: 'card@example.com',
+        ),
+      );
+
+      expect(result, equals('card-id'));
     });
 
     test(

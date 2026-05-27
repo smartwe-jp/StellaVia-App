@@ -2208,6 +2208,100 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemBankSettings => 'Bank account settings';
 
   @override
+  String get menuItemCreditCardSettings => 'Credit cards';
+
+  @override
+  String get creditCardListTitle => 'Credit cards';
+
+  @override
+  String get creditCardSettingsTitle => 'Add credit card';
+
+  @override
+  String get creditCardAddAction => 'Add credit card';
+
+  @override
+  String get creditCardRegisteredSectionTitle => 'Registered cards';
+
+  @override
+  String get creditCardAddSectionTitle => 'Card information';
+
+  @override
+  String get creditCardNoRegistered => 'No registered credit cards.';
+
+  @override
+  String get creditCardMaskedCardFallback => 'Card information';
+
+  @override
+  String get creditCardDefaultChip => 'Default';
+
+  @override
+  String get creditCardNumberLabel => 'Card number';
+
+  @override
+  String get creditCardHolderLabel => 'Card holder';
+
+  @override
+  String get creditCardExpiryLabel => 'Expiry date';
+
+  @override
+  String get creditCardMonthHint => 'Month';
+
+  @override
+  String get creditCardYearHint => 'Year';
+
+  @override
+  String get creditCardCvvLabel => 'CVV';
+
+  @override
+  String get creditCardBankContactHint =>
+      'Enter the email address or phone number registered with your bank.';
+
+  @override
+  String get creditCardBankEmailLabel => 'Bank registered email';
+
+  @override
+  String get creditCardIntlCodeLabel => 'Country code';
+
+  @override
+  String get creditCardMobileLabel => 'Bank registered mobile phone';
+
+  @override
+  String get creditCardDefaultPaymentLabel =>
+      'Use as the default payment card for future orders.';
+
+  @override
+  String get creditCardBackAction => 'Back';
+
+  @override
+  String get creditCardSaveAction => 'Save card information';
+
+  @override
+  String get creditCardSaved => 'Card information saved.';
+
+  @override
+  String get creditCardValidationRequired =>
+      'Enter card information and a contact method.';
+
+  @override
+  String get creditCardTokenKeyMissing =>
+      'Card verification key is not configured.';
+
+  @override
+  String get creditCardTokenFailed => 'Could not verify card information.';
+
+  @override
+  String get creditCardPreviewCardHolder => 'Card Holder';
+
+  @override
+  String get creditCardPreviewFullName => 'FULL NAME';
+
+  @override
+  String get creditCardPreviewExpires => 'Expires';
+
+  @override
+  String get creditCardPreviewUnknown => 'Unknown';
+
+  @override
   String get menuItemChangePassword => 'Change password';
 
   @override
