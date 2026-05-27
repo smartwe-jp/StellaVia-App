@@ -204,6 +204,7 @@ class KizunarkComposeSheet extends StatefulWidget {
 class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
   static const int _maxImages = 4;
   final List<String> _imageFilePaths = <String>[];
+  final FocusNode _textFocusNode = FocusNode();
   SelectedComposerFund? _selectedFund;
   bool _isSubmitting = false;
   bool _hasInputContent = false;
@@ -220,6 +221,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
 
   @override
   void dispose() {
+    _textFocusNode.dispose();
     widget.controller.removeListener(_syncInputContentState);
     super.dispose();
   }
@@ -254,6 +256,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
     }
     final paths = await widget.onPickImages(remainingCount);
     if (!mounted || paths.isEmpty) {
+      _restoreTextFocus();
       return;
     }
     setState(() {
@@ -263,6 +266,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
       _hasInputContent = true;
       _canSubmitContent = _hasSubmitContent;
     });
+    _restoreTextFocus();
   }
 
   Future<void> _confirmClose() async {
@@ -348,6 +352,18 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
       _selectedFund = fund;
     });
     widget.onSelectedFundChanged(fund);
+    _restoreTextFocus();
+  }
+
+  void _restoreTextFocus() {
+    if (!mounted) {
+      return;
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _textFocusNode.requestFocus();
+      }
+    });
   }
 
   void _submit() {
@@ -394,6 +410,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
                   authorLabel: widget.authorLabel,
                   placeholder: widget.placeholder,
                   controller: widget.controller,
+                  focusNode: _textFocusNode,
                   onChanged: widget.onTextChanged,
                   imageFilePaths: List<String>.of(_validImageFilePaths),
                   onRemoveImage: (int index) {
@@ -510,6 +527,7 @@ class KizunarkReplyComposeSheet extends StatefulWidget {
 class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
   static const int _maxImages = 4;
   final List<String> _imageFilePaths = <String>[];
+  final FocusNode _textFocusNode = FocusNode();
   bool _isSubmitting = false;
   bool _hasInputContent = false;
   bool _canSubmitContent = false;
@@ -529,6 +547,7 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
 
   @override
   void dispose() {
+    _textFocusNode.dispose();
     widget.controller.removeListener(_syncInputContentState);
     super.dispose();
   }
@@ -563,6 +582,7 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
     }
     final paths = await widget.onPickImages(remainingCount);
     if (!mounted || paths.isEmpty) {
+      _restoreTextFocus();
       return;
     }
     setState(() {
@@ -571,6 +591,18 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
       );
       _hasInputContent = true;
       _canSubmitContent = _hasSubmitContent;
+    });
+    _restoreTextFocus();
+  }
+
+  void _restoreTextFocus() {
+    if (!mounted) {
+      return;
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _textFocusNode.requestFocus();
+      }
     });
   }
 
@@ -654,6 +686,7 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
                   targetName: widget.targetName,
                   placeholder: widget.placeholder,
                   controller: widget.controller,
+                  focusNode: _textFocusNode,
                   onChanged: widget.onChanged,
                   imageFilePaths: List<String>.of(_validImageFilePaths),
                   onRemoveImage: (int index) {
@@ -935,6 +968,7 @@ class _PostInputComposer extends StatelessWidget {
     required this.authorLabel,
     required this.placeholder,
     required this.controller,
+    required this.focusNode,
     required this.onChanged,
     required this.imageFilePaths,
     required this.onRemoveImage,
@@ -945,6 +979,7 @@ class _PostInputComposer extends StatelessWidget {
   final String authorLabel;
   final String placeholder;
   final TextEditingController controller;
+  final FocusNode focusNode;
   final ValueChanged<String> onChanged;
   final List<String> imageFilePaths;
   final ValueChanged<int> onRemoveImage;
@@ -978,8 +1013,9 @@ class _PostInputComposer extends StatelessWidget {
               ),
               TextField(
                 controller: controller,
+                focusNode: focusNode,
                 autofocus: true,
-                minLines: 5,
+                minLines: 2,
                 maxLines: 10,
                 onChanged: onChanged,
                 style: appText.inputText.copyWith(
@@ -1039,34 +1075,40 @@ class _ComposeDock extends StatelessWidget {
           child: Row(
             children: <Widget>[
               if (linkedFundLabel != null && onPickFund != null) ...<Widget>[
-                OutlinedButton.icon(
-                  onPressed: onPickFund,
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size(0, 36),
-                    maximumSize: const Size(180, 40),
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                  ),
-                  icon: const Icon(Icons.account_balance_wallet_outlined),
-                  label: Text(
-                    linkedFundLabel!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                Focus(
+                  descendantsAreFocusable: false,
+                  child: OutlinedButton.icon(
+                    onPressed: onPickFund,
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(0, 36),
+                      maximumSize: const Size(180, 40),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                    ),
+                    icon: const Icon(Icons.account_balance_wallet_outlined),
+                    label: Text(
+                      linkedFundLabel!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
               ],
-              OutlinedButton.icon(
-                onPressed: canAddImage ? onAddImage : null,
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(0, 36),
-                  maximumSize: const Size(140, 40),
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                ),
-                icon: const Icon(Icons.image_outlined),
-                label: Text(
-                  addImageLabel,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+              Focus(
+                descendantsAreFocusable: false,
+                child: OutlinedButton.icon(
+                  onPressed: canAddImage ? onAddImage : null,
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(0, 36),
+                    maximumSize: const Size(140, 40),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                  ),
+                  icon: const Icon(Icons.image_outlined),
+                  label: Text(
+                    addImageLabel,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
               const Spacer(),
@@ -1265,6 +1307,7 @@ class _ReplyInputComposer extends StatelessWidget {
     required this.targetName,
     required this.placeholder,
     required this.controller,
+    required this.focusNode,
     required this.onChanged,
     required this.imageFilePaths,
     required this.onRemoveImage,
@@ -1276,6 +1319,7 @@ class _ReplyInputComposer extends StatelessWidget {
   final String targetName;
   final String placeholder;
   final TextEditingController controller;
+  final FocusNode focusNode;
   final ValueChanged<String> onChanged;
   final List<String> imageFilePaths;
   final ValueChanged<int> onRemoveImage;
@@ -1316,6 +1360,7 @@ class _ReplyInputComposer extends StatelessWidget {
               const SizedBox(height: 4),
               TextField(
                 controller: controller,
+                focusNode: focusNode,
                 autofocus: true,
                 minLines: 1,
                 maxLines: 9,
