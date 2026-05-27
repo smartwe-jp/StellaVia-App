@@ -1,8 +1,8 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
-import '../../support/fund_lottery_apply_models.dart';
-import '../../../../wallet/presentation/widgets/wallet_deposit_transfer_notice.dart';
+import '../../../domain/entities/fund_project.dart';
+import '../../../../wallet/presentation/widgets/project_deposit_bank_card.dart';
 
 class FundLotteryApplySelectedStep extends StatelessWidget {
   const FundLotteryApplySelectedStep({
@@ -13,10 +13,9 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
     required this.deadlineValue,
     required this.coolingOffTitle,
     required this.coolingOffBody,
-    required this.bankTips,
-    required this.bankTipsTransferName,
-    required this.transferNameCopyButtonLabel,
-    required this.depositRows,
+    required this.liveJapanBank,
+    required this.notLiveJapanBank,
+    required this.depositBankTexts,
     required this.jumpDepositButtonLabel,
     required this.standbyBalanceLabel,
     required this.standbyBalanceValue,
@@ -35,10 +34,6 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
     required this.onLaterDeposit,
     this.reportCompletedBackButtonLabel,
     this.onReportCompletedBack,
-    required this.copyButtonLabel,
-    required this.accountInfoCopyButtonLabel,
-    required this.copyDoneMessage,
-    required this.onCopyValue,
   });
 
   final String headline;
@@ -47,10 +42,9 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
   final String deadlineValue;
   final String coolingOffTitle;
   final String coolingOffBody;
-  final String bankTips;
-  final String bankTipsTransferName;
-  final String transferNameCopyButtonLabel;
-  final List<FundLotteryDepositRow> depositRows;
+  final FundProjectLiveJapanBank? liveJapanBank;
+  final FundProjectLiveJapanBank? notLiveJapanBank;
+  final ProjectDepositBankCardTexts depositBankTexts;
   final String jumpDepositButtonLabel;
   final String standbyBalanceLabel;
   final String standbyBalanceValue;
@@ -69,25 +63,18 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
   final VoidCallback onLaterDeposit;
   final String? reportCompletedBackButtonLabel;
   final VoidCallback? onReportCompletedBack;
-  final String copyButtonLabel;
-  final String accountInfoCopyButtonLabel;
-  final String copyDoneMessage;
-  final ValueChanged<String> onCopyValue;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
-    final accountInfoCopyText = _formatDepositRowsCopyText(depositRows);
     return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 40, 20, 32),
+      padding: const EdgeInsets.fromLTRB(0, 20, 0, 32),
       children: <Widget>[
         DecoratedBox(
           decoration: BoxDecoration(
             color: colors.surface,
-            borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: colors.border),
           ),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 20, 16, 18),
@@ -180,100 +167,10 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                 //   ),
                 // ),
                 const SizedBox(height: 12),
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: colors.surfaceAlt,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: colors.border),
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      ...List<Widget>.generate(depositRows.length, (int index) {
-                        final row = depositRows[index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Column(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 10,
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                      row.label,
-                                      style: appText.caption.copyWith(
-                                        color: colors.textSecondary,
-                                      ),
-                                    ),
-                                    Flexible(
-                                      child: Wrap(
-                                        spacing: 8,
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.center,
-                                        alignment: WrapAlignment.end,
-                                        children: <Widget>[
-                                          Text(
-                                            row.value,
-                                            textAlign: TextAlign.end,
-                                            style:
-                                                _depositValueStyle(
-                                                  appText,
-                                                  row.value,
-                                                ).copyWith(
-                                                  color: colors.textPrimary,
-                                                ),
-                                          ),
-                                          if (row.copyable &&
-                                              row.effectiveCopyValue
-                                                  .trim()
-                                                  .isNotEmpty)
-                                            AppCopyButton(
-                                              label: copyButtonLabel,
-                                              onPressed: () => onCopyValue(
-                                                row.effectiveCopyValue,
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              if (index < depositRows.length - 1)
-                                Divider(
-                                  height: 1,
-                                  thickness: 1,
-                                  color: colors.border,
-                                ),
-                            ],
-                          ),
-                        );
-                      }),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(12, 2, 12, 12),
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: AppCopyButton(
-                            label: accountInfoCopyButtonLabel,
-                            onPressed: accountInfoCopyText.isEmpty
-                                ? null
-                                : () => onCopyValue(accountInfoCopyText),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
-                WalletDepositTransferNotice(
-                  message: bankTips,
-                  transferName: bankTipsTransferName,
-                  copyButtonLabel: transferNameCopyButtonLabel,
-                  copyDoneMessage: copyDoneMessage,
+                ProjectDepositBankCard(
+                  liveJapanBank: liveJapanBank,
+                  notLiveJapanBank: notLiveJapanBank,
+                  texts: depositBankTexts,
                 ),
                 const SizedBox(height: 16),
                 if (isReportCompleted)
@@ -340,19 +237,6 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
       ],
     );
   }
-}
-
-String _formatDepositRowsCopyText(List<FundLotteryDepositRow> rows) {
-  return rows
-      .where(
-        (FundLotteryDepositRow row) =>
-            row.includeInFullCopy && row.effectiveCopyValue.trim().isNotEmpty,
-      )
-      .map(
-        (FundLotteryDepositRow row) =>
-            '${row.label}: ${row.effectiveCopyValue}',
-      )
-      .join('\n');
 }
 
 class _StandbyBalancePaymentCard extends StatelessWidget {
@@ -477,29 +361,4 @@ class _StandbyShortageBadge extends StatelessWidget {
       ),
     );
   }
-}
-
-TextStyle _depositValueStyle(AppSemanticTextTheme appText, String value) {
-  final trimmed = value.trim();
-  final looksNumeric = _looksNumericLikeValue(trimmed);
-  return looksNumeric ? appText.numericBody : appText.bodyStrong;
-}
-
-bool _looksNumericLikeValue(String value) {
-  if (value.isEmpty) {
-    return false;
-  }
-
-  const symbols = '¥%.,/:- ';
-  for (final rune in value.runes) {
-    final character = String.fromCharCode(rune);
-    final isDigit = rune >= 48 && rune <= 57;
-    final isUpper = rune >= 65 && rune <= 90;
-    final isLower = rune >= 97 && rune <= 122;
-    if (isDigit || isUpper || isLower || symbols.contains(character)) {
-      continue;
-    }
-    return false;
-  }
-  return true;
 }

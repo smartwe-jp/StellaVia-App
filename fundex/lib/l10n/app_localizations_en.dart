@@ -2982,6 +2982,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletProjectDepositAccountTitle => 'Project Deposit Account';
 
   @override
+  String get walletProjectOverseasDepositAccountTitle =>
+      'Overseas Deposit Account';
+
+  @override
+  String get walletProjectDomesticDepositSegment => 'Japanese transfer';
+
+  @override
+  String get walletProjectOverseasDepositSegment => 'Overseas transfer';
+
+  @override
+  String get walletProjectDepositBankInfoSection => 'Bank information';
+
+  @override
+  String get walletProjectDepositRecipientInfoSection =>
+      'Recipient information';
+
+  @override
+  String get walletProjectDepositSwiftCodeLabel => 'SWIFT Code';
+
+  @override
+  String get walletProjectDepositBranchAddressLabel => 'Bank address';
+
+  @override
+  String get walletProjectDepositAccountHolderAddressLabel => 'Address';
+
+  @override
   String get walletDedicatedAccountDescription =>
       'This is your dedicated deposit account. Deposits are reflected automatically (minimum: ¥10,000). If unused for 3 months, the account may be changed.';
 

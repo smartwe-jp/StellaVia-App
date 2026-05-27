@@ -32,6 +32,7 @@ class FundProjectDto {
     this.videoLink,
     this.subordinatedRatio,
     this.liveJapanBank,
+    this.notLiveJapanBank,
     this.detailData = const <String, Object?>{},
     this.photos = const <String>[],
     this.investorTypes = const <FundProjectInvestorTypeDto>[],
@@ -99,6 +100,11 @@ class FundProjectDto {
           : FundProjectLiveJapanBankDto.fromJson(
               _mapOrNull(json['liveJapanBank'])!,
             ),
+      notLiveJapanBank: _mapOrNull(json['notLiveJapanBank']) == null
+          ? null
+          : FundProjectLiveJapanBankDto.fromJson(
+              _mapOrNull(json['notLiveJapanBank'])!,
+            ),
       detailData: detailData,
       photos: _photoUrlsFrom(json['photos']),
       investorTypes: _investorTypesFrom(json['investorTypeList']),
@@ -136,6 +142,7 @@ class FundProjectDto {
   final String? videoLink;
   final String? subordinatedRatio;
   final FundProjectLiveJapanBankDto? liveJapanBank;
+  final FundProjectLiveJapanBankDto? notLiveJapanBank;
   final Map<String, Object?> detailData;
   final List<String> photos;
   final List<FundProjectInvestorTypeDto> investorTypes;

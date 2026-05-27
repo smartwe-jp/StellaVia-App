@@ -8,7 +8,7 @@ String formatWalletDepositTransferNoticeAccountId(AuthUser? user) {
 
   final katakana = _normalizeTransferNoticePart(user?.katakana);
   if (katakana.isNotEmpty) {
-    return '$katakana $accountId';
+    return '$accountId $katakana';
   }
 
   final romanName = _joinTransferNoticeParts(<String?>[
@@ -16,7 +16,7 @@ String formatWalletDepositTransferNoticeAccountId(AuthUser? user) {
     user?.firstNameEn,
   ]);
   if (romanName.isNotEmpty) {
-    return '$romanName $accountId';
+    return '$accountId $romanName';
   }
 
   return accountId;

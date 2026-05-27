@@ -25,7 +25,7 @@ class WalletDepositTransferNotice extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: colors.surface,
+        color: colors.highlightGold.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: colors.highlightGold),
       ),

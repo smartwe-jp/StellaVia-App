@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -23,9 +22,9 @@ import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../../member_profile/presentation/support/mypage_section_support.dart';
 import '../../../wallet/presentation/providers/wallet_providers.dart';
 import '../../../wallet/presentation/support/wallet_application_payment_refresh.dart';
-import '../../../wallet/presentation/support/wallet_deposit_copy_support.dart';
 import '../../../wallet/presentation/support/wallet_deposit_transfer_notice_support.dart';
 import '../../../wallet/presentation/support/wallet_standby_purchase_dialog.dart';
+import '../../../wallet/presentation/widgets/project_deposit_bank_card.dart';
 
 class FundLotteryApplyFlowPage extends ConsumerStatefulWidget {
   const FundLotteryApplyFlowPage({
@@ -318,27 +317,6 @@ class _FundLotteryApplyFlowPageState
 
   String _formatCurrency(BuildContext context, int value) {
     return _currencyFormatter(context).format(value);
-  }
-
-  String _formatBankValue(String? value) {
-    final trimmed = value?.trim();
-    if (trimmed == null || trimmed.isEmpty) {
-      return '--';
-    }
-    return trimmed;
-  }
-
-  String _formatBankAccountValue(FundProjectLiveJapanBank? bank) {
-    final accountType = bank?.bankAccountType?.trim();
-    final bankNumber = bank?.bankNumber?.trim();
-    final parts = <String>[
-      if (accountType != null && accountType.isNotEmpty) accountType,
-      if (bankNumber != null && bankNumber.isNotEmpty) bankNumber,
-    ];
-    if (parts.isEmpty) {
-      return '--';
-    }
-    return parts.join(' ');
   }
 
   int _resolveTotalAmount(int calculatedTotalAmount) {
@@ -790,6 +768,7 @@ class _FundLotteryApplyFlowPageState
               total + group.items.length,
         );
         final liveJapanBank = project.liveJapanBank;
+        final notLiveJapanBank = project.notLiveJapanBank;
         final transferNoticeAccountId =
             formatWalletDepositTransferNoticeAccountId(
               ref.watch(currentAuthUserProvider).valueOrNull,
@@ -1021,50 +1000,12 @@ class _FundLotteryApplyFlowPageState
                             deadlineValue: _formatDateTime(context, deadlineAt),
                             coolingOffTitle: l10n.lotteryApplyCoolingOffTitle,
                             coolingOffBody: l10n.lotteryApplyCoolingOffBody,
-                            bankTips: l10n.walletDepositTransferNotice(
-                              transferNoticeAccountId,
+                            liveJapanBank: liveJapanBank,
+                            notLiveJapanBank: notLiveJapanBank,
+                            depositBankTexts: _buildProjectDepositBankCardTexts(
+                              context,
+                              transferNoticeAccountId: transferNoticeAccountId,
                             ),
-                            bankTipsTransferName: transferNoticeAccountId,
-                            transferNameCopyButtonLabel:
-                                l10n.walletDepositTransferNameCopyAction,
-                            depositRows: <FundLotteryDepositRow>[
-                              FundLotteryDepositRow(
-                                label: l10n.lotteryApplyDepositAmountLabel,
-                                value: amountText,
-                                includeInFullCopy: false,
-                              ),
-                              FundLotteryDepositRow(
-                                label: l10n.lotteryApplyBankNameLabel,
-                                value: _formatBankValue(
-                                  liveJapanBank?.bankName,
-                                ),
-                              ),
-                              FundLotteryDepositRow(
-                                label: l10n.lotteryApplyBankBranchLabel,
-                                value: _formatBankValue(
-                                  liveJapanBank?.branchBankName,
-                                ),
-                                copyable: true,
-                                copyValue: resolveWalletDepositBranchCopyValue(
-                                  liveJapanBank?.branchBankName,
-                                ),
-                              ),
-                              FundLotteryDepositRow(
-                                label: l10n.lotteryApplyBankAccountLabel,
-                                value: _formatBankAccountValue(liveJapanBank),
-                                copyable: true,
-                                copyValue:
-                                    resolveWalletDepositAccountNumberCopyValue(
-                                      liveJapanBank?.bankNumber,
-                                    ),
-                              ),
-                              FundLotteryDepositRow(
-                                label: l10n.walletAccountHolderLabel,
-                                value: _formatBankValue(
-                                  liveJapanBank?.bankAccountOwnerName,
-                                ),
-                              ),
-                            ],
                             jumpDepositButtonLabel:
                                 l10n.lotteryApplyStep1DepositAction,
                             standbyBalanceLabel:
@@ -1104,14 +1045,6 @@ class _FundLotteryApplyFlowPageState
                             reportCompletedBackButtonLabel:
                                 l10n.lotteryApplyDepositReportBackAction,
                             onReportCompletedBack: _back,
-                            copyButtonLabel: l10n.lotteryApplyCopyAction,
-                            accountInfoCopyButtonLabel:
-                                l10n.lotteryApplyCopyAccountInfoAction,
-                            copyDoneMessage: l10n.lotteryApplyCopyDoneToast,
-                            onCopyValue: (String value) {
-                              Clipboard.setData(ClipboardData(text: value));
-                              _showToast(l10n.lotteryApplyCopyDoneToast);
-                            },
                           ),
                         FundLotteryApplyStep.depositCompleted =>
                           FundLotteryApplyCompletedStep(
@@ -1153,6 +1086,35 @@ class _FlowLoadingScaffold extends StatelessWidget {
       body: const Center(child: CircularProgressIndicator.adaptive()),
     );
   }
+}
+
+ProjectDepositBankCardTexts _buildProjectDepositBankCardTexts(
+  BuildContext context, {
+  required String transferNoticeAccountId,
+}) {
+  final l10n = context.l10n;
+  return ProjectDepositBankCardTexts(
+    domesticTitle: l10n.walletProjectDepositAccountTitle,
+    overseasTitle: l10n.walletProjectOverseasDepositAccountTitle,
+    domesticSegmentLabel: l10n.walletProjectDomesticDepositSegment,
+    overseasSegmentLabel: l10n.walletProjectOverseasDepositSegment,
+    copyLabel: l10n.lotteryApplyCopyAction,
+    copyDoneMessage: l10n.lotteryApplyCopyDoneToast,
+    bankInfoSectionTitle: l10n.walletProjectDepositBankInfoSection,
+    recipientInfoSectionTitle: l10n.walletProjectDepositRecipientInfoSection,
+    bankNameLabel: l10n.walletBankNameLabel,
+    swiftCodeLabel: l10n.walletProjectDepositSwiftCodeLabel,
+    branchNameLabel: l10n.walletBranchNameLabel,
+    branchAddressLabel: l10n.walletProjectDepositBranchAddressLabel,
+    bankCountryLabel: l10n.walletBankSettingsBankCountryLabel,
+    accountNumberLabel: l10n.walletAccountNumberLabel,
+    accountHolderLabel: l10n.walletAccountHolderLabel,
+    accountHolderAddressLabel:
+        l10n.walletProjectDepositAccountHolderAddressLabel,
+    transferNotice: l10n.walletDepositTransferNotice(transferNoticeAccountId),
+    transferName: transferNoticeAccountId,
+    transferNameCopyButtonLabel: l10n.walletDepositTransferNameCopyAction,
+  );
 }
 
 class _FlowErrorScaffold extends StatelessWidget {
