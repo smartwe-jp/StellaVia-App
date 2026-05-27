@@ -347,6 +347,7 @@ class _KizunarkComposeSheetState extends State<KizunarkComposeSheet> {
     setState(() {
       _selectedFund = fund;
     });
+    widget.onSelectedFundChanged(fund);
   }
 
   void _submit() {
@@ -466,12 +467,10 @@ class KizunarkReplyComposeSheet extends StatefulWidget {
     required this.targetImageUrls,
     required this.onTargetImageTap,
     required this.addImageLabel,
-    required this.linkedFundLabel,
     required this.imageCounterBuilder,
     required this.controller,
     required this.onChanged,
     required this.onPickImages,
-    required this.onPickFund,
     required this.onSaveDraft,
     required this.onSubmit,
     this.initialImageFilePaths = const <String>[],
@@ -494,12 +493,10 @@ class KizunarkReplyComposeSheet extends StatefulWidget {
   final List<String> targetImageUrls;
   final ValueChanged<int> onTargetImageTap;
   final String addImageLabel;
-  final String linkedFundLabel;
   final String Function(int count) imageCounterBuilder;
   final TextEditingController controller;
   final ValueChanged<String> onChanged;
   final Future<List<String>> Function(int remainingCount) onPickImages;
-  final Future<void> Function() onPickFund;
   final Future<void> Function(List<String> imageFilePaths) onSaveDraft;
   final Future<bool> Function(List<String> imageFilePaths) onSubmit;
   final List<String> initialImageFilePaths;
@@ -672,11 +669,9 @@ class _KizunarkReplyComposeSheetState extends State<KizunarkReplyComposeSheet> {
           ),
           _ComposeDock(
             addImageLabel: widget.addImageLabel,
-            linkedFundLabel: widget.linkedFundLabel,
             imageCounter: widget.imageCounterBuilder(_imageFilePaths.length),
             canAddImage: _imageFilePaths.length < _maxImages,
             onAddImage: _addImage,
-            onPickFund: widget.onPickFund,
           ),
         ],
       ),
