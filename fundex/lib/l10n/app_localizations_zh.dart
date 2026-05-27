@@ -1631,6 +1631,63 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelOrderDetailRefundComingSoon => '退款流程稍后接入';
 
   @override
+  String get hotelOrderDetailPaymentInfo => '订单支付信息';
+
+  @override
+  String get hotelOrderDetailOrderTime => '下单时间';
+
+  @override
+  String get hotelOrderDetailOrderStatus => '订单状态';
+
+  @override
+  String get hotelOrderDetailCouponDiscount => '优惠金额';
+
+  @override
+  String get hotelOrderDetailCouponUnused => '未使用优惠券';
+
+  @override
+  String get hotelOrderDetailPaidAmount => '支付金额';
+
+  @override
+  String get hotelOrderDetailPaymentStatus => '支付状态';
+
+  @override
+  String get hotelOrderDetailReceiptTitle => '领收书';
+
+  @override
+  String get hotelOrderDetailBookingComment => '预订留言信息';
+
+  @override
+  String get hotelOrderDetailRoomGuestCount => '房间入住人数';
+
+  @override
+  String get hotelPaymentStatusNotPaid => '待支付';
+
+  @override
+  String get hotelPaymentStatusInvalidPaid => '支付无效';
+
+  @override
+  String get hotelPaymentStatusPartialPay => '部分支付';
+
+  @override
+  String get hotelPaymentStatusPaid => '支付完成';
+
+  @override
+  String get hotelPaymentStatusOverpaid => '超额支付';
+
+  @override
+  String get hotelPaymentStatusNotRefunded => '未退款';
+
+  @override
+  String get hotelPaymentStatusRefunding => '退款中';
+
+  @override
+  String get hotelPaymentStatusPartialRefunded => '部分退款';
+
+  @override
+  String get hotelPaymentStatusRefunded => '退款完成';
+
+  @override
   String get hotelDetailNoRooms => '暂无可订房型';
 
   @override
@@ -6629,6 +6686,63 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelOrderDetailRefundComingSoon => '退款流程稍後接入';
+
+  @override
+  String get hotelOrderDetailPaymentInfo => '訂單支付資訊';
+
+  @override
+  String get hotelOrderDetailOrderTime => '下單時間';
+
+  @override
+  String get hotelOrderDetailOrderStatus => '訂單狀態';
+
+  @override
+  String get hotelOrderDetailCouponDiscount => '優惠金額';
+
+  @override
+  String get hotelOrderDetailCouponUnused => '未使用優惠券';
+
+  @override
+  String get hotelOrderDetailPaidAmount => '支付金額';
+
+  @override
+  String get hotelOrderDetailPaymentStatus => '支付狀態';
+
+  @override
+  String get hotelOrderDetailReceiptTitle => '領收書';
+
+  @override
+  String get hotelOrderDetailBookingComment => '預訂留言資訊';
+
+  @override
+  String get hotelOrderDetailRoomGuestCount => '房間入住人數';
+
+  @override
+  String get hotelPaymentStatusNotPaid => '待支付';
+
+  @override
+  String get hotelPaymentStatusInvalidPaid => '支付無效';
+
+  @override
+  String get hotelPaymentStatusPartialPay => '部分付款';
+
+  @override
+  String get hotelPaymentStatusPaid => '支付完成';
+
+  @override
+  String get hotelPaymentStatusOverpaid => '超額付款';
+
+  @override
+  String get hotelPaymentStatusNotRefunded => '未退款';
+
+  @override
+  String get hotelPaymentStatusRefunding => '退款中';
+
+  @override
+  String get hotelPaymentStatusPartialRefunded => '部分退款處理中';
+
+  @override
+  String get hotelPaymentStatusRefunded => '退款完成';
 
   @override
   String get hotelDetailNoRooms => '暫無可訂房型';

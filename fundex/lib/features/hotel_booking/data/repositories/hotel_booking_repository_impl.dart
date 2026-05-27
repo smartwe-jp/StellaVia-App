@@ -611,9 +611,9 @@ HotelOrderSummary _mapOrderSummary(HotelOrderDto dto) {
         dto.bookingOrderTime?.trim() ?? dto.createdTime?.trim() ?? '',
     paymentStatus: dto.paymentStatus?.trim() ?? '',
     paymentStatusCode: dto.paymentStatusCode,
-    orderStatus: dto.orderStatusStr?.trim().isNotEmpty == true
-        ? dto.orderStatusStr!.trim()
-        : dto.orderStatus?.trim() ?? _stringOrEmpty(dto.status),
+    orderStatus: dto.orderStatus?.trim().isNotEmpty == true
+        ? dto.orderStatus!.trim()
+        : dto.orderStatusStr?.trim() ?? _stringOrEmpty(dto.status),
     orderStatusCode: dto.orderStatusCode,
     totalAmount: dto.totalAmount ?? dto.paidAmount ?? price ?? originalPrice,
     canPay: dto.pay ?? false,
@@ -635,6 +635,7 @@ HotelOrderDetail _mapOrderDetail(
     longitude: _doubleOrNull(dto.lng),
     orderNo: dto.orderNo?.trim() ?? '',
     serialNo: dto.serialNo?.trim() ?? '',
+    createdTime: dto.createdTime?.trim() ?? '',
     guestName: dto.name?.trim() ?? '',
     receiptTitle: dto.receiptTitle?.trim() ?? '',
     contactEmail: dto.contactEmail?.trim() ?? '',
@@ -646,6 +647,7 @@ HotelOrderDetail _mapOrderDetail(
     childCount: dto.childCount,
     paidAmount: dto.paidAmount,
     originalAmount: _numOrNull(dto.priceElement['originalPrice']),
+    couponDiscountAmount: _numOrNull(dto.priceElement['coupons']),
     payName: dto.payName?.trim() ?? '',
     payCode: dto.payCode?.trim() ?? '',
     paymentTime: dto.paymentTime?.trim() ?? '',
@@ -697,8 +699,12 @@ HotelOrderRoomGuest _mapOrderRoomGuest(Map<String, Object?> raw) {
     roomNo: _stringOrEmpty(raw['roomNo']),
     name: _stringOrEmpty(raw['custName']),
     nationalityText: _stringOrEmpty(raw['nationalityText']),
-    guestCount: _intOrNull(raw['custNum']),
-    email: _stringOrEmpty(raw['email']),
+    guestCount: _intOrNull(raw['custNum']) ?? _intOrNull(raw['count']),
+    email: _firstNotEmpty(<String?>[
+      _stringOrEmpty(raw['email']),
+      _stringOrEmpty(raw['custEmail']),
+      _stringOrEmpty(raw['contactEmail']),
+    ]),
     checkedInText: _stringOrEmpty(raw['checkedInText']),
     password: _stringOrEmpty(raw['password']),
   );
@@ -797,7 +803,7 @@ num? _numOrNull(Object? raw) {
   if (raw is num) {
     return raw;
   }
-  return num.tryParse(raw?.toString().trim() ?? '');
+  return num.tryParse(raw?.toString().trim().replaceAll(',', '') ?? '');
 }
 
 String _stringOrEmpty(Object? raw) {

@@ -452,6 +452,7 @@ class HotelOrderDetail {
     required this.longitude,
     required this.orderNo,
     required this.serialNo,
+    required this.createdTime,
     required this.guestName,
     required this.receiptTitle,
     required this.contactEmail,
@@ -463,6 +464,7 @@ class HotelOrderDetail {
     required this.childCount,
     required this.paidAmount,
     required this.originalAmount,
+    required this.couponDiscountAmount,
     required this.payName,
     required this.payCode,
     required this.paymentTime,
@@ -484,6 +486,7 @@ class HotelOrderDetail {
   final double? longitude;
   final String orderNo;
   final String serialNo;
+  final String createdTime;
   final String guestName;
   final String receiptTitle;
   final String contactEmail;
@@ -495,6 +498,7 @@ class HotelOrderDetail {
   final int? childCount;
   final num? paidAmount;
   final num? originalAmount;
+  final num? couponDiscountAmount;
   final String payName;
   final String payCode;
   final String paymentTime;

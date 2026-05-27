@@ -1722,6 +1722,63 @@ class AppLocalizationsEn extends AppLocalizations {
       'Refund flow will be added later';
 
   @override
+  String get hotelOrderDetailPaymentInfo => 'Order payment information';
+
+  @override
+  String get hotelOrderDetailOrderTime => 'Order time';
+
+  @override
+  String get hotelOrderDetailOrderStatus => 'Order status';
+
+  @override
+  String get hotelOrderDetailCouponDiscount => 'Discount amount';
+
+  @override
+  String get hotelOrderDetailCouponUnused => 'No coupon used';
+
+  @override
+  String get hotelOrderDetailPaidAmount => 'Payment amount';
+
+  @override
+  String get hotelOrderDetailPaymentStatus => 'Payment status';
+
+  @override
+  String get hotelOrderDetailReceiptTitle => 'Receipt';
+
+  @override
+  String get hotelOrderDetailBookingComment => 'Booking message';
+
+  @override
+  String get hotelOrderDetailRoomGuestCount => 'Room guests';
+
+  @override
+  String get hotelPaymentStatusNotPaid => 'Payment pending';
+
+  @override
+  String get hotelPaymentStatusInvalidPaid => 'Invalid payment';
+
+  @override
+  String get hotelPaymentStatusPartialPay => 'Partial payment';
+
+  @override
+  String get hotelPaymentStatusPaid => 'Payment completed';
+
+  @override
+  String get hotelPaymentStatusOverpaid => 'Overpaid';
+
+  @override
+  String get hotelPaymentStatusNotRefunded => 'Not refunded';
+
+  @override
+  String get hotelPaymentStatusRefunding => 'Refund in progress';
+
+  @override
+  String get hotelPaymentStatusPartialRefunded => 'Partial refund in progress';
+
+  @override
+  String get hotelPaymentStatusRefunded => 'Refund completed';
+
+  @override
   String get hotelDetailNoRooms => 'No available rooms';
 
   @override

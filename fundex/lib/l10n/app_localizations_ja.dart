@@ -1646,6 +1646,63 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelOrderDetailRefundComingSoon => '払い戻しフローは後で接続します';
 
   @override
+  String get hotelOrderDetailPaymentInfo => '注文支払情報';
+
+  @override
+  String get hotelOrderDetailOrderTime => '注文日時';
+
+  @override
+  String get hotelOrderDetailOrderStatus => '注文状態';
+
+  @override
+  String get hotelOrderDetailCouponDiscount => '割引額';
+
+  @override
+  String get hotelOrderDetailCouponUnused => 'クーポン未使用';
+
+  @override
+  String get hotelOrderDetailPaidAmount => '支払金額';
+
+  @override
+  String get hotelOrderDetailPaymentStatus => '支払状態';
+
+  @override
+  String get hotelOrderDetailReceiptTitle => '領収書';
+
+  @override
+  String get hotelOrderDetailBookingComment => '予約メッセージ';
+
+  @override
+  String get hotelOrderDetailRoomGuestCount => '部屋宿泊人数';
+
+  @override
+  String get hotelPaymentStatusNotPaid => '支払い待ち';
+
+  @override
+  String get hotelPaymentStatusInvalidPaid => '無効支払済み';
+
+  @override
+  String get hotelPaymentStatusPartialPay => '一部有料';
+
+  @override
+  String get hotelPaymentStatusPaid => '支払い完了';
+
+  @override
+  String get hotelPaymentStatusOverpaid => '過払い';
+
+  @override
+  String get hotelPaymentStatusNotRefunded => '返金されない';
+
+  @override
+  String get hotelPaymentStatusRefunding => '返金処理中';
+
+  @override
+  String get hotelPaymentStatusPartialRefunded => '一部返金中';
+
+  @override
+  String get hotelPaymentStatusRefunded => '返金完了';
+
+  @override
   String get hotelDetailNoRooms => '予約可能な客室はありません';
 
   @override

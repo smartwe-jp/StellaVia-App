@@ -3213,6 +3213,120 @@ abstract class AppLocalizations {
   /// **'Refund flow will be added later'**
   String get hotelOrderDetailRefundComingSoon;
 
+  /// No description provided for @hotelOrderDetailPaymentInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Order payment information'**
+  String get hotelOrderDetailPaymentInfo;
+
+  /// No description provided for @hotelOrderDetailOrderTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Order time'**
+  String get hotelOrderDetailOrderTime;
+
+  /// No description provided for @hotelOrderDetailOrderStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Order status'**
+  String get hotelOrderDetailOrderStatus;
+
+  /// No description provided for @hotelOrderDetailCouponDiscount.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount amount'**
+  String get hotelOrderDetailCouponDiscount;
+
+  /// No description provided for @hotelOrderDetailCouponUnused.
+  ///
+  /// In en, this message translates to:
+  /// **'No coupon used'**
+  String get hotelOrderDetailCouponUnused;
+
+  /// No description provided for @hotelOrderDetailPaidAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment amount'**
+  String get hotelOrderDetailPaidAmount;
+
+  /// No description provided for @hotelOrderDetailPaymentStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment status'**
+  String get hotelOrderDetailPaymentStatus;
+
+  /// No description provided for @hotelOrderDetailReceiptTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipt'**
+  String get hotelOrderDetailReceiptTitle;
+
+  /// No description provided for @hotelOrderDetailBookingComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking message'**
+  String get hotelOrderDetailBookingComment;
+
+  /// No description provided for @hotelOrderDetailRoomGuestCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Room guests'**
+  String get hotelOrderDetailRoomGuestCount;
+
+  /// No description provided for @hotelPaymentStatusNotPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment pending'**
+  String get hotelPaymentStatusNotPaid;
+
+  /// No description provided for @hotelPaymentStatusInvalidPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid payment'**
+  String get hotelPaymentStatusInvalidPaid;
+
+  /// No description provided for @hotelPaymentStatusPartialPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Partial payment'**
+  String get hotelPaymentStatusPartialPay;
+
+  /// No description provided for @hotelPaymentStatusPaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment completed'**
+  String get hotelPaymentStatusPaid;
+
+  /// No description provided for @hotelPaymentStatusOverpaid.
+  ///
+  /// In en, this message translates to:
+  /// **'Overpaid'**
+  String get hotelPaymentStatusOverpaid;
+
+  /// No description provided for @hotelPaymentStatusNotRefunded.
+  ///
+  /// In en, this message translates to:
+  /// **'Not refunded'**
+  String get hotelPaymentStatusNotRefunded;
+
+  /// No description provided for @hotelPaymentStatusRefunding.
+  ///
+  /// In en, this message translates to:
+  /// **'Refund in progress'**
+  String get hotelPaymentStatusRefunding;
+
+  /// No description provided for @hotelPaymentStatusPartialRefunded.
+  ///
+  /// In en, this message translates to:
+  /// **'Partial refund in progress'**
+  String get hotelPaymentStatusPartialRefunded;
+
+  /// No description provided for @hotelPaymentStatusRefunded.
+  ///
+  /// In en, this message translates to:
+  /// **'Refund completed'**
+  String get hotelPaymentStatusRefunded;
+
   /// No description provided for @hotelDetailNoRooms.
   ///
   /// In en, this message translates to:

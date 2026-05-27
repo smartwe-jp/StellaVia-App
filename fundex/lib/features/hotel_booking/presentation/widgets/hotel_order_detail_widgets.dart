@@ -54,6 +54,10 @@ class HotelOrderDetailContent extends StatelessWidget {
                   _OrderCheckInGuideCard(detail: detail),
                   _OrderBookerInfoSection(detail: detail),
                   _OrderGuestInfoSection(detail: detail),
+                  _OrderPaymentInfoSection(
+                    detail: detail,
+                    presenter: presenter,
+                  ),
                   _OrderLocationSection(detail: detail),
                   _OrderCancelPolicySection(detail: detail),
                 ],
@@ -141,17 +145,8 @@ class _OrderDetailHero extends StatelessWidget {
                 if (detail.summary.orderStatus.isNotEmpty)
                   _StatusBadge(
                     label: detail.summary.orderStatus,
-                    tone: _StatusBadgeTone.danger,
+                    tone: _orderStatusTone(detail.summary.orderStatusCode),
                   ),
-                if (detail.summary.paymentStatus.isNotEmpty)
-                  _StatusBadge(
-                    label: detail.summary.paymentStatus,
-                    tone: _StatusBadgeTone.warning,
-                  ),
-                _StatusBadge(
-                  label: _checkedInLabel(context, detail),
-                  tone: _StatusBadgeTone.neutral,
-                ),
               ],
             ),
           ],
@@ -186,7 +181,7 @@ class _HeroIconButton extends StatelessWidget {
   }
 }
 
-enum _StatusBadgeTone { danger, warning, neutral }
+enum _StatusBadgeTone { success, danger, warning, neutral }
 
 class _StatusBadge extends StatelessWidget {
   const _StatusBadge({required this.label, required this.tone});
@@ -198,6 +193,11 @@ class _StatusBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
     final (background, border, foreground) = switch (tone) {
+      _StatusBadgeTone.success => (
+        colors.successSoft,
+        colors.successBorder,
+        colors.successForeground,
+      ),
       _StatusBadgeTone.danger => (
         colors.dangerSoft,
         colors.dangerBorder,
@@ -232,6 +232,26 @@ class _StatusBadge extends StatelessWidget {
       ),
     );
   }
+}
+
+_StatusBadgeTone _orderStatusTone(int? code) {
+  switch (code) {
+    case 25:
+    case 80:
+      return _StatusBadgeTone.success;
+    case 30:
+    case 40:
+      return _StatusBadgeTone.warning;
+    case 70:
+    case 98:
+      return _StatusBadgeTone.danger;
+    default:
+      return _StatusBadgeTone.neutral;
+  }
+}
+
+bool _isPaymentCompleted(int? code) {
+  return code == 45;
 }
 
 class _OrderHotelOverviewCard extends StatelessWidget {
@@ -486,6 +506,9 @@ class _OrderCheckInGuideCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!_isPaymentCompleted(detail.summary.paymentStatusCode)) {
+      return const SizedBox.shrink();
+    }
     final guide = _stripHtml(detail.checkInGuide).trim();
     final password = detail.gatePassword.trim();
     if (guide.isEmpty && password.isEmpty) {
@@ -578,6 +601,146 @@ class _OrderCheckInGuideCard extends StatelessWidget {
   }
 }
 
+class _OrderPaymentInfoSection extends StatelessWidget {
+  const _OrderPaymentInfoSection({
+    required this.detail,
+    required this.presenter,
+  });
+
+  final HotelOrderDetail detail;
+  final HotelBookingPresenter presenter;
+
+  @override
+  Widget build(BuildContext context) {
+    final couponDiscountAmount = detail.couponDiscountAmount ?? 0;
+    final createdTime = detail.createdTime.trim().isNotEmpty
+        ? detail.createdTime
+        : detail.summary.bookingOrderTime;
+    return _PlainSectionShell(
+      title: context.l10n.hotelOrderDetailPaymentInfo,
+      child: Column(
+        children: <Widget>[
+          _InfoLine(
+            data: _InfoLineData.payment(
+              context.l10n.hotelOrderDetailOrderTime,
+              _formatOrderPaymentTime(createdTime),
+            ),
+          ),
+          _InfoLine(
+            data: _InfoLineData.payment(
+              context.l10n.hotelOrderDetailOrderStatus,
+              detail.summary.orderStatus,
+            ),
+          ),
+          _InfoLine(
+            data: _InfoLineData.payment(
+              context.l10n.hotelOrderDetailCouponDiscount,
+              couponDiscountAmount > 0
+                  ? presenter.price(couponDiscountAmount)
+                  : context.l10n.hotelOrderDetailCouponUnused,
+            ),
+          ),
+          _PaymentAmountLine(detail: detail, presenter: presenter),
+          _InfoLine(
+            data: _InfoLineData.payment(
+              context.l10n.hotelOrderDetailPaymentStatus,
+              _paymentStatusLabel(context, detail.summary),
+            ),
+          ),
+          _InfoLine(
+            data: _InfoLineData.payment(
+              context.l10n.hotelOrderDetailReceiptTitle,
+              detail.receiptTitle,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PaymentAmountLine extends StatelessWidget {
+  const _PaymentAmountLine({required this.detail, required this.presenter});
+
+  final HotelOrderDetail detail;
+  final HotelBookingPresenter presenter;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    final actualAmount = detail.paidAmount ?? detail.summary.totalAmount;
+    final originalAmount = detail.originalAmount ?? actualAmount;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: colors.borderSoft)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 11),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            SizedBox(
+              width: 92,
+              child: Text(
+                context.l10n.hotelOrderDetailPaidAmount,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: colors.brandPrimaryDark,
+                  fontWeight: FontWeight.w900,
+                  height: 1.45,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: actualAmount == null
+                    ? Text(
+                        '-',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: colors.textSecondary,
+                          fontWeight: FontWeight.w700,
+                          height: 1.45,
+                        ),
+                      )
+                    : RichText(
+                        textAlign: TextAlign.start,
+                        text: TextSpan(
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodySmall?.copyWith(height: 1.45),
+                          children: <InlineSpan>[
+                            if (originalAmount != null) ...<InlineSpan>[
+                              TextSpan(
+                                text: presenter.price(originalAmount),
+                                style: TextStyle(
+                                  color: colors.textTertiary,
+                                  fontWeight: FontWeight.w700,
+                                  decoration: TextDecoration.lineThrough,
+                                  decorationColor: colors.textTertiary,
+                                ),
+                              ),
+                              const TextSpan(text: '  '),
+                            ],
+                            TextSpan(
+                              text: presenter.price(actualAmount),
+                              style: TextStyle(
+                                color: colors.brandAlert,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _OrderBookerInfoSection extends StatelessWidget {
   const _OrderBookerInfoSection({required this.detail});
 
@@ -598,6 +761,10 @@ class _OrderBookerInfoSection extends StatelessWidget {
         ),
         _InfoLineData(context.l10n.hotelOrderDetailEmail, detail.contactEmail),
         _InfoLineData(context.l10n.hotelOrderDetailPhone, _phoneText(detail)),
+        _InfoLineData(
+          context.l10n.hotelOrderDetailBookingComment,
+          detail.comment,
+        ),
         _InfoLineData(
           context.l10n.hotelOrderDetailCreatedAt,
           _formatDateTime(detail.summary.bookingOrderTime),
@@ -687,18 +854,52 @@ class _GuestLine extends StatelessWidget {
                   const SizedBox(height: 3),
                   Text(
                     _guestSubtitle(context, guest),
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: colors.textTertiary,
                       height: 1.35,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
+                  const SizedBox(height: 8),
+                  _GuestMetaLine(
+                    label: context.l10n.hotelOrderDetailEmail,
+                    value: guest.email,
+                  ),
+                  _GuestMetaLine(
+                    label: context.l10n.hotelOrderDetailRoomGuestCount,
+                    value: guest.guestCount == null
+                        ? ''
+                        : context.l10n.hotelOrderDetailGuestBadge(
+                            guest.guestCount!,
+                          ),
+                  ),
                 ],
               ),
             ),
-            const SizedBox(width: 8),
-            _MutedChip(label: context.l10n.hotelOrderDetailAdult),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _GuestMetaLine extends StatelessWidget {
+  const _GuestMetaLine({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    return Padding(
+      padding: const EdgeInsets.only(top: 3),
+      child: Text(
+        '$label: ${value.trim().isEmpty ? '-' : value}',
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+          color: colors.textSecondary,
+          height: 1.35,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );
@@ -1003,10 +1204,25 @@ class _SectionHeader extends StatelessWidget {
 }
 
 class _InfoLineData {
-  const _InfoLineData(this.label, this.value);
+  const _InfoLineData(
+    this.label,
+    this.value, {
+    this.valueFontWeight = FontWeight.w600,
+    this.showEmptyFallback = false,
+  });
+
+  const _InfoLineData.payment(String label, String value)
+    : this(
+        label,
+        value,
+        valueFontWeight: FontWeight.w700,
+        showEmptyFallback: true,
+      );
 
   final String label;
   final String value;
+  final FontWeight valueFontWeight;
+  final bool showEmptyFallback;
 }
 
 class _InfoLine extends StatelessWidget {
@@ -1040,10 +1256,12 @@ class _InfoLine extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                data.value,
+                data.value.trim().isEmpty && data.showEmptyFallback
+                    ? '-'
+                    : data.value,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: colors.textSecondary,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: data.valueFontWeight,
                   height: 1.45,
                 ),
               ),
@@ -1150,6 +1368,21 @@ String _phoneText(HotelOrderDetail detail) {
   return '+$code $mobile';
 }
 
+String _paymentStatusLabel(BuildContext context, HotelOrderSummary summary) {
+  return switch (summary.paymentStatusCode) {
+    40 => context.l10n.hotelPaymentStatusNotPaid,
+    41 => context.l10n.hotelPaymentStatusInvalidPaid,
+    43 => context.l10n.hotelPaymentStatusPartialPay,
+    45 => context.l10n.hotelPaymentStatusPaid,
+    49 => context.l10n.hotelPaymentStatusOverpaid,
+    50 => context.l10n.hotelPaymentStatusNotRefunded,
+    52 => context.l10n.hotelPaymentStatusRefunding,
+    53 => context.l10n.hotelPaymentStatusPartialRefunded,
+    55 => context.l10n.hotelPaymentStatusRefunded,
+    _ => summary.paymentStatus,
+  };
+}
+
 String _guestSubtitle(BuildContext context, HotelOrderRoomGuest guest) {
   return <String>[
     guest.roomTypeName,
@@ -1189,6 +1422,14 @@ String _formatDateTime(String raw) {
     return raw.trim();
   }
   return DateFormat('yyyy/MM/dd HH:mm').format(dateTime);
+}
+
+String _formatOrderPaymentTime(String raw) {
+  final dateTime = _parseDateTime(raw);
+  if (dateTime == null) {
+    return raw.trim();
+  }
+  return DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
 }
 
 String _stripHtml(String raw) {
