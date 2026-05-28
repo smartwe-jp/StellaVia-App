@@ -32,6 +32,7 @@ final discussionBoardDraftLocalDataSourceProvider =
       return DiscussionBoardDraftLocalDataSourceImpl(
         ref.watch(largeDataStoreProvider),
         ref.watch(authLocalDataSourceProvider),
+        ref.watch(discussionBoardDraftImageStoreProvider),
       );
     });
 

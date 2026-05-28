@@ -38,6 +38,7 @@ enum _DiscussionSendJobKind { post, reply }
 
 class _PendingDiscussionSendJob {
   const _PendingDiscussionSendJob.post({
+    required this.draftId,
     required this.content,
     required this.imageFilePaths,
     required this.selectedFund,
@@ -45,6 +46,7 @@ class _PendingDiscussionSendJob {
        thread = null;
 
   const _PendingDiscussionSendJob.reply({
+    required this.draftId,
     required this.content,
     required this.imageFilePaths,
     required DiscussionThread this.thread,
@@ -52,6 +54,7 @@ class _PendingDiscussionSendJob {
        selectedFund = null;
 
   final _DiscussionSendJobKind kind;
+  final String draftId;
   final String content;
   final List<String> imageFilePaths;
   final SelectedComposerFund? selectedFund;
@@ -166,6 +169,7 @@ class _DiscussionBoardTabPageState
       return false;
     }
     final job = _PendingDiscussionSendJob.post(
+      draftId: _newDraftId('post'),
       content: content,
       imageFilePaths: List<String>.of(imageFilePaths),
       selectedFund: _selectedPostComposerFund,
@@ -217,6 +221,10 @@ class _DiscussionBoardTabPageState
       return false;
     }
     if (submitted && mounted) {
+      await _deleteSavedDraft(job.draftId);
+      if (!mounted) {
+        return true;
+      }
       AppNotice.show(context, message: l10n.kizunarkPostSuccessNotice);
       return true;
     }
@@ -227,6 +235,7 @@ class _DiscussionBoardTabPageState
       content: job.content,
       imageFilePaths: job.imageFilePaths,
       selectedFund: job.selectedFund,
+      draftId: job.draftId,
       clearComposer: false,
     );
     await _showSendFailureDialog(onRetry: () => _retrySendJob(job));
@@ -250,6 +259,7 @@ class _DiscussionBoardTabPageState
       return false;
     }
     final job = _PendingDiscussionSendJob.reply(
+      draftId: _newDraftId('reply_${thread.id}'),
       content: content,
       imageFilePaths: List<String>.of(imageFilePaths),
       thread: thread,
@@ -294,6 +304,10 @@ class _DiscussionBoardTabPageState
       return false;
     }
     if (submitted && mounted) {
+      await _deleteSavedDraft(job.draftId);
+      if (!mounted) {
+        return true;
+      }
       AppNotice.show(context, message: l10n.kizunarkReplySuccessNotice);
       return true;
     }
@@ -304,6 +318,7 @@ class _DiscussionBoardTabPageState
       thread: thread,
       content: job.content,
       imageFilePaths: job.imageFilePaths,
+      draftId: job.draftId,
       clearComposer: false,
     );
     await _showSendFailureDialog(onRetry: () => _retrySendJob(job));
@@ -375,10 +390,26 @@ class _DiscussionBoardTabPageState
     );
   }
 
+  String _newDraftId(String prefix) {
+    return '${prefix}_${DateTime.now().toUtc().microsecondsSinceEpoch}';
+  }
+
+  Future<void> _deleteSavedDraft(String draftId) async {
+    final normalized = draftId.trim();
+    if (normalized.isEmpty) {
+      return;
+    }
+    await ref
+        .read(discussionBoardDraftLocalDataSourceProvider)
+        .deleteDraft(normalized);
+    ref.invalidate(discussionBoardDraftsProvider);
+  }
+
   Future<void> _savePostDraftData({
     required String content,
     required List<String> imageFilePaths,
     required SelectedComposerFund? selectedFund,
+    String? draftId,
     bool clearComposer = true,
   }) async {
     if (content.isEmpty && imageFilePaths.isEmpty) {
@@ -386,7 +417,7 @@ class _DiscussionBoardTabPageState
     }
     final now = DateTime.now().toUtc();
     final draft = DiscussionBoardDraft(
-      id: 'post_${now.microsecondsSinceEpoch}',
+      id: draftId ?? 'post_${now.microsecondsSinceEpoch}',
       kind: DiscussionDraftKind.post,
       content: content,
       imageFilePaths: imageFilePaths,
@@ -431,6 +462,7 @@ class _DiscussionBoardTabPageState
     required DiscussionThread thread,
     required String content,
     required List<String> imageFilePaths,
+    String? draftId,
     bool clearComposer = true,
     TextEditingController? controller,
   }) async {
@@ -439,7 +471,7 @@ class _DiscussionBoardTabPageState
     }
     final now = DateTime.now().toUtc();
     final draft = DiscussionBoardDraft(
-      id: 'reply_${thread.id}_${now.microsecondsSinceEpoch}',
+      id: draftId ?? 'reply_${thread.id}_${now.microsecondsSinceEpoch}',
       kind: DiscussionDraftKind.reply,
       content: content,
       imageFilePaths: imageFilePaths,
@@ -570,7 +602,7 @@ class _DiscussionBoardTabPageState
         final imageStore = ref.read(discussionBoardDraftImageStoreProvider);
         final persistedPaths = <String>[];
         for (final sourcePath in result.paths.take(remainingCount)) {
-          final persistedPath = await imageStore.persist(sourcePath);
+          final persistedPath = await imageStore.persistForDisplay(sourcePath);
           if (persistedPath != null && persistedPath.isNotEmpty) {
             persistedPaths.add(persistedPath);
           }
