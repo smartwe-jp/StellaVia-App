@@ -3651,7 +3651,38 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletDedicatedAccountTitle => 'お客様専用の入金口座';
 
   @override
-  String get walletProjectDepositAccountTitle => '案件専用の入金口座';
+  String get walletProjectDepositAccountTitle => '日本国内の入金口座';
+
+  @override
+  String get walletProjectOverseasDepositAccountTitle => '海外からの入金口座';
+
+  @override
+  String get walletProjectDomesticDepositSegment => '日本国内入金';
+
+  @override
+  String get walletProjectOverseasDepositSegment => '海外入金';
+
+  @override
+  String get walletProjectDepositBankInfoSection => '銀行情報';
+
+  @override
+  String get walletProjectDepositRecipientInfoSection => '受取人情報';
+
+  @override
+  String get walletProjectDepositSwiftCodeLabel => 'SWIFTコード';
+
+  @override
+  String get walletProjectDepositBranchAddressLabel => '銀行所在地';
+
+  @override
+  String get walletProjectDepositAccountHolderAddressLabel => '住所';
+
+  @override
+  String get walletPaymentConfirmationSentNotice =>
+      'すでに通知が送信されています。重複してご送信いただく必要はありません。';
+
+  @override
+  String get walletPaymentConfirmationSentAtLabel => '通知日時';
 
   @override
   String get walletDedicatedAccountDescription =>

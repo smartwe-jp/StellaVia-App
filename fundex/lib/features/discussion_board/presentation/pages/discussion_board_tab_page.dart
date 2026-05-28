@@ -47,9 +47,9 @@ class _PendingDiscussionSendJob {
   const _PendingDiscussionSendJob.reply({
     required this.content,
     required this.imageFilePaths,
-    required this.selectedFund,
     required DiscussionThread this.thread,
-  }) : kind = _DiscussionSendJobKind.reply;
+  }) : kind = _DiscussionSendJobKind.reply,
+       selectedFund = null;
 
   final _DiscussionSendJobKind kind;
   final String content;
@@ -69,7 +69,7 @@ class _DiscussionBoardTabPageState
       <String, TextEditingController>{};
   final Queue<_PendingDiscussionSendJob> _sendQueue =
       Queue<_PendingDiscussionSendJob>();
-  SelectedComposerFund? _selectedComposerFund;
+  SelectedComposerFund? _selectedPostComposerFund;
   bool _isProcessingSendQueue = false;
   bool _showHeaderPostAction = false;
 
@@ -168,7 +168,7 @@ class _DiscussionBoardTabPageState
     final job = _PendingDiscussionSendJob.post(
       content: content,
       imageFilePaths: List<String>.of(imageFilePaths),
-      selectedFund: _selectedComposerFund,
+      selectedFund: _selectedPostComposerFund,
     );
     _enqueueSendJob(job);
     _composerController.clear();
@@ -177,7 +177,7 @@ class _DiscussionBoardTabPageState
         .updateComposerText('');
     if (mounted) {
       setState(() {
-        _selectedComposerFund = null;
+        _selectedPostComposerFund = null;
       });
     }
     return true;
@@ -252,7 +252,6 @@ class _DiscussionBoardTabPageState
     final job = _PendingDiscussionSendJob.reply(
       content: content,
       imageFilePaths: List<String>.of(imageFilePaths),
-      selectedFund: _selectedComposerFund,
       thread: thread,
     );
     _enqueueSendJob(job);
@@ -260,11 +259,6 @@ class _DiscussionBoardTabPageState
     ref
         .read(discussionBoardControllerProvider(null).notifier)
         .updateReplyDraft(thread.id, '');
-    if (mounted) {
-      setState(() {
-        _selectedComposerFund = null;
-      });
-    }
     return true;
   }
 
@@ -288,7 +282,6 @@ class _DiscussionBoardTabPageState
       fallbackName: l10n.kizunarkFallbackDisplayName,
       fallbackHandle: l10n.kizunarkFallbackHandle,
       fallbackBadgeLabel: l10n.kizunarkInvestorBadge,
-      linkedProjectId: int.tryParse(job.selectedFund?.projectId ?? ''),
       imageFilePaths: job.imageFilePaths,
       onProgress: (double progress) {
         if (_isSendGenerationActive(generation)) {
@@ -311,7 +304,6 @@ class _DiscussionBoardTabPageState
       thread: thread,
       content: job.content,
       imageFilePaths: job.imageFilePaths,
-      selectedFund: job.selectedFund,
       clearComposer: false,
     );
     await _showSendFailureDialog(onRetry: () => _retrySendJob(job));
@@ -378,7 +370,7 @@ class _DiscussionBoardTabPageState
     await _savePostDraftData(
       content: _composerController.text.trim(),
       imageFilePaths: imageFilePaths,
-      selectedFund: _selectedComposerFund,
+      selectedFund: _selectedPostComposerFund,
       clearComposer: clearComposer,
     );
   }
@@ -415,7 +407,7 @@ class _DiscussionBoardTabPageState
         .updateComposerText('');
     if (mounted) {
       setState(() {
-        _selectedComposerFund = null;
+        _selectedPostComposerFund = null;
       });
     }
   }
@@ -430,7 +422,6 @@ class _DiscussionBoardTabPageState
       thread: thread,
       content: controller.text.trim(),
       imageFilePaths: imageFilePaths,
-      selectedFund: _selectedComposerFund,
       clearComposer: clearComposer,
       controller: controller,
     );
@@ -440,7 +431,6 @@ class _DiscussionBoardTabPageState
     required DiscussionThread thread,
     required String content,
     required List<String> imageFilePaths,
-    required SelectedComposerFund? selectedFund,
     bool clearComposer = true,
     TextEditingController? controller,
   }) async {
@@ -454,8 +444,6 @@ class _DiscussionBoardTabPageState
       content: content,
       imageFilePaths: imageFilePaths,
       updatedAtIso: now.toIso8601String(),
-      projectId: selectedFund?.projectId,
-      projectName: selectedFund?.projectName,
       replyThreadId: thread.id,
       replyTargetName: thread.author.displayName,
       replyTargetBody: thread.body,
@@ -472,11 +460,6 @@ class _DiscussionBoardTabPageState
     ref
         .read(discussionBoardControllerProvider(null).notifier)
         .updateReplyDraft(thread.id, '');
-    if (mounted) {
-      setState(() {
-        _selectedComposerFund = null;
-      });
-    }
   }
 
   Future<DiscussionBoardDraft?> _openDraftList() {
@@ -680,25 +663,23 @@ class _DiscussionBoardTabPageState
     );
   }
 
-  Future<SelectedComposerFund?> _showComposerFundPicker() async {
+  Future<SelectedComposerFund?> _showComposerFundPicker(
+    SelectedComposerFund? currentSelection,
+  ) async {
     final selectedFund =
         await AppBottomSheet.showAdaptive<SelectedComposerFund>(
           context: context,
           useRootNavigator: true,
           builder: (BuildContext bottomSheetContext) {
             return KizunarkComposerFundPickerSheet(
-              currentSelection: _selectedComposerFund,
+              currentSelection: currentSelection,
             );
           },
         );
     if (!mounted || selectedFund == null) {
       return null;
     }
-    final nextFund = selectedFund.isClearSelection ? null : selectedFund;
-    setState(() {
-      _selectedComposerFund = nextFund;
-    });
-    return nextFund;
+    return selectedFund.isClearSelection ? null : selectedFund;
   }
 
   Future<void> _openPostComposer({
@@ -738,15 +719,15 @@ class _DiscussionBoardTabPageState
           linkedFundLabel: context.l10n.kizunarkAssociateFundAction,
           imageCounterBuilder: context.l10n.kizunarkImageCounter,
           controller: _composerController,
-          selectedFund: _selectedComposerFund,
+          selectedFund: _selectedPostComposerFund,
           hasDrafts: hasDrafts,
           onPickImages: _pickDiscussionImages,
-          onPickFund: _showComposerFundPicker,
+          onPickFund: () => _showComposerFundPicker(_selectedPostComposerFund),
           onOpenDrafts: _openDraftList,
           onOpenReplyDraft: _openReplyDraft,
           onSelectedFundChanged: (SelectedComposerFund? fund) {
             setState(() {
-              _selectedComposerFund = fund;
+              _selectedPostComposerFund = fund;
             });
           },
           onTextChanged: ref
@@ -763,6 +744,11 @@ class _DiscussionBoardTabPageState
         ),
       ),
     );
+    if (mounted && _composerController.text.trim().isEmpty) {
+      setState(() {
+        _selectedPostComposerFund = null;
+      });
+    }
   }
 
   Future<void> _openReplyComposer({
@@ -795,16 +781,6 @@ class _DiscussionBoardTabPageState
           .read(discussionBoardControllerProvider(null).notifier)
           .updateReplyDraft(thread.id, currentDraft);
     }
-    final draftProjectId = initialDraft?.projectId?.trim() ?? '';
-    if (draftProjectId.isNotEmpty) {
-      setState(() {
-        _selectedComposerFund = SelectedComposerFund(
-          projectId: draftProjectId,
-          projectName: initialDraft?.projectName ?? '',
-          selectionKey: draftProjectId,
-        );
-      });
-    }
     await context.push<void>(
       '/discussion-board/reply/${Uri.encodeComponent(thread.id)}',
       extra: KizunarkReplyComposeRouteArgs(
@@ -830,16 +806,12 @@ class _DiscussionBoardTabPageState
           onTargetImageTap: (int index) =>
               _openCommentImageViewer(thread.imageUrls, index),
           addImageLabel: context.l10n.kizunarkAddImageAction,
-          linkedFundLabel: context.l10n.kizunarkAssociateFundAction,
           imageCounterBuilder: context.l10n.kizunarkImageCounter,
           controller: replyController,
           onChanged: (String value) => ref
               .read(discussionBoardControllerProvider(null).notifier)
               .updateReplyDraft(thread.id, value),
           onPickImages: _pickDiscussionImages,
-          onPickFund: () async {
-            await _showComposerFundPicker();
-          },
           onSaveDraft: (List<String> imageFilePaths) => _saveReplyDraft(
             thread: thread,
             controller: replyController,
@@ -1140,6 +1112,7 @@ class _DiscussionBoardTabPageState
           return Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: KizunarkPostCard(
+              key: ValueKey<String>('discussion-thread-${thread.id}'),
               avatar: AppUserAvatar(
                 avatarUrl: thread.author.avatarUrl,
                 gradientColorValues: thread.author.avatarGradientColorValues,

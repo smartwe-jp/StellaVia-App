@@ -4,6 +4,7 @@ import 'package:core_network/core_network.dart';
 import '../models/wallet_account_history_dto.dart';
 import '../models/wallet_bank_account_info_dto.dart';
 import '../models/wallet_bank_account_pool_dto.dart';
+import '../models/wallet_payment_confirmation_dto.dart';
 import '../models/wallet_withdraw_dto.dart';
 
 abstract class WalletRemoteDataSource {
@@ -23,7 +24,13 @@ abstract class WalletRemoteDataSource {
 
   Future<void> sendWithdrawApplyCode();
 
-  Future<void> confirmPayment({required Object amount});
+  Future<void> confirmPayment({required Object amount, Object? bizId});
+
+  Future<List<WalletPaymentConfirmationRecordDto>> fetchPaymentConfirmations({
+    required String bizId,
+    int startPage = 1,
+    int limit = 10,
+  });
 
   Future<bool> autoFundDeduction({required String processId});
 
@@ -103,8 +110,21 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
   }
 
   @override
-  Future<void> confirmPayment({required Object amount}) {
-    return _apiClient.confirmPayment(amount: amount);
+  Future<void> confirmPayment({required Object amount, Object? bizId}) {
+    return _apiClient.confirmPayment(amount: amount, bizId: bizId);
+  }
+
+  @override
+  Future<List<WalletPaymentConfirmationRecordDto>> fetchPaymentConfirmations({
+    required String bizId,
+    int startPage = 1,
+    int limit = 10,
+  }) {
+    return _apiClient.fetchPaymentConfirmations(
+      bizId: bizId,
+      startPage: startPage,
+      limit: limit,
+    );
   }
 
   @override

@@ -7023,6 +7023,66 @@ abstract class AppLocalizations {
   /// **'Project Deposit Account'**
   String get walletProjectDepositAccountTitle;
 
+  /// No description provided for @walletProjectOverseasDepositAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Overseas Deposit Account'**
+  String get walletProjectOverseasDepositAccountTitle;
+
+  /// No description provided for @walletProjectDomesticDepositSegment.
+  ///
+  /// In en, this message translates to:
+  /// **'Japanese transfer'**
+  String get walletProjectDomesticDepositSegment;
+
+  /// No description provided for @walletProjectOverseasDepositSegment.
+  ///
+  /// In en, this message translates to:
+  /// **'Overseas transfer'**
+  String get walletProjectOverseasDepositSegment;
+
+  /// No description provided for @walletProjectDepositBankInfoSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank information'**
+  String get walletProjectDepositBankInfoSection;
+
+  /// No description provided for @walletProjectDepositRecipientInfoSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipient information'**
+  String get walletProjectDepositRecipientInfoSection;
+
+  /// No description provided for @walletProjectDepositSwiftCodeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'SWIFT Code'**
+  String get walletProjectDepositSwiftCodeLabel;
+
+  /// No description provided for @walletProjectDepositBranchAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank address'**
+  String get walletProjectDepositBranchAddressLabel;
+
+  /// No description provided for @walletProjectDepositAccountHolderAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get walletProjectDepositAccountHolderAddressLabel;
+
+  /// No description provided for @walletPaymentConfirmationSentNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'A payment notification has already been sent. You do not need to send it again.'**
+  String get walletPaymentConfirmationSentNotice;
+
+  /// No description provided for @walletPaymentConfirmationSentAtLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification time'**
+  String get walletPaymentConfirmationSentAtLabel;
+
   /// No description provided for @walletDedicatedAccountDescription.
   ///
   /// In en, this message translates to:

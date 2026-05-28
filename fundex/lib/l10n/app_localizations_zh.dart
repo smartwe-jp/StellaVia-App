@@ -3621,7 +3621,37 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletDedicatedAccountTitle => '您的专用入金账户';
 
   @override
-  String get walletProjectDepositAccountTitle => '项目专用入金账户';
+  String get walletProjectDepositAccountTitle => '日本国内入金账户';
+
+  @override
+  String get walletProjectOverseasDepositAccountTitle => '海外入金账户';
+
+  @override
+  String get walletProjectDomesticDepositSegment => '日本国内入金';
+
+  @override
+  String get walletProjectOverseasDepositSegment => '海外入金';
+
+  @override
+  String get walletProjectDepositBankInfoSection => '银行信息';
+
+  @override
+  String get walletProjectDepositRecipientInfoSection => '收款人信息';
+
+  @override
+  String get walletProjectDepositSwiftCodeLabel => 'SWIFT代码';
+
+  @override
+  String get walletProjectDepositBranchAddressLabel => '银行所在地';
+
+  @override
+  String get walletProjectDepositAccountHolderAddressLabel => '地址';
+
+  @override
+  String get walletPaymentConfirmationSentNotice => '已发送过入金通知，无需重复发送。';
+
+  @override
+  String get walletPaymentConfirmationSentAtLabel => '通知时间';
 
   @override
   String get walletDedicatedAccountDescription =>
@@ -8771,7 +8801,37 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get walletDedicatedAccountTitle => '您的專用入金帳戶';
 
   @override
-  String get walletProjectDepositAccountTitle => '項目專用入金帳戶';
+  String get walletProjectDepositAccountTitle => '日本國內入金帳戶';
+
+  @override
+  String get walletProjectOverseasDepositAccountTitle => '海外入金帳戶';
+
+  @override
+  String get walletProjectDomesticDepositSegment => '日本國內入金';
+
+  @override
+  String get walletProjectOverseasDepositSegment => '海外入金';
+
+  @override
+  String get walletProjectDepositBankInfoSection => '銀行資訊';
+
+  @override
+  String get walletProjectDepositRecipientInfoSection => '收款人資訊';
+
+  @override
+  String get walletProjectDepositSwiftCodeLabel => 'SWIFT代碼';
+
+  @override
+  String get walletProjectDepositBranchAddressLabel => '銀行所在地';
+
+  @override
+  String get walletProjectDepositAccountHolderAddressLabel => '地址';
+
+  @override
+  String get walletPaymentConfirmationSentNotice => '已發送過入金通知，無需重複發送。';
+
+  @override
+  String get walletPaymentConfirmationSentAtLabel => '通知時間';
 
   @override
   String get walletDedicatedAccountDescription =>

@@ -19,6 +19,46 @@
 - 除酒店业务外，后续 API 实现不再以老工程 `http_conf.dart` 作为来源。
 - 本文件的作用是补充“真实请求/响应样例报文”，用于 DTO/错误处理/兼容性测试；若与 Swagger 冲突，以 Swagger 为准，并在此文件更新样例。
 
+- 入金通知（来源：业务提供样例，2026-05-28）
+
+  1. `GET /member/wx/account/payment-confirmation`
+    - Query:
+      - `amount`: 入金通知金额（required）
+      - `bizId`: 业务 ID（optional），当前传入申请记录 `processId`
+    - Response: `R<object>`，`code == 0 或 200` 视为成功
+
+  2. `POST /member/wx/account/payment-confirmation`
+    - Body(JSON):
+      ```json
+      {
+        "bizId": "8020211",
+        "startPage": 1,
+        "limit": 10
+      }
+      ```
+    - Response:
+      ```json
+      {
+        "msg": "success",
+        "code": 200,
+        "data": {
+          "total": 1,
+          "limit": 10,
+          "currentPage": 1,
+          "rows": [
+            {
+              "id": 46,
+              "userId": 125530,
+              "bizId": "8020211",
+              "amount": 10000,
+              "createTime": "2026-05-26 11:51:06"
+            }
+          ]
+        }
+      }
+      ```
+    - App 行为：进入入金详情/抽選入金详情时按 `processId` 查询第一页，若存在第一条记录，则显示已通知提示和最新通知时间。
+
 - 1.登录与Token 获取
   - [HTTP] REQ POST:
   https://testoa.gutingjun.com/api/uaa/oauth/token 

@@ -3,8 +3,8 @@ export 'package:company_api_runtime/company_api_runtime.dart'
         FundProjectApplyDetailDto,
         FundProjectApplyInvestorDto,
         FundProjectDto,
-        FundProjectLiveJapanBankDto,
         FundProjectInvestorTypeDto,
+        FundProjectLiveJapanBankDto,
         FundProjectPdfDocumentDto,
         FundProjectPdfUrlDto;
 
@@ -13,8 +13,8 @@ import 'package:company_api_runtime/company_api_runtime.dart'
         FundProjectApplyDetailDto,
         FundProjectApplyInvestorDto,
         FundProjectDto,
-        FundProjectLiveJapanBankDto,
         FundProjectInvestorTypeDto,
+        FundProjectLiveJapanBankDto,
         FundProjectPdfDocumentDto,
         FundProjectPdfUrlDto;
 
@@ -53,6 +53,7 @@ extension FundProjectDtoMapper on FundProjectDto {
       videoLink: videoLink,
       subordinatedRatio: subordinatedRatio,
       liveJapanBank: liveJapanBank?.toEntity(),
+      notLiveJapanBank: notLiveJapanBank?.toEntity(),
       detailData: Map<String, Object?>.unmodifiable(detailData),
       photos: List<String>.unmodifiable(photos),
       investorTypes: List<FundProjectInvestorType>.unmodifiable(

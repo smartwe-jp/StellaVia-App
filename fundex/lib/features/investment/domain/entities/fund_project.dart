@@ -33,6 +33,7 @@ class FundProject {
     this.videoLink,
     this.subordinatedRatio,
     this.liveJapanBank,
+    this.notLiveJapanBank,
     this.detailData = const <String, Object?>{},
     this.photos = const <String>[],
     this.investorTypes = const <FundProjectInvestorType>[],
@@ -69,6 +70,7 @@ class FundProject {
   final String? videoLink;
   final String? subordinatedRatio;
   final FundProjectLiveJapanBank? liveJapanBank;
+  final FundProjectLiveJapanBank? notLiveJapanBank;
   final Map<String, Object?> detailData;
   final List<String> photos;
   final List<FundProjectInvestorType> investorTypes;

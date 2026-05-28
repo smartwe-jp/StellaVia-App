@@ -59,6 +59,14 @@ class KizunarkThreadDetailPage extends ConsumerWidget {
   })
   onMessageLongPress;
 
+  void _openLinkedFundDetail(BuildContext context, String? projectId) {
+    final normalized = projectId?.trim() ?? '';
+    if (normalized.isEmpty) {
+      return;
+    }
+    context.push('/funds/$normalized');
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
@@ -94,6 +102,7 @@ class KizunarkThreadDetailPage extends ConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: KizunarkPostCard(
+                    key: ValueKey<String>('discussion-thread-${liveThread.id}'),
                     avatar: AppUserAvatar(
                       avatarUrl: liveThread.author.avatarUrl,
                       gradientColorValues:
@@ -123,6 +132,10 @@ class KizunarkThreadDetailPage extends ConsumerWidget {
                         ? null
                         : KizunarkFundReferenceChip(
                             label: liveThread.fundReferenceLabel!,
+                            onTap: () => _openLinkedFundDetail(
+                              context,
+                              liveThread.fundReferenceId,
+                            ),
                           ),
                     commentCount: liveThread.commentCount,
                     onToggleRepliesTap: onReply,
@@ -144,6 +157,7 @@ class KizunarkThreadDetailPage extends ConsumerWidget {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: KizunarkReplyTile(
+                      key: ValueKey<String>('discussion-reply-${reply.id}'),
                       avatar: AppUserAvatar(
                         avatarUrl: reply.author.avatarUrl,
                         gradientColorValues:

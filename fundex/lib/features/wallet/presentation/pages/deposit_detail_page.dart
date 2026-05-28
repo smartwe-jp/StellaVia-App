@@ -1,6 +1,5 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -15,10 +14,10 @@ import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../providers/wallet_providers.dart';
 import '../support/wallet_application_payment_refresh.dart';
-import '../support/wallet_deposit_copy_support.dart';
 import '../support/wallet_deposit_transfer_notice_support.dart';
 import '../support/wallet_standby_purchase_dialog.dart';
-import '../widgets/wallet_deposit_transfer_notice.dart';
+import '../widgets/project_deposit_bank_card.dart';
+import '../widgets/wallet_payment_confirmation_notice.dart';
 import 'deposit_list_page.dart';
 
 class DepositDetailPage extends ConsumerWidget {
@@ -145,9 +144,16 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
     });
 
     try {
-      await ref.read(confirmWalletPaymentUseCaseProvider).call(amount: amount);
+      final processId = _resolveDepositProcessId(widget.record);
+      await ref
+          .read(confirmWalletPaymentUseCaseProvider)
+          .call(amount: amount, bizId: processId);
       if (!mounted) {
         return;
+      }
+      if (processId != null) {
+        ref.invalidate(walletPaymentConfirmationRecordsProvider(processId));
+        ref.invalidate(latestWalletPaymentConfirmationProvider(processId));
       }
       setState(() {
         _isOperationCompleted = true;
@@ -262,7 +268,9 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final l10n = context.l10n;
-    final bank = widget.project.liveJapanBank;
+    final hasDepositBank =
+        widget.project.liveJapanBank != null ||
+        _isUsableOverseasDepositBank(widget.project.notLiveJapanBank);
     final depositAmount = resolveDepositAmount(widget.record)?.round();
     final formatter = NumberFormat.currency(
       locale: Localizations.localeOf(context).toLanguageTag(),
@@ -284,6 +292,15 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
         depositAmount != null &&
         depositAmount > 0 &&
         standbyBalance >= depositAmount;
+    final depositProcessId = _resolveDepositProcessId(widget.record);
+    final latestPaymentConfirmationCreateTime = depositProcessId == null
+        ? null
+        : ref
+              .watch(latestWalletPaymentConfirmationProvider(depositProcessId))
+              .asData
+              ?.value
+              ?.createTime
+              ?.trim();
     final currentUser = ref.watch(currentAuthUserProvider).valueOrNull;
     final transferNoticeAccountId = formatWalletDepositTransferNoticeAccountId(
       currentUser,
@@ -294,16 +311,19 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
       children: <Widget>[
         DepositProjectCard(record: widget.record),
         const SizedBox(height: 16),
-        if (bank == null)
+        if (!hasDepositBank)
           DepositLoadState(
             icon: Icons.account_balance_outlined,
             message: l10n.walletProjectDepositAccountUnavailableMessage,
           )
         else
-          _ProjectDepositBankCard(
-            bank: bank,
-            title: l10n.walletProjectDepositAccountTitle,
-            transferNoticeAccountId: transferNoticeAccountId,
+          ProjectDepositBankCard(
+            liveJapanBank: widget.project.liveJapanBank,
+            notLiveJapanBank: widget.project.notLiveJapanBank,
+            texts: _buildProjectDepositBankCardTexts(
+              context,
+              transferNoticeAccountId: transferNoticeAccountId,
+            ),
           ),
         const SizedBox(height: 20),
         if (_isOperationCompleted)
@@ -334,6 +354,15 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
             isLoading: _isPurchasingWithStandbyBalance,
             onPurchase: _purchaseWithStandbyBalance,
           ),
+          if (latestPaymentConfirmationCreateTime != null &&
+              latestPaymentConfirmationCreateTime.isNotEmpty) ...<Widget>[
+            const SizedBox(height: 16),
+            WalletPaymentConfirmationNotice(
+              message: l10n.walletPaymentConfirmationSentNotice,
+              timeLabel: l10n.walletPaymentConfirmationSentAtLabel,
+              createTime: latestPaymentConfirmationCreateTime,
+            ),
+          ],
           const SizedBox(height: 16),
           PrimaryCtaButton(
             label: l10n.lotteryApplyReportDepositAction,
@@ -373,6 +402,40 @@ String _resolveDepositProjectName(
   }
   final projectName = project.projectName.trim();
   return projectName.isEmpty ? '--' : projectName;
+}
+
+bool _isUsableOverseasDepositBank(FundProjectLiveJapanBank? bank) {
+  return (bank?.bankName?.trim().isNotEmpty ?? false) &&
+      (bank?.bankNumber?.trim().isNotEmpty ?? false);
+}
+
+ProjectDepositBankCardTexts _buildProjectDepositBankCardTexts(
+  BuildContext context, {
+  required String transferNoticeAccountId,
+}) {
+  final l10n = context.l10n;
+  return ProjectDepositBankCardTexts(
+    domesticTitle: l10n.walletProjectDepositAccountTitle,
+    overseasTitle: l10n.walletProjectOverseasDepositAccountTitle,
+    domesticSegmentLabel: l10n.walletProjectDomesticDepositSegment,
+    overseasSegmentLabel: l10n.walletProjectOverseasDepositSegment,
+    copyLabel: l10n.lotteryApplyCopyAction,
+    copyDoneMessage: l10n.lotteryApplyCopyDoneToast,
+    bankInfoSectionTitle: l10n.walletProjectDepositBankInfoSection,
+    recipientInfoSectionTitle: l10n.walletProjectDepositRecipientInfoSection,
+    bankNameLabel: l10n.walletBankNameLabel,
+    swiftCodeLabel: l10n.walletProjectDepositSwiftCodeLabel,
+    branchNameLabel: l10n.walletBranchNameLabel,
+    branchAddressLabel: l10n.walletProjectDepositBranchAddressLabel,
+    bankCountryLabel: l10n.walletBankSettingsBankCountryLabel,
+    accountNumberLabel: l10n.walletAccountNumberLabel,
+    accountHolderLabel: l10n.walletAccountHolderLabel,
+    accountHolderAddressLabel:
+        l10n.walletProjectDepositAccountHolderAddressLabel,
+    transferNotice: l10n.walletDepositTransferNotice(transferNoticeAccountId),
+    transferName: transferNoticeAccountId,
+    transferNameCopyButtonLabel: l10n.walletDepositTransferNameCopyAction,
+  );
 }
 
 class _StandbyBalancePaymentCard extends StatelessWidget {
@@ -494,200 +557,6 @@ class _StandbyShortageBadge extends StatelessWidget {
             fontWeight: FontWeight.w800,
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _ProjectDepositBankCard extends StatelessWidget {
-  const _ProjectDepositBankCard({
-    required this.bank,
-    required this.title,
-    required this.transferNoticeAccountId,
-  });
-
-  final FundProjectLiveJapanBank bank;
-  final String title;
-  final String transferNoticeAccountId;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    final l10n = context.l10n;
-    final branchCopyValue = resolveWalletDepositBranchCopyValue(
-      bank.branchBankName,
-    );
-    final accountNumberCopyValue = resolveWalletDepositAccountNumberCopyValue(
-      bank.bankNumber,
-    );
-    final fullCopyText = formatWalletDepositCopyText(<WalletDepositCopyRow>[
-      WalletDepositCopyRow(
-        label: l10n.walletBankNameLabel,
-        value: bank.bankName,
-      ),
-      WalletDepositCopyRow(
-        label: l10n.walletBranchNameLabel,
-        value: branchCopyValue,
-      ),
-      WalletDepositCopyRow(
-        label: l10n.walletAccountNumberLabel,
-        value: accountNumberCopyValue,
-      ),
-      WalletDepositCopyRow(
-        label: l10n.walletAccountHolderLabel,
-        value: bank.bankAccountOwnerName,
-      ),
-    ]);
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: colors.border),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  title,
-                  style: appText.sectionTitle.copyWith(
-                    color: colors.textPrimary,
-                  ),
-                ),
-                AppCopyButton(
-                  label: l10n.lotteryApplyCopyAction,
-                  onPressed: fullCopyText.isEmpty
-                      ? null
-                      : () async {
-                          await Clipboard.setData(
-                            ClipboardData(text: fullCopyText),
-                          );
-                          if (context.mounted) {
-                            AppNotice.show(
-                              context,
-                              message: l10n.lotteryApplyCopyDoneToast,
-                            );
-                          }
-                        },
-                  textStyle: appText.caption,
-                ),
-              ],
-            ),
-            const SizedBox(height: 26),
-            _CopyableBankInfoRow(
-              label: l10n.walletBankNameLabel,
-              value: bank.bankName,
-              copyLabel: null,
-            ),
-            _CopyableBankInfoRow(
-              label: l10n.walletBranchNameLabel,
-              value: bank.branchBankName,
-              copyLabel: l10n.lotteryApplyCopyAction,
-              copyValue: branchCopyValue,
-            ),
-            _CopyableBankInfoRow(
-              label: l10n.walletAccountNumberLabel,
-              value: bank.bankNumber,
-              copyLabel: l10n.lotteryApplyCopyAction,
-              copyValue: accountNumberCopyValue,
-            ),
-            _CopyableBankInfoRow(
-              label: l10n.walletAccountHolderLabel,
-              value: bank.bankAccountOwnerName,
-              copyLabel: null,
-            ),
-            const SizedBox(height: 12),
-            WalletDepositTransferNotice(
-              message: l10n.walletDepositTransferNotice(
-                transferNoticeAccountId,
-              ),
-              transferName: transferNoticeAccountId,
-              copyButtonLabel: l10n.walletDepositTransferNameCopyAction,
-              copyDoneMessage: l10n.lotteryApplyCopyDoneToast,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _CopyableBankInfoRow extends StatelessWidget {
-  const _CopyableBankInfoRow({
-    required this.label,
-    required this.value,
-    required this.copyLabel,
-    this.copyValue,
-  });
-
-  final String label;
-  final String? value;
-  final String? copyLabel;
-  final String? copyValue;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    final l10n = context.l10n;
-    final hasValue = value != null && value!.trim().isNotEmpty;
-    final resolvedCopyValue = copyValue?.trim() ?? value?.trim() ?? '';
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SizedBox(
-            width: 92,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 2),
-              child: Text(
-                label,
-                style: appText.caption.copyWith(color: colors.textSecondary),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  hasValue ? value! : '--',
-                  style: appText.bodyStrong.copyWith(color: colors.textPrimary),
-                ),
-                if (copyLabel != null &&
-                    hasValue &&
-                    resolvedCopyValue.isNotEmpty) ...<Widget>[
-                  const SizedBox(height: 4),
-                  AppCopyButton(
-                    label: copyLabel ?? l10n.lotteryApplyCopyAction,
-                    onPressed: () async {
-                      await Clipboard.setData(
-                        ClipboardData(text: resolvedCopyValue),
-                      );
-                      if (context.mounted) {
-                        AppNotice.show(
-                          context,
-                          message: l10n.lotteryApplyCopyDoneToast,
-                        );
-                      }
-                    },
-                    textStyle: appText.caption,
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

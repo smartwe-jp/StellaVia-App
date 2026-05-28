@@ -5,7 +5,7 @@ class ConfirmWalletPaymentUseCase {
 
   final WalletRepository _repository;
 
-  Future<void> call({required Object amount}) {
-    return _repository.confirmPayment(amount: amount);
+  Future<void> call({required Object amount, Object? bizId}) {
+    return _repository.confirmPayment(amount: amount, bizId: bizId);
   }
 }

@@ -54,6 +54,7 @@ class AppRemoteImage extends StatelessWidget {
       fadeInDuration: Duration.zero,
       fadeOutDuration: Duration.zero,
       placeholderFadeInDuration: Duration.zero,
+      useOldImageOnUrlChange: true,
       placeholder: (_, __) => placeholder ?? const SizedBox.shrink(),
       errorWidget: (_, __, ___) => errorWidget ?? const SizedBox.shrink(),
     );
