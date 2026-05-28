@@ -558,6 +558,16 @@ List<Map<String, Object?>> hotelMapListFromJson(Object? raw) {
   return const <Map<String, Object?>>[];
 }
 
+class HotelOrderCancelRuleResultDto {
+  const HotelOrderCancelRuleResultDto({
+    required this.canCancel,
+    required this.message,
+  });
+
+  final bool canCancel;
+  final String message;
+}
+
 @freezed
 abstract class HotelBookingCreateRequestDto
     with _$HotelBookingCreateRequestDto {
