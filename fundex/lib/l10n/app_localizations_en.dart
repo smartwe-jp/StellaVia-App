@@ -3436,6 +3436,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Distribution calculation period';
 
   @override
+  String get fundDetailDistributionCalculationPeriodMonth =>
+      'Calculated for each natural month. A natural month means the period from the first day to the last day of each month.';
+
+  @override
   String get fundDetailDistributionCalculationPeriodSeason =>
       'Calculated for each natural quarter. A natural quarter means each period from January 1 to March 31, April 1 to June 30, July 1 to September 30, and October 1 to December 31 of every year.';
 

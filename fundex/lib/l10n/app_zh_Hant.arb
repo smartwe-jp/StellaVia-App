@@ -1388,6 +1388,7 @@
   "fundDetailSubordinatedRatioLabel": "劣後出資比例",
   "fundDetailDistributionInfoTitle": "分配相關",
   "fundDetailDistributionCalculationPeriodLabel": "分配計算時間",
+  "fundDetailDistributionCalculationPeriodMonth": "按自然月計算。自然月是指每月1日至月末日的期間。",
   "fundDetailDistributionCalculationPeriodSeason": "按自然季度計算。自然季度是指每年1月1日至3月31日、4月1日至6月30日、7月1日至9月30日、10月1日至12月31日的各期間。",
   "fundDetailDistributionCalculationPeriodYear": "按自然年計算。自然年是指每年1月1日至12月31日的期間。",
   "fundDetailDistributionScheduleLabel": "分配預定",

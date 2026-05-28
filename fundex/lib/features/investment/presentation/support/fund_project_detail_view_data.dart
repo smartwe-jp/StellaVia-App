@@ -143,6 +143,8 @@ String _resolveDistributionCalculationPeriodText(
   FundProject project,
 ) {
   switch (project.periodType?.trim().toUpperCase()) {
+    case 'MONTH':
+      return context.l10n.fundDetailDistributionCalculationPeriodMonth;
     case 'SEASON':
       return context.l10n.fundDetailDistributionCalculationPeriodSeason;
     case 'YEAR':

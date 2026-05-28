@@ -6303,6 +6303,12 @@ abstract class AppLocalizations {
   /// **'Distribution calculation period'**
   String get fundDetailDistributionCalculationPeriodLabel;
 
+  /// No description provided for @fundDetailDistributionCalculationPeriodMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculated for each natural month. A natural month means the period from the first day to the last day of each month.'**
+  String get fundDetailDistributionCalculationPeriodMonth;
+
   /// No description provided for @fundDetailDistributionCalculationPeriodSeason.
   ///
   /// In en, this message translates to:
