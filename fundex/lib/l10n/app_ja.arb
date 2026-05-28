@@ -923,6 +923,7 @@
   "fundDetailSubordinatedRatioLabel": "劣後出資比率",
   "fundDetailDistributionInfoTitle": "分配関連",
   "fundDetailDistributionCalculationPeriodLabel": "分配計算期間",
+  "fundDetailDistributionCalculationPeriodMonth": "自然月ごとに計算します。自然月とは、毎月1日から月末日までの期間を指します。",
   "fundDetailDistributionCalculationPeriodSeason": "自然四半期ごとに計算するものとし、自然四半期とは、毎年１月１日から３月３１日まで、４月１日から６月３０日まで、７月１日から９月３０日まで、１０月１日から１２月３１日までの各期間をいう。",
   "fundDetailDistributionCalculationPeriodYear": "自然年ごとに計算するものとし、自然年とは、毎年１月１日から１２月３１日までの期間をいう。",
   "fundDetailDistributionScheduleLabel": "分配予定",

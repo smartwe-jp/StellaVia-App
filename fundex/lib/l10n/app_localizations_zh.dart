@@ -2389,6 +2389,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fundDetailDistributionCalculationPeriodLabel => '分配计算时间';
 
   @override
+  String get fundDetailDistributionCalculationPeriodMonth =>
+      '按自然月计算。自然月是指每月1日至月末日的期间。';
+
+  @override
   String get fundDetailDistributionCalculationPeriodSeason =>
       '按自然季度计算。自然季度是指每年1月1日至3月31日、4月1日至6月30日、7月1日至9月30日、10月1日至12月31日的各期间。';
 
@@ -6741,6 +6745,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get fundDetailDistributionCalculationPeriodLabel => '分配計算時間';
+
+  @override
+  String get fundDetailDistributionCalculationPeriodMonth =>
+      '按自然月計算。自然月是指每月1日至月末日的期間。';
 
   @override
   String get fundDetailDistributionCalculationPeriodSeason =>
