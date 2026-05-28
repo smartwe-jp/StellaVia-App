@@ -7,6 +7,7 @@ import '../../data/datasources/wallet_remote_data_source.dart';
 import '../../data/repositories/wallet_repository_impl.dart';
 import '../../domain/entities/wallet_account_history.dart';
 import '../../domain/entities/wallet_bank_account_info.dart';
+import '../../domain/entities/wallet_payment_confirmation_record.dart';
 import '../../domain/entities/wallet_withdraw_record.dart';
 import '../../domain/repositories/wallet_repository.dart';
 import '../../domain/usecases/add_wallet_bank_account_usecase.dart';
@@ -18,6 +19,7 @@ import '../../domain/usecases/fetch_wallet_account_history_usecase.dart';
 import '../../domain/usecases/cancel_wallet_withdraw_usecase.dart';
 import '../../domain/usecases/confirm_wallet_payment_usecase.dart';
 import '../../domain/usecases/delete_wallet_bank_account_usecase.dart';
+import '../../domain/usecases/fetch_wallet_payment_confirmations_usecase.dart';
 import '../../domain/usecases/fetch_wallet_withdraw_cost_usecase.dart';
 import '../../domain/usecases/fetch_wallet_withdraw_history_usecase.dart';
 import '../../domain/usecases/fetch_wallet_withdrawing_list_usecase.dart';
@@ -108,6 +110,13 @@ final confirmWalletPaymentUseCaseProvider =
       return ConfirmWalletPaymentUseCase(ref.watch(walletRepositoryProvider));
     });
 
+final fetchWalletPaymentConfirmationsUseCaseProvider =
+    Provider<FetchWalletPaymentConfirmationsUseCase>((ref) {
+      return FetchWalletPaymentConfirmationsUseCase(
+        ref.watch(walletRepositoryProvider),
+      );
+    });
+
 final autoFundDeductionUseCaseProvider = Provider<AutoFundDeductionUseCase>((
   ref,
 ) {
@@ -149,6 +158,27 @@ final walletWithdrawCostProvider = FutureProvider.autoDispose
       return ref
           .watch(fetchWalletWithdrawCostUseCaseProvider)
           .call(bankId: bankId);
+    });
+
+final walletPaymentConfirmationRecordsProvider = FutureProvider.autoDispose
+    .family<List<WalletPaymentConfirmationRecord>, String>((ref, bizId) {
+      final normalizedBizId = bizId.trim();
+      if (normalizedBizId.isEmpty) {
+        return Future<List<WalletPaymentConfirmationRecord>>.value(
+          const <WalletPaymentConfirmationRecord>[],
+        );
+      }
+      return ref
+          .watch(fetchWalletPaymentConfirmationsUseCaseProvider)
+          .call(bizId: normalizedBizId, startPage: 1, limit: 10);
+    });
+
+final latestWalletPaymentConfirmationProvider = FutureProvider.autoDispose
+    .family<WalletPaymentConfirmationRecord?, String>((ref, bizId) async {
+      final records = await ref.watch(
+        walletPaymentConfirmationRecordsProvider(bizId).future,
+      );
+      return records.isEmpty ? null : records.first;
     });
 
 final walletWithdrawHistoryProvider =

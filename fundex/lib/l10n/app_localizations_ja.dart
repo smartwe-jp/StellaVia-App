@@ -2851,6 +2851,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get walletProjectDepositAccountHolderAddressLabel => '住所';
 
   @override
+  String get walletPaymentConfirmationSentNotice =>
+      'すでに通知が送信されています。重複してご送信いただく必要はありません。';
+
+  @override
+  String get walletPaymentConfirmationSentAtLabel => '通知日時';
+
+  @override
   String get walletDedicatedAccountDescription =>
       'この口座はお客様専用の入金口座です。入金は自動的に口座に反映されます。（最低入金額：¥10,000）\n3ヶ月間利用がない場合、入金口座が変更される場合があります。';
 

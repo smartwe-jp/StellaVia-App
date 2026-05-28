@@ -17,6 +17,7 @@ import '../support/wallet_application_payment_refresh.dart';
 import '../support/wallet_deposit_transfer_notice_support.dart';
 import '../support/wallet_standby_purchase_dialog.dart';
 import '../widgets/project_deposit_bank_card.dart';
+import '../widgets/wallet_payment_confirmation_notice.dart';
 import 'deposit_list_page.dart';
 
 class DepositDetailPage extends ConsumerWidget {
@@ -143,9 +144,16 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
     });
 
     try {
-      await ref.read(confirmWalletPaymentUseCaseProvider).call(amount: amount);
+      final processId = _resolveDepositProcessId(widget.record);
+      await ref
+          .read(confirmWalletPaymentUseCaseProvider)
+          .call(amount: amount, bizId: processId);
       if (!mounted) {
         return;
+      }
+      if (processId != null) {
+        ref.invalidate(walletPaymentConfirmationRecordsProvider(processId));
+        ref.invalidate(latestWalletPaymentConfirmationProvider(processId));
       }
       setState(() {
         _isOperationCompleted = true;
@@ -284,6 +292,15 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
         depositAmount != null &&
         depositAmount > 0 &&
         standbyBalance >= depositAmount;
+    final depositProcessId = _resolveDepositProcessId(widget.record);
+    final latestPaymentConfirmationCreateTime = depositProcessId == null
+        ? null
+        : ref
+              .watch(latestWalletPaymentConfirmationProvider(depositProcessId))
+              .asData
+              ?.value
+              ?.createTime
+              ?.trim();
     final currentUser = ref.watch(currentAuthUserProvider).valueOrNull;
     final transferNoticeAccountId = formatWalletDepositTransferNoticeAccountId(
       currentUser,
@@ -337,6 +354,15 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
             isLoading: _isPurchasingWithStandbyBalance,
             onPurchase: _purchaseWithStandbyBalance,
           ),
+          if (latestPaymentConfirmationCreateTime != null &&
+              latestPaymentConfirmationCreateTime.isNotEmpty) ...<Widget>[
+            const SizedBox(height: 16),
+            WalletPaymentConfirmationNotice(
+              message: l10n.walletPaymentConfirmationSentNotice,
+              timeLabel: l10n.walletPaymentConfirmationSentAtLabel,
+              createTime: latestPaymentConfirmationCreateTime,
+            ),
+          ],
           const SizedBox(height: 16),
           PrimaryCtaButton(
             label: l10n.lotteryApplyReportDepositAction,

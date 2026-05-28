@@ -1,6 +1,7 @@
 import '../entities/wallet_account_history.dart';
 import '../entities/wallet_bank_account_draft.dart';
 import '../entities/wallet_bank_account_info.dart';
+import '../entities/wallet_payment_confirmation_record.dart';
 import '../entities/wallet_withdraw_apply_draft.dart';
 import '../entities/wallet_withdraw_record.dart';
 
@@ -19,7 +20,13 @@ abstract class WalletRepository {
 
   Future<void> sendWithdrawApplyCode();
 
-  Future<void> confirmPayment({required Object amount});
+  Future<void> confirmPayment({required Object amount, Object? bizId});
+
+  Future<List<WalletPaymentConfirmationRecord>> fetchPaymentConfirmations({
+    required String bizId,
+    int startPage = 1,
+    int limit = 10,
+  });
 
   Future<bool> autoFundDeduction({required String processId});
 

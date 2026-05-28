@@ -5549,6 +5549,18 @@ abstract class AppLocalizations {
   /// **'Address'**
   String get walletProjectDepositAccountHolderAddressLabel;
 
+  /// No description provided for @walletPaymentConfirmationSentNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'A payment notification has already been sent. You do not need to send it again.'**
+  String get walletPaymentConfirmationSentNotice;
+
+  /// No description provided for @walletPaymentConfirmationSentAtLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification time'**
+  String get walletPaymentConfirmationSentAtLabel;
+
   /// No description provided for @walletDedicatedAccountDescription.
   ///
   /// In en, this message translates to:

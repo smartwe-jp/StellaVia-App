@@ -1078,6 +1078,8 @@
   "walletProjectDepositSwiftCodeLabel": "SWIFT代码",
   "walletProjectDepositBranchAddressLabel": "银行所在地",
   "walletProjectDepositAccountHolderAddressLabel": "地址",
+  "walletPaymentConfirmationSentNotice": "已发送过入金通知，无需重复发送。",
+  "walletPaymentConfirmationSentAtLabel": "通知时间",
   "walletDedicatedAccountDescription": "该账户为您的专用入金账户。入金会自动反映到账户（最低入金额：¥10,000）。\n若连续3个月未使用，入金账户可能会变更。",
   "walletDepositTransferNotice": "出资金入金时产生的转账手续费由客户承担。非本人名义的转账入金无法受理。\n※转账时，请在汇款人名义或备注中填写\n【{accountId}】。",
   "walletBankNameLabel": "银行名称",

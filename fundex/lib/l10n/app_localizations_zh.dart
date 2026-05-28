@@ -2822,6 +2822,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get walletProjectDepositAccountHolderAddressLabel => '地址';
 
   @override
+  String get walletPaymentConfirmationSentNotice => '已发送过入金通知，无需重复发送。';
+
+  @override
+  String get walletPaymentConfirmationSentAtLabel => '通知时间';
+
+  @override
   String get walletDedicatedAccountDescription =>
       '该账户为您的专用入金账户。入金会自动反映到账户（最低入金额：¥10,000）。\n若连续3个月未使用，入金账户可能会变更。';
 
@@ -7168,6 +7174,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get walletProjectDepositAccountHolderAddressLabel => '地址';
+
+  @override
+  String get walletPaymentConfirmationSentNotice => '已發送過入金通知，無需重複發送。';
+
+  @override
+  String get walletPaymentConfirmationSentAtLabel => '通知時間';
 
   @override
   String get walletDedicatedAccountDescription =>

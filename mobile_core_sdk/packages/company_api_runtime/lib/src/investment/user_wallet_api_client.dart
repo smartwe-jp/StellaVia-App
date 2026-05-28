@@ -148,11 +148,15 @@ class UserWalletApiClient {
     return _asNumOrZero(payload['data']);
   }
 
-  Future<void> confirmPayment({required Object amount}) async {
+  Future<void> confirmPayment({required Object amount, Object? bizId}) async {
+    final normalizedBizId = _normalizedOptionalString(bizId);
     final response = await _dioForPath(paymentConfirmationPath)
         .get<Map<String, dynamic>>(
           paymentConfirmationPath,
-          queryParameters: <String, dynamic>{'amount': amount},
+          queryParameters: <String, dynamic>{
+            'amount': amount,
+            if (normalizedBizId != null) 'bizId': normalizedBizId,
+          },
           options: authRequired(true),
         );
     final payload = _envelopeCodec.toJsonMap(response.data);
@@ -163,6 +167,34 @@ class UserWalletApiClient {
       payload,
       fallbackMessage: 'Failed to confirm payment.',
     );
+  }
+
+  Future<List<UserWalletPaymentConfirmationRecordDto>>
+  fetchPaymentConfirmations({
+    required String bizId,
+    int startPage = 1,
+    int limit = 10,
+  }) async {
+    final normalizedBizId = bizId.trim();
+    if (normalizedBizId.isEmpty) {
+      return const <UserWalletPaymentConfirmationRecordDto>[];
+    }
+    final response = await _dioForPath(paymentConfirmationPath)
+        .post<Map<String, dynamic>>(
+          paymentConfirmationPath,
+          data: UserWalletPaymentConfirmationQueryDto(
+            bizId: normalizedBizId,
+            startPage: startPage,
+            limit: limit,
+          ).toJson(),
+          options: authRequired(true),
+        );
+    return _extractRows(
+          _envelopeCodec.toJsonMap(response.data),
+          fallbackMessage: 'Failed to load payment confirmations.',
+        )
+        .map(UserWalletPaymentConfirmationRecordDto.fromJson)
+        .toList(growable: false);
   }
 
   Future<bool> autoFundDeduction({required String processId}) async {
@@ -368,6 +400,14 @@ class UserWalletApiClient {
       return value;
     }
     return num.tryParse(value.toString()) ?? 0;
+  }
+
+  String? _normalizedOptionalString(Object? value) {
+    final text = value?.toString().trim();
+    if (text == null || text.isEmpty) {
+      return null;
+    }
+    return text;
   }
 
   bool _asBool(dynamic value) {

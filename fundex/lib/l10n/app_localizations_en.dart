@@ -3008,6 +3008,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletProjectDepositAccountHolderAddressLabel => 'Address';
 
   @override
+  String get walletPaymentConfirmationSentNotice =>
+      'A payment notification has already been sent. You do not need to send it again.';
+
+  @override
+  String get walletPaymentConfirmationSentAtLabel => 'Notification time';
+
+  @override
   String get walletDedicatedAccountDescription =>
       'This is your dedicated deposit account. Deposits are reflected automatically (minimum: ¥10,000). If unused for 3 months, the account may be changed.';
 

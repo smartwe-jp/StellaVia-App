@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../domain/entities/fund_project.dart';
 import '../../../../wallet/presentation/widgets/project_deposit_bank_card.dart';
+import '../../../../wallet/presentation/widgets/wallet_payment_confirmation_notice.dart';
 
 class FundLotteryApplySelectedStep extends StatelessWidget {
   const FundLotteryApplySelectedStep({
@@ -22,6 +23,9 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
     required this.standbyPurchaseButtonLabel,
     required this.standbyShortageLabel,
     this.standbyShortageValue,
+    this.paymentConfirmationCreateTime,
+    required this.paymentConfirmationMessage,
+    required this.paymentConfirmationTimeLabel,
     required this.canPurchaseWithStandbyBalance,
     required this.isPurchasingWithStandbyBalance,
     required this.onPurchaseWithStandbyBalance,
@@ -51,6 +55,9 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
   final String standbyPurchaseButtonLabel;
   final String standbyShortageLabel;
   final String? standbyShortageValue;
+  final String? paymentConfirmationCreateTime;
+  final String paymentConfirmationMessage;
+  final String paymentConfirmationTimeLabel;
   final bool canPurchaseWithStandbyBalance;
   final bool isPurchasingWithStandbyBalance;
   final VoidCallback onPurchaseWithStandbyBalance;
@@ -73,9 +80,7 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 20, 0, 32),
       children: <Widget>[
         DecoratedBox(
-          decoration: BoxDecoration(
-            color: colors.surface,
-          ),
+          decoration: BoxDecoration(color: colors.surface),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 20, 16, 18),
             child: Column(
@@ -199,6 +204,14 @@ class FundLotteryApplySelectedStep extends StatelessWidget {
                     isLoading: isPurchasingWithStandbyBalance,
                     onPurchase: onPurchaseWithStandbyBalance,
                   ),
+                  if (paymentConfirmationCreateTime != null) ...<Widget>[
+                    const SizedBox(height: 16),
+                    WalletPaymentConfirmationNotice(
+                      message: paymentConfirmationMessage,
+                      timeLabel: paymentConfirmationTimeLabel,
+                      createTime: paymentConfirmationCreateTime!,
+                    ),
+                  ],
                   // const SizedBox(height: 16),
                   // PrimaryCtaButton(
                   //   label: jumpDepositButtonLabel,

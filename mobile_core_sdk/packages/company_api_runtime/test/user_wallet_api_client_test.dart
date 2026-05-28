@@ -174,6 +174,67 @@ void main() {
       await api.confirmPayment(amount: 10000);
     });
 
+    test('confirmPayment sends bizId query when provided', () async {
+      final dio = _buildDio((options) async {
+        expect(options.method, equals('GET'));
+        expect(options.path, equals(UserWalletApiPaths.paymentConfirmation));
+        expect(
+          options.queryParameters,
+          equals(<String, dynamic>{'amount': 10000, 'bizId': '8020211'}),
+        );
+        expect(options.extra['auth_required'], isTrue);
+        return _jsonOk('{"msg":"success","code":200,"data":true}');
+      });
+      final api = UserWalletApiClient(dioForPath: (_) => dio);
+
+      await api.confirmPayment(amount: 10000, bizId: '8020211');
+    });
+
+    test('fetchPaymentConfirmations sends POST and maps rows', () async {
+      final dio = _buildDio((options) async {
+        expect(options.method, equals('POST'));
+        expect(options.path, equals(UserWalletApiPaths.paymentConfirmation));
+        expect(
+          options.data,
+          equals(<String, dynamic>{
+            'bizId': '8020211',
+            'startPage': 1,
+            'limit': 10,
+          }),
+        );
+        expect(options.extra['auth_required'], isTrue);
+        return _jsonOk('''
+{
+  "msg": "success",
+  "code": 200,
+  "data": {
+    "total": 1,
+    "limit": 10,
+    "currentPage": 1,
+    "rows": [
+      {
+        "id": 46,
+        "userId": 125530,
+        "bizId": "8020211",
+        "amount": 10000,
+        "createTime": "2026-05-26 11:51:06"
+      }
+    ]
+  }
+}
+''');
+      });
+      final api = UserWalletApiClient(dioForPath: (_) => dio);
+
+      final rows = await api.fetchPaymentConfirmations(bizId: '8020211');
+
+      expect(rows, hasLength(1));
+      expect(rows.first.id, equals(46));
+      expect(rows.first.bizId, equals('8020211'));
+      expect(rows.first.amount, equals(10000));
+      expect(rows.first.createTime, equals('2026-05-26 11:51:06'));
+    });
+
     test('autoFundDeduction sends GET with processId query', () async {
       final dio = _buildDio((options) async {
         expect(options.method, equals('GET'));

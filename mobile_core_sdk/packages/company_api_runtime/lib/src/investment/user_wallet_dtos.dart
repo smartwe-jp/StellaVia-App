@@ -220,6 +220,54 @@ class UserWalletBankAccountInfoDto {
   final String? updateTime;
 }
 
+class UserWalletPaymentConfirmationQueryDto {
+  const UserWalletPaymentConfirmationQueryDto({
+    required this.bizId,
+    this.startPage = 1,
+    this.limit = 10,
+  });
+
+  final String bizId;
+  final int startPage;
+  final int limit;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'bizId': bizId.trim(),
+      'startPage': startPage,
+      'limit': limit,
+    };
+  }
+}
+
+class UserWalletPaymentConfirmationRecordDto {
+  const UserWalletPaymentConfirmationRecordDto({
+    this.id,
+    this.userId,
+    this.bizId,
+    this.amount,
+    this.createTime,
+  });
+
+  factory UserWalletPaymentConfirmationRecordDto.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return UserWalletPaymentConfirmationRecordDto(
+      id: _intOrNull(json['id']),
+      userId: _intOrNull(json['userId']),
+      bizId: _stringOrNull(json['bizId']),
+      amount: _numOrNull(json['amount']),
+      createTime: _stringOrNull(json['createTime']),
+    );
+  }
+
+  final int? id;
+  final int? userId;
+  final String? bizId;
+  final num? amount;
+  final String? createTime;
+}
+
 class UserWalletWithdrawApplyRequestDto {
   const UserWalletWithdrawApplyRequestDto({
     required this.amount,

@@ -551,9 +551,16 @@ class _FundLotteryApplyFlowPageState
     });
 
     try {
-      await ref.read(confirmWalletPaymentUseCaseProvider).call(amount: amount);
+      final processId = widget.initialSeed?.processId?.trim();
+      await ref
+          .read(confirmWalletPaymentUseCaseProvider)
+          .call(amount: amount, bizId: processId);
       if (!mounted) {
         return;
+      }
+      if (processId != null && processId.isNotEmpty) {
+        ref.invalidate(walletPaymentConfirmationRecordsProvider(processId));
+        ref.invalidate(latestWalletPaymentConfirmationProvider(processId));
       }
       setState(() {
         _hasReportedDepositCompleted = true;
@@ -769,6 +776,20 @@ class _FundLotteryApplyFlowPageState
         );
         final liveJapanBank = project.liveJapanBank;
         final notLiveJapanBank = project.notLiveJapanBank;
+        final paymentConfirmationBizId = widget.initialSeed?.processId?.trim();
+        final latestPaymentConfirmationCreateTime =
+            paymentConfirmationBizId == null || paymentConfirmationBizId.isEmpty
+            ? null
+            : ref
+                  .watch(
+                    latestWalletPaymentConfirmationProvider(
+                      paymentConfirmationBizId,
+                    ),
+                  )
+                  .asData
+                  ?.value
+                  ?.createTime
+                  ?.trim();
         final transferNoticeAccountId =
             formatWalletDepositTransferNoticeAccountId(
               ref.watch(currentAuthUserProvider).valueOrNull,
@@ -1020,6 +1041,12 @@ class _FundLotteryApplyFlowPageState
                             standbyShortageValue: standbyShortage > 0
                                 ? formatter.format(standbyShortage)
                                 : null,
+                            paymentConfirmationCreateTime:
+                                latestPaymentConfirmationCreateTime,
+                            paymentConfirmationMessage:
+                                l10n.walletPaymentConfirmationSentNotice,
+                            paymentConfirmationTimeLabel:
+                                l10n.walletPaymentConfirmationSentAtLabel,
                             canPurchaseWithStandbyBalance:
                                 canPurchaseWithStandbyBalance &&
                                 !_isReportingDeposit,

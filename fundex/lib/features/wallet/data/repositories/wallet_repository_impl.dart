@@ -1,6 +1,7 @@
 import '../../domain/entities/wallet_account_history.dart';
 import '../../domain/entities/wallet_bank_account_draft.dart';
 import '../../domain/entities/wallet_bank_account_info.dart';
+import '../../domain/entities/wallet_payment_confirmation_record.dart';
 import '../../domain/entities/wallet_withdraw_apply_draft.dart';
 import '../../domain/entities/wallet_withdraw_record.dart';
 import '../../domain/repositories/wallet_repository.dart';
@@ -8,6 +9,7 @@ import '../datasources/wallet_remote_data_source.dart';
 import '../models/wallet_account_history_dto.dart';
 import '../models/wallet_bank_account_info_dto.dart';
 import '../models/wallet_bank_account_pool_dto.dart';
+import '../models/wallet_payment_confirmation_dto.dart';
 import '../models/wallet_withdraw_dto.dart';
 
 class WalletRepositoryImpl implements WalletRepository {
@@ -59,8 +61,24 @@ class WalletRepositoryImpl implements WalletRepository {
   }
 
   @override
-  Future<void> confirmPayment({required Object amount}) {
-    return _remote.confirmPayment(amount: amount);
+  Future<void> confirmPayment({required Object amount, Object? bizId}) {
+    return _remote.confirmPayment(amount: amount, bizId: bizId);
+  }
+
+  @override
+  Future<List<WalletPaymentConfirmationRecord>> fetchPaymentConfirmations({
+    required String bizId,
+    int startPage = 1,
+    int limit = 10,
+  }) async {
+    final dtos = await _remote.fetchPaymentConfirmations(
+      bizId: bizId,
+      startPage: startPage,
+      limit: limit,
+    );
+    return dtos
+        .map((WalletPaymentConfirmationRecordDto dto) => dto.toEntity())
+        .toList(growable: false);
   }
 
   @override
