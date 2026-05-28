@@ -6,6 +6,7 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
 import 'hotel_detail_image_placeholder.dart';
+import 'hotel_payment_countdown_badge.dart';
 
 class HotelOrderStatusFilterBar extends StatelessWidget {
   const HotelOrderStatusFilterBar({
@@ -52,15 +53,17 @@ class HotelOrderSummaryCard extends StatelessWidget {
     required this.order,
     required this.presenter,
     this.onTap,
-    this.onRebook,
-    this.onViewDetail,
+    this.onCancel,
+    this.onPay,
+    this.onPaymentCountdownExpired,
   });
 
   final HotelOrderSummary order;
   final HotelBookingPresenter presenter;
   final VoidCallback? onTap;
-  final VoidCallback? onRebook;
-  final VoidCallback? onViewDetail;
+  final VoidCallback? onCancel;
+  final VoidCallback? onPay;
+  final VoidCallback? onPaymentCountdownExpired;
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +74,10 @@ class HotelOrderSummaryCard extends StatelessWidget {
     final checkIn = _dateTimeParts(order.checkIn);
     final checkOut = _dateTimeParts(order.checkOut);
     final statusBadge = _statusBadge(context, colors);
-    final viewDetailTap = onViewDetail ?? onTap;
     final amountText = presenter.price(order.totalAmount);
+    final canCancel = _canCancel(order);
+    final canPay = _canPay(order);
+    final showPaymentCountdown = order.orderStatusCode == 1;
 
     return AspectRatio(
       aspectRatio: 4.2 / 3,
@@ -111,72 +116,79 @@ class HotelOrderSummaryCard extends StatelessWidget {
                         const SizedBox(width: 8),
                         _OrderStatusBadge(data: statusBadge),
                       ],
+                      if (showPaymentCountdown) ...<Widget>[
+                        const SizedBox(width: 6),
+                        HotelPaymentCountdownBadge(
+                          baseTime: order.bookingOrderTime,
+                          onExpired: onPaymentCountdownExpired,
+                        ),
+                      ],
                     ],
                   ),
                   const SizedBox(height: 12),
                   Divider(color: colors.borderSoft, height: 1),
                   const SizedBox(height: 14),
                   Row(
-                      spacing: 12,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: AspectRatio(
-                            aspectRatio: 1.0,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(
-                                UiTokens.radius12,
-                              ),
-                              child: AppRemoteImage(
-                                imageUrl: order.hotelImageUrl,
-                                fit: BoxFit.cover,
-                                placeholder: const HotelDetailImagePlaceholder(),
-                                errorWidget: const HotelDetailImagePlaceholder(),
-                              ),
+                    spacing: 12,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: AspectRatio(
+                          aspectRatio: 1.0,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                              UiTokens.radius12,
+                            ),
+                            child: AppRemoteImage(
+                              imageUrl: order.hotelImageUrl,
+                              fit: BoxFit.cover,
+                              placeholder: const HotelDetailImagePlaceholder(),
+                              errorWidget: const HotelDetailImagePlaceholder(),
                             ),
                           ),
                         ),
-  
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context).textTheme.titleMedium
-                                    ?.copyWith(
-                                      color: colors.textPrimary,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                order.hotelAddress.isNotEmpty
-                                    ? order.hotelAddress
-                                    : order.buildingName,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context).textTheme.bodySmall
-                                    ?.copyWith(
-                                      color: colors.textSecondary,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                              ),
-                              const SizedBox(height: 10),
-                              _OrderStayDatePanel(
-                                checkIn: checkIn,
-                                checkOut: checkOut,
-                              ),
-                            ],
-                          ),
+                      ),
+
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(
+                                    color: colors.textPrimary,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              order.hotelAddress.isNotEmpty
+                                  ? order.hotelAddress
+                                  : order.buildingName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: colors.textSecondary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                            ),
+                            const SizedBox(height: 10),
+                            _OrderStayDatePanel(
+                              checkIn: checkIn,
+                              checkOut: checkOut,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  
+                      ),
+                    ],
+                  ),
+
                   const Spacer(),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -208,21 +220,24 @@ class HotelOrderSummaryCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 10),
-                      _OrderActionButton(
-                        label: context.l10n.hotelOrdersRebookAction,
-                        onTap: onRebook,
-                        foregroundColor: colors.brandPrimary,
-                        backgroundColor: colors.brandWhite,
-                        borderColor: colors.border,
-                      ),
-                      const SizedBox(width: 8),
-                      _OrderActionButton(
-                        label: context.l10n.hotelOrdersDetailAction,
-                        onTap: viewDetailTap,
-                        foregroundColor: colors.onDark,
-                        backgroundColor: colors.brandPrimary,
-                        borderColor: colors.brandPrimary,
-                      ),
+                      if (canCancel) ...<Widget>[
+                        _OrderActionButton(
+                          label: context.l10n.hotelOrdersCancelAction,
+                          onTap: onCancel,
+                          foregroundColor: colors.brandAlert,
+                          backgroundColor: colors.brandWhite,
+                          borderColor: colors.dangerBorder,
+                        ),
+                        const SizedBox(width: 8),
+                      ],
+                      if (canPay)
+                        _OrderActionButton(
+                          label: context.l10n.hotelBookingResultPay,
+                          onTap: onPay,
+                          foregroundColor: colors.onDark,
+                          backgroundColor: colors.brandPrimary,
+                          borderColor: colors.brandPrimary,
+                        ),
                     ],
                   ),
                 ],
@@ -238,46 +253,66 @@ class HotelOrderSummaryCard extends StatelessWidget {
     BuildContext context,
     AppSemanticColorTheme colors,
   ) {
-    if (order.orderStatusCode == 5 ||
-        order.orderStatus.contains('キャンセル') ||
-        order.orderStatus.contains('取消') ||
-        order.orderStatus.toLowerCase().contains('cancel')) {
+    final statusLabel = order.orderStatus.trim();
+    final statusCode = order.orderStatusCode;
+    if (statusCode == 5 || statusCode == 6) {
       return _OrderStatusBadgeData(
-        label: order.orderStatus.isNotEmpty
-            ? order.orderStatus
+        label: statusLabel.isNotEmpty
+            ? statusLabel
             : context.l10n.hotelOrdersFilterCancelled,
         foregroundColor: colors.textSecondary,
         backgroundColor: colors.infoSoft.withValues(alpha: 0.10),
         borderColor: colors.infoBorder,
       );
     }
-    if (order.paymentStatusCode == 40 || order.canPay) {
+    if (statusCode == 1) {
       return _OrderStatusBadgeData(
-        label: order.paymentStatus.isNotEmpty
-            ? order.paymentStatus
+        label: statusLabel.isNotEmpty
+            ? statusLabel
             : context.l10n.hotelOrdersFilterAwaitingPayment,
         foregroundColor: colors.warningForeground,
         backgroundColor: colors.warningSubtle,
         borderColor: colors.warningBorder,
       );
     }
-    if (order.orderStatus.isNotEmpty) {
+    if (statusCode == 2 || statusCode == 3) {
       return _OrderStatusBadgeData(
-        label: order.orderStatus,
+        label: statusLabel.isNotEmpty
+            ? statusLabel
+            : context.l10n.hotelOrdersFilterBooked,
         foregroundColor: colors.successForeground,
         backgroundColor: colors.successSubtle,
         borderColor: colors.successBorder,
       );
     }
-    if (order.paymentStatus.isNotEmpty) {
+    if (statusCode == 4 || statusCode == 41) {
       return _OrderStatusBadgeData(
-        label: order.paymentStatus,
+        label: statusLabel.isNotEmpty ? statusLabel : order.paymentStatus,
+        foregroundColor: colors.warningForeground,
+        backgroundColor: colors.warningSubtle,
+        borderColor: colors.warningBorder,
+      );
+    }
+    if (statusLabel.isNotEmpty) {
+      return _OrderStatusBadgeData(
+        label: statusLabel,
         foregroundColor: colors.textSecondary,
         backgroundColor: colors.surfaceAlt,
         borderColor: colors.borderSoft,
       );
     }
     return null;
+  }
+
+  bool _canCancel(HotelOrderSummary order) {
+    return switch (order.orderStatusCode) {
+      1 || 2 || 3 => true,
+      _ => false,
+    };
+  }
+
+  bool _canPay(HotelOrderSummary order) {
+    return order.orderStatusCode == 1;
   }
 
   _OrderDateTimeParts _dateTimeParts(String raw) {

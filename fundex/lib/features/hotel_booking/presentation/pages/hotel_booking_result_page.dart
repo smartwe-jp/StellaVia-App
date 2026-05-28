@@ -47,6 +47,7 @@ class HotelBookingResultPage extends StatelessWidget {
             children: <Widget>[
               HotelBookingResultHero(
                 title: context.l10n.hotelBookingResultTitle,
+                createdAt: args.createdAt,
                 onClose: goToHotelRoot,
               ),
               Padding(

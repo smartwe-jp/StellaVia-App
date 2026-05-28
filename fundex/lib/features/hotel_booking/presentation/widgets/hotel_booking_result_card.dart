@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../support/hotel_booking_presenter.dart';
 import 'hotel_booking_payment_section.dart';
+import 'hotel_payment_countdown_badge.dart';
 
 class HotelBookingResultHero extends StatelessWidget {
   const HotelBookingResultHero({
     super.key,
     required this.title,
+    required this.createdAt,
     required this.onClose,
   });
 
   final String title;
+  final String createdAt;
   final VoidCallback onClose;
 
   @override
@@ -38,28 +41,9 @@ class HotelBookingResultHero extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    DecoratedBox(
-                      decoration: ShapeDecoration(
-                        color: colors.onDark.withValues(alpha: 0.16),
-                        shape: CircleBorder(
-                          side: BorderSide(
-                            color: colors.onDark.withValues(alpha: 0.20),
-                          ),
-                        ),
-                      ),
-                      child: SizedBox.square(
-                        dimension: 74,
-                        child: Center(
-                          child: Text(
-                            '!',
-                            style: Theme.of(context).textTheme.headlineLarge
-                                ?.copyWith(
-                                  color: colors.highlightGold,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                          ),
-                        ),
-                      ),
+                    HotelPaymentCountdownBadge(
+                      baseTime: createdAt,
+                      large: true,
                     ),
                     const SizedBox(height: 24),
                     Text(

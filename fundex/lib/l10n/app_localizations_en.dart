@@ -1659,11 +1659,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hotelOrdersRebookAction => 'Book again';
 
   @override
+  String get hotelOrdersCancelAction => 'Cancel';
+
+  @override
   String get hotelOrdersDetailAction => 'Details';
 
   @override
   String get hotelOrdersRebookComingSoon =>
       'Book-again flow will be added later';
+
+  @override
+  String get hotelOrdersCancelComingSoon =>
+      'Cancellation will be connected later';
 
   @override
   String get hotelOrdersDetailComingSoon => 'Order details will be added later';

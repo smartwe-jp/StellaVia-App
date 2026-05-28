@@ -14,6 +14,7 @@ class HotelOrderListState {
     this.limit = 5,
     this.isLoading = false,
     this.isLoadingMore = false,
+    this.expiredOrderIds = const <String>{},
     this.error,
   });
 
@@ -24,6 +25,7 @@ class HotelOrderListState {
   final int limit;
   final bool isLoading;
   final bool isLoadingMore;
+  final Set<String> expiredOrderIds;
   final Object? error;
 
   bool get hasContent => orders.isNotEmpty;
@@ -37,6 +39,7 @@ class HotelOrderListState {
     int? limit,
     bool? isLoading,
     bool? isLoadingMore,
+    Set<String>? expiredOrderIds,
     Object? error = _unchanged,
   }) {
     return HotelOrderListState(
@@ -47,6 +50,7 @@ class HotelOrderListState {
       limit: limit ?? this.limit,
       isLoading: isLoading ?? this.isLoading,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      expiredOrderIds: expiredOrderIds ?? this.expiredOrderIds,
       error: identical(error, _unchanged) ? this.error : error,
     );
   }
@@ -89,7 +93,7 @@ class HotelOrderListController extends StateNotifier<HotelOrderListState> {
         limit: state.limit,
       );
       state = state.copyWith(
-        orders: result.orders,
+        orders: _applyExpiredOverrides(result.orders),
         totalCount: result.totalCount,
         nextPage: 2,
         isLoading: false,
@@ -113,7 +117,10 @@ class HotelOrderListController extends StateNotifier<HotelOrderListState> {
         limit: state.limit,
       );
       state = state.copyWith(
-        orders: <HotelOrderSummary>[...state.orders, ...result.orders],
+        orders: _applyExpiredOverrides(<HotelOrderSummary>[
+          ...state.orders,
+          ...result.orders,
+        ]),
         totalCount: result.totalCount,
         nextPage: result.page + 1,
         isLoadingMore: false,
@@ -122,6 +129,60 @@ class HotelOrderListController extends StateNotifier<HotelOrderListState> {
     } catch (error) {
       state = state.copyWith(isLoadingMore: false, error: error);
     }
+  }
+
+  Future<void> markPaymentExpired(String orderId) async {
+    final trimmed = orderId.trim();
+    if (trimmed.isEmpty) {
+      return;
+    }
+    state = state.copyWith(
+      expiredOrderIds: <String>{...state.expiredOrderIds, trimmed},
+      orders: _applyExpiredOverrides(state.orders, extraExpiredId: trimmed),
+    );
+    await Future<void>.delayed(const Duration(seconds: 3));
+    if (!mounted) {
+      return;
+    }
+    await refresh();
+  }
+
+  List<HotelOrderSummary> _applyExpiredOverrides(
+    List<HotelOrderSummary> orders, {
+    String? extraExpiredId,
+  }) {
+    final expiredIds = <String>{
+      ...state.expiredOrderIds,
+      if (extraExpiredId != null) extraExpiredId,
+    };
+    if (expiredIds.isEmpty) {
+      return orders;
+    }
+    return orders
+        .map((order) {
+          if (!expiredIds.contains(order.id)) {
+            return order;
+          }
+          return HotelOrderSummary(
+            id: order.id,
+            hotelName: order.hotelName,
+            buildingName: order.buildingName,
+            hotelImageUrl: order.hotelImageUrl,
+            hotelAddress: order.hotelAddress,
+            checkIn: order.checkIn,
+            checkOut: order.checkOut,
+            bookingOrderTime: order.bookingOrderTime,
+            paymentStatus: order.paymentStatus,
+            paymentStatusCode: order.paymentStatusCode,
+            orderStatus: '',
+            orderStatusCode: 5,
+            payCode: order.payCode,
+            totalAmount: order.totalAmount,
+            canPay: false,
+            canRefund: false,
+          );
+        })
+        .toList(growable: false);
   }
 }
 

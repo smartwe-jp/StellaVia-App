@@ -7,7 +7,9 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/status_bar/app_status_bar_providers.dart';
 import '../providers/hotel_booking_providers.dart';
 import '../support/hotel_booking_presenter.dart';
+import '../support/hotel_payment_route_args.dart';
 import '../widgets/hotel_order_list_widgets.dart';
+import '../widgets/hotel_payment_method_widgets.dart';
 import '../widgets/hotel_state_views.dart';
 import '../widgets/hotel_status_bar_preference_scope.dart';
 
@@ -114,15 +116,37 @@ class HotelOrderListPage extends ConsumerWidget {
                         );
                       }
 
+                      Future<void> openPayment() async {
+                        if (order.id.isEmpty) {
+                          return;
+                        }
+                        final paid = await context.push<bool>(
+                          '/hotel-booking/payment',
+                          extra: HotelPaymentRouteArgs(
+                            orderId: order.id,
+                            totalAmount: order.totalAmount ?? 0,
+                            initialPaymentMethod: hotelPaymentMethodFromCode(
+                              order.payCode,
+                            ),
+                            redirectToOrderDetailOnSuccess: false,
+                          ),
+                        );
+                        if (paid == true) {
+                          await controller.refresh();
+                        }
+                      }
+
                       return HotelOrderSummaryCard(
                         order: order,
                         presenter: presenter,
                         onTap: openDetail,
-                        onRebook: () => AppNotice.show(
+                        onCancel: () => AppNotice.show(
                           context,
-                          message: context.l10n.hotelOrdersRebookComingSoon,
+                          message: context.l10n.hotelOrdersCancelComingSoon,
                         ),
-                        onViewDetail: openDetail,
+                        onPay: openPayment,
+                        onPaymentCountdownExpired: () =>
+                            controller.markPaymentExpired(order.id),
                       );
                     },
                   ),

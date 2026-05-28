@@ -12,15 +12,23 @@ import '../widgets/hotel_payment_method_widgets.dart';
 import '../widgets/hotel_state_views.dart';
 import '../widgets/hotel_status_bar_preference_scope.dart';
 
-class HotelOrderDetailPage extends ConsumerWidget {
+class HotelOrderDetailPage extends ConsumerStatefulWidget {
   const HotelOrderDetailPage({super.key, required this.orderId});
 
   final String orderId;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HotelOrderDetailPage> createState() =>
+      _HotelOrderDetailPageState();
+}
+
+class _HotelOrderDetailPageState extends ConsumerState<HotelOrderDetailPage> {
+  bool _paymentExpired = false;
+
+  @override
+  Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
-    final detailState = ref.watch(hotelOrderDetailProvider(orderId));
+    final detailState = ref.watch(hotelOrderDetailProvider(widget.orderId));
     final presenter = HotelBookingPresenter(
       Localizations.localeOf(context).toLanguageTag(),
     );
@@ -35,12 +43,14 @@ class HotelOrderDetailPage extends ConsumerWidget {
           child: detailState.when(
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (_, __) => HotelFullPageError(
-              onRetry: () => ref.invalidate(hotelOrderDetailProvider(orderId)),
+              onRetry: () =>
+                  ref.invalidate(hotelOrderDetailProvider(widget.orderId)),
             ),
             data: (detail) {
               return HotelOrderDetailContent(
                 detail: detail,
                 presenter: presenter,
+                paymentExpired: _paymentExpired,
                 onBack: () {
                   if (context.canPop()) {
                     context.pop();
@@ -56,7 +66,7 @@ class HotelOrderDetailPage extends ConsumerWidget {
                   final paid = await context.push<bool>(
                     '/hotel-booking/payment',
                     extra: HotelPaymentRouteArgs(
-                      orderId: orderId,
+                      orderId: widget.orderId,
                       totalAmount: detail.summary.totalAmount ?? 0,
                       initialPaymentMethod: hotelPaymentMethodFromCode(
                         detail.payCode,
@@ -65,13 +75,24 @@ class HotelOrderDetailPage extends ConsumerWidget {
                     ),
                   );
                   if (paid == true) {
-                    ref.invalidate(hotelOrderDetailProvider(orderId));
+                    ref.invalidate(hotelOrderDetailProvider(widget.orderId));
                   }
                 },
                 onRefund: () => AppNotice.show(
                   context,
                   message: context.l10n.hotelOrderDetailRefundComingSoon,
                 ),
+                onPaymentCountdownExpired: () {
+                  if (!_paymentExpired) {
+                    setState(() => _paymentExpired = true);
+                  }
+                  Future<void>.delayed(const Duration(seconds: 3), () {
+                    if (!mounted) {
+                      return;
+                    }
+                    ref.invalidate(hotelOrderDetailProvider(widget.orderId));
+                  });
+                },
               );
             },
           ),

@@ -665,10 +665,11 @@ HotelOrderSummary _mapOrderSummary(HotelOrderDto dto) {
         dto.bookingOrderTime?.trim() ?? dto.createdTime?.trim() ?? '',
     paymentStatus: dto.paymentStatus?.trim() ?? '',
     paymentStatusCode: dto.paymentStatusCode,
-    orderStatus: dto.orderStatus?.trim().isNotEmpty == true
-        ? dto.orderStatus!.trim()
-        : dto.orderStatusStr?.trim() ?? _stringOrEmpty(dto.status),
+    orderStatus: dto.orderStatusStr?.trim().isNotEmpty == true
+        ? dto.orderStatusStr!.trim()
+        : dto.orderStatus?.trim() ?? _stringOrEmpty(dto.status),
     orderStatusCode: dto.orderStatusCode,
+    payCode: dto.payCode?.trim() ?? '',
     totalAmount: dto.totalAmount ?? dto.paidAmount ?? price ?? originalPrice,
     canPay: dto.pay ?? false,
     canRefund: dto.refund ?? false,

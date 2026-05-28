@@ -7,28 +7,34 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
 import 'hotel_detail_image_placeholder.dart';
+import 'hotel_payment_countdown_badge.dart';
 
 class HotelOrderDetailContent extends StatelessWidget {
   const HotelOrderDetailContent({
     super.key,
     required this.detail,
     required this.presenter,
+    this.paymentExpired = false,
     required this.onBack,
     required this.onMore,
     required this.onPay,
     required this.onRefund,
+    required this.onPaymentCountdownExpired,
   });
 
   final HotelOrderDetail detail;
   final HotelBookingPresenter presenter;
+  final bool paymentExpired;
   final VoidCallback onBack;
   final VoidCallback onMore;
   final VoidCallback onPay;
   final VoidCallback onRefund;
+  final VoidCallback onPaymentCountdownExpired;
 
   @override
   Widget build(BuildContext context) {
-    final canShowActions = detail.summary.canPay || detail.summary.canRefund;
+    final canShowActions =
+        !paymentExpired && (detail.summary.canPay || detail.summary.canRefund);
     final bottomInset = MediaQuery.paddingOf(context).bottom;
     return Stack(
       children: <Widget>[
@@ -37,8 +43,10 @@ class HotelOrderDetailContent extends StatelessWidget {
             SliverToBoxAdapter(
               child: _OrderDetailHero(
                 detail: detail,
+                paymentExpired: paymentExpired,
                 onBack: onBack,
                 onMore: onMore,
+                onPaymentCountdownExpired: onPaymentCountdownExpired,
               ),
             ),
             SliverPadding(
@@ -57,6 +65,7 @@ class HotelOrderDetailContent extends StatelessWidget {
                   _OrderPaymentInfoSection(
                     detail: detail,
                     presenter: presenter,
+                    paymentExpired: paymentExpired,
                   ),
                   _OrderLocationSection(detail: detail),
                   _OrderCancelPolicySection(detail: detail),
@@ -85,13 +94,17 @@ class HotelOrderDetailContent extends StatelessWidget {
 class _OrderDetailHero extends StatelessWidget {
   const _OrderDetailHero({
     required this.detail,
+    required this.paymentExpired,
     required this.onBack,
     required this.onMore,
+    required this.onPaymentCountdownExpired,
   });
 
   final HotelOrderDetail detail;
+  final bool paymentExpired;
   final VoidCallback onBack;
   final VoidCallback onMore;
+  final VoidCallback onPaymentCountdownExpired;
 
   @override
   Widget build(BuildContext context) {
@@ -142,10 +155,25 @@ class _OrderDetailHero extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: <Widget>[
-                if (detail.summary.orderStatus.isNotEmpty)
+                if (_orderStatusLabel(
+                  context,
+                  detail.summary,
+                  paymentExpired,
+                ).isNotEmpty)
                   _StatusBadge(
-                    label: detail.summary.orderStatus,
-                    tone: _orderStatusTone(detail.summary.orderStatusCode),
+                    label: _orderStatusLabel(
+                      context,
+                      detail.summary,
+                      paymentExpired,
+                    ),
+                    tone: _orderStatusTone(
+                      paymentExpired ? 5 : detail.summary.orderStatusCode,
+                    ),
+                  ),
+                if (!paymentExpired && _isAwaitingPayment(detail.summary))
+                  HotelPaymentCountdownBadge(
+                    baseTime: detail.createdTime,
+                    onExpired: onPaymentCountdownExpired,
                   ),
               ],
             ),
@@ -236,12 +264,19 @@ class _StatusBadge extends StatelessWidget {
 
 _StatusBadgeTone _orderStatusTone(int? code) {
   switch (code) {
+    case 2:
+    case 3:
     case 80:
       return _StatusBadgeTone.success;
+    case 1:
     case 25:
     case 30:
     case 40:
+    case 4:
+    case 41:
       return _StatusBadgeTone.warning;
+    case 5:
+    case 6:
     case 70:
     case 98:
       return _StatusBadgeTone.danger;
@@ -250,8 +285,31 @@ _StatusBadgeTone _orderStatusTone(int? code) {
   }
 }
 
+String _orderStatusLabel(
+  BuildContext context,
+  HotelOrderSummary summary,
+  bool paymentExpired,
+) {
+  if (paymentExpired) {
+    return context.l10n.hotelOrdersFilterCancelled;
+  }
+  if (summary.orderStatus.isNotEmpty) {
+    return summary.orderStatus;
+  }
+  return switch (summary.orderStatusCode) {
+    5 || 6 || 98 => context.l10n.hotelOrdersFilterCancelled,
+    1 => context.l10n.hotelOrdersFilterAwaitingPayment,
+    2 || 3 => context.l10n.hotelOrdersFilterBooked,
+    _ => '',
+  };
+}
+
 bool _isPaymentCompleted(int? code) {
   return code == 45;
+}
+
+bool _isAwaitingPayment(HotelOrderSummary summary) {
+  return summary.orderStatusCode == 1 || summary.paymentStatusCode == 40;
 }
 
 class _OrderHotelOverviewCard extends StatelessWidget {
@@ -605,10 +663,12 @@ class _OrderPaymentInfoSection extends StatelessWidget {
   const _OrderPaymentInfoSection({
     required this.detail,
     required this.presenter,
+    required this.paymentExpired,
   });
 
   final HotelOrderDetail detail;
   final HotelBookingPresenter presenter;
+  final bool paymentExpired;
 
   @override
   Widget build(BuildContext context) {
@@ -629,7 +689,7 @@ class _OrderPaymentInfoSection extends StatelessWidget {
           _InfoLine(
             data: _InfoLineData.payment(
               context.l10n.hotelOrderDetailOrderStatus,
-              detail.summary.orderStatus,
+              _orderStatusLabel(context, detail.summary, paymentExpired),
             ),
           ),
           _InfoLine(

@@ -500,6 +500,7 @@ class HotelOrderSummary {
     required this.paymentStatusCode,
     required this.orderStatus,
     required this.orderStatusCode,
+    required this.payCode,
     required this.totalAmount,
     required this.canPay,
     required this.canRefund,
@@ -517,6 +518,7 @@ class HotelOrderSummary {
   final int? paymentStatusCode;
   final String orderStatus;
   final int? orderStatusCode;
+  final String payCode;
   final num? totalAmount;
   final bool canPay;
   final bool canRefund;

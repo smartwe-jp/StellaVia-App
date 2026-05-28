@@ -292,6 +292,7 @@ class _HotelBookingConfirmPageState
           seed: widget.seed,
           totalAmount: draft.totalAmount,
           paymentMethod: _paymentMethod,
+          createdAt: DateTime.now().toIso8601String(),
         ),
       );
     } catch (_) {

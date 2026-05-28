@@ -3093,6 +3093,12 @@ abstract class AppLocalizations {
   /// **'Book again'**
   String get hotelOrdersRebookAction;
 
+  /// No description provided for @hotelOrdersCancelAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get hotelOrdersCancelAction;
+
   /// No description provided for @hotelOrdersDetailAction.
   ///
   /// In en, this message translates to:
@@ -3104,6 +3110,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Book-again flow will be added later'**
   String get hotelOrdersRebookComingSoon;
+
+  /// No description provided for @hotelOrdersCancelComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancellation will be connected later'**
+  String get hotelOrdersCancelComingSoon;
 
   /// No description provided for @hotelOrdersDetailComingSoon.
   ///

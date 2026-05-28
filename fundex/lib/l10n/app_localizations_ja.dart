@@ -1586,10 +1586,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelOrdersRebookAction => '再予約';
 
   @override
+  String get hotelOrdersCancelAction => 'キャンセル';
+
+  @override
   String get hotelOrdersDetailAction => '詳細を見る';
 
   @override
   String get hotelOrdersRebookComingSoon => '再予約フローは後で接続します';
+
+  @override
+  String get hotelOrdersCancelComingSoon => 'キャンセル機能は後で接続します';
 
   @override
   String get hotelOrdersDetailComingSoon => '注文詳細は後で接続します';

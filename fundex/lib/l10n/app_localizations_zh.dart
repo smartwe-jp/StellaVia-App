@@ -1569,10 +1569,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelOrdersRebookAction => '再次预订';
 
   @override
+  String get hotelOrdersCancelAction => '取消';
+
+  @override
   String get hotelOrdersDetailAction => '查看详情';
 
   @override
   String get hotelOrdersRebookComingSoon => '再次预订流程稍后接入';
+
+  @override
+  String get hotelOrdersCancelComingSoon => '取消功能稍后接入';
 
   @override
   String get hotelOrdersDetailComingSoon => '订单详情稍后接入';
@@ -6779,10 +6785,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hotelOrdersRebookAction => '再次預訂';
 
   @override
+  String get hotelOrdersCancelAction => '取消';
+
+  @override
   String get hotelOrdersDetailAction => '查看詳情';
 
   @override
   String get hotelOrdersRebookComingSoon => '再次預訂流程稍後接入';
+
+  @override
+  String get hotelOrdersCancelComingSoon => '取消功能稍後接入';
 
   @override
   String get hotelOrdersDetailComingSoon => '訂單詳情稍後接入';
