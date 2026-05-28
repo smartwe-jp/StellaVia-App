@@ -1472,6 +1472,30 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelPaymentComingSoon => '支付流程稍后接入';
 
   @override
+  String get hotelPaymentPageTitle => '支付';
+
+  @override
+  String get hotelPaymentOrderIdLabel => '订单号';
+
+  @override
+  String get hotelPaymentSelectCreditCardTitle => '选择信用卡';
+
+  @override
+  String get hotelPaymentSecureTitle => '信用卡认证';
+
+  @override
+  String get hotelPaymentNoCreditCard => '请先添加信用卡。';
+
+  @override
+  String get hotelPaymentCreditCardFailed => '信用卡支付失败，请稍后再试。';
+
+  @override
+  String get hotelPaymentCreditCardSuccess => '支付成功，请查看订单。';
+
+  @override
+  String get hotelPaymentAddCreditCardAndPay => '添加信用卡并支付';
+
+  @override
   String get hotelBookingResultAppBarTitle => '预订结果';
 
   @override
@@ -6647,6 +6671,30 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelPaymentComingSoon => '支付流程稍後接入';
+
+  @override
+  String get hotelPaymentPageTitle => '支付';
+
+  @override
+  String get hotelPaymentOrderIdLabel => '訂單號';
+
+  @override
+  String get hotelPaymentSelectCreditCardTitle => '選擇信用卡';
+
+  @override
+  String get hotelPaymentSecureTitle => '信用卡認證';
+
+  @override
+  String get hotelPaymentNoCreditCard => '請先新增信用卡。';
+
+  @override
+  String get hotelPaymentCreditCardFailed => '信用卡支付失敗，請稍後再試。';
+
+  @override
+  String get hotelPaymentCreditCardSuccess => '支付成功，請查看訂單。';
+
+  @override
+  String get hotelPaymentAddCreditCardAndPay => '新增信用卡並支付';
 
   @override
   String get hotelBookingResultAppBarTitle => '預訂結果';

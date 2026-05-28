@@ -189,6 +189,16 @@ class HotelCreditCardRegistrationDraft {
   final String email;
 }
 
+class HotelCreditCardPaymentResult {
+  const HotelCreditCardPaymentResult({
+    required this.pay,
+    required this.secureUrl,
+  });
+
+  final bool pay;
+  final String secureUrl;
+}
+
 class HotelDetail {
   const HotelDetail({
     required this.id,

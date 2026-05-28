@@ -2901,6 +2901,54 @@ abstract class AppLocalizations {
   /// **'Payment flow will be added later'**
   String get hotelPaymentComingSoon;
 
+  /// No description provided for @hotelPaymentPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get hotelPaymentPageTitle;
+
+  /// No description provided for @hotelPaymentOrderIdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Order ID'**
+  String get hotelPaymentOrderIdLabel;
+
+  /// No description provided for @hotelPaymentSelectCreditCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select credit card'**
+  String get hotelPaymentSelectCreditCardTitle;
+
+  /// No description provided for @hotelPaymentSecureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit card verification'**
+  String get hotelPaymentSecureTitle;
+
+  /// No description provided for @hotelPaymentNoCreditCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Please add a credit card first.'**
+  String get hotelPaymentNoCreditCard;
+
+  /// No description provided for @hotelPaymentCreditCardFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit card payment failed. Please try again later.'**
+  String get hotelPaymentCreditCardFailed;
+
+  /// No description provided for @hotelPaymentCreditCardSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment completed. Please check your order.'**
+  String get hotelPaymentCreditCardSuccess;
+
+  /// No description provided for @hotelPaymentAddCreditCardAndPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Add credit card and pay'**
+  String get hotelPaymentAddCreditCardAndPay;
+
   /// No description provided for @hotelBookingResultAppBarTitle.
   ///
   /// In en, this message translates to:

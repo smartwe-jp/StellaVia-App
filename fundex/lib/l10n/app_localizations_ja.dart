@@ -1487,6 +1487,31 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelPaymentComingSoon => '支払いフローは後で接続します';
 
   @override
+  String get hotelPaymentPageTitle => '支払い';
+
+  @override
+  String get hotelPaymentOrderIdLabel => '注文番号';
+
+  @override
+  String get hotelPaymentSelectCreditCardTitle => 'クレジットカードを選択';
+
+  @override
+  String get hotelPaymentSecureTitle => 'クレジットカード認証';
+
+  @override
+  String get hotelPaymentNoCreditCard => '先にクレジットカードを追加してください。';
+
+  @override
+  String get hotelPaymentCreditCardFailed =>
+      'クレジットカード決済に失敗しました。しばらくしてからもう一度お試しください。';
+
+  @override
+  String get hotelPaymentCreditCardSuccess => 'お支払いが完了しました。注文をご確認ください。';
+
+  @override
+  String get hotelPaymentAddCreditCardAndPay => 'クレジットカードを追加して支払う';
+
+  @override
   String get hotelBookingResultAppBarTitle => '予約結果';
 
   @override

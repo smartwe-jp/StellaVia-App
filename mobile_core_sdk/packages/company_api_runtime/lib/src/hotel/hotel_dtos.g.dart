@@ -496,6 +496,31 @@ Map<String, dynamic> _$HotelCreditCardRegisterRequestDtoToJson(
   'cardholderEmail': ?instance.cardholderEmail,
 };
 
+_HotelRegisteredCardPaymentRequestDto
+_$HotelRegisteredCardPaymentRequestDtoFromJson(Map<String, dynamic> json) =>
+    _HotelRegisteredCardPaymentRequestDto(
+      cardId: json['cardId'] as String,
+      bookingOrderId: json['bookingOrderId'] as String,
+    );
+
+Map<String, dynamic> _$HotelRegisteredCardPaymentRequestDtoToJson(
+  _HotelRegisteredCardPaymentRequestDto instance,
+) => <String, dynamic>{
+  'cardId': instance.cardId,
+  'bookingOrderId': instance.bookingOrderId,
+};
+
+_HotelCreditCardPaymentResultDto _$HotelCreditCardPaymentResultDtoFromJson(
+  Map<String, dynamic> json,
+) => _HotelCreditCardPaymentResultDto(
+  pay: json['pay'] as bool?,
+  url: hotelNullableStringFromJson(json['url']),
+);
+
+Map<String, dynamic> _$HotelCreditCardPaymentResultDtoToJson(
+  _HotelCreditCardPaymentResultDto instance,
+) => <String, dynamic>{'pay': instance.pay, 'url': instance.url};
+
 _HotelRoomTypeRoomNumDto _$HotelRoomTypeRoomNumDtoFromJson(
   Map<String, dynamic> json,
 ) => _HotelRoomTypeRoomNumDto(

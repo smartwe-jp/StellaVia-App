@@ -1559,6 +1559,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hotelPaymentComingSoon => 'Payment flow will be added later';
 
   @override
+  String get hotelPaymentPageTitle => 'Payment';
+
+  @override
+  String get hotelPaymentOrderIdLabel => 'Order ID';
+
+  @override
+  String get hotelPaymentSelectCreditCardTitle => 'Select credit card';
+
+  @override
+  String get hotelPaymentSecureTitle => 'Credit card verification';
+
+  @override
+  String get hotelPaymentNoCreditCard => 'Please add a credit card first.';
+
+  @override
+  String get hotelPaymentCreditCardFailed =>
+      'Credit card payment failed. Please try again later.';
+
+  @override
+  String get hotelPaymentCreditCardSuccess =>
+      'Payment completed. Please check your order.';
+
+  @override
+  String get hotelPaymentAddCreditCardAndPay => 'Add credit card and pay';
+
+  @override
   String get hotelBookingResultAppBarTitle => 'Booking result';
 
   @override

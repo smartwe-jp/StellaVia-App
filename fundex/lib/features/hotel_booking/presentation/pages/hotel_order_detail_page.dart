@@ -6,7 +6,9 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../providers/hotel_booking_providers.dart';
 import '../support/hotel_booking_presenter.dart';
+import '../support/hotel_payment_route_args.dart';
 import '../widgets/hotel_order_detail_widgets.dart';
+import '../widgets/hotel_payment_method_widgets.dart';
 import '../widgets/hotel_state_views.dart';
 import '../widgets/hotel_status_bar_preference_scope.dart';
 
@@ -50,10 +52,22 @@ class HotelOrderDetailPage extends ConsumerWidget {
                   context,
                   message: context.l10n.hotelOrderDetailMoreComingSoon,
                 ),
-                onPay: () => AppNotice.show(
-                  context,
-                  message: context.l10n.hotelOrderDetailPaymentComingSoon,
-                ),
+                onPay: () async {
+                  final paid = await context.push<bool>(
+                    '/hotel-booking/payment',
+                    extra: HotelPaymentRouteArgs(
+                      orderId: orderId,
+                      totalAmount: detail.summary.totalAmount ?? 0,
+                      initialPaymentMethod: hotelPaymentMethodFromCode(
+                        detail.payCode,
+                      ),
+                      redirectToOrderDetailOnSuccess: false,
+                    ),
+                  );
+                  if (paid == true) {
+                    ref.invalidate(hotelOrderDetailProvider(orderId));
+                  }
+                },
                 onRefund: () => AppNotice.show(
                   context,
                   message: context.l10n.hotelOrderDetailRefundComingSoon,

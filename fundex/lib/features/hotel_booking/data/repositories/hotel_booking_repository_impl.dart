@@ -315,6 +315,23 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
     );
   }
 
+  @override
+  Future<HotelCreditCardPaymentResult> payWithRegisteredCreditCard({
+    required String cardId,
+    required String orderId,
+  }) async {
+    final result = await _remote.payWithRegisteredCard(
+      HotelRegisteredCardPaymentRequestDto(
+        cardId: cardId.trim(),
+        bookingOrderId: orderId.trim(),
+      ),
+    );
+    return HotelCreditCardPaymentResult(
+      pay: result.pay ?? false,
+      secureUrl: result.url?.trim() ?? '',
+    );
+  }
+
   HotelCreditCard _mapCreditCard(HotelCreditCardDto dto) {
     return HotelCreditCard(
       id: dto.cardId.trim(),

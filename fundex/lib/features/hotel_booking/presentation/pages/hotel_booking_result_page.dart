@@ -7,6 +7,7 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/status_bar/app_status_bar_providers.dart';
 import '../support/hotel_booking_presenter.dart';
 import '../support/hotel_booking_result_route_args.dart';
+import '../support/hotel_payment_route_args.dart';
 import '../widgets/hotel_booking_result_card.dart';
 import '../widgets/hotel_status_bar_preference_scope.dart';
 
@@ -60,9 +61,13 @@ class HotelBookingResultPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 28),
                     HotelBookingResultActions(
-                      onPay: () => AppNotice.show(
-                        context,
-                        message: context.l10n.hotelPaymentComingSoon,
+                      onPay: () => context.push(
+                        '/hotel-booking/payment',
+                        extra: HotelPaymentRouteArgs(
+                          orderId: args.orderId,
+                          totalAmount: args.totalAmount,
+                          initialPaymentMethod: args.paymentMethod,
+                        ),
                       ),
                       onBackToOrders: () {
                         goToOrders();

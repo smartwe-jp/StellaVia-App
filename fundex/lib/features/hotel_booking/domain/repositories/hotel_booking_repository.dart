@@ -51,4 +51,9 @@ abstract class HotelBookingRepository {
   Future<List<HotelCreditCard>> fetchRegisteredCreditCards();
 
   Future<String> registerCreditCard(HotelCreditCardRegistrationDraft draft);
+
+  Future<HotelCreditCardPaymentResult> payWithRegisteredCreditCard({
+    required String cardId,
+    required String orderId,
+  });
 }

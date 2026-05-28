@@ -334,6 +334,32 @@ abstract class HotelCreditCardRegisterRequestDto
 }
 
 @freezed
+abstract class HotelRegisteredCardPaymentRequestDto
+    with _$HotelRegisteredCardPaymentRequestDto {
+  @JsonSerializable(includeIfNull: false)
+  const factory HotelRegisteredCardPaymentRequestDto({
+    required String cardId,
+    required String bookingOrderId,
+  }) = _HotelRegisteredCardPaymentRequestDto;
+
+  factory HotelRegisteredCardPaymentRequestDto.fromJson(
+    Map<String, dynamic> json,
+  ) => _$HotelRegisteredCardPaymentRequestDtoFromJson(json);
+}
+
+@freezed
+abstract class HotelCreditCardPaymentResultDto
+    with _$HotelCreditCardPaymentResultDto {
+  const factory HotelCreditCardPaymentResultDto({
+    bool? pay,
+    @JsonKey(fromJson: hotelNullableStringFromJson) String? url,
+  }) = _HotelCreditCardPaymentResultDto;
+
+  factory HotelCreditCardPaymentResultDto.fromJson(Map<String, dynamic> json) =>
+      _$HotelCreditCardPaymentResultDtoFromJson(json);
+}
+
+@freezed
 abstract class HotelRoomTypeRoomNumDto with _$HotelRoomTypeRoomNumDto {
   @JsonSerializable(includeIfNull: false)
   const factory HotelRoomTypeRoomNumDto({

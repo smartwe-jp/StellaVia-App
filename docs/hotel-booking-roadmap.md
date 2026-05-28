@@ -36,14 +36,14 @@ Current behavior:
 - Hotel booking confirmation has a first UI/data slice at `/hotel-booking/:id/confirm`: order summary, coupon entry row, payment method selection, booker form, room guest form, invoice, note, and sticky amount bar. The submit action creates a pre-order through `/pms/bookingorder/save/v2`.
 - Entering hotel booking confirmation initializes the legacy-compatible preparation request set: `/pms/page` for `APP011`, `APP003`, `APP004`, and `APP012`, plus `/pms/countryCodeList`, `/pms/order/room/extraPerson`, `/pms/coupons/order/custListV2`, `/pms/member/memberContactsList`, and `/creditCard/register/list`.
 - Hotel booking confirmation auto-fills empty booker fields from the current App authenticated user cache. Booker name uses App `lastName`/`firstName` first and falls back to `lastNameEn`/`firstNameEn`; email, phone, and phone country code use the authenticated user fields.
-- Successful hotel pre-order creation navigates to `/hotel-booking/:id/result` with the order id, selected payment method, payable amount, and a notice that payment is still required within the backend timeout window. The payment button is still a placeholder until the hotel payment slice is implemented.
+- Successful hotel pre-order creation navigates to `/hotel-booking/:id/result` with the order id, selected payment method, payable amount, and a notice that payment is still required within the backend timeout window. Any payment action now opens `/hotel-booking/payment`, a redesigned payment-method selection page that defaults to the order's submitted payment method but lets the user choose again before paying. The credit-card payment path is wired for registered cards: it loads `/creditCard/register/list`, calls `/creditCard/member/cardIdPay`, opens the returned 3D Secure URL in the shared web viewer, and treats URLs containing `paysuccess` / `payfailed` as payment completion signals. Alipay and WeChat remain placeholders.
 - Hotel order list is available from the hotel home quick-action row at `/hotel-booking/orders`. It calls `/pms/order/list` with top status filters for all, awaiting payment, booked, and cancelled orders, loads 5 rows per page, and keeps list state in a Riverpod controller.
 - Hotel order detail is available at `/hotel-booking/orders/:orderId`. Entering the page loads `/pms/order/detail` plus `/pms/page` for `APP008`, `APP003`, and `APP0011`, maps the legacy detail fields into typed domain data, and renders the first redesigned order-detail UI slice.
 - SDK-level hotel API client/DTO foundation exists for the first migration slice.
 
 Current gaps:
 
-- No hotel payment/refund/cancel policy flow.
+- No Alipay, WeChat, refund, or cancel policy flow.
 - Hotel API success-code contract is still unresolved: old app checks `code == 200`, while current architecture notes say hotel uses `code == 0`.
 
 ## API And Legacy Reference Sources

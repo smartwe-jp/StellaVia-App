@@ -20,52 +20,58 @@ class AppWebViewerTexts {
   final String invalidUrlNotice;
 }
 
-Future<void> openAppWebViewer(
+typedef AppWebViewerResultMatcher<T> = T? Function(Uri uri);
+
+Future<T?> openAppWebViewer<T>(
   BuildContext context, {
   required String url,
   String? title,
   AppWebViewerTexts texts = const AppWebViewerTexts(),
   bool useRootNavigator = true,
+  AppWebViewerResultMatcher<T>? onPageFinishedResult,
 }) async {
   final normalizedUrl = url.trim();
   final uri = Uri.tryParse(normalizedUrl);
   if (uri == null || (!uri.isScheme('https') && !uri.isScheme('http'))) {
     AppNotice.show(context, message: texts.invalidUrlNotice);
-    return;
+    return null;
   }
 
   final navigator = Navigator.of(context, rootNavigator: useRootNavigator);
-  await navigator.push<void>(
-    MaterialPageRoute<void>(
-      builder: (BuildContext context) => AppWebViewerPage(
+  return navigator.push<T>(
+    MaterialPageRoute<T>(
+      builder: (BuildContext context) => AppWebViewerPage<T>(
         pageUri: uri,
         title: title?.trim().isNotEmpty == true
             ? title!.trim()
             : texts.pageTitle,
         texts: texts,
+        onPageFinishedResult: onPageFinishedResult,
       ),
       settings: const RouteSettings(name: 'app_web_viewer'),
     ),
   );
 }
 
-class AppWebViewerPage extends StatefulWidget {
+class AppWebViewerPage<T> extends StatefulWidget {
   const AppWebViewerPage({
     super.key,
     required this.pageUri,
     required this.title,
     this.texts = const AppWebViewerTexts(),
+    this.onPageFinishedResult,
   });
 
   final Uri pageUri;
   final String title;
   final AppWebViewerTexts texts;
+  final AppWebViewerResultMatcher<T>? onPageFinishedResult;
 
   @override
-  State<AppWebViewerPage> createState() => _AppWebViewerPageState();
+  State<AppWebViewerPage<T>> createState() => _AppWebViewerPageState<T>();
 }
 
-class _AppWebViewerPageState extends State<AppWebViewerPage> {
+class _AppWebViewerPageState<T> extends State<AppWebViewerPage<T>> {
   late final WebViewController _controller;
 
   bool _hasMainFrameError = false;
@@ -98,9 +104,18 @@ class _AppWebViewerPageState extends State<AppWebViewerPage> {
               _progress = _progress == 0 ? 5 : _progress;
             });
           },
-          onPageFinished: (_) {
+          onPageFinished: (String url) {
             if (!mounted) {
               return;
+            }
+            final matcher = widget.onPageFinishedResult;
+            if (matcher != null) {
+              final uri = Uri.tryParse(url);
+              final result = uri == null ? null : matcher(uri);
+              if (result != null) {
+                Navigator.of(context).pop<T>(result);
+                return;
+              }
             }
             setState(() {
               _hasMainFrameError = false;
@@ -210,16 +225,9 @@ class _WebLoadErrorPanel extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: appText.body,
-            ),
+            Text(message, textAlign: TextAlign.center, style: appText.body),
             const SizedBox(height: 16),
-            OutlinedButton(
-              onPressed: onRetry,
-              child: Text(retryLabel),
-            ),
+            OutlinedButton(onPressed: onRetry, child: Text(retryLabel)),
           ],
         ),
       ),

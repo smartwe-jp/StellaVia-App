@@ -199,9 +199,9 @@ class _StatusBadge extends StatelessWidget {
         colors.successForeground,
       ),
       _StatusBadgeTone.danger => (
-        colors.dangerSoft,
-        colors.dangerBorder,
-        colors.danger,
+        colors.infoSoft.withValues(alpha: 0.10),
+        colors.infoBorder,
+        colors.onDark.withValues(alpha: 0.72),
       ),
       _StatusBadgeTone.warning => (
         colors.warningSoft,
@@ -236,9 +236,9 @@ class _StatusBadge extends StatelessWidget {
 
 _StatusBadgeTone _orderStatusTone(int? code) {
   switch (code) {
-    case 25:
     case 80:
       return _StatusBadgeTone.success;
+    case 25:
     case 30:
     case 40:
       return _StatusBadgeTone.warning;
@@ -668,7 +668,7 @@ class _PaymentAmountLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
-    final actualAmount = detail.paidAmount ?? detail.summary.totalAmount;
+    final actualAmount = detail.summary.totalAmount;
     final originalAmount = detail.originalAmount ?? actualAmount;
     return DecoratedBox(
       decoration: BoxDecoration(

@@ -542,6 +542,35 @@ void main() {
       expect(result, equals('card-id'));
     });
 
+    test('payWithRegisteredCard posts card id and parses secure url', () async {
+      final client = _buildClient((options) async {
+        expect(options.method, equals('POST'));
+        expect(options.path, equals(HotelApiPaths.cardPayById));
+        expect(options.extra['auth_required'], isTrue);
+        expect(
+          options.data,
+          equals(<String, dynamic>{
+            'cardId': 'card-id',
+            'bookingOrderId': '1290827',
+          }),
+        );
+        return _jsonOk(
+          '{"code":200,"msg":"success","data":{"pay":true,"url":"https://secure.example.com/verify"}}',
+        );
+      });
+      final api = HotelApiClient(client);
+
+      final result = await api.payWithRegisteredCard(
+        const HotelRegisteredCardPaymentRequestDto(
+          cardId: 'card-id',
+          bookingOrderId: '1290827',
+        ),
+      );
+
+      expect(result.pay, isTrue);
+      expect(result.url, equals('https://secure.example.com/verify'));
+    });
+
     test(
       'createAirhostBooking follows Swagger /booking/order contract',
       () async {

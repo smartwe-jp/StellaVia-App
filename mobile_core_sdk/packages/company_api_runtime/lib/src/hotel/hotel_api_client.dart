@@ -75,6 +75,7 @@ class HotelApiClient {
     this.memberInfoUpdatePath = HotelApiPaths.memberInfoUpdate,
     this.memberContactsListPath = HotelApiPaths.memberContactsList,
     this.cardRegisterListPath = HotelApiPaths.cardRegisterList,
+    this.cardPayByIdPath = HotelApiPaths.cardPayById,
     this.cardRegisterPath = HotelApiPaths.cardRegister,
   }) : _envelopeCodec =
            envelopeCodec ??
@@ -108,6 +109,7 @@ class HotelApiClient {
   final String memberInfoUpdatePath;
   final String memberContactsListPath;
   final String cardRegisterListPath;
+  final String cardPayByIdPath;
   final String cardRegisterPath;
 
   Future<HotelSearchResultDto> searchHotels(
@@ -536,5 +538,21 @@ class HotelApiClient {
       fallbackMessage: 'Failed to pay hotel order.',
     );
     return HotelPaymentResultDto.fromJson(data);
+  }
+
+  Future<HotelCreditCardPaymentResultDto> payWithRegisteredCard(
+    HotelRegisteredCardPaymentRequestDto request,
+  ) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      cardPayByIdPath,
+      data: request.toJson(),
+      options: authRequired(true),
+    );
+
+    final data = _envelopeCodec.extractDataMap(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to pay hotel order by credit card.',
+    );
+    return HotelCreditCardPaymentResultDto.fromJson(data);
   }
 }

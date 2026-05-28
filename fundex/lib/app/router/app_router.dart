@@ -20,8 +20,10 @@ import '../../features/hotel_booking/presentation/pages/hotel_booking_tab_page.d
 import '../../features/hotel_booking/presentation/pages/hotel_member_profile_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_order_detail_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_order_list_page.dart';
+import '../../features/hotel_booking/presentation/pages/hotel_payment_method_page.dart';
 import '../../features/hotel_booking/presentation/support/hotel_booking_result_route_args.dart';
 import '../../features/hotel_booking/presentation/support/hotel_map_route_args.dart';
+import '../../features/hotel_booking/presentation/support/hotel_payment_route_args.dart';
 import '../../features/discussion_board/presentation/widgets/kizunark_comment_composer_widgets.dart';
 import '../../features/discussion_board/presentation/widgets/kizunark_draft_list_page.dart';
 import '../../features/discussion_board/presentation/widgets/kizunark_thread_detail_page.dart';
@@ -440,10 +442,31 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     },
                   ),
                   GoRoute(
+                    path: 'payment',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (BuildContext context, GoRouterState state) {
+                      final extra = state.extra;
+                      if (extra is! HotelPaymentRouteArgs) {
+                        return const _HotelBookingConfirmMissingSeedRedirect();
+                      }
+                      return HotelPaymentMethodPage(args: extra);
+                    },
+                  ),
+                  GoRoute(
                     path: ':id',
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (BuildContext context, GoRouterState state) {
                       final id = state.pathParameters['id'] ?? '';
+                      if (id == 'payment') {
+                        final extra = state.extra;
+                        if (extra is HotelPaymentRouteArgs) {
+                          return HotelPaymentMethodPage(args: extra);
+                        }
+                        return const _HotelBookingConfirmMissingSeedRedirect();
+                      }
+                      if (!_isNumericPathSegment(id)) {
+                        return const _HotelBookingConfirmMissingSeedRedirect();
+                      }
                       final extra = state.extra;
                       return HotelDetailPage(
                         hotelId: id,
@@ -892,6 +915,18 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+
+bool _isNumericPathSegment(String value) {
+  if (value.isEmpty) {
+    return false;
+  }
+  for (final unit in value.codeUnits) {
+    if (unit < 48 || unit > 57) {
+      return false;
+    }
+  }
+  return true;
+}
 
 class _HotelBookingConfirmMissingSeedRedirect extends ConsumerWidget {
   const _HotelBookingConfirmMissingSeedRedirect();

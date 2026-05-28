@@ -246,9 +246,9 @@ class HotelOrderSummaryCard extends StatelessWidget {
         label: order.orderStatus.isNotEmpty
             ? order.orderStatus
             : context.l10n.hotelOrdersFilterCancelled,
-        foregroundColor: colors.dangerForeground,
-        backgroundColor: colors.dangerSubtle,
-        borderColor: colors.dangerBorder,
+        foregroundColor: colors.textSecondary,
+        backgroundColor: colors.infoSoft.withValues(alpha: 0.10),
+        borderColor: colors.infoBorder,
       );
     }
     if (order.paymentStatusCode == 40 || order.canPay) {
