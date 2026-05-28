@@ -676,6 +676,7 @@
   "hotelOrdersDetailAction": "Details",
   "hotelOrdersRebookComingSoon": "Book-again flow will be added later",
   "hotelOrdersCancelComingSoon": "Cancellation will be connected later",
+  "hotelOrdersCancelFailed": "Failed to cancel the order. Please try again later.",
   "hotelOrdersDetailComingSoon": "Order details will be added later",
   "hotelOrderDetailTitle": "Order detail",
   "hotelOrderDetailBookingTypeRoom": "Room booking",

@@ -66,6 +66,16 @@ abstract class HotelBookingRemoteDataSource {
     required String orderId,
   });
 
+  Future<HotelOrderCancelRuleResultDto> fetchCancelOrderRule({
+    required String languageCode,
+    required String orderId,
+  });
+
+  Future<String> cancelOrder({
+    required String languageCode,
+    required String orderId,
+  });
+
   Future<HotelMemberInfoDto> fetchMemberInfo();
 
   Future<void> updateMemberInfo(HotelMemberInfoUpdateRequestDto request);
@@ -202,6 +212,25 @@ class HotelBookingRemoteDataSourceImpl implements HotelBookingRemoteDataSource {
     required String orderId,
   }) {
     return _client.fetchOrderDetail(lang: languageCode, orderId: orderId);
+  }
+
+  @override
+  Future<HotelOrderCancelRuleResultDto> fetchCancelOrderRule({
+    required String languageCode,
+    required String orderId,
+  }) {
+    return _client.fetchCancelOrderRule(
+      lang: languageCode,
+      bookingOrderId: orderId,
+    );
+  }
+
+  @override
+  Future<String> cancelOrder({
+    required String languageCode,
+    required String orderId,
+  }) {
+    return _client.cancelOrder(lang: languageCode, bookingOrderId: orderId);
   }
 
   @override

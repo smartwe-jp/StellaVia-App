@@ -1598,6 +1598,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelOrdersCancelComingSoon => 'キャンセル機能は後で接続します';
 
   @override
+  String get hotelOrdersCancelFailed => 'キャンセル処理に失敗しました。しばらくしてからもう一度お試しください。';
+
+  @override
   String get hotelOrdersDetailComingSoon => '注文詳細は後で接続します';
 
   @override

@@ -1673,6 +1673,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Cancellation will be connected later';
 
   @override
+  String get hotelOrdersCancelFailed =>
+      'Failed to cancel the order. Please try again later.';
+
+  @override
   String get hotelOrdersDetailComingSoon => 'Order details will be added later';
 
   @override

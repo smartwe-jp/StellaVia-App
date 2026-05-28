@@ -268,6 +268,29 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
   }
 
   @override
+  Future<HotelOrderCancelRule> fetchCancelOrderRule({
+    required String languageCode,
+    required String orderId,
+  }) async {
+    final result = await _remote.fetchCancelOrderRule(
+      languageCode: languageCode,
+      orderId: orderId,
+    );
+    return HotelOrderCancelRule(
+      canCancel: result.canCancel,
+      message: result.message.trim(),
+    );
+  }
+
+  @override
+  Future<String> cancelOrder({
+    required String languageCode,
+    required String orderId,
+  }) {
+    return _remote.cancelOrder(languageCode: languageCode, orderId: orderId);
+  }
+
+  @override
   Future<HotelMemberProfile> fetchMemberProfile() async {
     final dto = await _remote.fetchMemberInfo();
     return _mapMemberProfile(dto);

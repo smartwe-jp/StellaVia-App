@@ -486,6 +486,13 @@ class HotelOrderListResult {
   bool get hasMore => orders.length < totalCount;
 }
 
+class HotelOrderCancelRule {
+  const HotelOrderCancelRule({required this.canCancel, required this.message});
+
+  final bool canCancel;
+  final String message;
+}
+
 class HotelOrderSummary {
   const HotelOrderSummary({
     required this.id,

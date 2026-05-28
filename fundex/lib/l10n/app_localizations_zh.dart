@@ -1581,6 +1581,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelOrdersCancelComingSoon => '取消功能稍后接入';
 
   @override
+  String get hotelOrdersCancelFailed => '取消订单失败，请稍后再试。';
+
+  @override
   String get hotelOrdersDetailComingSoon => '订单详情稍后接入';
 
   @override
@@ -6799,6 +6802,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelOrdersCancelComingSoon => '取消功能稍後接入';
+
+  @override
+  String get hotelOrdersCancelFailed => '取消訂單失敗，請稍後再試。';
 
   @override
   String get hotelOrdersDetailComingSoon => '訂單詳情稍後接入';

@@ -3117,6 +3117,12 @@ abstract class AppLocalizations {
   /// **'Cancellation will be connected later'**
   String get hotelOrdersCancelComingSoon;
 
+  /// No description provided for @hotelOrdersCancelFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to cancel the order. Please try again later.'**
+  String get hotelOrdersCancelFailed;
+
   /// No description provided for @hotelOrdersDetailComingSoon.
   ///
   /// In en, this message translates to:

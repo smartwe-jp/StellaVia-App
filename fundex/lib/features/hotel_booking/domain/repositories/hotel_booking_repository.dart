@@ -44,6 +44,16 @@ abstract class HotelBookingRepository {
     required String orderId,
   });
 
+  Future<HotelOrderCancelRule> fetchCancelOrderRule({
+    required String languageCode,
+    required String orderId,
+  });
+
+  Future<String> cancelOrder({
+    required String languageCode,
+    required String orderId,
+  });
+
   Future<HotelMemberProfile> fetchMemberProfile();
 
   Future<void> updateMemberProfile(HotelMemberProfile profile);

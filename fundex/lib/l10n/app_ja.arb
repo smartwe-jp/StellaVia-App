@@ -676,6 +676,7 @@
   "hotelOrdersDetailAction": "詳細を見る",
   "hotelOrdersRebookComingSoon": "再予約フローは後で接続します",
   "hotelOrdersCancelComingSoon": "キャンセル機能は後で接続します",
+  "hotelOrdersCancelFailed": "キャンセル処理に失敗しました。しばらくしてからもう一度お試しください。",
   "hotelOrdersDetailComingSoon": "注文詳細は後で接続します",
   "hotelOrderDetailTitle": "注文詳細",
   "hotelOrderDetailBookingTypeRoom": "部屋ごと予約",

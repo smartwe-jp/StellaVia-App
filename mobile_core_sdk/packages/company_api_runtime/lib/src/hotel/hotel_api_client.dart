@@ -493,7 +493,7 @@ class HotelApiClient {
     return HotelMemberPayInfoDto.fromJson(data);
   }
 
-  Future<String> fetchCancelOrderRule({
+  Future<HotelOrderCancelRuleResultDto> fetchCancelOrderRule({
     required String bookingOrderId,
     required String lang,
   }) async {
@@ -503,13 +503,27 @@ class HotelApiClient {
       options: authRequired(true),
     );
 
-    return _envelopeCodec.extractDataString(
-      _envelopeCodec.toJsonMap(response.data),
-      fallbackMessage: 'Failed to load hotel cancel rule.',
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    final canCancel = _envelopeCodec.isSuccessEnvelope(
+      payload,
+      requireTruthyData: true,
+    );
+    final message = canCancel
+        ? _envelopeCodec.extractDataString(
+            payload,
+            fallbackMessage: 'Failed to load hotel cancel rule.',
+          )
+        : _envelopeCodec.resolveErrorMessage(
+            payload,
+            fallbackMessage: 'Failed to load hotel cancel rule.',
+          );
+    return HotelOrderCancelRuleResultDto(
+      canCancel: canCancel,
+      message: message,
     );
   }
 
-  Future<void> cancelOrder({
+  Future<String> cancelOrder({
     required String bookingOrderId,
     required String lang,
   }) async {
@@ -519,10 +533,16 @@ class HotelApiClient {
       options: authRequired(true),
     );
 
-    _envelopeCodec.assertSuccessIfEnvelope(
-      _envelopeCodec.toJsonMap(response.data),
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    if (_envelopeCodec.isSuccessEnvelope(payload)) {
+      return _envelopeCodec.resolveErrorMessage(
+        payload,
+        fallbackMessage: 'success',
+      );
+    }
+    return _envelopeCodec.resolveErrorMessage(
+      payload,
       fallbackMessage: 'Failed to cancel hotel order.',
-      requireTruthyData: true,
     );
   }
 
