@@ -1585,6 +1585,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hotelPaymentAddCreditCardAndPay => 'Add credit card and pay';
 
   @override
+  String get hotelPaymentExitTitle => 'Payment is not complete';
+
+  @override
+  String get hotelPaymentExitMessage =>
+      'Closing this page may interrupt the current payment process. Do you want to exit?';
+
+  @override
+  String get hotelPaymentExitConfirm => 'Exit';
+
+  @override
   String get hotelBookingResultAppBarTitle => 'Booking result';
 
   @override

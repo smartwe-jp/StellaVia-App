@@ -89,6 +89,7 @@ Future<void> runHotelCreditCardPaymentFlow({
       invalidUrlNotice: context.l10n.webViewerInvalidUrlNotice,
     ),
     onPageFinishedResult: _secureResultFromUri,
+    onExitRequested: _confirmPendingPaymentExit,
   );
   if (!context.mounted) {
     return;
@@ -106,6 +107,25 @@ Future<void> runHotelCreditCardPaymentFlow({
   if (secureResult == HotelCreditCardSecureResult.failure) {
     AppNotice.show(context, message: context.l10n.hotelPaymentCreditCardFailed);
   }
+}
+
+Future<bool> _confirmPendingPaymentExit(BuildContext context) async {
+  final l10n = context.l10n;
+  final result = await AppDialogs.showAdaptiveAlert<bool>(
+    context: context,
+    title: l10n.hotelPaymentExitTitle,
+    message: l10n.hotelPaymentExitMessage,
+    barrierDismissible: false,
+    actions: <AppDialogAction<bool>>[
+      AppDialogAction<bool>(label: l10n.commonCancel, value: false),
+      AppDialogAction<bool>(
+        label: l10n.hotelPaymentExitConfirm,
+        value: true,
+        isDestructive: true,
+      ),
+    ],
+  );
+  return result == true;
 }
 
 Future<HotelCreditCard?> _selectCard(

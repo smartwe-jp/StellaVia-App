@@ -1496,6 +1496,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelPaymentAddCreditCardAndPay => '添加信用卡并支付';
 
   @override
+  String get hotelPaymentExitTitle => '支付尚未完成';
+
+  @override
+  String get hotelPaymentExitMessage => '关闭此页面可能会中断当前支付流程。确定要退出吗？';
+
+  @override
+  String get hotelPaymentExitConfirm => '退出';
+
+  @override
   String get hotelBookingResultAppBarTitle => '预订结果';
 
   @override
@@ -6695,6 +6704,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelPaymentAddCreditCardAndPay => '新增信用卡並支付';
+
+  @override
+  String get hotelPaymentExitTitle => '支付尚未完成';
+
+  @override
+  String get hotelPaymentExitMessage => '關閉此頁面可能會中斷目前支付流程。確定要退出嗎？';
+
+  @override
+  String get hotelPaymentExitConfirm => '退出';
 
   @override
   String get hotelBookingResultAppBarTitle => '預訂結果';

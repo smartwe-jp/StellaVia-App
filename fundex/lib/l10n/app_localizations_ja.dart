@@ -1512,6 +1512,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelPaymentAddCreditCardAndPay => 'クレジットカードを追加して支払う';
 
   @override
+  String get hotelPaymentExitTitle => 'お支払いはまだ完了していません';
+
+  @override
+  String get hotelPaymentExitMessage =>
+      'この画面を閉じると、お支払い手続きが中断される可能性があります。終了しますか？';
+
+  @override
+  String get hotelPaymentExitConfirm => '終了する';
+
+  @override
   String get hotelBookingResultAppBarTitle => '予約結果';
 
   @override

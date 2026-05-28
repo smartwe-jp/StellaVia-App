@@ -2949,6 +2949,24 @@ abstract class AppLocalizations {
   /// **'Add credit card and pay'**
   String get hotelPaymentAddCreditCardAndPay;
 
+  /// No description provided for @hotelPaymentExitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment is not complete'**
+  String get hotelPaymentExitTitle;
+
+  /// No description provided for @hotelPaymentExitMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Closing this page may interrupt the current payment process. Do you want to exit?'**
+  String get hotelPaymentExitMessage;
+
+  /// No description provided for @hotelPaymentExitConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit'**
+  String get hotelPaymentExitConfirm;
+
   /// No description provided for @hotelBookingResultAppBarTitle.
   ///
   /// In en, this message translates to:

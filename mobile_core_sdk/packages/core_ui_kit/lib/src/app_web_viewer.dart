@@ -21,6 +21,7 @@ class AppWebViewerTexts {
 }
 
 typedef AppWebViewerResultMatcher<T> = T? Function(Uri uri);
+typedef AppWebViewerExitGuard = Future<bool> Function(BuildContext context);
 
 Future<T?> openAppWebViewer<T>(
   BuildContext context, {
@@ -29,6 +30,7 @@ Future<T?> openAppWebViewer<T>(
   AppWebViewerTexts texts = const AppWebViewerTexts(),
   bool useRootNavigator = true,
   AppWebViewerResultMatcher<T>? onPageFinishedResult,
+  AppWebViewerExitGuard? onExitRequested,
 }) async {
   final normalizedUrl = url.trim();
   final uri = Uri.tryParse(normalizedUrl);
@@ -47,6 +49,7 @@ Future<T?> openAppWebViewer<T>(
             : texts.pageTitle,
         texts: texts,
         onPageFinishedResult: onPageFinishedResult,
+        onExitRequested: onExitRequested,
       ),
       settings: const RouteSettings(name: 'app_web_viewer'),
     ),
@@ -60,12 +63,14 @@ class AppWebViewerPage<T> extends StatefulWidget {
     required this.title,
     this.texts = const AppWebViewerTexts(),
     this.onPageFinishedResult,
+    this.onExitRequested,
   });
 
   final Uri pageUri;
   final String title;
   final AppWebViewerTexts texts;
   final AppWebViewerResultMatcher<T>? onPageFinishedResult;
+  final AppWebViewerExitGuard? onExitRequested;
 
   @override
   State<AppWebViewerPage<T>> createState() => _AppWebViewerPageState<T>();
@@ -76,6 +81,8 @@ class _AppWebViewerPageState<T> extends State<AppWebViewerPage<T>> {
 
   bool _hasMainFrameError = false;
   bool _pageLoaded = false;
+  bool _allowRoutePop = false;
+  bool _isHandlingExit = false;
   int _progress = 0;
   Color? _lastAppliedBackgroundColor;
 
@@ -113,6 +120,7 @@ class _AppWebViewerPageState<T> extends State<AppWebViewerPage<T>> {
               final uri = Uri.tryParse(url);
               final result = uri == null ? null : matcher(uri);
               if (result != null) {
+                _allowRoutePop = true;
                 Navigator.of(context).pop<T>(result);
                 return;
               }
@@ -158,47 +166,81 @@ class _AppWebViewerPageState<T> extends State<AppWebViewerPage<T>> {
     await _controller.loadRequest(widget.pageUri);
   }
 
+  Future<void> _handleExitRequest() async {
+    if (_isHandlingExit) {
+      return;
+    }
+    final guard = widget.onExitRequested;
+    if (guard == null) {
+      _allowRoutePop = true;
+      if (mounted) {
+        Navigator.of(context).pop<T>();
+      }
+      return;
+    }
+    _isHandlingExit = true;
+    final shouldExit = await guard(context);
+    _isHandlingExit = false;
+    if (!mounted || !shouldExit) {
+      return;
+    }
+    _allowRoutePop = true;
+    Navigator.of(context).pop<T>();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title, maxLines: 1, overflow: TextOverflow.ellipsis),
-      ),
-      body: Stack(
-        children: <Widget>[
-          if (_hasMainFrameError)
-            _WebLoadErrorPanel(
-              message: widget.texts.loadFailedLabel,
-              retryLabel: widget.texts.retryLabel,
-              onRetry: _reload,
-            )
-          else
-            WebViewWidget(controller: _controller),
-          if (!_hasMainFrameError && !_pageLoaded)
-            Container(
-              color: colors.surface.withValues(alpha: 0.94),
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const CircularProgressIndicator.adaptive(),
-                  const SizedBox(height: 12),
-                  Text(widget.texts.loadingLabel, style: appText.body),
-                ],
+    return PopScope<T>(
+      canPop: widget.onExitRequested == null || _allowRoutePop,
+      onPopInvokedWithResult: (bool didPop, T? result) {
+        if (!didPop) {
+          unawaited(_handleExitRequest());
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            widget.title,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        body: Stack(
+          children: <Widget>[
+            if (_hasMainFrameError)
+              _WebLoadErrorPanel(
+                message: widget.texts.loadFailedLabel,
+                retryLabel: widget.texts.retryLabel,
+                onRetry: _reload,
+              )
+            else
+              WebViewWidget(controller: _controller),
+            if (!_hasMainFrameError && !_pageLoaded)
+              Container(
+                color: colors.surface.withValues(alpha: 0.94),
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const CircularProgressIndicator.adaptive(),
+                    const SizedBox(height: 12),
+                    Text(widget.texts.loadingLabel, style: appText.body),
+                  ],
+                ),
               ),
-            ),
-          if (!_hasMainFrameError && _progress > 0 && _progress < 100)
-            Align(
-              alignment: Alignment.topCenter,
-              child: LinearProgressIndicator(
-                value: _progress / 100,
-                minHeight: 2,
+            if (!_hasMainFrameError && _progress > 0 && _progress < 100)
+              Align(
+                alignment: Alignment.topCenter,
+                child: LinearProgressIndicator(
+                  value: _progress / 100,
+                  minHeight: 2,
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
