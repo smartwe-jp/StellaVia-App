@@ -24,17 +24,17 @@ class HotelBookingCouponRow extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Row(
+          spacing: 12,
           children: <Widget>[
-            Expanded(
-              child: Text(
+            Text(
                 context.l10n.hotelBookingCoupons,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   color: colors.textPrimary,
                   fontWeight: FontWeight.w700,
                 ),
               ),
-            ),
-            Flexible(
+            
+            Expanded(
               child: Text(
                 selectedCouponName?.trim().isNotEmpty == true
                     ? selectedCouponName!.trim()
