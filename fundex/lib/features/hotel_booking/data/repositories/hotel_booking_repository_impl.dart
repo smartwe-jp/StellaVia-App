@@ -330,11 +330,41 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
           code: draft.token.code,
           message: draft.token.message,
         ),
+        bookingOrderId: draft.bookingOrderId.trim(),
         defaultFlag: draft.defaultFlag ? 1 : 0,
         cardholderMobilePhoneCountry: draft.mobileCountryCode.trim(),
         cardholderMobilePhoneNumber: draft.mobileNumber.trim(),
         cardholderEmail: draft.email.trim(),
       ),
+    );
+  }
+
+  @override
+  Future<HotelCreditCardPaymentResult> payWithCreditCardToken({
+    required HotelCreditCardRegistrationDraft draft,
+    required bool saveCard,
+  }) async {
+    final result = await _remote.payWithCreditCardToken(
+      HotelCreditCardRegisterRequestDto(
+        cardToken: HotelCreditCardTokenDto(
+          token: draft.token.token,
+          tokenExpireDate: draft.token.tokenExpireDate,
+          reqCardNumber: draft.token.reqCardNumber,
+          status: draft.token.status,
+          code: draft.token.code,
+          message: draft.token.message,
+        ),
+        bookingOrderId: draft.bookingOrderId.trim(),
+        defaultFlag: draft.defaultFlag ? 1 : 0,
+        cardholderMobilePhoneCountry: draft.mobileCountryCode.trim(),
+        cardholderMobilePhoneNumber: draft.mobileNumber.trim(),
+        cardholderEmail: draft.email.trim(),
+      ),
+      saveCard: saveCard,
+    );
+    return HotelCreditCardPaymentResult(
+      pay: result.pay ?? false,
+      secureUrl: result.url?.trim() ?? '',
     );
   }
 
@@ -520,11 +550,17 @@ int? _parseRemainingRoomsText(Object? raw) {
   if (text.contains('以上') || text.contains('+') || lower.contains('more')) {
     return 5;
   }
-  final match = RegExp(r'\d+').firstMatch(text);
-  if (match == null) {
-    return null;
+  final digits = StringBuffer();
+  for (final codeUnit in text.codeUnits) {
+    if (codeUnit >= 48 && codeUnit <= 57) {
+      digits.writeCharCode(codeUnit);
+      continue;
+    }
+    if (digits.isNotEmpty) {
+      break;
+    }
   }
-  return int.tryParse(match.group(0)!);
+  return digits.isEmpty ? null : int.tryParse(digits.toString());
 }
 
 String _formatBookingType(Object? raw) {

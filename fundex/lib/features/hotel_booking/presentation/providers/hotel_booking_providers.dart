@@ -26,6 +26,7 @@ import '../../domain/usecases/fetch_hotel_order_cancel_rule_usecase.dart';
 import '../../domain/usecases/fetch_hotel_order_detail_usecase.dart';
 import '../../domain/usecases/fetch_hotel_order_list_usecase.dart';
 import '../../domain/usecases/pay_hotel_order_with_registered_card_usecase.dart';
+import '../../domain/usecases/pay_hotel_order_with_credit_card_token_usecase.dart';
 import '../../domain/usecases/register_hotel_credit_card_usecase.dart';
 import '../../domain/usecases/search_hotels_usecase.dart';
 import '../../domain/usecases/update_hotel_member_profile_usecase.dart';
@@ -124,6 +125,13 @@ final registerHotelCreditCardUseCaseProvider =
 final payHotelOrderWithRegisteredCardUseCaseProvider =
     Provider<PayHotelOrderWithRegisteredCardUseCase>((ref) {
       return PayHotelOrderWithRegisteredCardUseCase(
+        ref.watch(hotelBookingRepositoryProvider),
+      );
+    });
+
+final payHotelOrderWithCreditCardTokenUseCaseProvider =
+    Provider<PayHotelOrderWithCreditCardTokenUseCase>((ref) {
+      return PayHotelOrderWithCreditCardTokenUseCase(
         ref.watch(hotelBookingRepositoryProvider),
       );
     });

@@ -74,6 +74,8 @@ class HotelApiClient {
     this.memberInfoPath = HotelApiPaths.memberInfo,
     this.memberInfoUpdatePath = HotelApiPaths.memberInfoUpdate,
     this.memberContactsListPath = HotelApiPaths.memberContactsList,
+    this.cardPayAuthPath = HotelApiPaths.cardPayAuth,
+    this.cardPayJoinPath = HotelApiPaths.cardPayJoin,
     this.cardRegisterListPath = HotelApiPaths.cardRegisterList,
     this.cardPayByIdPath = HotelApiPaths.cardPayById,
     this.cardRegisterPath = HotelApiPaths.cardRegister,
@@ -108,6 +110,8 @@ class HotelApiClient {
   final String memberInfoPath;
   final String memberInfoUpdatePath;
   final String memberContactsListPath;
+  final String cardPayAuthPath;
+  final String cardPayJoinPath;
   final String cardRegisterListPath;
   final String cardPayByIdPath;
   final String cardRegisterPath;
@@ -360,6 +364,23 @@ class HotelApiClient {
       _envelopeCodec.toJsonMap(response.data),
       fallbackMessage: 'Failed to register credit card.',
     );
+  }
+
+  Future<HotelCreditCardPaymentResultDto> payWithCreditCardToken(
+    HotelCreditCardRegisterRequestDto request, {
+    required bool saveCard,
+  }) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      saveCard ? cardPayJoinPath : cardPayAuthPath,
+      data: request.toJson(),
+      options: authRequired(true),
+    );
+
+    final data = _envelopeCodec.extractDataMap(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to pay hotel order by credit card.',
+    );
+    return HotelCreditCardPaymentResultDto.fromJson(data);
   }
 
   Future<String> fetchRefundStrategyText({

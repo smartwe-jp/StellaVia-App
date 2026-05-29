@@ -97,6 +97,9 @@ class SettingsCreditCardFormSection extends StatelessWidget {
     required this.onDefaultChanged,
     required this.onBack,
     required this.onSubmit,
+    this.showBackButton = false,
+    this.defaultSwitchLabel,
+    this.submitLabel,
   });
 
   final TextEditingController cardNumberController;
@@ -119,6 +122,9 @@ class SettingsCreditCardFormSection extends StatelessWidget {
   final ValueChanged<bool> onDefaultChanged;
   final VoidCallback onBack;
   final VoidCallback onSubmit;
+  final bool showBackButton;
+  final String? defaultSwitchLabel;
+  final String? submitLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -273,7 +279,7 @@ class SettingsCreditCardFormSection extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  l10n.creditCardDefaultPaymentLabel,
+                  defaultSwitchLabel ?? l10n.creditCardDefaultPaymentLabel,
                   style: appText.body.copyWith(color: colors.textSecondary),
                 ),
               ),
@@ -282,21 +288,23 @@ class SettingsCreditCardFormSection extends StatelessWidget {
           const SizedBox(height: 18),
           Row(
             children: <Widget>[
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: isSaving ? null : onBack,
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(52),
-                    foregroundColor: colors.textSecondary,
-                    side: BorderSide(color: colors.border),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(UiTokens.radius12),
+              if (showBackButton) ...<Widget>[
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: isSaving ? null : onBack,
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(52),
+                      foregroundColor: colors.textSecondary,
+                      side: BorderSide(color: colors.border),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(UiTokens.radius12),
+                      ),
                     ),
+                    child: Text(l10n.creditCardBackAction),
                   ),
-                  child: Text(l10n.creditCardBackAction),
                 ),
-              ),
-              const SizedBox(width: 12),
+                const SizedBox(width: 12),
+              ],
               Expanded(
                 child: FilledButton(
                   onPressed: isSaving ? null : onSubmit,
@@ -317,7 +325,7 @@ class SettingsCreditCardFormSection extends StatelessWidget {
                             color: colors.onDark,
                           ),
                         )
-                      : Text(l10n.creditCardSaveAction),
+                      : Text(submitLabel ?? l10n.creditCardSaveAction),
                 ),
               ),
             ],
@@ -947,7 +955,7 @@ InputDecoration _creditCardInputDecoration(BuildContext context) {
 }
 
 String _formatPreviewNumber(String raw) {
-  final digits = raw.replaceAll(RegExp(r'\D'), '');
+  final digits = _asciiDigitsOnly(raw);
   if (digits.isEmpty) {
     return '####  ####  ####  ####';
   }
@@ -962,7 +970,7 @@ String _formatPreviewNumber(String raw) {
 }
 
 String _cardBrandLabel(String raw, String unknownLabel) {
-  final digits = raw.replaceAll(RegExp(r'\D'), '');
+  final digits = _asciiDigitsOnly(raw);
   if (digits.startsWith('4')) {
     return 'VISA';
   }
@@ -976,6 +984,16 @@ String _cardBrandLabel(String raw, String unknownLabel) {
     return 'JCB';
   }
   return unknownLabel;
+}
+
+String _asciiDigitsOnly(String raw) {
+  final digits = StringBuffer();
+  for (final codeUnit in raw.codeUnits) {
+    if (codeUnit >= 48 && codeUnit <= 57) {
+      digits.writeCharCode(codeUnit);
+    }
+  }
+  return digits.toString();
 }
 
 List<PhoneCountryCodeOption> _phoneCountryOptions(String value) {

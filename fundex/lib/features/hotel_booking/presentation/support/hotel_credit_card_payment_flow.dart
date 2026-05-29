@@ -72,11 +72,29 @@ Future<void> runHotelCreditCardPaymentFlow({
   if (!context.mounted) {
     return;
   }
+  await completeHotelCreditCardPaymentFlow(
+    context: context,
+    ref: ref,
+    orderId: orderId,
+    result: result,
+    onSuccess: onSuccess,
+  );
+}
+
+Future<void> completeHotelCreditCardPaymentFlow({
+  required BuildContext context,
+  required WidgetRef ref,
+  required String orderId,
+  required HotelCreditCardPaymentResult result,
+  VoidCallback? onSuccess,
+}) async {
+  if (!context.mounted) {
+    return;
+  }
   if (!result.pay || result.secureUrl.isEmpty) {
     AppNotice.show(context, message: context.l10n.hotelPaymentCreditCardFailed);
     return;
   }
-
   final secureResult = await openAppWebViewer<HotelCreditCardSecureResult>(
     context,
     url: result.secureUrl,

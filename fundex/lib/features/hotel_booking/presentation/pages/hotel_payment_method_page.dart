@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../settings/presentation/pages/settings_credit_card_page.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../providers/hotel_booking_providers.dart';
 import '../support/hotel_booking_presenter.dart';
@@ -116,12 +117,24 @@ class _HotelPaymentMethodPageState
   }
 
   Future<void> _openAddCardPage() async {
-    final added = await context.push<bool>('/profile/settings/credit-card/add');
-    if (!mounted || added != true) {
+    final result = await context.push<Object?>(
+      '/profile/settings/credit-card/add',
+      extra: SettingsCreditCardAddRouteArgs.payment(payment: widget.args),
+    );
+    if (!mounted || result is! SettingsCreditCardAddResult) {
       return;
     }
-    ref.invalidate(hotelCreditCardsProvider);
-    AppNotice.show(context, message: context.l10n.creditCardSaved);
+    if (result.saved) {
+      ref.invalidate(hotelCreditCardsProvider);
+    }
+    if (!result.paid) {
+      return;
+    }
+    if (widget.args.redirectToOrderDetailOnSuccess) {
+      goToHotelOrderDetail(context, widget.args.orderId);
+      return;
+    }
+    context.pop(true);
   }
 
   Future<void> _submitPayment() async {

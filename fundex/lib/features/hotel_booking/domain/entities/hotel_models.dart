@@ -180,6 +180,7 @@ class HotelCreditCardRegistrationDraft {
     required this.mobileCountryCode,
     required this.mobileNumber,
     required this.email,
+    this.bookingOrderId = '',
   });
 
   final HotelCreditCardToken token;
@@ -187,6 +188,7 @@ class HotelCreditCardRegistrationDraft {
   final String mobileCountryCode;
   final String mobileNumber;
   final String email;
+  final String bookingOrderId;
 }
 
 class HotelCreditCardPaymentResult {

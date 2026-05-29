@@ -575,10 +575,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                             parentNavigatorKey: _rootNavigatorKey,
                             pageBuilder:
                                 (BuildContext context, GoRouterState state) {
-                                  return MaterialPage<bool>(
+                                  final extra = state.extra;
+                                  return MaterialPage<Object?>(
                                     key: state.pageKey,
                                     fullscreenDialog: true,
-                                    child: const SettingsCreditCardAddPage(),
+                                    child: SettingsCreditCardAddPage(
+                                      args:
+                                          extra
+                                              is SettingsCreditCardAddRouteArgs
+                                          ? extra
+                                          : null,
+                                    ),
                                   );
                                 },
                           ),

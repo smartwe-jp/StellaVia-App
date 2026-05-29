@@ -12,7 +12,22 @@ import '../../../auth/domain/entities/auth_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../hotel_booking/domain/entities/hotel_models.dart';
 import '../../../hotel_booking/presentation/providers/hotel_booking_providers.dart';
+import '../../../hotel_booking/presentation/support/hotel_credit_card_payment_flow.dart';
+import '../../../hotel_booking/presentation/support/hotel_payment_route_args.dart';
 import '../widgets/settings_credit_card_widgets.dart';
+
+class SettingsCreditCardAddRouteArgs {
+  const SettingsCreditCardAddRouteArgs.payment({required this.payment});
+
+  final HotelPaymentRouteArgs payment;
+}
+
+class SettingsCreditCardAddResult {
+  const SettingsCreditCardAddResult({required this.saved, required this.paid});
+
+  final bool saved;
+  final bool paid;
+}
 
 class SettingsCreditCardPage extends ConsumerWidget {
   const SettingsCreditCardPage({super.key});
@@ -58,8 +73,13 @@ class SettingsCreditCardPage extends ConsumerWidget {
   }
 
   Future<void> _openAddPage(BuildContext context, WidgetRef ref) async {
-    final added = await context.push<bool>('/profile/settings/credit-card/add');
-    if (!context.mounted || added != true) {
+    final result = await context.push<Object?>(
+      '/profile/settings/credit-card/add',
+    );
+    final added =
+        result == true ||
+        (result is SettingsCreditCardAddResult && result.saved);
+    if (!context.mounted || !added) {
       return;
     }
     ref.invalidate(hotelCreditCardsProvider);
@@ -68,7 +88,9 @@ class SettingsCreditCardPage extends ConsumerWidget {
 }
 
 class SettingsCreditCardAddPage extends ConsumerStatefulWidget {
-  const SettingsCreditCardAddPage({super.key});
+  const SettingsCreditCardAddPage({super.key, this.args});
+
+  final SettingsCreditCardAddRouteArgs? args;
 
   @override
   ConsumerState<SettingsCreditCardAddPage> createState() =>
@@ -90,6 +112,8 @@ class _SettingsCreditCardAddPageState
   bool _isDefault = true;
   bool _isCvvFocused = false;
   bool _isSaving = false;
+
+  bool get _isPaymentMode => widget.args != null;
 
   @override
   void initState() {
@@ -151,7 +175,10 @@ class _SettingsCreditCardAddPageState
       return;
     }
     final l10n = context.l10n;
-    final cardNumber = _cardNumberController.text.replaceAll(RegExp(r'\D'), '');
+    final cardNumber = _cardNumberController.text
+        .split('')
+        .where(_isAsciiDigit)
+        .join();
     final holder = _holderController.text.trim();
     final cvv = _cvvController.text.trim();
     final email = _emailController.text.trim();
@@ -188,18 +215,52 @@ class _SettingsCreditCardAddPageState
           tokenApiKey: tokenApiKey,
         ),
       );
-      await ref.read(registerHotelCreditCardUseCaseProvider)(
-        HotelCreditCardRegistrationDraft(
-          token: token,
-          defaultFlag: _isDefault,
-          mobileCountryCode: _mobileCountryCode,
-          mobileNumber: mobile,
-          email: email,
-        ),
+      final draft = HotelCreditCardRegistrationDraft(
+        token: token,
+        defaultFlag: _isDefault,
+        mobileCountryCode: _mobileCountryCode,
+        mobileNumber: mobile,
+        email: email,
       );
+      final payment = widget.args?.payment;
+      if (payment == null) {
+        await ref.read(registerHotelCreditCardUseCaseProvider)(draft);
+        if (mounted) {
+          ref.invalidate(hotelCreditCardsProvider);
+          context.pop(true);
+        }
+        return;
+      }
+      final payResult =
+          await ref.read(payHotelOrderWithCreditCardTokenUseCaseProvider)(
+            draft: HotelCreditCardRegistrationDraft(
+              token: token,
+              defaultFlag: _isDefault,
+              mobileCountryCode: _mobileCountryCode,
+              mobileNumber: mobile,
+              email: email,
+              bookingOrderId: payment.orderId,
+            ),
+            saveCard: _isDefault,
+          );
       if (mounted) {
-        ref.invalidate(hotelCreditCardsProvider);
-        context.pop(true);
+        if (_isDefault) {
+          ref.invalidate(hotelCreditCardsProvider);
+        }
+        await completeHotelCreditCardPaymentFlow(
+          context: context,
+          ref: ref,
+          orderId: payment.orderId,
+          result: payResult,
+          onSuccess: () {
+            if (!mounted) {
+              return;
+            }
+            context.pop(
+              SettingsCreditCardAddResult(saved: _isDefault, paid: true),
+            );
+          },
+        );
       }
     } catch (error) {
       if (mounted) {
@@ -264,6 +325,12 @@ class _SettingsCreditCardAddPageState
             onDefaultChanged: (value) => setState(() => _isDefault = value),
             onBack: () => context.pop(false),
             onSubmit: _submit,
+            defaultSwitchLabel: _isPaymentMode
+                ? context.l10n.creditCardSaveAction
+                : null,
+            submitLabel: _isPaymentMode
+                ? context.l10n.hotelBookingResultPay
+                : null,
           ),
         ],
       ),
@@ -308,6 +375,14 @@ class _SettingsCreditCardAddPageState
       return trimmed.substring(1);
     }
     return trimmed;
+  }
+
+  bool _isAsciiDigit(String value) {
+    if (value.length != 1) {
+      return false;
+    }
+    final codeUnit = value.codeUnitAt(0);
+    return codeUnit >= 48 && codeUnit <= 57;
   }
 
   String _errorMessage(Object error, {required String fallback}) {
