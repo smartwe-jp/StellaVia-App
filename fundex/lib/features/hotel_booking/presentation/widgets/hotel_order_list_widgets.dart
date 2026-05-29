@@ -77,6 +77,7 @@ class HotelOrderSummaryCard extends StatelessWidget {
     final amountText = presenter.price(order.totalAmount);
     final canCancel = _canCancel(order);
     final canPay = _canPay(order);
+    final hasActions = canCancel || canPay;
     final showPaymentCountdown = order.orderStatusCode == 1;
 
     return AspectRatio(
@@ -238,6 +239,7 @@ class HotelOrderSummaryCard extends StatelessWidget {
                           backgroundColor: colors.brandPrimary,
                           borderColor: colors.brandPrimary,
                         ),
+                      if (!hasActions) const _OrderNextIndicator(),
                     ],
                   ),
                 ],
@@ -523,6 +525,30 @@ class _OrderActionButton extends StatelessWidget {
               fontWeight: FontWeight.w800,
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _OrderNextIndicator extends StatelessWidget {
+  const _OrderNextIndicator();
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surfaceAlt,
+        shape: BoxShape.circle,
+        //border: Border.all(color: colors.borderSoft),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Icon(
+          Icons.chevron_right_rounded,
+          size: 22,
+          color: colors.brandPrimary,
         ),
       ),
     );
