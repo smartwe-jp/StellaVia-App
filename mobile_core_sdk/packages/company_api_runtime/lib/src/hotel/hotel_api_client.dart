@@ -375,9 +375,18 @@ class HotelApiClient {
       options: authRequired(true),
     );
 
-    return _envelopeCodec.extractDataString(
-      _envelopeCodec.toJsonMap(response.data),
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    _envelopeCodec.assertSuccessIfEnvelope(
+      payload,
       fallbackMessage: 'Failed to delete credit card.',
+    );
+    final data = payload['data']?.toString().trim() ?? '';
+    if (data.isNotEmpty) {
+      return data;
+    }
+    return _envelopeCodec.resolveErrorMessage(
+      payload,
+      fallbackMessage: 'Credit card deleted.',
     );
   }
 

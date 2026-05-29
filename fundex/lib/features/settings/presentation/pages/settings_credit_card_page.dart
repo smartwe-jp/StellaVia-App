@@ -93,6 +93,11 @@ class SettingsCreditCardPage extends ConsumerWidget {
     HotelCreditCard card,
   ) async {
     final l10n = context.l10n;
+    final cardId = card.id.trim();
+    if (cardId.isEmpty) {
+      AppNotice.show(context, message: l10n.creditCardDeleteFailed);
+      return;
+    }
     final confirmed = await AppDialogs.showAdaptiveAlert<bool>(
       context: context,
       title: l10n.creditCardDeleteConfirmTitle,
@@ -113,7 +118,7 @@ class SettingsCreditCardPage extends ConsumerWidget {
     try {
       final message = await AppLoadingDialog.run(
         context,
-        () => ref.read(unregisterHotelCreditCardUseCaseProvider)(card.id),
+        () => ref.read(unregisterHotelCreditCardUseCaseProvider)(cardId),
       );
       if (!context.mounted) {
         return;
