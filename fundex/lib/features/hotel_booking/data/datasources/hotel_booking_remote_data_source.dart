@@ -48,6 +48,8 @@ abstract class HotelBookingRemoteDataSource {
 
   Future<String> registerCreditCard(HotelCreditCardRegisterRequestDto request);
 
+  Future<String> unregisterCreditCard({required String cardId});
+
   Future<HotelCreditCardPaymentResultDto> payWithCreditCardToken(
     HotelCreditCardRegisterRequestDto request, {
     required bool saveCard,
@@ -182,6 +184,11 @@ class HotelBookingRemoteDataSourceImpl implements HotelBookingRemoteDataSource {
   @override
   Future<String> registerCreditCard(HotelCreditCardRegisterRequestDto request) {
     return _client.registerCreditCard(request);
+  }
+
+  @override
+  Future<String> unregisterCreditCard({required String cardId}) {
+    return _client.unregisterCreditCard(cardId: cardId);
   }
 
   @override

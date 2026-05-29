@@ -340,6 +340,11 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
   }
 
   @override
+  Future<String> unregisterCreditCard(String cardId) {
+    return _remote.unregisterCreditCard(cardId: cardId.trim());
+  }
+
+  @override
   Future<HotelCreditCardPaymentResult> payWithCreditCardToken({
     required HotelCreditCardRegistrationDraft draft,
     required bool saveCard,

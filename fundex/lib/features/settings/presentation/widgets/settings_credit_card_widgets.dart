@@ -13,10 +13,12 @@ class SettingsRegisteredCreditCardSection extends StatelessWidget {
     super.key,
     required this.cardsState,
     required this.onRetry,
+    required this.onDelete,
   });
 
   final AsyncValue<List<HotelCreditCard>> cardsState;
   final VoidCallback onRetry;
+  final ValueChanged<HotelCreditCard> onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -25,51 +27,60 @@ class SettingsRegisteredCreditCardSection extends StatelessWidget {
     final appText = theme.appTextTheme;
     final l10n = context.l10n;
 
-    return _SettingsCreditCardPanel(
-      title: l10n.creditCardRegisteredSectionTitle,
-      child: cardsState.when(
-        loading: () => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 18),
-          child: Center(
-            child: SizedBox(
-              width: 22,
-              height: 22,
-              child: CircularProgressIndicator(
-                strokeWidth: 2.4,
-                color: colors.primary,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          l10n.creditCardRegisteredSectionTitle,
+          style: appText.sectionTitle.copyWith(color: colors.textPrimary),
+        ),
+        const SizedBox(height: 14),
+        cardsState.when(
+          loading: () => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 18),
+            child: Center(
+              child: SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.4,
+                  color: colors.primary,
+                ),
               ),
             ),
           ),
-        ),
-        error: (_, __) => Row(
-          children: <Widget>[
-            Expanded(
-              child: Text(
-                l10n.uiErrorRequestFailed,
-                style: appText.body.copyWith(color: colors.textSecondary),
-              ),
-            ),
-            TextButton(onPressed: onRetry, child: Text(l10n.commonRetry)),
-          ],
-        ),
-        data: (cards) {
-          if (cards.isEmpty) {
-            return Text(
-              l10n.creditCardNoRegistered,
-              style: appText.body.copyWith(color: colors.textSecondary),
-            );
-          }
-          return Column(
+          error: (_, __) => Row(
             children: <Widget>[
-              for (var index = 0; index < cards.length; index += 1) ...[
-                _RegisteredCreditCardTile(card: cards[index]),
-                if (index != cards.length - 1)
-                  Divider(height: 18, color: colors.borderSoft),
-              ],
+              Expanded(
+                child: Text(
+                  l10n.uiErrorRequestFailed,
+                  style: appText.body.copyWith(color: colors.textSecondary),
+                ),
+              ),
+              TextButton(onPressed: onRetry, child: Text(l10n.commonRetry)),
             ],
-          );
-        },
-      ),
+          ),
+          data: (cards) {
+            if (cards.isEmpty) {
+              return Text(
+                l10n.creditCardNoRegistered,
+                style: appText.body.copyWith(color: colors.textSecondary),
+              );
+            }
+            return Column(
+              children: <Widget>[
+                for (var index = 0; index < cards.length; index += 1) ...[
+                  _RegisteredCreditCardTile(
+                    card: cards[index],
+                    onDelete: () => onDelete(cards[index]),
+                  ),
+                  if (index != cards.length - 1) const SizedBox(height: 14),
+                ],
+              ],
+            );
+          },
+        ),
+      ],
     );
   }
 }
@@ -444,9 +455,10 @@ class _SettingsCreditCardPanel extends StatelessWidget {
 }
 
 class _RegisteredCreditCardTile extends StatelessWidget {
-  const _RegisteredCreditCardTile({required this.card});
+  const _RegisteredCreditCardTile({required this.card, required this.onDelete});
 
   final HotelCreditCard card;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -454,58 +466,124 @@ class _RegisteredCreditCardTile extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final l10n = context.l10n;
+    final brand = _registeredCardBrand(card, l10n.creditCardPreviewUnknown);
+    final number = _formatRegisteredCardNumber(card.maskedNumber);
+    final holder = card.holderName.trim().isEmpty
+        ? l10n.creditCardPreviewFullName
+        : card.holderName.trim().toUpperCase();
+    final expire = card.expire.trim().isEmpty ? 'MM/YY' : card.expire.trim();
 
-    return Row(
-      children: <Widget>[
-        Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: colors.primarySubtle,
-            borderRadius: BorderRadius.circular(UiTokens.radius12),
-          ),
-          child: Icon(
-            Icons.credit_card_rounded,
-            color: colors.primary,
-            size: 22,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
+    return AspectRatio(
+      aspectRatio: 1.68,
+      child: _CreditCardPreviewSurface(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Text(
-                card.maskedNumber.isEmpty
-                    ? l10n.creditCardMaskedCardFallback
-                    : card.maskedNumber,
-                style: appText.cardTitle.copyWith(color: colors.textPrimary),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        brand,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: appText.heroSubtitle.copyWith(
+                          color: colors.onDark,
+                        ),
+                      ),
+                      if (card.isDefault) ...<Widget>[
+                        const SizedBox(height: 6),
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: colors.brandWhite.withValues(alpha: 0.18),
+                            borderRadius: BorderRadius.circular(999),
+                            border: Border.all(
+                              color: colors.brandWhite.withValues(alpha: 0.28),
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
+                            child: Text(
+                              l10n.creditCardDefaultChip,
+                              style: appText.micro.copyWith(
+                                color: colors.onDark,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  const Spacer(),
+                  _RegisteredCreditCardDeleteButton(onTap: onDelete),
+                ],
               ),
-              const SizedBox(height: 2),
-              Text(
-                [
-                  if (card.holderName.isNotEmpty) card.holderName,
-                  if (card.expire.isNotEmpty) card.expire,
-                ].join(' · '),
-                style: appText.helper.copyWith(color: colors.textSecondary),
+              const Spacer(),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  number,
+                  style: appText.heroSubtitle.copyWith(color: colors.onDark),
+                ),
+              ),
+              const Spacer(),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: _PreviewLabelValue(
+                      label: l10n.creditCardPreviewCardHolder,
+                      value: holder,
+                    ),
+                  ),
+                  const SizedBox(width: 18),
+                  _PreviewLabelValue(
+                    label: l10n.creditCardPreviewExpires,
+                    value: expire,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                  ),
+                ],
               ),
             ],
           ),
         ),
-        if (card.isDefault)
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: colors.warningSubtle,
-              borderRadius: BorderRadius.circular(999),
-              border: Border.all(color: colors.warningBorder),
-            ),
-            child: Text(
-              l10n.creditCardDefaultChip,
-              style: appText.micro.copyWith(color: colors.warningForeground),
-            ),
+      ),
+    );
+  }
+}
+
+class _RegisteredCreditCardDeleteButton extends StatelessWidget {
+  const _RegisteredCreditCardDeleteButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).appColors;
+    return Material(
+      color: colors.brandWhite.withValues(alpha: 0.16),
+      shape: const CircleBorder(),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Icon(
+            Icons.delete_outline_rounded,
+            size: 22,
+            color: colors.danger,
+            semanticLabel: context.l10n.creditCardDeleteAction,
           ),
-      ],
+        ),
+      ),
     );
   }
 }
@@ -684,9 +762,9 @@ class _CreditCardPreviewSurface extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: <Color>[
-              colors.brandPrimaryBright.withValues(alpha: 0.72),
+              colors.brandPrimaryBright.withValues(alpha: 0.82),
               colors.brandPrimary,
-              colors.highlightGold.withValues(alpha: 0.82),
+              colors.brandPrimaryDark,
             ],
           ),
           boxShadow: <BoxShadow>[
@@ -837,6 +915,62 @@ class _SettingsCreditCardTextField extends StatelessWidget {
   }
 }
 
+class CreditCardNumberInputFormatter extends TextInputFormatter {
+  const CreditCardNumberInputFormatter({this.maxDigits = 19});
+
+  final int maxDigits;
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final digits = _asciiDigitsOnly(newValue.text);
+    final limitedDigits = digits.length > maxDigits
+        ? digits.substring(0, maxDigits)
+        : digits;
+    final grouped = _groupCardDigits(limitedDigits);
+    final digitsBeforeCursor = _asciiDigitsOnly(
+      newValue.text.substring(
+        0,
+        newValue.selection.end.clamp(0, newValue.text.length),
+      ),
+    ).length.clamp(0, limitedDigits.length);
+    final cursorOffset = _offsetForDigitCount(grouped, digitsBeforeCursor);
+
+    return TextEditingValue(
+      text: grouped,
+      selection: TextSelection.collapsed(offset: cursorOffset),
+    );
+  }
+
+  String _groupCardDigits(String digits) {
+    final groups = <String>[];
+    for (var index = 0; index < digits.length; index += 4) {
+      final end = (index + 4).clamp(0, digits.length);
+      groups.add(digits.substring(index, end));
+    }
+    return groups.join(' ');
+  }
+
+  int _offsetForDigitCount(String text, int digitCount) {
+    if (digitCount <= 0) {
+      return 0;
+    }
+    var seenDigits = 0;
+    for (var index = 0; index < text.length; index += 1) {
+      final codeUnit = text.codeUnitAt(index);
+      if (codeUnit >= 48 && codeUnit <= 57) {
+        seenDigits += 1;
+      }
+      if (seenDigits >= digitCount) {
+        return index + 1;
+      }
+    }
+    return text.length;
+  }
+}
+
 class _SettingsCreditCardDropdown extends StatelessWidget {
   const _SettingsCreditCardDropdown({
     required this.value,
@@ -984,6 +1118,36 @@ String _cardBrandLabel(String raw, String unknownLabel) {
     return 'JCB';
   }
   return unknownLabel;
+}
+
+String _registeredCardBrand(HotelCreditCard card, String unknownLabel) {
+  final code = card.brandCode.trim();
+  if (code.isNotEmpty) {
+    return code.toUpperCase();
+  }
+  return _cardBrandLabel(card.maskedNumber, unknownLabel);
+}
+
+String _formatRegisteredCardNumber(String raw) {
+  final trimmed = raw.trim();
+  if (trimmed.isEmpty) {
+    return '####  ####  ####  ####';
+  }
+  final normalized = trimmed
+      .replaceAll('\u3000', ' ')
+      .replaceAll('-', ' ')
+      .split(' ')
+      .where((part) => part.isNotEmpty)
+      .join(' ');
+  if (normalized.contains(' ')) {
+    return normalized;
+  }
+  final groups = <String>[];
+  for (var index = 0; index < normalized.length; index += 4) {
+    final end = (index + 4).clamp(0, normalized.length);
+    groups.add(normalized.substring(index, end));
+  }
+  return groups.join('  ');
 }
 
 String _asciiDigitsOnly(String raw) {

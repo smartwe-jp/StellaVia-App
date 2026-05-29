@@ -2220,6 +2220,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get creditCardSaved => '卡片信息已保存。';
 
   @override
+  String get creditCardDeleteAction => '删除';
+
+  @override
+  String get creditCardDeleteConfirmTitle => '删除信用卡？';
+
+  @override
+  String get creditCardDeleteConfirmBody => '此卡片将从已保存的支付方式中移除。';
+
+  @override
+  String get creditCardDeleted => '卡片信息已删除。';
+
+  @override
+  String get creditCardDeleteFailed => '卡片信息删除失败。';
+
+  @override
   String get creditCardValidationRequired => '请填写卡片信息和联系方式。';
 
   @override
@@ -7447,6 +7462,21 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get creditCardSaved => '卡片資訊已儲存。';
+
+  @override
+  String get creditCardDeleteAction => '刪除';
+
+  @override
+  String get creditCardDeleteConfirmTitle => '刪除信用卡？';
+
+  @override
+  String get creditCardDeleteConfirmBody => '此卡片將從已儲存的付款方式中移除。';
+
+  @override
+  String get creditCardDeleted => '卡片資訊已刪除。';
+
+  @override
+  String get creditCardDeleteFailed => '卡片資訊刪除失敗。';
 
   @override
   String get creditCardValidationRequired => '請填寫卡片資訊和聯絡方式。';

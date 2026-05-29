@@ -78,6 +78,7 @@ class HotelApiClient {
     this.cardPayJoinPath = HotelApiPaths.cardPayJoin,
     this.cardRegisterListPath = HotelApiPaths.cardRegisterList,
     this.cardPayByIdPath = HotelApiPaths.cardPayById,
+    this.cardUnregisterByIdPath = HotelApiPaths.cardUnregisterById,
     this.cardRegisterPath = HotelApiPaths.cardRegister,
   }) : _envelopeCodec =
            envelopeCodec ??
@@ -114,6 +115,7 @@ class HotelApiClient {
   final String cardPayJoinPath;
   final String cardRegisterListPath;
   final String cardPayByIdPath;
+  final String cardUnregisterByIdPath;
   final String cardRegisterPath;
 
   Future<HotelSearchResultDto> searchHotels(
@@ -363,6 +365,19 @@ class HotelApiClient {
     return _envelopeCodec.extractDataString(
       _envelopeCodec.toJsonMap(response.data),
       fallbackMessage: 'Failed to register credit card.',
+    );
+  }
+
+  Future<String> unregisterCreditCard({required String cardId}) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      cardUnregisterByIdPath,
+      data: <String, dynamic>{'cardId': cardId.trim()},
+      options: authRequired(true),
+    );
+
+    return _envelopeCodec.extractDataString(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to delete credit card.',
     );
   }
 

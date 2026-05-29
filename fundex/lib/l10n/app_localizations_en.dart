@@ -2332,6 +2332,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get creditCardSaved => 'Card information saved.';
 
   @override
+  String get creditCardDeleteAction => 'Delete';
+
+  @override
+  String get creditCardDeleteConfirmTitle => 'Delete credit card?';
+
+  @override
+  String get creditCardDeleteConfirmBody =>
+      'This card will be removed from your saved payment methods.';
+
+  @override
+  String get creditCardDeleted => 'Card information deleted.';
+
+  @override
+  String get creditCardDeleteFailed => 'Failed to delete card information.';
+
+  @override
   String get creditCardValidationRequired =>
       'Enter card information and a contact method.';
 

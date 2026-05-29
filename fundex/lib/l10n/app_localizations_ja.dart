@@ -2238,6 +2238,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get creditCardSaved => 'カード情報を保存しました。';
 
   @override
+  String get creditCardDeleteAction => '削除';
+
+  @override
+  String get creditCardDeleteConfirmTitle => 'クレジットカードを削除しますか？';
+
+  @override
+  String get creditCardDeleteConfirmBody => 'このカードを保存済みのお支払い方法から削除します。';
+
+  @override
+  String get creditCardDeleted => 'カード情報を削除しました。';
+
+  @override
+  String get creditCardDeleteFailed => 'カード情報の削除に失敗しました。';
+
+  @override
   String get creditCardValidationRequired => 'カード情報と連絡先を入力してください。';
 
   @override

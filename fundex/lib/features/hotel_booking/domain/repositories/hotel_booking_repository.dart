@@ -62,6 +62,8 @@ abstract class HotelBookingRepository {
 
   Future<String> registerCreditCard(HotelCreditCardRegistrationDraft draft);
 
+  Future<String> unregisterCreditCard(String cardId);
+
   Future<HotelCreditCardPaymentResult> payWithCreditCardToken({
     required HotelCreditCardRegistrationDraft draft,
     required bool saveCard,

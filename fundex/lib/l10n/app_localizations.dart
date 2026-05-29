@@ -4329,6 +4329,36 @@ abstract class AppLocalizations {
   /// **'Card information saved.'**
   String get creditCardSaved;
 
+  /// No description provided for @creditCardDeleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get creditCardDeleteAction;
+
+  /// No description provided for @creditCardDeleteConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete credit card?'**
+  String get creditCardDeleteConfirmTitle;
+
+  /// No description provided for @creditCardDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This card will be removed from your saved payment methods.'**
+  String get creditCardDeleteConfirmBody;
+
+  /// No description provided for @creditCardDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Card information deleted.'**
+  String get creditCardDeleted;
+
+  /// No description provided for @creditCardDeleteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete card information.'**
+  String get creditCardDeleteFailed;
+
   /// No description provided for @creditCardValidationRequired.
   ///
   /// In en, this message translates to:

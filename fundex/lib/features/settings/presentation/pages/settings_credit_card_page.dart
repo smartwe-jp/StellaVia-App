@@ -54,6 +54,7 @@ class SettingsCreditCardPage extends ConsumerWidget {
             SettingsRegisteredCreditCardSection(
               cardsState: cardsState,
               onRetry: () => ref.invalidate(hotelCreditCardsProvider),
+              onDelete: (card) => _deleteCard(context, ref, card),
             ),
           ],
         ),
@@ -84,6 +85,49 @@ class SettingsCreditCardPage extends ConsumerWidget {
     }
     ref.invalidate(hotelCreditCardsProvider);
     AppNotice.show(context, message: context.l10n.creditCardSaved);
+  }
+
+  Future<void> _deleteCard(
+    BuildContext context,
+    WidgetRef ref,
+    HotelCreditCard card,
+  ) async {
+    final l10n = context.l10n;
+    final confirmed = await AppDialogs.showAdaptiveAlert<bool>(
+      context: context,
+      title: l10n.creditCardDeleteConfirmTitle,
+      message: l10n.creditCardDeleteConfirmBody,
+      barrierDismissible: false,
+      actions: <AppDialogAction<bool>>[
+        AppDialogAction<bool>(label: l10n.commonCancel, value: false),
+        AppDialogAction<bool>(
+          label: l10n.creditCardDeleteAction,
+          value: true,
+          isDestructive: true,
+        ),
+      ],
+    );
+    if (!context.mounted || confirmed != true) {
+      return;
+    }
+    try {
+      final message = await AppLoadingDialog.run(
+        context,
+        () => ref.read(unregisterHotelCreditCardUseCaseProvider)(card.id),
+      );
+      if (!context.mounted) {
+        return;
+      }
+      ref.invalidate(hotelCreditCardsProvider);
+      AppNotice.show(
+        context,
+        message: message.trim().isEmpty ? l10n.creditCardDeleted : message,
+      );
+    } catch (_) {
+      if (context.mounted) {
+        AppNotice.show(context, message: l10n.creditCardDeleteFailed);
+      }
+    }
   }
 }
 
@@ -307,9 +351,8 @@ class _SettingsCreditCardAddPageState
             isDefault: _isDefault,
             isCvvFocused: _isCvvFocused,
             isSaving: _isSaving,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(19),
+            inputFormatters: const <TextInputFormatter>[
+              CreditCardNumberInputFormatter(maxDigits: 19),
             ],
             onCardPreviewChanged: () => setState(() {}),
             onMonthChanged: (value) => setState(() => _selectedMonth = value),
