@@ -610,6 +610,46 @@
     }
   },
   "hotelBookingNoCoupons": "None available",
+  "hotelCouponsTitle": "Coupons",
+  "hotelCouponsEmpty": "No coupons yet",
+  "hotelCouponsSelectTitle": "Select coupon",
+  "hotelCouponsClearSelection": "Do not use",
+  "hotelCouponsAvailableSegment": "Available {count}",
+  "@hotelCouponsAvailableSegment": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelCouponsUnavailableSegment": "Unavailable {count}",
+  "@hotelCouponsUnavailableSegment": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelCouponTypeDiscount": "Discount",
+  "hotelCouponTypeVoucher": "Voucher",
+  "hotelCouponTypeSpecial": "Special",
+  "hotelCouponsQuantity": "{count} available",
+  "@hotelCouponsQuantity": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelCouponsValidPeriod": "{begin} - {end}",
+  "@hotelCouponsValidPeriod": {
+    "placeholders": {
+      "begin": {},
+      "end": {}
+    }
+  },
+  "hotelCouponSpecialPrimarySuffix": "day",
+  "hotelCouponSpecialSecondary": "night",
   "hotelBookingPaymentTitle": "Select payment method",
   "hotelBookingCreditCardPay": "Credit card",
   "hotelBookingRegisteredCards": "{count} saved cards",

@@ -30,6 +30,10 @@ abstract class HotelBookingRepository {
     required String languageCode,
   });
 
+  Future<HotelBookingQuote> quoteBookingPrice(HotelBookingQuoteRequest request);
+
+  Future<HotelCouponListResult> fetchCoupons({required String languageCode});
+
   Future<String> createBooking(HotelBookingCreateDraft draft);
 
   Future<HotelOrderListResult> fetchOrderList({

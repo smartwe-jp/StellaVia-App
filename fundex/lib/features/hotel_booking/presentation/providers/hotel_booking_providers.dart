@@ -19,6 +19,7 @@ import '../../domain/usecases/create_hotel_credit_card_token_usecase.dart';
 import '../../domain/usecases/create_hotel_booking_usecase.dart';
 import '../../domain/usecases/fetch_hotel_building_filters_usecase.dart';
 import '../../domain/usecases/fetch_hotel_booking_preparation_usecase.dart';
+import '../../domain/usecases/fetch_hotel_coupons_usecase.dart';
 import '../../domain/usecases/fetch_hotel_credit_cards_usecase.dart';
 import '../../domain/usecases/fetch_hotel_detail_usecase.dart';
 import '../../domain/usecases/fetch_hotel_member_profile_usecase.dart';
@@ -27,6 +28,7 @@ import '../../domain/usecases/fetch_hotel_order_detail_usecase.dart';
 import '../../domain/usecases/fetch_hotel_order_list_usecase.dart';
 import '../../domain/usecases/pay_hotel_order_with_registered_card_usecase.dart';
 import '../../domain/usecases/pay_hotel_order_with_credit_card_token_usecase.dart';
+import '../../domain/usecases/quote_hotel_booking_price_usecase.dart';
 import '../../domain/usecases/register_hotel_credit_card_usecase.dart';
 import '../../domain/usecases/request_hotel_order_invoice_usecase.dart';
 import '../../domain/usecases/search_hotels_usecase.dart';
@@ -93,6 +95,19 @@ final assignHotelOccupancyUseCaseProvider =
 final fetchHotelBookingPreparationUseCaseProvider =
     Provider<FetchHotelBookingPreparationUseCase>((ref) {
       return FetchHotelBookingPreparationUseCase(
+        ref.watch(hotelBookingRepositoryProvider),
+      );
+    });
+
+final fetchHotelCouponsUseCaseProvider = Provider<FetchHotelCouponsUseCase>((
+  ref,
+) {
+  return FetchHotelCouponsUseCase(ref.watch(hotelBookingRepositoryProvider));
+});
+
+final quoteHotelBookingPriceUseCaseProvider =
+    Provider<QuoteHotelBookingPriceUseCase>((ref) {
+      return QuoteHotelBookingPriceUseCase(
         ref.watch(hotelBookingRepositoryProvider),
       );
     });
@@ -245,6 +260,15 @@ final hotelBookingPreparationProvider = FutureProvider.autoDispose
         languageCode: languageCode,
       );
     });
+
+final hotelCouponsProvider = FutureProvider.autoDispose<HotelCouponListResult>((
+  ref,
+) {
+  final languageCode = ref.watch(hotelLocaleLanguageCodeProvider);
+  return ref.watch(fetchHotelCouponsUseCaseProvider)(
+    languageCode: languageCode,
+  );
+});
 
 final hotelMemberProfileProvider =
     FutureProvider.autoDispose<HotelMemberProfile>((ref) {

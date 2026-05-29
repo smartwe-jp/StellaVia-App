@@ -1484,6 +1484,53 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hotelBookingNoCoupons => 'None available';
 
   @override
+  String get hotelCouponsTitle => 'Coupons';
+
+  @override
+  String get hotelCouponsEmpty => 'No coupons yet';
+
+  @override
+  String get hotelCouponsSelectTitle => 'Select coupon';
+
+  @override
+  String get hotelCouponsClearSelection => 'Do not use';
+
+  @override
+  String hotelCouponsAvailableSegment(int count) {
+    return 'Available $count';
+  }
+
+  @override
+  String hotelCouponsUnavailableSegment(int count) {
+    return 'Unavailable $count';
+  }
+
+  @override
+  String get hotelCouponTypeDiscount => 'Discount';
+
+  @override
+  String get hotelCouponTypeVoucher => 'Voucher';
+
+  @override
+  String get hotelCouponTypeSpecial => 'Special';
+
+  @override
+  String hotelCouponsQuantity(int count) {
+    return '$count available';
+  }
+
+  @override
+  String hotelCouponsValidPeriod(Object begin, Object end) {
+    return '$begin - $end';
+  }
+
+  @override
+  String get hotelCouponSpecialPrimarySuffix => 'day';
+
+  @override
+  String get hotelCouponSpecialSecondary => 'night';
+
+  @override
   String get hotelBookingPaymentTitle => 'Select payment method';
 
   @override

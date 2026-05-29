@@ -610,6 +610,46 @@
     }
   },
   "hotelBookingNoCoupons": "利用できません",
+  "hotelCouponsTitle": "クーポン",
+  "hotelCouponsEmpty": "クーポンはありません",
+  "hotelCouponsSelectTitle": "クーポンを選択",
+  "hotelCouponsClearSelection": "使用しない",
+  "hotelCouponsAvailableSegment": "利用可 {count}",
+  "@hotelCouponsAvailableSegment": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelCouponsUnavailableSegment": "対象外 {count}",
+  "@hotelCouponsUnavailableSegment": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelCouponTypeDiscount": "割引券",
+  "hotelCouponTypeVoucher": "金券",
+  "hotelCouponTypeSpecial": "特別券",
+  "hotelCouponsQuantity": "{count}件",
+  "@hotelCouponsQuantity": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelCouponsValidPeriod": "{begin} - {end}",
+  "@hotelCouponsValidPeriod": {
+    "placeholders": {
+      "begin": {},
+      "end": {}
+    }
+  },
+  "hotelCouponSpecialPrimarySuffix": "日",
+  "hotelCouponSpecialSecondary": "泊",
   "hotelBookingPaymentTitle": "お支払い方法を選択",
   "hotelBookingCreditCardPay": "クレジットカード決済",
   "hotelBookingRegisteredCards": "登録済みカード {count}件",

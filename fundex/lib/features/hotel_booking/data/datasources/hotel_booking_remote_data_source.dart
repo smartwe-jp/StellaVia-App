@@ -40,6 +40,8 @@ abstract class HotelBookingRemoteDataSource {
     required String hotelId,
   });
 
+  Future<List<HotelCouponDto>> fetchCoupons({required String languageCode});
+
   Future<List<Map<String, dynamic>>> fetchMemberContacts({
     required String languageCode,
   });
@@ -173,6 +175,11 @@ class HotelBookingRemoteDataSourceImpl implements HotelBookingRemoteDataSource {
     required String hotelId,
   }) {
     return _client.fetchOrderCoupons(lang: languageCode, hotelId: hotelId);
+  }
+
+  @override
+  Future<List<HotelCouponDto>> fetchCoupons({required String languageCode}) {
+    return _client.fetchCustomerCoupons(lang: languageCode);
   }
 
   @override

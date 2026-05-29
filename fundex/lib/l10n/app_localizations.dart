@@ -2763,6 +2763,84 @@ abstract class AppLocalizations {
   /// **'None available'**
   String get hotelBookingNoCoupons;
 
+  /// No description provided for @hotelCouponsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Coupons'**
+  String get hotelCouponsTitle;
+
+  /// No description provided for @hotelCouponsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No coupons yet'**
+  String get hotelCouponsEmpty;
+
+  /// No description provided for @hotelCouponsSelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select coupon'**
+  String get hotelCouponsSelectTitle;
+
+  /// No description provided for @hotelCouponsClearSelection.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not use'**
+  String get hotelCouponsClearSelection;
+
+  /// No description provided for @hotelCouponsAvailableSegment.
+  ///
+  /// In en, this message translates to:
+  /// **'Available {count}'**
+  String hotelCouponsAvailableSegment(int count);
+
+  /// No description provided for @hotelCouponsUnavailableSegment.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable {count}'**
+  String hotelCouponsUnavailableSegment(int count);
+
+  /// No description provided for @hotelCouponTypeDiscount.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount'**
+  String get hotelCouponTypeDiscount;
+
+  /// No description provided for @hotelCouponTypeVoucher.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher'**
+  String get hotelCouponTypeVoucher;
+
+  /// No description provided for @hotelCouponTypeSpecial.
+  ///
+  /// In en, this message translates to:
+  /// **'Special'**
+  String get hotelCouponTypeSpecial;
+
+  /// No description provided for @hotelCouponsQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} available'**
+  String hotelCouponsQuantity(int count);
+
+  /// No description provided for @hotelCouponsValidPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'{begin} - {end}'**
+  String hotelCouponsValidPeriod(Object begin, Object end);
+
+  /// No description provided for @hotelCouponSpecialPrimarySuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'day'**
+  String get hotelCouponSpecialPrimarySuffix;
+
+  /// No description provided for @hotelCouponSpecialSecondary.
+  ///
+  /// In en, this message translates to:
+  /// **'night'**
+  String get hotelCouponSpecialSecondary;
+
   /// No description provided for @hotelBookingPaymentTitle.
   ///
   /// In en, this message translates to:

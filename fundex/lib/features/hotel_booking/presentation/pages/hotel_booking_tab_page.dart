@@ -53,6 +53,7 @@ class _HotelBookingTabContent extends ConsumerWidget {
                 onMapTap: () =>
                     context.push('/hotel-booking/map', extra: state.criteria),
                 onOrdersTap: () => context.push('/hotel-booking/orders'),
+                onCouponsTap: () => context.push('/hotel-booking/coupons'),
               ),
             ),
             if (state.error != null && state.hasContent)

@@ -1416,6 +1416,53 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelBookingNoCoupons => '利用できません';
 
   @override
+  String get hotelCouponsTitle => 'クーポン';
+
+  @override
+  String get hotelCouponsEmpty => 'クーポンはありません';
+
+  @override
+  String get hotelCouponsSelectTitle => 'クーポンを選択';
+
+  @override
+  String get hotelCouponsClearSelection => '使用しない';
+
+  @override
+  String hotelCouponsAvailableSegment(int count) {
+    return '利用可 $count';
+  }
+
+  @override
+  String hotelCouponsUnavailableSegment(int count) {
+    return '対象外 $count';
+  }
+
+  @override
+  String get hotelCouponTypeDiscount => '割引券';
+
+  @override
+  String get hotelCouponTypeVoucher => '金券';
+
+  @override
+  String get hotelCouponTypeSpecial => '特別券';
+
+  @override
+  String hotelCouponsQuantity(int count) {
+    return '$count件';
+  }
+
+  @override
+  String hotelCouponsValidPeriod(Object begin, Object end) {
+    return '$begin - $end';
+  }
+
+  @override
+  String get hotelCouponSpecialPrimarySuffix => '日';
+
+  @override
+  String get hotelCouponSpecialSecondary => '泊';
+
+  @override
   String get hotelBookingPaymentTitle => 'お支払い方法を選択';
 
   @override

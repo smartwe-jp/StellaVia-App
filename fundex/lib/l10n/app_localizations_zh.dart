@@ -1401,6 +1401,53 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelBookingNoCoupons => '暂无可用';
 
   @override
+  String get hotelCouponsTitle => '优惠券';
+
+  @override
+  String get hotelCouponsEmpty => '暂无优惠券';
+
+  @override
+  String get hotelCouponsSelectTitle => '选择优惠券';
+
+  @override
+  String get hotelCouponsClearSelection => '不使用';
+
+  @override
+  String hotelCouponsAvailableSegment(int count) {
+    return '可用 $count';
+  }
+
+  @override
+  String hotelCouponsUnavailableSegment(int count) {
+    return '不可用 $count';
+  }
+
+  @override
+  String get hotelCouponTypeDiscount => '折扣券';
+
+  @override
+  String get hotelCouponTypeVoucher => '代金券';
+
+  @override
+  String get hotelCouponTypeSpecial => '特殊券';
+
+  @override
+  String hotelCouponsQuantity(int count) {
+    return '$count张';
+  }
+
+  @override
+  String hotelCouponsValidPeriod(Object begin, Object end) {
+    return '$begin - $end';
+  }
+
+  @override
+  String get hotelCouponSpecialPrimarySuffix => '天';
+
+  @override
+  String get hotelCouponSpecialSecondary => '晚';
+
+  @override
   String get hotelBookingPaymentTitle => '请选择支付方式';
 
   @override
@@ -6664,6 +6711,53 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelBookingNoCoupons => '暫無可用';
+
+  @override
+  String get hotelCouponsTitle => '優惠券';
+
+  @override
+  String get hotelCouponsEmpty => '暫無優惠券';
+
+  @override
+  String get hotelCouponsSelectTitle => '選擇優惠券';
+
+  @override
+  String get hotelCouponsClearSelection => '不使用';
+
+  @override
+  String hotelCouponsAvailableSegment(int count) {
+    return '可用 $count';
+  }
+
+  @override
+  String hotelCouponsUnavailableSegment(int count) {
+    return '不可用 $count';
+  }
+
+  @override
+  String get hotelCouponTypeDiscount => '折扣券';
+
+  @override
+  String get hotelCouponTypeVoucher => '代金券';
+
+  @override
+  String get hotelCouponTypeSpecial => '特殊券';
+
+  @override
+  String hotelCouponsQuantity(int count) {
+    return '$count張';
+  }
+
+  @override
+  String hotelCouponsValidPeriod(Object begin, Object end) {
+    return '$begin - $end';
+  }
+
+  @override
+  String get hotelCouponSpecialPrimarySuffix => '天';
+
+  @override
+  String get hotelCouponSpecialSecondary => '晚';
 
   @override
   String get hotelBookingPaymentTitle => '請選擇付款方式';

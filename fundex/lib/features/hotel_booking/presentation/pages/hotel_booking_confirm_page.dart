@@ -15,6 +15,7 @@ import '../widgets/hotel_booking_extra_sections.dart';
 import '../widgets/hotel_booking_guest_form_section.dart';
 import '../widgets/hotel_booking_order_summary_card.dart';
 import '../widgets/hotel_booking_payment_section.dart';
+import '../widgets/hotel_coupon_list_widgets.dart';
 import '../widgets/hotel_state_views.dart';
 import '../widgets/hotel_status_bar_preference_scope.dart';
 
@@ -51,6 +52,8 @@ class _HotelBookingConfirmPageState
   bool _useGuestNameForInvoice = true;
   bool _didApplyBookerAuthUser = false;
   bool _isSubmitting = false;
+  HotelCoupon? _selectedCoupon;
+  num? _quotedAmountOverride;
 
   @override
   void initState() {
@@ -112,7 +115,10 @@ class _HotelBookingConfirmPageState
     final authUserState = ref.watch(currentAuthUserProvider);
     _scheduleBookerAuthUserApply(authUserState.valueOrNull);
     final preparation = preparationState.valueOrNull;
-    final amount = preparation?.quotedPrice ?? widget.seed.fallbackAmount;
+    final amount =
+        _quotedAmountOverride ??
+        preparation?.quotedPrice ??
+        widget.seed.fallbackAmount;
     final amountText = presenter.price(amount);
 
     return HotelStatusBarPreferenceScope(
@@ -171,7 +177,10 @@ class _HotelBookingConfirmPageState
                       const SizedBox(height: 14),
                       HotelBookingCouponRow(
                         availableCount: preparation?.couponsAvailableCount ?? 0,
-                        onTap: _showComingSoon,
+                        selectedCouponName: _selectedCoupon?.name,
+                        onTap: preparation == null
+                            ? _showComingSoon
+                            : () => _openCouponPicker(preparation),
                       ),
                       const SizedBox(height: 14),
                       HotelBookingPaymentSection(
@@ -270,6 +279,47 @@ class _HotelBookingConfirmPageState
     AppNotice.show(context, message: context.l10n.hotelDetailBookingComingSoon);
   }
 
+  Future<void> _openCouponPicker(HotelBookingPreparation preparation) async {
+    final result = await showHotelCouponPickerSheet(
+      context: context,
+      coupons: preparation.coupons,
+      pageTexts: preparation.pageTexts,
+      selectedCouponId: _selectedCoupon?.id,
+    );
+    if (!mounted || result == null) {
+      return;
+    }
+    final nextCoupon = result.shouldClear ? null : result.coupon;
+    if (!result.shouldClear && nextCoupon?.id == _selectedCoupon?.id) {
+      return;
+    }
+    setState(() => _selectedCoupon = nextCoupon);
+    try {
+      final quote = await AppLoadingDialog.run(
+        context,
+        () => ref.read(quoteHotelBookingPriceUseCaseProvider)(
+          _buildQuoteRequest(nextCoupon),
+        ),
+        message: context.l10n.commonPleaseWait,
+      );
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _quotedAmountOverride =
+            quote.quotedPrice ??
+            preparation.quotedPrice ??
+            widget.seed.fallbackAmount;
+      });
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() => _selectedCoupon = null);
+      AppNotice.show(context, message: context.l10n.hotelBookingCreateFailed);
+    }
+  }
+
   Future<void> _submitBooking(num? amount) async {
     if (_isSubmitting) {
       return;
@@ -353,6 +403,32 @@ class _HotelBookingConfirmPageState
           ? booker.fullName
           : _invoiceController.text.trim(),
       comment: _messageController.text.trim(),
+      selectedCoupons: _selectedCoupon?.id == null
+          ? const <HotelBookingSelectedCoupon>[]
+          : <HotelBookingSelectedCoupon>[
+              HotelBookingSelectedCoupon(couponId: _selectedCoupon!.id!),
+            ],
+    );
+  }
+
+  HotelBookingQuoteRequest _buildQuoteRequest(HotelCoupon? coupon) {
+    return HotelBookingQuoteRequest(
+      hotelId: widget.seed.detail.id,
+      checkIn: widget.seed.criteria.checkInDate,
+      checkOut: widget.seed.criteria.checkOutDate,
+      languageCode: ref.read(hotelLocaleLanguageCodeProvider),
+      rooms: List<HotelBookingQuoteRoom>.generate(
+        widget.seed.selectedRooms.length,
+        (index) => HotelBookingQuoteRoom(
+          roomTypeId: widget.seed.selectedRooms[index].room.id,
+          occupancy: _roomAdults[index],
+        ),
+      ),
+      coupons: coupon?.id == null
+          ? const <HotelBookingSelectedCoupon>[]
+          : <HotelBookingSelectedCoupon>[
+              HotelBookingSelectedCoupon(couponId: coupon!.id!),
+            ],
     );
   }
 

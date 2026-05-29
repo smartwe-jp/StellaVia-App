@@ -354,6 +354,7 @@ class HotelBookingPreparation {
   const HotelBookingPreparation({
     required this.pageTexts,
     required this.countryCodes,
+    required this.coupons,
     required this.couponsAvailableCount,
     required this.contactsCount,
     required this.registeredCardCount,
@@ -363,11 +364,96 @@ class HotelBookingPreparation {
 
   final Map<String, String> pageTexts;
   final List<HotelCountryCode> countryCodes;
+  final List<HotelCoupon> coupons;
   final int couponsAvailableCount;
   final int contactsCount;
   final int registeredCardCount;
   final num? quotedPrice;
   final num? originalPrice;
+}
+
+class HotelBookingQuote {
+  const HotelBookingQuote({
+    required this.quotedPrice,
+    required this.originalPrice,
+  });
+
+  final num? quotedPrice;
+  final num? originalPrice;
+}
+
+class HotelBookingQuoteRequest {
+  const HotelBookingQuoteRequest({
+    required this.hotelId,
+    required this.checkIn,
+    required this.checkOut,
+    required this.languageCode,
+    required this.rooms,
+    required this.coupons,
+  });
+
+  final String hotelId;
+  final DateTime checkIn;
+  final DateTime checkOut;
+  final String languageCode;
+  final List<HotelBookingQuoteRoom> rooms;
+  final List<HotelBookingSelectedCoupon> coupons;
+}
+
+class HotelBookingQuoteRoom {
+  const HotelBookingQuoteRoom({
+    required this.roomTypeId,
+    required this.occupancy,
+  });
+
+  final String roomTypeId;
+  final int occupancy;
+}
+
+class HotelBookingSelectedCoupon {
+  const HotelBookingSelectedCoupon({required this.couponId, this.count = 1});
+
+  final int couponId;
+  final int count;
+}
+
+class HotelCouponListResult {
+  const HotelCouponListResult({required this.coupons, required this.pageTexts});
+
+  final List<HotelCoupon> coupons;
+  final Map<String, String> pageTexts;
+}
+
+class HotelCoupon {
+  const HotelCoupon({
+    required this.id,
+    required this.name,
+    required this.number,
+    required this.detail,
+    required this.type,
+    required this.discount,
+    required this.amount,
+    required this.amountEvery,
+    required this.hotelNames,
+    required this.beginDate,
+    required this.endDate,
+    required this.createdTime,
+    required this.canUse,
+  });
+
+  final int? id;
+  final String name;
+  final int number;
+  final String detail;
+  final int type;
+  final num? discount;
+  final num? amount;
+  final String amountEvery;
+  final String hotelNames;
+  final String beginDate;
+  final String endDate;
+  final String createdTime;
+  final bool? canUse;
 }
 
 class HotelMemberProfile {
@@ -677,6 +763,7 @@ class HotelBookingCreateDraft {
     required this.roomGuests,
     required this.receiptTitle,
     required this.comment,
+    this.selectedCoupons = const <HotelBookingSelectedCoupon>[],
   });
 
   final HotelBookingConfirmSeed seed;
@@ -686,6 +773,7 @@ class HotelBookingCreateDraft {
   final List<HotelBookingRoomGuestDraft> roomGuests;
   final String receiptTitle;
   final String comment;
+  final List<HotelBookingSelectedCoupon> selectedCoupons;
 }
 
 class HotelBookingPersonDraft {

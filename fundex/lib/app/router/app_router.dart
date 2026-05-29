@@ -14,6 +14,7 @@ import '../../features/discussion_board/presentation/pages/discussion_board_tab_
 import '../../features/hotel_booking/domain/entities/hotel_models.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_booking_confirm_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_booking_result_page.dart';
+import '../../features/hotel_booking/presentation/pages/hotel_coupon_list_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_detail_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_map_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_booking_tab_page.dart';
@@ -123,6 +124,7 @@ String? resolveAuthRedirect({
   final isHotelProtectedChildRoute =
       isHotelMemberProfile ||
       location.startsWith('/hotel-booking/orders') ||
+      location == '/hotel-booking/coupons' ||
       location.endsWith('/confirm') ||
       location.endsWith('/result');
   final isGuestAccessibleRoute =
@@ -439,6 +441,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     builder: (BuildContext context, GoRouterState state) {
                       final orderId = state.pathParameters['orderId'] ?? '';
                       return HotelOrderDetailPage(orderId: orderId);
+                    },
+                  ),
+                  GoRoute(
+                    path: 'coupons',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const HotelCouponListPage();
                     },
                   ),
                   GoRoute(

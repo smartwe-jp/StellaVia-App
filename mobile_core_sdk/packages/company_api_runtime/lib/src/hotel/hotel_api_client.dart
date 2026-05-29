@@ -30,6 +30,7 @@ class HotelApiPaths {
   static const String assignOccupancy = '/pms/assign/occupancy';
   static const String countryCodeList = '/pms/countryCodeList';
   static const String roomExtraPerson = '/pms/order/room/extraPerson';
+  static const String couponsCustList = '/pms/coupons/custListV2';
   static const String couponsOrderCustList = '/pms/coupons/order/custListV2';
   static const String memberInfo = '/pms/member/info';
   static const String memberInfoUpdate = '/pms/member/custSetInfo';
@@ -72,6 +73,7 @@ class HotelApiClient {
     this.assignOccupancyPath = HotelApiPaths.assignOccupancy,
     this.countryCodeListPath = HotelApiPaths.countryCodeList,
     this.roomExtraPersonPath = HotelApiPaths.roomExtraPerson,
+    this.couponsCustListPath = HotelApiPaths.couponsCustList,
     this.couponsOrderCustListPath = HotelApiPaths.couponsOrderCustList,
     this.memberInfoPath = HotelApiPaths.memberInfo,
     this.memberInfoUpdatePath = HotelApiPaths.memberInfoUpdate,
@@ -110,6 +112,7 @@ class HotelApiClient {
   final String assignOccupancyPath;
   final String countryCodeListPath;
   final String roomExtraPersonPath;
+  final String couponsCustListPath;
   final String couponsOrderCustListPath;
   final String memberInfoPath;
   final String memberInfoUpdatePath;
@@ -297,6 +300,22 @@ class HotelApiClient {
       _envelopeCodec.toJsonMap(response.data),
       fallbackMessage: 'Failed to load hotel coupons.',
     );
+  }
+
+  Future<List<HotelCouponDto>> fetchCustomerCoupons({
+    required String lang,
+  }) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      couponsCustListPath,
+      data: <String, dynamic>{'lang': lang},
+      options: authRequired(true),
+    );
+
+    final rows = _envelopeCodec.extractDataList(
+      _envelopeCodec.toJsonMap(response.data),
+      fallbackMessage: 'Failed to load hotel coupons.',
+    );
+    return rows.map(HotelCouponDto.fromJson).toList(growable: false);
   }
 
   Future<HotelMemberInfoDto> fetchMemberInfo() async {

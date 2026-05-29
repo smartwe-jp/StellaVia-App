@@ -610,6 +610,46 @@
     }
   },
   "hotelBookingNoCoupons": "暫無可用",
+  "hotelCouponsTitle": "優惠券",
+  "hotelCouponsEmpty": "暫無優惠券",
+  "hotelCouponsSelectTitle": "選擇優惠券",
+  "hotelCouponsClearSelection": "不使用",
+  "hotelCouponsAvailableSegment": "可用 {count}",
+  "@hotelCouponsAvailableSegment": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelCouponsUnavailableSegment": "不可用 {count}",
+  "@hotelCouponsUnavailableSegment": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelCouponTypeDiscount": "折扣券",
+  "hotelCouponTypeVoucher": "代金券",
+  "hotelCouponTypeSpecial": "特殊券",
+  "hotelCouponsQuantity": "{count}張",
+  "@hotelCouponsQuantity": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelCouponsValidPeriod": "{begin} - {end}",
+  "@hotelCouponsValidPeriod": {
+    "placeholders": {
+      "begin": {},
+      "end": {}
+    }
+  },
+  "hotelCouponSpecialPrimarySuffix": "天",
+  "hotelCouponSpecialSecondary": "晚",
   "hotelBookingPaymentTitle": "請選擇付款方式",
   "hotelBookingCreditCardPay": "信用卡付款",
   "hotelBookingRegisteredCards": "{count}張已綁定信用卡",

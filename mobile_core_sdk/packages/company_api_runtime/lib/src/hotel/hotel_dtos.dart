@@ -568,6 +568,99 @@ class HotelOrderCancelRuleResultDto {
   final String message;
 }
 
+class HotelCouponDto {
+  const HotelCouponDto({
+    required this.couponsId,
+    required this.couponsName,
+    required this.number,
+    required this.detail,
+    required this.type,
+    required this.discount,
+    required this.amount,
+    required this.amountEvery,
+    required this.hotelNames,
+    required this.beginDate,
+    required this.endDate,
+    required this.createdTime,
+    required this.use,
+  });
+
+  factory HotelCouponDto.fromJson(Map<String, dynamic> json) {
+    return HotelCouponDto(
+      couponsId: _hotelIntFromJson(json['couponsId']),
+      couponsName: hotelStringFromJson(json['couponsName']),
+      number: _hotelIntFromJson(json['number']) ?? 0,
+      detail: hotelStringFromJson(json['detail']),
+      type: _hotelIntFromJson(json['type']) ?? 0,
+      discount: _hotelNumFromJson(json['discount']),
+      amount: _hotelNumFromJson(json['amount']),
+      amountEvery: hotelStringFromJson(json['amountEvery']),
+      hotelNames: hotelStringFromJson(json['hotelNames']),
+      beginDate: hotelStringFromJson(json['beginDate']),
+      endDate: hotelStringFromJson(json['endDate']),
+      createdTime: hotelStringFromJson(json['createdTime']),
+      use: _hotelBoolFromJson(json['use']),
+    );
+  }
+
+  final int? couponsId;
+  final String couponsName;
+  final int number;
+  final String detail;
+  final int type;
+  final num? discount;
+  final num? amount;
+  final String amountEvery;
+  final String hotelNames;
+  final String beginDate;
+  final String endDate;
+  final String createdTime;
+  final bool? use;
+}
+
+int? _hotelIntFromJson(Object? raw) {
+  if (raw == null) {
+    return null;
+  }
+  if (raw is int) {
+    return raw;
+  }
+  if (raw is num) {
+    return raw.toInt();
+  }
+  return int.tryParse(raw.toString().trim());
+}
+
+num? _hotelNumFromJson(Object? raw) {
+  if (raw == null) {
+    return null;
+  }
+  if (raw is num) {
+    return raw;
+  }
+  return num.tryParse(raw.toString().trim());
+}
+
+bool? _hotelBoolFromJson(Object? raw) {
+  if (raw == null) {
+    return null;
+  }
+  if (raw is bool) {
+    return raw;
+  }
+  if (raw is num) {
+    return raw != 0;
+  }
+  final text = raw.toString().trim().toLowerCase();
+  if (text == 'true' || text == '1' || text == 'yes') {
+    return true;
+  }
+  if (text == 'false' || text == '0' || text == 'no') {
+    return false;
+  }
+  return null;
+}
+
 @freezed
 abstract class HotelBookingCreateRequestDto
     with _$HotelBookingCreateRequestDto {

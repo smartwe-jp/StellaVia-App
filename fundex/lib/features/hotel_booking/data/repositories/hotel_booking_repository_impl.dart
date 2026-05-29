@@ -195,11 +195,16 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
     final coupons = await couponsFuture;
     final contacts = await contactsFuture;
     final cards = await cardsFuture;
+    final couponItems = _mapOrderCoupons(coupons);
+    final availableCouponCount = couponItems
+        .where((coupon) => coupon.canUse ?? true)
+        .length;
 
     return HotelBookingPreparation(
       pageTexts: Map<String, String>.unmodifiable(pageTexts),
       countryCodes: _mapCountryCodes(countryCodes),
-      couponsAvailableCount: _listCount(coupons['availableList']),
+      coupons: List<HotelCoupon>.unmodifiable(couponItems),
+      couponsAvailableCount: availableCouponCount,
       contactsCount: contacts.length,
       registeredCardCount: cards.length,
       quotedPrice: quote.priceElement?.price,
@@ -208,8 +213,58 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
   }
 
   @override
+  Future<HotelBookingQuote> quoteBookingPrice(
+    HotelBookingQuoteRequest request,
+  ) async {
+    final quote = await _remote.fetchRoomExtraPerson(
+      HotelRoomExtraPersonRequestDto(
+        hotelId: request.hotelId,
+        checkIn: _wireDateTimeFormat.format(request.checkIn),
+        checkOut: _wireDateTimeFormat.format(request.checkOut),
+        lang: request.languageCode,
+        roomTypeCustNums: request.rooms
+            .map(
+              (room) => HotelRoomTypeCustNumRequestDto(
+                roomTypeId: room.roomTypeId,
+                occupancy: room.occupancy.toString(),
+              ),
+            )
+            .toList(growable: false),
+        couponsCounts: request.coupons
+            .map(
+              (coupon) => <String, Object>{
+                'couponsId': coupon.couponId,
+                'count': coupon.count,
+              },
+            )
+            .toList(growable: false),
+      ),
+    );
+    return HotelBookingQuote(
+      quotedPrice: quote.priceElement?.price,
+      originalPrice: quote.priceElement?.originalPrice,
+    );
+  }
+
+  @override
   Future<String> createBooking(HotelBookingCreateDraft draft) {
     return _remote.createBooking(_mapBookingCreateRequest(draft));
+  }
+
+  @override
+  Future<HotelCouponListResult> fetchCoupons({
+    required String languageCode,
+  }) async {
+    final pageTextFuture = _remote
+        .fetchPageText(languageCode: languageCode, pageCode: 'APP011')
+        .catchError((_) => const <String, String>{});
+    final couponsFuture = _remote.fetchCoupons(languageCode: languageCode);
+    final pageTexts = await pageTextFuture;
+    final coupons = await couponsFuture;
+    return HotelCouponListResult(
+      coupons: coupons.map(_mapCoupon).toList(growable: false),
+      pageTexts: Map<String, String>.unmodifiable(pageTexts),
+    );
   }
 
   @override
@@ -481,6 +536,16 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
     }
 
     return HotelBookingCreateRequestDto(
+      couponsCounts: draft.selectedCoupons.isEmpty
+          ? null
+          : draft.selectedCoupons
+                .map(
+                  (coupon) => <String, dynamic>{
+                    'couponsId': coupon.couponId,
+                    'count': coupon.count,
+                  },
+                )
+                .toList(growable: false),
       parent: HotelBookingCreateParentDto(
         bookingOrderEntity: HotelBookingOrderEntityDto(
           checkIn: _wireDateTimeFormat.format(seed.criteria.checkInDate),
@@ -544,6 +609,54 @@ HotelSummary _mapHotelSummary(HotelSummaryDto dto) {
         .where((tag) => tag.isNotEmpty)
         .toList(growable: false),
   );
+}
+
+HotelCoupon _mapCoupon(HotelCouponDto dto) {
+  return HotelCoupon(
+    id: dto.couponsId,
+    name: dto.couponsName.trim(),
+    number: dto.number,
+    detail: dto.detail.trim(),
+    type: dto.type,
+    discount: dto.discount,
+    amount: dto.amount,
+    amountEvery: dto.amountEvery.trim(),
+    hotelNames: dto.hotelNames.trim(),
+    beginDate: dto.beginDate.trim(),
+    endDate: dto.endDate.trim(),
+    createdTime: dto.createdTime.trim(),
+    canUse: dto.use,
+  );
+}
+
+List<HotelCoupon> _mapOrderCoupons(Map<String, dynamic> raw) {
+  final coupons = <HotelCoupon>[];
+  void append(Object? source, {bool? canUse}) {
+    if (source is! List) {
+      return;
+    }
+    for (final item in source) {
+      if (item is! Map) {
+        continue;
+      }
+      final row = Map<String, dynamic>.from(item);
+      if (canUse != null && !row.containsKey('use')) {
+        row['use'] = canUse;
+      }
+      coupons.add(_mapCoupon(HotelCouponDto.fromJson(row)));
+    }
+  }
+
+  append(raw['availableList'], canUse: true);
+  append(raw['unavailableList'], canUse: false);
+  append(raw['disableList'], canUse: false);
+  append(raw['disabledList'], canUse: false);
+  append(raw['unUseList'], canUse: false);
+  if (coupons.isEmpty) {
+    append(raw['data']);
+    append(raw['list']);
+  }
+  return coupons;
 }
 
 int? _mapSummaryRemainingRooms(HotelSummaryDto dto) {
@@ -696,13 +809,6 @@ List<HotelCountryCode> _mapCountryCodes(Map<String, String> rows) {
       .toList();
   values.sort((a, b) => a.code.compareTo(b.code));
   return values;
-}
-
-int _listCount(Object? raw) {
-  if (raw is List) {
-    return raw.length;
-  }
-  return 0;
 }
 
 HotelMemberProfile _mapMemberProfile(HotelMemberInfoDto dto) {

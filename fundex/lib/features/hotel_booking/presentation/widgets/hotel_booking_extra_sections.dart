@@ -9,10 +9,12 @@ class HotelBookingCouponRow extends StatelessWidget {
     super.key,
     required this.availableCount,
     required this.onTap,
+    this.selectedCouponName,
   });
 
   final int availableCount;
   final VoidCallback onTap;
+  final String? selectedCouponName;
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +34,20 @@ class HotelBookingCouponRow extends StatelessWidget {
                 ),
               ),
             ),
-            Text(
-              availableCount > 0
-                  ? context.l10n.hotelBookingCouponsAvailable(availableCount)
-                  : context.l10n.hotelBookingNoCoupons,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: colors.textTertiary,
-                fontWeight: FontWeight.w600,
+            Flexible(
+              child: Text(
+                selectedCouponName?.trim().isNotEmpty == true
+                    ? selectedCouponName!.trim()
+                    : availableCount > 0
+                    ? context.l10n.hotelBookingCouponsAvailable(availableCount)
+                    : context.l10n.hotelBookingNoCoupons,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.end,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: colors.textTertiary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             const SizedBox(width: 6),
