@@ -44,6 +44,12 @@ abstract class HotelBookingRepository {
     required String orderId,
   });
 
+  Future<String> requestOrderInvoice({
+    required String orderId,
+    required String receiptTitle,
+    required String email,
+  });
+
   Future<HotelOrderCancelRule> fetchCancelOrderRule({
     required String languageCode,
     required String orderId,

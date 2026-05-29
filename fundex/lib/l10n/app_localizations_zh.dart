@@ -1673,6 +1673,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelOrderDetailMoreComingSoon => '更多操作稍后接入';
 
   @override
+  String get hotelOrderDetailMoreMenuTitle => '更多操作';
+
+  @override
   String get hotelOrderDetailPaymentComingSoon => '支付流程稍后接入';
 
   @override
@@ -1701,6 +1704,24 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get hotelOrderDetailReceiptTitle => '领收书';
+
+  @override
+  String get hotelOrderInvoiceReceiptTitleLabel => '领收书・宛名';
+
+  @override
+  String get hotelOrderInvoiceEmailLabel => '请输入邮箱地址';
+
+  @override
+  String get hotelOrderInvoiceDownloadAction => '下载';
+
+  @override
+  String get hotelOrderInvoiceValidationMessage => '请填写领收书宛名和邮箱地址。';
+
+  @override
+  String get hotelOrderInvoiceRequested => '领收书请求已提交。';
+
+  @override
+  String get hotelOrderInvoiceFailed => '领收书下载失败，请稍后再试。';
 
   @override
   String get hotelOrderDetailBookingComment => '预订留言信息';
@@ -6917,6 +6938,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hotelOrderDetailMoreComingSoon => '更多操作稍後接入';
 
   @override
+  String get hotelOrderDetailMoreMenuTitle => '更多操作';
+
+  @override
   String get hotelOrderDetailPaymentComingSoon => '支付流程稍後接入';
 
   @override
@@ -6945,6 +6969,24 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelOrderDetailReceiptTitle => '領收書';
+
+  @override
+  String get hotelOrderInvoiceReceiptTitleLabel => '領收書・宛名';
+
+  @override
+  String get hotelOrderInvoiceEmailLabel => '請輸入信箱地址';
+
+  @override
+  String get hotelOrderInvoiceDownloadAction => '下載';
+
+  @override
+  String get hotelOrderInvoiceValidationMessage => '請填寫領收書宛名和信箱地址。';
+
+  @override
+  String get hotelOrderInvoiceRequested => '領收書請求已提交。';
+
+  @override
+  String get hotelOrderInvoiceFailed => '領收書下載失敗，請稍後再試。';
 
   @override
   String get hotelOrderDetailBookingComment => '預訂留言資訊';

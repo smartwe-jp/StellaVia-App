@@ -3297,6 +3297,12 @@ abstract class AppLocalizations {
   /// **'More actions will be added later'**
   String get hotelOrderDetailMoreComingSoon;
 
+  /// No description provided for @hotelOrderDetailMoreMenuTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'More actions'**
+  String get hotelOrderDetailMoreMenuTitle;
+
   /// No description provided for @hotelOrderDetailPaymentComingSoon.
   ///
   /// In en, this message translates to:
@@ -3356,6 +3362,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Receipt'**
   String get hotelOrderDetailReceiptTitle;
+
+  /// No description provided for @hotelOrderInvoiceReceiptTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipt recipient'**
+  String get hotelOrderInvoiceReceiptTitleLabel;
+
+  /// No description provided for @hotelOrderInvoiceEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an email address'**
+  String get hotelOrderInvoiceEmailLabel;
+
+  /// No description provided for @hotelOrderInvoiceDownloadAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Download'**
+  String get hotelOrderInvoiceDownloadAction;
+
+  /// No description provided for @hotelOrderInvoiceValidationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a receipt recipient and email address.'**
+  String get hotelOrderInvoiceValidationMessage;
+
+  /// No description provided for @hotelOrderInvoiceRequested.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipt request submitted.'**
+  String get hotelOrderInvoiceRequested;
+
+  /// No description provided for @hotelOrderInvoiceFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to download the receipt. Please try again later.'**
+  String get hotelOrderInvoiceFailed;
 
   /// No description provided for @hotelOrderDetailBookingComment.
   ///

@@ -1690,6 +1690,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelOrderDetailMoreComingSoon => 'その他の操作は後で接続します';
 
   @override
+  String get hotelOrderDetailMoreMenuTitle => 'その他の操作';
+
+  @override
   String get hotelOrderDetailPaymentComingSoon => '支払いフローは後で接続します';
 
   @override
@@ -1718,6 +1721,25 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get hotelOrderDetailReceiptTitle => '領収書';
+
+  @override
+  String get hotelOrderInvoiceReceiptTitleLabel => '領収書・宛名';
+
+  @override
+  String get hotelOrderInvoiceEmailLabel => 'メールアドレスを入力してください';
+
+  @override
+  String get hotelOrderInvoiceDownloadAction => 'ダウンロード';
+
+  @override
+  String get hotelOrderInvoiceValidationMessage => '領収書の宛名とメールアドレスを入力してください。';
+
+  @override
+  String get hotelOrderInvoiceRequested => '領収書の発行依頼を送信しました。';
+
+  @override
+  String get hotelOrderInvoiceFailed =>
+      '領収書のダウンロードに失敗しました。しばらくしてからもう一度お試しください。';
 
   @override
   String get hotelOrderDetailBookingComment => '予約メッセージ';

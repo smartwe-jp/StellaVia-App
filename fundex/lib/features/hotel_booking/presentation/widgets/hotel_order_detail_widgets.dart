@@ -26,7 +26,7 @@ class HotelOrderDetailContent extends StatelessWidget {
   final HotelBookingPresenter presenter;
   final bool paymentExpired;
   final VoidCallback onBack;
-  final VoidCallback onMore;
+  final ValueChanged<BuildContext> onMore;
   final VoidCallback onPay;
   final VoidCallback onCancel;
   final VoidCallback onPaymentCountdownExpired;
@@ -45,6 +45,7 @@ class HotelOrderDetailContent extends StatelessWidget {
               child: _OrderDetailHero(
                 detail: detail,
                 paymentExpired: paymentExpired,
+                showMore: _canShowMoreActions(detail.summary),
                 onBack: onBack,
                 onMore: onMore,
                 onPaymentCountdownExpired: onPaymentCountdownExpired,
@@ -96,6 +97,7 @@ class _OrderDetailHero extends StatelessWidget {
   const _OrderDetailHero({
     required this.detail,
     required this.paymentExpired,
+    required this.showMore,
     required this.onBack,
     required this.onMore,
     required this.onPaymentCountdownExpired,
@@ -103,8 +105,9 @@ class _OrderDetailHero extends StatelessWidget {
 
   final HotelOrderDetail detail;
   final bool paymentExpired;
+  final bool showMore;
   final VoidCallback onBack;
-  final VoidCallback onMore;
+  final ValueChanged<BuildContext> onMore;
   final VoidCallback onPaymentCountdownExpired;
 
   @override
@@ -131,7 +134,17 @@ class _OrderDetailHero extends StatelessWidget {
                   icon: Icons.chevron_left_rounded,
                   onTap: onBack,
                 ),
-                _HeroIconButton(icon: Icons.more_horiz_rounded, onTap: onMore),
+                if (showMore)
+                  Builder(
+                    builder: (BuildContext moreButtonContext) {
+                      return _HeroIconButton(
+                        icon: Icons.more_horiz_rounded,
+                        onTap: () => onMore(moreButtonContext),
+                      );
+                    },
+                  )
+                else
+                  const SizedBox(width: 42, height: 42),
               ],
             ),
             const SizedBox(height: 18),
@@ -265,19 +278,12 @@ class _StatusBadge extends StatelessWidget {
 
 _StatusBadgeTone _orderStatusTone(int? code) {
   switch (code) {
-    case 2:
-    case 3:
+    case 25:
     case 80:
       return _StatusBadgeTone.success;
-    case 1:
-    case 25:
     case 30:
     case 40:
-    case 4:
-    case 41:
       return _StatusBadgeTone.warning;
-    case 5:
-    case 6:
     case 70:
     case 98:
       return _StatusBadgeTone.danger;
@@ -307,6 +313,14 @@ String _orderStatusLabel(
 
 bool _isPaymentCompleted(int? code) {
   return code == 45;
+}
+
+bool _canShowMoreActions(HotelOrderSummary summary) {
+  return switch (summary.orderStatusCode) {
+    70 || 98 => false,
+    80 => true,
+    _ => _isPaymentCompleted(summary.paymentStatusCode),
+  };
 }
 
 bool _isAwaitingPayment(HotelOrderSummary summary) {

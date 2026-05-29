@@ -1767,6 +1767,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'More actions will be added later';
 
   @override
+  String get hotelOrderDetailMoreMenuTitle => 'More actions';
+
+  @override
   String get hotelOrderDetailPaymentComingSoon =>
       'Payment flow will be added later';
 
@@ -1797,6 +1800,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hotelOrderDetailReceiptTitle => 'Receipt';
+
+  @override
+  String get hotelOrderInvoiceReceiptTitleLabel => 'Receipt recipient';
+
+  @override
+  String get hotelOrderInvoiceEmailLabel => 'Enter an email address';
+
+  @override
+  String get hotelOrderInvoiceDownloadAction => 'Download';
+
+  @override
+  String get hotelOrderInvoiceValidationMessage =>
+      'Enter a receipt recipient and email address.';
+
+  @override
+  String get hotelOrderInvoiceRequested => 'Receipt request submitted.';
+
+  @override
+  String get hotelOrderInvoiceFailed =>
+      'Failed to download the receipt. Please try again later.';
 
   @override
   String get hotelOrderDetailBookingComment => 'Booking message';

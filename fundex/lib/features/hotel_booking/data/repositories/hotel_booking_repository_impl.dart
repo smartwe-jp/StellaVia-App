@@ -268,6 +268,19 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
   }
 
   @override
+  Future<String> requestOrderInvoice({
+    required String orderId,
+    required String receiptTitle,
+    required String email,
+  }) {
+    return _remote.requestOrderInvoice(
+      orderId: orderId,
+      receiptTitle: receiptTitle,
+      email: email,
+    );
+  }
+
+  @override
   Future<HotelOrderCancelRule> fetchCancelOrderRule({
     required String languageCode,
     required String orderId,

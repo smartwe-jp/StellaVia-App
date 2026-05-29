@@ -73,6 +73,12 @@ abstract class HotelBookingRemoteDataSource {
     required String orderId,
   });
 
+  Future<String> requestOrderInvoice({
+    required String orderId,
+    required String receiptTitle,
+    required String email,
+  });
+
   Future<HotelOrderCancelRuleResultDto> fetchCancelOrderRule({
     required String languageCode,
     required String orderId,
@@ -232,6 +238,19 @@ class HotelBookingRemoteDataSourceImpl implements HotelBookingRemoteDataSource {
     required String orderId,
   }) {
     return _client.fetchOrderDetail(lang: languageCode, orderId: orderId);
+  }
+
+  @override
+  Future<String> requestOrderInvoice({
+    required String orderId,
+    required String receiptTitle,
+    required String email,
+  }) {
+    return _client.requestOrderInvoice(
+      bookingOrderId: orderId,
+      receiptTitle: receiptTitle,
+      email: email,
+    );
   }
 
   @override

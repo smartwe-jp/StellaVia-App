@@ -22,6 +22,7 @@ class HotelApiPaths {
   static const String payForOrder = '/pms/pay4order';
   static const String orderList = '/pms/order/list';
   static const String orderDetail = '/pms/order/detail';
+  static const String orderInvoice = '/pms/order/invoice';
   static const String permitMemberPay = '/pms/book/permitMemberPay';
   static const String cancelOrderRule = '/pms/book/cancelOrderRule';
   static const String cancelOrder = '/pms/book/cancelOrder/v2';
@@ -63,6 +64,7 @@ class HotelApiClient {
     this.payForOrderPath = HotelApiPaths.payForOrder,
     this.orderListPath = HotelApiPaths.orderList,
     this.orderDetailPath = HotelApiPaths.orderDetail,
+    this.orderInvoicePath = HotelApiPaths.orderInvoice,
     this.permitMemberPayPath = HotelApiPaths.permitMemberPay,
     this.cancelOrderRulePath = HotelApiPaths.cancelOrderRule,
     this.cancelOrderPath = HotelApiPaths.cancelOrder,
@@ -100,6 +102,7 @@ class HotelApiClient {
   final String payForOrderPath;
   final String orderListPath;
   final String orderDetailPath;
+  final String orderInvoicePath;
   final String permitMemberPayPath;
   final String cancelOrderRulePath;
   final String cancelOrderPath;
@@ -523,6 +526,36 @@ class HotelApiClient {
       throw StateError('Failed to load hotel order detail.');
     }
     return HotelOrderDto.fromJson(data);
+  }
+
+  Future<String> requestOrderInvoice({
+    required String bookingOrderId,
+    required String receiptTitle,
+    required String email,
+  }) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      orderInvoicePath,
+      data: <String, dynamic>{
+        'bookingOrderId': bookingOrderId.trim(),
+        'receiptTitle': receiptTitle.trim(),
+        'email': email.trim(),
+      },
+      options: authRequired(true),
+    );
+
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    _envelopeCodec.assertSuccessIfEnvelope(
+      payload,
+      fallbackMessage: 'Failed to request hotel receipt.',
+    );
+    final data = payload['data']?.toString().trim() ?? '';
+    if (data.isNotEmpty) {
+      return data;
+    }
+    return _envelopeCodec.resolveErrorMessage(
+      payload,
+      fallbackMessage: 'success',
+    );
   }
 
   Future<HotelMemberPayInfoDto> fetchMemberPayInfo() async {
