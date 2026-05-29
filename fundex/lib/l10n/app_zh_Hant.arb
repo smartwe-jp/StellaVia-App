@@ -223,6 +223,8 @@
   "forgotPasswordUiReadyMessage": "UI 已完成，可繼續接入找回密碼接口。",
   "forgotPasswordRecoverFailed": "恢復存取失敗，請檢查驗證碼。",
   "commonOk": "知道了",
+  "commonConfirm": "確定",
+  "commonPleaseWait": "請稍候",
   "commonBackToLogin": "返回登入",
   "homeTitle": "首頁",
   "mainTabHome": "首頁",

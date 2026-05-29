@@ -223,6 +223,8 @@
   "forgotPasswordUiReadyMessage": "UI is complete and ready for API integration.",
   "forgotPasswordRecoverFailed": "Unable to recover access. Please verify your code.",
   "commonOk": "OK",
+  "commonConfirm": "Confirm",
+  "commonPleaseWait": "Please wait",
   "commonBackToLogin": "Back to sign in",
   "homeTitle": "Home",
   "mainTabHome": "Home",

@@ -223,6 +223,8 @@
   "forgotPasswordUiReadyMessage": "UI実装は完了しました。次はAPI連携です。",
   "forgotPasswordRecoverFailed": "アクセス復旧に失敗しました。認証コードを確認してください。",
   "commonOk": "了解",
+  "commonConfirm": "確認",
+  "commonPleaseWait": "お待ちください",
   "commonBackToLogin": "ログインへ戻る",
   "homeTitle": "ホーム",
   "mainTabHome": "ホーム",

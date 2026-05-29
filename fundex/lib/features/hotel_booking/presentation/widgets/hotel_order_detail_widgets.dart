@@ -18,7 +18,7 @@ class HotelOrderDetailContent extends StatelessWidget {
     required this.onBack,
     required this.onMore,
     required this.onPay,
-    required this.onRefund,
+    required this.onCancel,
     required this.onPaymentCountdownExpired,
   });
 
@@ -28,13 +28,14 @@ class HotelOrderDetailContent extends StatelessWidget {
   final VoidCallback onBack;
   final VoidCallback onMore;
   final VoidCallback onPay;
-  final VoidCallback onRefund;
+  final VoidCallback onCancel;
   final VoidCallback onPaymentCountdownExpired;
 
   @override
   Widget build(BuildContext context) {
     final canShowActions =
-        !paymentExpired && (detail.summary.canPay || detail.summary.canRefund);
+        !paymentExpired &&
+        (detail.summary.canPay || _canCancel(detail.summary));
     final bottomInset = MediaQuery.paddingOf(context).bottom;
     return Stack(
       children: <Widget>[
@@ -81,9 +82,9 @@ class HotelOrderDetailContent extends StatelessWidget {
             bottom: 0,
             child: _OrderDetailBottomActions(
               canPay: detail.summary.canPay,
-              canRefund: detail.summary.canRefund,
+              canCancel: _canCancel(detail.summary),
               onPay: onPay,
-              onRefund: onRefund,
+              onCancel: onCancel,
             ),
           ),
       ],
@@ -309,7 +310,24 @@ bool _isPaymentCompleted(int? code) {
 }
 
 bool _isAwaitingPayment(HotelOrderSummary summary) {
-  return summary.orderStatusCode == 1 || summary.paymentStatusCode == 40;
+  if (_isTerminalDetailOrderStatus(summary.orderStatusCode)) {
+    return false;
+  }
+  return summary.paymentStatusCode == 40;
+}
+
+bool _canCancel(HotelOrderSummary summary) {
+  return switch (summary.orderStatusCode) {
+    25 || 30 || 40 => true,
+    _ => false,
+  };
+}
+
+bool _isTerminalDetailOrderStatus(int? code) {
+  return switch (code) {
+    70 || 80 || 98 => true,
+    _ => false,
+  };
 }
 
 class _OrderHotelOverviewCard extends StatelessWidget {
@@ -1087,15 +1105,15 @@ class _OrderCancelPolicySection extends StatelessWidget {
 class _OrderDetailBottomActions extends StatelessWidget {
   const _OrderDetailBottomActions({
     required this.canPay,
-    required this.canRefund,
+    required this.canCancel,
     required this.onPay,
-    required this.onRefund,
+    required this.onCancel,
   });
 
   final bool canPay;
-  final bool canRefund;
+  final bool canCancel;
   final VoidCallback onPay;
-  final VoidCallback onRefund;
+  final VoidCallback onCancel;
 
   @override
   Widget build(BuildContext context) {
@@ -1125,16 +1143,16 @@ class _OrderDetailBottomActions extends StatelessWidget {
                     child: Text(context.l10n.hotelOrderDetailPayNow),
                   ),
                 ),
-              if (canPay && canRefund) const SizedBox(width: 12),
-              if (canRefund)
+              if (canPay && canCancel) const SizedBox(width: 12),
+              if (canCancel)
                 Expanded(
                   child: FilledButton(
                     style: FilledButton.styleFrom(
-                      backgroundColor: colors.danger,
+                      backgroundColor: colors.brandAlert,
                       foregroundColor: colors.onDark,
                     ),
-                    onPressed: onRefund,
-                    child: Text(context.l10n.hotelOrderDetailRefundRequest),
+                    onPressed: onCancel,
+                    child: Text(context.l10n.hotelOrdersCancelAction),
                   ),
                 ),
             ],

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../providers/hotel_booking_providers.dart';
 import '../support/hotel_booking_presenter.dart';
+import '../support/hotel_order_cancel_flow.dart';
 import '../support/hotel_payment_route_args.dart';
 import '../widgets/hotel_order_detail_widgets.dart';
 import '../widgets/hotel_payment_method_widgets.dart';
@@ -29,6 +30,7 @@ class _HotelOrderDetailPageState extends ConsumerState<HotelOrderDetailPage> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
     final detailState = ref.watch(hotelOrderDetailProvider(widget.orderId));
+    final languageCode = ref.watch(hotelLocaleLanguageCodeProvider);
     final presenter = HotelBookingPresenter(
       Localizations.localeOf(context).toLanguageTag(),
     );
@@ -78,9 +80,17 @@ class _HotelOrderDetailPageState extends ConsumerState<HotelOrderDetailPage> {
                     ref.invalidate(hotelOrderDetailProvider(widget.orderId));
                   }
                 },
-                onRefund: () => AppNotice.show(
-                  context,
-                  message: context.l10n.hotelOrderDetailRefundComingSoon,
+                onCancel: () => runHotelOrderCancelFlow(
+                  context: context,
+                  ref: ref,
+                  languageCode: languageCode,
+                  orderId: widget.orderId,
+                  onCancelled: () async {
+                    if (_paymentExpired) {
+                      setState(() => _paymentExpired = false);
+                    }
+                    ref.invalidate(hotelOrderDetailProvider(widget.orderId));
+                  },
                 ),
                 onPaymentCountdownExpired: () {
                   if (!_paymentExpired) {

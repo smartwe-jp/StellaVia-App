@@ -1379,6 +1379,18 @@ abstract class AppLocalizations {
   /// **'OK'**
   String get commonOk;
 
+  /// No description provided for @commonConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get commonConfirm;
+
+  /// No description provided for @commonPleaseWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait'**
+  String get commonPleaseWait;
+
   /// No description provided for @commonBackToLogin.
   ///
   /// In en, this message translates to:

@@ -663,6 +663,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get commonOk => '了解';
 
   @override
+  String get commonConfirm => '確認';
+
+  @override
+  String get commonPleaseWait => 'お待ちください';
+
+  @override
   String get commonBackToLogin => 'ログインへ戻る';
 
   @override

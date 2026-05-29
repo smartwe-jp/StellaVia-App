@@ -655,6 +655,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonOk => '知道了';
 
   @override
+  String get commonConfirm => '确定';
+
+  @override
+  String get commonPleaseWait => '请等待';
+
+  @override
   String get commonBackToLogin => '返回登录';
 
   @override
@@ -5875,6 +5881,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get commonOk => '知道了';
+
+  @override
+  String get commonConfirm => '確定';
+
+  @override
+  String get commonPleaseWait => '請稍候';
 
   @override
   String get commonBackToLogin => '返回登入';

@@ -710,6 +710,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonOk => 'OK';
 
   @override
+  String get commonConfirm => 'Confirm';
+
+  @override
+  String get commonPleaseWait => 'Please wait';
+
+  @override
   String get commonBackToLogin => 'Back to sign in';
 
   @override

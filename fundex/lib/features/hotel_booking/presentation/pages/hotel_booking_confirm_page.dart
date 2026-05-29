@@ -280,7 +280,11 @@ class _HotelBookingConfirmPageState
     }
     setState(() => _isSubmitting = true);
     try {
-      final orderId = await ref.read(createHotelBookingUseCaseProvider)(draft);
+      final orderId = await AppLoadingDialog.run(
+        context,
+        () => ref.read(createHotelBookingUseCaseProvider)(draft),
+        message: context.l10n.commonPleaseWait,
+      );
       if (!mounted) {
         return;
       }

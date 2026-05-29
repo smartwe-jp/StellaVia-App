@@ -5,10 +5,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/status_bar/app_status_bar_providers.dart';
-import '../../../../l10n/app_localizations.dart';
-import '../controllers/hotel_order_list_controller.dart';
 import '../providers/hotel_booking_providers.dart';
 import '../support/hotel_booking_presenter.dart';
+import '../support/hotel_order_cancel_flow.dart';
 import '../support/hotel_payment_route_args.dart';
 import '../widgets/hotel_order_list_widgets.dart';
 import '../widgets/hotel_payment_method_widgets.dart';
@@ -143,12 +142,12 @@ class HotelOrderListPage extends ConsumerWidget {
                         order: order,
                         presenter: presenter,
                         onTap: openDetail,
-                        onCancel: () => _runCancelOrderFlow(
+                        onCancel: () => runHotelOrderCancelFlow(
                           context: context,
                           ref: ref,
-                          controller: controller,
                           languageCode: languageCode,
                           orderId: order.id,
+                          onCancelled: controller.refresh,
                         ),
                         onPay: openPayment,
                         onPaymentCountdownExpired: () =>
@@ -163,79 +162,4 @@ class HotelOrderListPage extends ConsumerWidget {
       ),
     );
   }
-}
-
-Future<void> _runCancelOrderFlow({
-  required BuildContext context,
-  required WidgetRef ref,
-  required HotelOrderListController controller,
-  required String languageCode,
-  required String orderId,
-}) async {
-  final trimmedOrderId = orderId.trim();
-  if (trimmedOrderId.isEmpty) {
-    return;
-  }
-  final l10n = context.l10n;
-  try {
-    final rule = await ref.read(fetchHotelOrderCancelRuleUseCaseProvider)(
-      languageCode: languageCode,
-      orderId: trimmedOrderId,
-    );
-    if (!context.mounted) {
-      return;
-    }
-    final shouldCancel = await AppDialogs.showAdaptiveAlert<bool>(
-      context: context,
-      title: l10n.hotelOrdersCancelAction,
-      message: rule.message,
-      barrierDismissible: false,
-      actions: rule.canCancel
-          ? <AppDialogAction<bool>>[
-              AppDialogAction<bool>(label: l10n.commonCancel, value: false),
-              AppDialogAction<bool>(
-                label: l10n.commonOk,
-                value: true,
-                isDefaultAction: true,
-              ),
-            ]
-          : <AppDialogAction<bool>>[
-              AppDialogAction<bool>(
-                label: l10n.commonOk,
-                value: false,
-                isDefaultAction: true,
-              ),
-            ],
-    );
-    if (!context.mounted || !rule.canCancel || shouldCancel != true) {
-      return;
-    }
-    final message = await ref.read(cancelHotelOrderUseCaseProvider)(
-      languageCode: languageCode,
-      orderId: trimmedOrderId,
-    );
-    if (!context.mounted) {
-      return;
-    }
-    AppNotice.show(
-      context,
-      message: message.trim().isEmpty ? l10n.hotelOrdersCancelFailed : message,
-    );
-    await controller.refresh();
-  } catch (error) {
-    if (!context.mounted) {
-      return;
-    }
-    AppNotice.show(context, message: _cancelErrorMessage(error, l10n));
-  }
-}
-
-String _cancelErrorMessage(Object error, AppLocalizations l10n) {
-  if (error is StateError) {
-    final message = error.message.trim();
-    if (message.isNotEmpty) {
-      return message;
-    }
-  }
-  return l10n.hotelOrdersCancelFailed;
 }
