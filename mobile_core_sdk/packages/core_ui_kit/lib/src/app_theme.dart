@@ -57,15 +57,14 @@ class AppThemeFactory {
     Color overlay(Color foreground, Color base, double opacity) =>
         Color.alphaBlend(foreground.withValues(alpha: opacity), base);
     final textTheme = AppTypographyTokens.textTheme(brightness, locale: locale);
-    final contentMuted = onSurface.withValues(alpha: 0.72);
+    final contentMuted = isDark
+        ? AppColorTokens.darkMuted
+        : AppColorTokens.lightMuted;
     final darkInteractivePrimary = AppColorTokens.brandPrimaryBright;
-    final darkInteractivePrimaryAlt =
-        Color.lerp(
-          AppColorTokens.brandPrimaryBright,
-          AppColorTokens.brandPrimary,
-          0.38,
-        ) ??
-        AppColorTokens.brandPrimaryBright;
+    final darkInteractivePrimaryAlt = AppColorTokens.brandViolet;
+    final linkColor = isDark
+        ? AppColorTokens.brandLilac
+        : AppColorTokens.brandPurple;
     TextStyle sans({
       required double size,
       required FontWeight weight,
@@ -208,9 +207,9 @@ class AppThemeFactory {
           ? AppColorTokens.darkMuted
           : AppColorTokens.fundexTextSecondary,
       textTertiary: isDark
-          ? AppColorTokens.darkMuted.withValues(alpha: 0.84)
-          : AppColorTokens.fundexTextTertiary,
-      onDark: AppColorTokens.darkOnSurface,
+          ? AppColorTokens.darkMuted
+          : AppColorTokens.fundexTextSecondary,
+      onDark: AppColorTokens.brandWhite,
       disabled: AppColorTokens.fundexDisabled,
       highlightGold: AppColorTokens.fundexHighlightGold,
       scrim: Colors.black.withValues(alpha: isDark ? 0.56 : 0.36),
@@ -218,7 +217,7 @@ class AppThemeFactory {
     final semanticTextTheme = AppSemanticTextTheme(
       heroTitle: sans(
         size: 24,
-        weight: FontWeight.w800,
+        weight: FontWeight.w700,
         color: semanticColors.onDark,
         height: 1.16,
       ),
@@ -230,19 +229,19 @@ class AppThemeFactory {
       ),
       heroMetricPrimary: numeric(
         size: 26,
-        weight: FontWeight.w800,
+        weight: FontWeight.w600,
         color: semanticColors.textPrimary,
         height: 1.1,
       ),
       heroMetricSecondary: numeric(
         size: 16,
-        weight: FontWeight.w800,
+        weight: FontWeight.w600,
         color: semanticColors.textPrimary,
         height: 1.2,
       ),
       pageTitle: sans(
         size: 18,
-        weight: FontWeight.w800,
+        weight: FontWeight.w700,
         color: semanticColors.textPrimary,
         height: 1.24,
       ),
@@ -304,7 +303,7 @@ class AppThemeFactory {
       ),
       button: sans(
         size: 15,
-        weight: FontWeight.w800,
+        weight: FontWeight.w500,
         color: semanticColors.textPrimary,
         height: 1.2,
         letterSpacing: 0.1,
@@ -337,36 +336,36 @@ class AppThemeFactory {
       link: sans(
         size: 12,
         weight: FontWeight.w700,
-        color: semanticColors.primary,
+        color: linkColor,
         height: 1.3,
       ),
       numericDisplay: numeric(
         size: 44,
-        weight: FontWeight.w900,
+        weight: FontWeight.w600,
         color: semanticColors.textPrimary,
         height: 1.04,
       ),
       numericHeadline: numeric(
         size: 32,
-        weight: FontWeight.w900,
+        weight: FontWeight.w600,
         color: semanticColors.textPrimary,
         height: 1.08,
       ),
       numericTitle: numeric(
         size: 20,
-        weight: FontWeight.w800,
+        weight: FontWeight.w600,
         color: semanticColors.textPrimary,
         height: 1.1,
       ),
       numericBody: numeric(
         size: 14,
-        weight: FontWeight.w700,
+        weight: FontWeight.w600,
         color: semanticColors.textPrimary,
         height: 1.2,
       ),
       numericCaption: numeric(
         size: 10,
-        weight: FontWeight.w700,
+        weight: FontWeight.w600,
         color: semanticColors.textSecondary,
         height: 1.2,
       ),
@@ -391,39 +390,22 @@ class AppThemeFactory {
     );
 
     final authVisualTheme = AppAuthVisualTheme(
-      backgroundGradientColors: isDark
-          ? const <Color>[
-              AppColorTokens.darkBackground,
-              Color(0xFF101A2A),
-              Color(0xFF15253B),
-            ]
-          : const <Color>[
-              Color(0xFFEAF3FF),
-              Color(0xFFF8FBFF),
-              Color(0xFFE7FFF8),
-            ],
-      loginHeroGradientColors: isDark
-          ? const <Color>[
-              AppColorTokens.darkBackground,
-              AppColorTokens.darkSurface,
-              AppColorTokens.darkBackground,
-            ]
-          : const <Color>[
-              AppColorTokens.fundexPrimaryDark,
-              AppColorTokens.fundexPrimaryDarkDradient,
-              AppColorTokens.fundexPrimaryDarkAlt,
-            ],
+      backgroundGradientColors: <Color>[background, background],
+      loginHeroGradientColors: const <Color>[
+        AppColorTokens.brandNavy,
+        AppColorTokens.brandNavy,
+      ],
       loginHeroLogoGradientColors: const <Color>[
-        AppColorTokens.fundexAccent,
-        AppColorTokens.fundexAccentDradient,
+        AppColorTokens.brandPurple,
+        AppColorTokens.brandPurple,
       ],
       loginHeroLogoShadowColor: AppColorTokens.fundexAccent.withValues(
         alpha: isDark ? 0.52 : 0.42,
       ),
       loginHeroForegroundColor: Colors.white,
-      orbPrimary: AppColorTokens.accent.withValues(alpha: 0.28),
-      orbSecondary: AppColorTokens.accentTertiary.withValues(alpha: 0.24),
-      orbTertiary: AppColorTokens.accentSecondary.withValues(alpha: 0.22),
+      orbPrimary: Colors.transparent,
+      orbSecondary: Colors.transparent,
+      orbTertiary: Colors.transparent,
       brandLabelStyle: (textTheme.labelLarge ?? const TextStyle()).copyWith(
         color: contentMuted,
         letterSpacing: 2.4,
@@ -455,7 +437,7 @@ class AppThemeFactory {
           ),
       categorySelectedBackgroundColor: isDark
           ? semanticColors.primary
-          : AppColorTokens.travelPrimaryBlueAlt,
+          : AppColorTokens.brandPurple,
       categorySelectedForegroundColor: Colors.white,
       categorySelectedLabelStyle: (textTheme.bodySmall ?? const TextStyle())
           .copyWith(
@@ -464,9 +446,7 @@ class AppThemeFactory {
             fontWeight: FontWeight.w400,
             height: 16.5 / 12,
           ),
-      categoryIdleBackgroundColor: isDark
-          ? const Color(0xFF161E2D)
-          : Colors.white,
+      categoryIdleBackgroundColor: isDark ? surface : Colors.white,
       categoryIdleBorderColor: isDark
           ? outline.withValues(alpha: 0.9)
           : AppColorTokens.travelBorderSoft,
@@ -482,19 +462,17 @@ class AppThemeFactory {
             fontWeight: FontWeight.w500,
             height: 16.5 / 12,
           ),
-      categoryShadowColor: AppColorTokens.travelShadowBlue.withValues(
-        alpha: isDark ? 0.18 : 0.5,
+      categoryShadowColor: AppColorTokens.brandNavy.withValues(
+        alpha: isDark ? 0.18 : 0.08,
       ),
-      floatingIconBackgroundColor: isDark
-          ? const Color(0xFF17202E)
-          : Colors.white,
+      floatingIconBackgroundColor: isDark ? surface : Colors.white,
       floatingIconForegroundColor: isDark
           ? AppColorTokens.darkOnSurface
           : AppColorTokens.travelIconNavy,
       floatingIconShadowColor: Colors.black.withValues(
         alpha: isDark ? 0.24 : 0.10,
       ),
-      cardBorderColor:  isDark
+      cardBorderColor: isDark
           ? AppColorTokens.darkBorderSoft
           : AppColorTokens.lightBorderSoft,
       cardTileShadowColor: Colors.black.withValues(alpha: isDark ? 0.22 : 0.10),
@@ -506,11 +484,9 @@ class AppThemeFactory {
             fontSize: 23,
             fontWeight: FontWeight.w700,
             height: 22 / 23,
-            color: isDark ? AppColorTokens.darkOnSurface : Colors.black,
+            color: onSurface,
           ),
-      sectionActionColor: isDark
-          ? const Color(0xFFF3BA55)
-          : AppColorTokens.travelLinkGold,
+      sectionActionColor: linkColor,
       mediaCardTitleStyle: (textTheme.titleMedium ?? const TextStyle())
           .copyWith(
             color: Colors.white,
@@ -557,7 +533,7 @@ class AppThemeFactory {
         ),
         Colors.black.withValues(alpha: isDark ? 1 : 0.96),
       ],
-      discountChipBackgroundColor: AppColorTokens.travelDiscountCoral,
+      discountChipBackgroundColor: semanticColors.primary,
       discountChipTextStyle: (textTheme.labelMedium ?? const TextStyle())
           .copyWith(
             color: Colors.white,
@@ -576,9 +552,9 @@ class AppThemeFactory {
             height: 9.55 / 10,
           ),
       ratingAccentColor: AppColorTokens.travelRatingOrange,
-      hostActionButtonBackgroundColor: AppColorTokens.travelFabOrange,
-      hostActionButtonShadowColor: AppColorTokens.travelShadowOrange.withValues(
-        alpha: isDark ? 0.55 : 1,
+      hostActionButtonBackgroundColor: semanticColors.primary,
+      hostActionButtonShadowColor: AppColorTokens.brandPurple.withValues(
+        alpha: isDark ? 0.28 : 0.15,
       ),
       iconNavyColor: isDark
           ? AppColorTokens.darkOnSurface
@@ -604,19 +580,41 @@ class AppThemeFactory {
       onError: Colors.white,
       surface: surface,
       onSurface: onSurface,
-      tertiary: semanticColors.success,
+      tertiary: semanticColors.primaryAlt,
       onTertiary: Colors.white,
+      primaryContainer: semanticColors.primarySoft,
+      onPrimaryContainer: isDark
+          ? AppColorTokens.brandLilac
+          : AppColorTokens.brandPurple,
+      secondaryContainer: semanticColors.primarySubtle,
+      onSecondaryContainer: isDark
+          ? AppColorTokens.brandLilac
+          : AppColorTokens.brandPurple,
+      surfaceContainerLowest: background,
+      surfaceContainerLow: surface,
+      surfaceContainer: surface,
+      surfaceContainerHigh: semanticColors.surfaceAlt,
+      surfaceContainerHighest: semanticColors.surfaceAlt,
+      onSurfaceVariant: semanticColors.textSecondary,
+      outline: outline,
+      outlineVariant: semanticColors.borderSoft,
+      inverseSurface: isDark
+          ? AppColorTokens.lightSurface
+          : AppColorTokens.brandNavy,
+      onInverseSurface: isDark
+          ? AppColorTokens.brandNavy
+          : AppColorTokens.brandWhite,
+      inversePrimary: isDark
+          ? AppColorTokens.brandPurple
+          : AppColorTokens.brandLilac,
+      surfaceTint: Colors.transparent,
     );
-    final inputFillColor = isDark
-        ? surface.withValues(alpha: 0.72)
-        : surface;
-    final inputOutlineColor = isDark
-        ? outline
-        : semanticColors.primary.withValues(alpha: 0.22);
+    final inputFillColor = isDark ? surface.withValues(alpha: 0.72) : surface;
+    final inputOutlineColor = outline;
 
     final inputBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(UiTokens.radius12),
-      borderSide: BorderSide(color: inputOutlineColor, width: 1.5),
+      borderRadius: BorderRadius.circular(UiTokens.radius8),
+      borderSide: BorderSide(color: inputOutlineColor),
     );
     final statusBarOverlayStyle = statusBarOverlayStyleFor(brightness);
 
@@ -627,6 +625,8 @@ class AppThemeFactory {
       colorScheme: colorScheme,
       scaffoldBackgroundColor: background,
       textTheme: textTheme,
+      fontFamily: AppTypographyTokens.primaryContentFamilyForLocale(locale),
+      fontFamilyFallback: AppTypographyTokens.sansFamilyFallback,
       extensions: <ThemeExtension<dynamic>>[
         semanticColors,
         semanticTextTheme,
@@ -655,24 +655,39 @@ class AppThemeFactory {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
+        constraints: const BoxConstraints(minHeight: UiTokens.inputHeight),
         fillColor: inputFillColor,
+        prefixIconColor: semanticColors.textSecondary,
+        suffixIconColor: semanticColors.textSecondary,
         hintStyle: semanticTextTheme.helper.copyWith(
           color: semanticColors.textTertiary,
         ),
         labelStyle: semanticTextTheme.inputLabel,
         floatingLabelStyle: semanticTextTheme.inputLabel.copyWith(
-          color: semanticColors.primary,
+          color: linkColor,
         ),
         border: inputBorder,
         enabledBorder: inputBorder,
+        disabledBorder: inputBorder.copyWith(
+          borderSide: BorderSide(color: semanticColors.borderSoft),
+        ),
+        errorStyle: semanticTextTheme.helper.copyWith(
+          color: semanticColors.dangerForeground,
+        ),
         focusedBorder: inputBorder.copyWith(
-          borderSide: BorderSide(color: semanticColors.primary, width: 1.5),
+          borderSide: BorderSide(color: semanticColors.primaryAlt, width: 2),
         ),
         errorBorder: inputBorder.copyWith(
-          borderSide: BorderSide(color: semanticColors.danger, width: 1.5),
+          borderSide: BorderSide(
+            color: semanticColors.dangerForeground,
+            width: 1.5,
+          ),
         ),
         focusedErrorBorder: inputBorder.copyWith(
-          borderSide: BorderSide(color: semanticColors.danger, width: 1.5),
+          borderSide: BorderSide(
+            color: semanticColors.dangerForeground,
+            width: 1.5,
+          ),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: UiTokens.spacing16,
@@ -702,14 +717,24 @@ class AppThemeFactory {
           ),
         ),
       ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          backgroundColor: semanticColors.primary,
+          foregroundColor: semanticColors.onDark,
+          minimumSize: const Size(0, UiTokens.controlHeight),
+          shape: const StadiumBorder(),
+          textStyle: semanticTextTheme.button,
+        ),
+      ),
       filledButtonTheme: FilledButtonThemeData(
         style: ButtonStyle(
           minimumSize: const WidgetStatePropertyAll<Size>(
-            Size(double.infinity, 54),
+            Size(double.infinity, UiTokens.controlHeight),
           ),
           shape: WidgetStatePropertyAll<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(UiTokens.radius14),
+              borderRadius: BorderRadius.circular(UiTokens.circle),
             ),
           ),
           textStyle: WidgetStatePropertyAll<TextStyle?>(
@@ -719,15 +744,24 @@ class AppThemeFactory {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: ButtonStyle(
-          minimumSize: const WidgetStatePropertyAll<Size>(
-            Size(double.infinity, 54),
+          backgroundColor: WidgetStatePropertyAll(surface),
+          foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+            (states) =>
+                states.contains(WidgetState.disabled) ? null : linkColor,
           ),
-          side: WidgetStatePropertyAll<BorderSide>(
-            BorderSide(color: outline, width: 1.5),
+          minimumSize: const WidgetStatePropertyAll<Size>(
+            Size(double.infinity, UiTokens.controlHeight),
+          ),
+          side: WidgetStateProperty.resolveWith(
+            (states) => BorderSide(
+              color: states.contains(WidgetState.disabled)
+                  ? semanticColors.borderSoft
+                  : linkColor,
+            ),
           ),
           shape: WidgetStatePropertyAll<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(UiTokens.radius14),
+              borderRadius: BorderRadius.circular(UiTokens.circle),
             ),
           ),
           textStyle: WidgetStatePropertyAll<TextStyle?>(
@@ -740,12 +774,13 @@ class AppThemeFactory {
           textStyle: WidgetStatePropertyAll<TextStyle?>(
             semanticTextTheme.button,
           ),
-          foregroundColor: WidgetStatePropertyAll<Color>(
-            semanticColors.primary,
+          foregroundColor: WidgetStateProperty.resolveWith<Color?>(
+            (states) =>
+                states.contains(WidgetState.disabled) ? null : linkColor,
           ),
           shape: WidgetStatePropertyAll<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(UiTokens.radius14),
+              borderRadius: BorderRadius.circular(UiTokens.circle),
             ),
           ),
         ),
@@ -761,7 +796,7 @@ class AppThemeFactory {
       ),
       cupertinoOverrideTheme: NoDefaultCupertinoThemeData(
         brightness: brightness,
-        primaryColor: AppColorTokens.accent,
+        primaryColor: linkColor,
         scaffoldBackgroundColor: background,
         barBackgroundColor: surface.withValues(alpha: 0.8),
         textTheme: CupertinoTextThemeData(

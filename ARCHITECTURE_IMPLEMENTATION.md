@@ -55,6 +55,7 @@ template_v2/
 - UI 风格：遵循 iOS 交互与视觉标准，面向日本及国际市场审美。
 - 必须支持 Light / Dark 模式。
 - 字体、颜色、间距、圆角统一沉淀在 `mobile_core_sdk/packages/core_ui_kit`。
+- 2026-10-23 起，主题基础以 StellaVia Figma 品牌规范为准：白底、紫色操作、Navy 正文；日文字体 Zen Kaku Gothic Antique，英文／数字 Jost，中文保留 Noto Sans SC/TC。深色模式为 App 适配，具体映射与范围见 `docs/stellavia-theme-foundation.md`。字体资源由 `fundex` 本地打包，SDK 负责字体语义。
 - 以后实现 UI 时，样式选择路径必须固定为：先对照设计要求，检查 `core_ui_kit` 现有主题语义与样式是否已覆盖；若已有合适的颜色和字体样式，必须直接复用；若没有，再先补充到主题/样式定义后再使用；禁止在业务页面或组件内直接硬编码颜色、字号、字重等视觉样式。
 - 通用控件（弹框、底部弹框等）统一由 `core_ui_kit` 提供，不在业务侧重复实现。
 - 业务页面优先复用 SDK 组件，再做业务差异化皮肤。

@@ -6,10 +6,15 @@ class AppTypographyTokens {
   const AppTypographyTokens._();
 
   // Product requirement:
-  // - Japanese + English: Noto Sans JP
+  // - Japanese: Zen Kaku Gothic Antique; English and numbers: Jost
   // - Simplified Chinese: Noto Sans SC
   // - Traditional Chinese: Noto Sans TC
+  static const String latinFamily = 'Jost';
+  static const String japaneseFamily = 'Zen Kaku Gothic Antique';
+
   static const List<String> supportedContentFamilies = <String>[
+    japaneseFamily,
+    latinFamily,
     'Noto Sans JP',
     'Noto Sans SC',
     'Noto Sans TC',
@@ -72,8 +77,8 @@ class AppTypographyTokens {
       return 'Noto Sans SC';
     }
 
-    // Product requirement uses Noto Sans JP for both Japanese and English UI.
-    return 'Noto Sans JP';
+    if (languageCode == 'en') return latinFamily;
+    return japaneseFamily;
   }
 
   static TextStyle sansStyle({
@@ -107,10 +112,13 @@ class AppTypographyTokens {
       size: size,
       weight: weight,
       color: color,
-      fontFamily: primaryContentFamilyForLocale(locale),
+      fontFamily: latinFamily,
       height: height,
       letterSpacing: letterSpacing,
-      fontFamilyFallback: numericFamilyFallback,
+      fontFamilyFallback: <String>[
+        primaryContentFamilyForLocale(locale),
+        ...numericFamilyFallback,
+      ],
     );
   }
 
@@ -144,14 +152,14 @@ class AppTypographyTokens {
     return TextTheme(
       displayLarge: numericStyle(
         size: 44,
-        weight: FontWeight.w900,
+        weight: FontWeight.w600,
         color: onSurface,
         locale: locale,
         height: 1.04,
       ),
       displayMedium: numericStyle(
         size: 32,
-        weight: FontWeight.w900,
+        weight: FontWeight.w600,
         color: onSurface,
         locale: locale,
         height: 1.08,
@@ -165,7 +173,7 @@ class AppTypographyTokens {
       ),
       headlineLarge: sansStyle(
         size: 28,
-        weight: FontWeight.w800,
+        weight: FontWeight.w700,
         color: onSurface,
         locale: locale,
         height: 1.14,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'app_theme_extensions.dart';
+import 'app_text_field.dart';
 import 'ui_buttons.dart';
 import 'ui_tokens.dart';
 
@@ -356,7 +357,7 @@ class _VerificationCodeInputFormatter extends TextInputFormatter {
   }
 }
 
-class _BaseInputField extends StatefulWidget {
+class _BaseInputField extends StatelessWidget {
   const _BaseInputField({
     this.fieldKey,
     required this.controller,
@@ -392,238 +393,33 @@ class _BaseInputField extends StatefulWidget {
   final TextCapitalization textCapitalization;
 
   @override
-  State<_BaseInputField> createState() => _BaseInputFieldState();
-}
-
-class _BaseInputFieldState extends State<_BaseInputField> {
-  late final FocusNode _focusNode;
-  bool _isFocused = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode = FocusNode();
-    _focusNode.addListener(_handleFocusChanged);
-  }
-
-  @override
-  void dispose() {
-    _focusNode
-      ..removeListener(_handleFocusChanged)
-      ..dispose();
-    super.dispose();
-  }
-
-  void _handleFocusChanged() {
-    if (_isFocused == _focusNode.hasFocus) {
-      return;
-    }
-    setState(() {
-      _isFocused = _focusNode.hasFocus;
-    });
-  }
-
-  void _requestFocus() {
-    if (!widget.enabled || _focusNode.hasFocus) {
-      return;
-    }
-    _focusNode.requestFocus();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    final hotelTheme = theme.extension<AppFTKTheme>()!;
-    final isDark = theme.brightness == Brightness.dark;
-    //final surfaceColor = theme.colorScheme.surface;
-    final fillColor = isDark
-        ? colors.primarySoft.withValues(alpha: 0.9)
-        : colors.onDark;
-    // ? surfaceColor.withValues(alpha: 0.9)
-    // : surfaceColor.withValues(alpha: 0.92);
-    final iconBg = hotelTheme.primaryButtonColor.withValues(
-      alpha: isDark ? 0.24 : 0.12,
-    );
-    final iconColor = hotelTheme.primaryButtonColor;
-    final hintStyle = appText.body.copyWith(
-      color: colors.textSecondary.withValues(alpha: 0.95),
-    );
-    final textStyle = appText.inputText;
-
-    final inputShell = _InputShell(
-      enabled: widget.enabled,
-      isFocused: _isFocused,
-      onTap: _requestFocus,
-      fillColor: fillColor,
-      glowColor: hotelTheme.primaryButtonColor.withValues(alpha: 0.16),
-      shadowColor: isDark
-          ? colors.scrim.withValues(alpha: 0.50)
-          : colors.scrim.withValues(alpha: 0.06),
-      defaultBorderColor: isDark
-          ? hotelTheme.cardBorderColor.withValues(alpha: 0.88)
-          : colors.primary.withValues(alpha: 0.22),
-      focusedBorderColor: hotelTheme.primaryButtonColor,
-      disabledBorderColor: isDark
-          ? hotelTheme.cardBorderColor.withValues(alpha: 0.45)
-          : colors.primary.withValues(alpha: 0.12),
-      child: Row(
-        children: <Widget>[
-          Container(
-            width: 34,
-            height: 34,
-            decoration: BoxDecoration(
-              color: iconBg,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(widget.leadingIcon, size: 18, color: iconColor),
+  Widget build(BuildContext context) => AppTextField(
+    inputKey: fieldKey,
+    controller: controller,
+    label: showLabel ? labelText : null,
+    hintText: hintText,
+    enabled: enabled,
+    keyboardType: keyboardType,
+    textInputAction: textInputAction,
+    autofillHints: autofillHints,
+    inputFormatters: inputFormatters,
+    obscureText: obscureText,
+    textCapitalization: textCapitalization,
+    onChanged: onChanged,
+    prefixIcon: Icon(leadingIcon),
+    suffixIcon: trailing == null
+        ? null
+        : Padding(
+            padding: const EdgeInsets.all(UiTokens.spacing12),
+            child: trailing,
           ),
-          const SizedBox(width: UiTokens.spacing12),
-          Expanded(
-            child: SizedBox(
-              //height: 34,
-              child: TextField(
-                key: widget.fieldKey,
-                controller: widget.controller,
-                focusNode: _focusNode,
-                enabled: widget.enabled,
-                obscureText: widget.obscureText,
-                keyboardType: widget.keyboardType,
-                textInputAction: widget.textInputAction,
-                textCapitalization: widget.textCapitalization,
-                onChanged: widget.onChanged,
-                autofocus: false,
-                autofillHints: widget.autofillHints,
-                inputFormatters: widget.inputFormatters,
-                style: textStyle,
-                textAlignVertical: TextAlignVertical.center,
-                cursorColor: hotelTheme.primaryButtonColor,
-                decoration: InputDecoration(
-                  isDense: true,
-                  filled: false,
-                  fillColor: Colors.transparent,
-                  hintText: widget.hintText,
-                  hintStyle: hintStyle,
-                  border: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  focusedErrorBorder: InputBorder.none,
-                  contentPadding: EdgeInsets.zero,
-                  counterText: '',
-                ),
-              ),
-            ),
-          ),
-          if (widget.trailing != null) ...<Widget>[
-            const SizedBox(width: UiTokens.spacing8),
-            widget.trailing!,
-          ],
-        ],
-      ),
-    );
-
-    if (!widget.showLabel) {
-      return inputShell;
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        _FieldLabel(labelText: widget.labelText),
-        const SizedBox(height: UiTokens.spacing8),
-        inputShell,
-      ],
-    );
-  }
+  );
 }
 
 class _FieldLabel extends StatelessWidget {
   const _FieldLabel({required this.labelText});
-
   final String labelText;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    return Text(
-      labelText,
-      style: appText.inputLabel.copyWith(color: colors.textSecondary),
-    );
-  }
-}
-
-class _InputShell extends StatefulWidget {
-  const _InputShell({
-    required this.child,
-    required this.isFocused,
-    required this.onTap,
-    required this.fillColor,
-    required this.glowColor,
-    required this.shadowColor,
-    required this.defaultBorderColor,
-    required this.focusedBorderColor,
-    required this.disabledBorderColor,
-    required this.enabled,
-  });
-
-  final Widget child;
-  final bool isFocused;
-  final VoidCallback onTap;
-  final Color fillColor;
-  final Color glowColor;
-  final Color shadowColor;
-  final Color defaultBorderColor;
-  final Color focusedBorderColor;
-  final Color disabledBorderColor;
-  final bool enabled;
-
-  @override
-  State<_InputShell> createState() => _InputShellState();
-}
-
-class _InputShellState extends State<_InputShell> {
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: widget.enabled ? widget.onTap : null,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
-        curve: Curves.easeOutCubic,
-        padding: const EdgeInsets.symmetric(
-          horizontal: UiTokens.spacing12,
-          vertical: UiTokens.spacing12,
-        ),
-        decoration: BoxDecoration(
-          color: widget.enabled
-              ? (widget.isFocused
-                    ? widget.fillColor.withValues(alpha: 1)
-                    : widget.fillColor)
-              : widget.fillColor.withValues(alpha: 0.62),
-          border: Border.all(
-            color: !widget.enabled
-                ? widget.disabledBorderColor
-                : (widget.isFocused
-                      ? widget.focusedBorderColor
-                      : widget.defaultBorderColor),
-            width: 1.5,
-          ),
-          borderRadius: BorderRadius.circular(18),
-          // boxShadow: <BoxShadow>[
-          //   BoxShadow(
-          //     color: _isFocused ? widget.glowColor : widget.shadowColor,
-          //     blurRadius: _isFocused ? 20 : 14,
-          //     offset: _isFocused ? const Offset(0, 6) : const Offset(0, 4),
-          //   ),
-          // ],
-        ),
-        child: widget.child,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => AppFieldLabel(label: labelText);
 }

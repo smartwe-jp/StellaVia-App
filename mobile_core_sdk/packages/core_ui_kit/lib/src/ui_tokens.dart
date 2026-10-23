@@ -1,4 +1,8 @@
 class UiTokens {
+  static const double controlHeight = 48;
+  static const double inputHeight = 52;
+  static const double progressHeight = 8;
+  static const double radius4 = 4;
   static const double spacing4 = 4;
   static const double spacing8 = 8;
   static const double spacing12 = 12;

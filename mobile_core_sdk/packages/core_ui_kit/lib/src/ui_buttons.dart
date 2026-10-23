@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
 import 'app_theme_extensions.dart';
+import 'app_button.dart';
 import 'ui_tokens.dart';
 
-class PrimaryCtaButton extends StatefulWidget {
+class PrimaryCtaButton extends StatelessWidget {
   const PrimaryCtaButton({
     super.key,
     this.label,
     this.child,
     this.onPressed,
     this.isLoading = false,
-    this.height = 56,
+    this.height = UiTokens.controlHeight,
     this.fullWidth = true,
     this.borderRadius,
     this.horizontalPadding = UiTokens.spacing16,
@@ -38,104 +39,49 @@ class PrimaryCtaButton extends StatefulWidget {
   final bool threeSideShadow;
 
   @override
-  State<PrimaryCtaButton> createState() => _PrimaryCtaButtonState();
-}
-
-class _PrimaryCtaButtonState extends State<PrimaryCtaButton> {
-  bool _isPressed = false;
-
-  @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appTheme = theme.extension<AppFTKTheme>()!;
-    final baseColor = widget.backgroundColor ?? appTheme.primaryButtonColor;
-    final baseShadowColor =
-        widget.shadowColor ?? appTheme.primaryButtonShadowColor;
-    final buttonTextStyle = widget.textStyle ?? appTheme.primaryButtonTextStyle;
-    final radius =
-        widget.borderRadius ?? BorderRadius.circular(UiTokens.radius14);
-    final isEnabled = widget.onPressed != null && !widget.isLoading;
-
-    final buttonChild = widget.isLoading
-        ? SizedBox(
-            width: widget.loadingIndicatorSize,
-            height: widget.loadingIndicatorSize,
-            child: CircularProgressIndicator(
-              strokeWidth: 2.2,
-              valueColor: AlwaysStoppedAnimation<Color>(colors.onDark),
-            ),
-          )
-        : (widget.child ?? Text(widget.label!, style: buttonTextStyle));
-
-    final content = SizedBox(
-      height: widget.height,
-      width: widget.fullWidth ? double.infinity : null,
-      child: _PressScale(
-        enabled: isEnabled,
-        isPressed: _isPressed,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: baseColor.withValues(
-              alpha: (widget.onPressed != null) ? 1 : widget.disabledOpacity,
-            ),
-            borderRadius: radius,
-            boxShadow: (widget.onPressed != null)
-                ? (widget.threeSideShadow
-                      ? <BoxShadow>[
-                          BoxShadow(
-                            color: baseShadowColor.withValues(alpha: 0.22),
-                            blurRadius: 16,
-                            spreadRadius: -2,
-                            offset: const Offset(-8, 8),
-                          ),
-                          BoxShadow(
-                            color: baseShadowColor.withValues(alpha: 0.12),
-                            blurRadius: 6,
-                            spreadRadius: -1,
-                            offset: const Offset(8, 8),
-                          ),
-                        ]
-                      : <BoxShadow>[
-                          BoxShadow(
-                            color: baseShadowColor,
-                            blurRadius: 21,
-                            offset: const Offset(1, 10),
-                          ),
-                        ])
-                : const <BoxShadow>[],
-          ),
-          child: Material(
-            type: MaterialType.transparency,
-            child: InkWell(
-              onTap: isEnabled ? widget.onPressed : null,
-              onHighlightChanged: (bool value) {
-                if (_isPressed == value) {
-                  return;
-                }
-                setState(() {
-                  _isPressed = value;
-                });
-              },
-              borderRadius: radius,
-              child: Center(child: buttonChild),
-            ),
-          ),
+    final colors = context.appColors;
+    Widget button = AppButton(
+      label: label,
+      child: child,
+      onPressed: onPressed,
+      isLoading: isLoading,
+      minHeight: height,
+      fullWidth: fullWidth,
+      loadingIndicatorSize: loadingIndicatorSize,
+      style: ButtonStyle(
+        backgroundColor: backgroundColor == null
+            ? null
+            : WidgetStateProperty.resolveWith(
+                (states) => states.contains(WidgetState.disabled) && !isLoading
+                    ? backgroundColor!.withValues(alpha: disabledOpacity)
+                    : backgroundColor,
+              ),
+        foregroundColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.disabled) && !isLoading
+              ? null
+              : colors.onDark,
         ),
+        textStyle: textStyle == null ? null : WidgetStatePropertyAll(textStyle),
+        shape: borderRadius == null
+            ? null
+            : WidgetStatePropertyAll(
+                RoundedRectangleBorder(borderRadius: borderRadius!),
+              ),
       ),
     );
-
-    if (widget.fullWidth) {
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
-        child: content,
+    // Keep the legacy inset contract while new callers use AppButton directly.
+    if (fullWidth) {
+      button = Padding(
+        padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+        child: button,
       );
     }
-    return content;
+    return button;
   }
 }
 
-class CompactActionButton extends StatefulWidget {
+class CompactActionButton extends StatelessWidget {
   const CompactActionButton({
     super.key,
     required this.label,
@@ -158,81 +104,34 @@ class CompactActionButton extends StatefulWidget {
   final bool filledBackground;
 
   @override
-  State<CompactActionButton> createState() => _CompactActionButtonState();
-}
-
-class _CompactActionButtonState extends State<CompactActionButton> {
-  bool _isPressed = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final appText = theme.appTextTheme;
-    final hotelTheme = theme.extension<AppFTKTheme>()!;
-    final baseColor = widget.backgroundColor ?? hotelTheme.primaryButtonColor;
-    final textColor =
-        widget.foregroundColor ??
-        (widget.filledBackground ? theme.colorScheme.onPrimary : baseColor);
-    final isEnabled = widget.onPressed != null && !widget.isLoading;
-    final radius = BorderRadius.circular(UiTokens.radius16);
-    final textStyle = appText.inputLabel.copyWith(color: textColor);
-
-    return SizedBox(
-      width: widget.width,
-      height: widget.height,
-      child: _PressScale(
-        enabled: isEnabled,
-        isPressed: _isPressed,
-        scale: 0.97,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: baseColor.withValues(
-              alpha: widget.filledBackground
-                  ? (isEnabled ? 1 : 0.42)
-                  : (isEnabled ? 0.12 : 0.06),
-            ),
-            borderRadius: radius,
-          ),
-          child: Material(
-            type: MaterialType.transparency,
-            child: InkWell(
-              onTap: isEnabled ? widget.onPressed : null,
-              onHighlightChanged: (bool value) {
-                if (_isPressed == value) {
-                  return;
-                }
-                setState(() {
-                  _isPressed = value;
-                });
-              },
-              borderRadius: radius,
-              child: Center(
-                child: widget.isLoading
-                    ? SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            textColor.withValues(alpha: 0.92),
-                          ),
-                        ),
-                      )
-                    : Text(
-                        widget.label,
-                        style: widget.onPressed == null
-                            ? textStyle.copyWith(
-                                color: textColor.withValues(alpha: 0.45),
-                              )
-                            : textStyle,
-                      ),
+  Widget build(BuildContext context) => SizedBox(
+    width: width,
+    child: AppButton(
+      label: label,
+      onPressed: onPressed,
+      isLoading: isLoading,
+      minHeight: height,
+      variant: filledBackground
+          ? AppButtonVariant.primary
+          : AppButtonVariant.secondary,
+      style: ButtonStyle(
+        backgroundColor: backgroundColor == null
+            ? null
+            : WidgetStateProperty.resolveWith(
+                (states) => states.contains(WidgetState.disabled) && !isLoading
+                    ? null
+                    : backgroundColor,
               ),
-            ),
-          ),
-        ),
+        foregroundColor: foregroundColor == null
+            ? null
+            : WidgetStateProperty.resolveWith(
+                (states) => states.contains(WidgetState.disabled) && !isLoading
+                    ? null
+                    : foregroundColor,
+              ),
       ),
-    );
-  }
+    ),
+  );
 }
 
 class CircleIconButton extends StatelessWidget {
@@ -526,30 +425,6 @@ class PillChip extends StatelessWidget {
             borderRadius ?? BorderRadius.circular(hotelTheme.chipCornerRadius),
       ),
       child: Padding(padding: padding, child: child),
-    );
-  }
-}
-
-class _PressScale extends StatelessWidget {
-  const _PressScale({
-    required this.enabled,
-    required this.isPressed,
-    required this.child,
-    this.scale = 0.985,
-  });
-
-  final bool enabled;
-  final bool isPressed;
-  final Widget child;
-  final double scale;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedScale(
-      scale: enabled && isPressed ? scale : 1,
-      duration: const Duration(milliseconds: 110),
-      curve: Curves.easeOutCubic,
-      child: child,
     );
   }
 }

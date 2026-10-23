@@ -3,14 +3,19 @@ import 'package:flutter/material.dart';
 class AppColorTokens {
   const AppColorTokens._();
 
-  // Corporate guideline palette extracted from the UI spec image.
-  static const Color brandPrimary = Color(0xFF0C1C50);
-  static const Color brandPrimaryDark = Color(0xFF09153B);
-  static const Color brandPrimaryBright = Color(0xFF5E7DE0);
-  static const Color brandBaseCream = Color(0xFFEEE8E0);
-  static const Color brandBaseCreamLight = Color(0xFFF5F1EB);
-  static const Color brandBaseCreamLighter = Color(0xFFF8F4EF);
-  static const Color brandSecondaryTeal = Color(0xFF2495A3);
+  // StellaVia Figma guideline (2026-10-16). Brand colors are invariant;
+  // use AppSemanticColorTheme for brightness-aware UI colors.
+  static const Color brandNavy = Color(0xFF070E2B);
+  static const Color brandPurple = Color(0xFF4C0679);
+  static const Color brandViolet = Color(0xFF9652C2);
+  static const Color brandLilac = Color(0xFFC8ABE2);
+  static const Color brandPrimary = brandPurple;
+  static const Color brandPrimaryDark = brandNavy;
+  static const Color brandPrimaryBright = brandViolet;
+  static const Color brandBaseCream = Color(0xFFEEE9E1);
+  static const Color brandBaseCreamLight = Color(0xFFF6F4F0);
+  static const Color brandBaseCreamLighter = Color(0xFFFAF9F7);
+  static const Color brandSecondaryTeal = brandViolet;
   static const Color brandAlert = Color(0xFFF9675F);
   static const Color brandNeutral = Color(0xFFE7E7E7);
   static const Color brandWhite = Color(0xFFFFFFFF);
@@ -19,11 +24,11 @@ class AppColorTokens {
   // Keep these names for compatibility so the app can switch brand colors
   // from a single file instead of touching component code.
   static const Color fundexPrimaryDark = brandPrimaryDark;
-  static const Color fundexPrimaryDarkDradient = brandPrimary;
-  static const Color fundexPrimaryDarkAlt = Color(0xFF18306F);
+  static const Color fundexPrimaryDarkDradient = brandNavy;
+  static const Color fundexPrimaryDarkAlt = brandNavy;
   static const Color fundexAccent = brandPrimary;
-  static const Color fundexAccentLight = Color(0xFFE2E8F7);
-  static const Color fundexAccentSuperLight = Color(0xFFF4F7FC);
+  static const Color fundexAccentLight = Color(0xFFEFE8F4);
+  static const Color fundexAccentSuperLight = Color(0xFFF8F4FB);
   static const Color fundexAccentDradient = brandPrimaryBright;
   static const Color fundexAccentAlt = brandPrimaryBright;
   static const Color fundexSuccess = Color(0xFF10B981);
@@ -32,26 +37,24 @@ class AppColorTokens {
   static const Color fundexDangerLight = Color(0xFFFFECEB);
   static const Color fundexWarning = Color(0xFFF59E0B);
   static const Color fundexWarningLight = Color(0xFFFEF3C7);
-  static const Color fundexViolet = Color(0xFF8B5CF6);
+  static const Color fundexViolet = brandViolet;
   static const Color fundexVioletLight = Color(0xFFEDE9FE);
   static const Color fundexPink = Color(0xFFEC4899);
   static const Color fundexPinkLight = Color(0xFFFCE7F3);
   static const Color kizunarkPrimary = brandPrimary;
   static const Color kizunarkSecondary = brandPrimaryBright;
   static const Color kizunarkPrimaryLight = fundexAccentSuperLight;
-  // Light theme hierarchy:
-  // page background keeps the brand base cream, while cards/cells sit one level
-  // lighter so they still read as distinct layers within the same family.
-  static const Color fundexBackground = fundexBaseCream;
-  static const Color fundexSurface = brandBaseCreamLight;
-  static const Color fundexSurfaceAlt = brandBaseCreamLighter;
-  static const Color fundexBorder = Color(0xFFD2C09D);
-  static const Color fundexBorderSoft = Color(0xFFE3D7C3);
-  static const Color fundexText = Color(0xFF0F172A);
-  static const Color fundexTextSecondary = Color(0xFF475569);
-  static const Color fundexTextTertiary = Color.fromARGB(255, 122, 137, 159);
+  // White pages/cards with cream reserved for alternate surfaces.
+  static const Color fundexBackground = brandWhite;
+  static const Color fundexSurface = brandWhite;
+  static const Color fundexSurfaceAlt = brandBaseCream;
+  static const Color fundexBorder = Color(0x24070E2B);
+  static const Color fundexBorderSoft = Color(0x1A070E2B);
+  static const Color fundexText = brandNavy;
+  static const Color fundexTextSecondary = Color(0xFF5C6070);
+  static const Color fundexTextTertiary = Color(0xFF6B6F80);
   static const Color fundexDisabled = Color(0xFFCBD5E1);
-  static const Color fundexHighlightGold = Color(0xFFB8954F);
+  static const Color fundexHighlightGold = Color(0xFF9C6A10);
   static const Color fundexBaseCream = brandBaseCream;
   static const Color fundexSurfaceInverse = Color(0xFF1E293B);
   static const Color fundexSurfaceInverseAlt = Color(0xFF334155);
@@ -69,19 +72,19 @@ class AppColorTokens {
   static const Color lightSurfaceAlt = fundexSurfaceAlt;
   static const Color lightBorderSoft = fundexBorderSoft;
 
-  // Dark palette intentionally stays in a deeper navy family so the
-  // brand blue can remain an accent instead of taking over the whole UI.
-  static const Color darkBackground = Color(0xFF0A1628);
-  static const Color darkSurface = Color(0xFF101A2A);
-  static const Color darkSurfaceAlt = Color(0xFF15253B);
-  static const Color darkOnSurface = Color(0xFFF8FAFC);
-  static const Color darkMuted = Color(0xFF94A3B8);
-  static const Color darkBorder = Color(0xFF2B3F57);
-  static const Color darkBorderSoft = Color(0xFF3E536D);
+  // App adaptation: the Figma guideline currently specifies light mode only.
+  // Layer navy surfaces and reserve lilac for readable links on dark surfaces.
+  static const Color darkBackground = Color(0xFF070E2B);
+  static const Color darkSurface = Color(0xFF10162E);
+  static const Color darkSurfaceAlt = Color(0xFF1B2038);
+  static const Color darkOnSurface = Color(0xFFF6F4F8);
+  static const Color darkMuted = Color(0xFFB9B6C8);
+  static const Color darkBorder = Color(0xFF45465A);
+  static const Color darkBorderSoft = Color(0xFF33364C);
 
   // System UI status bar palette.
-  // Keep light/dark entries separated for future adjustments; currently same.
-  static const Color statusBarBackgroundLight = fundexPrimaryDark;
+  // Default pages use a light status bar; immersive pages own their overlay.
+  static const Color statusBarBackgroundLight = brandWhite;
   static const Color statusBarBackgroundDark = darkBackground;
 
   static const Color danger = fundexDanger;
@@ -89,9 +92,9 @@ class AppColorTokens {
   static const Color info = fundexAccent;
   static const Color infoLight = fundexAccentLight;
   static const Color infoSoft = fundexAccentSuperLight;
-  static const Color infoBorder = Color(0xFFC7D2F0);
-  static const Color infoStrong = Color(0xFF1E3C91);
-  static const Color infoText = Color(0xFF152B68);
+  static const Color infoBorder = Color(0xFFC8ABE2);
+  static const Color infoStrong = Color(0xFF4C0679);
+  static const Color infoText = Color(0xFF4C0679);
   static const Color successSoft = Color(0xFFF0FDF4);
   static const Color successBorder = Color(0xFFA7F3D0);
   static const Color successStrong = Color(0xFF047857);

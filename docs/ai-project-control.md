@@ -34,6 +34,15 @@ Use three layers of coordination:
 
 ## Current Implemented Areas
 
+### StellaVia Theme Foundation (2026-10-23)
+
+- The shared theme now follows the Figma StellaVia guideline: Purple `#4C0679` actions, Navy `#070E2B` text, Violet `#9652C2` accents, white pages/cards, and Cream `#EEE9E1` alternate surfaces.
+- Japanese uses bundled Zen Kaku Gothic Antique; English and numeric styles use bundled Jost. Chinese keeps Noto Sans SC/TC and existing glyph fallbacks.
+- Dark mode is an app adaptation, not a supplied Figma design: layered navy surfaces, violet filled actions with white text, and lilac links.
+- Material ColorScheme, Cupertino accent, semantic text/color extensions, auth and hotel theme adapters use the updated palette. Legacy token names remain compatible.
+- Scope is theme foundation only. Component geometry, individual page layouts, fund status rules, rank/mileage features and registration steps remain separate tasks. Semantic success/warning/error colors remain functional exceptions to the brand palette.
+- See [StellaVia theme foundation](stellavia-theme-foundation.md) for mappings, font sources, validation, and remaining visual migration boundaries.
+
 ### App Infrastructure
 
 - Flavor/config/router/bootstrap structure exists in `fundex/lib/app`.

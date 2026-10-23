@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_theme_extensions.dart';
+import 'app_section_header.dart';
 import 'fund_detail_widgets.dart';
 import 'ui_tokens.dart';
 
@@ -747,40 +748,12 @@ class FundSectionHeader extends StatelessWidget {
   final VoidCallback? onActionTap;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: Row(
-            children: <Widget>[
-              if (leading != null) ...<Widget>[
-                leading!,
-                const SizedBox(width: 8),
-              ],
-              Expanded(child: Text(title, style: appText.heroMetricSecondary)),
-            ],
-          ),
-        ),
-        if (actionLabel != null)
-          TextButton(
-            onPressed: onActionTap,
-            style: TextButton.styleFrom(
-              foregroundColor: colors.highlightGold,
-              visualDensity: const VisualDensity(horizontal: -2, vertical: -2),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            ),
-            child: Text(
-              actionLabel ?? '',
-              style: appText.bodyStrong.copyWith(color: colors.highlightGold),
-            ),
-          ),
-      ],
-    );
-  }
+  Widget build(BuildContext context) => AppSectionHeader(
+    title: title,
+    leading: leading,
+    actionLabel: actionLabel,
+    onActionTap: onActionTap,
+  );
 }
 
 class FundFeaturedFundTagData {

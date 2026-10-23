@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_theme_extensions.dart';
+import 'app_card.dart';
 import 'ui_buttons.dart';
 import 'ui_tokens.dart';
 
@@ -301,27 +302,11 @@ class SurfacePanelCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
-    final hotelTheme = theme.extension<AppFTKTheme>()!;
-    final isDark = theme.brightness == Brightness.dark;
     final titleStyle = appText.sectionTitle;
     final subtitleStyle = appText.helper.copyWith(color: colors.textSecondary);
 
-    return Container(
-      width: double.infinity,
+    return AppCard(
       padding: padding,
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface.withValues(
-          alpha: isDark ? 0.94 : 0.97,
-        ),
-        borderRadius: BorderRadius.circular(UiTokens.radius20),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: hotelTheme.cardTileShadowColor,
-            blurRadius: 18,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

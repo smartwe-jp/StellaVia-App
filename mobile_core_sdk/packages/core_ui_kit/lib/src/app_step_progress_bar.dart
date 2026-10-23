@@ -13,7 +13,7 @@ class AppStepProgressBar extends StatefulWidget {
     this.completedColor,
     this.currentColor,
     this.pendingColor,
-    this.enablePulse = true,
+    this.enablePulse = false,
   }) : assert(stepCount > 0),
        assert(currentStep >= 0),
        assert(currentStep < stepCount);
@@ -36,6 +36,7 @@ class _AppStepProgressBarState extends State<AppStepProgressBar>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _pulse;
+  bool _pulseEnabled = false;
 
   @override
   void initState() {
@@ -45,23 +46,29 @@ class _AppStepProgressBarState extends State<AppStepProgressBar>
       duration: const Duration(milliseconds: 1400),
     );
     _pulse = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
-    if (widget.enablePulse) {
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _syncPulse();
+  }
+
+  void _syncPulse() {
+    _pulseEnabled =
+        widget.enablePulse && !MediaQuery.disableAnimationsOf(context);
+    if (_pulseEnabled) {
       _controller.repeat(reverse: true);
+    } else {
+      _controller.stop();
+      _controller.value = 1;
     }
   }
 
   @override
   void didUpdateWidget(covariant AppStepProgressBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.enablePulse == oldWidget.enablePulse) {
-      return;
-    }
-    if (widget.enablePulse) {
-      _controller.repeat(reverse: true);
-    } else {
-      _controller.stop();
-      _controller.value = 1;
-    }
+    if (widget.enablePulse != oldWidget.enablePulse) _syncPulse();
   }
 
   @override
@@ -74,44 +81,47 @@ class _AppStepProgressBarState extends State<AppStepProgressBar>
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
     final completedColor = widget.completedColor ?? colors.primary;
-    final currentColor = widget.currentColor ?? colors.primary;
+    final currentColor = widget.currentColor ?? colors.primaryAlt;
     final pendingColor = widget.pendingColor ?? colors.borderSoft;
     return Padding(
       padding: widget.padding,
-      child: AnimatedBuilder(
-        animation: _pulse,
-        builder: (BuildContext context, Widget? child) {
-          return Row(
-            children: List<Widget>.generate(widget.stepCount, (int index) {
-              final bool isDone = index < widget.currentStep;
-              final bool isCurrent = index == widget.currentStep;
-              final Color color = isDone
-                  ? completedColor
-                  : isCurrent
-                  ? Color.lerp(
-                      currentColor.withValues(alpha: 0.52),
-                      currentColor,
-                      widget.enablePulse ? _pulse.value : 1,
-                    )!
-                  : pendingColor;
+      child: Semantics(
+        value: '${widget.currentStep + 1}/${widget.stepCount}',
+        child: AnimatedBuilder(
+          animation: _pulse,
+          builder: (BuildContext context, Widget? child) {
+            return Row(
+              children: List<Widget>.generate(widget.stepCount, (int index) {
+                final bool isDone = index < widget.currentStep;
+                final bool isCurrent = index == widget.currentStep;
+                final Color color = isDone
+                    ? completedColor
+                    : isCurrent
+                    ? Color.lerp(
+                        currentColor.withValues(alpha: 0.52),
+                        currentColor,
+                        _pulseEnabled ? _pulse.value : 1,
+                      )!
+                    : pendingColor;
 
-              return Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: index == widget.stepCount - 1 ? 0 : widget.spacing,
-                  ),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: color,
-                      borderRadius: BorderRadius.circular(widget.height / 2),
+                return Expanded(
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.only(
+                      end: index == widget.stepCount - 1 ? 0 : widget.spacing,
                     ),
-                    child: SizedBox(height: widget.height),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: color,
+                        borderRadius: BorderRadius.circular(widget.height / 2),
+                      ),
+                      child: SizedBox(height: widget.height),
+                    ),
                   ),
-                ),
-              );
-            }),
-          );
-        },
+                );
+              }),
+            );
+          },
+        ),
       ),
     );
   }
