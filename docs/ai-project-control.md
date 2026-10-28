@@ -43,6 +43,13 @@ Use three layers of coordination:
 - Scope is theme foundation only. Component geometry, individual page layouts, fund status rules, rank/mileage features and registration steps remain separate tasks. Semantic success/warning/error colors remain functional exceptions to the brand palette.
 - See [StellaVia theme foundation](stellavia-theme-foundation.md) for mappings, font sources, validation, and remaining visual migration boundaries.
 
+### StellaVia Shared Primitives (2026-10-23)
+
+- `core_ui_kit` now exports `AppButton`, `AppTextField` / `AppFieldLabel`, `AppCard`, `AppStatusBadge`, `AppProgressBar`, `AppSectionHeader` / `AppBrandHeading`; existing `AppStepProgressBar` remains the generic segmented progress control.
+- Native Material button/input themes and compatible legacy CTA, input, panel and section-heading adapters share these styles. Labels, validation and actions are supplied by callers; no app routes or domain status codes enter the primitives.
+- Page/feature-specific secondary compositions stay in the owning feature's `presentation/widgets`, with mappings in `presentation/support`. Do not grow the legacy business-specific SDK widget files. Existing business compositions are migrated with their owning module, not by an unrelated bulk refactor.
+- Component API, scope and validation are recorded in [StellaVia shared components](stellavia-shared-components.md).
+
 ### App Infrastructure
 
 - Flavor/config/router/bootstrap structure exists in `fundex/lib/app`.

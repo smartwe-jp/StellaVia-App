@@ -48,6 +48,6 @@ Success, warning and error palettes remain functional exceptions. Rank gold and 
 
 Validation result (2026-10-23): all 11 SDK UI-kit tests and 3 app theme tests passed; targeted analysis and `git diff --check` passed. Both light/dark sample renders were inspected. No physical-device regression was performed.
 
-## Next stage
+## Follow-up
 
-Shared component shapes, button geometry, fund status/progress rules, page layouts, and member registration/business flows are unchanged. Do not infer completed page redesign from this theme update.
+Shared primitives and component geometry are now covered by [stage 2](stellavia-shared-components.md). Fund status/progress business rules, page layouts, and member registration/business flows remain separate. Do not infer completed page redesign from these foundation updates.

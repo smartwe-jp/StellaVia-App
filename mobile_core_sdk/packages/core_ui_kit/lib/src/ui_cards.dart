@@ -305,47 +305,50 @@ class SurfacePanelCard extends StatelessWidget {
     final titleStyle = appText.sectionTitle;
     final subtitleStyle = appText.helper.copyWith(color: colors.textSecondary);
 
-    return AppCard(
-      padding: padding,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          if (title != null ||
-              subtitle != null ||
-              leading != null ||
-              trailing != null)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                if (leading != null) ...<Widget>[
-                  leading!,
-                  const SizedBox(width: UiTokens.spacing12),
-                ],
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      if (title != null) Text(title!, style: titleStyle),
-                      if (subtitle != null) ...<Widget>[
-                        const SizedBox(height: UiTokens.spacing4),
-                        Text(subtitle!, style: subtitleStyle),
+    return SizedBox(
+      width: double.infinity,
+      child: AppCard(
+        padding: padding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            if (title != null ||
+                subtitle != null ||
+                leading != null ||
+                trailing != null)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  if (leading != null) ...<Widget>[
+                    leading!,
+                    const SizedBox(width: UiTokens.spacing12),
+                  ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        if (title != null) Text(title!, style: titleStyle),
+                        if (subtitle != null) ...<Widget>[
+                          const SizedBox(height: UiTokens.spacing4),
+                          Text(subtitle!, style: subtitleStyle),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
-                ),
-                if (trailing != null) ...<Widget>[
-                  const SizedBox(width: UiTokens.spacing8),
-                  trailing!,
+                  if (trailing != null) ...<Widget>[
+                    const SizedBox(width: UiTokens.spacing8),
+                    trailing!,
+                  ],
                 ],
-              ],
-            ),
-          if (title != null ||
-              subtitle != null ||
-              leading != null ||
-              trailing != null)
-            const SizedBox(height: UiTokens.spacing12),
-          child,
-        ],
+              ),
+            if (title != null ||
+                subtitle != null ||
+                leading != null ||
+                trailing != null)
+              const SizedBox(height: UiTokens.spacing12),
+            child,
+          ],
+        ),
       ),
     );
   }

@@ -53,6 +53,7 @@ rtk fvm flutter gen-l10n
 ## UI Rules
 
 - Reuse `core_ui_kit` tokens/components before creating page-local styles.
+- SDK UI ownership is limited to business-agnostic primitives: buttons, inputs, card surfaces, status badges, progress indicators, headings, and other general controls. Page/feature-specific compositions belong in that feature's `presentation/widgets`; status-code mapping, progress thresholds, and display formatting belong in `presentation/support`. Sharing a business composition across two pages alone is not a reason to move it into SDK. Do not add new business-specific UI to the legacy SDK `fund_*` / member-profile widget files; migrate those compositions within their owning feature when touching their business layout.
 - Business feature pages must not hardcode colors. Use `Theme.of(context)`, `core_ui_kit` tokens/components, or an existing feature theme/helper. Raw `Color(0x...)`, `Colors.*`, and page-local hex color constants are allowed only inside theme/token definitions or with a narrow documented exception.
 - Do not hardcode fonts/shadows in business pages unless there is a scoped reason; prefer theme text styles and shared visual tokens.
 - Page files should stay focused on screen composition, route argument binding, provider watching, and event wiring. Move non-trivial child UI into separate files under the feature's `presentation/widgets/` directory, and move display mapping/formatting into `presentation/support`.
