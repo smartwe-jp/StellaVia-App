@@ -525,7 +525,20 @@ final hotelOrderListControllerProvider =
       HotelOrderListController,
       HotelOrderListState
     >((ref) {
+      final authenticated =
+          ref.watch(isAuthenticatedProvider).asData?.value == true;
+      final identity = authenticated
+          ? ref.watch(
+              currentAuthUserProvider.select((state) {
+                final user = state.valueOrNull;
+                return user == null
+                    ? null
+                    : (user.id, user.userId, user.username);
+              }),
+            )
+          : null;
       return HotelOrderListController(
+        canLoad: authenticated && identity != null,
         fetchOrderList: ref.watch(fetchHotelOrderListUseCaseProvider),
         languageCode: ref.watch(hotelLocaleLanguageCodeProvider),
       );

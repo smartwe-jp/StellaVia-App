@@ -6528,7 +6528,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeFeaturePreparing => 'Coming soon.';
 
   @override
-  String get homeMilesUnavailable => 'Host miles balance is coming soon.';
+  String get homeMilesUnavailable => 'Miles balance is unavailable.';
 
   @override
   String get homeMemberEyebrow => 'YADONUSHI MEMBER';
@@ -6762,4 +6762,226 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hotelMilesSampleLocation => 'Hakuba · Nagano';
+
+  @override
+  String get homeDataLoadError => 'Unable to refresh data.';
+
+  @override
+  String homeMilesBalanceLabel(String balance) {
+    return 'Available host miles: $balance';
+  }
+
+  @override
+  String homeRankRangeBetween(String minimum, String maximum) {
+    return '$minimum – $maximum';
+  }
+
+  @override
+  String homeRankRangeFrom(String minimum) {
+    return '$minimum or more';
+  }
+
+  @override
+  String get homeRankLabel => 'Host rank';
+
+  @override
+  String get homeRankRulesEmpty => 'No rank information is available yet.';
+
+  @override
+  String get simTitle => 'Simulation';
+
+  @override
+  String get simInvestment => 'Investment';
+
+  @override
+  String get simTenThousandYen => '× ¥10,000';
+
+  @override
+  String get simAmountMinimum => '¥10,000 (1 unit)';
+
+  @override
+  String get simAmountMaximum => '¥50,000,000';
+
+  @override
+  String get simAnnualRate => 'Expected yield (p.a.)';
+
+  @override
+  String get simTerm => 'Term';
+
+  @override
+  String get simMonthsUnit => 'months';
+
+  @override
+  String get simDividendType => 'Dividend type';
+
+  @override
+  String get simIncome => 'Income';
+
+  @override
+  String get simCapital => 'Capital';
+
+  @override
+  String get simMonthlyPayment => 'Monthly';
+
+  @override
+  String get simMaturityPayment => 'At maturity';
+
+  @override
+  String get simMonthlyDividend => 'Monthly dividend';
+
+  @override
+  String get simTermDividend => 'Dividend (lump sum)';
+
+  @override
+  String get simTotalReceived => 'Total received';
+
+  @override
+  String get simEarnedMiles => 'Total miles';
+
+  @override
+  String simMiles(String value) {
+    return '$value miles';
+  }
+
+  @override
+  String get simEstimateNote =>
+      'Pretax simple-interest estimate. Total received includes principal and all dividends during the term. Miles use the tier for the simulated investment and are not guaranteed awards.';
+
+  @override
+  String get simRegister => 'Register free to get started';
+
+  @override
+  String get simTotalDividend => 'Total dividends';
+
+  @override
+  String get simFinancialTitle => 'Dividend';
+
+  @override
+  String get simExperienceTitle => 'Host Benefits';
+
+  @override
+  String get simRank => 'Rank';
+
+  @override
+  String get simMonthlyRateLabel => 'monthly';
+
+  @override
+  String get simMonthlyMiles => 'Miles / month';
+
+  @override
+  String get simTiming => 'Timing';
+
+  @override
+  String simTimingIncome(int months) {
+    return 'Monthly + principal repaid after $months months';
+  }
+
+  @override
+  String simTimingCapital(int months) {
+    return 'All after $months months (principal + dividend)';
+  }
+
+  @override
+  String get simFinancialEyebrow => 'FINANCIAL RETURN';
+
+  @override
+  String get simExperienceEyebrow => 'EXPERIENCE RETURN';
+
+  @override
+  String get hotelMilesLogin => 'Log in to view Host Benefits';
+
+  @override
+  String get hotelMilesBookingPending =>
+      'Browse hotels here. Host Miles booking is coming soon.';
+
+  @override
+  String get hotelMilesDateEligible => 'Host Miles apply to the selected dates';
+
+  @override
+  String get hotelMilesRequiredUnknown => 'Required miles: —';
+
+  @override
+  String hotelMilesAdvanceMonths(int months) {
+    return 'Your rank allows booking up to $months months before check-in.';
+  }
+
+  @override
+  String get hotelMilesLoadMore => 'Load more';
+
+  @override
+  String get myPageChartAssets => 'Assets';
+
+  @override
+  String get myPageChartOperating => 'Operating balance';
+
+  @override
+  String get myPageChartDividends => 'Cumulative dividends';
+
+  @override
+  String get myPageChartMiles => 'Host Miles';
+
+  @override
+  String get myPageChartMileUnit => 'mile';
+
+  @override
+  String get myPageChartYenUnit => 'JPY';
+
+  @override
+  String get myPageChartRange => 'Time range';
+
+  @override
+  String myPageChartYears(int years) {
+    return 'Last $years years';
+  }
+
+  @override
+  String get myPageChartLoadFailed => 'Unable to load data';
+
+  @override
+  String get myPageChartEmpty => 'No data for this period';
+
+  @override
+  String get myPageRankAbout => 'About ranks';
+
+  @override
+  String get myPageRankRate => 'Miles earning rate';
+
+  @override
+  String get myPageRankMax => 'Highest rank reached';
+
+  @override
+  String get myPageRankGap => 'Operating balance needed for next rank';
+
+  @override
+  String get myPageRankRoomUnit => 'rooms';
+
+  @override
+  String get myPageRankBooked => 'Booked';
+
+  @override
+  String get myPageRankExpiring => 'Expiring soon';
+
+  @override
+  String get myPageRankExpiryTitle => 'Host Miles expiry';
+
+  @override
+  String get myPageRankExpiryEmpty => 'No Host Miles are scheduled to expire.';
+
+  @override
+  String get mainTabBookings => 'Bookings';
+
+  @override
+  String myPageAssetGreeting(String name) {
+    return 'Assets for $name';
+  }
+
+  @override
+  String get myPageAssetHelper =>
+      'View your total assets and host miles together.';
+
+  @override
+  String get myPageHideAmounts => 'Hide amounts';
+
+  @override
+  String get myPageShowAmounts => 'Show amounts';
 }

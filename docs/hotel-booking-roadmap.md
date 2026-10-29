@@ -390,3 +390,31 @@ Run broader `flutter analyze` / `flutter test` only when the change affects shar
 - 不将旧 `stayBenefit` / `stayBenefitParticipate` 解释为宿主マイル资格。房屋类型仍使用现有 buildingCode 映射；里程说明单独放在卡片内容。
 - 新业务组合位于 hotel_booking/presentation/widgets，静态预览 fixture 与配色位于 support，四语言 ARB 已生成。
 - 验证：定向 analyze；首页区域/排序、四语言 320px/1.3 字号、预览禁止预约；已有 controller 与鉴权路由回归。未做真机或后台预约验证。
+
+## 2026-10-29 数据层增量与契约修正
+
+- hotelSearch 的 stayBenefit=true 已在10-15测试发布中明确用于宿主マイル/Point特典，支持多晚；日期不符合的酒店仍返回，stayBenefitParticipate表示整段日期适用性。此结论取代10-28预览记录中“不解释为宿主マイル资格”的旧判断。
+- SDK与领域数据增加列表detail/description，以及room/extraPerson报价pointTotal（可空），现有UI不使用新字段，预览页和单晚选择暂不改动。
+- 权益接口/余额/过期提醒/等级规则由新的host_miles模块提供；有效预约室数为null时保持未知。
+- 预约、支付、房间分配新增字段与旧券流程切换仍由后续任务处理；支付14与旧隐藏WeChat路径的编码冲突需届时核实。
+- 来源、接口清单、完成口径和验证见 [StellaVia 数据接入](stellavia-data-integration.md)。
+
+## 2026-10-29 酒店首页样式收敛
+
+本期酒店首页/里程预览文字排版集中到 HotelHomeTextStyles；HotelHomeCard、里程入口与摘要外壳改用 SDK AppCard 的可选背景/边框/圆角能力。数据、预览标记、搜索与跳转行为不变，业务组合继续由 hotel_booking 持有。四语言小屏与预览交互回归通过。
+
+## 2026-10-29 宿主マイル首页真实数据
+
+- `/hotel-booking/host-miles` 已移除设计示例，接入 account-summary 的 availablePoints、user-tier-info 的 currentTier、remainingBookingRooms（maxRooms-currentBookingRooms，下限0）与 leadTimeMonths；缺失值为未知，部分接口失败不隐藏其他成功数据。
+- 游客可查酒店，不请求账户接口；登录身份变化重建 autoDispose controller，旧请求不能回写。下拉刷新、返回登录及前台恢复刷新；同账号刷新失败保留有效旧值。
+- 独立宿主里程列表固定 hotelSearch stayBenefit=true，支持地区/价格排序/人数/多晚日期与9条分页。旧券单晚选择器保留，通过显式 allowMultiNightBenefits 使用新多晚查询。变更查询条件清除旧列表，刷新保留旧列表，并拒绝迟到的旧查询/分页结果。
+- 酒店图片/名称/地址/库存来自实际列表；stayBenefitParticipate 表示所选日期适用性，不等于账户可下单资格。列表缺少已确认的所需里程字段，显示未知，不把lowestPrice换算为里程。
+- 卡片不进入详情/预定，预约按钮禁用并显示准备中；不接旧券校验、下单和支付。旧预览fixture保留为未引用外部实现，线上页面不再读取。
+- 验证：涉及文件定向 analyze 通过；宿主首页 controller/widget 测试通过，覆盖游客、账号切换、刷新失败保留数据、分页、迟到响应和四语言320px/1.3字号；已查看390px页面截图，未做登录设备上的真实接口联调。变更范围 diff --check 通过。
+
+## 2026-10-29 住宿管理根Tab
+
+- 用户确认底部Tab同步调整为首页/基金/酒店/住宿管理/My Page；住宿管理复用HotelOrderListPage(isRootTab:true)，使用/bookings根路由、/bookings/:orderId详情。旧/hotel-booking/orders[/:orderId]保留重定向，避免旧路径被酒店动态:id误匹配。游客仍需登录，不扩大预约/支付范围。
+- 根Tab去除返回按钮，保留现有订单过滤/分页/取消/支付。支持下拉、切回Tab、从订单详情返回、前台恢复刷新。
+- 订单列表provider按登录身份重建；游客不请求，换号清空，disposed/较早请求不能回写，刷新失败保留旧列表。
+- 验证：Tab/实际路由分支与旧路径匹配/鉴权回归28项通过，订单缓存与迟到响应2项通过；App/SDK定向analyze通过。已查看393px TabBar截图，四语言320px/放大字号和深色模式覆盖；未做真实设备订单联调。

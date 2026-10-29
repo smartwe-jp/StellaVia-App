@@ -60,6 +60,7 @@ class HotelOrderListController extends StateNotifier<HotelOrderListState> {
   HotelOrderListController({
     required FetchHotelOrderListUseCase fetchOrderList,
     required String languageCode,
+    this.canLoad = true,
   }) : _fetchOrderList = fetchOrderList,
        _languageCode = languageCode,
        super(const HotelOrderListState()) {
@@ -68,6 +69,8 @@ class HotelOrderListController extends StateNotifier<HotelOrderListState> {
 
   final FetchHotelOrderListUseCase _fetchOrderList;
   final String _languageCode;
+  final bool canLoad;
+  int _generation = 0;
 
   Future<void> setStatus(HotelOrderStatusFilter status) async {
     if (state.status == status) {
@@ -84,6 +87,8 @@ class HotelOrderListController extends StateNotifier<HotelOrderListState> {
   }
 
   Future<void> refresh() async {
+    if (!mounted || !canLoad) return;
+    final generation = ++_generation;
     state = state.copyWith(isLoading: true, isLoadingMore: false, error: null);
     try {
       final result = await _fetchOrderList(
@@ -92,6 +97,7 @@ class HotelOrderListController extends StateNotifier<HotelOrderListState> {
         page: 1,
         limit: state.limit,
       );
+      if (!mounted || generation != _generation) return;
       state = state.copyWith(
         orders: _applyExpiredOverrides(result.orders),
         totalCount: result.totalCount,
@@ -100,11 +106,14 @@ class HotelOrderListController extends StateNotifier<HotelOrderListState> {
         error: null,
       );
     } catch (error) {
+      if (!mounted || generation != _generation) return;
       state = state.copyWith(isLoading: false, error: error);
     }
   }
 
   Future<void> loadMore() async {
+    if (!mounted || !canLoad) return;
+    final generation = _generation;
     if (state.isLoading || state.isLoadingMore || !state.hasMore) {
       return;
     }
@@ -116,6 +125,7 @@ class HotelOrderListController extends StateNotifier<HotelOrderListState> {
         page: state.nextPage,
         limit: state.limit,
       );
+      if (!mounted || generation != _generation) return;
       state = state.copyWith(
         orders: _applyExpiredOverrides(<HotelOrderSummary>[
           ...state.orders,
@@ -127,6 +137,7 @@ class HotelOrderListController extends StateNotifier<HotelOrderListState> {
         error: null,
       );
     } catch (error) {
+      if (!mounted || generation != _generation) return;
       state = state.copyWith(isLoadingMore: false, error: error);
     }
   }

@@ -6149,7 +6149,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeFeaturePreparing => '准备中，敬请期待。';
 
   @override
-  String get homeMilesUnavailable => '宿主里程余额准备中。';
+  String get homeMilesUnavailable => '暂时无法获取里程余额。';
 
   @override
   String get homeMemberEyebrow => 'YADONUSHI MEMBER';
@@ -6374,6 +6374,226 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get hotelMilesSampleLocation => '白马・长野';
+
+  @override
+  String get homeDataLoadError => '数据更新失败。';
+
+  @override
+  String homeMilesBalanceLabel(String balance) {
+    return '可用宿主里程：$balance';
+  }
+
+  @override
+  String homeRankRangeBetween(String minimum, String maximum) {
+    return '$minimum ～ $maximum';
+  }
+
+  @override
+  String homeRankRangeFrom(String minimum) {
+    return '$minimum及以上';
+  }
+
+  @override
+  String get homeRankLabel => '宿主等级';
+
+  @override
+  String get homeRankRulesEmpty => '暂无等级信息。';
+
+  @override
+  String get simTitle => '模拟试算';
+
+  @override
+  String get simInvestment => '投资金额';
+
+  @override
+  String get simTenThousandYen => '万日元';
+
+  @override
+  String get simAmountMinimum => '1万日元（1份）';
+
+  @override
+  String get simAmountMaximum => '5,000万日元';
+
+  @override
+  String get simAnnualRate => '预期年化收益率';
+
+  @override
+  String get simTerm => '运营期限';
+
+  @override
+  String get simMonthsUnit => '个月';
+
+  @override
+  String get simDividendType => '分红类型';
+
+  @override
+  String get simIncome => '收益型';
+
+  @override
+  String get simCapital => '资本型';
+
+  @override
+  String get simMonthlyPayment => '每月分红';
+
+  @override
+  String get simMaturityPayment => '到期一次性';
+
+  @override
+  String get simMonthlyDividend => '每月分红';
+
+  @override
+  String get simTermDividend => '分红（到期一次性）';
+
+  @override
+  String get simTotalReceived => '合计领取额';
+
+  @override
+  String get simEarnedMiles => '累计获得里程';
+
+  @override
+  String simMiles(String value) {
+    return '$value 里程';
+  }
+
+  @override
+  String get simEstimateNote =>
+      '按税前单利估算，累计收取包括本金和期间全部分红。里程按试算金额对应等级计算，不代表实际发放承诺。';
+
+  @override
+  String get simRegister => '免费注册会员并开始';
+
+  @override
+  String get simTotalDividend => '累计分红';
+
+  @override
+  String get simFinancialTitle => '分红';
+
+  @override
+  String get simExperienceTitle => '宿主优待';
+
+  @override
+  String get simRank => '等级';
+
+  @override
+  String get simMonthlyRateLabel => '月次';
+
+  @override
+  String get simMonthlyMiles => '每月获得里程';
+
+  @override
+  String get simTiming => '领取时机';
+
+  @override
+  String simTimingIncome(int months) {
+    return '每月领取＋本金于$months个月后偿还';
+  }
+
+  @override
+  String simTimingCapital(int months) {
+    return '全部于$months个月后（本金＋分红）';
+  }
+
+  @override
+  String get simFinancialEyebrow => 'FINANCIAL RETURN';
+
+  @override
+  String get simExperienceEyebrow => 'EXPERIENCE RETURN';
+
+  @override
+  String get hotelMilesLogin => '登录查看宿主优待';
+
+  @override
+  String get hotelMilesBookingPending => '可查看酒店列表，宿主里程预约流程准备中。';
+
+  @override
+  String get hotelMilesDateEligible => '所选日期适用宿主里程';
+
+  @override
+  String get hotelMilesRequiredUnknown => '所需里程：—';
+
+  @override
+  String hotelMilesAdvanceMonths(int months) {
+    return '当前等级可提前$months个月预约入住。';
+  }
+
+  @override
+  String get hotelMilesLoadMore => '加载更多';
+
+  @override
+  String get myPageChartAssets => '资产';
+
+  @override
+  String get myPageChartOperating => '运用余额';
+
+  @override
+  String get myPageChartDividends => '累计分红';
+
+  @override
+  String get myPageChartMiles => '宿主里程';
+
+  @override
+  String get myPageChartMileUnit => 'mile';
+
+  @override
+  String get myPageChartYenUnit => '日元';
+
+  @override
+  String get myPageChartRange => '时间范围';
+
+  @override
+  String myPageChartYears(int years) {
+    return '近$years年';
+  }
+
+  @override
+  String get myPageChartLoadFailed => '数据加载失败';
+
+  @override
+  String get myPageChartEmpty => '此期间暂无数据';
+
+  @override
+  String get myPageRankAbout => '关于等级';
+
+  @override
+  String get myPageRankRate => '里程获得率';
+
+  @override
+  String get myPageRankMax => '已达到最高等级';
+
+  @override
+  String get myPageRankGap => '距离下一等级还需运用余额';
+
+  @override
+  String get myPageRankRoomUnit => '间';
+
+  @override
+  String get myPageRankBooked => '预约中';
+
+  @override
+  String get myPageRankExpiring => '即将失效';
+
+  @override
+  String get myPageRankExpiryTitle => '宿主里程到期明细';
+
+  @override
+  String get myPageRankExpiryEmpty => '暂无即将到期的宿主里程。';
+
+  @override
+  String get mainTabBookings => '住宿管理';
+
+  @override
+  String myPageAssetGreeting(String name) {
+    return '$name的资产状况';
+  }
+
+  @override
+  String get myPageAssetHelper => '一览总资产与宿主里程。';
+
+  @override
+  String get myPageHideAmounts => '隐藏金额';
+
+  @override
+  String get myPageShowAmounts => '显示金额';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -12525,7 +12745,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeFeaturePreparing => '準備中，敬請期待。';
 
   @override
-  String get homeMilesUnavailable => '宿主里程餘額準備中。';
+  String get homeMilesUnavailable => '暫時無法取得里程餘額。';
 
   @override
   String get homeMemberEyebrow => 'YADONUSHI MEMBER';
@@ -12750,4 +12970,224 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelMilesSampleLocation => '白馬・長野';
+
+  @override
+  String get homeDataLoadError => '資料更新失敗。';
+
+  @override
+  String homeMilesBalanceLabel(String balance) {
+    return '可用宿主里程：$balance';
+  }
+
+  @override
+  String homeRankRangeBetween(String minimum, String maximum) {
+    return '$minimum ～ $maximum';
+  }
+
+  @override
+  String homeRankRangeFrom(String minimum) {
+    return '$minimum及以上';
+  }
+
+  @override
+  String get homeRankLabel => '宿主等級';
+
+  @override
+  String get homeRankRulesEmpty => '暫無等級資訊。';
+
+  @override
+  String get simTitle => '模擬試算';
+
+  @override
+  String get simInvestment => '投資金額';
+
+  @override
+  String get simTenThousandYen => '萬日圓';
+
+  @override
+  String get simAmountMinimum => '1萬日圓（1份）';
+
+  @override
+  String get simAmountMaximum => '5,000萬日圓';
+
+  @override
+  String get simAnnualRate => '預期年化收益率';
+
+  @override
+  String get simTerm => '營運期限';
+
+  @override
+  String get simMonthsUnit => '個月';
+
+  @override
+  String get simDividendType => '配息類型';
+
+  @override
+  String get simIncome => '收益型';
+
+  @override
+  String get simCapital => '資本型';
+
+  @override
+  String get simMonthlyPayment => '每月配息';
+
+  @override
+  String get simMaturityPayment => '到期一次性';
+
+  @override
+  String get simMonthlyDividend => '每月配息';
+
+  @override
+  String get simTermDividend => '配息（到期一次性）';
+
+  @override
+  String get simTotalReceived => '合計領取額';
+
+  @override
+  String get simEarnedMiles => '累計獲得里程';
+
+  @override
+  String simMiles(String value) {
+    return '$value 里程';
+  }
+
+  @override
+  String get simEstimateNote =>
+      '按稅前單利估算，累計收取包括本金和期間全部分紅。里程按試算金額對應等級計算，不代表實際發放承諾。';
+
+  @override
+  String get simRegister => '免費註冊會員並開始';
+
+  @override
+  String get simTotalDividend => '累計配息';
+
+  @override
+  String get simFinancialTitle => '配息';
+
+  @override
+  String get simExperienceTitle => '宿主優待';
+
+  @override
+  String get simRank => '等級';
+
+  @override
+  String get simMonthlyRateLabel => '月次';
+
+  @override
+  String get simMonthlyMiles => '每月獲得里程';
+
+  @override
+  String get simTiming => '領取時機';
+
+  @override
+  String simTimingIncome(int months) {
+    return '每月領取＋本金於$months個月後償還';
+  }
+
+  @override
+  String simTimingCapital(int months) {
+    return '全部於$months個月後（本金＋配息）';
+  }
+
+  @override
+  String get simFinancialEyebrow => 'FINANCIAL RETURN';
+
+  @override
+  String get simExperienceEyebrow => 'EXPERIENCE RETURN';
+
+  @override
+  String get hotelMilesLogin => '登入查看宿主優待';
+
+  @override
+  String get hotelMilesBookingPending => '可查看飯店清單，宿主里程預約流程準備中。';
+
+  @override
+  String get hotelMilesDateEligible => '所選日期適用宿主里程';
+
+  @override
+  String get hotelMilesRequiredUnknown => '所需里程：—';
+
+  @override
+  String hotelMilesAdvanceMonths(int months) {
+    return '目前等級可提前$months個月預約入住。';
+  }
+
+  @override
+  String get hotelMilesLoadMore => '載入更多';
+
+  @override
+  String get myPageChartAssets => '資產';
+
+  @override
+  String get myPageChartOperating => '運用餘額';
+
+  @override
+  String get myPageChartDividends => '累計分紅';
+
+  @override
+  String get myPageChartMiles => '宿主里程';
+
+  @override
+  String get myPageChartMileUnit => 'mile';
+
+  @override
+  String get myPageChartYenUnit => '日圓';
+
+  @override
+  String get myPageChartRange => '時間範圍';
+
+  @override
+  String myPageChartYears(int years) {
+    return '近$years年';
+  }
+
+  @override
+  String get myPageChartLoadFailed => '資料載入失敗';
+
+  @override
+  String get myPageChartEmpty => '此期間暫無資料';
+
+  @override
+  String get myPageRankAbout => '關於等級';
+
+  @override
+  String get myPageRankRate => '里程獲得率';
+
+  @override
+  String get myPageRankMax => '已達到最高等級';
+
+  @override
+  String get myPageRankGap => '距離下一等級還需運用餘額';
+
+  @override
+  String get myPageRankRoomUnit => '間';
+
+  @override
+  String get myPageRankBooked => '預約中';
+
+  @override
+  String get myPageRankExpiring => '即將失效';
+
+  @override
+  String get myPageRankExpiryTitle => '宿主里程到期明細';
+
+  @override
+  String get myPageRankExpiryEmpty => '暫無即將到期的宿主里程。';
+
+  @override
+  String get mainTabBookings => '住宿管理';
+
+  @override
+  String myPageAssetGreeting(String name) {
+    return '$name的資產狀況';
+  }
+
+  @override
+  String get myPageAssetHelper => '一覽總資產與宿主里程。';
+
+  @override
+  String get myPageHideAmounts => '隱藏金額';
+
+  @override
+  String get myPageShowAmounts => '顯示金額';
 }

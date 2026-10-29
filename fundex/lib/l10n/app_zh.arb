@@ -2558,7 +2558,7 @@
   "homeRankDetails": "了解等级制度",
   "homeRegisterFree": "免费注册会员",
   "homeFeaturePreparing": "准备中，敬请期待。",
-  "homeMilesUnavailable": "宿主里程余额准备中。",
+  "homeMilesUnavailable": "暂时无法获取里程余额。",
   "homeMemberEyebrow": "YADONUSHI MEMBER",
   "homeGuestEyebrow": "YADONUSHI",
   "homeSimulationEyebrow": "MILE SIMULATION",
@@ -2681,5 +2681,138 @@
   },
   "hotelMilesChoose": "选择酒店和日期",
   "hotelMilesSampleName": "白马 MIZUHO",
-  "hotelMilesSampleLocation": "白马・长野"
+  "hotelMilesSampleLocation": "白马・长野",
+  "homeDataLoadError": "数据更新失败。",
+  "homeMilesBalanceLabel": "可用宿主里程：{balance}",
+  "@homeMilesBalanceLabel": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "homeRankRangeBetween": "{minimum} ～ {maximum}",
+  "homeRankRangeFrom": "{minimum}及以上",
+  "homeRankLabel": "宿主等级",
+  "homeRankRulesEmpty": "暂无等级信息。",
+  "@homeRankRangeBetween": {
+    "placeholders": {
+      "minimum": {
+        "type": "String"
+      },
+      "maximum": {
+        "type": "String"
+      }
+    }
+  },
+  "@homeRankRangeFrom": {
+    "placeholders": {
+      "minimum": {
+        "type": "String"
+      }
+    }
+  },
+  "simTitle": "模拟试算",
+  "simInvestment": "投资金额",
+  "simTenThousandYen": "万日元",
+  "simAmountMinimum": "1万日元（1份）",
+  "simAmountMaximum": "5,000万日元",
+  "simAnnualRate": "预期年化收益率",
+  "simTerm": "运营期限",
+  "simMonthsUnit": "个月",
+  "simDividendType": "分红类型",
+  "simIncome": "收益型",
+  "simCapital": "资本型",
+  "simMonthlyPayment": "每月分红",
+  "simMaturityPayment": "到期一次性",
+  "simMonthlyDividend": "每月分红",
+  "simTermDividend": "分红（到期一次性）",
+  "simTotalReceived": "合计领取额",
+  "simEarnedMiles": "累计获得里程",
+  "simMiles": "{value} 里程",
+  "simEstimateNote": "按税前单利估算，累计收取包括本金和期间全部分红。里程按试算金额对应等级计算，不代表实际发放承诺。",
+  "simRegister": "免费注册会员并开始",
+  "@simMiles": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "simTotalDividend": "累计分红",
+  "simFinancialTitle": "分红",
+  "simExperienceTitle": "宿主优待",
+  "simRank": "等级",
+  "simMonthlyRateLabel": "月次",
+  "simMonthlyMiles": "每月获得里程",
+  "simTiming": "领取时机",
+  "simTimingIncome": "每月领取＋本金于{months}个月后偿还",
+  "simTimingCapital": "全部于{months}个月后（本金＋分红）",
+  "simFinancialEyebrow": "FINANCIAL RETURN",
+  "simExperienceEyebrow": "EXPERIENCE RETURN",
+  "@simTimingIncome": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "@simTimingCapital": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelMilesLogin": "登录查看宿主优待",
+  "hotelMilesBookingPending": "可查看酒店列表，宿主里程预约流程准备中。",
+  "hotelMilesDateEligible": "所选日期适用宿主里程",
+  "hotelMilesRequiredUnknown": "所需里程：—",
+  "hotelMilesAdvanceMonths": "当前等级可提前{months}个月预约入住。",
+  "hotelMilesLoadMore": "加载更多",
+  "@hotelMilesAdvanceMonths": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "myPageChartAssets": "资产",
+  "myPageChartOperating": "运用余额",
+  "myPageChartDividends": "累计分红",
+  "myPageChartMiles": "宿主里程",
+  "myPageChartMileUnit": "mile",
+  "myPageChartYenUnit": "日元",
+  "myPageChartRange": "时间范围",
+  "myPageChartYears": "近{years}年",
+  "myPageChartLoadFailed": "数据加载失败",
+  "myPageChartEmpty": "此期间暂无数据",
+  "@myPageChartYears": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "myPageRankAbout": "关于等级",
+  "myPageRankRate": "里程获得率",
+  "myPageRankMax": "已达到最高等级",
+  "myPageRankGap": "距离下一等级还需运用余额",
+  "myPageRankRoomUnit": "间",
+  "myPageRankBooked": "预约中",
+  "myPageRankExpiring": "即将失效",
+  "myPageRankExpiryTitle": "宿主里程到期明细",
+  "myPageRankExpiryEmpty": "暂无即将到期的宿主里程。",
+  "mainTabBookings": "住宿管理",
+  "myPageAssetGreeting": "{name}的资产状况",
+  "myPageAssetHelper": "一览总资产与宿主里程。",
+  "myPageHideAmounts": "隐藏金额",
+  "myPageShowAmounts": "显示金额",
+  "@myPageAssetGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

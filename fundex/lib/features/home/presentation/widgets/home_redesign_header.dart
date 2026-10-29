@@ -1,6 +1,7 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../support/home_text_styles.dart';
 
 class HomeRedesignHeader extends StatelessWidget {
   const HomeRedesignHeader({
@@ -32,10 +33,9 @@ class HomeRedesignHeader extends StatelessWidget {
               children: [
                 Text(
                   'STELLAVIA',
-                  style: context.appTextTheme.numericTitle.copyWith(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: isAuthenticated ? 0 : 4.8,
+                  style: HomeTextStyles.brandWordmark(
+                    context,
+                    isAuthenticated: isAuthenticated,
                   ),
                 ),
                 const Spacer(),

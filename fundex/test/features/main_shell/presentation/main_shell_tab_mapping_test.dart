@@ -7,10 +7,11 @@ import 'package:fundex/features/main_shell/presentation/widgets/main_shell_tab_r
 void main() {
   test('main shell tab order matches the router branch order', () {
     expect(MainShellTab.home.index, 0);
-    expect(MainShellTab.hotel.index, 1);
-    expect(MainShellTab.investment.index, 2);
-    expect(MainShellTab.kizunark.index, 3);
+    expect(MainShellTab.hotel.index, 2);
+    expect(MainShellTab.investment.index, 1);
+    expect(MainShellTab.bookings.index, 3);
     expect(MainShellTab.profile.index, 4);
+    expect(MainShellTab.kizunark.index, 5);
   });
 
   testWidgets('tab refresh scope refreshes only when its tab becomes active', (

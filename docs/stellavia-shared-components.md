@@ -34,3 +34,25 @@ Progress drawing clamps to 0..1, with nonfinite values drawn as zero. Null is in
 ## Validation
 
 This stage does not add or run UI tests. Run static analysis and `git diff --check` for the SDK changes before merging. Full device and page-level visual review remains a separate activity.
+
+## 2026-10-29 本期 UI 收敛
+
+- 固定实现路径：设计 → SDK 主题/语义样式 → 通用基础控件 → feature 专属组合 → 页面。无业务含义的交互/容器在 SDK；等级、酒店、收益等组合与规则仍在 feature。
+- AppCard 新增 filled（无边框、无阴影）及可选 backgroundColor、borderColor、borderWidth、borderRadius；原有默认16圆角、outlined边框与padding不变。业务传入主题色，不传原始色值。新能力已用于酒店卡/里程入口/里程摘要、首页试算入口、收益结果及服务回报卡。
+- AppSlider 统一轨道、描边圆点和原生 Slider 交互；调用方提供值、范围、步数、回调及本地化无障碍文案。
+- AppTwoLineSegmentedControl<T> 提供两个带说明的选项，支持 selected 语义、键盘/焦点原生 InkWell 行为及 onChanged=null 禁用；不引用分红类型。现有 AppDualSegmentedControl 不改，避免影响旧页面。双行控件文字样式在 SDK app_control_styles.dart。
+- 本期首页/服务/等级的文字角色集中在 home_text_styles.dart，计算器在 home_simulation_theme.dart；酒店首页在 hotel_home_text_styles.dart。保留原有视觉数值与字体继承，组件不再内联定义字号/字重。页面特有排版留在 feature，不把业务样式加入 SDK。
+- 后续修改：通用卡片外壳/滑块/分段行为改 SDK；功能标题/说明/数值排版改 feature 样式；业务内容改 feature widgets；页面负责组合与事件。设计所需的圆角覆盖仍可独立设置，不承诺所有卡片统一为一个尺寸。
+- 验证：10 项 App 定向回归、3 项 SDK 控件测试通过；覆盖多语言小屏交互、旧卡片默认样式、内外点击隔离、明暗主题及禁用行为。定向 analyze 通过，计算器渲染截图已检查。未进行真机回归。
+
+### 分段切换动画
+
+采用登录页邮件/电话切换的实现方案：复用 SDK AppDualSegmentedControl，轨道容器180ms、独立选中块240ms easeOutCubic滑动、文字颜色180ms渐变。为 AppDualSegmentItem 增加可选caption，AppTwoLineSegmentedControl仅作为双行参数适配器；移除重复的AppSegmentedSurface。双行高度随字号适配，支持禁用回调与减少选中块动画。登录页本身保持原样。
+
+计算器通过 HomeSimulationTheme.segments 传入 AppSegmentedControlStyle：浅色轨道、白色选中块、无边框/阴影、12/10圆角及独立文字样式。通用控件样式参数为空时保留旧默认外观，切换动画共用。
+
+## 2026-10-29 底部导航
+
+- SDK新增AppBottomTabBar / AppBottomTabItem：等宽布局、图标builder、选中态语义、主题着色、底部SafeArea；默认内容高54，34底部安全区时合计88，大字号允许文字区增高。AppShellNavigationTheme浅色未选中灰按Figma #999CAB，深色沿用主题适配。
+- App main_shell持有五项文案、24×24本地SVG和路由索引；SDK不依赖具体Tab/路由。Figma来源8190:760/8190:967「01 ホーム（サマリー）」。iOS home indicator由系统提供，不在App重复绘制。
+- 移除旧导航圆形底座、中间凸起与金色动效，主壳滚动显隐、讨论发送队列仍保留。

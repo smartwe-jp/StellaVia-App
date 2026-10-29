@@ -1385,3 +1385,11 @@ Response
         ]
     }
 }
+
+## 2026-10-29 StellaVia 权益与统计数据层
+
+接口/请求/返回字段与分层说明见 [数据接入清单](../docs/stellavia-data-integration.md)。Funding Swagger已核对全部11个读取接口；客户端由现有集群路由注入。
+
+Hotel临时来源：2026-10-14谷町君开发小组确认 `POST /pms/order/room/extraPerson` 返回新增 `pointTotal`。请求沿用既有room报价DTO（hotelId/checkIn/checkOut/lang/roomTypeCustNums/couponsCounts）。示意响应 `{"code":200,"data":{"pointTotal":1200,"priceElement":{"price":1000}}}`；其中数值仅为结构示例，非实测兑换率。`pointTotal:null`表示不支持积分支付。Hotel Swagger当前未包含此字段；已有hotel envelope策略不改，后续以更新Swagger收敛。
+
+累计获得请求示例：`GET /crowdfunding/points/cumulative-chart?startMonth=2025-01`；响应示例 `{"code":200,"data":{"xaxis":["2026-01","2026-02"],"yaxis":[9020314,9020314]}}`。累计值取最后一个y值，可用余额单独取user-account-summary.availablePoints。

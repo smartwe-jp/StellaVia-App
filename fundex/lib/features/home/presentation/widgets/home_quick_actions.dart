@@ -2,6 +2,7 @@ import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../support/home_text_styles.dart';
 
 class HomeQuickActions extends StatelessWidget {
   const HomeQuickActions({
@@ -62,10 +63,9 @@ class _Action extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: context.appTextTheme.caption.copyWith(
-                color: context.appColors.textPrimary,
-                fontSize: 12,
-              ),
+              style: HomeTextStyles.caption(
+                context,
+              ).copyWith(color: context.appColors.textPrimary),
             ),
           ),
           const SizedBox(width: 4),

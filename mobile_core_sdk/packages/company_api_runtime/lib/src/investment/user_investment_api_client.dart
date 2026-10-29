@@ -228,13 +228,18 @@ class UserInvestmentApiClient {
   }
 
   Future<List<UserInvestmentRecordDto>> fetchInvestmentList({
+    int? projectStatus,
     int startPage = 1,
     int limit = 20,
   }) async {
     final response = await _dioForPath(myInvestmentListPath)
         .post<Map<String, dynamic>>(
           myInvestmentListPath,
-          data: <String, dynamic>{'startPage': startPage, 'limit': limit},
+          data: <String, dynamic>{
+            'startPage': startPage,
+            'limit': limit,
+            if (projectStatus != null) 'projectStatus': projectStatus,
+          },
           options: authRequired(true),
         );
 

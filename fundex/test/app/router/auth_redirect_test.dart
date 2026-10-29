@@ -4,6 +4,26 @@ import 'package:fundex/app/router/app_router.dart';
 
 void main() {
   group('resolveAuthRedirect', () {
+    test('new bookings tab and details require authentication', () {
+      for (final path in [
+        '/bookings',
+        '/bookings/42',
+        '/hotel-booking/orders',
+        '/hotel-booking/orders/42',
+      ]) {
+        expect(
+          resolveAuthRedirect(
+            authState: const AsyncData(false),
+            location: path,
+          ),
+          '/login',
+        );
+        expect(
+          resolveAuthRedirect(authState: const AsyncData(true), location: path),
+          isNull,
+        );
+      }
+    });
     test(
       'home information pages are public without exposing other home children',
       () {
@@ -12,7 +32,11 @@ void main() {
           const AsyncData<bool>(false),
           const AsyncData<bool>(true),
         ]) {
-          for (final path in ['/home/service', '/home/ranks']) {
+          for (final path in [
+            '/home/service',
+            '/home/ranks',
+            '/home/simulation',
+          ]) {
             expect(
               resolveAuthRedirect(authState: auth, location: path),
               isNull,

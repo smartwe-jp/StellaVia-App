@@ -7,9 +7,14 @@ class FetchMyPageInvestmentListUseCase {
   final MyPageRepository _repository;
 
   Future<List<MyPageInvestmentRecord>> call({
+    int? projectStatus,
     int startPage = 1,
     int limit = 20,
   }) {
-    return _repository.fetchInvestmentList(startPage: startPage, limit: limit);
+    return _repository.fetchInvestmentList(
+      startPage: startPage,
+      limit: limit,
+      projectStatus: projectStatus,
+    );
   }
 }

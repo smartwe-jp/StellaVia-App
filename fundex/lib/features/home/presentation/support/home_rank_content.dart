@@ -1,6 +1,8 @@
+import 'package:intl/intl.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../host_miles/domain/entities/host_miles_models.dart';
 
-/// Design copy only: not an eligibility policy or an account-rank calculation.
+/// Display mapping only; membership eligibility remains server-owned.
 class HomeRankContent {
   const HomeRankContent(
     this.name,
@@ -11,13 +13,51 @@ class HomeRankContent {
     this.rooms,
   );
   final String name, investmentRange, rate;
-  final int validityMonths, advanceMonths, rooms;
+  final int? validityMonths, advanceMonths, rooms;
 }
 
-List<HomeRankContent> homeRankContent(AppLocalizations l10n) => [
-  HomeRankContent('REGULAR', l10n.homeRankRegularRange, '0.5%', 13, 2, 2),
-  HomeRankContent('BRONZE', l10n.homeRankBronzeRange, '0.525%', 15, 3, 3),
-  HomeRankContent('SILVER', l10n.homeRankSilverRange, '0.55%', 18, 4, 4),
-  HomeRankContent('GOLD', l10n.homeRankGoldRange, '0.575%', 21, 5, 5),
-  HomeRankContent('MASTER', l10n.homeRankMasterRange, '0.6%', 24, 6, 6),
-];
+List<HomeRankContent> homeRankContent(
+  AppLocalizations l10n,
+  List<HostMilesTierRule> rules,
+  String locale,
+) {
+  final currency = NumberFormat.currency(
+    locale: locale,
+    symbol: '¥',
+    decimalDigits: 0,
+  );
+  final percentage = NumberFormat.decimalPattern(locale)
+    ..maximumFractionDigits = 6;
+  final sorted = [...rules]
+    ..sort((a, b) {
+      if (a.minAum == null) return b.minAum == null ? 0 : 1;
+      if (b.minAum == null) return -1;
+      return a.minAum!.compareTo(b.minAum!);
+    });
+  return sorted
+      .map((rule) {
+        final minimum = rule.minAum;
+        final maximum = rule.maxAum;
+        final range = minimum == null
+            ? '—'
+            : maximum == null
+            ? l10n.homeRankRangeFrom(currency.format(minimum))
+            : l10n.homeRankRangeBetween(
+                currency.format(minimum),
+                currency.format(maximum),
+              );
+        return HomeRankContent(
+          rule.tierCode?.trim().isNotEmpty == true
+              ? rule.tierCode!.trim()
+              : '—',
+          range,
+          rule.pointRate == null
+              ? '—'
+              : '${percentage.format(rule.pointRate! * 100)}%',
+          rule.expireMonths,
+          rule.leadTimeMonths,
+          rule.maxRooms,
+        );
+      })
+      .toList(growable: false);
+}

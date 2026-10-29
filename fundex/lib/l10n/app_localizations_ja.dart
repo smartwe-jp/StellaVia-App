@@ -702,7 +702,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mainTabHome => 'ホーム';
 
   @override
-  String get mainTabHotel => '宿泊';
+  String get mainTabHotel => 'ホテル';
 
   @override
   String get mainTabDiscussion => '掲示板';
@@ -6209,7 +6209,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeFeaturePreparing => 'ただいま準備中です。';
 
   @override
-  String get homeMilesUnavailable => '宿主マイル残高は準備中です。';
+  String get homeMilesUnavailable => '宿主マイル残高を取得できません。';
 
   @override
   String get homeMemberEyebrow => 'YADONUSHI MEMBER';
@@ -6435,4 +6435,224 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get hotelMilesSampleLocation => '白馬・長野';
+
+  @override
+  String get homeDataLoadError => 'データを更新できませんでした。';
+
+  @override
+  String homeMilesBalanceLabel(String balance) {
+    return '利用可能な宿主マイル：$balance';
+  }
+
+  @override
+  String homeRankRangeBetween(String minimum, String maximum) {
+    return '$minimum ～ $maximum';
+  }
+
+  @override
+  String homeRankRangeFrom(String minimum) {
+    return '$minimum以上';
+  }
+
+  @override
+  String get homeRankLabel => '宿主ランク';
+
+  @override
+  String get homeRankRulesEmpty => 'ランク情報はまだありません。';
+
+  @override
+  String get simTitle => 'シミュレーション';
+
+  @override
+  String get simInvestment => '投資金額';
+
+  @override
+  String get simTenThousandYen => '万円';
+
+  @override
+  String get simAmountMinimum => '1万円（1口）';
+
+  @override
+  String get simAmountMaximum => '5,000万円';
+
+  @override
+  String get simAnnualRate => '想定利回り（年率）';
+
+  @override
+  String get simTerm => '運用期間';
+
+  @override
+  String get simMonthsUnit => 'ヶ月';
+
+  @override
+  String get simDividendType => '配当タイプ';
+
+  @override
+  String get simIncome => 'インカム型';
+
+  @override
+  String get simCapital => 'キャピタル型';
+
+  @override
+  String get simMonthlyPayment => '毎月配当';
+
+  @override
+  String get simMaturityPayment => '満期一括';
+
+  @override
+  String get simMonthlyDividend => '毎月の配当';
+
+  @override
+  String get simTermDividend => '配当（満期一括）';
+
+  @override
+  String get simTotalReceived => 'トータル受取額';
+
+  @override
+  String get simEarnedMiles => '累計獲得マイル';
+
+  @override
+  String simMiles(String value) {
+    return '$value マイル';
+  }
+
+  @override
+  String get simEstimateNote =>
+      '税引前・単利の概算です。トータル受取額は元本と期間中の配当の合計です。マイルは試算額のランクで算出し、実際の付与を保証するものではありません。';
+
+  @override
+  String get simRegister => '無料で会員登録して始める';
+
+  @override
+  String get simTotalDividend => '累計配当';
+
+  @override
+  String get simFinancialTitle => '配当';
+
+  @override
+  String get simExperienceTitle => '宿主優待';
+
+  @override
+  String get simRank => 'ランク';
+
+  @override
+  String get simMonthlyRateLabel => '月次';
+
+  @override
+  String get simMonthlyMiles => '毎月獲得マイル';
+
+  @override
+  String get simTiming => '受取タイミング';
+
+  @override
+  String simTimingIncome(int months) {
+    return '毎月受取＋元本は$monthsヶ月後に償還';
+  }
+
+  @override
+  String simTimingCapital(int months) {
+    return '全額$monthsヶ月後（元本＋配当）';
+  }
+
+  @override
+  String get simFinancialEyebrow => 'FINANCIAL RETURN';
+
+  @override
+  String get simExperienceEyebrow => 'EXPERIENCE RETURN';
+
+  @override
+  String get hotelMilesLogin => 'ログインして宿主優待を確認';
+
+  @override
+  String get hotelMilesBookingPending => 'ホテル一覧を確認できます。宿主マイルでの予約手続きは準備中です。';
+
+  @override
+  String get hotelMilesDateEligible => '選択した日程は宿主マイルの対象です';
+
+  @override
+  String get hotelMilesRequiredUnknown => '必要マイル：—';
+
+  @override
+  String hotelMilesAdvanceMonths(int months) {
+    return 'チェックイン日の$monthsヶ月前から予約可能なランクです。';
+  }
+
+  @override
+  String get hotelMilesLoadMore => 'さらに読み込む';
+
+  @override
+  String get myPageChartAssets => '資産';
+
+  @override
+  String get myPageChartOperating => '運用残高';
+
+  @override
+  String get myPageChartDividends => '累計配当額';
+
+  @override
+  String get myPageChartMiles => '宿主マイル';
+
+  @override
+  String get myPageChartMileUnit => 'mile';
+
+  @override
+  String get myPageChartYenUnit => '円';
+
+  @override
+  String get myPageChartRange => '表示期間';
+
+  @override
+  String myPageChartYears(int years) {
+    return '直近$years年';
+  }
+
+  @override
+  String get myPageChartLoadFailed => 'データを取得できませんでした';
+
+  @override
+  String get myPageChartEmpty => 'この期間のデータはありません';
+
+  @override
+  String get myPageRankAbout => 'ランクについて';
+
+  @override
+  String get myPageRankRate => 'マイル獲得率';
+
+  @override
+  String get myPageRankMax => '最高ランクに到達しています';
+
+  @override
+  String get myPageRankGap => '次のランクアップまで 運用残高あと';
+
+  @override
+  String get myPageRankRoomUnit => '室';
+
+  @override
+  String get myPageRankBooked => '予約中';
+
+  @override
+  String get myPageRankExpiring => 'まもなく失効';
+
+  @override
+  String get myPageRankExpiryTitle => '失効予定の宿主マイル';
+
+  @override
+  String get myPageRankExpiryEmpty => '失効予定の宿主マイルはありません。';
+
+  @override
+  String get mainTabBookings => '宿泊管理';
+
+  @override
+  String myPageAssetGreeting(String name) {
+    return '$nameの資産状況';
+  }
+
+  @override
+  String get myPageAssetHelper => '総資産と宿主マイルをまとめて確認できます。';
+
+  @override
+  String get myPageHideAmounts => '金額を非表示';
+
+  @override
+  String get myPageShowAmounts => '金額を表示';
 }

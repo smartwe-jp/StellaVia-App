@@ -39,9 +39,11 @@ class HotelSearchConditionsSheet extends StatefulWidget {
     required this.presenter,
     required this.buildingFilters,
     required this.onApply,
+    this.allowMultiNightBenefits = false,
     this.stayBenefitPeriods = const <HotelStayBenefitPeriod>[],
   });
 
+  final bool allowMultiNightBenefits;
   final HotelSearchCriteria criteria;
   final HotelBookingPresenter presenter;
   final List<HotelBuildingFilter> buildingFilters;
@@ -145,10 +147,10 @@ class _HotelSearchConditionsSheetState
       context: context,
       criteria: _criteria,
       stayBenefitSelectableDates: _stayBenefitSelectableDates(),
-      selectionMode: _criteria.stayBenefit
+      selectionMode: _criteria.stayBenefit && !widget.allowMultiNightBenefits
           ? HotelStayDateSelectionMode.stayBenefitSingleNight
           : HotelStayDateSelectionMode.range,
-      guidanceText: _criteria.stayBenefit
+      guidanceText: _criteria.stayBenefit && !widget.allowMultiNightBenefits
           ? context.l10n.hotelStayBenefitSingleNightOnly
           : null,
     );
@@ -159,7 +161,7 @@ class _HotelSearchConditionsSheetState
   }
 
   Set<DateTime> _stayBenefitSelectableDates() {
-    if (!_criteria.stayBenefit) {
+    if (!_criteria.stayBenefit || widget.allowMultiNightBenefits) {
       return const <DateTime>{};
     }
     final dates = <DateTime>{};

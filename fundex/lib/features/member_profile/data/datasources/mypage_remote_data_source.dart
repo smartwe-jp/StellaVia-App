@@ -29,6 +29,7 @@ abstract class MyPageRemoteDataSource {
   });
 
   Future<List<MyPageInvestmentRecordDto>> fetchInvestmentList({
+    int? projectStatus,
     int startPage = 1,
     int limit = 20,
   });
@@ -144,10 +145,15 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
 
   @override
   Future<List<MyPageInvestmentRecordDto>> fetchInvestmentList({
+    int? projectStatus,
     int startPage = 1,
     int limit = 20,
   }) async {
-    return _apiClient.fetchInvestmentList(startPage: startPage, limit: limit);
+    return _apiClient.fetchInvestmentList(
+      startPage: startPage,
+      limit: limit,
+      projectStatus: projectStatus,
+    );
   }
 
   @override

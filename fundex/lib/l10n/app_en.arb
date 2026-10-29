@@ -2588,7 +2588,7 @@
   "homeRankDetails": "Explore membership ranks",
   "homeRegisterFree": "Join for free",
   "homeFeaturePreparing": "Coming soon.",
-  "homeMilesUnavailable": "Host miles balance is coming soon.",
+  "homeMilesUnavailable": "Miles balance is unavailable.",
   "homeMemberEyebrow": "YADONUSHI MEMBER",
   "homeGuestEyebrow": "YADONUSHI",
   "homeSimulationEyebrow": "MILE SIMULATION",
@@ -2711,5 +2711,138 @@
   },
   "hotelMilesChoose": "Choose hotel and dates",
   "hotelMilesSampleName": "Hakuba MIZUHO",
-  "hotelMilesSampleLocation": "Hakuba · Nagano"
+  "hotelMilesSampleLocation": "Hakuba · Nagano",
+  "homeDataLoadError": "Unable to refresh data.",
+  "homeMilesBalanceLabel": "Available host miles: {balance}",
+  "@homeMilesBalanceLabel": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "homeRankRangeBetween": "{minimum} – {maximum}",
+  "homeRankRangeFrom": "{minimum} or more",
+  "homeRankLabel": "Host rank",
+  "homeRankRulesEmpty": "No rank information is available yet.",
+  "@homeRankRangeBetween": {
+    "placeholders": {
+      "minimum": {
+        "type": "String"
+      },
+      "maximum": {
+        "type": "String"
+      }
+    }
+  },
+  "@homeRankRangeFrom": {
+    "placeholders": {
+      "minimum": {
+        "type": "String"
+      }
+    }
+  },
+  "simTitle": "Simulation",
+  "simInvestment": "Investment",
+  "simTenThousandYen": "× ¥10,000",
+  "simAmountMinimum": "¥10,000 (1 unit)",
+  "simAmountMaximum": "¥50,000,000",
+  "simAnnualRate": "Expected yield (p.a.)",
+  "simTerm": "Term",
+  "simMonthsUnit": "months",
+  "simDividendType": "Dividend type",
+  "simIncome": "Income",
+  "simCapital": "Capital",
+  "simMonthlyPayment": "Monthly",
+  "simMaturityPayment": "At maturity",
+  "simMonthlyDividend": "Monthly dividend",
+  "simTermDividend": "Dividend (lump sum)",
+  "simTotalReceived": "Total received",
+  "simEarnedMiles": "Total miles",
+  "simMiles": "{value} miles",
+  "simEstimateNote": "Pretax simple-interest estimate. Total received includes principal and all dividends during the term. Miles use the tier for the simulated investment and are not guaranteed awards.",
+  "simRegister": "Register free to get started",
+  "@simMiles": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "simTotalDividend": "Total dividends",
+  "simFinancialTitle": "Dividend",
+  "simExperienceTitle": "Host Benefits",
+  "simRank": "Rank",
+  "simMonthlyRateLabel": "monthly",
+  "simMonthlyMiles": "Miles / month",
+  "simTiming": "Timing",
+  "simTimingIncome": "Monthly + principal repaid after {months} months",
+  "simTimingCapital": "All after {months} months (principal + dividend)",
+  "simFinancialEyebrow": "FINANCIAL RETURN",
+  "simExperienceEyebrow": "EXPERIENCE RETURN",
+  "@simTimingIncome": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "@simTimingCapital": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelMilesLogin": "Log in to view Host Benefits",
+  "hotelMilesBookingPending": "Browse hotels here. Host Miles booking is coming soon.",
+  "hotelMilesDateEligible": "Host Miles apply to the selected dates",
+  "hotelMilesRequiredUnknown": "Required miles: —",
+  "hotelMilesAdvanceMonths": "Your rank allows booking up to {months} months before check-in.",
+  "hotelMilesLoadMore": "Load more",
+  "@hotelMilesAdvanceMonths": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "myPageChartAssets": "Assets",
+  "myPageChartOperating": "Operating balance",
+  "myPageChartDividends": "Cumulative dividends",
+  "myPageChartMiles": "Host Miles",
+  "myPageChartMileUnit": "mile",
+  "myPageChartYenUnit": "JPY",
+  "myPageChartRange": "Time range",
+  "myPageChartYears": "Last {years} years",
+  "myPageChartLoadFailed": "Unable to load data",
+  "myPageChartEmpty": "No data for this period",
+  "@myPageChartYears": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "myPageRankAbout": "About ranks",
+  "myPageRankRate": "Miles earning rate",
+  "myPageRankMax": "Highest rank reached",
+  "myPageRankGap": "Operating balance needed for next rank",
+  "myPageRankRoomUnit": "rooms",
+  "myPageRankBooked": "Booked",
+  "myPageRankExpiring": "Expiring soon",
+  "myPageRankExpiryTitle": "Host Miles expiry",
+  "myPageRankExpiryEmpty": "No Host Miles are scheduled to expire.",
+  "mainTabBookings": "Bookings",
+  "myPageAssetGreeting": "Assets for {name}",
+  "myPageAssetHelper": "View your total assets and host miles together.",
+  "myPageHideAmounts": "Hide amounts",
+  "myPageShowAmounts": "Show amounts",
+  "@myPageAssetGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

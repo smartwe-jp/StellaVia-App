@@ -29,7 +29,12 @@ import '../support/mypage_share_summary.dart';
 import '../support/mypage_withdraw_action.dart';
 import '../widgets/my_page_apply_card_detail.dart';
 import '../widgets/my_page_active_fund_summary_card.dart';
-import '../widgets/my_page_asset_trend_card.dart';
+import '../widgets/my_page_holding_card.dart';
+import '../widgets/my_page_asset_summary.dart';
+import '../../domain/entities/mypage_chart.dart';
+import '../providers/mypage_chart_providers.dart';
+import '../widgets/my_page_summary_section.dart';
+import '../providers/mypage_membership_providers.dart';
 import '../widgets/mypage_share_sheet.dart';
 
 class ProfileCenterTabPage extends ConsumerStatefulWidget {
@@ -43,7 +48,6 @@ class ProfileCenterTabPage extends ConsumerStatefulWidget {
 class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
   final ScrollController _scrollController = ScrollController();
   final Set<String> _hiddenOrderInquiryIds = <String>{};
-  MyPageAssetTrendRange _selectedTrendRange = MyPageAssetTrendRange.threeMonths;
 
   @override
   void dispose() {
@@ -61,11 +65,6 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
     final authUserAsync = ref.watch(currentAuthUserProvider);
     final basicProfile = ref.watch(memberBasicProfileProvider);
     final localeTag = locale.toLanguageTag();
-    final trendEndDate = _resolveTrendEndDate();
-    final trendRange = (
-      startDate: _selectedTrendRange.resolveStart(trendEndDate),
-      endDate: trendEndDate,
-    );
     final currencyFormatter = NumberFormat.currency(
       locale: localeTag,
       symbol: '¥',
@@ -89,7 +88,6 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
     //final orderInquiryAsync = ref.watch(myPageOrderInquiryListProvider);
     final investmentAsync = ref.watch(myPageInvestmentListProvider);
     final walletHistoryAsync = ref.watch(walletHistoryProvider);
-    final assetTrendAsync = ref.watch(myPageAssetTrendProvider(trendRange));
     final investmentRecords = investmentAsync.valueOrNull;
     final displayName = _resolveMyPageDisplayName(
       locale: locale,
@@ -111,28 +109,28 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
       scrollController: _scrollController,
       child: Scaffold(
         appBar: AppNavigationBar(
-          title: 'STE//AVIA',
-          backgroundColor: colors.heroStart,
-          foregroundColor: colors.highlightGold,
+          title: l10n.mainTabProfile,
+          backgroundColor: colors.surface,
+          foregroundColor: colors.textPrimary,
           showDivider: false,
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _HeroHeaderActionButton(
-                icon: Icons.notifications_none_rounded,
+              MyPageHeaderAction(
+                icon: Symbols.notifications,
                 unreadCount: unreadNotificationCount,
                 onTap: () => context.push('/profile/notifications'),
               ),
               const SizedBox(width: 8),
-              _HeroHeaderActionButton(
-                icon: Icons.menu_rounded,
+              MyPageHeaderAction(
+                icon: Symbols.settings,
                 onTap: () => context.push('/profile/settings'),
               ),
             ],
           ),
         ),
         body: ColoredBox(
-          color: colors.background,
+          color: colors.surface,
           child: RefreshIndicator(
             onRefresh: _refreshPage,
             child: ListView(
@@ -140,9 +138,7 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
               controller: _scrollController,
               padding: EdgeInsets.zero,
               children: <Widget>[
-                FundMyPageAssetOverview(
-                  brandLabel: 'STE//AVIA',
-                  welcomeLabel: l10n.myPageWelcomeBack,
+                MyPageAssetSummary(
                   displayName: displayName,
                   verificationBadge: authUserAsync.whenOrNull(
                     data: (user) => _resolveMyPageVerificationBadge(
@@ -151,30 +147,12 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                       user?.status,
                     ),
                   ),
-                  totalAssetsLabel: l10n.myPageTotalAssetsLabel,
                   totalAssetsValue: _formatCurrency(
                     totalAssetsExcludingLoan,
                     currencyFormatter,
                   ),
-                  totalAssetsCaption: l10n.myPageTotalAssetsCaption,
-                  headerActions: <Widget>[
-                    _HeroHeaderActionButton(
-                      icon: Icons.notifications_none_rounded,
-                      unreadCount: unreadNotificationCount,
-                      onTap: () => context.push('/profile/notifications'),
-                    ),
-                    _HeroHeaderActionButton(
-                      icon: Icons.menu_rounded,
-                      onTap: () => context.push('/profile/settings'),
-                    ),
-                  ],
-                  // nameTrailing: _HeroHeaderActionButton(
-                  //   icon: Symbols.open_in_new,
-                  //   onTap: () => _showShareSheet(
-                  //     summary: shareSummary,
-                  //     currencyFormatter: currencyFormatter,
-                  //   ),
-                  // ),
+                  onDeposit: () => context.push('/wallet/deposit'),
+                  onWithdraw: () => _handleWithdrawTap(context, ref),
                   metrics: <FundMyPageMetricData>[
                     FundMyPageMetricData(
                       label: l10n.myPageMetricOperating,
@@ -208,36 +186,8 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                       ),
                     ),
                   ],
-                  quickActions: <FundMyPageQuickActionData>[
-                    FundMyPageQuickActionData(
-                      label: l10n.myPageDepositAction,
-                      backgroundColor: colors.highlightGold,
-                      foregroundColor: colors.onDark,
-                      onTap: () => context.push('/wallet/deposit'),
-                    ),
-                    FundMyPageQuickActionData(
-                      label: l10n.myPageWithdrawAction,
-                      backgroundColor: colors.heroStart,
-                      borderColor: colors.highlightGold,
-                      foregroundColor: colors.highlightGold,
-                      onTap: () => _handleWithdrawTap(context, ref),
-                    ),
-                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                  child: MyPageAssetTrendCard(
-                    title: l10n.myPageAssetTrendTitle,
-                    selectedRange: _selectedTrendRange,
-                    onRangeChanged: (range) {
-                      setState(() {
-                        _selectedTrendRange = range;
-                      });
-                    },
-                    records: assetTrendAsync.valueOrNull ?? const [],
-                    isLoading: assetTrendAsync.isLoading,
-                  ),
-                ),
+                const MyPageSummarySection(),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
                   child: Column(
@@ -269,18 +219,13 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
     setState(() {
       _hiddenOrderInquiryIds.clear();
     });
-    final trendEndDate = _resolveTrendEndDate();
     await Future.wait<void>(<Future<void>>[
       refreshProfileCenterTabPage(ref),
       ref.refresh(walletHistoryProvider.future).then((_) {}),
-      ref
-          .refresh(
-            myPageAssetTrendProvider((
-              startDate: _selectedTrendRange.resolveStart(trendEndDate),
-              endDate: trendEndDate,
-            )).future,
-          )
-          .then((_) {}),
+      ref.read(myPageTierProvider.notifier).refresh(),
+      ref.read(myPageMilesAccountProvider.notifier).refresh(),
+      for (final kind in MyPageChartKind.values)
+        ref.read(myPageChartProvider(kind).notifier).refresh(),
     ]);
   }
 
@@ -312,11 +257,6 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
         shareFailedNotice: l10n.myPageShareFailedNotice,
       ),
     );
-  }
-
-  DateTime _resolveTrendEndDate() {
-    final now = DateTime.now();
-    return DateTime(now.year, now.month, now.day);
   }
 
   // Future<void> _hideOrderInquiryRecord(String orderId) async {
@@ -723,9 +663,10 @@ Widget _buildActiveFundsSection(
               fallbackEarningType: group.earningType,
               fallbackEarningRatio: group.earningRatio,
             );
-            return MyPageActiveFundSummaryCard(
+            return MyPageHoldingCard(
               data: MyPageActiveFundSummaryCardData(
                 title: group.projectName,
+                periodText: formatMyPageActiveFundPeriod(context, project),
                 investorCode: investorTypeDisplay.investorCode,
                 investorType: investorTypeDisplay.investorType,
                 returnText: investorTypeDisplay.returnText,
@@ -1073,52 +1014,6 @@ class _PendingStatusBadge extends StatelessWidget {
       child: Text(
         label,
         style: appText.tableLabel.copyWith(color: foregroundColor),
-      ),
-    );
-  }
-}
-
-class _HeroHeaderActionButton extends StatelessWidget {
-  const _HeroHeaderActionButton({
-    required this.icon,
-    this.onTap,
-    this.unreadCount = 0,
-  });
-
-  final IconData icon;
-  final VoidCallback? onTap;
-  final int unreadCount;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).appColors;
-    return SizedBox(
-      width: 38,
-      height: 38,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: <Widget>[
-          Positioned.fill(
-            child: Material(
-              color: colors.onDark.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(11),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(11),
-                onTap: onTap,
-                child: Icon(icon, size: 19, color: colors.onDark),
-              ),
-            ),
-          ),
-          if (unreadCount > 0)
-            Positioned(
-              left: 22,
-              top: 2,
-              child: AppNotificationCountBadge(
-                count: unreadCount,
-                borderColor: colors.heroStart,
-              ),
-            ),
-        ],
       ),
     );
   }

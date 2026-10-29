@@ -12,7 +12,9 @@ class HotelHomeSearch extends ConsumerWidget {
     super.key,
     required this.criteria,
     required this.onApply,
+    this.allowMultiNightBenefits = false,
   });
+  final bool allowMultiNightBenefits;
   final HotelSearchCriteria criteria;
   final Future<void> Function(HotelSearchCriteria) onApply;
 
@@ -39,6 +41,7 @@ class HotelHomeSearch extends ConsumerWidget {
           useRootNavigator: true,
           isScrollControlled: true,
           builder: (_) => HotelSearchConditionsSheet(
+            allowMultiNightBenefits: allowMultiNightBenefits,
             criteria: criteria,
             presenter: presenter,
             buildingFilters: filters,

@@ -236,7 +236,7 @@
   "commonBackToLogin": "ログインへ戻る",
   "homeTitle": "ホーム",
   "mainTabHome": "ホーム",
-  "mainTabHotel": "宿泊",
+  "mainTabHotel": "ホテル",
   "mainTabDiscussion": "掲示板",
   "mainTabInvestment": "ファンド",
   "mainTabProfile": "マイページ",
@@ -2558,7 +2558,7 @@
   "homeRankDetails": "ランク制度を詳しく見る",
   "homeRegisterFree": "無料で会員登録",
   "homeFeaturePreparing": "ただいま準備中です。",
-  "homeMilesUnavailable": "宿主マイル残高は準備中です。",
+  "homeMilesUnavailable": "宿主マイル残高を取得できません。",
   "homeMemberEyebrow": "YADONUSHI MEMBER",
   "homeGuestEyebrow": "YADONUSHI",
   "homeSimulationEyebrow": "MILE SIMULATION",
@@ -2681,5 +2681,138 @@
   },
   "hotelMilesChoose": "ホテルと日程を選ぶ",
   "hotelMilesSampleName": "白馬 MIZUHO",
-  "hotelMilesSampleLocation": "白馬・長野"
+  "hotelMilesSampleLocation": "白馬・長野",
+  "homeDataLoadError": "データを更新できませんでした。",
+  "homeMilesBalanceLabel": "利用可能な宿主マイル：{balance}",
+  "@homeMilesBalanceLabel": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "homeRankRangeBetween": "{minimum} ～ {maximum}",
+  "homeRankRangeFrom": "{minimum}以上",
+  "homeRankLabel": "宿主ランク",
+  "homeRankRulesEmpty": "ランク情報はまだありません。",
+  "@homeRankRangeBetween": {
+    "placeholders": {
+      "minimum": {
+        "type": "String"
+      },
+      "maximum": {
+        "type": "String"
+      }
+    }
+  },
+  "@homeRankRangeFrom": {
+    "placeholders": {
+      "minimum": {
+        "type": "String"
+      }
+    }
+  },
+  "simTitle": "シミュレーション",
+  "simInvestment": "投資金額",
+  "simTenThousandYen": "万円",
+  "simAmountMinimum": "1万円（1口）",
+  "simAmountMaximum": "5,000万円",
+  "simAnnualRate": "想定利回り（年率）",
+  "simTerm": "運用期間",
+  "simMonthsUnit": "ヶ月",
+  "simDividendType": "配当タイプ",
+  "simIncome": "インカム型",
+  "simCapital": "キャピタル型",
+  "simMonthlyPayment": "毎月配当",
+  "simMaturityPayment": "満期一括",
+  "simMonthlyDividend": "毎月の配当",
+  "simTermDividend": "配当（満期一括）",
+  "simTotalReceived": "トータル受取額",
+  "simEarnedMiles": "累計獲得マイル",
+  "simMiles": "{value} マイル",
+  "simEstimateNote": "税引前・単利の概算です。トータル受取額は元本と期間中の配当の合計です。マイルは試算額のランクで算出し、実際の付与を保証するものではありません。",
+  "simRegister": "無料で会員登録して始める",
+  "@simMiles": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "simTotalDividend": "累計配当",
+  "simFinancialTitle": "配当",
+  "simExperienceTitle": "宿主優待",
+  "simRank": "ランク",
+  "simMonthlyRateLabel": "月次",
+  "simMonthlyMiles": "毎月獲得マイル",
+  "simTiming": "受取タイミング",
+  "simTimingIncome": "毎月受取＋元本は{months}ヶ月後に償還",
+  "simTimingCapital": "全額{months}ヶ月後（元本＋配当）",
+  "simFinancialEyebrow": "FINANCIAL RETURN",
+  "simExperienceEyebrow": "EXPERIENCE RETURN",
+  "@simTimingIncome": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "@simTimingCapital": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelMilesLogin": "ログインして宿主優待を確認",
+  "hotelMilesBookingPending": "ホテル一覧を確認できます。宿主マイルでの予約手続きは準備中です。",
+  "hotelMilesDateEligible": "選択した日程は宿主マイルの対象です",
+  "hotelMilesRequiredUnknown": "必要マイル：—",
+  "hotelMilesAdvanceMonths": "チェックイン日の{months}ヶ月前から予約可能なランクです。",
+  "hotelMilesLoadMore": "さらに読み込む",
+  "@hotelMilesAdvanceMonths": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "myPageChartAssets": "資産",
+  "myPageChartOperating": "運用残高",
+  "myPageChartDividends": "累計配当額",
+  "myPageChartMiles": "宿主マイル",
+  "myPageChartMileUnit": "mile",
+  "myPageChartYenUnit": "円",
+  "myPageChartRange": "表示期間",
+  "myPageChartYears": "直近{years}年",
+  "myPageChartLoadFailed": "データを取得できませんでした",
+  "myPageChartEmpty": "この期間のデータはありません",
+  "@myPageChartYears": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "myPageRankAbout": "ランクについて",
+  "myPageRankRate": "マイル獲得率",
+  "myPageRankMax": "最高ランクに到達しています",
+  "myPageRankGap": "次のランクアップまで 運用残高あと",
+  "myPageRankRoomUnit": "室",
+  "myPageRankBooked": "予約中",
+  "myPageRankExpiring": "まもなく失効",
+  "myPageRankExpiryTitle": "失効予定の宿主マイル",
+  "myPageRankExpiryEmpty": "失効予定の宿主マイルはありません。",
+  "mainTabBookings": "宿泊管理",
+  "myPageAssetGreeting": "{name}の資産状況",
+  "myPageAssetHelper": "総資産と宿主マイルをまとめて確認できます。",
+  "myPageHideAmounts": "金額を非表示",
+  "myPageShowAmounts": "金額を表示",
+  "@myPageAssetGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

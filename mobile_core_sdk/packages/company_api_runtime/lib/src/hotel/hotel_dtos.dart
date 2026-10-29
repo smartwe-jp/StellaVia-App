@@ -51,6 +51,7 @@ abstract class HotelSummaryDto with _$HotelSummaryDto {
   const factory HotelSummaryDto({
     @JsonKey(name: 'hotelId') @Default('') String id,
     @Default('') String hotelName,
+    String? detail,
     String? address,
     String? area,
     String? image,
@@ -549,6 +550,9 @@ abstract class HotelRoomExtraPersonRequestDto
 abstract class HotelRoomExtraPersonResultDto
     with _$HotelRoomExtraPersonResultDto {
   const factory HotelRoomExtraPersonResultDto({
+    // Temporary source: 2026-10-14 developer contract; absent from hotel Swagger.
+    // Null means points payment is unsupported. Keep separate from cash price.
+    @JsonKey(fromJson: _hotelNumFromJson) num? pointTotal,
     HotelPriceElementDto? priceElement,
   }) = _HotelRoomExtraPersonResultDto;
 

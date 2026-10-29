@@ -68,10 +68,12 @@ class MyPageRepositoryImpl implements MyPageRepository {
 
   @override
   Future<List<MyPageInvestmentRecord>> fetchInvestmentList({
+    int? projectStatus,
     int startPage = 1,
     int limit = 20,
   }) async {
     final dtos = await _remote.fetchInvestmentList(
+      projectStatus: projectStatus,
       startPage: startPage,
       limit: limit,
     );

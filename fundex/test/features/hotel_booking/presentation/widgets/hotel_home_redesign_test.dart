@@ -1,4 +1,8 @@
 import 'dart:convert';
+import '../../hotel_host_miles_fakes.dart';
+import 'package:fundex/features/hotel_booking/presentation/providers/hotel_host_miles_provider.dart';
+import 'package:fundex/features/hotel_booking/presentation/providers/hotel_booking_providers.dart';
+import 'package:fundex/features/auth/presentation/providers/auth_providers.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 import 'dart:ui' as ui;
@@ -18,6 +22,15 @@ Widget app(
   double scale = 1,
   GlobalKey? capture,
 }) => ProviderScope(
+  overrides: [
+    isAuthenticatedProvider.overrideWithValue(const AsyncData(true)),
+    hotelBuildingFiltersProvider.overrideWith((ref) async => []),
+    hotelHostMilesProvider.overrideWith((ref) {
+      final c = milesController(HotelsFake(), MilesFake());
+      Future.microtask(c.refresh);
+      return c;
+    }),
+  ],
   child: MaterialApp(
     locale: locale,
     localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -75,7 +88,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(applied?.priceSort, HotelPriceSort.descending);
   });
-  testWidgets('localized miles preview fits narrow screens and cannot book', (
+  testWidgets('localized live miles home fits narrow screens and cannot book', (
     tester,
   ) async {
     tester.view.devicePixelRatio = 1;
@@ -87,11 +100,21 @@ void main() {
         app(const HotelHostMilesPage(), locale: locale, scale: 1.3),
       );
       await tester.pumpAndSettle();
-      expect(find.text('BRONZE'), findsOneWidget);
-      await tester.scrollUntilVisible(find.byType(AppButton), 300);
+      expect(find.text('GOLD'), findsOneWidget);
+      expect(find.text('23,456'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.byWidgetPredicate((w) => w is AppButton && w.onPressed == null),
+        300,
+      );
       await tester.pumpAndSettle();
       expect(
-        tester.widget<AppButton>(find.byType(AppButton)).onPressed,
+        tester
+            .widget<AppButton>(
+              find.byWidgetPredicate(
+                (w) => w is AppButton && w.onPressed == null,
+              ),
+            )
+            .onPressed,
         isNull,
       );
       expect(tester.takeException(), isNull);
@@ -107,20 +130,13 @@ void main() {
     final key = GlobalKey();
     await tester.pumpWidget(app(const HotelHostMilesPage(), capture: key));
     await tester.pumpAndSettle();
-    await tester.runAsync(
-      () => precacheImage(
-        const AssetImage('assets/images/hotel_miles_preview.png'),
-        key.currentContext!,
-      ),
-    );
-    await tester.pumpAndSettle();
     final boundary =
         key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
     await tester.runAsync(() async {
       final img = await boundary.toImage();
       final data = await img.toByteData(format: ui.ImageByteFormat.png);
       await File(
-        '/tmp/hotel-miles-preview.png',
+        '/tmp/hotel-miles-live.png',
       ).writeAsBytes(data!.buffer.asUint8List());
       img.dispose();
     });

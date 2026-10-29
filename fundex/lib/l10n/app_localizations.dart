@@ -11844,7 +11844,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeMilesUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'Host miles balance is coming soon.'**
+  /// **'Miles balance is unavailable.'**
   String get homeMilesUnavailable;
 
   /// No description provided for @homeMemberEyebrow.
@@ -12224,6 +12224,408 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hakuba · Nagano'**
   String get hotelMilesSampleLocation;
+
+  /// No description provided for @homeDataLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to refresh data.'**
+  String get homeDataLoadError;
+
+  /// No description provided for @homeMilesBalanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Available host miles: {balance}'**
+  String homeMilesBalanceLabel(String balance);
+
+  /// No description provided for @homeRankRangeBetween.
+  ///
+  /// In en, this message translates to:
+  /// **'{minimum} – {maximum}'**
+  String homeRankRangeBetween(String minimum, String maximum);
+
+  /// No description provided for @homeRankRangeFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'{minimum} or more'**
+  String homeRankRangeFrom(String minimum);
+
+  /// No description provided for @homeRankLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Host rank'**
+  String get homeRankLabel;
+
+  /// No description provided for @homeRankRulesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No rank information is available yet.'**
+  String get homeRankRulesEmpty;
+
+  /// No description provided for @simTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulation'**
+  String get simTitle;
+
+  /// No description provided for @simInvestment.
+  ///
+  /// In en, this message translates to:
+  /// **'Investment'**
+  String get simInvestment;
+
+  /// No description provided for @simTenThousandYen.
+  ///
+  /// In en, this message translates to:
+  /// **'× ¥10,000'**
+  String get simTenThousandYen;
+
+  /// No description provided for @simAmountMinimum.
+  ///
+  /// In en, this message translates to:
+  /// **'¥10,000 (1 unit)'**
+  String get simAmountMinimum;
+
+  /// No description provided for @simAmountMaximum.
+  ///
+  /// In en, this message translates to:
+  /// **'¥50,000,000'**
+  String get simAmountMaximum;
+
+  /// No description provided for @simAnnualRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected yield (p.a.)'**
+  String get simAnnualRate;
+
+  /// No description provided for @simTerm.
+  ///
+  /// In en, this message translates to:
+  /// **'Term'**
+  String get simTerm;
+
+  /// No description provided for @simMonthsUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'months'**
+  String get simMonthsUnit;
+
+  /// No description provided for @simDividendType.
+  ///
+  /// In en, this message translates to:
+  /// **'Dividend type'**
+  String get simDividendType;
+
+  /// No description provided for @simIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Income'**
+  String get simIncome;
+
+  /// No description provided for @simCapital.
+  ///
+  /// In en, this message translates to:
+  /// **'Capital'**
+  String get simCapital;
+
+  /// No description provided for @simMonthlyPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get simMonthlyPayment;
+
+  /// No description provided for @simMaturityPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'At maturity'**
+  String get simMaturityPayment;
+
+  /// No description provided for @simMonthlyDividend.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly dividend'**
+  String get simMonthlyDividend;
+
+  /// No description provided for @simTermDividend.
+  ///
+  /// In en, this message translates to:
+  /// **'Dividend (lump sum)'**
+  String get simTermDividend;
+
+  /// No description provided for @simTotalReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Total received'**
+  String get simTotalReceived;
+
+  /// No description provided for @simEarnedMiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Total miles'**
+  String get simEarnedMiles;
+
+  /// No description provided for @simMiles.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} miles'**
+  String simMiles(String value);
+
+  /// No description provided for @simEstimateNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Pretax simple-interest estimate. Total received includes principal and all dividends during the term. Miles use the tier for the simulated investment and are not guaranteed awards.'**
+  String get simEstimateNote;
+
+  /// No description provided for @simRegister.
+  ///
+  /// In en, this message translates to:
+  /// **'Register free to get started'**
+  String get simRegister;
+
+  /// No description provided for @simTotalDividend.
+  ///
+  /// In en, this message translates to:
+  /// **'Total dividends'**
+  String get simTotalDividend;
+
+  /// No description provided for @simFinancialTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Dividend'**
+  String get simFinancialTitle;
+
+  /// No description provided for @simExperienceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Host Benefits'**
+  String get simExperienceTitle;
+
+  /// No description provided for @simRank.
+  ///
+  /// In en, this message translates to:
+  /// **'Rank'**
+  String get simRank;
+
+  /// No description provided for @simMonthlyRateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'monthly'**
+  String get simMonthlyRateLabel;
+
+  /// No description provided for @simMonthlyMiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Miles / month'**
+  String get simMonthlyMiles;
+
+  /// No description provided for @simTiming.
+  ///
+  /// In en, this message translates to:
+  /// **'Timing'**
+  String get simTiming;
+
+  /// No description provided for @simTimingIncome.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly + principal repaid after {months} months'**
+  String simTimingIncome(int months);
+
+  /// No description provided for @simTimingCapital.
+  ///
+  /// In en, this message translates to:
+  /// **'All after {months} months (principal + dividend)'**
+  String simTimingCapital(int months);
+
+  /// No description provided for @simFinancialEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'FINANCIAL RETURN'**
+  String get simFinancialEyebrow;
+
+  /// No description provided for @simExperienceEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'EXPERIENCE RETURN'**
+  String get simExperienceEyebrow;
+
+  /// No description provided for @hotelMilesLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in to view Host Benefits'**
+  String get hotelMilesLogin;
+
+  /// No description provided for @hotelMilesBookingPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse hotels here. Host Miles booking is coming soon.'**
+  String get hotelMilesBookingPending;
+
+  /// No description provided for @hotelMilesDateEligible.
+  ///
+  /// In en, this message translates to:
+  /// **'Host Miles apply to the selected dates'**
+  String get hotelMilesDateEligible;
+
+  /// No description provided for @hotelMilesRequiredUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Required miles: —'**
+  String get hotelMilesRequiredUnknown;
+
+  /// No description provided for @hotelMilesAdvanceMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'Your rank allows booking up to {months} months before check-in.'**
+  String hotelMilesAdvanceMonths(int months);
+
+  /// No description provided for @hotelMilesLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get hotelMilesLoadMore;
+
+  /// No description provided for @myPageChartAssets.
+  ///
+  /// In en, this message translates to:
+  /// **'Assets'**
+  String get myPageChartAssets;
+
+  /// No description provided for @myPageChartOperating.
+  ///
+  /// In en, this message translates to:
+  /// **'Operating balance'**
+  String get myPageChartOperating;
+
+  /// No description provided for @myPageChartDividends.
+  ///
+  /// In en, this message translates to:
+  /// **'Cumulative dividends'**
+  String get myPageChartDividends;
+
+  /// No description provided for @myPageChartMiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Host Miles'**
+  String get myPageChartMiles;
+
+  /// No description provided for @myPageChartMileUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'mile'**
+  String get myPageChartMileUnit;
+
+  /// No description provided for @myPageChartYenUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'JPY'**
+  String get myPageChartYenUnit;
+
+  /// No description provided for @myPageChartRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Time range'**
+  String get myPageChartRange;
+
+  /// No description provided for @myPageChartYears.
+  ///
+  /// In en, this message translates to:
+  /// **'Last {years} years'**
+  String myPageChartYears(int years);
+
+  /// No description provided for @myPageChartLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load data'**
+  String get myPageChartLoadFailed;
+
+  /// No description provided for @myPageChartEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No data for this period'**
+  String get myPageChartEmpty;
+
+  /// No description provided for @myPageRankAbout.
+  ///
+  /// In en, this message translates to:
+  /// **'About ranks'**
+  String get myPageRankAbout;
+
+  /// No description provided for @myPageRankRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Miles earning rate'**
+  String get myPageRankRate;
+
+  /// No description provided for @myPageRankMax.
+  ///
+  /// In en, this message translates to:
+  /// **'Highest rank reached'**
+  String get myPageRankMax;
+
+  /// No description provided for @myPageRankGap.
+  ///
+  /// In en, this message translates to:
+  /// **'Operating balance needed for next rank'**
+  String get myPageRankGap;
+
+  /// No description provided for @myPageRankRoomUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'rooms'**
+  String get myPageRankRoomUnit;
+
+  /// No description provided for @myPageRankBooked.
+  ///
+  /// In en, this message translates to:
+  /// **'Booked'**
+  String get myPageRankBooked;
+
+  /// No description provided for @myPageRankExpiring.
+  ///
+  /// In en, this message translates to:
+  /// **'Expiring soon'**
+  String get myPageRankExpiring;
+
+  /// No description provided for @myPageRankExpiryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Host Miles expiry'**
+  String get myPageRankExpiryTitle;
+
+  /// No description provided for @myPageRankExpiryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No Host Miles are scheduled to expire.'**
+  String get myPageRankExpiryEmpty;
+
+  /// No description provided for @mainTabBookings.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookings'**
+  String get mainTabBookings;
+
+  /// No description provided for @myPageAssetGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Assets for {name}'**
+  String myPageAssetGreeting(String name);
+
+  /// No description provided for @myPageAssetHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'View your total assets and host miles together.'**
+  String get myPageAssetHelper;
+
+  /// No description provided for @myPageHideAmounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide amounts'**
+  String get myPageHideAmounts;
+
+  /// No description provided for @myPageShowAmounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Show amounts'**
+  String get myPageShowAmounts;
 }
 
 class _AppLocalizationsDelegate

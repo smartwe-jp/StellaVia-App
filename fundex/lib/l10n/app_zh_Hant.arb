@@ -2558,7 +2558,7 @@
   "homeRankDetails": "了解等級制度",
   "homeRegisterFree": "免費註冊會員",
   "homeFeaturePreparing": "準備中，敬請期待。",
-  "homeMilesUnavailable": "宿主里程餘額準備中。",
+  "homeMilesUnavailable": "暫時無法取得里程餘額。",
   "homeMemberEyebrow": "YADONUSHI MEMBER",
   "homeGuestEyebrow": "YADONUSHI",
   "homeSimulationEyebrow": "MILE SIMULATION",
@@ -2681,5 +2681,138 @@
   },
   "hotelMilesChoose": "選擇酒店和日期",
   "hotelMilesSampleName": "白馬 MIZUHO",
-  "hotelMilesSampleLocation": "白馬・長野"
+  "hotelMilesSampleLocation": "白馬・長野",
+  "homeDataLoadError": "資料更新失敗。",
+  "homeMilesBalanceLabel": "可用宿主里程：{balance}",
+  "@homeMilesBalanceLabel": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "homeRankRangeBetween": "{minimum} ～ {maximum}",
+  "homeRankRangeFrom": "{minimum}及以上",
+  "homeRankLabel": "宿主等級",
+  "homeRankRulesEmpty": "暫無等級資訊。",
+  "@homeRankRangeBetween": {
+    "placeholders": {
+      "minimum": {
+        "type": "String"
+      },
+      "maximum": {
+        "type": "String"
+      }
+    }
+  },
+  "@homeRankRangeFrom": {
+    "placeholders": {
+      "minimum": {
+        "type": "String"
+      }
+    }
+  },
+  "simTitle": "模擬試算",
+  "simInvestment": "投資金額",
+  "simTenThousandYen": "萬日圓",
+  "simAmountMinimum": "1萬日圓（1份）",
+  "simAmountMaximum": "5,000萬日圓",
+  "simAnnualRate": "預期年化收益率",
+  "simTerm": "營運期限",
+  "simMonthsUnit": "個月",
+  "simDividendType": "配息類型",
+  "simIncome": "收益型",
+  "simCapital": "資本型",
+  "simMonthlyPayment": "每月配息",
+  "simMaturityPayment": "到期一次性",
+  "simMonthlyDividend": "每月配息",
+  "simTermDividend": "配息（到期一次性）",
+  "simTotalReceived": "合計領取額",
+  "simEarnedMiles": "累計獲得里程",
+  "simMiles": "{value} 里程",
+  "simEstimateNote": "按稅前單利估算，累計收取包括本金和期間全部分紅。里程按試算金額對應等級計算，不代表實際發放承諾。",
+  "simRegister": "免費註冊會員並開始",
+  "@simMiles": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "simTotalDividend": "累計配息",
+  "simFinancialTitle": "配息",
+  "simExperienceTitle": "宿主優待",
+  "simRank": "等級",
+  "simMonthlyRateLabel": "月次",
+  "simMonthlyMiles": "每月獲得里程",
+  "simTiming": "領取時機",
+  "simTimingIncome": "每月領取＋本金於{months}個月後償還",
+  "simTimingCapital": "全部於{months}個月後（本金＋配息）",
+  "simFinancialEyebrow": "FINANCIAL RETURN",
+  "simExperienceEyebrow": "EXPERIENCE RETURN",
+  "@simTimingIncome": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "@simTimingCapital": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelMilesLogin": "登入查看宿主優待",
+  "hotelMilesBookingPending": "可查看飯店清單，宿主里程預約流程準備中。",
+  "hotelMilesDateEligible": "所選日期適用宿主里程",
+  "hotelMilesRequiredUnknown": "所需里程：—",
+  "hotelMilesAdvanceMonths": "目前等級可提前{months}個月預約入住。",
+  "hotelMilesLoadMore": "載入更多",
+  "@hotelMilesAdvanceMonths": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "myPageChartAssets": "資產",
+  "myPageChartOperating": "運用餘額",
+  "myPageChartDividends": "累計分紅",
+  "myPageChartMiles": "宿主里程",
+  "myPageChartMileUnit": "mile",
+  "myPageChartYenUnit": "日圓",
+  "myPageChartRange": "時間範圍",
+  "myPageChartYears": "近{years}年",
+  "myPageChartLoadFailed": "資料載入失敗",
+  "myPageChartEmpty": "此期間暫無資料",
+  "@myPageChartYears": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "myPageRankAbout": "關於等級",
+  "myPageRankRate": "里程獲得率",
+  "myPageRankMax": "已達到最高等級",
+  "myPageRankGap": "距離下一等級還需運用餘額",
+  "myPageRankRoomUnit": "間",
+  "myPageRankBooked": "預約中",
+  "myPageRankExpiring": "即將失效",
+  "myPageRankExpiryTitle": "宿主里程到期明細",
+  "myPageRankExpiryEmpty": "暫無即將到期的宿主里程。",
+  "mainTabBookings": "住宿管理",
+  "myPageAssetGreeting": "{name}的資產狀況",
+  "myPageAssetHelper": "一覽總資產與宿主里程。",
+  "myPageHideAmounts": "隱藏金額",
+  "myPageShowAmounts": "顯示金額",
+  "@myPageAssetGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

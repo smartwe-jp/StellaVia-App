@@ -74,6 +74,7 @@ _HotelSummaryDto _$HotelSummaryDtoFromJson(Map<String, dynamic> json) =>
     _HotelSummaryDto(
       id: json['hotelId'] as String? ?? '',
       hotelName: json['hotelName'] as String? ?? '',
+      detail: json['detail'] as String?,
       address: json['address'] as String?,
       area: json['area'] as String?,
       image: json['image'] as String?,
@@ -104,6 +105,7 @@ Map<String, dynamic> _$HotelSummaryDtoToJson(_HotelSummaryDto instance) =>
     <String, dynamic>{
       'hotelId': instance.id,
       'hotelName': instance.hotelName,
+      'detail': instance.detail,
       'address': instance.address,
       'area': instance.area,
       'image': instance.image,
@@ -690,6 +692,7 @@ Map<String, dynamic> _$HotelRoomExtraPersonRequestDtoToJson(
 _HotelRoomExtraPersonResultDto _$HotelRoomExtraPersonResultDtoFromJson(
   Map<String, dynamic> json,
 ) => _HotelRoomExtraPersonResultDto(
+  pointTotal: _hotelNumFromJson(json['pointTotal']),
   priceElement: json['priceElement'] == null
       ? null
       : HotelPriceElementDto.fromJson(
@@ -699,7 +702,10 @@ _HotelRoomExtraPersonResultDto _$HotelRoomExtraPersonResultDtoFromJson(
 
 Map<String, dynamic> _$HotelRoomExtraPersonResultDtoToJson(
   _HotelRoomExtraPersonResultDto instance,
-) => <String, dynamic>{'priceElement': instance.priceElement};
+) => <String, dynamic>{
+  'pointTotal': instance.pointTotal,
+  'priceElement': instance.priceElement,
+};
 
 _HotelPriceElementDto _$HotelPriceElementDtoFromJson(
   Map<String, dynamic> json,

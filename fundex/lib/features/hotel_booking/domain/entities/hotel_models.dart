@@ -80,6 +80,7 @@ class HotelSearchResult {
 
 class HotelSummary {
   const HotelSummary({
+    this.description,
     required this.id,
     required this.name,
     required this.address,
@@ -101,6 +102,7 @@ class HotelSummary {
     required this.tags,
   });
 
+  final String? description;
   final String id;
   final String name;
   final String address;
@@ -473,6 +475,7 @@ class HotelCountryCode {
 
 class HotelBookingPreparation {
   const HotelBookingPreparation({
+    this.pointTotal,
     required this.pageTexts,
     required this.countryCodes,
     required this.coupons,
@@ -490,6 +493,9 @@ class HotelBookingPreparation {
   final int couponsAvailableCount;
   final int contactsCount;
   final int registeredCardCount;
+
+  /// Null means the quote does not offer points payment.
+  final num? pointTotal;
   final num? quotedPrice;
   final num? originalPrice;
   final List<HotelBookingRoomPriceElement> roomPriceElements;
@@ -585,11 +591,14 @@ class HotelMemberContactDraft {
 
 class HotelBookingQuote {
   const HotelBookingQuote({
+    this.pointTotal,
     required this.quotedPrice,
     required this.originalPrice,
     required this.roomPriceElements,
   });
 
+  /// Null means the quote does not offer points payment.
+  final num? pointTotal;
   final num? quotedPrice;
   final num? originalPrice;
   final List<HotelBookingRoomPriceElement> roomPriceElements;

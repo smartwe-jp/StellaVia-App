@@ -5,15 +5,19 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../providers/hotel_booking_providers.dart';
+import '../../../main_shell/presentation/providers/main_shell_providers.dart';
+import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
 import '../support/hotel_booking_presenter.dart';
 import '../support/hotel_order_cancel_flow.dart';
 import '../support/hotel_payment_route_args.dart';
 import '../widgets/hotel_order_list_widgets.dart';
+import '../widgets/hotel_bookings_refresh_scope.dart';
 import '../widgets/hotel_payment_method_widgets.dart';
 import '../widgets/hotel_state_views.dart';
 
 class HotelOrderListPage extends ConsumerWidget {
-  const HotelOrderListPage({super.key});
+  const HotelOrderListPage({super.key, this.isRootTab = false});
+  final bool isRootTab;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,24 +29,28 @@ class HotelOrderListPage extends ConsumerWidget {
       Localizations.localeOf(context).toLanguageTag(),
     );
 
-    return Scaffold(
+    final page = Scaffold(
       backgroundColor: colors.surfaceAlt,
       appBar: AppNavigationBar(
-        title: context.l10n.hotelOrdersTitle,
+        title: isRootTab
+            ? context.l10n.mainTabBookings
+            : context.l10n.hotelOrdersTitle,
         backgroundColor: colors.surface,
         foregroundColor: colors.textPrimary,
-        leading: AppNavigationIconButton(
-          icon: Icons.arrow_back_rounded,
-          onTap: () {
-            if (context.canPop()) {
-              context.pop();
-              return;
-            }
-            context.go('/hotel-booking');
-          },
-          backgroundColor: colors.surface.withValues(alpha: 0),
-          foregroundColor: colors.textPrimary,
-        ),
+        leading: isRootTab
+            ? null
+            : AppNavigationIconButton(
+                icon: Icons.arrow_back_rounded,
+                onTap: () {
+                  if (context.canPop()) {
+                    context.pop();
+                    return;
+                  }
+                  context.go('/hotel-booking');
+                },
+                backgroundColor: colors.surface.withValues(alpha: 0),
+                foregroundColor: colors.textPrimary,
+              ),
       ),
       body: RefreshIndicator(
         onRefresh: controller.refresh,
@@ -153,5 +161,15 @@ class HotelOrderListPage extends ConsumerWidget {
         ),
       ),
     );
+    return isRootTab
+        ? MainShellTabRefreshScope(
+            tabIndex: MainShellTab.bookings.index,
+            onRefresh: (_) => controller.refresh(),
+            child: HotelBookingsRefreshScope(
+              onRefresh: controller.refresh,
+              child: page,
+            ),
+          )
+        : page;
   }
 }

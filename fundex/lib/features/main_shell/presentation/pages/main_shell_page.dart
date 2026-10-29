@@ -1,19 +1,14 @@
-import 'dart:async';
-import 'dart:math' as math;
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
-import 'package:sensors_plus/sensors_plus.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../discussion_board/presentation/providers/discussion_board_providers.dart';
 import '../../../discussion_board/presentation/state/discussion_send_queue_state.dart';
 import '../providers/main_shell_providers.dart';
+import '../widgets/main_shell_bottom_bar.dart';
 
 class MainShellPage extends ConsumerStatefulWidget {
   const MainShellPage({super.key, required this.navigationShell});
@@ -28,13 +23,10 @@ class _MainShellPageState extends ConsumerState<MainShellPage>
     with SingleTickerProviderStateMixin {
   static const double _chromeRevealScrollDistance = 96;
   static const double _chromeRevealActivationDistance = 18;
-  static const double _defaultGoldRingRotation = math.pi / 2;
 
   late final AnimationController _chromeSnapController;
   Animation<double>? _chromeSnapAnimation;
-  StreamSubscription<AccelerometerEvent>? _accelerometerSubscription;
   double _pendingChromeRevealDistance = 0;
-  double _goldRingRotation = _defaultGoldRingRotation;
 
   @override
   void initState() {
@@ -50,55 +42,12 @@ class _MainShellPageState extends ConsumerState<MainShellPage>
           }
           _setChromeReveal(animation.value);
         });
-    _startGoldRingMotionTracking();
   }
 
   @override
   void dispose() {
-    _accelerometerSubscription?.cancel();
     _chromeSnapController.dispose();
     super.dispose();
-  }
-
-  void _startGoldRingMotionTracking() {
-    if (kIsWeb) {
-      return;
-    }
-    _accelerometerSubscription =
-        accelerometerEventStream(
-          samplingPeriod: SensorInterval.uiInterval,
-        ).listen(
-          _handleAccelerometerEvent,
-          onError: (_) {
-            _accelerometerSubscription?.cancel();
-            _accelerometerSubscription = null;
-          },
-          cancelOnError: true,
-        );
-  }
-
-  void _handleAccelerometerEvent(AccelerometerEvent event) {
-    final verticalMagnitude = math.sqrt(event.y * event.y + event.z * event.z);
-    if (verticalMagnitude < 0.8) {
-      return;
-    }
-    final xAxisPitch = math.atan2(event.z, event.y.abs());
-    final targetRotation = _defaultGoldRingRotation + xAxisPitch;
-    final nextRotation = _lerpAngle(_goldRingRotation, targetRotation, 0.14);
-    if ((nextRotation - _goldRingRotation).abs() < 0.01) {
-      return;
-    }
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      _goldRingRotation = nextRotation;
-    });
-  }
-
-  double _lerpAngle(double current, double target, double factor) {
-    final delta = (target - current + math.pi) % (math.pi * 2) - math.pi;
-    return current + delta * factor;
   }
 
   void _onDestinationSelected(BuildContext context, int index) {
@@ -201,13 +150,7 @@ class _MainShellPageState extends ConsumerState<MainShellPage>
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = theme.appColors;
-    final colorScheme = theme.colorScheme;
-    final shellNavigationTheme = theme.extension<AppShellNavigationTheme>()!;
     final sendQueueState = ref.watch(discussionSendQueueProvider);
-    final inactiveTabBackgroundColor = Color.alphaBlend(
-      colors.highlightGold.withValues(alpha: 0.18),
-      colors.surface,
-    );
     final currentTabIndex = ref.watch(mainShellCurrentTabIndexProvider);
     final chromeReveal = ref
         .watch(mainShellChromeRevealProvider)
@@ -242,15 +185,7 @@ class _MainShellPageState extends ConsumerState<MainShellPage>
             child: widget.navigationShell,
           ),
           bottomNavigationBar: DecoratedBox(
-            decoration: BoxDecoration(color: colors.surfaceAlt,
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: colors.highlightGold.withValues(alpha: 0.8),
-                    blurRadius: 12,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
-            ),
+            decoration: BoxDecoration(color: colors.surface),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -278,239 +213,10 @@ class _MainShellPageState extends ConsumerState<MainShellPage>
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
-                              // Container(
-                              //   height: 1,
-                              //   width: double.infinity,
-                              //   color: colors.border,
-                              // ),
-                              SafeArea(
-                                top: false,
-                                child: SizedBox(
-                                  key: const Key('main_tab_bar'),
-                                  height: 70,
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: _MainTabItem(
-                                              label: l10n.mainTabHome,
-                                              isSelected:
-                                                  currentTabIndex ==
-                                                  MainShellTab.home.index,
-                                              labelColor:
-                                                  currentTabIndex ==
-                                                      MainShellTab.home.index
-                                                  ? colorScheme.primary
-                                                  : shellNavigationTheme
-                                                        .bottomTabInactiveColor,
-                                              onTap: () =>
-                                                  _onDestinationSelected(
-                                                    context,
-                                                    MainShellTab.home.index,
-                                                  ),
-                                              badge: _MainTabBadge(
-                                                backgroundColor:
-                                                    currentTabIndex ==
-                                                        MainShellTab.home.index
-                                                    ? colorScheme.primary
-                                                    : inactiveTabBackgroundColor,
-                                                child: Icon(
-                                                  Icons.home_rounded,
-                                                  size: 24,
-                                                  color:
-                                                      currentTabIndex ==
-                                                          MainShellTab
-                                                              .home
-                                                              .index
-                                                      ? colors.onDark
-                                                      : shellNavigationTheme
-                                                            .bottomTabInactiveColor,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: _MainTabItem(
-                                              label: l10n.mainTabHotel,
-                                              isSelected:
-                                                  currentTabIndex ==
-                                                  MainShellTab.hotel.index,
-                                              labelColor:
-                                                  currentTabIndex ==
-                                                      MainShellTab.hotel.index
-                                                  ? colorScheme.primary
-                                                  : shellNavigationTheme
-                                                        .bottomTabInactiveColor,
-                                              onTap: () =>
-                                                  _onDestinationSelected(
-                                                    context,
-                                                    MainShellTab.hotel.index,
-                                                  ),
-                                              badge: _MainTabBadge(
-                                                backgroundColor:
-                                                    currentTabIndex ==
-                                                        MainShellTab.hotel.index
-                                                    ? colorScheme.primary
-                                                    : inactiveTabBackgroundColor,
-                                                child: Icon(
-                                                  Icons.hotel_rounded,
-                                                  size: 24,
-                                                  color:
-                                                      currentTabIndex ==
-                                                          MainShellTab
-                                                              .hotel
-                                                              .index
-                                                      ? colors.onDark
-                                                      : shellNavigationTheme
-                                                            .bottomTabInactiveColor,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: _MainTabItem(
-                                              center: true,
-                                              label: l10n.mainTabInvestment,
-                                              isSelected:
-                                                  currentTabIndex ==
-                                                  MainShellTab.investment.index,
-                                              labelColor:
-                                                  currentTabIndex ==
-                                                      MainShellTab
-                                                          .investment
-                                                          .index
-                                                  ? colorScheme.primary
-                                                  : colors.highlightGold,
-                                              onTap: () =>
-                                                  _onDestinationSelected(
-                                                    context,
-                                                    MainShellTab
-                                                        .investment
-                                                        .index,
-                                                  ),
-                                              badge: _MainTabBadge(
-                                                isSelected:
-                                                    currentTabIndex ==
-                                                    MainShellTab
-                                                        .investment
-                                                        .index,
-                                                center: true,
-                                                goldRingRotation:
-                                                    _goldRingRotation,
-                                                backgroundColor:
-                                                    currentTabIndex ==
-                                                        MainShellTab
-                                                            .investment
-                                                            .index
-                                                    ? colorScheme.primary
-                                                    : inactiveTabBackgroundColor,
-                                                child: Icon(
-                                                  Symbols.finance_mode,
-                                                  size: 24,
-                                                  color:
-                                                      currentTabIndex ==
-                                                          MainShellTab
-                                                              .investment
-                                                              .index
-                                                      ? colors.onDark
-                                                      : colors.highlightGold,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: _MainTabItem(
-                                              label: l10n.mainTabKizunark,
-                                              isSelected:
-                                                  currentTabIndex ==
-                                                  MainShellTab.kizunark.index,
-                                              labelColor:
-                                                  currentTabIndex ==
-                                                      MainShellTab
-                                                          .kizunark
-                                                          .index
-                                                  ? colorScheme.primary
-                                                  : shellNavigationTheme
-                                                        .bottomTabInactiveColor,
-                                              onTap: () =>
-                                                  _onDestinationSelected(
-                                                    context,
-                                                    MainShellTab.kizunark.index,
-                                                  ),
-                                              badge: _MainTabBadge(
-                                                backgroundColor:
-                                                    currentTabIndex ==
-                                                        MainShellTab
-                                                            .kizunark
-                                                            .index
-                                                    ? colorScheme.primary
-                                                    : inactiveTabBackgroundColor,
-                                                child: Image.asset(
-                                                  'assets/images/kizunark.tab.normal.png',
-                                                  width: 24,
-                                                  height: 24,
-                                                  fit: BoxFit.contain,
-                                                  color:
-                                                      currentTabIndex ==
-                                                          MainShellTab
-                                                              .kizunark
-                                                              .index
-                                                      ? colors.onDark
-                                                      : shellNavigationTheme
-                                                            .bottomTabInactiveColor,
-                                                  colorBlendMode:
-                                                      BlendMode.srcIn,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-
-                                          Expanded(
-                                            child: _MainTabItem(
-                                              label: l10n.mainTabProfile,
-                                              isSelected:
-                                                  currentTabIndex ==
-                                                  MainShellTab.profile.index,
-                                              labelColor:
-                                                  currentTabIndex ==
-                                                      MainShellTab.profile.index
-                                                  ? colorScheme.primary
-                                                  : shellNavigationTheme
-                                                        .bottomTabInactiveColor,
-                                              onTap: () =>
-                                                  _onDestinationSelected(
-                                                    context,
-                                                    MainShellTab.profile.index,
-                                                  ),
-                                              badge: _MainTabBadge(
-                                                backgroundColor:
-                                                    currentTabIndex ==
-                                                        MainShellTab
-                                                            .profile
-                                                            .index
-                                                    ? colorScheme.primary
-                                                    : inactiveTabBackgroundColor,
-                                                child: Icon(
-                                                  Icons.person_rounded,
-                                                  size: 24,
-                                                  color:
-                                                      currentTabIndex ==
-                                                          MainShellTab
-                                                              .profile
-                                                              .index
-                                                      ? colors.onDark
-                                                      : shellNavigationTheme
-                                                            .bottomTabInactiveColor,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                              MainShellBottomBar(
+                                currentTabIndex: currentTabIndex,
+                                onSelected: (index) =>
+                                    _onDestinationSelected(context, index),
                               ),
                             ],
                           ),
@@ -597,179 +303,5 @@ class _DiscussionSendQueueBar extends StatelessWidget {
             )
           : const SizedBox.shrink(),
     );
-  }
-}
-
-class _MainTabItem extends StatelessWidget {
-  const _MainTabItem({
-    required this.label,
-    required this.isSelected,
-    required this.labelColor,
-    required this.onTap,
-    required this.badge,
-    this.center = false,
-  });
-
-  final String label;
-  final bool isSelected;
-  final Color labelColor;
-  final VoidCallback onTap;
-  final Widget badge;
-  final bool center;
-
-  @override
-  Widget build(BuildContext context) {
-    final labelStyle = Theme.of(context).textTheme.labelMedium;
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: onTap,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          //const SizedBox(height: 4),
-          
-          const SizedBox(height: 2),
-          badge,
-          SizedBox(height: center ? 0 : 2),
-          Text(
-            label,
-            style: labelStyle?.copyWith(
-              color: labelColor,
-              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-            ),
-          ),
-
-        ],
-      ),
-    );
-  }
-}
-
-class _MainTabBadge extends StatelessWidget {
-  const _MainTabBadge({
-    required this.backgroundColor,
-    required this.child,
-    this.center = false,
-    this.isSelected = false,
-    this.goldRingRotation = _MainShellPageState._defaultGoldRingRotation,
-  });
-
-  final Color backgroundColor;
-  final Widget child;
-  final bool center;
-  final bool isSelected;
-  final double goldRingRotation;
-
-  static const double _layoutSize = 40;
-  static const double _centerVisualSize = 56;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).appColors;
-    //final showGoldRing = center;
-    final badge = DecoratedBox(
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        shape: BoxShape.circle,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: backgroundColor.withValues(alpha: 0.32),
-            blurRadius: 14,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: SizedBox(
-        width: _layoutSize,
-        height: _layoutSize,
-        child: Center(child: child),
-      ),
-    );
-    final paintedBadge = Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: colors.surfaceAlt,
-          width: 4,
-        ),
-      ),
-      child: CustomPaint(
-        foregroundPainter: _MainTabGoldRingPainter(
-          baseGold: colors.highlightGold,
-          lightGold: colors.warningBorder,
-          glowColor: colors.highlightGold.withValues(alpha: 0.45),
-          rotation: goldRingRotation,
-        ),
-        child: badge,
-      ),
-    );
-
-    if (!center) {
-      return badge;
-    }
-    return Transform.scale(
-      scale: _centerVisualSize / _layoutSize,
-      alignment: Alignment.bottomCenter,
-      child: paintedBadge,
-    );
-  }
-}
-
-class _MainTabGoldRingPainter extends CustomPainter {
-  const _MainTabGoldRingPainter({
-    required this.baseGold,
-    required this.lightGold,
-    required this.glowColor,
-    required this.rotation,
-  });
-
-  final Color baseGold;
-  final Color lightGold;
-  final Color glowColor;
-  final double rotation;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final shortestSide = math.min(size.width, size.height);
-    final center = Offset(size.width / 2, size.height / 2);
-    final strokeWidth = shortestSide * 0.07;
-    final radius = shortestSide / 2 - strokeWidth / 2;
-    final rect = Rect.fromCircle(center: center, radius: radius);
-
-    final glowPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth * 1.35
-      ..color = glowColor
-      ..maskFilter = MaskFilter.blur(BlurStyle.normal, strokeWidth * 0.7);
-    canvas.drawCircle(center, radius, glowPaint);
-
-    final ringPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round
-      ..shader = SweepGradient(
-        transform: GradientRotation(rotation),
-        colors: <Color>[
-          lightGold,
-          baseGold,
-          baseGold,
-          baseGold,
-          lightGold,
-          baseGold,
-          baseGold,
-          baseGold,
-          lightGold,
-        ],
-        stops: const <double>[0, 0.06, 0.18, 0.44, 0.50, 0.56, 0.82, 0.94, 1],
-      ).createShader(rect);
-    canvas.drawCircle(center, radius, ringPaint);
-  }
-
-  @override
-  bool shouldRepaint(covariant _MainTabGoldRingPainter oldDelegate) {
-    return oldDelegate.baseGold != baseGold ||
-        oldDelegate.lightGold != lightGold ||
-        oldDelegate.glowColor != glowColor ||
-        oldDelegate.rotation != rotation;
   }
 }

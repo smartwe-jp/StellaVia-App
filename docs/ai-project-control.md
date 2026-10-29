@@ -232,3 +232,45 @@ Update these files by scope:
 ### 2026-10-28 酒店首页范围
 
 普通酒店首页及卡片按 Figma 更新，搜索/分页/刷新继续用现有接口。新增 `/hotel-booking/host-miles` 设计预览页（明确示例标记，按钮禁用），不复用旧住宿优待作为里程资格，不实现后续预约。实现边界与验证见 `docs/hotel-booking-roadmap.md` 的本日记录。
+
+### 2026-10-29 新功能数据层
+
+已新增宿主マイル权益和资产收益统计的11个SDK读取接口及App领域/data层，详见 [StellaVia 数据接入](stellavia-data-integration.md)。余额、过期提醒与等级规则已从最新Swagger补齐。仅依赖注入，不触发页面请求；UI由用户后续逐页指派。10-15讨论已确认stayBenefit=true可用于宿主マイル、多晚查询，修正上面的10-28预览时期判断；旧单晚UI尚待后续改版。
+
+### 2026-10-29 首页数据接入
+
+登录首页现有里程卡已绑定availablePoints，公开等级预览已绑定listRules；只接现有首页可展示数据，详情页/试算/预约由后续指派。账户隔离、错误保留旧值和重试、下拉/Tab/页面返回/前台刷新已补齐，见 [Home redesign](home-redesign.md) 的本日数据接入记录。
+
+### 2026-10-29 首页试算器
+
+已实现 Figma 13 的 `/home/simulation` 公共页面及首页入口。输入金额/年利率/期限/分红类型实时计算税前单利；里程使用公开 listRules 的月 pointRate。用户授权晚数先使用 10,000 mile/晚示例参数，页面明确说明。具体公式、边界与验证见 `docs/home-redesign.md` 的同日试算器章节。后续真实兑换标准明确后替换参数，不将此假设用于预约提交。
+
+### 2026-10-29 本期 UI 基础能力收敛
+
+首页/服务/等级/酒店首页文字样式已集中到 feature support；SDK AppCard 增加可选表面与几何配置，并新增 AppSlider、AppTwoLineSegmentedControl，已回接本期页面。业务组合仍归 feature。维护路径和兼容边界见 `docs/stellavia-shared-components.md` 的同日章节。
+
+### 2026-10-29 试算器 Web 规则对齐
+
+试算器结果改为 FINANCIAL RETURN 配当 / EXPERIENCE RETURN 宿主優待；展示实际期间累计配当、领取时机、等级月率/月里程/累计里程。删除之前每晚10,000里程假设及晚数，用户确认不加入示例酒店。App仍实时计算。Web算法来源与边界见 `docs/home-redesign.md` 最新章节。
+
+### 2026-10-29 宿主マイル酒店首页
+
+酒店里程首页已接真实余额/等级/剩余室数与stayBenefit=true酒店列表，支持多晚查询和分页。保留未确认所需里程为未知，预定入口禁用。数据隔离/刷新/错误边界见hotel-booking-roadmap.md最新章节。
+
+### 2026-10-29 My Page 图表接入
+
+My Page资产区已替换为运用残高、累计配当、累计宿主マイル三张真实数据图表，默认近5年，可分别切换1/3/5年。使用既有历史基金资产、累计收益和累计里程接口；保留刷新失败缓存、账号隔离及根Tab刷新。旧走势图实现保留，其他My Page内容本轮不改。字段口径与验证见 [StellaVia 数据接入](stellavia-data-integration.md) 最新章节。
+
+### 2026-10-29 My Page 等级卡
+
+My Page新增真实等级/可用里程/月获得率/升级差额/室数/过期摘要，复用现有等级说明页并提供过期明细弹层。最高等级采用接口MAX标记。过期汇总未确认一个月口径，文案暂为“即将失效”。字段、进度与验证见StellaVia数据接入文档最新章节。
+
+### 2026-10-29 TabBar 设计与入口调整
+
+用户确认同时调整外观及Tab内容。可见顺序为首页、基金、酒店、住宿管理、My Page；图标使用Figma 01 ホーム（サマリー）的原SVG。SDK通用AppBottomTabBar负责外观与SafeArea，App负责映射。住宿管理使用/bookings复用现有酒店订单列表，旧/hotel-booking/orders及详情路径重定向兼容。KIZUNARK保留第6个不可见分支及原/discussion-board路由，以保留旧功能/深链接，不出现在可见Tab中。原先“Tab不动”的范围限制由本次明确授权更新。
+
+### 2026-10-29 My Page summary design
+- My Page uses the white asset summary header from Figma `8038:31937`, with existing verification status semantics (4 verified, 2/5 pending, otherwise unverified), notifications/settings, amount visibility, and guarded withdrawal/deposit actions.
+- Feature widgets `MyPageAssetSummary` and `MyPageHoldingCard` reuse SDK primitives/tokens. Legacy asset overview and active-fund card implementations remain available; My Page switches to the new compositions.
+- Holding cards use real project photos, status, invested amount/units, dividends and scheduled period. Missing period displays a dash; no fabricated hotel subtitle. Existing record selection and detail routing remain unchanged.
+- Transaction history is unchanged; membership card and three charts remain integrated. Four locales updated.

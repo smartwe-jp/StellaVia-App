@@ -1,6 +1,7 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../support/home_text_styles.dart';
 
 class HomeServiceAboutSection extends StatelessWidget {
   const HomeServiceAboutSection({super.key});
@@ -13,7 +14,7 @@ class HomeServiceAboutSection extends StatelessWidget {
       ),
       Text(
         context.l10n.homeServiceAboutBody,
-        style: context.appTextTheme.body.copyWith(fontSize: 15, height: 2),
+        style: HomeTextStyles.readingBody(context),
       ),
       ClipRRect(
         borderRadius: BorderRadius.circular(16),
@@ -72,46 +73,43 @@ class _ReturnCard extends StatelessWidget {
     final colors = context.appColors;
     final text = context.appTextTheme;
     final foreground = inverse ? colors.onDark : colors.textPrimary;
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: inverse ? colors.brandPrimaryDark : colors.surfaceAlt,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 16,
-        children: [
-          Text(
-            eyebrow,
-            style: text.numericCaption.copyWith(
-              fontSize: 12,
-              letterSpacing: 1.8,
-              color: inverse ? colors.brandPrimaryBright : text.link.color,
+      child: AppCard(
+        variant: AppCardVariant.filled,
+        backgroundColor: inverse ? colors.brandPrimaryDark : colors.surfaceAlt,
+        padding: const EdgeInsets.all(24),
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 16,
+          children: [
+            Text(
+              eyebrow,
+              style: HomeTextStyles.returnEyebrow(context).copyWith(
+                color: inverse ? colors.brandPrimaryBright : text.link.color,
+              ),
             ),
-          ),
-          Text(
-            englishTitle,
-            style: text.numericTitle.copyWith(
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-              color: inverse ? foreground : text.link.color,
+            Text(
+              englishTitle,
+              style: HomeTextStyles.rankName(
+                context,
+              ).copyWith(color: inverse ? foreground : text.link.color),
             ),
-          ),
-          Text(
-            title,
-            style: text.sectionTitle.copyWith(fontSize: 20, color: foreground),
-          ),
-          Text(
-            body,
-            style: text.body.copyWith(
-              fontSize: 15,
-              height: 2,
-              color: foreground,
+            Text(
+              title,
+              style: HomeTextStyles.returnTitle(
+                context,
+              ).copyWith(color: foreground),
             ),
-          ),
-        ],
+            Text(
+              body,
+              style: HomeTextStyles.readingBody(
+                context,
+              ).copyWith(color: foreground),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -142,8 +140,7 @@ class HomeServiceStartSection extends StatelessWidget {
             children: [
               Text(
                 '0${i + 1}',
-                style: context.appTextTheme.numericTitle.copyWith(
-                  fontSize: 26,
+                style: HomeTextStyles.stepNumber(context).copyWith(
                   color: context.appColors.onDark.withValues(alpha: .8),
                 ),
               ),
@@ -154,19 +151,16 @@ class HomeServiceStartSection extends StatelessWidget {
                   children: [
                     Text(
                       steps[i].$1,
-                      style: context.appTextTheme.bodyStrong.copyWith(
-                        fontSize: 16,
-                        color: context.appColors.onDark,
-                      ),
+                      style: HomeTextStyles.stepTitle(
+                        context,
+                      ).copyWith(color: context.appColors.onDark),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       steps[i].$2,
-                      style: context.appTextTheme.caption.copyWith(
-                        fontSize: 12,
-                        height: 5 / 3,
-                        color: context.appColors.onDark,
-                      ),
+                      style: HomeTextStyles.stepDescription(
+                        context,
+                      ).copyWith(color: context.appColors.onDark),
                     ),
                   ],
                 ),
@@ -175,11 +169,9 @@ class HomeServiceStartSection extends StatelessWidget {
           ),
         Text(
           l.homeServiceMemberNote,
-          style: context.appTextTheme.caption.copyWith(
-            fontSize: 12,
-            height: 5 / 3,
-            color: context.appColors.onDark,
-          ),
+          style: HomeTextStyles.stepDescription(
+            context,
+          ).copyWith(color: context.appColors.onDark),
         ),
       ],
     );

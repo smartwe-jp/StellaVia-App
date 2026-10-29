@@ -2,12 +2,24 @@ import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../support/home_design_theme.dart';
+import 'home_data_status.dart';
+import '../support/home_text_styles.dart';
 
 class HomeRankTeaser extends StatelessWidget {
-  const HomeRankTeaser({super.key, required this.onTap});
+  const HomeRankTeaser({
+    super.key,
+    required this.onTap,
+    this.names = const ['REGULAR', 'BRONZE', 'SILVER', 'GOLD', 'MASTER'],
+    this.isLoading = false,
+    this.hasError = false,
+    this.onRetry,
+  });
+  final List<String> names;
+  final bool isLoading;
+  final bool hasError;
+  final VoidCallback? onRetry;
   final VoidCallback onTap;
-  // Proper names from the design; these cards illustrate tiers, not user status.
-  static const _names = ['REGULAR', 'BRONZE', 'SILVER', 'GOLD', 'MASTER'];
+  // Public tier catalog, not the signed-in user's tier.
   @override
   Widget build(BuildContext context) => AppCard(
     padding: const EdgeInsets.all(12),
@@ -16,12 +28,17 @@ class HomeRankTeaser extends StatelessWidget {
       children: [
         Text(
           context.l10n.homeRankEyebrow,
-          style: context.appTextTheme.link.copyWith(fontSize: 13),
+          style: HomeTextStyles.sectionLink(context),
         ),
         const SizedBox(height: 2),
         Text(
           context.l10n.homeRankTitle,
-          style: context.appTextTheme.bodyStrong.copyWith(fontSize: 15),
+          style: HomeTextStyles.entryTitle(context),
+        ),
+        HomeDataStatus(
+          isLoading: isLoading,
+          hasError: hasError,
+          onRetry: onRetry,
         ),
         const SizedBox(height: 8),
         SizedBox(
@@ -30,9 +47,12 @@ class HomeRankTeaser extends StatelessWidget {
             builder: (context, constraints) => ClipRect(
               child: Stack(
                 children: [
-                  for (var i = 0; i < _names.length; i++)
+                  for (var i = 0; i < names.length; i++)
                     Positioned(
-                      left: i * constraints.maxWidth * .15,
+                      left:
+                          i *
+                          constraints.maxWidth *
+                          (names.length <= 1 ? 0 : .6 / (names.length - 1)),
                       top: 0,
                       width: 280,
                       height: 99,
@@ -40,7 +60,9 @@ class HomeRankTeaser extends StatelessWidget {
                         child: Container(
                           clipBehavior: Clip.antiAlias,
                           decoration: BoxDecoration(
-                            color: HomeDesignTheme.rankSurfaces[i],
+                            color:
+                                HomeDesignTheme.rankSurfaces[i %
+                                    HomeDesignTheme.rankSurfaces.length],
                             borderRadius: BorderRadius.circular(11.2),
                           ),
                           child: Column(
@@ -52,26 +74,29 @@ class HomeRankTeaser extends StatelessWidget {
                                   horizontal: 14,
                                   vertical: 10,
                                 ),
-                                color: HomeDesignTheme.rankHeaders[i],
+                                color:
+                                    HomeDesignTheme.rankHeaders[i %
+                                        HomeDesignTheme.rankHeaders.length],
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'RANK 0${i + 1}',
-                                      style: context.appTextTheme.numericCaption
-                                          .copyWith(
-                                            fontSize: 8,
-                                            letterSpacing: 1.2,
+                                      'RANK ${(i + 1).toString().padLeft(2, '0')}',
+                                      style:
+                                          HomeTextStyles.rankPreviewEyebrow(
+                                            context,
+                                          ).copyWith(
                                             color: i == 0
                                                 ? HomeDesignTheme.rankInk
                                                 : HomeDesignTheme.rankOnDark,
                                           ),
                                     ),
                                     Text(
-                                      _names[i],
-                                      style: context.appTextTheme.numericBody
-                                          .copyWith(
-                                            fontSize: 14,
+                                      names[i],
+                                      style:
+                                          HomeTextStyles.rankPreviewName(
+                                            context,
+                                          ).copyWith(
                                             color: i == 0
                                                 ? HomeDesignTheme.rankInk
                                                 : HomeDesignTheme.rankOnDark,

@@ -1,3 +1,4 @@
+import '../../features/home/presentation/pages/home_simulation_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_host_miles_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -144,6 +145,7 @@ String? resolveAuthRedirect({
       location == '/home' ||
       location == '/home/service' ||
       location == '/home/ranks' ||
+      location == '/home/simulation' ||
       location == '/home/free-market' ||
       location.startsWith('/home/free-market/') ||
       location == '/discussion-board' ||
@@ -307,6 +309,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 },
                 routes: <RouteBase>[
                   GoRoute(
+                    path: 'simulation',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) => const HomeSimulationPage(),
+                  ),
+                  GoRoute(
                     path: 'service',
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) =>
@@ -341,6 +348,50 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (BuildContext context, GoRouterState state) {
                       return const BenefitLotteryStatusPage();
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              GoRoute(
+                path: '/funds',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const InvestmentTabPage();
+                },
+                routes: <RouteBase>[
+                  GoRoute(
+                    path: ':id',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (BuildContext context, GoRouterState state) {
+                      final id = state.pathParameters['id'] ?? '';
+                      return FundProjectDetailPage(projectId: id);
+                    },
+                  ),
+                  GoRoute(
+                    path: ':id/lottery-apply',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (BuildContext context, GoRouterState state) {
+                      final id = state.pathParameters['id'] ?? '';
+                      final initialStep = fundLotteryApplyStepFromQueryValue(
+                        state.uri.queryParameters['step'],
+                      );
+                      final allowSubmittedResultAdvance =
+                          state.uri.queryParameters['allowSubmittedAdvance'] !=
+                          'false';
+                      final extra = state.extra;
+                      return FundLotteryApplyFlowPage(
+                        projectId: id,
+                        initialStep:
+                            initialStep ?? FundLotteryApplyStep.amountInput,
+                        allowSubmittedResultAdvance:
+                            allowSubmittedResultAdvance,
+                        initialSeed: extra is FundLotteryApplyFlowSeed
+                            ? extra
+                            : null,
+                      );
                     },
                   ),
                 ],
@@ -402,10 +453,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   ),
                   GoRoute(
                     path: 'orders',
-                    parentNavigatorKey: _rootNavigatorKey,
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const HotelOrderListPage();
-                    },
+                    redirect: (context, state) => '/bookings',
+                  ),
+                  GoRoute(
+                    path: 'orders/:orderId',
+                    redirect: (context, state) =>
+                        '/bookings/${Uri.encodeComponent(state.pathParameters['orderId'] ?? '')}',
                   ),
                   GoRoute(
                     path: 'check-in',
@@ -420,14 +473,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     builder: (BuildContext context, GoRouterState state) {
                       final orderId = state.pathParameters['orderId'] ?? '';
                       return HotelTodayCheckInDetailPage(orderId: orderId);
-                    },
-                  ),
-                  GoRoute(
-                    path: 'orders/:orderId',
-                    parentNavigatorKey: _rootNavigatorKey,
-                    builder: (BuildContext context, GoRouterState state) {
-                      final orderId = state.pathParameters['orderId'] ?? '';
-                      return HotelOrderDetailPage(orderId: orderId);
                     },
                   ),
                   GoRoute(
@@ -514,72 +559,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: <RouteBase>[
               GoRoute(
-                path: '/funds',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const InvestmentTabPage();
-                },
-                routes: <RouteBase>[
+                path: '/bookings',
+                builder: (context, state) =>
+                    const HotelOrderListPage(isRootTab: true),
+                routes: [
                   GoRoute(
-                    path: ':id',
+                    path: ':orderId',
                     parentNavigatorKey: _rootNavigatorKey,
-                    builder: (BuildContext context, GoRouterState state) {
-                      final id = state.pathParameters['id'] ?? '';
-                      return FundProjectDetailPage(projectId: id);
-                    },
-                  ),
-                  GoRoute(
-                    path: ':id/lottery-apply',
-                    parentNavigatorKey: _rootNavigatorKey,
-                    builder: (BuildContext context, GoRouterState state) {
-                      final id = state.pathParameters['id'] ?? '';
-                      final initialStep = fundLotteryApplyStepFromQueryValue(
-                        state.uri.queryParameters['step'],
-                      );
-                      final allowSubmittedResultAdvance =
-                          state.uri.queryParameters['allowSubmittedAdvance'] !=
-                          'false';
-                      final extra = state.extra;
-                      return FundLotteryApplyFlowPage(
-                        projectId: id,
-                        initialStep:
-                            initialStep ?? FundLotteryApplyStep.amountInput,
-                        allowSubmittedResultAdvance:
-                            allowSubmittedResultAdvance,
-                        initialSeed: extra is FundLotteryApplyFlowSeed
-                            ? extra
-                            : null,
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: <RouteBase>[
-              GoRoute(
-                path: '/discussion-board',
-                builder: (BuildContext context, GoRouterState state) {
-                  return const DiscussionBoardTabPage();
-                },
-                routes: <RouteBase>[
-                  GoRoute(
-                    path: 'thread/:threadId',
-                    parentNavigatorKey: _rootNavigatorKey,
-                    builder: (BuildContext context, GoRouterState state) {
-                      final extra = state.extra;
-                      if (extra is! KizunarkThreadDetailRouteArgs) {
-                        return const DiscussionBoardTabPage();
-                      }
-                      return KizunarkThreadDetailPage(
-                        thread: extra.thread,
-                        isAuthenticated: extra.isAuthenticated,
-                        currentUserId: extra.currentUserId,
-                        onOpenImageViewer: extra.onOpenImageViewer,
-                        onReply: extra.onReply,
-                        onMessageLongPress: extra.onMessageLongPress,
-                      );
-                    },
+                    builder: (context, state) => HotelOrderDetailPage(
+                      orderId: state.pathParameters['orderId'] ?? '',
+                    ),
                   ),
                 ],
               ),
@@ -624,6 +613,36 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     path: 'secondary-market',
                     redirect: (BuildContext context, GoRouterState state) {
                       return '/profile/my/secondary-market';
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              GoRoute(
+                path: '/discussion-board',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const DiscussionBoardTabPage();
+                },
+                routes: <RouteBase>[
+                  GoRoute(
+                    path: 'thread/:threadId',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (BuildContext context, GoRouterState state) {
+                      final extra = state.extra;
+                      if (extra is! KizunarkThreadDetailRouteArgs) {
+                        return const DiscussionBoardTabPage();
+                      }
+                      return KizunarkThreadDetailPage(
+                        thread: extra.thread,
+                        isAuthenticated: extra.isAuthenticated,
+                        currentUserId: extra.currentUserId,
+                        onOpenImageViewer: extra.onOpenImageViewer,
+                        onReply: extra.onReply,
+                        onMessageLongPress: extra.onMessageLongPress,
+                      );
                     },
                   ),
                 ],

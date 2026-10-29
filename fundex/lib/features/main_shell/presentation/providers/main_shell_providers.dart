@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-enum MainShellTab { home, hotel, investment, kizunark, profile }
+// KIZUNARK remains a deep-linkable hidden branch, outside the five visible tabs.
+enum MainShellTab { home, investment, hotel, bookings, profile, kizunark }
 
 final mainShellCurrentTabIndexProvider = StateProvider<int>(
   (ref) => MainShellTab.home.index,

@@ -25,9 +25,10 @@ import '../../../notifications/presentation/providers/notifications_providers.da
 import '../widgets/home_redesign_header.dart';
 import '../widgets/home_brand_intro.dart';
 import '../widgets/home_quick_actions.dart';
-import '../widgets/home_miles_card.dart';
+import '../widgets/home_miles_data_sections.dart';
+import '../widgets/home_miles_refresh_scope.dart';
+import '../providers/home_miles_providers.dart';
 import '../widgets/home_simulation_card.dart';
-import '../widgets/home_rank_teaser.dart';
 import '../support/home_design_theme.dart';
 import '../support/home_display_name_resolver.dart';
 
@@ -133,121 +134,129 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
 
     void preparing() =>
         AppNotice.show(context, message: l10n.homeFeaturePreparing);
-    return ColoredBox(
-      color: HomeDesignTheme.background(context),
-      child: Column(
-        children: [
-          HomeRedesignHeader(
-            isAuthenticated: isAuthenticated,
-            unreadCount: unreadNotificationCount,
-            onLogin: () => context.push('/login'),
-            onNotifications: () => context.push('/profile/notifications'),
-          ),
-          Expanded(
-            child: MainShellTabRefreshScope(
-              tabIndex: MainShellTab.home.index,
-              onRefresh: _refreshHomeOverviewTab,
-              scrollController: _scrollController,
-              child: RefreshIndicator(
-                onRefresh: () => _refreshHomeOverviewTab(ref),
-                child: ListView(
-                  key: const Key('home_tab_content'),
-                  controller: _scrollController,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-                  children: [
-                    if (networkAccessState == AppNetworkAccessState.denied ||
-                        (_isApplePlatform &&
-                            networkAvailability ==
-                                AppNetworkAvailability.offline))
-                      AppNetworkStatusBar(
-                        title: l10n.networkAccessDeniedBannerTitle,
-                        message: l10n.networkAccessDeniedBannerMessage,
-                        icon: Icons.wifi_find_outlined,
-                      )
-                    else if (networkAvailability ==
-                        AppNetworkAvailability.offline)
-                      AppNetworkStatusBar(
-                        title: l10n.networkOfflineBannerTitle,
-                        message: l10n.networkOfflineBannerMessage,
-                      ),
-                    HomeBrandIntro(
-                      isAuthenticated: isAuthenticated,
-                      displayName: displayName,
-                      onServiceTap: () => context.push('/home/service'),
-                    ),
-                    const SizedBox(height: 20),
-                    if (isAuthenticated) ...[
-                      HomeQuickActions(
-                        onFunds: () => context.go('/funds'),
-                        onHotels: () => context.go('/hotel-booking'),
-                      ),
-                      const SizedBox(height: 20),
-                    ],
-                    if (isAuthenticated) HomeMilesCard(onTap: preparing),
-                    if (asyncProjects.isLoading && projects.isEmpty)
-                      const Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Center(
-                          child: CircularProgressIndicator.adaptive(),
+    return HomeMilesRefreshScope(
+      onRefresh: () => _refreshHomeMiles(ref),
+      child: ColoredBox(
+        color: HomeDesignTheme.background(context),
+        child: Column(
+          children: [
+            HomeRedesignHeader(
+              isAuthenticated: isAuthenticated,
+              unreadCount: unreadNotificationCount,
+              onLogin: () => context.push('/login'),
+              onNotifications: () => context.push('/profile/notifications'),
+            ),
+            Expanded(
+              child: MainShellTabRefreshScope(
+                tabIndex: MainShellTab.home.index,
+                onRefresh: _refreshHomeOverviewTab,
+                scrollController: _scrollController,
+                child: RefreshIndicator(
+                  onRefresh: () => _refreshHomeOverviewTab(ref),
+                  child: ListView(
+                    key: const Key('home_tab_content'),
+                    controller: _scrollController,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                    children: [
+                      if (networkAccessState == AppNetworkAccessState.denied ||
+                          (_isApplePlatform &&
+                              networkAvailability ==
+                                  AppNetworkAvailability.offline))
+                        AppNetworkStatusBar(
+                          title: l10n.networkAccessDeniedBannerTitle,
+                          message: l10n.networkAccessDeniedBannerMessage,
+                          icon: Icons.wifi_find_outlined,
+                        )
+                      else if (networkAvailability ==
+                          AppNetworkAvailability.offline)
+                        AppNetworkStatusBar(
+                          title: l10n.networkOfflineBannerTitle,
+                          message: l10n.networkOfflineBannerMessage,
                         ),
-                      ),
-                    if (loadError != null && projects.isEmpty)
-                      Column(
-                        children: [
-                          Text(
-                            l10n.fundListLoadError,
-                            textAlign: TextAlign.center,
-                            style: context.appTextTheme.bodyMuted,
-                          ),
-                          AppButton(
-                            label: l10n.fundListRetry,
-                            variant: AppButtonVariant.text,
-                            onPressed: () =>
-                                ref.invalidate(fundProjectListProvider),
-                          ),
-                        ],
-                      ),
-                    if (featuredFundCards.isNotEmpty) ...[
-                      FundFeaturedFundCarousel(
-                        title: l10n.homeFeaturedFundsTitle,
-                        actionLabel: l10n.homeViewAllAction,
-                        onActionTap: () => context.go('/funds'),
-                        children: featuredFundCards,
+                      HomeBrandIntro(
+                        isAuthenticated: isAuthenticated,
+                        displayName: displayName,
+                        onServiceTap: () => context.push('/home/service'),
                       ),
                       const SizedBox(height: 20),
-                    ],
-                    // if (featuredHotelCards.isNotEmpty) ...[
-                    //   FundFeaturedFundCarousel(
-                    //     title: l10n.homeFeaturedHotelsTitle,
-                    //     actionLabel: l10n.homeViewAllAction,
-                    //     onActionTap: () => context.go('/hotel-booking'),
-                    //     headerSpacing: 8,
-                    //     children: featuredHotelCards,
-                    //   ),
-                    //   const SizedBox(height: 20),
-                    // ],
-                    //if (isAuthenticated)
+                      if (isAuthenticated) ...[
+                        HomeQuickActions(
+                          onFunds: () => context.go('/funds'),
+                          onHotels: () => context.go('/hotel-booking'),
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                      if (isAuthenticated)
+                        HomeMilesAccountSection(onTap: preparing),
+                      if (asyncProjects.isLoading && projects.isEmpty)
+                        const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          ),
+                        ),
+                      if (loadError != null && projects.isEmpty)
+                        Column(
+                          children: [
+                            Text(
+                              l10n.fundListLoadError,
+                              textAlign: TextAlign.center,
+                              style: context.appTextTheme.bodyMuted,
+                            ),
+                            AppButton(
+                              label: l10n.fundListRetry,
+                              variant: AppButtonVariant.text,
+                              onPressed: () =>
+                                  ref.invalidate(fundProjectListProvider),
+                            ),
+                          ],
+                        ),
+                      if (featuredFundCards.isNotEmpty) ...[
+                        FundFeaturedFundCarousel(
+                          title: l10n.homeFeaturedFundsTitle,
+                          actionLabel: l10n.homeViewAllAction,
+                          onActionTap: () => context.go('/funds'),
+                          children: featuredFundCards,
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                      // if (featuredHotelCards.isNotEmpty) ...[
+                      //   FundFeaturedFundCarousel(
+                      //     title: l10n.homeFeaturedHotelsTitle,
+                      //     actionLabel: l10n.homeViewAllAction,
+                      //     onActionTap: () => context.go('/hotel-booking'),
+                      //     headerSpacing: 8,
+                      //     children: featuredHotelCards,
+                      //   ),
+                      //   const SizedBox(height: 20),
+                      // ],
+                      //if (isAuthenticated)
 
-                    //else
-                    //const SizedBox(height: 20),
-                    HomeSimulationCard(onTap: preparing),
-                    const SizedBox(height: 20),
-                    HomeRankTeaser(onTap: () => context.push('/home/ranks')),
-                  ],
+                      //else
+                      //const SizedBox(height: 20),
+                      HomeSimulationCard(
+                        onTap: () => context.push('/home/simulation'),
+                      ),
+                      const SizedBox(height: 20),
+                      HomeMilesRankSection(
+                        onTap: () => context.push('/home/ranks'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          if (!isAuthenticated)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 12, 18, 12),
-              child: AppButton(
-                label: l10n.homeRegisterFree,
-                onPressed: () => context.push('/login?openRegister=1'),
+            if (!isAuthenticated)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(18, 12, 18, 12),
+                child: AppButton(
+                  label: l10n.homeRegisterFree,
+                  onPressed: () => context.push('/login?openRegister=1'),
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -264,9 +273,19 @@ Future<void> _refreshHomeOverviewTab(WidgetRef ref) async {
   ref.invalidate(homeFeaturedHotelsProvider);
   ref.invalidate(memberProfileDetailsProvider);
   await Future.wait<void>([
+    _refreshHomeMiles(ref),
     refreshRootTabSharedData(ref),
     ref.refresh(fundProjectListProvider.future).then((_) {}),
     ref.refresh(homeFeaturedHotelsProvider.future).then((_) {}),
     ref.refresh(memberProfileDetailsProvider.future).then((_) {}),
+  ]);
+}
+
+Future<void> _refreshHomeMiles(WidgetRef ref) async {
+  if (shouldSkipAppNetworkRefresh(ref)) return;
+  await Future.wait<void>([
+    ref.read(homeMilesRulesProvider.notifier).refresh(),
+    if (ref.read(isAuthenticatedProvider).asData?.value == true)
+      ref.read(homeMilesAccountProvider.notifier).refresh(),
   ]);
 }

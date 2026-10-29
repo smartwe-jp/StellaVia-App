@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'app_theme_extensions.dart';
 import 'ui_tokens.dart';
 
-enum AppCardVariant { outlined, elevated, subtle }
+enum AppCardVariant { outlined, elevated, subtle, filled }
 
 /// Surface primitive only. Domain-specific contents belong to feature widgets.
 class AppCard extends StatelessWidget {
@@ -14,6 +14,12 @@ class AppCard extends StatelessWidget {
     this.padding = const EdgeInsets.all(UiTokens.spacing16),
     this.onTap,
     this.semanticLabel,
+    this.backgroundColor,
+    this.borderColor,
+    this.borderWidth = 1,
+    this.borderRadius = const BorderRadius.all(
+      Radius.circular(UiTokens.radius16),
+    ),
   });
 
   final Widget child;
@@ -22,13 +28,19 @@ class AppCard extends StatelessWidget {
   final VoidCallback? onTap;
   final String? semanticLabel;
 
+  /// Theme-derived surface overrides; content and business variants stay in features.
+  final Color? backgroundColor;
+  final Color? borderColor;
+  final double borderWidth;
+  final BorderRadiusGeometry borderRadius;
+
   @override
   Widget build(BuildContext context) {
     final colors = context.appColors;
     final shape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(UiTokens.radius16),
+      borderRadius: borderRadius,
       side: variant == AppCardVariant.outlined
-          ? BorderSide(color: colors.border)
+          ? BorderSide(color: borderColor ?? colors.border, width: borderWidth)
           : BorderSide.none,
     );
     return Semantics(
@@ -36,7 +48,7 @@ class AppCard extends StatelessWidget {
       button: onTap == null ? null : true,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(UiTokens.radius16),
+          borderRadius: borderRadius,
           boxShadow: variant == AppCardVariant.elevated
               ? [
                   BoxShadow(
@@ -48,9 +60,11 @@ class AppCard extends StatelessWidget {
               : null,
         ),
         child: Material(
-          color: variant == AppCardVariant.subtle
-              ? colors.surfaceAlt
-              : colors.surface,
+          color:
+              backgroundColor ??
+              (variant == AppCardVariant.subtle
+                  ? colors.surfaceAlt
+                  : colors.surface),
           shape: shape,
           clipBehavior: Clip.antiAlias,
           child: InkWell(

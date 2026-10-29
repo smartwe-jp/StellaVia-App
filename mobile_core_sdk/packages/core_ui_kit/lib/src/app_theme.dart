@@ -567,7 +567,7 @@ class AppThemeFactory {
     final shellNavigationTheme = AppShellNavigationTheme(
       bottomTabInactiveColor: isDark
           ? onSurface.withValues(alpha: 0.84)
-          : onSurface.withValues(alpha: 0.68),
+          : const Color(0xFF999CAB),
     );
 
     final colorScheme = ColorScheme(

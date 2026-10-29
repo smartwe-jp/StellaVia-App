@@ -2,6 +2,7 @@ import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../support/home_design_theme.dart';
+import '../support/home_text_styles.dart';
 
 class HomeBrandIntro extends StatelessWidget {
   const HomeBrandIntro({
@@ -18,20 +19,16 @@ class HomeBrandIntro extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final colors = context.appColors;
-    final text = context.appTextTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (isAuthenticated) ...[
           Text(
             l10n.homeMemberGreeting(displayName),
-            style: text.sectionTitle.copyWith(fontSize: 19),
+            style: HomeTextStyles.greeting(context),
           ),
           const SizedBox(height: 4),
-          Text(
-            l10n.homeMemberIntro,
-            style: text.caption.copyWith(fontSize: 12),
-          ),
+          Text(l10n.homeMemberIntro, style: HomeTextStyles.caption(context)),
           const SizedBox(height: 16),
         ],
         ClipRRect(
@@ -72,30 +69,27 @@ class HomeBrandIntro extends StatelessWidget {
                         isAuthenticated
                             ? l10n.homeMemberEyebrow
                             : l10n.homeGuestEyebrow,
-                        style: text.numericCaption.copyWith(
-                          color: colors.onDark,
-                          fontSize: 10,
-                          letterSpacing: isAuthenticated ? 0 : 3,
-                        ),
+                        style: HomeTextStyles.heroEyebrow(
+                          context,
+                          isAuthenticated: isAuthenticated,
+                        ).copyWith(color: colors.onDark),
                       ),
                       SizedBox(height: isAuthenticated ? 18 : 4),
                       Text(
                         isAuthenticated
                             ? l10n.homeMemberHeroTitle
                             : l10n.homeGuestBenefitsTitle,
-                        style: text.sectionTitle.copyWith(
-                          color: colors.onDark,
-                          fontSize: 22,
-                        ),
+                        style: HomeTextStyles.heroTitle(
+                          context,
+                        ).copyWith(color: colors.onDark),
                       ),
                       const SizedBox(height: 4),
                       if (isAuthenticated)
                         Text(
                           l10n.homeMemberHeroBody,
-                          style: text.caption.copyWith(
-                            color: colors.onDark,
-                            fontSize: 12,
-                          ),
+                          style: HomeTextStyles.caption(
+                            context,
+                          ).copyWith(color: colors.onDark),
                         )
                       else
                         SizedBox(
@@ -108,10 +102,9 @@ class HomeBrandIntro extends StatelessWidget {
                             children: [
                               Text(
                                 l10n.homeGuestBenefitsBody,
-                                style: text.caption.copyWith(
-                                  color: colors.onDark,
-                                  fontSize: 12,
-                                ),
+                                style: HomeTextStyles.caption(
+                                  context,
+                                ).copyWith(color: colors.onDark),
                               ),
                               AppButton(
                                 fullWidth: false,
@@ -123,7 +116,9 @@ class HomeBrandIntro extends StatelessWidget {
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 10,
                                   ),
-                                  textStyle: text.micro.copyWith(fontSize: 11),
+                                  textStyle: HomeTextStyles.compactAction(
+                                    context,
+                                  ),
                                   tapTargetSize:
                                       MaterialTapTargetSize.shrinkWrap,
                                 ),

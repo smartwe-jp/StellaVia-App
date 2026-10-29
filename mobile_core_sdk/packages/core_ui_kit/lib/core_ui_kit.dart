@@ -42,3 +42,7 @@ export 'src/app_card.dart';
 export 'src/app_status_badge.dart';
 export 'src/app_progress_bar.dart';
 export 'src/app_section_header.dart';
+export 'src/app_slider.dart';
+export 'src/app_two_line_segmented_control.dart';
+
+export 'src/app_bottom_tab_bar.dart';

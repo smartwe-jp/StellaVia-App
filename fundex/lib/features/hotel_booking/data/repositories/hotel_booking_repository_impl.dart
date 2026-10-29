@@ -232,6 +232,7 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
         .length;
 
     return HotelBookingPreparation(
+      pointTotal: quote.pointTotal,
       pageTexts: Map<String, String>.unmodifiable(pageTexts),
       countryCodes: _mapCountryCodes(countryCodes),
       coupons: List<HotelCoupon>.unmodifiable(couponItems),
@@ -285,6 +286,7 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
             couponsCounts: couponsCounts,
           );
     return HotelBookingQuote(
+      pointTotal: quote.pointTotal,
       quotedPrice: quote.priceElement?.price,
       originalPrice: quote.priceElement?.originalPrice,
       roomPriceElements: _mapRoomPriceElements(
@@ -957,6 +959,7 @@ HotelSummary _mapHotelSummary(HotelSummaryDto dto) {
   final discount = dto.discount2 ?? dto.discount;
   final discountName = dto.discountName2 ?? '';
   return HotelSummary(
+    description: dto.detail,
     id: dto.id,
     name: dto.hotelName.trim(),
     address: dto.address?.trim() ?? '',

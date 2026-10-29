@@ -26,6 +26,7 @@ abstract class MyPageRepository {
   });
 
   Future<List<MyPageInvestmentRecord>> fetchInvestmentList({
+    int? projectStatus,
     int startPage = 1,
     int limit = 20,
   });

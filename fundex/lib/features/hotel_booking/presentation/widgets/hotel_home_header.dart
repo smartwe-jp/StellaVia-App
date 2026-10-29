@@ -5,6 +5,7 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../controllers/hotel_booking_controller.dart';
 import '../../domain/entities/hotel_models.dart';
 import 'hotel_home_search.dart';
+import '../support/hotel_home_text_styles.dart';
 
 class HotelHomeHeader extends StatelessWidget {
   const HotelHomeHeader({
@@ -28,9 +29,7 @@ class HotelHomeHeader extends StatelessWidget {
               children: [
                 Text(
                   'STELLAVIA',
-                  style: context.appTextTheme.numericTitle.copyWith(
-                    fontSize: 18,
-                  ),
+                  style: HotelHomeTextStyles.brandWordmark(context),
                 ),
                 const Spacer(),
                 IconButton(
@@ -51,57 +50,43 @@ class HotelHomeHeader extends StatelessWidget {
           children: [
             Text(
               context.l10n.hotelHomeTitle,
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              style: HotelHomeTextStyles.pageTitle(context),
             ),
             const SizedBox(height: 10),
             HotelHomeSearch(criteria: state.criteria, onApply: onApply),
             const SizedBox(height: 18),
-            Material(
-              color: context.appColors.surface,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-                side: BorderSide(color: context.appColors.primary, width: 1.5),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: InkWell(
-                key: const Key('hotel_host_miles_entry'),
-                onTap: () => context.push('/hotel-booking/host-miles'),
-                child: Padding(
-                  padding: const EdgeInsets.all(14),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              context.l10n.homeBookWithMiles,
-                              style: Theme.of(context).textTheme.titleSmall
-                                  ?.copyWith(
-                                    color: context.appColors.primary,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              context.l10n.hotelMilesEntryDescription,
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(
-                                    color: context.appColors.textSecondary,
-                                  ),
-                            ),
-                          ],
+            AppCard(
+              key: const Key('hotel_host_miles_entry'),
+              borderRadius: BorderRadius.circular(20),
+              borderColor: context.appColors.primary,
+              borderWidth: 1.5,
+              padding: const EdgeInsets.all(14),
+              onTap: () => context.push('/hotel-booking/host-miles'),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          context.l10n.homeBookWithMiles,
+                          style: HotelHomeTextStyles.sectionTitle(
+                            context,
+                          ).copyWith(color: context.appColors.primary),
                         ),
-                      ),
-                      Icon(
-                        Icons.chevron_right,
-                        color: context.appColors.primary,
-                      ),
-                    ],
+                        const SizedBox(height: 6),
+                        Text(
+                          context.l10n.hotelMilesEntryDescription,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: context.appColors.textSecondary,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                  Icon(Icons.chevron_right, color: context.appColors.primary),
+                ],
               ),
             ),
             const SizedBox(height: 16),

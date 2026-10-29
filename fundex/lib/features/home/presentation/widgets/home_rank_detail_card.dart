@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../support/home_design_theme.dart';
 import '../support/home_rank_content.dart';
+import '../support/home_text_styles.dart';
 
 class HomeRankDetailCard extends StatelessWidget {
   const HomeRankDetailCard({
@@ -15,34 +16,31 @@ class HomeRankDetailCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    final text = context.appTextTheme;
     return AppCard(
       padding: EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            color: HomeDesignTheme.detailRankHeaders[index],
+            color:
+                HomeDesignTheme.detailRankHeaders[index %
+                    HomeDesignTheme.detailRankHeaders.length],
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  l.homeRankProvisionalLabel,
-                  style: text.caption.copyWith(
+                  l.homeRankLabel,
+                  style: HomeTextStyles.rankEyebrow(context).copyWith(
                     color: context.appColors.onDark.withValues(alpha: .8),
-                    fontSize: 11,
-                    letterSpacing: 1.32,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   rank.name,
-                  style: text.numericTitle.copyWith(
-                    color: context.appColors.onDark,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: HomeTextStyles.rankName(
+                    context,
+                  ).copyWith(color: context.appColors.onDark),
                 ),
               ],
             ),
@@ -65,16 +63,22 @@ class HomeRankDetailCard extends StatelessWidget {
                 ),
                 _Metric(
                   label: l.homeRankValidityLabel,
-                  value: l.homeRankMonths(rank.validityMonths),
+                  value: rank.validityMonths == null
+                      ? '—'
+                      : l.homeRankMonths(rank.validityMonths!),
                 ),
                 _GroupHeading(label: l.homeRankBookingLabel),
                 _Metric(
                   label: l.homeRankAdvanceLabel,
-                  value: l.homeRankAdvanceMonths(rank.advanceMonths),
+                  value: rank.advanceMonths == null
+                      ? '—'
+                      : l.homeRankAdvanceMonths(rank.advanceMonths!),
                 ),
                 _Metric(
                   label: l.homeRankRoomsLabel,
-                  value: l.homeRankRooms(rank.rooms),
+                  value: rank.rooms == null
+                      ? '—'
+                      : l.homeRankRooms(rank.rooms!),
                 ),
               ],
             ),
@@ -97,23 +101,13 @@ class _Metric extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
-        label,
-        style: context.appTextTheme.caption.copyWith(fontSize: 12, height: 1.2),
-      ),
+      Text(label, style: HomeTextStyles.rankMetricLabel(context)),
       const SizedBox(height: 4),
       Text(
         value,
         style: prominent
-            ? context.appTextTheme.numericTitle.copyWith(
-                fontSize: 32,
-                height: 1,
-                fontWeight: FontWeight.w700,
-              )
-            : context.appTextTheme.bodyStrong.copyWith(
-                fontSize: 14,
-                height: 1.2,
-              ),
+            ? HomeTextStyles.rankRate(context)
+            : HomeTextStyles.rankMetricValue(context),
       ),
     ],
   );
@@ -139,10 +133,7 @@ class _GroupHeading extends StatelessWidget {
             ),
             const SizedBox(width: 6),
             Expanded(
-              child: Text(
-                label,
-                style: context.appTextTheme.bodyStrong.copyWith(fontSize: 12),
-              ),
+              child: Text(label, style: HomeTextStyles.groupTitle(context)),
             ),
           ],
         ),

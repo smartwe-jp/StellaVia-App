@@ -1,25 +1,29 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
-import '../support/hotel_home_theme.dart';
+import '../support/hotel_home_text_styles.dart';
 
-class HotelMilesPreviewSummary extends StatelessWidget {
-  const HotelMilesPreviewSummary({super.key});
+class HotelMilesSummary extends StatelessWidget {
+  const HotelMilesSummary({
+    super.key,
+    required this.rank,
+    required this.balance,
+    required this.rooms,
+  });
+  final String rank, balance, rooms;
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) => AppCard(
     padding: const EdgeInsets.all(16),
-    decoration: BoxDecoration(
-      color: HotelHomeTheme.bronzeSurface(context),
-      border: Border.all(color: context.appColors.borderSoft),
-      borderRadius: BorderRadius.circular(20),
-    ),
+    backgroundColor: context.appColors.surfaceAlt,
+    borderColor: context.appColors.borderSoft,
+    borderRadius: BorderRadius.circular(20),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'BRONZE',
+          rank,
           style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: HotelHomeTheme.bronzeInk(context),
+            color: context.appColors.textPrimary,
           ),
         ),
         const SizedBox(height: 6),
@@ -27,16 +31,10 @@ class HotelMilesPreviewSummary extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: _Metric(
-                label: context.l10n.homeHostMiles,
-                value: '12,000',
-              ),
+              child: _Metric(label: context.l10n.homeHostMiles, value: balance),
             ),
             Expanded(
-              child: _Metric(
-                label: context.l10n.hotelMilesRooms,
-                value: context.l10n.hotelMilesRoomValue(2),
-              ),
+              child: _Metric(label: context.l10n.hotelMilesRooms, value: rooms),
             ),
           ],
         ),
@@ -60,10 +58,7 @@ class _Metric extends StatelessWidget {
         ).textTheme.bodySmall?.copyWith(color: context.appColors.textSecondary),
       ),
       const SizedBox(height: 8),
-      Text(
-        value,
-        style: context.appTextTheme.numericTitle.copyWith(fontSize: 24),
-      ),
+      Text(value, style: HotelHomeTextStyles.milesValue(context)),
     ],
   );
 }
