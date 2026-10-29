@@ -381,3 +381,12 @@ Run broader `flutter analyze` / `flutter test` only when the change affects shar
 - Are hotel orders connected to wallet/account history?
 - Are hotel benefits related to owner/fund benefits or a separate product domain?
 - Does hotel need multilingual content from backend, or should app localize static labels only?
+
+## 2026-10-28 酒店首页设计更新
+
+- 设计来源：Figma `I9xMTxYMyek9AvMWtDvkFi`，普通首页 `8110:798`、宿主マイル首页 `8110:968`。
+- 普通首页替换为品牌栏、日期人数搜索、宿主マイル入口、区域/价格排序及新版酒店卡片。保留现有搜索条件弹层、真实接口、分页、刷新、错误缓存与详情跳转；旧横幅/快捷入口仅从此首页移出，旧实现与路由保留。Tab 不变。
+- 新路由 `/hotel-booking/host-miles` 暂为明确标记的设计预览；等级 BRONZE、余额 12,000、可约 2 室和酒店里程均是独立示例数据，不是账户或接口结果。预览搜索/筛选/预约按钮禁用；不接下单流程。用户已确认本阶段采用明确标记的设计预览和示例数据，后续再接真实宿主マイル接口。
+- 不将旧 `stayBenefit` / `stayBenefitParticipate` 解释为宿主マイル资格。房屋类型仍使用现有 buildingCode 映射；里程说明单独放在卡片内容。
+- 新业务组合位于 hotel_booking/presentation/widgets，静态预览 fixture 与配色位于 support，四语言 ARB 已生成。
+- 验证：定向 analyze；首页区域/排序、四语言 320px/1.3 字号、预览禁止预约；已有 controller 与鉴权路由回归。未做真机或后台预约验证。

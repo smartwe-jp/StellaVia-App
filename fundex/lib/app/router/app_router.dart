@@ -1,3 +1,4 @@
+import '../../features/hotel_booking/presentation/pages/hotel_host_miles_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -34,6 +35,8 @@ import '../../features/discussion_board/presentation/widgets/kizunark_comment_co
 import '../../features/discussion_board/presentation/widgets/kizunark_draft_list_page.dart';
 import '../../features/discussion_board/presentation/widgets/kizunark_thread_detail_page.dart';
 import '../../features/home/presentation/pages/home_overview_tab_page.dart';
+import '../../features/home/presentation/pages/home_service_introduction_page.dart';
+import '../../features/home/presentation/pages/home_rank_details_page.dart';
 import '../../features/benefit_lottery/presentation/pages/benefit_lottery_status_page.dart';
 import '../../features/investment/presentation/pages/fund_project_detail_page.dart';
 import '../../features/investment/presentation/pages/fund_lottery_apply_flow_page.dart';
@@ -139,6 +142,8 @@ String? resolveAuthRedirect({
       location.endsWith('/result');
   final isGuestAccessibleRoute =
       location == '/home' ||
+      location == '/home/service' ||
+      location == '/home/ranks' ||
       location == '/home/free-market' ||
       location.startsWith('/home/free-market/') ||
       location == '/discussion-board' ||
@@ -302,6 +307,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 },
                 routes: <RouteBase>[
                   GoRoute(
+                    path: 'service',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) =>
+                        const HomeServiceIntroductionPage(),
+                  ),
+                  GoRoute(
+                    path: 'ranks',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) => const HomeRankDetailsPage(),
+                  ),
+                  GoRoute(
                     path: 'free-market',
                     builder: (BuildContext context, GoRouterState state) {
                       return const SecondaryMarketMarketplacePage();
@@ -371,6 +387,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     builder: (BuildContext context, GoRouterState state) {
                       return const HotelMemberProfilePage();
                     },
+                  ),
+                  GoRoute(
+                    path: 'host-miles',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) => const HotelHostMilesPage(),
                   ),
                   GoRoute(
                     path: 'stay-benefits',

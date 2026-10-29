@@ -9,16 +9,19 @@ class HotelRemainingRoomsLabel extends StatelessWidget {
     required this.count,
     this.unit = HotelRemainingUnit.room,
     this.textAlign = TextAlign.start,
+    this.color,
   });
 
   final int count;
   final HotelRemainingUnit unit;
   final TextAlign textAlign;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
-    final textColor = count < 5 ? colors.danger : colors.brandSecondary;
+    final textColor =
+        color ?? (count < 5 ? colors.danger : colors.brandSecondary);
     return Text(
       _label(context),
       textAlign: textAlign,

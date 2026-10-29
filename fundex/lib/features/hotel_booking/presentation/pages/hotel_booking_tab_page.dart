@@ -11,10 +11,10 @@ import '../support/hotel_booking_presenter.dart';
 import '../support/hotel_detail_route_args.dart';
 import '../support/hotel_map_route_args.dart';
 import '../widgets/hotel_booking_service_footer.dart';
-import '../widgets/hotel_hero_section.dart';
+import '../widgets/hotel_home_header.dart';
 import '../widgets/hotel_price_discount_dialog.dart';
 import '../widgets/hotel_state_views.dart';
-import '../widgets/hotel_summary_card.dart';
+import '../widgets/hotel_home_card.dart';
 
 class HotelBookingTabPage extends ConsumerWidget {
   const HotelBookingTabPage({super.key});
@@ -59,7 +59,7 @@ class _HotelBookingTabContentState
       onRefresh: (_) => controller.refresh(),
       scrollController: _scrollController,
       child: ColoredBox(
-        color: colors.surfaceAlt,
+        color: colors.surface,
         child: RefreshIndicator(
           onRefresh: controller.refresh,
           child: NotificationListener<ScrollNotification>(
@@ -80,18 +80,9 @@ class _HotelBookingTabContentState
               physics: const AlwaysScrollableScrollPhysics(),
               slivers: <Widget>[
                 SliverToBoxAdapter(
-                  child: HotelHeroSection(
+                  child: HotelHomeHeader(
                     state: state,
-                    criteria: state.criteria,
-                    presenter: presenter,
-                    onCriteriaApplied: controller.applyCriteria,
-                    onPriceSortSelected: controller.setPriceSort,
-                    onMapTap: () => context.push(
-                      '/hotel-booking/map',
-                      extra: state.criteria,
-                    ),
-                    onOrdersTap: () => context.push('/hotel-booking/orders'),
-                    onCouponsTap: () => context.push('/hotel-booking/coupons'),
+                    onApply: controller.applyCriteria,
                   ),
                 ),
                 if (state.error != null && state.hasContent)
@@ -125,7 +116,7 @@ class _HotelBookingTabContentState
                           criteria: state.criteria,
                           hotel: hotel,
                         );
-                        return HotelSummaryCard(
+                        return HotelHomeCard(
                           hotel: hotel,
                           presenter: presenter,
                           onDiscountTap: hotel.id.trim().isEmpty

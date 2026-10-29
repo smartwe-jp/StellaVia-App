@@ -2056,19 +2056,35 @@
   "myPageApplyStatusCancelled": "キャンセル済み",
   "myPageApplyWinningUnitsDetail": "当選口数: {count}",
   "@myPageApplyWinningUnitsDetail": {
-    "placeholders": {"count": {"type": "String"}}
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
   },
   "myPageApplyInvestmentUnitsDetail": "投資口数: {count}",
   "@myPageApplyInvestmentUnitsDetail": {
-    "placeholders": {"count": {"type": "String"}}
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
   },
   "myPageApplyInvestmentAmountDetail": "投資金額: {amount}",
   "@myPageApplyInvestmentAmountDetail": {
-    "placeholders": {"amount": {"type": "String"}}
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
   },
   "myPageApplyPurchaseSucceededAtDetail": "購入成功日時: {dateTime}",
   "@myPageApplyPurchaseSucceededAtDetail": {
-    "placeholders": {"dateTime": {"type": "String"}}
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
   },
   "myPageCoolingOffDeadlineRemaining": "{date}まで（残り{days}日）",
   "@myPageCoolingOffDeadlineRemaining": {
@@ -2507,7 +2523,16 @@
   "inviteFriendsShareHint": "送信先のアプリを選んで、友達に招待を送りましょう。",
   "inviteFriendsShareTitle": "StellaViaへの招待",
   "inviteFriendsShareMessage": "StellaViaで一緒に、新しい体験を楽しみませんか？\n\n招待コード：{inviteCode}（StellaVia Appでの会員登録時に入力）\n登録はこちら：{inviteLink}",
-  "@inviteFriendsShareMessage": {"placeholders": {"inviteCode": {"type": "String"}, "inviteLink": {"type": "String"}}},
+  "@inviteFriendsShareMessage": {
+    "placeholders": {
+      "inviteCode": {
+        "type": "String"
+      },
+      "inviteLink": {
+        "type": "String"
+      }
+    }
+  },
   "inviteFriendsShareUnavailable": "この端末では共有機能を利用できません。",
   "inviteFriendsLoadErrorTitle": "招待情報を読み込めませんでした",
   "inviteFriendsLoadErrorDescription": "通信状況を確認して、もう一度お試しください。",
@@ -2515,5 +2540,146 @@
   "inviteFriendsForbiddenDescription": "ご利用中のアカウントには、友達招待機能の利用権限がありません。",
   "inviteFriendsReturnToSettings": "設定に戻る",
   "inviteFriendsRequestErrorTitle": "招待情報を表示できません",
-  "inviteFriendsRequestErrorDescription": "招待サービスを一時的に利用できません。時間をおいてもう一度お試しください。"
+  "inviteFriendsRequestErrorDescription": "招待サービスを一時的に利用できません。時間をおいてもう一度お試しください。",
+  "homeMemberGreeting": "{name}、こんにちは",
+  "homeMemberIntro": "運用状況と宿主マイルを、ここから確認できます。",
+  "homeMemberHeroTitle": "投資が、旅になる。",
+  "homeMemberHeroBody": "宿主マイルで、次の旅をもっと身近に。",
+  "homeQuickActionsTitle": "すぐにできること",
+  "homeFindFunds": "ファンドを探す",
+  "homeFindHotels": "ホテルを探す",
+  "homeHostMiles": "宿主マイル",
+  "homeBookWithMiles": "宿主マイルで予約",
+  "homeGuestBenefitsTitle": "宿主優待",
+  "homeGuestBenefitsBody": "未来の安心も、今の楽しみも。",
+  "homeLearnService": "サービスを知る",
+  "homeSimulationTitle": "いくら投資すると、何泊できる？",
+  "homeRankTitle": "投資するほど、旅がひろがる。",
+  "homeRankDetails": "ランク制度を詳しく見る",
+  "homeRegisterFree": "無料で会員登録",
+  "homeFeaturePreparing": "ただいま準備中です。",
+  "homeMilesUnavailable": "宿主マイル残高は準備中です。",
+  "homeMemberEyebrow": "YADONUSHI MEMBER",
+  "homeGuestEyebrow": "YADONUSHI",
+  "homeSimulationEyebrow": "MILE SIMULATION",
+  "homeRankEyebrow": "RANK",
+  "@homeMemberGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeServiceTitle": "宿主優待について",
+  "homeServiceAboutEyebrow": "ABOUT",
+  "homeServiceAboutTitle": "未来と、今に投資しよう。",
+  "homeServiceAboutBody": "将来のために今を我慢するのではなく、資産を育てながら、家族やパートナー、大切な人との“今”の時間も楽しむ。ファンドへの投資で、運用によるリターンに加えて、ホテルの宿泊に使える「宿主マイル」が貯まる『宿主優待』。それが、STELLAVIAが提案する新しい投資のかたちです。",
+  "homeServiceReturnsEyebrow": "TWO RETURNS",
+  "homeServiceReturnsTitle": "投資から、ふたつのリターンを。",
+  "homeServiceFutureEyebrow": "FUTURE",
+  "homeServiceFinancialEyebrow": "FINANCIAL RETURN",
+  "homeServiceFinancialTitle": "運用によるリターン",
+  "homeServiceFinancialBody": "想定利回り6〜10%のホテルファンドへ投資。固定利回りで、中長期の資産形成を目指します。",
+  "homeServiceNowEyebrow": "NOW",
+  "homeServiceExperienceEyebrow": "EXPERIENCE RETURN",
+  "homeServiceExperienceTitle": "宿主マイルで、旅に出る",
+  "homeServiceExperienceBody": "貯まった宿主マイルを使って、STELLAVIAのホテルを予約。旅という体験でも還元します。",
+  "homeRankDetailTitle": "続けるほど、旅がもっと自由に。",
+  "homeRankDetailBody": "運用残高に応じた5段階のランク。ランクが上がるほど、宿主マイルの獲得率だけでなく、宿泊の予約可能期間や宿主マイルの有効期限が広がります。続けるほど、旅がもっと自由になる設計です。",
+  "homeRankDraftNotice": "内部検討用・仮案｜獲得率は未公開です。制度・条項は法令等の確認後に確定し、数値・条件は変更となる場合があります。",
+  "homeRankProvisionalLabel": "宿主ランク（仮）",
+  "homeRankInvestmentLabel": "投資運用額",
+  "homeRankRegularRange": "50万円未満",
+  "homeRankBronzeRange": "50万円以上〜200万円未満",
+  "homeRankSilverRange": "200万円以上〜500万円未満",
+  "homeRankGoldRange": "500万円以上〜1,000万円未満",
+  "homeRankMasterRange": "1,000万円以上",
+  "homeRankRateLabel": "宿主マイル獲得率（月次）",
+  "homeRankValidityLabel": "宿主マイル有効期限",
+  "homeRankBookingLabel": "宿泊予約",
+  "homeRankAdvanceLabel": "宿泊予約期間（チェックイン）",
+  "homeRankRoomsLabel": "同時予約保有数",
+  "homeRankMonths": "{count}ヶ月",
+  "homeRankAdvanceMonths": "{count}ヶ月前から",
+  "homeRankRooms": "{count}室まで",
+  "homeServiceStartEyebrow": "HOW TO START",
+  "homeServiceStartTitle": "STELLAVIAの始め方",
+  "homeServiceStep1Body": "スマホひとつで、いつでもどこでもかんたんに会員登録できます。",
+  "homeServiceStep2Title": "宿主ファンドを選ぶ",
+  "homeServiceStep2Body": "運用期間や想定利回りを確認して選びます。",
+  "homeServiceStep3Title": "宿主マイルを貯める",
+  "homeServiceStep3Body": "運用残高に応じて毎月貯まります。",
+  "homeServiceStep4Title": "ホテルに泊まる",
+  "homeServiceStep4Body": "貯まったマイルでSTELLAVIAのホテルへ。",
+  "homeServiceMemberNote": "すでに本会員の方は、そのままファンドをお選びいただけます。",
+  "@homeRankMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@homeRankAdvanceMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@homeRankRooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelHomeTitle": "ホテル",
+  "hotelHomeDatesGuests": "宿泊日・人数",
+  "hotelHomeArea": "エリア",
+  "hotelHomeResults": "空室のあるホテル　{count}件",
+  "@hotelHomeResults": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "hotelMilesEntryDescription": "ランク・残高に応じて対象ホテルを予約できます",
+  "hotelMilesTitle": "宿主マイルで泊まる",
+  "hotelMilesDescription": "会員ランクに応じた対象ホテル・日程をご案内します。",
+  "hotelMilesPreview": "デザインプレビュー · 表示データはサンプルです。予約はまだできません。",
+  "hotelMilesRooms": "あと予約できる室数",
+  "hotelMilesRoomValue": "{count} 室",
+  "@hotelMilesRoomValue": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "hotelMilesAdvanceNotice": "BRONZEの方は、チェックイン日の3ヶ月前からご予約いただけます。期間外の日付は選択できません。",
+  "hotelMilesEligibleHotels": "対象ホテル",
+  "hotelMilesEligibility": "宿主マイルで対象 · 必要マイル {count} / 泊",
+  "@hotelMilesEligibility": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "hotelMilesPerNight": "{count}マイル〜 / 泊",
+  "@hotelMilesPerNight": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "hotelMilesChoose": "ホテルと日程を選ぶ",
+  "hotelMilesSampleName": "白馬 MIZUHO",
+  "hotelMilesSampleLocation": "白馬・長野"
 }

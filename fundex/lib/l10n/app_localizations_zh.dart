@@ -6094,6 +6094,286 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get inviteFriendsRequestErrorDescription => '邀请服务暂时不可用，请稍后重试。';
+
+  @override
+  String homeMemberGreeting(String name) {
+    return '$name，你好';
+  }
+
+  @override
+  String get homeMemberIntro => '在这里查看投资情况与宿主里程。';
+
+  @override
+  String get homeMemberHeroTitle => '让投资成为旅程。';
+
+  @override
+  String get homeMemberHeroBody => '用宿主里程，让下一次旅行更近一步。';
+
+  @override
+  String get homeQuickActionsTitle => '快捷入口';
+
+  @override
+  String get homeFindFunds => '寻找基金';
+
+  @override
+  String get homeFindHotels => '寻找酒店';
+
+  @override
+  String get homeHostMiles => '宿主里程';
+
+  @override
+  String get homeBookWithMiles => '使用宿主里程预约';
+
+  @override
+  String get homeGuestBenefitsTitle => '宿主优待';
+
+  @override
+  String get homeGuestBenefitsBody => '未来的安心，当下的乐趣。';
+
+  @override
+  String get homeLearnService => '了解服务';
+
+  @override
+  String get homeSimulationTitle => '投资多少，可以住几晚？';
+
+  @override
+  String get homeRankTitle => '投资越多，旅程越广。';
+
+  @override
+  String get homeRankDetails => '了解等级制度';
+
+  @override
+  String get homeRegisterFree => '免费注册会员';
+
+  @override
+  String get homeFeaturePreparing => '准备中，敬请期待。';
+
+  @override
+  String get homeMilesUnavailable => '宿主里程余额准备中。';
+
+  @override
+  String get homeMemberEyebrow => 'YADONUSHI MEMBER';
+
+  @override
+  String get homeGuestEyebrow => 'YADONUSHI';
+
+  @override
+  String get homeSimulationEyebrow => 'MILE SIMULATION';
+
+  @override
+  String get homeRankEyebrow => 'RANK';
+
+  @override
+  String get homeServiceTitle => '关于宿主优待';
+
+  @override
+  String get homeServiceAboutEyebrow => 'ABOUT';
+
+  @override
+  String get homeServiceAboutTitle => '投资未来，也投资当下。';
+
+  @override
+  String get homeServiceAboutBody =>
+      '不必为了未来而牺牲当下。在积累资产的同时，也享受与家人、伴侣和重要之人共度的时光。通过基金投资，除获得投资回报外，还能积累用于酒店住宿的「宿主里程」。这就是 STELLAVIA 提出的全新投资方式——「宿主优待」。';
+
+  @override
+  String get homeServiceReturnsEyebrow => 'TWO RETURNS';
+
+  @override
+  String get homeServiceReturnsTitle => '一次投资，两种回报。';
+
+  @override
+  String get homeServiceFutureEyebrow => 'FUTURE';
+
+  @override
+  String get homeServiceFinancialEyebrow => 'FINANCIAL RETURN';
+
+  @override
+  String get homeServiceFinancialTitle => '投资回报';
+
+  @override
+  String get homeServiceFinancialBody =>
+      '投资于预期收益率为6～10%的酒店基金，以固定收益率为目标，进行中长期资产积累。';
+
+  @override
+  String get homeServiceNowEyebrow => 'NOW';
+
+  @override
+  String get homeServiceExperienceEyebrow => 'EXPERIENCE RETURN';
+
+  @override
+  String get homeServiceExperienceTitle => '用宿主里程，开启旅程';
+
+  @override
+  String get homeServiceExperienceBody =>
+      '使用积累的宿主里程预约 STELLAVIA 酒店，以旅行体验收获另一份回报。';
+
+  @override
+  String get homeRankDetailTitle => '持续投资，让旅行更自由。';
+
+  @override
+  String get homeRankDetailBody =>
+      '根据投资余额划分五个等级。等级越高，宿主里程获取率越高，可提前预约的时间与里程有效期也越长。持续投资，让旅行更自由。';
+
+  @override
+  String get homeRankDraftNotice =>
+      '内部讨论用草案｜获取率尚未公开。制度及条款将在法规等确认后确定，数值和条件可能调整。';
+
+  @override
+  String get homeRankProvisionalLabel => '宿主等级（暂定）';
+
+  @override
+  String get homeRankInvestmentLabel => '投资金额';
+
+  @override
+  String get homeRankRegularRange => '不足50万日元';
+
+  @override
+  String get homeRankBronzeRange => '50万至不足200万日元';
+
+  @override
+  String get homeRankSilverRange => '200万至不足500万日元';
+
+  @override
+  String get homeRankGoldRange => '500万至不足1,000万日元';
+
+  @override
+  String get homeRankMasterRange => '1,000万日元及以上';
+
+  @override
+  String get homeRankRateLabel => '宿主里程获取率（每月）';
+
+  @override
+  String get homeRankValidityLabel => '宿主里程有效期';
+
+  @override
+  String get homeRankBookingLabel => '住宿预约';
+
+  @override
+  String get homeRankAdvanceLabel => '住宿预约时间（入住日）';
+
+  @override
+  String get homeRankRoomsLabel => '可同时保有的预约数量';
+
+  @override
+  String homeRankMonths(int count) {
+    return '$count个月';
+  }
+
+  @override
+  String homeRankAdvanceMonths(int count) {
+    return '入住前$count个月起';
+  }
+
+  @override
+  String homeRankRooms(int count) {
+    return '最多$count间';
+  }
+
+  @override
+  String get homeServiceStartEyebrow => 'HOW TO START';
+
+  @override
+  String get homeServiceStartTitle => '如何开始使用 STELLAVIA';
+
+  @override
+  String get homeServiceStep1Body => '只需一部手机，随时随地轻松注册。';
+
+  @override
+  String get homeServiceStep2Title => '选择宿主基金';
+
+  @override
+  String get homeServiceStep2Body => '确认投资期限及预期收益率后进行选择。';
+
+  @override
+  String get homeServiceStep3Title => '积累宿主里程';
+
+  @override
+  String get homeServiceStep3Body => '根据投资余额每月积累里程。';
+
+  @override
+  String get homeServiceStep4Title => '入住酒店';
+
+  @override
+  String get homeServiceStep4Body => '使用积累的里程入住 STELLAVIA 酒店。';
+
+  @override
+  String get homeServiceMemberNote => '已成为正式会员的用户可直接选择基金。';
+
+  @override
+  String get hotelHomeTitle => '酒店';
+
+  @override
+  String get hotelHomeDatesGuests => '入住日期・人数';
+
+  @override
+  String get hotelHomeArea => '区域';
+
+  @override
+  String hotelHomeResults(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '有空房的酒店　$countString家';
+  }
+
+  @override
+  String get hotelMilesEntryDescription => '根据等级和余额预约适用酒店';
+
+  @override
+  String get hotelMilesTitle => '使用宿主里程入住';
+
+  @override
+  String get hotelMilesDescription => '查看会员等级适用的酒店和日期。';
+
+  @override
+  String get hotelMilesPreview => '设计预览 · 当前为示例数据，暂不可预约。';
+
+  @override
+  String get hotelMilesRooms => '还可预约的房间数';
+
+  @override
+  String hotelMilesRoomValue(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$countString 间';
+  }
+
+  @override
+  String get hotelMilesAdvanceNotice => 'BRONZE会员可从入住日期前3个月开始预约，无法选择期间以外的日期。';
+
+  @override
+  String get hotelMilesEligibleHotels => '适用酒店';
+
+  @override
+  String hotelMilesEligibility(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '适用宿主里程 · 每晚需 $countString 里程';
+  }
+
+  @override
+  String hotelMilesPerNight(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$countString里程起 / 晚';
+  }
+
+  @override
+  String get hotelMilesChoose => '选择酒店和日期';
+
+  @override
+  String get hotelMilesSampleName => '白马 MIZUHO';
+
+  @override
+  String get hotelMilesSampleLocation => '白马・长野';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -12190,4 +12470,284 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get inviteFriendsRequestErrorDescription => '邀請服務暫時無法使用，請稍後重試。';
+
+  @override
+  String homeMemberGreeting(String name) {
+    return '$name，你好';
+  }
+
+  @override
+  String get homeMemberIntro => '在這裡查看投資情況與宿主里程。';
+
+  @override
+  String get homeMemberHeroTitle => '讓投資成為旅程。';
+
+  @override
+  String get homeMemberHeroBody => '用宿主里程，讓下一次旅行更近一步。';
+
+  @override
+  String get homeQuickActionsTitle => '快捷入口';
+
+  @override
+  String get homeFindFunds => '尋找基金';
+
+  @override
+  String get homeFindHotels => '尋找飯店';
+
+  @override
+  String get homeHostMiles => '宿主里程';
+
+  @override
+  String get homeBookWithMiles => '使用宿主里程預約';
+
+  @override
+  String get homeGuestBenefitsTitle => '宿主優待';
+
+  @override
+  String get homeGuestBenefitsBody => '未來的安心，當下的樂趣。';
+
+  @override
+  String get homeLearnService => '了解服務';
+
+  @override
+  String get homeSimulationTitle => '投資多少，可以住幾晚？';
+
+  @override
+  String get homeRankTitle => '投資越多，旅程越廣。';
+
+  @override
+  String get homeRankDetails => '了解等級制度';
+
+  @override
+  String get homeRegisterFree => '免費註冊會員';
+
+  @override
+  String get homeFeaturePreparing => '準備中，敬請期待。';
+
+  @override
+  String get homeMilesUnavailable => '宿主里程餘額準備中。';
+
+  @override
+  String get homeMemberEyebrow => 'YADONUSHI MEMBER';
+
+  @override
+  String get homeGuestEyebrow => 'YADONUSHI';
+
+  @override
+  String get homeSimulationEyebrow => 'MILE SIMULATION';
+
+  @override
+  String get homeRankEyebrow => 'RANK';
+
+  @override
+  String get homeServiceTitle => '關於宿主優待';
+
+  @override
+  String get homeServiceAboutEyebrow => 'ABOUT';
+
+  @override
+  String get homeServiceAboutTitle => '投資未來，也投資當下。';
+
+  @override
+  String get homeServiceAboutBody =>
+      '不必為了未來而犧牲當下。在累積資產的同時，也享受與家人、伴侶和重要之人共度的時光。透過基金投資，除獲得投資回報外，還能累積用於飯店住宿的「宿主里程」。這就是 STELLAVIA 提出的全新投資方式——「宿主優待」。';
+
+  @override
+  String get homeServiceReturnsEyebrow => 'TWO RETURNS';
+
+  @override
+  String get homeServiceReturnsTitle => '一次投資，兩種回報。';
+
+  @override
+  String get homeServiceFutureEyebrow => 'FUTURE';
+
+  @override
+  String get homeServiceFinancialEyebrow => 'FINANCIAL RETURN';
+
+  @override
+  String get homeServiceFinancialTitle => '投資回報';
+
+  @override
+  String get homeServiceFinancialBody =>
+      '投資於預期收益率為6～10%的飯店基金，以固定收益率為目標，進行中長期資產累積。';
+
+  @override
+  String get homeServiceNowEyebrow => 'NOW';
+
+  @override
+  String get homeServiceExperienceEyebrow => 'EXPERIENCE RETURN';
+
+  @override
+  String get homeServiceExperienceTitle => '用宿主里程，開啟旅程';
+
+  @override
+  String get homeServiceExperienceBody =>
+      '使用累積的宿主里程預約 STELLAVIA 飯店，以旅行體驗收穫另一份回報。';
+
+  @override
+  String get homeRankDetailTitle => '持續投資，讓旅行更自由。';
+
+  @override
+  String get homeRankDetailBody =>
+      '根據投資餘額劃分五個等級。等級越高，宿主里程獲取率越高，可提前預約的時間與里程有效期也越長。持續投資，讓旅行更自由。';
+
+  @override
+  String get homeRankDraftNotice =>
+      '內部討論用草案｜獲取率尚未公開。制度及條款將在法規等確認後確定，數值和條件可能調整。';
+
+  @override
+  String get homeRankProvisionalLabel => '宿主等級（暫定）';
+
+  @override
+  String get homeRankInvestmentLabel => '投資金額';
+
+  @override
+  String get homeRankRegularRange => '不足50萬日圓';
+
+  @override
+  String get homeRankBronzeRange => '50萬至不足200萬日圓';
+
+  @override
+  String get homeRankSilverRange => '200萬至不足500萬日圓';
+
+  @override
+  String get homeRankGoldRange => '500萬至不足1,000萬日圓';
+
+  @override
+  String get homeRankMasterRange => '1,000萬日圓及以上';
+
+  @override
+  String get homeRankRateLabel => '宿主里程獲取率（每月）';
+
+  @override
+  String get homeRankValidityLabel => '宿主里程有效期';
+
+  @override
+  String get homeRankBookingLabel => '住宿預約';
+
+  @override
+  String get homeRankAdvanceLabel => '住宿預約時間（入住日）';
+
+  @override
+  String get homeRankRoomsLabel => '可同時保有的預約數量';
+
+  @override
+  String homeRankMonths(int count) {
+    return '$count個月';
+  }
+
+  @override
+  String homeRankAdvanceMonths(int count) {
+    return '入住前$count個月起';
+  }
+
+  @override
+  String homeRankRooms(int count) {
+    return '最多$count間';
+  }
+
+  @override
+  String get homeServiceStartEyebrow => 'HOW TO START';
+
+  @override
+  String get homeServiceStartTitle => '如何開始使用 STELLAVIA';
+
+  @override
+  String get homeServiceStep1Body => '只需一部手機，隨時隨地輕鬆註冊。';
+
+  @override
+  String get homeServiceStep2Title => '選擇宿主基金';
+
+  @override
+  String get homeServiceStep2Body => '確認投資期限及預期收益率後進行選擇。';
+
+  @override
+  String get homeServiceStep3Title => '累積宿主里程';
+
+  @override
+  String get homeServiceStep3Body => '根據投資餘額每月累積里程。';
+
+  @override
+  String get homeServiceStep4Title => '入住飯店';
+
+  @override
+  String get homeServiceStep4Body => '使用累積的里程入住 STELLAVIA 飯店。';
+
+  @override
+  String get homeServiceMemberNote => '已成為正式會員的用戶可直接選擇基金。';
+
+  @override
+  String get hotelHomeTitle => '酒店';
+
+  @override
+  String get hotelHomeDatesGuests => '入住日期・人數';
+
+  @override
+  String get hotelHomeArea => '區域';
+
+  @override
+  String hotelHomeResults(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '有空房的酒店　$countString家';
+  }
+
+  @override
+  String get hotelMilesEntryDescription => '根據等級和餘額預約適用酒店';
+
+  @override
+  String get hotelMilesTitle => '使用宿主里程入住';
+
+  @override
+  String get hotelMilesDescription => '查看會員等級適用的酒店和日期。';
+
+  @override
+  String get hotelMilesPreview => '設計預覽 · 目前為範例資料，暫不可預約。';
+
+  @override
+  String get hotelMilesRooms => '還可預約的房間數';
+
+  @override
+  String hotelMilesRoomValue(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$countString 間';
+  }
+
+  @override
+  String get hotelMilesAdvanceNotice => 'BRONZE會員可從入住日期前3個月開始預約，無法選擇期間以外的日期。';
+
+  @override
+  String get hotelMilesEligibleHotels => '適用酒店';
+
+  @override
+  String hotelMilesEligibility(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '適用宿主里程 · 每晚需 $countString 里程';
+  }
+
+  @override
+  String hotelMilesPerNight(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$countString里程起 / 晚';
+  }
+
+  @override
+  String get hotelMilesChoose => '選擇酒店和日期';
+
+  @override
+  String get hotelMilesSampleName => '白馬 MIZUHO';
+
+  @override
+  String get hotelMilesSampleLocation => '白馬・長野';
 }

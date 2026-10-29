@@ -6469,4 +6469,297 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get inviteFriendsRequestErrorDescription =>
       'The invitation service is temporarily unavailable. Please try again later.';
+
+  @override
+  String homeMemberGreeting(String name) {
+    return 'Hello, $name';
+  }
+
+  @override
+  String get homeMemberIntro =>
+      'Your investments and host miles, all in one place.';
+
+  @override
+  String get homeMemberHeroTitle => 'Turn investments into journeys.';
+
+  @override
+  String get homeMemberHeroBody =>
+      'Bring your next journey closer with host miles.';
+
+  @override
+  String get homeQuickActionsTitle => 'Quick actions';
+
+  @override
+  String get homeFindFunds => 'Explore funds';
+
+  @override
+  String get homeFindHotels => 'Explore hotels';
+
+  @override
+  String get homeHostMiles => 'Host miles';
+
+  @override
+  String get homeBookWithMiles => 'Book with miles';
+
+  @override
+  String get homeGuestBenefitsTitle => 'Host benefits';
+
+  @override
+  String get homeGuestBenefitsBody =>
+      'Peace of mind for tomorrow. Joy for today.';
+
+  @override
+  String get homeLearnService => 'Discover the service';
+
+  @override
+  String get homeSimulationTitle =>
+      'How many nights could your investment bring?';
+
+  @override
+  String get homeRankTitle => 'More investment. More journeys.';
+
+  @override
+  String get homeRankDetails => 'Explore membership ranks';
+
+  @override
+  String get homeRegisterFree => 'Join for free';
+
+  @override
+  String get homeFeaturePreparing => 'Coming soon.';
+
+  @override
+  String get homeMilesUnavailable => 'Host miles balance is coming soon.';
+
+  @override
+  String get homeMemberEyebrow => 'YADONUSHI MEMBER';
+
+  @override
+  String get homeGuestEyebrow => 'YADONUSHI';
+
+  @override
+  String get homeSimulationEyebrow => 'MILE SIMULATION';
+
+  @override
+  String get homeRankEyebrow => 'RANK';
+
+  @override
+  String get homeServiceTitle => 'About host benefits';
+
+  @override
+  String get homeServiceAboutEyebrow => 'ABOUT';
+
+  @override
+  String get homeServiceAboutTitle => 'Invest in tomorrow and today.';
+
+  @override
+  String get homeServiceAboutBody =>
+      'Build your assets while enjoying time with family, your partner and the people who matter today. Host benefits combine investment returns with host miles that can be used for hotel stays. This is the new approach to investing proposed by STELLAVIA.';
+
+  @override
+  String get homeServiceReturnsEyebrow => 'TWO RETURNS';
+
+  @override
+  String get homeServiceReturnsTitle => 'Two kinds of returns from investing.';
+
+  @override
+  String get homeServiceFutureEyebrow => 'FUTURE';
+
+  @override
+  String get homeServiceFinancialEyebrow => 'FINANCIAL RETURN';
+
+  @override
+  String get homeServiceFinancialTitle => 'Investment returns';
+
+  @override
+  String get homeServiceFinancialBody =>
+      'Invest in hotel funds with an expected yield of 6–10%. Aim to build assets over the medium to long term through fixed yields.';
+
+  @override
+  String get homeServiceNowEyebrow => 'NOW';
+
+  @override
+  String get homeServiceExperienceEyebrow => 'EXPERIENCE RETURN';
+
+  @override
+  String get homeServiceExperienceTitle => 'Travel with host miles';
+
+  @override
+  String get homeServiceExperienceBody =>
+      'Use accumulated host miles to book STELLAVIA hotels. Enjoy returns in the form of travel experiences too.';
+
+  @override
+  String get homeRankDetailTitle => 'Keep investing. Travel more freely.';
+
+  @override
+  String get homeRankDetailBody =>
+      'Five membership ranks are based on your invested balance. Higher ranks increase your host-mile earning rate, extend the advance booking window and lengthen mile validity. Continued investing gives you more freedom to travel.';
+
+  @override
+  String get homeRankDraftNotice =>
+      'Internal draft for discussion. Earning rates have not been published. The program and terms will be finalized following legal review; figures and conditions may change.';
+
+  @override
+  String get homeRankProvisionalLabel => 'Host rank (provisional)';
+
+  @override
+  String get homeRankInvestmentLabel => 'Invested balance';
+
+  @override
+  String get homeRankRegularRange => 'Below ¥500,000';
+
+  @override
+  String get homeRankBronzeRange => '¥500,000 to below ¥2,000,000';
+
+  @override
+  String get homeRankSilverRange => '¥2,000,000 to below ¥5,000,000';
+
+  @override
+  String get homeRankGoldRange => '¥5,000,000 to below ¥10,000,000';
+
+  @override
+  String get homeRankMasterRange => '¥10,000,000 or more';
+
+  @override
+  String get homeRankRateLabel => 'Monthly host-mile earning rate';
+
+  @override
+  String get homeRankValidityLabel => 'Host-mile validity';
+
+  @override
+  String get homeRankBookingLabel => 'Hotel reservations';
+
+  @override
+  String get homeRankAdvanceLabel => 'Advance booking window (check-in)';
+
+  @override
+  String get homeRankRoomsLabel => 'Concurrent reservations';
+
+  @override
+  String homeRankMonths(int count) {
+    return '$count months';
+  }
+
+  @override
+  String homeRankAdvanceMonths(int count) {
+    return 'From $count months before check-in';
+  }
+
+  @override
+  String homeRankRooms(int count) {
+    return 'Up to $count rooms';
+  }
+
+  @override
+  String get homeServiceStartEyebrow => 'HOW TO START';
+
+  @override
+  String get homeServiceStartTitle => 'Getting started with STELLAVIA';
+
+  @override
+  String get homeServiceStep1Body =>
+      'Register easily on your phone, anytime and anywhere.';
+
+  @override
+  String get homeServiceStep2Title => 'Choose a host fund';
+
+  @override
+  String get homeServiceStep2Body =>
+      'Review the investment period and expected yield before choosing.';
+
+  @override
+  String get homeServiceStep3Title => 'Earn host miles';
+
+  @override
+  String get homeServiceStep3Body =>
+      'Miles accrue monthly based on your invested balance.';
+
+  @override
+  String get homeServiceStep4Title => 'Stay at a hotel';
+
+  @override
+  String get homeServiceStep4Body =>
+      'Use your miles for a stay at a STELLAVIA hotel.';
+
+  @override
+  String get homeServiceMemberNote =>
+      'Existing full members can go straight to choosing a fund.';
+
+  @override
+  String get hotelHomeTitle => 'Hotels';
+
+  @override
+  String get hotelHomeDatesGuests => 'Dates · Guests';
+
+  @override
+  String get hotelHomeArea => 'Area';
+
+  @override
+  String hotelHomeResults(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return 'Available hotels · $countString';
+  }
+
+  @override
+  String get hotelMilesEntryDescription =>
+      'Book eligible hotels based on your rank and balance';
+
+  @override
+  String get hotelMilesTitle => 'Stay with host miles';
+
+  @override
+  String get hotelMilesDescription =>
+      'Discover hotels and dates available for your membership rank.';
+
+  @override
+  String get hotelMilesPreview =>
+      'Design preview · Sample data. Booking is not available yet.';
+
+  @override
+  String get hotelMilesRooms => 'Rooms you can still book';
+
+  @override
+  String hotelMilesRoomValue(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$countString rooms';
+  }
+
+  @override
+  String get hotelMilesAdvanceNotice =>
+      'BRONZE members can book from 3 months before check-in. Dates outside this period are unavailable.';
+
+  @override
+  String get hotelMilesEligibleHotels => 'Eligible hotels';
+
+  @override
+  String hotelMilesEligibility(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return 'Host miles eligible · $countString miles / night';
+  }
+
+  @override
+  String hotelMilesPerNight(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return 'From $countString miles / night';
+  }
+
+  @override
+  String get hotelMilesChoose => 'Choose hotel and dates';
+
+  @override
+  String get hotelMilesSampleName => 'Hakuba MIZUHO';
+
+  @override
+  String get hotelMilesSampleLocation => 'Hakuba · Nagano';
 }

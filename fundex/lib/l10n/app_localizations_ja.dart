@@ -6154,4 +6154,285 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get inviteFriendsRequestErrorDescription =>
       '招待サービスを一時的に利用できません。時間をおいてもう一度お試しください。';
+
+  @override
+  String homeMemberGreeting(String name) {
+    return '$name、こんにちは';
+  }
+
+  @override
+  String get homeMemberIntro => '運用状況と宿主マイルを、ここから確認できます。';
+
+  @override
+  String get homeMemberHeroTitle => '投資が、旅になる。';
+
+  @override
+  String get homeMemberHeroBody => '宿主マイルで、次の旅をもっと身近に。';
+
+  @override
+  String get homeQuickActionsTitle => 'すぐにできること';
+
+  @override
+  String get homeFindFunds => 'ファンドを探す';
+
+  @override
+  String get homeFindHotels => 'ホテルを探す';
+
+  @override
+  String get homeHostMiles => '宿主マイル';
+
+  @override
+  String get homeBookWithMiles => '宿主マイルで予約';
+
+  @override
+  String get homeGuestBenefitsTitle => '宿主優待';
+
+  @override
+  String get homeGuestBenefitsBody => '未来の安心も、今の楽しみも。';
+
+  @override
+  String get homeLearnService => 'サービスを知る';
+
+  @override
+  String get homeSimulationTitle => 'いくら投資すると、何泊できる？';
+
+  @override
+  String get homeRankTitle => '投資するほど、旅がひろがる。';
+
+  @override
+  String get homeRankDetails => 'ランク制度を詳しく見る';
+
+  @override
+  String get homeRegisterFree => '無料で会員登録';
+
+  @override
+  String get homeFeaturePreparing => 'ただいま準備中です。';
+
+  @override
+  String get homeMilesUnavailable => '宿主マイル残高は準備中です。';
+
+  @override
+  String get homeMemberEyebrow => 'YADONUSHI MEMBER';
+
+  @override
+  String get homeGuestEyebrow => 'YADONUSHI';
+
+  @override
+  String get homeSimulationEyebrow => 'MILE SIMULATION';
+
+  @override
+  String get homeRankEyebrow => 'RANK';
+
+  @override
+  String get homeServiceTitle => '宿主優待について';
+
+  @override
+  String get homeServiceAboutEyebrow => 'ABOUT';
+
+  @override
+  String get homeServiceAboutTitle => '未来と、今に投資しよう。';
+
+  @override
+  String get homeServiceAboutBody =>
+      '将来のために今を我慢するのではなく、資産を育てながら、家族やパートナー、大切な人との“今”の時間も楽しむ。ファンドへの投資で、運用によるリターンに加えて、ホテルの宿泊に使える「宿主マイル」が貯まる『宿主優待』。それが、STELLAVIAが提案する新しい投資のかたちです。';
+
+  @override
+  String get homeServiceReturnsEyebrow => 'TWO RETURNS';
+
+  @override
+  String get homeServiceReturnsTitle => '投資から、ふたつのリターンを。';
+
+  @override
+  String get homeServiceFutureEyebrow => 'FUTURE';
+
+  @override
+  String get homeServiceFinancialEyebrow => 'FINANCIAL RETURN';
+
+  @override
+  String get homeServiceFinancialTitle => '運用によるリターン';
+
+  @override
+  String get homeServiceFinancialBody =>
+      '想定利回り6〜10%のホテルファンドへ投資。固定利回りで、中長期の資産形成を目指します。';
+
+  @override
+  String get homeServiceNowEyebrow => 'NOW';
+
+  @override
+  String get homeServiceExperienceEyebrow => 'EXPERIENCE RETURN';
+
+  @override
+  String get homeServiceExperienceTitle => '宿主マイルで、旅に出る';
+
+  @override
+  String get homeServiceExperienceBody =>
+      '貯まった宿主マイルを使って、STELLAVIAのホテルを予約。旅という体験でも還元します。';
+
+  @override
+  String get homeRankDetailTitle => '続けるほど、旅がもっと自由に。';
+
+  @override
+  String get homeRankDetailBody =>
+      '運用残高に応じた5段階のランク。ランクが上がるほど、宿主マイルの獲得率だけでなく、宿泊の予約可能期間や宿主マイルの有効期限が広がります。続けるほど、旅がもっと自由になる設計です。';
+
+  @override
+  String get homeRankDraftNotice =>
+      '内部検討用・仮案｜獲得率は未公開です。制度・条項は法令等の確認後に確定し、数値・条件は変更となる場合があります。';
+
+  @override
+  String get homeRankProvisionalLabel => '宿主ランク（仮）';
+
+  @override
+  String get homeRankInvestmentLabel => '投資運用額';
+
+  @override
+  String get homeRankRegularRange => '50万円未満';
+
+  @override
+  String get homeRankBronzeRange => '50万円以上〜200万円未満';
+
+  @override
+  String get homeRankSilverRange => '200万円以上〜500万円未満';
+
+  @override
+  String get homeRankGoldRange => '500万円以上〜1,000万円未満';
+
+  @override
+  String get homeRankMasterRange => '1,000万円以上';
+
+  @override
+  String get homeRankRateLabel => '宿主マイル獲得率（月次）';
+
+  @override
+  String get homeRankValidityLabel => '宿主マイル有効期限';
+
+  @override
+  String get homeRankBookingLabel => '宿泊予約';
+
+  @override
+  String get homeRankAdvanceLabel => '宿泊予約期間（チェックイン）';
+
+  @override
+  String get homeRankRoomsLabel => '同時予約保有数';
+
+  @override
+  String homeRankMonths(int count) {
+    return '$countヶ月';
+  }
+
+  @override
+  String homeRankAdvanceMonths(int count) {
+    return '$countヶ月前から';
+  }
+
+  @override
+  String homeRankRooms(int count) {
+    return '$count室まで';
+  }
+
+  @override
+  String get homeServiceStartEyebrow => 'HOW TO START';
+
+  @override
+  String get homeServiceStartTitle => 'STELLAVIAの始め方';
+
+  @override
+  String get homeServiceStep1Body => 'スマホひとつで、いつでもどこでもかんたんに会員登録できます。';
+
+  @override
+  String get homeServiceStep2Title => '宿主ファンドを選ぶ';
+
+  @override
+  String get homeServiceStep2Body => '運用期間や想定利回りを確認して選びます。';
+
+  @override
+  String get homeServiceStep3Title => '宿主マイルを貯める';
+
+  @override
+  String get homeServiceStep3Body => '運用残高に応じて毎月貯まります。';
+
+  @override
+  String get homeServiceStep4Title => 'ホテルに泊まる';
+
+  @override
+  String get homeServiceStep4Body => '貯まったマイルでSTELLAVIAのホテルへ。';
+
+  @override
+  String get homeServiceMemberNote => 'すでに本会員の方は、そのままファンドをお選びいただけます。';
+
+  @override
+  String get hotelHomeTitle => 'ホテル';
+
+  @override
+  String get hotelHomeDatesGuests => '宿泊日・人数';
+
+  @override
+  String get hotelHomeArea => 'エリア';
+
+  @override
+  String hotelHomeResults(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '空室のあるホテル　$countString件';
+  }
+
+  @override
+  String get hotelMilesEntryDescription => 'ランク・残高に応じて対象ホテルを予約できます';
+
+  @override
+  String get hotelMilesTitle => '宿主マイルで泊まる';
+
+  @override
+  String get hotelMilesDescription => '会員ランクに応じた対象ホテル・日程をご案内します。';
+
+  @override
+  String get hotelMilesPreview => 'デザインプレビュー · 表示データはサンプルです。予約はまだできません。';
+
+  @override
+  String get hotelMilesRooms => 'あと予約できる室数';
+
+  @override
+  String hotelMilesRoomValue(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$countString 室';
+  }
+
+  @override
+  String get hotelMilesAdvanceNotice =>
+      'BRONZEの方は、チェックイン日の3ヶ月前からご予約いただけます。期間外の日付は選択できません。';
+
+  @override
+  String get hotelMilesEligibleHotels => '対象ホテル';
+
+  @override
+  String hotelMilesEligibility(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '宿主マイルで対象 · 必要マイル $countString / 泊';
+  }
+
+  @override
+  String hotelMilesPerNight(int count) {
+    final intl.NumberFormat countNumberFormat =
+        intl.NumberFormat.decimalPattern(localeName);
+    final String countString = countNumberFormat.format(count);
+
+    return '$countStringマイル〜 / 泊';
+  }
+
+  @override
+  String get hotelMilesChoose => 'ホテルと日程を選ぶ';
+
+  @override
+  String get hotelMilesSampleName => '白馬 MIZUHO';
+
+  @override
+  String get hotelMilesSampleLocation => '白馬・長野';
 }

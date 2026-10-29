@@ -2056,19 +2056,35 @@
   "myPageApplyStatusCancelled": "已取消",
   "myPageApplyWinningUnitsDetail": "中签口数: {count}",
   "@myPageApplyWinningUnitsDetail": {
-    "placeholders": {"count": {"type": "String"}}
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
   },
   "myPageApplyInvestmentUnitsDetail": "投资口数: {count}",
   "@myPageApplyInvestmentUnitsDetail": {
-    "placeholders": {"count": {"type": "String"}}
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
   },
   "myPageApplyInvestmentAmountDetail": "投资金额: {amount}",
   "@myPageApplyInvestmentAmountDetail": {
-    "placeholders": {"amount": {"type": "String"}}
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
   },
   "myPageApplyPurchaseSucceededAtDetail": "购买成功时间: {dateTime}",
   "@myPageApplyPurchaseSucceededAtDetail": {
-    "placeholders": {"dateTime": {"type": "String"}}
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
   },
   "myPageCoolingOffDeadlineRemaining": "截止 {date}（剩余 {days} 天）",
   "@myPageCoolingOffDeadlineRemaining": {
@@ -2507,7 +2523,16 @@
   "inviteFriendsShareHint": "选择一个应用，将邀请发送给好友。",
   "inviteFriendsShareTitle": "StellaVia 好友邀请",
   "inviteFriendsShareMessage": "和我一起在 StellaVia 开启全新体验吧！\n\n邀请码：{inviteCode}（使用 StellaVia App 注册时输入）\n注册链接：{inviteLink}",
-  "@inviteFriendsShareMessage": {"placeholders": {"inviteCode": {"type": "String"}, "inviteLink": {"type": "String"}}},
+  "@inviteFriendsShareMessage": {
+    "placeholders": {
+      "inviteCode": {
+        "type": "String"
+      },
+      "inviteLink": {
+        "type": "String"
+      }
+    }
+  },
   "inviteFriendsShareUnavailable": "当前设备无法使用系统分享功能。",
   "inviteFriendsLoadErrorTitle": "无法加载邀请信息",
   "inviteFriendsLoadErrorDescription": "请检查网络连接后重试。",
@@ -2515,5 +2540,146 @@
   "inviteFriendsForbiddenDescription": "当前账户没有使用好友邀请功能的权限。",
   "inviteFriendsReturnToSettings": "返回设置",
   "inviteFriendsRequestErrorTitle": "无法显示邀请信息",
-  "inviteFriendsRequestErrorDescription": "邀请服务暂时不可用，请稍后重试。"
+  "inviteFriendsRequestErrorDescription": "邀请服务暂时不可用，请稍后重试。",
+  "homeMemberGreeting": "{name}，你好",
+  "homeMemberIntro": "在这里查看投资情况与宿主里程。",
+  "homeMemberHeroTitle": "让投资成为旅程。",
+  "homeMemberHeroBody": "用宿主里程，让下一次旅行更近一步。",
+  "homeQuickActionsTitle": "快捷入口",
+  "homeFindFunds": "寻找基金",
+  "homeFindHotels": "寻找酒店",
+  "homeHostMiles": "宿主里程",
+  "homeBookWithMiles": "使用宿主里程预约",
+  "homeGuestBenefitsTitle": "宿主优待",
+  "homeGuestBenefitsBody": "未来的安心，当下的乐趣。",
+  "homeLearnService": "了解服务",
+  "homeSimulationTitle": "投资多少，可以住几晚？",
+  "homeRankTitle": "投资越多，旅程越广。",
+  "homeRankDetails": "了解等级制度",
+  "homeRegisterFree": "免费注册会员",
+  "homeFeaturePreparing": "准备中，敬请期待。",
+  "homeMilesUnavailable": "宿主里程余额准备中。",
+  "homeMemberEyebrow": "YADONUSHI MEMBER",
+  "homeGuestEyebrow": "YADONUSHI",
+  "homeSimulationEyebrow": "MILE SIMULATION",
+  "homeRankEyebrow": "RANK",
+  "@homeMemberGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeServiceTitle": "关于宿主优待",
+  "homeServiceAboutEyebrow": "ABOUT",
+  "homeServiceAboutTitle": "投资未来，也投资当下。",
+  "homeServiceAboutBody": "不必为了未来而牺牲当下。在积累资产的同时，也享受与家人、伴侣和重要之人共度的时光。通过基金投资，除获得投资回报外，还能积累用于酒店住宿的「宿主里程」。这就是 STELLAVIA 提出的全新投资方式——「宿主优待」。",
+  "homeServiceReturnsEyebrow": "TWO RETURNS",
+  "homeServiceReturnsTitle": "一次投资，两种回报。",
+  "homeServiceFutureEyebrow": "FUTURE",
+  "homeServiceFinancialEyebrow": "FINANCIAL RETURN",
+  "homeServiceFinancialTitle": "投资回报",
+  "homeServiceFinancialBody": "投资于预期收益率为6～10%的酒店基金，以固定收益率为目标，进行中长期资产积累。",
+  "homeServiceNowEyebrow": "NOW",
+  "homeServiceExperienceEyebrow": "EXPERIENCE RETURN",
+  "homeServiceExperienceTitle": "用宿主里程，开启旅程",
+  "homeServiceExperienceBody": "使用积累的宿主里程预约 STELLAVIA 酒店，以旅行体验收获另一份回报。",
+  "homeRankDetailTitle": "持续投资，让旅行更自由。",
+  "homeRankDetailBody": "根据投资余额划分五个等级。等级越高，宿主里程获取率越高，可提前预约的时间与里程有效期也越长。持续投资，让旅行更自由。",
+  "homeRankDraftNotice": "内部讨论用草案｜获取率尚未公开。制度及条款将在法规等确认后确定，数值和条件可能调整。",
+  "homeRankProvisionalLabel": "宿主等级（暂定）",
+  "homeRankInvestmentLabel": "投资金额",
+  "homeRankRegularRange": "不足50万日元",
+  "homeRankBronzeRange": "50万至不足200万日元",
+  "homeRankSilverRange": "200万至不足500万日元",
+  "homeRankGoldRange": "500万至不足1,000万日元",
+  "homeRankMasterRange": "1,000万日元及以上",
+  "homeRankRateLabel": "宿主里程获取率（每月）",
+  "homeRankValidityLabel": "宿主里程有效期",
+  "homeRankBookingLabel": "住宿预约",
+  "homeRankAdvanceLabel": "住宿预约时间（入住日）",
+  "homeRankRoomsLabel": "可同时保有的预约数量",
+  "homeRankMonths": "{count}个月",
+  "homeRankAdvanceMonths": "入住前{count}个月起",
+  "homeRankRooms": "最多{count}间",
+  "homeServiceStartEyebrow": "HOW TO START",
+  "homeServiceStartTitle": "如何开始使用 STELLAVIA",
+  "homeServiceStep1Body": "只需一部手机，随时随地轻松注册。",
+  "homeServiceStep2Title": "选择宿主基金",
+  "homeServiceStep2Body": "确认投资期限及预期收益率后进行选择。",
+  "homeServiceStep3Title": "积累宿主里程",
+  "homeServiceStep3Body": "根据投资余额每月积累里程。",
+  "homeServiceStep4Title": "入住酒店",
+  "homeServiceStep4Body": "使用积累的里程入住 STELLAVIA 酒店。",
+  "homeServiceMemberNote": "已成为正式会员的用户可直接选择基金。",
+  "@homeRankMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@homeRankAdvanceMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@homeRankRooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelHomeTitle": "酒店",
+  "hotelHomeDatesGuests": "入住日期・人数",
+  "hotelHomeArea": "区域",
+  "hotelHomeResults": "有空房的酒店　{count}家",
+  "@hotelHomeResults": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "hotelMilesEntryDescription": "根据等级和余额预约适用酒店",
+  "hotelMilesTitle": "使用宿主里程入住",
+  "hotelMilesDescription": "查看会员等级适用的酒店和日期。",
+  "hotelMilesPreview": "设计预览 · 当前为示例数据，暂不可预约。",
+  "hotelMilesRooms": "还可预约的房间数",
+  "hotelMilesRoomValue": "{count} 间",
+  "@hotelMilesRoomValue": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "hotelMilesAdvanceNotice": "BRONZE会员可从入住日期前3个月开始预约，无法选择期间以外的日期。",
+  "hotelMilesEligibleHotels": "适用酒店",
+  "hotelMilesEligibility": "适用宿主里程 · 每晚需 {count} 里程",
+  "@hotelMilesEligibility": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "hotelMilesPerNight": "{count}里程起 / 晚",
+  "@hotelMilesPerNight": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "hotelMilesChoose": "选择酒店和日期",
+  "hotelMilesSampleName": "白马 MIZUHO",
+  "hotelMilesSampleLocation": "白马・长野"
 }

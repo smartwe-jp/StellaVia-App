@@ -11738,6 +11738,492 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The invitation service is temporarily unavailable. Please try again later.'**
   String get inviteFriendsRequestErrorDescription;
+
+  /// No description provided for @homeMemberGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello, {name}'**
+  String homeMemberGreeting(String name);
+
+  /// No description provided for @homeMemberIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Your investments and host miles, all in one place.'**
+  String get homeMemberIntro;
+
+  /// No description provided for @homeMemberHeroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn investments into journeys.'**
+  String get homeMemberHeroTitle;
+
+  /// No description provided for @homeMemberHeroBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring your next journey closer with host miles.'**
+  String get homeMemberHeroBody;
+
+  /// No description provided for @homeQuickActionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick actions'**
+  String get homeQuickActionsTitle;
+
+  /// No description provided for @homeFindFunds.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore funds'**
+  String get homeFindFunds;
+
+  /// No description provided for @homeFindHotels.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore hotels'**
+  String get homeFindHotels;
+
+  /// No description provided for @homeHostMiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Host miles'**
+  String get homeHostMiles;
+
+  /// No description provided for @homeBookWithMiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Book with miles'**
+  String get homeBookWithMiles;
+
+  /// No description provided for @homeGuestBenefitsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Host benefits'**
+  String get homeGuestBenefitsTitle;
+
+  /// No description provided for @homeGuestBenefitsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Peace of mind for tomorrow. Joy for today.'**
+  String get homeGuestBenefitsBody;
+
+  /// No description provided for @homeLearnService.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover the service'**
+  String get homeLearnService;
+
+  /// No description provided for @homeSimulationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How many nights could your investment bring?'**
+  String get homeSimulationTitle;
+
+  /// No description provided for @homeRankTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'More investment. More journeys.'**
+  String get homeRankTitle;
+
+  /// No description provided for @homeRankDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore membership ranks'**
+  String get homeRankDetails;
+
+  /// No description provided for @homeRegisterFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Join for free'**
+  String get homeRegisterFree;
+
+  /// No description provided for @homeFeaturePreparing.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon.'**
+  String get homeFeaturePreparing;
+
+  /// No description provided for @homeMilesUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Host miles balance is coming soon.'**
+  String get homeMilesUnavailable;
+
+  /// No description provided for @homeMemberEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'YADONUSHI MEMBER'**
+  String get homeMemberEyebrow;
+
+  /// No description provided for @homeGuestEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'YADONUSHI'**
+  String get homeGuestEyebrow;
+
+  /// No description provided for @homeSimulationEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'MILE SIMULATION'**
+  String get homeSimulationEyebrow;
+
+  /// No description provided for @homeRankEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'RANK'**
+  String get homeRankEyebrow;
+
+  /// No description provided for @homeServiceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About host benefits'**
+  String get homeServiceTitle;
+
+  /// No description provided for @homeServiceAboutEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'ABOUT'**
+  String get homeServiceAboutEyebrow;
+
+  /// No description provided for @homeServiceAboutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Invest in tomorrow and today.'**
+  String get homeServiceAboutTitle;
+
+  /// No description provided for @homeServiceAboutBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Build your assets while enjoying time with family, your partner and the people who matter today. Host benefits combine investment returns with host miles that can be used for hotel stays. This is the new approach to investing proposed by STELLAVIA.'**
+  String get homeServiceAboutBody;
+
+  /// No description provided for @homeServiceReturnsEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'TWO RETURNS'**
+  String get homeServiceReturnsEyebrow;
+
+  /// No description provided for @homeServiceReturnsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Two kinds of returns from investing.'**
+  String get homeServiceReturnsTitle;
+
+  /// No description provided for @homeServiceFutureEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'FUTURE'**
+  String get homeServiceFutureEyebrow;
+
+  /// No description provided for @homeServiceFinancialEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'FINANCIAL RETURN'**
+  String get homeServiceFinancialEyebrow;
+
+  /// No description provided for @homeServiceFinancialTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Investment returns'**
+  String get homeServiceFinancialTitle;
+
+  /// No description provided for @homeServiceFinancialBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Invest in hotel funds with an expected yield of 6–10%. Aim to build assets over the medium to long term through fixed yields.'**
+  String get homeServiceFinancialBody;
+
+  /// No description provided for @homeServiceNowEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'NOW'**
+  String get homeServiceNowEyebrow;
+
+  /// No description provided for @homeServiceExperienceEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'EXPERIENCE RETURN'**
+  String get homeServiceExperienceEyebrow;
+
+  /// No description provided for @homeServiceExperienceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel with host miles'**
+  String get homeServiceExperienceTitle;
+
+  /// No description provided for @homeServiceExperienceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Use accumulated host miles to book STELLAVIA hotels. Enjoy returns in the form of travel experiences too.'**
+  String get homeServiceExperienceBody;
+
+  /// No description provided for @homeRankDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep investing. Travel more freely.'**
+  String get homeRankDetailTitle;
+
+  /// No description provided for @homeRankDetailBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Five membership ranks are based on your invested balance. Higher ranks increase your host-mile earning rate, extend the advance booking window and lengthen mile validity. Continued investing gives you more freedom to travel.'**
+  String get homeRankDetailBody;
+
+  /// No description provided for @homeRankDraftNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Internal draft for discussion. Earning rates have not been published. The program and terms will be finalized following legal review; figures and conditions may change.'**
+  String get homeRankDraftNotice;
+
+  /// No description provided for @homeRankProvisionalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Host rank (provisional)'**
+  String get homeRankProvisionalLabel;
+
+  /// No description provided for @homeRankInvestmentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Invested balance'**
+  String get homeRankInvestmentLabel;
+
+  /// No description provided for @homeRankRegularRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Below ¥500,000'**
+  String get homeRankRegularRange;
+
+  /// No description provided for @homeRankBronzeRange.
+  ///
+  /// In en, this message translates to:
+  /// **'¥500,000 to below ¥2,000,000'**
+  String get homeRankBronzeRange;
+
+  /// No description provided for @homeRankSilverRange.
+  ///
+  /// In en, this message translates to:
+  /// **'¥2,000,000 to below ¥5,000,000'**
+  String get homeRankSilverRange;
+
+  /// No description provided for @homeRankGoldRange.
+  ///
+  /// In en, this message translates to:
+  /// **'¥5,000,000 to below ¥10,000,000'**
+  String get homeRankGoldRange;
+
+  /// No description provided for @homeRankMasterRange.
+  ///
+  /// In en, this message translates to:
+  /// **'¥10,000,000 or more'**
+  String get homeRankMasterRange;
+
+  /// No description provided for @homeRankRateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly host-mile earning rate'**
+  String get homeRankRateLabel;
+
+  /// No description provided for @homeRankValidityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Host-mile validity'**
+  String get homeRankValidityLabel;
+
+  /// No description provided for @homeRankBookingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hotel reservations'**
+  String get homeRankBookingLabel;
+
+  /// No description provided for @homeRankAdvanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Advance booking window (check-in)'**
+  String get homeRankAdvanceLabel;
+
+  /// No description provided for @homeRankRoomsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Concurrent reservations'**
+  String get homeRankRoomsLabel;
+
+  /// No description provided for @homeRankMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} months'**
+  String homeRankMonths(int count);
+
+  /// No description provided for @homeRankAdvanceMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'From {count} months before check-in'**
+  String homeRankAdvanceMonths(int count);
+
+  /// No description provided for @homeRankRooms.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to {count} rooms'**
+  String homeRankRooms(int count);
+
+  /// No description provided for @homeServiceStartEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'HOW TO START'**
+  String get homeServiceStartEyebrow;
+
+  /// No description provided for @homeServiceStartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting started with STELLAVIA'**
+  String get homeServiceStartTitle;
+
+  /// No description provided for @homeServiceStep1Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Register easily on your phone, anytime and anywhere.'**
+  String get homeServiceStep1Body;
+
+  /// No description provided for @homeServiceStep2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a host fund'**
+  String get homeServiceStep2Title;
+
+  /// No description provided for @homeServiceStep2Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Review the investment period and expected yield before choosing.'**
+  String get homeServiceStep2Body;
+
+  /// No description provided for @homeServiceStep3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Earn host miles'**
+  String get homeServiceStep3Title;
+
+  /// No description provided for @homeServiceStep3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Miles accrue monthly based on your invested balance.'**
+  String get homeServiceStep3Body;
+
+  /// No description provided for @homeServiceStep4Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay at a hotel'**
+  String get homeServiceStep4Title;
+
+  /// No description provided for @homeServiceStep4Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Use your miles for a stay at a STELLAVIA hotel.'**
+  String get homeServiceStep4Body;
+
+  /// No description provided for @homeServiceMemberNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Existing full members can go straight to choosing a fund.'**
+  String get homeServiceMemberNote;
+
+  /// No description provided for @hotelHomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hotels'**
+  String get hotelHomeTitle;
+
+  /// No description provided for @hotelHomeDatesGuests.
+  ///
+  /// In en, this message translates to:
+  /// **'Dates · Guests'**
+  String get hotelHomeDatesGuests;
+
+  /// No description provided for @hotelHomeArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Area'**
+  String get hotelHomeArea;
+
+  /// No description provided for @hotelHomeResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Available hotels · {count}'**
+  String hotelHomeResults(int count);
+
+  /// No description provided for @hotelMilesEntryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Book eligible hotels based on your rank and balance'**
+  String get hotelMilesEntryDescription;
+
+  /// No description provided for @hotelMilesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay with host miles'**
+  String get hotelMilesTitle;
+
+  /// No description provided for @hotelMilesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Discover hotels and dates available for your membership rank.'**
+  String get hotelMilesDescription;
+
+  /// No description provided for @hotelMilesPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Design preview · Sample data. Booking is not available yet.'**
+  String get hotelMilesPreview;
+
+  /// No description provided for @hotelMilesRooms.
+  ///
+  /// In en, this message translates to:
+  /// **'Rooms you can still book'**
+  String get hotelMilesRooms;
+
+  /// No description provided for @hotelMilesRoomValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} rooms'**
+  String hotelMilesRoomValue(int count);
+
+  /// No description provided for @hotelMilesAdvanceNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'BRONZE members can book from 3 months before check-in. Dates outside this period are unavailable.'**
+  String get hotelMilesAdvanceNotice;
+
+  /// No description provided for @hotelMilesEligibleHotels.
+  ///
+  /// In en, this message translates to:
+  /// **'Eligible hotels'**
+  String get hotelMilesEligibleHotels;
+
+  /// No description provided for @hotelMilesEligibility.
+  ///
+  /// In en, this message translates to:
+  /// **'Host miles eligible · {count} miles / night'**
+  String hotelMilesEligibility(int count);
+
+  /// No description provided for @hotelMilesPerNight.
+  ///
+  /// In en, this message translates to:
+  /// **'From {count} miles / night'**
+  String hotelMilesPerNight(int count);
+
+  /// No description provided for @hotelMilesChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose hotel and dates'**
+  String get hotelMilesChoose;
+
+  /// No description provided for @hotelMilesSampleName.
+  ///
+  /// In en, this message translates to:
+  /// **'Hakuba MIZUHO'**
+  String get hotelMilesSampleName;
+
+  /// No description provided for @hotelMilesSampleLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Hakuba · Nagano'**
+  String get hotelMilesSampleLocation;
 }
 
 class _AppLocalizationsDelegate

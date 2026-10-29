@@ -3,14 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/network/app_network_connectivity_providers.dart';
 import '../../../../app/navigation/app_root_tab_refresh.dart';
-import '../../../benefit_lottery/presentation/support/benefit_lottery_mock_catalog.dart';
-import '../../../benefit_lottery/presentation/support/benefit_lottery_mock_draw_source.dart';
-import '../../../benefit_lottery/presentation/widgets/benefit_lottery_draw_dialog.dart';
 import '../../../hotel_booking/presentation/support/hotel_booking_presenter.dart';
 import '../../../hotel_booking/presentation/support/hotel_detail_route_args.dart';
 import '../../../hotel_booking/presentation/support/hotel_map_route_args.dart';
@@ -18,25 +14,22 @@ import '../../../hotel_booking/presentation/widgets/hotel_price_discount_dialog.
 import '../../../hotel_booking/presentation/widgets/hotel_summary_card.dart';
 import '../providers/home_featured_hotels_provider.dart';
 import '../support/home_featured_fund_card_mapper.dart';
-import '../support/home_member_profile_reminder_support.dart';
-import '../widgets/home_attraction_detail_sheet.dart';
-import '../widgets/home_attraction_section.dart';
-import '../widgets/home_hero_banner.dart';
-import '../widgets/home_investment_flow_section.dart';
-import '../widgets/home_license_bar.dart';
-import '../widgets/home_lottery_entry_bar.dart';
-import '../widgets/home_official_site_link.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../main_shell/presentation/providers/main_shell_providers.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
-import '../../../member_profile/domain/entities/member_profile_details.dart';
 import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../notifications/presentation/providers/notifications_providers.dart';
-import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 
-final Uri _officialSiteUri = Uri.parse('https://stellavia.co.jp/');
+import '../widgets/home_redesign_header.dart';
+import '../widgets/home_brand_intro.dart';
+import '../widgets/home_quick_actions.dart';
+import '../widgets/home_miles_card.dart';
+import '../widgets/home_simulation_card.dart';
+import '../widgets/home_rank_teaser.dart';
+import '../support/home_design_theme.dart';
+import '../support/home_display_name_resolver.dart';
 
 class HomeOverviewTabPage extends ConsumerStatefulWidget {
   const HomeOverviewTabPage({super.key});
@@ -72,85 +65,17 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
             ),
           )
         : 0;
-    final currentUser = ref.watch(currentAuthUserProvider).asData?.value;
-    final isMemberProfileCompleted = ref
-        .watch(isMemberProfileCompletedProvider)
-        .valueOrNull;
-    final isEmailVerified = ref
-        .watch(settingsEmailVerifiedProvider)
-        .valueOrNull;
     final asyncProjects = ref.watch(fundProjectListProvider);
     final asyncFeaturedHotels = ref.watch(homeFeaturedHotelsProvider);
-    final asyncMemberProfile = ref.watch(memberProfileDetailsProvider);
-    final asyncVerificationStatus = ref.watch(
-      settingsRemoteVerificationStatusProvider,
-    );
-    final showLotteryEntry = _isHomeLotteryEntryEnabled;
-    final memberProfile = asyncMemberProfile.valueOrNull;
-    final verificationStatus = asyncVerificationStatus.valueOrNull;
     final projects = asyncProjects.valueOrNull ?? const <FundProject>[];
-    final shouldShowMemberProfileReminder = shouldShowHomeMemberProfileReminder(
-      currentUser,
-      isMemberProfileCompleted: isMemberProfileCompleted,
+    final profile = isAuthenticated
+        ? ref.watch(memberBasicProfileProvider)
+        : null;
+    final displayName = resolveHomeDisplayName(
+      locale: Localizations.localeOf(context),
+      profile: profile,
     );
-
-    final reminders = <FundReminderData>[
-      if (shouldShowMemberProfileReminder)
-        FundReminderData(
-          leading: const Icon(Icons.person_outline, size: 30),
-          title: l10n.homeReminderProfileTitle,
-          message: l10n.homeReminderProfileBody,
-          tone: FundReminderTone.danger,
-          badgeLabel: l10n.homeReminderProfileBadge,
-          actionLabel: l10n.memberProfileOverviewStartIntakeAction,
-          segmentCount: MemberProfileDetails.flowStepCount,
-          completedSegmentCount: memberProfile?.completedFlowStepCount ?? 0,
-          onActionTap: () => context.push('/member-profile/onboarding'),
-          onTap: () => context.push('/member-profile/onboarding'),
-        ),
-      if (isEmailVerified == false)
-        FundReminderData(
-          leading: const Icon(Icons.alternate_email_rounded, size: 30),
-          title: l10n.homeReminderEmailVerificationTitle,
-          message: l10n.homeReminderEmailVerificationBody,
-          tone: FundReminderTone.warning,
-          badgeLabel: l10n.homeReminderProfileBadge,
-          actionLabel: l10n.homeReminderVerifyAction,
-          onActionTap: () => context.push('/profile/settings/two-factor/email'),
-          onTap: () => context.push('/profile/settings/two-factor/email'),
-        ),
-      if (verificationStatus?.isPhoneVerified == false)
-        FundReminderData(
-          leading: const Icon(Icons.smartphone_rounded, size: 30),
-          title: l10n.homeReminderPhoneVerificationTitle,
-          message: l10n.homeReminderPhoneVerificationBody,
-          tone: FundReminderTone.warning,
-          badgeLabel: l10n.homeReminderProfileBadge,
-          actionLabel: l10n.homeReminderVerifyAction,
-          onActionTap: () => context.push('/profile/settings/two-factor/phone'),
-          onTap: () => context.push('/profile/settings/two-factor/phone'),
-        ),
-      // if (!shouldShowMemberProfileReminder &&
-      //     verificationStatus?.isRealPersonVerified == false)
-      //   FundReminderData(
-      //     leading: const Icon(Icons.verified_user_outlined, size: 30),
-      //     title: l10n.homeReminderRealPersonVerificationTitle,
-      //     message: l10n.homeReminderRealPersonVerificationBody,
-      //     tone: FundReminderTone.danger,
-      //     badgeLabel: l10n.homeReminderProfileBadge,
-      //     actionLabel: l10n.homeReminderVerifyAction,
-      //     onActionTap: () => context.push('/profile/settings/two-factor/face'),
-      //     onTap: () => context.push('/profile/settings/two-factor/face'),
-      //   ),
-    ];
-
-    final featuredProjects = projects
-        // .where(
-        //   (FundProject project) =>
-        //       _featuredProjectStatuses.contains(project.projectStatus),
-        // )
-        .take(4)
-        .toList(growable: false);
+    final featuredProjects = projects.take(4).toList(growable: false);
     final featuredFundCards = featuredProjects
         .map(
           (FundProject project) => FundFeaturedFundCard(
@@ -206,252 +131,124 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
               .toList(growable: false);
     final loadError = asyncProjects.asError;
 
-    final bool showGuide =
-        shouldShowMemberProfileReminder ||
-        isEmailVerified == false ||
-        verificationStatus?.isPhoneVerified == false ||
-        verificationStatus?.isRealPersonVerified == false;
-
-    final topSection = HomeHeroBanner(
-      registerBonusTitle: l10n.homeGuestRegisterBonusTitle,
-      registerBonusBody: l10n.homeGuestRegisterBonusBar,
-      registerLabel: l10n.homeTopBannerRegisterAction,
-      notificationUnreadCount: unreadNotificationCount,
-      loginLabel: l10n.loginSubmit,
-      onLoginTap: isAuthenticated ? null : () => context.push('/login'),
-      onRegisterTap: isAuthenticated
-          ? null
-          : () => context.push('/login?openRegister=1'),
-      onNotificationTap: () => context.push('/profile/notifications'),
-      onSettingsTap: () => context.push('/profile/settings'),
-      showGuestActions: !isAuthenticated,
-    );
-    final attractionSection = HomeAttractionSection(
-      title: l10n.homeAttractionSectionTitle,
-      items: <HomeAttractionItemData>[
-        HomeAttractionItemData(
-          icon: Icons.home_outlined,
-          title: l10n.homeAttractionAreaTitle,
-          body: l10n.homeAttractionAreaBody,
-          onTap: () =>
-              _openAttractionDetail(context, HomeAttractionDetailKind.area),
-        ),
-        HomeAttractionItemData(
-          icon: Icons.hotel_outlined,
-          title: l10n.homeAttractionStructureTitle,
-          body: l10n.homeAttractionStructureBody,
-          onTap: () =>
-              _openAttractionDetail(context, HomeAttractionDetailKind.stay),
-        ),
-        HomeAttractionItemData(
-          icon: Icons.account_balance_outlined,
-          title: l10n.homeAttractionFundsTitle,
-          body: l10n.homeAttractionFundsBody,
-          onTap: () =>
-              _openAttractionDetail(context, HomeAttractionDetailKind.shield),
-        ),
-      ],
-    );
-
-    return Column(
-      children: <Widget>[
-        //MainShellChromeVisibility(child: topNavigationBar),
-        Expanded(
-          child: MainShellTabRefreshScope(
-            tabIndex: MainShellTab.home.index,
-            onRefresh: _refreshHomeOverviewTab,
-            scrollController: _scrollController,
-            child: RefreshIndicator(
-              onRefresh: () => _refreshHomeOverviewTab(ref),
-              child: ListView(
-                key: const Key('home_tab_content'),
-                controller: _scrollController,
-                padding: EdgeInsets.zero,
-                physics: const AlwaysScrollableScrollPhysics(),
-                children: <Widget>[
-                  if (networkAccessState == AppNetworkAccessState.denied ||
-                      (_isApplePlatform &&
-                          networkAvailability ==
-                              AppNetworkAvailability.offline))
-                    AppNetworkStatusBar(
-                      title: l10n.networkAccessDeniedBannerTitle,
-                      message: l10n.networkAccessDeniedBannerMessage,
-                      icon: Icons.wifi_find_outlined,
-                    )
-                  else if (networkAvailability ==
-                      AppNetworkAvailability.offline)
-                    AppNetworkStatusBar(
-                      title: l10n.networkOfflineBannerTitle,
-                      message: l10n.networkOfflineBannerMessage,
+    void preparing() =>
+        AppNotice.show(context, message: l10n.homeFeaturePreparing);
+    return ColoredBox(
+      color: HomeDesignTheme.background(context),
+      child: Column(
+        children: [
+          HomeRedesignHeader(
+            isAuthenticated: isAuthenticated,
+            unreadCount: unreadNotificationCount,
+            onLogin: () => context.push('/login'),
+            onNotifications: () => context.push('/profile/notifications'),
+          ),
+          Expanded(
+            child: MainShellTabRefreshScope(
+              tabIndex: MainShellTab.home.index,
+              onRefresh: _refreshHomeOverviewTab,
+              scrollController: _scrollController,
+              child: RefreshIndicator(
+                onRefresh: () => _refreshHomeOverviewTab(ref),
+                child: ListView(
+                  key: const Key('home_tab_content'),
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                  children: [
+                    if (networkAccessState == AppNetworkAccessState.denied ||
+                        (_isApplePlatform &&
+                            networkAvailability ==
+                                AppNetworkAvailability.offline))
+                      AppNetworkStatusBar(
+                        title: l10n.networkAccessDeniedBannerTitle,
+                        message: l10n.networkAccessDeniedBannerMessage,
+                        icon: Icons.wifi_find_outlined,
+                      )
+                    else if (networkAvailability ==
+                        AppNetworkAvailability.offline)
+                      AppNetworkStatusBar(
+                        title: l10n.networkOfflineBannerTitle,
+                        message: l10n.networkOfflineBannerMessage,
+                      ),
+                    HomeBrandIntro(
+                      isAuthenticated: isAuthenticated,
+                      displayName: displayName,
+                      onServiceTap: () => context.push('/home/service'),
                     ),
-                  topSection,
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
-                    child: Column(
-                      spacing: UiTokens.spacing16,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        if (showLotteryEntry)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: UiTokens.spacing16,
-                            ),
-                            child: HomeLotteryEntryBar(
-                              title: l10n.homeLotteryEntryTitle,
-                              body: l10n.homeLotteryEntryBody,
-                              actionLabel: l10n.homeLotteryEntryAction,
-                              onTap: () => _openBenefitLotteryDialog(context),
-                            ),
-                          ),
-                        if (isAuthenticated)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: UiTokens.spacing16,
-                            ),
-                            child: FundReminderFeed(items: reminders),
-                          ),
-                        //if (!isAuthenticated)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: UiTokens.spacing16,
-                          ),
-                          child: attractionSection,
+                    const SizedBox(height: 20),
+                    if (isAuthenticated) ...[
+                      HomeQuickActions(
+                        onFunds: () => context.go('/funds'),
+                        onHotels: () => context.go('/hotel-booking'),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                    if (isAuthenticated) HomeMilesCard(onTap: preparing),
+                    if (asyncProjects.isLoading && projects.isEmpty)
+                      const Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Center(
+                          child: CircularProgressIndicator.adaptive(),
                         ),
-                        if (asyncProjects.isLoading && projects.isEmpty)
-                          const Center(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: UiTokens.spacing16,
-                              ),
-                              child: CircularProgressIndicator.adaptive(),
-                            ),
+                      ),
+                    if (loadError != null && projects.isEmpty)
+                      Column(
+                        children: [
+                          Text(
+                            l10n.fundListLoadError,
+                            textAlign: TextAlign.center,
+                            style: context.appTextTheme.bodyMuted,
                           ),
-                        if (loadError != null && projects.isEmpty)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: UiTokens.spacing16,
-                            ),
-                            child: Center(
-                              child: Column(
-                                children: <Widget>[
-                                  Text(
-                                    l10n.fundListLoadError,
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        (Theme.of(
-                                                  context,
-                                                ).textTheme.bodyMedium ??
-                                                const TextStyle())
-                                            .copyWith(
-                                              color: AppColorTokens
-                                                  .fundexTextSecondary,
-                                            ),
-                                  ),
-                                  const SizedBox(height: UiTokens.spacing12),
-                                  OutlinedButton(
-                                    onPressed: () =>
-                                        ref.invalidate(fundProjectListProvider),
-                                    child: Text(l10n.fundListRetry),
-                                  ),
-                                ],
-                              ),
-                            ),
+                          AppButton(
+                            label: l10n.fundListRetry,
+                            variant: AppButtonVariant.text,
+                            onPressed: () =>
+                                ref.invalidate(fundProjectListProvider),
                           ),
-                        if (featuredFundCards.isNotEmpty)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: UiTokens.spacing16,
-                            ),
-                            child: FundFeaturedFundCarousel(
-                              title: l10n.homeFeaturedFundsTitle,
-                              actionLabel: l10n.homeViewAllAction,
-                              onActionTap: () => context.go('/funds'),
-                              children: featuredFundCards,
-                            ),
-                          ),
-                        if (featuredHotelCards.isNotEmpty)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: UiTokens.spacing16,
-                            ),
-                            child: FundFeaturedFundCarousel(
-                              title: l10n.homeFeaturedHotelsTitle,
-                              actionLabel: l10n.homeViewAllAction,
-                              onActionTap: () => context.go('/hotel-booking'),
-                              headerSpacing: 8,
-                              children: featuredHotelCards,
-                            ),
-                          ),
-                        if (showGuide)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: UiTokens.spacing16,
-                              vertical: UiTokens.spacing16,
-                            ),
-                            child: HomeInvestmentFlowSection(
-                              title: l10n.homeInvestmentFlowTitle,
-                              steps: <HomeInvestmentFlowStepData>[
-                                HomeInvestmentFlowStepData(
-                                  stepNumber: 1,
-                                  icon: Icons.person_outline_rounded,
-                                  title: l10n.homeInvestmentFlowStep1Title,
-                                  body: l10n.homeInvestmentFlowStep1Body,
-                                ),
-                                HomeInvestmentFlowStepData(
-                                  stepNumber: 2,
-                                  icon: Icons.badge_outlined,
-                                  title: l10n.homeInvestmentFlowStep2Title,
-                                  body: l10n.homeInvestmentFlowStep2Body,
-                                ),
-                                HomeInvestmentFlowStepData(
-                                  stepNumber: 3,
-                                  icon: Icons.bar_chart_rounded,
-                                  title: l10n.homeInvestmentFlowStep3Title,
-                                  body: l10n.homeInvestmentFlowStep3Body,
-                                ),
-                              ],
-                            ),
-                          )
-                        else
-                          const SizedBox(height: UiTokens.spacing20),
+                        ],
+                      ),
+                    if (featuredFundCards.isNotEmpty) ...[
+                      FundFeaturedFundCarousel(
+                        title: l10n.homeFeaturedFundsTitle,
+                        actionLabel: l10n.homeViewAllAction,
+                        onActionTap: () => context.go('/funds'),
+                        children: featuredFundCards,
+                      ),
+                      const SizedBox(height: 20),
+                    ],
+                    // if (featuredHotelCards.isNotEmpty) ...[
+                    //   FundFeaturedFundCarousel(
+                    //     title: l10n.homeFeaturedHotelsTitle,
+                    //     actionLabel: l10n.homeViewAllAction,
+                    //     onActionTap: () => context.go('/hotel-booking'),
+                    //     headerSpacing: 8,
+                    //     children: featuredHotelCards,
+                    //   ),
+                    //   const SizedBox(height: 20),
+                    // ],
+                    //if (isAuthenticated)
 
-                        const SizedBox(height: UiTokens.spacing20),
-                        // Padding(
-                        //   padding: const EdgeInsets.symmetric(
-                        //     horizontal: UiTokens.spacing16,
-                        //   ),
-                        //   child: HomeOfficialSiteLink(
-                        //     label: l10n.homeOfficialSiteAction,
-                        //     onTap: () => _openOfficialSite(context),
-                        //   ),
-                        // ),
-                        HomeLicenseBar(
-                          linkArea: HomeOfficialSiteLink(
-                            label: l10n.homeOfficialSiteAction,
-                            onTap: () => _openOfficialSite(context),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                    //else
+                    //const SizedBox(height: 20),
+                    HomeSimulationCard(onTap: preparing),
+                    const SizedBox(height: 20),
+                    HomeRankTeaser(onTap: () => context.push('/home/ranks')),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ],
-    );
-  }
-
-  Future<void> _openBenefitLotteryDialog(BuildContext context) async {
-    final model = buildBenefitLotteryMockWheelModel(context.l10n);
-    final mockDrawSource = BenefitLotteryMockDrawSource();
-    await showBenefitLotteryDrawDialog(
-      context,
-      model: model,
-      drawRequest: () => mockDrawSource.draw(model),
-      onDetailsTap: () => context.push('/home/benefit-lottery/status'),
-      onCouponsTap: () => context.go('/hotel-booking/coupons'),
+          if (!isAuthenticated)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(18, 12, 18, 12),
+              child: AppButton(
+                label: l10n.homeRegisterFree,
+                onPressed: () => context.push('/login?openRegister=1'),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
@@ -461,45 +258,15 @@ bool get _isApplePlatform =>
     (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS);
 
-bool get _isHomeLotteryEntryEnabled => false;
-
 Future<void> _refreshHomeOverviewTab(WidgetRef ref) async {
-  if (shouldSkipAppNetworkRefresh(ref)) {
-    return;
-  }
+  if (shouldSkipAppNetworkRefresh(ref)) return;
   ref.invalidate(fundProjectListProvider);
   ref.invalidate(homeFeaturedHotelsProvider);
   ref.invalidate(memberProfileDetailsProvider);
-  await Future.wait<void>(<Future<void>>[
+  await Future.wait<void>([
     refreshRootTabSharedData(ref),
     ref.refresh(fundProjectListProvider.future).then((_) {}),
     ref.refresh(homeFeaturedHotelsProvider.future).then((_) {}),
     ref.refresh(memberProfileDetailsProvider.future).then((_) {}),
   ]);
-}
-
-Future<void> _openOfficialSite(BuildContext context) async {
-  final launched = await launchUrl(
-    _officialSiteUri,
-    mode: LaunchMode.externalApplication,
-  );
-  if (launched || !context.mounted) {
-    return;
-  }
-  AppNotice.show(context, message: context.l10n.homeOfficialSiteOpenFailed);
-}
-
-Future<void> _openAttractionDetail(
-  BuildContext context,
-  HomeAttractionDetailKind kind,
-) {
-  return AppBottomSheet.showAdaptive<void>(
-    context: context,
-    isScrollControlled: true,
-    useSafeArea: true,
-    useRootNavigator: true,
-    builder: (BuildContext bottomSheetContext) {
-      return HomeAttractionDetailSheet(kind: kind);
-    },
-  );
 }

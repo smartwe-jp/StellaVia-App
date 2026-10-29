@@ -2086,19 +2086,35 @@
   "myPageApplyStatusCancelled": "Cancelled",
   "myPageApplyWinningUnitsDetail": "Winning units: {count}",
   "@myPageApplyWinningUnitsDetail": {
-    "placeholders": {"count": {"type": "String"}}
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
   },
   "myPageApplyInvestmentUnitsDetail": "Investment units: {count}",
   "@myPageApplyInvestmentUnitsDetail": {
-    "placeholders": {"count": {"type": "String"}}
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
   },
   "myPageApplyInvestmentAmountDetail": "Investment amount: {amount}",
   "@myPageApplyInvestmentAmountDetail": {
-    "placeholders": {"amount": {"type": "String"}}
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
   },
   "myPageApplyPurchaseSucceededAtDetail": "Purchase completed at: {dateTime}",
   "@myPageApplyPurchaseSucceededAtDetail": {
-    "placeholders": {"dateTime": {"type": "String"}}
+    "placeholders": {
+      "dateTime": {
+        "type": "String"
+      }
+    }
   },
   "myPageCoolingOffDeadlineRemaining": "Until {date} ({days} days left)",
   "@myPageCoolingOffDeadlineRemaining": {
@@ -2537,7 +2553,16 @@
   "inviteFriendsShareHint": "Choose an app to send your invitation.",
   "inviteFriendsShareTitle": "Invitation to StellaVia",
   "inviteFriendsShareMessage": "Would you like to enjoy new experiences together on StellaVia?\n\nInvitation code: {inviteCode} (enter when registering with the StellaVia App)\nRegister here: {inviteLink}",
-  "@inviteFriendsShareMessage": {"placeholders": {"inviteCode": {"type": "String"}, "inviteLink": {"type": "String"}}},
+  "@inviteFriendsShareMessage": {
+    "placeholders": {
+      "inviteCode": {
+        "type": "String"
+      },
+      "inviteLink": {
+        "type": "String"
+      }
+    }
+  },
   "inviteFriendsShareUnavailable": "Sharing is not available on this device.",
   "inviteFriendsLoadErrorTitle": "Unable to load your invitation",
   "inviteFriendsLoadErrorDescription": "Check your connection and try again.",
@@ -2545,5 +2570,146 @@
   "inviteFriendsForbiddenDescription": "Your current account does not have permission to use the friend invitation feature.",
   "inviteFriendsReturnToSettings": "Back to settings",
   "inviteFriendsRequestErrorTitle": "Unable to display your invitation",
-  "inviteFriendsRequestErrorDescription": "The invitation service is temporarily unavailable. Please try again later."
+  "inviteFriendsRequestErrorDescription": "The invitation service is temporarily unavailable. Please try again later.",
+  "homeMemberGreeting": "Hello, {name}",
+  "homeMemberIntro": "Your investments and host miles, all in one place.",
+  "homeMemberHeroTitle": "Turn investments into journeys.",
+  "homeMemberHeroBody": "Bring your next journey closer with host miles.",
+  "homeQuickActionsTitle": "Quick actions",
+  "homeFindFunds": "Explore funds",
+  "homeFindHotels": "Explore hotels",
+  "homeHostMiles": "Host miles",
+  "homeBookWithMiles": "Book with miles",
+  "homeGuestBenefitsTitle": "Host benefits",
+  "homeGuestBenefitsBody": "Peace of mind for tomorrow. Joy for today.",
+  "homeLearnService": "Discover the service",
+  "homeSimulationTitle": "How many nights could your investment bring?",
+  "homeRankTitle": "More investment. More journeys.",
+  "homeRankDetails": "Explore membership ranks",
+  "homeRegisterFree": "Join for free",
+  "homeFeaturePreparing": "Coming soon.",
+  "homeMilesUnavailable": "Host miles balance is coming soon.",
+  "homeMemberEyebrow": "YADONUSHI MEMBER",
+  "homeGuestEyebrow": "YADONUSHI",
+  "homeSimulationEyebrow": "MILE SIMULATION",
+  "homeRankEyebrow": "RANK",
+  "@homeMemberGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeServiceTitle": "About host benefits",
+  "homeServiceAboutEyebrow": "ABOUT",
+  "homeServiceAboutTitle": "Invest in tomorrow and today.",
+  "homeServiceAboutBody": "Build your assets while enjoying time with family, your partner and the people who matter today. Host benefits combine investment returns with host miles that can be used for hotel stays. This is the new approach to investing proposed by STELLAVIA.",
+  "homeServiceReturnsEyebrow": "TWO RETURNS",
+  "homeServiceReturnsTitle": "Two kinds of returns from investing.",
+  "homeServiceFutureEyebrow": "FUTURE",
+  "homeServiceFinancialEyebrow": "FINANCIAL RETURN",
+  "homeServiceFinancialTitle": "Investment returns",
+  "homeServiceFinancialBody": "Invest in hotel funds with an expected yield of 6–10%. Aim to build assets over the medium to long term through fixed yields.",
+  "homeServiceNowEyebrow": "NOW",
+  "homeServiceExperienceEyebrow": "EXPERIENCE RETURN",
+  "homeServiceExperienceTitle": "Travel with host miles",
+  "homeServiceExperienceBody": "Use accumulated host miles to book STELLAVIA hotels. Enjoy returns in the form of travel experiences too.",
+  "homeRankDetailTitle": "Keep investing. Travel more freely.",
+  "homeRankDetailBody": "Five membership ranks are based on your invested balance. Higher ranks increase your host-mile earning rate, extend the advance booking window and lengthen mile validity. Continued investing gives you more freedom to travel.",
+  "homeRankDraftNotice": "Internal draft for discussion. Earning rates have not been published. The program and terms will be finalized following legal review; figures and conditions may change.",
+  "homeRankProvisionalLabel": "Host rank (provisional)",
+  "homeRankInvestmentLabel": "Invested balance",
+  "homeRankRegularRange": "Below ¥500,000",
+  "homeRankBronzeRange": "¥500,000 to below ¥2,000,000",
+  "homeRankSilverRange": "¥2,000,000 to below ¥5,000,000",
+  "homeRankGoldRange": "¥5,000,000 to below ¥10,000,000",
+  "homeRankMasterRange": "¥10,000,000 or more",
+  "homeRankRateLabel": "Monthly host-mile earning rate",
+  "homeRankValidityLabel": "Host-mile validity",
+  "homeRankBookingLabel": "Hotel reservations",
+  "homeRankAdvanceLabel": "Advance booking window (check-in)",
+  "homeRankRoomsLabel": "Concurrent reservations",
+  "homeRankMonths": "{count} months",
+  "homeRankAdvanceMonths": "From {count} months before check-in",
+  "homeRankRooms": "Up to {count} rooms",
+  "homeServiceStartEyebrow": "HOW TO START",
+  "homeServiceStartTitle": "Getting started with STELLAVIA",
+  "homeServiceStep1Body": "Register easily on your phone, anytime and anywhere.",
+  "homeServiceStep2Title": "Choose a host fund",
+  "homeServiceStep2Body": "Review the investment period and expected yield before choosing.",
+  "homeServiceStep3Title": "Earn host miles",
+  "homeServiceStep3Body": "Miles accrue monthly based on your invested balance.",
+  "homeServiceStep4Title": "Stay at a hotel",
+  "homeServiceStep4Body": "Use your miles for a stay at a STELLAVIA hotel.",
+  "homeServiceMemberNote": "Existing full members can go straight to choosing a fund.",
+  "@homeRankMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@homeRankAdvanceMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@homeRankRooms": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelHomeTitle": "Hotels",
+  "hotelHomeDatesGuests": "Dates · Guests",
+  "hotelHomeArea": "Area",
+  "hotelHomeResults": "Available hotels · {count}",
+  "@hotelHomeResults": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "hotelMilesEntryDescription": "Book eligible hotels based on your rank and balance",
+  "hotelMilesTitle": "Stay with host miles",
+  "hotelMilesDescription": "Discover hotels and dates available for your membership rank.",
+  "hotelMilesPreview": "Design preview · Sample data. Booking is not available yet.",
+  "hotelMilesRooms": "Rooms you can still book",
+  "hotelMilesRoomValue": "{count} rooms",
+  "@hotelMilesRoomValue": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "hotelMilesAdvanceNotice": "BRONZE members can book from 3 months before check-in. Dates outside this period are unavailable.",
+  "hotelMilesEligibleHotels": "Eligible hotels",
+  "hotelMilesEligibility": "Host miles eligible · {count} miles / night",
+  "@hotelMilesEligibility": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "hotelMilesPerNight": "From {count} miles / night",
+  "@hotelMilesPerNight": {
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "format": "decimalPattern"
+      }
+    }
+  },
+  "hotelMilesChoose": "Choose hotel and dates",
+  "hotelMilesSampleName": "Hakuba MIZUHO",
+  "hotelMilesSampleLocation": "Hakuba · Nagano"
 }

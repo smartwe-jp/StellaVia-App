@@ -34,6 +34,13 @@ Use three layers of coordination:
 
 ## Current Implemented Areas
 
+### Home redesign (2026-10-28)
+
+- Member and guest home now follow the app redesign frames, preserving the existing tabs and live fund/hotel lists. Old home sections are detached from this page; external implementations remain.
+- Service introduction and rank details now have public pages at `/home/service` and `/home/ranks`, with localized Figma content, back navigation and registration/fund actions. Rank values remain provisional display content, not eligibility rules. Simulation/miles features remain pending.
+- Later user-confirmed home composition hides hotels and the miles card and shows simulation for both auth states; external implementations are retained.
+- See [Home redesign](home-redesign.md) for scope, assets and validation.
+
 ### StellaVia Theme Foundation (2026-10-23)
 
 - The shared theme now follows the Figma StellaVia guideline: Purple `#4C0679` actions, Navy `#070E2B` text, Violet `#9652C2` accents, white pages/cards, and Cream `#EEE9E1` alternate surfaces.
@@ -221,3 +228,7 @@ Update these files by scope:
 - Release/CI/signing/upload: `docs/github-actions-release-flow.md`.
 - API client/DTO scaffolding pattern: `MANUAL_API_CLIENT_DTO_SCAFFOLD_TEMPLATE.md`.
 - Historical architecture baseline: `ARCHITECTURE_IMPLEMENTATION.md` only when changing foundational architecture decisions.
+
+### 2026-10-28 酒店首页范围
+
+普通酒店首页及卡片按 Figma 更新，搜索/分页/刷新继续用现有接口。新增 `/hotel-booking/host-miles` 设计预览页（明确示例标记，按钮禁用），不复用旧住宿优待作为里程资格，不实现后续预约。实现边界与验证见 `docs/hotel-booking-roadmap.md` 的本日记录。

@@ -4,6 +4,30 @@ import 'package:fundex/app/router/app_router.dart';
 
 void main() {
   group('resolveAuthRedirect', () {
+    test(
+      'home information pages are public without exposing other home children',
+      () {
+        for (final auth in [
+          const AsyncLoading<bool>(),
+          const AsyncData<bool>(false),
+          const AsyncData<bool>(true),
+        ]) {
+          for (final path in ['/home/service', '/home/ranks']) {
+            expect(
+              resolveAuthRedirect(authState: auth, location: path),
+              isNull,
+            );
+          }
+        }
+        expect(
+          resolveAuthRedirect(
+            authState: const AsyncData<bool>(false),
+            location: '/home/benefit-lottery/status',
+          ),
+          '/login',
+        );
+      },
+    );
     test('keeps loading state on public home route', () {
       final redirect = resolveAuthRedirect(
         authState: const AsyncLoading<bool>(),
