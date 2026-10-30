@@ -6603,7 +6603,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String myPageChartYears(int years) {
-    return '直近$years年';
+    return '直近$years年間';
   }
 
   @override
@@ -6655,4 +6655,64 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get myPageShowAmounts => '金額を表示';
+
+  @override
+  String get hotelManagementCapacity => '同時予約保有数';
+
+  @override
+  String get hotelManagementCapacityHint => '現在のランクで予約できる上限';
+
+  @override
+  String get hotelManagementNextTrip => '次の旅を予約する';
+
+  @override
+  String get hotelManagementNextTripHint => '宿主マイルが使えるホテルを探す';
+
+  @override
+  String get hotelManagementLoadFailed => '予約室数を取得できませんでした';
+
+  @override
+  String get hotelDetailMilesQuoteAfterSelection => '選択後に合計マイルを確認';
+
+  @override
+  String get hotelDetailDecreaseRoom => '客室を減らす';
+
+  @override
+  String get hotelDetailIncreaseRoom => '客室を追加';
+
+  @override
+  String get hotelDetailSelection => '選択中';
+
+  @override
+  String get hotelDetailRequiredMiles => '必要マイル合計';
+
+  @override
+  String get hotelDetailStayTotal => '宿泊料金合計';
+
+  @override
+  String get hotelDetailEstimatedMiles => '予約後の宿主マイル（見込み）';
+
+  @override
+  String get hotelDetailEstimatedRooms => '予約後の予約可能室数（見込み）';
+
+  @override
+  String get hotelDetailEstimateNotice => '表示は見込みです。実際のマイル・室数は予約確定時に反映されます。';
+
+  @override
+  String get hotelDetailMilesInsufficient => '宿主マイルが不足しています。';
+
+  @override
+  String get hotelDetailRoomsInsufficient => '予約可能室数を超えています。';
+
+  @override
+  String get hotelDetailMilesUnavailable => 'この条件のマイル見積もりは取得できません。';
+
+  @override
+  String get hotelDetailMilesPending => 'マイル予約手続きは準備中';
+
+  @override
+  String get hotelDetailProceed => '予約へ進む';
+
+  @override
+  String get hotelDetailRoomsHeading => 'ROOMS';
 }

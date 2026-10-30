@@ -368,8 +368,6 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
     final locale = Localizations.localeOf(context).toLanguageTag();
     final currency = NumberFormat.currency(
       locale: locale,
@@ -431,7 +429,6 @@ class _WithdrawPageState extends ConsumerState<WithdrawPage> {
         ]);
       },
       child: Scaffold(
-        backgroundColor: colors.surface,
         appBar: AppNavigationBar(
           title: l10n.walletWithdrawTitle,
           height: 52,

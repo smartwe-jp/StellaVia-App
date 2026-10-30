@@ -154,7 +154,6 @@ class _HotelMemberProfilePageState
     final profileState = ref.watch(hotelMemberProfileProvider);
 
     return Scaffold(
-      backgroundColor: colors.surfaceAlt,
       appBar: AppBar(
         backgroundColor: colors.surfaceAlt,
         foregroundColor: colors.textPrimary,

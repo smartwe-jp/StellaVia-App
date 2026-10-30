@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
@@ -21,128 +20,39 @@ class MainShellPage extends ConsumerStatefulWidget {
 
 class _MainShellPageState extends ConsumerState<MainShellPage>
     with SingleTickerProviderStateMixin {
-  static const double _chromeRevealScrollDistance = 96;
-  static const double _chromeRevealActivationDistance = 18;
-
-  late final AnimationController _chromeSnapController;
-  Animation<double>? _chromeSnapAnimation;
-  double _pendingChromeRevealDistance = 0;
+  late final AppScrollChromeController _chrome;
 
   @override
   void initState() {
     super.initState();
-    _chromeSnapController =
-        AnimationController(
-          vsync: this,
-          duration: const Duration(milliseconds: 160),
-        )..addListener(() {
-          final animation = _chromeSnapAnimation;
-          if (animation == null) {
-            return;
-          }
-          _setChromeReveal(animation.value);
-        });
+    _chrome = AppScrollChromeController(
+      vsync: this,
+      initialReveal: ref.read(mainShellChromeRevealProvider),
+    )..addListener(_syncChrome);
+  }
+
+  void _syncChrome() {
+    ref.read(mainShellChromeRevealProvider.notifier).state = _chrome.value;
+    ref.read(mainShellChromeVisibleProvider.notifier).state =
+        _chrome.value > .01;
   }
 
   @override
   void dispose() {
-    _chromeSnapController.dispose();
+    _chrome.dispose();
     super.dispose();
   }
 
   void _onDestinationSelected(BuildContext context, int index) {
-    //_showChrome();
     widget.navigationShell.goBranch(
       index,
       initialLocation: index == widget.navigationShell.currentIndex,
     );
   }
 
-  void _setChromeReveal(double reveal) {
-    final nextReveal = reveal.clamp(0, 1).toDouble();
-    final currentReveal = ref.read(mainShellChromeRevealProvider);
-    if ((currentReveal - nextReveal).abs() < 0.001) {
-      return;
-    }
-    ref.read(mainShellChromeRevealProvider.notifier).state = nextReveal;
-    ref.read(mainShellChromeVisibleProvider.notifier).state = nextReveal > 0.01;
-  }
-
   void _showChrome() {
-    _chromeSnapController.stop();
-    _pendingChromeRevealDistance = 0;
-    _setChromeReveal(1);
-  }
-
-  void _snapChromeReveal(ScrollMetrics metrics) {
-    _pendingChromeRevealDistance = 0;
-    final currentReveal = ref.read(mainShellChromeRevealProvider);
-    final isAtBottom = metrics.extentAfter <= 1;
-    if (isAtBottom && currentReveal > 0.01) {
-      return;
-    }
-    final targetReveal = currentReveal >= 0.5 ? 1.0 : 0.0;
-    if ((currentReveal - targetReveal).abs() < 0.001) {
-      _setChromeReveal(targetReveal);
-      return;
-    }
-    _chromeSnapAnimation =
-        Tween<double>(begin: currentReveal, end: targetReveal).animate(
-          CurvedAnimation(
-            parent: _chromeSnapController,
-            curve: Curves.easeOutCubic,
-          ),
-        );
-    _chromeSnapController.forward(from: 0);
-  }
-
-  bool _handleScrollNotification(ScrollNotification notification) {
-    if (notification.metrics.axis != Axis.vertical) {
-      return false;
-    }
-    if (notification.metrics.pixels <= notification.metrics.minScrollExtent) {
-      _showChrome();
-      return false;
-    }
-    if (notification.metrics.outOfRange) {
-      return false;
-    }
-    if (notification is UserScrollNotification &&
-        notification.direction == ScrollDirection.idle) {
-      _snapChromeReveal(notification.metrics);
-      return false;
-    }
-    if (notification is! ScrollUpdateNotification) {
-      return false;
-    }
-
-    final delta = notification.scrollDelta ?? 0;
-    if (delta == 0) {
-      return false;
-    }
-    _chromeSnapController.stop();
-    final currentReveal = ref.read(mainShellChromeRevealProvider);
-    if (delta > 0 &&
-        currentReveal > 0.01 &&
-        notification.metrics.extentAfter <= 1) {
-      return false;
-    }
-    var effectiveDelta = delta;
-    if (delta < 0 && currentReveal <= 0.01) {
-      _pendingChromeRevealDistance += -delta;
-      if (_pendingChromeRevealDistance < _chromeRevealActivationDistance) {
-        return false;
-      }
-      effectiveDelta =
-          -(_pendingChromeRevealDistance - _chromeRevealActivationDistance);
-      _pendingChromeRevealDistance = _chromeRevealActivationDistance;
-    } else if (delta > 0 || currentReveal > 0.01) {
-      _pendingChromeRevealDistance = 0;
-    }
-    final nextReveal =
-        currentReveal - (effectiveDelta / _chromeRevealScrollDistance);
-    _setChromeReveal(nextReveal);
-    return false;
+    _chrome.show();
+    _syncChrome();
   }
 
   @override
@@ -176,7 +86,7 @@ class _MainShellPageState extends ConsumerState<MainShellPage>
     return PrimaryScrollController(
       controller: primaryScrollController,
       child: NotificationListener<ScrollNotification>(
-        onNotification: _handleScrollNotification,
+        onNotification: _chrome.handleScrollNotification,
         child: Scaffold(
           key: const Key('home_page'),
           body: SafeArea(

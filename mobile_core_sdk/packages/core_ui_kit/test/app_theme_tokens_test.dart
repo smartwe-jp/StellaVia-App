@@ -30,6 +30,10 @@ void main() {
     expect(semanticText, isNotNull);
     expect(semanticColors!.brandPrimary, const Color(0xFF4C0679));
     expect(semanticColors.primary, AppColorTokens.fundexAccent);
+    expect(semanticColors.background, const Color(0xFFF5F5F2));
+    expect(theme.scaffoldBackgroundColor, semanticColors.background);
+    expect(semanticColors.surface, const Color(0xFFFFFFFF));
+    expect(theme.cardTheme.color, semanticColors.surface);
     expect(theme.textTheme.titleSmall, isNotNull);
     expect(theme.textTheme.labelSmall, isNotNull);
     expect(theme.textTheme.displayLarge, isNotNull);

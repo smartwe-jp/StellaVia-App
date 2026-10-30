@@ -95,7 +95,6 @@ class SettingsOperatingCompanyPage extends ConsumerWidget {
     );
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.settingsOperatingCompanyTitle,
         leading: AppNavigationIconButton(

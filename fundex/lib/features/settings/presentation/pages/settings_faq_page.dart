@@ -51,7 +51,6 @@ class _SettingsFaqPageState extends State<SettingsFaqPage> {
     final l10n = context.l10n;
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.menuItemFaqHelp,
         leading: AppNavigationIconButton(

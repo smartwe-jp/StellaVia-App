@@ -44,7 +44,6 @@ class _HotelPaymentMethodPageState
     _syncSelectedCard(cardsState.valueOrNull ?? const <HotelCreditCard>[]);
 
     return Scaffold(
-      backgroundColor: colors.surfaceAlt,
       appBar: AppNavigationBar(
         title: context.l10n.hotelPaymentPageTitle,
         backgroundColor: colors.surface,

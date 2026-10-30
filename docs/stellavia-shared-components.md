@@ -56,3 +56,34 @@ This stage does not add or run UI tests. Run static analysis and `git diff --che
 - SDK新增AppBottomTabBar / AppBottomTabItem：等宽布局、图标builder、选中态语义、主题着色、底部SafeArea；默认内容高54，34底部安全区时合计88，大字号允许文字区增高。AppShellNavigationTheme浅色未选中灰按Figma #999CAB，深色沿用主题适配。
 - App main_shell持有五项文案、24×24本地SVG和路由索引；SDK不依赖具体Tab/路由。Figma来源8190:760/8190:967「01 ホーム（サマリー）」。iOS home indicator由系统提供，不在App重复绘制。
 - 移除旧导航圆形底座、中间凸起与金色动效，主壳滚动显隐、讨论发送队列仍保留。
+
+## 2026-10-30 下拉选择按钮
+
+SDK新增 `AppDropdownSelector<T>` / `AppDropdownOption<T>`：圆角描边、粗体当前值、向下箭头及锚定下拉菜单；48逻辑像素点击区域，支持禁用及主题/文字/边框参数。业务层提供本地化选项和值。My Page三块图表复用该控件，保留各自1/3/5年选择、请求和刷新逻辑。
+
+SP校准：Figma「02-1 · サマリー（SP）」`6500:16325` 为88×26、12px Bold、1px边框、6px文字箭头间距，文字使用Zen Kaku Gothic Antique；箭头采用原SVG（4×7含描边，旋转后布局槽6×3）。Flutter以12px行高及6px上下内边距补偿Figma cap-trim（8px文本+8px内边距），保留48px透明点击范围。通用控件增加icon、iconGap、borderWidth参数。
+
+TabBar点击反馈：`AppBottomTabBar`使用圆形InkResponse和CircleBorder裁剪，保留整项点击范围、语义与原布局，避免矩形高亮。
+
+## 2026-10-30 普通子页面导航栏
+
+- 普通子页面沿用 App 已有 `AppNavigationBar` + `AppNavigationIconButton`：默认高度、surface 背景、textPrimary 前景、标准 arrow_back_rounded 返回按钮。
+- Figma 页面内容改版不应自行覆盖导航栏高度、按钮结构或颜色；只有用户明确要求调整导航栏时才变更。酒店详情与宿主マイル首页已恢复这一规范。
+
+### 导航栏／底部栏滚动显隐
+
+- `core_ui_kit` 的 `AppScrollChromeController` 统一承载主壳原有规则：96 px 渐变距离、18 px 反向触发阈值、160 ms easeOutCubic 收尾动画，以及顶部恢复／底部防抖。
+- `AppScrollChromeVisibility` 负责滑动、透明度、折叠高度及隐藏时禁用点击；不改变栏本身样式。
+- 酒店详情页为顶部标准导航栏和底部预约操作栏使用同一个页面独立 controller；只响应主列表纵向滚动，不影响父级 Tab 显隐状态。主壳复用同一 controller 实现。
+
+- 顶部 `Scaffold.appBar` 必须使用 `AppScrollNavigationBar`：独立保留状态栏安全区，通过 OverflowBox 给内部导航栏完整固定高度，仅收缩外层视口并整体平移。不能同时缩小 PreferredSize 并直接约束内部 AppNavigationBar，否则会压缩其 Column，导致动画中间帧溢出。底部操作栏仍使用原 AppScrollChromeVisibility。
+
+- 根 Tab 页（App 首页、酒店首页、宿泊管理、My Page）顶部栏统一读取 `mainShellChromeRevealProvider`，通过 `AppScrollNavigationBar` 与底部 Tab 栏同步显隐。不要为根 Tab 新建独立显隐状态。酒店品牌导航已移至列表外；搜索、筛选与宿主マイル入口仍属于滚动内容。新增三个实际页面测试，覆盖 47 px 顶部安全区、0/中间/1 reveal 和内部固定高度。
+
+- 首页子页面（计算器、服务介绍、等级介绍）统一使用 AppNavigationBar + AppNavigationIconButton，去除原生 AppBar 与计算器页独立的居中标题／图文返回／导航背景覆盖，保留原有返回与首页兜底路由。
+
+- My Page 的运用余额、累计配当、累计宿主マイル三个图表默认时间范围统一为最近 1 年；1／3／5 年手动切换保持独立，刷新不重置当前选择。
+
+- My Page“最近 1 年”按当前月份向前滚动 12 个月（含当月），例如 2026-10 对应 2025-11 至 2026-10。三个图表请求起点均使用首月 1 日；月柱按跨年月份偏移定位，横轴标签和折线范围随当前月份滚动。3／5 年范围保持原有行为。
+
+- 主壳显隐边界修正：真实拖动即使本帧到达列表底部，也必须更新 reveal；仅非拖动的底部运动保留防抖。栏收起导致视口增大时，列表向旧边界回弹不得被当成用户反向滚动，内容恰好可容纳时也不因 offset 回零自动展开。用户主动反向拖动仍恢复显示。根 Tab 回归现使用真实 StatefulShellRoute/MainShellPage，并验证短首页实际拖动及恢复，避免只手动修改 provider 的验证盲区。

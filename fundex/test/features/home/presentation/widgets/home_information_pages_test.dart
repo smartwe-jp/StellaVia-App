@@ -215,7 +215,7 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.byType(HomeRankDetailsPage), findsOneWidget);
         expect(find.text('0.525%'), findsOneWidget);
-        await tester.tap(find.byType(BackButton));
+        await tester.tap(find.byType(AppNavigationIconButton));
         await tester.pumpAndSettle();
         expect(find.byType(HomeServiceIntroductionPage), findsOneWidget);
         expect(
@@ -239,7 +239,7 @@ void main() {
         final router = routerFor(path);
         await tester.pumpWidget(app(router));
         await tester.pumpAndSettle();
-        await tester.tap(find.byType(BackButton));
+        await tester.tap(find.byType(AppNavigationIconButton));
         await tester.pumpAndSettle();
         expect(find.text('home'), findsOneWidget);
         await tester.pumpWidget(const SizedBox());

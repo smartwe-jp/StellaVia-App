@@ -7,6 +7,7 @@ void main() {
     test('new bookings tab and details require authentication', () {
       for (final path in [
         '/bookings',
+        '/bookings/history',
         '/bookings/42',
         '/hotel-booking/orders',
         '/hotel-booking/orders/42',

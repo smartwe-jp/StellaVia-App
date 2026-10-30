@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'package:go_router/go_router.dart';
+import 'package:fundex/features/hotel_booking/presentation/support/hotel_detail_route_args.dart';
+import 'package:fundex/features/hotel_booking/presentation/widgets/hotel_home_card.dart';
 import '../../hotel_host_miles_fakes.dart';
 import 'package:fundex/features/hotel_booking/presentation/providers/hotel_host_miles_provider.dart';
 import 'package:fundex/features/hotel_booking/presentation/providers/hotel_booking_providers.dart';
@@ -88,38 +91,69 @@ void main() {
     await tester.pumpAndSettle();
     expect(applied?.priceSort, HotelPriceSort.descending);
   });
-  testWidgets('localized live miles home fits narrow screens and cannot book', (
+  testWidgets(
+    'localized live miles home fits narrow screens and opens details',
+    (tester) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(320, 844);
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      for (final locale in AppLocalizations.supportedLocales) {
+        await tester.pumpWidget(
+          app(const HotelHostMilesPage(), locale: locale, scale: 1.3),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text('GOLD'), findsOneWidget);
+        expect(find.text('23,456'), findsOneWidget);
+        await tester.scrollUntilVisible(find.byType(HotelHomeCard).first, 300);
+        await tester.pumpAndSettle();
+        expect(
+          tester.widget<HotelHomeCard>(find.byType(HotelHomeCard).first).onTap,
+          isNotNull,
+        );
+        expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox());
+      }
+    },
+  );
+  testWidgets('miles hotel entry passes explicit mode and current criteria', (
     tester,
   ) async {
-    tester.view.devicePixelRatio = 1;
-    tester.view.physicalSize = const Size(320, 844);
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-    for (final locale in AppLocalizations.supportedLocales) {
-      await tester.pumpWidget(
-        app(const HotelHostMilesPage(), locale: locale, scale: 1.3),
-      );
-      await tester.pumpAndSettle();
-      expect(find.text('GOLD'), findsOneWidget);
-      expect(find.text('23,456'), findsOneWidget);
-      await tester.scrollUntilVisible(
-        find.byWidgetPredicate((w) => w is AppButton && w.onPressed == null),
-        300,
-      );
-      await tester.pumpAndSettle();
-      expect(
-        tester
-            .widget<AppButton>(
-              find.byWidgetPredicate(
-                (w) => w is AppButton && w.onPressed == null,
-              ),
-            )
-            .onPressed,
-        isNull,
-      );
-      expect(tester.takeException(), isNull);
-      await tester.pumpWidget(const SizedBox());
-    }
+    HotelDetailRouteArgs? args;
+    final router = GoRouter(
+      routes: [
+        GoRoute(path: '/', builder: (_, __) => const HotelHostMilesPage()),
+        GoRoute(
+          path: '/hotel-booking/:id',
+          builder: (_, state) {
+            args = state.extra as HotelDetailRouteArgs;
+            return const Scaffold(body: Text('detail destination'));
+          },
+        ),
+      ],
+    );
+    addTearDown(router.dispose);
+    await tester.pumpWidget(
+      app(
+        MaterialApp.router(
+          routerConfig: router,
+          locale: const Locale('ja'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: AppThemeFactory.light(locale: const Locale('ja')),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.byType(HotelHomeCard).first, 300);
+    await tester.ensureVisible(find.text('API Hotel'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('API Hotel'));
+    await tester.pumpAndSettle();
+    expect(args?.mode, HotelBookingMode.hostMiles);
+    expect(args?.buildingCode, liveHotel.buildingCode);
+    expect(args?.criteria.stayBenefit, true);
+    expect(find.text('detail destination'), findsOneWidget);
   });
   testWidgets('capture miles preview', (tester) async {
     if (Platform.environment['HOTEL_CAPTURE'] != '1') return;

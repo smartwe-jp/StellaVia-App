@@ -19,30 +19,6 @@ class HotelHomeHeader extends StatelessWidget {
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      SafeArea(
-        bottom: false,
-        child: SizedBox(
-          height: 56,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Text(
-                  'STELLAVIA',
-                  style: HotelHomeTextStyles.brandWordmark(context),
-                ),
-                const Spacer(),
-                IconButton(
-                  tooltip: context.l10n.notificationsTitle,
-                  onPressed: () => context.push('/notifications'),
-                  icon: const Icon(Icons.notifications_none),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      const Divider(height: 1),
       Padding(
         padding: const EdgeInsets.fromLTRB(18, 16, 18, 0),
         child: Column(
@@ -100,6 +76,44 @@ class HotelHomeHeader extends StatelessWidget {
           ],
         ),
       ),
+    ],
+  );
+}
+
+/// Brand navigation remains separate from the scrolling search/filter content.
+class HotelHomeNavigationBar extends StatelessWidget
+    implements PreferredSizeWidget {
+  const HotelHomeNavigationBar({super.key});
+  @override
+  Size get preferredSize => const Size.fromHeight(57);
+  @override
+  Widget build(BuildContext context) => Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      SafeArea(
+        bottom: false,
+        child: SizedBox(
+          height: 56,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                Text(
+                  'STELLAVIA',
+                  style: HotelHomeTextStyles.brandWordmark(context),
+                ),
+                const Spacer(),
+                IconButton(
+                  tooltip: context.l10n.notificationsTitle,
+                  onPressed: () => context.push('/notifications'),
+                  icon: const Icon(Icons.notifications_none),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      const Divider(height: 1),
     ],
   );
 }

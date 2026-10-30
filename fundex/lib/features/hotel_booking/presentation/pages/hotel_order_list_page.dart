@@ -30,7 +30,6 @@ class HotelOrderListPage extends ConsumerWidget {
     );
 
     final page = Scaffold(
-      backgroundColor: colors.surfaceAlt,
       appBar: AppNavigationBar(
         title: isRootTab
             ? context.l10n.mainTabBookings
@@ -46,7 +45,7 @@ class HotelOrderListPage extends ConsumerWidget {
                     context.pop();
                     return;
                   }
-                  context.go('/hotel-booking');
+                  context.go('/bookings');
                 },
                 backgroundColor: colors.surface.withValues(alpha: 0),
                 foregroundColor: colors.textPrimary,

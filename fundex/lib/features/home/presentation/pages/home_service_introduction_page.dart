@@ -13,11 +13,15 @@ class HomeServiceIntroductionPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final member = ref.watch(isAuthenticatedProvider).valueOrNull ?? false;
     return Scaffold(
-      backgroundColor: context.appColors.surface,
-      appBar: AppBar(
-        title: Text(context.l10n.homeServiceTitle),
-        leading: BackButton(
-          onPressed: () {
+      appBar: AppNavigationBar(
+        title: context.l10n.homeServiceTitle,
+        backgroundColor: context.appColors.surface,
+        foregroundColor: context.appColors.textPrimary,
+        leading: AppNavigationIconButton(
+          icon: Icons.arrow_back_rounded,
+          backgroundColor: context.appColors.surface.withValues(alpha: 0),
+          foregroundColor: context.appColors.textPrimary,
+          onTap: () {
             if (context.canPop()) {
               context.pop();
             } else {

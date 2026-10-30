@@ -26,7 +26,10 @@ class MyPageSummaryChartPlot extends StatelessWidget {
             painter: _SummaryPainter(
               points: points,
               start: data.start,
-              end: DateTime(data.end.year, 12, 31),
+              end: years == 1
+                  ? DateTime(data.end.year, data.end.month + 1, 0)
+                  : DateTime(data.end.year, 12, 31),
+              monthly: years == 1,
               bars: bars,
               line: context.appColors.brandSecondary,
               primary: context.appColors.primary,
@@ -45,9 +48,11 @@ class MyPageSummaryChartPlot extends StatelessWidget {
                     Positioned(
                       left:
                           constraints.maxWidth *
-                              (years == 1
-                                  ? (int.parse(labels[i]) - .5) / 12
-                                  : (i + .5) / labels.length) -
+                              MyPageChartDisplay.labelPosition(
+                                i,
+                                years,
+                                labels.length,
+                              ) -
                           18,
                       width: 36,
                       child: Text(
@@ -72,6 +77,7 @@ class _SummaryPainter extends CustomPainter {
     required this.start,
     required this.end,
     required this.bars,
+    required this.monthly,
     required this.line,
     required this.primary,
   });
@@ -79,6 +85,7 @@ class _SummaryPainter extends CustomPainter {
   final DateTime start, end;
   final bool bars;
   final Color line, primary;
+  final bool monthly;
   @override
   void paint(Canvas canvas, Size size) {
     if (points.isEmpty) return;
@@ -98,12 +105,14 @@ class _SummaryPainter extends CustomPainter {
             d.difference(start).inMilliseconds /
             math.max(1, end.difference(start).inMilliseconds);
     if (bars) {
-      final months = start.year == end.year;
-      final count = months ? 12 : end.year - start.year + 1;
+      final count = monthly ? 12 : end.year - start.year + 1;
       final slot = size.width / count;
       for (var i = 0; i < points.length; i++) {
         final p = points[i];
-        final index = months ? p.date.month - 1 : p.date.year - start.year;
+        final index = monthly
+            ? MyPageChartDisplay.monthIndex(p.date, start)
+            : p.date.year - start.year;
+        if (index < 0 || index >= count) continue;
         final top = math.min(y(p.value), y(0));
         final height = math.max(1.0, (y(p.value) - y(0)).abs());
         canvas.drawRRect(
@@ -149,6 +158,7 @@ class _SummaryPainter extends CustomPainter {
       old.start != start ||
       old.end != end ||
       old.bars != bars ||
+      old.monthly != monthly ||
       old.line != line ||
       old.primary != primary;
 }

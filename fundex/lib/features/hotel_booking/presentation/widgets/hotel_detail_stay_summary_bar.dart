@@ -12,12 +12,14 @@ class HotelDetailStaySummaryBar extends StatelessWidget {
     required this.presenter,
     this.onDatesTap,
     this.onGuestsTap,
+    this.flat = false,
   });
 
   final HotelSearchCriteria criteria;
   final HotelBookingPresenter presenter;
   final VoidCallback? onDatesTap;
   final VoidCallback? onGuestsTap;
+  final bool flat;
 
   @override
   Widget build(BuildContext context) {
@@ -26,50 +28,55 @@ class HotelDetailStaySummaryBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.brandWhite,
         borderRadius: BorderRadius.circular(UiTokens.radius16),
-        border: Border.all(color: colors.highlightGold.withValues(alpha: 0.45)),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: colors.brandPrimaryDark.withValues(alpha: 0.12),
-            blurRadius: UiTokens.radius16,
-            offset: const Offset(0, 14),
-          ),
-        ],
+        border: Border.all(
+          color: flat
+              ? colors.borderSoft
+              : colors.highlightGold.withValues(alpha: 0.45),
+        ),
+        boxShadow: flat
+            ? const []
+            : <BoxShadow>[
+                BoxShadow(
+                  color: colors.brandPrimaryDark.withValues(alpha: 0.12),
+                  blurRadius: UiTokens.radius16,
+                  offset: const Offset(0, 14),
+                ),
+              ],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(UiTokens.radius16),
         child: Row(
-            children: <Widget>[
-              Expanded(
-                child: _SummaryItem(
-                  icon: Icons.calendar_month_outlined,
-                  label: context.l10n.hotelDetailStayDateLabel,
-                  value:
-                      '${presenter.stayRange(criteria)}、 '
-                      '${context.l10n.hotelSearchNights(criteria.nights)}',
-                  onTap: onDatesTap,
+          children: <Widget>[
+            Expanded(
+              child: _SummaryItem(
+                icon: Icons.calendar_month_outlined,
+                label: context.l10n.hotelDetailStayDateLabel,
+                value:
+                    '${presenter.stayRange(criteria)}、 '
+                    '${context.l10n.hotelSearchNights(criteria.nights)}',
+                onTap: onDatesTap,
+              ),
+            ),
+            SizedBox(
+              width: 1,
+              height: 60,
+              child: ColoredBox(color: colors.borderSoft),
+            ),
+            Expanded(
+              child: _SummaryItem(
+                icon: Icons.person_outline_rounded,
+                label: context.l10n.hotelDetailGuestRoomLabel,
+                value: context.l10n.hotelGuestDetailedSummary(
+                  criteria.occupancy,
+                  criteria.kids,
+                  criteria.roomCount,
                 ),
+                onTap: onGuestsTap,
               ),
-              SizedBox(
-                width: 1,
-                height: 60,
-                child: ColoredBox(color: colors.borderSoft),
-              ),
-              Expanded(
-                child: _SummaryItem(
-                  icon: Icons.person_outline_rounded,
-                  label: context.l10n.hotelDetailGuestRoomLabel,
-                  value: context.l10n.hotelGuestDetailedSummary(
-                    criteria.occupancy,
-                    criteria.kids,
-                    criteria.roomCount,
-                  ),
-                  onTap: onGuestsTap,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-      
+      ),
     );
   }
 }
@@ -101,13 +108,15 @@ class _SummaryItem extends StatelessWidget {
             children: <Widget>[
               Icon(icon, size: 18, color: colors.brandSecondary),
               const SizedBox(width: 4),
-              Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: colors.brandSecondary,
-                  fontWeight: FontWeight.w600,
+              Expanded(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: colors.brandSecondary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ],

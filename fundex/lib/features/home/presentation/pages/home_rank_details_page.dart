@@ -8,11 +8,15 @@ class HomeRankDetailsPage extends StatelessWidget {
   const HomeRankDetailsPage({super.key});
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: context.appColors.surface,
-    appBar: AppBar(
-      title: Text(context.l10n.homeRankDetails),
-      leading: BackButton(
-        onPressed: () {
+    appBar: AppNavigationBar(
+      title: context.l10n.homeRankDetails,
+      backgroundColor: context.appColors.surface,
+      foregroundColor: context.appColors.textPrimary,
+      leading: AppNavigationIconButton(
+        icon: Icons.arrow_back_rounded,
+        backgroundColor: context.appColors.surface.withValues(alpha: 0),
+        foregroundColor: context.appColors.textPrimary,
+        onTap: () {
           if (context.canPop()) {
             context.pop();
           } else {

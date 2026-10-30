@@ -37,7 +37,6 @@ class DepositPage extends ConsumerWidget {
             .then((_) {});
       },
       child: Scaffold(
-        backgroundColor: colors.surface,
         appBar: AppNavigationBar(
           title: l10n.walletDepositTitle,
           height: 52,

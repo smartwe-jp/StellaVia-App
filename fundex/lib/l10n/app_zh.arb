@@ -2814,5 +2814,25 @@
         "type": "String"
       }
     }
-  }
+  },
+  "hotelManagementCapacity": "同时预约持有数",
+  "hotelManagementCapacityHint": "当前等级可预约的上限",
+  "hotelManagementNextTrip": "预约下一次旅行",
+  "hotelManagementNextTripHint": "寻找可使用宿主里程的酒店",
+  "hotelManagementLoadFailed": "无法获取预约室数",
+  "hotelDetailMilesQuoteAfterSelection": "选房后计算总里程",
+  "hotelDetailDecreaseRoom": "减少客房",
+  "hotelDetailIncreaseRoom": "增加客房",
+  "hotelDetailSelection": "已选",
+  "hotelDetailRequiredMiles": "所需总里程",
+  "hotelDetailStayTotal": "住宿总价",
+  "hotelDetailEstimatedMiles": "预约后预计剩余里程",
+  "hotelDetailEstimatedRooms": "预约后预计可预约室数",
+  "hotelDetailEstimateNotice": "此处为预估，实际里程与室数将在预约确认时更新。",
+  "hotelDetailMilesInsufficient": "宿主里程不足。",
+  "hotelDetailRoomsInsufficient": "超出可预约室数。",
+  "hotelDetailMilesUnavailable": "无法获取当前条件的里程报价。",
+  "hotelDetailMilesPending": "里程预约流程准备中",
+  "hotelDetailProceed": "继续预约",
+  "hotelDetailRoomsHeading": "ROOMS"
 }

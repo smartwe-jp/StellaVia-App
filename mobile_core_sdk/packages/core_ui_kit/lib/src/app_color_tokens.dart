@@ -44,8 +44,8 @@ class AppColorTokens {
   static const Color kizunarkPrimary = brandPrimary;
   static const Color kizunarkSecondary = brandPrimaryBright;
   static const Color kizunarkPrimaryLight = fundexAccentSuperLight;
-  // White pages/cards with cream reserved for alternate surfaces.
-  static const Color fundexBackground = brandWhite;
+  // Neutral page canvas, white cards, cream alternate surfaces.
+  static const Color fundexBackground = Color(0xFFF5F5F2);
   static const Color fundexSurface = brandWhite;
   static const Color fundexSurfaceAlt = brandBaseCream;
   static const Color fundexBorder = Color(0x24070E2B);

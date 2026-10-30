@@ -22,7 +22,6 @@ class HotelTodayCheckInPage extends ConsumerWidget {
     );
 
     return Scaffold(
-      backgroundColor: colors.surfaceAlt,
       appBar: AppNavigationBar(
         title: context.l10n.hotelTodayCheckInTitle,
         backgroundColor: colors.surface,

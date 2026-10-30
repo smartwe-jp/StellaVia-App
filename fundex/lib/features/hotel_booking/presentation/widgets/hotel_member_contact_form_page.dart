@@ -60,7 +60,6 @@ class _HotelMemberContactFormPageState
     final colors = Theme.of(context).appColors;
     final countriesState = ref.watch(hotelCountryCodesProvider);
     return Scaffold(
-      backgroundColor: colors.surfaceAlt,
       appBar: AppNavigationBar(
         title: widget.contact == null
             ? context.l10n.hotelMemberContactsAddAction

@@ -15,7 +15,10 @@ class LoadMyPageChartUseCase {
     DateTime now,
   ) async {
     final end = DateTime(now.year, now.month, now.day);
-    final start = DateTime(now.year - years + 1);
+    // One year is a rolling window of twelve calendar months, including this month.
+    final start = years == 1
+        ? DateTime(now.year, now.month - 11)
+        : DateTime(now.year - years + 1);
     final points = <MyPageChartPoint>[];
     num? total;
     void add(String? raw, num? value) {

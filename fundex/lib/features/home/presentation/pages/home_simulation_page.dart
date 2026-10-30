@@ -24,31 +24,21 @@ class HomeSimulationPage extends ConsumerWidget {
     final member = ref.watch(isAuthenticatedProvider).asData?.value == true;
     return Scaffold(
       backgroundColor: HomeSimulationTheme.background(context),
-      appBar: AppBar(
-        backgroundColor: HomeSimulationTheme.background(context),
-        title: Text(l.simTitle),
-        centerTitle: true,
-        leadingWidth: 85,
-        leading: TextButton(
-          onPressed: () {
+      appBar: AppNavigationBar(
+        title: l.simTitle,
+        backgroundColor: context.appColors.surface,
+        foregroundColor: context.appColors.textPrimary,
+        leading: AppNavigationIconButton(
+          icon: Icons.arrow_back_rounded,
+          backgroundColor: context.appColors.surface.withValues(alpha: 0),
+          foregroundColor: context.appColors.textPrimary,
+          onTap: () {
             if (context.canPop()) {
               context.pop();
             } else {
               context.go('/home');
             }
           },
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                'assets/images/simulation_back.png',
-                width: 10,
-                height: 16,
-              ),
-              const SizedBox(width: 4),
-              Flexible(child: Text(l.commonBack)),
-            ],
-          ),
         ),
       ),
       body: SafeArea(

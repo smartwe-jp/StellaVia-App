@@ -229,7 +229,6 @@ class _SettingsPhoneVerificationPageState
     final verifiedPhoneAsync = ref.watch(settingsVerifiedPhoneNumberProvider);
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.settingsPhoneVerificationTitle,
         leading: AppNavigationIconButton(

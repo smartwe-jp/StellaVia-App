@@ -33,7 +33,6 @@ class SettingsTwoFactorPage extends ConsumerWidget {
     final canOpenFaceVerification = faceVerified.asData?.value != true;
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.menuItemTwoFactor,
         leading: AppNavigationIconButton(

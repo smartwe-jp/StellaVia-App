@@ -59,8 +59,6 @@ class _MemberProfileOverviewPageState
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
     final authUser = ref.watch(currentAuthUserProvider).asData?.value;
     final basicProfile = ref.watch(memberBasicProfileProvider);
     final detailsAsync = ref.watch(memberProfileDetailsProvider);
@@ -75,7 +73,6 @@ class _MemberProfileOverviewPageState
     );
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.menuItemEditProfile,
         leading: AppNavigationIconButton(

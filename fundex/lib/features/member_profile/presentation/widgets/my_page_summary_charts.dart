@@ -1,7 +1,7 @@
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/mypage_chart.dart';
 import '../providers/mypage_chart_providers.dart';
@@ -59,33 +59,40 @@ class MyPageSummaryChartCard extends ConsumerWidget {
               Expanded(
                 child: Text(title, style: MyPageChartStyles.title(context)),
               ),
-              PopupMenuButton<int>(
-                tooltip: l.myPageChartRange,
-                initialValue: state.years,
-                onSelected: controller.selectYears,
-                itemBuilder: (c) => [
-                  for (final y in [1, 3, 5])
-                    PopupMenuItem(value: y, child: Text(l.myPageChartYears(y))),
-                ],
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        l.myPageChartYears(state.years),
-                        style: MyPageChartStyles.range(context),
-                      ),
-                      const SizedBox(width: 8),
-                      SvgPicture.asset(
-                        'assets/images/mypage-chart-chevron.svg',
-                        width: 8,
-                        height: 14,
-                        colorFilter: ColorFilter.mode(
-                          context.appColors.textSecondary,
-                          BlendMode.srcIn,
+              Flexible(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: AppDropdownSelector<int>(
+                    tooltip: l.myPageChartRange,
+                    textStyle: MyPageChartStyles.range(context),
+                    icon: SizedBox(
+                      width: 6,
+                      height: 3,
+                      child: OverflowBox(
+                        maxWidth: 7,
+                        maxHeight: 4,
+                        child: RotatedBox(
+                          quarterTurns: 1,
+                          child: SvgPicture.asset(
+                            'assets/images/mypage-range-chevron.svg',
+                            width: 4,
+                            height: 7,
+                            colorFilter: ColorFilter.mode(
+                              context.appColors.textPrimary,
+                              BlendMode.srcIn,
+                            ),
+                          ),
                         ),
                       ),
+                    ),
+                    value: state.years,
+                    onChanged: controller.selectYears,
+                    options: [
+                      for (final y in [1, 3, 5])
+                        AppDropdownOption(
+                          value: y,
+                          label: l.myPageChartYears(y),
+                        ),
                     ],
                   ),
                 ),

@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 
 /// Feature-only Figma surface and decorative rank colors; not account tiers.
 abstract final class HomeDesignTheme {
-  static Color background(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.light
-      ? const Color(0xFFF5F5F2)
-      : context.appColors.background;
+  static Color background(BuildContext context) => context.appColors.background;
   static const guestGradient = [
     Color(0xFF3B3029),
     Color(0xFF6B5240),

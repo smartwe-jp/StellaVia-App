@@ -52,7 +52,13 @@ class AppBottomTabBar extends StatelessWidget {
                       onTap: () => onSelected(i),
                       button: true,
                       label: items[i].label,
-                      child: InkWell(
+                      child: InkResponse(
+                        // Keep the whole tab tappable, but clip press feedback
+                        // to a circle instead of highlighting its rectangular cell.
+                        containedInkWell: true,
+                        highlightShape: BoxShape.circle,
+                        customBorder: const CircleBorder(),
+                        radius: height / 2,
                         onTap: () => onSelected(i),
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(2, 10, 2, 2),

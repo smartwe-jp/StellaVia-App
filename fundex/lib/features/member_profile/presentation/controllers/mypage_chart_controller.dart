@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/mypage_chart.dart';
 
 class MyPageChartState {
-  const MyPageChartState({this.years = 5, this.data = const AsyncLoading()});
+  const MyPageChartState({this.years = 1, this.data = const AsyncLoading()});
   final int years;
   final AsyncValue<MyPageChartData> data;
 }

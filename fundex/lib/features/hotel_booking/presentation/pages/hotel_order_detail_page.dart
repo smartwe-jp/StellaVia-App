@@ -29,7 +29,6 @@ class _HotelOrderDetailPageState extends ConsumerState<HotelOrderDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).appColors;
     final detailState = ref.watch(hotelOrderDetailProvider(widget.orderId));
     final languageCode = ref.watch(hotelLocaleLanguageCodeProvider);
     final presenter = HotelBookingPresenter(
@@ -37,7 +36,6 @@ class _HotelOrderDetailPageState extends ConsumerState<HotelOrderDetailPage> {
     );
 
     return Scaffold(
-      backgroundColor: colors.surfaceAlt,
       body: SafeArea(
         top: false,
         bottom: false,

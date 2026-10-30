@@ -6594,6 +6594,66 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get myPageShowAmounts => '显示金额';
+
+  @override
+  String get hotelManagementCapacity => '同时预约持有数';
+
+  @override
+  String get hotelManagementCapacityHint => '当前等级可预约的上限';
+
+  @override
+  String get hotelManagementNextTrip => '预约下一次旅行';
+
+  @override
+  String get hotelManagementNextTripHint => '寻找可使用宿主里程的酒店';
+
+  @override
+  String get hotelManagementLoadFailed => '无法获取预约室数';
+
+  @override
+  String get hotelDetailMilesQuoteAfterSelection => '选房后计算总里程';
+
+  @override
+  String get hotelDetailDecreaseRoom => '减少客房';
+
+  @override
+  String get hotelDetailIncreaseRoom => '增加客房';
+
+  @override
+  String get hotelDetailSelection => '已选';
+
+  @override
+  String get hotelDetailRequiredMiles => '所需总里程';
+
+  @override
+  String get hotelDetailStayTotal => '住宿总价';
+
+  @override
+  String get hotelDetailEstimatedMiles => '预约后预计剩余里程';
+
+  @override
+  String get hotelDetailEstimatedRooms => '预约后预计可预约室数';
+
+  @override
+  String get hotelDetailEstimateNotice => '此处为预估，实际里程与室数将在预约确认时更新。';
+
+  @override
+  String get hotelDetailMilesInsufficient => '宿主里程不足。';
+
+  @override
+  String get hotelDetailRoomsInsufficient => '超出可预约室数。';
+
+  @override
+  String get hotelDetailMilesUnavailable => '无法获取当前条件的里程报价。';
+
+  @override
+  String get hotelDetailMilesPending => '里程预约流程准备中';
+
+  @override
+  String get hotelDetailProceed => '继续预约';
+
+  @override
+  String get hotelDetailRoomsHeading => 'ROOMS';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -13190,4 +13250,64 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageShowAmounts => '顯示金額';
+
+  @override
+  String get hotelManagementCapacity => '同時預約持有數';
+
+  @override
+  String get hotelManagementCapacityHint => '目前等級可預約的上限';
+
+  @override
+  String get hotelManagementNextTrip => '預約下一次旅行';
+
+  @override
+  String get hotelManagementNextTripHint => '尋找可使用宿主里程的酒店';
+
+  @override
+  String get hotelManagementLoadFailed => '無法取得預約室數';
+
+  @override
+  String get hotelDetailMilesQuoteAfterSelection => '選房後計算總里程';
+
+  @override
+  String get hotelDetailDecreaseRoom => '減少客房';
+
+  @override
+  String get hotelDetailIncreaseRoom => '增加客房';
+
+  @override
+  String get hotelDetailSelection => '已選';
+
+  @override
+  String get hotelDetailRequiredMiles => '所需總里程';
+
+  @override
+  String get hotelDetailStayTotal => '住宿總價';
+
+  @override
+  String get hotelDetailEstimatedMiles => '預約後預計剩餘里程';
+
+  @override
+  String get hotelDetailEstimatedRooms => '預約後預計可預約室數';
+
+  @override
+  String get hotelDetailEstimateNotice => '此處為預估，實際里程與室數將在預約確認時更新。';
+
+  @override
+  String get hotelDetailMilesInsufficient => '宿主里程不足。';
+
+  @override
+  String get hotelDetailRoomsInsufficient => '超出可預約室數。';
+
+  @override
+  String get hotelDetailMilesUnavailable => '無法取得目前條件的里程報價。';
+
+  @override
+  String get hotelDetailMilesPending => '里程預約流程準備中';
+
+  @override
+  String get hotelDetailProceed => '繼續預約';
+
+  @override
+  String get hotelDetailRoomsHeading => 'ROOMS';
 }

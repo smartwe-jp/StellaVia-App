@@ -28,7 +28,6 @@ class SettingsContractDocumentsPage extends ConsumerWidget {
     );
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.menuItemContractList,
         leading: AppNavigationIconButton(

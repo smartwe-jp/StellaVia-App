@@ -6,6 +6,7 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../providers/hotel_host_miles_provider.dart';
 import '../support/hotel_booking_presenter.dart';
+import '../support/hotel_detail_route_args.dart';
 import '../widgets/hotel_home_card.dart';
 import '../widgets/hotel_host_miles_header.dart';
 import '../widgets/hotel_state_views.dart';
@@ -18,6 +19,7 @@ class HotelHostMilesPage extends ConsumerStatefulWidget {
 
 class _HotelHostMilesPageState extends ConsumerState<HotelHostMilesPage>
     with WidgetsBindingObserver {
+  bool _loadMoreScheduled = false;
   @override
   void initState() {
     super.initState();
@@ -47,11 +49,15 @@ class _HotelHostMilesPageState extends ConsumerState<HotelHostMilesPage>
       Localizations.localeOf(context).toLanguageTag(),
     );
     return Scaffold(
-      backgroundColor: context.appColors.surface,
-      appBar: AppBar(
-        title: Text(context.l10n.homeBookWithMiles),
-        leading: BackButton(
-          onPressed: () {
+      appBar: AppNavigationBar(
+        title: context.l10n.homeBookWithMiles,
+        backgroundColor: context.appColors.surface,
+        foregroundColor: context.appColors.textPrimary,
+        leading: AppNavigationIconButton(
+          icon: Icons.arrow_back_rounded,
+          backgroundColor: context.appColors.surface.withValues(alpha: 0),
+          foregroundColor: context.appColors.textPrimary,
+          onTap: () {
             if (context.canPop()) {
               context.pop();
             } else {
@@ -66,8 +72,17 @@ class _HotelHostMilesPageState extends ConsumerState<HotelHostMilesPage>
           onNotification: (notice) {
             if (notice.depth == 0 &&
                 notice.metrics.extentAfter < 400 &&
-                hotels.loadMoreError == null) {
-              controller.loadMore();
+                hotels.loadMoreError == null &&
+                !_loadMoreScheduled) {
+              // Layout-induced scroll notifications must not synchronously
+              // mutate Riverpod while the widget tree is building.
+              _loadMoreScheduled = true;
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _loadMoreScheduled = false;
+                if (mounted && (ModalRoute.of(context)?.isCurrent ?? false)) {
+                  ref.read(hotelHostMilesProvider.notifier).loadMore();
+                }
+              });
             }
             return false;
           },
@@ -101,6 +116,14 @@ class _HotelHostMilesPageState extends ConsumerState<HotelHostMilesPage>
                     hotel: hotel,
                     presenter: presenter,
                     hostMilesMode: true,
+                    onTap: () => context.push(
+                      '/hotel-booking/${Uri.encodeComponent(hotel.id)}',
+                      extra: HotelDetailRouteArgs(
+                        criteria: hotels.criteria,
+                        buildingCode: hotel.buildingCode,
+                        mode: HotelBookingMode.hostMiles,
+                      ),
+                    ),
                   ),
                 ),
               if (hotels.isLoadingMore)
@@ -114,7 +137,6 @@ class _HotelHostMilesPageState extends ConsumerState<HotelHostMilesPage>
                   variant: AppButtonVariant.text,
                 ),
               const SizedBox(height: 16),
-              AppButton(label: context.l10n.hotelMilesChoose, onPressed: null),
               const SizedBox(height: 24),
             ],
           ),

@@ -132,19 +132,26 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
               .toList(growable: false);
     final loadError = asyncProjects.asError;
 
-    void preparing() =>
-        AppNotice.show(context, message: l10n.homeFeaturePreparing);
     return HomeMilesRefreshScope(
       onRefresh: () => _refreshHomeMiles(ref),
       child: ColoredBox(
         color: HomeDesignTheme.background(context),
         child: Column(
           children: [
-            HomeRedesignHeader(
-              isAuthenticated: isAuthenticated,
-              unreadCount: unreadNotificationCount,
-              onLogin: () => context.push('/login'),
-              onNotifications: () => context.push('/profile/notifications'),
+            AppScrollNavigationBar(
+              reveal: ref.watch(mainShellChromeRevealProvider),
+              backgroundColor: isAuthenticated
+                  ? context.appColors.surface
+                  : HomeDesignTheme.background(context),
+              navigationBar: PreferredSize(
+                preferredSize: const Size.fromHeight(56),
+                child: HomeRedesignHeader(
+                  isAuthenticated: isAuthenticated,
+                  unreadCount: unreadNotificationCount,
+                  onLogin: () => context.push('/login'),
+                  onNotifications: () => context.push('/profile/notifications'),
+                ),
+              ),
             ),
             Expanded(
               child: MainShellTabRefreshScope(
@@ -188,7 +195,10 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                         const SizedBox(height: 20),
                       ],
                       if (isAuthenticated)
-                        HomeMilesAccountSection(onTap: preparing),
+                        HomeMilesAccountSection(
+                          onTap: () =>
+                              context.push('/hotel-booking/host-miles'),
+                        ),
                       if (asyncProjects.isLoading && projects.isEmpty)
                         const Padding(
                           padding: EdgeInsets.all(16),

@@ -130,7 +130,6 @@ class _HotelStayBenefitPageState extends ConsumerState<HotelStayBenefitPage> {
     );
 
     return Scaffold(
-      backgroundColor: colors.surfaceAlt,
       appBar: AppNavigationBar(
         title: context.l10n.hotelStayBenefitsTitle,
         backgroundColor: colors.surface,

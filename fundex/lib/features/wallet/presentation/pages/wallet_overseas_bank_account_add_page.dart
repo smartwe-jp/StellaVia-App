@@ -170,7 +170,6 @@ class _WalletOverseasBankAccountAddPageState
     final isAdding = ref.watch(walletBankAccountAddingProvider);
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.walletBankSettingsOverseasAddTitle,
         backgroundColor: colors.surface,

@@ -1,3 +1,4 @@
+import '../../features/hotel_booking/presentation/pages/hotel_management_page.dart';
 import '../../features/home/presentation/pages/home_simulation_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_host_miles_page.dart';
 import 'package:flutter/material.dart';
@@ -453,7 +454,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   ),
                   GoRoute(
                     path: 'orders',
-                    redirect: (context, state) => '/bookings',
+                    redirect: (context, state) => '/bookings/history',
                   ),
                   GoRoute(
                     path: 'orders/:orderId',
@@ -524,6 +525,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                       return HotelDetailPage(
                         hotelId: id,
                         initialCriteria: criteria,
+                        mode: extra is HotelDetailRouteArgs
+                            ? extra.mode
+                            : HotelBookingMode.regular,
                         buildingCode: extra is HotelDetailRouteArgs
                             ? extra.buildingCode
                             : null,
@@ -560,9 +564,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             routes: <RouteBase>[
               GoRoute(
                 path: '/bookings',
-                builder: (context, state) =>
-                    const HotelOrderListPage(isRootTab: true),
+                builder: (context, state) => const HotelManagementPage(),
                 routes: [
+                  GoRoute(
+                    path: 'history',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) => const HotelOrderListPage(),
+                  ),
                   GoRoute(
                     path: ':orderId',
                     parentNavigatorKey: _rootNavigatorKey,

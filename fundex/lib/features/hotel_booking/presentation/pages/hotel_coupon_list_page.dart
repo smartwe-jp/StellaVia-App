@@ -32,7 +32,6 @@ class _HotelCouponListPageState extends ConsumerState<HotelCouponListPage> {
             <HotelFundBenefitTicket>[],
           );
     return Scaffold(
-      backgroundColor: colors.surfaceAlt,
       appBar: AppNavigationBar(
         title: context.l10n.hotelCouponsTitle,
         backgroundColor: colors.surface,

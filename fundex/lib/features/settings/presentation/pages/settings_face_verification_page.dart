@@ -338,7 +338,6 @@ class _SettingsFaceVerificationPageState
         selfieUploaded && !_isUploadingPhoto && !_isRunningVerification;
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.settingsFaceVerificationTitle,
         leading: AppNavigationIconButton(

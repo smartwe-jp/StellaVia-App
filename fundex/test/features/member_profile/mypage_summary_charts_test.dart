@@ -78,7 +78,7 @@ class MilesFake implements HostMilesRepository {
 }
 
 MyPageChartData chart(int years) => MyPageChartData(
-  start: DateTime(2027 - years),
+  start: years == 1 ? DateTime(2025, 11) : DateTime(2027 - years),
   end: DateTime(2026, 10, 29),
   total: 9020314,
   points: [
@@ -133,12 +133,13 @@ void main() {
       await flush();
       expect(container.read(provider).data.valueOrNull?.total, 9020314);
       final old = container.read(provider.notifier);
-      await old.selectYears(1);
+      expect(old.state.years, 1);
+      await old.selectYears(3);
       container.invalidate(currentAuthUserProvider);
       await flush();
       await flush();
       expect(identical(old, container.read(provider.notifier)), true);
-      expect(container.read(provider).years, 1);
+      expect(container.read(provider).years, 3);
       container.read(identity.notifier).state = 'B';
       await flush();
       await flush();
@@ -184,6 +185,52 @@ void main() {
       );
     },
   );
+  test('one year rolls across year boundaries for every chart kind', () async {
+    final usecase = LoadMyPageChartUseCase(
+      ProfileFake(),
+      AssetsFake(),
+      MilesFake(),
+    );
+    for (final now in [
+      DateTime(2026, 10, 30),
+      DateTime(2026, 1, 1),
+      DateTime(2024, 2, 29),
+      DateTime(2026, 12, 31),
+    ]) {
+      for (final kind in MyPageChartKind.values) {
+        final result = await usecase(kind, 1, now);
+        expect(result.start, DateTime(now.year, now.month - 11));
+        expect(result.end, now);
+        expect(MyPageChartDisplay.monthIndex(now, result.start), 11);
+        expect(MyPageChartDisplay.labels(result, 1).last, '${now.month}');
+        expect(
+          result.points.every(
+            (p) => !p.date.isBefore(result.start) && !p.date.isAfter(now),
+          ),
+          true,
+        );
+      }
+    }
+    final data = MyPageChartData(
+      start: DateTime(2025, 11),
+      end: DateTime(2026, 10, 30),
+      total: 30,
+      points: [
+        MyPageChartPoint(DateTime(2025, 11, 1), 10),
+        MyPageChartPoint(DateTime(2025, 11, 30), 15),
+        MyPageChartPoint(DateTime(2026, 1), 20),
+        MyPageChartPoint(DateTime(2026, 10), 30),
+      ],
+    );
+    expect(MyPageChartDisplay.labels(data, 1), ['11', '2', '5', '8', '10']);
+    final bars = MyPageChartDisplay.bars(data, 1);
+    expect(bars.map((p) => p.value), [15, 20, 30]);
+    expect(bars.map((p) => MyPageChartDisplay.monthIndex(p.date, data.start)), [
+      0,
+      2,
+      11,
+    ]);
+  });
   test(
     'range changes reject late results and refresh failure preserves useful data',
     () async {
@@ -194,13 +241,13 @@ void main() {
         return p.future;
       });
       final first = c.refresh();
-      final second = c.selectYears(1);
-      pending[1].complete(chart(1));
+      final second = c.selectYears(5);
+      pending[1].complete(chart(5));
       await second;
-      pending[0].complete(chart(5));
+      pending[0].complete(chart(1));
       await first;
-      expect(c.state.years, 1);
-      expect(c.state.data.valueOrNull?.start, DateTime(2026));
+      expect(c.state.years, 5);
+      expect(c.state.data.valueOrNull?.start, DateTime(2022));
       final refresh = c.refresh();
       pending.last.completeError(StateError('offline'));
       await refresh;
@@ -269,9 +316,17 @@ void main() {
         );
         await tester.pumpAndSettle();
         expect(find.text('9,020,314'), findsNWidgets(3));
+        expect(
+          tester
+              .widgetList<AppDropdownSelector<int>>(
+                find.byType(AppDropdownSelector<int>),
+              )
+              .map((w) => w.value),
+          [1, 1, 1],
+        );
         await tester.tap(find.byType(PopupMenuButton<int>).first);
         await tester.pumpAndSettle();
-        await tester.tap(find.byType(PopupMenuItem<int>).first);
+        await tester.tap(find.byType(PopupMenuItem<int>).last);
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);
         await tester.pumpWidget(const SizedBox());

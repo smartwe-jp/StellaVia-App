@@ -6984,4 +6984,69 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myPageShowAmounts => 'Show amounts';
+
+  @override
+  String get hotelManagementCapacity => 'Concurrent reservations';
+
+  @override
+  String get hotelManagementCapacityHint =>
+      'Booking limit for your current tier';
+
+  @override
+  String get hotelManagementNextTrip => 'Book your next trip';
+
+  @override
+  String get hotelManagementNextTripHint => 'Find hotels accepting host miles';
+
+  @override
+  String get hotelManagementLoadFailed => 'Unable to load reservation counts';
+
+  @override
+  String get hotelDetailMilesQuoteAfterSelection =>
+      'Select rooms to quote miles';
+
+  @override
+  String get hotelDetailDecreaseRoom => 'Remove a room';
+
+  @override
+  String get hotelDetailIncreaseRoom => 'Add a room';
+
+  @override
+  String get hotelDetailSelection => 'Selection';
+
+  @override
+  String get hotelDetailRequiredMiles => 'Total miles required';
+
+  @override
+  String get hotelDetailStayTotal => 'Total stay price';
+
+  @override
+  String get hotelDetailEstimatedMiles => 'Estimated miles after booking';
+
+  @override
+  String get hotelDetailEstimatedRooms =>
+      'Estimated room allowance after booking';
+
+  @override
+  String get hotelDetailEstimateNotice =>
+      'These are estimates. Miles and room allowance are updated when the booking is confirmed.';
+
+  @override
+  String get hotelDetailMilesInsufficient => 'Insufficient host miles.';
+
+  @override
+  String get hotelDetailRoomsInsufficient => 'Room allowance exceeded.';
+
+  @override
+  String get hotelDetailMilesUnavailable =>
+      'A miles quote is unavailable for this selection.';
+
+  @override
+  String get hotelDetailMilesPending => 'Miles booking coming soon';
+
+  @override
+  String get hotelDetailProceed => 'Continue to booking';
+
+  @override
+  String get hotelDetailRoomsHeading => 'ROOMS';
 }

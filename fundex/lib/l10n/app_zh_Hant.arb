@@ -2814,5 +2814,25 @@
         "type": "String"
       }
     }
-  }
+  },
+  "hotelManagementCapacity": "同時預約持有數",
+  "hotelManagementCapacityHint": "目前等級可預約的上限",
+  "hotelManagementNextTrip": "預約下一次旅行",
+  "hotelManagementNextTripHint": "尋找可使用宿主里程的酒店",
+  "hotelManagementLoadFailed": "無法取得預約室數",
+  "hotelDetailMilesQuoteAfterSelection": "選房後計算總里程",
+  "hotelDetailDecreaseRoom": "減少客房",
+  "hotelDetailIncreaseRoom": "增加客房",
+  "hotelDetailSelection": "已選",
+  "hotelDetailRequiredMiles": "所需總里程",
+  "hotelDetailStayTotal": "住宿總價",
+  "hotelDetailEstimatedMiles": "預約後預計剩餘里程",
+  "hotelDetailEstimatedRooms": "預約後預計可預約室數",
+  "hotelDetailEstimateNotice": "此處為預估，實際里程與室數將在預約確認時更新。",
+  "hotelDetailMilesInsufficient": "宿主里程不足。",
+  "hotelDetailRoomsInsufficient": "超出可預約室數。",
+  "hotelDetailMilesUnavailable": "無法取得目前條件的里程報價。",
+  "hotelDetailMilesPending": "里程預約流程準備中",
+  "hotelDetailProceed": "繼續預約",
+  "hotelDetailRoomsHeading": "ROOMS"
 }

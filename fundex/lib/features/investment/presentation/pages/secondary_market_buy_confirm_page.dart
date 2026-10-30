@@ -112,7 +112,6 @@ class _SecondaryMarketBuyConfirmPageState
     );
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.secondaryMarketBuyOrderTitle,
         leading: AppNavigationIconButton(

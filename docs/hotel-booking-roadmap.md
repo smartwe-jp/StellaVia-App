@@ -418,3 +418,30 @@ Run broader `flutter analyze` / `flutter test` only when the change affects shar
 - 根Tab去除返回按钮，保留现有订单过滤/分页/取消/支付。支持下拉、切回Tab、从订单详情返回、前台恢复刷新。
 - 订单列表provider按登录身份重建；游客不请求，换号清空，disposed/较早请求不能回写，刷新失败保留旧列表。
 - 验证：Tab/实际路由分支与旧路径匹配/鉴权回归28项通过，订单缓存与迟到响应2项通过；App/SDK定向analyze通过。已查看393px TabBar截图，四语言320px/放大字号和深色模式覆盖；未做真实设备订单联调。
+
+### 2026-10-30 宿泊管理首页
+
+- `/bookings` 改为独立 `HotelManagementPage`，顶部2×2入口恢复预约列表、入住办理、优惠券、常用宿泊者；保留既有页面、鉴权和业务流程。
+- 预约历史迁至 `/bookings/history`，注册在动态orderId之前；`/hotel-booking/orders`兼容重定向到历史页。`/bookings/:orderId`及旧详情别名不变。历史页显示返回按钮，兜底返回宿泊管理。
+- 下方参考Figma `8190:1492`「07 宿泊管理」最后两块：同時予約保有数与次の旅を予約する。前者使用user-tier-info的currentBookingRooms/maxRooms（不根据订单列表估算）；后者进入宿主マイル酒店首页。缺失数字显示—，加载失败保留旧值并可重试。
+- tier资源按当前账号身份隔离，未登录不请求；支持下拉、根Tab、前台恢复及子页返回刷新。原四入口组件保留，新组合留在hotel_booking/presentation/widgets，复用SDK AppCard。
+- 四语言布局及五入口跳转、账号隔离/错误缓存、主路由顺序与鉴权回归已覆盖；未新增预定提交流程。
+
+宿泊管理首页顶部沿用原AppNavigationBar（白底、原字号、根Tab无返回按钮），不采用07设计的大标题导航；四宫格与下方两块保持。
+
+## 2026-10-30: Common hotel detail redesign (04)
+
+- Regular hotel cards and host-miles hotel cards now open the redesigned gallery, introduction, room selection, totals and hotel guide. Date/guest editing remains available; editing either discards the previous selection/quote.
+- `HotelDetailRouteArgs.mode` explicitly distinguishes regular from host miles. The old fund-stay-voucher `stayBenefit` rules remain in `LegacyHotelDetailPage`; host miles never enters the one-night/voucher amount checks.
+- `HotelDetailSelectionController` owns quantity/assignment/quote state; the session key includes hotel data, search criteria, locale, account identity and mode. Disposed sessions ignore late network results. Sold-out/minimum-stay/known room-limit constraints disable increments; failed requests clear stale totals and expose retry.
+- Regular booking uses assignment price and preserves login/profile completion, final occupancy check, server-message confirmation and the existing confirmation seed. Host miles uses the existing quote `pointTotal`, account balance and tier remaining rooms. No per-room/night miles are invented; missing points remain unknown. Remaining balance/room values are estimates, with no account mutation.
+- Cancellation text is `HotelDetail.refundPolicyText`, already fetched via `/pms/refundStrategyText` for the hotel/check-in/language. The sample design's fixed points-refund schedule is not hardcoded.
+- Host-miles submission/payment remain out of this slice: the CTA explicitly says coming soon and cannot enter ordinary/voucher checkout. The detail shows tier lead-time guidance; final date eligibility and miles redemption still require the subsequent booking-flow integration.
+- Generic UI primitives/fonts/tokens are reused. Hotel-specific composition lives in feature widgets; typography/display mapping and selection state are in support/controllers. Original Figma SVG assets are bundled locally; photos remain API supplied.
+- Validation: controller tests cover money vs miles, quote payload, missing/error totals, inventory/minimum stay/room limits and late responses. Four-locale mobile layout tests check cards, totals and API cancellation text; entry tests verify explicit host-miles routing. The hotel-module/router suite passed 50 tests, and targeted analysis passed for touched files. No live reservation was submitted.
+
+- 2026-10-30 滚动显隐：新版酒店详情顶部标准导航栏与底部预约栏共用 SDK 滚动显隐机制，向下浏览隐藏、反向滑动出现、回到顶部恢复。页面持有独立状态；普通／里程两种模式共用，旧住宿券页维持原实现。新增实际拖动测试验证两栏同步折叠／恢复；相关详情和主壳 13 项测试通过。
+
+- 顶部显隐修正：解决带 47 px 顶部安全区时 AppNavigationBar Column 在动画中间帧高度不足的 overflow。顶部使用 AppScrollNavigationBar 保持 65 px 内部尺寸并整体平移；底部价格区域未变更。逐帧回归验证内部高度恒定、位置随 reveal 变化及无布局异常，详情页 10 项测试通过。
+
+- 根 Tab 顶栏补接：酒店首页品牌导航与宿泊管理导航现在读取主壳显隐状态，随底部 Tab 同步出现／隐藏；酒店搜索筛选仍在列表内。App 首页同步修正。相关既有页面测试 10 项和新增根 Tab 状态／高度测试 3 项通过。

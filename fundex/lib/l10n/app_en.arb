@@ -2844,5 +2844,25 @@
         "type": "String"
       }
     }
-  }
+  },
+  "hotelManagementCapacity": "Concurrent reservations",
+  "hotelManagementCapacityHint": "Booking limit for your current tier",
+  "hotelManagementNextTrip": "Book your next trip",
+  "hotelManagementNextTripHint": "Find hotels accepting host miles",
+  "hotelManagementLoadFailed": "Unable to load reservation counts",
+  "hotelDetailMilesQuoteAfterSelection": "Select rooms to quote miles",
+  "hotelDetailDecreaseRoom": "Remove a room",
+  "hotelDetailIncreaseRoom": "Add a room",
+  "hotelDetailSelection": "Selection",
+  "hotelDetailRequiredMiles": "Total miles required",
+  "hotelDetailStayTotal": "Total stay price",
+  "hotelDetailEstimatedMiles": "Estimated miles after booking",
+  "hotelDetailEstimatedRooms": "Estimated room allowance after booking",
+  "hotelDetailEstimateNotice": "These are estimates. Miles and room allowance are updated when the booking is confirmed.",
+  "hotelDetailMilesInsufficient": "Insufficient host miles.",
+  "hotelDetailRoomsInsufficient": "Room allowance exceeded.",
+  "hotelDetailMilesUnavailable": "A miles quote is unavailable for this selection.",
+  "hotelDetailMilesPending": "Miles booking coming soon",
+  "hotelDetailProceed": "Continue to booking",
+  "hotelDetailRoomsHeading": "ROOMS"
 }

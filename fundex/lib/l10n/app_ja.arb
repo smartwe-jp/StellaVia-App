@@ -2784,7 +2784,7 @@
   "myPageChartMileUnit": "mile",
   "myPageChartYenUnit": "円",
   "myPageChartRange": "表示期間",
-  "myPageChartYears": "直近{years}年",
+  "myPageChartYears": "直近{years}年間",
   "myPageChartLoadFailed": "データを取得できませんでした",
   "myPageChartEmpty": "この期間のデータはありません",
   "@myPageChartYears": {
@@ -2814,5 +2814,25 @@
         "type": "String"
       }
     }
-  }
+  },
+  "hotelManagementCapacity": "同時予約保有数",
+  "hotelManagementCapacityHint": "現在のランクで予約できる上限",
+  "hotelManagementNextTrip": "次の旅を予約する",
+  "hotelManagementNextTripHint": "宿主マイルが使えるホテルを探す",
+  "hotelManagementLoadFailed": "予約室数を取得できませんでした",
+  "hotelDetailMilesQuoteAfterSelection": "選択後に合計マイルを確認",
+  "hotelDetailDecreaseRoom": "客室を減らす",
+  "hotelDetailIncreaseRoom": "客室を追加",
+  "hotelDetailSelection": "選択中",
+  "hotelDetailRequiredMiles": "必要マイル合計",
+  "hotelDetailStayTotal": "宿泊料金合計",
+  "hotelDetailEstimatedMiles": "予約後の宿主マイル（見込み）",
+  "hotelDetailEstimatedRooms": "予約後の予約可能室数（見込み）",
+  "hotelDetailEstimateNotice": "表示は見込みです。実際のマイル・室数は予約確定時に反映されます。",
+  "hotelDetailMilesInsufficient": "宿主マイルが不足しています。",
+  "hotelDetailRoomsInsufficient": "予約可能室数を超えています。",
+  "hotelDetailMilesUnavailable": "この条件のマイル見積もりは取得できません。",
+  "hotelDetailMilesPending": "マイル予約手続きは準備中",
+  "hotelDetailProceed": "予約へ進む",
+  "hotelDetailRoomsHeading": "ROOMS"
 }

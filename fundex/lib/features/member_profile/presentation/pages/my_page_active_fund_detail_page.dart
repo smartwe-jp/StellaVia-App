@@ -90,7 +90,6 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
     //final canShowResale = summary.projectStatus == 4;
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.myPageActiveFundDetailTitle,
         leading: AppNavigationIconButton(

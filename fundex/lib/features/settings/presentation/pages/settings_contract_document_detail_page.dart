@@ -47,7 +47,6 @@ class SettingsContractDocumentDetailPage extends ConsumerWidget {
     final project = projectAsync.asData?.value ?? initialProject;
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.settingsContractDetailTitle,
         leading: AppNavigationIconButton(

@@ -152,7 +152,6 @@ class _MyPageSecondaryMarketSellOrderPageState
         '${_sellUnits ?? 0}${l10n.myPageResaleUnitsSuffix} × ${formatter.format(_price ?? 0)}';
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.myPageResaleOrderTitle,
         leading: AppNavigationIconButton(

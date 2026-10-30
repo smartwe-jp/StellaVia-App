@@ -336,7 +336,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final supportPhone = operatingCompanyAsync.asData?.value.tel.trim() ?? '';
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.menuTitle,
         // decoration: BoxDecoration(

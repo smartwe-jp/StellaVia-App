@@ -108,29 +108,33 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
       onRefresh: (_) => _refreshPage(),
       scrollController: _scrollController,
       child: Scaffold(
-        appBar: AppNavigationBar(
-          title: l10n.mainTabProfile,
+        appBar: AppScrollNavigationBar(
+          reveal: ref.watch(mainShellChromeRevealProvider),
           backgroundColor: colors.surface,
-          foregroundColor: colors.textPrimary,
-          showDivider: false,
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              MyPageHeaderAction(
-                icon: Symbols.notifications,
-                unreadCount: unreadNotificationCount,
-                onTap: () => context.push('/profile/notifications'),
-              ),
-              const SizedBox(width: 8),
-              MyPageHeaderAction(
-                icon: Symbols.settings,
-                onTap: () => context.push('/profile/settings'),
-              ),
-            ],
+          navigationBar: AppNavigationBar(
+            title: l10n.mainTabProfile,
+            backgroundColor: colors.surface,
+            foregroundColor: colors.textPrimary,
+            showDivider: false,
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                MyPageHeaderAction(
+                  icon: Symbols.notifications,
+                  unreadCount: unreadNotificationCount,
+                  onTap: () => context.push('/profile/notifications'),
+                ),
+                const SizedBox(width: 8),
+                MyPageHeaderAction(
+                  icon: Symbols.settings,
+                  onTap: () => context.push('/profile/settings'),
+                ),
+              ],
+            ),
           ),
         ),
         body: ColoredBox(
-          color: colors.surface,
+          color: colors.background,
           child: RefreshIndicator(
             onRefresh: _refreshPage,
             child: ListView(

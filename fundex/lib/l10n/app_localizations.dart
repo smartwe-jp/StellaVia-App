@@ -12626,6 +12626,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show amounts'**
   String get myPageShowAmounts;
+
+  /// No description provided for @hotelManagementCapacity.
+  ///
+  /// In en, this message translates to:
+  /// **'Concurrent reservations'**
+  String get hotelManagementCapacity;
+
+  /// No description provided for @hotelManagementCapacityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Booking limit for your current tier'**
+  String get hotelManagementCapacityHint;
+
+  /// No description provided for @hotelManagementNextTrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Book your next trip'**
+  String get hotelManagementNextTrip;
+
+  /// No description provided for @hotelManagementNextTripHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Find hotels accepting host miles'**
+  String get hotelManagementNextTripHint;
+
+  /// No description provided for @hotelManagementLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load reservation counts'**
+  String get hotelManagementLoadFailed;
+
+  /// No description provided for @hotelDetailMilesQuoteAfterSelection.
+  ///
+  /// In en, this message translates to:
+  /// **'Select rooms to quote miles'**
+  String get hotelDetailMilesQuoteAfterSelection;
+
+  /// No description provided for @hotelDetailDecreaseRoom.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove a room'**
+  String get hotelDetailDecreaseRoom;
+
+  /// No description provided for @hotelDetailIncreaseRoom.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a room'**
+  String get hotelDetailIncreaseRoom;
+
+  /// No description provided for @hotelDetailSelection.
+  ///
+  /// In en, this message translates to:
+  /// **'Selection'**
+  String get hotelDetailSelection;
+
+  /// No description provided for @hotelDetailRequiredMiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Total miles required'**
+  String get hotelDetailRequiredMiles;
+
+  /// No description provided for @hotelDetailStayTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total stay price'**
+  String get hotelDetailStayTotal;
+
+  /// No description provided for @hotelDetailEstimatedMiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated miles after booking'**
+  String get hotelDetailEstimatedMiles;
+
+  /// No description provided for @hotelDetailEstimatedRooms.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated room allowance after booking'**
+  String get hotelDetailEstimatedRooms;
+
+  /// No description provided for @hotelDetailEstimateNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'These are estimates. Miles and room allowance are updated when the booking is confirmed.'**
+  String get hotelDetailEstimateNotice;
+
+  /// No description provided for @hotelDetailMilesInsufficient.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient host miles.'**
+  String get hotelDetailMilesInsufficient;
+
+  /// No description provided for @hotelDetailRoomsInsufficient.
+  ///
+  /// In en, this message translates to:
+  /// **'Room allowance exceeded.'**
+  String get hotelDetailRoomsInsufficient;
+
+  /// No description provided for @hotelDetailMilesUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'A miles quote is unavailable for this selection.'**
+  String get hotelDetailMilesUnavailable;
+
+  /// No description provided for @hotelDetailMilesPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Miles booking coming soon'**
+  String get hotelDetailMilesPending;
+
+  /// No description provided for @hotelDetailProceed.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue to booking'**
+  String get hotelDetailProceed;
+
+  /// No description provided for @hotelDetailRoomsHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'ROOMS'**
+  String get hotelDetailRoomsHeading;
 }
 
 class _AppLocalizationsDelegate

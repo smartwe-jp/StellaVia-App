@@ -274,3 +274,15 @@ My Page新增真实等级/可用里程/月获得率/升级差额/室数/过期�
 - Feature widgets `MyPageAssetSummary` and `MyPageHoldingCard` reuse SDK primitives/tokens. Legacy asset overview and active-fund card implementations remain available; My Page switches to the new compositions.
 - Holding cards use real project photos, status, invested amount/units, dividends and scheduled period. Missing period displays a dash; no fabricated hotel subtitle. Existing record selection and detail routing remain unchanged.
 - Transaction history is unchanged; membership card and three charts remain integrated. Four locales updated.
+
+### 2026-10-30 默认页面底色
+
+默认浅色页面背景统一为`#F5F5F2`，白色surface继续用于卡片/弹窗/导航栏。普通页面移除Scaffold白色/奶油色覆盖；首页、My Page及酒店Tab根容器统一读取background。特殊背景例外与维护规则见stellavia-theme-foundation.md最新章节。
+
+### 2026-10-30 宿泊管理独立首页
+
+`/bookings`现在展示四宫格旧酒店入口和Figma 07最后两块（真实预约室数/等级上限、宿主マイル酒店入口）。预定历史下移至`/bookings/history`，旧订单路径保持兼容。详见hotel-booking-roadmap.md。
+
+### Hotel detail redesign — 2026-10-30
+
+Hotel detail now shares the 04 room-selection layout for ordinary and host-miles entry points. Explicit `HotelBookingMode` separates miles from legacy fund-stay-voucher rules, whose original page remains available. Miles uses existing `pointTotal` and private account/tier resources for estimates only; submission/payment remain pending. Ordinary confirmation/guards remain connected. See `docs/hotel-booking-roadmap.md` for quote, cancellation and validation boundaries.

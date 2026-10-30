@@ -202,7 +202,6 @@ class _SettingsEmailVerificationPageState
     final verifiedEmailAsync = ref.watch(settingsVerifiedEmailProvider);
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.settingsEmailVerificationTitle,
         leading: AppNavigationIconButton(

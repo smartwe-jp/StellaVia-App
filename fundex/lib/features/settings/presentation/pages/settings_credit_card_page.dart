@@ -40,7 +40,6 @@ class SettingsCreditCardPage extends ConsumerWidget {
     final cardsState = ref.watch(hotelCreditCardsProvider);
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: context.l10n.creditCardListTitle,
         leading: AppNavigationIconButton(
@@ -338,10 +337,8 @@ class _SettingsCreditCardAddPageState
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).appColors;
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: context.l10n.creditCardSettingsTitle,
         leading: AppNavigationIconButton(

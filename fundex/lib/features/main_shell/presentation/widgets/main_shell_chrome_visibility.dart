@@ -1,3 +1,4 @@
+import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,18 +15,6 @@ class MainShellChromeVisibility extends ConsumerWidget {
         .watch(mainShellChromeRevealProvider)
         .clamp(0, 1)
         .toDouble();
-    return ClipRect(
-      child: Opacity(
-        opacity: reveal,
-        child: Align(
-          heightFactor: reveal,
-          alignment: Alignment.topCenter,
-          child: FractionalTranslation(
-            translation: Offset(0, reveal - 1),
-            child: IgnorePointer(ignoring: reveal <= 0.01, child: child),
-          ),
-        ),
-      ),
-    );
+    return AppScrollChromeVisibility(reveal: reveal, child: child);
   }
 }

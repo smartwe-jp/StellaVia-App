@@ -156,7 +156,6 @@ class _HotelBookingConfirmPageState
         (widget.seed.criteria.stayBenefit ? _fundBenefitTickets.length : 0);
 
     return Scaffold(
-      backgroundColor: colors.surfaceAlt,
       appBar: AppNavigationBar(
         title: context.l10n.hotelBookingConfirmTitle,
         backgroundColor: colors.surface,

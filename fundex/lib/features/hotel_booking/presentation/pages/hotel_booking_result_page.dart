@@ -1,4 +1,3 @@
-import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:fundex/features/hotel_booking/presentation/widgets/hotel_booking_service_footer.dart';
 import 'package:go_router/go_router.dart';
@@ -16,7 +15,6 @@ class HotelBookingResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).appColors;
     final presenter = HotelBookingPresenter(
       Localizations.localeOf(context).toLanguageTag(),
     );
@@ -31,7 +29,6 @@ class HotelBookingResultPage extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: colors.surfaceAlt,
       body: SafeArea(
         top: false,
         bottom: false,

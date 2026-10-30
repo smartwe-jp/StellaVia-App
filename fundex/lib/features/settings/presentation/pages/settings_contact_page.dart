@@ -383,7 +383,6 @@ class _SettingsContactPageState extends ConsumerState<SettingsContactPage> {
     final isFormReady = _isFormReady;
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.settingsContactTitle,
         leading: AppNavigationIconButton(

@@ -51,6 +51,14 @@ void main() {
       'orders/:orderId',
     );
     expect(
+      router.configuration
+          .findMatch(Uri.parse('/bookings/history'))
+          .last
+          .route
+          .path,
+      'history',
+    );
+    expect(
       router.configuration.findMatch(Uri.parse('/bookings/42')).last.route.path,
       ':orderId',
     );

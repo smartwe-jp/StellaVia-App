@@ -818,7 +818,6 @@ class _FundLotteryApplyFlowPageState
             }
           },
           child: Scaffold(
-            backgroundColor: colors.surface,
             appBar: AppNavigationBar(
               title: l10n.lotteryApplyFlowTitle,
               backgroundColor: colors.surface,
@@ -1120,7 +1119,6 @@ class _FlowLoadingScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.appColors;
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: title,
         backgroundColor: colors.surface,
@@ -1192,7 +1190,6 @@ class _FlowErrorScaffold extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: title,
         backgroundColor: colors.surface,

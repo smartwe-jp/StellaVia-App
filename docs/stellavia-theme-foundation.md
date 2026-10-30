@@ -51,3 +51,10 @@ Validation result (2026-10-23): all 11 SDK UI-kit tests and 3 app theme tests pa
 ## Follow-up
 
 Shared primitives and component geometry are now covered by [stage 2](stellavia-shared-components.md). Fund status/progress business rules, page layouts, and member registration/business flows remain separate. Do not infer completed page redesign from these foundation updates.
+
+## 2026-10-30 默认页面背景统一
+
+- `AppColorTokens.fundexBackground`（`lightBackground`别名）统一为首页浅灰 `#F5F5F2`；`surface`仍为白色，`surfaceAlt`仍为奶油色，深色主题色值不变。
+- 首页移除独立浅色背景常量，直接读取`appColors.background`。My Page、酒店Tab的根ColoredBox也改用background。
+- 普通设置、会员、资金、交易及酒店页面移除Scaffold的surface/surfaceAlt覆盖，继承全局scaffoldBackgroundColor。卡片、导航栏、底部操作栏及弹窗的surface不改。
+- 登录/注册品牌布局、邀请页、地图及头像编辑属于独立背景场景，保留其显式设置。基金详情的白色内容面板及酒店详情的独立容器保留。新增普通页面默认不设置Scaffold背景；仅有明确特殊设计时覆盖。

@@ -18,7 +18,6 @@ class HotelMemberContactsPage extends ConsumerWidget {
     final contactsState = ref.watch(hotelMemberContactsProvider);
     final contacts = contactsState.valueOrNull ?? const <HotelMemberContact>[];
     return Scaffold(
-      backgroundColor: colors.surfaceAlt,
       appBar: AppNavigationBar(
         title: context.l10n.hotelMemberContactsTitle,
         backgroundColor: colors.surface,

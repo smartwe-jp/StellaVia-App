@@ -27,7 +27,6 @@ class _HotelTodayCheckInDetailPageState
     final detailState = ref.watch(hotelOrderDetailProvider(widget.orderId));
 
     return Scaffold(
-      backgroundColor: colors.surfaceAlt,
       appBar: AppNavigationBar(
         title: context.l10n.hotelTodayCheckInTitle,
         backgroundColor: colors.surface,

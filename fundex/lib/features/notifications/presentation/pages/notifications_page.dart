@@ -165,7 +165,6 @@ class _NotificationsPageState extends ConsumerState<NotificationsPage> {
     final items = state.items;
 
     return Scaffold(
-      backgroundColor: colors.surface,
       appBar: 
       AppNavigationBar(
         title: l10n.notificationsTitle,

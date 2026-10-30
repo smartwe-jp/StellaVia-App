@@ -59,116 +59,135 @@ class _HotelBookingTabContentState
       onRefresh: (_) => controller.refresh(),
       scrollController: _scrollController,
       child: ColoredBox(
-        color: colors.surface,
-        child: RefreshIndicator(
-          onRefresh: controller.refresh,
-          child: NotificationListener<ScrollNotification>(
-            onNotification: (notification) {
-              if (notification.depth != 0) {
-                return false;
-              }
-              if (notification.metrics.extentAfter < _loadMoreTriggerExtent &&
-                  state.hasMore &&
-                  state.loadMoreError == null) {
-                controller.loadMore();
-              }
-              return false;
-            },
-            child: CustomScrollView(
-              key: const Key('hotel_tab_content'),
-              controller: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: <Widget>[
-                SliverToBoxAdapter(
-                  child: HotelHomeHeader(
-                    state: state,
-                    onApply: controller.applyCriteria,
+        color: colors.background,
+        child: Column(
+          children: [
+            AppScrollNavigationBar(
+              reveal: ref.watch(mainShellChromeRevealProvider),
+              backgroundColor: colors.background,
+              navigationBar: const HotelHomeNavigationBar(),
+            ),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: controller.refresh,
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (notification) {
+                    if (notification.depth != 0) {
+                      return false;
+                    }
+                    if (notification.metrics.extentAfter <
+                            _loadMoreTriggerExtent &&
+                        state.hasMore &&
+                        state.loadMoreError == null) {
+                      controller.loadMore();
+                    }
+                    return false;
+                  },
+                  child: CustomScrollView(
+                    key: const Key('hotel_tab_content'),
+                    controller: _scrollController,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    slivers: <Widget>[
+                      SliverToBoxAdapter(
+                        child: HotelHomeHeader(
+                          state: state,
+                          onApply: controller.applyCriteria,
+                        ),
+                      ),
+                      if (state.error != null && state.hasContent)
+                        SliverToBoxAdapter(
+                          child: HotelInlineErrorNotice(
+                            onRetry: controller.refresh,
+                          ),
+                        ),
+                      if (state.isLoading)
+                        const SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: Center(child: CircularProgressIndicator()),
+                        )
+                      else if (state.error != null && !state.hasContent)
+                        SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: HotelFullPageError(
+                            onRetry: controller.refresh,
+                          ),
+                        )
+                      else if (state.hotels.isEmpty)
+                        const SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: HotelEmptyList(),
+                        )
+                      else ...<Widget>[
+                        SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                          sliver: SliverList.separated(
+                            itemCount: state.hotels.length,
+                            separatorBuilder: (_, __) =>
+                                const SizedBox(height: 12),
+                            itemBuilder: (context, index) {
+                              final hotel = state.hotels[index];
+                              final mapArgs = HotelMapRouteArgs.fromHotel(
+                                criteria: state.criteria,
+                                hotel: hotel,
+                              );
+                              return HotelHomeCard(
+                                hotel: hotel,
+                                presenter: presenter,
+                                onDiscountTap: hotel.id.trim().isEmpty
+                                    ? null
+                                    : () => showHotelPriceDiscountDialog(
+                                        context: context,
+                                        hotelId: hotel.id,
+                                        criteria: state.criteria,
+                                        presenter: presenter,
+                                        showBookingAction: true,
+                                        onBookingTap: () => context.push(
+                                          '/hotel-booking/${Uri.encodeComponent(hotel.id)}',
+                                          extra: HotelDetailRouteArgs(
+                                            criteria: state.criteria,
+                                            buildingCode: hotel.buildingCode,
+                                          ),
+                                        ),
+                                      ),
+                                onTap: hotel.id.trim().isEmpty
+                                    ? null
+                                    : () => context.push(
+                                        '/hotel-booking/${Uri.encodeComponent(hotel.id)}',
+                                        extra: HotelDetailRouteArgs(
+                                          criteria: state.criteria,
+                                          buildingCode: hotel.buildingCode,
+                                        ),
+                                      ),
+                                onMapTap: mapArgs.hasValidTarget
+                                    ? () => context.push(
+                                        '/hotel-booking/map',
+                                        extra: mapArgs,
+                                      )
+                                    : null,
+                              );
+                            },
+                          ),
+                        ),
+                        if (state.hasMore || state.isLoadingMore)
+                          SliverToBoxAdapter(
+                            child: _HotelListLoadMoreFooter(
+                              isLoading: state.isLoadingMore,
+                              error: state.loadMoreError,
+                              onRetry: controller.loadMore,
+                            ),
+                          )
+                        else
+                          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+                        const SliverToBoxAdapter(
+                          child: HotelBookingServiceFooter(),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
-                if (state.error != null && state.hasContent)
-                  SliverToBoxAdapter(
-                    child: HotelInlineErrorNotice(onRetry: controller.refresh),
-                  ),
-                if (state.isLoading)
-                  const SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Center(child: CircularProgressIndicator()),
-                  )
-                else if (state.error != null && !state.hasContent)
-                  SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: HotelFullPageError(onRetry: controller.refresh),
-                  )
-                else if (state.hotels.isEmpty)
-                  const SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: HotelEmptyList(),
-                  )
-                else ...<Widget>[
-                  SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-                    sliver: SliverList.separated(
-                      itemCount: state.hotels.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 12),
-                      itemBuilder: (context, index) {
-                        final hotel = state.hotels[index];
-                        final mapArgs = HotelMapRouteArgs.fromHotel(
-                          criteria: state.criteria,
-                          hotel: hotel,
-                        );
-                        return HotelHomeCard(
-                          hotel: hotel,
-                          presenter: presenter,
-                          onDiscountTap: hotel.id.trim().isEmpty
-                              ? null
-                              : () => showHotelPriceDiscountDialog(
-                                  context: context,
-                                  hotelId: hotel.id,
-                                  criteria: state.criteria,
-                                  presenter: presenter,
-                                  showBookingAction: true,
-                                  onBookingTap: () => context.push(
-                                    '/hotel-booking/${Uri.encodeComponent(hotel.id)}',
-                                    extra: HotelDetailRouteArgs(
-                                      criteria: state.criteria,
-                                      buildingCode: hotel.buildingCode,
-                                    ),
-                                  ),
-                                ),
-                          onTap: hotel.id.trim().isEmpty
-                              ? null
-                              : () => context.push(
-                                  '/hotel-booking/${Uri.encodeComponent(hotel.id)}',
-                                  extra: HotelDetailRouteArgs(
-                                    criteria: state.criteria,
-                                    buildingCode: hotel.buildingCode,
-                                  ),
-                                ),
-                          onMapTap: mapArgs.hasValidTarget
-                              ? () => context.push(
-                                  '/hotel-booking/map',
-                                  extra: mapArgs,
-                                )
-                              : null,
-                        );
-                      },
-                    ),
-                  ),
-                  if (state.hasMore || state.isLoadingMore)
-                    SliverToBoxAdapter(
-                      child: _HotelListLoadMoreFooter(
-                        isLoading: state.isLoadingMore,
-                        error: state.loadMoreError,
-                        onRetry: controller.loadMore,
-                      ),
-                    )
-                  else
-                    const SliverToBoxAdapter(child: SizedBox(height: 24)),
-                  const SliverToBoxAdapter(child: HotelBookingServiceFooter()),
-                ],
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
