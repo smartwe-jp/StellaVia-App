@@ -97,19 +97,6 @@ class HotelHomeFilters extends StatelessWidget {
     spacing: 12,
     runSpacing: 8,
     children: [
-      PopupMenuButton<String>(
-        initialValue: criteria.area,
-        onSelected: (area) => onApply(criteria.copyWith(area: area)),
-        itemBuilder: (_) => [
-          for (final area in hotelAreaOptions(context))
-            PopupMenuItem(value: area.value, child: Text(area.label)),
-        ],
-        child: _FilterPill(
-          label: criteria.area.isEmpty
-              ? context.l10n.hotelHomeArea
-              : hotelAreaLabel(context, criteria.area),
-        ),
-      ),
       PopupMenuButton<HotelPriceSort>(
         initialValue: criteria.priceSort,
         onSelected: (sort) => onApply(criteria.copyWith(priceSort: sort)),
@@ -125,6 +112,19 @@ class HotelHomeFilters extends StatelessWidget {
         ],
         child: _FilterPill(label: context.l10n.hotelToolbarSort),
       ),
+      PopupMenuButton<String>(
+        initialValue: criteria.area,
+        onSelected: (area) => onApply(criteria.copyWith(area: area)),
+        itemBuilder: (_) => [
+          for (final area in hotelAreaOptions(context))
+            PopupMenuItem(value: area.value, child: Text(area.label)),
+        ],
+        child: _FilterPill(
+          label: criteria.area.isEmpty
+              ? context.l10n.hotelHomeArea
+              : hotelAreaLabel(context, criteria.area),
+        ),
+      ), 
     ],
   );
 }
