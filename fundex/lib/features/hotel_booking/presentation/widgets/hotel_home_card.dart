@@ -131,11 +131,10 @@ class HotelHomeCard extends StatelessWidget {
               onTap: onDiscountTap,
             ),
           const Divider(height: 12),
-          Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            crossAxisAlignment: WrapCrossAlignment.center,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 12,
-            runSpacing: 8,
             children: [
               HotelRemainingRoomsLabel(
                 color: colors.brandSecondary,
