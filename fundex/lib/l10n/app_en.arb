@@ -2864,5 +2864,6 @@
   "hotelDetailMilesUnavailable": "A miles quote is unavailable for this selection.",
   "hotelDetailMilesPending": "Miles booking coming soon",
   "hotelDetailProceed": "Continue to booking",
-  "hotelDetailRoomsHeading": "ROOMS"
+  "hotelDetailRoomsHeading": "ROOMS",
+  "hotelSortNone": "No selection"
 }

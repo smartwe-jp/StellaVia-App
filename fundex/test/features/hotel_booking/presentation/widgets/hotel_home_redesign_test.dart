@@ -65,16 +65,23 @@ void main() {
   testWidgets('area and sort apply criteria without legacy benefits', (
     tester,
   ) async {
-    final criteria = HotelSearchCriteria.initial(DateTime(2026, 11, 14));
+    tester.view.physicalSize = const Size(320, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    var criteria = HotelSearchCriteria.initial(DateTime(2026, 11, 14));
     HotelSearchCriteria? applied;
     await tester.pumpWidget(
       app(
         Scaffold(
-          body: HotelHomeFilters(
-            criteria: criteria,
-            onApply: (value) async {
-              applied = value;
-            },
+          body: StatefulBuilder(
+            builder: (context, setState) => HotelHomeFilters(
+              criteria: criteria,
+              onApply: (value) async {
+                applied = value;
+                setState(() => criteria = value);
+              },
+            ),
           ),
         ),
       ),
@@ -84,12 +91,42 @@ void main() {
     await tester.tap(find.text('京都'));
     await tester.pumpAndSettle();
     expect(applied?.area, 'kyoto');
+    expect(find.text('京都'), findsOneWidget);
+    expect(find.text('エリア'), findsNothing);
     expect(applied?.stayBenefit, false);
     await tester.tap(find.byType(PopupMenuButton<HotelPriceSort>));
     await tester.pumpAndSettle();
     await tester.tap(find.byType(PopupMenuItem<HotelPriceSort>).last);
     await tester.pumpAndSettle();
     expect(applied?.priceSort, HotelPriceSort.descending);
+    final l = AppLocalizations.of(
+      tester.element(find.byType(HotelHomeFilters)),
+    );
+    expect(find.text(l.hotelSortPriceDescending), findsOneWidget);
+    expect(find.text(l.hotelToolbarSort), findsNothing);
+    expect(applied?.area, 'kyoto');
+    await tester.tap(find.byType(PopupMenuButton<HotelPriceSort>));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(PopupMenuItem<HotelPriceSort>).at(1));
+    await tester.pumpAndSettle();
+    expect(find.text(l.hotelSortPriceAscending), findsOneWidget);
+    expect(find.text(l.hotelSortPriceDescending), findsNothing);
+    await tester.tap(find.byType(PopupMenuButton<HotelPriceSort>));
+    await tester.pumpAndSettle();
+    expect(
+      tester
+          .widget<PopupMenuItem<HotelPriceSort>>(
+            find.byType(PopupMenuItem<HotelPriceSort>).first,
+          )
+          .value,
+      HotelPriceSort.none,
+    );
+    await tester.tap(find.text(l.hotelSortNone));
+    await tester.pumpAndSettle();
+    expect(applied?.priceSort, HotelPriceSort.none);
+    expect(applied?.area, 'kyoto');
+    expect(find.text(l.hotelToolbarSort), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
   testWidgets(
     'localized live miles home fits narrow screens and opens details',

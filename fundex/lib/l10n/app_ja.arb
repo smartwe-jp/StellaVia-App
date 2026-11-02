@@ -2834,5 +2834,6 @@
   "hotelDetailMilesUnavailable": "この条件のマイル見積もりは取得できません。",
   "hotelDetailMilesPending": "マイル予約手続きは準備中",
   "hotelDetailProceed": "予約へ進む",
-  "hotelDetailRoomsHeading": "ROOMS"
+  "hotelDetailRoomsHeading": "ROOMS",
+  "hotelSortNone": "選択しない"
 }

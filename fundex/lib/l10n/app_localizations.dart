@@ -12746,6 +12746,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ROOMS'**
   String get hotelDetailRoomsHeading;
+
+  /// No description provided for @hotelSortNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No selection'**
+  String get hotelSortNone;
 }
 
 class _AppLocalizationsDelegate

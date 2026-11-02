@@ -7049,4 +7049,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hotelDetailRoomsHeading => 'ROOMS';
+
+  @override
+  String get hotelSortNone => 'No selection';
 }

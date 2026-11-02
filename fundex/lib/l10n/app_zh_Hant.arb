@@ -2834,5 +2834,6 @@
   "hotelDetailMilesUnavailable": "無法取得目前條件的里程報價。",
   "hotelDetailMilesPending": "里程預約流程準備中",
   "hotelDetailProceed": "繼續預約",
-  "hotelDetailRoomsHeading": "ROOMS"
+  "hotelDetailRoomsHeading": "ROOMS",
+  "hotelSortNone": "不選擇"
 }

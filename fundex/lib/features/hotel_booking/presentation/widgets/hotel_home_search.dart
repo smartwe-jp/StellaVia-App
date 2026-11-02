@@ -102,6 +102,10 @@ class HotelHomeFilters extends StatelessWidget {
         onSelected: (sort) => onApply(criteria.copyWith(priceSort: sort)),
         itemBuilder: (_) => [
           PopupMenuItem(
+            value: HotelPriceSort.none,
+            child: Text(context.l10n.hotelSortNone),
+          ),
+          PopupMenuItem(
             value: HotelPriceSort.ascending,
             child: Text(context.l10n.hotelSortPriceAscending),
           ),
@@ -110,7 +114,13 @@ class HotelHomeFilters extends StatelessWidget {
             child: Text(context.l10n.hotelSortPriceDescending),
           ),
         ],
-        child: _FilterPill(label: context.l10n.hotelToolbarSort),
+        child: _FilterPill(
+          label: switch (criteria.priceSort) {
+            HotelPriceSort.none => context.l10n.hotelToolbarSort,
+            HotelPriceSort.ascending => context.l10n.hotelSortPriceAscending,
+            HotelPriceSort.descending => context.l10n.hotelSortPriceDescending,
+          },
+        ),
       ),
       PopupMenuButton<String>(
         initialValue: criteria.area,
@@ -124,7 +134,7 @@ class HotelHomeFilters extends StatelessWidget {
               ? context.l10n.hotelHomeArea
               : hotelAreaLabel(context, criteria.area),
         ),
-      ), 
+      ),
     ],
   );
 }
@@ -143,7 +153,9 @@ class _FilterPill extends StatelessWidget {
     child: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(label, style: Theme.of(context).textTheme.labelMedium),
+        Flexible(
+          child: Text(label, style: Theme.of(context).textTheme.labelMedium),
+        ),
         const SizedBox(width: 8),
         const Icon(Icons.keyboard_arrow_down, size: 14),
       ],

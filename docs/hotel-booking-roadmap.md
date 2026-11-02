@@ -445,3 +445,5 @@ Run broader `flutter analyze` / `flutter test` only when the change affects shar
 - 顶部显隐修正：解决带 47 px 顶部安全区时 AppNavigationBar Column 在动画中间帧高度不足的 overflow。顶部使用 AppScrollNavigationBar 保持 65 px 内部尺寸并整体平移；底部价格区域未变更。逐帧回归验证内部高度恒定、位置随 reveal 变化及无布局异常，详情页 10 项测试通过。
 
 - 根 Tab 顶栏补接：酒店首页品牌导航与宿泊管理导航现在读取主壳显隐状态，随底部 Tab 同步出现／隐藏；酒店搜索筛选仍在列表内。App 首页同步修正。相关既有页面测试 10 项和新增根 Tab 状态／高度测试 3 项通过。
+
+- 2026-11-02：HotelHomeFilters 排序按钮按 criteria.priceSort 显示当前价格升序／降序文案，未设置时保留排序占位文案；地区按钮沿用已有选中地区显示。普通酒店首页与宿主マイル首页共用此组件，回归覆盖选择后按钮文案及地区条件保留。

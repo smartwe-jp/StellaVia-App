@@ -6715,4 +6715,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get hotelDetailRoomsHeading => 'ROOMS';
+
+  @override
+  String get hotelSortNone => '選択しない';
 }

@@ -2834,5 +2834,6 @@
   "hotelDetailMilesUnavailable": "无法获取当前条件的里程报价。",
   "hotelDetailMilesPending": "里程预约流程准备中",
   "hotelDetailProceed": "继续预约",
-  "hotelDetailRoomsHeading": "ROOMS"
+  "hotelDetailRoomsHeading": "ROOMS",
+  "hotelSortNone": "不选择"
 }
