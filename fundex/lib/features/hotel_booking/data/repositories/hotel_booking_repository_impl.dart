@@ -127,6 +127,7 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
         startDate: checkIn,
         endDate: checkOut,
         occupancy: criteria.occupancy,
+        stayBenefit: criteria.stayBenefit ? true : null,
       ),
     );
     final refundPolicyFuture = _remote
@@ -160,6 +161,7 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
   }) async {
     final result = await _remote.assignOccupancy(
       HotelAssignOccupancyRequestDto(
+        stayBenefit: criteria.stayBenefit ? true : null,
         lang: languageCode,
         hotelId: hotelId,
         checkIn: _wireDateFormat.format(criteria.checkInDate),
@@ -232,6 +234,7 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
         .length;
 
     return HotelBookingPreparation(
+      pointsRequired: quote.pointsRequired,
       pointTotal: quote.pointTotal,
       pageTexts: Map<String, String>.unmodifiable(pageTexts),
       countryCodes: _mapCountryCodes(countryCodes),
@@ -252,13 +255,16 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
   Future<HotelBookingQuote> quoteBookingPrice(
     HotelBookingQuoteRequest request,
   ) async {
-    final couponsCounts = _mapCouponsCounts(request.coupons);
-    final quote = request.usesRoomPlanSelection
+    final couponsCounts = request.stayBenefit
+        ? <Object?>[]
+        : _mapCouponsCounts(request.coupons);
+    final quote = (request.stayBenefit || request.usesRoomPlanSelection)
         ? await _remote.fetchRoomExtraPerson(
             HotelRoomExtraPersonRequestDto(
+              stayBenefit: request.stayBenefit ? true : null,
               hotelId: request.hotelId,
-              checkIn: _wireDateTimeFormat.format(request.checkIn),
-              checkOut: _wireDateTimeFormat.format(request.checkOut),
+              checkIn: _wireDateFormat.format(request.checkIn),
+              checkOut: _wireDateFormat.format(request.checkOut),
               lang: request.languageCode,
               roomTypeCustNums: request.rooms
                   .map(
@@ -286,6 +292,7 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
             couponsCounts: couponsCounts,
           );
     return HotelBookingQuote(
+      pointsRequired: quote.pointsRequired,
       pointTotal: quote.pointTotal,
       quotedPrice: quote.priceElement?.price,
       originalPrice: quote.priceElement?.originalPrice,
@@ -959,6 +966,7 @@ HotelSummary _mapHotelSummary(HotelSummaryDto dto) {
   final discount = dto.discount2 ?? dto.discount;
   final discountName = dto.discountName2 ?? '';
   return HotelSummary(
+    startingPoints: dto.startingPoints,
     description: dto.detail,
     id: dto.id,
     name: dto.hotelName.trim(),
@@ -1172,6 +1180,7 @@ HotelRoomPlan _mapRoomPlan(HotelRoomTypeDto dto) {
   final discount = dto.discount2 ?? dto.discount;
   final discountName = dto.discountName2 ?? '';
   return HotelRoomPlan(
+    pointsRequired: dto.pointsRequired,
     id: dto.id.trim(),
     name: (dto.showName?.trim().isNotEmpty ?? false)
         ? dto.showName!.trim()
@@ -1208,6 +1217,7 @@ HotelAssignOccupancyResult _mapAssignOccupancyResult(
   HotelAssignOccupancyResultDto dto,
 ) {
   return HotelAssignOccupancyResult(
+    pointsRequired: dto.pointsRequired,
     price: dto.price,
     message: dto.message?.trim() ?? '',
     roomTypeCustNums: dto.roomTypeCustNums

@@ -1,3 +1,6 @@
+import '../../../auth/presentation/providers/auth_providers.dart';
+import '../support/secondary_market_trade_support.dart';
+import '../controllers/secondary_market_controller.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,47 +33,65 @@ class _SecondaryMarketBuyConfirmPageState
       return;
     }
 
+    setState(() => _isSubmitting = true);
     final l10n = context.l10n;
-    final priceText = NumberFormat.decimalPattern().format(
-      widget.draft.unitPrice,
-    );
-    final unitText = NumberFormat.decimalPattern().format(widget.draft.buyNum);
-    final confirmed = await AppDialogs.showAdaptiveAlert<bool>(
-      context: context,
-      title: l10n.secondaryMarketBuyFinalConfirmTitle,
-      message: l10n.secondaryMarketBuyFinalConfirmMessage(priceText, unitText),
-      actions: <AppDialogAction<bool>>[
-        AppDialogAction<bool>(
-          label: l10n.walletBankSettingsCancelAction,
-          value: false,
-        ),
-        AppDialogAction<bool>(
-          label: l10n.secondaryMarketBuySubmitButton,
-          value: true,
-          isDestructive: true,
-        ),
-      ],
-    );
-    if (confirmed != true || !mounted) {
-      return;
-    }
-
-    setState(() {
-      _isSubmitting = true;
-    });
-
     try {
+      final priceText = NumberFormat.decimalPattern().format(
+        widget.draft.unitPrice,
+      );
+      final unitText = NumberFormat.decimalPattern().format(
+        widget.draft.buyNum,
+      );
+      final confirmed = await AppDialogs.showAdaptiveAlert<bool>(
+        context: context,
+        title: l10n.secondaryMarketBuyFinalConfirmTitle,
+        message: l10n.secondaryMarketBuyFinalConfirmMessage(
+          priceText,
+          unitText,
+        ),
+        actions: <AppDialogAction<bool>>[
+          AppDialogAction<bool>(
+            label: l10n.walletBankSettingsCancelAction,
+            value: false,
+          ),
+          AppDialogAction<bool>(
+            label: l10n.secondaryMarketBuySubmitButton,
+            value: true,
+            isDestructive: true,
+          ),
+        ],
+      );
+      if (confirmed != true || !mounted) {
+        return;
+      }
+
+      final draft = widget.draft;
+      if (!draft.agreed || draft.buyNum <= 0 || draft.unitPrice <= 0) {
+        throw StateError(l10n.secondaryMarketBuyValidationMessage);
+      }
+      final latest = await ref.refresh(
+        secondaryMarketOrderProvider(draft.orderId).future,
+      );
+      final user = await ref.read(currentAuthUserProvider.future);
+      if (latest == null ||
+          !canBuySecondaryMarketRecord(latest) ||
+          user?.userId == null ||
+          latest.memberId == null ||
+          latest.memberId == user!.userId ||
+          remainingUnitsForSecondaryMarketRecord(latest) < draft.buyNum ||
+          latest.price != draft.unitPrice) {
+        throw StateError(l10n.secondaryMarketDetailUnavailable);
+      }
+      if (!mounted) return;
       await ref
           .read(submitMyPageSecondaryMarketPurchaseUseCaseProvider)
           .call(id: widget.draft.orderId, buyNum: widget.draft.buyNum);
       if (!mounted) {
         return;
       }
-      ref.invalidate(secondaryMarketMarketplaceListProvider);
-      ref.invalidate(myPageInvestmentListProvider);
-      ref.invalidate(myPageAccountStatisticProvider);
-      AppNotice.show(context, message: l10n.secondaryMarketBuySubmitSuccess);
-      context.go('/home/free-market');
+      refreshSecondaryMarket(ref);
+      AppNotice.show(context, message: l10n.secondaryMarketSubmittedNotice);
+      context.go('/profile/my/secondary-market?tab=buy');
     } catch (error) {
       if (!mounted) {
         return;

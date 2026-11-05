@@ -1,3 +1,4 @@
+import '../../../investment/presentation/controllers/secondary_market_controller.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,39 +32,49 @@ class _MyPageSecondaryMarketSellConfirmPageState
       return;
     }
 
+    setState(() => _isSubmitting = true);
     final l10n = context.l10n;
-    final priceText = NumberFormat.decimalPattern().format(widget.draft.price);
-    final unitText = NumberFormat.decimalPattern().format(widget.draft.sellNum);
-    final confirmed = await AppDialogs.showAdaptiveAlert<bool>(
-      context: context,
-      title: l10n.myPageResaleHintTitle,
-      message: l10n.myPageResaleFinalConfirmMessage(priceText, unitText),
-      actions: <AppDialogAction<bool>>[
-        AppDialogAction<bool>(
-          label: l10n.walletBankSettingsCancelAction,
-          value: false,
-        ),
-        AppDialogAction<bool>(
-          label: l10n.myPageResaleSubmitButton,
-          value: true,
-          isDestructive: true,
-        ),
-      ],
-    );
-    if (confirmed != true || !mounted) {
-      return;
-    }
-
-    final allowed = await ensureSensitiveActionAuthorized(context, ref);
-    if (!mounted || !allowed) {
-      return;
-    }
-
-    setState(() {
-      _isSubmitting = true;
-    });
-
     try {
+      final priceText = NumberFormat.decimalPattern().format(
+        widget.draft.price,
+      );
+      final unitText = NumberFormat.decimalPattern().format(
+        widget.draft.sellNum,
+      );
+      final confirmed = await AppDialogs.showAdaptiveAlert<bool>(
+        context: context,
+        title: l10n.myPageResaleHintTitle,
+        message: l10n.myPageResaleFinalConfirmMessage(priceText, unitText),
+        actions: <AppDialogAction<bool>>[
+          AppDialogAction<bool>(
+            label: l10n.walletBankSettingsCancelAction,
+            value: false,
+          ),
+          AppDialogAction<bool>(
+            label: l10n.myPageResaleSubmitButton,
+            value: true,
+            isDestructive: true,
+          ),
+        ],
+      );
+      if (confirmed != true || !mounted) {
+        return;
+      }
+
+      final allowed = await ensureSensitiveActionAuthorized(context, ref);
+      if (!mounted || !allowed) {
+        return;
+      }
+
+      final draft = widget.draft;
+      if (!draft.agreed ||
+          draft.fromProcessId.trim().isEmpty ||
+          draft.sellNum <= 0 ||
+          draft.sellNum > draft.availableUnits ||
+          draft.price <= 0) {
+        throw StateError(l10n.secondaryMarketSellUnavailable);
+      }
+      if (!mounted) return;
       await ref
           .read(submitMyPageSecondaryMarketCreateUseCaseProvider)
           .call(
@@ -74,6 +85,7 @@ class _MyPageSecondaryMarketSellConfirmPageState
       if (!mounted) {
         return;
       }
+      refreshSecondaryMarket(ref);
       AppNotice.show(context, message: l10n.myPageResaleSubmitSuccess);
       context.go('/profile/my/secondary-market');
     } catch (error) {
@@ -153,7 +165,8 @@ class _MyPageSecondaryMarketSellConfirmPageState
                 const SizedBox(height: 14),
                 SecondaryMarketTradeReviewCard(
                   title: l10n.myPageResaleReviewSectionTitle,
-                  subtitle: l10n.myPageResaleReviewHint,
+                  subtitle:
+                      '${l10n.myPageResaleReviewHint}\n${l10n.myPageResaleMaxUnitsNotice(widget.draft.availableUnits)}',
                   rows: <SecondaryMarketTradeInfoRowData>[
                     SecondaryMarketTradeInfoRowData(
                       label: l10n.myPageResaleOrderMethodLabel,

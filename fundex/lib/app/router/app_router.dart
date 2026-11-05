@@ -1,3 +1,6 @@
+import '../../features/investment/presentation/pages/secondary_market_active_sales_page.dart';
+import '../../features/investment/presentation/pages/secondary_market_activity_page.dart';
+import '../../features/investment/presentation/pages/secondary_market_activity_detail_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_management_page.dart';
 import '../../features/home/presentation/pages/home_simulation_page.dart';
 import '../../features/hotel_booking/presentation/pages/hotel_host_miles_page.dart';
@@ -794,11 +797,24 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
+        path: '/profile/my/secondary-market/active-sales',
+        builder: (context, state) => SecondaryMarketActiveSalesPage(
+          projectId: state.uri.queryParameters['projectId'] ?? '',
+          processId: state.uri.queryParameters['processId'] ?? '',
+        ),
+      ),
+      GoRoute(
+        path: '/profile/my/secondary-market/purchases/:id',
+        builder: (context, state) => SecondaryMarketActivityDetailPage(id: state.pathParameters['id']!, sale: false),
+      ),
+      GoRoute(
+        path: '/profile/my/secondary-market/sales/:id',
+        builder: (context, state) => SecondaryMarketActivityDetailPage(id: state.pathParameters['id']!, sale: true),
+      ),
+      GoRoute(
         path: '/profile/my/secondary-market',
         builder: (BuildContext context, GoRouterState state) {
-          return const MyPageSectionListPage(
-            sectionType: MyPageSectionType.coolingOff,
-          );
+          return SecondaryMarketActivityPage(initialPurchases: state.uri.queryParameters['tab'] == 'buy');
         },
       ),
       GoRoute(

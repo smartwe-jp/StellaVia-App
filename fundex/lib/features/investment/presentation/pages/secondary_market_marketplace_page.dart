@@ -3,261 +3,91 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-
 import '../../../../app/localization/app_localizations_ext.dart';
-import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
-import '../../../member_profile/presentation/providers/mypage_providers.dart';
+import '../controllers/secondary_market_controller.dart';
+import '../widgets/secondary_market_refresh_scope.dart';
 
-class SecondaryMarketMarketplacePage extends ConsumerStatefulWidget {
+class SecondaryMarketMarketplacePage extends ConsumerWidget {
   const SecondaryMarketMarketplacePage({super.key});
-
   @override
-  ConsumerState<SecondaryMarketMarketplacePage> createState() =>
-      _SecondaryMarketMarketplacePageState();
-}
-
-class _SecondaryMarketMarketplacePageState
-    extends ConsumerState<SecondaryMarketMarketplacePage> {
-  static const int _pageSize = 20;
-
-  final ScrollController _scrollController = ScrollController();
-  final List<MyPageOrderInquiryRecord> _records = <MyPageOrderInquiryRecord>[];
-
-  bool _isInitialLoading = true;
-  bool _isLoadingMore = false;
-  bool _hasMore = true;
-  Object? _error;
-  int _nextPage = 1;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_handleScroll);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadInitial();
-    });
-  }
-
-  @override
-  void dispose() {
-    _scrollController
-      ..removeListener(_handleScroll)
-      ..dispose();
-    super.dispose();
-  }
-
-  void _handleScroll() {
-    if (!_scrollController.hasClients ||
-        _isInitialLoading ||
-        _isLoadingMore ||
-        !_hasMore) {
-      return;
-    }
-    final position = _scrollController.position;
-    if (position.pixels >= position.maxScrollExtent - 240) {
-      _loadNextPage();
-    }
-  }
-
-  Future<void> _loadInitial() async {
-    setState(() {
-      _records.clear();
-      _isInitialLoading = true;
-      _isLoadingMore = false;
-      _hasMore = true;
-      _error = null;
-      _nextPage = 1;
-    });
-    await _loadNextPage();
-  }
-
-  Future<void> _loadNextPage() async {
-    if (_isLoadingMore || !_hasMore) {
-      return;
-    }
-
-    setState(() {
-      _isLoadingMore = true;
-      _error = null;
-    });
-
-    try {
-      final isAuthenticated =
-          ref.read(isAuthenticatedProvider).asData?.value ?? false;
-      final records = await ref
-          .read(fetchMyPageOrderInquiryListUseCaseProvider)
-          .call(
-            startPage: _nextPage,
-            limit: _pageSize,
-            status: 'VALID',
-            publicAccess: !isAuthenticated,
-          );
-      final existingIds = _records.map((item) => item.id).toSet();
-      _records.addAll(
-        records.where((item) => !existingIds.contains(item.id)).toList(),
-      );
-      _nextPage += 1;
-      _hasMore = records.length >= _pageSize;
-      if (mounted) {
-        setState(() {
-          _isInitialLoading = false;
-          _isLoadingMore = false;
-        });
-      }
-    } catch (error) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        _error = error;
-        _isInitialLoading = false;
-        _isLoadingMore = false;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final formatter = NumberFormat.currency(
-      locale: Localizations.localeOf(context).toLanguageTag(),
-      symbol: '¥',
-      decimalDigits: 0,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = context.l10n;
+    final state = ref.watch(
+      secondaryMarketControllerProvider(SecondaryMarketListKind.market),
     );
-
-    return Scaffold(
-      appBar: AppNavigationBar(
-        title: l10n.homeFreeMarketTitle,
-        backgroundColor: colors.surface,
-        foregroundColor: colors.textPrimary,
-        leading: AppNavigationIconButton(
-          icon: Icons.arrow_back_rounded,
-          onTap: () => context.pop(),
-          backgroundColor: colors.surface.withValues(alpha: 0),
-          foregroundColor: colors.textPrimary,
-        ),
-      ),
-      body: RefreshIndicator(
-        onRefresh: _loadInitial,
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: <Widget>[
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-              sliver: _buildContent(context, formatter: formatter),
-            ),
-          ],
-        ),
-      ),
+    final controller = ref.read(
+      secondaryMarketControllerProvider(
+        SecondaryMarketListKind.market,
+      ).notifier,
     );
-  }
-
-  Widget _buildStateCard(
-    BuildContext context, {
-    required String message,
-    String? actionLabel,
-    VoidCallback? onActionTap,
-  }) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colors.border),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: <Widget>[
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: appText.bodyMuted.copyWith(color: colors.textSecondary),
-            ),
-            if (actionLabel != null && onActionTap != null) ...<Widget>[
-              const SizedBox(height: 12),
-              OutlinedButton(onPressed: onActionTap, child: Text(actionLabel)),
+    final formatter = NumberFormat.currency(symbol: '¥', decimalDigits: 0);
+    return SecondaryMarketRefreshScope(
+      onRefresh: controller.refresh,
+      child: Scaffold(
+        appBar: AppNavigationBar(
+          title: l.homeFreeMarketTitle,
+          leading: AppNavigationIconButton(
+            icon: Icons.arrow_back,
+            onTap: () => context.canPop() ? context.pop() : context.go('/home'),
+          ),
+        ),
+        body: RefreshIndicator(
+          onRefresh: controller.refresh,
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(16),
+            children: [
+              TextButton(
+                onPressed: () async {
+                  await context.push('/profile/my/secondary-market');
+                  if (context.mounted) await controller.refresh();
+                },
+                child: Text(l.secondaryMarketManage),
+              ),
+              if (state.loading) const LinearProgressIndicator(),
+              if (state.error != null)
+                ListTile(
+                  title: Text(l.secondaryMarketListLoadError),
+                  trailing: TextButton(
+                    onPressed: controller.refresh,
+                    child: Text(l.fundListRetry),
+                  ),
+                ),
+              if (!state.loading && state.error == null && state.orders.isEmpty)
+                Text(l.homeFreeMarketEmptyState),
+              for (final record in state.orders)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: FundSecondaryMarketCard(
+                    width: double.infinity,
+                    data: _buildSecondaryMarketCardData(
+                      context,
+                      record,
+                      formatter,
+                      () async {
+                        await context.push(
+                          '/home/free-market/${record.id}',
+                          extra: record,
+                        );
+                        if (context.mounted) await controller.refresh();
+                      },
+                    ),
+                    actionLabel: l.secondaryMarketBuyAction,
+                    yieldLabel: l.homeEstimatedYieldLabel,
+                    soldUnitsTitle: l.homeFreeMarketSoldUnitsLabel,
+                    unitPriceTitle: l.homeFreeMarketUnitPriceLabel,
+                  ),
+                ),
+              if (state.hasMore && !state.loading)
+                TextButton(
+                  onPressed: controller.loadMore,
+                  child: Text(l.secondaryMarketLoadMore),
+                ),
             ],
-          ],
+          ),
         ),
       ),
-    );
-  }
-
-  Widget _buildCardFooterLoader(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 12),
-      child: Center(
-        child: _isLoadingMore
-            ? const CircularProgressIndicator.adaptive()
-            : const SizedBox.shrink(),
-      ),
-    );
-  }
-
-  SliverList _buildContent(
-    BuildContext context, {
-    required NumberFormat formatter,
-  }) {
-    final l10n = context.l10n;
-
-    if (_isInitialLoading && _records.isEmpty) {
-      return SliverList.list(
-        children: const <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 32),
-            child: Center(child: CircularProgressIndicator.adaptive()),
-          ),
-        ],
-      );
-    }
-
-    if (_error != null && _records.isEmpty) {
-      return SliverList.list(
-        children: <Widget>[
-          _buildStateCard(
-            context,
-            message: l10n.secondaryMarketListLoadError,
-            actionLabel: l10n.fundListRetry,
-            onActionTap: _loadInitial,
-          ),
-        ],
-      );
-    }
-
-    if (_records.isEmpty) {
-      return SliverList.list(
-        children: <Widget>[
-          _buildStateCard(context, message: l10n.homeFreeMarketEmptyState),
-        ],
-      );
-    }
-
-    return SliverList.list(
-      children: <Widget>[
-        for (var index = 0; index < _records.length; index++) ...<Widget>[
-          FundSecondaryMarketCard(
-            width: double.infinity,
-            data: _buildSecondaryMarketCardData(
-              context,
-              _records[index],
-              formatter,
-            ),
-            actionLabel: l10n.secondaryMarketBuyAction,
-            yieldLabel: l10n.homeEstimatedYieldLabel,
-            soldUnitsTitle: l10n.homeFreeMarketSoldUnitsLabel,
-            unitPriceTitle: l10n.homeFreeMarketUnitPriceLabel,
-          ),
-          if (index < _records.length - 1) const SizedBox(height: 8),
-        ],
-        _buildCardFooterLoader(context),
-      ],
     );
   }
 }
@@ -266,6 +96,7 @@ FundSecondaryMarketCardData _buildSecondaryMarketCardData(
   BuildContext context,
   MyPageOrderInquiryRecord record,
   NumberFormat formatter,
+  VoidCallback onTap,
 ) {
   final theme = Theme.of(context);
   final colors = theme.appColors;
@@ -283,12 +114,11 @@ FundSecondaryMarketCardData _buildSecondaryMarketCardData(
     investorTypeLabel: investorCode != null && investorCode.isNotEmpty
         ? investorCode
         : '--',
-    soldUnitsLabel: '${soldNum.toString()} / ${sellNum.toString()}口',
+    soldUnitsLabel:
+        '${soldNum.toString()} / ${sellNum.toString()}${context.l10n.myPageResaleUnitsSuffix}',
     unitPriceLabel: formatter.format(record.price ?? 0),
     progress: progress.clamp(0, 1),
-    onTap: (record.id == null || record.id!.trim().isEmpty)
-        ? null
-        : () => context.push('/home/free-market/${record.id}', extra: record),
+    onTap: (record.id == null || record.id!.trim().isEmpty) ? null : onTap,
   );
 }
 

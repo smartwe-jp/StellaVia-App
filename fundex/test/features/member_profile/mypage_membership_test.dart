@@ -199,7 +199,8 @@ void main() {
       expect(find.text('0.5'), findsOneWidget);
       await tester.tap(find.text('120'));
       await tester.pumpAndSettle();
-      expect(find.text('120 mile'), findsOneWidget);
+      final l = await AppLocalizations.delegate.load(locale);
+      expect(find.text('120 ${l.myPageChartMileUnit}'), findsOneWidget);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
     }

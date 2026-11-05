@@ -2,6 +2,10 @@ import 'package:flutter/foundation.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_detail_route_args.dart';
 
+enum HotelQuoteStage { idle, assigning, quoting }
+
+enum HotelQuoteIssue { missingOccupancy, missingPoints }
+
 /// Selection belongs to one hotel/date/guest/account snapshot. Disposing it
 /// invalidates pending assignments and quotes when any of those inputs change.
 class HotelDetailSelectionController extends ChangeNotifier {
@@ -25,6 +29,9 @@ class HotelDetailSelectionController extends ChangeNotifier {
   HotelBookingQuote? quotation;
   bool busy = false;
   bool failed = false;
+  HotelQuoteStage stage = HotelQuoteStage.idle;
+  HotelQuoteStage? failedStage;
+  Object? error;
   bool _disposed = false;
   int _revision = 0;
 
@@ -39,7 +46,9 @@ class HotelDetailSelectionController extends ChangeNotifier {
   List<HotelSelectedRoom> get selections => selectionsFor(quantities);
   int get roomCount => quantities.values.fold(0, (a, b) => a + b);
   num? get amount => mode == HotelBookingMode.hostMiles
-      ? quotation?.pointTotal
+      ? (quotation != null
+            ? quotation!.pointsRequired
+            : assignment?.pointsRequired)
       : assignment?.price;
 
   bool canAdd(int index, {int? roomLimit}) {
@@ -47,6 +56,7 @@ class HotelDetailSelectionController extends ChangeNotifier {
     final stock = room.remainingRooms;
     return !busy &&
         detail.isBookable &&
+        (mode != HotelBookingMode.hostMiles || room.pointsRequired != null) &&
         (room.minimumStayNights == null ||
             criteria.nights >= room.minimumStayNights!) &&
         (stock == null || stock < 0 || (quantities[index] ?? 0) < stock) &&
@@ -85,12 +95,16 @@ class HotelDetailSelectionController extends ChangeNotifier {
     assignment = null;
     quotation = null;
     failed = false;
+    failedStage = null;
+    error = null;
+    stage = HotelQuoteStage.idle;
     final selected = selections;
     if (selected.isEmpty) {
       notifyListeners();
       return;
     }
     busy = true;
+    stage = HotelQuoteStage.assigning;
     notifyListeners();
     try {
       final assigned = await assign(selected);
@@ -98,10 +112,14 @@ class HotelDetailSelectionController extends ChangeNotifier {
       HotelBookingQuote? quoted;
       if (mode == HotelBookingMode.hostMiles) {
         if (assigned.roomTypeCustNums.isEmpty) {
-          throw StateError('Missing assigned occupancy for miles quote');
+          throw HotelQuoteIssue.missingOccupancy;
         }
+        assignment = assigned;
+        stage = HotelQuoteStage.quoting;
+        notifyListeners();
         quoted = await quote(
           HotelBookingQuoteRequest(
+            stayBenefit: true,
             hotelId: detail.id,
             checkIn: criteria.checkInDate,
             checkOut: criteria.checkOutDate,
@@ -120,12 +138,21 @@ class HotelDetailSelectionController extends ChangeNotifier {
         );
       }
       if (_disposed || revision != _revision) return;
+      if (mode == HotelBookingMode.hostMiles &&
+          quoted?.pointsRequired == null) {
+        throw HotelQuoteIssue.missingPoints;
+      }
       assignment = assigned;
       quotation = quoted;
-    } catch (_) {
+    } catch (cause) {
       if (_disposed || revision != _revision) return;
+      assignment = null;
+      quotation = null;
       failed = true;
+      failedStage = stage;
+      error = cause;
     }
+    stage = HotelQuoteStage.idle;
     busy = false;
     notifyListeners();
   }

@@ -1,5 +1,6 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import '../support/hotel_reference_miles_display.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
@@ -139,7 +140,14 @@ class HotelDetailRoomCard extends StatelessWidget {
                           children: [
                             Text(
                               miles
-                                  ? c.l10n.hotelDetailMilesQuoteAfterSelection
+                                  ? (room.pointsRequired == null
+                                        ? c
+                                              .l10n
+                                              .hotelStayBenefitUnavailableForDate
+                                        : hotelReferenceMilesLabel(
+                                            c,
+                                            room.pointsRequired!,
+                                          ))
                                   : (room.price == null
                                         ? '—'
                                         : presenter.price(room.price)),

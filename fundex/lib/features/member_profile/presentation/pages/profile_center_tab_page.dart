@@ -192,6 +192,10 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                   ],
                 ),
                 const MyPageSummarySection(),
+                Padding(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: AppButton(label: l10n.secondaryMarketManage,
+                    variant: AppButtonVariant.secondary,
+                    onPressed: () => context.push('/profile/my/secondary-market'))),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
                   child: Column(

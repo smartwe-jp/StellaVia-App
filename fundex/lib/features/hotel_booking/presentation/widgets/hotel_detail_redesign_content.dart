@@ -211,16 +211,10 @@ class HotelDetailRedesignContent extends StatelessWidget {
             ),
           ),
         ),
-        Builder(
-          builder: (context) => AppScrollChromeVisibility(
-            reveal: AppScrollChromeScope.revealOf(context),
-            bottom: true,
-            child: HotelDetailReservationPanel(
-              selection: selection,
-              onBook: onBook,
-              busy: openingConfirmation,
-            ),
-          ),
+        HotelDetailReservationPanel(
+          selection: selection,
+          onBook: onBook,
+          busy: openingConfirmation,
         ),
       ],
     );

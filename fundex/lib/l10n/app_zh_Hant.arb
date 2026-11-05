@@ -2192,7 +2192,7 @@
   "myPageResaleInvestorTypeLabel": "出資者類別",
   "myPageResaleOrderMethodLabel": "委託方式",
   "myPageResaleOrderMethodValue": "賣出委託",
-  "myPageResaleAvailableUnitsLabel": "可賣口數",
+  "myPageResaleAvailableUnitsLabel": "可售口數",
   "myPageResaleSellUnitsLabel": "賣出口數",
   "myPageResaleUnitPriceLabel": "賣出單價",
   "myPageResaleFeeLabel": "賣出手續費",
@@ -2835,5 +2835,61 @@
   "hotelDetailMilesPending": "里程預約流程準備中",
   "hotelDetailProceed": "繼續預約",
   "hotelDetailRoomsHeading": "ROOMS",
-  "hotelSortNone": "不選擇"
+  "hotelSortNone": "不選擇",
+  "hotelMilesReferenceStayFrom": "參考 {count} 里程起（整個住宿期間）",
+  "@hotelMilesReferenceStayFrom": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "hotelMilesReferenceStay": "參考 {count} 里程（整個住宿期間）",
+  "@hotelMilesReferenceStay": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "hotelQuoteAssigning": "正在分配入住人數…",
+  "hotelQuoteCalculating": "正在計算合計里程…",
+  "hotelQuoteFailed": "里程報價取得失敗，請重試。",
+  "secondaryMarketManage": "買賣管理",
+  "secondaryMarketPurchases": "我的購買",
+  "secondaryMarketSales": "我的出售",
+  "secondaryMarketApplicationDetail": "購買申請詳情",
+  "secondaryMarketApplications": "購買申請",
+  "secondaryMarketNoApplications": "暫無購買申請",
+  "secondaryMarketLoadMore": "載入更多",
+  "secondaryMarketRefresh": "重新整理狀態",
+  "secondaryMarketStateSubmitted": "待審核",
+  "secondaryMarketStateRejected": "已駁回",
+  "secondaryMarketStatePayment": "待財務確認到帳",
+  "secondaryMarketStateCompleted": "購買成功",
+  "secondaryMarketStateExpired": "已失效",
+  "secondaryMarketStateWithdrawn": "已撤回",
+  "secondaryMarketStateUnknown": "狀態待確認",
+  "secondaryMarketListingValid": "出售中",
+  "secondaryMarketListingInvalid": "掛單已失效",
+  "secondaryMarketContract": "電子契約",
+  "secondaryMarketContractUnsigned": "未簽署",
+  "secondaryMarketContractSigned": "已簽署",
+  "secondaryMarketContractPending": "未生效",
+  "secondaryMarketContractEffective": "已生效",
+  "secondaryMarketContractTodo": "待您簽約",
+  "secondaryMarketSign": "簽署契約",
+  "secondaryMarketSignPending": "簽約操作暫不可用，請聯絡客服。",
+  "secondaryMarketPaymentPending": "請等待入金指引，最終到帳狀態以財務確認為準。",
+  "secondaryMarketProcessId": "申請編號",
+  "secondaryMarketContractId": "契約編號",
+  "secondaryMarketCancelListing": "撤銷掛單",
+  "secondaryMarketCancelApplication": "撤回申請",
+  "secondaryMarketSubmittedNotice": "購買申請已提交，請在買賣管理中查看審核、簽約及入金狀態。",
+  "secondaryMarketSellUnavailable": "此筆持倉目前不可出售，請重新整理後重試。",
+  "myPageResaleMaxUnitsNotice": "最多可出售 {count} 口",
+  "@myPageResaleMaxUnitsNotice": {"placeholders": {"count": {"type": "int"}}},
+  "secondaryMarketActiveSalesTitle": "出售中掛單",
+  "secondaryMarketActiveSalesEntry": "查看出售中掛單",
+  "secondaryMarketActiveSalesEmpty": "這筆購買記錄暫無出售中掛單"
 }

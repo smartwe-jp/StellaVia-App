@@ -245,6 +245,10 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
 
                       //else
                       //const SizedBox(height: 20),
+                      AppButton(label: l10n.homeFreeMarketTitle,
+                        variant: AppButtonVariant.secondary,
+                        onPressed: () => context.push('/home/free-market')),
+                      const SizedBox(height: 20),
                       HomeSimulationCard(
                         onTap: () => context.push('/home/simulation'),
                       ),

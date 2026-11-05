@@ -241,7 +241,7 @@ final walletPendingDepositListProvider =
     FutureProvider.autoDispose<List<MyPageApplyRecord>>((ref) async {
       return ref
           .watch(fetchMyPageApplyListUseCaseProvider)
-          .call(statuses: const <int>[2]);
+          .call(statuses: const <int>[2], marketType: 1);
     });
 
 final walletPendingDepositRecordProvider = FutureProvider.autoDispose

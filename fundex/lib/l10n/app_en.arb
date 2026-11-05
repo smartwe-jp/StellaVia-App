@@ -2865,5 +2865,61 @@
   "hotelDetailMilesPending": "Miles booking coming soon",
   "hotelDetailProceed": "Continue to booking",
   "hotelDetailRoomsHeading": "ROOMS",
-  "hotelSortNone": "No selection"
+  "hotelSortNone": "No selection",
+  "hotelMilesReferenceStayFrom": "From {count} miles (reference, entire stay)",
+  "@hotelMilesReferenceStayFrom": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "hotelMilesReferenceStay": "{count} miles (reference, entire stay)",
+  "@hotelMilesReferenceStay": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "hotelQuoteAssigning": "Assigning guests…",
+  "hotelQuoteCalculating": "Calculating total miles…",
+  "hotelQuoteFailed": "Could not retrieve the miles quote. Please retry.",
+  "secondaryMarketManage": "Trading activity",
+  "secondaryMarketPurchases": "My purchases",
+  "secondaryMarketSales": "My listings",
+  "secondaryMarketApplicationDetail": "Purchase application",
+  "secondaryMarketApplications": "Purchase applications",
+  "secondaryMarketNoApplications": "No purchase applications",
+  "secondaryMarketLoadMore": "Load more",
+  "secondaryMarketRefresh": "Refresh status",
+  "secondaryMarketStateSubmitted": "Awaiting review",
+  "secondaryMarketStateRejected": "Rejected",
+  "secondaryMarketStatePayment": "Awaiting payment confirmation",
+  "secondaryMarketStateCompleted": "Purchase completed",
+  "secondaryMarketStateExpired": "Expired",
+  "secondaryMarketStateWithdrawn": "Withdrawn",
+  "secondaryMarketStateUnknown": "Status unavailable",
+  "secondaryMarketListingValid": "Listed",
+  "secondaryMarketListingInvalid": "Listing inactive",
+  "secondaryMarketContract": "Electronic contract",
+  "secondaryMarketContractUnsigned": "Unsigned",
+  "secondaryMarketContractSigned": "Signed",
+  "secondaryMarketContractPending": "Not effective",
+  "secondaryMarketContractEffective": "Effective",
+  "secondaryMarketContractTodo": "Your signature is required",
+  "secondaryMarketSign": "Sign contract",
+  "secondaryMarketSignPending": "Signing is currently unavailable. Please contact support.",
+  "secondaryMarketPaymentPending": "Please wait for payment instructions. Payment status updates after financial confirmation.",
+  "secondaryMarketProcessId": "Application ID",
+  "secondaryMarketContractId": "Contract ID",
+  "secondaryMarketCancelListing": "Cancel listing",
+  "secondaryMarketCancelApplication": "Withdraw application",
+  "secondaryMarketSubmittedNotice": "Application submitted. Track review, contract and payment status in Trading activity.",
+  "secondaryMarketSellUnavailable": "This holding is currently unavailable for sale. Refresh and try again.",
+  "myPageResaleMaxUnitsNotice": "You can sell up to {count} units",
+  "@myPageResaleMaxUnitsNotice": {"placeholders": {"count": {"type": "int"}}},
+  "secondaryMarketActiveSalesTitle": "Active sale listings",
+  "secondaryMarketActiveSalesEntry": "View active sale listings",
+  "secondaryMarketActiveSalesEmpty": "No active sale listings for this purchase."
 }

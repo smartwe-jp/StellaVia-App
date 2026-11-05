@@ -2,6 +2,7 @@ import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../support/hotel_home_text_styles.dart';
+import '../../../host_miles/presentation/support/host_miles_rank_theme.dart';
 
 class HotelMilesSummary extends StatelessWidget {
   const HotelMilesSummary({
@@ -14,17 +15,17 @@ class HotelMilesSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) => AppCard(
     padding: const EdgeInsets.all(16),
-    backgroundColor: context.appColors.surfaceAlt,
-    borderColor: context.appColors.borderSoft,
+    variant: AppCardVariant.filled,
+    backgroundColor: HostMilesRankTheme.surface(context, rank),
     borderRadius: BorderRadius.circular(20),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           rank,
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: context.appColors.textPrimary,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.labelSmall?.copyWith(color: context.appColors.onDark),
         ),
         const SizedBox(height: 6),
         Row(
@@ -53,12 +54,17 @@ class _Metric extends StatelessWidget {
     children: [
       Text(
         label,
-        style: Theme.of(
-          context,
-        ).textTheme.bodySmall?.copyWith(color: context.appColors.textSecondary),
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: context.appColors.onDark.withValues(alpha: .85),
+        ),
       ),
       const SizedBox(height: 8),
-      Text(value, style: HotelHomeTextStyles.milesValue(context)),
+      Text(
+        value,
+        style: HotelHomeTextStyles.milesValue(
+          context,
+        ).copyWith(color: context.appColors.onDark),
+      ),
     ],
   );
 }

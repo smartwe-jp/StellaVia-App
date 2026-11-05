@@ -148,6 +148,13 @@ void main() {
           tester.widget<HotelHomeCard>(find.byType(HotelHomeCard).first).onTap,
           isNotNull,
         );
+        final l = AppLocalizations.of(
+          tester.element(find.byType(HotelHomeCard).first),
+        );
+        expect(
+          find.text(l.hotelMilesReferenceStayFrom('12,800')),
+          findsWidgets,
+        );
         expect(tester.takeException(), isNull);
         await tester.pumpWidget(const SizedBox());
       }

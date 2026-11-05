@@ -70,7 +70,9 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage>
     }
     final query = HotelDetailQuery(
       hotelId: widget.hotelId,
-      criteria: _criteria,
+      criteria: _criteria.copyWith(
+        stayBenefit: widget.mode == HotelBookingMode.hostMiles,
+      ),
     );
     final detail = ref.watch(hotelDetailProvider(query));
     final identity = ref.watch(hotelManagementIdentityProvider);
@@ -178,7 +180,9 @@ class _HotelDetailSessionState extends ConsumerState<HotelDetailSession> {
       languageCode: ref.read(hotelLocaleLanguageCodeProvider),
       assign: (rooms) => ref.read(assignHotelOccupancyUseCaseProvider)(
         hotelId: widget.detail.id,
-        criteria: widget.criteria,
+        criteria: widget.criteria.copyWith(
+          stayBenefit: widget.mode == HotelBookingMode.hostMiles,
+        ),
         selectedRooms: rooms,
         languageCode: ref.read(hotelLocaleLanguageCodeProvider),
       ),

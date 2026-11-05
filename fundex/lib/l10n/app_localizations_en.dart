@@ -7052,4 +7052,139 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hotelSortNone => 'No selection';
+
+  @override
+  String hotelMilesReferenceStayFrom(String count) {
+    return 'From $count miles (reference, entire stay)';
+  }
+
+  @override
+  String hotelMilesReferenceStay(String count) {
+    return '$count miles (reference, entire stay)';
+  }
+
+  @override
+  String get hotelQuoteAssigning => 'Assigning guests…';
+
+  @override
+  String get hotelQuoteCalculating => 'Calculating total miles…';
+
+  @override
+  String get hotelQuoteFailed =>
+      'Could not retrieve the miles quote. Please retry.';
+
+  @override
+  String get secondaryMarketManage => 'Trading activity';
+
+  @override
+  String get secondaryMarketPurchases => 'My purchases';
+
+  @override
+  String get secondaryMarketSales => 'My listings';
+
+  @override
+  String get secondaryMarketApplicationDetail => 'Purchase application';
+
+  @override
+  String get secondaryMarketApplications => 'Purchase applications';
+
+  @override
+  String get secondaryMarketNoApplications => 'No purchase applications';
+
+  @override
+  String get secondaryMarketLoadMore => 'Load more';
+
+  @override
+  String get secondaryMarketRefresh => 'Refresh status';
+
+  @override
+  String get secondaryMarketStateSubmitted => 'Awaiting review';
+
+  @override
+  String get secondaryMarketStateRejected => 'Rejected';
+
+  @override
+  String get secondaryMarketStatePayment => 'Awaiting payment confirmation';
+
+  @override
+  String get secondaryMarketStateCompleted => 'Purchase completed';
+
+  @override
+  String get secondaryMarketStateExpired => 'Expired';
+
+  @override
+  String get secondaryMarketStateWithdrawn => 'Withdrawn';
+
+  @override
+  String get secondaryMarketStateUnknown => 'Status unavailable';
+
+  @override
+  String get secondaryMarketListingValid => 'Listed';
+
+  @override
+  String get secondaryMarketListingInvalid => 'Listing inactive';
+
+  @override
+  String get secondaryMarketContract => 'Electronic contract';
+
+  @override
+  String get secondaryMarketContractUnsigned => 'Unsigned';
+
+  @override
+  String get secondaryMarketContractSigned => 'Signed';
+
+  @override
+  String get secondaryMarketContractPending => 'Not effective';
+
+  @override
+  String get secondaryMarketContractEffective => 'Effective';
+
+  @override
+  String get secondaryMarketContractTodo => 'Your signature is required';
+
+  @override
+  String get secondaryMarketSign => 'Sign contract';
+
+  @override
+  String get secondaryMarketSignPending =>
+      'Signing is currently unavailable. Please contact support.';
+
+  @override
+  String get secondaryMarketPaymentPending =>
+      'Please wait for payment instructions. Payment status updates after financial confirmation.';
+
+  @override
+  String get secondaryMarketProcessId => 'Application ID';
+
+  @override
+  String get secondaryMarketContractId => 'Contract ID';
+
+  @override
+  String get secondaryMarketCancelListing => 'Cancel listing';
+
+  @override
+  String get secondaryMarketCancelApplication => 'Withdraw application';
+
+  @override
+  String get secondaryMarketSubmittedNotice =>
+      'Application submitted. Track review, contract and payment status in Trading activity.';
+
+  @override
+  String get secondaryMarketSellUnavailable =>
+      'This holding is currently unavailable for sale. Refresh and try again.';
+
+  @override
+  String myPageResaleMaxUnitsNotice(int count) {
+    return 'You can sell up to $count units';
+  }
+
+  @override
+  String get secondaryMarketActiveSalesTitle => 'Active sale listings';
+
+  @override
+  String get secondaryMarketActiveSalesEntry => 'View active sale listings';
+
+  @override
+  String get secondaryMarketActiveSalesEmpty =>
+      'No active sale listings for this purchase.';
 }

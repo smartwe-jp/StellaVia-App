@@ -2781,7 +2781,7 @@
   "myPageChartOperating": "運用残高",
   "myPageChartDividends": "累計配当額",
   "myPageChartMiles": "宿主マイル",
-  "myPageChartMileUnit": "mile",
+  "myPageChartMileUnit": "マイル",
   "myPageChartYenUnit": "円",
   "myPageChartRange": "表示期間",
   "myPageChartYears": "直近{years}年間",
@@ -2835,5 +2835,61 @@
   "hotelDetailMilesPending": "マイル予約手続きは準備中",
   "hotelDetailProceed": "予約へ進む",
   "hotelDetailRoomsHeading": "ROOMS",
-  "hotelSortNone": "選択しない"
+  "hotelSortNone": "選択しない",
+  "hotelMilesReferenceStayFrom": "参考：{count} マイル〜（滞在期間合計）",
+  "@hotelMilesReferenceStayFrom": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "hotelMilesReferenceStay": "参考：{count} マイル（滞在期間合計）",
+  "@hotelMilesReferenceStay": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "hotelQuoteAssigning": "宿泊人数を割り当てています…",
+  "hotelQuoteCalculating": "合計マイルを計算しています…",
+  "hotelQuoteFailed": "マイル見積もりを取得できませんでした。再試行してください。",
+  "secondaryMarketManage": "売買管理",
+  "secondaryMarketPurchases": "購入申込",
+  "secondaryMarketSales": "出品一覧",
+  "secondaryMarketApplicationDetail": "購入申込詳細",
+  "secondaryMarketApplications": "購入申込一覧",
+  "secondaryMarketNoApplications": "購入申込はありません",
+  "secondaryMarketLoadMore": "もっと見る",
+  "secondaryMarketRefresh": "状態を更新",
+  "secondaryMarketStateSubmitted": "審査待ち",
+  "secondaryMarketStateRejected": "否認",
+  "secondaryMarketStatePayment": "入金確認待ち",
+  "secondaryMarketStateCompleted": "購入完了",
+  "secondaryMarketStateExpired": "失効",
+  "secondaryMarketStateWithdrawn": "申込取消済み",
+  "secondaryMarketStateUnknown": "状態確認中",
+  "secondaryMarketListingValid": "出品中",
+  "secondaryMarketListingInvalid": "出品終了",
+  "secondaryMarketContract": "電子契約",
+  "secondaryMarketContractUnsigned": "未署名",
+  "secondaryMarketContractSigned": "署名済み",
+  "secondaryMarketContractPending": "未発効",
+  "secondaryMarketContractEffective": "発効済み",
+  "secondaryMarketContractTodo": "署名が必要です",
+  "secondaryMarketSign": "契約に署名",
+  "secondaryMarketSignPending": "現在、署名手続きは利用できません。サポートへお問い合わせください。",
+  "secondaryMarketPaymentPending": "入金案内をお待ちください。入金状況は財務確認後に更新されます。",
+  "secondaryMarketProcessId": "申込番号",
+  "secondaryMarketContractId": "契約番号",
+  "secondaryMarketCancelListing": "出品を取り消す",
+  "secondaryMarketCancelApplication": "申込を取り消す",
+  "secondaryMarketSubmittedNotice": "購入申込を送信しました。売買管理で審査・契約・入金状況をご確認ください。",
+  "secondaryMarketSellUnavailable": "この保有分は現在出品できません。更新してお試しください。",
+  "myPageResaleMaxUnitsNotice": "最大 {count} 口まで売却できます",
+  "@myPageResaleMaxUnitsNotice": {"placeholders": {"count": {"type": "int"}}},
+  "secondaryMarketActiveSalesTitle": "売却中の注文",
+  "secondaryMarketActiveSalesEntry": "売却中の注文を確認",
+  "secondaryMarketActiveSalesEmpty": "この購入記録に売却中の注文はありません"
 }

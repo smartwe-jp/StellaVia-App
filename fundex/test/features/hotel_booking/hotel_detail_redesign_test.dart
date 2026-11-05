@@ -24,55 +24,59 @@ import 'package:intl/date_symbol_data_local.dart';
 final criteria = HotelSearchCriteria.initial(
   DateTime(2026, 10, 30),
 ).copyWith(checkOutDate: DateTime(2026, 11, 2));
-HotelRoomPlan room({int stock = 2, int minStay = 1}) => HotelRoomPlan(
-  id: '1',
-  name: '庭を望む和室（竹）',
-  price: 18000,
-  beforeDiscountPrice: null,
-  discount: null,
-  discountName: '',
-  occupancy: 2,
-  adultCapacity: 2,
-  childCapacity: 1,
-  baseOccupancy: 2,
-  roomSize: '28',
-  bedroomCount: 1,
-  bathroomCount: 1,
-  remainingRooms: stock,
-  minimumStayNights: minStay,
-  description: '',
-  facilityCategories: [],
-  images: [],
-  beds: [],
-);
-HotelDetail detail({int stock = 2, int minStay = 1}) => HotelDetail(
-  id: '1',
-  name: '嵐山旅館',
-  address: '',
-  description: '京都・嵐山の自然に包まれた、心ほどける滞在。',
-  latitude: null,
-  longitude: null,
-  bookingType: 0,
-  buildingTypeStr: '',
-  isBookable: true,
-  entirePrice: null,
-  checkInMessage: '',
-  checkInTime: '15:00',
-  checkOutTime: '11:00',
-  detailText: '',
-  surroundingText: '',
-  travelText: '',
-  checkInGuide: '',
-  ruleText: '',
-  refundPolicyText: 'API cancellation policy',
-  telNo: '',
-  facilities: [],
-  images: [],
-  roomPlans: [room(stock: stock, minStay: minStay)],
-  tags: ['京都'],
-  priceCalendarByDate: {},
-);
+HotelRoomPlan room({int stock = 2, int minStay = 1, num? points = 6000}) =>
+    HotelRoomPlan(
+      pointsRequired: points,
+      id: '1',
+      name: '庭を望む和室（竹）',
+      price: 18000,
+      beforeDiscountPrice: null,
+      discount: null,
+      discountName: '',
+      occupancy: 2,
+      adultCapacity: 2,
+      childCapacity: 1,
+      baseOccupancy: 2,
+      roomSize: '28',
+      bedroomCount: 1,
+      bathroomCount: 1,
+      remainingRooms: stock,
+      minimumStayNights: minStay,
+      description: '',
+      facilityCategories: [],
+      images: [],
+      beds: [],
+    );
+HotelDetail detail({int stock = 2, int minStay = 1, num? points = 6000}) =>
+    HotelDetail(
+      id: '1',
+      name: '嵐山旅館',
+      address: '',
+      description: '京都・嵐山の自然に包まれた、心ほどける滞在。',
+      latitude: null,
+      longitude: null,
+      bookingType: 0,
+      buildingTypeStr: '',
+      isBookable: true,
+      entirePrice: null,
+      checkInMessage: '',
+      checkInTime: '15:00',
+      checkOutTime: '11:00',
+      detailText: '',
+      surroundingText: '',
+      travelText: '',
+      checkInGuide: '',
+      ruleText: '',
+      refundPolicyText: 'API cancellation policy',
+      telNo: '',
+      facilities: [],
+      images: [],
+      roomPlans: [room(stock: stock, minStay: minStay, points: points)],
+      tags: ['京都'],
+      priceCalendarByDate: {},
+    );
 const assigned = HotelAssignOccupancyResult(
+  pointsRequired: 7200,
   price: 18000,
   message: '',
   roomTypeCustNums: [
@@ -81,7 +85,8 @@ const assigned = HotelAssignOccupancyResult(
   roomTypeExtraGuestPrices: [],
 );
 HotelBookingQuote quote([num? points = 8500]) => HotelBookingQuote(
-  pointTotal: points,
+  pointsRequired: points,
+  pointTotal: 999999,
   quotedPrice: 18000,
   originalPrice: 18000,
   roomPriceElements: [],
@@ -101,6 +106,34 @@ HotelDetailSelectionController controller({
 );
 
 void main() {
+  test('missing reference points block miles only; zero is valid', () async {
+    final miles = controller(
+      mode: HotelBookingMode.hostMiles,
+      hotel: detail(points: null),
+    );
+    final cash = controller(hotel: detail(points: null));
+    final zero = controller(
+      mode: HotelBookingMode.hostMiles,
+      hotel: detail(points: 0),
+    );
+    addTearDown(miles.dispose);
+    addTearDown(cash.dispose);
+    addTearDown(zero.dispose);
+    expect(miles.canAdd(0), false);
+    await miles.change(0, 1);
+    expect(miles.roomCount, 0);
+    expect(cash.canAdd(0), true);
+    expect(zero.canAdd(0), true);
+  });
+  test('detail cache separates cash and miles requests', () {
+    final regular = HotelDetailQuery(hotelId: '1', criteria: criteria);
+    final miles = HotelDetailQuery(
+      hotelId: '1',
+      criteria: criteria.copyWith(stayBenefit: true),
+    );
+    expect(regular, isNot(miles));
+  });
+
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     await initializeDateFormatting();
@@ -142,6 +175,7 @@ void main() {
       expect(c.amount, 8500);
       expect(request!.rooms.single.occupancy, 2);
       expect(request!.coupons, isEmpty);
+      expect(request!.stayBenefit, true);
       expect(request!.checkOut, criteria.checkOutDate);
       expect(request!.selectedRooms.single.quantity, 1);
     },
@@ -160,7 +194,9 @@ void main() {
       addTearDown(c.dispose);
       await c.change(0, 1);
       expect(c.amount, isNull);
-      expect(c.failed, isFalse);
+      expect(c.failed, isTrue);
+      expect(c.error, HotelQuoteIssue.missingPoints);
+      expect(c.failedStage, HotelQuoteStage.quoting);
       fail = true;
       await c.refreshQuote();
       expect(c.failed, isTrue);
@@ -208,95 +244,116 @@ void main() {
       expect(quoted, isFalse);
     },
   );
-  testWidgets(
-    'detail navigation and reservation bars hide and reveal together',
-    (tester) async {
-      tester.view.physicalSize = const Size(390, 844);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
-      tester.view.padding = const FakeViewPadding(top: 47, bottom: 34);
-      addTearDown(tester.view.resetPadding);
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            hotelDetailProvider.overrideWith((ref, query) async => detail()),
-            hotelManagementIdentityProvider.overrideWith((ref) => null),
-            hotelLocaleLanguageCodeProvider.overrideWithValue('JP'),
-          ],
-          child: MaterialApp(
-            locale: const Locale('ja'),
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            theme: AppThemeFactory.light(locale: const Locale('ja')),
-            home: HotelDetailPage(
-              hotelId: '1',
-              initialCriteria: criteria,
-              mode: HotelBookingMode.hostMiles,
-            ),
-          ),
-        ),
+  test(
+    'actual quote stages, retry and removal never use reference totals',
+    () async {
+      final assignment = Completer<HotelAssignOccupancyResult>();
+      final response = Completer<HotelBookingQuote>();
+      var retries = 0;
+      final c = controller(
+        mode: HotelBookingMode.hostMiles,
+        assign: (_) => assignment.future,
+        getQuote: (_) =>
+            retries++ == 0 ? response.future : Future.value(quote(9123)),
       );
-      await tester.pumpAndSettle();
-      final chrome = tester
-          .widget<AppScrollChromeScope>(find.byType(AppScrollChromeScope))
-          .notifier!;
-      expect(chrome.value, 1);
-      expect(find.byType(AppNavigationBar), findsOneWidget);
-      final scrollable = find.byType(ListView).first;
-      final navigation = find.byType(AppNavigationBar);
-      final originalHeight = tester.getSize(navigation).height;
-      final originalY = tester.getTopLeft(navigation).dy;
-      expect(originalHeight, 65);
-      expect(originalY, 47);
-      final gesture = await tester.startGesture(const Offset(195, 420));
-      // Inspect live intermediate frames, not just the settled endpoints.
-      for (var i = 0; i < 3; i++) {
-        await gesture.moveBy(const Offset(0, -20));
-        await tester.pump(const Duration(milliseconds: 16));
-        expect(tester.getSize(navigation).height, originalHeight);
-        expect(tester.takeException(), isNull);
-      }
-      expect(chrome.value, greaterThan(0));
-      expect(chrome.value, lessThan(1));
-      expect(tester.getTopLeft(navigation).dy, lessThan(originalY));
-      expect(
-        tester.getTopLeft(navigation).dy,
-        closeTo(originalY - originalHeight * (1 - chrome.value), .01),
-      );
-      await gesture.up();
-      await tester.pumpAndSettle();
-      await tester.drag(scrollable, const Offset(0, -350));
-      await tester.pumpAndSettle();
-      expect(chrome.value, 0);
-      final bars = find.byType(AppScrollChromeVisibility);
-      expect(
-        bars,
-        findsOneWidget,
-      ); // Bottom panel's implementation is unchanged.
-      expect(
-        tester
-            .widget<AppScrollNavigationBar>(find.byType(AppScrollNavigationBar))
-            .preferredSize
-            .height,
-        0,
-      );
-      expect(tester.getSize(navigation).height, originalHeight);
-      for (final element in bars.evaluate()) {
-        expect(tester.getSize(find.byWidget(element.widget)).height, 0);
-      }
-      await tester.drag(scrollable, const Offset(0, 200));
-      await tester.pumpAndSettle();
-      expect(chrome.value, 1);
-      for (final element in bars.evaluate()) {
-        expect(
-          tester.getSize(find.byWidget(element.widget)).height,
-          greaterThan(0),
-        );
-      }
-      expect(tester.takeException(), isNull);
+      addTearDown(c.dispose);
+      final task = c.change(0, 1);
+      expect(c.stage, HotelQuoteStage.assigning);
+      expect(c.amount, isNull);
+      assignment.complete(assigned);
+      await Future<void>.delayed(Duration.zero);
+      expect(c.stage, HotelQuoteStage.quoting);
+      expect(c.amount, 7200);
+      response.completeError(StateError('quote error'));
+      await task;
+      expect(c.failedStage, HotelQuoteStage.quoting);
+      expect(c.amount, isNull);
+      await c.refreshQuote();
+      expect(c.failed, false);
+      expect(c.amount, 9123);
+      await c.change(0, 0);
+      expect(c.amount, isNull);
+      expect(c.failed, false);
     },
   );
+  testWidgets('detail navigation hides while reservation panel stays fixed', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    tester.view.padding = const FakeViewPadding(top: 47, bottom: 34);
+    addTearDown(tester.view.resetPadding);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          hotelDetailProvider.overrideWith((ref, query) async => detail()),
+          hotelManagementIdentityProvider.overrideWith((ref) => null),
+          hotelLocaleLanguageCodeProvider.overrideWithValue('JP'),
+        ],
+        child: MaterialApp(
+          locale: const Locale('ja'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: AppThemeFactory.light(locale: const Locale('ja')),
+          home: HotelDetailPage(
+            hotelId: '1',
+            initialCriteria: criteria,
+            mode: HotelBookingMode.hostMiles,
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final chrome = tester
+        .widget<AppScrollChromeScope>(find.byType(AppScrollChromeScope))
+        .notifier!;
+    expect(chrome.value, 1);
+    expect(find.byType(AppNavigationBar), findsOneWidget);
+    final scrollable = find.byType(ListView).first;
+    final navigation = find.byType(AppNavigationBar);
+    final panel = find.byType(HotelDetailReservationPanel);
+    final panelRect = tester.getRect(panel);
+    final originalHeight = tester.getSize(navigation).height;
+    final originalY = tester.getTopLeft(navigation).dy;
+    expect(originalHeight, 65);
+    expect(originalY, 47);
+    final gesture = await tester.startGesture(const Offset(195, 420));
+    // Inspect live intermediate frames, not just the settled endpoints.
+    for (var i = 0; i < 3; i++) {
+      await gesture.moveBy(const Offset(0, -20));
+      await tester.pump(const Duration(milliseconds: 16));
+      expect(tester.getSize(navigation).height, originalHeight);
+      expect(tester.takeException(), isNull);
+    }
+    expect(chrome.value, greaterThan(0));
+    expect(chrome.value, lessThan(1));
+    expect(tester.getTopLeft(navigation).dy, lessThan(originalY));
+    expect(
+      tester.getTopLeft(navigation).dy,
+      closeTo(originalY - originalHeight * (1 - chrome.value), .01),
+    );
+    await gesture.up();
+    await tester.pumpAndSettle();
+    await tester.drag(scrollable, const Offset(0, -350));
+    await tester.pumpAndSettle();
+    expect(chrome.value, 0);
+    expect(
+      tester
+          .widget<AppScrollNavigationBar>(find.byType(AppScrollNavigationBar))
+          .preferredSize
+          .height,
+      0,
+    );
+    expect(tester.getSize(navigation).height, originalHeight);
+    expect(tester.getRect(panel), panelRect);
+    await tester.drag(scrollable, const Offset(0, 200));
+    await tester.pumpAndSettle();
+    expect(chrome.value, 1);
+    expect(tester.getRect(panel), panelRect);
+    expect(tester.takeException(), isNull);
+  });
   for (final locale in AppLocalizations.supportedLocales) {
     testWidgets('detail room cards and miles boundary fit mobile $locale', (
       tester,
@@ -354,6 +411,7 @@ void main() {
         scrollable: find.byType(Scrollable).first,
       );
       await tester.pumpAndSettle();
+      expect(find.text(l.hotelMilesReferenceStay('6,000')), findsOneWidget);
       expect(tester.takeException(), isNull);
       if (locale.languageCode == 'ja' &&
           Platform.environment['DETAIL_CAPTURE'] == '1') {
@@ -375,7 +433,7 @@ void main() {
         scrollable: find.byType(Scrollable).first,
       );
       await tester.pumpAndSettle();
-      expect(find.text('3,500 mile'), findsOneWidget);
+      expect(find.text('3,500 ${l.myPageChartMileUnit}'), findsOneWidget);
       expect(tester.takeException(), isNull);
       await tester.scrollUntilVisible(
         find.text('API cancellation policy'),

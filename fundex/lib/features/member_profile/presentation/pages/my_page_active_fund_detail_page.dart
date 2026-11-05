@@ -1,3 +1,4 @@
+import '../widgets/secondary_market_sell_entry.dart';
 import 'dart:io';
 
 import 'package:core_ui_kit/core_ui_kit.dart';
@@ -98,34 +99,11 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
         ),
       ),
 
-      // bottomNavigationBar:
-      // canShowResale ?
-      // SafeArea(
-      //         top: false,
-      //         child: Container(
-      //           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-      //           child:
-      //           PrimaryCtaButton(
-      //             label: l10n.myPageResaleTabOrder,
-      //             onPressed: summary.processId == null
-      //                 ? null
-      //                 : () => context.push(
-      //                     '/my/secondary-market/sell',
-      //                     extra: MyPageSecondaryMarketSellSeed(
-      //                       projectId: projectId,
-      //                       projectName: projectName,
-      //                       fromProcessId: summary.processId!,
-      //                       availableUnits: summary.investNumRemaining ?? 0,
-      //                       investorCode: summary.investorCode,
-      //                       earningRatio: summary.earningRatio,
-      //                     ),
-      //                   ),
-      //             backgroundColor: colors.danger,
-      //             shadowColor: colors.danger.withValues(alpha: 0.5),
-      //             horizontalPadding: 0,
-      //             threeSideShadow: true,
-      //           ))):
-      //           null,
+      bottomNavigationBar: summary.projectStatus == 4
+          ? SecondaryMarketSellEntry(
+              record: initialSeed?.projectId == projectId ? initialSeed : null,
+            )
+          : null,
       body: RefreshIndicator(
         onRefresh: () => _refresh(ref, projectId: projectId),
         child: ListView(
@@ -159,12 +137,39 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
                   label: l10n.myPageActiveFundRemainingUnitsLabel,
                   value: _formatCount(summary.investNumValid),
                 ),
+                ActiveFundOverviewMetricData(
+                  label: l10n.myPageResaleAvailableUnitsLabel,
+                  value: _formatCount(summary.investNumRemaining),
+                ),
               ],
               periodLabel: l10n.fundListPeriodLabel,
               periodValue: operationPeriod ?? l10n.myPageResultAnnouncementTbd,
               investorCode: investorSummary.investorCode,
               returnText: investorSummary.returnText,
             ),
+            if (initialSeed?.processId?.isNotEmpty == true) ...<Widget>[
+              const SizedBox(height: 14),
+              AppCard(
+                child: ListTile(
+                  title: Text(l10n.secondaryMarketActiveSalesEntry),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () async {
+                    await context.push(
+                      Uri(
+                        path: '/profile/my/secondary-market/active-sales',
+                        queryParameters: {
+                          'projectId': projectId,
+                          'processId': initialSeed!.processId!,
+                        },
+                      ).toString(),
+                    );
+                    if (context.mounted) {
+                      await _refresh(ref, projectId: projectId);
+                    }
+                  },
+                ),
+              ),
+            ],
             if (hiwariDisplay.isNotEmpty) ...<Widget>[
               const SizedBox(height: 14),
               MyPageHiwariInfoCard(data: hiwariDisplay),

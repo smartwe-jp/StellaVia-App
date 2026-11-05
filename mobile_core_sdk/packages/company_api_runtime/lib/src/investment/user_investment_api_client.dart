@@ -145,11 +145,13 @@ class UserInvestmentApiClient {
     int? startPage,
     int? limit,
     List<int>? statuses,
+    int? marketType,
   }) async {
     final body = <String, dynamic>{
       if (startPage != null) 'startPage': startPage,
       if (limit != null) 'limit': limit,
       if (statuses != null && statuses.isNotEmpty) 'status': statuses,
+      if (marketType != null) 'marketType': marketType,
     };
     final response = await _dioForPath(applyListPath)
         .post<Map<String, dynamic>>(
@@ -371,6 +373,16 @@ class UserInvestmentApiClient {
       return _envelopeCodec.isTruthyData(payload['data']);
     }
     return true;
+  }
+
+  Future<List<SecondaryMarketHoldingDto>> fetchSecondaryMarketHoldings() async {
+    const path = '/crowdfunding/secondary/market/available';
+    final response = await _dioForPath(path).get<Map<String, dynamic>>(path, options: authRequired(true));
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    _envelopeCodec.assertSuccessIfEnvelope(payload, fallbackMessage: 'Failed to load available holdings.', requireTruthyData: false);
+    final data = payload['data'];
+    if (data is! List) throw const FormatException('Expected available holdings list.');
+    return data.map((row) => SecondaryMarketHoldingDto.fromJson(_envelopeCodec.toJsonMap(row))).toList(growable: false);
   }
 
   Future<void> submitSecondaryMarketCreate({

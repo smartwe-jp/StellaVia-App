@@ -80,6 +80,7 @@ class HotelSearchResult {
 
 class HotelSummary {
   const HotelSummary({
+    this.startingPoints,
     this.description,
     required this.id,
     required this.name,
@@ -102,6 +103,8 @@ class HotelSummary {
     required this.tags,
   });
 
+  /// Reference miles for the entire searched stay, not per night.
+  final num? startingPoints;
   final String? description;
   final String id;
   final String name;
@@ -373,6 +376,7 @@ class HotelDetailImage {
 
 class HotelRoomPlan {
   const HotelRoomPlan({
+    this.pointsRequired,
     required this.id,
     required this.name,
     required this.price,
@@ -396,6 +400,9 @@ class HotelRoomPlan {
 
   final String id;
   final String name;
+
+  /// Reference miles for this room type over the entire requested stay.
+  final num? pointsRequired;
   final num? price;
   final num? beforeDiscountPrice;
   final num? discount;
@@ -436,11 +443,15 @@ class HotelRoomOccupancyAssignment {
 
 class HotelAssignOccupancyResult {
   const HotelAssignOccupancyResult({
+    this.pointsRequired,
     required this.price,
     required this.message,
     required this.roomTypeCustNums,
     required this.roomTypeExtraGuestPrices,
   });
+
+  /// Server-calculated miles for all selected rooms over the entire stay.
+  final num? pointsRequired;
 
   final num? price;
   final String message;
@@ -475,6 +486,7 @@ class HotelCountryCode {
 
 class HotelBookingPreparation {
   const HotelBookingPreparation({
+    this.pointsRequired,
     this.pointTotal,
     required this.pageTexts,
     required this.countryCodes,
@@ -486,6 +498,9 @@ class HotelBookingPreparation {
     required this.originalPrice,
     required this.roomPriceElements,
   });
+
+  /// Server-calculated miles for all selected rooms over the entire stay.
+  final num? pointsRequired;
 
   final Map<String, String> pageTexts;
   final List<HotelCountryCode> countryCodes;
@@ -591,6 +606,7 @@ class HotelMemberContactDraft {
 
 class HotelBookingQuote {
   const HotelBookingQuote({
+    this.pointsRequired,
     this.pointTotal,
     required this.quotedPrice,
     required this.originalPrice,
@@ -598,6 +614,9 @@ class HotelBookingQuote {
   });
 
   /// Null means the quote does not offer points payment.
+  /// Server-calculated miles for all selected rooms over the entire stay.
+  final num? pointsRequired;
+
   final num? pointTotal;
   final num? quotedPrice;
   final num? originalPrice;
@@ -618,6 +637,7 @@ class HotelBookingRoomPriceElement {
 
 class HotelBookingQuoteRequest {
   const HotelBookingQuoteRequest({
+    this.stayBenefit = false,
     required this.hotelId,
     required this.checkIn,
     required this.checkOut,
@@ -628,6 +648,7 @@ class HotelBookingQuoteRequest {
     required this.selectedRooms,
   });
 
+  final bool stayBenefit;
   final String hotelId;
   final DateTime checkIn;
   final DateTime checkOut;

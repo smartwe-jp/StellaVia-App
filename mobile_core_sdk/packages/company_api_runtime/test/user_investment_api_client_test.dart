@@ -40,6 +40,56 @@ Dio _buildDio(Future<ResponseBody> Function(RequestOptions options) handler) {
 
 void main() {
   group('UserInvestmentApiClient', () {
+    test('secondary market filter and contract fields including nested applications', () async {
+      final dio = _buildDio((options) async {
+        if (options.path == UserInvestmentApiPaths.applyList) {
+          expect(options.data, {'startPage': 2, 'limit': 10, 'status': [0, 2], 'marketType': 2});
+          return _jsonOk('{"code":200,"data":{"rows":[{"projectName":"fund","contractId":123,"ecStatus":0,"ecUserTodo":true,"status":2}]}}');
+        }
+        return _jsonOk('{"code":200,"data":{"rows":[{"id":1,"projectName":"fund","status":"VALID","applyList":[{"processId":"a","contractId":"123","ecStatus":1,"ecUserTodo":false,"status":3},{"processId":"b","ecStatus":null,"ecUserTodo":null,"status":0}]}]}}');
+      });
+      final api = UserInvestmentApiClient(dioForPath: (_) => dio);
+      final purchases = await api.fetchApplyList(marketType: 2, startPage: 2, limit: 10, statuses: [0, 2]);
+      expect(purchases.single.contractId, '123');
+      expect(purchases.single.ecStatus, 0);
+      expect(purchases.single.ecUserTodo, true);
+      final orders = await api.fetchOrderInquiryList(userId: 42);
+      expect(orders.single.status, 'VALID');
+      expect(orders.single.applyList.map((e) => e.status), [3, 0]);
+      expect(orders.single.applyList.first.ecUserTodo, false);
+      expect(orders.single.applyList.last.contractId, isNull);
+    });
+    test('available holdings preserve process identity and server availability', () async {
+      final dio = _buildDio((options) async {
+        expect(options.path, '/crowdfunding/secondary/market/available');
+        expect(options.method, 'GET');
+        expect(options.extra['auth_required'], true);
+        return _jsonOk('{"code":200,"data":[{"processId":"a","projectId":1,"projectName":"fund","availableNum":2,"investmentUnit":100000},{"processId":"b","projectId":1,"projectName":"fund","availableNum":5}]}');
+      });
+      final rows = await UserInvestmentApiClient(dioForPath: (_) => dio).fetchSecondaryMarketHoldings();
+      expect(rows.map((e) => e.processId), ['a', 'b']);
+      expect(rows.map((e) => e.availableNum), [2, 5]);
+      expect(rows.first.investmentUnit, 100000);
+      expect(rows.last.investmentUnit, isNull);
+    });
+    test('secondary market writes send existing contract and reject business failure', () async {
+      final bodies = <Object?>[];
+      final dio = _buildDio((options) async {
+        expect(options.extra['auth_required'], true);
+        bodies.add(options.data);
+        return _jsonOk(options.path == UserInvestmentApiPaths.secondaryMarketPurchase
+          ? '{"code":500,"msg":"sold out"}' : '{"code":200,"data":true}');
+      });
+      final api = UserInvestmentApiClient(dioForPath: (_) => dio);
+      await api.submitSecondaryMarketCreate(fromProcessId: 'holding', sellNum: 2, price: 100);
+      await api.submitSecondaryMarketModify(id: 'listing', fromProcessId: 'holding', sellNum: 2, price: 100, status: 'INVALID', thisTimeSoldNum: 1);
+      await expectLater(api.submitSecondaryMarketPurchase(id: 'listing', buyNum: 1), throwsA(anything));
+      expect(bodies, [
+        {'fromProcessId':'holding','sellNum':'2','price':100},
+        {'id':'listing','fromProcessId':'holding','sellNum':2,'price':100,'status':'INVALID','thisTimeSoldNum':1},
+        {'buyNum':'1','id':'listing'},
+      ]);
+    });
     test('fetchAccountStatistic gets envelope and parses data', () async {
       final dio = _buildDio((options) async {
         expect(options.method, equals('GET'));

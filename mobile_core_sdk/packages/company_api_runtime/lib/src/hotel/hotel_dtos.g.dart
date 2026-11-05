@@ -74,6 +74,7 @@ _HotelSummaryDto _$HotelSummaryDtoFromJson(Map<String, dynamic> json) =>
     _HotelSummaryDto(
       id: json['hotelId'] as String? ?? '',
       hotelName: json['hotelName'] as String? ?? '',
+      startingPoints: _hotelReferencePointsFromJson(json['startingPoints']),
       detail: json['detail'] as String?,
       address: json['address'] as String?,
       area: json['area'] as String?,
@@ -105,6 +106,7 @@ Map<String, dynamic> _$HotelSummaryDtoToJson(_HotelSummaryDto instance) =>
     <String, dynamic>{
       'hotelId': instance.id,
       'hotelName': instance.hotelName,
+      'startingPoints': instance.startingPoints,
       'detail': instance.detail,
       'address': instance.address,
       'area': instance.area,
@@ -169,6 +171,7 @@ _HotelDetailRequestDto _$HotelDetailRequestDtoFromJson(
   startDate: json['startDate'] as String,
   endDate: json['endDate'] as String,
   occupancy: (json['occupancy'] as num?)?.toInt(),
+  stayBenefit: json['stayBenefit'] as bool?,
 );
 
 Map<String, dynamic> _$HotelDetailRequestDtoToJson(
@@ -179,6 +182,7 @@ Map<String, dynamic> _$HotelDetailRequestDtoToJson(
   'startDate': instance.startDate,
   'endDate': instance.endDate,
   'occupancy': ?instance.occupancy,
+  'stayBenefit': ?instance.stayBenefit,
 };
 
 _HotelDetailDto _$HotelDetailDtoFromJson(Map<String, dynamic> json) =>
@@ -267,6 +271,7 @@ _HotelRoomTypeDto _$HotelRoomTypeDtoFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String? ?? '',
       name: json['name'] as String? ?? '',
       showName: json['showName'] as String?,
+      pointsRequired: _hotelReferencePointsFromJson(json['pointsRequired']),
       price: json['price'] as num?,
       beforeDiscountPrice: json['beforeDiscountPrice'] as num?,
       discount: json['discount'] as num?,
@@ -307,6 +312,7 @@ Map<String, dynamic> _$HotelRoomTypeDtoToJson(_HotelRoomTypeDto instance) =>
       'id': instance.id,
       'name': instance.name,
       'showName': instance.showName,
+      'pointsRequired': instance.pointsRequired,
       'price': instance.price,
       'beforeDiscountPrice': instance.beforeDiscountPrice,
       'discount': instance.discount,
@@ -552,6 +558,7 @@ Map<String, dynamic> _$HotelRoomTypeRoomNumDtoToJson(
 _HotelAssignOccupancyRequestDto _$HotelAssignOccupancyRequestDtoFromJson(
   Map<String, dynamic> json,
 ) => _HotelAssignOccupancyRequestDto(
+  stayBenefit: json['stayBenefit'] as bool?,
   lang: json['lang'] as String,
   hotelId: json['hotelId'] as String,
   checkIn: json['checkIn'] as String,
@@ -569,6 +576,7 @@ _HotelAssignOccupancyRequestDto _$HotelAssignOccupancyRequestDtoFromJson(
 Map<String, dynamic> _$HotelAssignOccupancyRequestDtoToJson(
   _HotelAssignOccupancyRequestDto instance,
 ) => <String, dynamic>{
+  'stayBenefit': ?instance.stayBenefit,
   'lang': instance.lang,
   'hotelId': instance.hotelId,
   'checkIn': instance.checkIn,
@@ -580,6 +588,7 @@ Map<String, dynamic> _$HotelAssignOccupancyRequestDtoToJson(
 _HotelAssignOccupancyResultDto _$HotelAssignOccupancyResultDtoFromJson(
   Map<String, dynamic> json,
 ) => _HotelAssignOccupancyResultDto(
+  pointsRequired: _hotelReferencePointsFromJson(json['pointsRequired']),
   roomTypeCustNums:
       (json['roomTypeCustNums'] as List<dynamic>?)
           ?.map(
@@ -603,6 +612,7 @@ _HotelAssignOccupancyResultDto _$HotelAssignOccupancyResultDtoFromJson(
 Map<String, dynamic> _$HotelAssignOccupancyResultDtoToJson(
   _HotelAssignOccupancyResultDto instance,
 ) => <String, dynamic>{
+  'pointsRequired': instance.pointsRequired,
   'roomTypeCustNums': instance.roomTypeCustNums,
   'roomTypeExtraGuestPrices': instance.roomTypeExtraGuestPrices,
   'message': instance.message,
@@ -662,6 +672,7 @@ Map<String, dynamic> _$HotelRoomTypeCustNumRequestDtoToJson(
 _HotelRoomExtraPersonRequestDto _$HotelRoomExtraPersonRequestDtoFromJson(
   Map<String, dynamic> json,
 ) => _HotelRoomExtraPersonRequestDto(
+  stayBenefit: json['stayBenefit'] as bool?,
   hotelId: json['hotelId'] as String,
   checkIn: json['checkIn'] as String,
   checkOut: json['checkOut'] as String,
@@ -681,6 +692,7 @@ _HotelRoomExtraPersonRequestDto _$HotelRoomExtraPersonRequestDtoFromJson(
 Map<String, dynamic> _$HotelRoomExtraPersonRequestDtoToJson(
   _HotelRoomExtraPersonRequestDto instance,
 ) => <String, dynamic>{
+  'stayBenefit': ?instance.stayBenefit,
   'hotelId': instance.hotelId,
   'checkIn': instance.checkIn,
   'checkOut': instance.checkOut,
@@ -692,6 +704,7 @@ Map<String, dynamic> _$HotelRoomExtraPersonRequestDtoToJson(
 _HotelRoomExtraPersonResultDto _$HotelRoomExtraPersonResultDtoFromJson(
   Map<String, dynamic> json,
 ) => _HotelRoomExtraPersonResultDto(
+  pointsRequired: _hotelReferencePointsFromJson(json['pointsRequired']),
   pointTotal: _hotelNumFromJson(json['pointTotal']),
   priceElement: json['priceElement'] == null
       ? null
@@ -703,6 +716,7 @@ _HotelRoomExtraPersonResultDto _$HotelRoomExtraPersonResultDtoFromJson(
 Map<String, dynamic> _$HotelRoomExtraPersonResultDtoToJson(
   _HotelRoomExtraPersonResultDto instance,
 ) => <String, dynamic>{
+  'pointsRequired': instance.pointsRequired,
   'pointTotal': instance.pointTotal,
   'priceElement': instance.priceElement,
 };

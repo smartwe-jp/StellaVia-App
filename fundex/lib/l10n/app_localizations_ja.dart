@@ -6593,7 +6593,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageChartMiles => '宿主マイル';
 
   @override
-  String get myPageChartMileUnit => 'mile';
+  String get myPageChartMileUnit => 'マイル';
 
   @override
   String get myPageChartYenUnit => '円';
@@ -6718,4 +6718,134 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get hotelSortNone => '選択しない';
+
+  @override
+  String hotelMilesReferenceStayFrom(String count) {
+    return '参考：$count マイル〜（滞在期間合計）';
+  }
+
+  @override
+  String hotelMilesReferenceStay(String count) {
+    return '参考：$count マイル（滞在期間合計）';
+  }
+
+  @override
+  String get hotelQuoteAssigning => '宿泊人数を割り当てています…';
+
+  @override
+  String get hotelQuoteCalculating => '合計マイルを計算しています…';
+
+  @override
+  String get hotelQuoteFailed => 'マイル見積もりを取得できませんでした。再試行してください。';
+
+  @override
+  String get secondaryMarketManage => '売買管理';
+
+  @override
+  String get secondaryMarketPurchases => '購入申込';
+
+  @override
+  String get secondaryMarketSales => '出品一覧';
+
+  @override
+  String get secondaryMarketApplicationDetail => '購入申込詳細';
+
+  @override
+  String get secondaryMarketApplications => '購入申込一覧';
+
+  @override
+  String get secondaryMarketNoApplications => '購入申込はありません';
+
+  @override
+  String get secondaryMarketLoadMore => 'もっと見る';
+
+  @override
+  String get secondaryMarketRefresh => '状態を更新';
+
+  @override
+  String get secondaryMarketStateSubmitted => '審査待ち';
+
+  @override
+  String get secondaryMarketStateRejected => '否認';
+
+  @override
+  String get secondaryMarketStatePayment => '入金確認待ち';
+
+  @override
+  String get secondaryMarketStateCompleted => '購入完了';
+
+  @override
+  String get secondaryMarketStateExpired => '失効';
+
+  @override
+  String get secondaryMarketStateWithdrawn => '申込取消済み';
+
+  @override
+  String get secondaryMarketStateUnknown => '状態確認中';
+
+  @override
+  String get secondaryMarketListingValid => '出品中';
+
+  @override
+  String get secondaryMarketListingInvalid => '出品終了';
+
+  @override
+  String get secondaryMarketContract => '電子契約';
+
+  @override
+  String get secondaryMarketContractUnsigned => '未署名';
+
+  @override
+  String get secondaryMarketContractSigned => '署名済み';
+
+  @override
+  String get secondaryMarketContractPending => '未発効';
+
+  @override
+  String get secondaryMarketContractEffective => '発効済み';
+
+  @override
+  String get secondaryMarketContractTodo => '署名が必要です';
+
+  @override
+  String get secondaryMarketSign => '契約に署名';
+
+  @override
+  String get secondaryMarketSignPending => '現在、署名手続きは利用できません。サポートへお問い合わせください。';
+
+  @override
+  String get secondaryMarketPaymentPending => '入金案内をお待ちください。入金状況は財務確認後に更新されます。';
+
+  @override
+  String get secondaryMarketProcessId => '申込番号';
+
+  @override
+  String get secondaryMarketContractId => '契約番号';
+
+  @override
+  String get secondaryMarketCancelListing => '出品を取り消す';
+
+  @override
+  String get secondaryMarketCancelApplication => '申込を取り消す';
+
+  @override
+  String get secondaryMarketSubmittedNotice =>
+      '購入申込を送信しました。売買管理で審査・契約・入金状況をご確認ください。';
+
+  @override
+  String get secondaryMarketSellUnavailable => 'この保有分は現在出品できません。更新してお試しください。';
+
+  @override
+  String myPageResaleMaxUnitsNotice(int count) {
+    return '最大 $count 口まで売却できます';
+  }
+
+  @override
+  String get secondaryMarketActiveSalesTitle => '売却中の注文';
+
+  @override
+  String get secondaryMarketActiveSalesEntry => '売却中の注文を確認';
+
+  @override
+  String get secondaryMarketActiveSalesEmpty => 'この購入記録に売却中の注文はありません';
 }

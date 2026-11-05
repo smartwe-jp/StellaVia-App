@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import '../entities/mypage_models.dart';
 
 abstract class MyPageRepository {
+  Future<List<SecondaryMarketHolding>> fetchSecondaryMarketHoldings();
   Future<MyPageAccountStatistic> fetchAccountStatistic();
   Future<List<MyPageAssetTrend>> fetchAssetTrend({
     required DateTime startDate,
@@ -13,6 +14,7 @@ abstract class MyPageRepository {
     int? startPage,
     int? limit,
     List<int>? statuses,
+    int? marketType,
   });
 
   Future<void> submitUserWithdraw({required String processId, String? remark});

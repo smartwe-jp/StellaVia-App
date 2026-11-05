@@ -10,6 +10,14 @@ class MyPageRepositoryImpl implements MyPageRepository {
     : _remote = remote;
 
   final MyPageRemoteDataSource _remote;
+  @override
+  Future<List<SecondaryMarketHolding>> fetchSecondaryMarketHoldings() async {
+    final rows = await _remote.fetchSecondaryMarketHoldings();
+    return rows.map((row) => SecondaryMarketHolding(processId: row.processId,
+      projectId: row.projectId, projectName: row.projectName, availableNum: row.availableNum,
+      investmentUnit: row.investmentUnit, investorCode: row.investorCode, earningRadio: row.earningRadio)).toList(growable: false);
+  }
+
 
   @override
   Future<MyPageAccountStatistic> fetchAccountStatistic() async {
@@ -34,11 +42,13 @@ class MyPageRepositoryImpl implements MyPageRepository {
     int? startPage,
     int? limit,
     List<int>? statuses,
+    int? marketType,
   }) async {
     final dtos = await _remote.fetchApplyList(
       startPage: startPage,
       limit: limit,
       statuses: statuses,
+      marketType: marketType,
     );
     return dtos.map((dto) => dto.toEntity()).toList(growable: false);
   }

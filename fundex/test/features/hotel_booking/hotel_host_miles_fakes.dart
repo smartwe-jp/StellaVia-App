@@ -8,6 +8,7 @@ import 'package:fundex/features/hotel_booking/domain/usecases/search_hotels_usec
 import 'package:fundex/features/hotel_booking/presentation/controllers/hotel_host_miles_controller.dart';
 
 const liveHotel = HotelSummary(
+  startingPoints: 12800,
   id: 'live-42',
   name: 'API Hotel',
   address: 'Kyoto',

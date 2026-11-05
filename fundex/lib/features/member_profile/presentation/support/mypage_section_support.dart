@@ -483,6 +483,13 @@ bool canShowApplyCancelAction(int? status) {
 }
 
 void handlePendingApplyTap(BuildContext context, MyPageApplyRecord record) {
+  if (record.secondaryMarketSellId?.trim().isNotEmpty == true) {
+    final processId = record.processId;
+    context.push(processId == null
+      ? '/profile/my/secondary-market?tab=buy'
+      : '/profile/my/secondary-market/purchases/${Uri.encodeComponent(processId)}');
+    return;
+  }
   final projectId = record.projectId?.trim();
   if (projectId == null || projectId.isEmpty) {
     return;

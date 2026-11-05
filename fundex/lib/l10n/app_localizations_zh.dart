@@ -5121,7 +5121,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageResaleOrderMethodValue => '卖出委托';
 
   @override
-  String get myPageResaleAvailableUnitsLabel => '可卖口数';
+  String get myPageResaleAvailableUnitsLabel => '可售口数';
 
   @override
   String get myPageResaleSellUnitsLabel => '卖出口数';
@@ -6657,6 +6657,135 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get hotelSortNone => '不选择';
+
+  @override
+  String hotelMilesReferenceStayFrom(String count) {
+    return '参考 $count 里程起（整个住宿期间）';
+  }
+
+  @override
+  String hotelMilesReferenceStay(String count) {
+    return '参考 $count 里程（整个住宿期间）';
+  }
+
+  @override
+  String get hotelQuoteAssigning => '正在分配入住人数…';
+
+  @override
+  String get hotelQuoteCalculating => '正在计算合计里程…';
+
+  @override
+  String get hotelQuoteFailed => '里程报价获取失败，请重试。';
+
+  @override
+  String get secondaryMarketManage => '买卖管理';
+
+  @override
+  String get secondaryMarketPurchases => '我的购买';
+
+  @override
+  String get secondaryMarketSales => '我的出售';
+
+  @override
+  String get secondaryMarketApplicationDetail => '购买申请详情';
+
+  @override
+  String get secondaryMarketApplications => '购买申请';
+
+  @override
+  String get secondaryMarketNoApplications => '暂无购买申请';
+
+  @override
+  String get secondaryMarketLoadMore => '加载更多';
+
+  @override
+  String get secondaryMarketRefresh => '刷新状态';
+
+  @override
+  String get secondaryMarketStateSubmitted => '待审核';
+
+  @override
+  String get secondaryMarketStateRejected => '已驳回';
+
+  @override
+  String get secondaryMarketStatePayment => '待财务确认到账';
+
+  @override
+  String get secondaryMarketStateCompleted => '购买成功';
+
+  @override
+  String get secondaryMarketStateExpired => '已失效';
+
+  @override
+  String get secondaryMarketStateWithdrawn => '已撤回';
+
+  @override
+  String get secondaryMarketStateUnknown => '状态待确认';
+
+  @override
+  String get secondaryMarketListingValid => '出售中';
+
+  @override
+  String get secondaryMarketListingInvalid => '挂单已失效';
+
+  @override
+  String get secondaryMarketContract => '电子契约';
+
+  @override
+  String get secondaryMarketContractUnsigned => '未签署';
+
+  @override
+  String get secondaryMarketContractSigned => '已签署';
+
+  @override
+  String get secondaryMarketContractPending => '未生效';
+
+  @override
+  String get secondaryMarketContractEffective => '已生效';
+
+  @override
+  String get secondaryMarketContractTodo => '待您签约';
+
+  @override
+  String get secondaryMarketSign => '签署契约';
+
+  @override
+  String get secondaryMarketSignPending => '签约操作暂不可用，请联系客服。';
+
+  @override
+  String get secondaryMarketPaymentPending => '请等待入金指引，最终到账状态以财务确认为准。';
+
+  @override
+  String get secondaryMarketProcessId => '申请编号';
+
+  @override
+  String get secondaryMarketContractId => '契约编号';
+
+  @override
+  String get secondaryMarketCancelListing => '撤销挂单';
+
+  @override
+  String get secondaryMarketCancelApplication => '撤回申请';
+
+  @override
+  String get secondaryMarketSubmittedNotice => '购买申请已提交，请在买卖管理中查看审核、签约及入金状态。';
+
+  @override
+  String get secondaryMarketSellUnavailable => '此笔持仓当前不可出售，请刷新后重试。';
+
+  @override
+  String myPageResaleMaxUnitsNotice(int count) {
+    return '最多可出售 $count 口';
+  }
+
+  @override
+  String get secondaryMarketActiveSalesTitle => '出售中挂单';
+
+  @override
+  String get secondaryMarketActiveSalesEntry => '查看出售中挂单';
+
+  @override
+  String get secondaryMarketActiveSalesEmpty => '这笔购买记录暂无出售中挂单';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -11780,7 +11909,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageResaleOrderMethodValue => '賣出委託';
 
   @override
-  String get myPageResaleAvailableUnitsLabel => '可賣口數';
+  String get myPageResaleAvailableUnitsLabel => '可售口數';
 
   @override
   String get myPageResaleSellUnitsLabel => '賣出口數';
@@ -13316,4 +13445,133 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelSortNone => '不選擇';
+
+  @override
+  String hotelMilesReferenceStayFrom(String count) {
+    return '參考 $count 里程起（整個住宿期間）';
+  }
+
+  @override
+  String hotelMilesReferenceStay(String count) {
+    return '參考 $count 里程（整個住宿期間）';
+  }
+
+  @override
+  String get hotelQuoteAssigning => '正在分配入住人數…';
+
+  @override
+  String get hotelQuoteCalculating => '正在計算合計里程…';
+
+  @override
+  String get hotelQuoteFailed => '里程報價取得失敗，請重試。';
+
+  @override
+  String get secondaryMarketManage => '買賣管理';
+
+  @override
+  String get secondaryMarketPurchases => '我的購買';
+
+  @override
+  String get secondaryMarketSales => '我的出售';
+
+  @override
+  String get secondaryMarketApplicationDetail => '購買申請詳情';
+
+  @override
+  String get secondaryMarketApplications => '購買申請';
+
+  @override
+  String get secondaryMarketNoApplications => '暫無購買申請';
+
+  @override
+  String get secondaryMarketLoadMore => '載入更多';
+
+  @override
+  String get secondaryMarketRefresh => '重新整理狀態';
+
+  @override
+  String get secondaryMarketStateSubmitted => '待審核';
+
+  @override
+  String get secondaryMarketStateRejected => '已駁回';
+
+  @override
+  String get secondaryMarketStatePayment => '待財務確認到帳';
+
+  @override
+  String get secondaryMarketStateCompleted => '購買成功';
+
+  @override
+  String get secondaryMarketStateExpired => '已失效';
+
+  @override
+  String get secondaryMarketStateWithdrawn => '已撤回';
+
+  @override
+  String get secondaryMarketStateUnknown => '狀態待確認';
+
+  @override
+  String get secondaryMarketListingValid => '出售中';
+
+  @override
+  String get secondaryMarketListingInvalid => '掛單已失效';
+
+  @override
+  String get secondaryMarketContract => '電子契約';
+
+  @override
+  String get secondaryMarketContractUnsigned => '未簽署';
+
+  @override
+  String get secondaryMarketContractSigned => '已簽署';
+
+  @override
+  String get secondaryMarketContractPending => '未生效';
+
+  @override
+  String get secondaryMarketContractEffective => '已生效';
+
+  @override
+  String get secondaryMarketContractTodo => '待您簽約';
+
+  @override
+  String get secondaryMarketSign => '簽署契約';
+
+  @override
+  String get secondaryMarketSignPending => '簽約操作暫不可用，請聯絡客服。';
+
+  @override
+  String get secondaryMarketPaymentPending => '請等待入金指引，最終到帳狀態以財務確認為準。';
+
+  @override
+  String get secondaryMarketProcessId => '申請編號';
+
+  @override
+  String get secondaryMarketContractId => '契約編號';
+
+  @override
+  String get secondaryMarketCancelListing => '撤銷掛單';
+
+  @override
+  String get secondaryMarketCancelApplication => '撤回申請';
+
+  @override
+  String get secondaryMarketSubmittedNotice => '購買申請已提交，請在買賣管理中查看審核、簽約及入金狀態。';
+
+  @override
+  String get secondaryMarketSellUnavailable => '此筆持倉目前不可出售，請重新整理後重試。';
+
+  @override
+  String myPageResaleMaxUnitsNotice(int count) {
+    return '最多可出售 $count 口';
+  }
+
+  @override
+  String get secondaryMarketActiveSalesTitle => '出售中掛單';
+
+  @override
+  String get secondaryMarketActiveSalesEntry => '查看出售中掛單';
+
+  @override
+  String get secondaryMarketActiveSalesEmpty => '這筆購買記錄暫無出售中掛單';
 }

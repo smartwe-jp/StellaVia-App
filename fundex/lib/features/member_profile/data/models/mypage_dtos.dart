@@ -129,6 +129,9 @@ extension MyPagePdfDocumentDtoMapper on MyPagePdfDocumentDto {
 extension MyPageApplyRecordDtoMapper on MyPageApplyRecordDto {
   MyPageApplyRecord toEntity() {
     return MyPageApplyRecord(
+      contractId: contractId,
+      ecStatus: ecStatus,
+      ecUserTodo: ecUserTodo,
       projectId: projectId,
       projectRuleId: projectRuleId,
       secondaryMarketSellId: secondaryMarketSellId,

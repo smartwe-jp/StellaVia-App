@@ -50,6 +50,9 @@ class MyPagePdfDocument {
 
 class MyPageApplyRecord {
   const MyPageApplyRecord({
+    this.contractId,
+    this.ecStatus,
+    this.ecUserTodo,
     this.projectId,
     this.projectRuleId,
     this.secondaryMarketSellId,
@@ -77,6 +80,10 @@ class MyPageApplyRecord {
     this.processId,
     this.serviceFee,
   });
+
+  final String? contractId;
+  final int? ecStatus;
+  final bool? ecUserTodo;
 
   final String? projectId;
   final String? projectRuleId;
@@ -362,4 +369,15 @@ class MyPageLockedAmount {
   final String? lockedReason;
   final String? startLockedTime;
   final String? lockExpireTime;
+}
+
+class SecondaryMarketHolding {
+  const SecondaryMarketHolding({required this.processId, required this.projectId,
+    required this.projectName, required this.availableNum, this.investmentUnit,
+    this.investorCode, this.earningRadio});
+  final String processId, projectId, projectName;
+  final int availableNum;
+  final int? investmentUnit;
+  final String? investorCode;
+  final double? earningRadio;
 }

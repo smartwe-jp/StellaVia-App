@@ -51,6 +51,7 @@ abstract class HotelSummaryDto with _$HotelSummaryDto {
   const factory HotelSummaryDto({
     @JsonKey(name: 'hotelId') @Default('') String id,
     @Default('') String hotelName,
+    @JsonKey(fromJson: _hotelReferencePointsFromJson) num? startingPoints,
     String? detail,
     String? address,
     String? area,
@@ -190,6 +191,7 @@ abstract class HotelDetailRequestDto with _$HotelDetailRequestDto {
     required String startDate,
     required String endDate,
     int? occupancy,
+    bool? stayBenefit,
   }) = _HotelDetailRequestDto;
 
   factory HotelDetailRequestDto.fromJson(Map<String, dynamic> json) =>
@@ -252,6 +254,7 @@ abstract class HotelRoomTypeDto with _$HotelRoomTypeDto {
     @Default('') String id,
     @Default('') String name,
     String? showName,
+    @JsonKey(fromJson: _hotelReferencePointsFromJson) num? pointsRequired,
     num? price,
     num? beforeDiscountPrice,
     num? discount,
@@ -459,6 +462,7 @@ abstract class HotelAssignOccupancyRequestDto
     with _$HotelAssignOccupancyRequestDto {
   @JsonSerializable(includeIfNull: false, explicitToJson: true)
   const factory HotelAssignOccupancyRequestDto({
+    bool? stayBenefit,
     required String lang,
     required String hotelId,
     required String checkIn,
@@ -476,6 +480,7 @@ abstract class HotelAssignOccupancyRequestDto
 abstract class HotelAssignOccupancyResultDto
     with _$HotelAssignOccupancyResultDto {
   const factory HotelAssignOccupancyResultDto({
+    @JsonKey(fromJson: _hotelReferencePointsFromJson) num? pointsRequired,
     @Default(<HotelRoomTypeCustNumDto>[])
     List<HotelRoomTypeCustNumDto> roomTypeCustNums,
     @Default(<HotelRoomTypeExtraGuestPriceDto>[])
@@ -533,6 +538,7 @@ abstract class HotelRoomExtraPersonRequestDto
     with _$HotelRoomExtraPersonRequestDto {
   @JsonSerializable(includeIfNull: false, explicitToJson: true)
   const factory HotelRoomExtraPersonRequestDto({
+    bool? stayBenefit,
     required String hotelId,
     required String checkIn,
     required String checkOut,
@@ -550,6 +556,7 @@ abstract class HotelRoomExtraPersonRequestDto
 abstract class HotelRoomExtraPersonResultDto
     with _$HotelRoomExtraPersonResultDto {
   const factory HotelRoomExtraPersonResultDto({
+    @JsonKey(fromJson: _hotelReferencePointsFromJson) num? pointsRequired,
     // Temporary source: 2026-10-14 developer contract; absent from hotel Swagger.
     // Null means points payment is unsupported. Keep separate from cash price.
     @JsonKey(fromJson: _hotelNumFromJson) num? pointTotal,
@@ -1225,4 +1232,15 @@ abstract class OptimismPaymentRequestDto with _$OptimismPaymentRequestDto {
 
   factory OptimismPaymentRequestDto.fromJson(Map<String, dynamic> json) =>
       _$OptimismPaymentRequestDtoFromJson(json);
+}
+
+// Missing means ineligible for the requested stay. Malformed values must fail
+// parsing so they surface as a retryable data error, not false ineligibility.
+num? _hotelReferencePointsFromJson(Object? raw) {
+  if (raw == null) return null;
+  final value = raw is num ? raw : num.tryParse(raw.toString().trim());
+  if (value == null || !value.isFinite || value < 0) {
+    throw const FormatException('Invalid hotel reference points');
+  }
+  return value;
 }

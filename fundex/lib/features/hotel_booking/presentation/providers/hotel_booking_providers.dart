@@ -578,7 +578,8 @@ class HotelDetailQuery {
         other.criteria.checkOutDate == criteria.checkOutDate &&
         other.criteria.occupancy == criteria.occupancy &&
         other.criteria.kids == criteria.kids &&
-        other.criteria.roomCount == criteria.roomCount;
+        other.criteria.roomCount == criteria.roomCount &&
+        other.criteria.stayBenefit == criteria.stayBenefit;
   }
 
   @override
@@ -589,6 +590,7 @@ class HotelDetailQuery {
     criteria.occupancy,
     criteria.kids,
     criteria.roomCount,
+    criteria.stayBenefit,
   );
 }
 

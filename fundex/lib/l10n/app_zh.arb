@@ -2192,7 +2192,7 @@
   "myPageResaleInvestorTypeLabel": "出资者类别",
   "myPageResaleOrderMethodLabel": "委托方式",
   "myPageResaleOrderMethodValue": "卖出委托",
-  "myPageResaleAvailableUnitsLabel": "可卖口数",
+  "myPageResaleAvailableUnitsLabel": "可售口数",
   "myPageResaleSellUnitsLabel": "卖出口数",
   "myPageResaleUnitPriceLabel": "卖出单价",
   "myPageResaleFeeLabel": "卖出手续费",
@@ -2835,5 +2835,61 @@
   "hotelDetailMilesPending": "里程预约流程准备中",
   "hotelDetailProceed": "继续预约",
   "hotelDetailRoomsHeading": "ROOMS",
-  "hotelSortNone": "不选择"
+  "hotelSortNone": "不选择",
+  "hotelMilesReferenceStayFrom": "参考 {count} 里程起（整个住宿期间）",
+  "@hotelMilesReferenceStayFrom": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "hotelMilesReferenceStay": "参考 {count} 里程（整个住宿期间）",
+  "@hotelMilesReferenceStay": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "hotelQuoteAssigning": "正在分配入住人数…",
+  "hotelQuoteCalculating": "正在计算合计里程…",
+  "hotelQuoteFailed": "里程报价获取失败，请重试。",
+  "secondaryMarketManage": "买卖管理",
+  "secondaryMarketPurchases": "我的购买",
+  "secondaryMarketSales": "我的出售",
+  "secondaryMarketApplicationDetail": "购买申请详情",
+  "secondaryMarketApplications": "购买申请",
+  "secondaryMarketNoApplications": "暂无购买申请",
+  "secondaryMarketLoadMore": "加载更多",
+  "secondaryMarketRefresh": "刷新状态",
+  "secondaryMarketStateSubmitted": "待审核",
+  "secondaryMarketStateRejected": "已驳回",
+  "secondaryMarketStatePayment": "待财务确认到账",
+  "secondaryMarketStateCompleted": "购买成功",
+  "secondaryMarketStateExpired": "已失效",
+  "secondaryMarketStateWithdrawn": "已撤回",
+  "secondaryMarketStateUnknown": "状态待确认",
+  "secondaryMarketListingValid": "出售中",
+  "secondaryMarketListingInvalid": "挂单已失效",
+  "secondaryMarketContract": "电子契约",
+  "secondaryMarketContractUnsigned": "未签署",
+  "secondaryMarketContractSigned": "已签署",
+  "secondaryMarketContractPending": "未生效",
+  "secondaryMarketContractEffective": "已生效",
+  "secondaryMarketContractTodo": "待您签约",
+  "secondaryMarketSign": "签署契约",
+  "secondaryMarketSignPending": "签约操作暂不可用，请联系客服。",
+  "secondaryMarketPaymentPending": "请等待入金指引，最终到账状态以财务确认为准。",
+  "secondaryMarketProcessId": "申请编号",
+  "secondaryMarketContractId": "契约编号",
+  "secondaryMarketCancelListing": "撤销挂单",
+  "secondaryMarketCancelApplication": "撤回申请",
+  "secondaryMarketSubmittedNotice": "购买申请已提交，请在买卖管理中查看审核、签约及入金状态。",
+  "secondaryMarketSellUnavailable": "此笔持仓当前不可出售，请刷新后重试。",
+  "myPageResaleMaxUnitsNotice": "最多可出售 {count} 口",
+  "@myPageResaleMaxUnitsNotice": {"placeholders": {"count": {"type": "int"}}},
+  "secondaryMarketActiveSalesTitle": "出售中挂单",
+  "secondaryMarketActiveSalesEntry": "查看出售中挂单",
+  "secondaryMarketActiveSalesEmpty": "这笔购买记录暂无出售中挂单"
 }

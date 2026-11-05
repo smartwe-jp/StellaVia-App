@@ -1,5 +1,6 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import '../support/hotel_reference_miles_display.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
@@ -41,7 +42,8 @@ class HotelHomeCard extends StatelessWidget {
         : hotel.buildingType.isNotEmpty
         ? hotel.buildingType
         : hotel.bookingTypeLabel;
-    final miles = requiredMiles;
+    final miles =
+        requiredMiles ?? (hostMilesMode ? hotel.startingPoints : null);
     final isMiles = hostMilesMode || miles != null;
     return AppCard(
       backgroundColor: colors.surface,
@@ -119,7 +121,7 @@ class HotelHomeCard extends StatelessWidget {
           const SizedBox(height: 10),
           if (isMiles)
             Text(
-              hotel.stayBenefitParticipate
+              miles != null
                   ? context.l10n.hotelMilesDateEligible
                   : context.l10n.hotelStayBenefitUnavailableForDate,
               style: text.labelSmall?.copyWith(color: colors.brandSecondary),
@@ -143,30 +145,36 @@ class HotelHomeCard extends StatelessWidget {
                   buildingCode: hotel.buildingCode,
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  if (!isMiles &&
-                      hotel.lowestPrice != null &&
-                      (hotel.beforeDiscountPrice ?? 0) > hotel.lowestPrice!)
-                    Text(
-                      presenter.price(hotel.beforeDiscountPrice),
-                      style: text.labelSmall?.copyWith(
-                        color: colors.textTertiary,
-                        decoration: TextDecoration.lineThrough,
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    if (!isMiles &&
+                        hotel.lowestPrice != null &&
+                        (hotel.beforeDiscountPrice ?? 0) > hotel.lowestPrice!)
+                      Text(
+                        presenter.price(hotel.beforeDiscountPrice),
+                        style: text.labelSmall?.copyWith(
+                          color: colors.textTertiary,
+                          decoration: TextDecoration.lineThrough,
+                        ),
                       ),
+                    Text(
+                      isMiles
+                          ? miles == null
+                                ? context.l10n.hotelMilesRequiredUnknown
+                                : hotelReferenceMilesLabel(
+                                    context,
+                                    miles,
+                                    starting: true,
+                                  )
+                          : hotel.lowestPrice == null
+                          ? context.l10n.hotelPriceAsk
+                          : '${presenter.price(hotel.lowestPrice)}${context.l10n.hotelPricePerNight}',
+                      style: HotelHomeTextStyles.sectionTitle(context),
                     ),
-                  Text(
-                    isMiles
-                        ? miles == null
-                              ? context.l10n.hotelMilesRequiredUnknown
-                              : context.l10n.hotelMilesPerNight(miles)
-                        : hotel.lowestPrice == null
-                        ? context.l10n.hotelPriceAsk
-                        : '${presenter.price(hotel.lowestPrice)}${context.l10n.hotelPricePerNight}',
-                    style: HotelHomeTextStyles.sectionTitle(context),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),

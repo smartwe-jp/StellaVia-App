@@ -10,11 +10,13 @@ class FetchMyPageApplyListUseCase {
     int? startPage,
     int? limit,
     List<int>? statuses,
+    int? marketType,
   }) {
     return _repository.fetchApplyList(
       startPage: startPage,
       limit: limit,
       statuses: statuses,
+      marketType: marketType,
     );
   }
 }

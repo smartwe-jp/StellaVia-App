@@ -12752,6 +12752,252 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No selection'**
   String get hotelSortNone;
+
+  /// No description provided for @hotelMilesReferenceStayFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'From {count} miles (reference, entire stay)'**
+  String hotelMilesReferenceStayFrom(String count);
+
+  /// No description provided for @hotelMilesReferenceStay.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} miles (reference, entire stay)'**
+  String hotelMilesReferenceStay(String count);
+
+  /// No description provided for @hotelQuoteAssigning.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigning guests…'**
+  String get hotelQuoteAssigning;
+
+  /// No description provided for @hotelQuoteCalculating.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculating total miles…'**
+  String get hotelQuoteCalculating;
+
+  /// No description provided for @hotelQuoteFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not retrieve the miles quote. Please retry.'**
+  String get hotelQuoteFailed;
+
+  /// No description provided for @secondaryMarketManage.
+  ///
+  /// In en, this message translates to:
+  /// **'Trading activity'**
+  String get secondaryMarketManage;
+
+  /// No description provided for @secondaryMarketPurchases.
+  ///
+  /// In en, this message translates to:
+  /// **'My purchases'**
+  String get secondaryMarketPurchases;
+
+  /// No description provided for @secondaryMarketSales.
+  ///
+  /// In en, this message translates to:
+  /// **'My listings'**
+  String get secondaryMarketSales;
+
+  /// No description provided for @secondaryMarketApplicationDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase application'**
+  String get secondaryMarketApplicationDetail;
+
+  /// No description provided for @secondaryMarketApplications.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase applications'**
+  String get secondaryMarketApplications;
+
+  /// No description provided for @secondaryMarketNoApplications.
+  ///
+  /// In en, this message translates to:
+  /// **'No purchase applications'**
+  String get secondaryMarketNoApplications;
+
+  /// No description provided for @secondaryMarketLoadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load more'**
+  String get secondaryMarketLoadMore;
+
+  /// No description provided for @secondaryMarketRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh status'**
+  String get secondaryMarketRefresh;
+
+  /// No description provided for @secondaryMarketStateSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting review'**
+  String get secondaryMarketStateSubmitted;
+
+  /// No description provided for @secondaryMarketStateRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get secondaryMarketStateRejected;
+
+  /// No description provided for @secondaryMarketStatePayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting payment confirmation'**
+  String get secondaryMarketStatePayment;
+
+  /// No description provided for @secondaryMarketStateCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase completed'**
+  String get secondaryMarketStateCompleted;
+
+  /// No description provided for @secondaryMarketStateExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get secondaryMarketStateExpired;
+
+  /// No description provided for @secondaryMarketStateWithdrawn.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawn'**
+  String get secondaryMarketStateWithdrawn;
+
+  /// No description provided for @secondaryMarketStateUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Status unavailable'**
+  String get secondaryMarketStateUnknown;
+
+  /// No description provided for @secondaryMarketListingValid.
+  ///
+  /// In en, this message translates to:
+  /// **'Listed'**
+  String get secondaryMarketListingValid;
+
+  /// No description provided for @secondaryMarketListingInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing inactive'**
+  String get secondaryMarketListingInvalid;
+
+  /// No description provided for @secondaryMarketContract.
+  ///
+  /// In en, this message translates to:
+  /// **'Electronic contract'**
+  String get secondaryMarketContract;
+
+  /// No description provided for @secondaryMarketContractUnsigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsigned'**
+  String get secondaryMarketContractUnsigned;
+
+  /// No description provided for @secondaryMarketContractSigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed'**
+  String get secondaryMarketContractSigned;
+
+  /// No description provided for @secondaryMarketContractPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Not effective'**
+  String get secondaryMarketContractPending;
+
+  /// No description provided for @secondaryMarketContractEffective.
+  ///
+  /// In en, this message translates to:
+  /// **'Effective'**
+  String get secondaryMarketContractEffective;
+
+  /// No description provided for @secondaryMarketContractTodo.
+  ///
+  /// In en, this message translates to:
+  /// **'Your signature is required'**
+  String get secondaryMarketContractTodo;
+
+  /// No description provided for @secondaryMarketSign.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign contract'**
+  String get secondaryMarketSign;
+
+  /// No description provided for @secondaryMarketSignPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing is currently unavailable. Please contact support.'**
+  String get secondaryMarketSignPending;
+
+  /// No description provided for @secondaryMarketPaymentPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait for payment instructions. Payment status updates after financial confirmation.'**
+  String get secondaryMarketPaymentPending;
+
+  /// No description provided for @secondaryMarketProcessId.
+  ///
+  /// In en, this message translates to:
+  /// **'Application ID'**
+  String get secondaryMarketProcessId;
+
+  /// No description provided for @secondaryMarketContractId.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract ID'**
+  String get secondaryMarketContractId;
+
+  /// No description provided for @secondaryMarketCancelListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel listing'**
+  String get secondaryMarketCancelListing;
+
+  /// No description provided for @secondaryMarketCancelApplication.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw application'**
+  String get secondaryMarketCancelApplication;
+
+  /// No description provided for @secondaryMarketSubmittedNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Application submitted. Track review, contract and payment status in Trading activity.'**
+  String get secondaryMarketSubmittedNotice;
+
+  /// No description provided for @secondaryMarketSellUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This holding is currently unavailable for sale. Refresh and try again.'**
+  String get secondaryMarketSellUnavailable;
+
+  /// No description provided for @myPageResaleMaxUnitsNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'You can sell up to {count} units'**
+  String myPageResaleMaxUnitsNotice(int count);
+
+  /// No description provided for @secondaryMarketActiveSalesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Active sale listings'**
+  String get secondaryMarketActiveSalesTitle;
+
+  /// No description provided for @secondaryMarketActiveSalesEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'View active sale listings'**
+  String get secondaryMarketActiveSalesEntry;
+
+  /// No description provided for @secondaryMarketActiveSalesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No active sale listings for this purchase.'**
+  String get secondaryMarketActiveSalesEmpty;
 }
 
 class _AppLocalizationsDelegate

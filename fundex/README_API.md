@@ -1393,3 +1393,7 @@ Response
 Hotel临时来源：2026-10-14谷町君开发小组确认 `POST /pms/order/room/extraPerson` 返回新增 `pointTotal`。请求沿用既有room报价DTO（hotelId/checkIn/checkOut/lang/roomTypeCustNums/couponsCounts）。示意响应 `{"code":200,"data":{"pointTotal":1200,"priceElement":{"price":1000}}}`；其中数值仅为结构示例，非实测兑换率。`pointTotal:null`表示不支持积分支付。Hotel Swagger当前未包含此字段；已有hotel envelope策略不改，后续以更新Swagger收敛。
 
 累计获得请求示例：`GET /crowdfunding/points/cumulative-chart?startMonth=2025-01`；响应示例 `{"code":200,"data":{"xaxis":["2026-01","2026-02"],"yaxis":[9020314,9020314]}}`。累计值取最后一个y值，可用余额单独取user-account-summary.availablePoints。
+
+## 二级市场（2026-11-05）
+
+申请列表使用 `marketType=1/2` 区分一级／二级，DTO 保留 `contractId/ecStatus/ecUserTodo`（含挂单 `applyList`）。出售来源使用 `/crowdfunding/secondary/market/available` 返回的持仓 `processId/availableNum`。签约和入金操作暂缓，详见 [二级市场恢复记录](../docs/secondary-market-roadmap.md)。

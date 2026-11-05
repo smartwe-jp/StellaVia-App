@@ -1,17 +1,11 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import '../../../host_miles/presentation/support/host_miles_rank_theme.dart';
 
 /// Figma membership palette. Colors communicate rank, never derive eligibility.
 class MyPageRankTheme {
   static Color surface(BuildContext context, String rank) =>
-      switch (rank.toUpperCase()) {
-        'REGULAR' => const Color(0xFF070E2B),
-        'BRONZE' => const Color(0xFFA85929),
-        'SILVER' => const Color(0xFF687184),
-        'GOLD' => const Color(0xFF91723D),
-        'MASTER' => const Color(0xFF65358B),
-        _ => context.appColors.primary,
-      };
+      HostMilesRankTheme.surface(context, rank);
   static TextStyle gapLabel(BuildContext c) =>
       c.appTextTheme.caption.copyWith(fontSize: 12);
   static TextStyle gapValue(BuildContext c) => c.appTextTheme.numericBody

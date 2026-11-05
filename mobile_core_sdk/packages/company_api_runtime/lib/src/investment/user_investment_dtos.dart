@@ -216,6 +216,9 @@ class UserInvestmentContractProjectPdfDto {
 
 class UserInvestmentApplyRecordDto {
   const UserInvestmentApplyRecordDto({
+    this.contractId,
+    this.ecStatus,
+    this.ecUserTodo,
     this.projectId,
     this.projectRuleId,
     this.secondaryMarketSellId,
@@ -246,6 +249,9 @@ class UserInvestmentApplyRecordDto {
 
   factory UserInvestmentApplyRecordDto.fromJson(Map<String, dynamic> json) {
     return UserInvestmentApplyRecordDto(
+      contractId: _stringOrNull(json['contractId']),
+      ecStatus: _intOrNull(json['ecStatus']),
+      ecUserTodo: _boolOrNull(json['ecUserTodo']),
       projectId:
           _stringOrNull(json['projectId']) ?? _stringOrNull(json['projecId']),
       projectRuleId: _stringOrNull(json['projectRuleId']),
@@ -279,6 +285,10 @@ class UserInvestmentApplyRecordDto {
       serviceFee: _numOrNull(json['serviceFee']),
     );
   }
+
+  final String? contractId;
+  final int? ecStatus;
+  final bool? ecUserTodo;
 
   final String? projectId;
   final String? projectRuleId;
@@ -805,4 +815,20 @@ String _formatApiDateTime(DateTime value) {
   final minute = value.minute.toString().padLeft(2, '0');
   final second = value.second.toString().padLeft(2, '0');
   return '$year-$month-$day $hour:$minute:$second';
+}
+
+class SecondaryMarketHoldingDto {
+  const SecondaryMarketHoldingDto({required this.processId, required this.projectId,
+    required this.projectName, required this.availableNum, this.investmentUnit,
+    this.investorCode, this.earningRadio});
+  factory SecondaryMarketHoldingDto.fromJson(Map<String, dynamic> json) => SecondaryMarketHoldingDto(
+    processId: _stringOrNull(json['processId']) ?? '', projectId: _stringOrNull(json['projectId']) ?? '',
+    projectName: _stringOrNull(json['projectName']) ?? '', availableNum: _intOrNull(json['availableNum']) ?? 0,
+    investmentUnit: _intOrNull(json['investmentUnit']), investorCode: _stringOrNull(json['investorCode']),
+    earningRadio: _doubleOrNull(json['earningRadio']));
+  final String processId, projectId, projectName;
+  final int availableNum;
+  final int? investmentUnit;
+  final String? investorCode;
+  final double? earningRadio;
 }

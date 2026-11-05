@@ -6,6 +6,7 @@ import 'package:core_network/core_network.dart';
 import '../models/mypage_dtos.dart';
 
 abstract class MyPageRemoteDataSource {
+  Future<List<SecondaryMarketHoldingDto>> fetchSecondaryMarketHoldings();
   Future<MyPageAccountStatisticDto> fetchAccountStatistic();
   Future<List<MyPageAssetTrendDto>> fetchAssetTrend({
     required DateTime startDate,
@@ -16,6 +17,7 @@ abstract class MyPageRemoteDataSource {
     int? startPage,
     int? limit,
     List<int>? statuses,
+    int? marketType,
   });
 
   Future<void> submitUserWithdraw({required String processId, String? remark});
@@ -93,6 +95,9 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
   final UserInvestmentApiClient _apiClient;
 
   @override
+  Future<List<SecondaryMarketHoldingDto>> fetchSecondaryMarketHoldings() => _apiClient.fetchSecondaryMarketHoldings();
+
+  @override
   Future<MyPageAccountStatisticDto> fetchAccountStatistic() async {
     return _apiClient.fetchAccountStatistic();
   }
@@ -110,11 +115,13 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
     int? startPage,
     int? limit,
     List<int>? statuses,
+    int? marketType,
   }) async {
     return _apiClient.fetchApplyList(
       startPage: startPage,
       limit: limit,
       statuses: statuses,
+      marketType: marketType,
     );
   }
 

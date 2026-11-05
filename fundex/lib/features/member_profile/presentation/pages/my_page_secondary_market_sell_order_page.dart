@@ -1,5 +1,6 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -29,10 +30,19 @@ class _MyPageSecondaryMarketSellOrderPageState
   @override
   void initState() {
     super.initState();
+    if (kDebugMode) {
+      debugPrint(
+        '[SecondaryMarketSellOrder] projectId=${widget.seed.projectId} '
+        'processId=${widget.seed.fromProcessId} '
+        'sellLimit=${widget.seed.availableUnits}',
+      );
+    }
     _sellUnitsController = TextEditingController(
       text: widget.seed.availableUnits > 0 ? '1' : '0',
     );
-    _priceController = TextEditingController(text: '1000000');
+    _priceController = TextEditingController(
+      text: widget.seed.initialUnitPrice?.toString() ?? '',
+    );
   }
 
   @override
@@ -186,7 +196,8 @@ class _MyPageSecondaryMarketSellOrderPageState
                 const SizedBox(height: 14),
                 SecondaryMarketTradeSellEntryCard(
                   title: l10n.myPageResaleSellUnitsLabel,
-                  subtitle: l10n.myPageResaleQuantityHint,
+                  subtitle:
+                      '${l10n.myPageResaleQuantityHint}\n${l10n.myPageResaleMaxUnitsNotice(widget.seed.availableUnits)}',
                   availabilityLabel: l10n.myPageResaleAvailableUnitsLabel,
                   priceLabel: l10n.myPageResaleUnitPriceLabel,
                   formulaLabel: l10n.myPageResaleLiveEstimateFormulaLabel,

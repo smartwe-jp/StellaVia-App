@@ -447,3 +447,40 @@ Run broader `flutter analyze` / `flutter test` only when the change affects shar
 - 根 Tab 顶栏补接：酒店首页品牌导航与宿泊管理导航现在读取主壳显隐状态，随底部 Tab 同步出现／隐藏；酒店搜索筛选仍在列表内。App 首页同步修正。相关既有页面测试 10 项和新增根 Tab 状态／高度测试 3 项通过。
 
 - 2026-11-02：HotelHomeFilters 排序按钮按 criteria.priceSort 显示当前价格升序／降序文案，未设置时保留排序占位文案；地区按钮沿用已有选中地区显示。普通酒店首页与宿主マイル首页共用此组件，回归覆盖选择后按钮文案及地区条件保留。
+
+- 2026-11-02：宿主マイル酒店首页里程卡按接口会员等级着色，与 My Page 共用 host_miles/presentation/support/HostMilesRankTheme 的五级配色；未知等级沿用品牌主色，文字使用 onDark。保留原数据与布局，不改变预订规则。
+
+## 2026-11-02 参考兑换里程接入
+
+- 按后台最新契约，搜索 startingPoints 与详情 roomTypeDTO4APPs.pointsRequired 都表示完整入住期间的参考积分，不按每晚计算。SDK 接受数字字符串与数值，缺失保留 null；非法、非有限或负值作为解析错误进入重试状态，避免误判为不适用。
+- 宿主マイル详情请求补 stayBenefit:true；普通详情不添加该参数。详情缓存键加入 stayBenefit，防止普通与特典结果混用。
+- 列表显示住宿期间参考里程起，房型显示住宿期间参考里程；不再使用每晚里程文案。成功响应缺少积分时显示日期不适用，里程模式禁止增加该房型，现金模式不受影响。
+- 总计继续使用现有报价 pointTotal，不累加参考积分作为最终金额。改日期仍重建详情选择会话。宿主マイル提交、扣积分、支付仍未接入。
+- 四语言文案与窄屏布局、请求/解析/映射、模式缓存隔离及选择限制纳入定向回归；未进行真实预订。
+
+### 2026-11-02 SIT 真实参考里程核对
+
+- 只调用 hotelSearch / hotelinfobyidapp 的只读查询，未提交预订、扣积分或支付。SIT 成功响应 code=200。
+- 酒店1 Crush On：2026-11-10～11-13 搜索 startingPoints=75368，最低房型 pointsRequired=75368、库存1；11-10～11-11 两处25123、库存2；11-14～11-17 两处78195、库存0且酒店 bookingStatus=false。确认完整期间积分直接展示，不按晚数放大/缩小。
+- 酒店35 難波77：11-10～11-13 列表无 startingPoints，5个房型均无 pointsRequired，仍有6～21间库存。回放确认日期不适用文字和里程模式禁用增加房间，不把有库存等同于可兑换。
+- 远期2027-10-01～10-04及跨边界09-30～10-02：搜索无酒店1；详情 code=500，msg=「選択された日付範囲に料金がありません。ご確認ください。」。这不是成功响应缺失积分，应保持错误/重试状态。由于无房价，尚未验证“部分入住日期符合特典”的成功响应。
+- 本轮新增 opt-in hotel_live_reference_replay_test.dart，读取 STELLAVIA_LIVE_CAPTURE_DIR 中本轮真实JSON，经过现有DTO/Repository渲染列表和房型；完整详情页面日期状态切换一晚→售罄日期→一晚，确认控制器重建、旧选择/报价清空、可选状态恢复。两项回放测试通过。捕获文件位于本机 /tmp/stellavia-live-*.json，不入库。
+- 验证边界：真实HTTP响应 + Flutter组件/页面回放，不等同于连接iPhone上的人工点击验收；未调用会员相关或报价接口。
+
+### 2026-11-02 按人数正式报价链路完善
+
+- 按已选房型数量调用 assign/occupancy，使用返回的逐房入住人数请求正式报价；底部只显示 pointTotal，不使用参考积分或现金金额回退。
+- 按房型报价日期统一为 yyyy-MM-dd，与原确认页 _fetchPreparationQuote 保持一致；此前 quoteBookingPrice 单独带了时间后缀。尚无已登录真实响应证明该差异就是本次合计缺失原因。
+- 增加人数分配/里程计算状态、分阶段失败原因和底部重试；缺失 pointTotal 作为不可用报价处理，失败和清空选择均清除旧总计。订单提交和支付维持未接入。
+- 本轮按用户要求直接实现，登录实机结果待用户反馈；不声称已经完成已登录接口验证。
+
+- 2026-11-02：按用户最新要求，新版酒店详情底部价格/预约区域固定显示，不再跟随滚动隐藏；顶部导航仍沿用滑动显隐。普通与宿主マイル模式共用，保留底部安全区。
+
+### 2026-11-04 分配人数和确认报价的新积分契约
+
+- SDK assign/occupancy 与 order/room/extraPerson 请求新增可选 stayBenefit，结果新增可空 pointsRequired，兼容数值字符串。App 新增同名领域字段，保留旧 pointTotal 兼容其他使用方，但宿主マイル详情不再读取旧字段。
+- 宿主マイル选房：人数分配始终传 stayBenefit:true，按后台返回的逐房人数调用本次明确支持特典的 /pms/order/room/extraPerson（不走未提供特典契约的 /pms/order/extraPerson）。分配成功时展示 assignment.pointsRequired，确认报价成功后更新为 quote.pointsRequired；失败/缺失确认积分清空合计并允许重试。
+- HotelBookingQuoteRequest 独立 stayBenefit 标记默认false；数据层在 true 时强制 couponsCounts:[]，防止未来调用方带入普通优惠券。普通模式不新增请求参数、仍保留优惠券与原接口选择。
+- pointsRequired 为后台按当前人数/全部房间/整个住宿期间计算的参考兑换积分，不乘晚数、不在前端按卡片金额相加。订单提交、支付和旧住宿券确认页面未扩展。
+- SIT只读验证：酒店1，2026-11-10～11-11，2人1间，assign/occupancy(stayBenefit:true) code=200，pointsRequired="25123"，逐房人数2。未进行已登录确认报价/订单提交验证。
+- 16项App定向测试与3项SDK测试通过，覆盖参数、优惠券隔离、数字解析、分阶段合计、新旧字段区分和失败重试。

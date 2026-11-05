@@ -6,6 +6,7 @@ import '../controllers/hotel_detail_selection_controller.dart';
 import '../support/hotel_booking_presenter.dart';
 import '../support/hotel_detail_route_args.dart';
 import '../support/hotel_detail_styles.dart';
+import '../support/hotel_quote_status.dart';
 
 class HotelDetailSelectionSummary extends StatelessWidget {
   const HotelDetailSelectionSummary({
@@ -39,13 +40,15 @@ class HotelDetailSelectionSummary extends StatelessWidget {
         amount == null
             ? '—'
             : miles
-            ? '${presenter.amount(amount)} mile'
+            ? '${presenter.amount(amount)} ${c.l10n.myPageChartMileUnit}'
             : presenter.price(amount),
       ),
       if (miles) ...[
         (
           c.l10n.hotelDetailEstimatedMiles,
-          remaining == null ? '—' : '${presenter.amount(remaining)} mile',
+          remaining == null
+              ? '—'
+              : '${presenter.amount(remaining)} ${c.l10n.myPageChartMileUnit}',
         ),
         (
           c.l10n.hotelDetailEstimatedRooms,
@@ -112,7 +115,7 @@ class HotelDetailSelectionSummary extends StatelessWidget {
               ),
             if (selection.failed) ...[
               Text(
-                c.l10n.hotelAssignOccupancyFailed,
+                hotelQuoteStatus(c, selection),
                 style: HotelDetailStyles.caption(c),
               ),
               TextButton(
@@ -170,13 +173,30 @@ class HotelDetailReservationPanel extends StatelessWidget {
                   '${miles ? c.l10n.hotelDetailRequiredMiles : c.l10n.hotelDetailStayTotal}  ${amount == null
                       ? '—'
                       : miles
-                      ? '${presenter.amount(amount)} mile'
+                      ? '${presenter.amount(amount)} ${c.l10n.myPageChartMileUnit}'
                       : presenter.price(amount)}',
                   style: c.appTextTheme.bodyStrong.copyWith(
                     color: c.appColors.onDark,
                   ),
                 ),
               ),
+              if (selection.busy) ...[
+                const LinearProgressIndicator(),
+                Text(
+                  hotelQuoteStatus(c, selection),
+                  style: c.appTextTheme.caption,
+                ),
+              ],
+              if (selection.failed) ...[
+                Text(
+                  hotelQuoteStatus(c, selection),
+                  style: c.appTextTheme.caption,
+                ),
+                TextButton(
+                  onPressed: selection.refreshQuote,
+                  child: Text(c.l10n.commonRetry),
+                ),
+              ],
               const SizedBox(height: 10),
               AppButton(
                 label: miles

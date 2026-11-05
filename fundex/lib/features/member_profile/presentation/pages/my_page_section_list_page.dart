@@ -189,6 +189,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
               startPage: page,
               limit: _pageSize,
               statuses: applyFilter.statuses,
+              marketType: 1,
             );
         return _MyPageSectionPageData(
           applyRecords: records,

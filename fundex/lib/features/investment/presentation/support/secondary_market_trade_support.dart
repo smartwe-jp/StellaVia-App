@@ -17,7 +17,9 @@ SecondaryMarketBuySeed buildSecondaryMarketBuySeed(
 }
 
 bool canBuySecondaryMarketRecord(MyPageOrderInquiryRecord record) {
-  return (record.id?.trim().isNotEmpty ?? false) &&
+  return record.status?.toUpperCase() == 'VALID' &&
+      (record.price ?? 0) > 0 &&
+      (record.id?.trim().isNotEmpty ?? false) &&
       remainingUnitsForSecondaryMarketRecord(record) > 0;
 }
 

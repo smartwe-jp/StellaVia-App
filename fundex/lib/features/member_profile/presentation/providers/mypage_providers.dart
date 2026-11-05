@@ -1,3 +1,4 @@
+import '../../domain/usecases/fetch_secondary_market_holdings_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/network/app_network_providers.dart';
@@ -117,14 +118,14 @@ final myPageSectionListRefreshSignalProvider = StateProvider<int>((ref) => 0);
 
 final myPageApplyListProvider =
     FutureProvider.autoDispose<List<MyPageApplyRecord>>((ref) async {
-      return ref.watch(fetchMyPageApplyListUseCaseProvider).call();
+      return ref.watch(fetchMyPageApplyListUseCaseProvider).call(marketType: 1);
     });
 
 final myPagePendingApplyListProvider =
     FutureProvider.autoDispose<List<MyPageApplyRecord>>((ref) async {
       return ref
           .watch(fetchMyPageApplyListUseCaseProvider)
-          .call(statuses: const <int>[0, 2]);
+          .call(statuses: const <int>[0, 2], marketType: 1);
     });
 
 class MyPageHomeApplySectionData {
@@ -220,3 +221,10 @@ final myPageProjectBenefitProvider = FutureProvider.autoDispose
           .watch(fetchMyPageProjectBenefitUseCaseProvider)
           .call(projectId: projectId);
     });
+
+final fetchSecondaryMarketHoldingsUseCaseProvider = Provider((ref) => FetchSecondaryMarketHoldingsUseCase(ref.watch(myPageRepositoryProvider)));
+final secondaryMarketHoldingsProvider = FutureProvider.autoDispose<List<SecondaryMarketHolding>>((ref) async {
+  final user = await ref.watch(currentAuthUserProvider.future);
+  if (user?.userId == null) return [];
+  return ref.read(fetchSecondaryMarketHoldingsUseCaseProvider).call();
+});
