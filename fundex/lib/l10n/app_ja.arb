@@ -2891,5 +2891,7 @@
   "@myPageResaleMaxUnitsNotice": {"placeholders": {"count": {"type": "int"}}},
   "secondaryMarketActiveSalesTitle": "売却中の注文",
   "secondaryMarketActiveSalesEntry": "売却中の注文を確認",
-  "secondaryMarketActiveSalesEmpty": "この購入記録に売却中の注文はありません"
+  "secondaryMarketActiveSalesEmpty": "この購入記録に売却中の注文はありません",
+  "hotelExtraGuestMilesTitle": "追加宿泊人数分の参考マイル",
+  "hotelExtraGuestMilesNotice": "客室タイプごとの全室・全宿泊期間の参考値です。合計マイルは見積もり結果をご確認ください。"
 }

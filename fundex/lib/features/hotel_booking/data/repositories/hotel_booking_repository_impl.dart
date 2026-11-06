@@ -1238,6 +1238,7 @@ HotelAssignOccupancyResult _mapAssignOccupancyResult(
             totalGuestCount: item.totalGuestCount ?? 0,
             extraGuestCount: item.extraGuestCount ?? 0,
             extraGuestPrice: item.extraGuestPrice,
+            extraGuestPoints: item.extraGuestPoints,
           ),
         )
         .where((item) => item.roomTypeId.isNotEmpty)

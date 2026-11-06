@@ -6848,4 +6848,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get secondaryMarketActiveSalesEmpty => 'この購入記録に売却中の注文はありません';
+
+  @override
+  String get hotelExtraGuestMilesTitle => '追加宿泊人数分の参考マイル';
+
+  @override
+  String get hotelExtraGuestMilesNotice =>
+      '客室タイプごとの全室・全宿泊期間の参考値です。合計マイルは見積もり結果をご確認ください。';
 }

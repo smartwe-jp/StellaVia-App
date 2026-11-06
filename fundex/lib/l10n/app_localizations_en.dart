@@ -7187,4 +7187,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get secondaryMarketActiveSalesEmpty =>
       'No active sale listings for this purchase.';
+
+  @override
+  String get hotelExtraGuestMilesTitle => 'Additional guest reference miles';
+
+  @override
+  String get hotelExtraGuestMilesNotice =>
+      'Reference miles cover all rooms and the full stay for each room type. The quoted total applies.';
 }

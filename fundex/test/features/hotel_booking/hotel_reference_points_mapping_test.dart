@@ -26,6 +26,14 @@ class Remote extends Fake implements HotelBookingRemoteDataSource {
     return HotelAssignOccupancyResultDto.fromJson({
       'pointsRequired': '32100',
       'price': 123,
+      'roomTypeExtraGuestPrices': [
+        {
+          'roomTypeId': '1',
+          'extraGuestCount': 1,
+          'extraGuestPrice': 9999,
+          'extraGuestPoints': '1200',
+        },
+      ],
     });
   }
 
@@ -85,6 +93,8 @@ void main() {
       expect(remote.assignmentRequest!.stayBenefit, true);
       expect(remote.assignmentRequest!.occupancy, 4);
       expect(assigned.pointsRequired, 32100);
+      expect(assigned.roomTypeExtraGuestPrices.single.extraGuestPoints, 1200);
+      expect(assigned.roomTypeExtraGuestPrices.single.extraGuestPrice, 9999);
       for (final benefit in [true, false]) {
         await repo.quoteBookingPrice(
           HotelBookingQuoteRequest(

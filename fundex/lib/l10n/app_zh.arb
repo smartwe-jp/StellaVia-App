@@ -2891,5 +2891,7 @@
   "@myPageResaleMaxUnitsNotice": {"placeholders": {"count": {"type": "int"}}},
   "secondaryMarketActiveSalesTitle": "出售中挂单",
   "secondaryMarketActiveSalesEntry": "查看出售中挂单",
-  "secondaryMarketActiveSalesEmpty": "这笔购买记录暂无出售中挂单"
+  "secondaryMarketActiveSalesEmpty": "这笔购买记录暂无出售中挂单",
+  "hotelExtraGuestMilesTitle": "额外入住人员参考里程",
+  "hotelExtraGuestMilesNotice": "按房型显示全部房间、整个住宿期间的参考里程；总里程以报价结果为准。"
 }

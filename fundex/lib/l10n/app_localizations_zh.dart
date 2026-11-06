@@ -6786,6 +6786,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get secondaryMarketActiveSalesEmpty => '这笔购买记录暂无出售中挂单';
+
+  @override
+  String get hotelExtraGuestMilesTitle => '额外入住人员参考里程';
+
+  @override
+  String get hotelExtraGuestMilesNotice => '按房型显示全部房间、整个住宿期间的参考里程；总里程以报价结果为准。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -13574,4 +13580,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get secondaryMarketActiveSalesEmpty => '這筆購買記錄暫無出售中掛單';
+
+  @override
+  String get hotelExtraGuestMilesTitle => '額外入住人員參考里程';
+
+  @override
+  String get hotelExtraGuestMilesNotice => '按房型顯示全部房間、整個住宿期間的參考里程；總里程以報價結果為準。';
 }

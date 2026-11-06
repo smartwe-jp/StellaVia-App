@@ -1,3 +1,5 @@
+import '../../../investment/presentation/controllers/secondary_market_controller.dart';
+import '../widgets/home_secondary_market_section.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -245,9 +247,7 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
 
                       //else
                       //const SizedBox(height: 20),
-                      AppButton(label: l10n.homeFreeMarketTitle,
-                        variant: AppButtonVariant.secondary,
-                        onPressed: () => context.push('/home/free-market')),
+                      const HomeSecondaryMarketSection(),
                       const SizedBox(height: 20),
                       HomeSimulationCard(
                         onTap: () => context.push('/home/simulation'),
@@ -287,6 +287,13 @@ Future<void> _refreshHomeOverviewTab(WidgetRef ref) async {
   ref.invalidate(homeFeaturedHotelsProvider);
   ref.invalidate(memberProfileDetailsProvider);
   await Future.wait<void>([
+    ref
+        .read(
+          secondaryMarketControllerProvider(
+            SecondaryMarketListKind.market,
+          ).notifier,
+        )
+        .refresh(),
     _refreshHomeMiles(ref),
     refreshRootTabSharedData(ref),
     ref.refresh(fundProjectListProvider.future).then((_) {}),

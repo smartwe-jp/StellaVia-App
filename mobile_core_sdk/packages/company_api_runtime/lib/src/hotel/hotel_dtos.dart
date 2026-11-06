@@ -514,6 +514,7 @@ abstract class HotelRoomTypeExtraGuestPriceDto
     int? totalGuestCount,
     int? extraGuestCount,
     num? extraGuestPrice,
+    @JsonKey(fromJson: _hotelReferencePointsFromJson, includeIfNull: false) num? extraGuestPoints,
   }) = _HotelRoomTypeExtraGuestPriceDto;
 
   factory HotelRoomTypeExtraGuestPriceDto.fromJson(Map<String, dynamic> json) =>

@@ -12998,6 +12998,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No active sale listings for this purchase.'**
   String get secondaryMarketActiveSalesEmpty;
+
+  /// No description provided for @hotelExtraGuestMilesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional guest reference miles'**
+  String get hotelExtraGuestMilesTitle;
+
+  /// No description provided for @hotelExtraGuestMilesNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Reference miles cover all rooms and the full stay for each room type. The quoted total applies.'**
+  String get hotelExtraGuestMilesNotice;
 }
 
 class _AppLocalizationsDelegate

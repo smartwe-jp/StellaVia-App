@@ -484,3 +484,10 @@ Run broader `flutter analyze` / `flutter test` only when the change affects shar
 - pointsRequired 为后台按当前人数/全部房间/整个住宿期间计算的参考兑换积分，不乘晚数、不在前端按卡片金额相加。订单提交、支付和旧住宿券确认页面未扩展。
 - SIT只读验证：酒店1，2026-11-10～11-11，2人1间，assign/occupancy(stayBenefit:true) code=200，pointsRequired="25123"，逐房人数2。未进行已登录确认报价/订单提交验证。
 - 16项App定向测试与3项SDK测试通过，覆盖参数、优惠券隔离、数字解析、分阶段合计、新旧字段区分和失败重试。
+
+### 2026-11-05 额外入住人员参考里程展示
+
+- 人数分配结果 roomTypeExtraGuestPrices 新增可空 extraGuestPoints，SDK 兼容数字与数字字符串，映射至领域实体。
+- 宿主里程详情报价摘要按房型显示全部房间、整个入住期间的额外人员参考里程；缺失显示未知，不用 extraGuestPrice 现金费用回退，也不再次乘人数、房间数或晚数。普通现金页面不显示该明细。
+- 总里程仍取现有 assignment/quotation.pointsRequired，未改变计算方式，绝不相加 extraGuestPoints。未接预订、扣里程、取消返还写入操作。
+- 验证：App 报价映射／详情 20 项、SDK 字段解析 4 项通过；四语言 320 宽布局覆盖 0／缺失参考值，确认总里程保持接口报价，不增加额外人员参考值。

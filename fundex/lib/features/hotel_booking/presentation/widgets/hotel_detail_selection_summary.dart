@@ -7,6 +7,7 @@ import '../support/hotel_booking_presenter.dart';
 import '../support/hotel_detail_route_args.dart';
 import '../support/hotel_detail_styles.dart';
 import '../support/hotel_quote_status.dart';
+import 'hotel_extra_guest_miles_breakdown.dart';
 
 class HotelDetailSelectionSummary extends StatelessWidget {
   const HotelDetailSelectionSummary({
@@ -87,6 +88,10 @@ class HotelDetailSelectionSummary extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+            if (miles && selection.assignment != null)
+              HotelExtraGuestMilesBreakdown(
+                rows: selection.assignment!.roomTypeExtraGuestPrices,
               ),
             if (selection.busy) const LinearProgressIndicator(),
             if (miles)

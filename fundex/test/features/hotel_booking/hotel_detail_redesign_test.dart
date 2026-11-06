@@ -106,6 +106,86 @@ HotelDetailSelectionController controller({
 );
 
 void main() {
+  for (final locale in [
+    const Locale('zh'),
+    const Locale('ja'),
+    const Locale('en'),
+    const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
+  ]) {
+    testWidgets('extra guest miles are reference only: $locale', (
+      tester,
+    ) async {
+      final c = controller(
+        mode: HotelBookingMode.hostMiles,
+        assign: (_) async => const HotelAssignOccupancyResult(
+          pointsRequired: 7200,
+          price: 18000,
+          message: '',
+          roomTypeCustNums: [
+            HotelRoomOccupancyAssignment(roomTypeId: '1', occupancy: 3),
+          ],
+          roomTypeExtraGuestPrices: [
+            HotelRoomTypeExtraGuestPrice(
+              roomTypeId: '1',
+              roomTypeName: 'Room A',
+              roomCount: 2,
+              totalGuestCount: 6,
+              extraGuestCount: 2,
+              extraGuestPrice: 9999,
+              extraGuestPoints: 1200,
+            ),
+            HotelRoomTypeExtraGuestPrice(
+              roomTypeId: '2',
+              roomTypeName: 'Room B',
+              roomCount: 1,
+              totalGuestCount: 3,
+              extraGuestCount: 1,
+              extraGuestPrice: 8888,
+            ),
+            HotelRoomTypeExtraGuestPrice(
+              roomTypeId: '3',
+              roomTypeName: 'Room C',
+              roomCount: 1,
+              totalGuestCount: 2,
+              extraGuestCount: 0,
+              extraGuestPrice: 0,
+              extraGuestPoints: 0,
+            ),
+          ],
+        ),
+      );
+      addTearDown(c.dispose);
+      await c.change(0, 1);
+      expect(c.amount, 8500);
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: AppThemeFactory.light(locale: locale),
+          home: Scaffold(
+            body: SingleChildScrollView(
+              child: SizedBox(
+                width: 320,
+                child: HotelDetailSelectionSummary(selection: c),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final l = AppLocalizations.of(
+        tester.element(find.byType(HotelDetailSelectionSummary)),
+      );
+      expect(find.text('1,200 ${l.myPageChartMileUnit}'), findsOneWidget);
+      expect(find.text('8,500 ${l.myPageChartMileUnit}'), findsOneWidget);
+      expect(find.text('0 ${l.myPageChartMileUnit}'), findsOneWidget);
+      expect(find.text('Room B'), findsOneWidget);
+      expect(find.textContaining('9,999'), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   test('missing reference points block miles only; zero is valid', () async {
     final miles = controller(
       mode: HotelBookingMode.hostMiles,

@@ -2,6 +2,16 @@ import 'package:company_api_runtime/company_api_runtime.dart';
 import 'package:test/test.dart';
 
 void main() {
+  test('extra guest reference points decode without replacing cash or total', () {
+    for (final value in [1200, '1200', 0, null]) {
+      final dto = HotelRoomTypeExtraGuestPriceDto.fromJson({
+        'extraGuestPrice': 9999, 'extraGuestPoints': value,
+      });
+      expect(dto.extraGuestPoints, value is String ? 1200 : value);
+      expect(dto.extraGuestPrice, 9999);
+    }
+    expect(HotelRoomTypeExtraGuestPriceDto.fromJson({}).extraGuestPoints, isNull);
+  });
   test(
     'assignment and confirmation decode new pointsRequired independently of old pointTotal',
     () {

@@ -2921,5 +2921,7 @@
   "@myPageResaleMaxUnitsNotice": {"placeholders": {"count": {"type": "int"}}},
   "secondaryMarketActiveSalesTitle": "Active sale listings",
   "secondaryMarketActiveSalesEntry": "View active sale listings",
-  "secondaryMarketActiveSalesEmpty": "No active sale listings for this purchase."
+  "secondaryMarketActiveSalesEmpty": "No active sale listings for this purchase.",
+  "hotelExtraGuestMilesTitle": "Additional guest reference miles",
+  "hotelExtraGuestMilesNotice": "Reference miles cover all rooms and the full stay for each room type. The quoted total applies."
 }

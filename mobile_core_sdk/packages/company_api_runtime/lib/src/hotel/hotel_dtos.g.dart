@@ -642,6 +642,7 @@ _HotelRoomTypeExtraGuestPriceDto _$HotelRoomTypeExtraGuestPriceDtoFromJson(
   totalGuestCount: (json['totalGuestCount'] as num?)?.toInt(),
   extraGuestCount: (json['extraGuestCount'] as num?)?.toInt(),
   extraGuestPrice: json['extraGuestPrice'] as num?,
+  extraGuestPoints: _hotelReferencePointsFromJson(json['extraGuestPoints']),
 );
 
 Map<String, dynamic> _$HotelRoomTypeExtraGuestPriceDtoToJson(
@@ -653,6 +654,7 @@ Map<String, dynamic> _$HotelRoomTypeExtraGuestPriceDtoToJson(
   'totalGuestCount': instance.totalGuestCount,
   'extraGuestCount': instance.extraGuestCount,
   'extraGuestPrice': instance.extraGuestPrice,
+  'extraGuestPoints': ?instance.extraGuestPoints,
 };
 
 _HotelRoomTypeCustNumRequestDto _$HotelRoomTypeCustNumRequestDtoFromJson(

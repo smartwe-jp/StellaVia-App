@@ -467,6 +467,7 @@ class HotelRoomTypeExtraGuestPrice {
     required this.totalGuestCount,
     required this.extraGuestCount,
     required this.extraGuestPrice,
+    this.extraGuestPoints,
   });
 
   final String roomTypeId;
@@ -475,6 +476,7 @@ class HotelRoomTypeExtraGuestPrice {
   final int totalGuestCount;
   final int extraGuestCount;
   final num? extraGuestPrice;
+  final num? extraGuestPoints;
 }
 
 class HotelCountryCode {
