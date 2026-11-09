@@ -103,7 +103,7 @@ class SecondaryMarketTradeFlowHeader extends StatelessWidget {
               height: 6,
               spacing: 6,
               completedColor: colors.primary,
-              currentColor: colors.warningAction,
+              currentColor: colors.infoForeground,
               pendingColor: colors.borderSoft,
               enablePulse: false,
             ),
@@ -227,9 +227,9 @@ class SecondaryMarketTradeTitleCard extends StatelessWidget {
                 _HeroChip(
                   icon: Icons.storefront_rounded,
                   label: marketLabel,
-                  backgroundColor: colors.warningSubtle.withValues(alpha: 0.7),
-                  foregroundColor: colors.warningAction,
-                  textColor: colors.warningAction,
+                  backgroundColor: colors.primarySubtle.withValues(alpha: 0.7),
+                  foregroundColor: colors.infoForeground,
+                  textColor: colors.infoForeground,
                 ),
                 const SizedBox(width: 8),
                 _HeroChip(
@@ -298,11 +298,11 @@ class SecondaryMarketTradeTitleCard extends StatelessWidget {
                   child: _CompactHighlightMetric(
                     label: availableUnitsCaption,
                     value: availableUnitsLabel,
-                    backgroundColor: colors.warningSubtle.withValues(
+                    backgroundColor: colors.primarySubtle.withValues(
                       alpha: 0.72,
                     ),
-                    borderColor: colors.warningBorder,
-                    valueColor: colors.warningAction,
+                    borderColor: colors.infoBorder,
+                    valueColor: colors.infoForeground,
                   ),
                 ),
               ],
@@ -353,7 +353,7 @@ class SecondaryMarketTradeHeroCard extends StatelessWidget {
           colors: <Color>[
             colors.primarySubtle,
             colors.surface,
-            colors.warningSubtle.withValues(alpha: 0.78),
+            colors.primarySubtle.withValues(alpha: 0.78),
           ],
         ),
         border: Border.all(color: colors.borderSoft),
@@ -375,8 +375,8 @@ class SecondaryMarketTradeHeroCard extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: <Color>[
-                    colors.warning.withValues(alpha: 0.18),
-                    colors.warning.withValues(alpha: 0.02),
+                    colors.primary.withValues(alpha: 0.18),
+                    colors.primary.withValues(alpha: 0.02),
                   ],
                 ),
               ),
@@ -424,7 +424,7 @@ class SecondaryMarketTradeHeroCard extends StatelessWidget {
                       icon: Icons.storefront_rounded,
                       label: marketLabel,
                       backgroundColor: colors.surface.withValues(alpha: 0.9),
-                      foregroundColor: colors.warningAction,
+                      foregroundColor: colors.infoForeground,
                       textColor: colors.textSecondary,
                     ),
                     const SizedBox(width: 8),
@@ -814,7 +814,7 @@ class SecondaryMarketTradeQuantityCard extends StatelessWidget {
                 colors: <Color>[
                   colors.primarySubtle.withValues(alpha: 0.58),
                   colors.surface,
-                  colors.warningSubtle.withValues(alpha: 0.68),
+                  colors.primarySubtle.withValues(alpha: 0.68),
                 ],
               ),
               borderRadius: BorderRadius.circular(20),
@@ -1147,7 +1147,7 @@ class SecondaryMarketTradeSellEntryCard extends StatelessWidget {
                 colors: <Color>[
                   colors.primarySubtle.withValues(alpha: 0.54),
                   colors.surface,
-                  colors.warningSubtle.withValues(alpha: 0.66),
+                  colors.primarySubtle.withValues(alpha: 0.66),
                 ],
               ),
               borderRadius: BorderRadius.circular(20),
@@ -1456,12 +1456,12 @@ class SecondaryMarketTradeFinalNoticeCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: <Color>[
-            colors.warningSubtle.withValues(alpha: 0.76),
+            colors.primarySubtle.withValues(alpha: 0.76),
             colors.surface,
           ],
         ),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: colors.warningBorder),
+        border: Border.all(color: colors.infoBorder),
         boxShadow: <BoxShadow>[
           BoxShadow(
             color: colors.scrim.withValues(alpha: 0.04),
@@ -1479,7 +1479,7 @@ class SecondaryMarketTradeFinalNoticeCard extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: colors.warningAction,
+                color: colors.primary,
                 borderRadius: BorderRadius.circular(16),
               ),
               alignment: Alignment.center,
@@ -1686,7 +1686,7 @@ class _StepLabel extends StatelessWidget {
     final iconColor = completed
         ? colors.primary
         : selected
-        ? colors.warningAction
+        ? colors.infoForeground
         : colors.textSecondary.withValues(alpha: 0.5);
 
     return Row(

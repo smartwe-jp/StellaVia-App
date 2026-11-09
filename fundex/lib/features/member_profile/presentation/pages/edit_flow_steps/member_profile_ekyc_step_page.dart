@@ -129,7 +129,7 @@ class _MemberProfileDocumentGuideCardState
         color: colors.surfaceAlt,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: _expanded ? colors.highlightGold : colors.border,
+          color: _expanded ? colors.infoForeground : colors.border,
           width: 1.5,
         ),
       ),

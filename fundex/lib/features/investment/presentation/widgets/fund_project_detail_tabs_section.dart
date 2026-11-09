@@ -471,7 +471,7 @@ class _FundIncomeSchemeTab extends StatelessWidget {
             headerGradient: LinearGradient(
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
-              colors: <Color>[colors.danger, colors.warning],
+              colors: <Color>[colors.heroStart, colors.heroEnd],
             ),
             rows: <_FundSchemeRowData>[
               _FundSchemeRowData(
@@ -607,7 +607,7 @@ class _FundIncomeSchemeTab extends StatelessWidget {
                 Text(
                   _moneyValueOrDash(structuredData.distributedCapital, context),
                   style: appText.numericHeadline.copyWith(
-                    color: colors.highlightGold,
+                    color: colors.infoForeground,
                   ),
                 ),
               ],

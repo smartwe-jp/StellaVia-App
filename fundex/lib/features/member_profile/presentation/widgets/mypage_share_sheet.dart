@@ -184,7 +184,7 @@ class _MyPageShareCard extends StatelessWidget {
                 height: 190,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: colors.highlightGold.withValues(alpha: 0.12),
+                  color: colors.primaryAlt.withValues(alpha: 0.12),
                 ),
               ),
             ),
@@ -197,7 +197,7 @@ class _MyPageShareCard extends StatelessWidget {
                   Text(
                     'STE//AVIA',
                     style: text.cardTitle.copyWith(
-                      color: colors.highlightGold,
+                      color: AppColorTokens.brandLilac,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 2,
                     ),
@@ -286,14 +286,14 @@ class _ShareHeroMetric extends StatelessWidget {
         Text(
           label,
           style: theme.appTextTheme.caption.copyWith(
-            color: colors.highlightGold,
+            color: AppColorTokens.brandLilac,
           ),
         ),
         const SizedBox(height: 6),
         Text(
           value,
           style: theme.appTextTheme.heroMetricPrimary.copyWith(
-            color: colors.highlightGold,
+            color: colors.onDark,
             fontWeight: FontWeight.w800,
           ),
         ),

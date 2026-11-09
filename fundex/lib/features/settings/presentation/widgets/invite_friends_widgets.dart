@@ -166,9 +166,9 @@ class _InviteHeroCard extends StatelessWidget {
     final colors = Theme.of(context).appColors;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: colors.highlightGold,
+        color: colors.primarySubtle,
         borderRadius: BorderRadius.circular(UiTokens.radius16),
-        border: Border.all(color: colors.highlightGold.withValues(alpha: 0.18)),
+        border: Border.all(color: colors.primary.withValues(alpha: 0.18)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -186,7 +186,7 @@ class _InviteHeroCard extends StatelessWidget {
                     color: colors.surface,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(Icons.group_add_rounded, color: colors.highlightGold),
+                  child: Icon(Icons.group_add_rounded, color: colors.primary),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
@@ -214,7 +214,7 @@ class _InviteHeroCard extends StatelessWidget {
             const SizedBox(height: 20),
             DecoratedBox(
               decoration: BoxDecoration(
-                //color: colors.highlightGold.withValues(alpha: 0.25),
+                color: colors.surface,
                 borderRadius: BorderRadius.circular(UiTokens.radius12),
                 border: Border.all(color: colors.surface),
               ),
@@ -308,7 +308,7 @@ class InviteValueCard extends StatelessWidget {
             const SizedBox(height: 14),
             DecoratedBox(
               decoration: BoxDecoration(
-                color: colors.highlightGold.withValues(alpha: 0.25),
+                color: colors.primary.withValues(alpha: 0.25),
                 borderRadius: BorderRadius.circular(UiTokens.radius12),
               ),
               child: Padding(

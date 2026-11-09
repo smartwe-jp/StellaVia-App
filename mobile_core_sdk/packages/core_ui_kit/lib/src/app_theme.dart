@@ -211,7 +211,7 @@ class AppThemeFactory {
           : AppColorTokens.fundexTextSecondary,
       onDark: AppColorTokens.brandWhite,
       disabled: AppColorTokens.fundexDisabled,
-      highlightGold: AppColorTokens.fundexHighlightGold,
+      highlightGold: isDark ? darkInteractivePrimary : AppColorTokens.brandPurple,
       scrim: Colors.black.withValues(alpha: isDark ? 0.56 : 0.36),
     );
     final semanticTextTheme = AppSemanticTextTheme(
@@ -551,7 +551,7 @@ class AppThemeFactory {
             fontWeight: FontWeight.w500,
             height: 9.55 / 10,
           ),
-      ratingAccentColor: AppColorTokens.travelRatingOrange,
+      ratingAccentColor: semanticColors.primaryAlt,
       hostActionButtonBackgroundColor: semanticColors.primary,
       hostActionButtonShadowColor: AppColorTokens.brandPurple.withValues(
         alpha: isDark ? 0.28 : 0.15,

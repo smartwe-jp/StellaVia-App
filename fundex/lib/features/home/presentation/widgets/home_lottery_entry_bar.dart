@@ -91,10 +91,10 @@ class HomeLotteryEntryBar extends StatelessWidget {
                                 UiTokens.radius20,
                               ),
                               border: Border.all(
-                                color: colors.highlightGold,
+                                color: colors.infoForeground,
                                 width: 1.5,
                               ),
-                              color: colors.highlightGold.withValues(
+                              color: colors.primaryAlt.withValues(
                                 alpha: 0.08,
                               ),
                             ),
@@ -108,7 +108,7 @@ class HomeLotteryEntryBar extends StatelessWidget {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: appText.chip.copyWith(
-                                  color: colors.highlightGold,
+                                  color: colors.infoForeground,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),

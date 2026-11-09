@@ -367,7 +367,7 @@ class _SegmentButton extends StatelessWidget {
     final colors = Theme.of(context).appColors;
     return Expanded(
       child: Material(
-        color: selected ? colors.highlightGold : colors.surfaceAlt,
+        color: selected ? colors.primary : colors.surfaceAlt,
         borderRadius: BorderRadius.circular(9),
         child: InkWell(
           onTap: onTap,

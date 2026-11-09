@@ -370,7 +370,7 @@ class _FundHeroMetricCard extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               subtitle!,
-              style: appText.chip.copyWith(color: colors.highlightGold),
+              style: appText.chip.copyWith(color: colors.infoForeground),
             ),
           ],
         ],
@@ -915,11 +915,11 @@ class FundFeaturedFundCard extends StatelessWidget {
     final progress = data.progress.clamp(0.0, 1.0);
     final isApplyAction = data.actionTone == FundFeaturedFundActionTone.apply;
     final actionBackgroundColor = isApplyAction
-        ? colors.highlightGold
-        : colors.primary;
+        ? colors.primary
+        : colors.surface;
     final actionForegroundColor = isApplyAction
-        ? colors.textPrimary
-        : colors.onDark;
+        ? colors.onDark
+        : colors.infoForeground;
     final showDaysRemaining = data.daysRemaining.trim().isNotEmpty;
 
     Widget dataBlock(String title, String value) {
@@ -940,7 +940,7 @@ class FundFeaturedFundCard extends StatelessWidget {
             Text(
               value,
               style: appText.bodyStrong.copyWith(
-                color: colors.highlightGold,
+                color: colors.infoForeground,
                 fontSize: 18,
               ),
             ),
@@ -1081,11 +1081,11 @@ class FundFeaturedFundCard extends StatelessWidget {
                             child: LinearProgressIndicator(
                               minHeight: 7,
                               value: progress,
-                              backgroundColor: colors.highlightGold.withValues(
+                              backgroundColor: colors.primary.withValues(
                                 alpha: 0.16,
                               ),
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                colors.highlightGold,
+                                colors.primaryAlt,
                               ),
                             ),
                           ),
@@ -1103,7 +1103,7 @@ class FundFeaturedFundCard extends StatelessWidget {
                                       TextSpan(
                                         text: data.progressLabel ?? '',
                                         style: appText.bodyStrong.copyWith(
-                                          color: colors.highlightGold,
+                                          color: colors.infoForeground,
                                         ),
                                       ),
                                     ],
@@ -1135,6 +1135,7 @@ class FundFeaturedFundCard extends StatelessWidget {
                             ),
                             decoration: BoxDecoration(
                               color: actionBackgroundColor,
+                              border: Border.all(color: colors.primary),
                               borderRadius: BorderRadius.circular(
                                 UiTokens.radius12,
                               ),
@@ -1382,7 +1383,7 @@ class FundActiveFundCard extends StatelessWidget {
                           overflow: TextOverflow.visible,
                           style: appText.numericTitle.copyWith(
                             color:
-                                data.annualYieldColor ?? colors.highlightGold,
+                                data.annualYieldColor ?? colors.infoForeground,
                             fontSize: 22,
                             height: 1.25,
                             fontWeight: FontWeight.w800,
@@ -1427,7 +1428,7 @@ class FundActiveFundCard extends StatelessWidget {
                       minHeight: 5,
                       trackColor: colors.border,
                       gradientColors: <Color>[
-                        data.progressColor ?? colors.highlightGold,
+                        data.progressColor ?? colors.primaryAlt,
                         colors.primary,
                       ],
                       borderRadius: BorderRadius.circular(2),

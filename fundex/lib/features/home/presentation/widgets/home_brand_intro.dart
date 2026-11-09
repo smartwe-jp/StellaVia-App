@@ -1,7 +1,6 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
-import '../support/home_design_theme.dart';
 import '../support/home_text_styles.dart';
 
 class HomeBrandIntro extends StatelessWidget {
@@ -41,15 +40,7 @@ class HomeBrandIntro extends StatelessWidget {
                         'assets/images/home_member_hero.png',
                         fit: BoxFit.cover,
                       )
-                    : const DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: HomeDesignTheme.guestGradient,
-                          ),
-                        ),
-                      ),
+                    : ColoredBox(color: colors.heroStart),
               ),
               if (isAuthenticated)
                 Positioned.fill(

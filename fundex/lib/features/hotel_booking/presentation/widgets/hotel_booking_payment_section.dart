@@ -164,7 +164,7 @@ class _PaymentIndicator extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: isSelected ? colors.highlightGold : colors.border,
+          color: isSelected ? colors.primary : colors.border,
           width: 3,
         ),
       ),
@@ -178,7 +178,7 @@ class _PaymentIndicator extends StatelessWidget {
             height: isSelected ? 10 : 0,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: colors.highlightGold,
+              color: colors.infoForeground,
             ),
           ),
         ),

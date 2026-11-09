@@ -177,16 +177,9 @@ class _ProjectHeaderCard extends StatelessWidget {
     final appText = theme.appTextTheme;
     return DecoratedBox(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: <Color>[
-            colors.highlightGold.withValues(alpha: 0.92),
-            colors.warningSoft.withValues(alpha: 0.90),
-          ],
-        ),
+        color: colors.surfaceAlt,
         borderRadius: BorderRadius.circular(UiTokens.radius20),
-        border: Border.all(color: colors.warningBorder),
+        border: Border.all(color: colors.border),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(18, 20, 18, 20),

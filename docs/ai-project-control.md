@@ -291,3 +291,11 @@ My Page新增真实等级/可用里程/月获得率/升级差额/室数/过期�
 ### Hotel detail redesign — 2026-10-30
 
 Hotel detail now shares the 04 room-selection layout for ordinary and host-miles entry points. Explicit `HotelBookingMode` separates miles from legacy fund-stay-voucher rules, whose original page remains available. Miles uses existing `pointTotal` and private account/tier resources for estimates only; submission/payment remain pending. Ordinary confirmation/guards remain connected. See `docs/hotel-booking-roadmap.md` for quote, cancellation and validation boundaries.
+
+### 2026-11-09 StellaVia 通用界面颜色
+
+通用操作、金额、状态、转盘和筛选已按 Figma「02｜カラー」迁移。金色仅用于 Gold 会员等级；默认浅色页面背景仍为 `#F5F5F2`。SDK 兼容映射及各颜色用途见 [主题规范](stellavia-theme-foundation.md)。
+
+基金状态标签按 Figma 第 06 节统一映射，状态码与配色详见[主题规范](stellavia-theme-foundation.md)。
+
+宿主等级卡按 Figma 第 06 节「ランクカード（5段階）」统一标题、卡面与标记色，入口与配色见[主题规范](stellavia-theme-foundation.md)。

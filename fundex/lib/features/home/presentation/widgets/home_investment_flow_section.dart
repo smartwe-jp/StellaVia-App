@@ -30,7 +30,7 @@ class HomeInvestmentFlowSection extends StatelessWidget {
                 Icon(
                   Icons.play_arrow_rounded,
                   size: 24,
-                  color: colors.highlightGold,
+                  color: colors.infoForeground,
                 ),
             ],
           ],
@@ -90,7 +90,7 @@ class _HomeInvestmentFlowCard extends StatelessWidget {
               width: 24,
               height: 24,
               decoration: BoxDecoration(
-                color: colors.highlightGold,
+                color: colors.infoForeground,
                 shape: BoxShape.circle,
               ),
               alignment: Alignment.center,
@@ -107,7 +107,7 @@ class _HomeInvestmentFlowCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Icon(data.icon, size: 32, color: colors.highlightGold),
+              Icon(data.icon, size: 32, color: colors.infoForeground),
               const SizedBox(height: 8),
               Text(
                 data.title,

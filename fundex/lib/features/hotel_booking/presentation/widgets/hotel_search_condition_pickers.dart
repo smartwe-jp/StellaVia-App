@@ -296,7 +296,7 @@ class _HotelStayDateRangePickerState extends State<HotelStayDateRangePicker> {
                 widget.guidanceText!,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: colors.highlightGold,
+                  color: colors.infoForeground,
                   fontWeight: FontWeight.w800,
                 ),
               ),
@@ -597,7 +597,7 @@ class _CalendarDayCell extends StatelessWidget {
     final foregroundColor = (isSelectedEdge || isInRange)
         ? colors.onDark
         : isStayBenefitMode && isStayBenefitSelectable && isCurrentMonth
-        ? colors.highlightGold
+        ? colors.primary
         : enabled && isCurrentMonth
         ? colors.textPrimary
         : colors.textTertiary;
@@ -623,7 +623,7 @@ class _CalendarDayCell extends StatelessWidget {
         child: Material(
           color: backgroundColor,
           shape: shouldShowStayBenefitRing
-              ? CircleBorder(side: BorderSide(color: colors.highlightGold))
+              ? CircleBorder(side: BorderSide(color: colors.primary))
               : null,
           borderRadius: shouldShowStayBenefitRing ? null : borderRadius,
           child: InkWell(

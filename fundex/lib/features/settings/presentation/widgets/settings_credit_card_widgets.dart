@@ -282,7 +282,7 @@ class SettingsCreditCardFormSection extends StatelessWidget {
               Switch(
                 value: isDefault,
                 activeThumbColor: colors.brandWhite,
-                activeTrackColor: colors.highlightGold,
+                activeTrackColor: colors.primaryAlt,
                 inactiveThumbColor: colors.surface,
                 inactiveTrackColor: colors.disabled,
                 onChanged: onDefaultChanged,
@@ -321,7 +321,7 @@ class SettingsCreditCardFormSection extends StatelessWidget {
                   onPressed: isSaving ? null : onSubmit,
                   style: FilledButton.styleFrom(
                     minimumSize: const Size.fromHeight(52),
-                    backgroundColor: colors.highlightGold,
+                    backgroundColor: colors.primary,
                     foregroundColor: colors.onDark,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(UiTokens.radius12),

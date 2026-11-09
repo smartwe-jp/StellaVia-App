@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../investment/presentation/support/fund_project_status_style.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/support/fund_lottery_apply_models.dart';
@@ -254,18 +255,8 @@ String resolveSectionEmptyState(AppLocalizations l10n, MyPageSectionType type) {
   };
 }
 
-String resolveProjectStatusLabel(AppLocalizations l10n, int? projectStatus) {
-  return switch (projectStatus) {
-    0 => l10n.fundListStatusUpcoming,
-    1 => l10n.fundListStatusOpen,
-    2 => l10n.fundListStatusFailed,
-    3 => l10n.fundListStatusClosed,
-    4 => l10n.fundListStatusOperating,
-    5 => l10n.fundListStatusOperatingEnded,
-    7 => l10n.fundListStatusCompleted,
-    _ => l10n.fundListStatusUnknown,
-  };
-}
+String resolveProjectStatusLabel(AppLocalizations l10n, int? projectStatus) =>
+    fundProjectStatusLabel(l10n, projectStatus);
 
 String resolveMyPageActiveFundStatusLabel(
   AppLocalizations l10n,
@@ -275,11 +266,7 @@ String resolveMyPageActiveFundStatusLabel(
   if (investNumValid == 0) {
     return l10n.myPageActiveFundRedeemedStatus;
   }
-  return switch (projectStatus) {
-    4 => l10n.fundListStatusOperating,
-    5 => l10n.fundListStatusOperatingEnded,
-    _ => resolveProjectStatusLabel(l10n, projectStatus),
-  };
+  return fundProjectStatusLabel(l10n, projectStatus);
 }
 
 Color resolveMyPageActiveFundStatusBackgroundColor(
@@ -291,12 +278,7 @@ Color resolveMyPageActiveFundStatusBackgroundColor(
   if (investNumValid == 0) {
     return colors.surfaceAlt;
   }
-  return switch (projectStatus) {
-    4 => Color.lerp(colors.surface, colors.successSubtle, 0.5)!,
-    5 => colors.brandPrimary.withValues(alpha: 0.12),
-    1 => colors.highlightGold.withValues(alpha: 0.22),
-    _ => colors.highlightGold.withValues(alpha: 0.10),
-  };
+  return fundProjectStatusColors(context, projectStatus).background;
 }
 
 Color resolveMyPageActiveFundStatusForegroundColor(
@@ -308,11 +290,7 @@ Color resolveMyPageActiveFundStatusForegroundColor(
   if (investNumValid == 0) {
     return colors.textSecondary;
   }
-  return switch (projectStatus) {
-    4 => colors.successForeground,
-    5 => colors.textSecondary,
-    _ => colors.textSecondary,
-  };
+  return fundProjectStatusColors(context, projectStatus).foreground;
 }
 
 double? resolveMyPageActiveFundProgress(FundProject? project) {
@@ -787,7 +765,7 @@ Color resolveOrderInquiryStatusForegroundColor(
 ) {
   final colors = Theme.of(context).appColors;
   return (record.status?.trim().toUpperCase() == 'VALID')
-      ? colors.warningAction
+      ? colors.infoForeground
       : colors.textSecondary;
 }
 
@@ -797,7 +775,7 @@ Color resolveOrderInquiryStatusBackgroundColor(
 ) {
   final colors = Theme.of(context).appColors;
   return (record.status?.trim().toUpperCase() == 'VALID')
-      ? colors.warningSubtle
+      ? colors.primarySubtle
       : colors.surfaceAlt;
 }
 

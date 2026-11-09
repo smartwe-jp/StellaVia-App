@@ -270,7 +270,7 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       style: appText.numericHeadline.copyWith(
-                        color: colors.highlightGold,
+                        color: colors.infoForeground,
                         fontSize: 26,
                         fontWeight: FontWeight.w900,
                       ),
@@ -279,7 +279,7 @@ class FundLotteryApplyAmountStep extends StatelessWidget {
                         TextSpan(
                           text: ' $estimatedDistributionSuffix',
                           style: appText.numericBody.copyWith(
-                            color: colors.highlightGold,
+                            color: colors.infoForeground,
                           ),
                         ),
                       ],

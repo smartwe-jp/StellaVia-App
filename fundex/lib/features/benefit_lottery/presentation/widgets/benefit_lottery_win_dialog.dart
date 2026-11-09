@@ -95,16 +95,7 @@ class BenefitLotteryWinDialog extends StatelessWidget {
                   UiTokens.spacing24,
                   UiTokens.spacing20,
                 ),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: <Color>[
-                      colors.highlightGold.withValues(alpha: 0.28),
-                      colors.background,
-                    ],
-                  ),
-                ),
+                decoration: BoxDecoration(color: colors.primarySubtle),
                 child: Column(
                   children: <Widget>[
                     Container(
@@ -113,17 +104,10 @@ class BenefitLotteryWinDialog extends StatelessWidget {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(UiTokens.radius16),
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: <Color>[
-                            colors.highlightGold,
-                            colors.brandPrimary,
-                          ],
-                        ),
+                        color: colors.primary,
                         boxShadow: <BoxShadow>[
                           BoxShadow(
-                            color: colors.highlightGold.withValues(alpha: 0.45),
+                            color: colors.primaryAlt.withValues(alpha: 0.45),
                             blurRadius: 26,
                             offset: const Offset(0, 10),
                           ),
@@ -142,7 +126,7 @@ class BenefitLotteryWinDialog extends StatelessWidget {
                       l10n.benefitLotteryWinCongratulations,
                       textAlign: TextAlign.center,
                       style: appText.bodyStrong.copyWith(
-                        color: colors.highlightGold,
+                        color: colors.infoForeground,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 1.2,
                       ),
@@ -152,14 +136,14 @@ class BenefitLotteryWinDialog extends StatelessWidget {
                       l10n.benefitLotteryWinPrizeMessage(grade),
                       textAlign: TextAlign.center,
                       style: appText.cardTitle.copyWith(
-                        color: colors.heroStart,
+                        color: colors.textPrimary,
                       ),
                     ),
                     const SizedBox(height: UiTokens.spacing8),
                     Text(
                       amountFormatter.format(prize.price),
                       style: appText.numericHeadline.copyWith(
-                        color: colors.highlightGold,
+                        color: colors.infoForeground,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -220,8 +204,8 @@ class BenefitLotteryWinDialog extends StatelessWidget {
                         key: const Key('benefit_lottery_win_confirm'),
                         onPressed: () => Navigator.of(context).pop(true),
                         style: FilledButton.styleFrom(
-                          backgroundColor: colors.highlightGold,
-                          foregroundColor: colors.heroStart,
+                          backgroundColor: colors.primary,
+                          foregroundColor: colors.onDark,
                           minimumSize: const Size.fromHeight(48),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
@@ -232,7 +216,7 @@ class BenefitLotteryWinDialog extends StatelessWidget {
                         child: Text(
                           l10n.benefitLotteryWinConfirmAction,
                           style: appText.button.copyWith(
-                            color: colors.heroStart,
+                            color: colors.onDark,
                             fontWeight: FontWeight.w800,
                           ),
                         ),
@@ -297,7 +281,7 @@ class _WinMetaRow extends StatelessWidget {
               value,
               textAlign: TextAlign.end,
               style: appText.caption.copyWith(
-                color: isCode ? colors.highlightGold : colors.heroStart,
+                color: isCode ? colors.infoForeground : colors.heroStart,
                 fontWeight: FontWeight.w700,
                 letterSpacing: isCode ? 1.4 : 0,
               ),

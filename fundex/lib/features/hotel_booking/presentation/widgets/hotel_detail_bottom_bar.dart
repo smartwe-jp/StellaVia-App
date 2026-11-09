@@ -85,9 +85,7 @@ class HotelDetailBottomBar extends StatelessWidget {
                 child: FilledButton(
                   onPressed: isLoading ? null : onBookNow,
                   style: FilledButton.styleFrom(
-                    backgroundColor: useStayBenefitAccent
-                        ? colors.highlightGold
-                        : colors.brandPrimary,
+                    backgroundColor: colors.primary,
                     foregroundColor: colors.onDark,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(UiTokens.radius16),
@@ -179,11 +177,11 @@ class _BottomBarAmountText extends StatelessWidget {
           const TextSpan(text: '  '),
           TextSpan(
             text: presenter.amount(0),
-            style: baseStyle?.copyWith(color: colors.highlightGold),
+            style: baseStyle?.copyWith(color: colors.textPrimary),
           ),
           TextSpan(
             text: ' $currencyCode',
-            style: baseStyle?.copyWith(color: colors.highlightGold),
+            style: baseStyle?.copyWith(color: colors.textPrimary),
           ),
         ],
       ),

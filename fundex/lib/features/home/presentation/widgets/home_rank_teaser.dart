@@ -1,7 +1,7 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
-import '../support/home_design_theme.dart';
+import '../../../host_miles/presentation/support/host_miles_rank_theme.dart';
 import 'home_data_status.dart';
 import '../support/home_text_styles.dart';
 
@@ -56,59 +56,7 @@ class HomeRankTeaser extends StatelessWidget {
                       top: 0,
                       width: 280,
                       height: 99,
-                      child: ExcludeSemantics(
-                        child: Container(
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                            color:
-                                HomeDesignTheme.rankSurfaces[i %
-                                    HomeDesignTheme.rankSurfaces.length],
-                            borderRadius: BorderRadius.circular(11.2),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Container(
-                                height: 56,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 14,
-                                  vertical: 10,
-                                ),
-                                color:
-                                    HomeDesignTheme.rankHeaders[i %
-                                        HomeDesignTheme.rankHeaders.length],
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'RANK ${(i + 1).toString().padLeft(2, '0')}',
-                                      style:
-                                          HomeTextStyles.rankPreviewEyebrow(
-                                            context,
-                                          ).copyWith(
-                                            color: i == 0
-                                                ? HomeDesignTheme.rankInk
-                                                : HomeDesignTheme.rankOnDark,
-                                          ),
-                                    ),
-                                    Text(
-                                      names[i],
-                                      style:
-                                          HomeTextStyles.rankPreviewName(
-                                            context,
-                                          ).copyWith(
-                                            color: i == 0
-                                                ? HomeDesignTheme.rankInk
-                                                : HomeDesignTheme.rankOnDark,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      child: _RankPreview(name: names[i]),
                     ),
                   Positioned(
                     right: 3,
@@ -134,4 +82,49 @@ class HomeRankTeaser extends StatelessWidget {
       ],
     ),
   );
+}
+
+class _RankPreview extends StatelessWidget {
+  const _RankPreview({required this.name});
+  final String name;
+  @override
+  Widget build(BuildContext context) {
+    final palette = HostMilesRankTheme.of(name);
+    return ExcludeSemantics(
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          color: palette.surface,
+          borderRadius: BorderRadius.circular(11.2),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              constraints: const BoxConstraints(minHeight: 56),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              decoration: palette.headerDecoration,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    palette.number == null ? 'RANK' : 'RANK ${palette.number}',
+                    style: HomeTextStyles.rankPreviewEyebrow(
+                      context,
+                    ).copyWith(color: palette.headerInk.withValues(alpha: .75)),
+                  ),
+                  Text(
+                    name,
+                    style: HomeTextStyles.rankPreviewName(
+                      context,
+                    ).copyWith(color: palette.headerInk),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

@@ -218,23 +218,13 @@ class _WalletBankAccountCard extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final isOverseas = account.bankType == 1;
-    final gradientColors = isOverseas
-        ? <Color>[colors.heroStart, colors.primary]
-        : <Color>[
-            Color.lerp(colors.highlightGold, colors.primary, 0.18)!,
-            Color.lerp(colors.highlightGold, colors.primary, 0.34)!,
-          ];
     final chipBorderColor = colors.brandWhite.withValues(alpha: 0.35);
     final foreground = colors.brandWhite;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: gradientColors,
-        ),
+        color: isOverseas ? colors.heroStart : colors.primary,
         borderRadius: BorderRadius.circular(16),
         boxShadow: <BoxShadow>[
           BoxShadow(

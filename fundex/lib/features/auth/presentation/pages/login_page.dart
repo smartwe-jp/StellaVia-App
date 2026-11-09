@@ -265,7 +265,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final controller = ref.read(authControllerProvider.notifier);
     final theme = Theme.of(context);
     final hotelTheme = theme.extension<AppFTKTheme>();
-    final brandGold = theme.appColors.highlightGold;
+    final actionColor = theme.appColors.primary;
     final titleStyle = (theme.textTheme.titleSmall ?? const TextStyle())
         .copyWith(fontWeight: FontWeight.bold);
     final effectiveErrorMessage =
@@ -365,7 +365,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                         icon: Icons.send_rounded,
                                         size: 34,
                                         borderRadius: 10,
-                                        backgroundColor: brandGold.withValues(
+                                        backgroundColor: actionColor.withValues(
                                           alpha: canSendCode ? 1 : 0.42,
                                         ),
                                         foregroundColor: canSendCode
@@ -398,7 +398,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                         icon: Icons.send_rounded,
                                         size: 34,
                                         borderRadius: 10,
-                                        backgroundColor: brandGold.withValues(
+                                        backgroundColor: actionColor.withValues(
                                           alpha: canSendCode ? 1 : 0.42,
                                         ),
                                         foregroundColor: canSendCode
@@ -426,7 +426,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           inputKey: const Key('login_code_input'),
                           sendButtonKey: const Key('login_send_code_button'),
                           isSendingCode: state.isSendingCode,
-                          sendButtonBackgroundColor: brandGold,
+                          sendButtonBackgroundColor: actionColor,
                           sendButtonForegroundColor: theme.appColors.onDark,
                           sendButtonFilled: true,
                           onChanged: (String value) =>
@@ -650,11 +650,11 @@ class _LoginChannelSegmentedControl extends StatelessWidget {
     final radius = BorderRadius.circular(18);
     final selectedBackgroundColor = isDark
         ? Color.alphaBlend(
-            colors.highlightGold.withValues(alpha: 0.20),
+            colors.primaryAlt.withValues(alpha: 0.20),
             colors.surfaceAlt,
           )
         : Color.alphaBlend(
-            colors.highlightGold.withValues(alpha: 0.28),
+            colors.primaryAlt.withValues(alpha: 0.28),
             colors.surface,
           );
     final containerBackgroundColor = colors.surfaceAlt;

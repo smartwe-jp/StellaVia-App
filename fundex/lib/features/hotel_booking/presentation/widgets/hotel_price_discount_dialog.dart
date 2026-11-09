@@ -143,7 +143,7 @@ class _DiscountContent extends StatelessWidget {
         const SizedBox(height: 12),
         DecoratedBox(
           decoration: BoxDecoration(
-            color: colors.highlightGold.withValues(alpha: 0.12),
+            color: colors.primaryAlt.withValues(alpha: 0.12),
           ),
           child: Column(
             children: <Widget>[

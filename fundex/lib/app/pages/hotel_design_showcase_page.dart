@@ -37,12 +37,12 @@ class HotelDesignShowcasePage extends StatelessWidget {
                 ),
                 _PaletteSwatch(
                   'Rating',
-                  '#FE8814',
+                  '#9652C2',
                   AppColorTokens.travelRatingOrange,
                 ),
                 _PaletteSwatch(
                   'FAB',
-                  '#FF930C',
+                  '#4C0679',
                   AppColorTokens.travelFabOrange,
                 ),
                 _PaletteSwatch(
@@ -52,8 +52,8 @@ class HotelDesignShowcasePage extends StatelessWidget {
                 ),
                 _PaletteSwatch(
                   'Link',
-                  '#D99221',
-                  AppColorTokens.travelLinkGold,
+                  '#4C0679',
+                  AppColorTokens.brandPurple,
                 ),
                 _PaletteSwatch(
                   'Muted',

@@ -260,7 +260,7 @@ class _MemberAvatarCropPageState extends State<MemberAvatarCropPage> {
                                 child: _decodedImage == null
                                     ? Center(
                                         child: CircularProgressIndicator(
-                                          color: colors.highlightGold,
+                                          color: colors.infoForeground,
                                         ),
                                       )
                                     : InteractiveViewer(
@@ -295,7 +295,7 @@ class _MemberAvatarCropPageState extends State<MemberAvatarCropPage> {
                               child: CustomPaint(
                                 size: Size.square(cropViewportSize),
                                 painter: _AvatarCropOverlayPainter(
-                                  borderColor: colors.highlightGold,
+                                  borderColor: colors.infoForeground,
                                 ),
                               ),
                             ),

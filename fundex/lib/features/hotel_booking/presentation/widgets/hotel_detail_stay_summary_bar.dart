@@ -31,7 +31,7 @@ class HotelDetailStaySummaryBar extends StatelessWidget {
         border: Border.all(
           color: flat
               ? colors.borderSoft
-              : colors.highlightGold.withValues(alpha: 0.45),
+              : colors.primaryAlt.withValues(alpha: 0.45),
         ),
         boxShadow: flat
             ? const []

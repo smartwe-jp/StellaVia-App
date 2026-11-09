@@ -326,9 +326,9 @@ class _PaymentDeadlineNotice extends StatelessWidget {
     final colors = Theme.of(context).appColors;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: colors.highlightGold.withValues(alpha: 0.12),
+        color: colors.primaryAlt.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(UiTokens.radius20),
-        border: Border.all(color: colors.highlightGold.withValues(alpha: 0.40)),
+        border: Border.all(color: colors.primaryAlt.withValues(alpha: 0.40)),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
@@ -337,7 +337,7 @@ class _PaymentDeadlineNotice extends StatelessWidget {
           children: <Widget>[
             DecoratedBox(
               decoration: ShapeDecoration(
-                color: colors.highlightGold,
+                color: colors.infoForeground,
                 shape: const CircleBorder(),
               ),
               child: SizedBox.square(

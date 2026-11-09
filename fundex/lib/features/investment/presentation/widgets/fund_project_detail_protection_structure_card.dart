@@ -54,7 +54,7 @@ class FundProjectDetailProtectionStructureCard extends StatelessWidget {
                   Expanded(
                     flex: (data.secondaryRatio * 1000).round().clamp(1, 999),
                     child: Container(
-                      color: colors.warning,
+                      color: colors.primaryAlt,
                       alignment: Alignment.center,
                       child: Text(
                         '${data.secondaryLabel} ${(data.secondaryRatio * 100).round()}%',

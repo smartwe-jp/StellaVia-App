@@ -68,7 +68,7 @@ class SecondaryMarketDetailHeroCard extends StatelessWidget {
           colors: <Color>[
             colors.primarySubtle,
             colors.surface,
-            colors.warningSubtle,
+            colors.primarySubtle,
           ],
         ),
         border: Border.all(color: colors.borderSoft),
@@ -90,8 +90,8 @@ class SecondaryMarketDetailHeroCard extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: <Color>[
-                    colors.warning.withValues(alpha: 0.24),
-                    colors.warning.withValues(alpha: 0.02),
+                    colors.primary.withValues(alpha: 0.24),
+                    colors.primary.withValues(alpha: 0.02),
                   ],
                 ),
               ),
@@ -165,7 +165,7 @@ class SecondaryMarketDetailHeroCard extends StatelessWidget {
                           Icon(
                             Icons.storefront_rounded,
                             size: 14,
-                            color: colors.warningAction,
+                            color: colors.infoForeground,
                           ),
                           const SizedBox(width: 6),
                           Text(
@@ -305,11 +305,11 @@ class SecondaryMarketDetailHeroCard extends StatelessWidget {
                         child: _HeroMetricCard(
                           label: soldUnitsLabel,
                           icon: Icons.task_alt_rounded,
-                          backgroundColor: colors.warningSubtle.withValues(
+                          backgroundColor: colors.primarySubtle.withValues(
                             alpha: 0.74,
                           ),
-                          borderColor: colors.warningBorder,
-                          accentColor: colors.warningAction,
+                          borderColor: colors.infoBorder,
+                          accentColor: colors.infoForeground,
                         ),
                       ),
                       const SizedBox(width: 10),

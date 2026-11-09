@@ -333,7 +333,7 @@ class _PushDialogIcon extends StatelessWidget {
       width: 56,
       height: 56,
       decoration: BoxDecoration(
-        color: colors.highlightGold.withValues(alpha: 0.18),
+        color: colors.primaryAlt.withValues(alpha: 0.18),
         shape: BoxShape.circle,
       ),
       child: Icon(icon, color: colors.brandPrimary, size: 28),

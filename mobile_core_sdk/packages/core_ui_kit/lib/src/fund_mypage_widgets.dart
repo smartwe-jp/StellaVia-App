@@ -102,7 +102,7 @@ class FundMyPageAssetOverview extends StatelessWidget {
             //         maxLines: 1,
             //         overflow: TextOverflow.ellipsis,
             //         style: appText.cardTitle.copyWith(
-            //           color: colors.highlightGold,
+            //           color: colors.infoForeground,
             //           fontWeight: FontWeight.w800,
             //           letterSpacing: 1.6,
             //         ),
@@ -159,7 +159,7 @@ class FundMyPageAssetOverview extends StatelessWidget {
             Text(
               totalAssetsLabel,
               style: appText.caption.copyWith(
-                color: colors.highlightGold,
+                color: colors.infoForeground,
                 fontWeight: FontWeight.w700,
               ),
             ),

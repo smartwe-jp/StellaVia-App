@@ -273,7 +273,7 @@ class FundProjectDetailExternalVideoLinkRow extends StatelessWidget {
           ),
           const SizedBox(width: UiTokens.spacing12),
           Material(
-            color: colors.highlightGold,
+            color: colors.primaryAlt,
             borderRadius: BorderRadius.circular(999),
             child: InkWell(
               borderRadius: BorderRadius.circular(999),
@@ -434,10 +434,10 @@ class _FundProjectDetailYoutubePlayerState
           RemainingDuration(),
           SizedBox(width: 14),
         ],
-        progressIndicatorColor: colors.highlightGold,
+        progressIndicatorColor: colors.primaryAlt,
         progressColors: ProgressBarColors(
-          playedColor: colors.highlightGold,
-          handleColor: colors.highlightGold,
+          playedColor: colors.primaryAlt,
+          handleColor: colors.primary,
           bufferedColor: colors.onDark.withValues(alpha: 0.42),
           backgroundColor: colors.onDark.withValues(alpha: 0.22),
         ),
@@ -445,7 +445,7 @@ class _FundProjectDetailYoutubePlayerState
           child: SizedBox.square(
             dimension: 34,
             child: CircularProgressIndicator.adaptive(
-              valueColor: AlwaysStoppedAnimation<Color>(colors.highlightGold),
+              valueColor: AlwaysStoppedAnimation<Color>(colors.textPrimary),
             ),
           ),
         ),
@@ -501,7 +501,7 @@ class _FundProjectVideoReadyState extends StatelessWidget {
                 dimension: 34,
                 child: CircularProgressIndicator.adaptive(
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    colors.highlightGold,
+                    colors.primaryAlt,
                   ),
                 ),
               ),
@@ -583,7 +583,7 @@ class _FundProjectVideoCenterButton extends StatelessWidget {
           dimension: 58,
           child: Icon(
             Icons.play_arrow_rounded,
-            color: colors.highlightGold,
+            color: colors.primaryAlt,
             size: 38,
           ),
         ),
@@ -638,7 +638,7 @@ class _FundProjectVideoControls extends StatelessWidget {
                 value: progress,
                 min: 0,
                 max: 1,
-                activeColor: colors.highlightGold,
+                activeColor: colors.primary,
                 inactiveColor: colors.onDark.withValues(alpha: 0.30),
                 onChanged: onSeekToProgress,
               ),
@@ -692,7 +692,7 @@ class _FundProjectVideoErrorState extends StatelessWidget {
                   onPressed: onRetry,
                   child: Text(
                     context.l10n.fundListRetry,
-                    style: appText.button.copyWith(color: colors.highlightGold),
+                    style: appText.button.copyWith(color: colors.primaryAlt),
                   ),
                 ),
               ],

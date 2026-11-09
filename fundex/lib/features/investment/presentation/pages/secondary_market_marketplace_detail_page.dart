@@ -120,8 +120,8 @@ class SecondaryMarketMarketplaceDetailPage extends ConsumerWidget {
                   statusLabel: record.status?.toUpperCase() == 'VALID'
                       ? l10n.secondaryMarketListingValid
                       : l10n.secondaryMarketListingInvalid,
-                  statusBackgroundColor: colors.warningSubtle,
-                  statusForegroundColor: colors.warningAction,
+                  statusBackgroundColor: colors.primarySubtle,
+                  statusForegroundColor: colors.infoForeground,
                   investorTypeLabel: buildSecondaryMarketInvestorTypeDisplay(
                     record,
                   ),

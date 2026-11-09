@@ -114,8 +114,18 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
               onTitleTap: () => context.push('/funds/$projectId'),
               titleColor: colors.primary,
               statusLabel: statusLabel,
-              statusBackgroundColor: colors.primarySubtle,
-              statusForegroundColor: colors.primaryAlt,
+              statusBackgroundColor:
+                  resolveMyPageActiveFundStatusBackgroundColor(
+                    context,
+                    summary.projectStatus,
+                    investNumValid: summary.investNumValid,
+                  ),
+              statusForegroundColor:
+                  resolveMyPageActiveFundStatusForegroundColor(
+                    context,
+                    summary.projectStatus,
+                    investNumValid: summary.investNumValid,
+                  ),
               totalBenefitLabel: l10n.myPageAccumulatedDistributionLabel,
               totalBenefitValue: formatCurrency(summary.earnings, formatter),
               primaryMetrics: <ActiveFundOverviewMetricData>[
@@ -259,8 +269,8 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
                                       : null,
                                   style: _detailOutlineButtonStyle(
                                     context,
-                                    borderColor: colors.highlightGold,
-                                    foregroundColor: colors.highlightGold,
+                                    borderColor: colors.infoForeground,
+                                    foregroundColor: colors.infoForeground,
                                   ),
                                   child: Text(
                                     l10n.myPageActiveFundReportAction,

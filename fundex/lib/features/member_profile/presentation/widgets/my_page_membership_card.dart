@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../host_miles/domain/entities/host_miles_models.dart';
+import '../../../host_miles/presentation/support/host_miles_rank_theme.dart';
 import '../support/mypage_rank_display.dart';
 import '../support/mypage_rank_theme.dart';
 
@@ -21,7 +22,12 @@ class MyPageMembershipCard extends StatelessWidget {
     final l = context.l10n;
     final locale = Localizations.localeOf(context).toLanguageTag();
     final rank = MyPageRankDisplay.name(tier);
-    final color = MyPageRankTheme.surface(context, rank);
+    final palette = HostMilesRankTheme.of(rank);
+    final color = palette.header;
+    final ink = MyPageRankTheme.inkOn(color);
+    final metricInk = MyPageRankTheme.inkOn(
+      Color.alphaBlend(context.appColors.onDark.withValues(alpha: .14), color),
+    );
     final progress = MyPageRankDisplay.progress(tier);
     return AppCard(
       variant: AppCardVariant.filled,
@@ -36,7 +42,7 @@ class MyPageMembershipCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   l.homeRankLabel,
-                  style: MyPageRankTheme.label(context),
+                  style: MyPageRankTheme.label(context, ink),
                 ),
               ),
               InkWell(
@@ -48,11 +54,12 @@ class MyPageMembershipCard extends StatelessWidget {
                     children: [
                       Text(
                         l.myPageRankAbout,
-                        style: MyPageRankTheme.label(context),
+                        style: MyPageRankTheme.label(context, ink),
                       ),
                       const SizedBox(width: 5),
                       SvgPicture.asset(
                         'assets/images/mypage-rank-chevron.svg',
+                        colorFilter: ColorFilter.mode(ink, BlendMode.srcIn),
                         width: 6,
                         height: 10,
                       ),
@@ -62,13 +69,14 @@ class MyPageMembershipCard extends StatelessWidget {
               ),
             ],
           ),
-          Text(rank, style: MyPageRankTheme.rank(context)),
+          Text(rank, style: MyPageRankTheme.rank(context, ink)),
           const SizedBox(height: 14),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: _Metric(
+                  ink: metricInk,
                   label: l.myPageChartMiles,
                   value: MyPageRankDisplay.number(
                     account?.availablePoints,
@@ -80,6 +88,7 @@ class MyPageMembershipCard extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: _Metric(
+                  ink: metricInk,
                   label: l.myPageRankRate,
                   value: MyPageRankDisplay.rate(tier?.pointRate, locale),
                   unit: '%',
@@ -119,7 +128,11 @@ class MyPageMembershipCard extends StatelessWidget {
                   ),
                 if (progress != null) ...[
                   const SizedBox(height: 8),
-                  AppProgressBar(value: progress, color: color, height: 6),
+                  AppProgressBar(
+                    value: progress,
+                    color: palette.marker,
+                    height: 6,
+                  ),
                 ],
               ],
             ),
@@ -131,7 +144,13 @@ class MyPageMembershipCard extends StatelessWidget {
 }
 
 class _Metric extends StatelessWidget {
-  const _Metric({required this.label, required this.value, required this.unit});
+  const _Metric({
+    required this.ink,
+    required this.label,
+    required this.value,
+    required this.unit,
+  });
+  final Color ink;
   final String label, value, unit;
   @override
   Widget build(BuildContext context) => AppCard(
@@ -142,13 +161,13 @@ class _Metric extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: MyPageRankTheme.label(context)),
+        Text(label, style: MyPageRankTheme.label(context, ink)),
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           spacing: 4,
           children: [
-            Text(value, style: MyPageRankTheme.metric(context)),
-            Text(unit, style: MyPageRankTheme.label(context)),
+            Text(value, style: MyPageRankTheme.metric(context, ink)),
+            Text(unit, style: MyPageRankTheme.label(context, ink)),
           ],
         ),
       ],

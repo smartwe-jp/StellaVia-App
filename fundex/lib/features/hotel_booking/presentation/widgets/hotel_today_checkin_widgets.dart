@@ -336,7 +336,7 @@ class _CheckInStayDatePanel extends StatelessWidget {
               child: Icon(
                 Icons.arrow_forward_rounded,
                 size: 20,
-                color: colors.highlightGold,
+                color: colors.infoForeground,
               ),
             ),
             Expanded(

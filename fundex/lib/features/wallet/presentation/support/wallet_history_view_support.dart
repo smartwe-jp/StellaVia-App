@@ -139,7 +139,7 @@ Color resolveWalletHistoryIndicatorColor(
     WalletHistoryVisualType.withdraw => colors.danger,
     WalletHistoryVisualType.deposit => colors.successForeground,
     WalletHistoryVisualType.bonus ||
-    WalletHistoryVisualType.dividend => colors.highlightGold,
+    WalletHistoryVisualType.dividend => colors.infoForeground,
     WalletHistoryVisualType.unknown => colors.textSecondary.withValues(
       alpha: 0.55,
     ),

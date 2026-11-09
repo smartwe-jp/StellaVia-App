@@ -169,7 +169,7 @@ class AppFilterBar<T> extends StatelessWidget {
   }) {
     switch (item.style) {
       case AppFilterBarItemStyle.accent:
-        return colors.warning;
+        return colors.primary;
       case AppFilterBarItemStyle.primary:
         return selected
             ? (selectedBackgroundColor ?? colors.primary)
@@ -184,7 +184,7 @@ class AppFilterBar<T> extends StatelessWidget {
   }) {
     switch (item.style) {
       case AppFilterBarItemStyle.accent:
-        return selected ? colors.warningSubtle : colors.surface;
+        return selected ? colors.primarySubtle : colors.surface;
       case AppFilterBarItemStyle.primary:
         return selected
             ? (selectedBackgroundColor ?? colors.primary)
@@ -199,7 +199,7 @@ class AppFilterBar<T> extends StatelessWidget {
   }) {
     switch (item.style) {
       case AppFilterBarItemStyle.accent:
-        return selected ? colors.warningAction : colors.warning;
+        return colors.infoForeground;
       case AppFilterBarItemStyle.primary:
         return selected
             ? (selectedForegroundColor ?? colors.onDark)

@@ -15,7 +15,7 @@ class HomeLicenseBar extends StatelessWidget {
     final appText = theme.appTextTheme;
 
     return DecoratedBox(
-      decoration: BoxDecoration(color: colors.highlightGold),
+      decoration: BoxDecoration(color: colors.heroStart),
       child: Container(
         padding: const EdgeInsets.fromLTRB(0, 16, 0, 26),
         alignment: Alignment.center,

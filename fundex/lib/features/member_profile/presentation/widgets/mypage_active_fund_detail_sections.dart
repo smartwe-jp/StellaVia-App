@@ -76,7 +76,7 @@ class ActiveFundOverviewHeroCard extends StatelessWidget {
           colors: <Color>[
             colors.primarySubtle,
             colors.surface,
-            colors.warningSubtle.withValues(alpha: 0.74),
+            colors.primarySubtle.withValues(alpha: 0.74),
           ],
         ),
         border: Border.all(color: colors.borderSoft),
@@ -98,8 +98,8 @@ class ActiveFundOverviewHeroCard extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: <Color>[
-                    colors.warning.withValues(alpha: 0.18),
-                    colors.warning.withValues(alpha: 0.02),
+                    colors.primary.withValues(alpha: 0.18),
+                    colors.primary.withValues(alpha: 0.02),
                   ],
                 ),
               ),
@@ -262,7 +262,7 @@ class ActiveFundOverviewHeroCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.right,
                               style: appText.bodyStrong.copyWith(
-                                color: colors.highlightGold,
+                                color: colors.infoForeground,
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
@@ -437,7 +437,7 @@ class ActiveFundBenefitBalanceCard extends StatelessWidget {
             Text(
               value,
               style: appText.numericHeadline.copyWith(
-                color: colors.highlightGold,
+                color: colors.infoForeground,
                 letterSpacing: 0.2,
               ),
             ),
@@ -527,7 +527,7 @@ class ActiveFundBenefitHistoryCard extends StatelessWidget {
                   child: _BenefitMetricTile(
                     label: netLabel,
                     value: netValue,
-                    valueColor: colors.highlightGold,
+                    valueColor: colors.textPrimary,
                     backgroundColor: colors.primarySubtle,
                     borderColor: colors.borderSoft,
                   ),

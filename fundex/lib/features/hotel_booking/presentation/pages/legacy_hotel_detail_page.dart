@@ -1010,9 +1010,9 @@ class _StayBenefitEligibilityNotice extends StatelessWidget {
     final colors = Theme.of(context).appColors;
     final colorSet = switch (decision.tone) {
       _StayBenefitNoticeTone.available => (
-        background: colors.highlightGold.withValues(alpha: 0.10),
-        border: colors.highlightGold.withValues(alpha: 0.28),
-        foreground: colors.highlightGold,
+        background: colors.primaryAlt.withValues(alpha: 0.10),
+        border: colors.primaryAlt.withValues(alpha: 0.28),
+        foreground: colors.infoForeground,
         icon: Icons.check_circle_outline_rounded,
       ),
       _StayBenefitNoticeTone.warning => (

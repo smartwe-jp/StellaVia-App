@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'app_color_tokens.dart';
 import 'kizunark_widgets.dart';
 
 class AppUserAvatar extends StatelessWidget {
@@ -36,7 +37,14 @@ class AppUserAvatar extends StatelessWidget {
       imageUrl: avatarUrl,
       imageProvider: imageProvider,
       gradientColors: effectiveGradientValues
-          .map(Color.new)
+          .map(
+            (value) => switch (value) {
+              // Older cached discussion avatars contain the previous accent pair.
+              0xFFF59E0B => AppColorTokens.brandPurple,
+              0xFFFBBF24 => AppColorTokens.brandViolet,
+              _ => Color(value),
+            },
+          )
           .toList(growable: false),
       size: size,
       fontSize: fontSize,
@@ -50,7 +58,7 @@ List<int> _defaultAvatarGradientValuesForSeed(int? seed) {
     <int>[0xFF6366F1, 0xFF8B5CF6],
     <int>[0xFFEC4899, 0xFFF472B6],
     <int>[0xFF10B981, 0xFF34D399],
-    <int>[0xFFF59E0B, 0xFFFBBF24],
+    <int>[0xFF4C0679, 0xFF9652C2],
     <int>[0xFF2563EB, 0xFF60A5FA],
     <int>[0xFF14B8A6, 0xFF2DD4BF],
   ];

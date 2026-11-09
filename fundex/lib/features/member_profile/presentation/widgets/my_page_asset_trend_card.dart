@@ -116,8 +116,8 @@ class MyPageAssetTrendCard extends StatelessWidget {
                       yAxisScale: yAxisScale,
                       xAxisLabels: xAxisLabels,
                       yAxisLabels: yAxisLabels,
-                      lineColor: colors.highlightGold,
-                      fillColor: colors.highlightGold.withValues(alpha: 0.08),
+                      lineColor: colors.primaryAlt,
+                      fillColor: colors.primaryAlt.withValues(alpha: 0.08),
                       guideColor: colors.borderSoft,
                       labelStyle: appText.micro.copyWith(
                         color: colors.textTertiary,
@@ -187,7 +187,7 @@ class _TrendRangeSelector extends StatelessWidget {
               child: Material(
                 color: isSelected
                     ? colors.primary
-                    : colors.highlightGold.withValues(alpha: 0.18),
+                    : colors.primaryAlt.withValues(alpha: 0.18),
                 borderRadius: BorderRadius.circular(UiTokens.radius8),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(UiTokens.radius8),

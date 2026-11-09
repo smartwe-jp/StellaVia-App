@@ -18,7 +18,7 @@ class HotelTypeBadge extends StatelessWidget {
       constraints: const BoxConstraints(maxWidth: 176),
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: colors.highlightGold.withValues(alpha: 0.88),
+          color: colors.primary.withValues(alpha: 0.88),
           borderRadius: BorderRadius.circular(999),
           border: Border.all(color: colors.brandWhite.withValues(alpha: 0.38)),
           boxShadow: <BoxShadow>[

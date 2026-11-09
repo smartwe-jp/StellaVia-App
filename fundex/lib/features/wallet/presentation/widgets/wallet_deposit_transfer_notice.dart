@@ -25,9 +25,9 @@ class WalletDepositTransferNotice extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: colors.highlightGold.withValues(alpha: 0.10),
+        color: colors.primaryAlt.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: colors.highlightGold),
+        border: Border.all(color: colors.infoForeground),
       ),
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -40,7 +40,7 @@ class WalletDepositTransferNotice extends StatelessWidget {
                 Icon(
                   Icons.info_outline_rounded,
                   size: 18,
-                  color: colors.highlightGold,
+                  color: colors.infoForeground,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -66,9 +66,9 @@ class WalletDepositTransferNotice extends StatelessWidget {
                     AppNotice.show(context, message: copyDoneMessage);
                   }
                 },
-                backgroundColor: colors.highlightGold.withValues(alpha: 0.10),
-                foregroundColor: colors.highlightGold,
-                borderColor: colors.highlightGold.withValues(alpha: 0.28),
+                backgroundColor: colors.primary.withValues(alpha: 0.10),
+                foregroundColor: colors.infoForeground,
+                borderColor: colors.primaryAlt.withValues(alpha: 0.28),
                 textStyle: appText.caption.copyWith(
                   fontWeight: FontWeight.w800,
                 ),

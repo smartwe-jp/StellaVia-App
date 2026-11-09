@@ -369,7 +369,7 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                               child: Text(
                                 featuresText,
                                 style: appText.bodySemi.copyWith(
-                                  color: colors.highlightGold,
+                                  color: colors.infoForeground,
                                   height: 1.7,
                                 ),
                               ),

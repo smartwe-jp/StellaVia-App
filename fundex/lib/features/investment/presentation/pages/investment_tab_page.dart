@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../support/fund_project_status_style.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/network/app_network_connectivity_providers.dart';
 import '../../domain/entities/fund_project.dart';
@@ -61,14 +62,10 @@ class _FundListFilterOption {
 class _FundStatusPalette {
   const _FundStatusPalette({
     required this.heroGradientColors,
-    required this.tagBackgroundColor,
-    required this.tagForegroundColor,
     required this.amountGradientColors,
   });
 
   final List<Color> heroGradientColors;
-  final Color tagBackgroundColor;
-  final Color tagForegroundColor;
   final List<Color> amountGradientColors;
 }
 
@@ -237,28 +234,6 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
     }
   }
 
-  String _resolveStatusLabel(BuildContext context, int? status) {
-    final l10n = context.l10n;
-    switch (status) {
-      case 4:
-        return l10n.fundListStatusOperating; //运用中
-      case 5:
-        return l10n.fundListStatusOperatingEnded; //运用结束
-      case 1:
-        return l10n.fundListStatusOpen; //募集中
-      case 0:
-        return l10n.fundListStatusUpcoming; //募集前
-      case 3:
-        return l10n.fundListStatusClosed; //募集结束
-      case 7:
-        return l10n.fundListStatusCompleted; //募集完成
-      case 2:
-        return l10n.fundListStatusFailed; //募集失败
-      default:
-        return l10n.fundListStatusUnknown; //未设定
-    }
-  }
-
   _FundStatusPalette _resolveStatusPalette(BuildContext context, int? status) {
     final colors = context.appColors;
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -268,23 +243,15 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
             colors.brandPrimaryDark.withValues(alpha: 0.20),
             colors.primary,
           );
-    final openTagBackgroundColor = isDark
-        ? Color.alphaBlend(colors.highlightGold, colors.surfaceAlt)
-        : Color.alphaBlend(colors.highlightGold, colors.primarySubtle);
-    final openTagForegroundColor = isDark ? colors.onDark : colors.primary;
     switch (status) {
       case 4: // 运用中
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.infoForeground, colors.primary],
-          tagBackgroundColor: colors.infoSubtle,
-          tagForegroundColor: colors.infoForeground,
           amountGradientColors: <Color>[colors.info, colors.primaryAlt],
         );
       case 5: // 运用结束
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.heroMiddle, colors.heroEnd],
-          tagBackgroundColor: colors.surfaceAlt,
-          tagForegroundColor: colors.textSecondary,
           amountGradientColors: <Color>[
             colors.textSecondary,
             colors.heroMiddle,
@@ -293,22 +260,16 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
       case 1: // 募集中
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.brandPrimaryDark, openAccentColor],
-          tagBackgroundColor: openTagBackgroundColor,
-          tagForegroundColor: colors.onDark,
           amountGradientColors: <Color>[openAccentColor, colors.primary],
         );
       case 0: // 募集前
         return _FundStatusPalette(
-          heroGradientColors: <Color>[colors.warningForeground, colors.warning],
-          tagBackgroundColor: colors.warningSubtle,
-          tagForegroundColor: colors.warningForeground,
-          amountGradientColors: <Color>[colors.warningAction, colors.warning],
+          heroGradientColors: <Color>[colors.heroStart, colors.heroEnd],
+          amountGradientColors: <Color>[colors.textPrimary, colors.textPrimary],
         );
       case 3: // 募集结束
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.heroMiddle, colors.heroEnd],
-          tagBackgroundColor: colors.surfaceAlt,
-          tagForegroundColor: colors.textSecondary,
           amountGradientColors: <Color>[
             colors.textSecondary,
             colors.heroMiddle,
@@ -317,22 +278,16 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
       case 7: // 募集完成
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.brandPrimaryDark, colors.primary],
-          tagBackgroundColor: openTagBackgroundColor,
-          tagForegroundColor: openTagForegroundColor,
           amountGradientColors: <Color>[colors.primaryAlt, colors.primary],
         );
       case 2: // 募集失败
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.dangerForeground, colors.danger],
-          tagBackgroundColor: colors.dangerSubtle,
-          tagForegroundColor: colors.dangerForeground,
           amountGradientColors: <Color>[colors.dangerForeground, colors.danger],
         );
       default:
         return _FundStatusPalette(
           heroGradientColors: <Color>[colors.heroMiddle, colors.heroEnd],
-          tagBackgroundColor: colors.surfaceAlt,
-          tagForegroundColor: colors.textSecondary,
           amountGradientColors: <Color>[
             colors.textSecondary,
             colors.heroMiddle,
@@ -546,8 +501,8 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                                   context,
                                   project.projectStatus,
                                 );
-                                final statusLabel = _resolveStatusLabel(
-                                  context,
+                                final statusLabel = fundProjectStatusLabel(
+                                  context.l10n,
                                   project.projectStatus,
                                 );
                                 final gainType = _resolveMethodLabel(
@@ -682,6 +637,7 @@ class _FundProjectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final statusColors = fundProjectStatusColors(context, project.projectStatus);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final isDark = theme.brightness == Brightness.dark;
@@ -759,8 +715,8 @@ class _FundProjectCard extends StatelessWidget {
                         top: 12,
                         child: _PillTag(
                           label: statusLabel,
-                          backgroundColor: palette.tagBackgroundColor,
-                          foregroundColor: palette.tagForegroundColor,
+                          backgroundColor: statusColors.background,
+                          foregroundColor: statusColors.foreground,
                         ),
                       ),
 
@@ -911,7 +867,7 @@ class _FundProjectCard extends StatelessWidget {
                               child: _CardStatCell(
                                 label: yieldLabel,
                                 value: annualYieldText,
-                                valueColor: colors.highlightGold,
+                                valueColor: colors.textPrimary,
                                 useNumericValueStyle: true,
                               ),
                             ),

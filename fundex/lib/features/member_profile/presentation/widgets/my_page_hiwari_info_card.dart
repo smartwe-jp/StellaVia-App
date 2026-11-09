@@ -62,16 +62,16 @@ class _HiwariInfoBlock extends StatelessWidget {
         if (data.badgeLabel != null) ...<Widget>[
           DecoratedBox(
             decoration: BoxDecoration(
-              color: colors.warningSubtle,
+              color: colors.primarySubtle,
               borderRadius: BorderRadius.circular(UiTokens.radius8),
-              border: Border.all(color: colors.warning.withValues(alpha: 0.48)),
+              border: Border.all(color: colors.primary.withValues(alpha: 0.48)),
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               child: Text(
                 data.badgeLabel!,
                 style: appText.chip.copyWith(
-                  color: colors.warning,
+                  color: colors.primary,
                   fontWeight: FontWeight.w800,
                 ),
               ),

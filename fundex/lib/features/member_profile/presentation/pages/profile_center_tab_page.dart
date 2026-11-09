@@ -465,10 +465,10 @@ Widget _buildPendingApplicationsSection(
             );
             return FundMyPageProjectCard(
               title: record.projectName,
-              accentColor: AppColorTokens.fundexHighlightGold,
+              accentColor: colors.primary,
               trailing: _PendingStatusBadge(
                 label: resolveApplyStatusLabel(l10n, record),
-                backgroundColor: AppColorTokens.fundexHighlightGold,
+                backgroundColor: colors.primary,
                 foregroundColor: AppColorTokens.darkOnSurface,
               ),
               rows: <FundLabeledValue>[
@@ -564,7 +564,7 @@ Widget _buildCoolingOffSection(
           .map((record) {
             return FundMyPageProjectCard(
               title: record.projectName,
-              accentColor: colors.warning,
+              accentColor: colors.primaryAlt,
               trailing: _PendingStatusBadge(
                 label: resolveOrderInquiryStatusLabel(l10n, record),
                 backgroundColor: resolveOrderInquiryStatusBackgroundColor(

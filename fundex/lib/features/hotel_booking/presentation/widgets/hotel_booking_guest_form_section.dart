@@ -516,9 +516,9 @@ class _CounterButton extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: onTap == null ? colors.surface : colors.highlightGold,
+          color: onTap == null ? colors.surface : colors.primary,
           border: Border.all(
-            color: colors.highlightGold.withValues(alpha: 0.4),
+            color: colors.primaryAlt.withValues(alpha: 0.4),
           ),
         ),
         child: SizedBox(

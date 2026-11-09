@@ -482,7 +482,7 @@ class _StayDatePanel extends StatelessWidget {
                 parts: checkIn,
               ),
             ),
-            Icon(Icons.arrow_forward_rounded, color: colors.highlightGold),
+            Icon(Icons.arrow_forward_rounded, color: colors.infoForeground),
             Expanded(
               child: _StayDateColumn(
                 label: context.l10n.hotelOrdersCheckOutLabel,

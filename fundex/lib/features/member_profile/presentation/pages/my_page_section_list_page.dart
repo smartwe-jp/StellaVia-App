@@ -443,10 +443,10 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     );
     return FundMyPageProjectCard(
       title: record.projectName,
-      accentColor: AppColorTokens.fundexHighlightGold,
+      accentColor: colors.primary,
       trailing: _StatusBadge(
         label: resolveApplyStatusLabel(l10n, record),
-        backgroundColor: AppColorTokens.fundexHighlightGold,
+        backgroundColor: colors.primary,
         foregroundColor: AppColorTokens.darkOnSurface,
       ),
       rows: <FundLabeledValue>[
@@ -488,7 +488,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
 
     return FundMyPageProjectCard(
       title: record.projectName,
-      accentColor: colors.warning,
+      accentColor: colors.primaryAlt,
       trailing: _StatusBadge(
         label: resolveOrderInquiryStatusLabel(l10n, record),
         backgroundColor: resolveOrderInquiryStatusBackgroundColor(

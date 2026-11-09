@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'dart:ui' as ui;
 
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
@@ -9,113 +8,46 @@ import 'package:intl/intl.dart' as intl;
 import '../controllers/benefit_lottery_draw_controller.dart';
 import '../models/benefit_lottery_models.dart';
 
-class BenefitLotteryWheelSegmentStyle {
-  const BenefitLotteryWheelSegmentStyle({
-    required this.startColor,
-    required this.middleColor,
-    required this.endColor,
-  });
-
-  final Color startColor;
-  final Color middleColor;
-  final Color endColor;
-
-  Color get swatchColor => middleColor;
-}
-
 class BenefitLotteryWheelPalette {
   const BenefitLotteryWheelPalette({
-    required this.prizeStyles,
-    required this.noWinStyle,
+    required this.prizeColors,
+    required this.noWinColor,
     required this.outerRingColor,
     required this.darkRingColor,
     required this.middleRingColor,
     required this.innerRingColor,
     required this.dividerColor,
-    required this.sheenColor,
     required this.lightTextColor,
     required this.darkTextColor,
-    required this.hubHighlightColor,
     required this.hubColor,
   });
 
-  factory BenefitLotteryWheelPalette.stellaViaMock() {
-    return const BenefitLotteryWheelPalette(
-      prizeStyles: <BenefitLotteryWheelSegmentStyle>[
-        _mockLightGoldSegment,
-        _mockDeepGoldSegment,
-      ],
-      noWinStyle: _mockNoWinGoldSegment,
-      outerRingColor: _mockOuterRingColor,
-      darkRingColor: _mockDarkRingColor,
-      middleRingColor: _mockMiddleRingColor,
-      innerRingColor: _mockInnerRingColor,
-      dividerColor: _mockDividerColor,
-      sheenColor: _mockSheenColor,
-      lightTextColor: _mockLightTextColor,
-      darkTextColor: _mockTextColor,
-      hubHighlightColor: _mockHubHighlightColor,
-      hubColor: _mockHubColor,
-    );
-  }
+  static const stellaVia = BenefitLotteryWheelPalette(
+    prizeColors: [AppColorTokens.brandPurple, AppColorTokens.brandViolet],
+    noWinColor: AppColorTokens.brandBaseCream,
+    outerRingColor: AppColorTokens.brandPurple,
+    darkRingColor: AppColorTokens.brandNavy,
+    middleRingColor: AppColorTokens.brandLilac,
+    innerRingColor: AppColorTokens.brandViolet,
+    dividerColor: AppColorTokens.brandWhite,
+    lightTextColor: AppColorTokens.brandWhite,
+    darkTextColor: AppColorTokens.brandNavy,
+    hubColor: AppColorTokens.brandNavy,
+  );
 
-  // Scoped design-token exception: these exact colors come from
-  // docs/StellaVia_抽選UI_モック.html wheelSvgBlock(), where the roulette is a
-  // fixed SVG. Keeping them local here gives the Flutter wheel the same visual
-  // weight without spreading page-level hardcoded colors.
-  static const Color _mockLightGoldStart = Color(0xFFF8E8C4);
-  static const Color _mockLightGoldMiddle = Color(0xFFE3C890);
-  static const Color _mockLightGoldEnd = Color(0xFFCDA35F);
-  static const Color _mockDeepGoldStart = Color(0xFFC9A565);
-  static const Color _mockDeepGoldMiddle = Color(0xFFA8813F);
-  static const Color _mockDeepGoldEnd = Color(0xFF8A6530);
-  static const Color _mockOuterRingColor = Color(0xFFB8954F);
-  static const Color _mockDarkRingColor = Color(0xFF7A5A28);
-  static const Color _mockMiddleRingColor = Color(0xFFD4B978);
-  static const Color _mockInnerRingColor = Color(0xFFE8D2A0);
-  static const Color _mockDividerColor = Color(0xB3FFFFFF);
-  static const Color _mockSheenColor = Color(0x52FFFFFF);
-  static const Color _mockLightTextColor = Color(0xFFFFFFFF);
-  static const Color _mockTextColor = Color(0xFF0C1C50);
-  static const Color _mockHubHighlightColor = Color(0xFF102A5E);
-  static const Color _mockHubColor = Color(0xFF050C28);
-
-  static const BenefitLotteryWheelSegmentStyle _mockLightGoldSegment =
-      BenefitLotteryWheelSegmentStyle(
-        startColor: _mockLightGoldStart,
-        middleColor: _mockLightGoldMiddle,
-        endColor: _mockLightGoldEnd,
-      );
-
-  static const BenefitLotteryWheelSegmentStyle _mockDeepGoldSegment =
-      BenefitLotteryWheelSegmentStyle(
-        startColor: _mockDeepGoldStart,
-        middleColor: _mockDeepGoldMiddle,
-        endColor: _mockDeepGoldEnd,
-      );
-
-  static const BenefitLotteryWheelSegmentStyle _mockNoWinGoldSegment =
-      BenefitLotteryWheelSegmentStyle(
-        startColor: _mockLightGoldStart,
-        middleColor: _mockInnerRingColor,
-        endColor: _mockLightGoldMiddle,
-      );
-
-  final List<BenefitLotteryWheelSegmentStyle> prizeStyles;
-  final BenefitLotteryWheelSegmentStyle noWinStyle;
+  final List<Color> prizeColors;
+  final Color noWinColor;
   final Color outerRingColor;
   final Color darkRingColor;
   final Color middleRingColor;
   final Color innerRingColor;
   final Color dividerColor;
-  final Color sheenColor;
   final Color lightTextColor;
   final Color darkTextColor;
-  final Color hubHighlightColor;
   final Color hubColor;
 
-  BenefitLotteryWheelSegmentStyle styleForPrizeIndex(int prizeIndex) {
-    return prizeStyles[prizeIndex % prizeStyles.length];
+  Color colorForPrizeIndex(int prizeIndex) {
+    return prizeColors[prizeIndex % prizeColors.length];
   }
 }
 
@@ -288,7 +220,7 @@ class _BenefitLotteryWheelState extends State<BenefitLotteryWheel>
       decimalDigits: 0,
     );
     final model = widget.controller.model;
-    final wheelPalette = BenefitLotteryWheelPalette.stellaViaMock();
+    const wheelPalette = BenefitLotteryWheelPalette.stellaVia;
     final selectedPrize = widget.controller.selectedPrize;
     final showNoWinToast =
         selectedPrize?.isNoWin == true &&
@@ -345,14 +277,7 @@ class _BenefitLotteryWheelState extends State<BenefitLotteryWheel>
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  center: const Alignment(-0.35, -0.40),
-                  radius: 0.75,
-                  colors: <Color>[
-                    wheelPalette.hubHighlightColor,
-                    wheelPalette.hubColor,
-                  ],
-                ),
+                color: wheelPalette.hubColor,
                 border: Border.all(
                   color: wheelPalette.middleRingColor,
                   width: widget.size * 0.012,
@@ -531,39 +456,22 @@ class _BenefitLotteryWheelPainter extends CustomPainter {
     for (var index = 0; index < model.prizes.length; index++) {
       final prize = model.prizes[index];
       final startAngle = startOffset + index * sweep;
-      final segmentStyle = prize.isNoWin
-          ? wheelPalette.noWinStyle
-          : wheelPalette.styleForPrizeIndex(prizeStyleIndex++);
+      final segmentColor = prize.isNoWin
+          ? wheelPalette.noWinColor
+          : wheelPalette.colorForPrizeIndex(prizeStyleIndex++);
       final segmentCenterAngle = startAngle + sweep / 2;
-      final gradientEnd = Offset(
-        center.dx + math.cos(segmentCenterAngle) * wheelRadius,
-        center.dy + math.sin(segmentCenterAngle) * wheelRadius,
-      );
       final segmentPath = Path()
         ..moveTo(center.dx, center.dy)
         ..arcTo(wheelRect, startAngle, sweep, false)
         ..close();
-      canvas.drawPath(
-        segmentPath,
-        Paint()
-          ..shader = ui.Gradient.linear(
-            center,
-            gradientEnd,
-            <Color>[
-              segmentStyle.startColor,
-              segmentStyle.middleColor,
-              segmentStyle.endColor,
-            ],
-            const <double>[0, 0.6, 1],
-          ),
-      );
+      canvas.drawPath(segmentPath, Paint()..color = segmentColor);
       _paintPrizeLabel(
         canvas: canvas,
         center: center,
         radius: wheelRadius,
         segmentCenterAngle: segmentCenterAngle,
         prize: prize,
-        segmentColor: segmentStyle.swatchColor,
+        segmentColor: segmentColor,
       );
     }
 
@@ -582,20 +490,6 @@ class _BenefitLotteryWheelPainter extends CustomPainter {
         dividerPaint,
       );
     }
-
-    canvas.drawCircle(
-      center,
-      wheelRadius,
-      Paint()
-        ..shader = RadialGradient(
-          center: Alignment.topCenter,
-          radius: 0.70,
-          colors: <Color>[
-            wheelPalette.sheenColor,
-            wheelPalette.sheenColor.withValues(alpha: 0),
-          ],
-        ).createShader(wheelRect),
-    );
   }
 
   void _paintPrizeLabel({

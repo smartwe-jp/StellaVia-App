@@ -245,7 +245,7 @@ class _EligibleHeroCardState extends State<_EligibleHeroCard> {
           Text(
             context.l10n.benefitLotteryStatusHeroEyebrow,
             style: appText.micro.copyWith(
-              color: BenefitLotteryWheelPalette.stellaViaMock().middleRingColor,
+              color: BenefitLotteryWheelPalette.stellaVia.middleRingColor,
               letterSpacing: 3,
               fontWeight: FontWeight.w700,
             ),
@@ -350,8 +350,7 @@ class _LockedHeroCardState extends State<_LockedHeroCard> {
                   shape: BoxShape.circle,
                   color: colors.heroStart.withValues(alpha: 0.90),
                   border: Border.all(
-                    color: BenefitLotteryWheelPalette.stellaViaMock()
-                        .middleRingColor
+                    color: BenefitLotteryWheelPalette.stellaVia.middleRingColor
                         .withValues(alpha: 0.42),
                   ),
                 ),
@@ -359,8 +358,7 @@ class _LockedHeroCardState extends State<_LockedHeroCard> {
                   dimension: 78,
                   child: Icon(
                     Icons.lock_outline_rounded,
-                    color: BenefitLotteryWheelPalette.stellaViaMock()
-                        .middleRingColor,
+                    color: BenefitLotteryWheelPalette.stellaVia.middleRingColor,
                     size: 30,
                   ),
                 ),
@@ -404,8 +402,8 @@ class _LockedCtaCard extends StatelessWidget {
       padding: const EdgeInsets.all(UiTokens.spacing20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(UiTokens.radius20),
-        color: colors.highlightGold.withValues(alpha: 0.18),
-        border: Border.all(color: colors.highlightGold.withValues(alpha: 0.45)),
+        color: colors.primaryAlt.withValues(alpha: 0.18),
+        border: Border.all(color: colors.primaryAlt.withValues(alpha: 0.45)),
       ),
       child: Column(
         children: <Widget>[
@@ -500,7 +498,7 @@ class _EvaluationCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(UiTokens.spacing12),
             decoration: BoxDecoration(
-              color: colors.highlightGold.withValues(alpha: 0.10),
+              color: colors.primaryAlt.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(UiTokens.radius14),
             ),
             child: Text(
@@ -549,12 +547,12 @@ class _EvaluationFactorTile extends StatelessWidget {
         children: <Widget>[
           DecoratedBox(
             decoration: BoxDecoration(
-              color: colors.highlightGold.withValues(alpha: 0.16),
+              color: colors.primaryAlt.withValues(alpha: 0.16),
               borderRadius: BorderRadius.circular(UiTokens.radius12),
             ),
             child: SizedBox.square(
               dimension: 36,
-              child: Icon(icon, color: colors.highlightGold, size: 20),
+              child: Icon(icon, color: colors.infoForeground, size: 20),
             ),
           ),
           const SizedBox(width: UiTokens.spacing8),
@@ -629,7 +627,7 @@ class _PrizeListCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(UiTokens.spacing12),
             decoration: BoxDecoration(
-              color: colors.highlightGold.withValues(alpha: 0.10),
+              color: colors.primaryAlt.withValues(alpha: 0.10),
               borderRadius: BorderRadius.circular(UiTokens.radius14),
             ),
             child: Text(
@@ -692,7 +690,7 @@ class _PrizeRow extends StatelessWidget {
               formatter.format(prize.price),
             ),
             style: Theme.of(context).appTextTheme.bodyStrong.copyWith(
-              color: Theme.of(context).appColors.highlightGold,
+              color: Theme.of(context).appColors.infoForeground,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -988,7 +986,7 @@ class _GradeChip extends StatelessWidget {
     final colors = Theme.of(context).appColors;
     final appText = Theme.of(context).appTextTheme;
     final background = switch (grade.toUpperCase()) {
-      'S' => colors.highlightGold,
+      'S' => colors.primary,
       'A' => colors.success,
       'B' => colors.info,
       'C' => colors.communitySecondary,

@@ -2,6 +2,7 @@ import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../investment/presentation/support/fund_project_status_style.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../investment/domain/entities/fund_project.dart';
 import '../../../investment/presentation/support/fund_project_gain_type_label.dart';
@@ -55,57 +56,12 @@ String _buildDaysRemainingLabel(BuildContext context, int? daysRemaining) {
 }
 
 FundFeaturedFundTagData _buildStatusTag(BuildContext context, int? status) {
-  final palette = _resolveFeaturedStatusPalette(context, status);
-  switch (status) {
-    case 7:
-      return FundFeaturedFundTagData(
-        label: context.l10n.fundListStatusCompleted,
-        backgroundColor: palette.tagBackgroundColor,
-        foregroundColor: palette.tagForegroundColor,
-      );
-    case 5:
-      return FundFeaturedFundTagData(
-        label: context.l10n.fundListStatusOperatingEnded,
-        backgroundColor: palette.tagBackgroundColor,
-        foregroundColor: palette.tagForegroundColor,
-      );
-    case 1:
-      return FundFeaturedFundTagData(
-        label: context.l10n.fundListStatusOpen,
-        backgroundColor: palette.tagBackgroundColor,
-        foregroundColor: palette.tagForegroundColor,
-      );
-    case 0:
-      return FundFeaturedFundTagData(
-        label: context.l10n.fundListStatusUpcoming,
-        backgroundColor: palette.tagBackgroundColor,
-        foregroundColor: palette.tagForegroundColor,
-      );
-    case 4:
-      return FundFeaturedFundTagData(
-        label: context.l10n.fundListStatusOperating,
-        backgroundColor: palette.tagBackgroundColor,
-        foregroundColor: palette.tagForegroundColor,
-      );
-    case 3:
-      return FundFeaturedFundTagData(
-        label: context.l10n.fundListStatusClosed,
-        backgroundColor: palette.tagBackgroundColor,
-        foregroundColor: palette.tagForegroundColor,
-      );
-    case 2:
-      return FundFeaturedFundTagData(
-        label: context.l10n.fundListStatusFailed,
-        backgroundColor: palette.tagBackgroundColor,
-        foregroundColor: palette.tagForegroundColor,
-      );
-    default:
-      return FundFeaturedFundTagData(
-        label: context.l10n.fundListStatusUnknown,
-        backgroundColor: palette.tagBackgroundColor,
-        foregroundColor: palette.tagForegroundColor,
-      );
-  }
+  final colors = fundProjectStatusColors(context, status);
+  return FundFeaturedFundTagData(
+    label: fundProjectStatusLabel(context.l10n, status),
+    backgroundColor: colors.background,
+    foregroundColor: colors.foreground,
+  );
 }
 
 FundFeaturedFundTagData? _buildMethodTag(
@@ -126,77 +82,14 @@ FundFeaturedFundTagData? _buildMethodTag(
 }
 
 List<Color> _featuredArtworkGradientColors(BuildContext context, int? status) {
-  return _resolveFeaturedStatusPalette(context, status).gradientColors;
-}
-
-_FeaturedFundStatusPalette _resolveFeaturedStatusPalette(
-  BuildContext context,
-  int? status,
-) {
-  final colors = Theme.of(context).appColors;
-
-  switch (status) {
-    case 4:
-      return _FeaturedFundStatusPalette(
-        gradientColors: <Color>[colors.infoForeground, colors.primary],
-        tagBackgroundColor: colors.infoSubtle,
-        tagForegroundColor: colors.infoForeground,
-      );
-    case 5:
-      return _FeaturedFundStatusPalette(
-        gradientColors: <Color>[colors.heroMiddle, colors.heroEnd],
-        tagBackgroundColor: colors.surfaceAlt,
-        tagForegroundColor: colors.textSecondary,
-      );
-    case 1:
-      return _FeaturedFundStatusPalette(
-        gradientColors: <Color>[colors.brandPrimaryDark, colors.primary],
-        tagBackgroundColor: colors.highlightGold,
-        tagForegroundColor: colors.onDark,
-      );
-    case 0:
-      return _FeaturedFundStatusPalette(
-        gradientColors: <Color>[colors.brandPrimaryDark, colors.primary],
-        tagBackgroundColor: colors.surface,
-        tagForegroundColor: colors.primary,
-      );
-    case 3:
-      return _FeaturedFundStatusPalette(
-        gradientColors: <Color>[colors.heroMiddle, colors.heroEnd],
-        tagBackgroundColor: colors.surfaceAlt,
-        tagForegroundColor: colors.textSecondary,
-      );
-    case 7:
-      return _FeaturedFundStatusPalette(
-        gradientColors: <Color>[colors.primaryAlt, colors.primary],
-        tagBackgroundColor: colors.primarySubtle,
-        tagForegroundColor: colors.primary,
-      );
-    case 2:
-      return _FeaturedFundStatusPalette(
-        gradientColors: <Color>[colors.dangerForeground, colors.danger],
-        tagBackgroundColor: colors.dangerSubtle,
-        tagForegroundColor: colors.dangerForeground,
-      );
-    default:
-      return _FeaturedFundStatusPalette(
-        gradientColors: <Color>[colors.heroMiddle, colors.heroEnd],
-        tagBackgroundColor: colors.surfaceAlt,
-        tagForegroundColor: colors.textSecondary,
-      );
-  }
-}
-
-class _FeaturedFundStatusPalette {
-  const _FeaturedFundStatusPalette({
-    required this.gradientColors,
-    required this.tagBackgroundColor,
-    required this.tagForegroundColor,
-  });
-
-  final List<Color> gradientColors;
-  final Color tagBackgroundColor;
-  final Color tagForegroundColor;
+  final colors = context.appColors;
+  return switch (status) {
+    4 => [colors.infoForeground, colors.primary],
+    0 || 1 => [colors.brandPrimaryDark, colors.primary],
+    7 => [colors.primaryAlt, colors.primary],
+    2 => [colors.dangerForeground, colors.danger],
+    _ => [colors.heroMiddle, colors.heroEnd],
+  };
 }
 
 String _buildFeaturedMetadata(BuildContext context, FundProject project) {
@@ -208,29 +101,7 @@ String _buildFeaturedMetadata(BuildContext context, FundProject project) {
   if (period != null && period.isNotEmpty) {
     return period;
   }
-  return _resolveStatusLabel(context, project.projectStatus);
-}
-
-String _resolveStatusLabel(BuildContext context, int? status) {
-  final l10n = context.l10n;
-  switch (status) {
-    case 4:
-      return l10n.fundListStatusOperating;
-    case 5:
-      return l10n.fundListStatusOperatingEnded;
-    case 1:
-      return l10n.fundListStatusOpen;
-    case 0:
-      return l10n.fundListStatusUpcoming;
-    case 3:
-      return l10n.fundListStatusClosed;
-    case 7:
-      return l10n.fundListStatusCompleted;
-    case 2:
-      return l10n.fundListStatusFailed;
-    default:
-      return l10n.fundListStatusUnknown;
-  }
+  return fundProjectStatusLabel(context.l10n, project.projectStatus);
 }
 
 double _normalizeProgress(double? ratio) {

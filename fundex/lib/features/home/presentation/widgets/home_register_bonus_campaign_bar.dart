@@ -33,15 +33,7 @@ class HomeRegisterBonusCampaignBar extends StatelessWidget {
             bottom: 0,
             height: 22,
             child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: <Color>[
-                    colors.highlightGold.withValues(alpha: 0.9),
-                    const Color(0xFFFFE8A7),
-                    colors.highlightGold.withValues(alpha: 0.86),
-                  ],
-                ),
-              ),
+              decoration: const BoxDecoration(color: AppColorTokens.brandBaseCream),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 44),
                 child: Center(
@@ -77,7 +69,6 @@ class HomeRegisterBonusCampaignBar extends StatelessWidget {
                         color: colors.onDark,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.8,
-                        shadows: _softTextShadows,
                       ),
                     ),
                   ),
@@ -88,7 +79,7 @@ class HomeRegisterBonusCampaignBar extends StatelessWidget {
                     children: <Widget>[
                       _StackedLabel(
                         label: _maxLabel(locale),
-                        color: colors.highlightGold,
+                        color: AppColorTokens.brandLilac,
                       ),
                       const SizedBox(width: 5),
                       Flexible(
@@ -98,12 +89,11 @@ class HomeRegisterBonusCampaignBar extends StatelessWidget {
                             '3,000',
                             maxLines: 1,
                             style: appText.numericDisplay.copyWith(
-                              color: const Color(0xFFFFE7A1),
+                              color: AppColorTokens.brandLilac,
                               fontSize: 42,
                               fontWeight: FontWeight.w900,
                               height: 0.9,
                               letterSpacing: -1.6,
-                              shadows: _goldTextShadows,
                             ),
                           ),
                         ),
@@ -115,7 +105,6 @@ class HomeRegisterBonusCampaignBar extends StatelessWidget {
                           color: colors.onDark,
                           fontWeight: FontWeight.w900,
                           height: 1.05,
-                          shadows: _softTextShadows,
                         ),
                       ),
                     ],
@@ -161,7 +150,6 @@ class _StackedLabel extends StatelessWidget {
                 color: color,
                 fontWeight: FontWeight.w900,
                 height: 0.95,
-                shadows: _goldTextShadows,
               ),
             ),
           )
@@ -178,13 +166,7 @@ class _CampaignBarPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final rect = Offset.zero & size;
-    final background = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: <Color>[colors.heroStart, colors.heroMiddle, colors.primaryAlt],
-      ).createShader(rect);
-    canvas.drawRect(rect, background);
+    canvas.drawRect(rect, Paint()..color = colors.heroStart);
 
     _drawWindowPanel(canvas, size);
     _drawArc(canvas, size);
@@ -196,19 +178,11 @@ class _CampaignBarPainter extends CustomPainter {
 
   void _drawWindowPanel(Canvas canvas, Size size) {
     final panel = Rect.fromLTWH(0, 0, size.width * 0.28, size.height - 22);
-    final panelPaint = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: <Color>[
-          Colors.white.withValues(alpha: 0.16),
-          Colors.white.withValues(alpha: 0.03),
-        ],
-      ).createShader(panel);
+    final panelPaint = Paint()..color = colors.onDark.withValues(alpha: 0.08);
     canvas.drawRect(panel, panelPaint);
 
     final linePaint = Paint()
-      ..color = colors.highlightGold.withValues(alpha: 0.18)
+      ..color = colors.primaryAlt.withValues(alpha: 0.18)
       ..strokeWidth = 1;
     for (var index = 1; index <= 2; index++) {
       final x = panel.width * index / 3;
@@ -223,7 +197,7 @@ class _CampaignBarPainter extends CustomPainter {
 
   void _drawArc(Canvas canvas, Size size) {
     final arcPaint = Paint()
-      ..color = colors.highlightGold.withValues(alpha: 0.58)
+      ..color = colors.primaryAlt.withValues(alpha: 0.58)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.6;
     final path = Path()
@@ -245,7 +219,7 @@ class _CampaignBarPainter extends CustomPainter {
 
   void _drawStar(Canvas canvas, Offset center, double radius) {
     final paint = Paint()
-      ..color = const Color(0xFFFFF2B8)
+      ..color = AppColorTokens.brandLilac
       ..strokeWidth = 1.2
       ..strokeCap = StrokeCap.round;
     canvas.drawLine(
@@ -261,7 +235,7 @@ class _CampaignBarPainter extends CustomPainter {
     canvas.drawCircle(
       center,
       math.max(1.2, radius * 0.18),
-      Paint()..color = Colors.white.withValues(alpha: 0.92),
+      Paint()..color = colors.onDark.withValues(alpha: 0.92),
     );
   }
 
@@ -277,29 +251,21 @@ class _CampaignBarPainter extends CustomPainter {
 
   void _drawCoin(Canvas canvas, Offset center, double radius) {
     final rect = Rect.fromCircle(center: center, radius: radius);
-    final shadowPaint = Paint()..color = Colors.black.withValues(alpha: 0.14);
+    final shadowPaint = Paint()
+      ..color = colors.heroStart.withValues(alpha: 0.14);
     canvas.drawOval(rect.shift(const Offset(0, 1.5)), shadowPaint);
 
-    final coinPaint = Paint()
-      ..shader = const LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: <Color>[
-          Color(0xFFFFF0A8),
-          Color(0xFFC79837),
-          Color(0xFFFFD978),
-        ],
-      ).createShader(rect);
+    final coinPaint = Paint()..color = AppColorTokens.brandLilac;
     canvas.drawOval(rect, coinPaint);
 
     final borderPaint = Paint()
-      ..color = const Color(0xFF8F6824).withValues(alpha: 0.62)
+      ..color = colors.brandPrimary.withValues(alpha: 0.62)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
     canvas.drawOval(rect.deflate(2), borderPaint);
 
     final markStyle = Paint()
-      ..color = const Color(0xFF8F6824).withValues(alpha: 0.56)
+      ..color = colors.brandPrimary.withValues(alpha: 0.56)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.2;
     final markRect = Rect.fromCenter(
@@ -337,12 +303,3 @@ String _amountUnit(Locale locale) {
       return '円分';
   }
 }
-
-const _softTextShadows = <Shadow>[
-  Shadow(color: Color(0x99000000), blurRadius: 4, offset: Offset(0, 1)),
-];
-
-const _goldTextShadows = <Shadow>[
-  Shadow(color: Color(0x88000000), blurRadius: 5, offset: Offset(0, 1.5)),
-  Shadow(color: Color(0x66FFFFFF), blurRadius: 4, offset: Offset(0, -1)),
-];

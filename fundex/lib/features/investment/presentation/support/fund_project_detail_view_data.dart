@@ -2,6 +2,7 @@ import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'fund_project_status_style.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../settings/presentation/support/settings_operating_company_content.dart';
 import '../../domain/entities/fund_project.dart';
@@ -655,51 +656,12 @@ List<FundDetailBadgeData> _buildHeroBadges(
 }
 
 FundDetailBadgeData _buildStatusBadge(BuildContext context, int? status) {
-  final colors = context.appColors;
-  switch (status) {
-    case 1:
-      return FundDetailBadgeData(
-        label: context.l10n.fundListStatusOpen,
-        backgroundColor: colors.highlightGold,
-        foregroundColor: colors.onDark,
-      );
-    case 0:
-      return FundDetailBadgeData(
-        label: context.l10n.fundListStatusUpcoming,
-        backgroundColor: colors.warning,
-        foregroundColor: colors.brandWhite,
-      );
-    case 4:
-      return FundDetailBadgeData(
-        label: context.l10n.fundListStatusOperating,
-        backgroundColor: colors.primary,
-        foregroundColor: colors.brandWhite,
-      );
-    case 5:
-      return FundDetailBadgeData(
-        label: context.l10n.fundListStatusOperatingEnded,
-        backgroundColor: colors.textSecondary.withValues(alpha: 0.88),
-        foregroundColor: colors.brandWhite,
-      );
-    case 7:
-      return FundDetailBadgeData(
-        label: context.l10n.fundListStatusCompleted,
-        backgroundColor: colors.primary,
-        foregroundColor: colors.brandWhite,
-      );
-    case 2:
-      return FundDetailBadgeData(
-        label: context.l10n.fundListStatusFailed,
-        backgroundColor: colors.danger,
-        foregroundColor: colors.brandWhite,
-      );
-    default:
-      return FundDetailBadgeData(
-        label: context.l10n.fundListStatusUnknown,
-        backgroundColor: colors.textTertiary.withValues(alpha: 0.88),
-        foregroundColor: colors.brandWhite,
-      );
-  }
+  final colors = fundProjectStatusColors(context, status);
+  return FundDetailBadgeData(
+    label: fundProjectStatusLabel(context.l10n, status),
+    backgroundColor: colors.background,
+    foregroundColor: colors.foreground,
+  );
 }
 
 List<Color> _resolveHeroGradientColors(BuildContext context, int? status) {
@@ -713,9 +675,8 @@ List<Color> _resolveHeroGradientColors(BuildContext context, int? status) {
       ];
     case 0:
       return <Color>[
-        colors.warningForeground,
-        colors.warningAction,
-        colors.warning,
+        colors.heroStart,
+        colors.heroEnd,
       ];
     case 4:
       return <Color>[colors.infoForeground, colors.primary, colors.primaryAlt];

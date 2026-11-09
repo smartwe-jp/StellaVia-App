@@ -129,7 +129,7 @@ class _HomeCelebrationDialogState extends State<HomeCelebrationDialog>
                         icon: const Icon(Icons.close_rounded),
                         style: IconButton.styleFrom(
                           foregroundColor: colors.onDark,
-                          backgroundColor: colors.warning,
+                          backgroundColor: colors.primary,
                         ),
                       ),
                     ),
@@ -151,7 +151,7 @@ class _HomeCelebrationDialogState extends State<HomeCelebrationDialog>
                           child: FilledButton(
                             onPressed: _showActions ? widget.onDismiss : null,
                             style: FilledButton.styleFrom(
-                              backgroundColor: darkColors.warning,
+                              backgroundColor: darkColors.primary,
                               foregroundColor: darkColors.textPrimary,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 24,

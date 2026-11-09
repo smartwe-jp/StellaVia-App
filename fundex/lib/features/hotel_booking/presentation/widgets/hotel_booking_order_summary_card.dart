@@ -96,7 +96,7 @@ class HotelBookingOrderSummaryCard extends StatelessWidget {
                   children: <Widget>[
                     DecoratedBox(
                       decoration: BoxDecoration(
-                        color: colors.highlightGold.withValues(alpha: 0.22),
+                        color: colors.primaryAlt.withValues(alpha: 0.22),
                         borderRadius: BorderRadius.circular(UiTokens.radius8),
                       ),
                       child: Padding(
@@ -108,7 +108,7 @@ class HotelBookingOrderSummaryCard extends StatelessWidget {
                           context.l10n.hotelBookingOfficialBooking,
                           style: Theme.of(context).textTheme.labelMedium
                               ?.copyWith(
-                                color: colors.highlightGold,
+                                color: colors.infoForeground,
                                 fontWeight: FontWeight.w600,
                               ),
                         ),

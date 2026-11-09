@@ -404,9 +404,9 @@ class _ExtraGuestPriceNotice extends StatelessWidget {
     final priceText = presenter.price(extraGuestPrice);
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: colors.highlightGold.withValues(alpha: 0.12),
+        color: colors.primaryAlt.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(UiTokens.radius8),
-        border: Border.all(color: colors.highlightGold.withValues(alpha: 0.32)),
+        border: Border.all(color: colors.primaryAlt.withValues(alpha: 0.32)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
@@ -512,7 +512,7 @@ class _RoomQuantityStepper extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(999),
             border: Border.all(
-              color: colors.highlightGold.withValues(alpha: 0.50),
+              color: colors.primaryAlt.withValues(alpha: 0.50),
             ),
           ),
           child: SizedBox(

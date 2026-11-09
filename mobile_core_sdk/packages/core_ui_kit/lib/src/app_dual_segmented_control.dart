@@ -72,11 +72,11 @@ class AppDualSegmentedControl<T> extends StatelessWidget {
         style?.selectedBackgroundColor ??
         (isDark
             ? Color.alphaBlend(
-                colors.highlightGold.withValues(alpha: 0.20),
+                colors.primaryAlt.withValues(alpha: 0.20),
                 colors.surfaceAlt,
               )
             : Color.alphaBlend(
-                colors.highlightGold.withValues(alpha: 0.28),
+                colors.primaryAlt.withValues(alpha: 0.28),
                 colors.surface,
               ));
 

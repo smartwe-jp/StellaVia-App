@@ -193,7 +193,7 @@ class _BenefitLotteryDrawDialogState extends State<BenefitLotteryDrawDialog> {
                   vertical: UiTokens.spacing8,
                 ),
                 decoration: BoxDecoration(
-                  color: colors.highlightGold.withValues(alpha: 0.10),
+                  color: colors.primaryAlt.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(UiTokens.radius8),
                 ),
                 child: Text(
@@ -340,7 +340,7 @@ class _PrizeLegend extends StatelessWidget {
       symbol: '¥',
       decimalDigits: 0,
     );
-    final wheelPalette = BenefitLotteryWheelPalette.stellaViaMock();
+    const wheelPalette = BenefitLotteryWheelPalette.stellaVia;
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
@@ -363,10 +363,8 @@ class _PrizeLegend extends StatelessWidget {
                 child: _PrizeLegendItem(
                   prize: model.prizes[index],
                   color: model.prizes[index].isNoWin
-                      ? wheelPalette.noWinStyle.swatchColor
-                      : wheelPalette
-                            .styleForPrizeIndex(prizeIndex++)
-                            .swatchColor,
+                      ? wheelPalette.noWinColor
+                      : wheelPalette.colorForPrizeIndex(prizeIndex++),
                   priceText: model.prizes[index].isNoWin
                       ? null
                       : priceFormatter.format(model.prizes[index].price),

@@ -6,6 +6,14 @@ import 'package:fundex/features/benefit_lottery/presentation/models/benefit_lott
 import 'package:fundex/features/benefit_lottery/presentation/widgets/benefit_lottery_wheel.dart';
 
 void main() {
+  test('prizes alternate brand accents and no-win uses cream', () {
+    const palette = BenefitLotteryWheelPalette.stellaVia;
+    expect(palette.colorForPrizeIndex(0), AppColorTokens.brandPurple);
+    expect(palette.colorForPrizeIndex(1), AppColorTokens.brandViolet);
+    expect(palette.colorForPrizeIndex(2), AppColorTokens.brandPurple);
+    expect(palette.noWinColor, AppColorTokens.brandBaseCream);
+  });
+
   testWidgets('renders the supported maximum of eight segments', (
     WidgetTester tester,
   ) async {

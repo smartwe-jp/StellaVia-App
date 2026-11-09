@@ -51,7 +51,7 @@ class HotelCouponCard extends StatelessWidget {
                   SizedBox(
                     width: 118,
                     child: DecoratedBox(
-                      decoration: BoxDecoration(color: colors.highlightGold),
+                      decoration: BoxDecoration(color: colors.primary),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 10,
@@ -217,7 +217,7 @@ class HotelFundBenefitTicketCard extends StatelessWidget {
                 DecoratedBox(
                   decoration: BoxDecoration(
                     color: Color.alphaBlend(
-                      colors.highlightGold.withValues(alpha: 0.16),
+                      colors.primaryAlt.withValues(alpha: 0.16),
                       colors.surface,
                     ),
                   ),

@@ -235,7 +235,7 @@ class _ActiveFundMiddlePanel extends StatelessWidget {
             label: investmentAmountLabel,
             value: investmentAmountValue,
             valueStyle: appText.caption.copyWith(
-              color: colors.highlightGold,
+              color: colors.infoForeground,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -244,7 +244,7 @@ class _ActiveFundMiddlePanel extends StatelessWidget {
               label: investmentUnitsLabel!,
               value: investmentUnitsValue!,
               valueStyle: appText.caption.copyWith(
-                color: colors.highlightGold,
+                color: colors.infoForeground,
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -252,7 +252,7 @@ class _ActiveFundMiddlePanel extends StatelessWidget {
             label: investorCode,
             value: returnText,
             valueStyle: appText.micro.copyWith(
-              color: colors.highlightGold,
+              color: colors.infoForeground,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -327,7 +327,7 @@ class _AccumulatedEarningsPill extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
       decoration: BoxDecoration(
-        color: colors.highlightGold.withValues(alpha: 0.1),
+        color: colors.primaryAlt.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Row(
@@ -349,7 +349,7 @@ class _AccumulatedEarningsPill extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: appText.caption.copyWith(
-              color: colors.highlightGold,
+              color: colors.infoForeground,
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -403,7 +403,7 @@ class _ActiveFundThumbnailPlaceholder extends StatelessWidget {
         child: Icon(
           Icons.apartment_rounded,
           size: 20,
-          color: colors.highlightGold,
+          color: colors.infoForeground,
         ),
       ),
     );

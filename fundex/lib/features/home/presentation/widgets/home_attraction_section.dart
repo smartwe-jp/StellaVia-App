@@ -100,7 +100,7 @@ class _HomeAttractionCard extends StatelessWidget {
                 SizedBox(
                   width: 44,
                   height: 44,
-                  child: Icon(data.icon, size: 32, color: colors.highlightGold),
+                  child: Icon(data.icon, size: 32, color: colors.infoForeground),
                 ),
                 const SizedBox(height: 2),
                 Text(
@@ -118,7 +118,7 @@ class _HomeAttractionCard extends StatelessWidget {
                 Icon(
                   Symbols.keyboard_arrow_down,
                   size: 18,
-                  color: colors.highlightGold,
+                  color: colors.infoForeground,
                 ),
               ],
             ),

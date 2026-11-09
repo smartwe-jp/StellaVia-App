@@ -30,7 +30,7 @@ List<DiscussionThread> buildDiscussionBoardMockSeed() {
     displayName: '高橋**',
     accountHandle: 'tak***@',
     avatarText: '高',
-    avatarGradientColorValues: <int>[0xFFF59E0B, 0xFFFBBF24],
+    avatarGradientColorValues: <int>[0xFF4C0679, 0xFF9652C2],
     badge: investorBadge,
   );
   const watanabe = DiscussionAuthor(
@@ -70,7 +70,7 @@ List<DiscussionThread> buildDiscussionBoardMockSeed() {
     displayName: 'tak***',
     accountHandle: '',
     avatarText: '高',
-    avatarGradientColorValues: <int>[0xFFF59E0B, 0xFFFBBF24],
+    avatarGradientColorValues: <int>[0xFF4C0679, 0xFF9652C2],
     badge: investorBadge,
   );
 

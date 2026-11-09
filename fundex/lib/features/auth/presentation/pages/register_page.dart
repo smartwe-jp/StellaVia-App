@@ -219,7 +219,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
-    final brandGold = theme.appColors.highlightGold;
+    final actionColor = theme.appColors.primary;
     final localeTag = Localizations.localeOf(context).toLanguageTag();
     final operatingCompanyContent = ref
         .watch(settingsOperatingCompanyContentProvider(localeTag))
@@ -282,7 +282,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       icon: Icons.send_rounded,
                       size: 34,
                       borderRadius: 10,
-                      backgroundColor: brandGold.withValues(
+                      backgroundColor: actionColor.withValues(
                         alpha: _canSendCode ? 1 : 0.42,
                       ),
                       foregroundColor: _canSendCode
@@ -303,7 +303,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   inputKey: const Key('register_code_input'),
                   sendButtonKey: const Key('register_send_code_button'),
                   isSendingCode: _isSendingCode,
-                  sendButtonBackgroundColor: brandGold,
+                  sendButtonBackgroundColor: actionColor,
                   sendButtonForegroundColor: theme.appColors.onDark,
                   sendButtonFilled: true,
                   onChanged: (_) => setState(() {}),

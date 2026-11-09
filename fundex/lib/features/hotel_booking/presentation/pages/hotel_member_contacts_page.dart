@@ -249,7 +249,7 @@ class _HotelMemberContactCard extends StatelessWidget {
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                           Icon(Icons.person, color: colors.highlightGold),
+                           Icon(Icons.person, color: colors.infoForeground),
                            const SizedBox(width: 4),
                            Text(
                                 name,
@@ -343,7 +343,7 @@ class _DefaultBadge extends StatelessWidget {
     final colors = Theme.of(context).appColors;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: colors.highlightGold.withValues(alpha: 0.12),
+        color: colors.primaryAlt.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(999),
       ),
       child: Padding(
@@ -351,7 +351,7 @@ class _DefaultBadge extends StatelessWidget {
         child: Text(
           context.l10n.hotelMemberContactsDefault,
           style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: colors.highlightGold,
+            color: colors.infoForeground,
             fontWeight: FontWeight.w800,
           ),
         ),

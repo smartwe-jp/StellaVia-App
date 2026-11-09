@@ -337,11 +337,9 @@ class _HomeHeroActionButton extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
 
-    final backgroundColor = isPrimary
-        ? colors.highlightGold
-        : Colors.transparent;
-    final foregroundColor = isPrimary ? colors.onDark : colors.highlightGold;
-    final borderColor = colors.highlightGold;
+    final backgroundColor = isPrimary ? colors.primary : colors.surface;
+    final foregroundColor = isPrimary ? colors.onDark : colors.infoForeground;
+    final borderColor = colors.primary;
 
     return Material(
       color: Colors.transparent,

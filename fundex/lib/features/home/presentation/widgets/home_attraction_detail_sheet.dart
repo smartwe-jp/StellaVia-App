@@ -167,7 +167,7 @@ class _AttractionDetailBody extends StatelessWidget {
       height: 1.55,
       fontWeight: FontWeight.w800,
     );
-    final accentStyle = titleStyle.copyWith(color: colors.highlightGold);
+    final accentStyle = titleStyle.copyWith(color: colors.infoForeground);
 
     return Padding(
       padding: EdgeInsets.only(bottom: bottomSpacing),
@@ -224,17 +224,17 @@ class _ShieldLayerCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: colors.surface,
         borderRadius: BorderRadius.circular(UiTokens.radius12),
-        border: Border.all(color: colors.highlightGold),
+        border: Border.all(color: colors.infoForeground),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Icon(Icons.security, size: 24, color: colors.highlightGold),
+          Icon(Icons.security, size: 24, color: colors.infoForeground),
           const SizedBox(width: UiTokens.spacing12),
           Text(
               label,
               style: appText.pageTitle.copyWith(
-                color: colors.highlightGold,
+                color: colors.infoForeground,
                 fontSize: 16,
                 height: 1.35,
               ),
@@ -245,7 +245,7 @@ class _ShieldLayerCard extends StatelessWidget {
             height: 54,
             margin: const EdgeInsets.symmetric(horizontal: UiTokens.spacing12),
             decoration: BoxDecoration(
-              color: colors.highlightGold,
+              color: colors.infoForeground,
               borderRadius: BorderRadius.circular(99),
             ),
           ),

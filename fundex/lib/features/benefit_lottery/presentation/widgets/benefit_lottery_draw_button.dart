@@ -24,10 +24,10 @@ class BenefitLotteryDrawButton extends StatelessWidget {
       child: FilledButton(
         onPressed: isLoading ? null : onPressed,
         style: FilledButton.styleFrom(
-          backgroundColor: colors.highlightGold,
-          foregroundColor: colors.heroStart,
-          disabledBackgroundColor: colors.highlightGold.withValues(alpha: 0.48),
-          disabledForegroundColor: colors.heroStart.withValues(alpha: 0.72),
+          backgroundColor: colors.primary,
+          foregroundColor: colors.onDark,
+          disabledBackgroundColor: colors.primary.withValues(alpha: 0.48),
+          disabledForegroundColor: colors.onDark.withValues(alpha: 0.72),
           minimumSize: const Size.fromHeight(48),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(UiTokens.radius12),
@@ -41,7 +41,7 @@ class BenefitLotteryDrawButton extends StatelessWidget {
                 dimension: 16,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: colors.heroStart,
+                  color: colors.onDark,
                 ),
               ),
               const SizedBox(width: UiTokens.spacing8),
@@ -49,7 +49,7 @@ class BenefitLotteryDrawButton extends StatelessWidget {
             Text(
               label,
               style: appText.button.copyWith(
-                color: colors.heroStart,
+                color: colors.onDark,
                 fontWeight: FontWeight.w800,
               ),
             ),

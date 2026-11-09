@@ -65,14 +65,14 @@ class FundSecondaryMarketCard extends StatelessWidget {
               colors.surfaceAlt,
             ),
             Color.alphaBlend(
-              colors.highlightGold.withValues(alpha: 0.22),
+              colors.primaryAlt.withValues(alpha: 0.22),
               colors.surface,
             ),
           ]
         : <Color>[
             colors.surface,
             Color.alphaBlend(
-              colors.highlightGold.withValues(alpha: 0.14),
+              colors.primaryAlt.withValues(alpha: 0.14),
               colors.surface,
             ),
           ];
@@ -179,8 +179,8 @@ class FundSecondaryMarketCard extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final actionBackgroundColor = theme.brightness == Brightness.dark
-        ? colors.highlightGold.withValues(alpha: 0.16)
-        : colors.highlightGold.withValues(alpha: 0.08);
+        ? colors.primaryAlt.withValues(alpha: 0.16)
+        : colors.primaryAlt.withValues(alpha: 0.08);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
@@ -203,7 +203,7 @@ class FundSecondaryMarketCard extends StatelessWidget {
                     Text(
                       data.annualYield,
                       style: appText.numericHeadline.copyWith(
-                        color: colors.highlightGold,
+                        color: colors.infoForeground,
                         height: 1.0,
                       ),
                     ),
@@ -242,11 +242,11 @@ class FundSecondaryMarketCard extends StatelessWidget {
               onPressed: data.onTap,
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size.fromHeight(38),
-                side: BorderSide(color: colors.highlightGold),
+                side: BorderSide(color: colors.infoForeground),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                foregroundColor: colors.highlightGold,
+                foregroundColor: colors.infoForeground,
                 backgroundColor: actionBackgroundColor,
                 textStyle: appText.button,
                 padding: const EdgeInsets.symmetric(horizontal: 12),

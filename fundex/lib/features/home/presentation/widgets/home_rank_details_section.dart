@@ -58,11 +58,10 @@ class HomeRankDetailsSection extends ConsumerWidget {
             Column(
               spacing: 20,
               children: [
-                for (var i = 0; i < ranks.length; i++)
+                for (final rank in ranks)
                   HomeRankDetailCard(
-                    key: ValueKey('rank-${ranks[i].name}'),
-                    rank: ranks[i],
-                    index: i,
+                    key: ValueKey('rank-${rank.name}'),
+                    rank: rank,
                   ),
               ],
             ),
