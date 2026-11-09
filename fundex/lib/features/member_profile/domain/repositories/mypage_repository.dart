@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import '../entities/mypage_models.dart';
 
 abstract class MyPageRepository {
+  Future<({List<MyPageOrderInquiryRecord> rows, int total})> fetchTradeListings({required int page, int? userId, String? status});
+  Future<({List<MyPageApplyRecord> rows, int total})> fetchTradeApplications({required int page});
   Future<List<SecondaryMarketHolding>> fetchSecondaryMarketHoldings();
   Future<MyPageAccountStatistic> fetchAccountStatistic();
   Future<List<MyPageAssetTrend>> fetchAssetTrend({
@@ -10,6 +12,10 @@ abstract class MyPageRepository {
     required DateTime endDate,
   });
 
+  Future<({List<MyPageApplyRecord> rows, int total})> fetchFundManagementApplications({
+    required int page,
+    required int status,
+  });
   Future<List<MyPageApplyRecord>> fetchApplyList({
     int? startPage,
     int? limit,

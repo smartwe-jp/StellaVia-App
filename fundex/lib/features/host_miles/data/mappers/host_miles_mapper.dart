@@ -5,6 +5,8 @@ extension HostMilesTierMapping on HostMilesTierDto {
   HostMilesTier toEntity() {
     return HostMilesTier(
       currentTier: currentTier,
+      pointsBalance: pointsBalance,
+      cumulativeMiles:cumulativeMiles,
       pointRate: pointRate,
       expireMonths: expireMonths,
       leadTimeMonths: leadTimeMonths,
@@ -70,6 +72,7 @@ extension HostMilesCumulativeChartMapping on HostMilesCumulativeChartDto {
 extension HostMilesTransactionMapping on HostMilesTransactionDto {
   HostMilesTransaction toEntity() {
     return HostMilesTransaction(
+      typeDescription: typeDescription,
       amount: amount,
       bizType: bizType,
       createTime: createTime,

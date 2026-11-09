@@ -9,7 +9,7 @@ import '../models/wallet_withdraw_dto.dart';
 
 abstract class WalletRemoteDataSource {
   Future<List<WalletAccountHistoryDto>> fetchAccountHistory({
-    int accountType = 0,
+    int? accountType = 0,
   });
 
   Future<WalletBankAccountInfoDto?> fetchBankAccountInfo();
@@ -74,7 +74,7 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
 
   @override
   Future<List<WalletAccountHistoryDto>> fetchAccountHistory({
-    int accountType = 0,
+    int? accountType = 0,
   }) {
     return _apiClient.fetchAccountHistory(accountType: accountType);
   }

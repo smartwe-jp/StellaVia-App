@@ -87,7 +87,7 @@ class _MyPageSecondaryMarketSellConfirmPageState
       }
       refreshSecondaryMarket(ref);
       AppNotice.show(context, message: l10n.myPageResaleSubmitSuccess);
-      context.go('/profile/my/secondary-market');
+      context.go('/profile/my/secondary-market?tab=sales');
     } catch (error) {
       if (!mounted) {
         return;

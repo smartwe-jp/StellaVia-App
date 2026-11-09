@@ -147,6 +147,21 @@ class UserInvestmentApiClient {
     List<int>? statuses,
     int? marketType,
   }) async {
+    return (await fetchApplyPage(
+      startPage: startPage,
+      limit: limit,
+      statuses: statuses,
+      marketType: marketType,
+    )).rows;
+  }
+
+  Future<({List<UserInvestmentApplyRecordDto> rows, int total})>
+  fetchApplyPage({
+    int? startPage,
+    int? limit,
+    List<int>? statuses,
+    int? marketType,
+  }) async {
     final body = <String, dynamic>{
       if (startPage != null) 'startPage': startPage,
       if (limit != null) 'limit': limit,
@@ -160,17 +175,11 @@ class UserInvestmentApiClient {
           options: authRequired(true),
         );
 
-    final rows = _envelopeCodec.extractPagedRows(
-      _envelopeCodec.toJsonMap(response.data),
-      fallbackMessage: 'Failed to load member apply list.',
-      pageProfile: _pageProfile,
+    return _tradePage(
+      response.data,
+      UserInvestmentApplyRecordDto.fromJson,
+      'Failed to load member apply list.',
     );
-    return rows
-        .map(
-          (Map<String, dynamic> row) =>
-              UserInvestmentApplyRecordDto.fromJson(row),
-        )
-        .toList(growable: false);
   }
 
   Future<void> submitUserWithdraw({
@@ -202,6 +211,23 @@ class UserInvestmentApiClient {
     int limit = 20,
     bool publicAccess = false,
   }) async {
+    return (await fetchOrderInquiryPage(
+      userId: userId,
+      status: status,
+      startPage: startPage,
+      limit: limit,
+      publicAccess: publicAccess,
+    )).rows;
+  }
+
+  Future<({List<UserInvestmentOrderInquiryRecordDto> rows, int total})>
+  fetchOrderInquiryPage({
+    int? userId,
+    String? status,
+    int startPage = 1,
+    int limit = 20,
+    bool publicAccess = false,
+  }) async {
     final path = publicAccess
         ? offlineOrderInquiryPagePath
         : orderInquiryPagePath;
@@ -216,17 +242,39 @@ class UserInvestmentApiClient {
       options: authRequired(!publicAccess),
     );
 
-    final rows = _envelopeCodec.extractPagedRows(
-      _envelopeCodec.toJsonMap(response.data),
-      fallbackMessage: 'Failed to load order inquiry list.',
+    return _tradePage(
+      response.data,
+      UserInvestmentOrderInquiryRecordDto.fromJson,
+      'Failed to load order inquiry list.',
+    );
+  }
+
+  ({List<T> rows, int total}) _tradePage<T>(
+    Object? response,
+    T Function(Map<String, dynamic>) decode,
+    String message,
+  ) {
+    final payload = _envelopeCodec.toJsonMap(response);
+    final extracted = _envelopeCodec.extractPagedRows(
+      payload,
+      fallbackMessage: message,
       pageProfile: _pageProfile,
     );
-    return rows
-        .map(
-          (Map<String, dynamic> row) =>
-              UserInvestmentOrderInquiryRecordDto.fromJson(row),
-        )
-        .toList(growable: false);
+    final container = payload[_pageProfile.containerKey];
+    final page = container is Map ? container['data'] ?? container : container;
+    final rawRows = page is Map
+        ? page['rows'] ?? page['list'] ?? page['investList']
+        : page;
+    final rows = rawRows is List
+        ? _envelopeCodec.toJsonMapList(rawRows)
+        : extracted;
+    final total = page is Map
+        ? page['total'] ?? page['count'] ?? page['totalCount']
+        : payload['total'];
+    return (
+      rows: rows.map(decode).toList(growable: false),
+      total: int.tryParse(total?.toString() ?? '') ?? rows.length,
+    );
   }
 
   Future<List<UserInvestmentRecordDto>> fetchInvestmentList({
@@ -377,12 +425,25 @@ class UserInvestmentApiClient {
 
   Future<List<SecondaryMarketHoldingDto>> fetchSecondaryMarketHoldings() async {
     const path = '/crowdfunding/secondary/market/available';
-    final response = await _dioForPath(path).get<Map<String, dynamic>>(path, options: authRequired(true));
+    final response = await _dioForPath(
+      path,
+    ).get<Map<String, dynamic>>(path, options: authRequired(true));
     final payload = _envelopeCodec.toJsonMap(response.data);
-    _envelopeCodec.assertSuccessIfEnvelope(payload, fallbackMessage: 'Failed to load available holdings.', requireTruthyData: false);
-    final data = payload['data'];
-    if (data is! List) throw const FormatException('Expected available holdings list.');
-    return data.map((row) => SecondaryMarketHoldingDto.fromJson(_envelopeCodec.toJsonMap(row))).toList(growable: false);
+    _envelopeCodec.assertSuccessIfEnvelope(
+      payload,
+      fallbackMessage: 'Failed to load available holdings.',
+      requireTruthyData: false,
+    );
+    final body = payload['data'];
+    final data = body is Map ? body['list'] : body;
+    if (data is! List)
+      throw const FormatException('Expected available holdings list.');
+    return data
+        .map(
+          (row) =>
+              SecondaryMarketHoldingDto.fromJson(_envelopeCodec.toJsonMap(row)),
+        )
+        .toList(growable: false);
   }
 
   Future<void> submitSecondaryMarketCreate({

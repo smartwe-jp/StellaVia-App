@@ -7,6 +7,9 @@ class MyPageSummarySection extends StatelessWidget {
   const MyPageSummarySection({super.key});
   @override
   Widget build(BuildContext context) => const MyPageChartRefreshScope(
-    child: Column(children: [MyPageMembershipSection(), MyPageSummaryCharts()]),
+    isSummary: true,
+    child: Column(
+      children: [MyPageMembershipSection(summary: true), MyPageSummaryCharts()],
+    ),
   );
 }

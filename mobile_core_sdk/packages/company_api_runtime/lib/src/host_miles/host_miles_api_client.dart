@@ -12,6 +12,8 @@ class HostMilesApiPaths {
   static const fetchTierRules = '/crowdfunding/offline/listRules';
   static const fetchChart = '/crowdfunding/points/chart';
   static const fetchCumulativeChart = '/crowdfunding/points/cumulative-chart';
+  static const earnedMonth = '/crowdfunding/points/engine-point-month';
+  static const expectedNextMonth = '/crowdfunding/points/pre-engine-point';
   static const fetchTransactions = '/crowdfunding/points/user-transactions';
 }
 
@@ -131,7 +133,7 @@ class HostMilesApiClient {
     );
     final data = payload[_codec.profile.dataKey];
     return readList(
-      data,
+      data is Map ? data['rows'] ?? data['list'] ?? data['data'] : data,
       (value) => readObject(value, HostMilesChartEntryDto.fromJson),
     );
   }
@@ -156,6 +158,32 @@ class HostMilesApiClient {
     );
     final data = payload[_codec.profile.dataKey];
     return readObject(data, HostMilesCumulativeChartDto.fromJson);
+  }
+
+  Future<num> fetchEarnedMonth(DateTime month) =>
+      _readMiles(HostMilesApiPaths.earnedMonth, {'yearMonth': apiMonth(month)});
+  Future<num> fetchExpectedNextMonth() =>
+      _readMiles(HostMilesApiPaths.expectedNextMonth, null);
+
+  Future<num> _readMiles(String path, Map<String, String>? query) async {
+    final response = await _dioForPath(path).get<Map<String, dynamic>>(
+      path,
+      queryParameters: query,
+      options: authRequired(true),
+    );
+    final payload = _codec.toJsonMap(response.data);
+    if (!_codec.looksLikeEnvelope(payload)) {
+      throw const FormatException('Missing miles response envelope.');
+    }
+    _codec.assertSuccessIfEnvelope(
+      payload,
+      fallbackMessage: 'Failed to load monthly miles.',
+    );
+    final value = readNumber(payload[_codec.profile.dataKey]);
+    if (value == null || !value.isFinite) {
+      throw const FormatException('Invalid monthly miles.');
+    }
+    return value;
   }
 
   Future<HostMilesTransactionPageDto> fetchTransactions({
@@ -186,6 +214,12 @@ class HostMilesApiClient {
       fallbackMessage: 'Failed to fetchTransactions.',
     );
     final data = payload[_codec.profile.dataKey];
+    if (data is List) {
+      return HostMilesTransactionPageDto.fromJson({
+        'total': data.length,
+        'rows': data,
+      });
+    }
     return readObject(data, HostMilesTransactionPageDto.fromJson);
   }
 }

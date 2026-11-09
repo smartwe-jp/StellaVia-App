@@ -6912,6 +6912,212 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageChartAssets => 'Assets';
 
   @override
+  String get myPageChartAvailable => 'Available balance';
+
+  @override
+  String get myPageChartCashHint =>
+      'Standby cash for deposits, withdrawals, and investments';
+
+  @override
+  String get myPageChartDividendUnit => '(Unit: ¥1,000)';
+
+  @override
+  String get myPageChartMilesBalance => 'Host mile balance';
+
+  @override
+  String get myPageMilesHistoryUnit => 'mile';
+
+  @override
+  String get manageTierRoomsHint =>
+      'Maximum rooms you can book at once. The quota returns after checkout.';
+
+  @override
+  String manageMilesPrevMonth(String ym) {
+    return '$ym (last month)';
+  }
+
+  @override
+  String manageMilesThisMonth(String ym) {
+    return '$ym (this month)';
+  }
+
+  @override
+  String manageMilesNextMonth(String ym) {
+    return '$ym (next month)';
+  }
+
+  @override
+  String get manageMilesEarnedDone => 'Host miles (earned)';
+
+  @override
+  String get manageMilesEarnedPlan => 'Host miles (expected)';
+
+  @override
+  String get manageMilesCumulative => 'Cumulative host miles';
+
+  @override
+  String get manageTierCumulativeMiles => 'Cumulative miles';
+
+  @override
+  String get myPageMilesHistoryLink => 'Mile history';
+
+  @override
+  String get myPageMilesHistoryTitle => 'Host mile history';
+
+  @override
+  String myPageMilesHistoryCount(int count) {
+    return 'Latest $count';
+  }
+
+  @override
+  String get myPageMilesHistoryEmpty => 'No mile history yet';
+
+  @override
+  String get myPageMilesHistoryError => 'Failed to load mile history';
+
+  @override
+  String get myPageMilesHistoryEarn => 'Earned';
+
+  @override
+  String get myPageMilesHistoryUse => 'Used';
+
+  @override
+  String get myPageMilesHistoryExpired => 'Expired';
+
+  @override
+  String get myPageMilesHistoryExpiring => 'Expiring soon (1 month)';
+
+  @override
+  String get myPageMilesHistoryOther => 'Other';
+
+  @override
+  String myPageMilesHistoryExpiryDate(String date) {
+    return 'Expires: $date';
+  }
+
+  @override
+  String get myPageMilesHistoryNext => 'Next';
+
+  @override
+  String get myPageMilesHistoryPrev => 'Previous';
+
+  @override
+  String get hostManageFundExpectDisclaimer =>
+      '*Future redemptions and dividends are not guaranteed.';
+
+  @override
+  String get hostManageFundExpectPrincipalUnit => '(unit: ¥10,000)';
+
+  @override
+  String get hostManageFundBankEmpty => 'No transfer account available';
+
+  @override
+  String get hostManageBankFee =>
+      '※ Transfer fees are borne by the customer. Please make sure the amount credited after fees is not short of your application amount.';
+
+  @override
+  String get hostManageFundTabApplying => 'Applying';
+
+  @override
+  String get hostManageFundTabPending => 'Awaiting deposit';
+
+  @override
+  String get hostManageFundTabRunning => 'In operation';
+
+  @override
+  String get hostManageFundTabRedeem => 'Redemption / dividends due';
+
+  @override
+  String get hostManageFundTabDividend => 'Dividend history';
+
+  @override
+  String get hostManageFundEmptyApplying => 'No funds currently in application';
+
+  @override
+  String get hostManageFundEmptyPending => 'No funds awaiting deposit';
+
+  @override
+  String get hostManageFundEmptyRunning => 'No funds currently in operation';
+
+  @override
+  String get hostManageFundEmptyDividend => 'No dividend history yet';
+
+  @override
+  String get hostManageFundExpectTotal => 'Total';
+
+  @override
+  String get hostManageFundExpectPrincipal => 'Expected redemption';
+
+  @override
+  String get hostManageFundExpectBenefit => 'Expected dividend';
+
+  @override
+  String get hostManageFundThisMonth => 'This month';
+
+  @override
+  String get hostManageFundNextMonth => 'Next month';
+
+  @override
+  String get hostManageFundBankAccount => 'Transfer account';
+
+  @override
+  String get hostManageFundBankConfirm => 'View transfer account';
+
+  @override
+  String get hostManageFundDepositDue => 'Deposit deadline';
+
+  @override
+  String get hostManageFundDividendDate => 'Date';
+
+  @override
+  String get hostManageFundDividendAmount => 'Dividend';
+
+  @override
+  String get hostManageFundDividendReceived => 'Received';
+
+  @override
+  String get hostManageFundDividendReceivedHint =>
+      'Amount after withholding tax is deducted from the dividend.';
+
+  @override
+  String get hostManageFundYieldFloating => 'Floating return';
+
+  @override
+  String hostManageFundYieldFixedFloating(String pct) {
+    return '$pct% + floating return';
+  }
+
+  @override
+  String get hostManageFundMonthUnit => 'months';
+
+  @override
+  String get hostManageFundApplyAmount => 'Amount applied';
+
+  @override
+  String get hostManageFundApplyUnits => 'Units applied';
+
+  @override
+  String get hostManageFundExpectRange1y => 'Next 1 year';
+
+  @override
+  String get hostManageFundExpectRange3y => 'Next 3 years';
+
+  @override
+  String get hostManageFundExpectRange5y => 'Next 5 years';
+
+  @override
+  String get hostManageFundName => '基金名稱';
+
+  @override
+  String get hostManageFundYield => 'Expected yield';
+
+  @override
+  String get hostManageFundPeriod => 'Term';
+
+  @override
+  String get hostManageGoFundList => 'View fund list';
+
+  @override
   String get myPageChartOperating => 'Operating balance';
 
   @override
@@ -6948,6 +7154,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myPageRankMax => 'Highest rank reached';
+
+  @override
+  String get myPageNextRankTitle => 'Next rank';
+
+  @override
+  String get myPageNextRankBalance => 'Additional invested balance';
 
   @override
   String get myPageRankGap => 'Operating balance needed for next rank';
@@ -7074,6 +7286,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not retrieve the miles quote. Please retry.';
 
   @override
+  String get myPageShortcutSummary => 'Summary';
+
+  @override
+  String get myPageShortcutFunds => 'Host fund management';
+
+  @override
+  String get myPageShortcutMiles => 'Host miles management';
+
+  @override
+  String get myPageShortcutDocuments => 'Documents';
+
+  @override
   String get secondaryMarketManage => 'Trading activity';
 
   @override
@@ -7194,4 +7418,37 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get hotelExtraGuestMilesNotice =>
       'Reference miles cover all rooms and the full stay for each room type. The quoted total applies.';
+
+  @override
+  String get tradeTabSell => 'Sell funds';
+
+  @override
+  String get tradeTabBuy => 'Buy funds';
+
+  @override
+  String get tradeTabHistory => 'Trade history';
+
+  @override
+  String get tradeSubSell => 'Sell';
+
+  @override
+  String get tradeSubBuy => 'Apply';
+
+  @override
+  String get tradeInvestAmount => 'Invested amount';
+
+  @override
+  String get tradeSellApply => 'Sell order';
+
+  @override
+  String get tradeEmptySell => 'No funds available to sell';
+
+  @override
+  String get tradeEmptyBuy => 'No funds available to buy';
+
+  @override
+  String get tradeEmptyHistorySell => 'No sell listings';
+
+  @override
+  String get tradeEmptyHistoryBuy => 'No buy applications';
 }

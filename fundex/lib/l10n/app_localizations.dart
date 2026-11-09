@@ -12489,6 +12489,384 @@ abstract class AppLocalizations {
   /// **'Assets'**
   String get myPageChartAssets;
 
+  /// No description provided for @myPageChartAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Available balance'**
+  String get myPageChartAvailable;
+
+  /// No description provided for @myPageChartCashHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Standby cash for deposits, withdrawals, and investments'**
+  String get myPageChartCashHint;
+
+  /// No description provided for @myPageChartDividendUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'(Unit: ¥1,000)'**
+  String get myPageChartDividendUnit;
+
+  /// No description provided for @myPageChartMilesBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Host mile balance'**
+  String get myPageChartMilesBalance;
+
+  /// No description provided for @myPageMilesHistoryUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'mile'**
+  String get myPageMilesHistoryUnit;
+
+  /// No description provided for @manageTierRoomsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum rooms you can book at once. The quota returns after checkout.'**
+  String get manageTierRoomsHint;
+
+  /// No description provided for @manageMilesPrevMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'{ym} (last month)'**
+  String manageMilesPrevMonth(String ym);
+
+  /// No description provided for @manageMilesThisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'{ym} (this month)'**
+  String manageMilesThisMonth(String ym);
+
+  /// No description provided for @manageMilesNextMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'{ym} (next month)'**
+  String manageMilesNextMonth(String ym);
+
+  /// No description provided for @manageMilesEarnedDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Host miles (earned)'**
+  String get manageMilesEarnedDone;
+
+  /// No description provided for @manageMilesEarnedPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'Host miles (expected)'**
+  String get manageMilesEarnedPlan;
+
+  /// No description provided for @manageMilesCumulative.
+  ///
+  /// In en, this message translates to:
+  /// **'Cumulative host miles'**
+  String get manageMilesCumulative;
+
+  /// No description provided for @manageTierCumulativeMiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Cumulative miles'**
+  String get manageTierCumulativeMiles;
+
+  /// No description provided for @myPageMilesHistoryLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Mile history'**
+  String get myPageMilesHistoryLink;
+
+  /// No description provided for @myPageMilesHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Host mile history'**
+  String get myPageMilesHistoryTitle;
+
+  /// No description provided for @myPageMilesHistoryCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest {count}'**
+  String myPageMilesHistoryCount(int count);
+
+  /// No description provided for @myPageMilesHistoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No mile history yet'**
+  String get myPageMilesHistoryEmpty;
+
+  /// No description provided for @myPageMilesHistoryError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load mile history'**
+  String get myPageMilesHistoryError;
+
+  /// No description provided for @myPageMilesHistoryEarn.
+  ///
+  /// In en, this message translates to:
+  /// **'Earned'**
+  String get myPageMilesHistoryEarn;
+
+  /// No description provided for @myPageMilesHistoryUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Used'**
+  String get myPageMilesHistoryUse;
+
+  /// No description provided for @myPageMilesHistoryExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get myPageMilesHistoryExpired;
+
+  /// No description provided for @myPageMilesHistoryExpiring.
+  ///
+  /// In en, this message translates to:
+  /// **'Expiring soon (1 month)'**
+  String get myPageMilesHistoryExpiring;
+
+  /// No description provided for @myPageMilesHistoryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get myPageMilesHistoryOther;
+
+  /// No description provided for @myPageMilesHistoryExpiryDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Expires: {date}'**
+  String myPageMilesHistoryExpiryDate(String date);
+
+  /// No description provided for @myPageMilesHistoryNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get myPageMilesHistoryNext;
+
+  /// No description provided for @myPageMilesHistoryPrev.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get myPageMilesHistoryPrev;
+
+  /// No description provided for @hostManageFundExpectDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'*Future redemptions and dividends are not guaranteed.'**
+  String get hostManageFundExpectDisclaimer;
+
+  /// No description provided for @hostManageFundExpectPrincipalUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'(unit: ¥10,000)'**
+  String get hostManageFundExpectPrincipalUnit;
+
+  /// No description provided for @hostManageFundBankEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No transfer account available'**
+  String get hostManageFundBankEmpty;
+
+  /// No description provided for @hostManageBankFee.
+  ///
+  /// In en, this message translates to:
+  /// **'※ Transfer fees are borne by the customer. Please make sure the amount credited after fees is not short of your application amount.'**
+  String get hostManageBankFee;
+
+  /// No description provided for @hostManageFundTabApplying.
+  ///
+  /// In en, this message translates to:
+  /// **'Applying'**
+  String get hostManageFundTabApplying;
+
+  /// No description provided for @hostManageFundTabPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting deposit'**
+  String get hostManageFundTabPending;
+
+  /// No description provided for @hostManageFundTabRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'In operation'**
+  String get hostManageFundTabRunning;
+
+  /// No description provided for @hostManageFundTabRedeem.
+  ///
+  /// In en, this message translates to:
+  /// **'Redemption / dividends due'**
+  String get hostManageFundTabRedeem;
+
+  /// No description provided for @hostManageFundTabDividend.
+  ///
+  /// In en, this message translates to:
+  /// **'Dividend history'**
+  String get hostManageFundTabDividend;
+
+  /// No description provided for @hostManageFundEmptyApplying.
+  ///
+  /// In en, this message translates to:
+  /// **'No funds currently in application'**
+  String get hostManageFundEmptyApplying;
+
+  /// No description provided for @hostManageFundEmptyPending.
+  ///
+  /// In en, this message translates to:
+  /// **'No funds awaiting deposit'**
+  String get hostManageFundEmptyPending;
+
+  /// No description provided for @hostManageFundEmptyRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'No funds currently in operation'**
+  String get hostManageFundEmptyRunning;
+
+  /// No description provided for @hostManageFundEmptyDividend.
+  ///
+  /// In en, this message translates to:
+  /// **'No dividend history yet'**
+  String get hostManageFundEmptyDividend;
+
+  /// No description provided for @hostManageFundExpectTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get hostManageFundExpectTotal;
+
+  /// No description provided for @hostManageFundExpectPrincipal.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected redemption'**
+  String get hostManageFundExpectPrincipal;
+
+  /// No description provided for @hostManageFundExpectBenefit.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected dividend'**
+  String get hostManageFundExpectBenefit;
+
+  /// No description provided for @hostManageFundThisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'This month'**
+  String get hostManageFundThisMonth;
+
+  /// No description provided for @hostManageFundNextMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get hostManageFundNextMonth;
+
+  /// No description provided for @hostManageFundBankAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer account'**
+  String get hostManageFundBankAccount;
+
+  /// No description provided for @hostManageFundBankConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'View transfer account'**
+  String get hostManageFundBankConfirm;
+
+  /// No description provided for @hostManageFundDepositDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit deadline'**
+  String get hostManageFundDepositDue;
+
+  /// No description provided for @hostManageFundDividendDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get hostManageFundDividendDate;
+
+  /// No description provided for @hostManageFundDividendAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Dividend'**
+  String get hostManageFundDividendAmount;
+
+  /// No description provided for @hostManageFundDividendReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Received'**
+  String get hostManageFundDividendReceived;
+
+  /// No description provided for @hostManageFundDividendReceivedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount after withholding tax is deducted from the dividend.'**
+  String get hostManageFundDividendReceivedHint;
+
+  /// No description provided for @hostManageFundYieldFloating.
+  ///
+  /// In en, this message translates to:
+  /// **'Floating return'**
+  String get hostManageFundYieldFloating;
+
+  /// No description provided for @hostManageFundYieldFixedFloating.
+  ///
+  /// In en, this message translates to:
+  /// **'{pct}% + floating return'**
+  String hostManageFundYieldFixedFloating(String pct);
+
+  /// No description provided for @hostManageFundMonthUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'months'**
+  String get hostManageFundMonthUnit;
+
+  /// No description provided for @hostManageFundApplyAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount applied'**
+  String get hostManageFundApplyAmount;
+
+  /// No description provided for @hostManageFundApplyUnits.
+  ///
+  /// In en, this message translates to:
+  /// **'Units applied'**
+  String get hostManageFundApplyUnits;
+
+  /// No description provided for @hostManageFundExpectRange1y.
+  ///
+  /// In en, this message translates to:
+  /// **'Next 1 year'**
+  String get hostManageFundExpectRange1y;
+
+  /// No description provided for @hostManageFundExpectRange3y.
+  ///
+  /// In en, this message translates to:
+  /// **'Next 3 years'**
+  String get hostManageFundExpectRange3y;
+
+  /// No description provided for @hostManageFundExpectRange5y.
+  ///
+  /// In en, this message translates to:
+  /// **'Next 5 years'**
+  String get hostManageFundExpectRange5y;
+
+  /// No description provided for @hostManageFundName.
+  ///
+  /// In en, this message translates to:
+  /// **'基金名稱'**
+  String get hostManageFundName;
+
+  /// No description provided for @hostManageFundYield.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected yield'**
+  String get hostManageFundYield;
+
+  /// No description provided for @hostManageFundPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Term'**
+  String get hostManageFundPeriod;
+
+  /// No description provided for @hostManageGoFundList.
+  ///
+  /// In en, this message translates to:
+  /// **'View fund list'**
+  String get hostManageGoFundList;
+
   /// No description provided for @myPageChartOperating.
   ///
   /// In en, this message translates to:
@@ -12560,6 +12938,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Highest rank reached'**
   String get myPageRankMax;
+
+  /// No description provided for @myPageNextRankTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Next rank'**
+  String get myPageNextRankTitle;
+
+  /// No description provided for @myPageNextRankBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional invested balance'**
+  String get myPageNextRankBalance;
 
   /// No description provided for @myPageRankGap.
   ///
@@ -12782,6 +13172,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not retrieve the miles quote. Please retry.'**
   String get hotelQuoteFailed;
+
+  /// No description provided for @myPageShortcutSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get myPageShortcutSummary;
+
+  /// No description provided for @myPageShortcutFunds.
+  ///
+  /// In en, this message translates to:
+  /// **'Host fund management'**
+  String get myPageShortcutFunds;
+
+  /// No description provided for @myPageShortcutMiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Host miles management'**
+  String get myPageShortcutMiles;
+
+  /// No description provided for @myPageShortcutDocuments.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents'**
+  String get myPageShortcutDocuments;
 
   /// No description provided for @secondaryMarketManage.
   ///
@@ -13010,6 +13424,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reference miles cover all rooms and the full stay for each room type. The quoted total applies.'**
   String get hotelExtraGuestMilesNotice;
+
+  /// No description provided for @tradeTabSell.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell funds'**
+  String get tradeTabSell;
+
+  /// No description provided for @tradeTabBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy funds'**
+  String get tradeTabBuy;
+
+  /// No description provided for @tradeTabHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Trade history'**
+  String get tradeTabHistory;
+
+  /// No description provided for @tradeSubSell.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell'**
+  String get tradeSubSell;
+
+  /// No description provided for @tradeSubBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get tradeSubBuy;
+
+  /// No description provided for @tradeInvestAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Invested amount'**
+  String get tradeInvestAmount;
+
+  /// No description provided for @tradeSellApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell order'**
+  String get tradeSellApply;
+
+  /// No description provided for @tradeEmptySell.
+  ///
+  /// In en, this message translates to:
+  /// **'No funds available to sell'**
+  String get tradeEmptySell;
+
+  /// No description provided for @tradeEmptyBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'No funds available to buy'**
+  String get tradeEmptyBuy;
+
+  /// No description provided for @tradeEmptyHistorySell.
+  ///
+  /// In en, this message translates to:
+  /// **'No sell listings'**
+  String get tradeEmptyHistorySell;
+
+  /// No description provided for @tradeEmptyHistoryBuy.
+  ///
+  /// In en, this message translates to:
+  /// **'No buy applications'**
+  String get tradeEmptyHistoryBuy;
 }
 
 class _AppLocalizationsDelegate

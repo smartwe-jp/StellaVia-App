@@ -6584,6 +6584,208 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageChartAssets => '資産';
 
   @override
+  String get myPageChartAvailable => '利用可能残高';
+
+  @override
+  String get myPageChartCashHint => '入出金・投資に使える待機資金';
+
+  @override
+  String get myPageChartDividendUnit => '(単位: 千円)';
+
+  @override
+  String get myPageChartMilesBalance => '宿主マイル残高';
+
+  @override
+  String get myPageMilesHistoryUnit => 'mile';
+
+  @override
+  String get manageTierRoomsHint => '※同時に予約できる室数の上限です。チェックアウト後、予約できる室数が戻ります。';
+
+  @override
+  String manageMilesPrevMonth(String ym) {
+    return '$ym（前月分）';
+  }
+
+  @override
+  String manageMilesThisMonth(String ym) {
+    return '$ym（今月分）';
+  }
+
+  @override
+  String manageMilesNextMonth(String ym) {
+    return '$ym（来月分）';
+  }
+
+  @override
+  String get manageMilesEarnedDone => '宿主マイル（獲得済み）';
+
+  @override
+  String get manageMilesEarnedPlan => '宿主マイル（獲得予定）';
+
+  @override
+  String get manageMilesCumulative => '累計獲得宿主マイル';
+
+  @override
+  String get manageTierCumulativeMiles => '累計獲得マイル';
+
+  @override
+  String get myPageMilesHistoryLink => 'マイル履歴';
+
+  @override
+  String get myPageMilesHistoryTitle => '宿主マイル履歴';
+
+  @override
+  String myPageMilesHistoryCount(int count) {
+    return '最新の$count件';
+  }
+
+  @override
+  String get myPageMilesHistoryEmpty => 'マイル履歴がありません';
+
+  @override
+  String get myPageMilesHistoryError => 'マイル履歴の取得に失敗しました';
+
+  @override
+  String get myPageMilesHistoryEarn => '獲得';
+
+  @override
+  String get myPageMilesHistoryUse => '利用';
+
+  @override
+  String get myPageMilesHistoryExpired => '失効';
+
+  @override
+  String get myPageMilesHistoryExpiring => '失効予定（1ヶ月前）';
+
+  @override
+  String get myPageMilesHistoryOther => 'その他';
+
+  @override
+  String myPageMilesHistoryExpiryDate(String date) {
+    return '有効期限：$date';
+  }
+
+  @override
+  String get myPageMilesHistoryNext => '次へ';
+
+  @override
+  String get myPageMilesHistoryPrev => '前へ';
+
+  @override
+  String get hostManageFundExpectDisclaimer => '*将来の償還・配当を保証するものではありません。';
+
+  @override
+  String get hostManageFundExpectPrincipalUnit => '(単位: 万円)';
+
+  @override
+  String get hostManageFundBankEmpty => '振込先口座情報がありません';
+
+  @override
+  String get hostManageBankFee =>
+      '※振込手数料はお客様のご負担となります。手数料差引き後に入金額が不足しないよう、十分ご注意のうえお振込みください。';
+
+  @override
+  String get hostManageFundTabApplying => '応募中';
+
+  @override
+  String get hostManageFundTabPending => '入金前';
+
+  @override
+  String get hostManageFundTabRunning => '運用中';
+
+  @override
+  String get hostManageFundTabRedeem => '償還・配当予定';
+
+  @override
+  String get hostManageFundTabDividend => '配当実績';
+
+  @override
+  String get hostManageFundEmptyApplying => '応募中のファンドはありません';
+
+  @override
+  String get hostManageFundEmptyPending => '入金待ちのファンドはありません';
+
+  @override
+  String get hostManageFundEmptyRunning => '運用中のファンドはありません';
+
+  @override
+  String get hostManageFundEmptyDividend => '配当実績はありません';
+
+  @override
+  String get hostManageFundExpectTotal => '合計';
+
+  @override
+  String get hostManageFundExpectPrincipal => '償還予定額';
+
+  @override
+  String get hostManageFundExpectBenefit => '配当予定額';
+
+  @override
+  String get hostManageFundThisMonth => '今月';
+
+  @override
+  String get hostManageFundNextMonth => '来月';
+
+  @override
+  String get hostManageFundBankAccount => '振込先口座';
+
+  @override
+  String get hostManageFundBankConfirm => '振込先口座を確認';
+
+  @override
+  String get hostManageFundDepositDue => '入金期日';
+
+  @override
+  String get hostManageFundDividendDate => '日付';
+
+  @override
+  String get hostManageFundDividendAmount => '配当額';
+
+  @override
+  String get hostManageFundDividendReceived => '入金額';
+
+  @override
+  String get hostManageFundDividendReceivedHint => '配当額から源泉徴収税額を引いた金額です。';
+
+  @override
+  String get hostManageFundYieldFloating => '変動所得';
+
+  @override
+  String hostManageFundYieldFixedFloating(String pct) {
+    return '$pct% ＋ 変動所得';
+  }
+
+  @override
+  String get hostManageFundMonthUnit => 'ヶ月';
+
+  @override
+  String get hostManageFundApplyAmount => '応募額';
+
+  @override
+  String get hostManageFundApplyUnits => '応募口数';
+
+  @override
+  String get hostManageFundExpectRange1y => '未来1年間';
+
+  @override
+  String get hostManageFundExpectRange3y => '未来3年間';
+
+  @override
+  String get hostManageFundExpectRange5y => '未来5年間';
+
+  @override
+  String get hostManageFundName => 'ファンド名';
+
+  @override
+  String get hostManageFundYield => '想定利回り';
+
+  @override
+  String get hostManageFundPeriod => '運用期間';
+
+  @override
+  String get hostManageGoFundList => 'ファンド一覧を見る';
+
+  @override
   String get myPageChartOperating => '運用残高';
 
   @override
@@ -6620,6 +6822,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get myPageRankMax => '最高ランクに到達しています';
+
+  @override
+  String get myPageNextRankTitle => '次のランクアップまで';
+
+  @override
+  String get myPageNextRankBalance => '運用残高あと';
 
   @override
   String get myPageRankGap => '次のランクアップまで 運用残高あと';
@@ -6739,6 +6947,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelQuoteFailed => 'マイル見積もりを取得できませんでした。再試行してください。';
 
   @override
+  String get myPageShortcutSummary => 'サマリー';
+
+  @override
+  String get myPageShortcutFunds => '宿主ファンド管理';
+
+  @override
+  String get myPageShortcutMiles => '宿主マイル管理';
+
+  @override
+  String get myPageShortcutDocuments => '各種書類';
+
+  @override
   String get secondaryMarketManage => '売買管理';
 
   @override
@@ -6855,4 +7075,37 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get hotelExtraGuestMilesNotice =>
       '客室タイプごとの全室・全宿泊期間の参考値です。合計マイルは見積もり結果をご確認ください。';
+
+  @override
+  String get tradeTabSell => 'ファンドを売る';
+
+  @override
+  String get tradeTabBuy => 'ファンドを買う';
+
+  @override
+  String get tradeTabHistory => '売買履歴';
+
+  @override
+  String get tradeSubSell => '売却';
+
+  @override
+  String get tradeSubBuy => '応募';
+
+  @override
+  String get tradeInvestAmount => '運用投資額';
+
+  @override
+  String get tradeSellApply => '売却申込';
+
+  @override
+  String get tradeEmptySell => '売却できるファンドはありません';
+
+  @override
+  String get tradeEmptyBuy => '購入できるファンドはありません';
+
+  @override
+  String get tradeEmptyHistorySell => '売却の申込はありません';
+
+  @override
+  String get tradeEmptyHistoryBuy => '応募の申込はありません';
 }

@@ -72,12 +72,14 @@ class UserWalletApiClient {
 
   /// 0: all records, 1: CNY, 2: USD
   Future<List<UserWalletAccountHistoryItemDto>> fetchAccountHistory({
-    int accountType = 0,
+    int? accountType = 0,
   }) async {
     final response = await _dioForPath(accountHistoryPath)
         .get<Map<String, dynamic>>(
           accountHistoryPath,
-          queryParameters: <String, dynamic>{'accountType': accountType},
+          queryParameters: accountType == null
+              ? null
+              : <String, dynamic>{'accountType': accountType},
           options: authRequired(true),
         );
 

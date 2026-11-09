@@ -17,4 +17,6 @@ abstract class HostMilesRepository {
     int startPage = 1,
     int limit = 20,
   });
+  Future<num> fetchEarnedMonth(DateTime month);
+  Future<num> fetchExpectedNextMonth();
 }

@@ -25,11 +25,11 @@ enum HostMilesRankTheme {
 
   static HostMilesRankTheme of(String code) =>
       switch (code.trim().toUpperCase()) {
-        'REGULAR' => regular,
-        'BRONZE' => bronze,
-        'SILVER' => silver,
-        'GOLD' => gold,
-        'MASTER' => master,
+        'REGULAR' || 'レギュラー' || 'グリーン' || 'GREEN' => regular,
+        'BRONZE' || 'ブロンズ' => bronze,
+        'SILVER' || 'シルバー' => silver,
+        'GOLD' || 'ゴールド' => gold,
+        'MASTER' || 'マスター' || 'ダイヤモンド' || 'DIAMOND' => master,
         _ => unknown,
       };
 

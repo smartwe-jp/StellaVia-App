@@ -9,36 +9,37 @@ class MyPageChartDisplay {
       switch (kind) {
         MyPageChartKind.operating => l.myPageChartOperating,
         MyPageChartKind.dividends => l.myPageChartDividends,
-        MyPageChartKind.miles => l.myPageChartMiles,
+        MyPageChartKind.miles => l.myPageChartMilesBalance,
+        MyPageChartKind.available => l.myPageChartAvailable,
       };
   static String amount(num? value, String locale) =>
       value == null ? '—' : NumberFormat.decimalPattern(locale).format(value);
 
-  /// Cumulative series: show last observed balance in each year/month, never sum balances.
-  static List<MyPageChartPoint> bars(MyPageChartData data, int years) {
-    final buckets = <int, MyPageChartPoint>{};
-    for (final p in data.points) {
-      buckets[years == 1 ? p.date.year * 12 + p.date.month : p.date.year] = p;
+  static const ringColors = [
+    AppColorTokens.brandViolet,
+    AppColorTokens.brandPurple,
+    AppColorTokens.brandLilac,
+    Color(0xFF7B4FA0),
+    Color(0xFFA67BC8),
+    Color(0xFF5A2A8A),
+    Color(0xFFD4BFE8),
+  ];
+
+  static String axisValue(double value, MyPageChartKind kind, String locale) {
+    if (kind == MyPageChartKind.dividends) {
+      final thousands = value / 1000;
+      return NumberFormat(
+        thousands >= 1 ? '#,##0' : '0.0',
+        locale,
+      ).format(thousands);
     }
-    return buckets.values.toList();
+    final magnitude = value.abs();
+    final format = NumberFormat('0.#', locale);
+    if (magnitude >= 1e8) return '${format.format(value / 1e8)}億';
+    if (magnitude >= 1e4) return '${format.format(value / 1e4)}万';
+    if (magnitude >= 1e3) return '${format.format(value / 1e3)}k';
+    return NumberFormat('0', locale).format(value);
   }
-
-  static const monthLabelIndices = [0, 3, 6, 9, 11];
-
-  static int monthIndex(DateTime date, DateTime start) =>
-      (date.year - start.year) * 12 + date.month - start.month;
-
-  static List<String> labels(MyPageChartData data, int years) => years == 1
-      ? [
-          for (final i in monthLabelIndices)
-            '${DateTime(data.start.year, data.start.month + i).month}',
-        ]
-      : [for (var y = data.start.year; y <= data.end.year; y++) '$y'];
-
-  static double labelPosition(int index, int years, int labelCount) =>
-      years == 1
-      ? (monthLabelIndices[index] + .5) / 12
-      : (index + .5) / labelCount;
 }
 
 /// Figma summary chart typography, based on the shared theme font families.

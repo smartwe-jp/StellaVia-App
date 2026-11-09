@@ -19,6 +19,7 @@ extension WalletBankAccountInfoDtoMapper on WalletBankAccountInfoDto {
       id: bankAccountId ?? pool.id,
       bankName: pool.bankName ?? '--',
       branchName: pool.branchName ?? '--',
+      branchNumber: pool.branchBankNumber,
       accountType: _resolveAccountTypeLabel(
         accountType: pool.accountType,
         bankAccountType: pool.bankAccountType,

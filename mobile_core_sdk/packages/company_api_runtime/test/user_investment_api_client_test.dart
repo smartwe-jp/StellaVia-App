@@ -59,6 +59,15 @@ void main() {
       expect(orders.single.applyList.first.ecUserTodo, false);
       expect(orders.single.applyList.last.contractId, isNull);
     });
+    test('management preserves pagination and explicit available units', () async {
+      final api = UserInvestmentApiClient(dioForPath: (_) => _buildDio((options) async {
+        expect(options.data, {'startPage':2, 'limit':10, 'status':'VALID'});
+        return _jsonOk('{"code":200,"data":{"count":"15","list":[{"id":"x","availableNum":0,"sellNum":10,"soldNum":0},{"id":"y","purchaseNum":3}]}}');
+      }));
+      final page = await api.fetchOrderInquiryPage(startPage:2, limit:10, status:'VALID');
+      expect(page.total,15);
+      expect(page.rows.map((r) => r.availableNum),[0,3]);
+    });
     test('available holdings preserve process identity and server availability', () async {
       final dio = _buildDio((options) async {
         expect(options.path, '/crowdfunding/secondary/market/available');
@@ -147,6 +156,19 @@ void main() {
       expect(rows.first.totalFundAccount, equals(100000));
       expect(rows.last.recordDate, equals('2026-05-09'));
       expect(rows.last.totalAccount, equals(150000));
+    });
+
+    test('member fund management keeps total and the fields used by the mobile cards', () async {
+      final dio=_buildDio((options) async{
+        expect(options.path,'/crowdfunding/user/apply/list');
+        expect(options.data,{'status':[2],'marketType':1,'startPage':2,'limit':10});
+        return _jsonOk('{"code":200,"data":{"total":15,"rows":[{"projecId":"p","projectName":"Fund","investment_period":"12","payDeadline":"2026-11-20","expectedYield":"0.052"}]}}');
+      });
+      final page=await UserInvestmentApiClient(dioForPath:(_)=>dio).fetchApplyPage(statuses:[2],marketType:1,startPage:2,limit:10);
+      expect(page.total,15);
+      expect(page.rows.single.period,'12');
+      expect(page.rows.single.transferDeadline,startsWith('2026-11-20'));
+      expect(page.rows.single.expectedYield,.052);
     });
 
     test('fetchApplyList without params posts an empty body and parses rows', () async {

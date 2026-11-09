@@ -116,11 +116,19 @@ class UserInvestmentInvestorTypeDto {
     return UserInvestmentInvestorTypeDto(
       id: _stringOrNull(json['id']),
       projectId: _stringOrNull(json['projectId']),
-      investorType: _stringOrNull(json['investorType']),
+      investorType: _stringOrNull(
+        json['investorType'] ?? json['investor_type'],
+      ),
       investorCode: _stringOrNull(json['investorCode']),
-      earningsType: _stringOrNull(json['earningsType']),
-      earningsRadio: _doubleOrNull(json['earningsRadio']),
-      interestRadio: _doubleOrNull(json['interestRadio']),
+      earningsType: _stringOrNull(
+        json['earningsType'] ?? json['earnings_type'],
+      ),
+      earningsRadio: _doubleOrNull(
+        json['earningsRadio'] ?? json['earnings_radio'],
+      ),
+      interestRadio: _doubleOrNull(
+        json['interestRadio'] ?? json['interest_radio'],
+      ),
       remark: _stringOrNull(json['remark']),
       isOpen: _boolOrNull(json['isOpen']),
       isOpenType: _intOrNull(json['isOpenType']),
@@ -241,6 +249,11 @@ class UserInvestmentApplyRecordDto {
     this.actualArrivalTime,
     this.settlementDate,
     this.paymentExpiryDate,
+    this.transferDeadline,
+    this.period,
+    this.startDate,
+    this.endDate,
+    this.expectedYield,
     this.investNum,
     this.investMoney,
     this.processId,
@@ -252,24 +265,35 @@ class UserInvestmentApplyRecordDto {
       contractId: _stringOrNull(json['contractId']),
       ecStatus: _intOrNull(json['ecStatus']),
       ecUserTodo: _boolOrNull(json['ecUserTodo']),
-      projectId:
-          _stringOrNull(json['projectId']) ?? _stringOrNull(json['projecId']),
+      projectId: _stringOrNull(
+        json['projecId'] ?? json['project_id'] ?? json['projectId'],
+      ),
       projectRuleId: _stringOrNull(json['projectRuleId']),
       secondaryMarketSellId: _stringOrNull(json['secondaryMarketSellId']),
       fromProcessId: _stringOrNull(json['fromProcessId']),
       investorCode: _stringOrNull(json['investorCode']),
-      investorType: _toNullableJsonMap(json['investorType']) == null
+      investorType:
+          _toNullableJsonMap(json['investorType'] ?? json['investor_type']) ==
+              null
           ? null
           : UserInvestmentInvestorTypeDto.fromJson(
-              _toJsonMap(json['investorType']),
+              _toJsonMap(json['investorType'] ?? json['investor_type']),
             ),
-      projectName: _stringOrNull(json['projectName']) ?? '',
+      projectName:
+          _stringOrNull(json['projectName'] ?? json['project_name']) ?? '',
       memberId: _intOrNull(json['memberId']),
       accountId: _stringOrNull(json['accountId']),
       memberName: _stringOrNull(json['memberName']),
       status: _intOrNull(json['status']),
-      applyNum: _intOrNull(json['applyNum']),
-      applyMoney: _numOrNull(json['applyMoney']),
+      applyNum: _intOrNull(
+        json['applyNum'] ?? json['apply_num'] ?? json['num'],
+      ),
+      applyMoney: _numOrNull(
+        json['applyMoney'] ??
+            json['apply_money'] ??
+            json['money'] ??
+            json['amount'],
+      ),
       feeRatio: _doubleOrNull(json['feeRatio']),
       sellerFeeRatio: _doubleOrNull(json['sellerFeeRatio']),
       applyTime: _dateTimeOrNull(json['applyTime']),
@@ -279,9 +303,39 @@ class UserInvestmentApplyRecordDto {
       actualArrivalTime: _dateTimeOrNull(json['actualArrivalTime']),
       settlementDate: _dateTimeOrNull(json['settlementDate']),
       paymentExpiryDate: _dateTimeOrNull(json['paymentExpiryDate']),
+      transferDeadline: _dateTimeOrNull(
+        json['payDeadline'] ??
+            json['paymentDeadline'] ??
+            json['depositDeadline'] ??
+            json['lastPayTime'] ??
+            json['payEndTime'] ??
+            json['expireTime'] ??
+            json['dueDate'] ??
+            json['endTime'] ??
+            json['paymentExpiryDate'],
+      ),
+      period: _stringOrNull(
+        json['investmentPeriod'] ??
+            json['investment_period'] ??
+            _toNullableJsonMap(json['project'])?['investmentPeriod'] ??
+            json['projectPeriodMonths'] ??
+            json['project_period_months'] ??
+            json['periodMonth'] ??
+            json['period_month'],
+      ),
+      startDate: _stringOrNull(
+        json['beginDate'] ?? json['begin_date'] ?? json['startDate'],
+      ),
+      endDate: _stringOrNull(json['endDate'] ?? json['end_date']),
+      expectedYield: _numOrNull(
+        json['expectedYield'] ??
+            json['expected_yield'] ??
+            json['yieldRate'] ??
+            json['yield'],
+      ),
       investNum: _intOrNull(json['investNum']),
       investMoney: _numOrNull(json['investMoney']),
-      processId: _stringOrNull(json['processId']),
+      processId: _stringOrNull(json['processId'] ?? json['process_id']),
       serviceFee: _numOrNull(json['serviceFee']),
     );
   }
@@ -312,6 +366,9 @@ class UserInvestmentApplyRecordDto {
   final String? actualArrivalTime;
   final String? settlementDate;
   final String? paymentExpiryDate;
+  final String? transferDeadline;
+  final String? period, startDate, endDate;
+  final num? expectedYield;
   final int? investNum;
   final num? investMoney;
   final String? processId;
@@ -384,6 +441,7 @@ class UserInvestmentOrderInquiryRecordDto {
     this.investorType,
     this.projectId,
     required this.projectName,
+    this.availableNum,
     this.sellNum,
     this.soldNum,
     this.price,
@@ -409,6 +467,11 @@ class UserInvestmentOrderInquiryRecordDto {
             ),
       projectId: _stringOrNull(json['projectId']),
       projectName: _stringOrNull(json['projectName']) ?? '',
+      availableNum:
+          _intOrNull(json['availableNum']) ??
+          (json['sellNum'] == null || json['soldNum'] == null
+              ? _intOrNull(json['purchaseNum'])
+              : null),
       sellNum: _intOrNull(json['sellNum']),
       soldNum: _intOrNull(json['soldNum']),
       price: _numOrNull(json['price']),
@@ -443,6 +506,7 @@ class UserInvestmentOrderInquiryRecordDto {
   final UserInvestmentInvestorTypeDto? investorType;
   final String? projectId;
   final String projectName;
+  final int? availableNum;
   final int? sellNum;
   final int? soldNum;
   final num? price;
@@ -818,15 +882,56 @@ String _formatApiDateTime(DateTime value) {
 }
 
 class SecondaryMarketHoldingDto {
-  const SecondaryMarketHoldingDto({required this.processId, required this.projectId,
-    required this.projectName, required this.availableNum, this.investmentUnit,
-    this.investorCode, this.earningRadio});
-  factory SecondaryMarketHoldingDto.fromJson(Map<String, dynamic> json) => SecondaryMarketHoldingDto(
-    processId: _stringOrNull(json['processId']) ?? '', projectId: _stringOrNull(json['projectId']) ?? '',
-    projectName: _stringOrNull(json['projectName']) ?? '', availableNum: _intOrNull(json['availableNum']) ?? 0,
-    investmentUnit: _intOrNull(json['investmentUnit']), investorCode: _stringOrNull(json['investorCode']),
-    earningRadio: _doubleOrNull(json['earningRadio']));
+  const SecondaryMarketHoldingDto({
+    required this.processId,
+    required this.projectId,
+    required this.projectName,
+    required this.availableNum,
+    this.investmentUnit,
+    this.investedAmount,
+    this.investorCode,
+    this.earningRadio,
+  });
+  factory SecondaryMarketHoldingDto.fromJson(
+    Map<String, dynamic> json,
+  ) => SecondaryMarketHoldingDto(
+    processId:
+        _stringOrNull(
+          json['processId'] ??
+              json['process_id'] ??
+              json['fromProcessId'] ??
+              json['from_process_id'],
+        ) ??
+        '',
+    projectId: _stringOrNull(json['projectId'] ?? json['project_id']) ?? '',
+    projectName:
+        _stringOrNull(json['projectName'] ?? json['project_name']) ?? '',
+    availableNum:
+        _intOrNull(
+          json['availableNum'] ??
+              json['investNumRemaining'] ??
+              json['invest_num_remaining'] ??
+              json['investNumValid'] ??
+              json['invest_num_valid'],
+        ) ??
+        0,
+    investmentUnit: _intOrNull(
+      json['unitPrice'] ?? json['price'] ?? json['investmentUnit'],
+    ),
+    investedAmount: _numOrNull(
+      json['investMoneyValid'] ??
+          json['invest_money_valid'] ??
+          json['investMoney'],
+    ),
+    investorCode: _stringOrNull(
+      json['investorCode'] ?? _toJsonMap(json['investorType'])['investorCode'],
+    ),
+    earningRadio: _doubleOrNull(
+      json['earningRadio'] ?? _toJsonMap(json['investorType'])['earningsRadio'],
+    ),
+  );
   final String processId, projectId, projectName;
+  final num? investedAmount;
   final int availableNum;
   final int? investmentUnit;
   final String? investorCode;

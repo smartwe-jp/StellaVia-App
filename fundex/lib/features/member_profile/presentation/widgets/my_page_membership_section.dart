@@ -6,33 +6,46 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../providers/mypage_membership_providers.dart';
 import 'my_page_membership_card.dart';
 import 'my_page_membership_rooms.dart';
+import 'my_page_summary_rank_card.dart';
 import 'my_page_miles_expiry_sheet.dart';
 
 class MyPageMembershipSection extends ConsumerWidget {
-  const MyPageMembershipSection({super.key});
+  const MyPageMembershipSection({super.key, this.summary = false});
+  final bool summary;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tier = ref.watch(myPageTierProvider);
     final account = ref.watch(myPageMilesAccountProvider);
+    void openRanks() => context.push('/home/ranks');
+    void openExpiry() => AppBottomSheet.showAdaptive(
+      context: context,
+      useRootNavigator: true,
+      builder: (_) => const MyPageMilesExpirySheet(),
+    );
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
       child: Column(
         children: [
-          MyPageMembershipCard(
-            tier: tier.valueOrNull,
-            account: account.valueOrNull,
-            onRankTap: () => context.push('/home/ranks'),
-          ),
-          const SizedBox(height: 12),
-          MyPageMembershipRooms(
-            tier: tier.valueOrNull,
-            account: account.valueOrNull,
-            onExpiryTap: () => AppBottomSheet.showAdaptive(
-              context: context,
-              useRootNavigator: true,
-              builder: (_) => const MyPageMilesExpirySheet(),
+          if (summary)
+            MyPageSummaryRankCard(
+              tier: tier.valueOrNull,
+              account: account.valueOrNull,
+              onRankTap: openRanks,
+              onExpiryTap: openExpiry,
+            )
+          else ...[
+            MyPageMembershipCard(
+              tier: tier.valueOrNull,
+              account: account.valueOrNull,
+              onRankTap: openRanks,
             ),
-          ),
+            const SizedBox(height: 12),
+            MyPageMembershipRooms(
+              tier: tier.valueOrNull,
+              account: account.valueOrNull,
+              onExpiryTap: openExpiry,
+            ),
+          ],
           if (tier.isLoading || account.isLoading)
             const Padding(
               padding: EdgeInsets.only(top: 8),

@@ -67,6 +67,23 @@ void main() {
       expect(rows.first.tradeTime, equals('2026-03-15'));
     });
 
+    test(
+      'summary reads all account history without an account type query',
+      () async {
+        final dio = _buildDio((options) async {
+          expect(options.method, 'GET');
+          expect(options.path, '/member/wx/account/history');
+          expect(options.queryParameters, isEmpty);
+          return _jsonOk(
+            '{"code":200,"data":{"rows":[{"balance":"0","tradeTime":"2026-11-09"}]}}',
+          );
+        });
+        final history = await UserWalletApiClient(
+          dioForPath: (_) => dio,
+        ).fetchAccountHistory(accountType: null);
+        expect(history.single.balance, 0);
+      },
+    );
     test('fetchAccountHistory throws when envelope code failed', () async {
       final dio = _buildDio((_) async {
         return _jsonOk('{"msg":"failed","code":500,"data":null}');

@@ -6,11 +6,11 @@ import '../../../host_miles/presentation/providers/host_miles_providers.dart';
 import '../../domain/entities/mypage_chart.dart';
 import '../../domain/usecases/load_mypage_chart_usecase.dart';
 import '../controllers/mypage_chart_controller.dart';
-import 'mypage_providers.dart';
+import '../../../wallet/presentation/providers/wallet_providers.dart';
 
 final loadMyPageChartProvider = Provider(
   (ref) => LoadMyPageChartUseCase(
-    ref.watch(myPageRepositoryProvider),
+    ref.watch(walletRepositoryProvider),
     ref.watch(assetStatisticsRepositoryProvider),
     ref.watch(hostMilesRepositoryProvider),
   ),
@@ -40,7 +40,7 @@ final myPageChartProvider = StateNotifierProvider.autoDispose
           return Future.error(StateError('Authenticated user required'));
         }
         return useCase(kind, years, DateTime.now());
-      });
+      }, localHistory: kind == MyPageChartKind.available);
       if (authenticated && identity != null) {
         scheduleMicrotask(() {
           if (controller.mounted) unawaited(controller.refresh());

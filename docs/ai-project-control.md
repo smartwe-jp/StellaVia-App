@@ -299,3 +299,15 @@ Hotel detail now shares the 04 room-selection layout for ordinary and host-miles
 基金状态标签按 Figma 第 06 节统一映射，状态码与配色详见[主题规范](stellavia-theme-foundation.md)。
 
 宿主等级卡按 Figma 第 06 节「ランクカード（5段階）」统一标题、卡面与标记色，入口与配色见[主题规范](stellavia-theme-foundation.md)。
+
+### My Page 快捷入口
+
+My Page 顶部显示会员全名及认证状态，第一区域为宿主等级与可预约数，第二区域按 Figma「00-1 · メニュー展開（SP）」放置两行三列快捷入口。サマリー打开独立的 /profile/summary 页面；宿主ファンド管理打开独立的 /profile/host-funds 页面；売買管理、会員情報、各種書類分别打开交易管理、会员资料和合同文档。宿主マイル管理打开 /profile/miles，提供等级、余额、月度获得与预计里程、累计获得趋势及履历入口。
+
+My Page 首页在六个快捷入口处结束。首页进入和刷新只读取会员身份与认证、等级、里程账户及导航栏通知所需数据。申请、持仓、基金列表、钱包流水和图表由对应子页面按需读取。
+
+独立サマリー页按 Figma 02-1 使用一张整色等级卡整合获得率、同时预约上限、已预约室数、即将失效里程及下一等级差额；里程余额、持仓分布、累计分红和可用余额四张图仅在详情展示。接口、时间范围与显示口径见 [StellaVia 数据接入](stellavia-data-integration.md)。
+
+サマリー里程余额卡的「マイル履歴」已连接真实交易分页接口，支持按月分组、到期日及交易类型；接口与分页规则见 [StellaVia 数据接入](stellavia-data-integration.md)。
+
+宿主ファンド管理采用 Figma SP 的五个业务区块，复用 App 的基金卡片和筛选条。申请、持仓和分红的数据规则见[数据接入记录](stellavia-data-integration.md)。

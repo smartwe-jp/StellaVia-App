@@ -22,6 +22,8 @@
 | HostMiles.fetchTierRules | GET /offline/listRules | 无，公开 | tierCode / minAum / maxAum / pointRate / expireMonths / leadTimeMonths / maxRooms |
 | HostMiles.fetchChart | POST /points/chart | startDate / endDate，yyyy-MM-dd | date / points 列表，暂不赋予未确认的统计口径 |
 | HostMiles.fetchCumulativeChart | GET /points/cumulative-chart | startMonth，yyyy-MM | xaxis / yaxis |
+| HostMiles.fetchEarnedMonth | GET /points/engine-point-month | yearMonth，yyyy-MM | 指定月份实际获得的里程数 |
+| HostMiles.fetchExpectedNextMonth | GET /points/pre-engine-point | 无 | 下月预计获得的里程数 |
 | HostMiles.fetchTransactions | POST /points/user-transactions | bizType 可选，startPage / limit | total / limit / currentPage / rows |
 | AssetStatistics.fetchInvestments | GET /user/invest/chart | 无 | investTotal / investList（含 projectStatus） |
 | AssetStatistics.fetchCumulativeBenefit | POST /benefit/chart/cumulative | startDate / endDate | total / dates / values |
@@ -105,3 +107,31 @@
 assign/occupancy 与 order/room/extraPerson 均支持可选 stayBenefit:true，data.pointsRequired 是全部房间、整个入住期间所需参考积分，替代宿主マイル详情原先假定的 pointTotal。确认请求特典模式必须 couponsCounts:[]。SDK与App领域映射已接入；详情按实际人数分配后请求确认报价，普通现金与旧券流程保留。提交和支付未接入。
 
 - 2026-11-04：日文里程单位统一显示「マイル」，覆盖酒店参考里程、详情合计/余额及 My Page 图表/等级/过期明细；详情复用现有本地化单位，不再硬编码 mile。
+
+### サマリー（SP）独立页
+
+My Page 的サマリー入口打开 `/profile/summary`。サマリー使用 Figma 02-1 单卡布局，整合等级、获得率、预约上限与已预约室数、到期里程及升级差额。到期字段沿用「まもなく失効」，最高等级不显示升级差额；My Page 首页保留原有卡片。四张图仅在进入该页后加载，按[测试站 My Page](https://testoa.gutingjun.com/mypage)口径展示。
+
+| 图表 | 数据及显示 |
+| --- | --- |
+| 宿主里程余额 | POST /crowdfunding/points/chart，date / points 折线。标题优先使用等级接口余额（pointsBalance、currentPoints、pointBalance、availablePoints、points），其次使用序列末值。 |
+| 运用余额 | GET /crowdfunding/user/invest/chart，每只基金的 investMoneyValid 为扇区权重。标题用 investTotal，缺失时回退账户统计 crowdfundingTotal；圆心用 investTotal，缺失时合计持仓。点选扇区显示基金、期间和金额。 |
+| 累计分红 | POST /crowdfunding/benefit/chart/cumulative，顶部用 total，dates 与 values 同索引绘制面积图。纵轴以千日元显示，点选显示原始日元。 |
+| 可用余额 | GET /member/login/account-statistic 的 firstLevelAccountTotal；曲线从 GET /member/wx/account/history（无账户类型筛选）的有效余额按交易时间排序，切换范围在本地筛选。提供出金及交易履历入口。 |
+
+三张时间序列独立选择近 1／3／5 年，默认 1 年，从今天向前推相应年数的同月同日（含两端）。持仓图没有时间选择器。
+
+サマリー里程卡的「マイル履歴」打开独立登录页，按测试站读取 POST /crowdfunding/points/user-transactions（startPage、limit）。默认每页 10 条，可选 20、50、100；切换条数回到第一页。当前页按交易时间降序、按本地年月分组，展示类型、带正负号的里程和可选有效期限，错误可重试。
+
+### 宿主ファンド管理（SP）
+
+My Page 快捷入口打开 `/profile/host-funds`。以 [Figma SP](https://www.figma.com/design/xul33CFNblfWc9zdEQo4yF/?node-id=12400-41435) 的内容区块为基准，使用 AppFilterBar、FundMyPageProjectCard 和已有持仓环形图。
+- 「応募中」「入金前」分别按 `status:[0]`、`status:[2]` 查询 /crowdfunding/user/apply/list，`marketType:1`，每页 10 条。保留后台总数；支持基金详情和有 processId 的申请撤回，沿用现有确认流程。
+- 收款账户按 /member/bank-account/info 的 accountPool 优先，再回退项目详情 liveJapanBank。仅在项目收款账户场景提示会员编号与片假名的汇款备注。
+- 「運用中」读取 /crowdfunding/user/invest/chart，显示持仓分布、运用期间、持仓金额与口数。
+- 「償還・配当予定」按月累加预测本金及分红，展示本月、下月及未来 12／36／60 个月的对数柱图。查询 endYearMonth 为本月后 N+1 个月，按测试站约定覆盖显示窗口。
+- 「配当実績」显示近 1／3／5 年的累计分红图与降序年度明细；图表按千日元标轴，点选显示日元原值。年度明细区分总分红与实际入金。
+
+### 宿主マイル管理
+
+My Page 的 /profile/miles 按[测试站里程管理页](https://testoa.gutingjun.com/mypage/miles)排列内容。余额折线按日期查询，累计获得面积图按月份查询，两图独立选择近 1、3、5 年。上月与本月按 yearMonth 取实际获得值，下月取预计值。等级卡和累计图共用累计序列末值，缺失时依次回退等级接口累计字段及余额，避免将投资金额 currentAum 显示成里程。到期明细、等级说明和履历复用现有 App 入口。

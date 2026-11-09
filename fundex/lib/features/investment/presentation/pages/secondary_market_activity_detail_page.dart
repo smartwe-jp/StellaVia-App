@@ -106,7 +106,7 @@ class _SecondaryMarketActivityDetailPageState
             icon: Icons.arrow_back,
             onTap: () => context.canPop()
                 ? context.pop()
-                : context.go('/profile/my/secondary-market'),
+                : context.go('/profile/my/secondary-market?tab=${widget.sale ? 'sales' : 'buy'}'),
           ),
         ),
         body: RefreshIndicator(

@@ -63,4 +63,8 @@ class HostMilesRepositoryImpl implements HostMilesRepository {
     );
     return result.toEntity();
   }
+  @override
+  Future<num> fetchEarnedMonth(DateTime month)=>_remote.fetchEarnedMonth(month);
+  @override
+  Future<num> fetchExpectedNextMonth()=>_remote.fetchExpectedNextMonth();
 }

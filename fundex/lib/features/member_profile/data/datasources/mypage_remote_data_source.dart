@@ -6,6 +6,8 @@ import 'package:core_network/core_network.dart';
 import '../models/mypage_dtos.dart';
 
 abstract class MyPageRemoteDataSource {
+  Future<({List<MyPageOrderInquiryRecordDto> rows, int total})> fetchTradeListings({required int page, int? userId, String? status});
+  Future<({List<MyPageApplyRecordDto> rows, int total})> fetchTradeApplications({required int page});
   Future<List<SecondaryMarketHoldingDto>> fetchSecondaryMarketHoldings();
   Future<MyPageAccountStatisticDto> fetchAccountStatistic();
   Future<List<MyPageAssetTrendDto>> fetchAssetTrend({
@@ -13,6 +15,10 @@ abstract class MyPageRemoteDataSource {
     required DateTime endDate,
   });
 
+  Future<({List<MyPageApplyRecordDto> rows, int total})> fetchFundManagementApplications({
+    required int page,
+    required int status,
+  });
   Future<List<MyPageApplyRecordDto>> fetchApplyList({
     int? startPage,
     int? limit,
@@ -95,6 +101,12 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
   final UserInvestmentApiClient _apiClient;
 
   @override
+  Future<({List<MyPageApplyRecordDto> rows, int total})> fetchTradeApplications({required int page}) => _apiClient.fetchApplyPage(startPage: page, limit: 10, marketType: 2);
+
+  @override
+  Future<({List<MyPageOrderInquiryRecordDto> rows, int total})> fetchTradeListings({required int page, int? userId, String? status}) => _apiClient.fetchOrderInquiryPage(startPage: page, limit: 10, userId: userId, status: status);
+
+  @override
   Future<List<SecondaryMarketHoldingDto>> fetchSecondaryMarketHoldings() => _apiClient.fetchSecondaryMarketHoldings();
 
   @override
@@ -109,6 +121,13 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
   }) async {
     return _apiClient.fetchAssetTrend(startDate: startDate, endDate: endDate);
   }
+
+  @override
+  Future<({List<MyPageApplyRecordDto> rows, int total})> fetchFundManagementApplications({
+    required int page,
+    required int status,
+  }) =>
+      _apiClient.fetchApplyPage(startPage: page, limit: 10, statuses: [status], marketType: 1);
 
   @override
   Future<List<MyPageApplyRecordDto>> fetchApplyList({

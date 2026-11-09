@@ -3,136 +3,143 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
-import '../controllers/secondary_market_controller.dart';
-import '../widgets/secondary_market_activity_cards.dart';
+import '../../../member_profile/presentation/providers/mypage_membership_providers.dart';
+import '../../../member_profile/presentation/providers/mypage_providers.dart';
+import '../controllers/trade_management_provider.dart';
 import '../widgets/secondary_market_refresh_scope.dart';
+import '../widgets/trade_management_list.dart';
 
-class SecondaryMarketActivityPage extends ConsumerStatefulWidget {
-  const SecondaryMarketActivityPage({super.key, this.initialPurchases = false});
-  final bool initialPurchases;
+enum _Section { sell, buy, history }
+
+class SecondaryMarketActivityPage extends ConsumerWidget {
+  const SecondaryMarketActivityPage({
+    super.key,
+    this.initialPurchases = false,
+    this.initialSalesHistory = false,
+  });
+  final bool initialPurchases, initialSalesHistory;
   @override
-  ConsumerState<SecondaryMarketActivityPage> createState() =>
-      _SecondaryMarketActivityPageState();
+  Widget build(BuildContext context, WidgetRef ref) => Scaffold(
+    appBar: AppNavigationBar(
+      title: context.l10n.secondaryMarketManage,
+      leading: AppNavigationIconButton(
+        icon: Icons.arrow_back_rounded,
+        onTap: () => context.canPop() ? context.pop() : context.go('/profile'),
+      ),
+    ),
+    body: SafeArea(
+      top: false,
+      child: _Sections(
+        key: ValueKey((
+          ref.watch(myPageMembershipIdentityProvider),
+          initialPurchases,
+          initialSalesHistory,
+        )),
+        history: initialPurchases || initialSalesHistory,
+        purchases: initialPurchases,
+      ),
+    ),
+  );
 }
 
-class _SecondaryMarketActivityPageState
-    extends ConsumerState<SecondaryMarketActivityPage> {
-  late SecondaryMarketListKind kind = widget.initialPurchases
-      ? SecondaryMarketListKind.purchases
-      : SecondaryMarketListKind.sales;
+class _Sections extends ConsumerStatefulWidget {
+  const _Sections({super.key, required this.history, required this.purchases});
+  final bool history, purchases;
+  @override
+  ConsumerState<_Sections> createState() => _SectionsState();
+}
+
+class _SectionsState extends ConsumerState<_Sections> {
+  late _Section section = widget.history ? _Section.history : _Section.sell;
+  late TradeList history = widget.purchases
+      ? TradeList.purchaseHistory
+      : TradeList.salesHistory;
+  int page = 1;
+  TradeList get list => switch (section) {
+    _Section.sell => TradeList.sell,
+    _Section.buy => TradeList.buy,
+    _Section.history => history,
+  };
+  Future<void> refresh() async {
+    final provider = tradePageProvider((list: list, page: page));
+    if (list == TradeList.sell) ref.invalidate(secondaryMarketHoldingsProvider);
+    await ref
+        .refresh(provider.future)
+        .then<void>((_) {}, onError: (Object _) {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    final state = ref.watch(secondaryMarketControllerProvider(kind));
-    final controller = ref.read(
-      secondaryMarketControllerProvider(kind).notifier,
-    );
+    final state = ref.watch(tradePageProvider((list: list, page: page)));
     return SecondaryMarketRefreshScope(
-      onRefresh: () => controller.refresh(),
-      child: Scaffold(
-        appBar: AppNavigationBar(
-          title: l.secondaryMarketManage,
-          leading: AppNavigationIconButton(
-            icon: Icons.arrow_back,
-            onTap: () =>
-                context.canPop() ? context.pop() : context.go('/profile/my'),
+      onRefresh: refresh,
+      child: Column(
+        children: [
+          AppFilterBar<_Section>(
+            value: section,
+            height: 54,
+            backgroundColor: context.appColors.surface,
+            items: [
+              AppFilterBarItem(value: _Section.sell, label: l.tradeTabSell),
+              AppFilterBarItem(value: _Section.buy, label: l.tradeTabBuy),
+              AppFilterBarItem(
+                value: _Section.history,
+                label: l.tradeTabHistory,
+              ),
+            ],
+            onChanged: (s) => setState(() {
+              section = s;
+              page = 1;
+            }),
           ),
-        ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: SegmentedButton<SecondaryMarketListKind>(
-                segments: [
-                  ButtonSegment(
-                    value: SecondaryMarketListKind.purchases,
-                    label: Text(l.secondaryMarketPurchases),
-                  ),
-                  ButtonSegment(
-                    value: SecondaryMarketListKind.sales,
-                    label: Text(l.secondaryMarketSales),
-                  ),
-                ],
-                selected: {kind},
-                onSelectionChanged: (value) =>
-                    setState(() => kind = value.single),
-              ),
-            ),
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: controller.refresh,
-                child: ListView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(16),
-                  children: [
-                    if (state.error != null)
-                      ListTile(
-                        title: Text(l.fundListLoadError),
-                        trailing: TextButton(
-                          onPressed: controller.refresh,
-                          child: Text(l.fundListRetry),
-                        ),
-                      ),
-                    if (state.loading) const LinearProgressIndicator(),
-                    if (!state.loading &&
-                        state.error == null &&
-                        state.orders.isEmpty &&
-                        state.applications.isEmpty)
-                      Padding(
-                        padding: const EdgeInsets.all(24),
-                        child: Text(l.secondaryMarketNoApplications),
-                      ),
-                    for (final record in state.applications)
-                      SecondaryMarketApplicationCard(
-                        record: record,
-                        onTap: record.processId == null
-                            ? null
-                            : () async {
-                                await context.push(
-                                  '/profile/my/secondary-market/purchases/${Uri.encodeComponent(record.processId!)}',
-                                );
-                                if (mounted) {
-                                  ref
-                                      .read(
-                                        secondaryMarketControllerProvider(
-                                          kind,
-                                        ).notifier,
-                                      )
-                                      .refresh();
-                                }
-                              },
-                      ),
-                    for (final record in state.orders)
-                      SecondaryMarketListingCard(
-                        record: record,
-                        onTap: record.id == null
-                            ? null
-                            : () async {
-                                await context.push(
-                                  '/profile/my/secondary-market/sales/${Uri.encodeComponent(record.id!)}',
-                                );
-                                if (mounted) {
-                                  ref
-                                      .read(
-                                        secondaryMarketControllerProvider(
-                                          kind,
-                                        ).notifier,
-                                      )
-                                      .refresh();
-                                }
-                              },
-                      ),
-                    if (state.hasMore && !state.loading)
-                      TextButton(
-                        onPressed: controller.loadMore,
-                        child: Text(l.secondaryMarketLoadMore),
-                      ),
-                  ],
+          if (section == _Section.history)
+            AppFilterBar<TradeList>(
+              value: history,
+              items: [
+                AppFilterBarItem(
+                  value: TradeList.salesHistory,
+                  label: l.tradeSubSell,
                 ),
+                AppFilterBarItem(
+                  value: TradeList.purchaseHistory,
+                  label: l.tradeSubBuy,
+                ),
+              ],
+              onChanged: (value) => setState(() {
+                history = value;
+                page = 1;
+              }),
+            ),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: refresh,
+              child: ListView(
+                key: ValueKey((list, page)),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: [
+                  if (state.isLoading) const LinearProgressIndicator(),
+                  if (state.hasError)
+                    ListTile(
+                      title: Text(l.fundListLoadError),
+                      trailing: TextButton(
+                        onPressed: refresh,
+                        child: Text(l.commonRetry),
+                      ),
+                    ),
+                  if (state.valueOrNull case final data?)
+                    TradeManagementList(
+                      data: data,
+                      list: list,
+                      page: page,
+                      onPage: (value) => setState(() => page = value),
+                    ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

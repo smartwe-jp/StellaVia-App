@@ -5,12 +5,21 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/network/app_network_connectivity_providers.dart';
 import '../../domain/entities/mypage_chart.dart';
 import '../providers/mypage_chart_providers.dart';
+import '../providers/mypage_providers.dart';
 import '../providers/mypage_membership_providers.dart';
 
-/// The root tab keeps chart state. Refresh it on foreground and detail return.
+/// Refresh only the data displayed by the visible My Page route.
 class MyPageChartRefreshScope extends ConsumerStatefulWidget {
-  const MyPageChartRefreshScope({super.key, required this.child});
+  const MyPageChartRefreshScope({
+    super.key,
+    required this.child,
+    this.isSummary = false,
+  });
   final Widget child;
+  final bool isSummary;
+
+  String get path => isSummary ? summaryPath : '/profile';
+  static const summaryPath = '/profile/summary';
   @override
   ConsumerState<MyPageChartRefreshScope> createState() =>
       _MyPageChartRefreshScopeState();
@@ -42,14 +51,14 @@ class _MyPageChartRefreshScopeState
   void _routeChanged() {
     final path = _router?.routerDelegate.state.uri.path;
     final returned =
-        path == '/profile' && _lastPath != null && _lastPath != '/profile';
+        path == widget.path && _lastPath != null && _lastPath != widget.path;
     _lastPath = path;
     if (returned) _refresh();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && _lastPath == '/profile') {
+    if (state == AppLifecycleState.resumed && _lastPath == widget.path) {
       _refresh();
     }
   }
@@ -62,6 +71,8 @@ class _MyPageChartRefreshScopeState
       if (!mounted || shouldSkipAppNetworkRefresh(ref)) return;
       unawaited(ref.read(myPageTierProvider.notifier).refresh());
       unawaited(ref.read(myPageMilesAccountProvider.notifier).refresh());
+      if (!widget.isSummary) return;
+      ref.invalidate(myPageAccountStatisticProvider);
       for (final kind in MyPageChartKind.values) {
         unawaited(ref.read(myPageChartProvider(kind).notifier).refresh());
       }

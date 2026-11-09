@@ -15,6 +15,15 @@ class MyPageRankDisplay {
     return format.format(value * 100);
   }
 
+  static String managementRate(num? value, String locale) {
+    if (value == null || !value.isFinite) return '—';
+    final percent = value <= 1 ? value * 100 : value;
+    final format = NumberFormat.decimalPattern(locale)
+      ..minimumFractionDigits = 2
+      ..maximumFractionDigits = 3;
+    return format.format(percent);
+  }
+
   static bool isMax(HostMilesTier? tier) =>
       tier?.nextTier?.trim().toUpperCase() == 'MAX';
 

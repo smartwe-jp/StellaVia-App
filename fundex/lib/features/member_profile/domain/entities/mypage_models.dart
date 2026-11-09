@@ -75,6 +75,11 @@ class MyPageApplyRecord {
     this.actualArrivalTime,
     this.settlementDate,
     this.paymentExpiryDate,
+    this.transferDeadline,
+    this.period,
+    this.startDate,
+    this.endDate,
+    this.expectedYield,
     this.investNum,
     this.investMoney,
     this.processId,
@@ -107,6 +112,8 @@ class MyPageApplyRecord {
   final String? actualArrivalTime;
   final String? settlementDate;
   final String? paymentExpiryDate;
+  final String? transferDeadline, period, startDate, endDate;
+  final num? expectedYield;
   final int? investNum;
   final num? investMoney;
   final String? processId;
@@ -157,6 +164,7 @@ class MyPageOrderInquiryRecord {
     this.investorType,
     this.projectId,
     required this.projectName,
+    this.availableNum,
     this.sellNum,
     this.soldNum,
     this.price,
@@ -174,6 +182,7 @@ class MyPageOrderInquiryRecord {
   final MyPageInvestorType? investorType;
   final String? projectId;
   final String projectName;
+  final int? availableNum;
   final int? sellNum;
   final int? soldNum;
   final num? price;
@@ -373,9 +382,10 @@ class MyPageLockedAmount {
 
 class SecondaryMarketHolding {
   const SecondaryMarketHolding({required this.processId, required this.projectId,
-    required this.projectName, required this.availableNum, this.investmentUnit,
+    required this.projectName, required this.availableNum, this.investmentUnit, this.investedAmount,
     this.investorCode, this.earningRadio});
   final String processId, projectId, projectName;
+  final num? investedAmount;
   final int availableNum;
   final int? investmentUnit;
   final String? investorCode;

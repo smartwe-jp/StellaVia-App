@@ -3,6 +3,8 @@ import '../statistics/statistics_wire_values.dart';
 class HostMilesTierDto {
   const HostMilesTierDto({
     this.currentTier,
+    this.pointsBalance,
+    this.cumulativeMiles,
     this.pointRate,
     this.expireMonths,
     this.leadTimeMonths,
@@ -13,6 +15,8 @@ class HostMilesTierDto {
     this.nextTierGap,
   });
   final String? currentTier;
+  final num? pointsBalance;
+  final num? cumulativeMiles;
   final num? pointRate;
   final int? expireMonths;
   final int? leadTimeMonths;
@@ -23,7 +27,37 @@ class HostMilesTierDto {
   final int? nextTierGap;
   factory HostMilesTierDto.fromJson(Map<String, dynamic> json) =>
       HostMilesTierDto(
-        currentTier: readString(json['currentTier']),
+        currentTier: readString(
+          json['currentTier'] ??
+              json['tierCode'] ??
+              json['tierName'] ??
+              json['currentTierCode'] ??
+              json['rank'],
+        ),
+        cumulativeMiles:
+            [
+                  'totalEarnedPoints',
+                  'cumulativePoints',
+                  'totalEarnPoints',
+                  'lifetimePoints',
+                  'totalPoints',
+                ]
+                .map((key) => readNumber(json[key]))
+                .whereType<num>()
+                .where((n) => n.isFinite)
+                .firstOrNull,
+        pointsBalance:
+            [
+                  'pointsBalance',
+                  'currentPoints',
+                  'pointBalance',
+                  'availablePoints',
+                  'points',
+                ]
+                .map((key) => readNumber(json[key]))
+                .whereType<num>()
+                .where((n) => n.isFinite)
+                .firstOrNull,
         pointRate: readNumber(json['pointRate']),
         expireMonths: readInteger(json['expireMonths']),
         leadTimeMonths: readInteger(json['leadTimeMonths']),
@@ -101,11 +135,11 @@ class HostMilesTierRuleDto {
 class HostMilesChartEntryDto {
   const HostMilesChartEntryDto({this.date, this.points});
   final String? date;
-  final int? points;
+  final num? points;
   factory HostMilesChartEntryDto.fromJson(Map<String, dynamic> json) =>
       HostMilesChartEntryDto(
-        date: readString(json['date']),
-        points: readInteger(json['points']),
+        date: readString(json['date'] ?? json['recordDate']),
+        points: readNumber(json['points'] ?? json['value']),
       );
 }
 
@@ -126,24 +160,63 @@ class HostMilesCumulativeChartDto {
 class HostMilesTransactionDto {
   const HostMilesTransactionDto({
     this.amount,
+    this.typeDescription = '',
     this.bizType,
     this.createTime,
     this.expireTime,
     this.outTradeNo,
   });
-  final int? amount;
+  final num? amount;
+  final String typeDescription;
   final String? bizType;
   final DateTime? createTime;
   final DateTime? expireTime;
   final String? outTradeNo;
   factory HostMilesTransactionDto.fromJson(Map<String, dynamic> json) =>
       HostMilesTransactionDto(
-        amount: readInteger(json['amount']),
+        amount: readNumber(
+          json['points'] ??
+              json['changePoints'] ??
+              json['amount'] ??
+              json['pointChange'] ??
+              json['point'],
+        ),
+        typeDescription: [
+          'type',
+          'tradeType',
+          'transactionType',
+          'pointType',
+          'bizType',
+          'remark',
+          'status',
+          'statusName',
+        ].map((key) => json[key]).whereType<Object>().join(' '),
         bizType: readString(json['bizType']),
-        createTime: readTimestamp(json['createTime']),
-        expireTime: readTimestamp(json['expireTime']),
+        createTime: _transactionDate(
+          json['date'] ??
+              json['tradeTime'] ??
+              json['createTime'] ??
+              json['recordDate'],
+        ),
+        expireTime: _transactionDate(
+          json['expireTime'] ??
+              json['expireDate'] ??
+              json['expiryTime'] ??
+              json['validUntil'],
+        ),
         outTradeNo: readString(json['outTradeNo']),
       );
+}
+
+DateTime? _transactionDate(Object? raw) {
+  final number = readInteger(raw);
+  if (number != null) {
+    final millis = number < 1000000000000 ? number * 1000 : number;
+    return millis.abs() <= 8640000000000000
+        ? DateTime.fromMillisecondsSinceEpoch(millis, isUtc: true)
+        : null;
+  }
+  return DateTime.tryParse(raw?.toString().replaceAll('/', '-') ?? '');
 }
 
 class HostMilesTransactionPageDto {
@@ -159,11 +232,16 @@ class HostMilesTransactionPageDto {
   final List<HostMilesTransactionDto> rows;
   factory HostMilesTransactionPageDto.fromJson(Map<String, dynamic> json) =>
       HostMilesTransactionPageDto(
-        total: readInteger(json['total']),
+        total: readInteger(
+          json['total'] ??
+              json['totalCount'] ??
+              json['totalElements'] ??
+              json['count'],
+        ),
         limit: readInteger(json['limit']),
         currentPage: readInteger(json['currentPage']),
         rows: readList(
-          json['rows'],
+          json['rows'] ?? json['list'] ?? json['records'] ?? json['data'],
           (value) => readObject(value, HostMilesTransactionDto.fromJson),
         ),
       );

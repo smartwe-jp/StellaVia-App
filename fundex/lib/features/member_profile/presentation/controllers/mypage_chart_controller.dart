@@ -8,13 +8,25 @@ class MyPageChartState {
 }
 
 class MyPageChartController extends StateNotifier<MyPageChartState> {
-  MyPageChartController(this.load) : super(const MyPageChartState());
+  MyPageChartController(this.load, {this.localHistory = false})
+    : super(const MyPageChartState());
   final Future<MyPageChartData> Function(int years) load;
+  final bool localHistory;
+  MyPageChartData? _history;
   int _generation = 0;
   Future<void> selectYears(int years) async {
     if (![1, 3, 5].contains(years) || state.years == years) return;
+    if (localHistory && _history != null) {
+      state = MyPageChartState(
+        years: years,
+        data: AsyncData(_history!.historyWindow(years, DateTime.now())),
+      );
+      return;
+    }
+    final loadingHistory =
+        localHistory && _generation > 0 && state.data.isLoading;
     state = MyPageChartState(years: years);
-    await refresh();
+    if (!loadingHistory) await refresh();
   }
 
   Future<void> refresh() async {
@@ -28,12 +40,21 @@ class MyPageChartController extends StateNotifier<MyPageChartState> {
     try {
       final result = await load(years);
       if (mounted && generation == _generation) {
-        state = MyPageChartState(years: years, data: AsyncData(result));
+        if (localHistory) _history = result;
+        final selected = state.years;
+        state = MyPageChartState(
+          years: selected,
+          data: AsyncData(
+            localHistory
+                ? result.historyWindow(selected, DateTime.now())
+                : result,
+          ),
+        );
       }
     } catch (e, st) {
       if (mounted && generation == _generation) {
         state = MyPageChartState(
-          years: years,
+          years: state.years,
           data: AsyncError<MyPageChartData>(e, st).copyWithPrevious(state.data),
         );
       }

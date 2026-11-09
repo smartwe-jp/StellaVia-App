@@ -1,6 +1,8 @@
 class HostMilesTier {
   const HostMilesTier({
     this.currentTier,
+    this.pointsBalance,
+    this.cumulativeMiles,
     this.pointRate,
     this.expireMonths,
     this.leadTimeMonths,
@@ -11,6 +13,8 @@ class HostMilesTier {
     this.nextTierGap,
   });
   final String? currentTier;
+  final num? pointsBalance;
+  final num? cumulativeMiles;
   final num? pointRate;
   final int? expireMonths;
   final int? leadTimeMonths;
@@ -74,7 +78,7 @@ class HostMilesTierRule {
 class HostMilesChartEntry {
   const HostMilesChartEntry({this.date, this.points});
   final String? date;
-  final int? points;
+  final num? points;
 }
 
 class HostMilesCumulativeChart {
@@ -92,12 +96,14 @@ class HostMilesCumulativeChart {
 class HostMilesTransaction {
   const HostMilesTransaction({
     this.amount,
+    this.typeDescription = '',
     this.bizType,
     this.createTime,
     this.expireTime,
     this.outTradeNo,
   });
-  final int? amount;
+  final num? amount;
+  final String typeDescription;
   final String? bizType;
   final DateTime? createTime;
   final DateTime? expireTime;

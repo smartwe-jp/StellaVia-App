@@ -11,11 +11,23 @@ class MyPageRepositoryImpl implements MyPageRepository {
 
   final MyPageRemoteDataSource _remote;
   @override
+  Future<({List<MyPageOrderInquiryRecord> rows, int total})> fetchTradeListings({required int page, int? userId, String? status}) async {
+    final result = await _remote.fetchTradeListings(page: page, userId: userId, status: status);
+    return (rows: result.rows.map((row) => row.toEntity()).toList(growable: false), total: result.total);
+  }
+
+  @override
+  Future<({List<MyPageApplyRecord> rows, int total})> fetchTradeApplications({required int page}) async {
+    final result = await _remote.fetchTradeApplications(page: page);
+    return (rows: result.rows.map((row) => row.toEntity()).toList(growable: false), total: result.total);
+  }
+
+  @override
   Future<List<SecondaryMarketHolding>> fetchSecondaryMarketHoldings() async {
     final rows = await _remote.fetchSecondaryMarketHoldings();
     return rows.map((row) => SecondaryMarketHolding(processId: row.processId,
       projectId: row.projectId, projectName: row.projectName, availableNum: row.availableNum,
-      investmentUnit: row.investmentUnit, investorCode: row.investorCode, earningRadio: row.earningRadio)).toList(growable: false);
+      investmentUnit: row.investmentUnit, investedAmount: row.investedAmount, investorCode: row.investorCode, earningRadio: row.earningRadio)).toList(growable: false);
   }
 
 
@@ -35,6 +47,15 @@ class MyPageRepositoryImpl implements MyPageRepository {
       endDate: endDate,
     );
     return dtos.map((dto) => dto.toEntity()).toList(growable: false);
+  }
+
+  @override
+  Future<({List<MyPageApplyRecord> rows, int total})> fetchFundManagementApplications({
+    required int page,
+    required int status,
+  }) async {
+    final result = await _remote.fetchFundManagementApplications(page: page, status: status);
+    return (rows: result.rows.map((row) => row.toEntity()).toList(growable: false), total: result.total);
   }
 
   @override

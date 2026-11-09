@@ -1,3 +1,4 @@
+import 'trade_management_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
@@ -172,6 +173,7 @@ final secondaryMarketApplicationProvider = FutureProvider.autoDispose
     });
 
 void refreshSecondaryMarket(WidgetRef ref) {
+  ref.invalidate(tradePageProvider);
   ref.invalidate(secondaryMarketActiveSalesProvider);
   ref.invalidate(secondaryMarketControllerProvider);
   ref.invalidate(secondaryMarketOrderProvider);

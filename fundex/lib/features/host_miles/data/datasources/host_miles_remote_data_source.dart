@@ -24,4 +24,6 @@ class HostMilesRemoteDataSource {
     startPage: startPage,
     limit: limit,
   );
+  Future<num> fetchEarnedMonth(DateTime month)=>_api.fetchEarnedMonth(month);
+  Future<num> fetchExpectedNextMonth()=>_api.fetchExpectedNextMonth();
 }

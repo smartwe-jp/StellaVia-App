@@ -6523,6 +6523,207 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageChartAssets => '资产';
 
   @override
+  String get myPageChartAvailable => '可用余额';
+
+  @override
+  String get myPageChartCashHint => '可用于入出金与投资的待机资金';
+
+  @override
+  String get myPageChartDividendUnit => '（单位：千日元）';
+
+  @override
+  String get myPageChartMilesBalance => '宿主里程余额';
+
+  @override
+  String get myPageMilesHistoryUnit => 'mile';
+
+  @override
+  String get manageTierRoomsHint => '※可同时预约的房间上限。退房后额度会恢复。';
+
+  @override
+  String manageMilesPrevMonth(String ym) {
+    return '$ym（上月）';
+  }
+
+  @override
+  String manageMilesThisMonth(String ym) {
+    return '$ym（本月）';
+  }
+
+  @override
+  String manageMilesNextMonth(String ym) {
+    return '$ym（下月）';
+  }
+
+  @override
+  String get manageMilesEarnedDone => '宿主里程（已获得）';
+
+  @override
+  String get manageMilesEarnedPlan => '宿主里程（预计获得）';
+
+  @override
+  String get manageMilesCumulative => '累计获得宿主里程';
+
+  @override
+  String get manageTierCumulativeMiles => '累计获得里程';
+
+  @override
+  String get myPageMilesHistoryLink => '里程明细';
+
+  @override
+  String get myPageMilesHistoryTitle => '宿主里程明细';
+
+  @override
+  String myPageMilesHistoryCount(int count) {
+    return '最近$count条';
+  }
+
+  @override
+  String get myPageMilesHistoryEmpty => '暂无里程明细';
+
+  @override
+  String get myPageMilesHistoryError => '里程明细加载失败';
+
+  @override
+  String get myPageMilesHistoryEarn => '获得';
+
+  @override
+  String get myPageMilesHistoryUse => '使用';
+
+  @override
+  String get myPageMilesHistoryExpired => '失效';
+
+  @override
+  String get myPageMilesHistoryExpiring => '即将失效（1个月前）';
+
+  @override
+  String get myPageMilesHistoryOther => '其他';
+
+  @override
+  String myPageMilesHistoryExpiryDate(String date) {
+    return '过期时间：$date';
+  }
+
+  @override
+  String get myPageMilesHistoryNext => '下一页';
+
+  @override
+  String get myPageMilesHistoryPrev => '上一页';
+
+  @override
+  String get hostManageFundExpectDisclaimer => '*不保证将来的偿还与分红。';
+
+  @override
+  String get hostManageFundExpectPrincipalUnit => '(单位: 万日元)';
+
+  @override
+  String get hostManageFundBankEmpty => '暂无收款账户资料';
+
+  @override
+  String get hostManageBankFee => '※汇款手续费由客户承担。请注意汇款金额，避免扣除手续费后入金不足。';
+
+  @override
+  String get hostManageFundTabApplying => '应募中';
+
+  @override
+  String get hostManageFundTabPending => '入金前';
+
+  @override
+  String get hostManageFundTabRunning => '运用中';
+
+  @override
+  String get hostManageFundTabRedeem => '偿还・分红预定';
+
+  @override
+  String get hostManageFundTabDividend => '分红实绩';
+
+  @override
+  String get hostManageFundEmptyApplying => '暂无应募中的基金';
+
+  @override
+  String get hostManageFundEmptyPending => '暂无待入金的基金';
+
+  @override
+  String get hostManageFundEmptyRunning => '暂无运用中的基金';
+
+  @override
+  String get hostManageFundEmptyDividend => '暂无分红实绩';
+
+  @override
+  String get hostManageFundExpectTotal => '合计';
+
+  @override
+  String get hostManageFundExpectPrincipal => '预定偿还额';
+
+  @override
+  String get hostManageFundExpectBenefit => '预定分红额';
+
+  @override
+  String get hostManageFundThisMonth => '本月';
+
+  @override
+  String get hostManageFundNextMonth => '下月';
+
+  @override
+  String get hostManageFundBankAccount => '汇款账户';
+
+  @override
+  String get hostManageFundBankConfirm => '确认汇款账户';
+
+  @override
+  String get hostManageFundDepositDue => '入金期限';
+
+  @override
+  String get hostManageFundDividendDate => '日期';
+
+  @override
+  String get hostManageFundDividendAmount => '分红额';
+
+  @override
+  String get hostManageFundDividendReceived => '入金额';
+
+  @override
+  String get hostManageFundDividendReceivedHint => '为分红额扣除源泉征收税额后的金额。';
+
+  @override
+  String get hostManageFundYieldFloating => '浮动收益';
+
+  @override
+  String hostManageFundYieldFixedFloating(String pct) {
+    return '$pct% ＋ 浮动收益';
+  }
+
+  @override
+  String get hostManageFundMonthUnit => '个月';
+
+  @override
+  String get hostManageFundApplyAmount => '应募额';
+
+  @override
+  String get hostManageFundApplyUnits => '应募口数';
+
+  @override
+  String get hostManageFundExpectRange1y => '未来1年间';
+
+  @override
+  String get hostManageFundExpectRange3y => '未来3年间';
+
+  @override
+  String get hostManageFundExpectRange5y => '未来5年间';
+
+  @override
+  String get hostManageFundName => 'ファンド名';
+
+  @override
+  String get hostManageFundYield => '预期收益率';
+
+  @override
+  String get hostManageFundPeriod => '运用期间';
+
+  @override
+  String get hostManageGoFundList => '查看基金列表';
+
+  @override
   String get myPageChartOperating => '运用余额';
 
   @override
@@ -6559,6 +6760,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get myPageRankMax => '已达到最高等级';
+
+  @override
+  String get myPageNextRankTitle => '距离下一等级';
+
+  @override
+  String get myPageNextRankBalance => '还需投资余额';
 
   @override
   String get myPageRankGap => '距离下一等级还需运用余额';
@@ -6678,6 +6885,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelQuoteFailed => '里程报价获取失败，请重试。';
 
   @override
+  String get myPageShortcutSummary => '资产概览';
+
+  @override
+  String get myPageShortcutFunds => '宿主基金管理';
+
+  @override
+  String get myPageShortcutMiles => '宿主里程管理';
+
+  @override
+  String get myPageShortcutDocuments => '各类文件';
+
+  @override
   String get secondaryMarketManage => '买卖管理';
 
   @override
@@ -6792,6 +7011,39 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get hotelExtraGuestMilesNotice => '按房型显示全部房间、整个住宿期间的参考里程；总里程以报价结果为准。';
+
+  @override
+  String get tradeTabSell => '卖出基金';
+
+  @override
+  String get tradeTabBuy => '买入基金';
+
+  @override
+  String get tradeTabHistory => '买卖记录';
+
+  @override
+  String get tradeSubSell => '卖出';
+
+  @override
+  String get tradeSubBuy => '认购';
+
+  @override
+  String get tradeInvestAmount => '运用投资额';
+
+  @override
+  String get tradeSellApply => '卖出申请';
+
+  @override
+  String get tradeEmptySell => '暂无可卖出的基金';
+
+  @override
+  String get tradeEmptyBuy => '暂无可买入的基金';
+
+  @override
+  String get tradeEmptyHistorySell => '暂无卖出申请';
+
+  @override
+  String get tradeEmptyHistoryBuy => '暂无认购申请';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -13317,6 +13569,207 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageChartAssets => '資產';
 
   @override
+  String get myPageChartAvailable => '可用餘額';
+
+  @override
+  String get myPageChartCashHint => '可用於入出金與投資的待機資金';
+
+  @override
+  String get myPageChartDividendUnit => '（單位：千日圓）';
+
+  @override
+  String get myPageChartMilesBalance => '宿主里程餘額';
+
+  @override
+  String get myPageMilesHistoryUnit => 'mile';
+
+  @override
+  String get manageTierRoomsHint => '※可同時預約的房間上限。退房後額度會恢復。';
+
+  @override
+  String manageMilesPrevMonth(String ym) {
+    return '$ym（上月）';
+  }
+
+  @override
+  String manageMilesThisMonth(String ym) {
+    return '$ym（本月）';
+  }
+
+  @override
+  String manageMilesNextMonth(String ym) {
+    return '$ym（下月）';
+  }
+
+  @override
+  String get manageMilesEarnedDone => '宿主里程（已獲得）';
+
+  @override
+  String get manageMilesEarnedPlan => '宿主里程（預計獲得）';
+
+  @override
+  String get manageMilesCumulative => '累計獲得宿主里程';
+
+  @override
+  String get manageTierCumulativeMiles => '累計獲得里程';
+
+  @override
+  String get myPageMilesHistoryLink => '里程明細';
+
+  @override
+  String get myPageMilesHistoryTitle => '宿主里程明細';
+
+  @override
+  String myPageMilesHistoryCount(int count) {
+    return '最近$count筆';
+  }
+
+  @override
+  String get myPageMilesHistoryEmpty => '暫無里程明細';
+
+  @override
+  String get myPageMilesHistoryError => '里程明細載入失敗';
+
+  @override
+  String get myPageMilesHistoryEarn => '獲得';
+
+  @override
+  String get myPageMilesHistoryUse => '使用';
+
+  @override
+  String get myPageMilesHistoryExpired => '失效';
+
+  @override
+  String get myPageMilesHistoryExpiring => '即將失效（1個月前）';
+
+  @override
+  String get myPageMilesHistoryOther => '其他';
+
+  @override
+  String myPageMilesHistoryExpiryDate(String date) {
+    return '過期時間：$date';
+  }
+
+  @override
+  String get myPageMilesHistoryNext => '下一頁';
+
+  @override
+  String get myPageMilesHistoryPrev => '上一頁';
+
+  @override
+  String get hostManageFundExpectDisclaimer => '*不保證將來的償還與配息。';
+
+  @override
+  String get hostManageFundExpectPrincipalUnit => '(單位: 萬日圓)';
+
+  @override
+  String get hostManageFundBankEmpty => '暫無匯款帳戶資料';
+
+  @override
+  String get hostManageBankFee => '※匯款手續費由客戶自行負擔。請注意匯款金額，避免扣除手續費後入金不足。';
+
+  @override
+  String get hostManageFundTabApplying => '應募中';
+
+  @override
+  String get hostManageFundTabPending => '入金前';
+
+  @override
+  String get hostManageFundTabRunning => '運用中';
+
+  @override
+  String get hostManageFundTabRedeem => '償還・配息預定';
+
+  @override
+  String get hostManageFundTabDividend => '配息實績';
+
+  @override
+  String get hostManageFundEmptyApplying => '暫無應募中的基金';
+
+  @override
+  String get hostManageFundEmptyPending => '暫無待入金的基金';
+
+  @override
+  String get hostManageFundEmptyRunning => '暫無運用中的基金';
+
+  @override
+  String get hostManageFundEmptyDividend => '暫無配息實績';
+
+  @override
+  String get hostManageFundExpectTotal => '合計';
+
+  @override
+  String get hostManageFundExpectPrincipal => '預定償還額';
+
+  @override
+  String get hostManageFundExpectBenefit => '預定配息額';
+
+  @override
+  String get hostManageFundThisMonth => '本月';
+
+  @override
+  String get hostManageFundNextMonth => '下月';
+
+  @override
+  String get hostManageFundBankAccount => '匯款帳戶';
+
+  @override
+  String get hostManageFundBankConfirm => '確認匯款帳戶';
+
+  @override
+  String get hostManageFundDepositDue => '入金期限';
+
+  @override
+  String get hostManageFundDividendDate => '日期';
+
+  @override
+  String get hostManageFundDividendAmount => '配息額';
+
+  @override
+  String get hostManageFundDividendReceived => '入金額';
+
+  @override
+  String get hostManageFundDividendReceivedHint => '為配息額扣除源泉徵收稅額後的金額。';
+
+  @override
+  String get hostManageFundYieldFloating => '浮動收益';
+
+  @override
+  String hostManageFundYieldFixedFloating(String pct) {
+    return '$pct% ＋ 浮動收益';
+  }
+
+  @override
+  String get hostManageFundMonthUnit => '個月';
+
+  @override
+  String get hostManageFundApplyAmount => '應募額';
+
+  @override
+  String get hostManageFundApplyUnits => '應募口數';
+
+  @override
+  String get hostManageFundExpectRange1y => '未來1年間';
+
+  @override
+  String get hostManageFundExpectRange3y => '未來3年間';
+
+  @override
+  String get hostManageFundExpectRange5y => '未來5年間';
+
+  @override
+  String get hostManageFundName => 'ファンド名';
+
+  @override
+  String get hostManageFundYield => '預期收益率';
+
+  @override
+  String get hostManageFundPeriod => '運用期間';
+
+  @override
+  String get hostManageGoFundList => '查看基金列表';
+
+  @override
   String get myPageChartOperating => '運用餘額';
 
   @override
@@ -13353,6 +13806,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageRankMax => '已達到最高等級';
+
+  @override
+  String get myPageNextRankTitle => '距離下一等級';
+
+  @override
+  String get myPageNextRankBalance => '尚需投資餘額';
 
   @override
   String get myPageRankGap => '距離下一等級還需運用餘額';
@@ -13472,6 +13931,18 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hotelQuoteFailed => '里程報價取得失敗，請重試。';
 
   @override
+  String get myPageShortcutSummary => '資產概覽';
+
+  @override
+  String get myPageShortcutFunds => '宿主基金管理';
+
+  @override
+  String get myPageShortcutMiles => '宿主里程管理';
+
+  @override
+  String get myPageShortcutDocuments => '各類文件';
+
+  @override
   String get secondaryMarketManage => '買賣管理';
 
   @override
@@ -13586,4 +14057,37 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelExtraGuestMilesNotice => '按房型顯示全部房間、整個住宿期間的參考里程；總里程以報價結果為準。';
+
+  @override
+  String get tradeTabSell => '賣出基金';
+
+  @override
+  String get tradeTabBuy => '買入基金';
+
+  @override
+  String get tradeTabHistory => '買賣紀錄';
+
+  @override
+  String get tradeSubSell => '賣出';
+
+  @override
+  String get tradeSubBuy => '認購';
+
+  @override
+  String get tradeInvestAmount => '運用投資額';
+
+  @override
+  String get tradeSellApply => '賣出申請';
+
+  @override
+  String get tradeEmptySell => '暫無可賣出的基金';
+
+  @override
+  String get tradeEmptyBuy => '暫無可買入的基金';
+
+  @override
+  String get tradeEmptyHistorySell => '暫無賣出申請';
+
+  @override
+  String get tradeEmptyHistoryBuy => '暫無認購申請';
 }

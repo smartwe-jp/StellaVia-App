@@ -20,7 +20,7 @@ class WalletRepositoryImpl implements WalletRepository {
 
   @override
   Future<List<WalletAccountHistory>> fetchAccountHistory({
-    int accountType = 0,
+    int? accountType = 0,
   }) async {
     final dtos = await _remote.fetchAccountHistory(accountType: accountType);
     return dtos.map((WalletAccountHistoryDto dto) => dto.toEntity()).toList();

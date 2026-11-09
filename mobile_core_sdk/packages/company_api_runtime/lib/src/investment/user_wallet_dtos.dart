@@ -82,7 +82,7 @@ class UserWalletBankAccountPoolDto {
       bankType: _intOrNull(json['bankType']),
       bankName: _stringOrNull(json['bankName']),
       branchName: _stringOrNull(json['branchName'] ?? json['branchBankName']),
-      branchBankNumber: _stringOrNull(json['branchBankNumber']),
+      branchBankNumber: _stringOrNull(json['branchBankNumber'] ?? json['branchCode'] ?? json['branch_code']),
       bankAccountType: _intOrNull(
         json['bankAccountType'] ?? json['accountType'],
       ),
@@ -193,7 +193,7 @@ class UserWalletBankAccountInfoDto {
   });
 
   factory UserWalletBankAccountInfoDto.fromJson(Map<String, dynamic> json) {
-    final accountPoolMap = json['accountPool'];
+    final accountPoolMap = json['accountPool'] ?? json['account_pool'];
     return UserWalletBankAccountInfoDto(
       accountPool: accountPoolMap is Map
           ? UserWalletBankAccountPoolDto.fromJson(

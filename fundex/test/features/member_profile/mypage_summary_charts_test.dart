@@ -13,34 +13,36 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fundex/l10n/app_localizations.dart';
 import 'package:fundex/features/member_profile/domain/entities/mypage_chart.dart';
 import 'package:fundex/features/member_profile/domain/entities/mypage_models.dart';
-import 'package:fundex/features/member_profile/domain/repositories/mypage_repository.dart';
+import 'package:fundex/features/wallet/domain/repositories/wallet_repository.dart';
+import 'package:fundex/features/wallet/domain/entities/wallet_account_history.dart';
+import 'package:fundex/features/member_profile/presentation/providers/mypage_providers.dart';
 import 'package:fundex/features/member_profile/domain/usecases/load_mypage_chart_usecase.dart';
 import 'package:fundex/features/member_profile/presentation/controllers/mypage_chart_controller.dart';
 import 'package:fundex/features/member_profile/presentation/providers/mypage_chart_providers.dart';
-import 'package:fundex/features/member_profile/presentation/support/mypage_chart_display.dart';
+import 'package:fundex/features/member_profile/presentation/widgets/my_page_balance_ring.dart';
 import 'package:fundex/features/member_profile/presentation/widgets/my_page_summary_charts.dart';
+import 'package:fundex/features/member_profile/presentation/pages/my_page_summary_page.dart';
+import 'package:fundex/features/member_profile/presentation/providers/mypage_membership_providers.dart';
+import 'package:fundex/features/member_profile/presentation/controllers/mypage_membership_controller.dart';
+import 'package:fundex/features/member_profile/presentation/widgets/my_page_membership_card.dart';
+import 'package:fundex/features/member_profile/presentation/widgets/my_page_summary_rank_card.dart';
 import 'package:fundex/features/asset_statistics/domain/entities/asset_statistics_models.dart';
 import 'package:fundex/features/asset_statistics/domain/repositories/asset_statistics_repository.dart';
 import 'package:fundex/features/host_miles/domain/entities/host_miles_models.dart';
 import 'package:fundex/features/host_miles/domain/repositories/host_miles_repository.dart';
 
-class ProfileFake implements MyPageRepository {
-  DateTime? start;
+class WalletFake implements WalletRepository {
   @override
-  Future<List<MyPageAssetTrend>> fetchAssetTrend({
-    required DateTime startDate,
-    required DateTime endDate,
+  Future<List<WalletAccountHistory>> fetchAccountHistory({
+    int? accountType = 0,
   }) async {
-    start = startDate;
+    expect(accountType, isNull);
     return const [
-      MyPageAssetTrend(
-        recordDate: '2026-10-01',
-        totalAccount: 999,
-        totalFundAccount: 200,
-      ),
-      MyPageAssetTrend(recordDate: '2022-01-01', totalFundAccount: 0),
-      MyPageAssetTrend(recordDate: 'invalid', totalFundAccount: 400),
-      MyPageAssetTrend(recordDate: '2026-10-02', totalAccount: 888),
+      WalletAccountHistory(tradeTime: '2026-10-29 19:58:00', balance: 200),
+      WalletAccountHistory(tradeTime: '2025-10-29', balance: 50),
+      WalletAccountHistory(tradeTime: '2025-10-28', balance: 10),
+      WalletAccountHistory(tradeTime: 'invalid', balance: 300),
+      WalletAccountHistory(createTime: '2026-10-30', balance: 400),
     ];
   }
 
@@ -49,6 +51,16 @@ class ProfileFake implements MyPageRepository {
 }
 
 class AssetsFake implements AssetStatisticsRepository {
+  @override
+  Future<AssetInvestmentChart> fetchInvestments() async =>
+      const AssetInvestmentChart(
+        investTotal: 210,
+        investList: [
+          AssetInvestment(projectName: 'A', investMoneyValid: 150),
+          AssetInvestment(projectName: 'B', investMoneyValid: 50),
+        ],
+      );
+
   @override
   Future<AssetCumulativeBenefit> fetchCumulativeBenefit({
     required DateTime startDate,
@@ -65,14 +77,19 @@ class AssetsFake implements AssetStatisticsRepository {
 class MilesFake implements HostMilesRepository {
   bool empty = false;
   @override
-  Future<HostMilesCumulativeChart> fetchCumulativeChart({
-    required DateTime startMonth,
-  }) async => empty
-      ? const HostMilesCumulativeChart()
-      : const HostMilesCumulativeChart(
-          xaxis: ['2026-01', '2026-02'],
-          yaxis: [400, 500],
-        );
+  Future<List<HostMilesChartEntry>> fetchChart({
+    required DateTime startDate,
+    required DateTime endDate,
+  }) async {
+    expect(startDate, DateTime(endDate.year - 5, endDate.month, endDate.day));
+    return empty
+        ? []
+        : const [
+            HostMilesChartEntry(date: '2025-01', points: 400),
+            HostMilesChartEntry(date: '2026-02', points: 500),
+          ];
+  }
+
   @override
   dynamic noSuchMethod(Invocation i) => super.noSuchMethod(i);
 }
@@ -81,9 +98,21 @@ MyPageChartData chart(int years) => MyPageChartData(
   start: years == 1 ? DateTime(2025, 11) : DateTime(2027 - years),
   end: DateTime(2026, 10, 29),
   total: 9020314,
+  holdings: const [
+    AssetInvestment(
+      projectName: 'Fund A',
+      investMoneyValid: 5412188,
+      beginDate: '2025-01-01',
+      endDate: '2027-12-31',
+    ),
+    AssetInvestment(projectName: 'Fund B', investMoneyValid: 3608126),
+  ],
   points: [
-    for (var y = 2027 - years; y <= 2026; y++)
-      MyPageChartPoint(DateTime(y, 1, 1), (y - 2020) * 10000),
+    for (var i = 0; i <= 12; i++)
+      MyPageChartPoint(
+        DateTime(2026, 10 - 12 * years + i * years, 29),
+        3000 + i * 800,
+      ),
   ],
 );
 
@@ -151,29 +180,25 @@ void main() {
   );
 
   test(
-    'maps fund balance, cumulative dividends and last earned miles without summing',
+    'loads real fund positions, cumulative dividend rows and the last daily miles balance',
     () async {
-      final profile = ProfileFake();
+      final wallet = WalletFake();
       final miles = MilesFake();
-      final usecase = LoadMyPageChartUseCase(profile, AssetsFake(), miles);
+      final usecase = LoadMyPageChartUseCase(wallet, AssetsFake(), miles);
       final balance = await usecase(
         MyPageChartKind.operating,
         5,
         DateTime(2026, 10, 29),
       );
-      expect(profile.start, DateTime(2022));
-      expect(balance.total, 200);
-      expect(balance.points.map((p) => p.value), [0, 200]);
+      expect(balance.total, 210);
+      expect(balance.holdings.map((h) => h.investMoneyValid), [150, 50]);
       final dividends = await usecase(
         MyPageChartKind.dividends,
         5,
         DateTime(2026, 10, 29),
       );
       expect(dividends.total, 1200);
-      expect(MyPageChartDisplay.bars(dividends, 5).map((p) => p.value), [
-        600,
-        1200,
-      ]);
+      expect(dividends.points.map((p) => p.value), [100, 600, 1200]);
       expect(
         (await usecase(MyPageChartKind.miles, 5, DateTime(2026, 10, 29))).total,
         500,
@@ -181,56 +206,62 @@ void main() {
       miles.empty = true;
       expect(
         (await usecase(MyPageChartKind.miles, 5, DateTime(2026, 10, 29))).total,
-        isNull,
+        0,
       );
     },
   );
-  test('one year rolls across year boundaries for every chart kind', () async {
-    final usecase = LoadMyPageChartUseCase(
-      ProfileFake(),
-      AssetsFake(),
-      MilesFake(),
-    );
-    for (final now in [
-      DateTime(2026, 10, 30),
-      DateTime(2026, 1, 1),
-      DateTime(2024, 2, 29),
-      DateTime(2026, 12, 31),
-    ]) {
-      for (final kind in MyPageChartKind.values) {
-        final result = await usecase(kind, 1, now);
-        expect(result.start, DateTime(now.year, now.month - 11));
-        expect(result.end, now);
-        expect(MyPageChartDisplay.monthIndex(now, result.start), 11);
-        expect(MyPageChartDisplay.labels(result, 1).last, '${now.month}');
-        expect(
-          result.points.every(
-            (p) => !p.date.isBefore(result.start) && !p.date.isAfter(now),
-          ),
-          true,
-        );
-      }
-    }
-    final data = MyPageChartData(
-      start: DateTime(2025, 11),
-      end: DateTime(2026, 10, 30),
-      total: 30,
-      points: [
-        MyPageChartPoint(DateTime(2025, 11, 1), 10),
-        MyPageChartPoint(DateTime(2025, 11, 30), 15),
-        MyPageChartPoint(DateTime(2026, 1), 20),
-        MyPageChartPoint(DateTime(2026, 10), 30),
-      ],
-    );
-    expect(MyPageChartDisplay.labels(data, 1), ['11', '2', '5', '8', '10']);
-    final bars = MyPageChartDisplay.bars(data, 1);
-    expect(bars.map((p) => p.value), [15, 20, 30]);
-    expect(bars.map((p) => MyPageChartDisplay.monthIndex(p.date, data.start)), [
-      0,
-      2,
-      11,
-    ]);
-  });
+  test(
+    'wallet window uses inclusive calendar dates and the Web leap-year rule',
+    () async {
+      final now = DateTime(2026, 10, 29);
+      final data = await LoadMyPageChartUseCase(
+        WalletFake(),
+        AssetsFake(),
+        MilesFake(),
+      )(MyPageChartKind.available, 1, now);
+      expect(data.historyWindow(1, now).points.map((p) => p.value), [50, 200]);
+      expect(data.historyWindow(3, now).points.map((p) => p.value), [
+        10,
+        50,
+        200,
+      ]);
+      expect(
+        MyPageChartData.rangeStart(DateTime(2024, 2, 29), 1),
+        DateTime(2023, 3, 1),
+      );
+    },
+  );
+  test(
+    'available balance switches ranges locally even while its history is loading',
+    () async {
+      final pending = Completer<MyPageChartData>();
+      var calls = 0;
+      final controller = MyPageChartController((years) {
+        calls++;
+        return pending.future;
+      }, localHistory: true);
+      addTearDown(controller.dispose);
+      final now = DateTime.now();
+      final oldPoint = MyPageChartPoint(
+        DateTime(now.year - 2, now.month, now.day),
+        19,
+      );
+      final recentPoint = MyPageChartPoint(now, 25);
+      final first = controller.refresh();
+      await controller.selectYears(5);
+      pending.complete(
+        MyPageChartData(start: now, end: now, points: [oldPoint, recentPoint]),
+      );
+      await first;
+      expect(controller.state.data.valueOrNull!.points, [
+        oldPoint,
+        recentPoint,
+      ]);
+      await controller.selectYears(1);
+      expect(controller.state.data.valueOrNull!.points, [recentPoint]);
+      expect(calls, 1);
+    },
+  );
   test(
     'range changes reject late results and refresh failure preserves useful data',
     () async {
@@ -241,13 +272,13 @@ void main() {
         return p.future;
       });
       final first = c.refresh();
-      final second = c.selectYears(5);
-      pending[1].complete(chart(5));
+      final second = c.selectYears(3);
+      pending[1].complete(chart(3));
       await second;
-      pending[0].complete(chart(1));
+      pending[0].complete(chart(5));
       await first;
-      expect(c.state.years, 5);
-      expect(c.state.data.valueOrNull?.start, DateTime(2022));
+      expect(c.state.years, 3);
+      expect(c.state.data.valueOrNull?.start, DateTime(2024));
       final refresh = c.refresh();
       pending.last.completeError(StateError('offline'));
       await refresh;
@@ -276,8 +307,41 @@ void main() {
     double scale = 1,
     GlobalKey? capture,
     bool dark = false,
+    bool summary = false,
   }) => ProviderScope(
     overrides: [
+      myPageAccountStatisticProvider.overrideWith(
+        (ref) async =>
+            const MyPageAccountStatistic(firstLevelAccountTotal: 14500),
+      ),
+      ...[
+        myPageMilesExpiryProvider.overrideWith((ref) async => []),
+        myPageTierProvider.overrideWith((ref) {
+          final c = MyPageMembershipController(
+            () async => const HostMilesTier(
+              pointsBalance: 30000,
+              currentTier: 'BRONZE',
+              pointRate: .00525,
+              maxRooms: 3,
+              currentBookingRooms: 1,
+              currentAum: 600000,
+              nextTierGap: 900000,
+            ),
+          );
+          Future.microtask(c.refresh);
+          return c;
+        }),
+        myPageMilesAccountProvider.overrideWith((ref) {
+          final c = MyPageMembershipController(
+            () async => const HostMilesAccount(
+              availablePoints: 30000,
+              expiringSoonPoints: 1200,
+            ),
+          );
+          Future.microtask(c.refresh);
+          return c;
+        }),
+      ],
       for (final kind in MyPageChartKind.values)
         myPageChartProvider(kind).overrideWith((ref) {
           final c = MyPageChartController((years) async => chart(years));
@@ -298,9 +362,11 @@ void main() {
         ).copyWith(textScaler: TextScaler.linear(scale)),
         child: RepaintBoundary(key: capture, child: child!),
       ),
-      home: const Scaffold(
-        body: SingleChildScrollView(child: MyPageSummaryCharts()),
-      ),
+      home: summary
+          ? const MyPageSummaryPage()
+          : const Scaffold(
+              body: SingleChildScrollView(child: MyPageSummaryCharts()),
+            ),
     ),
   );
   testWidgets(
@@ -315,7 +381,10 @@ void main() {
           app(locale, scale: 1.3, dark: locale.languageCode == 'en'),
         );
         await tester.pumpAndSettle();
-        expect(find.text('9,020,314'), findsNWidgets(3));
+        expect(
+          find.textContaining('9,020,314', findRichText: true),
+          findsNWidgets(3),
+        );
         expect(
           tester
               .widgetList<AppDropdownSelector<int>>(
@@ -333,15 +402,75 @@ void main() {
       }
     },
   );
-  testWidgets('capture charts', (tester) async {
-    if (Platform.environment['CHART_CAPTURE'] != '1') return;
+  testWidgets('summary shows a combined rank card above the four charts', (
+    tester,
+  ) async {
     tester.view.devicePixelRatio = 1;
-    tester.view.physicalSize = const Size(390, 760);
+    tester.view.physicalSize = const Size(390, 1830);
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
     final key = GlobalKey();
-    await tester.pumpWidget(app(const Locale('ja'), capture: key));
+    await tester.pumpWidget(
+      app(const Locale('ja'), capture: key, summary: true),
+    );
     await tester.pumpAndSettle();
+    expect(find.byType(MyPageMembershipCard), findsNothing);
+    final card = find.byType(MyPageSummaryRankCard);
+    expect(card, findsOneWidget);
+    for (final value in [
+      'BRONZE',
+      '0.525 %',
+      '3 室',
+      '1 室',
+      '1,200 マイル',
+      '900,000 円',
+    ]) {
+      expect(
+        find.descendant(
+          of: card,
+          matching: find.text(value, findRichText: true),
+        ),
+        findsOneWidget,
+      );
+    }
+    expect(
+      tester
+          .widgetList<MyPageSummaryChartCard>(
+            find.byType(MyPageSummaryChartCard),
+          )
+          .map((w) => w.kind),
+      [
+        MyPageChartKind.miles,
+        MyPageChartKind.operating,
+        MyPageChartKind.dividends,
+        MyPageChartKind.available,
+      ],
+    );
+    expect(tester.takeException(), isNull);
+    expect(find.textContaining('30,000', findRichText: true), findsOneWidget);
+    expect(find.textContaining('14,500', findRichText: true), findsOneWidget);
+    final ring = find.byType(MyPageBalanceRing);
+    await tester.ensureVisible(ring);
+    await tester.tapAt(tester.getCenter(ring) + const Offset(86, 0));
+    await tester.pump();
+    expect(find.textContaining('Fund A'), findsOneWidget);
+    await tester.tapAt(tester.getCenter(ring));
+    await tester.pump();
+    await tester.ensureVisible(card);
+    final arrow = find.descendant(
+      of: card,
+      matching: find.byIcon(Icons.chevron_right_rounded),
+    );
+    final expiryRow = find
+        .ancestor(of: arrow, matching: find.byType(AppCard))
+        .first;
+    expect(tester.getSize(expiryRow).height, 45);
+    await tester.tap(arrow);
+    await tester.pumpAndSettle();
+    expect(find.text('失効予定の宿主マイル'), findsOneWidget);
+    await tester.tap(find.byType(CloseButton));
+    await tester.pumpAndSettle();
+    if (Platform.environment['CHART_CAPTURE'] != '1') return;
     final boundary =
         key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
     await tester.runAsync(() async {

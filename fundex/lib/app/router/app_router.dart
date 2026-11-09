@@ -1,3 +1,7 @@
+import '../../features/member_profile/presentation/pages/host_fund_management_page.dart';
+import '../../features/member_profile/presentation/pages/my_page_summary_page.dart';
+import '../../features/member_profile/presentation/pages/my_page_miles_history_page.dart';
+import '../../features/member_profile/presentation/pages/my_page_miles_management_page.dart';
 import '../../features/investment/presentation/pages/secondary_market_active_sales_page.dart';
 import '../../features/investment/presentation/pages/secondary_market_activity_page.dart';
 import '../../features/investment/presentation/pages/secondary_market_activity_detail_page.dart';
@@ -594,6 +598,26 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 },
                 routes: <RouteBase>[
                   GoRoute(
+                    path: 'host-funds',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, __) => const HostFundManagementPage(),
+                  ),
+                  GoRoute(
+                    path: 'miles',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, __) => const MyPageMilesManagementPage(),
+                  ),
+                  GoRoute(
+                    path: 'miles-history',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, __) => const MyPageMilesHistoryPage(),
+                  ),
+                  GoRoute(
+                    path: 'summary',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, __) => const MyPageSummaryPage(),
+                  ),
+                  GoRoute(
                     path: 'avatar',
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (BuildContext context, GoRouterState state) {
@@ -814,7 +838,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/profile/my/secondary-market',
         builder: (BuildContext context, GoRouterState state) {
-          return SecondaryMarketActivityPage(initialPurchases: state.uri.queryParameters['tab'] == 'buy');
+          return SecondaryMarketActivityPage(initialPurchases: state.uri.queryParameters['tab'] == 'buy', initialSalesHistory: state.uri.queryParameters['tab'] == 'sales');
         },
       ),
       GoRoute(

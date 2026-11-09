@@ -26,6 +26,6 @@ bool canBuySecondaryMarketRecord(MyPageOrderInquiryRecord record) {
 int remainingUnitsForSecondaryMarketRecord(MyPageOrderInquiryRecord record) {
   final sell = record.sellNum ?? 0;
   final sold = record.soldNum ?? 0;
-  final remaining = sell - sold;
+  final remaining = record.availableNum ?? (sell - sold);
   return remaining < 0 ? 0 : remaining;
 }

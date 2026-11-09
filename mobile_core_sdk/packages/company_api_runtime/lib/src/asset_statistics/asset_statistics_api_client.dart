@@ -110,7 +110,7 @@ class AssetStatisticsApiClient {
     );
     final data = payload[_codec.profile.dataKey];
     return readList(
-      data,
+      data is Map ? data['list'] : data,
       (value) => readObject(value, AssetYearlyBenefitDto.fromJson),
     );
   }

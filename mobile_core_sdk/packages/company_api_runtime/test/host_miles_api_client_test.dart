@@ -28,6 +28,33 @@ Dio fixtureDio(
 }
 
 void main() {
+  test('management sends the month only for actual earnings', () async {
+    final paths = <String>[];
+    final api = HostMilesApiClient(
+      dioForPath: (path) {
+        paths.add(path);
+        return fixtureDio(
+          paths.length == 1 ? '0' : '42.5',
+          inspect: (r) {
+            expect(r.method, 'GET');
+            expect(r.extra['auth_required'], true);
+            expect(
+              r.queryParameters,
+              paths.length == 1 ? {'yearMonth': '2025-12'} : {},
+            );
+          },
+        );
+      },
+    );
+    expect(await api.fetchEarnedMonth(DateTime(2025, 12)), 0);
+    expect(await api.fetchExpectedNextMonth(), 42.5);
+    expect(paths, [
+      '/crowdfunding/points/engine-point-month',
+      '/crowdfunding/points/pre-engine-point',
+    ]);
+    final missing = HostMilesApiClient(dioForPath: (_) => fixtureDio(null));
+    await expectLater(missing.fetchExpectedNextMonth(), throwsFormatException);
+  });
   test('fetchTier request contract and response', () async {
     final dio = fixtureDio(
       {
@@ -54,6 +81,33 @@ void main() {
     expect(value.maxRooms, 6);
     expect(value.pointRate, 0.006);
   });
+  test(
+    'summary reads the first numeric tier balance and chart row aliases',
+    () async {
+      final api = HostMilesApiClient(
+        dioForPath: (path) => fixtureDio(
+          path == HostMilesApiPaths.fetchTier
+              ? {
+                  'pointsBalance': 'invalid',
+                  'currentPoints': '0',
+                  'availablePoints': 999,
+                }
+              : {
+                  'rows': [
+                    {'recordDate': '2026-11-01', 'value': '12.5'},
+                  ],
+                },
+        ),
+      );
+      expect((await api.fetchTier()).pointsBalance, 0);
+      final chart = await api.fetchChart(
+        startDate: DateTime(2025, 11, 9),
+        endDate: DateTime(2026, 11, 9),
+      );
+      expect(chart.single.date, '2026-11-01');
+      expect(chart.single.points, 12.5);
+    },
+  );
   test('fetchTier rejects backend failure', () async {
     final api = HostMilesApiClient(
       dioForPath: (_) => fixtureDio({
@@ -293,6 +347,34 @@ void main() {
     expect(value.rows.single.createTime!.millisecondsSinceEpoch, 1790833387000);
     expect(value.rows.single.expireTime, DateTime.utc(2026, 11, 1, 12));
   });
+  test(
+    'history accepts Web pagination and transaction field aliases',
+    () async {
+      final api = HostMilesApiClient(
+        dioForPath: (_) => fixtureDio(
+          {
+            'totalElements': 23,
+            'records': [
+              {
+                'pointChange': '-7.5',
+                'statusName': 'spend',
+                'tradeTime': 1790833387,
+                'validUntil': 1790833387000,
+              },
+            ],
+          },
+          inspect: (request) =>
+              expect(request.data, {'startPage': 1, 'limit': 10}),
+        ),
+      );
+      final result = await api.fetchTransactions(limit: 10);
+      expect(result.total, 23);
+      final row = result.rows.single;
+      expect(row.amount, -7.5);
+      expect(row.typeDescription, 'spend');
+      expect(row.createTime, row.expireTime);
+    },
+  );
   test('fetchTransactions rejects backend failure', () async {
     final api = HostMilesApiClient(
       dioForPath: (_) => fixtureDio({
