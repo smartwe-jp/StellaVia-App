@@ -72,141 +72,141 @@ class _MyPageAssetSummaryState extends State<MyPageAssetSummary> {
             l10n.myPageAssetHelper,
             style: text.caption.copyWith(color: colors.textSecondary),
           ),
-          const SizedBox(height: 16),
-          AppCard(
-            borderRadius: BorderRadius.circular(18),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        l10n.myPageTotalAssetsLabel,
-                        style: text.caption,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 32,
-                      width: 40,
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        tooltip: _visible
-                            ? l10n.myPageHideAmounts
-                            : l10n.myPageShowAmounts,
-                        icon: Icon(
-                          _visible
-                              ? Symbols.visibility
-                              : Symbols.visibility_off,
-                          size: 18,
-                          color: colors.textSecondary,
-                        ),
-                        onPressed: () => setState(() => _visible = !_visible),
-                      ),
-                    ),
-                  ],
-                ),
-                Text(
-                  _visible ? widget.totalAssetsValue : '••••••',
-                  style: MyPageSummaryStyles(context).total,
-                ),
-                const SizedBox(height: 20),
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    final twoColumns =
-                        constraints.maxWidth >= 300 &&
-                        MediaQuery.textScalerOf(context).scale(1) <= 1.2;
-                    return Wrap(
-                      spacing: 16,
-                      runSpacing: 8,
-                      children: [
-                        for (final metric
-                            in (widget.metrics.length == 3
-                                ? [
-                                    widget.metrics[0],
-                                    widget.metrics[2],
-                                    widget.metrics[1],
-                                  ]
-                                : widget.metrics))
-                          SizedBox(
-                            width: twoColumns
-                                ? (constraints.maxWidth - 16) / 2
-                                : constraints.maxWidth,
-                            child: InkWell(
-                              onTap: metric.onTap,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 4,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        metric.label,
-                                        style: text.micro.copyWith(
-                                          color: colors.textSecondary,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Flexible(
-                                      child: Text(
-                                        _visible ? metric.value : '••••',
-                                        textAlign: TextAlign.end,
-                                        style: MyPageSummaryStyles(
-                                          context,
-                                        ).metric,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    );
-                  },
-                ),
-                const SizedBox(height: 12),
-                Divider(height: 1, color: colors.border),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    Expanded(
-                      child: AppButton(
-                        label: l10n.myPageDepositAction,
-                        minHeight: 46,
-                        style: ButtonStyle(
-                          shape: WidgetStatePropertyAll(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                        onPressed: widget.onDeposit,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: AppButton(
-                        label: l10n.myPageWithdrawAction,
-                        minHeight: 46,
-                        style: ButtonStyle(
-                          shape: WidgetStatePropertyAll(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                        variant: AppButtonVariant.secondary,
-                        onPressed: widget.onWithdraw,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+          // const SizedBox(height: 16),
+          // AppCard(
+          //   borderRadius: BorderRadius.circular(18),
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       Row(
+          //         children: [
+          //           Expanded(
+          //             child: Text(
+          //               l10n.myPageTotalAssetsLabel,
+          //               style: text.caption,
+          //             ),
+          //           ),
+          //           SizedBox(
+          //             height: 32,
+          //             width: 40,
+          //             child: IconButton(
+          //               padding: EdgeInsets.zero,
+          //               tooltip: _visible
+          //                   ? l10n.myPageHideAmounts
+          //                   : l10n.myPageShowAmounts,
+          //               icon: Icon(
+          //                 _visible
+          //                     ? Symbols.visibility
+          //                     : Symbols.visibility_off,
+          //                 size: 18,
+          //                 color: colors.textSecondary,
+          //               ),
+          //               onPressed: () => setState(() => _visible = !_visible),
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //       Text(
+          //         _visible ? widget.totalAssetsValue : '••••••',
+          //         style: MyPageSummaryStyles(context).total,
+          //       ),
+          //       const SizedBox(height: 20),
+          //       LayoutBuilder(
+          //         builder: (context, constraints) {
+          //           final twoColumns =
+          //               constraints.maxWidth >= 300 &&
+          //               MediaQuery.textScalerOf(context).scale(1) <= 1.2;
+          //           return Wrap(
+          //             spacing: 16,
+          //             runSpacing: 8,
+          //             children: [
+          //               for (final metric
+          //                   in (widget.metrics.length == 3
+          //                       ? [
+          //                           widget.metrics[0],
+          //                           widget.metrics[2],
+          //                           widget.metrics[1],
+          //                         ]
+          //                       : widget.metrics))
+          //                 SizedBox(
+          //                   width: twoColumns
+          //                       ? (constraints.maxWidth - 16) / 2
+          //                       : constraints.maxWidth,
+          //                   child: InkWell(
+          //                     onTap: metric.onTap,
+          //                     child: Padding(
+          //                       padding: const EdgeInsets.symmetric(
+          //                         vertical: 4,
+          //                       ),
+          //                       child: Row(
+          //                         children: [
+          //                           Expanded(
+          //                             child: Text(
+          //                               metric.label,
+          //                               style: text.micro.copyWith(
+          //                                 color: colors.textSecondary,
+          //                               ),
+          //                             ),
+          //                           ),
+          //                           const SizedBox(width: 4),
+          //                           Flexible(
+          //                             child: Text(
+          //                               _visible ? metric.value : '••••',
+          //                               textAlign: TextAlign.end,
+          //                               style: MyPageSummaryStyles(
+          //                                 context,
+          //                               ).metric,
+          //                             ),
+          //                           ),
+          //                         ],
+          //                       ),
+          //                     ),
+          //                   ),
+          //                 ),
+          //             ],
+          //           );
+          //         },
+          //       ),
+          //       const SizedBox(height: 12),
+          //       Divider(height: 1, color: colors.border),
+          //       const SizedBox(height: 24),
+          //       Row(
+          //         children: [
+          //           Expanded(
+          //             child: AppButton(
+          //               label: l10n.myPageDepositAction,
+          //               minHeight: 46,
+          //               style: ButtonStyle(
+          //                 shape: WidgetStatePropertyAll(
+          //                   RoundedRectangleBorder(
+          //                     borderRadius: BorderRadius.circular(8),
+          //                   ),
+          //                 ),
+          //               ),
+          //               onPressed: widget.onDeposit,
+          //             ),
+          //           ),
+          //           const SizedBox(width: 12),
+          //           Expanded(
+          //             child: AppButton(
+          //               label: l10n.myPageWithdrawAction,
+          //               minHeight: 46,
+          //               style: ButtonStyle(
+          //                 shape: WidgetStatePropertyAll(
+          //                   RoundedRectangleBorder(
+          //                     borderRadius: BorderRadius.circular(8),
+          //                   ),
+          //                 ),
+          //               ),
+          //               variant: AppButtonVariant.secondary,
+          //               onPressed: widget.onWithdraw,
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );
