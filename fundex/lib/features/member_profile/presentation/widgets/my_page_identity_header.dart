@@ -21,11 +21,10 @@ class MyPageIdentityHeader extends ConsumerWidget {
       profile.email,
     );
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
-      child: Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 8,
-        runSpacing: 4,
+      padding: const EdgeInsets.fromLTRB(32, 16, 32, 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             myPageDisplayName(Localizations.localeOf(context), profile),
