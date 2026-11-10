@@ -24,12 +24,13 @@ Widget app(
   Locale locale = const Locale('ja'),
   double scale = 1,
   GlobalKey? capture,
+  bool eligible = false,
 }) => ProviderScope(
   overrides: [
     isAuthenticatedProvider.overrideWithValue(const AsyncData(true)),
     hotelBuildingFiltersProvider.overrideWith((ref) async => []),
     hotelHostMilesProvider.overrideWith((ref) {
-      final c = milesController(HotelsFake(), MilesFake());
+      final c = milesController(HotelsFake(eligible: eligible), MilesFake());
       Future.microtask(c.refresh);
       return c;
     }),
@@ -62,6 +63,46 @@ void main() {
       await loader.load();
     }
   });
+  testWidgets(
+    'host miles notices appear above the search fields only in the sheet',
+    (tester) async {
+      await tester.pumpWidget(app(const HotelHostMilesPage()));
+      await tester.pumpAndSettle();
+      final trigger = find.byKey(const Key('hotel_home_search'));
+      final l = AppLocalizations.of(tester.element(trigger));
+      expect(
+        find.descendant(
+          of: trigger,
+          matching: find.textContaining(l.hotelSearchGuestCounts(1, 0)),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: trigger,
+          matching: find.textContaining(l.hotelGuestDetailedSummary(1, 0, 1)),
+        ),
+        findsNothing,
+      );
+      final advance = l.hotelMilesAdvanceMonths(5);
+      expect(find.text(advance), findsNothing);
+      expect(find.text(l.hotelMilesBookingPending), findsNothing);
+      await tester.ensureVisible(trigger);
+      await tester.tap(trigger);
+      await tester.pumpAndSettle();
+      expect(find.text(advance), findsOneWidget);
+      expect(find.text(l.hotelMilesBookingPending), findsOneWidget);
+      expect(
+        tester.getBottomLeft(find.text(l.hotelSearchConditionsTitle)).dy,
+        lessThan(tester.getTopLeft(find.text(advance)).dy),
+      );
+      expect(
+        tester.getBottomLeft(find.text(l.hotelMilesBookingPending)).dy,
+        lessThan(tester.getTopLeft(find.text(l.hotelDestinationLabel)).dy),
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
   testWidgets('area and sort apply criteria without legacy benefits', (
     tester,
   ) async {
@@ -129,7 +170,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
   testWidgets(
-    'localized live miles home fits narrow screens and opens details',
+    'ineligible miles cards have a translucent overlay and cannot open details on narrow screens',
     (tester) async {
       tester.view.devicePixelRatio = 1;
       tester.view.physicalSize = const Size(320, 844);
@@ -145,12 +186,43 @@ void main() {
         await tester.scrollUntilVisible(find.byType(HotelHomeCard).first, 300);
         await tester.pumpAndSettle();
         expect(
-          tester.widget<HotelHomeCard>(find.byType(HotelHomeCard).first).onTap,
-          isNotNull,
+          tester
+              .widget<AppCard>(
+                find.descendant(
+                  of: find.byType(HotelHomeCard).first,
+                  matching: find.byType(AppCard),
+                ),
+              )
+              .onTap,
+          isNull,
         );
         final l = AppLocalizations.of(
           tester.element(find.byType(HotelHomeCard).first),
         );
+        final card = find.byType(HotelHomeCard).first;
+        expect(
+          find.descendant(
+            of: card,
+            matching: find.byWidgetPredicate(
+              (widget) =>
+                  widget is DecoratedBox &&
+                  widget.position == DecorationPosition.foreground &&
+                  widget.decoration is BoxDecoration &&
+                  (widget.decoration as BoxDecoration).color ==
+                      tester
+                          .element(card)
+                          .appColors
+                          .surface
+                          .withValues(alpha: 0.32),
+            ),
+          ),
+          findsOneWidget,
+        );
+        await tester.ensureVisible(find.text('API Hotel').first);
+        await tester.tap(find.text('API Hotel').first);
+        await tester.pumpAndSettle();
+        expect(find.text(l.hotelMilesDateIneligible), findsWidgets);
+        expect(find.text(l.hotelMilesDateEligible), findsNothing);
         expect(
           find.text(l.hotelMilesReferenceStayFrom('12,800')),
           findsWidgets,
@@ -186,6 +258,7 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppThemeFactory.light(locale: const Locale('ja')),
         ),
+        eligible: true,
       ),
     );
     await tester.pumpAndSettle();
@@ -195,7 +268,7 @@ void main() {
     await tester.tap(find.text('API Hotel'));
     await tester.pumpAndSettle();
     expect(args?.mode, HotelBookingMode.hostMiles);
-    expect(args?.buildingCode, liveHotel.buildingCode);
+    expect(args?.buildingCode, liveHotel(eligible: true).buildingCode);
     expect(args?.criteria.stayBenefit, true);
     expect(find.text('detail destination'), findsOneWidget);
   });

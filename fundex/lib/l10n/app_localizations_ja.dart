@@ -1038,7 +1038,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeFeaturedFundsTitle => '最新ファンド';
 
   @override
-  String get homeFeaturedHotelsTitle => '宿泊施設';
+  String get homeFeaturedHotelsTitle => '泊まれるホテル';
 
   @override
   String homeFeaturedFundRemainingDays(Object days) {
@@ -1535,6 +1535,11 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String hotelGuestSummary(int guests, int rooms) {
     return '大人$guests名・$rooms室';
+  }
+
+  @override
+  String hotelSearchGuestCounts(int adults, int children) {
+    return '大人$adults名・子ども$children名';
   }
 
   @override
@@ -2336,6 +2341,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get hotelDetailFacilities => '設備';
+
+  @override
+  String get hotelFeatureDetailsLink => '詳細';
 
   @override
   String get hotelDetailDescription => '宿泊施設の詳細';
@@ -6191,7 +6199,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeGuestBenefitsBody => '未来の安心も、今の楽しみも。';
 
   @override
-  String get homeLearnService => 'サービスを知る';
+  String get homeLearnService => 'サービス詳細を見る';
 
   @override
   String get homeSimulationTitle => 'いくら投資すると、何泊できる？';
@@ -6567,6 +6575,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelMilesBookingPending => 'ホテル一覧を確認できます。宿主マイルでの予約手続きは準備中です。';
 
   @override
+  String get hotelMilesDateIneligible => 'この日程は対象外';
+
+  @override
   String get hotelMilesDateEligible => '選択した日程は宿主マイルの対象です';
 
   @override
@@ -6929,12 +6940,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String hotelMilesReferenceStayFrom(String count) {
-    return '参考：$count マイル〜（滞在期間合計）';
+    return '$count マイル〜';
   }
 
   @override
   String hotelMilesReferenceStay(String count) {
-    return '参考：$count マイル（滞在期間合計）';
+    return '$count マイル';
   }
 
   @override

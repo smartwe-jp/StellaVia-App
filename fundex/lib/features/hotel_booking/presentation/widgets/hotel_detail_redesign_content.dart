@@ -10,6 +10,7 @@ import '../support/hotel_detail_route_args.dart';
 import '../support/hotel_detail_styles.dart';
 import 'hotel_booking_service_footer.dart';
 import 'hotel_detail_guide.dart';
+import 'hotel_description_section.dart';
 import 'hotel_detail_photo_gallery.dart';
 import 'hotel_detail_room_card.dart';
 import 'hotel_detail_selection_summary.dart';
@@ -55,7 +56,7 @@ class HotelDetailRedesignContent extends StatelessWidget {
               children: [
                 HotelDetailPhotoGallery(images: detail.images),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 28, 24, 32),
+                  padding: const EdgeInsets.fromLTRB(24, 20, 24, 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -68,13 +69,6 @@ class HotelDetailRedesignContent extends StatelessWidget {
                         ),
                       const SizedBox(height: 12),
                       Text(detail.name, style: HotelDetailStyles.title(c)),
-                      if (detail.description.isNotEmpty) ...[
-                        const SizedBox(height: 16),
-                        Text(
-                          hotelDetailPlainText(detail.description),
-                          style: HotelDetailStyles.body(c),
-                        ),
-                      ],
                       if (detail.tags.isNotEmpty) ...[
                         const SizedBox(height: 16),
                         Wrap(
@@ -103,29 +97,11 @@ class HotelDetailRedesignContent extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 36, 16, 0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(
-                        c.l10n.hotelDetailRoomsHeading,
-                        textAlign: TextAlign.center,
-                        style: HotelDetailStyles.rooms(c),
-                      ),
-                      Text(
-                        c.l10n.hotelDetailAvailableRooms,
-                        textAlign: TextAlign.center,
-                        style: HotelDetailStyles.label(c),
-                      ),
-                      const SizedBox(height: 20),
-                      HotelDetailStaySummaryBar(
-                        flat: true,
-                        criteria: criteria,
-                        presenter: presenter,
-                        onDatesTap: openingConfirmation ? null : onDates,
-                        onGuestsTap: openingConfirmation ? null : onGuests,
-                      ),
-                      const SizedBox(height: 20),
+                      HotelDescriptionSection(detail: detail),
                       if (detail.checkInMessage.isNotEmpty)
                         Padding(
                           padding: const EdgeInsets.only(bottom: 16),
@@ -134,11 +110,9 @@ class HotelDetailRedesignContent extends StatelessWidget {
                             style: HotelDetailStyles.body(c),
                           ),
                         ),
-                      if (miles) ...[
-                        Text(
-                          c.l10n.hotelMilesBookingPending,
-                          style: HotelDetailStyles.caption(c),
-                        ),
+                      if (miles &&
+                          (tier?.leadTimeMonths != null ||
+                              membershipFailed)) ...[
                         if (tier?.leadTimeMonths != null)
                           Text(
                             c.l10n.hotelMilesAdvanceMonths(
@@ -153,6 +127,26 @@ class HotelDetailRedesignContent extends StatelessWidget {
                           ),
                         const SizedBox(height: 20),
                       ],
+                      HotelDetailStaySummaryBar(
+                        flat: true,
+                        showRoomCount: !miles,
+                        criteria: criteria,
+                        presenter: presenter,
+                        onDatesTap: openingConfirmation ? null : onDates,
+                        onGuestsTap: openingConfirmation ? null : onGuests,
+                      ),
+                      const SizedBox(height: 16),
+                      Semantics(
+                        header: true,
+                        child: Text(
+                          c.l10n.hotelDetailAvailableRooms,
+                          textAlign: TextAlign.start,
+                          style: HotelDetailStyles.label(
+                            c,
+                          ).copyWith(color: c.appColors.primary),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
                       if (detail.roomPlans.isEmpty)
                         Text(c.l10n.hotelDetailNoRooms),
                       for (

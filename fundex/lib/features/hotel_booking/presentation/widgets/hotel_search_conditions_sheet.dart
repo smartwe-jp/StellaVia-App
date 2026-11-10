@@ -40,9 +40,11 @@ class HotelSearchConditionsSheet extends StatefulWidget {
     required this.buildingFilters,
     required this.onApply,
     this.allowMultiNightBenefits = false,
+    this.hints = const [],
     this.stayBenefitPeriods = const <HotelStayBenefitPeriod>[],
   });
 
+  final List<String> hints;
   final bool allowMultiNightBenefits;
   final HotelSearchCriteria criteria;
   final HotelBookingPresenter presenter;
@@ -207,9 +209,10 @@ class _HotelSearchConditionsSheetState
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
     final bottomPadding = MediaQuery.viewInsetsOf(context).bottom;
+    final hints = widget.hints.where((text) => text.trim().isNotEmpty).toList();
     return SafeArea(
       top: false,
-      child: Padding(
+      child: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(20, 14, 20, 20 + bottomPadding),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -233,6 +236,42 @@ class _HotelSearchConditionsSheetState
                 ),
               ),
             ),
+            if (hints.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: colors.primarySubtle,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.info_outline_rounded,
+                      color: colors.primary,
+                      size: 18,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 4,
+                        children: [
+                          for (final hint in hints)
+                            Text(
+                              hint,
+                              style: context.appTextTheme.caption.copyWith(
+                                color: colors.textPrimary,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
             const SizedBox(height: 22),
             HotelSearchConditionRow(
               label: context.l10n.hotelDestinationLabel,

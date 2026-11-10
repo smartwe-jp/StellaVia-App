@@ -1106,7 +1106,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeFeaturedFundsTitle => 'Latest Funds';
 
   @override
-  String get homeFeaturedHotelsTitle => 'Hotels';
+  String get homeFeaturedHotelsTitle => 'Hotels bookable with miles';
 
   @override
   String homeFeaturedFundRemainingDays(Object days) {
@@ -1614,6 +1614,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String hotelGuestSummary(int guests, int rooms) {
     return '$guests adults · $rooms rooms';
+  }
+
+  @override
+  String hotelSearchGuestCounts(int adults, int children) {
+    return '$adults adults · $children children';
   }
 
   @override
@@ -2444,6 +2449,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hotelDetailFacilities => 'Facilities';
+
+  @override
+  String get hotelFeatureDetailsLink => 'Details';
 
   @override
   String get hotelDetailDescription => 'Property details';
@@ -6509,7 +6517,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Peace of mind for tomorrow. Joy for today.';
 
   @override
-  String get homeLearnService => 'Discover the service';
+  String get homeLearnService => 'View service details';
 
   @override
   String get homeSimulationTitle =>
@@ -6895,6 +6903,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Browse hotels here. Host Miles booking is coming soon.';
 
   @override
+  String get hotelMilesDateIneligible =>
+      'Host Miles do not apply to the selected dates';
+
+  @override
   String get hotelMilesDateEligible => 'Host Miles apply to the selected dates';
 
   @override
@@ -7267,12 +7279,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String hotelMilesReferenceStayFrom(String count) {
-    return 'From $count miles (reference, entire stay)';
+    return 'From $count miles';
   }
 
   @override
   String hotelMilesReferenceStay(String count) {
-    return '$count miles (reference, entire stay)';
+    return '$count miles';
   }
 
   @override

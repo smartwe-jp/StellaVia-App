@@ -62,7 +62,7 @@ HotelDetail detail({int stock = 2, int minStay = 1, num? points = 6000}) =>
       checkInMessage: '',
       checkInTime: '15:00',
       checkOutTime: '11:00',
-      detailText: '',
+      detailText: '<p>町家を一棟から予約できます。庭を望む和室があります。</p>',
       surroundingText: '',
       travelText: '',
       checkInGuide: '',
@@ -477,14 +477,49 @@ void main() {
       final l = AppLocalizations.of(
         tester.element(find.byType(HotelDetailRedesignContent)),
       );
+      expect(find.text(l.hotelDetailAvailableRooms), findsOneWidget);
+      expect(find.text(l.hotelDetailRoomsHeading), findsNothing);
+      expect(find.text(l.hotelGuestFieldLabel), findsOneWidget);
       expect(
-        tester
-            .widget<AppButton>(
-              find.widgetWithText(AppButton, l.hotelDetailMilesPending),
-            )
-            .onPressed,
-        isNull,
+        find.text(l.hotelSearchGuestCounts(criteria.occupancy, criteria.kids)),
+        findsOneWidget,
       );
+      expect(
+        tester.getTopLeft(find.text(l.hotelDetailStayDateLabel)).dy,
+        greaterThan(tester.getBottomLeft(find.text(c.detail.name)).dy),
+      );
+      expect(
+        tester.getBottomLeft(find.text(l.hotelDetailStayDateLabel)).dy,
+        lessThan(tester.getTopLeft(find.text(l.hotelDetailAvailableRooms)).dy),
+      );
+      expect(
+        find.textContaining('町家を一棟から予約できます。', findRichText: true),
+        findsOneWidget,
+      );
+      expect(find.text(c.detail.description), findsNothing);
+      expect(find.text('町家を一棟から予約できます。庭を望む和室があります。'), findsNothing);
+      final detailsButton = find.text(l.hotelFeatureDetailsLink);
+      await tester.ensureVisible(detailsButton);
+      await tester.tap(detailsButton);
+      await tester.pumpAndSettle();
+      expect(find.text('町家を一棟から予約できます。庭を望む和室があります。'), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byType(BottomSheet),
+          matching: find.text(c.detail.name),
+        ),
+        findsOneWidget,
+      );
+      await tester.tap(find.byType(CloseButton));
+      await tester.pumpAndSettle();
+      expect(find.text('町家を一棟から予約できます。庭を望む和室があります。'), findsNothing);
+      expect(find.text(l.hotelMilesBookingPending), findsNothing);
+      final milesButton = find.widgetWithText(
+        AppButton,
+        l.hotelDetailMilesPending,
+      );
+      expect(tester.widget<AppButton>(milesButton).onPressed, isNull);
+      expect(find.text(l.hotelDetailProceed), findsNothing);
       await tester.scrollUntilVisible(
         find.byType(HotelDetailRoomCard),
         300,
@@ -492,6 +527,31 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.text(l.hotelMilesReferenceStay('6,000')), findsOneWidget);
+      final card = find.byType(HotelDetailRoomCard).first;
+      final stock = find.descendant(
+        of: card,
+        matching: find.text(l.hotelDetailRemainingRoomsShort(2)),
+      );
+      final plus = find.descendant(
+        of: card,
+        matching: find.byTooltip(l.hotelDetailIncreaseRoom),
+      );
+      expect(tester.getCenter(stock).dy, closeTo(tester.getCenter(plus).dy, 1));
+      expect(
+        tester.getTopRight(stock).dx,
+        lessThan(tester.getTopLeft(plus).dx),
+      );
+      expect(
+        tester
+            .getSize(
+              find
+                  .descendant(of: card, matching: find.byType(AppRemoteImage))
+                  .first,
+            )
+            .height,
+        143,
+      );
+
       expect(tester.takeException(), isNull);
       if (locale.languageCode == 'ja' &&
           Platform.environment['DETAIL_CAPTURE'] == '1') {

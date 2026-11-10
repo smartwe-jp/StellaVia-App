@@ -13,7 +13,9 @@ class HotelDetailGuide extends StatelessWidget {
   final HotelDetail detail;
   @override
   Widget build(BuildContext c) {
-    final sections = <(String, String)>[
+    final travel = hotelDetailPlainText(detail.travelText);
+    final showMap = HotelDetailMapSection.canShow(detail);
+    final arrivalSections = <(String, String)>[
       (
         c.l10n.hotelDetailCheckInTime,
         [
@@ -24,12 +26,24 @@ class HotelDetailGuide extends StatelessWidget {
         ].join('\n'),
       ),
       (c.l10n.hotelDetailCheckInGuide, detail.checkInGuide),
-      (c.l10n.hotelDetailDescription, detail.detailText),
-      (c.l10n.hotelDetailTravel, detail.travelText),
+    ];
+    final otherSections = <(String, String)>[
       (c.l10n.hotelDetailSurrounding, detail.surroundingText),
       (c.l10n.hotelDetailPolicy, detail.ruleText),
       (c.l10n.hotelDetailRefundPolicy, detail.refundPolicyText),
     ];
+    Iterable<Widget> textSections(List<(String, String)> sections) sync* {
+      for (final section in sections) {
+        final text = hotelDetailPlainText(section.$2);
+        if (text.isNotEmpty) {
+          yield _Section(
+            title: section.$1,
+            child: Text(text, style: HotelDetailStyles.body(c)),
+          );
+        }
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
@@ -50,20 +64,21 @@ class HotelDetailGuide extends StatelessWidget {
                 ],
               ),
             ),
-          for (final section in sections)
-            if (hotelDetailPlainText(section.$2).isNotEmpty)
-              _Section(
-                title: section.$1,
-                child: Text(
-                  hotelDetailPlainText(section.$2),
-                  style: HotelDetailStyles.body(c),
-                ),
+          ...textSections(arrivalSections),
+          if (travel.isNotEmpty || showMap)
+            _Section(
+              title: c.l10n.hotelDetailTravel,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (travel.isNotEmpty)
+                    Text(travel, style: HotelDetailStyles.body(c)),
+                  if (travel.isNotEmpty && showMap) const SizedBox(height: 12),
+                  if (showMap) HotelDetailMapSection(detail: detail),
+                ],
               ),
-          if (HotelDetailMapSection.canShow(detail))
-            Padding(
-              padding: const EdgeInsets.only(bottom: 32),
-              child: HotelDetailMapSection(detail: detail),
             ),
+          ...textSections(otherSections),
           if (detail.telNo.isNotEmpty)
             _Section(
               title: c.l10n.hotelDetailContact,

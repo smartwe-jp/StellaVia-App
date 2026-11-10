@@ -1024,7 +1024,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeFeaturedFundsTitle => '最新基金';
 
   @override
-  String get homeFeaturedHotelsTitle => '酒店';
+  String get homeFeaturedHotelsTitle => '可用里程预订的酒店';
 
   @override
   String homeFeaturedFundRemainingDays(Object days) {
@@ -1521,6 +1521,11 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String hotelGuestSummary(int guests, int rooms) {
     return '$guests位成人 · $rooms间';
+  }
+
+  @override
+  String hotelSearchGuestCounts(int adults, int children) {
+    return '$adults位成人・$children名儿童';
   }
 
   @override
@@ -2315,6 +2320,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get hotelDetailFacilities => '设施设备';
+
+  @override
+  String get hotelFeatureDetailsLink => '详情';
 
   @override
   String get hotelDetailDescription => '房源详情';
@@ -6131,7 +6139,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeGuestBenefitsBody => '未来的安心，当下的乐趣。';
 
   @override
-  String get homeLearnService => '了解服务';
+  String get homeLearnService => '查看服务详情';
 
   @override
   String get homeSimulationTitle => '投资多少，可以住几晚？';
@@ -6506,6 +6514,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelMilesBookingPending => '可查看酒店列表，宿主里程预约流程准备中。';
 
   @override
+  String get hotelMilesDateIneligible => '所选日期不适用宿主里程';
+
+  @override
   String get hotelMilesDateEligible => '所选日期适用宿主里程';
 
   @override
@@ -6867,12 +6878,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String hotelMilesReferenceStayFrom(String count) {
-    return '参考 $count 里程起（整个住宿期间）';
+    return '$count 里程起';
   }
 
   @override
   String hotelMilesReferenceStay(String count) {
-    return '参考 $count 里程（整个住宿期间）';
+    return '$count 里程';
   }
 
   @override
@@ -8067,7 +8078,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeFeaturedFundsTitle => '基金';
 
   @override
-  String get homeFeaturedHotelsTitle => '酒店';
+  String get homeFeaturedHotelsTitle => '可用里程預訂的飯店';
 
   @override
   String homeFeaturedFundRemainingDays(Object days) {
@@ -8564,6 +8575,11 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String hotelGuestSummary(int guests, int rooms) {
     return '$guests位成人 · $rooms間';
+  }
+
+  @override
+  String hotelSearchGuestCounts(int adults, int children) {
+    return '$adults位成人・$children名兒童';
   }
 
   @override
@@ -9358,6 +9374,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelDetailFacilities => '設施設備';
+
+  @override
+  String get hotelFeatureDetailsLink => '詳情';
 
   @override
   String get hotelDetailDescription => '房源詳情';
@@ -13177,7 +13196,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeGuestBenefitsBody => '未來的安心，當下的樂趣。';
 
   @override
-  String get homeLearnService => '了解服務';
+  String get homeLearnService => '查看服務詳情';
 
   @override
   String get homeSimulationTitle => '投資多少，可以住幾晚？';
@@ -13552,6 +13571,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get hotelMilesBookingPending => '可查看飯店清單，宿主里程預約流程準備中。';
 
   @override
+  String get hotelMilesDateIneligible => '所選日期不適用宿主里程';
+
+  @override
   String get hotelMilesDateEligible => '所選日期適用宿主里程';
 
   @override
@@ -13913,12 +13935,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String hotelMilesReferenceStayFrom(String count) {
-    return '參考 $count 里程起（整個住宿期間）';
+    return '$count 里程起';
   }
 
   @override
   String hotelMilesReferenceStay(String count) {
-    return '參考 $count 里程（整個住宿期間）';
+    return '$count 里程';
   }
 
   @override

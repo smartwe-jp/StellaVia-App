@@ -7,7 +7,7 @@ import 'package:fundex/features/hotel_booking/domain/repositories/hotel_booking_
 import 'package:fundex/features/hotel_booking/domain/usecases/search_hotels_usecase.dart';
 import 'package:fundex/features/hotel_booking/presentation/controllers/hotel_host_miles_controller.dart';
 
-const liveHotel = HotelSummary(
+HotelSummary liveHotel({bool eligible = false}) => HotelSummary(
   startingPoints: 12800,
   id: 'live-42',
   name: 'API Hotel',
@@ -26,7 +26,7 @@ const liveHotel = HotelSummary(
   buildingType: '',
   isBookable: true,
   remainingRooms: 4,
-  stayBenefitParticipate: false,
+  stayBenefitParticipate: eligible,
   tags: [],
 );
 
@@ -56,6 +56,8 @@ class MilesFake extends HostMilesRepository {
 }
 
 class HotelsFake extends HotelBookingRepository {
+  HotelsFake({this.eligible = false});
+  final bool eligible;
   final criteria = <HotelSearchCriteria>[];
   final pages = <int>[];
   final pending = <Completer<HotelSearchResult>>[];
@@ -76,7 +78,7 @@ class HotelsFake extends HotelBookingRepository {
       return c.future;
     }
     return HotelSearchResult(
-      hotels: page == 1 ? [liveHotel] : [],
+      hotels: page == 1 ? [liveHotel(eligible: eligible)] : [],
       totalCount: 2,
     );
   }

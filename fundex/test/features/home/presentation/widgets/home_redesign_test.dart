@@ -13,7 +13,6 @@ import 'package:fundex/features/home/presentation/widgets/home_redesign_header.d
 import 'package:fundex/features/home/presentation/widgets/home_quick_actions.dart';
 import 'package:fundex/features/home/presentation/widgets/home_miles_card.dart';
 import 'package:fundex/features/home/presentation/widgets/home_simulation_card.dart';
-import 'package:fundex/features/home/presentation/widgets/home_rank_teaser.dart';
 
 void main() {
   testWidgets(
@@ -68,6 +67,13 @@ void main() {
                                   HomeBrandIntro(
                                     isAuthenticated: member,
                                     displayName: '田中さん',
+                                    ranks: const [
+                                      'REGULAR',
+                                      'BRONZE',
+                                      'SILVER',
+                                      'GOLD',
+                                      'MASTER',
+                                    ],
                                     onServiceTap: () => taps++,
                                   ),
                                   const SizedBox(height: 20),
@@ -81,8 +87,6 @@ void main() {
                                     HomeMilesCard(onTap: () => taps++)
                                   else
                                     HomeSimulationCard(onTap: () => taps++),
-                                  const SizedBox(height: 20),
-                                  HomeRankTeaser(onTap: () => taps++),
                                 ],
                               ),
                             ),
@@ -94,20 +98,33 @@ void main() {
                 ),
               ),
             );
-            await tester.runAsync(() async {
-              await precacheImage(
-                const AssetImage('assets/images/home_member_hero.png'),
-                tester.element(find.byType(HomeBrandIntro)),
-              );
-            });
             await tester.pumpAndSettle();
             expect(
               tester.takeException(),
               isNull,
               reason: '$locale member=$member width=$width',
             );
-            final context = tester.element(find.byType(HomeRankTeaser));
-            final label = AppLocalizations.of(context).homeRankDetails;
+            final context = tester.element(find.byType(HomeBrandIntro));
+            final label = AppLocalizations.of(context).homeLearnService;
+            expect(
+              find.text(AppLocalizations.of(context).homeRankDetails),
+              findsNothing,
+            );
+            final names = ['REGULAR', 'BRONZE', 'SILVER', 'GOLD', 'MASTER'];
+            for (var i = 0; i < names.length - 1; i++) {
+              final right = tester.getTopRight(find.text(names[i])).dx;
+              final nextCard = find
+                  .ancestor(
+                    of: find.text(names[i + 1]),
+                    matching: find.byType(Positioned),
+                  )
+                  .first;
+              expect(right, lessThanOrEqualTo(tester.getTopLeft(nextCard).dx));
+            }
+            expect(
+              tester.getBottomLeft(find.text('MASTER')).dy,
+              lessThan(tester.getTopLeft(find.text(label)).dy),
+            );
             await tester.ensureVisible(find.text(label));
             await tester.tap(find.text(label));
             await tester.pumpAndSettle();

@@ -6,7 +6,6 @@ import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
 import 'hotel_discount_badge.dart';
 import 'hotel_remaining_rooms_label.dart';
-import 'hotel_type_badge.dart';
 
 class HotelSummaryCard extends StatelessWidget {
   const HotelSummaryCard({
@@ -67,22 +66,12 @@ class HotelSummaryCard extends StatelessWidget {
             SizedBox(
               height: 154,
               width: double.infinity,
-              child: Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  AppRemoteImage(
-                    imageUrl: hotel.imageUrl,
-                    fit: BoxFit.cover,
-                    errorWidget: const _HotelImagePlaceholder(
-                      icon: Icons.image_not_supported_outlined,
-                    ),
-                  ),
-                  Positioned(
-                    top: 12,
-                    right: 12,
-                    child: HotelTypeBadge(label: _resolveTypeLabel(context)),
-                  ),
-                ],
+              child: AppRemoteImage(
+                imageUrl: hotel.imageUrl,
+                fit: BoxFit.cover,
+                errorWidget: const _HotelImagePlaceholder(
+                  icon: Icons.image_not_supported_outlined,
+                ),
               ),
             ),
             Padding(
@@ -246,20 +235,6 @@ class HotelSummaryCard extends StatelessWidget {
       return hotel.area;
     }
     return context.l10n.hotelDefaultDestination;
-  }
-
-  String _resolveTypeLabel(BuildContext context) {
-    final codeLabel = hotelBuildingTypeLabelForCode(
-      context,
-      hotel.buildingCode,
-    );
-    if (codeLabel.isNotEmpty) {
-      return codeLabel;
-    }
-    if (hotel.buildingType.isNotEmpty) {
-      return hotel.buildingType;
-    }
-    return hotel.bookingTypeLabel;
   }
 
   bool get _shouldShowOldPrice {

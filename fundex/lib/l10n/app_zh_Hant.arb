@@ -346,7 +346,7 @@
   "homeReminderCoolingOffBadge": "剩餘5天",
   "homeReminderCoolingOffAction": "取消手續",
   "homeFeaturedFundsTitle": "基金",
-  "homeFeaturedHotelsTitle": "酒店",
+  "homeFeaturedHotelsTitle": "可用里程預訂的飯店",
   "homeFeaturedFundRemainingDays": "剩餘 {days} 天",
   "@homeFeaturedFundRemainingDays": {
     "placeholders": {
@@ -566,6 +566,17 @@
         "type": "int"
       },
       "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelSearchGuestCounts": "{adults}位成人・{children}名兒童",
+  "@hotelSearchGuestCounts": {
+    "placeholders": {
+      "adults": {
+        "type": "int"
+      },
+      "children": {
         "type": "int"
       }
     }
@@ -1014,6 +1025,7 @@
   "hotelPaymentStatusRefunded": "退款完成",
   "hotelDetailNoRooms": "暫無可訂房型",
   "hotelDetailFacilities": "設施設備",
+  "hotelFeatureDetailsLink": "詳情",
   "hotelDetailDescription": "房源詳情",
   "hotelDetailSurrounding": "周邊環境",
   "hotelDetailTravel": "出行資訊",
@@ -2552,7 +2564,7 @@
   "homeBookWithMiles": "使用宿主里程預約",
   "homeGuestBenefitsTitle": "宿主優待",
   "homeGuestBenefitsBody": "未來的安心，當下的樂趣。",
-  "homeLearnService": "了解服務",
+  "homeLearnService": "查看服務詳情",
   "homeSimulationTitle": "投資多少，可以住幾晚？",
   "homeRankTitle": "投資越多，旅程越廣。",
   "homeRankDetails": "了解等級制度",
@@ -2766,6 +2778,7 @@
   },
   "hotelMilesLogin": "登入查看宿主優待",
   "hotelMilesBookingPending": "可查看飯店清單，宿主里程預約流程準備中。",
+  "hotelMilesDateIneligible": "所選日期不適用宿主里程",
   "hotelMilesDateEligible": "所選日期適用宿主里程",
   "hotelMilesRequiredUnknown": "所需里程：—",
   "hotelMilesAdvanceMonths": "目前等級可提前{months}個月預約入住。",
@@ -2907,7 +2920,7 @@
   "hotelDetailProceed": "繼續預約",
   "hotelDetailRoomsHeading": "ROOMS",
   "hotelSortNone": "不選擇",
-  "hotelMilesReferenceStayFrom": "參考 {count} 里程起（整個住宿期間）",
+  "hotelMilesReferenceStayFrom": "{count} 里程起",
   "@hotelMilesReferenceStayFrom": {
     "placeholders": {
       "count": {
@@ -2915,7 +2928,7 @@
       }
     }
   },
-  "hotelMilesReferenceStay": "參考 {count} 里程（整個住宿期間）",
+  "hotelMilesReferenceStay": "{count} 里程",
   "@hotelMilesReferenceStay": {
     "placeholders": {
       "count": {

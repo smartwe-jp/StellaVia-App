@@ -346,7 +346,7 @@
   "homeReminderCoolingOffBadge": "残り5日",
   "homeReminderCoolingOffAction": "取消手続き",
   "homeFeaturedFundsTitle": "最新ファンド",
-  "homeFeaturedHotelsTitle": "宿泊施設",
+  "homeFeaturedHotelsTitle": "泊まれるホテル",
   "homeFeaturedFundRemainingDays": "残り {days}日",
   "@homeFeaturedFundRemainingDays": {
     "placeholders": {
@@ -566,6 +566,17 @@
         "type": "int"
       },
       "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelSearchGuestCounts": "大人{adults}名・子ども{children}名",
+  "@hotelSearchGuestCounts": {
+    "placeholders": {
+      "adults": {
+        "type": "int"
+      },
+      "children": {
         "type": "int"
       }
     }
@@ -1014,6 +1025,7 @@
   "hotelPaymentStatusRefunded": "返金完了",
   "hotelDetailNoRooms": "予約可能な客室はありません",
   "hotelDetailFacilities": "設備",
+  "hotelFeatureDetailsLink": "詳細",
   "hotelDetailDescription": "宿泊施設の詳細",
   "hotelDetailSurrounding": "周辺環境",
   "hotelDetailTravel": "アクセス",
@@ -2552,7 +2564,7 @@
   "homeBookWithMiles": "宿主マイルで予約",
   "homeGuestBenefitsTitle": "宿主優待",
   "homeGuestBenefitsBody": "未来の安心も、今の楽しみも。",
-  "homeLearnService": "サービスを知る",
+  "homeLearnService": "サービス詳細を見る",
   "homeSimulationTitle": "いくら投資すると、何泊できる？",
   "homeRankTitle": "投資するほど、旅がひろがる。",
   "homeRankDetails": "ランク制度を詳しく見る",
@@ -2766,6 +2778,7 @@
   },
   "hotelMilesLogin": "ログインして宿主優待を確認",
   "hotelMilesBookingPending": "ホテル一覧を確認できます。宿主マイルでの予約手続きは準備中です。",
+  "hotelMilesDateIneligible": "この日程は対象外",
   "hotelMilesDateEligible": "選択した日程は宿主マイルの対象です",
   "hotelMilesRequiredUnknown": "必要マイル：—",
   "hotelMilesAdvanceMonths": "チェックイン日の{months}ヶ月前から予約可能なランクです。",
@@ -2907,7 +2920,7 @@
   "hotelDetailProceed": "予約へ進む",
   "hotelDetailRoomsHeading": "ROOMS",
   "hotelSortNone": "選択しない",
-  "hotelMilesReferenceStayFrom": "参考：{count} マイル〜（滞在期間合計）",
+  "hotelMilesReferenceStayFrom": "{count} マイル〜",
   "@hotelMilesReferenceStayFrom": {
     "placeholders": {
       "count": {
@@ -2915,7 +2928,7 @@
       }
     }
   },
-  "hotelMilesReferenceStay": "参考：{count} マイル（滞在期間合計）",
+  "hotelMilesReferenceStay": "{count} マイル",
   "@hotelMilesReferenceStay": {
     "placeholders": {
       "count": {

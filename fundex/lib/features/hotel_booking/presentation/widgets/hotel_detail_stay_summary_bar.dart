@@ -13,6 +13,7 @@ class HotelDetailStaySummaryBar extends StatelessWidget {
     this.onDatesTap,
     this.onGuestsTap,
     this.flat = false,
+    this.showRoomCount = true,
   });
 
   final HotelSearchCriteria criteria;
@@ -20,6 +21,7 @@ class HotelDetailStaySummaryBar extends StatelessWidget {
   final VoidCallback? onDatesTap;
   final VoidCallback? onGuestsTap;
   final bool flat;
+  final bool showRoomCount;
 
   @override
   Widget build(BuildContext context) {
@@ -65,12 +67,19 @@ class HotelDetailStaySummaryBar extends StatelessWidget {
             Expanded(
               child: _SummaryItem(
                 icon: Icons.person_outline_rounded,
-                label: context.l10n.hotelDetailGuestRoomLabel,
-                value: context.l10n.hotelGuestDetailedSummary(
-                  criteria.occupancy,
-                  criteria.kids,
-                  criteria.roomCount,
-                ),
+                label: showRoomCount
+                    ? context.l10n.hotelDetailGuestRoomLabel
+                    : context.l10n.hotelGuestFieldLabel,
+                value: !showRoomCount
+                    ? context.l10n.hotelSearchGuestCounts(
+                        criteria.occupancy,
+                        criteria.kids,
+                      )
+                    : context.l10n.hotelGuestDetailedSummary(
+                        criteria.occupancy,
+                        criteria.kids,
+                        criteria.roomCount,
+                      ),
                 onTap: onGuestsTap,
               ),
             ),

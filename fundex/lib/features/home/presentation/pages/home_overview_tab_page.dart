@@ -1,5 +1,3 @@
-import '../../../investment/presentation/controllers/secondary_market_controller.dart';
-import '../widgets/home_secondary_market_section.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +7,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/network/app_network_connectivity_providers.dart';
 import '../../../../app/navigation/app_root_tab_refresh.dart';
-import '../../../hotel_booking/presentation/support/hotel_booking_presenter.dart';
-import '../../../hotel_booking/presentation/support/hotel_detail_route_args.dart';
-import '../../../hotel_booking/presentation/support/hotel_map_route_args.dart';
-import '../../../hotel_booking/presentation/widgets/hotel_price_discount_dialog.dart';
-import '../../../hotel_booking/presentation/widgets/hotel_summary_card.dart';
 import '../providers/home_featured_hotels_provider.dart';
+import '../widgets/home_miles_hotels_section.dart';
 import '../support/home_featured_fund_card_mapper.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../investment/domain/entities/fund_project.dart';
@@ -32,6 +26,7 @@ import '../widgets/home_miles_refresh_scope.dart';
 import '../providers/home_miles_providers.dart';
 import '../widgets/home_simulation_card.dart';
 import '../support/home_design_theme.dart';
+import '../support/home_miles_display.dart';
 import '../support/home_display_name_resolver.dart';
 
 class HomeOverviewTabPage extends ConsumerStatefulWidget {
@@ -69,7 +64,6 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
           )
         : 0;
     final asyncProjects = ref.watch(fundProjectListProvider);
-    final asyncFeaturedHotels = ref.watch(homeFeaturedHotelsProvider);
     final projects = asyncProjects.valueOrNull ?? const <FundProject>[];
     final profile = isAuthenticated
         ? ref.watch(memberBasicProfileProvider)
@@ -90,48 +84,6 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
           ),
         )
         .toList(growable: false);
-    final featuredHotels = asyncFeaturedHotels.valueOrNull;
-    final hotelPresenter = HotelBookingPresenter(
-      Localizations.localeOf(context).toLanguageTag(),
-    );
-    final featuredHotelCards = featuredHotels == null
-        ? const <Widget>[]
-        : featuredHotels.hotels
-              .map((hotel) {
-                final mapArgs = HotelMapRouteArgs.fromHotel(
-                  criteria: featuredHotels.criteria,
-                  hotel: hotel,
-                );
-                return SizedBox(
-                  width: 320,
-                  child: HotelSummaryCard(
-                    hotel: hotel,
-                    presenter: hotelPresenter,
-                    onDiscountTap: hotel.id.trim().isEmpty
-                        ? null
-                        : () => showHotelPriceDiscountDialog(
-                            context: context,
-                            hotelId: hotel.id,
-                            criteria: featuredHotels.criteria,
-                            presenter: hotelPresenter,
-                          ),
-                    onTap: hotel.id.trim().isEmpty
-                        ? null
-                        : () => context.push(
-                            '/hotel-booking/${Uri.encodeComponent(hotel.id)}',
-                            extra: HotelDetailRouteArgs(
-                              criteria: featuredHotels.criteria,
-                              buildingCode: hotel.buildingCode,
-                            ),
-                          ),
-                    onMapTap: mapArgs.hasValidTarget
-                        ? () =>
-                              context.push('/hotel-booking/map', extra: mapArgs)
-                        : null,
-                  ),
-                );
-              })
-              .toList(growable: false);
     final loadError = asyncProjects.asError;
 
     return HomeMilesRefreshScope(
@@ -186,8 +138,16 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                       HomeBrandIntro(
                         isAuthenticated: isAuthenticated,
                         displayName: displayName,
+                        ranks: homeRankNames(
+                          ref.watch(homeMilesRulesProvider).data,
+                        ),
                         onServiceTap: () => context.push('/home/service'),
                       ),
+                      const SizedBox(height: 20),
+                      HomeSimulationCard(
+                        onTap: () => context.push('/home/simulation'),
+                      ),
+
                       const SizedBox(height: 20),
                       if (isAuthenticated) ...[
                         HomeQuickActions(
@@ -233,29 +193,8 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                         ),
                         const SizedBox(height: 20),
                       ],
-                      // if (featuredHotelCards.isNotEmpty) ...[
-                      //   FundFeaturedFundCarousel(
-                      //     title: l10n.homeFeaturedHotelsTitle,
-                      //     actionLabel: l10n.homeViewAllAction,
-                      //     onActionTap: () => context.go('/hotel-booking'),
-                      //     headerSpacing: 8,
-                      //     children: featuredHotelCards,
-                      //   ),
-                      //   const SizedBox(height: 20),
-                      // ],
-                      //if (isAuthenticated)
-
-                      //else
-                      //const SizedBox(height: 20),
-                      const HomeSecondaryMarketSection(),
+                      const HomeMilesHotelsSection(),
                       const SizedBox(height: 20),
-                      HomeSimulationCard(
-                        onTap: () => context.push('/home/simulation'),
-                      ),
-                      const SizedBox(height: 20),
-                      HomeMilesRankSection(
-                        onTap: () => context.push('/home/ranks'),
-                      ),
                     ],
                   ),
                 ),
@@ -284,20 +223,14 @@ bool get _isApplePlatform =>
 Future<void> _refreshHomeOverviewTab(WidgetRef ref) async {
   if (shouldSkipAppNetworkRefresh(ref)) return;
   ref.invalidate(fundProjectListProvider);
-  ref.invalidate(homeFeaturedHotelsProvider);
   ref.invalidate(memberProfileDetailsProvider);
   await Future.wait<void>([
-    ref
-        .read(
-          secondaryMarketControllerProvider(
-            SecondaryMarketListKind.market,
-          ).notifier,
-        )
-        .refresh(),
     _refreshHomeMiles(ref),
     refreshRootTabSharedData(ref),
     ref.refresh(fundProjectListProvider.future).then((_) {}),
-    ref.refresh(homeFeaturedHotelsProvider.future).then((_) {}),
+    ref
+        .refresh(homeFeaturedHotelsProvider.future)
+        .then<void>((_) {}, onError: (Object _) {}),
     ref.refresh(memberProfileDetailsProvider.future).then((_) {}),
   ]);
 }

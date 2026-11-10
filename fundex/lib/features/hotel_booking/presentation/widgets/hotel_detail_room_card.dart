@@ -52,7 +52,7 @@ class HotelDetailRoomCard extends StatelessWidget {
             InkWell(
               onTap: onDetails,
               child: SizedBox(
-                height: 238,
+                height: 143,
                 child: AppRemoteImage(
                   imageUrl: room.images.isEmpty ? '' : room.images.first.url,
                   fit: BoxFit.cover,
@@ -100,7 +100,9 @@ class HotelDetailRoomCard extends StatelessWidget {
                                 Flexible(
                                   child: Text(
                                     fact.$2,
-                                    style: HotelDetailStyles.spec(c),
+                                    style: HotelDetailStyles.caption(
+                                      c,
+                                    ).copyWith(fontWeight: FontWeight.w500),
                                   ),
                                 ),
                               ],
@@ -113,6 +115,11 @@ class HotelDetailRoomCard extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: onDetails,
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(48, 36),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -131,37 +138,43 @@ class HotelDetailRoomCard extends StatelessWidget {
                     ),
                   ),
                   Divider(color: c.appColors.borderSoft, height: 1),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 4,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        miles
+                            ? (room.pointsRequired == null
+                                  ? c.l10n.hotelStayBenefitUnavailableForDate
+                                  : hotelReferenceMilesLabel(
+                                      c,
+                                      room.pointsRequired!,
+                                    ))
+                            : (room.price == null
+                                  ? '—'
+                                  : presenter.price(room.price)),
+                        style: HotelDetailStyles.roomPrice(c),
+                      ),
+                      Text(
+                        c.l10n.hotelDetailPerStay(nights),
+                        style: HotelDetailStyles.roomMetadata(c),
+                      ),
+                    ],
+                  ),
                   Row(
                     children: [
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              miles
-                                  ? (room.pointsRequired == null
-                                        ? c
-                                              .l10n
-                                              .hotelStayBenefitUnavailableForDate
-                                        : hotelReferenceMilesLabel(
-                                            c,
-                                            room.pointsRequired!,
-                                          ))
-                                  : (room.price == null
-                                        ? '—'
-                                        : presenter.price(room.price)),
-                              style: miles
-                                  ? HotelDetailStyles.caption(c)
-                                  : HotelDetailStyles.amount(c),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              c.l10n.hotelDetailPerStay(nights),
-                              style: HotelDetailStyles.spec(c),
-                            ),
-                          ],
-                        ),
+                        child:
+                            room.remainingRooms != null &&
+                                room.remainingRooms! >= 0
+                            ? Text(
+                                c.l10n.hotelDetailRemainingRoomsShort(
+                                  room.remainingRooms!,
+                                ),
+                                style: HotelDetailStyles.roomMetadata(c),
+                              )
+                            : const SizedBox.shrink(),
                       ),
                       _QuantityButton(
                         asset: 'minus',
@@ -173,7 +186,7 @@ class HotelDetailRoomCard extends StatelessWidget {
                         child: Text(
                           '$quantity',
                           textAlign: TextAlign.center,
-                          style: HotelDetailStyles.label(c),
+                          style: HotelDetailStyles.heading(c),
                         ),
                       ),
                       _QuantityButton(
@@ -183,16 +196,6 @@ class HotelDetailRoomCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  if (room.remainingRooms != null &&
-                      room.remainingRooms! >= 0) ...[
-                    const SizedBox(height: 12),
-                    Text(
-                      c.l10n.hotelDetailRemainingRoomsShort(
-                        room.remainingRooms!,
-                      ),
-                      style: HotelDetailStyles.spec(c),
-                    ),
-                  ],
                   if (minimum != null && minimum > nights) ...[
                     const SizedBox(height: 8),
                     Text(

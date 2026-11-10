@@ -371,7 +371,7 @@
   "homeReminderCoolingOffBadge": "5 days left",
   "homeReminderCoolingOffAction": "Cancel contract",
   "homeFeaturedFundsTitle": "Latest Funds",
-  "homeFeaturedHotelsTitle": "Hotels",
+  "homeFeaturedHotelsTitle": "Hotels bookable with miles",
   "homeFeaturedFundRemainingDays": "{days} days left",
   "@homeFeaturedFundRemainingDays": {
     "placeholders": {
@@ -591,6 +591,17 @@
         "type": "int"
       },
       "rooms": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelSearchGuestCounts": "{adults} adults · {children} children",
+  "@hotelSearchGuestCounts": {
+    "placeholders": {
+      "adults": {
+        "type": "int"
+      },
+      "children": {
         "type": "int"
       }
     }
@@ -1039,6 +1050,7 @@
   "hotelPaymentStatusRefunded": "Refund completed",
   "hotelDetailNoRooms": "No available rooms",
   "hotelDetailFacilities": "Facilities",
+  "hotelFeatureDetailsLink": "Details",
   "hotelDetailDescription": "Property details",
   "hotelDetailSurrounding": "Surroundings",
   "hotelDetailTravel": "Access",
@@ -2582,7 +2594,7 @@
   "homeBookWithMiles": "Book with miles",
   "homeGuestBenefitsTitle": "Host benefits",
   "homeGuestBenefitsBody": "Peace of mind for tomorrow. Joy for today.",
-  "homeLearnService": "Discover the service",
+  "homeLearnService": "View service details",
   "homeSimulationTitle": "How many nights could your investment bring?",
   "homeRankTitle": "More investment. More journeys.",
   "homeRankDetails": "Explore membership ranks",
@@ -2796,6 +2808,7 @@
   },
   "hotelMilesLogin": "Log in to view Host Benefits",
   "hotelMilesBookingPending": "Browse hotels here. Host Miles booking is coming soon.",
+  "hotelMilesDateIneligible": "Host Miles do not apply to the selected dates",
   "hotelMilesDateEligible": "Host Miles apply to the selected dates",
   "hotelMilesRequiredUnknown": "Required miles: —",
   "hotelMilesAdvanceMonths": "Your rank allows booking up to {months} months before check-in.",
@@ -2937,7 +2950,7 @@
   "hotelDetailProceed": "Continue to booking",
   "hotelDetailRoomsHeading": "ROOMS",
   "hotelSortNone": "No selection",
-  "hotelMilesReferenceStayFrom": "From {count} miles (reference, entire stay)",
+  "hotelMilesReferenceStayFrom": "From {count} miles",
   "@hotelMilesReferenceStayFrom": {
     "placeholders": {
       "count": {
@@ -2945,7 +2958,7 @@
       }
     }
   },
-  "hotelMilesReferenceStay": "{count} miles (reference, entire stay)",
+  "hotelMilesReferenceStay": "{count} miles",
   "@hotelMilesReferenceStay": {
     "placeholders": {
       "count": {

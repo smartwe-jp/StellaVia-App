@@ -105,7 +105,7 @@ void main() {
       h.pending[1].complete(const HotelSearchResult(hotels: [], totalCount: 0));
       await second;
       h.pending[0].complete(
-        const HotelSearchResult(hotels: [liveHotel], totalCount: 1),
+        HotelSearchResult(hotels: [liveHotel()], totalCount: 1),
       );
       await first;
       expect(c.state.hotels.hotels, isEmpty);
@@ -113,7 +113,7 @@ void main() {
       final late = c.refresh();
       c.dispose();
       h.pending[2].complete(
-        const HotelSearchResult(hotels: [liveHotel], totalCount: 1),
+        HotelSearchResult(hotels: [liveHotel()], totalCount: 1),
       );
       await late;
     },

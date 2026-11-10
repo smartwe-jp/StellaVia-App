@@ -33,23 +33,16 @@ class HotelHomeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = context.appColors;
     final text = Theme.of(context).textTheme;
-    final codeLabel = hotelBuildingTypeLabelForCode(
-      context,
-      hotel.buildingCode,
-    );
-    final type = codeLabel.isNotEmpty
-        ? codeLabel
-        : hotel.buildingType.isNotEmpty
-        ? hotel.buildingType
-        : hotel.bookingTypeLabel;
     final miles =
         requiredMiles ?? (hostMilesMode ? hotel.startingPoints : null);
     final isMiles = hostMilesMode || miles != null;
-    return AppCard(
+    final disabled = isMiles && !hotel.stayBenefitParticipate;
+    final radius = BorderRadius.circular(20);
+    final card = AppCard(
       backgroundColor: colors.surface,
       borderColor: colors.borderSoft,
-      borderRadius: BorderRadius.circular(20),
-      onTap: onTap,
+      borderRadius: radius,
+      onTap: disabled ? null : onTap,
       padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,13 +51,9 @@ class HotelHomeCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             child: AspectRatio(
               aspectRatio: 334 / 164,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  if (previewImageAsset != null)
-                    Image.asset(previewImageAsset!, fit: BoxFit.cover)
-                  else
-                    AppRemoteImage(
+              child: previewImageAsset != null
+                  ? Image.asset(previewImageAsset!, fit: BoxFit.cover)
+                  : AppRemoteImage(
                       imageUrl: hotel.imageUrl,
                       fit: BoxFit.cover,
                       errorWidget: ColoredBox(
@@ -75,40 +64,14 @@ class HotelHomeCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                  if (type.isNotEmpty)
-                    Positioned(
-                      top: 10,
-                      right: 10,
-                      child: Container(
-                        constraints: const BoxConstraints(maxWidth: 180),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 18,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: colors.primary,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Text(
-                          type,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: text.labelSmall?.copyWith(
-                            color: colors.onDark,
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
             ),
           ),
           const SizedBox(height: 8),
           InkWell(
-            onTap: onMapTap,
+            onTap: disabled ? null : onMapTap,
             child: Text(
               hotel.address.isNotEmpty ? hotel.address : hotel.area,
-              style: text.labelSmall?.copyWith(color: colors.brandSecondary),
+              style: text.labelMedium?.copyWith(color: colors.brandSecondary),
             ),
           ),
           const SizedBox(height: 6),
@@ -120,11 +83,15 @@ class HotelHomeCard extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           if (isMiles)
-            Text(
-              miles != null
-                  ? context.l10n.hotelMilesDateEligible
-                  : context.l10n.hotelStayBenefitUnavailableForDate,
-              style: text.labelSmall?.copyWith(color: colors.brandSecondary),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                hotel.stayBenefitParticipate
+                    ? context.l10n.hotelMilesDateEligible
+                    : context.l10n.hotelMilesDateIneligible,
+                textAlign: TextAlign.right,
+                style: text.labelSmall?.copyWith(color: colors.brandSecondary),
+              ),
             )
           else
             HotelDiscountBadge(
@@ -180,6 +147,18 @@ class HotelHomeCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
         ],
+      ),
+    );
+    if (!disabled) return card;
+    return Semantics(
+      enabled: false,
+      child: DecoratedBox(
+        position: DecorationPosition.foreground,
+        decoration: BoxDecoration(
+          color: colors.surface.withValues(alpha: 0.32),
+          borderRadius: radius,
+        ),
+        child: card,
       ),
     );
   }

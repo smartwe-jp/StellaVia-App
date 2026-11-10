@@ -10,6 +10,11 @@ String hotelDetailPlainText(String value) => value
     .replaceAll('&amp;', '&')
     .trim();
 
+String hotelFeatureTitle(String text) {
+  final end = RegExp(r'。|[.](?=\s|$)').firstMatch(text)?.end;
+  return end == null ? text : text.substring(0, end);
+}
+
 List<(String, String)> hotelDetailRoomFacts(
   BuildContext c,
   HotelRoomPlan room,

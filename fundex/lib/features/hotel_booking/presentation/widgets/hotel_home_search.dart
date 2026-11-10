@@ -13,7 +13,11 @@ class HotelHomeSearch extends ConsumerWidget {
     required this.criteria,
     required this.onApply,
     this.allowMultiNightBenefits = false,
+    this.hints = const [],
+    this.showRoomCount = true,
   });
+  final bool showRoomCount;
+  final List<String> hints;
   final bool allowMultiNightBenefits;
   final HotelSearchCriteria criteria;
   final Future<void> Function(HotelSearchCriteria) onApply;
@@ -26,6 +30,16 @@ class HotelHomeSearch extends ConsumerWidget {
     final filters =
         ref.watch(hotelBuildingFiltersProvider).asData?.value ??
         const <HotelBuildingFilter>[];
+    final guests = showRoomCount
+        ? context.l10n.hotelGuestDetailedSummary(
+            criteria.occupancy,
+            criteria.kids,
+            criteria.roomCount,
+          )
+        : context.l10n.hotelSearchGuestCounts(
+            criteria.occupancy,
+            criteria.kids,
+          );
     final colors = context.appColors;
     return Material(
       color: colors.surface,
@@ -42,6 +56,7 @@ class HotelHomeSearch extends ConsumerWidget {
           isScrollControlled: true,
           builder: (_) => HotelSearchConditionsSheet(
             allowMultiNightBenefits: allowMultiNightBenefits,
+            hints: hints,
             criteria: criteria,
             presenter: presenter,
             buildingFilters: filters,
@@ -64,7 +79,7 @@ class HotelHomeSearch extends ConsumerWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${presenter.stayRange(criteria)} · ${context.l10n.hotelGuestDetailedSummary(criteria.occupancy, criteria.kids, criteria.roomCount)}',
+                      '${presenter.stayRange(criteria)} · $guests',
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ],

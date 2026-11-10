@@ -62,16 +62,14 @@ class HotelHostMilesHeader extends StatelessWidget {
           criteria: state.hotels.criteria,
           onApply: onApply,
           allowMultiNightBenefits: true,
+          showRoomCount: false,
+          hints: [
+            if (display.advance case final advance?) advance,
+            l.hotelMilesBookingPending,
+          ],
         ),
         const SizedBox(height: 10),
         HotelHomeFilters(criteria: state.hotels.criteria, onApply: onApply),
-        if (display.advance != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 12),
-            child: Text(display.advance!, style: context.appTextTheme.caption),
-          ),
-        const SizedBox(height: 12),
-        Text(l.hotelMilesBookingPending, style: context.appTextTheme.caption),
         const SizedBox(height: 24),
         Text(
           l.hotelMilesEligibleHotels,

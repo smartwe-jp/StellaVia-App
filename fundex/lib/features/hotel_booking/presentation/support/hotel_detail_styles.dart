@@ -20,6 +20,10 @@ abstract final class HotelDetailStyles {
       c.appTextTheme.caption.copyWith(fontSize: 11);
   static TextStyle amount(BuildContext c) => c.appTextTheme.numericBody
       .copyWith(fontSize: 18, color: c.appColors.primary);
+  static TextStyle roomMetadata(BuildContext c) => c.appTextTheme.caption
+      .copyWith(fontSize: 14, fontWeight: FontWeight.w500);
+  static TextStyle roomPrice(BuildContext c) => c.appTextTheme.numericBody
+      .copyWith(fontSize: 20, color: c.appColors.primary);
   static TextStyle rooms(BuildContext c) => c.appTextTheme.numericBody.copyWith(
     fontSize: 28,
     fontWeight: FontWeight.w500,

@@ -2090,7 +2090,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeFeaturedHotelsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Hotels'**
+  /// **'Hotels bookable with miles'**
   String get homeFeaturedHotelsTitle;
 
   /// No description provided for @homeFeaturedFundRemainingDays.
@@ -3026,6 +3026,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{guests} adults · {rooms} rooms'**
   String hotelGuestSummary(int guests, int rooms);
+
+  /// No description provided for @hotelSearchGuestCounts.
+  ///
+  /// In en, this message translates to:
+  /// **'{adults} adults · {children} children'**
+  String hotelSearchGuestCounts(int adults, int children);
 
   /// No description provided for @hotelGuestDetailedSummary.
   ///
@@ -4490,6 +4496,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Facilities'**
   String get hotelDetailFacilities;
+
+  /// No description provided for @hotelFeatureDetailsLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get hotelFeatureDetailsLink;
 
   /// No description provided for @hotelDetailDescription.
   ///
@@ -11808,7 +11820,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeLearnService.
   ///
   /// In en, this message translates to:
-  /// **'Discover the service'**
+  /// **'View service details'**
   String get homeLearnService;
 
   /// No description provided for @homeSimulationTitle.
@@ -12458,6 +12470,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Browse hotels here. Host Miles booking is coming soon.'**
   String get hotelMilesBookingPending;
+
+  /// No description provided for @hotelMilesDateIneligible.
+  ///
+  /// In en, this message translates to:
+  /// **'Host Miles do not apply to the selected dates'**
+  String get hotelMilesDateIneligible;
 
   /// No description provided for @hotelMilesDateEligible.
   ///
@@ -13146,13 +13164,13 @@ abstract class AppLocalizations {
   /// No description provided for @hotelMilesReferenceStayFrom.
   ///
   /// In en, this message translates to:
-  /// **'From {count} miles (reference, entire stay)'**
+  /// **'From {count} miles'**
   String hotelMilesReferenceStayFrom(String count);
 
   /// No description provided for @hotelMilesReferenceStay.
   ///
   /// In en, this message translates to:
-  /// **'{count} miles (reference, entire stay)'**
+  /// **'{count} miles'**
   String hotelMilesReferenceStay(String count);
 
   /// No description provided for @hotelQuoteAssigning.
