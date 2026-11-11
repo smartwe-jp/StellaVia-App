@@ -47,6 +47,13 @@ class HotelDetailRedesignContent extends StatelessWidget {
       Localizations.localeOf(c).toLanguageTag(),
     );
     final roomLimit = miles ? tier?.remainingBookingRooms : null;
+    final balance = account?.availablePoints ?? tier?.pointsBalance;
+    final extraGuestsByRoom = {
+      for (final row
+          in selection.assignment?.roomTypeExtraGuestPrices ??
+              const <HotelRoomTypeExtraGuestPrice>[])
+        if (row.extraGuestCount > 0) row.roomTypeId: row,
+    };
     return Column(
       children: [
         Expanded(
@@ -147,6 +154,14 @@ class HotelDetailRedesignContent extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 8),
+                      if (miles && roomLimit != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            '${c.l10n.hotelDetailEstimatedRooms}  ${c.l10n.hotelMilesRoomValue(selection.remainingAllowance(roomLimit)!)}',
+                            style: HotelDetailStyles.caption(c),
+                          ),
+                        ),
                       if (detail.roomPlans.isEmpty)
                         Text(c.l10n.hotelDetailNoRooms),
                       for (
@@ -159,6 +174,18 @@ class HotelDetailRedesignContent extends StatelessWidget {
                           child: HotelDetailRoomCard(
                             room: detail.roomPlans[index],
                             quantity: selection.quantities[index] ?? 0,
+                            remaining: miles
+                                ? selection.additionalRooms(
+                                    index,
+                                    roomLimit: roomLimit,
+                                  )
+                                : null,
+                            allowanceExhausted:
+                                miles &&
+                                selection.remainingAllowance(roomLimit) == 0,
+                            extraGuests:
+                                extraGuestsByRoom[detail.roomPlans[index].id],
+                            shortfall: selection.milesShortfall(index, balance),
                             nights: criteria.nights,
                             miles: miles,
                             onDetails: () => showHotelRoomDetailSheet(
@@ -180,12 +207,14 @@ class HotelDetailRedesignContent extends StatelessWidget {
                                     !selection.canAdd(
                                       index,
                                       roomLimit: roomLimit,
+                                      balance: balance,
                                     )
                                 ? null
                                 : () => selection.change(
                                     index,
                                     (selection.quantities[index] ?? 0) + 1,
                                     roomLimit: roomLimit,
+                                    balance: balance,
                                   ),
                           ),
                         ),

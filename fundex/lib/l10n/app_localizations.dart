@@ -13113,6 +13113,36 @@ abstract class AppLocalizations {
   /// **'Estimated room allowance after booking'**
   String get hotelDetailEstimatedRooms;
 
+  /// No description provided for @hotelRoomExtraGuests.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 extra guest} other{{count} extra guests}}'**
+  String hotelRoomExtraGuests(int count);
+
+  /// No description provided for @hotelRoomExtraGuestsMiles.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 extra guest} other{{count} extra guests}}, +{miles} miles'**
+  String hotelRoomExtraGuestsMiles(int count, String miles);
+
+  /// No description provided for @hotelDetailNoVacancy.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold out'**
+  String get hotelDetailNoVacancy;
+
+  /// No description provided for @hotelDetailRoomAllowanceUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'No room allowance remaining'**
+  String get hotelDetailRoomAllowanceUsed;
+
+  /// No description provided for @hotelDetailMilesShortfall.
+  ///
+  /// In en, this message translates to:
+  /// **'You need {amount} more miles to add a room.'**
+  String hotelDetailMilesShortfall(String amount);
+
   /// No description provided for @hotelDetailEstimateNotice.
   ///
   /// In en, this message translates to:

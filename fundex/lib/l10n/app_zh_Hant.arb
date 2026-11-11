@@ -2912,6 +2912,35 @@
   "hotelDetailStayTotal": "住宿總價",
   "hotelDetailEstimatedMiles": "預約後預計剩餘里程",
   "hotelDetailEstimatedRooms": "預約後預計可預約室數",
+  "hotelRoomExtraGuests": "額外 {count} 人",
+  "@hotelRoomExtraGuests": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelRoomExtraGuestsMiles": "額外 {count} 人，+{miles} 里程",
+  "@hotelRoomExtraGuestsMiles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "miles": {
+        "type": "String"
+      }
+    }
+  },
+  "hotelDetailNoVacancy": "已滿房",
+  "hotelDetailRoomAllowanceUsed": "可訂房間額度已用完",
+  "hotelDetailMilesShortfall": "再選一間還差 {amount} 里程。",
+  "@hotelDetailMilesShortfall": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "hotelDetailEstimateNotice": "此處為預估，實際里程與室數將在預約確認時更新。",
   "hotelDetailMilesInsufficient": "宿主里程不足。",
   "hotelDetailRoomsInsufficient": "超出可預約室數。",

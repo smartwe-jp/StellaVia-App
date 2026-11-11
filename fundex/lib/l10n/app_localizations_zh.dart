@@ -6853,6 +6853,27 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelDetailEstimatedRooms => '预约后预计可预约室数';
 
   @override
+  String hotelRoomExtraGuests(int count) {
+    return '额外 $count 人';
+  }
+
+  @override
+  String hotelRoomExtraGuestsMiles(int count, String miles) {
+    return '额外 $count 人，+$miles 里程';
+  }
+
+  @override
+  String get hotelDetailNoVacancy => '已满房';
+
+  @override
+  String get hotelDetailRoomAllowanceUsed => '可订房间额度已用完';
+
+  @override
+  String hotelDetailMilesShortfall(String amount) {
+    return '再选一间还差 $amount 里程。';
+  }
+
+  @override
   String get hotelDetailEstimateNotice => '此处为预估，实际里程与室数将在预约确认时更新。';
 
   @override
@@ -13908,6 +13929,27 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelDetailEstimatedRooms => '預約後預計可預約室數';
+
+  @override
+  String hotelRoomExtraGuests(int count) {
+    return '額外 $count 人';
+  }
+
+  @override
+  String hotelRoomExtraGuestsMiles(int count, String miles) {
+    return '額外 $count 人，+$miles 里程';
+  }
+
+  @override
+  String get hotelDetailNoVacancy => '已滿房';
+
+  @override
+  String get hotelDetailRoomAllowanceUsed => '可訂房間額度已用完';
+
+  @override
+  String hotelDetailMilesShortfall(String amount) {
+    return '再選一間還差 $amount 里程。';
+  }
 
   @override
   String get hotelDetailEstimateNotice => '此處為預估，實際里程與室數將在預約確認時更新。';

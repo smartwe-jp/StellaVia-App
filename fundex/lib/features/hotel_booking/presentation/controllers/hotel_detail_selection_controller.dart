@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_detail_route_args.dart';
@@ -51,31 +52,60 @@ class HotelDetailSelectionController extends ChangeNotifier {
             : assignment?.pointsRequired)
       : assignment?.price;
 
-  bool canAdd(int index, {int? roomLimit}) {
+  int? remainingAllowance(int? limit) =>
+      limit == null ? null : math.max(0, limit - roomCount);
+
+  int? additionalRooms(int index, {int? roomLimit}) {
+    final stock = detail.roomPlans[index].remainingRooms;
+    final allowance = remainingAllowance(roomLimit);
+    if (stock == null || stock < 0) return allowance;
+    final left = math.max(0, stock - (quantities[index] ?? 0));
+    return allowance == null ? left : math.min(left, allowance);
+  }
+
+  // Reference miles only guide the next increment while a quote is unavailable.
+  // The booking total always comes from the assignment/quote.
+  num? milesShortfall(int index, num? balance, {int count = 1}) {
+    final price = detail.roomPlans[index].pointsRequired;
+    if (mode != HotelBookingMode.hostMiles ||
+        balance == null ||
+        price == null) {
+      return null;
+    }
+    final used =
+        amount ??
+        selections.fold<num>(
+          0,
+          (total, selected) =>
+              total + (selected.room.pointsRequired ?? 0) * selected.quantity,
+        );
+    return math.max(0, price * count - math.max(0, balance - used));
+  }
+
+  bool canAdd(int index, {int? roomLimit, num? balance, int count = 1}) {
     final room = detail.roomPlans[index];
-    final stock = room.remainingRooms;
+    final left = additionalRooms(index, roomLimit: roomLimit);
     return !busy &&
         detail.isBookable &&
         (mode != HotelBookingMode.hostMiles || room.pointsRequired != null) &&
         (room.minimumStayNights == null ||
             criteria.nights >= room.minimumStayNights!) &&
-        (stock == null || stock < 0 || (quantities[index] ?? 0) < stock) &&
-        (roomLimit == null || roomCount < roomLimit);
+        (left == null || count <= left) &&
+        (milesShortfall(index, balance, count: count) ?? 0) == 0;
   }
 
-  Future<void> change(int index, int quantity, {int? roomLimit}) async {
+  Future<void> change(
+    int index,
+    int quantity, {
+    int? roomLimit,
+    num? balance,
+  }) async {
     if (busy || quantity < 0 || index < 0 || index >= detail.roomPlans.length) {
       return;
     }
-    if (quantity > (quantities[index] ?? 0) &&
-        !canAdd(index, roomLimit: roomLimit)) {
-      return;
-    }
-    final stock = detail.roomPlans[index].remainingRooms;
-    final nextCount = roomCount - (quantities[index] ?? 0) + quantity;
-    if (quantity > (quantities[index] ?? 0) &&
-        ((stock != null && stock >= 0 && quantity > stock) ||
-            (roomLimit != null && nextCount > roomLimit))) {
+    final delta = quantity - (quantities[index] ?? 0);
+    if (delta > 0 &&
+        !canAdd(index, roomLimit: roomLimit, balance: balance, count: delta)) {
       return;
     }
     final next = {...quantities};

@@ -2912,6 +2912,35 @@
   "hotelDetailStayTotal": "宿泊料金合計",
   "hotelDetailEstimatedMiles": "予約後の宿主マイル（見込み）",
   "hotelDetailEstimatedRooms": "予約後の予約可能室数（見込み）",
+  "hotelRoomExtraGuests": "追加 {count} 名",
+  "@hotelRoomExtraGuests": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelRoomExtraGuestsMiles": "追加 {count} 名、+{miles} マイル",
+  "@hotelRoomExtraGuestsMiles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "miles": {
+        "type": "String"
+      }
+    }
+  },
+  "hotelDetailNoVacancy": "満室",
+  "hotelDetailRoomAllowanceUsed": "予約可能室数の残りは0室です",
+  "hotelDetailMilesShortfall": "あと {amount} マイル必要です。",
+  "@hotelDetailMilesShortfall": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "hotelDetailEstimateNotice": "表示は見込みです。実際のマイル・室数は予約確定時に反映されます。",
   "hotelDetailMilesInsufficient": "宿主マイルが不足しています。",
   "hotelDetailRoomsInsufficient": "予約可能室数を超えています。",

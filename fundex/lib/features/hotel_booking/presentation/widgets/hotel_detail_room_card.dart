@@ -16,6 +16,10 @@ class HotelDetailRoomCard extends StatelessWidget {
     required this.quantity,
     required this.nights,
     required this.miles,
+    this.remaining,
+    this.allowanceExhausted = false,
+    this.shortfall,
+    this.extraGuests,
     required this.onDetails,
     required this.onMinus,
     required this.onPlus,
@@ -24,6 +28,10 @@ class HotelDetailRoomCard extends StatelessWidget {
   final int quantity;
   final int nights;
   final bool miles;
+  final int? remaining;
+  final bool allowanceExhausted;
+  final num? shortfall;
+  final HotelRoomTypeExtraGuestPrice? extraGuests;
   final VoidCallback onDetails;
   final VoidCallback? onMinus;
   final VoidCallback? onPlus;
@@ -33,6 +41,17 @@ class HotelDetailRoomCard extends StatelessWidget {
       Localizations.localeOf(c).toLanguageTag(),
     );
     final minimum = room.minimumStayNights;
+    final left = remaining ?? room.remainingRooms;
+    final String? availability;
+    if (miles && room.remainingRooms == 0) {
+      availability = c.l10n.hotelDetailNoVacancy;
+    } else if (miles && allowanceExhausted) {
+      availability = c.l10n.hotelDetailRoomAllowanceUsed;
+    } else if (left != null && left >= 0) {
+      availability = c.l10n.hotelDetailRemainingRoomsShort(left);
+    } else {
+      availability = null;
+    }
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: Container(
@@ -162,16 +181,27 @@ class HotelDetailRoomCard extends StatelessWidget {
                       ),
                     ],
                   ),
+                  if (extraGuests case final row?
+                      when miles && quantity > 0) ...[
+                    const SizedBox(height: 6),
+                    Text(
+                      row.extraGuestPoints == null
+                          ? c.l10n.hotelRoomExtraGuests(row.extraGuestCount)
+                          : c.l10n.hotelRoomExtraGuestsMiles(
+                              row.extraGuestCount,
+                              presenter.amount(row.extraGuestPoints!),
+                            ),
+                      style: HotelDetailStyles.roomMetadata(
+                        c,
+                      ).copyWith(color: c.appColors.primary),
+                    ),
+                  ],
                   Row(
                     children: [
                       Expanded(
-                        child:
-                            room.remainingRooms != null &&
-                                room.remainingRooms! >= 0
+                        child: availability != null
                             ? Text(
-                                c.l10n.hotelDetailRemainingRoomsShort(
-                                  room.remainingRooms!,
-                                ),
+                                availability,
                                 style: HotelDetailStyles.roomMetadata(c),
                               )
                             : const SizedBox.shrink(),
@@ -196,6 +226,13 @@ class HotelDetailRoomCard extends StatelessWidget {
                       ),
                     ],
                   ),
+                  if ((shortfall ?? 0) > 0 && left != 0)
+                    Text(
+                      c.l10n.hotelDetailMilesShortfall(
+                        presenter.amount(shortfall!),
+                      ),
+                      style: HotelDetailStyles.caption(c),
+                    ),
                   if (minimum != null && minimum > nights) ...[
                     const SizedBox(height: 8),
                     Text(

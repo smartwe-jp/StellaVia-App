@@ -305,6 +305,27 @@ void main() {
     },
   );
   test(
+    'mile rooms share allowance and use the quoted balance for the next addition',
+    () async {
+      final hotel = detail(stock: 4);
+      hotel.roomPlans.add(room(stock: 3));
+      final c = controller(mode: HotelBookingMode.hostMiles, hotel: hotel);
+      addTearDown(c.dispose);
+      expect(c.additionalRooms(0, roomLimit: 2), 2);
+      await c.change(0, 1, roomLimit: 2, balance: 14000);
+      expect(c.additionalRooms(0, roomLimit: 2), 1);
+      expect(c.additionalRooms(1, roomLimit: 2), 1);
+      expect(c.milesShortfall(1, 14000), 500);
+      await c.change(1, 1, roomLimit: 2, balance: 14000);
+      expect(c.roomCount, 1);
+      await c.change(1, 1, roomLimit: 2, balance: 14500);
+      expect(c.additionalRooms(0, roomLimit: 2), 0);
+      await c.change(0, 0, roomLimit: 2);
+      expect(c.additionalRooms(1, roomLimit: 2), 1);
+    },
+  );
+
+  test(
     'discard in-flight assignment when date/account session is disposed',
     () async {
       final pending = Completer<HotelAssignOccupancyResult>();
@@ -354,6 +375,48 @@ void main() {
       await c.change(0, 0);
       expect(c.amount, isNull);
       expect(c.failed, false);
+    },
+  );
+  testWidgets(
+    'mile reservation bar keeps its height during assignment and quote',
+    (tester) async {
+      final assignment = Completer<HotelAssignOccupancyResult>();
+      final quotation = Completer<HotelBookingQuote>();
+      final c = controller(
+        mode: HotelBookingMode.hostMiles,
+        assign: (_) => assignment.future,
+        getQuote: (_) => quotation.future,
+      );
+      addTearDown(c.dispose);
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: AppThemeFactory.light(locale: const Locale('ja')),
+          home: Scaffold(
+            bottomNavigationBar: ListenableBuilder(
+              listenable: c,
+              builder: (_, _) => HotelDetailReservationPanel(
+                selection: c,
+                busy: false,
+                onBook: () {},
+              ),
+            ),
+          ),
+        ),
+      );
+      final panel = find.byType(HotelDetailReservationPanel);
+      final original = tester.getRect(panel);
+      final update = c.change(0, 1);
+      await tester.pump();
+      expect(tester.getRect(panel), original);
+      assignment.complete(assigned);
+      await tester.pump();
+      expect(tester.getRect(panel), original);
+      quotation.complete(quote());
+      await update;
+      await tester.pump();
+      expect(tester.getRect(panel), original);
     },
   );
   testWidgets('detail navigation hides while reservation panel stays fixed', (
@@ -442,7 +505,35 @@ void main() {
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
-      final c = controller(mode: HotelBookingMode.hostMiles);
+      final c = controller(
+        mode: HotelBookingMode.hostMiles,
+        assign: (_) async => HotelAssignOccupancyResult(
+          price: assigned.price,
+          pointsRequired: assigned.pointsRequired,
+          message: '',
+          roomTypeCustNums: assigned.roomTypeCustNums,
+          roomTypeExtraGuestPrices: const [
+            HotelRoomTypeExtraGuestPrice(
+              roomTypeId: 'other',
+              roomTypeName: 'Other',
+              roomCount: 1,
+              totalGuestCount: 3,
+              extraGuestCount: 1,
+              extraGuestPoints: 100,
+              extraGuestPrice: 0,
+            ),
+            HotelRoomTypeExtraGuestPrice(
+              roomTypeId: '1',
+              roomTypeName: 'Room',
+              roomCount: 2,
+              totalGuestCount: 6,
+              extraGuestCount: 2,
+              extraGuestPoints: 3300,
+              extraGuestPrice: 3000,
+            ),
+          ],
+        ),
+      );
       addTearDown(c.dispose);
       await c.change(0, 1);
       final key = GlobalKey();
@@ -528,14 +619,30 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text(l.hotelMilesReferenceStay('6,000')), findsOneWidget);
       final card = find.byType(HotelDetailRoomCard).first;
+      expect(
+        find.descendant(
+          of: card,
+          matching: find.text(l.hotelRoomExtraGuestsMiles(2, '3,300')),
+        ),
+        findsOneWidget,
+      );
       final stock = find.descendant(
         of: card,
-        matching: find.text(l.hotelDetailRemainingRoomsShort(2)),
+        matching: find.text(l.hotelDetailRemainingRoomsShort(1)),
       );
       final plus = find.descendant(
         of: card,
         matching: find.byTooltip(l.hotelDetailIncreaseRoom),
       );
+      expect(
+        tester
+            .widget<IconButton>(
+              find.descendant(of: card, matching: find.byType(IconButton)).last,
+            )
+            .onPressed,
+        isNull,
+      );
+      expect(find.text(l.hotelDetailMilesShortfall('2,500')), findsOneWidget);
       expect(tester.getCenter(stock).dy, closeTo(tester.getCenter(plus).dy, 1));
       expect(
         tester.getTopRight(stock).dx,

@@ -7252,6 +7252,39 @@ class AppLocalizationsEn extends AppLocalizations {
       'Estimated room allowance after booking';
 
   @override
+  String hotelRoomExtraGuests(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count extra guests',
+      one: '1 extra guest',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String hotelRoomExtraGuestsMiles(int count, String miles) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count extra guests',
+      one: '1 extra guest',
+    );
+    return '$_temp0, +$miles miles';
+  }
+
+  @override
+  String get hotelDetailNoVacancy => 'Sold out';
+
+  @override
+  String get hotelDetailRoomAllowanceUsed => 'No room allowance remaining';
+
+  @override
+  String hotelDetailMilesShortfall(String amount) {
+    return 'You need $amount more miles to add a room.';
+  }
+
+  @override
   String get hotelDetailEstimateNotice =>
       'These are estimates. Miles and room allowance are updated when the booking is confirmed.';
 

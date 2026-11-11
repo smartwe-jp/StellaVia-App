@@ -2942,6 +2942,35 @@
   "hotelDetailStayTotal": "Total stay price",
   "hotelDetailEstimatedMiles": "Estimated miles after booking",
   "hotelDetailEstimatedRooms": "Estimated room allowance after booking",
+  "hotelRoomExtraGuests": "{count, plural, =1{1 extra guest} other{{count} extra guests}}",
+  "@hotelRoomExtraGuests": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hotelRoomExtraGuestsMiles": "{count, plural, =1{1 extra guest} other{{count} extra guests}}, +{miles} miles",
+  "@hotelRoomExtraGuestsMiles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "miles": {
+        "type": "String"
+      }
+    }
+  },
+  "hotelDetailNoVacancy": "Sold out",
+  "hotelDetailRoomAllowanceUsed": "No room allowance remaining",
+  "hotelDetailMilesShortfall": "You need {amount} more miles to add a room.",
+  "@hotelDetailMilesShortfall": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "hotelDetailEstimateNotice": "These are estimates. Miles and room allowance are updated when the booking is confirmed.",
   "hotelDetailMilesInsufficient": "Insufficient host miles.",
   "hotelDetailRoomsInsufficient": "Room allowance exceeded.",

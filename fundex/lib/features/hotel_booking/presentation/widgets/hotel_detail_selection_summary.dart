@@ -26,9 +26,13 @@ class HotelDetailSelectionSummary extends StatelessWidget {
     );
     final miles = selection.mode == HotelBookingMode.hostMiles;
     final amount = selection.amount;
-    final balance = account?.availablePoints;
-    final remaining = amount != null && balance != null
+    final balance = account?.availablePoints ?? tier?.pointsBalance;
+    final remaining = balance == null
+        ? null
+        : amount != null
         ? balance - amount
+        : selection.roomCount == 0
+        ? balance
         : null;
     final roomLimit = tier?.remainingBookingRooms;
     final labels = <(String, String)>[
@@ -49,13 +53,15 @@ class HotelDetailSelectionSummary extends StatelessWidget {
           c.l10n.hotelDetailEstimatedMiles,
           remaining == null
               ? '—'
-              : '${presenter.amount(remaining)} ${c.l10n.myPageChartMileUnit}',
+              : '${presenter.amount(remaining < 0 ? 0 : remaining)} ${c.l10n.myPageChartMileUnit}',
         ),
         (
           c.l10n.hotelDetailEstimatedRooms,
           roomLimit == null
               ? '—'
-              : c.l10n.hotelMilesRoomValue(roomLimit - selection.roomCount),
+              : c.l10n.hotelMilesRoomValue(
+                  selection.remainingAllowance(roomLimit)!,
+                ),
         ),
       ],
     ];
@@ -185,7 +191,7 @@ class HotelDetailReservationPanel extends StatelessWidget {
                   ),
                 ),
               ),
-              if (selection.busy) ...[
+              if (!miles && selection.busy) ...[
                 const LinearProgressIndicator(),
                 Text(
                   hotelQuoteStatus(c, selection),
@@ -202,7 +208,15 @@ class HotelDetailReservationPanel extends StatelessWidget {
                   child: Text(c.l10n.commonRetry),
                 ),
               ],
-              const SizedBox(height: 10),
+              SizedBox(
+                height: 10,
+                child: miles && selection.busy
+                    ? const Align(
+                        alignment: Alignment.topCenter,
+                        child: LinearProgressIndicator(),
+                      )
+                    : null,
+              ),
               AppButton(
                 label: miles
                     ? c.l10n.hotelDetailMilesPending

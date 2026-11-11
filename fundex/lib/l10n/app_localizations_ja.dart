@@ -6915,6 +6915,27 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelDetailEstimatedRooms => '予約後の予約可能室数（見込み）';
 
   @override
+  String hotelRoomExtraGuests(int count) {
+    return '追加 $count 名';
+  }
+
+  @override
+  String hotelRoomExtraGuestsMiles(int count, String miles) {
+    return '追加 $count 名、+$miles マイル';
+  }
+
+  @override
+  String get hotelDetailNoVacancy => '満室';
+
+  @override
+  String get hotelDetailRoomAllowanceUsed => '予約可能室数の残りは0室です';
+
+  @override
+  String hotelDetailMilesShortfall(String amount) {
+    return 'あと $amount マイル必要です。';
+  }
+
+  @override
   String get hotelDetailEstimateNotice => '表示は見込みです。実際のマイル・室数は予約確定時に反映されます。';
 
   @override
