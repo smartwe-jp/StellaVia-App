@@ -106,6 +106,45 @@ HotelDetailSelectionController controller({
 );
 
 void main() {
+  testWidgets(
+    'zero remaining rooms replace the stepper until a selected room needs removal',
+    (tester) async {
+      Future<void> showCard(int quantity) => tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('ja'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: AppThemeFactory.light(locale: const Locale('ja')),
+          home: Scaffold(
+            body: HotelDetailRoomCard(
+              room: room(),
+              quantity: quantity,
+              remaining: 0,
+              miles: true,
+              nights: 1,
+              onDetails: () {},
+              onMinus: quantity > 0 ? () {} : null,
+              onPlus: null,
+            ),
+          ),
+        ),
+      );
+      await showCard(0);
+      expect(find.text('満室'), findsOneWidget);
+      expect(find.text('残り0室'), findsNothing);
+      expect(find.byType(IconButton), findsNothing);
+      await showCard(2);
+      expect(find.text('2'), findsOneWidget);
+      expect(find.text('残り0室'), findsOneWidget);
+      final buttons = tester
+          .widgetList<IconButton>(find.byType(IconButton))
+          .toList();
+      expect(buttons, hasLength(2));
+      expect(buttons.first.onPressed, isNotNull);
+      expect(buttons.last.onPressed, isNull);
+    },
+  );
+
   for (final locale in [
     const Locale('zh'),
     const Locale('ja'),

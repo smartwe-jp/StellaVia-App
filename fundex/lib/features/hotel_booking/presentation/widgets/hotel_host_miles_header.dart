@@ -62,9 +62,11 @@ class HotelHostMilesHeader extends StatelessWidget {
           criteria: state.hotels.criteria,
           onApply: onApply,
           allowMultiNightBenefits: true,
+          leadTimeMonths: state.tier.valueOrNull?.leadTimeMonths,
           showRoomCount: false,
           hints: [
-            if (display.advance case final advance?) advance,
+            if (state.tier.valueOrNull?.leadTimeMonths case final months?)
+              l.hotelMilesAdvanceMonths(months),
             l.hotelMilesBookingPending,
           ],
         ),

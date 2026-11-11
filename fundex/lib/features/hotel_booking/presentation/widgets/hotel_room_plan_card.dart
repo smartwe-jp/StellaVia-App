@@ -1,5 +1,4 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
@@ -486,12 +485,13 @@ class _RoomQuantityStepper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
+    if (remainingRooms == 0 && quantity == 0 && onIncrement == null) return const HotelFullBadge();
     final shouldShowRemaining = remainingRooms != null && remainingRooms! >= 0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         if (minimumStayNights != null || shouldShowRemaining) ...<Widget>[
-          if (minimumStayNights != null && remainingRooms! > 0)
+          if (minimumStayNights != null && remainingRooms != 0)
             Text(
               context.l10n.hotelDetailMinimumStay(minimumStayNights!),
               textAlign: TextAlign.end,
@@ -500,10 +500,11 @@ class _RoomQuantityStepper extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             )
-          else
+          else if (shouldShowRemaining)
             HotelRemainingRoomsLabel(
               count: remainingRooms!,
               unit: remainingUnit,
+              showFullBadge: false,
               textAlign: TextAlign.end,
             ),
           const SizedBox(height: 6),

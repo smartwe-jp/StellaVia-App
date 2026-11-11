@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../host_miles/domain/entities/host_miles_models.dart';
 import '../../../host_miles/domain/usecases/load_host_miles_home_usecase.dart';
 import '../../domain/entities/hotel_models.dart';
+import '../../domain/utils/hotel_miles_booking_window.dart';
 import '../../domain/usecases/search_hotels_usecase.dart';
 import 'hotel_booking_controller.dart';
 
@@ -33,7 +34,8 @@ class HotelHostMilesController extends StateNotifier<HotelHostMilesState> {
     required this.languageCode,
     required this.canLoadMembership,
     DateTime? now,
-  }) : super(
+  }) : _now = now,
+       super(
          HotelHostMilesState(
            hotels: HotelBookingState(
              criteria: HotelSearchCriteria.initial(
@@ -43,6 +45,7 @@ class HotelHostMilesController extends StateNotifier<HotelHostMilesState> {
            ),
          ),
        );
+  final DateTime? _now;
   final SearchHotelsUseCase search;
   final LoadHostMilesHomeUseCase membership;
   final String languageCode;
@@ -96,14 +99,13 @@ class HotelHostMilesController extends StateNotifier<HotelHostMilesState> {
   }
 
   Future<void> applyCriteria(HotelSearchCriteria criteria) {
-    final start = criteria.checkInDate;
-    final end = criteria.checkOutDate.isAfter(start)
-        ? criteria.checkOutDate
-        : start.add(const Duration(days: 1));
+    final bounded = HotelMilesBookingWindow(
+      _now ?? DateTime.now(),
+      state.tier.valueOrNull?.leadTimeMonths ?? 0,
+    ).constrain(criteria);
     state = state.copyWith(
       hotels: HotelBookingState(
-        criteria: criteria.copyWith(
-          checkOutDate: end,
+        criteria: bounded.copyWith(
           occupancy: criteria.occupancy.clamp(1, 20),
           kids: criteria.kids.clamp(0, 20),
           roomCount: criteria.roomCount.clamp(1, 10),

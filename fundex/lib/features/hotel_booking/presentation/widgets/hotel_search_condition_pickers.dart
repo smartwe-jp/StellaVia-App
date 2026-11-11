@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
+import '../../domain/utils/hotel_miles_booking_window.dart';
 
 Future<HotelSearchCriteria?> pickHotelStayDates({
   required BuildContext context,
@@ -11,14 +12,20 @@ Future<HotelSearchCriteria?> pickHotelStayDates({
   Map<String, Object?> priceCalendarByDate = const <String, Object?>{},
   Set<DateTime> stayBenefitSelectableDates = const <DateTime>{},
   HotelStayDateSelectionMode selectionMode = HotelStayDateSelectionMode.range,
+  bool hostMiles = false,
+  int? leadTimeMonths,
   String? guidanceText,
 }) async {
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
-  final initialStart = _dateOnly(criteria.checkInDate);
+  final window = !hostMiles && leadTimeMonths == null
+      ? null
+      : HotelMilesBookingWindow(today, leadTimeMonths ?? 0);
+  final initial = window?.constrain(criteria) ?? criteria;
+  final initialStart = _dateOnly(initial.checkInDate);
   final initialEnd = _normalizedCheckoutDate(
     initialStart,
-    criteria.checkOutDate,
+    initial.checkOutDate,
   );
   final firstDate = initialStart.isBefore(today) ? initialStart : today;
   final defaultLastDate = today.add(const Duration(days: 365));
@@ -34,11 +41,14 @@ Future<HotelSearchCriteria?> pickHotelStayDates({
       initialStartDate: initialStart,
       initialEndDate: initialEnd,
       firstDate: firstDate,
-      lastDate: lastDate,
+      lastDate: window?.lastCheckout ?? lastDate,
+      lastCheckIn: window?.lastNight,
       priceCalendarByDate: priceCalendarByDate,
       stayBenefitSelectableDates: stayBenefitSelectableDates,
       selectionMode: selectionMode,
-      guidanceText: guidanceText,
+      guidanceText: leadTimeMonths != null && leadTimeMonths >= 0
+          ? context.l10n.hotelMilesAdvanceMonths(leadTimeMonths)
+          : guidanceText,
     ),
   );
   if (range == null) {
@@ -194,6 +204,7 @@ class HotelGuestStepperRow extends StatelessWidget {
 class HotelStayDateRangePicker extends StatefulWidget {
   const HotelStayDateRangePicker({
     super.key,
+    this.lastCheckIn,
     required this.initialStartDate,
     required this.initialEndDate,
     required this.firstDate,
@@ -204,6 +215,7 @@ class HotelStayDateRangePicker extends StatefulWidget {
     this.guidanceText,
   });
 
+  final DateTime? lastCheckIn;
   final DateTime initialStartDate;
   final DateTime initialEndDate;
   final DateTime firstDate;
@@ -245,121 +257,135 @@ class _HotelStayDateRangePickerState extends State<HotelStayDateRangePicker> {
       _visibleMonth.year,
       _visibleMonth.month - 1,
     ).isAfter(DateTime(widget.firstDate.year, widget.firstDate.month - 1));
+    final lastSelectable = _endDate == null
+        ? widget.lastDate
+        : widget.lastCheckIn ?? widget.lastDate;
     final canGoNext = DateTime(
       _visibleMonth.year,
       _visibleMonth.month + 1,
-    ).isBefore(DateTime(widget.lastDate.year, widget.lastDate.month + 1));
+    ).isBefore(DateTime(lastSelectable.year, lastSelectable.month + 1));
 
     return SafeArea(
       top: false,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 14, 18, 22),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Container(
-              width: 42,
-              height: 4,
-              decoration: BoxDecoration(
-                color: colors.border,
-                borderRadius: BorderRadius.circular(999),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(18, 14, 18, 22),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                width: 42,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: colors.border,
+                  borderRadius: BorderRadius.circular(999),
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: _SelectedDateHeaderItem(
-                    label: context.l10n.hotelBookingCheckInDate,
-                    value: _formatOptionalFullDate(localeName, _startDate),
+              const SizedBox(height: 16),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: _SelectedDateHeaderItem(
+                      label: context.l10n.hotelBookingCheckInDate,
+                      value: _formatOptionalFullDate(localeName, _startDate),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: 1,
-                  height: 46,
-                  child: ColoredBox(color: colors.borderSoft),
-                ),
-                Expanded(
-                  child: _SelectedDateHeaderItem(
-                    label: context.l10n.hotelBookingCheckOutDate,
-                    value: _formatOptionalFullDate(localeName, _endDate),
+                  SizedBox(
+                    width: 1,
+                    height: 46,
+                    child: ColoredBox(color: colors.borderSoft),
                   ),
+                  Expanded(
+                    child: _SelectedDateHeaderItem(
+                      label: context.l10n.hotelBookingCheckOutDate,
+                      value: _formatOptionalFullDate(localeName, _endDate),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Divider(color: colors.borderSoft),
+              const SizedBox(height: 8),
+              if (_shouldShowGuidance) ...<Widget>[
+                const SizedBox(height: 6),
+                Text(
+                  widget.guidanceText!,
+                  textAlign: TextAlign.center,
+                  style: widget.lastCheckIn != null
+                      ? context.appTextTheme.caption.copyWith(
+                          color: colors.textPrimary,
+                        )
+                      : Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: colors.infoForeground,
+                          fontWeight: FontWeight.w800,
+                        ),
                 ),
               ],
-            ),
-            const SizedBox(height: 14),
-            Divider(color: colors.borderSoft),
-            const SizedBox(height: 8),
-            if (_shouldShowGuidance) ...<Widget>[
+              Row(
+                children: <Widget>[
+                  IconButton(
+                    onPressed: canGoPrevious ? _goPreviousMonth : null,
+                    icon: const Icon(Icons.chevron_left_rounded, size: 28),
+                  ),
+                  Expanded(
+                    child: Text(
+                      monthText,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: colors.textPrimary,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: canGoNext ? _goNextMonth : null,
+                    icon: const Icon(Icons.chevron_right_rounded, size: 28),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              _WeekdayHeader(localeName: localeName),
               const SizedBox(height: 6),
-              Text(
-                widget.guidanceText!,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: colors.infoForeground,
-                  fontWeight: FontWeight.w800,
+              _MonthGrid(
+                visibleMonth: _visibleMonth,
+                startDate: _startDate,
+                endDate: _endDate,
+                firstDate: widget.firstDate,
+                lastDate: lastSelectable,
+                priceCalendarByDate: widget.priceCalendarByDate,
+                stayBenefitSelectableDateKeys: _stayBenefitSelectableDateKeys,
+                selectionMode: widget.selectionMode,
+                onDateTap: _selectDate,
+              ),
+              const SizedBox(height: 18),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: colors.brandPrimary,
+                    foregroundColor: colors.onDark,
+                  ),
+                  onPressed: () {
+                    final startDate = _startDate;
+                    if (startDate == null) {
+                      return;
+                    }
+                    final endDate =
+                        _endDate ??
+                        DateTime(
+                          startDate.year,
+                          startDate.month,
+                          startDate.day + 1,
+                        );
+                    Navigator.of(
+                      context,
+                    ).pop(DateTimeRange(start: startDate, end: endDate));
+                  },
+                  child: Text(context.l10n.commonApply),
                 ),
               ),
             ],
-            Row(
-              children: <Widget>[
-                IconButton(
-                  onPressed: canGoPrevious ? _goPreviousMonth : null,
-                  icon: const Icon(Icons.chevron_left_rounded, size: 28),
-                ),
-                Expanded(
-                  child: Text(
-                    monthText,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: colors.textPrimary,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-                IconButton(
-                  onPressed: canGoNext ? _goNextMonth : null,
-                  icon: const Icon(Icons.chevron_right_rounded, size: 28),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            _WeekdayHeader(localeName: localeName),
-            const SizedBox(height: 6),
-            _MonthGrid(
-              visibleMonth: _visibleMonth,
-              startDate: _startDate,
-              endDate: _endDate,
-              firstDate: widget.firstDate,
-              lastDate: widget.lastDate,
-              priceCalendarByDate: widget.priceCalendarByDate,
-              stayBenefitSelectableDateKeys: _stayBenefitSelectableDateKeys,
-              selectionMode: widget.selectionMode,
-              onDateTap: _selectDate,
-            ),
-            const SizedBox(height: 18),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: colors.brandPrimary,
-                  foregroundColor: colors.onDark,
-                ),
-                onPressed: () {
-                  final startDate = _startDate;
-                  if (startDate == null) {
-                    return;
-                  }
-                  final endDate =
-                      _endDate ?? startDate.add(const Duration(days: 1));
-                  Navigator.of(
-                    context,
-                  ).pop(DateTimeRange(start: startDate, end: endDate));
-                },
-                child: Text(context.l10n.commonApply),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -373,10 +399,7 @@ class _HotelStayDateRangePickerState extends State<HotelStayDateRangePicker> {
 
   bool get _shouldShowGuidance {
     final text = widget.guidanceText?.trim();
-    return widget.selectionMode ==
-            HotelStayDateSelectionMode.stayBenefitSingleNight &&
-        text != null &&
-        text.isNotEmpty;
+    return text != null && text.isNotEmpty;
   }
 
   void _goPreviousMonth() {

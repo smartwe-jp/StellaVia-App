@@ -1637,7 +1637,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String hotelDetailRemainingRoomsShort(int count) {
-    return '$count rooms left';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count rooms left',
+      one: '1 room left',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -2570,7 +2576,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String hotelRemainingBuildingsFew(int count) {
-    return 'Only $count buildings left';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count buildings left',
+      one: '1 building left',
+    );
+    return '$_temp0';
   }
 
   @override

@@ -13,12 +13,14 @@ class HotelHomeSearch extends ConsumerWidget {
     required this.criteria,
     required this.onApply,
     this.allowMultiNightBenefits = false,
+    this.leadTimeMonths,
     this.hints = const [],
     this.showRoomCount = true,
   });
   final bool showRoomCount;
   final List<String> hints;
   final bool allowMultiNightBenefits;
+  final int? leadTimeMonths;
   final HotelSearchCriteria criteria;
   final Future<void> Function(HotelSearchCriteria) onApply;
 
@@ -56,6 +58,7 @@ class HotelHomeSearch extends ConsumerWidget {
           isScrollControlled: true,
           builder: (_) => HotelSearchConditionsSheet(
             allowMultiNightBenefits: allowMultiNightBenefits,
+            leadTimeMonths: leadTimeMonths,
             hints: hints,
             criteria: criteria,
             presenter: presenter,

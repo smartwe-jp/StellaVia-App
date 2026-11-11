@@ -267,7 +267,7 @@ class _HotelSummaryStatusLine extends StatelessWidget {
     final text = statusText?.trim();
     if (text == null || text.isEmpty) {
       return HotelRemainingRoomsLabel(
-        count: hotel.isBookable ? remainingRooms ?? 0 : 0,
+        count: hotel.isBookable ? remainingRooms ?? -1 : 0,
         unit: hotelRemainingUnitForHotelSummary(
           buildingCode: hotel.buildingCode,
         ),

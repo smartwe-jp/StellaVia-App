@@ -18,10 +18,6 @@ class HotelMilesDisplay {
           : '—',
       rooms = tier?.remainingBookingRooms == null
           ? '—'
-          : l.hotelMilesRoomValue(tier!.remainingBookingRooms!),
-      advance = tier?.leadTimeMonths == null
-          ? null
-          : l.hotelMilesAdvanceMonths(tier!.leadTimeMonths!);
+          : l.hotelMilesRoomValue(tier!.remainingBookingRooms!);
   final String balance, rank, rooms;
-  final String? advance;
 }

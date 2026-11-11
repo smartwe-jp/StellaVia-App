@@ -1558,7 +1558,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String hotelDetailRemainingRoomsShort(int count) {
-    return '残り $count 室';
+    return '残り$count室';
   }
 
   @override
@@ -2461,7 +2461,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String hotelRemainingBuildingsFew(int count) {
-    return '残りわずか：$count棟';
+    return '残り$count棟';
   }
 
   @override

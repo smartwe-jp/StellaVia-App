@@ -598,7 +598,7 @@
   "hotelDetailStayDateLabel": "宿泊日 · 退室日",
   "hotelDetailGuestRoomLabel": "宿泊人数 · 客室",
   "hotelDetailAvailableRooms": "選べる客室",
-  "hotelDetailRemainingRoomsShort": "残り {count} 室",
+  "hotelDetailRemainingRoomsShort": "残り{count}室",
   "@hotelDetailRemainingRoomsShort": {
     "placeholders": {
       "count": {
@@ -1114,7 +1114,7 @@
     }
   },
   "hotelRemainingRoomsMany": "残り4部屋以上",
-  "hotelRemainingBuildingsFew": "残りわずか：{count}棟",
+  "hotelRemainingBuildingsFew": "残り{count}棟",
   "@hotelRemainingBuildingsFew": {
     "placeholders": {
       "count": {

@@ -7,7 +7,9 @@ import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
 import '../support/hotel_detail_display.dart';
 import '../support/hotel_detail_styles.dart';
+import '../support/hotel_vacancy_theme.dart';
 import 'hotel_detail_image_placeholder.dart';
+import 'hotel_remaining_rooms_label.dart';
 
 class HotelDetailRoomCard extends StatelessWidget {
   const HotelDetailRoomCard({
@@ -42,16 +44,12 @@ class HotelDetailRoomCard extends StatelessWidget {
     );
     final minimum = room.minimumStayNights;
     final left = remaining ?? room.remainingRooms;
-    final String? availability;
-    if (miles && room.remainingRooms == 0) {
-      availability = c.l10n.hotelDetailNoVacancy;
-    } else if (miles && allowanceExhausted) {
-      availability = c.l10n.hotelDetailRoomAllowanceUsed;
-    } else if (left != null && left >= 0) {
-      availability = c.l10n.hotelDetailRemainingRoomsShort(left);
-    } else {
-      availability = null;
-    }
+    final noRoomsLeft = left == 0 || (miles && allowanceExhausted);
+    final showFullBadge =
+        noRoomsLeft && quantity == 0 && onPlus == null && onMinus == null;
+    final availability = !showFullBadge && left != null && left >= 0
+        ? c.l10n.hotelDetailRemainingRoomsShort(left)
+        : null;
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: Container(
@@ -202,28 +200,38 @@ class HotelDetailRoomCard extends StatelessWidget {
                         child: availability != null
                             ? Text(
                                 availability,
-                                style: HotelDetailStyles.roomMetadata(c),
+                                style: HotelDetailStyles.roomMetadata(c)
+                                    .copyWith(
+                                      color: HotelVacancyTheme.textColor(
+                                        c,
+                                        left ?? 0,
+                                      ),
+                                    ),
                               )
                             : const SizedBox.shrink(),
                       ),
-                      _QuantityButton(
-                        asset: 'minus',
-                        tooltip: c.l10n.hotelDetailDecreaseRoom,
-                        onPressed: onMinus,
-                      ),
-                      SizedBox(
-                        width: 32,
-                        child: Text(
-                          '$quantity',
-                          textAlign: TextAlign.center,
-                          style: HotelDetailStyles.heading(c),
+                      if (showFullBadge)
+                        const HotelFullBadge()
+                      else ...[
+                        _QuantityButton(
+                          asset: 'minus',
+                          tooltip: c.l10n.hotelDetailDecreaseRoom,
+                          onPressed: onMinus,
                         ),
-                      ),
-                      _QuantityButton(
-                        asset: 'plus',
-                        tooltip: c.l10n.hotelDetailIncreaseRoom,
-                        onPressed: onPlus,
-                      ),
+                        SizedBox(
+                          width: 32,
+                          child: Text(
+                            '$quantity',
+                            textAlign: TextAlign.center,
+                            style: HotelDetailStyles.heading(c),
+                          ),
+                        ),
+                        _QuantityButton(
+                          asset: 'plus',
+                          tooltip: c.l10n.hotelDetailIncreaseRoom,
+                          onPressed: onPlus,
+                        ),
+                      ],
                     ],
                   ),
                   if ((shortfall ?? 0) > 0 && left != 0)

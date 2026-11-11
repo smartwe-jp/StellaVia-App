@@ -3060,7 +3060,7 @@ abstract class AppLocalizations {
   /// No description provided for @hotelDetailRemainingRoomsShort.
   ///
   /// In en, this message translates to:
-  /// **'{count} rooms left'**
+  /// **'{count, plural, =1{1 room left} other{{count} rooms left}}'**
   String hotelDetailRemainingRoomsShort(int count);
 
   /// No description provided for @hotelDetailMinimumStay.
@@ -4698,7 +4698,7 @@ abstract class AppLocalizations {
   /// No description provided for @hotelRemainingBuildingsFew.
   ///
   /// In en, this message translates to:
-  /// **'Only {count} buildings left'**
+  /// **'{count, plural, =1{1 building left} other{{count} buildings left}}'**
   String hotelRemainingBuildingsFew(int count);
 
   /// No description provided for @hotelRemainingBuildingsMany.

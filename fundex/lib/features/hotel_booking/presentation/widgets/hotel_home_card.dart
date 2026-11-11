@@ -106,8 +106,7 @@ class HotelHomeCard extends StatelessWidget {
             spacing: 12,
             children: [
               HotelRemainingRoomsLabel(
-                color: colors.brandSecondary,
-                count: hotel.isBookable ? hotel.remainingRooms ?? 0 : 0,
+                count: hotel.isBookable ? hotel.remainingRooms ?? -1 : 0,
                 unit: hotelRemainingUnitForHotelSummary(
                   buildingCode: hotel.buildingCode,
                 ),

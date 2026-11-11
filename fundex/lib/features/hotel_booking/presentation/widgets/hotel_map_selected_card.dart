@@ -70,7 +70,7 @@ class HotelMapSelectedCard extends StatelessWidget {
                           const SizedBox(height: 6),
                           HotelRemainingRoomsLabel(
                             count: hotel.isBookable
-                                ? hotel.remainingRooms ?? 0
+                                ? hotel.remainingRooms ?? -1
                                 : 0,
                             unit: hotelRemainingUnitForHotelSummary(
                               buildingCode: hotel.buildingCode,

@@ -623,7 +623,7 @@
   "hotelDetailStayDateLabel": "Check-in · Check-out",
   "hotelDetailGuestRoomLabel": "Guests · Rooms",
   "hotelDetailAvailableRooms": "Available rooms",
-  "hotelDetailRemainingRoomsShort": "{count} rooms left",
+  "hotelDetailRemainingRoomsShort": "{count, plural, =1{1 room left} other{{count} rooms left}}",
   "@hotelDetailRemainingRoomsShort": {
     "placeholders": {
       "count": {
@@ -1139,7 +1139,7 @@
     }
   },
   "hotelRemainingRoomsMany": "4+ rooms left",
-  "hotelRemainingBuildingsFew": "Only {count} buildings left",
+  "hotelRemainingBuildingsFew": "{count, plural, =1{1 building left} other{{count} buildings left}}",
   "@hotelRemainingBuildingsFew": {
     "placeholders": {
       "count": {

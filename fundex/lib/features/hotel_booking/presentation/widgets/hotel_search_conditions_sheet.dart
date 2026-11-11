@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
+import '../../domain/utils/hotel_miles_booking_window.dart';
 import '../support/hotel_booking_presenter.dart';
 import 'hotel_search_condition_pickers.dart';
 
@@ -40,12 +41,14 @@ class HotelSearchConditionsSheet extends StatefulWidget {
     required this.buildingFilters,
     required this.onApply,
     this.allowMultiNightBenefits = false,
+    this.leadTimeMonths,
     this.hints = const [],
     this.stayBenefitPeriods = const <HotelStayBenefitPeriod>[],
   });
 
   final List<String> hints;
   final bool allowMultiNightBenefits;
+  final int? leadTimeMonths;
   final HotelSearchCriteria criteria;
   final HotelBookingPresenter presenter;
   final List<HotelBuildingFilter> buildingFilters;
@@ -59,7 +62,13 @@ class HotelSearchConditionsSheet extends StatefulWidget {
 
 class _HotelSearchConditionsSheetState
     extends State<HotelSearchConditionsSheet> {
-  late HotelSearchCriteria _criteria = widget.criteria;
+  late HotelSearchCriteria _criteria =
+      !widget.allowMultiNightBenefits && widget.leadTimeMonths == null
+      ? widget.criteria
+      : HotelMilesBookingWindow(
+          DateTime.now(),
+          widget.leadTimeMonths ?? 0,
+        ).constrain(widget.criteria);
 
   List<HotelBuildingFilter> get _buildingFilters {
     if (widget.buildingFilters.isNotEmpty) {
@@ -148,6 +157,8 @@ class _HotelSearchConditionsSheetState
     final nextCriteria = await pickHotelStayDates(
       context: context,
       criteria: _criteria,
+      hostMiles: widget.allowMultiNightBenefits,
+      leadTimeMonths: widget.leadTimeMonths,
       stayBenefitSelectableDates: _stayBenefitSelectableDates(),
       selectionMode: _criteria.stayBenefit && !widget.allowMultiNightBenefits
           ? HotelStayDateSelectionMode.stayBenefitSingleNight

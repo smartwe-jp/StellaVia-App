@@ -64,7 +64,7 @@ void main() {
     }
   });
   testWidgets(
-    'host miles notices appear above the search fields only in the sheet',
+    'host miles lead time appears between calendar dates and month controls',
     (tester) async {
       await tester.pumpWidget(app(const HotelHostMilesPage()));
       await tester.pumpAndSettle();
@@ -91,14 +91,22 @@ void main() {
       await tester.tap(trigger);
       await tester.pumpAndSettle();
       expect(find.text(advance), findsOneWidget);
+      final originalStyle = tester.widget<Text>(find.text(advance)).style;
       expect(find.text(l.hotelMilesBookingPending), findsOneWidget);
+      await tester.ensureVisible(find.text(l.hotelCheckInDateLabel));
+      await tester.tap(find.text(l.hotelCheckInDateLabel));
+      await tester.pumpAndSettle();
+      final calendarHint = find.text(advance).last;
+      expect(tester.widget<Text>(calendarHint).style, originalStyle);
       expect(
-        tester.getBottomLeft(find.text(l.hotelSearchConditionsTitle)).dy,
-        lessThan(tester.getTopLeft(find.text(advance)).dy),
+        tester.getBottomLeft(find.text(l.hotelBookingCheckInDate)).dy,
+        lessThan(tester.getTopLeft(calendarHint).dy),
       );
       expect(
-        tester.getBottomLeft(find.text(l.hotelMilesBookingPending)).dy,
-        lessThan(tester.getTopLeft(find.text(l.hotelDestinationLabel)).dy),
+        tester.getBottomLeft(calendarHint).dy,
+        lessThan(
+          tester.getTopLeft(find.byIcon(Icons.chevron_right_rounded).last).dy,
+        ),
       );
       expect(tester.takeException(), isNull);
     },

@@ -1544,7 +1544,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String hotelDetailRemainingRoomsShort(int count) {
-    return '仅剩 $count 间';
+    return '剩余 $count 间';
   }
 
   @override
@@ -2440,7 +2440,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String hotelRemainingBuildingsFew(int count) {
-    return '仅剩余：$count栋';
+    return '剩余 $count 栋';
   }
 
   @override
@@ -8619,7 +8619,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String hotelDetailRemainingRoomsShort(int count) {
-    return '僅剩 $count 間';
+    return '剩餘 $count 間';
   }
 
   @override
@@ -9515,7 +9515,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String hotelRemainingBuildingsFew(int count) {
-    return '僅剩餘：$count棟';
+    return '剩餘 $count 棟';
   }
 
   @override

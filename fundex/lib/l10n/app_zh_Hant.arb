@@ -598,7 +598,7 @@
   "hotelDetailStayDateLabel": "入住日期 · 退房日期",
   "hotelDetailGuestRoomLabel": "入住人數 · 客房",
   "hotelDetailAvailableRooms": "可選房型",
-  "hotelDetailRemainingRoomsShort": "僅剩 {count} 間",
+  "hotelDetailRemainingRoomsShort": "剩餘 {count} 間",
   "@hotelDetailRemainingRoomsShort": {
     "placeholders": {
       "count": {
@@ -1114,7 +1114,7 @@
     }
   },
   "hotelRemainingRoomsMany": "剩餘4間房以上",
-  "hotelRemainingBuildingsFew": "僅剩餘：{count}棟",
+  "hotelRemainingBuildingsFew": "剩餘 {count} 棟",
   "@hotelRemainingBuildingsFew": {
     "placeholders": {
       "count": {

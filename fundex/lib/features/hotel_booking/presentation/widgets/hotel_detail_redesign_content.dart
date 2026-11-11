@@ -120,12 +120,12 @@ class HotelDetailRedesignContent extends StatelessWidget {
                       if (miles &&
                           (tier?.leadTimeMonths != null ||
                               membershipFailed)) ...[
-                        if (tier?.leadTimeMonths != null)
+                        if (tier?.leadTimeMonths case final months?)
                           Text(
-                            c.l10n.hotelMilesAdvanceMonths(
-                              tier!.leadTimeMonths!,
+                            c.l10n.hotelMilesAdvanceMonths(months),
+                            style: HotelDetailStyles.roomMetadata(c).copyWith(
+                              color: c.appColors.primary,
                             ),
-                            style: HotelDetailStyles.caption(c),
                           ),
                         if (membershipFailed)
                           TextButton(

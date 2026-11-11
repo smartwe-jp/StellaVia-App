@@ -108,6 +108,14 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage>
           final next = await pickHotelStayDates(
             context: context,
             criteria: _criteria,
+            hostMiles: widget.mode == HotelBookingMode.hostMiles,
+            leadTimeMonths:
+                widget.mode == HotelBookingMode.hostMiles && identity != null
+                ? ref
+                      .read(hotelManagementTierResourceProvider(identity))
+                      .valueOrNull
+                      ?.leadTimeMonths
+                : null,
             priceCalendarByDate: value.priceCalendarByDate,
             selectionMode: HotelStayDateSelectionMode.range,
           );
