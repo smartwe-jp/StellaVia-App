@@ -98,6 +98,7 @@ void main() {
           riskToleranceCode: 'accept_loss',
           ekycDocumentType: 'drivers_license',
           idDocumentPhotoPath: '/tmp/id.jpg',
+          idDocumentObliquePhotoPath: '/tmp/angle.jpg',
           selfiePhotoPath: '/tmp/selfie.jpg',
           bankName: 'MUFG',
           branchBankName: 'Marunouchi',
@@ -133,6 +134,7 @@ void main() {
       ]);
       expect(restored?.ekycDocumentType, 'drivers_license');
       expect(restored?.idDocumentPhotoPath, '/tmp/id.jpg');
+      expect(restored?.idDocumentObliquePhotoPath, '/tmp/angle.jpg');
       expect(restored?.selfiePhotoPath, '/tmp/selfie.jpg');
       expect(restored?.bankName, 'MUFG');
       expect(restored?.bankAccountOwnerName, 'AARON HOU');

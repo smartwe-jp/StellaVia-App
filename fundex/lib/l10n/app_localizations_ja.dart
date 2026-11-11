@@ -5693,6 +5693,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfilePhotoDocumentFrontDescription => 'タップして表面をアップロード';
 
   @override
+  String get memberProfilePhotoDocumentObliqueTitle => '書類を撮影（斜め）';
+
+  @override
+  String get memberProfilePhotoDocumentObliqueDescription =>
+      '書類を傾けて、表面と厚みが一緒に写るように撮影してください。';
+
+  @override
   String get memberProfilePhotoDocumentBackTitle => '書類を撮影（裏面）';
 
   @override

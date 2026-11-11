@@ -128,6 +128,7 @@ void main() {
             fundSourceCode: 'ok',
             riskToleranceCode: 'accept_loss',
             ekycDocumentType: 'drivers_license',
+            idDocumentObliquePhotoPath: '/tmp/angle.jpg',
             idDocumentPhotoPath: '/tmp/front.jpg',
             selfiePhotoPath: '/tmp/selfie.jpg',
             electronicDeliveryConsent: true,

@@ -2392,6 +2392,8 @@
   "memberProfilePhotoDocumentDescription": "タップしてカメラを起動",
   "memberProfilePhotoDocumentFrontTitle": "書類を撮影（表面）",
   "memberProfilePhotoDocumentFrontDescription": "タップして表面をアップロード",
+  "memberProfilePhotoDocumentObliqueTitle": "書類を撮影（斜め）",
+  "memberProfilePhotoDocumentObliqueDescription": "書類を傾けて、表面と厚みが一緒に写るように撮影してください。",
   "memberProfilePhotoDocumentBackTitle": "書類を撮影（裏面）",
   "memberProfilePhotoDocumentBackDescription": "タップして裏面をアップロード",
   "memberProfileSelfieTitle": "自撮り写真を撮影",

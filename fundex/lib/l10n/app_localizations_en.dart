@@ -5983,6 +5983,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Tap to upload the front side';
 
   @override
+  String get memberProfilePhotoDocumentObliqueTitle => 'Photo ID (Angled View)';
+
+  @override
+  String get memberProfilePhotoDocumentObliqueDescription =>
+      'Tilt the document so its front and thickness are visible in the same photo.';
+
+  @override
   String get memberProfilePhotoDocumentBackTitle => 'Photo ID (Back)';
 
   @override

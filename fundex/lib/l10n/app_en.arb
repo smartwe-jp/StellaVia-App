@@ -2422,6 +2422,8 @@
   "memberProfilePhotoDocumentDescription": "Tap to open the camera",
   "memberProfilePhotoDocumentFrontTitle": "Photo ID (Front)",
   "memberProfilePhotoDocumentFrontDescription": "Tap to upload the front side",
+  "memberProfilePhotoDocumentObliqueTitle": "Photo ID (Angled View)",
+  "memberProfilePhotoDocumentObliqueDescription": "Tilt the document so its front and thickness are visible in the same photo.",
   "memberProfilePhotoDocumentBackTitle": "Photo ID (Back)",
   "memberProfilePhotoDocumentBackDescription": "Tap to upload the back side",
   "memberProfileSelfieTitle": "Take a selfie photo",

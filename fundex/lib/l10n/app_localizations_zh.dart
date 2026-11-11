@@ -5641,6 +5641,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfilePhotoDocumentFrontDescription => '点击上传正面照片';
 
   @override
+  String get memberProfilePhotoDocumentObliqueTitle => '拍摄证件斜面';
+
+  @override
+  String get memberProfilePhotoDocumentObliqueDescription =>
+      '请倾斜证件，让正面和边缘厚度同时入镜。';
+
+  @override
   String get memberProfilePhotoDocumentBackTitle => '拍摄文件反面';
 
   @override
@@ -12720,6 +12727,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get memberProfilePhotoDocumentFrontDescription => '點擊上傳正面照片';
+
+  @override
+  String get memberProfilePhotoDocumentObliqueTitle => '拍攝證件斜面';
+
+  @override
+  String get memberProfilePhotoDocumentObliqueDescription =>
+      '請傾斜證件，讓正面與邊緣厚度同時入鏡。';
 
   @override
   String get memberProfilePhotoDocumentBackTitle => '拍攝文件反面';

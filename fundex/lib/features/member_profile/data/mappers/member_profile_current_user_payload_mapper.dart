@@ -126,6 +126,9 @@ class MemberProfileCurrentUserPayloadMapper {
           authUser?.frontUrl ?? '',
         ]),
       ),
+      idDocumentObliquePhotoPath: _emptyToNull(
+        _string(identityInfo['documentObliqueImage']),
+      ),
       idDocumentBackPhotoPath: _emptyToNull(
         _firstNonEmpty(<String>[
           _string(identityInfo['documentBackImage']),

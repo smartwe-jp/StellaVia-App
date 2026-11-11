@@ -36,6 +36,7 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
     @Default('') String riskToleranceCode,
     @Default('') String ekycDocumentType,
     String? idDocumentPhotoPath,
+    String? idDocumentObliquePhotoPath,
     String? idDocumentBackPhotoPath,
     String? selfiePhotoPath,
     @Default('') String bankName,
@@ -112,6 +113,7 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       riskToleranceCode.trim().isNotEmpty ||
       ekycDocumentType.trim().isNotEmpty ||
       (idDocumentPhotoPath?.trim().isNotEmpty ?? false) ||
+      (idDocumentObliquePhotoPath?.trim().isNotEmpty ?? false) ||
       (idDocumentBackPhotoPath?.trim().isNotEmpty ?? false) ||
       (selfiePhotoPath?.trim().isNotEmpty ?? false) ||
       bankName.trim().isNotEmpty ||
@@ -197,6 +199,7 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
 
   bool get _isEkycStepComplete =>
       ekycDocumentType.trim().isNotEmpty &&
+      (idDocumentObliquePhotoPath?.trim().isNotEmpty ?? false) &&
       (idDocumentPhotoPath?.trim().isNotEmpty ?? false) &&
       (selfiePhotoPath?.trim().isNotEmpty ?? false);
 

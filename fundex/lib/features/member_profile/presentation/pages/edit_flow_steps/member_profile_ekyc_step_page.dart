@@ -8,9 +8,11 @@ class MemberProfileEkycStepPage extends StatelessWidget {
     super.key,
     required this.documentType,
     required this.documentTypeItems,
+    required this.documentObliqueUploaded,
     required this.documentFrontUploaded,
     required this.documentBackUploaded,
     required this.showDocumentBack,
+    this.documentObliquePreviewUrl,
     this.documentFrontPreviewUrl,
     this.documentBackPreviewUrl,
     this.previewActionLabel,
@@ -21,6 +23,7 @@ class MemberProfileEkycStepPage extends StatelessWidget {
     this.onSecondaryPressed,
     this.primaryButtonLabelOverride,
     this.onDocumentTypeChanged,
+    this.onUploadDocumentOblique,
     this.onUploadDocumentFront,
     this.onUploadDocumentBack,
     this.onNext,
@@ -28,9 +31,11 @@ class MemberProfileEkycStepPage extends StatelessWidget {
 
   final String? documentType;
   final List<DropdownMenuItem<String>> documentTypeItems;
+  final bool documentObliqueUploaded;
   final bool documentFrontUploaded;
   final bool documentBackUploaded;
   final bool showDocumentBack;
+  final String? documentObliquePreviewUrl;
   final String? documentFrontPreviewUrl;
   final String? documentBackPreviewUrl;
   final String? previewActionLabel;
@@ -41,6 +46,7 @@ class MemberProfileEkycStepPage extends StatelessWidget {
   final VoidCallback? onSecondaryPressed;
   final String? primaryButtonLabelOverride;
   final ValueChanged<String?>? onDocumentTypeChanged;
+  final VoidCallback? onUploadDocumentOblique;
   final VoidCallback? onUploadDocumentFront;
   final VoidCallback? onUploadDocumentBack;
   final VoidCallback? onNext;
@@ -79,6 +85,17 @@ class MemberProfileEkycStepPage extends StatelessWidget {
             previewUrl: documentFrontPreviewUrl,
             inlinePreview: true,
             onTap: onUploadDocumentFront,
+          ),
+          const SizedBox(height: 14),
+          MemberProfileUploadTile(
+            icon: Icons.camera_alt_outlined,
+            title: l10n.memberProfilePhotoDocumentObliqueTitle,
+            description: l10n.memberProfilePhotoDocumentObliqueDescription,
+            isCompleted: documentObliqueUploaded,
+            previewLabel: previewActionLabel,
+            previewUrl: documentObliquePreviewUrl,
+            inlinePreview: true,
+            onTap: onUploadDocumentOblique,
           ),
           if (showDocumentBack) ...<Widget>[
             const SizedBox(height: 14),

@@ -44,6 +44,25 @@ void main() {
   });
 
   group('member profile document image mapping', () {
+    test('round trips three independent document photos', () {
+      const photos = {
+        'documentType': 11,
+        'documentFrontImage': 'https://example.com/front.jpg',
+        'documentObliqueImage': 'https://example.com/angle.jpg',
+        'documentBackImage': 'https://example.com/back.jpg',
+      };
+      final profile = MemberProfileCurrentUserPayloadMapper.toEntity({
+        'identityInfo': photos,
+      })!;
+      final request = MemberProfileApiPayloadMapper.toSaveMemberInfoRequest(
+        profile: profile,
+        documentFrontImage: profile.idDocumentPhotoPath,
+        documentObliqueImage: profile.idDocumentObliquePhotoPath,
+        documentBackImage: profile.idDocumentBackPhotoPath,
+      );
+      expect(request['identityVerification'], photos);
+    });
+
     test('uses front image as back image for My Number documents', () {
       final payload = MemberProfileApiPayloadMapper.toSaveMemberInfoRequest(
         profile: const MemberProfileDetails(ekycDocumentType: 'my_number'),

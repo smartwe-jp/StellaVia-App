@@ -27,7 +27,7 @@ import '../support/profile_document_image_picker.dart';
 
 enum _MemberProfileEditFlowMode { flow, section }
 
-enum _ProfilePhotoTarget { documentFront, documentBack }
+enum _ProfilePhotoTarget { documentFront, documentOblique, documentBack }
 
 class MemberProfileEditFlowPage extends ConsumerStatefulWidget {
   const MemberProfileEditFlowPage({super.key})
@@ -53,6 +53,8 @@ class _MemberProfileEditFlowPageState
     extends ConsumerState<MemberProfileEditFlowPage> {
   static const _ProfilePhotoTarget _documentFrontPhotoTarget =
       _ProfilePhotoTarget.documentFront;
+  static const _ProfilePhotoTarget _documentObliquePhotoTarget =
+      _ProfilePhotoTarget.documentOblique;
   static const _ProfilePhotoTarget _documentBackPhotoTarget =
       _ProfilePhotoTarget.documentBack;
 
@@ -94,6 +96,7 @@ class _MemberProfileEditFlowPageState
   String _phone = '';
   String _email = '';
   String? _documentPhotoPath;
+  String? _documentObliquePhotoPath;
   String? _documentBackPhotoPath;
   String? _selfiePhotoPath;
   DateTime? _completedAt;
@@ -379,6 +382,9 @@ class _MemberProfileEditFlowPageState
           authUser?.email ?? '',
         ]);
         _documentPhotoPath = _emptyToNull(savedProfile?.idDocumentPhotoPath);
+        _documentObliquePhotoPath = _emptyToNull(
+          savedProfile?.idDocumentObliquePhotoPath,
+        );
         _documentBackPhotoPath = _emptyToNull(
           savedProfile?.idDocumentBackPhotoPath,
         );
@@ -445,6 +451,11 @@ class _MemberProfileEditFlowPageState
                 widget.initialStep ?? MemberProfileEditStep.basicInfo,
               )
             : _normalizeStepForFlow(resolvedStep);
+        if (!_isSingleSectionMode &&
+            _currentStep.index > MemberProfileEditStep.ekyc.index &&
+            !_isEkycStepReady) {
+          _currentStep = MemberProfileEditStep.ekyc;
+        }
         _isLoading = false;
       });
     } catch (_) {
@@ -535,6 +546,8 @@ class _MemberProfileEditFlowPageState
       setState(() {
         if (target == _documentFrontPhotoTarget) {
           _documentPhotoPath = uploadedUrl.trim();
+        } else if (target == _documentObliquePhotoTarget) {
+          _documentObliquePhotoPath = uploadedUrl.trim();
         } else if (target == _documentBackPhotoTarget) {
           _documentBackPhotoPath = uploadedUrl.trim();
         }
@@ -967,6 +980,7 @@ class _MemberProfileEditFlowPageState
   bool get _isEkycStepReady =>
       _isFilled(_documentType) &&
       _isRemoteImageUrl(_documentPhotoPath) &&
+      _isRemoteImageUrl(_documentObliquePhotoPath) &&
       (!_documentTypeRequiresBack(_documentType) ||
           _isRemoteImageUrl(_documentBackPhotoPath));
 
@@ -1169,6 +1183,7 @@ class _MemberProfileEditFlowPageState
       riskToleranceCode: _riskTolerance ?? '',
       ekycDocumentType: _documentType ?? '',
       idDocumentPhotoPath: _emptyToNull(_documentPhotoPath),
+      idDocumentObliquePhotoPath: _emptyToNull(_documentObliquePhotoPath),
       idDocumentBackPhotoPath: _documentTypeRequiresBack(_documentType)
           ? _emptyToNull(_documentBackPhotoPath)
           : null,
@@ -1649,10 +1664,15 @@ class _MemberProfileEditFlowPageState
           documentType: _documentType,
           documentTypeItems: _simpleItems(_documentTypeOptions(context)),
           documentFrontUploaded: _isRemoteImageUrl(_documentPhotoPath),
+          documentObliqueUploaded: _isRemoteImageUrl(_documentObliquePhotoPath),
           documentBackUploaded: _isRemoteImageUrl(_documentBackPhotoPath),
           showDocumentBack: _documentTypeRequiresBack(_documentType),
           documentFrontPreviewUrl: _isRemoteImageUrl(_documentPhotoPath)
               ? _documentPhotoPath
+              : null,
+          documentObliquePreviewUrl:
+              _isRemoteImageUrl(_documentObliquePhotoPath)
+              ? _documentObliquePhotoPath
               : null,
           documentBackPreviewUrl: _isRemoteImageUrl(_documentBackPhotoPath)
               ? _documentBackPhotoPath
@@ -1680,6 +1700,9 @@ class _MemberProfileEditFlowPageState
           onUploadDocumentFront: (_isSubmitting || _isUploadingPhoto)
               ? null
               : () => _pickAndSaveImage(target: _documentFrontPhotoTarget),
+          onUploadDocumentOblique: (_isSubmitting || _isUploadingPhoto)
+              ? null
+              : () => _pickAndSaveImage(target: _documentObliquePhotoTarget),
           onUploadDocumentBack: (_isSubmitting || _isUploadingPhoto)
               ? null
               : () => _pickAndSaveImage(target: _documentBackPhotoTarget),

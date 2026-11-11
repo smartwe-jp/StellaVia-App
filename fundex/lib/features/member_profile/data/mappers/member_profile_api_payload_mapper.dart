@@ -7,6 +7,7 @@ class MemberProfileApiPayloadMapper {
   static Map<String, dynamic> toSaveMemberInfoRequest({
     required MemberProfileDetails profile,
     String? documentFrontImage,
+    String? documentObliqueImage,
     String? documentBackImage,
     AuthUserDto? authUser,
   }) {
@@ -81,6 +82,7 @@ class MemberProfileApiPayloadMapper {
     final identityVerification = _buildIdentityVerificationPayload(
       profile: profile,
       documentFrontImage: documentFrontImage,
+      documentObliqueImage: documentObliqueImage,
       documentBackImage: documentBackImage,
     );
     if (identityVerification.isNotEmpty) {
@@ -212,9 +214,11 @@ class MemberProfileApiPayloadMapper {
   static Map<String, dynamic> _buildIdentityVerificationPayload({
     required MemberProfileDetails profile,
     String? documentFrontImage,
+    String? documentObliqueImage,
     String? documentBackImage,
   }) {
     final normalizedFrontImage = documentFrontImage?.trim() ?? '';
+    final obliqueImage = documentObliqueImage?.trim() ?? '';
     final normalizedBackImage = documentBackImage?.trim() ?? '';
     final effectiveBackImage =
         _documentTypeRequiresBack(profile.ekycDocumentType)
@@ -226,6 +230,7 @@ class MemberProfileApiPayloadMapper {
     return <String, dynamic>{
       'documentType': _mapDocumentType(profile.ekycDocumentType),
       'documentFrontImage': normalizedFrontImage,
+      if (obliqueImage.isNotEmpty) 'documentObliqueImage': obliqueImage,
       'documentBackImage': effectiveBackImage,
     };
   }

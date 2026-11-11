@@ -138,6 +138,9 @@ class MemberProfileRepositoryImpl implements MemberProfileRepository {
     final payload = MemberProfileApiPayloadMapper.toSaveMemberInfoRequest(
       profile: profile,
       documentFrontImage: frontUrl,
+      documentObliqueImage: _optionalRemotePhotoUrl(
+        profile.idDocumentObliquePhotoPath,
+      ),
       documentBackImage: backUrl,
       authUser: authUser,
     );

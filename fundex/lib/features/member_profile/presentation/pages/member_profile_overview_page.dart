@@ -406,6 +406,17 @@ class _MemberProfileOverviewPageState
                                   ),
                                 ),
                                 _OverviewFieldRow(
+                                  label: l10n
+                                      .memberProfilePhotoDocumentObliqueTitle,
+                                  value: _statusValue(
+                                    (profile.idDocumentObliquePhotoPath
+                                            ?.trim()
+                                            .isNotEmpty ??
+                                        false),
+                                    l10n,
+                                  ),
+                                ),
+                                _OverviewFieldRow(
                                   label:
                                       l10n.memberProfilePhotoDocumentBackTitle,
                                   value: _statusValue(

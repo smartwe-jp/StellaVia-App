@@ -2392,6 +2392,8 @@
   "memberProfilePhotoDocumentDescription": "點擊開啟相機",
   "memberProfilePhotoDocumentFrontTitle": "拍攝文件正面",
   "memberProfilePhotoDocumentFrontDescription": "點擊上傳正面照片",
+  "memberProfilePhotoDocumentObliqueTitle": "拍攝證件斜面",
+  "memberProfilePhotoDocumentObliqueDescription": "請傾斜證件，讓正面與邊緣厚度同時入鏡。",
   "memberProfilePhotoDocumentBackTitle": "拍攝文件反面",
   "memberProfilePhotoDocumentBackDescription": "點擊上傳反面照片",
   "memberProfileSelfieTitle": "拍攝自拍照",

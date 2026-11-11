@@ -73,6 +73,8 @@ Use three layers of coordination:
 
 ### Auth / Member Profile / Guarding
 
+- Profile document entry requires a separate angled photo showing the front and edge for every document type. Read its URL from `identityInfo.documentObliqueImage` and submit it in `identityVerification.documentObliqueImage`. My Number cards still do not require a back-side capture.
+
 - Active login/register flow uses email registration and unified `/login` flow.
 - OAuth client authorization uses the StellaVia Basic authorization value in SDK auth client.
 - Token refresh is implemented in `core_network`; 401 retry requests carry `token_retry_attempt`. Endpoints affected by stale JWT permission claims may explicitly opt into one 403 refresh/retry with `refreshOnForbidden`; ordinary 403 responses remain permission failures, and this compatibility retry never clears the session on failure.

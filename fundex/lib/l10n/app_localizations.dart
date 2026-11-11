@@ -10845,6 +10845,18 @@ abstract class AppLocalizations {
   /// **'Tap to upload the front side'**
   String get memberProfilePhotoDocumentFrontDescription;
 
+  /// No description provided for @memberProfilePhotoDocumentObliqueTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo ID (Angled View)'**
+  String get memberProfilePhotoDocumentObliqueTitle;
+
+  /// No description provided for @memberProfilePhotoDocumentObliqueDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Tilt the document so its front and thickness are visible in the same photo.'**
+  String get memberProfilePhotoDocumentObliqueDescription;
+
   /// No description provided for @memberProfilePhotoDocumentBackTitle.
   ///
   /// In en, this message translates to:
