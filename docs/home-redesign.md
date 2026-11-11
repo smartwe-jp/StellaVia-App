@@ -94,6 +94,6 @@ Information-page validation: 24 targeted tests passed (auth redirects plus navig
 
 ### 2026-11-10 首页里程酒店预览
 
-首页在最新基金之后展示「泊まれるホテル」。按宿主マイル入口的默认入住日期查询 stayBenefit=true，展示最多四家本次入住有参考里程、可预订且未售罄的酒店。「詳細を見る」打开 /hotel-booking/host-miles。酒店卡片携带当前查询条件和楼栋代码打开所选酒店的宿主マイル详情页，空列表也保留入口。首页不再展示或刷新二级市场列表。
+首页在最新基金之后展示「泊まれるホテル」。按宿主マイル入口的默认入住日期查询 stayBenefit=true，展示最多四家本次入住有参考里程、可预订且未售罄的酒店。「一覧を見る」打开 /hotel-booking/host-miles。酒店卡片携带当前查询条件和楼栋代码打开所选酒店的宿主マイル详情页，空列表也保留入口。首页不再展示或刷新二级市场列表。
 
 - The guest home header shows a settings button to the right of Login. It opens the existing guest settings page at `/profile/settings`.

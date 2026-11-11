@@ -9,6 +9,7 @@ import '../../../../app/network/app_network_connectivity_providers.dart';
 import '../../../../app/navigation/app_root_tab_refresh.dart';
 import '../providers/home_featured_hotels_provider.dart';
 import '../widgets/home_miles_hotels_section.dart';
+import '../widgets/home_featured_section.dart';
 import '../support/home_featured_fund_card_mapper.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../investment/domain/entities/fund_project.dart';
@@ -76,6 +77,7 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
     final featuredFundCards = featuredProjects
         .map(
           (FundProject project) => FundFeaturedFundCard(
+            shadowPadding: EdgeInsets.zero,
             data: buildHomeFeaturedFundCardData(context, project),
             yieldLabel: l10n.homeEstimatedYieldLabel,
             periodLabel: l10n.fundListPeriodLabel,
@@ -119,78 +121,89 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                     key: const Key('home_tab_content'),
                     controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                    padding: const EdgeInsets.only(top: 16, bottom: 24),
                     children: [
-                      if (networkAccessState == AppNetworkAccessState.denied ||
-                          (_isApplePlatform &&
-                              networkAvailability ==
-                                  AppNetworkAvailability.offline))
-                        AppNetworkStatusBar(
-                          title: l10n.networkAccessDeniedBannerTitle,
-                          message: l10n.networkAccessDeniedBannerMessage,
-                          icon: Icons.wifi_find_outlined,
-                        )
-                      else if (networkAvailability ==
-                          AppNetworkAvailability.offline)
-                        AppNetworkStatusBar(
-                          title: l10n.networkOfflineBannerTitle,
-                          message: l10n.networkOfflineBannerMessage,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: UiTokens.spacing16,
                         ),
-                      HomeBrandIntro(
-                        isAuthenticated: isAuthenticated,
-                        displayName: displayName,
-                        ranks: homeRankNames(
-                          ref.watch(homeMilesRulesProvider).data,
-                        ),
-                        onServiceTap: () => context.push('/home/service'),
-                      ),
-                      const SizedBox(height: 20),
-                      HomeSimulationCard(
-                        onTap: () => context.push('/home/simulation'),
-                      ),
-
-                      const SizedBox(height: 20),
-                      if (isAuthenticated) ...[
-                        HomeQuickActions(
-                          onFunds: () => context.go('/funds'),
-                          onHotels: () => context.go('/hotel-booking'),
-                        ),
-                        const SizedBox(height: 20),
-                      ],
-                      if (isAuthenticated)
-                        HomeMilesAccountSection(
-                          onTap: () =>
-                              context.push('/hotel-booking/host-miles'),
-                        ),
-                      if (asyncProjects.isLoading && projects.isEmpty)
-                        const Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Center(
-                            child: CircularProgressIndicator.adaptive(),
-                          ),
-                        ),
-                      if (loadError != null && projects.isEmpty)
-                        Column(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text(
-                              l10n.fundListLoadError,
-                              textAlign: TextAlign.center,
-                              style: context.appTextTheme.bodyMuted,
+                            if (networkAccessState ==
+                                    AppNetworkAccessState.denied ||
+                                (_isApplePlatform &&
+                                    networkAvailability ==
+                                        AppNetworkAvailability.offline))
+                              AppNetworkStatusBar(
+                                title: l10n.networkAccessDeniedBannerTitle,
+                                message: l10n.networkAccessDeniedBannerMessage,
+                                icon: Icons.wifi_find_outlined,
+                              )
+                            else if (networkAvailability ==
+                                AppNetworkAvailability.offline)
+                              AppNetworkStatusBar(
+                                title: l10n.networkOfflineBannerTitle,
+                                message: l10n.networkOfflineBannerMessage,
+                              ),
+                            HomeBrandIntro(
+                              isAuthenticated: isAuthenticated,
+                              displayName: displayName,
+                              ranks: homeRankNames(
+                                ref.watch(homeMilesRulesProvider).data,
+                              ),
+                              onServiceTap: () => context.push('/home/service'),
                             ),
-                            AppButton(
-                              label: l10n.fundListRetry,
-                              variant: AppButtonVariant.text,
-                              onPressed: () =>
-                                  ref.invalidate(fundProjectListProvider),
+                            const SizedBox(height: 20),
+                            HomeSimulationCard(
+                              onTap: () => context.push('/home/simulation'),
                             ),
+
+                            const SizedBox(height: 20),
+                            if (isAuthenticated) ...[
+                              HomeQuickActions(
+                                onFunds: () => context.go('/funds'),
+                                onHotels: () => context.go('/hotel-booking'),
+                              ),
+                              const SizedBox(height: 20),
+                            ],
+                            if (isAuthenticated)
+                              HomeMilesAccountSection(
+                                onTap: () =>
+                                    context.push('/hotel-booking/host-miles'),
+                              ),
+                            if (asyncProjects.isLoading && projects.isEmpty)
+                              const Padding(
+                                padding: EdgeInsets.all(16),
+                                child: Center(
+                                  child: CircularProgressIndicator.adaptive(),
+                                ),
+                              ),
+                            if (loadError != null && projects.isEmpty)
+                              Column(
+                                children: [
+                                  Text(
+                                    l10n.fundListLoadError,
+                                    textAlign: TextAlign.center,
+                                    style: context.appTextTheme.bodyMuted,
+                                  ),
+                                  AppButton(
+                                    label: l10n.fundListRetry,
+                                    variant: AppButtonVariant.text,
+                                    onPressed: () =>
+                                        ref.invalidate(fundProjectListProvider),
+                                  ),
+                                ],
+                              ),
                           ],
                         ),
+                      ),
                       if (featuredFundCards.isNotEmpty) ...[
-                        FundFeaturedFundCarousel(
+                        HomeFeaturedSection(
                           title: l10n.homeFeaturedFundsTitle,
                           actionLabel: l10n.homeViewAllAction,
                           onActionTap: () => context.go('/funds'),
-                          children: featuredFundCards,
+                          cards: featuredFundCards,
                         ),
                         const SizedBox(height: 20),
                       ],

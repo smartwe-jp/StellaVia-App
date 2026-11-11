@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +8,8 @@ import '../../../hotel_booking/presentation/support/hotel_detail_route_args.dart
 import '../../../hotel_booking/presentation/widgets/hotel_home_card.dart';
 import '../../../hotel_booking/presentation/widgets/hotel_state_views.dart';
 import '../providers/home_featured_hotels_provider.dart';
+
+import 'home_featured_section.dart';
 
 class HomeMilesHotelsSection extends ConsumerWidget {
   const HomeMilesHotelsSection({super.key});
@@ -21,16 +22,13 @@ class HomeMilesHotelsSection extends ConsumerWidget {
       Localizations.localeOf(context).toLanguageTag(),
     );
     final preview = state.valueOrNull;
-    return LayoutBuilder(
-      builder: (context, bounds) => Column(
+    return HomeFeaturedSection(
+      title: l.homeFeaturedHotelsTitle,
+      actionLabel: l.homeViewAllAction,
+      onActionTap: () => context.push('/hotel-booking/host-miles'),
+      status: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FundSectionHeader(
-            title: l.homeFeaturedHotelsTitle,
-            actionLabel: l.homeFeaturedFundViewDetailAction,
-            onActionTap: () => context.push('/hotel-booking/host-miles'),
-          ),
-          const SizedBox(height: 8),
           if (state.hasError)
             HotelInlineErrorNotice(
               onRetry: () => ref.invalidate(homeFeaturedHotelsProvider),
@@ -42,35 +40,25 @@ class HomeMilesHotelsSection extends ConsumerWidget {
               !state.hasError &&
               preview?.hotels.isEmpty == true)
             Text(l.hotelEmptyResults, style: context.appTextTheme.bodyMuted),
-          if (preview != null && preview.hotels.isNotEmpty)
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 12,
-                children: [
-                  for (final hotel in preview.hotels)
-                    SizedBox(
-                      width: math.min(320, bounds.maxWidth),
-                      child: HotelHomeCard(
-                        hotel: hotel,
-                        presenter: presenter,
-                        hostMilesMode: true,
-                        onTap: () => context.push(
-                          '/hotel-booking/${Uri.encodeComponent(hotel.id)}',
-                          extra: HotelDetailRouteArgs(
-                            criteria: preview.criteria,
-                            buildingCode: hotel.buildingCode,
-                            mode: HotelBookingMode.hostMiles,
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
         ],
       ),
+      cards: [
+        if (preview != null)
+          for (final hotel in preview.hotels)
+            HotelHomeCard(
+              hotel: hotel,
+              presenter: presenter,
+              hostMilesMode: true,
+              onTap: () => context.push(
+                '/hotel-booking/${Uri.encodeComponent(hotel.id)}',
+                extra: HotelDetailRouteArgs(
+                  criteria: preview.criteria,
+                  buildingCode: hotel.buildingCode,
+                  mode: HotelBookingMode.hostMiles,
+                ),
+              ),
+            ),
+      ],
     );
   }
 }

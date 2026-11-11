@@ -122,7 +122,7 @@ void main() {
       expect(opened?.buildingCode, 'building-5');
       router.pop();
       await tester.pumpAndSettle();
-      await tester.tap(find.text('詳細を見る'));
+      await tester.tap(find.text('一覧を見る'));
       await tester.pumpAndSettle();
       expect(find.text('Miles entry'), findsOneWidget);
     },
