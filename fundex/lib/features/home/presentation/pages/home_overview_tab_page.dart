@@ -103,6 +103,7 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                   isAuthenticated: isAuthenticated,
                   unreadCount: unreadNotificationCount,
                   onLogin: () => context.push('/login'),
+                  onSettings: () => context.push('/profile/settings'),
                   onNotifications: () => context.push('/profile/notifications'),
                 ),
               ),

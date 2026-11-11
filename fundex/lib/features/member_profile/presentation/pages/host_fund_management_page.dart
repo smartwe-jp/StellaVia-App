@@ -8,6 +8,7 @@ import '../support/host_fund_management.dart';
 import '../widgets/host_fund_applications.dart';
 import '../widgets/host_fund_holdings.dart';
 import '../widgets/host_fund_returns.dart';
+import 'my_page_section_list_page.dart';
 
 class HostFundManagementPage extends ConsumerWidget {
   const HostFundManagementPage({super.key});
@@ -56,26 +57,27 @@ class _FundSectionsState extends State<_FundSections> {
         onChanged: (value) => setState(() => tab = value),
       ),
       Expanded(
-        child: ListView(
-          key: ValueKey(tab),
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-          children: [
-            switch (tab) {
-              HostFundTab.applying ||
-              HostFundTab.pending => HostFundApplications(
+        child: tab == HostFundTab.running
+            ? const MyPageSectionListPage.operating(header: HostFundHoldings())
+            : ListView(
                 key: ValueKey(tab),
-                pending: tab == HostFundTab.pending,
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+                children: [
+                  if (tab == HostFundTab.applying || tab == HostFundTab.pending)
+                    HostFundApplications(
+                      key: ValueKey(tab),
+                      pending: tab == HostFundTab.pending,
+                    )
+                  else
+                    HostFundReturns(
+                      key: ValueKey(tab),
+                      forecast: tab == HostFundTab.forecast,
+                      years: ranges[tab] ?? 1,
+                      onYearsChanged: (value) =>
+                          setState(() => ranges[tab] = value),
+                    ),
+                ],
               ),
-              HostFundTab.running => const HostFundHoldings(),
-              HostFundTab.forecast || HostFundTab.dividends => HostFundReturns(
-                key: ValueKey(tab),
-                forecast: tab == HostFundTab.forecast,
-                years: ranges[tab] ?? 1,
-                onYearsChanged: (value) => setState(() => ranges[tab] = value),
-              ),
-            },
-          ],
-        ),
       ),
     ],
   );

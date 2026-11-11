@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/config/environment_provider.dart';
+import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../investment/presentation/widgets/secondary_market_buy_flow_sections.dart';
 import '../support/mypage_secondary_market_models.dart';
@@ -23,7 +24,6 @@ class MyPageSecondaryMarketSellOrderPage extends ConsumerStatefulWidget {
 class _MyPageSecondaryMarketSellOrderPageState
     extends ConsumerState<MyPageSecondaryMarketSellOrderPage> {
   late final TextEditingController _sellUnitsController;
-  late final TextEditingController _priceController;
 
   bool _agreed = false;
 
@@ -40,24 +40,18 @@ class _MyPageSecondaryMarketSellOrderPageState
     _sellUnitsController = TextEditingController(
       text: widget.seed.availableUnits > 0 ? '1' : '0',
     );
-    _priceController = TextEditingController(
-      text: widget.seed.initialUnitPrice?.toString() ?? '',
-    );
   }
 
   @override
   void dispose() {
     _sellUnitsController.dispose();
-    _priceController.dispose();
     super.dispose();
   }
 
   int? get _sellUnits => int.tryParse(_sellUnitsController.text.trim());
-  int? get _price => int.tryParse(_priceController.text.trim());
 
-  bool get _isValid {
+  bool _isValid(int? price) {
     final sellUnits = _sellUnits;
-    final price = _price;
     final hasProcessId = widget.seed.fromProcessId.trim().isNotEmpty;
     return hasProcessId &&
         _agreed &&
@@ -119,8 +113,8 @@ class _MyPageSecondaryMarketSellOrderPageState
     );
   }
 
-  void _goConfirm() {
-    if (!_isValid) {
+  void _goConfirm(int price) {
+    if (!_isValid(price)) {
       return;
     }
     final draft = MyPageSecondaryMarketSellDraft(
@@ -129,7 +123,7 @@ class _MyPageSecondaryMarketSellOrderPageState
       fromProcessId: widget.seed.fromProcessId,
       availableUnits: widget.seed.availableUnits,
       sellNum: _sellUnits!,
-      price: _price!,
+      price: price,
       investorCode: widget.seed.investorCode,
       earningRatio: widget.seed.earningRatio,
       agreed: _agreed,
@@ -147,21 +141,23 @@ class _MyPageSecondaryMarketSellOrderPageState
       symbol: '¥',
       decimalDigits: 0,
     );
-    final draftPreview = MyPageSecondaryMarketSellDraft(
-      projectId: widget.seed.projectId,
-      projectName: widget.seed.projectName,
-      fromProcessId: widget.seed.fromProcessId,
-      availableUnits: widget.seed.availableUnits,
-      sellNum: _sellUnits ?? 0,
-      price: _price ?? 0,
-      investorCode: widget.seed.investorCode,
-      earningRatio: widget.seed.earningRatio,
-      agreed: _agreed,
-    );
-    final formulaValue =
-        '${_sellUnits ?? 0}${l10n.myPageResaleUnitsSuffix} × ${formatter.format(_price ?? 0)}';
+    final presetPrice = widget.seed.initialUnitPrice;
+    final needsPrice = presetPrice == null || presetPrice <= 0;
+    final projectProvider = fundProjectDetailProvider(widget.seed.projectId);
+    final project = needsPrice ? ref.watch(projectProvider) : null;
+    final price = needsPrice
+        ? project?.asData?.value.investmentUnit
+        : presetPrice;
+    final hasPrice = price != null && price > 0;
+    final units = _sellUnits ?? 0;
+    final total = hasPrice ? formatter.format(units * price) : '—';
+    final formulaValue = hasPrice
+        ? '$units${l10n.myPageResaleUnitsSuffix} × ${formatter.format(price)}'
+        : '—';
+    final valid = _isValid(price);
 
     return Scaffold(
+      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.myPageResaleOrderTitle,
         leading: AppNavigationIconButton(
@@ -171,12 +167,12 @@ class _MyPageSecondaryMarketSellOrderPageState
       ),
       bottomNavigationBar: SecondaryMarketTradeStickyActionBar(
         amountLabel: l10n.myPageResaleNetAmountLabel,
-        amountValue: formatter.format(draftPreview.netAmount),
-        helperText: _isValid ? null : l10n.myPageResaleValidationMessage,
+        amountValue: total,
+        helperText: hasPrice && !valid
+            ? l10n.myPageResaleValidationMessage
+            : null,
         primaryLabel: l10n.myPageResaleConfirmButton,
-        onPrimaryPressed: _isValid ? _goConfirm : null,
-        primaryBackgroundColor: colors.danger,
-        primaryShadowColor: colors.danger.withValues(alpha: 0.36),
+        onPrimaryPressed: valid ? () => _goConfirm(price!) : null,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -189,34 +185,37 @@ class _MyPageSecondaryMarketSellOrderPageState
                 SecondaryMarketTradeFlowHeader(
                   currentStep: 0,
                   title: l10n.myPageResaleFlowOrderTitle,
-                  subtitle: l10n.myPageResaleFlowOrderSubtitle,
+
                   orderLabel: l10n.myPageResaleTabOrder,
                   confirmLabel: l10n.secondaryMarketTradeTabConfirm,
                 ),
                 const SizedBox(height: 14),
-                SecondaryMarketTradeSellEntryCard(
+                if (!hasPrice)
+                  if (project?.isLoading == true)
+                    const LinearProgressIndicator()
+                  else
+                    Column(
+                      children: [
+                        Text(l10n.myPageResalePriceUnavailable),
+                        TextButton(
+                          onPressed: () => ref.invalidate(projectProvider),
+                          child: Text(l10n.commonRetry),
+                        ),
+                      ],
+                    ),
+                SecondaryMarketTradeOrderForm(
                   title: l10n.myPageResaleSellUnitsLabel,
-                  subtitle:
-                      '${l10n.myPageResaleQuantityHint}\n${l10n.myPageResaleMaxUnitsNotice(widget.seed.availableUnits)}',
                   availabilityLabel: l10n.myPageResaleAvailableUnitsLabel,
-                  priceLabel: l10n.myPageResaleUnitPriceLabel,
                   formulaLabel: l10n.myPageResaleLiveEstimateFormulaLabel,
                   formulaValue: formulaValue,
-                  totalLabel: l10n.myPageResaleTotalAmountLabel,
-                  totalValue: formatter.format(draftPreview.totalAmount),
-                  feeLabel: l10n.myPageResaleFeeAmountLabel,
-                  feeValue: formatter.format(draftPreview.feeAmount),
-                  netLabel: l10n.myPageResaleNetAmountLabel,
-                  netValue: formatter.format(draftPreview.netAmount),
-                  quantityController: _sellUnitsController,
-                  priceController: _priceController,
+                  paymentLabel: l10n.myPageResaleNetAmountLabel,
+                  paymentValue: total,
+                  controller: _sellUnitsController,
                   selectedUnits: _sellUnits ?? 0,
                   availableUnits: widget.seed.availableUnits,
                   unitLabel: l10n.myPageResaleUnitsSuffix,
-                  priceUnitLabel: l10n.myPageResaleYenSuffix,
                   maxChipLabel: l10n.myPageResaleQuickMax,
-                  onQuantityChanged: (_) => setState(() {}),
-                  onPriceChanged: (_) => setState(() {}),
+                  onChanged: (_) => setState(() {}),
                   onDecrease: widget.seed.availableUnits > 0
                       ? _decreaseUnits
                       : null,
@@ -225,9 +224,6 @@ class _MyPageSecondaryMarketSellOrderPageState
                       : null,
                   onSelectPreset: _setSellUnits,
                   enabled: widget.seed.availableUnits > 0,
-                  validationMessage: _isValid
-                      ? null
-                      : l10n.myPageResaleValidationMessage,
                 ),
                 const SizedBox(height: 14),
                 SecondaryMarketTradeAgreementCard(
@@ -244,7 +240,6 @@ class _MyPageSecondaryMarketSellOrderPageState
                   documentAvailable: true,
                   onOpenDocument: () => _openContractSample(context),
                 ),
-                const SizedBox(height: 112),
               ],
             ),
           ),

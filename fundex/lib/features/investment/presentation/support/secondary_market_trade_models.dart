@@ -32,7 +32,6 @@ class SecondaryMarketBuyDraft {
     required this.unitPrice,
     this.investorCode,
     this.earningRatio,
-    this.feeRate = 0.0165,
     this.agreed = false,
     this.sampleDocumentUrl,
   });
@@ -45,13 +44,8 @@ class SecondaryMarketBuyDraft {
   final int unitPrice;
   final String? investorCode;
   final double? earningRatio;
-  final double feeRate;
   final bool agreed;
   final String? sampleDocumentUrl;
 
   num get totalAmount => buyNum * unitPrice;
-
-  num get feeAmount => totalAmount * feeRate;
-
-  num get paymentAmount => totalAmount + feeAmount;
 }

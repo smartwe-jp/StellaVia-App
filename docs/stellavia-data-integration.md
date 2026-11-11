@@ -128,7 +128,7 @@ My Page 的サマリー入口打开 `/profile/summary`。サマリー使用 Figm
 My Page 快捷入口打开 `/profile/host-funds`。以 [Figma SP](https://www.figma.com/design/xul33CFNblfWc9zdEQo4yF/?node-id=12400-41435) 的内容区块为基准，使用 AppFilterBar、FundMyPageProjectCard 和已有持仓环形图。
 - 「応募中」「入金前」分别按 `status:[0]`、`status:[2]` 查询 /crowdfunding/user/apply/list，`marketType:1`，每页 10 条。保留后台总数；支持基金详情和有 processId 的申请撤回，沿用现有确认流程。
 - 收款账户按 /member/bank-account/info 的 accountPool 优先，再回退项目详情 liveJapanBank。仅在项目收款账户场景提示会员编号与片假名的汇款备注。
-- 「運用中」读取 /crowdfunding/user/invest/chart，显示持仓分布、运用期间、持仓金额与口数。
+- 「運用中」读取 /crowdfunding/user/invest/chart，显示持仓分布。下方复用 My Page 的運用中投资记录列表与卡片，按 projectStatus=4 分页；点击携带所选投资记录进入運用中详情。
 - 「償還・配当予定」按月累加预测本金及分红，展示本月、下月及未来 12／36／60 个月的对数柱图。查询 endYearMonth 为本月后 N+1 个月，按测试站约定覆盖显示窗口。
 - 「配当実績」显示近 1／3／5 年的累计分红图与降序年度明细；图表按千日元标轴，点选显示日元原值。年度明细区分总分红与实际入金。
 

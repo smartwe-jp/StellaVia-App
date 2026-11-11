@@ -155,6 +155,7 @@ class _SecondaryMarketBuyOrderPageState
         '${_buyUnits ?? 0}${l10n.myPageResaleUnitsSuffix} × ${formatter.format(widget.seed.unitPrice)}';
 
     return Scaffold(
+      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.secondaryMarketBuyOrderTitle,
         leading: AppNavigationIconButton(
@@ -164,12 +165,10 @@ class _SecondaryMarketBuyOrderPageState
       ),
       bottomNavigationBar: SecondaryMarketTradeStickyActionBar(
         amountLabel: l10n.secondaryMarketBuyStickyAmountLabel,
-        amountValue: formatter.format(preview.paymentAmount),
+        amountValue: formatter.format(preview.totalAmount),
         helperText: _isValid ? null : l10n.secondaryMarketBuyValidationMessage,
         primaryLabel: l10n.secondaryMarketBuyConfirmButton,
         onPrimaryPressed: _isValid ? _goConfirm : null,
-        primaryBackgroundColor: colors.primary,
-        primaryShadowColor: colors.primary.withValues(alpha: 0.32),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -182,23 +181,18 @@ class _SecondaryMarketBuyOrderPageState
                 SecondaryMarketTradeFlowHeader(
                   currentStep: 0,
                   title: l10n.secondaryMarketBuyFlowInputTitle,
-                  subtitle: l10n.secondaryMarketBuyFlowInputSubtitle,
+
                   orderLabel: l10n.secondaryMarketTradeTabBuy,
                   confirmLabel: l10n.secondaryMarketTradeTabConfirm,
                 ),
                 const SizedBox(height: 14),
-                SecondaryMarketTradeQuantityCard(
+                SecondaryMarketTradeOrderForm(
                   title: l10n.secondaryMarketBuyUnitsLabel,
-                  subtitle: l10n.secondaryMarketBuyQuantityHint,
                   availabilityLabel: l10n.secondaryMarketBuyAvailableUnitsLabel,
                   formulaLabel: l10n.secondaryMarketBuyLiveEstimateFormulaLabel,
                   formulaValue: formulaValue,
-                  totalLabel: l10n.secondaryMarketBuyTotalAmountLabel,
-                  totalValue: formatter.format(preview.totalAmount),
-                  feeLabel: l10n.secondaryMarketBuyFeeAmountLabel,
-                  feeValue: formatter.format(preview.feeAmount),
                   paymentLabel: l10n.secondaryMarketBuyPaymentAmountLabel,
-                  paymentValue: formatter.format(preview.paymentAmount),
+                  paymentValue: formatter.format(preview.totalAmount),
                   controller: _buyUnitsController,
                   selectedUnits: _buyUnits ?? 0,
                   availableUnits: widget.seed.availableUnits,
@@ -233,7 +227,6 @@ class _SecondaryMarketBuyOrderPageState
                       ? null
                       : () => _openSampleDocument(context, _sampleDocumentUrl!),
                 ),
-                const SizedBox(height: 112),
               ],
             ),
           ),

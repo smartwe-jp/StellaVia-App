@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -39,97 +37,54 @@ class SecondaryMarketTradeFlowHeader extends StatelessWidget {
     super.key,
     required this.currentStep,
     required this.title,
-    required this.subtitle,
     required this.orderLabel,
     required this.confirmLabel,
   });
 
   final int currentStep;
   final String title;
-  final String subtitle;
   final String orderLabel;
   final String confirmLabel;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: colors.border),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: colors.scrim.withValues(alpha: 0.04),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                color: colors.primarySubtle,
-                borderRadius: BorderRadius.circular(999),
-              ),
-              child: Text(
-                'STEP ${currentStep + 1}/2',
-                style: appText.micro.copyWith(color: colors.primary),
+    final colors = context.appColors;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: _StepLabel(
+                label: orderLabel,
+                selected: currentStep == 0,
+                completed: currentStep > 0,
               ),
             ),
-            const SizedBox(height: 14),
-            Text(
-              title,
-              style: appText.pageTitle.copyWith(color: colors.textPrimary),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              subtitle,
-              style: appText.bodyMuted.copyWith(color: colors.textSecondary),
-            ),
-            const SizedBox(height: 16),
-            AppStepProgressBar(
-              stepCount: 2,
-              currentStep: currentStep,
-              padding: EdgeInsets.zero,
-              height: 6,
-              spacing: 6,
-              completedColor: colors.primary,
-              currentColor: colors.infoForeground,
-              pendingColor: colors.borderSoft,
-              enablePulse: false,
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: _StepLabel(
-                    label: orderLabel,
-                    selected: currentStep == 0,
-                    completed: currentStep > 0,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _StepLabel(
-                    label: confirmLabel,
-                    selected: currentStep == 1,
-                    completed: false,
-                  ),
-                ),
-              ],
+            Expanded(
+              child: _StepLabel(
+                label: confirmLabel,
+                selected: currentStep == 1,
+                completed: false,
+              ),
             ),
           ],
         ),
-      ),
+        const SizedBox(height: 8),
+        AppStepProgressBar(
+          stepCount: 2,
+          currentStep: currentStep,
+          padding: EdgeInsets.zero,
+          height: 3,
+          spacing: 8,
+          completedColor: colors.primary,
+          currentColor: colors.primary,
+          pendingColor: colors.borderSoft,
+          enablePulse: false,
+        ),
+        const SizedBox(height: 20),
+        Text(title, style: context.appTextTheme.pageTitle),
+      ],
     );
   }
 }
@@ -584,60 +539,30 @@ class SecondaryMarketTradePanelCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colors.surface,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: colors.border),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: colors.scrim.withValues(alpha: 0.04),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Divider(height: 1, color: context.appColors.borderSoft),
+        const SizedBox(height: 16),
+        Text(title, style: context.appTextTheme.sectionTitle),
+        if (subtitle != null) ...[
+          const SizedBox(height: 4),
+          Text(subtitle!, style: context.appTextTheme.caption),
         ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              title,
-              style: appText.sectionTitle.copyWith(color: colors.textPrimary),
-            ),
-            if (subtitle != null) ...<Widget>[
-              const SizedBox(height: 6),
-              Text(
-                subtitle!,
-                style: appText.bodyMuted.copyWith(color: colors.textSecondary),
-              ),
-            ],
-            const SizedBox(height: 16),
-            child,
-          ],
-        ),
-      ),
+        const SizedBox(height: 12),
+        child,
+      ],
     );
   }
 }
 
-class SecondaryMarketTradeQuantityCard extends StatelessWidget {
-  const SecondaryMarketTradeQuantityCard({
+class SecondaryMarketTradeOrderForm extends StatelessWidget {
+  const SecondaryMarketTradeOrderForm({
     super.key,
     required this.title,
-    required this.subtitle,
     required this.availabilityLabel,
     required this.formulaLabel,
     required this.formulaValue,
-    required this.totalLabel,
-    required this.totalValue,
-    required this.feeLabel,
-    required this.feeValue,
     required this.paymentLabel,
     required this.paymentValue,
     required this.controller,
@@ -650,18 +575,12 @@ class SecondaryMarketTradeQuantityCard extends StatelessWidget {
     required this.onIncrease,
     required this.onSelectPreset,
     this.enabled = true,
-    this.validationMessage,
   });
 
   final String title;
-  final String subtitle;
   final String availabilityLabel;
   final String formulaLabel;
   final String formulaValue;
-  final String totalLabel;
-  final String totalValue;
-  final String feeLabel;
-  final String feeValue;
   final String paymentLabel;
   final String paymentValue;
   final TextEditingController controller;
@@ -674,624 +593,145 @@ class SecondaryMarketTradeQuantityCard extends StatelessWidget {
   final VoidCallback? onIncrease;
   final ValueChanged<int> onSelectPreset;
   final bool enabled;
-  final String? validationMessage;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
     final presets = <int>{
       1,
-      if (availableUnits >= 5) 5,
-      if (availableUnits >= 10) 10,
+      5,
+      10,
       availableUnits,
-    }.where((int value) => value > 0).toList(growable: false);
-
+    }.where((n) => n > 0 && n <= availableUnits);
     return SecondaryMarketTradePanelCard(
       title: title,
-      subtitle: subtitle,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            '$availabilityLabel  $availableUnits$unitLabel',
+            style: context.appTextTheme.caption,
+          ),
+          const SizedBox(height: 8),
           Row(
-            children: <Widget>[
+            children: [
               _QuantityAdjustButton(
                 icon: Icons.remove_rounded,
                 onTap: enabled ? onDecrease : null,
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 8),
               Expanded(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: colors.surfaceAlt,
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: colors.border),
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: TextField(
-                          controller: controller,
-                          enabled: enabled,
-                          onChanged: onChanged,
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          style: appText.numericTitle.copyWith(
-                            color: colors.textPrimary,
-                          ),
-                          decoration: InputDecoration(
-                            isDense: true,
-                            border: InputBorder.none,
-                            hintText: '0',
-                            hintStyle: appText.numericTitle.copyWith(
-                              color: colors.textSecondary.withValues(
-                                alpha: 0.45,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        unitLabel,
-                        style: appText.bodyStrong.copyWith(
-                          color: colors.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
+                child: SecondaryMarketOrderNumberField(
+                  label: title,
+                  controller: controller,
+                  unit: unitLabel,
+                  enabled: enabled,
+                  onChanged: onChanged,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 8),
               _QuantityAdjustButton(
                 icon: Icons.add_rounded,
                 onTap: enabled ? onIncrease : null,
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 8),
           Wrap(
             spacing: 8,
-            runSpacing: 8,
-            children: presets
-                .map((int value) {
-                  final bool isMax = value == availableUnits;
-                  return _QuickSelectChip(
-                    label: isMax ? maxChipLabel : '$value$unitLabel',
-                    selected: selectedUnits == value,
-                    onTap: enabled ? () => onSelectPreset(value) : null,
-                  );
-                })
-                .toList(growable: false),
+            runSpacing: 6,
+            children: [
+              for (final n in presets)
+                _QuickSelectChip(
+                  label: n == availableUnits ? maxChipLabel : '$n$unitLabel',
+                  selected: selectedUnits == n,
+                  onTap: enabled ? () => onSelectPreset(n) : null,
+                ),
+            ],
           ),
-          const SizedBox(height: 14),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              color: colors.infoSoft,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: colors.infoBorder),
-            ),
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.inventory_2_outlined,
-                  size: 18,
-                  color: colors.primary,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    '$availableUnits$unitLabel',
-                    style: appText.bodyStrong.copyWith(
-                      color: colors.textPrimary,
-                    ),
-                  ),
-                ),
-                Text(
-                  availabilityLabel,
-                  style: appText.caption.copyWith(color: colors.textSecondary),
-                ),
-              ],
-            ),
+          const SizedBox(height: 24),
+          SecondaryMarketTradeSummaryCard(
+            title: formulaLabel,
+            formula: formulaValue,
+            highlightLabel: paymentLabel,
+            highlightValue: paymentValue,
           ),
-          const SizedBox(height: 16),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-                  colors.primarySubtle.withValues(alpha: 0.58),
-                  colors.surface,
-                  colors.primarySubtle.withValues(alpha: 0.68),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: colors.borderSoft),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  formulaLabel,
-                  style: appText.caption.copyWith(color: colors.textSecondary),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  formulaValue,
-                  style: appText.numericTitle.copyWith(
-                    color: colors.textPrimary,
-                    height: 1.0,
-                  ),
-                ),
-                const SizedBox(height: 14),
-                Divider(height: 1, color: colors.borderSoft),
-                const SizedBox(height: 14),
-                _InfoRow(
-                  row: SecondaryMarketTradeInfoRowData(
-                    label: totalLabel,
-                    value: totalValue,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                _InfoRow(
-                  row: SecondaryMarketTradeInfoRowData(
-                    label: feeLabel,
-                    value: feeValue,
-                  ),
-                ),
-                const SizedBox(height: 14),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 14,
-                  ),
-                  decoration: BoxDecoration(
-                    color: colors.primary,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          paymentLabel,
-                          style: appText.caption.copyWith(
-                            color: colors.onDark.withValues(alpha: 0.78),
-                          ),
-                        ),
-                      ),
-                      Text(
-                        paymentValue,
-                        style: appText.numericTitle.copyWith(
-                          color: colors.onDark,
-                          height: 1.0,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (validationMessage != null) ...<Widget>[
-            const SizedBox(height: 12),
-            Text(
-              validationMessage!,
-              style: appText.caption.copyWith(color: colors.danger),
-            ),
-          ],
         ],
       ),
     );
   }
 }
 
-class SecondaryMarketTradeSellEntryCard extends StatelessWidget {
-  const SecondaryMarketTradeSellEntryCard({
+class SecondaryMarketOrderNumberField extends StatelessWidget {
+  const SecondaryMarketOrderNumberField({
     super.key,
-    required this.title,
-    required this.subtitle,
-    required this.availabilityLabel,
-    required this.priceLabel,
-    required this.formulaLabel,
-    required this.formulaValue,
-    required this.totalLabel,
-    required this.totalValue,
-    required this.feeLabel,
-    required this.feeValue,
-    required this.netLabel,
-    required this.netValue,
-    required this.quantityController,
-    required this.priceController,
-    required this.selectedUnits,
-    required this.availableUnits,
-    required this.unitLabel,
-    required this.priceUnitLabel,
-    required this.maxChipLabel,
-    required this.onQuantityChanged,
-    required this.onPriceChanged,
-    required this.onDecrease,
-    required this.onIncrease,
-    required this.onSelectPreset,
-    this.enabled = true,
-    this.validationMessage,
+    required this.label,
+    required this.unit,
+    required this.controller,
+    required this.enabled,
+    required this.onChanged,
   });
-
-  final String title;
-  final String subtitle;
-  final String availabilityLabel;
-  final String priceLabel;
-  final String formulaLabel;
-  final String formulaValue;
-  final String totalLabel;
-  final String totalValue;
-  final String feeLabel;
-  final String feeValue;
-  final String netLabel;
-  final String netValue;
-  final TextEditingController quantityController;
-  final TextEditingController priceController;
-  final int selectedUnits;
-  final int availableUnits;
-  final String unitLabel;
-  final String priceUnitLabel;
-  final String maxChipLabel;
-  final ValueChanged<String> onQuantityChanged;
-  final ValueChanged<String> onPriceChanged;
-  final VoidCallback? onDecrease;
-  final VoidCallback? onIncrease;
-  final ValueChanged<int> onSelectPreset;
+  final String label, unit;
+  final TextEditingController controller;
   final bool enabled;
-  final String? validationMessage;
+  final ValueChanged<String> onChanged;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-    final presets = <int>{
-      1,
-      if (availableUnits >= 5) 5,
-      if (availableUnits >= 10) 10,
-      availableUnits,
-    }.where((int value) => value > 0).toList(growable: false);
-
-    return SecondaryMarketTradePanelCard(
-      title: title,
-      subtitle: subtitle,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              _QuantityAdjustButton(
-                icon: Icons.remove_rounded,
-                onTap: enabled ? onDecrease : null,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: colors.surfaceAlt,
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: colors.border),
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: TextField(
-                          controller: quantityController,
-                          enabled: enabled,
-                          onChanged: onQuantityChanged,
-                          keyboardType: TextInputType.number,
-                          textAlign: TextAlign.center,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          style: appText.numericTitle.copyWith(
-                            color: colors.textPrimary,
-                          ),
-                          decoration: InputDecoration(
-                            isDense: true,
-                            border: InputBorder.none,
-                            hintText: '0',
-                            hintStyle: appText.numericTitle.copyWith(
-                              color: colors.textSecondary.withValues(
-                                alpha: 0.45,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        unitLabel,
-                        style: appText.bodyStrong.copyWith(
-                          color: colors.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              _QuantityAdjustButton(
-                icon: Icons.add_rounded,
-                onTap: enabled ? onIncrease : null,
-              ),
-            ],
-          ),
-          const SizedBox(height: 14),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: presets
-                .map((int value) {
-                  final bool isMax = value == availableUnits;
-                  return _QuickSelectChip(
-                    label: isMax ? maxChipLabel : '$value$unitLabel',
-                    selected: selectedUnits == value,
-                    onTap: enabled ? () => onSelectPreset(value) : null,
-                  );
-                })
-                .toList(growable: false),
-          ),
-          const SizedBox(height: 14),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
-            decoration: BoxDecoration(
-              color: colors.surfaceAlt,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: colors.border),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  priceLabel,
-                  style: appText.caption.copyWith(color: colors.textSecondary),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: TextField(
-                        controller: priceController,
-                        enabled: enabled,
-                        onChanged: onPriceChanged,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        style: appText.numericTitle.copyWith(
-                          color: colors.textPrimary,
-                        ),
-                        decoration: InputDecoration(
-                          isDense: true,
-                          border: InputBorder.none,
-                          hintText: '0',
-                          hintStyle: appText.numericTitle.copyWith(
-                            color: colors.textSecondary.withValues(alpha: 0.45),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      priceUnitLabel,
-                      style: appText.bodyStrong.copyWith(
-                        color: colors.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 14),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              color: colors.infoSoft,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: colors.infoBorder),
-            ),
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.inventory_2_outlined,
-                  size: 18,
-                  color: colors.primary,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    '$availableUnits$unitLabel',
-                    style: appText.bodyStrong.copyWith(
-                      color: colors.textPrimary,
-                    ),
-                  ),
-                ),
-                Text(
-                  availabilityLabel,
-                  style: appText.caption.copyWith(color: colors.textSecondary),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[
-                  colors.primarySubtle.withValues(alpha: 0.54),
-                  colors.surface,
-                  colors.primarySubtle.withValues(alpha: 0.66),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: colors.borderSoft),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  formulaLabel,
-                  style: appText.caption.copyWith(color: colors.textSecondary),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  formulaValue,
-                  style: appText.numericTitle.copyWith(
-                    color: colors.textPrimary,
-                    height: 1.0,
-                  ),
-                ),
-                const SizedBox(height: 14),
-                Divider(height: 1, color: colors.borderSoft),
-                const SizedBox(height: 14),
-                _InfoRow(
-                  row: SecondaryMarketTradeInfoRowData(
-                    label: totalLabel,
-                    value: totalValue,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                _InfoRow(
-                  row: SecondaryMarketTradeInfoRowData(
-                    label: feeLabel,
-                    value: feeValue,
-                  ),
-                ),
-                const SizedBox(height: 14),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 14,
-                  ),
-                  decoration: BoxDecoration(
-                    color: colors.danger,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          netLabel,
-                          style: appText.caption.copyWith(
-                            color: colors.onDark.withValues(alpha: 0.78),
-                          ),
-                        ),
-                      ),
-                      Text(
-                        netValue,
-                        style: appText.numericTitle.copyWith(
-                          color: colors.onDark,
-                          height: 1.0,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (validationMessage != null) ...<Widget>[
-            const SizedBox(height: 12),
-            Text(
-              validationMessage!,
-              style: appText.caption.copyWith(color: colors.danger),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => Semantics(
+    label: label,
+    child: TextField(
+      controller: controller,
+      enabled: enabled,
+      onChanged: onChanged,
+      keyboardType: TextInputType.number,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      textAlign: TextAlign.center,
+      style: context.appTextTheme.numericTitle,
+      decoration: InputDecoration(suffixText: unit, hintText: '0'),
+    ),
+  );
 }
 
 class SecondaryMarketTradeSummaryCard extends StatelessWidget {
   const SecondaryMarketTradeSummaryCard({
     super.key,
     required this.title,
-    required this.rows,
+    this.rows = const [],
     required this.highlightLabel,
     required this.highlightValue,
-    this.highlightColor,
+    this.formula,
   });
 
   final String title;
   final List<SecondaryMarketTradeInfoRowData> rows;
   final String highlightLabel;
   final String highlightValue;
-  final Color? highlightColor;
+  final String? formula;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-
     return SecondaryMarketTradePanelCard(
       title: title,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: colors.infoSoft,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: colors.infoBorder),
-        ),
-        child: Column(
-          children: <Widget>[
-            for (int index = 0; index < rows.length; index++) ...<Widget>[
-              _InfoRow(row: rows[index]),
-              if (index != rows.length - 1) const SizedBox(height: 10),
-            ],
-            const SizedBox(height: 14),
-            Divider(height: 1, color: colors.borderSoft),
-            const SizedBox(height: 14),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    highlightLabel,
-                    style: appText.bodyStrong.copyWith(
-                      color: colors.textPrimary,
-                    ),
-                  ),
-                ),
-                Text(
-                  highlightValue,
-                  style: appText.numericHeadline.copyWith(
-                    color: highlightColor ?? colors.primary,
-                    height: 1.0,
-                  ),
-                ),
-              ],
-            ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (formula != null) ...[
+            Text(formula!, style: context.appTextTheme.numericTitle),
+            const SizedBox(height: 12),
           ],
-        ),
+          for (final row in rows)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: _InfoRow(row: row),
+            ),
+          Divider(color: context.appColors.borderSoft),
+          _InfoRow(
+            row: SecondaryMarketTradeInfoRowData(
+              label: highlightLabel,
+              value: highlightValue,
+              emphasized: true,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -1321,112 +761,32 @@ class SecondaryMarketTradeAgreementCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-
     return SecondaryMarketTradePanelCard(
       title: title,
       child: Column(
-        children: <Widget>[
-          Material(
-            color: colors.surfaceAlt,
-            borderRadius: BorderRadius.circular(18),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(18),
-              onTap: () => onChanged(!agreed),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Checkbox(
-                      value: agreed,
-                      onChanged: (bool? value) => onChanged(value ?? false),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Text(
-                          body,
-                          style: appText.body.copyWith(
-                            color: colors.textPrimary,
-                            height: 1.45,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+        children: [
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(
+              Icons.description_outlined,
+              color: context.appColors.primary,
             ),
+            title: Text(documentLabel, style: context.appTextTheme.bodyStrong),
+            subtitle: Text(documentActionLabel),
+            trailing: Icon(
+              documentAvailable
+                  ? Icons.chevron_right_rounded
+                  : Icons.schedule_rounded,
+            ),
+            enabled: documentAvailable,
+            onTap: documentAvailable ? onOpenDocument : null,
           ),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
-            decoration: BoxDecoration(
-              color: colors.surface,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: colors.border),
-            ),
-            child: Material(
-              type: MaterialType.transparency,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(18),
-                onTap: documentAvailable ? onOpenDocument : null,
-                child: Padding(
-                  padding: EdgeInsets.zero,
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        width: 42,
-                        height: 42,
-                        decoration: BoxDecoration(
-                          color: colors.primarySubtle,
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        alignment: Alignment.center,
-                        child: Icon(
-                          Icons.description_outlined,
-                          color: colors.primary,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              documentLabel,
-                              style: appText.bodyStrong.copyWith(
-                                color: colors.textPrimary,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              documentActionLabel,
-                              style: appText.caption.copyWith(
-                                color: documentAvailable
-                                    ? colors.primary
-                                    : colors.textSecondary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(
-                        documentAvailable
-                            ? Icons.chevron_right_rounded
-                            : Icons.schedule_rounded,
-                        color: documentAvailable
-                            ? colors.primary
-                            : colors.textSecondary,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+          CheckboxListTile(
+            contentPadding: EdgeInsets.zero,
+            controlAffinity: ListTileControlAffinity.leading,
+            value: agreed,
+            onChanged: (value) => onChanged(value ?? false),
+            title: Text(body, style: context.appTextTheme.body),
           ),
         ],
       ),
@@ -1446,70 +806,25 @@ class SecondaryMarketTradeFinalNoticeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: <Color>[
-            colors.primarySubtle.withValues(alpha: 0.76),
-            colors.surface,
-          ],
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(
+          Icons.info_outline_rounded,
+          size: 20,
+          color: context.appColors.textSecondary,
         ),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: colors.infoBorder),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: colors.scrim.withValues(alpha: 0.04),
-            blurRadius: 14,
-            offset: const Offset(0, 8),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: context.appTextTheme.bodyStrong),
+              Text(body, style: context.appTextTheme.caption),
+            ],
           ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: colors.primary,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              alignment: Alignment.center,
-              child: Icon(Icons.verified_user_rounded, color: colors.onDark),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    title,
-                    style: appText.sectionTitle.copyWith(
-                      color: colors.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    body,
-                    style: appText.body.copyWith(
-                      color: colors.textSecondary,
-                      height: 1.45,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
-      ),
+      ],
     );
   }
 }
@@ -1556,8 +871,6 @@ class SecondaryMarketTradeStickyActionBar extends StatelessWidget {
     required this.amountValue,
     required this.primaryLabel,
     required this.onPrimaryPressed,
-    this.primaryBackgroundColor,
-    this.primaryShadowColor,
     this.helperText,
     this.isLoading = false,
   });
@@ -1566,96 +879,53 @@ class SecondaryMarketTradeStickyActionBar extends StatelessWidget {
   final String amountValue;
   final String primaryLabel;
   final VoidCallback? onPrimaryPressed;
-  final Color? primaryBackgroundColor;
-  final Color? primaryShadowColor;
   final String? helperText;
   final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colors = theme.appColors;
-    final appText = theme.appTextTheme;
-
-    return SafeArea(
-      top: false,
-      child: ClipRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: colors.surface.withValues(alpha: 0.92),
-              border: Border(top: BorderSide(color: colors.borderSoft)),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: colors.scrim.withValues(alpha: 0.06),
-                  blurRadius: 18,
-                  offset: const Offset(0, -6),
-                ),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: context.appColors.surface,
+        border: Border(top: BorderSide(color: context.appColors.borderSoft)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (helperText != null) ...[
+                Text(helperText!, style: context.appTextTheme.caption),
+                const SizedBox(height: 8),
               ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  if (helperText != null) ...<Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          helperText!,
-                          style: appText.caption.copyWith(
-                            color: colors.textSecondary,
-                          ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(amountLabel, style: context.appTextTheme.caption),
+                        Text(
+                          amountValue,
+                          style: context.appTextTheme.numericTitle,
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              amountLabel,
-                              style: appText.caption.copyWith(
-                                color: colors.textSecondary,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              amountValue,
-                              style: appText.numericTitle.copyWith(
-                                color: colors.textPrimary,
-                                height: 1.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      SizedBox(
-                        width: 170,
-                        child: PrimaryCtaButton(
-                          label: primaryLabel,
-                          onPressed: onPrimaryPressed,
-                          isLoading: isLoading,
-                          fullWidth: false,
-                          height: 52,
-                          horizontalPadding: 0,
-                          backgroundColor: primaryBackgroundColor,
-                          shadowColor: primaryShadowColor,
-                          threeSideShadow: true,
-                        ),
-                      ),
-                    ],
+                  ),
+                  const SizedBox(width: 12),
+                  Flexible(
+                    child: AppButton(
+                      label: primaryLabel,
+                      onPressed: onPrimaryPressed,
+                      isLoading: isLoading,
+                    ),
                   ),
                 ],
               ),
-            ),
+            ],
           ),
         ),
       ),
@@ -1920,7 +1190,7 @@ class _InfoRow extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 16),
-        Flexible(
+        Expanded(
           child: Text(
             row.value,
             textAlign: TextAlign.end,

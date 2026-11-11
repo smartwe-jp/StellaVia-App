@@ -30,7 +30,6 @@ class MyPageSecondaryMarketSellDraft {
     required this.price,
     this.investorCode,
     this.earningRatio,
-    this.feeRate = 0.0165,
     this.agreed = false,
   });
 
@@ -42,14 +41,9 @@ class MyPageSecondaryMarketSellDraft {
   final int price;
   final String? investorCode;
   final double? earningRatio;
-  final double feeRate;
   final bool agreed;
 
   num get totalAmount => sellNum * price;
-
-  num get feeAmount => totalAmount * feeRate;
-
-  num get netAmount => totalAmount - feeAmount;
 }
 
 /// Keep the sale attached to the exact record used to open the detail page.

@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/support/app_request_error_message_resolver.dart';
-import '../../../auth/presentation/support/identity_auth_guard.dart';
 import '../../../investment/presentation/support/secondary_market_trade_widgets.dart';
 import '../../../investment/presentation/widgets/secondary_market_buy_flow_sections.dart';
 import '../providers/mypage_providers.dart';
@@ -61,11 +60,6 @@ class _MyPageSecondaryMarketSellConfirmPageState
         return;
       }
 
-      final allowed = await ensureSensitiveActionAuthorized(context, ref);
-      if (!mounted || !allowed) {
-        return;
-      }
-
       final draft = widget.draft;
       if (!draft.agreed ||
           draft.fromProcessId.trim().isEmpty ||
@@ -74,7 +68,6 @@ class _MyPageSecondaryMarketSellConfirmPageState
           draft.price <= 0) {
         throw StateError(l10n.secondaryMarketSellUnavailable);
       }
-      if (!mounted) return;
       await ref
           .read(submitMyPageSecondaryMarketCreateUseCaseProvider)
           .call(
@@ -126,6 +119,7 @@ class _MyPageSecondaryMarketSellConfirmPageState
     );
 
     return Scaffold(
+      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.myPageResaleOrderTitle,
         leading: AppNavigationIconButton(
@@ -135,11 +129,10 @@ class _MyPageSecondaryMarketSellConfirmPageState
       ),
       bottomNavigationBar: SecondaryMarketTradeStickyActionBar(
         amountLabel: l10n.myPageResaleNetAmountLabel,
-        amountValue: formatter.format(widget.draft.netAmount),
+        amountValue: formatter.format(widget.draft.totalAmount),
         primaryLabel: l10n.myPageResaleSubmitButton,
         onPrimaryPressed: _isSubmitting ? null : _submit,
-        primaryBackgroundColor: colors.danger,
-        primaryShadowColor: colors.danger.withValues(alpha: 0.38),
+
         isLoading: _isSubmitting,
       ),
       body: Column(
@@ -153,7 +146,7 @@ class _MyPageSecondaryMarketSellConfirmPageState
                 SecondaryMarketTradeFlowHeader(
                   currentStep: 1,
                   title: l10n.myPageResaleFlowConfirmTitle,
-                  subtitle: l10n.myPageResaleFlowConfirmSubtitle,
+
                   orderLabel: l10n.myPageResaleTabOrder,
                   confirmLabel: l10n.secondaryMarketTradeTabConfirm,
                 ),
@@ -197,25 +190,9 @@ class _MyPageSecondaryMarketSellConfirmPageState
                 const SizedBox(height: 14),
                 SecondaryMarketTradeSummaryCard(
                   title: l10n.myPageResaleSummarySectionTitle,
-                  rows: <SecondaryMarketTradeInfoRowData>[
-                    SecondaryMarketTradeInfoRowData(
-                      label: l10n.myPageResaleTotalAmountLabel,
-                      value: formatter.format(widget.draft.totalAmount),
-                    ),
-                    SecondaryMarketTradeInfoRowData(
-                      label: l10n.myPageResaleFeeAmountLabel,
-                      value: formatter.format(widget.draft.feeAmount),
-                    ),
-                    SecondaryMarketTradeInfoRowData(
-                      label: l10n.myPageResaleFeeLabel,
-                      value: l10n.myPageResaleFeeValue,
-                    ),
-                  ],
                   highlightLabel: l10n.myPageResaleNetAmountLabel,
-                  highlightValue: formatter.format(widget.draft.netAmount),
-                  highlightColor: colors.danger,
+                  highlightValue: formatter.format(widget.draft.totalAmount),
                 ),
-                const SizedBox(height: 112),
               ],
             ),
           ),

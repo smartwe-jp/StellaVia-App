@@ -9918,8 +9918,14 @@ abstract class AppLocalizations {
   /// No description provided for @myPageResaleValidationMessage.
   ///
   /// In en, this message translates to:
-  /// **'Enter sell units and unit price, then agree to the document confirmation.'**
+  /// **'Enter the number of units and agree to the document terms.'**
   String get myPageResaleValidationMessage;
+
+  /// No description provided for @myPageResalePriceUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The sale unit price is unavailable.'**
+  String get myPageResalePriceUnavailable;
 
   /// No description provided for @myPageResaleConfirmButton.
   ///

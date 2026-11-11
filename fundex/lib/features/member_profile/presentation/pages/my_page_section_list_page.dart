@@ -20,8 +20,14 @@ class MyPageSectionListPage extends ConsumerStatefulWidget {
     super.key,
     required this.sectionType,
     this.initialApplyFilter = MyPageApplyHistoryFilter.all,
-  });
+  }) : operatingHeader = null;
 
+  const MyPageSectionListPage.operating({super.key, required Widget header})
+    : operatingHeader = header,
+      sectionType = MyPageSectionType.activeFunds,
+      initialApplyFilter = MyPageApplyHistoryFilter.all;
+
+  final Widget? operatingHeader;
   final MyPageSectionType sectionType;
   final MyPageApplyHistoryFilter initialApplyFilter;
 
@@ -54,6 +60,9 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
   @override
   void initState() {
     super.initState();
+    if (widget.operatingHeader != null) {
+      _activeFundFilter = MyPageActiveFundFilter.operating;
+    }
     _applyFilter = widget.initialApplyFilter;
     _loadedApplyFilter = widget.initialApplyFilter;
     _scrollController.addListener(_handleScroll);
@@ -212,7 +221,13 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
       case MyPageSectionType.activeFunds:
         final records = await ref
             .read(fetchMyPageInvestmentListUseCaseProvider)
-            .call(startPage: page, limit: _pageSize);
+            .call(
+              startPage: page,
+              limit: _pageSize,
+              projectStatus: widget.operatingHeader == null
+                  ? null
+                  : MyPageActiveFundFilter.operating.statuses!.single,
+            );
         return _MyPageSectionPageData(
           investmentRecords: records,
           fetchedCount: records.length,
@@ -274,6 +289,31 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     final projectsById = <String, FundProject>{
       for (final project in projects) project.id: project,
     };
+
+    final list = RefreshIndicator(
+      onRefresh: _loadInitial,
+      child: CustomScrollView(
+        controller: _scrollController,
+        slivers: <Widget>[
+          if (widget.operatingHeader case final header?)
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                child: header,
+              ),
+            ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+            sliver: _buildSliverContent(
+              context,
+              formatter: currencyFormatter,
+              fundProjectsById: projectsById,
+            ),
+          ),
+        ],
+      ),
+    );
+    if (widget.operatingHeader != null) return list;
 
     return PrimaryScrollController(
       controller: _scrollController,
@@ -340,24 +380,7 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
                     )
                     .toList(growable: false),
               ),
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: _loadInitial,
-                child: CustomScrollView(
-                  controller: _scrollController,
-                  slivers: <Widget>[
-                    SliverPadding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-                      sliver: _buildSliverContent(
-                        context,
-                        formatter: currencyFormatter,
-                        fundProjectsById: projectsById,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            Expanded(child: list),
           ],
         ),
       ),

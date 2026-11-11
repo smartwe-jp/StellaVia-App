@@ -5473,7 +5473,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myPageResaleValidationMessage =>
-      'Enter sell units and unit price, then agree to the document confirmation.';
+      'Enter the number of units and agree to the document terms.';
+
+  @override
+  String get myPageResalePriceUnavailable =>
+      'The sale unit price is unavailable.';
 
   @override
   String get myPageResaleConfirmButton => 'Confirm';

@@ -1,5 +1,8 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
+import '../../../member_profile/presentation/widgets/my_page_asset_summary.dart'
+    show MyPageHeaderAction;
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../support/home_text_styles.dart';
 
@@ -9,11 +12,13 @@ class HomeRedesignHeader extends StatelessWidget {
     required this.isAuthenticated,
     required this.unreadCount,
     required this.onLogin,
+    required this.onSettings,
     required this.onNotifications,
   });
   final bool isAuthenticated;
   final int unreadCount;
   final VoidCallback onLogin;
+  final VoidCallback onSettings;
   final VoidCallback onNotifications;
 
   @override
@@ -31,14 +36,19 @@ class HomeRedesignHeader extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
-                Text(
-                  'STELLAVIA',
-                  style: HomeTextStyles.brandWordmark(
-                    context,
-                    isAuthenticated: isAuthenticated,
+                Expanded(
+                  child: FittedBox(
+                    alignment: AlignmentDirectional.centerStart,
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      'STELLAVIA',
+                      style: HomeTextStyles.brandWordmark(
+                        context,
+                        isAuthenticated: isAuthenticated,
+                      ),
+                    ),
                   ),
                 ),
-                const Spacer(),
                 if (isAuthenticated)
                   Badge(
                     isLabelVisible: unreadCount > 0,
@@ -52,7 +62,7 @@ class HomeRedesignHeader extends StatelessWidget {
                       ),
                     ),
                   )
-                else
+                else ...[
                   AppButton(
                     label: context.l10n.loginSubmit,
                     onPressed: onLogin,
@@ -60,6 +70,8 @@ class HomeRedesignHeader extends StatelessWidget {
                     fullWidth: false,
                     minHeight: 36,
                   ),
+                  MyPageHeaderAction(icon: Symbols.settings, onTap: onSettings),
+                ],
               ],
             ),
           ),

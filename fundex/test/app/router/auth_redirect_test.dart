@@ -53,6 +53,16 @@ void main() {
         );
       },
     );
+    test('guests can open settings directly from home', () {
+      expect(
+        resolveAuthRedirect(
+          authState: const AsyncData(false),
+          location: '/profile/settings',
+        ),
+        isNull,
+      );
+    });
+
     test('keeps loading state on public home route', () {
       final redirect = resolveAuthRedirect(
         authState: const AsyncLoading<bool>(),

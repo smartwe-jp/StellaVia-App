@@ -32,6 +32,7 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
       var taps = 0;
+      var settingsTaps = 0;
       for (final locale in AppLocalizations.supportedLocales) {
         for (final member in [true, false]) {
           for (final width in [390.0, 320.0]) {
@@ -58,6 +59,7 @@ void main() {
                               isAuthenticated: member,
                               unreadCount: 2,
                               onLogin: () => taps++,
+                              onSettings: () => settingsTaps++,
                               onNotifications: () => taps++,
                             ),
                             Expanded(
@@ -105,6 +107,21 @@ void main() {
               reason: '$locale member=$member width=$width',
             );
             final context = tester.element(find.byType(HomeBrandIntro));
+            final l10n = AppLocalizations.of(context);
+            final settings = find.byTooltip(l10n.mainTabSettings);
+            if (member) {
+              expect(settings, findsNothing);
+            } else {
+              expect(
+                tester.getTopLeft(settings).dx,
+                greaterThanOrEqualTo(
+                  tester.getTopRight(find.text(l10n.loginSubmit)).dx,
+                ),
+              );
+              final before = settingsTaps;
+              await tester.tap(settings);
+              expect(settingsTaps, before + 1);
+            }
             final label = AppLocalizations.of(context).homeLearnService;
             expect(
               find.text(AppLocalizations.of(context).homeRankDetails),

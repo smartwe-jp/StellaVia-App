@@ -5162,7 +5162,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageResaleNetAmountLabel => '预计到账金额';
 
   @override
-  String get myPageResaleValidationMessage => '请填写卖出口数、卖出单价，并同意文件确认。';
+  String get myPageResaleValidationMessage => '请输入卖出口数并同意相关文件。';
+
+  @override
+  String get myPageResalePriceUnavailable => '暂时无法获取卖出单价。';
 
   @override
   String get myPageResaleConfirmButton => '确认';
@@ -12240,7 +12243,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageResaleNetAmountLabel => '預計入帳金額';
 
   @override
-  String get myPageResaleValidationMessage => '請填寫賣出口數、賣出單價，並同意文件確認。';
+  String get myPageResaleValidationMessage => '請輸入賣出口數並同意相關文件。';
+
+  @override
+  String get myPageResalePriceUnavailable => '暫時無法取得賣出單價。';
 
   @override
   String get myPageResaleConfirmButton => '確認';

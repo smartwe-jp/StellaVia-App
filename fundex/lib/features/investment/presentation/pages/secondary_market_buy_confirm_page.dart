@@ -133,6 +133,7 @@ class _SecondaryMarketBuyConfirmPageState
     );
 
     return Scaffold(
+      backgroundColor: colors.surface,
       appBar: AppNavigationBar(
         title: l10n.secondaryMarketBuyOrderTitle,
         leading: AppNavigationIconButton(
@@ -142,11 +143,10 @@ class _SecondaryMarketBuyConfirmPageState
       ),
       bottomNavigationBar: SecondaryMarketTradeStickyActionBar(
         amountLabel: l10n.secondaryMarketBuyStickyAmountLabel,
-        amountValue: formatter.format(widget.draft.paymentAmount),
+        amountValue: formatter.format(widget.draft.totalAmount),
         primaryLabel: l10n.secondaryMarketBuySubmitButton,
         onPrimaryPressed: _isSubmitting ? null : _submit,
-        primaryBackgroundColor: colors.primary,
-        primaryShadowColor: colors.primary.withValues(alpha: 0.32),
+
         isLoading: _isSubmitting,
       ),
       body: Column(
@@ -160,7 +160,7 @@ class _SecondaryMarketBuyConfirmPageState
                 SecondaryMarketTradeFlowHeader(
                   currentStep: 1,
                   title: l10n.secondaryMarketBuyFlowConfirmTitle,
-                  subtitle: l10n.secondaryMarketBuyFlowConfirmSubtitle,
+
                   orderLabel: l10n.secondaryMarketTradeTabBuy,
                   confirmLabel: l10n.secondaryMarketTradeTabConfirm,
                 ),
@@ -202,23 +202,13 @@ class _SecondaryMarketBuyConfirmPageState
                   title: l10n.secondaryMarketBuySummarySectionTitle,
                   rows: <SecondaryMarketTradeInfoRowData>[
                     SecondaryMarketTradeInfoRowData(
-                      label: l10n.secondaryMarketBuyTotalAmountLabel,
-                      value: formatter.format(widget.draft.totalAmount),
-                    ),
-                    SecondaryMarketTradeInfoRowData(
-                      label: l10n.secondaryMarketBuyFeeAmountLabel,
-                      value: formatter.format(widget.draft.feeAmount),
-                    ),
-                    SecondaryMarketTradeInfoRowData(
                       label: l10n.homeEstimatedYieldLabel,
                       value: yieldText,
                     ),
                   ],
                   highlightLabel: l10n.secondaryMarketBuyPaymentAmountLabel,
-                  highlightValue: formatter.format(widget.draft.paymentAmount),
-                  highlightColor: colors.primary,
+                  highlightValue: formatter.format(widget.draft.totalAmount),
                 ),
-                const SizedBox(height: 112),
               ],
             ),
           ),

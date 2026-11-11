@@ -17,6 +17,8 @@ import 'package:fundex/features/auth/presentation/providers/auth_providers.dart'
 import 'package:fundex/features/member_profile/domain/entities/mypage_models.dart';
 import 'package:fundex/features/member_profile/domain/repositories/mypage_repository.dart';
 import 'package:fundex/features/member_profile/presentation/pages/host_fund_management_page.dart';
+import 'package:fundex/features/member_profile/presentation/support/mypage_section_support.dart';
+import 'package:fundex/features/member_profile/presentation/widgets/my_page_active_fund_summary_card.dart';
 import 'package:fundex/features/member_profile/presentation/providers/host_fund_management_providers.dart';
 import 'package:fundex/features/member_profile/presentation/providers/member_profile_providers.dart';
 import 'package:fundex/features/member_profile/presentation/providers/mypage_membership_providers.dart';
@@ -58,6 +60,24 @@ class _Applications implements MyPageRepository {
   final calls = <(int, int)>[];
   bool fail = false;
   final withdrawals = <String>[];
+  @override
+  Future<List<MyPageInvestmentRecord>> fetchInvestmentList({
+    int? projectStatus,
+    int startPage = 1,
+    int limit = 20,
+  }) async {
+    expect(projectStatus, 4);
+    return [
+      for (final order in ['first', 'second'])
+        MyPageInvestmentRecord(
+          projectId: 'p',
+          projectName: '運用投資 $order',
+          projectStatus: 4,
+          processId: order,
+        ),
+    ];
+  }
+
   @override
   Future<void> submitUserWithdraw({
     required String processId,
@@ -231,8 +251,12 @@ void main() {
             builder: (_, __) => const HostFundManagementPage(),
           ),
           GoRoute(
-            path: '/funds/:id',
-            builder: (_, __) => const Scaffold(body: Text('Detail')),
+            path: '/profile/my/active-funds/:id',
+            builder: (_, state) => Scaffold(
+              body: Text(
+                'Detail ${state.pathParameters['id']} ${(state.extra as MyPageActiveFundDetailSeed).processId}',
+              ),
+            ),
           ),
         ],
       );
@@ -247,6 +271,7 @@ void main() {
               'user',
             )),
             myPageRepositoryProvider.overrideWithValue(applications),
+            fundProjectListProvider.overrideWith((_) async => []),
             assetStatisticsRepositoryProvider.overrideWithValue(assets),
             currentAuthUserProvider.overrideWith(
               (ref) async => const AuthUser(username: 'user', userId: 123),
@@ -323,10 +348,15 @@ void main() {
       await tester.tap(find.byType(CloseButton));
       await tester.pumpAndSettle();
       await tap('運用中');
-      expect(find.text('神戸ファンド'), findsOneWidget);
+      expect(find.byType(MyPageActiveFundSummaryCard), findsWidgets);
       await preview('running');
-      await tap('神戸ファンド');
-      expect(find.text('Detail'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text('運用投資 second'),
+        180,
+        scrollable: find.byType(Scrollable).last,
+      );
+      await tap('運用投資 second');
+      expect(find.text('Detail p second'), findsOneWidget);
       router.pop();
       await tester.pumpAndSettle();
       await tap('償還・配当予定');

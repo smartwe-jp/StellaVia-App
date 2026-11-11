@@ -5208,7 +5208,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageResaleNetAmountLabel => '受取予定額';
 
   @override
-  String get myPageResaleValidationMessage => '売却口数・売却単価を入力し、書面確認に同意してください。';
+  String get myPageResaleValidationMessage => '売却口数を入力し、書面の内容に同意してください。';
+
+  @override
+  String get myPageResalePriceUnavailable => '売却単価を取得できません。';
 
   @override
   String get myPageResaleConfirmButton => '確認';
