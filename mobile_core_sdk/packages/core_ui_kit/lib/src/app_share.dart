@@ -50,6 +50,28 @@ class AppShare {
     String? subject,
     String? unavailableNotice,
   }) async {
+    return shareFileBytes(
+      context,
+      bytes: bytes,
+      fileName: fileName,
+      mimeType: 'image/png',
+      title: title,
+      subject: subject,
+      text: text,
+      unavailableNotice: unavailableNotice,
+    );
+  }
+
+  static Future<void> shareFileBytes(
+    BuildContext context, {
+    required Uint8List bytes,
+    required String fileName,
+    required String mimeType,
+    String? text,
+    String? title,
+    String? subject,
+    String? unavailableNotice,
+  }) async {
     if (bytes.isEmpty) {
       return;
     }
@@ -58,7 +80,7 @@ class AppShare {
     final result = await SharePlus.instance.share(
       ShareParams(
         files: <XFile>[
-          XFile.fromData(bytes, mimeType: 'image/png', name: fileName),
+          XFile.fromData(bytes, mimeType: mimeType, name: fileName),
         ],
         text: text?.trim().isEmpty == true ? null : text?.trim(),
         title: title?.trim().isEmpty == true ? null : title?.trim(),

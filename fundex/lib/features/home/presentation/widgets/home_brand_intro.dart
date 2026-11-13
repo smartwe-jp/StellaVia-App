@@ -7,13 +7,9 @@ import 'home_rank_progression.dart';
 class HomeBrandIntro extends StatelessWidget {
   const HomeBrandIntro({
     super.key,
-    required this.isAuthenticated,
     required this.onServiceTap,
     required this.ranks,
-    this.displayName = '',
   });
-  final bool isAuthenticated;
-  final String displayName;
   final List<String> ranks;
   final VoidCallback onServiceTap;
 
@@ -21,99 +17,85 @@ class HomeBrandIntro extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final colors = context.appColors;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (isAuthenticated) ...[
-          Text(
-            l10n.homeMemberGreeting(displayName),
-            style: HomeTextStyles.greeting(context),
-          ),
-          const SizedBox(height: 4),
-          Text(l10n.homeMemberIntro, style: HomeTextStyles.caption(context)),
-          const SizedBox(height: 16),
-        ],
-        Container(
-          width: double.infinity,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            color: colors.heroStart,
-            borderRadius: BorderRadius.circular(18),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.homeGuestEyebrow,
-                      style: HomeTextStyles.heroEyebrow(
-                        context,
-                        isAuthenticated: false,
-                      ).copyWith(color: colors.onDark),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      l10n.homeGuestBenefitsTitle,
-                      style: HomeTextStyles.heroTitle(
-                        context,
-                      ).copyWith(color: colors.onDark),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      l10n.homeRankTitle,
-                      style: HomeTextStyles.caption(
-                        context,
-                      ).copyWith(color: colors.onDark),
-                    ),
-                  ],
+    return Container(
+      width: double.infinity,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: colors.heroStart,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.homeGuestEyebrow,
+                  style: HomeTextStyles.heroEyebrow(
+                    context,
+                    isAuthenticated: false,
+                  ).copyWith(color: colors.onDark),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(6, 0, 6, 6),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Stack(
-                    alignment: AlignmentDirectional.bottomEnd,
-                    children: [
-                      if (ranks.isNotEmpty)
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: HomeRankProgression(names: ranks),
+                const SizedBox(height: 4),
+                Text(
+                  l10n.homeGuestBenefitsTitle,
+                  style: HomeTextStyles.heroTitle(
+                    context,
+                  ).copyWith(color: colors.onDark),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  l10n.homeRankTitle,
+                  style: HomeTextStyles.caption(
+                    context,
+                  ).copyWith(color: colors.onDark),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(6, 0, 6, 6),
+            child: SizedBox(
+              width: double.infinity,
+              child: Stack(
+                alignment: AlignmentDirectional.bottomEnd,
+                children: [
+                  if (ranks.isNotEmpty)
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: HomeRankProgression(names: ranks),
+                    ),
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                      end: 8,
+                      bottom: 0,
+                    ),
+                    child: AppButton(
+                      label: l10n.homeLearnService,
+                      fullWidth: false,
+                      minHeight: 34,
+                      variant: AppButtonVariant.secondary,
+                      onPressed: onServiceTap,
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: colors.onDark,
+                        foregroundColor: AppColorTokens.brandPurple,
+                        side: const BorderSide(
+                          color: AppColorTokens.brandPurple,
                         ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(
-                          end: 8,
-                          bottom: 0,
-                        ),
-                        child: AppButton(
-                          label: l10n.homeLearnService,
-                          fullWidth: false,
-                          minHeight: 34,
-                          variant: AppButtonVariant.secondary,
-                          onPressed: onServiceTap,
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor: colors.onDark,
-                            foregroundColor: AppColorTokens.brandPurple,
-                            side: const BorderSide(
-                              color: AppColorTokens.brandPurple,
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 14),
-                            textStyle: context.appTextTheme.micro,
-                          ),
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 14),
+                        textStyle: context.appTextTheme.micro,
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

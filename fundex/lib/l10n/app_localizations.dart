@@ -13395,17 +13395,101 @@ abstract class AppLocalizations {
   /// **'Effective'**
   String get secondaryMarketContractEffective;
 
+  /// No description provided for @secondaryContractCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get secondaryContractCompleted;
+
+  /// No description provided for @secondaryContractDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Declined'**
+  String get secondaryContractDeclined;
+
+  /// No description provided for @secondaryContractTodoCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting action'**
+  String get secondaryContractTodoCount;
+
+  /// No description provided for @secondaryContractEmailMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your registered email address.'**
+  String get secondaryContractEmailMissing;
+
+  /// No description provided for @secondaryContractEmailSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract delivery by email has been requested.'**
+  String get secondaryContractEmailSent;
+
+  /// No description provided for @secondaryContractProcedure.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract process'**
+  String get secondaryContractProcedure;
+
+  /// No description provided for @secondaryBuyerContractReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract under review'**
+  String get secondaryBuyerContractReview;
+
   /// No description provided for @secondaryMarketContractTodo.
   ///
   /// In en, this message translates to:
   /// **'Your signature is required'**
   String get secondaryMarketContractTodo;
 
+  /// No description provided for @secondaryMarketAwaitingSignature.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting signature'**
+  String get secondaryMarketAwaitingSignature;
+
+  /// No description provided for @secondaryMarketViewContract.
+  ///
+  /// In en, this message translates to:
+  /// **'View electronic contract'**
+  String get secondaryMarketViewContract;
+
   /// No description provided for @secondaryMarketSign.
   ///
   /// In en, this message translates to:
   /// **'Sign contract'**
   String get secondaryMarketSign;
+
+  /// No description provided for @secondaryContractProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Procedure progress'**
+  String get secondaryContractProgress;
+
+  /// No description provided for @secondaryMarketSignatureHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign inside the box'**
+  String get secondaryMarketSignatureHint;
+
+  /// No description provided for @secondaryMarketClearSignature.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear signature'**
+  String get secondaryMarketClearSignature;
+
+  /// No description provided for @secondaryMarketConfirmSignature.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm signature'**
+  String get secondaryMarketConfirmSignature;
+
+  /// No description provided for @secondaryMarketSignatureFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to sign. Return and refresh before trying again.'**
+  String get secondaryMarketSignatureFailed;
 
   /// No description provided for @secondaryMarketSignPending.
   ///
@@ -13418,6 +13502,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please wait for payment instructions. Payment status updates after financial confirmation.'**
   String get secondaryMarketPaymentPending;
+
+  /// No description provided for @secondaryPurchaseBreakdown.
+  ///
+  /// In en, this message translates to:
+  /// **'Application details'**
+  String get secondaryPurchaseBreakdown;
+
+  /// No description provided for @secondaryApprovedUnits.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved units'**
+  String get secondaryApprovedUnits;
+
+  /// No description provided for @secondaryApprovedAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved amount'**
+  String get secondaryApprovedAmount;
+
+  /// No description provided for @secondaryApprovedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved at'**
+  String get secondaryApprovedAt;
+
+  /// No description provided for @secondaryPaymentReceivedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment received at'**
+  String get secondaryPaymentReceivedAt;
+
+  /// No description provided for @secondaryListingDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing details'**
+  String get secondaryListingDetail;
+
+  /// No description provided for @secondaryListedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Listed at'**
+  String get secondaryListedAt;
+
+  /// No description provided for @secondaryListingNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing ID'**
+  String get secondaryListingNumber;
 
   /// No description provided for @secondaryMarketProcessId.
   ///

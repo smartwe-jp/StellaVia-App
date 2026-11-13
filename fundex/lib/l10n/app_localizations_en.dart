@@ -7432,10 +7432,55 @@ class AppLocalizationsEn extends AppLocalizations {
   String get secondaryMarketContractEffective => 'Effective';
 
   @override
+  String get secondaryContractCompleted => 'Completed';
+
+  @override
+  String get secondaryContractDeclined => 'Declined';
+
+  @override
+  String get secondaryContractTodoCount => 'Awaiting action';
+
+  @override
+  String get secondaryContractEmailMissing =>
+      'Check your registered email address.';
+
+  @override
+  String get secondaryContractEmailSent =>
+      'Contract delivery by email has been requested.';
+
+  @override
+  String get secondaryContractProcedure => 'Contract process';
+
+  @override
+  String get secondaryBuyerContractReview => 'Contract under review';
+
+  @override
   String get secondaryMarketContractTodo => 'Your signature is required';
 
   @override
+  String get secondaryMarketAwaitingSignature => 'Awaiting signature';
+
+  @override
+  String get secondaryMarketViewContract => 'View electronic contract';
+
+  @override
   String get secondaryMarketSign => 'Sign contract';
+
+  @override
+  String get secondaryContractProgress => 'Procedure progress';
+
+  @override
+  String get secondaryMarketSignatureHint => 'Sign inside the box';
+
+  @override
+  String get secondaryMarketClearSignature => 'Clear signature';
+
+  @override
+  String get secondaryMarketConfirmSignature => 'Confirm signature';
+
+  @override
+  String get secondaryMarketSignatureFailed =>
+      'Unable to sign. Return and refresh before trying again.';
 
   @override
   String get secondaryMarketSignPending =>
@@ -7444,6 +7489,30 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get secondaryMarketPaymentPending =>
       'Please wait for payment instructions. Payment status updates after financial confirmation.';
+
+  @override
+  String get secondaryPurchaseBreakdown => 'Application details';
+
+  @override
+  String get secondaryApprovedUnits => 'Approved units';
+
+  @override
+  String get secondaryApprovedAmount => 'Approved amount';
+
+  @override
+  String get secondaryApprovedAt => 'Approved at';
+
+  @override
+  String get secondaryPaymentReceivedAt => 'Payment received at';
+
+  @override
+  String get secondaryListingDetail => 'Listing details';
+
+  @override
+  String get secondaryListedAt => 'Listed at';
+
+  @override
+  String get secondaryListingNumber => 'Listing ID';
 
   @override
   String get secondaryMarketProcessId => 'Application ID';

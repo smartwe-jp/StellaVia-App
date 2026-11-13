@@ -94,22 +94,33 @@ class _SectionsState extends ConsumerState<_Sections> {
             }),
           ),
           if (section == _Section.history)
-            AppFilterBar<TradeList>(
-              value: history,
-              items: [
-                AppFilterBarItem(
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+              child: AppDualSegmentedControl<TradeList>(
+                height: 34,
+                radius: 12,
+                style: AppSegmentedControlStyle(
+                  shadows: const [],
+                  itemPadding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
+                  selectedBackgroundColor: context.appColors.surface,
+                ),
+                value: history,
+                first: AppDualSegmentItem(
                   value: TradeList.salesHistory,
                   label: l.tradeSubSell,
                 ),
-                AppFilterBarItem(
+                second: AppDualSegmentItem(
                   value: TradeList.purchaseHistory,
                   label: l.tradeSubBuy,
                 ),
-              ],
-              onChanged: (value) => setState(() {
-                history = value;
-                page = 1;
-              }),
+                onChanged: (value) => setState(() {
+                  history = value;
+                  page = 1;
+                }),
+              ),
             ),
           Expanded(
             child: RefreshIndicator(

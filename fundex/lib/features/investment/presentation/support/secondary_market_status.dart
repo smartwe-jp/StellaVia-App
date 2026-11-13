@@ -11,13 +11,22 @@ String secondaryApplicationStatus(AppLocalizations l, int? status) =>
       5 => l.secondaryMarketStateWithdrawn,
       _ => l.secondaryMarketStateUnknown,
     };
-String secondaryContractStatus(AppLocalizations l, int? status) =>
+bool hasSecondaryContract(MyPageApplyRecord record) =>
+    record.status != 5 && record.contractId?.trim().isNotEmpty == true;
+bool isSecondaryContractUnderReview(MyPageApplyRecord record) =>
+    hasSecondaryContract(record) && record.ecStatus == 1;
+bool canSignSecondaryContract(MyPageApplyRecord record) =>
+    hasSecondaryContract(record) &&
+    record.ecUserTodo == true &&
+    (record.ecStatus == 0 || record.ecStatus == 1);
+
+String? secondaryContractStatusLabel(AppLocalizations l, int? status) =>
     switch (status) {
       0 => l.secondaryMarketContractUnsigned,
       1 => l.secondaryMarketContractSigned,
-      2 => l.secondaryMarketContractPending,
-      3 => l.secondaryMarketContractEffective,
-      _ => l.secondaryMarketStateUnknown,
+      2 || 4 => l.secondaryContractCompleted,
+      3 => l.secondaryContractDeclined,
+      _ => null,
     };
 bool isSecondaryApplication(MyPageApplyRecord record) =>
     record.secondaryMarketSellId?.trim().isNotEmpty == true;

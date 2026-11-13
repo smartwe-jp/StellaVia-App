@@ -7067,16 +7067,82 @@ class AppLocalizationsJa extends AppLocalizations {
   String get secondaryMarketContractEffective => '発効済み';
 
   @override
+  String get secondaryContractCompleted => '完了';
+
+  @override
+  String get secondaryContractDeclined => '辞退済';
+
+  @override
+  String get secondaryContractTodoCount => '対応待ち';
+
+  @override
+  String get secondaryContractEmailMissing => '登録メールアドレスを確認してください。';
+
+  @override
+  String get secondaryContractEmailSent => '契約書のメール送信を受け付けました。';
+
+  @override
+  String get secondaryContractProcedure => '契約手続き';
+
+  @override
+  String get secondaryBuyerContractReview => '電子契約確認中';
+
+  @override
   String get secondaryMarketContractTodo => '署名が必要です';
 
   @override
-  String get secondaryMarketSign => '契約に署名';
+  String get secondaryMarketAwaitingSignature => '署名待ち';
+
+  @override
+  String get secondaryMarketViewContract => '電子契約を確認';
+
+  @override
+  String get secondaryMarketSign => '署名する';
+
+  @override
+  String get secondaryContractProgress => '手続進捗';
+
+  @override
+  String get secondaryMarketSignatureHint => '枠内に署名してください';
+
+  @override
+  String get secondaryMarketClearSignature => '書き直す';
+
+  @override
+  String get secondaryMarketConfirmSignature => '署名を確定';
+
+  @override
+  String get secondaryMarketSignatureFailed => '署名できませんでした。戻って更新してから再度お試しください。';
 
   @override
   String get secondaryMarketSignPending => '現在、署名手続きは利用できません。サポートへお問い合わせください。';
 
   @override
   String get secondaryMarketPaymentPending => '入金案内をお待ちください。入金状況は財務確認後に更新されます。';
+
+  @override
+  String get secondaryPurchaseBreakdown => '申込明細';
+
+  @override
+  String get secondaryApprovedUnits => '承認口数';
+
+  @override
+  String get secondaryApprovedAmount => '承認金額';
+
+  @override
+  String get secondaryApprovedAt => '承認日時';
+
+  @override
+  String get secondaryPaymentReceivedAt => '入金確認日時';
+
+  @override
+  String get secondaryListingDetail => '出品詳細';
+
+  @override
+  String get secondaryListedAt => '出品日時';
+
+  @override
+  String get secondaryListingNumber => '出品番号';
 
   @override
   String get secondaryMarketProcessId => '申込番号';

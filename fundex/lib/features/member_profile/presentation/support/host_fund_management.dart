@@ -36,6 +36,16 @@ String fundPeriod(String? start, String? end) => [start, end]
     .where((s) => s.trim().isNotEmpty)
     .map(fundDate)
     .join(' ～ ');
+String applicationPeriod(MyPageApplyRecord record, AppLocalizations l) {
+  final raw = record.period?.trim() ?? '';
+  if (raw.isNotEmpty)
+    return num.tryParse(raw) == null
+        ? raw
+        : '$raw ${l.hostManageFundMonthUnit}';
+  final range = fundPeriod(record.startDate, record.endDate);
+  return range.isEmpty ? '—' : range;
+}
+
 String applyYield(MyPageApplyRecord r, AppLocalizations l) {
   final investor = r.investorType;
   final type = investor?.earningsType?.toUpperCase();

@@ -828,6 +828,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         ),
       ),
       GoRoute(
+        path: '/profile/my/secondary-market/listings/:id',
+        builder: (context, state) => SecondaryMarketMarketplaceDetailPage(
+          orderId: state.pathParameters['id']!,
+        ),
+      ),
+      GoRoute(
         path: '/profile/my/secondary-market/purchases/:id',
         builder: (context, state) => SecondaryMarketActivityDetailPage(id: state.pathParameters['id']!, sale: false),
       ),

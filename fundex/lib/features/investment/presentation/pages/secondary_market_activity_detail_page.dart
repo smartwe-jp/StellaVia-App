@@ -9,8 +9,11 @@ import '../../../member_profile/presentation/support/mypage_withdraw_action.dart
 import '../controllers/secondary_market_controller.dart';
 import '../support/secondary_market_status.dart';
 import '../widgets/secondary_market_activity_cards.dart';
+import '../widgets/secondary_purchase_breakdown.dart';
 import '../widgets/secondary_market_refresh_scope.dart';
-import '../widgets/secondary_market_contract_actions.dart';
+
+import 'secondary_contract_page.dart';
+import '../controllers/trade_management_provider.dart';
 
 class SecondaryMarketActivityDetailPage extends ConsumerStatefulWidget {
   const SecondaryMarketActivityDetailPage({
@@ -31,13 +34,30 @@ class _SecondaryMarketActivityDetailPageState
   Future<void> _refresh() async {
     if (widget.sale) {
       await ref
-          .refresh(secondaryMarketOrderProvider(widget.id).future)
+          .refresh(secondaryMarketSellerOrderProvider(widget.id).future)
           .catchError((Object _) => null);
     } else {
       await ref
           .refresh(secondaryMarketApplicationProvider(widget.id).future)
           .catchError((Object _) => null);
     }
+  }
+
+  Future<void> _openContract(MyPageApplyRecord record, bool sign) async {
+    if (busy ||
+        !hasSecondaryContract(record) ||
+        (sign && !canSignSecondaryContract(record))) {
+      return;
+    }
+    await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) =>
+            SecondaryContractPage(id: record.contractId!.trim(), sign: sign),
+      ),
+    );
+    if (!mounted) return;
+    ref.invalidate(tradePageProvider);
+    await _refresh();
   }
 
   Future<void> _cancel({
@@ -80,7 +100,7 @@ class _SecondaryMarketActivityDetailPageState
   Widget build(BuildContext context) {
     final l = context.l10n;
     final order = widget.sale
-        ? ref.watch(secondaryMarketOrderProvider(widget.id))
+        ? ref.watch(secondaryMarketSellerOrderProvider(widget.id))
         : null;
     final application = widget.sale
         ? null
@@ -94,19 +114,30 @@ class _SecondaryMarketActivityDetailPageState
         sale != null && user?.userId != null && sale.memberId == user!.userId
         ? sale
         : null;
+    final pendingSignatures =
+        ownSale?.applyList.where(canSignSecondaryContract).length ?? 0;
     final purchase = application?.asData?.value;
     return SecondaryMarketRefreshScope(
       onRefresh: _refresh,
       child: Scaffold(
         appBar: AppNavigationBar(
           title: widget.sale
-              ? l.secondaryMarketSales
+              ? l.secondaryListingDetail
               : l.secondaryMarketApplicationDetail,
+          trailing: Tooltip(
+            message: l.secondaryMarketRefresh,
+            child: AppNavigationIconButton(
+              icon: Icons.refresh_rounded,
+              onTap: busy || loading ? null : _refresh,
+            ),
+          ),
           leading: AppNavigationIconButton(
             icon: Icons.arrow_back,
             onTap: () => context.canPop()
                 ? context.pop()
-                : context.go('/profile/my/secondary-market?tab=${widget.sale ? 'sales' : 'buy'}'),
+                : context.go(
+                    '/profile/my/secondary-market?tab=${widget.sale ? 'sales' : 'buy'}',
+                  ),
           ),
         ),
         body: RefreshIndicator(
@@ -119,10 +150,6 @@ class _SecondaryMarketActivityDetailPageState
               if (error) Text(l.fundListLoadError),
               if (!loading && !error && ownSale == null && purchase == null)
                 Text(l.secondaryMarketDetailUnavailable),
-              TextButton(
-                onPressed: busy ? null : _refresh,
-                child: Text(l.secondaryMarketRefresh),
-              ),
               if (ownSale != null) ...[
                 SecondaryMarketListingCard(
                   record: ownSale,
@@ -135,29 +162,35 @@ class _SecondaryMarketActivityDetailPageState
                       ? () => _cancel(order: ownSale)
                       : null,
                 ),
+                const SizedBox(height: 24),
                 Text(
-                  l.secondaryMarketApplications,
+                  "${l.secondaryMarketApplications}  (${ownSale.applyList.length})",
                   style: context.appTextTheme.sectionTitle,
                 ),
+                if (pendingSignatures > 0)
+                  Text(
+                    '${l.secondaryContractTodoCount} $pendingSignatures',
+                    style: context.appTextTheme.link,
+                  ),
+                const SizedBox(height: 8),
                 if (ownSale.applyList.isEmpty)
                   Text(l.secondaryMarketNoApplications),
                 for (final item in ownSale.applyList) ...[
-                  SecondaryMarketApplicationCard(record: item),
-                  SecondaryMarketContractActions(record: item, seller: true),
+                  SecondaryMarketApplicationCard(
+                    record: item,
+                    seller: true,
+                    onContract: (sign) => _openContract(item, sign),
+                  ),
                 ],
               ],
               if (purchase != null) ...[
                 SecondaryMarketApplicationCard(
                   record: purchase,
-                  onCancel:
-                      !busy &&
-                          !loading &&
-                          !error &&
-                          canWithdrawSecondaryApplication(purchase)
-                      ? () => _cancel(application: purchase)
-                      : null,
+                  showApplicationTime: false,
+                  showPayment: true,
+                  onContract: (sign) => _openContract(purchase, sign),
                 ),
-                SecondaryMarketContractActions(record: purchase, seller: false),
+                SecondaryPurchaseBreakdown(record: purchase),
               ],
             ],
           ),

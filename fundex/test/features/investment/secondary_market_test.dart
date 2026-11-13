@@ -1,4 +1,11 @@
 import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'package:fundex/features/investment/presentation/widgets/secondary_contract_signature_pad.dart';
+import 'package:fundex/features/investment/presentation/pages/secondary_signature_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fundex/features/member_profile/presentation/providers/mypage_membership_providers.dart';
+import 'package:hand_signature/signature.dart';
 import 'package:fundex/features/member_profile/presentation/support/mypage_section_support.dart';
 import 'package:fundex/features/member_profile/presentation/support/mypage_secondary_market_models.dart';
 import 'package:flutter/material.dart';
@@ -180,6 +187,130 @@ void main() {
       );
     },
   );
+  test('contract presence and the current signer gate are independent', () {
+    for (final id in [null, '', '  ', '123']) {
+      for (final status in [null, 0, 1, 2, 3]) {
+        for (final todo in [null, false, true]) {
+          final record = MyPageApplyRecord(
+            projectName: 'Fund',
+            contractId: id,
+            ecStatus: status,
+            ecUserTodo: todo,
+          );
+          expect(hasSecondaryContract(record), id == '123');
+          expect(
+            isSecondaryContractUnderReview(record),
+            id == '123' && status == 1,
+          );
+          expect(
+            canSignSecondaryContract(record),
+            id == '123' && (status == 0 || status == 1) && todo == true,
+          );
+        }
+      }
+    }
+  });
+  testWidgets(
+    'signature field accepts strokes and clearing disables confirmation',
+    (tester) async {
+      const locale = Locale('ja');
+      final l = await AppLocalizations.delegate.load(locale);
+      await tester.binding.setSurfaceSize(const Size(390, 844));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      const identity = ('a', 42, 'user');
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            myPageMembershipIdentityProvider.overrideWithValue(identity),
+          ],
+          child: MaterialApp(
+            locale: locale,
+            supportedLocales: AppLocalizations.supportedLocales,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            theme: AppThemeFactory.light(locale: locale),
+            home: const SecondarySignaturePage(
+              id: 'contract',
+              identity: identity,
+            ),
+          ),
+        ),
+      );
+      final pad = find.byType(HandSignature);
+      expect(tester.getSize(pad).height, greaterThan(80));
+      expect(
+        tester.getSize(pad).width,
+        greaterThan(tester.getSize(pad).height),
+      );
+      final start = tester.getCenter(pad);
+      await tester.dragFrom(start, const Offset(80, 35));
+      await tester.pump();
+      expect(
+        tester.widget<AppButton>(find.byType(AppButton)).onPressed,
+        isNotNull,
+      );
+      await tester.tap(find.text(l.secondaryMarketClearSignature));
+      await tester.pump();
+      expect(
+        tester.widget<AppButton>(find.byType(AppButton)).onPressed,
+        isNull,
+      );
+    },
+  );
+  testWidgets('signature upload rotates a rightward stroke clockwise', (
+    tester,
+  ) async {
+    late final Completer<Uint8List> captured;
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppThemeFactory.light(locale: const Locale('ja')),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: SecondaryContractSignaturePad(
+            onConfirm: (png) async => captured.complete(png),
+          ),
+        ),
+      ),
+    );
+    final start =
+        tester.getCenter(find.byType(HandSignature)) - const Offset(100, 0);
+    final stroke = await tester.startGesture(start);
+    for (var x = 0; x <= 160; x += 8) {
+      await stroke.moveTo(start + Offset(x.toDouble(), 0));
+    }
+    for (var y = 0; y <= 60; y += 6) {
+      await stroke.moveTo(start + Offset(160, y.toDouble()));
+    }
+    await stroke.up();
+    await tester.pump();
+    await tester.runAsync(() async {
+      captured = Completer<Uint8List>();
+      tester.widget<AppButton>(find.byType(AppButton)).onPressed!();
+      final codec = await ui.instantiateImageCodec(await captured.future);
+      final image = (await codec.getNextFrame()).image;
+      expect((image.width, image.height), (256, 512));
+      final pixels = (await image.toByteData(
+        format: ui.ImageByteFormat.rawRgba,
+      ))!;
+      // The downward hook at the right end now extends left at the bottom.
+      var upperLeft = 0, lowerLeft = 0;
+      for (var y = 0; y < image.height; y++) {
+        for (var x = 0; x < image.width ~/ 2; x++) {
+          if (pixels.getUint8((y * image.width + x) * 4 + 3) > 128) {
+            if (y < image.height ~/ 2) {
+              upperLeft++;
+            } else {
+              lowerLeft++;
+            }
+          }
+        }
+      }
+      expect(lowerLeft, greaterThan(upperLeft + 20));
+      image.dispose();
+      codec.dispose();
+    });
+    await tester.pumpAndSettle();
+  });
   for (final locale in [
     const Locale('ja'),
     const Locale('zh'),
@@ -204,7 +335,7 @@ void main() {
             theme: AppThemeFactory.light(locale: locale),
             supportedLocales: AppLocalizations.supportedLocales,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
-            home: const Scaffold(
+            home: Scaffold(
               body: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -212,6 +343,7 @@ void main() {
                     SecondaryMarketContractActions(
                       record: record,
                       seller: false,
+                      onOpen: (_) {},
                     ),
                   ],
                 ),
@@ -221,9 +353,10 @@ void main() {
         );
         await tester.pumpAndSettle();
         expect(find.text(l.secondaryMarketStatePayment), findsOneWidget);
-        expect(find.text(l.secondaryMarketContractTodo), findsOneWidget);
+        expect(find.text(l.secondaryMarketViewContract), findsNothing);
+        expect(find.text(l.secondaryMarketSign), findsOneWidget);
         expect(find.text(l.secondaryMarketPaymentPending), findsOneWidget);
-        expect(find.byType(AppButton), findsNothing);
+        expect(find.byType(AppButton), findsOneWidget);
         expect(tester.takeException(), isNull);
       },
     );

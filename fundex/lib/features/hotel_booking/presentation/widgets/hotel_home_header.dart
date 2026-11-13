@@ -24,11 +24,6 @@ class HotelHomeHeader extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              context.l10n.hotelHomeTitle,
-              style: HotelHomeTextStyles.pageTitle(context),
-            ),
-            const SizedBox(height: 10),
             HotelHomeSearch(criteria: state.criteria, onApply: onApply),
             const SizedBox(height: 18),
             AppCard(
@@ -80,7 +75,6 @@ class HotelHomeHeader extends StatelessWidget {
   );
 }
 
-/// Brand navigation remains separate from the scrolling search/filter content.
 class HotelHomeNavigationBar extends StatelessWidget
     implements PreferredSizeWidget {
   const HotelHomeNavigationBar({super.key});
@@ -96,19 +90,12 @@ class HotelHomeNavigationBar extends StatelessWidget
           height: 56,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Text(
-                  'STELLAVIA',
-                  style: HotelHomeTextStyles.brandWordmark(context),
-                ),
-                const Spacer(),
-                IconButton(
-                  tooltip: context.l10n.notificationsTitle,
-                  onPressed: () => context.push('/notifications'),
-                  icon: const Icon(Icons.notifications_none),
-                ),
-              ],
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(
+                context.l10n.hotelHomeTitle,
+                style: HotelHomeTextStyles.pageTitle(context),
+              ),
             ),
           ),
         ),

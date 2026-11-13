@@ -7005,16 +7005,82 @@ class AppLocalizationsZh extends AppLocalizations {
   String get secondaryMarketContractEffective => '已生效';
 
   @override
+  String get secondaryContractCompleted => '已完成';
+
+  @override
+  String get secondaryContractDeclined => '已放弃';
+
+  @override
+  String get secondaryContractTodoCount => '待处理';
+
+  @override
+  String get secondaryContractEmailMissing => '请确认注册邮箱。';
+
+  @override
+  String get secondaryContractEmailSent => '已受理契约邮件发送请求。';
+
+  @override
+  String get secondaryContractProcedure => '签约流程';
+
+  @override
+  String get secondaryBuyerContractReview => '电子契约确认中';
+
+  @override
   String get secondaryMarketContractTodo => '待您签约';
 
   @override
-  String get secondaryMarketSign => '签署契约';
+  String get secondaryMarketAwaitingSignature => '待签约';
+
+  @override
+  String get secondaryMarketViewContract => '查看电子契约';
+
+  @override
+  String get secondaryMarketSign => '去签约';
+
+  @override
+  String get secondaryContractProgress => '办理进度';
+
+  @override
+  String get secondaryMarketSignatureHint => '请在框内签名';
+
+  @override
+  String get secondaryMarketClearSignature => '重写';
+
+  @override
+  String get secondaryMarketConfirmSignature => '确认签署';
+
+  @override
+  String get secondaryMarketSignatureFailed => '签署失败，请返回刷新后重试。';
 
   @override
   String get secondaryMarketSignPending => '签约操作暂不可用，请联系客服。';
 
   @override
   String get secondaryMarketPaymentPending => '请等待入金指引，最终到账状态以财务确认为准。';
+
+  @override
+  String get secondaryPurchaseBreakdown => '申请明细';
+
+  @override
+  String get secondaryApprovedUnits => '审核通过口数';
+
+  @override
+  String get secondaryApprovedAmount => '审核通过金额';
+
+  @override
+  String get secondaryApprovedAt => '审核时间';
+
+  @override
+  String get secondaryPaymentReceivedAt => '到账时间';
+
+  @override
+  String get secondaryListingDetail => '挂单详情';
+
+  @override
+  String get secondaryListedAt => '出品时间';
+
+  @override
+  String get secondaryListingNumber => '挂单编号';
 
   @override
   String get secondaryMarketProcessId => '申请编号';
@@ -14093,16 +14159,82 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get secondaryMarketContractEffective => '已生效';
 
   @override
+  String get secondaryContractCompleted => '已完成';
+
+  @override
+  String get secondaryContractDeclined => '已放棄';
+
+  @override
+  String get secondaryContractTodoCount => '待處理';
+
+  @override
+  String get secondaryContractEmailMissing => '請確認註冊信箱。';
+
+  @override
+  String get secondaryContractEmailSent => '已受理契約郵件寄送請求。';
+
+  @override
+  String get secondaryContractProcedure => '簽約流程';
+
+  @override
+  String get secondaryBuyerContractReview => '電子契約確認中';
+
+  @override
   String get secondaryMarketContractTodo => '待您簽約';
 
   @override
-  String get secondaryMarketSign => '簽署契約';
+  String get secondaryMarketAwaitingSignature => '待簽約';
+
+  @override
+  String get secondaryMarketViewContract => '查看電子契約';
+
+  @override
+  String get secondaryMarketSign => '去簽約';
+
+  @override
+  String get secondaryContractProgress => '辦理進度';
+
+  @override
+  String get secondaryMarketSignatureHint => '請在框內簽名';
+
+  @override
+  String get secondaryMarketClearSignature => '重寫';
+
+  @override
+  String get secondaryMarketConfirmSignature => '確認簽署';
+
+  @override
+  String get secondaryMarketSignatureFailed => '簽署失敗，請返回重新整理後重試。';
 
   @override
   String get secondaryMarketSignPending => '簽約操作暫不可用，請聯絡客服。';
 
   @override
   String get secondaryMarketPaymentPending => '請等待入金指引，最終到帳狀態以財務確認為準。';
+
+  @override
+  String get secondaryPurchaseBreakdown => '申請明細';
+
+  @override
+  String get secondaryApprovedUnits => '審核通過口數';
+
+  @override
+  String get secondaryApprovedAmount => '審核通過金額';
+
+  @override
+  String get secondaryApprovedAt => '審核時間';
+
+  @override
+  String get secondaryPaymentReceivedAt => '到帳時間';
+
+  @override
+  String get secondaryListingDetail => '掛單詳情';
+
+  @override
+  String get secondaryListedAt => '出品時間';
+
+  @override
+  String get secondaryListingNumber => '掛單編號';
 
   @override
   String get secondaryMarketProcessId => '申請編號';

@@ -109,12 +109,6 @@ class _ApplicationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = context.l10n,
         locale = Localizations.localeOf(context).toLanguageTag();
-    final raw = record.period?.trim() ?? '';
-    final period = raw.isEmpty
-        ? fundPeriod(record.startDate, record.endDate)
-        : num.tryParse(raw) == null
-        ? raw
-        : '$raw ${l.hostManageFundMonthUnit}';
     final id = record.projectId?.trim();
     return FundMyPageProjectCard(
       title: record.projectName,
@@ -130,7 +124,7 @@ class _ApplicationCard extends StatelessWidget {
           ),
           FundLabeledValue(
             label: l.hostManageFundPeriod,
-            value: period.isEmpty ? '—' : period,
+            value: applicationPeriod(record, l),
           ),
         ],
         FundLabeledValue(

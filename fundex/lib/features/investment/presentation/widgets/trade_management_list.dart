@@ -1,5 +1,6 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
@@ -9,7 +10,7 @@ import '../controllers/trade_management_provider.dart';
 import 'secondary_market_activity_cards.dart';
 import 'secondary_market_marketplace_card.dart';
 
-class TradeManagementList extends StatelessWidget {
+class TradeManagementList extends ConsumerWidget {
   const TradeManagementList({
     super.key,
     required this.data,
@@ -23,7 +24,7 @@ class TradeManagementList extends StatelessWidget {
   final ValueChanged<int> onPage;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -45,8 +46,7 @@ class TradeManagementList extends StatelessWidget {
                 ? SecondaryMarketMarketplaceCard(
                     record: order,
                     onTap: () => context.push(
-                      '/home/free-market/${Uri.encodeComponent(order.id!)}',
-                      extra: order,
+                      '/profile/my/secondary-market/listings/${Uri.encodeComponent(order.id!)}',
                     ),
                   )
                 : SecondaryMarketListingCard(
@@ -58,15 +58,22 @@ class TradeManagementList extends StatelessWidget {
                           ),
                   ),
           ),
-        for (final record in data.applications)
+        for (final record in data.applications) ...[
           SecondaryMarketApplicationCard(
             record: record,
-            onTap: record.processId == null
+            onTap: record.processId?.trim().isNotEmpty != true
                 ? null
-                : () => context.push(
-                    '/profile/my/secondary-market/purchases/${Uri.encodeComponent(record.processId!)}',
-                  ),
+                : () async {
+                    await context.push(
+                      '/profile/my/secondary-market/purchases/${Uri.encodeComponent(record.processId!)}',
+                    );
+                    if (context.mounted)
+                      ref.invalidate(
+                        tradePageProvider((list: list, page: page)),
+                      );
+                  },
           ),
+        ],
         if (page > 1 || data.pages > 1)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

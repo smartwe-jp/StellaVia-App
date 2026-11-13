@@ -157,6 +157,21 @@ final secondaryMarketOrderProvider = FutureProvider.autoDispose
       }
     });
 
+// The seller-scoped list returns signer tasks for the selling member.
+final secondaryMarketSellerOrderProvider = FutureProvider.autoDispose
+    .family<MyPageOrderInquiryRecord?, String>((ref, id) async {
+      final userId = (await ref.watch(currentAuthUserProvider.future))?.userId;
+      if (userId == null) return null;
+      final repo = ref.read(myPageRepositoryProvider);
+      for (var page = 1; ; page++) {
+        final result = await repo.fetchTradeListings(page: page, userId: userId);
+        for (final row in result.rows) {
+          if (row.id == id) return row;
+        }
+        if (result.rows.isEmpty || page * 10 >= result.total) return null;
+      }
+    });
+
 final secondaryMarketApplicationProvider = FutureProvider.autoDispose
     .family<MyPageApplyRecord?, String>((ref, processId) async {
       final user = await ref.watch(currentAuthUserProvider.future);
@@ -177,6 +192,7 @@ void refreshSecondaryMarket(WidgetRef ref) {
   ref.invalidate(secondaryMarketActiveSalesProvider);
   ref.invalidate(secondaryMarketControllerProvider);
   ref.invalidate(secondaryMarketOrderProvider);
+  ref.invalidate(secondaryMarketSellerOrderProvider);
   ref.invalidate(secondaryMarketApplicationProvider);
   ref.invalidate(secondaryMarketMarketplaceListProvider);
   ref.invalidate(myPageOrderInquiryListProvider);

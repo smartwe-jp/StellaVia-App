@@ -67,8 +67,6 @@ void main() {
                                 padding: const EdgeInsets.all(16),
                                 children: [
                                   HomeBrandIntro(
-                                    isAuthenticated: member,
-                                    displayName: '田中さん',
                                     ranks: const [
                                       'REGULAR',
                                       'BRONZE',

@@ -59,6 +59,7 @@ dependencies:
   sensors_plus: ^7.1.0
   material_symbols_icons: ^4.2951.0
   flutter_svg: ^2.3.2
+  hand_signature: ^3.0.3
 
 dev_dependencies:
   flutter_test:

@@ -36,7 +36,7 @@ Use three layers of coordination:
 
 ### Secondary market restoration (2026-11-05)
 
-- Market filtering, contract metadata, separate buy/sell management, available-holding sale entry and refresh are restored. Signing and deposit operations are explicitly deferred; only their status is displayed.
+- Market filtering, contract metadata, separate buy/sell management, available-holding sale entry and refresh are restored. Buyer and seller electronic contract viewing and signing are connected per application. Deposit operations are deferred.
 - See [Secondary market roadmap](secondary-market-roadmap.md) for API/status contracts, validation and remaining integration work.
 
 ### Home redesign (2026-10-28)

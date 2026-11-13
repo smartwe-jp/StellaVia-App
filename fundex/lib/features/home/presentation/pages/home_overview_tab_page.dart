@@ -28,7 +28,6 @@ import '../providers/home_miles_providers.dart';
 import '../widgets/home_simulation_card.dart';
 import '../support/home_design_theme.dart';
 import '../support/home_miles_display.dart';
-import '../support/home_display_name_resolver.dart';
 
 class HomeOverviewTabPage extends ConsumerStatefulWidget {
   const HomeOverviewTabPage({super.key});
@@ -66,13 +65,6 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
         : 0;
     final asyncProjects = ref.watch(fundProjectListProvider);
     final projects = asyncProjects.valueOrNull ?? const <FundProject>[];
-    final profile = isAuthenticated
-        ? ref.watch(memberBasicProfileProvider)
-        : null;
-    final displayName = resolveHomeDisplayName(
-      locale: Localizations.localeOf(context),
-      profile: profile,
-    );
     final featuredProjects = projects.take(4).toList(growable: false);
     final featuredFundCards = featuredProjects
         .map(
@@ -147,8 +139,6 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                                 message: l10n.networkOfflineBannerMessage,
                               ),
                             HomeBrandIntro(
-                              isAuthenticated: isAuthenticated,
-                              displayName: displayName,
                               ranks: homeRankNames(
                                 ref.watch(homeMilesRulesProvider).data,
                               ),

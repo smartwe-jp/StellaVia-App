@@ -28,3 +28,4 @@ export 'src/host_miles/host_miles_api_client.dart';
 export 'src/host_miles/host_miles_dtos.dart';
 export 'src/asset_statistics/asset_statistics_api_client.dart';
 export 'src/asset_statistics/asset_statistics_dtos.dart';
+export 'src/investment/electronic_contract_api_client.dart';

@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 
+import 'secondary_market_marketplace_presenter.dart';
+
 FundSecondaryMarketCardData buildSecondaryMarketCardData(
   BuildContext context,
   MyPageOrderInquiryRecord record,
@@ -22,7 +24,7 @@ FundSecondaryMarketCardData buildSecondaryMarketCardData(
     statusLabel: context.l10n.homeFreeMarketStatusListed,
     statusBackgroundColor: colors.primary,
     statusForegroundColor: colors.onDark,
-    annualYield: _formatYieldPercent(record.investorType?.earningsRadio),
+    annualYield: formatSecondaryMarketRatio(record.investorType?.earningsRadio),
     investorTypeLabel: investorCode != null && investorCode.isNotEmpty
         ? investorCode
         : '--',
@@ -32,13 +34,4 @@ FundSecondaryMarketCardData buildSecondaryMarketCardData(
     progress: progress.clamp(0, 1),
     onTap: (record.id == null || record.id!.trim().isEmpty) ? null : onTap,
   );
-}
-
-String _formatYieldPercent(double? ratio) {
-  if (ratio == null) {
-    return '--';
-  }
-  final percentage = ratio > 1 ? ratio : ratio * 100;
-  final hasFraction = percentage % 1 != 0;
-  return '${percentage.toStringAsFixed(hasFraction ? 1 : 0)}%';
 }
