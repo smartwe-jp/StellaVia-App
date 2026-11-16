@@ -51,11 +51,10 @@ class MyPageSummaryChartCard extends ConsumerWidget {
             data?.total,
       MyPageChartKind.operating =>
         data?.total ??
-            ref
-                .watch(myPageAccountStatisticProvider)
-                .asData
-                ?.value
-                ?.crowdfundingTotal,
+            data?.holdings.fold<int>(
+              0,
+              (sum, holding) => sum + (holding.investMoneyValid ?? 0),
+            ),
       MyPageChartKind.available =>
         ref
             .watch(myPageAccountStatisticProvider)
@@ -194,11 +193,7 @@ class MyPageSummaryChartCard extends ConsumerWidget {
           else if (kind == MyPageChartKind.operating)
             MyPageBalanceRing(
               value: MyPageChartDisplay.amount(
-                data.total ??
-                    data.holdings.fold<int>(
-                      0,
-                      (total, h) => total + (h.investMoneyValid ?? 0),
-                    ),
+                headerTotal,
                 Localizations.localeOf(context).toLanguageTag(),
               ),
               unit: unit,

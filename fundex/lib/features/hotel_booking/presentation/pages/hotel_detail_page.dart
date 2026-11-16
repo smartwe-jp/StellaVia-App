@@ -11,6 +11,7 @@ import '../providers/hotel_booking_providers.dart';
 import '../providers/hotel_detail_membership_provider.dart';
 import '../providers/hotel_management_providers.dart';
 import '../support/hotel_detail_route_args.dart';
+import '../support/hotel_room_guest_form_targets.dart';
 import '../widgets/hotel_detail_redesign_content.dart';
 import '../widgets/hotel_search_condition_pickers.dart';
 import '../widgets/hotel_state_views.dart';
@@ -242,10 +243,8 @@ class _HotelDetailSessionState extends ConsumerState<HotelDetailSession> {
   }
 
   Future<void> _book() async {
-    if (widget.mode != HotelBookingMode.regular ||
-        selection.busy ||
-        _openingConfirmation ||
-        selection.roomCount == 0) {
+    final hostMiles = widget.mode == HotelBookingMode.hostMiles;
+    if (selection.busy || _openingConfirmation || selection.roomCount == 0) {
       return;
     }
     if (ref.read(isAuthenticatedProvider).asData?.value != true) {
@@ -264,7 +263,11 @@ class _HotelDetailSessionState extends ConsumerState<HotelDetailSession> {
       await selection.refreshQuote();
       if (!mounted) return;
       final assigned = selection.assignment;
-      if (selection.failed || assigned == null || (assigned.price ?? 0) <= 0) {
+      if (selection.failed ||
+          assigned == null ||
+          (hostMiles
+              ? selection.quotation?.pointsRequired == null
+              : (assigned.price ?? 0) <= 0)) {
         AppNotice.show(
           context,
           message: context.l10n.hotelAssignOccupancyFailed,
@@ -290,15 +293,32 @@ class _HotelDetailSessionState extends ConsumerState<HotelDetailSession> {
         );
         if (!mounted || confirmed != true) return;
       }
+      final seed = HotelBookingConfirmSeed(
+        detail: widget.detail,
+        criteria: widget.criteria.copyWith(stayBenefit: hostMiles),
+        hostMiles: hostMiles,
+        selectedRooms: selection.selections,
+        assignedPrice: assigned.price,
+        roomTypeCustNums: assigned.roomTypeCustNums,
+      );
+      if (hostMiles) {
+        final guests = buildHotelRoomGuestTargets(seed);
+        final adults = guests.fold(
+          0,
+          (count, room) => count + room.initialAdults,
+        );
+        final kids = guests.fold(0, (count, room) => count + room.initialKids);
+        if (adults != seed.criteria.occupancy || kids != seed.criteria.kids) {
+          AppNotice.show(
+            context,
+            message: context.l10n.hotelAssignOccupancyFailed,
+          );
+          return;
+        }
+      }
       await context.push(
         '/hotel-booking/${Uri.encodeComponent(widget.detail.id)}/confirm',
-        extra: HotelBookingConfirmSeed(
-          detail: widget.detail,
-          criteria: widget.criteria.copyWith(stayBenefit: false),
-          selectedRooms: selection.selections,
-          assignedPrice: assigned.price,
-          roomTypeCustNums: assigned.roomTypeCustNums,
-        ),
+        extra: seed,
       );
     } finally {
       if (mounted) setState(() => _openingConfirmation = false);

@@ -280,136 +280,144 @@ void main() {
       expect(detail.roomTypes.first.beds.first.num, equals(2));
     });
 
-    test(
-      'createBooking posts nested booking entity and returns order id',
-      () async {
-        final client = _buildClient((options) async {
-          expect(options.method, equals('POST'));
-          expect(options.path, equals(HotelApiPaths.bookingOrderSaveV2));
-          expect(options.extra['auth_required'], isTrue);
-          expect(
-            options.data,
-            equals(<String, dynamic>{
-              'parent': <String, dynamic>{
-                'bookingOrderEntity': <String, dynamic>{
-                  'brandStr': 'stella_asset',
-                  'checkIn': '2026-06-01 00:00:00',
-                  'checkOut': '2026-06-03 00:00:00',
-                  'bookingDate': '',
-                  'firstName': 'Taro',
-                  'lastName': 'Yamada',
-                  'name': 'Yamada Taro',
-                  'nationality': 'JP',
-                  'lang': 'JP',
-                  'hotelInfoID': 'h1',
-                  'roomCount': 1,
-                  'totalCount': 2,
-                  'totalRoomCount': 1,
-                  'contactIntlCode': '81',
-                  'contactMobile': '09000000000',
-                  'contactEmail': 'taro@example.com',
-                  'comment': '',
-                  'receiptTitle': '',
-                  'siteID': '146671713176780822',
-                  'orderRoomTypeData': <Map<String, dynamic>>[
-                    <String, dynamic>{
-                      'roomTypeID': 'r1',
-                      'roomCount': 1,
-                      'roomTypename': 'Twin',
-                      'roomPrice': 5740,
-                      'occupancy': 2,
-                      'roomTypeExtraGuestPrices': <String, dynamic>{
-                        'roomTypeId': 1,
-                        'roomTypeName': 'Twin',
+    for (final hostMiles in [false, true]) {
+      test(
+        'createBooking posts v2 JSON and returns order id (hostMiles=$hostMiles)',
+        () async {
+          final client = _buildClient((options) async {
+            expect(options.method, equals('POST'));
+            expect(
+              options.path,
+              hostMiles
+                  ? '/pms/bookingorder/stella/save'
+                  : HotelApiPaths.bookingOrderSaveV2,
+            );
+            expect(options.contentType, 'application/json');
+            expect(options.extra['auth_required'], isTrue);
+            expect(
+              options.data,
+              equals(<String, dynamic>{
+                'parent': <String, dynamic>{
+                  'bookingOrderEntity': <String, dynamic>{
+                    'brandStr': 'stella_asset',
+                    'checkIn': '2026-06-01 00:00:00',
+                    'checkOut': '2026-06-03 00:00:00',
+                    'bookingDate': '',
+                    'firstName': 'Taro',
+                    'lastName': 'Yamada',
+                    'name': 'Yamada Taro',
+                    'nationality': 'JP',
+                    'lang': 'JP',
+                    'hotelInfoID': 'h1',
+                    'roomCount': 1,
+                    'totalCount': 2,
+                    'totalRoomCount': 1,
+                    'contactIntlCode': '81',
+                    'contactMobile': '09000000000',
+                    'contactEmail': 'taro@example.com',
+                    'comment': '',
+                    'receiptTitle': '',
+                    'siteID': '146671713176780822',
+                    'orderRoomTypeData': <Map<String, dynamic>>[
+                      <String, dynamic>{
+                        'roomTypeID': 'r1',
                         'roomCount': 1,
-                        'totalGuestCount': 2,
-                        'extraGuestCount': 0,
-                        'extraGuestPrice': 0,
-                      },
-                      'roomCusts': <Map<String, dynamic>>[
-                        <String, dynamic>{
-                          'roomTypeID': 1,
-                          'name': 'Yamada Taro',
-                          'firstName': 'Taro',
-                          'lastName': 'Yamada',
-                          'nationality': 'JP',
-                          'email': 'taro@example.com',
-                          'count': 2,
-                          'childCount': 0,
-                          'maxcount': 2,
+                        'roomTypename': 'Twin',
+                        'roomPrice': 5740,
+                        'occupancy': 2,
+                        'roomTypeExtraGuestPrices': <String, dynamic>{
+                          'roomTypeId': 1,
+                          'roomTypeName': 'Twin',
+                          'roomCount': 1,
+                          'totalGuestCount': 2,
+                          'extraGuestCount': 0,
+                          'extraGuestPrice': 0,
                         },
-                      ],
-                    },
-                  ],
-                  'totalAmount': 5740,
-                },
-              },
-              'site': '38',
-              'fundBenefitTicketNo': '',
-            }),
-          );
-          return _jsonOk('{"code":200,"msg":"success","data":1290827}');
-        });
-        final api = HotelApiClient(client);
-
-        final orderId = await api.createBooking(
-          const HotelBookingCreateRequestDto(
-            parent: HotelBookingCreateParentDto(
-              bookingOrderEntity: HotelBookingOrderEntityDto(
-                checkIn: '2026-06-01 00:00:00',
-                checkOut: '2026-06-03 00:00:00',
-                firstName: 'Taro',
-                lastName: 'Yamada',
-                name: 'Yamada Taro',
-                nationality: 'JP',
-                lang: 'JP',
-                hotelInfoId: 'h1',
-                roomCount: 1,
-                totalCount: 2,
-                totalRoomCount: 1,
-                contactIntlCode: '81',
-                contactMobile: '09000000000',
-                contactEmail: 'taro@example.com',
-                orderRoomTypeData: <HotelOrderRoomTypeDataDto>[
-                  HotelOrderRoomTypeDataDto(
-                    roomTypeId: 'r1',
-                    roomCount: 1,
-                    roomTypename: 'Twin',
-                    roomPrice: 5740,
-                    occupancy: 2,
-                    roomTypeExtraGuestPrices: HotelRoomTypeExtraGuestPriceDto(
-                      roomTypeId: 1,
-                      roomTypeName: 'Twin',
-                      roomCount: 1,
-                      totalGuestCount: 2,
-                      extraGuestCount: 0,
-                      extraGuestPrice: 0,
-                    ),
-                    roomCusts: <HotelRoomCustomerDto>[
-                      HotelRoomCustomerDto(
-                        roomTypeId: 1,
-                        name: 'Yamada Taro',
-                        firstName: 'Taro',
-                        lastName: 'Yamada',
-                        nationality: 'JP',
-                        email: 'taro@example.com',
-                        count: 2,
-                        childCount: 0,
-                        maxcount: 2,
-                      ),
+                        'roomCusts': <Map<String, dynamic>>[
+                          <String, dynamic>{
+                            'roomTypeID': 1,
+                            'name': 'Yamada Taro',
+                            'firstName': 'Taro',
+                            'lastName': 'Yamada',
+                            'nationality': 'JP',
+                            'email': 'taro@example.com',
+                            'count': 2,
+                            'childCount': 0,
+                            'maxcount': 2,
+                          },
+                        ],
+                      },
                     ],
-                  ),
-                ],
-                totalAmount: 5740,
+                    'totalAmount': 5740,
+                  },
+                },
+                'site': '38',
+                'fundBenefitTicketNo': '',
+              }),
+            );
+            return _jsonOk('{"code":200,"msg":"success","data":1290827}');
+          });
+          final api = HotelApiClient(client);
+
+          final orderId = await api.createBooking(
+            const HotelBookingCreateRequestDto(
+              parent: HotelBookingCreateParentDto(
+                bookingOrderEntity: HotelBookingOrderEntityDto(
+                  checkIn: '2026-06-01 00:00:00',
+                  checkOut: '2026-06-03 00:00:00',
+                  firstName: 'Taro',
+                  lastName: 'Yamada',
+                  name: 'Yamada Taro',
+                  nationality: 'JP',
+                  lang: 'JP',
+                  hotelInfoId: 'h1',
+                  roomCount: 1,
+                  totalCount: 2,
+                  totalRoomCount: 1,
+                  contactIntlCode: '81',
+                  contactMobile: '09000000000',
+                  contactEmail: 'taro@example.com',
+                  orderRoomTypeData: <HotelOrderRoomTypeDataDto>[
+                    HotelOrderRoomTypeDataDto(
+                      roomTypeId: 'r1',
+                      roomCount: 1,
+                      roomTypename: 'Twin',
+                      roomPrice: 5740,
+                      occupancy: 2,
+                      roomTypeExtraGuestPrices: HotelRoomTypeExtraGuestPriceDto(
+                        roomTypeId: 1,
+                        roomTypeName: 'Twin',
+                        roomCount: 1,
+                        totalGuestCount: 2,
+                        extraGuestCount: 0,
+                        extraGuestPrice: 0,
+                      ),
+                      roomCusts: <HotelRoomCustomerDto>[
+                        HotelRoomCustomerDto(
+                          roomTypeId: 1,
+                          name: 'Yamada Taro',
+                          firstName: 'Taro',
+                          lastName: 'Yamada',
+                          nationality: 'JP',
+                          email: 'taro@example.com',
+                          count: 2,
+                          childCount: 0,
+                          maxcount: 2,
+                        ),
+                      ],
+                    ),
+                  ],
+                  totalAmount: 5740,
+                ),
               ),
             ),
-          ),
-        );
+            hostMiles: hostMiles,
+          );
 
-        expect(orderId, equals('1290827'));
-      },
-    );
-
+          expect(orderId, equals('1290827'));
+        },
+      );
+    }
     test(
       'fetchRefundStrategyText and fetchPriceByDate use PMS endpoints',
       () async {

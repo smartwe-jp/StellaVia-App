@@ -6650,6 +6650,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hostManageFundTabPending => '入金前';
 
   @override
+  String get hostManageFundTabBeforeOperation => '运用前';
+
+  @override
+  String get hostManageFundEmptyBeforeOperation => '暂无运用前的基金';
+
+  @override
   String get hostManageFundTabRunning => '运用中';
 
   @override
@@ -13802,6 +13808,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hostManageFundTabPending => '入金前';
+
+  @override
+  String get hostManageFundTabBeforeOperation => '運用前';
+
+  @override
+  String get hostManageFundEmptyBeforeOperation => '暫無運用前的基金';
 
   @override
   String get hostManageFundTabRunning => '運用中';

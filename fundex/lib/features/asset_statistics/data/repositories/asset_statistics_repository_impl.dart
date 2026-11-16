@@ -7,8 +7,10 @@ class AssetStatisticsRepositoryImpl implements AssetStatisticsRepository {
   const AssetStatisticsRepositoryImpl(this._remote);
   final AssetStatisticsRemoteDataSource _remote;
   @override
-  Future<AssetInvestmentChart> fetchInvestments() async {
-    final result = await _remote.fetchInvestments();
+  Future<AssetInvestmentChart> fetchInvestments({
+    required List<int> status,
+  }) async {
+    final result = await _remote.fetchInvestments(status: status);
     return result.toEntity();
   }
 

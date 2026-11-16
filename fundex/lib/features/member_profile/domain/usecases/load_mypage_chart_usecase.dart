@@ -32,7 +32,7 @@ class LoadMyPageChartUseCase {
 
     switch (kind) {
       case MyPageChartKind.operating:
-        final chart = await assets.fetchInvestments();
+        final chart = await assets.fetchInvestments(status: const [1, 7, 3, 4]);
         return MyPageChartData(
           start: start,
           end: end,

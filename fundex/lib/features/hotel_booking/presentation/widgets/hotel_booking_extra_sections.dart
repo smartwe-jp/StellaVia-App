@@ -155,7 +155,7 @@ class HotelBookingConfirmBottomBar extends StatelessWidget {
 
   final String amount;
   final String amountLabel;
-  final VoidCallback onConfirm;
+  final VoidCallback? onConfirm;
   final bool isSubmitting;
 
   @override

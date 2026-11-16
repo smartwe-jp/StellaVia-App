@@ -44,7 +44,10 @@ void main() {
       },
       inspect: (options) {
         expect(options.path, '/crowdfunding/user/invest/chart');
-        expect(options.method, 'GET');
+        expect(options.method, 'POST');
+        expect(options.data, {
+          'status': [1, 7, 3],
+        });
         expect(options.extra['auth_required'], true);
         expect(options.queryParameters, {});
       },
@@ -55,7 +58,7 @@ void main() {
         return dio;
       },
     );
-    final value = await api.fetchInvestments();
+    final value = await api.fetchInvestments(status: const [1, 7, 3]);
     expect(value.investTotal, 90203200);
     expect(value.investList.single.projectId, '453461223651215337');
     expect(value.investList.single.projectStatus, 4);
@@ -75,7 +78,10 @@ void main() {
         ],
       }, code: 500),
     );
-    await expectLater(api.fetchInvestments(), throwsStateError);
+    await expectLater(
+      api.fetchInvestments(status: const [1, 7, 3]),
+      throwsStateError,
+    );
   });
   test('fetchCumulativeBenefit request contract and response', () async {
     final dio = fixtureDio(

@@ -2861,6 +2861,8 @@
   "hostManageBankFee": "※ Transfer fees are borne by the customer. Please make sure the amount credited after fees is not short of your application amount.",
   "hostManageFundTabApplying": "Applying",
   "hostManageFundTabPending": "Awaiting deposit",
+  "hostManageFundTabBeforeOperation": "Before operation",
+  "hostManageFundEmptyBeforeOperation": "No funds awaiting operation",
   "hostManageFundTabRunning": "In operation",
   "hostManageFundTabRedeem": "Redemption / dividends due",
   "hostManageFundTabDividend": "Dividend history",

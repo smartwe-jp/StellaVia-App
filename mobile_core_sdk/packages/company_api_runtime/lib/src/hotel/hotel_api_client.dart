@@ -18,6 +18,8 @@ class HotelApiPaths {
   static const String refundStrategyText = '/pms/refundStrategyText';
   static const String roomFacility = '/pms/esLoadRoomFacility';
   static const String hotelDetail = '/pms/hotelinfobyidapp';
+  // Stella hotel integration contract, 2026-11-16. Shares the save/v2 body.
+  static const String stellaBookingOrderSave = '/pms/bookingorder/stella/save';
   static const String bookingOrderSaveV2 = '/pms/bookingorder/save/v2';
   static const String repeatBookings = '/pms/repeatBookings';
   static const String pmsSite = '/pms/site';
@@ -659,13 +661,28 @@ class HotelApiClient {
     return HotelPriceCalendarDto(pricesByDate: data);
   }
 
-  Future<String> createBooking(HotelBookingCreateRequestDto request) async {
+  Future<String> createBooking(
+    HotelBookingCreateRequestDto request, {
+    bool hostMiles = false,
+  }) async {
     final response = await _client.dio.post<Map<String, dynamic>>(
-      bookingOrderSaveV2Path,
+      hostMiles ? HotelApiPaths.stellaBookingOrderSave : bookingOrderSaveV2Path,
       data: request.toJson(),
       options: authRequired(true),
     );
 
+    if (hostMiles) {
+      const codec = LegacyEnvelopeCodec();
+      final payload = codec.toJsonMap(response.data);
+      final id = codec.extractDataString(
+        payload,
+        fallbackMessage: 'Failed to create Stella booking.',
+      );
+      if (payload['code'].toString() != '200' || (int.tryParse(id) ?? 0) <= 0) {
+        throw StateError('Invalid Stella booking order response.');
+      }
+      return id;
+    }
     return _envelopeCodec.extractDataString(
       _envelopeCodec.toJsonMap(response.data),
       fallbackMessage: 'Failed to create hotel booking.',

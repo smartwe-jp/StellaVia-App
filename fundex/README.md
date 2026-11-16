@@ -130,6 +130,17 @@ To avoid long `--dart-define` commands, this repo provides scripts:
 ./scripts/run_prod.sh
 ```
 
+On macOS, these scripts and the three VS Code launch profiles run an iOS
+debugger check before starting Flutter. Open `fundex/` in VS Code to use
+the profiles. For terminal launches use, for example,
+`./scripts/run_dev.sh -d <device-id>`. A direct `fvm flutter run` bypasses
+the hook. Preview the check with `python3 scripts/ios_debug_cleanup.py --dry-run`.
+
+The check skips cleanup while a Flutter run or attach session is detected in
+this checkout. It sends SIGTERM only to orphaned, launch-marked Xcode debugger
+processes in this app directory. Sessions from before the hook was installed
+lack that marker and are skipped. It never targets an installation command.
+
 If local define file is missing, create it once:
 
 ```bash

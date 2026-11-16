@@ -8,17 +8,22 @@ import 'host_fund_content.dart';
 import 'my_page_balance_ring.dart';
 
 class HostFundHoldings extends ConsumerWidget {
-  const HostFundHoldings({super.key});
+  const HostFundHoldings({super.key, required this.tab});
+  final HostFundTab tab;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n,
         locale = Localizations.localeOf(context).toLanguageTag();
     return HostFundContent(
-      state: ref.watch(hostFundHoldingsProvider),
-      retry: () => ref.invalidate(hostFundHoldingsProvider),
+      state: ref.watch(hostFundHoldingsProvider(tab)),
+      retry: () => ref.invalidate(hostFundHoldingsProvider(tab)),
       builder: (data) {
         final items = data.investList;
-        if (items.isEmpty) return const SizedBox.shrink();
+        if (items.isEmpty) {
+          return tab == HostFundTab.beforeOperation
+              ? HostFundEmpty(l.hostManageFundEmptyBeforeOperation)
+              : const SizedBox.shrink();
+        }
         final total = data.investTotal == null || data.investTotal == 0
             ? items.fold(0, (n, i) => n + (i.investMoneyValid ?? 0))
             : data.investTotal;
@@ -37,6 +42,20 @@ class HostFundHoldings extends ConsumerWidget {
                 label: l.hostManageFundExpectTotal,
                 holdings: items,
               ),
+              if (tab == HostFundTab.beforeOperation)
+                for (final holding in items)
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      holding.projectName ?? holding.projectId ?? '—',
+                    ),
+                    subtitle: Text(
+                      fundPeriod(holding.beginDate, holding.endDate),
+                    ),
+                    trailing: Text(
+                      '${fundMoney(holding.investMoneyValid, locale)} ${l.myPageChartYenUnit}',
+                    ),
+                  ),
             ],
           ),
         );

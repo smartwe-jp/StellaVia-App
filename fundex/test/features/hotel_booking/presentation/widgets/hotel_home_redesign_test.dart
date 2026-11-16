@@ -92,7 +92,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text(advance), findsOneWidget);
       final originalStyle = tester.widget<Text>(find.text(advance)).style;
-      expect(find.text(l.hotelMilesBookingPending), findsOneWidget);
+      expect(find.text(l.hotelMilesBookingPending), findsNothing);
       await tester.ensureVisible(find.text(l.hotelCheckInDateLabel));
       await tester.tap(find.text(l.hotelCheckInDateLabel));
       await tester.pumpAndSettle();

@@ -21,11 +21,13 @@ class AssetStatisticsApiClient {
        _codec = envelopeCodec ?? const LegacyEnvelopeCodec();
   final Dio Function(String) _dioForPath;
   final LegacyEnvelopeCodec _codec;
-  Future<AssetInvestmentChartDto> fetchInvestments() async {
+  Future<AssetInvestmentChartDto> fetchInvestments({
+    required List<int> status,
+  }) async {
     const path = AssetStatisticsApiPaths.fetchInvestments;
-    final response = await _dioForPath(path).get<Map<String, dynamic>>(
+    final response = await _dioForPath(path).post<Map<String, dynamic>>(
       path,
-      queryParameters: null,
+      data: {'status': status},
       options: authRequired(true),
     );
     final payload = _codec.toJsonMap(response.data);

@@ -1397,3 +1397,9 @@ Hotel临时来源：2026-10-14谷町君开发小组确认 `POST /pms/order/room/
 ## 二级市场（2026-11-05）
 
 申请列表使用 `marketType=1/2` 区分一级／二级，DTO 保留 `contractId/ecStatus/ecUserTodo`（含挂单 `applyList`）。出售来源使用 `/crowdfunding/secondary/market/available` 返回的持仓 `processId/availableNum`。签约和入金操作暂缓，详见 [二级市场恢复记录](../docs/secondary-market-roadmap.md)。
+
+### Stella 里程创建酒店预订（2026-11-16）
+
+按酒店团队提供的接口契约，酒店集群接收 `POST /pms/bookingorder/stella/save`。请求头为 `Content-Type: application/json`、`Authorization: Bearer {Stella用户Token}`、`x-client-type: Stellavia-App`。请求体直接复用 `/pms/bookingorder/save/v2` 的完整 JSON，含原订单金额、房型及逐房入住人。确认页展示的里程取人数报价的 `pointsRequired`。
+
+成功示例为 `{"msg":"success","code":200,"data":1232815}`。客户端将 `data` 作为 MrT 订单号进入预订结果页。

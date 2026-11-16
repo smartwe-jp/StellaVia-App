@@ -4,14 +4,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../../auth/domain/entities/auth_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../providers/hotel_booking_providers.dart';
+import '../providers/hotel_management_providers.dart';
+import '../providers/hotel_detail_membership_provider.dart';
+import '../providers/hotel_host_miles_provider.dart';
+import '../support/hotel_reference_miles_display.dart';
 import '../support/hotel_booking_presenter.dart';
 import '../support/hotel_booking_result_route_args.dart';
 import '../support/hotel_phone_intl_codes.dart';
+import '../support/hotel_room_guest_form_targets.dart';
 import '../widgets/hotel_booking_extra_sections.dart';
 import '../widgets/hotel_booking_guest_form_section.dart';
 import '../widgets/hotel_booking_order_summary_card.dart';
@@ -44,7 +50,7 @@ class _HotelBookingConfirmPageState
   late final List<TextEditingController> _roomLastNameControllers;
   late final List<TextEditingController> _roomEmailControllers;
   late final List<TextEditingController> _roomPhoneControllers;
-  late final List<_RoomGuestFormTarget> _roomGuestTargets;
+  late final List<HotelRoomGuestFormTarget> _roomGuestTargets;
   late final List<int> _roomAdults;
   late final List<int> _roomKids;
   HotelBookingPaymentMethod _paymentMethod =
@@ -58,6 +64,7 @@ class _HotelBookingConfirmPageState
   bool _didApplyBookerAuthUser = false;
   bool _isSubmitting = false;
   bool _isQuoting = false;
+  num? _requiredMiles;
   int _quoteRevision = 0;
   HotelCoupon? _selectedCoupon;
   HotelFundBenefitTicket? _selectedFundBenefitTicket;
@@ -85,7 +92,7 @@ class _HotelBookingConfirmPageState
     _roomLastNameControllers = <TextEditingController>[];
     _roomEmailControllers = <TextEditingController>[];
     _roomPhoneControllers = <TextEditingController>[];
-    _roomGuestTargets = _buildRoomGuestTargets(widget.seed);
+    _roomGuestTargets = buildHotelRoomGuestTargets(widget.seed);
     _roomAdults = <int>[];
     _roomKids = <int>[];
     for (final target in _roomGuestTargets) {
@@ -99,6 +106,9 @@ class _HotelBookingConfirmPageState
       _roomIntlCodes.add('+81');
     }
     _syncFirstRoomGuestFromBooker();
+    if (widget.seed.hostMiles) {
+      _requoteCurrentGuests();
+    }
   }
 
   @override
@@ -134,7 +144,23 @@ class _HotelBookingConfirmPageState
       hotelBookingPreparationProvider(widget.seed),
     );
     final authUserState = ref.watch(currentAuthUserProvider);
-    final accountStatisticState = ref.watch(myPageAccountStatisticProvider);
+    final miles = widget.seed.hostMiles;
+    final accountStatisticState = miles
+        ? null
+        : ref.watch(myPageAccountStatisticProvider);
+    final identity = miles ? ref.watch(hotelManagementIdentityProvider) : null;
+    final balance = identity == null
+        ? null
+        : ref
+                  .watch(hotelDetailAccountProvider(identity))
+                  .valueOrNull
+                  ?.availablePoints ??
+              ref
+                  .watch(hotelManagementTierResourceProvider(identity))
+                  .valueOrNull
+                  ?.pointsBalance;
+    final insufficient =
+        _requiredMiles != null && balance != null && _requiredMiles! > balance;
     _scheduleBookerAuthUserApply(authUserState.valueOrNull);
     final preparation = preparationState.valueOrNull;
     final effectiveRoomPriceElements = _roomPriceElements.isNotEmpty
@@ -192,10 +218,14 @@ class _HotelBookingConfirmPageState
                           ),
                         ),
                       ),
+                    if (miles && !_isQuoting && _requiredMiles == null)
+                      HotelInlineErrorNotice(onRetry: _requoteCurrentGuests),
+                    if (insufficient)
+                      Text(context.l10n.hotelDetailMilesInsufficient),
                     HotelBookingOrderSummaryCard(
                       seed: widget.seed,
                       presenter: presenter,
-                      amount: payableAmount,
+                      amount: miles ? _requiredMiles : payableAmount,
                       originalAmount: originalAmount,
                       selectedCoupon: _selectedCoupon,
                       selectedFundBenefitTicket: _selectedFundBenefitTicket,
@@ -203,24 +233,25 @@ class _HotelBookingConfirmPageState
                       onEdit: () => Navigator.of(context).maybePop(),
                     ),
                     const SizedBox(height: 14),
-                    HotelBookingCouponRow(
-                      availableCount: couponEntryCount,
-                      selectedCouponName: _couponRowSelectedName(presenter),
-                      onTap: preparation == null
-                          ? _showComingSoon
-                          : () => _openCouponPicker(preparation),
-                    ),
-                    if (!usesFundBenefitTicket) ...<Widget>[
+                    if (!miles)
+                      HotelBookingCouponRow(
+                        availableCount: couponEntryCount,
+                        selectedCouponName: _couponRowSelectedName(presenter),
+                        onTap: preparation == null
+                            ? _showComingSoon
+                            : () => _openCouponPicker(preparation),
+                      ),
+                    if (!miles && !usesFundBenefitTicket) ...<Widget>[
                       const SizedBox(height: 14),
                       HotelBookingPaymentSection(
                         selected: _paymentMethod,
                         registeredCardCount:
                             preparation?.registeredCardCount ?? 0,
                         accountBalance: accountStatisticState
-                            .valueOrNull
+                            ?.valueOrNull
                             ?.withdrawableAmount,
                         isAccountBalanceLoading:
-                            accountStatisticState.isLoading,
+                            accountStatisticState?.isLoading ?? false,
                         payableAmount: amount ?? 0,
                         onChanged: (value) =>
                             setState(() => _paymentMethod = value),
@@ -271,10 +302,12 @@ class _HotelBookingConfirmPageState
                             maxAdults: _maxAdultsFor(index),
                             maxKids: _maxKidsFor(index),
                             isRequired: true,
-                            priceTipText: _priceTipForRoom(
-                              index,
-                              effectiveRoomPriceElements,
-                            ),
+                            priceTipText: miles
+                                ? ''
+                                : _priceTipForRoom(
+                                    index,
+                                    effectiveRoomPriceElements,
+                                  ),
                             showTitle: false,
                             showPhoneFields: false,
                             wrapInCard: false,
@@ -336,11 +369,21 @@ class _HotelBookingConfirmPageState
           Align(
             alignment: Alignment.bottomCenter,
             child: HotelBookingConfirmBottomBar(
-              amount: amountText.isEmpty
+              amount: miles
+                  ? (_requiredMiles == null
+                        ? '—'
+                        : hotelReferenceMilesLabel(context, _requiredMiles!))
+                  : amountText.isEmpty
                   ? context.l10n.hotelPriceAsk
                   : '$amountText ${context.l10n.hotelCurrencyCode}',
-              amountLabel: context.l10n.hotelDetailPayableAmount,
-              onConfirm: () => _submitBooking(payableAmount),
+              amountLabel: miles
+                  ? context.l10n.hotelDetailRequiredMiles
+                  : context.l10n.hotelDetailPayableAmount,
+              onConfirm:
+                  miles &&
+                      (_isQuoting || _requiredMiles == null || insufficient)
+                  ? null
+                  : () => _submitBooking(payableAmount),
               isSubmitting: _isSubmitting,
             ),
           ),
@@ -456,7 +499,10 @@ class _HotelBookingConfirmPageState
 
   Future<void> _requoteCurrentGuests() async {
     final revision = ++_quoteRevision;
-    setState(() => _isQuoting = true);
+    setState(() {
+      _isQuoting = true;
+      _requiredMiles = null;
+    });
     try {
       final quote = await ref.read(quoteHotelBookingPriceUseCaseProvider)(
         _buildQuoteRequest(_selectedCoupon),
@@ -465,6 +511,9 @@ class _HotelBookingConfirmPageState
         return;
       }
       setState(() {
+        _requiredMiles = (quote.pointsRequired ?? -1) >= 0
+            ? quote.pointsRequired
+            : null;
         _quotedAmountOverride = quote.quotedPrice ?? widget.seed.fallbackAmount;
         _quotedOriginalAmountOverride = quote.originalPrice;
         _roomPriceElements = quote.roomPriceElements;
@@ -569,7 +618,8 @@ class _HotelBookingConfirmPageState
   }
 
   Future<void> _submitBooking(num? amount) async {
-    if (_isSubmitting) {
+    if (_isSubmitting ||
+        (widget.seed.hostMiles && (_isQuoting || _requiredMiles == null))) {
       return;
     }
     final draft = _buildCreateDraft(amount);
@@ -587,24 +637,38 @@ class _HotelBookingConfirmPageState
         return;
       }
       setState(() => _isSubmitting = false);
+      if (widget.seed.hostMiles) {
+        ref.invalidate(hotelHostMilesProvider);
+        ref.invalidate(hotelDetailAccountProvider);
+        ref.invalidate(hotelManagementTierResourceProvider);
+        ref.invalidate(hotelOrderListControllerProvider);
+      }
       context.go(
         '/hotel-booking/${Uri.encodeComponent(widget.seed.detail.id)}/result',
         extra: HotelBookingResultRouteArgs(
           orderId: orderId,
           seed: widget.seed,
           totalAmount: draft.totalAmount,
-          paymentMethod: _selectedFundBenefitTicket == null
+          requiredMiles: widget.seed.hostMiles ? _requiredMiles : null,
+          paymentMethod:
+              !widget.seed.hostMiles && _selectedFundBenefitTicket == null
               ? _paymentMethod
               : null,
           createdAt: DateTime.now().toIso8601String(),
         ),
       );
-    } catch (_) {
+    } catch (error) {
       if (!mounted) {
         return;
       }
       setState(() => _isSubmitting = false);
-      AppNotice.show(context, message: context.l10n.hotelBookingCreateFailed);
+      AppNotice.show(
+        context,
+        message: resolveAppRequestErrorMessage(
+          error,
+          context.l10n.hotelBookingCreateFailed,
+        ),
+      );
     }
   }
 
@@ -630,7 +694,9 @@ class _HotelBookingConfirmPageState
     }
     final totalAmount = amount ?? widget.seed.fallbackAmount ?? 0;
     if (totalAmount < 0 ||
-        (totalAmount == 0 && _selectedFundBenefitTicket == null)) {
+        (totalAmount == 0 &&
+            !widget.seed.hostMiles &&
+            _selectedFundBenefitTicket == null)) {
       AppNotice.show(context, message: context.l10n.hotelBookingCreateFailed);
       return null;
     }
@@ -684,6 +750,7 @@ class _HotelBookingConfirmPageState
 
   HotelBookingQuoteRequest _buildQuoteRequest(HotelCoupon? coupon) {
     return HotelBookingQuoteRequest(
+      stayBenefit: widget.seed.hostMiles,
       hotelId: widget.seed.detail.id,
       checkIn: widget.seed.criteria.checkInDate,
       checkOut: widget.seed.criteria.checkOutDate,
@@ -813,7 +880,7 @@ class _HotelBookingConfirmPageState
     return '';
   }
 
-  String _roomDisplayName(_RoomGuestFormTarget target) {
+  String _roomDisplayName(HotelRoomGuestFormTarget target) {
     final base = target.room.name.trim().isEmpty
         ? widget.seed.detail.name
         : target.room.name.trim();
@@ -845,116 +912,6 @@ class _HotelBookingConfirmPageState
   }
 }
 
-List<_RoomGuestFormTarget> _buildRoomGuestTargets(
-  HotelBookingConfirmSeed seed,
-) {
-  if (!seed.usesRoomPlanSelection) {
-    final room = seed.selectedRooms.isEmpty
-        ? HotelRoomPlan(
-            id: seed.detail.id,
-            name: seed.detail.name,
-            price: seed.detail.entirePrice ?? seed.detail.lowestRoomPrice,
-            beforeDiscountPrice: null,
-            discount: null,
-            discountName: '',
-            occupancy: seed.criteria.occupancy + seed.criteria.kids,
-            baseOccupancy: seed.criteria.occupancy,
-            roomSize: '',
-            bedroomCount: null,
-            bathroomCount: null,
-            remainingRooms: 1,
-            minimumStayNights: null,
-            description: seed.detail.description,
-            facilityCategories: const <HotelRoomFacilityCategory>[],
-            images: seed.detail.images,
-            beds: const <HotelRoomBed>[],
-            adultCapacity: seed.criteria.occupancy,
-            childCapacity: seed.criteria.kids,
-          )
-        : seed.selectedRooms.first.room;
-    return <_RoomGuestFormTarget>[
-      _RoomGuestFormTarget(
-        room: room,
-        instanceNumber: 1,
-        initialAdults: seed.criteria.occupancy,
-        initialKids: seed.criteria.kids,
-        maxGuests: null,
-        maxAdults: null,
-        maxKids: null,
-      ),
-    ];
-  }
-
-  final maxAdultsByRoom = <int?>[
-    for (final selection in seed.selectedRooms)
-      for (var index = 0; index < selection.quantity; index += 1)
-        selection.room.adultCapacity ?? selection.room.occupancy,
-  ];
-  final initialAdultsByRoom = _distributeInitialRoomAdults(
-    totalAdults: seed.criteria.occupancy,
-    maxAdultsByRoom: maxAdultsByRoom,
-  );
-
-  final targets = <_RoomGuestFormTarget>[];
-  var targetIndex = 0;
-  for (final selection in seed.selectedRooms) {
-    for (var index = 0; index < selection.quantity; index += 1) {
-      final maxGuests = selection.room.occupancy;
-      final maxAdults = selection.room.adultCapacity ?? maxGuests;
-      final maxKids = selection.room.childCapacity;
-      final initialAdults = targetIndex < initialAdultsByRoom.length
-          ? initialAdultsByRoom[targetIndex]
-          : 1;
-      targetIndex += 1;
-      targets.add(
-        _RoomGuestFormTarget(
-          room: selection.room,
-          instanceNumber: index + 1,
-          initialAdults: initialAdults,
-          initialKids: 0,
-          maxGuests: maxGuests,
-          maxAdults: maxAdults,
-          maxKids: maxKids,
-        ),
-      );
-    }
-  }
-  return targets;
-}
-
-List<int> _distributeInitialRoomAdults({
-  required int totalAdults,
-  required List<int?> maxAdultsByRoom,
-}) {
-  if (maxAdultsByRoom.isEmpty) {
-    return const <int>[];
-  }
-
-  final allocations = List<int>.filled(maxAdultsByRoom.length, 1);
-  var remainingAdults = totalAdults - maxAdultsByRoom.length;
-  if (remainingAdults <= 0) {
-    return allocations;
-  }
-
-  var cursor = 0;
-  var skippedInCycle = 0;
-  while (remainingAdults > 0 && skippedInCycle < allocations.length) {
-    final configuredMaxAdults = maxAdultsByRoom[cursor];
-    final maxAdults = configuredMaxAdults != null && configuredMaxAdults > 0
-        ? configuredMaxAdults
-        : 99;
-    if (allocations[cursor] < maxAdults) {
-      allocations[cursor] += 1;
-      remainingAdults -= 1;
-      skippedInCycle = 0;
-    } else {
-      skippedInCycle += 1;
-    }
-    cursor = (cursor + 1) % allocations.length;
-  }
-  return allocations;
-}
-
 class _UseBookerInfoCheckbox extends StatelessWidget {
   const _UseBookerInfoCheckbox({required this.value, required this.onChanged});
 
@@ -981,26 +938,6 @@ class _UseBookerInfoCheckbox extends StatelessWidget {
       controlAffinity: ListTileControlAffinity.leading,
     );
   }
-}
-
-class _RoomGuestFormTarget {
-  const _RoomGuestFormTarget({
-    required this.room,
-    required this.instanceNumber,
-    required this.initialAdults,
-    required this.initialKids,
-    required this.maxGuests,
-    required this.maxAdults,
-    required this.maxKids,
-  });
-
-  final HotelRoomPlan room;
-  final int instanceNumber;
-  final int initialAdults;
-  final int initialKids;
-  final int? maxGuests;
-  final int? maxAdults;
-  final int? maxKids;
 }
 
 class _RoomGuestFormsCard extends StatelessWidget {

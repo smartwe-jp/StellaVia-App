@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../providers/host_fund_management_providers.dart';
 import '../providers/mypage_membership_providers.dart';
 import '../support/host_fund_management.dart';
 import '../widgets/host_fund_applications.dart';
@@ -34,13 +35,22 @@ class HostFundManagementPage extends ConsumerWidget {
   );
 }
 
-class _FundSections extends StatefulWidget {
+class _FundSections extends ConsumerStatefulWidget {
   const _FundSections({super.key});
   @override
-  State<_FundSections> createState() => _FundSectionsState();
+  ConsumerState<_FundSections> createState() => _FundSectionsState();
 }
 
-class _FundSectionsState extends State<_FundSections> {
+class _FundSectionsState extends ConsumerState<_FundSections> {
+  Future<void> refreshHoldings(HostFundTab selected) async {
+    try {
+      final request = ref.refresh(hostFundHoldingsProvider(selected).future);
+      await request;
+    } catch (_) {
+      // HostFundHoldings displays the provider error and retry action.
+    }
+  }
+
   HostFundTab tab = HostFundTab.applying;
   final ranges = <HostFundTab, int>{};
   @override
@@ -58,7 +68,19 @@ class _FundSectionsState extends State<_FundSections> {
       ),
       Expanded(
         child: tab == HostFundTab.running
-            ? const MyPageSectionListPage.operating(header: HostFundHoldings())
+            ? MyPageSectionListPage.operating(
+                header: HostFundHoldings(tab: tab),
+                onRefreshHeader: () => refreshHoldings(HostFundTab.running),
+              )
+            : tab == HostFundTab.beforeOperation
+            ? RefreshIndicator(
+                onRefresh: () => refreshHoldings(HostFundTab.beforeOperation),
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+                  children: [HostFundHoldings(tab: tab)],
+                ),
+              )
             : ListView(
                 key: ValueKey(tab),
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),

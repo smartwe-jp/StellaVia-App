@@ -2831,6 +2831,8 @@
   "hostManageBankFee": "※振込手数料はお客様のご負担となります。手数料差引き後に入金額が不足しないよう、十分ご注意のうえお振込みください。",
   "hostManageFundTabApplying": "応募中",
   "hostManageFundTabPending": "入金前",
+  "hostManageFundTabBeforeOperation": "運用前",
+  "hostManageFundEmptyBeforeOperation": "運用前のファンドはありません",
   "hostManageFundTabRunning": "運用中",
   "hostManageFundTabRedeem": "償還・配当予定",
   "hostManageFundTabDividend": "配当実績",

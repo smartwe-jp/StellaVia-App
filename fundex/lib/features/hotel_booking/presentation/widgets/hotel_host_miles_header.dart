@@ -67,7 +67,6 @@ class HotelHostMilesHeader extends StatelessWidget {
           hints: [
             if (state.tier.valueOrNull?.leadTimeMonths case final months?)
               l.hotelMilesAdvanceMonths(months),
-            l.hotelMilesBookingPending,
           ],
         ),
         const SizedBox(height: 10),

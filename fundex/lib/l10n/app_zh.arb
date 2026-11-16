@@ -2831,6 +2831,8 @@
   "hostManageBankFee": "※汇款手续费由客户承担。请注意汇款金额，避免扣除手续费后入金不足。",
   "hostManageFundTabApplying": "应募中",
   "hostManageFundTabPending": "入金前",
+  "hostManageFundTabBeforeOperation": "运用前",
+  "hostManageFundEmptyBeforeOperation": "暂无运用前的基金",
   "hostManageFundTabRunning": "运用中",
   "hostManageFundTabRedeem": "偿还・分红预定",
   "hostManageFundTabDividend": "分红实绩",

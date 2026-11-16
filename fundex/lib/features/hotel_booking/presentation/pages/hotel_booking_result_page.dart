@@ -49,6 +49,7 @@ class HotelBookingResultPage extends StatelessWidget {
                 children: <Widget>[
                   HotelBookingResultCard(
                     orderId: args.orderId,
+                    requiredMiles: args.requiredMiles,
                     totalAmount: args.totalAmount,
                     paymentMethod: args.paymentMethod,
                     presenter: presenter,

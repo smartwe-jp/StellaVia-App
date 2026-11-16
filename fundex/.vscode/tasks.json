@@ -1,0 +1,16 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "fundex: check iOS debugger",
+      "type": "shell",
+      "command": "echo iOS debugger cleanup applies to macOS only",
+      "osx": {
+        "command": "/usr/bin/python3",
+        "args": ["${workspaceFolder}/scripts/ios_debug_cleanup.py"]
+      },
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "dedicated" }
+    }
+  ]
+}

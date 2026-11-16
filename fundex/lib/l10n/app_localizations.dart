@@ -12717,6 +12717,18 @@ abstract class AppLocalizations {
   /// **'Awaiting deposit'**
   String get hostManageFundTabPending;
 
+  /// No description provided for @hostManageFundTabBeforeOperation.
+  ///
+  /// In en, this message translates to:
+  /// **'Before operation'**
+  String get hostManageFundTabBeforeOperation;
+
+  /// No description provided for @hostManageFundEmptyBeforeOperation.
+  ///
+  /// In en, this message translates to:
+  /// **'No funds awaiting operation'**
+  String get hostManageFundEmptyBeforeOperation;
+
   /// No description provided for @hostManageFundTabRunning.
   ///
   /// In en, this message translates to:

@@ -100,7 +100,10 @@ abstract class HotelBookingRemoteDataSource {
 
   Future<String> syncOptimismPayment(OptimismPaymentRequestDto request);
 
-  Future<String> createBooking(HotelBookingCreateRequestDto request);
+  Future<String> createBooking(
+    HotelBookingCreateRequestDto request, {
+    bool hostMiles = false,
+  });
 
   Future<HotelOrderListDto> fetchOrderList({
     required String languageCode,
@@ -358,8 +361,11 @@ class HotelBookingRemoteDataSourceImpl implements HotelBookingRemoteDataSource {
   }
 
   @override
-  Future<String> createBooking(HotelBookingCreateRequestDto request) {
-    return _client.createBooking(request);
+  Future<String> createBooking(
+    HotelBookingCreateRequestDto request, {
+    bool hostMiles = false,
+  }) {
+    return _client.createBooking(request, hostMiles: hostMiles);
   }
 
   @override

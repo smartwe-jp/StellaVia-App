@@ -28,10 +28,17 @@ final hostFundApplicationsProvider = FutureProvider.autoDispose
             status: query.status,
           );
     });
-final hostFundHoldingsProvider =
-    FutureProvider.autoDispose<AssetInvestmentChart>((ref) {
+final hostFundHoldingsProvider = FutureProvider.autoDispose
+    .family<AssetInvestmentChart, HostFundTab>((ref, tab) {
       _requireMember(ref);
-      return ref.watch(assetStatisticsRepositoryProvider).fetchInvestments();
+      final status = switch (tab) {
+        HostFundTab.beforeOperation => const [1, 7, 3],
+        HostFundTab.running => const [4],
+        _ => throw ArgumentError.value(tab),
+      };
+      return ref
+          .watch(assetStatisticsRepositoryProvider)
+          .fetchInvestments(status: status);
     });
 final hostFundForecastProvider = FutureProvider.autoDispose
     .family<List<FundForecastMonth>, int>((ref, years) async {

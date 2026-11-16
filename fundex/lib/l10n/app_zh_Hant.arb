@@ -2831,6 +2831,8 @@
   "hostManageBankFee": "※匯款手續費由客戶自行負擔。請注意匯款金額，避免扣除手續費後入金不足。",
   "hostManageFundTabApplying": "應募中",
   "hostManageFundTabPending": "入金前",
+  "hostManageFundTabBeforeOperation": "運用前",
+  "hostManageFundEmptyBeforeOperation": "暫無運用前的基金",
   "hostManageFundTabRunning": "運用中",
   "hostManageFundTabRedeem": "償還・配息預定",
   "hostManageFundTabDividend": "配息實績",

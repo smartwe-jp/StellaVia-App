@@ -20,14 +20,19 @@ class MyPageSectionListPage extends ConsumerStatefulWidget {
     super.key,
     required this.sectionType,
     this.initialApplyFilter = MyPageApplyHistoryFilter.all,
-  }) : operatingHeader = null;
+  }) : operatingHeader = null,
+       onRefreshHeader = null;
 
-  const MyPageSectionListPage.operating({super.key, required Widget header})
-    : operatingHeader = header,
-      sectionType = MyPageSectionType.activeFunds,
-      initialApplyFilter = MyPageApplyHistoryFilter.all;
+  const MyPageSectionListPage.operating({
+    super.key,
+    required Widget header,
+    this.onRefreshHeader,
+  }) : operatingHeader = header,
+       sectionType = MyPageSectionType.activeFunds,
+       initialApplyFilter = MyPageApplyHistoryFilter.all;
 
   final Widget? operatingHeader;
+  final Future<void> Function()? onRefreshHeader;
   final MyPageSectionType sectionType;
   final MyPageApplyHistoryFilter initialApplyFilter;
 
@@ -291,7 +296,12 @@ class _MyPageSectionListPageState extends ConsumerState<MyPageSectionListPage> {
     };
 
     final list = RefreshIndicator(
-      onRefresh: _loadInitial,
+      onRefresh: () async {
+        await Future.wait([
+          _loadInitial(),
+          if (widget.onRefreshHeader case final refresh?) refresh(),
+        ]);
+      },
       child: CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[

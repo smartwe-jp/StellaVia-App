@@ -1084,6 +1084,7 @@ class HotelBookingConfirmSeed {
     required this.criteria,
     required this.selectedRooms,
     required this.assignedPrice,
+    this.hostMiles = false,
     this.roomTypeCustNums = const <HotelRoomOccupancyAssignment>[],
   });
 
@@ -1091,6 +1092,7 @@ class HotelBookingConfirmSeed {
   final HotelSearchCriteria criteria;
   final List<HotelSelectedRoom> selectedRooms;
   final num? assignedPrice;
+  final bool hostMiles;
   final List<HotelRoomOccupancyAssignment> roomTypeCustNums;
 
   bool get usesRoomPlanSelection => detail.bookingType == 0;

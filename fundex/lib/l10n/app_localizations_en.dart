@@ -7057,6 +7057,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hostManageFundTabPending => 'Awaiting deposit';
 
   @override
+  String get hostManageFundTabBeforeOperation => 'Before operation';
+
+  @override
+  String get hostManageFundEmptyBeforeOperation =>
+      'No funds awaiting operation';
+
+  @override
   String get hostManageFundTabRunning => 'In operation';
 
   @override

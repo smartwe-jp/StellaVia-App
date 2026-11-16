@@ -575,6 +575,7 @@ void main() {
       );
       addTearDown(c.dispose);
       await c.change(0, 1);
+      var confirmations = 0;
       final key = GlobalKey();
       await tester.pumpWidget(
         MaterialApp(
@@ -593,7 +594,7 @@ void main() {
                 account: const HostMilesAccount(availablePoints: 12000),
                 onDates: () {},
                 onGuests: () {},
-                onBook: () => fail('Miles must not enter regular booking'),
+                onBook: () => confirmations++,
                 openingConfirmation: false,
                 membershipFailed: false,
                 onMembershipRetry: () {},
@@ -644,12 +645,9 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('町家を一棟から予約できます。庭を望む和室があります。'), findsNothing);
       expect(find.text(l.hotelMilesBookingPending), findsNothing);
-      final milesButton = find.widgetWithText(
-        AppButton,
-        l.hotelDetailMilesPending,
-      );
-      expect(tester.widget<AppButton>(milesButton).onPressed, isNull);
-      expect(find.text(l.hotelDetailProceed), findsNothing);
+      final milesButton = find.widgetWithText(AppButton, l.hotelDetailProceed);
+      await tester.tap(milesButton);
+      expect(confirmations, 1);
       await tester.scrollUntilVisible(
         find.byType(HotelDetailRoomCard),
         300,

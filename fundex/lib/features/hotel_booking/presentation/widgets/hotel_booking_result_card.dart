@@ -105,6 +105,7 @@ class HotelBookingResultCard extends StatelessWidget {
     required this.paymentMethod,
     required this.presenter,
     this.isStayBenefitBooking = false,
+    this.requiredMiles,
   });
 
   final String orderId;
@@ -112,6 +113,7 @@ class HotelBookingResultCard extends StatelessWidget {
   final HotelBookingPaymentMethod? paymentMethod;
   final HotelBookingPresenter presenter;
   final bool isStayBenefitBooking;
+  final num? requiredMiles;
 
   @override
   Widget build(BuildContext context) {
@@ -138,15 +140,20 @@ class HotelBookingResultCard extends StatelessWidget {
               _ResultDivider(color: colors.borderSoft),
               _ResultLine(
                 label: context.l10n.hotelBookingResultPaymentMethod,
-                value: isStayBenefitBooking
+                value: requiredMiles != null
+                    ? context.l10n.myPageChartMiles
+                    : isStayBenefitBooking
                     ? context.l10n.hotelStayBenefitsTitle
                     : _paymentMethodLabel(context, paymentMethod),
               ),
               _ResultDivider(color: colors.borderSoft),
               _ResultLine(
                 label: context.l10n.hotelBookingResultPaymentAmount,
-                value:
-                    '${presenter.price(totalAmount)} ${context.l10n.hotelCurrencyCode}',
+                value: requiredMiles != null
+                    ? context.l10n.hotelMilesReferenceStay(
+                        presenter.amount(requiredMiles),
+                      )
+                    : '${presenter.price(totalAmount)} ${context.l10n.hotelCurrencyCode}',
                 valueColor: colors.brandAlert,
                 emphasized: true,
               ),

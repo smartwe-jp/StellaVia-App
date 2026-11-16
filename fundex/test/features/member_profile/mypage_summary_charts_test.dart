@@ -52,14 +52,18 @@ class WalletFake implements WalletRepository {
 
 class AssetsFake implements AssetStatisticsRepository {
   @override
-  Future<AssetInvestmentChart> fetchInvestments() async =>
-      const AssetInvestmentChart(
-        investTotal: 210,
-        investList: [
-          AssetInvestment(projectName: 'A', investMoneyValid: 150),
-          AssetInvestment(projectName: 'B', investMoneyValid: 50),
-        ],
-      );
+  Future<AssetInvestmentChart> fetchInvestments({
+    required List<int> status,
+  }) async {
+    expect(status, [1, 7, 3, 4]);
+    return const AssetInvestmentChart(
+      investTotal: 210,
+      investList: [
+        AssetInvestment(projectName: 'A', investMoneyValid: 150),
+        AssetInvestment(projectName: 'B', investMoneyValid: 50),
+      ],
+    );
+  }
 
   @override
   Future<AssetCumulativeBenefit> fetchCumulativeBenefit({

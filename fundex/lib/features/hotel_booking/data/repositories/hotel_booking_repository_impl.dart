@@ -202,21 +202,30 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
     final countryCodesFuture = _remote
         .fetchCountryCodeList(languageCode: languageCode)
         .catchError((_) => const <String, String>{});
-    final quoteFuture = _fetchPreparationQuote(
-      seed: seed,
-      languageCode: languageCode,
-      checkIn: checkIn,
-      checkOut: checkOut,
-    ).catchError((_) => const HotelRoomExtraPersonResultDto());
-    final couponsFuture = _remote
-        .fetchOrderCoupons(languageCode: languageCode, hotelId: seed.detail.id)
-        .catchError((_) => const <String, dynamic>{});
+    final quoteFuture = seed.hostMiles
+        ? Future.value(const HotelRoomExtraPersonResultDto())
+        : _fetchPreparationQuote(
+            seed: seed,
+            languageCode: languageCode,
+            checkIn: checkIn,
+            checkOut: checkOut,
+          ).catchError((_) => const HotelRoomExtraPersonResultDto());
+    final couponsFuture = seed.hostMiles
+        ? Future.value(const <String, dynamic>{})
+        : _remote
+              .fetchOrderCoupons(
+                languageCode: languageCode,
+                hotelId: seed.detail.id,
+              )
+              .catchError((_) => const <String, dynamic>{});
     final contactsFuture = _remote
         .fetchMemberContacts(languageCode: languageCode)
         .catchError((_) => const <Map<String, dynamic>>[]);
-    final cardsFuture = _remote.fetchRegisteredCards().catchError(
-      (_) => const <HotelCreditCardDto>[],
-    );
+    final cardsFuture = seed.hostMiles
+        ? Future.value(const <HotelCreditCardDto>[])
+        : _remote.fetchRegisteredCards().catchError(
+            (_) => const <HotelCreditCardDto>[],
+          );
 
     final pageTextMaps = await Future.wait(pageTextFutures);
     final pageTexts = <String, String>{};
@@ -305,7 +314,10 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
 
   @override
   Future<String> createBooking(HotelBookingCreateDraft draft) {
-    return _remote.createBooking(_mapBookingCreateRequest(draft));
+    return _remote.createBooking(
+      _mapBookingCreateRequest(draft),
+      hostMiles: draft.seed.hostMiles,
+    );
   }
 
   @override

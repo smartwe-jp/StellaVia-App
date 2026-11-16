@@ -7,9 +7,11 @@ class HotelBookingResultRouteArgs {
     required this.seed,
     required this.totalAmount,
     this.paymentMethod,
+    this.requiredMiles,
     required this.createdAt,
   });
 
+  final num? requiredMiles;
   final String orderId;
   final HotelBookingConfirmSeed seed;
   final num totalAmount;

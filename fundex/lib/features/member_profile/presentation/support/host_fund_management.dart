@@ -6,6 +6,7 @@ import '../../domain/entities/mypage_models.dart';
 enum HostFundTab {
   applying,
   pending,
+  beforeOperation,
   running,
   forecast,
   dividends;
@@ -13,6 +14,7 @@ enum HostFundTab {
   String label(AppLocalizations l) => switch (this) {
     applying => l.hostManageFundTabApplying,
     pending => l.hostManageFundTabPending,
+    beforeOperation => l.hostManageFundTabBeforeOperation,
     running => l.hostManageFundTabRunning,
     forecast => l.hostManageFundTabRedeem,
     dividends => l.hostManageFundTabDividend,
@@ -38,10 +40,11 @@ String fundPeriod(String? start, String? end) => [start, end]
     .join(' ～ ');
 String applicationPeriod(MyPageApplyRecord record, AppLocalizations l) {
   final raw = record.period?.trim() ?? '';
-  if (raw.isNotEmpty)
+  if (raw.isNotEmpty) {
     return num.tryParse(raw) == null
         ? raw
         : '$raw ${l.hostManageFundMonthUnit}';
+  }
   final range = fundPeriod(record.startDate, record.endDate);
   return range.isEmpty ? '—' : range;
 }

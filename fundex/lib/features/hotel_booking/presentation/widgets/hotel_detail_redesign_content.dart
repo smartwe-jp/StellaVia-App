@@ -123,9 +123,9 @@ class HotelDetailRedesignContent extends StatelessWidget {
                         if (tier?.leadTimeMonths case final months?)
                           Text(
                             c.l10n.hotelMilesAdvanceMonths(months),
-                            style: HotelDetailStyles.roomMetadata(c).copyWith(
-                              color: c.appColors.primary,
-                            ),
+                            style: HotelDetailStyles.roomMetadata(
+                              c,
+                            ).copyWith(color: c.appColors.primary),
                           ),
                         if (membershipFailed)
                           TextButton(
@@ -236,6 +236,10 @@ class HotelDetailRedesignContent extends StatelessWidget {
         ),
         HotelDetailReservationPanel(
           selection: selection,
+          withinAllowance:
+              !miles ||
+              ((roomLimit == null || selection.roomCount <= roomLimit) &&
+                  (balance == null || (selection.amount ?? 0) <= balance)),
           onBook: onBook,
           busy: openingConfirmation,
         ),

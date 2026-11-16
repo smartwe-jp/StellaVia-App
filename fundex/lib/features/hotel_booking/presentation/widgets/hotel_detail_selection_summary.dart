@@ -145,10 +145,12 @@ class HotelDetailReservationPanel extends StatelessWidget {
   const HotelDetailReservationPanel({
     super.key,
     required this.selection,
+    this.withinAllowance = true,
     required this.onBook,
     required this.busy,
   });
   final HotelDetailSelectionController selection;
+  final bool withinAllowance;
   final VoidCallback onBook;
   final bool busy;
   @override
@@ -218,12 +220,10 @@ class HotelDetailReservationPanel extends StatelessWidget {
                     : null,
               ),
               AppButton(
-                label: miles
-                    ? c.l10n.hotelDetailMilesPending
-                    : c.l10n.hotelDetailProceed,
+                label: c.l10n.hotelDetailProceed,
                 onPressed:
-                    miles ||
-                        busy ||
+                    busy ||
+                        !withinAllowance ||
                         selection.busy ||
                         selection.failed ||
                         selection.roomCount == 0 ||

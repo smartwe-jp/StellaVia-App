@@ -6712,6 +6712,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hostManageFundTabPending => '入金前';
 
   @override
+  String get hostManageFundTabBeforeOperation => '運用前';
+
+  @override
+  String get hostManageFundEmptyBeforeOperation => '運用前のファンドはありません';
+
+  @override
   String get hostManageFundTabRunning => '運用中';
 
   @override

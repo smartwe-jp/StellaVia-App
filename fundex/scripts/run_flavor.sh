@@ -19,6 +19,8 @@ case "$FLAVOR" in
     ;;
 esac
 
+cd "$(dirname "$0")/.."
+
 DEFINE_FILE=".vscode/dart_define.${FLAVOR}.local.json"
 ENTRYPOINT="lib/main_${FLAVOR}.dart"
 EXAMPLE_FILE=".vscode/dart_define.${FLAVOR}.example.json"
@@ -28,6 +30,11 @@ if [[ ! -f "$DEFINE_FILE" ]]; then
   echo "Create it first, for example:"
   echo "  cp $EXAMPLE_FILE $DEFINE_FILE"
   exit 1
+fi
+
+if [[ "$(uname -s)" == Darwin ]]; then
+  /usr/bin/python3 scripts/ios_debug_cleanup.py
+  export FUNDEX_IOS_DEBUG_LAUNCH=1
 fi
 
 exec fvm flutter run \

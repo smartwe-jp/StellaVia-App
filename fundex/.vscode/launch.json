@@ -7,6 +7,8 @@
       "type": "dart",
       "program": "lib/main_dev.dart",
       "flutterMode": "debug",
+      "preLaunchTask": "fundex: check iOS debugger",
+      "env": { "FUNDEX_IOS_DEBUG_LAUNCH": "1" },
       "args": [
         "--flavor",
         "dev",
@@ -19,6 +21,8 @@
       "type": "dart",
       "program": "lib/main_staging.dart",
       "flutterMode": "debug",
+      "preLaunchTask": "fundex: check iOS debugger",
+      "env": { "FUNDEX_IOS_DEBUG_LAUNCH": "1" },
       "args": [
         "--flavor",
         "staging",
@@ -31,6 +35,8 @@
       "type": "dart",
       "program": "lib/main_prod.dart",
       "flutterMode": "debug",
+      "preLaunchTask": "fundex: check iOS debugger",
+      "env": { "FUNDEX_IOS_DEBUG_LAUNCH": "1" },
       "args": [
         "--flavor",
         "prod",

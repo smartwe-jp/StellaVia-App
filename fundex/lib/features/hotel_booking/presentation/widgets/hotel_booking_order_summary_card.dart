@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
+import '../support/hotel_reference_miles_display.dart';
 import 'hotel_booking_section_card.dart';
 import 'hotel_detail_image_placeholder.dart';
 
@@ -199,7 +200,9 @@ class HotelBookingOrderSummaryCard extends StatelessWidget {
           Divider(color: colors.borderSoft),
           const SizedBox(height: 18),
           Text(
-            context.l10n.hotelDetailPayableAmount,
+            seed.hostMiles
+                ? context.l10n.hotelDetailRequiredMiles
+                : context.l10n.hotelDetailPayableAmount,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
               color: colors.textPrimary,
               fontWeight: FontWeight.w700,
@@ -243,7 +246,14 @@ class HotelBookingOrderSummaryCard extends StatelessWidget {
                                 ),
                           ),
                         Text(
-                          _priceWithCurrencyCode(context, amount),
+                          seed.hostMiles
+                              ? (amount == null
+                                    ? '—'
+                                    : hotelReferenceMilesLabel(
+                                        context,
+                                        amount!,
+                                      ))
+                              : _priceWithCurrencyCode(context, amount),
                           style: Theme.of(context).textTheme.headlineSmall
                               ?.copyWith(
                                 color: colors.brandAlert,

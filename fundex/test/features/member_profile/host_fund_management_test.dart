@@ -119,21 +119,27 @@ class _Applications implements MyPageRepository {
 class _Assets implements AssetStatisticsRepository {
   DateTime? endMonth, start;
   int? startYear;
+  final statuses = <List<int>>[];
   @override
-  Future<AssetInvestmentChart> fetchInvestments() async =>
-      const AssetInvestmentChart(
-        investTotal: 120000,
-        investList: [
-          AssetInvestment(
-            projectId: 'p',
-            projectName: '神戸ファンド',
-            investMoneyValid: 120000,
-            investNumValid: 12,
-            beginDate: '2026-03-01',
-            endDate: '2027-03-01',
-          ),
-        ],
-      );
+  Future<AssetInvestmentChart> fetchInvestments({
+    required List<int> status,
+  }) async {
+    statuses.add(status);
+    return const AssetInvestmentChart(
+      investTotal: 120000,
+      investList: [
+        AssetInvestment(
+          projectId: 'p',
+          projectName: '神戸ファンド',
+          investMoneyValid: 120000,
+          investNumValid: 12,
+          beginDate: '2026-03-01',
+          endDate: '2027-03-01',
+        ),
+      ],
+    );
+  }
+
   @override
   Future<AssetBenefitForecast> fetchForecast({
     required DateTime endYearMonth,
@@ -223,7 +229,7 @@ void main() {
     },
   );
   testWidgets(
-    'My Page shortcut opens all five fund sections with independent data and actions',
+    'My Page shortcut opens all six fund sections with independent data and actions',
     (tester) async {
       tester.view.devicePixelRatio = 1;
       tester.view.physicalSize = const Size(390, 844);
@@ -347,7 +353,11 @@ void main() {
       await preview('bank');
       await tester.tap(find.byType(CloseButton));
       await tester.pumpAndSettle();
+      await tap('運用前');
+      expect(assets.statuses.last, [1, 7, 3]);
+      expect(find.text('神戸ファンド'), findsOneWidget);
       await tap('運用中');
+      expect(assets.statuses.last, [4]);
       expect(find.byType(MyPageActiveFundSummaryCard), findsWidgets);
       await preview('running');
       await tester.scrollUntilVisible(
