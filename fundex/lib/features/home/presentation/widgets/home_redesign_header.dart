@@ -4,7 +4,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import '../../../member_profile/presentation/widgets/my_page_asset_summary.dart'
     show MyPageHeaderAction;
 import '../../../../app/localization/app_localizations_ext.dart';
-import '../support/home_text_styles.dart';
+import '../../../../app/widgets/stellavia_wordmark.dart';
 
 class HomeRedesignHeader extends StatelessWidget {
   const HomeRedesignHeader({
@@ -36,17 +36,11 @@ class HomeRedesignHeader extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
-                Expanded(
+                const Expanded(
                   child: FittedBox(
                     alignment: AlignmentDirectional.centerStart,
                     fit: BoxFit.scaleDown,
-                    child: Text(
-                      'STELLAVIA',
-                      style: HomeTextStyles.brandWordmark(
-                        context,
-                        isAuthenticated: isAuthenticated,
-                      ),
-                    ),
+                    child: StellaviaWordmark(),
                   ),
                 ),
                 if (isAuthenticated)

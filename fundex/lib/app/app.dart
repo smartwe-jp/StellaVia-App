@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,8 +24,6 @@ import 'network/app_network_connectivity_providers.dart';
 import '../features/auth/presentation/providers/auth_providers.dart';
 import '../features/hotel_booking/presentation/providers/hotel_booking_providers.dart';
 import '../features/investment/presentation/providers/fund_project_providers.dart';
-import '../features/home/presentation/providers/home_celebration_providers.dart';
-import '../features/home/presentation/widgets/home_celebration_dialog.dart';
 import '../features/member_profile/presentation/providers/member_profile_providers.dart';
 import '../features/settings/presentation/providers/settings_content_providers.dart';
 
@@ -43,7 +40,6 @@ class MemberTemplateApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     AppNotice.bindHostOverlayKey(_appNoticeOverlayKey);
     ref.watch(pushTokenSyncBootstrapProvider);
-    ref.watch(homeCelebrationBootstrapProvider);
     ref.watch(appPushDialogBootstrapProvider);
     ref.watch(appLinkCoordinatorProvider);
     ref.watch(hotelUserLanguageSyncBootstrapProvider);
@@ -156,7 +152,6 @@ class MemberTemplateApp extends ConsumerWidget {
             fit: StackFit.expand,
             children: <Widget>[
               appChild,
-              const _GlobalCelebrationHost(),
               const AppPushDialogHost(),
               Overlay(
                 key: _appNoticeOverlayKey,
@@ -249,144 +244,6 @@ Future<void> _showNetworkOfflineDialog(
     );
   } finally {
     ref.read(_networkOfflineDialogOpenProvider.notifier).state = false;
-  }
-}
-
-class _GlobalCelebrationHost extends ConsumerStatefulWidget {
-  const _GlobalCelebrationHost();
-
-  @override
-  ConsumerState<_GlobalCelebrationHost> createState() =>
-      _GlobalCelebrationHostState();
-}
-
-class _GlobalCelebrationHostState
-    extends ConsumerState<_GlobalCelebrationHost> {
-  static const Duration _presentationRetryDelay = Duration(milliseconds: 300);
-
-  HomeCelebrationEvent? _activeCelebration;
-  bool _isCelebrationScheduled = false;
-
-  void _tryPresentCelebration() {
-    if (!mounted || _activeCelebration != null || _isCelebrationScheduled) {
-      return;
-    }
-
-    final isAuthenticated =
-        ref.read(isAuthenticatedProvider).asData?.value ?? false;
-    final pendingEvent = ref
-        .read(homeCelebrationControllerProvider)
-        .pendingEvent;
-    if (!isAuthenticated || pendingEvent == null) {
-      return;
-    }
-    final currentLocation = _currentLocation();
-    if (currentLocation == null || currentLocation == '/splash') {
-      _scheduleRetry();
-      return;
-    }
-
-    _isCelebrationScheduled = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (!mounted) {
-        _isCelebrationScheduled = false;
-        return;
-      }
-      _isCelebrationScheduled = false;
-      if (!mounted || _activeCelebration != null) {
-        return;
-      }
-
-      final currentPending = ref
-          .read(homeCelebrationControllerProvider)
-          .pendingEvent;
-      final stableLocation = _currentLocation();
-      if (currentPending == null ||
-          currentPending.token != pendingEvent.token ||
-          stableLocation == null ||
-          stableLocation == '/splash') {
-        if (currentPending != null && stableLocation == '/splash') {
-          _scheduleRetry();
-        }
-        return;
-      }
-
-      ref
-          .read(homeCelebrationControllerProvider.notifier)
-          .consumePending(currentPending.token);
-      setState(() {
-        _activeCelebration = currentPending;
-      });
-    });
-    SchedulerBinding.instance.ensureVisualUpdate();
-  }
-
-  void _scheduleRetry() {
-    if (!mounted || _isCelebrationScheduled) {
-      return;
-    }
-    _isCelebrationScheduled = true;
-    Future<void>.delayed(_presentationRetryDelay, () {
-      _isCelebrationScheduled = false;
-      _tryPresentCelebration();
-    });
-  }
-
-  void _dismissCelebration() {
-    if (!mounted || _activeCelebration == null) {
-      return;
-    }
-    setState(() {
-      _activeCelebration = null;
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _tryPresentCelebration();
-    });
-  }
-
-  String? _currentLocation() {
-    try {
-      return ref
-          .read(appRouterProvider)
-          .routerDelegate
-          .currentConfiguration
-          .uri
-          .path;
-    } catch (_) {
-      return null;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    ref.listen<HomeCelebrationState>(homeCelebrationControllerProvider, (
-      previous,
-      next,
-    ) {
-      if (previous?.pendingEvent?.token == next.pendingEvent?.token) {
-        return;
-      }
-      _tryPresentCelebration();
-    });
-    ref.listen<AsyncValue<bool>>(isAuthenticatedProvider, (previous, next) {
-      final wasAuthenticated = previous?.asData?.value ?? false;
-      final isAuthenticated = next.asData?.value ?? false;
-      if (wasAuthenticated == isAuthenticated) {
-        return;
-      }
-      if (isAuthenticated) {
-        _tryPresentCelebration();
-      }
-    });
-    _tryPresentCelebration();
-    final activeCelebration = _activeCelebration;
-    if (activeCelebration == null) {
-      return const SizedBox.shrink();
-    }
-    return HomeCelebrationDialog(
-      event: activeCelebration,
-      onDismiss: _dismissCelebration,
-    );
   }
 }
 

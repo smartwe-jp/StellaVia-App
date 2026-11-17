@@ -56,24 +56,20 @@ void main() {
       expect(command.primaryLabel, 'Close');
     });
 
-    test('keeps legacy home celebration push compatible', () {
-      final command = parseAppPushCommand(
-        const AppPushNotificationEvent(
-          kind: 'aliyun',
-          payload: <String, Object?>{
-            'extraMap': <String, Object?>{
-              'TARGET_PAGE': 'homeCelebration',
-              '_ALIYUN_NOTIFICATION_MSG_ID_': 'legacy-1',
-              'LOTTIE_URL': 'https://example.com/celebration.json',
-            },
-          },
-        ),
-      );
-
-      expect(command, isNotNull);
-      expect(command!.action, AppPushAction.homeCelebration);
-      expect(command.token, 'push-legacy-1');
-      expect(command.lottieUrl, 'https://example.com/celebration.json');
+    test('ignores retired registration reward notifications', () {
+      for (final payload in [
+        {
+          'extraMap': {'TARGET_PAGE': 'homeCelebration'},
+        },
+        {'PUSH_ACTION': 'home_celebration'},
+        {'ACTION': 'celebration'},
+      ]) {
+        final event = AppPushNotificationEvent(
+          kind: 'foreground',
+          payload: payload,
+        );
+        expect(parseAppPushCommand(event), isNull);
+      }
     });
 
     test('ignores payload without supported action', () {

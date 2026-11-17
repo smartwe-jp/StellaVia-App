@@ -18,14 +18,6 @@ abstract final class HomeTextStyles {
       context.appTextTheme.sectionTitle.copyWith(fontSize: 22);
   static TextStyle compactAction(BuildContext context) =>
       context.appTextTheme.micro.copyWith(fontSize: 11);
-  static TextStyle brandWordmark(
-    BuildContext context, {
-    required bool isAuthenticated,
-  }) => context.appTextTheme.numericTitle.copyWith(
-    fontSize: 18,
-    fontWeight: FontWeight.w600,
-    letterSpacing: isAuthenticated ? 0 : 4.8,
-  );
   static TextStyle simulationEyebrow(BuildContext context) => context
       .appTextTheme
       .numericCaption

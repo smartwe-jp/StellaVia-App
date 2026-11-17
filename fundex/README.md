@@ -178,9 +178,3 @@ cp .vscode/dart_define.prod.example.json .vscode/dart_define.prod.local.json
   "BODY": "活動内容...",
   "IMAGE_URL": "https://example.com/campaign.jpg"
 }
-奖励动画
-
-{
-  TARGET_PAGE:"homeCelebration"
-  LOTTIE_URL:"https://stellavia.co.jp/Gift_box_with_coupon.json"
-}

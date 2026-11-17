@@ -56,7 +56,7 @@ class AppPushDialogController extends StateNotifier<AppPushDialogState> {
 
   Future<void> queueFromPush(AppPushNotificationEvent event) async {
     final command = parseAppPushCommand(event);
-    if (command == null || command.action == AppPushAction.homeCelebration) {
+    if (command == null) {
       return;
     }
     if (_hasCommandToken(command.token) || await _shouldSkip(command)) {
@@ -179,7 +179,6 @@ class AppPushDialogController extends StateNotifier<AppPushDialogState> {
       AppPushAction.appBlock => 0,
       AppPushAction.appUpdate => 10,
       AppPushAction.campaignDialog => 20,
-      AppPushAction.homeCelebration => 30,
     };
   }
 

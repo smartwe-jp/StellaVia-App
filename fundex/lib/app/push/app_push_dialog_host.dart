@@ -117,7 +117,6 @@ class _PushActionOverlayState extends State<_PushActionOverlay>
                   command: widget.command,
                   onPrimaryPressed: widget.onPrimaryPressed,
                 ),
-                AppPushAction.homeCelebration => const SizedBox.shrink(),
               },
             ),
           ),

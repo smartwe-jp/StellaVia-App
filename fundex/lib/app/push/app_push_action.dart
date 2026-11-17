@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'app_push_runtime.dart';
 
-enum AppPushAction { appBlock, appUpdate, campaignDialog, homeCelebration }
+enum AppPushAction { appBlock, appUpdate, campaignDialog }
 
 class AppPushCommand {
   const AppPushCommand({
@@ -17,7 +17,6 @@ class AppPushCommand {
     this.androidUrl,
     this.webUrl,
     this.imageUrl,
-    this.lottieUrl,
     this.targetVersion,
     this.minBuild,
     this.maxBuild,
@@ -38,7 +37,6 @@ class AppPushCommand {
   final String? androidUrl;
   final String? webUrl;
   final String? imageUrl;
-  final String? lottieUrl;
   final String? targetVersion;
   final int? minBuild;
   final int? maxBuild;
@@ -60,7 +58,6 @@ AppPushCommand? parseAppPushCommand(AppPushNotificationEvent event) {
   final reader = _PushPayloadReader(event.payload);
   final action = _parseAction(
     reader.string('PUSH_ACTION') ?? reader.string('ACTION'),
-    legacyTargetPage: reader.string('TARGET_PAGE'),
   );
   if (action == null) {
     return null;
@@ -88,7 +85,6 @@ AppPushCommand? parseAppPushCommand(AppPushNotificationEvent event) {
     androidUrl: reader.string('ANDROID_URL'),
     webUrl: reader.string('WEB_URL'),
     imageUrl: reader.string('IMAGE_URL'),
-    lottieUrl: reader.string('LOTTIE_URL'),
     targetVersion: reader.string('TARGET_VERSION'),
     minBuild: reader.integer('MIN_BUILD'),
     maxBuild: reader.integer('MAX_BUILD'),
@@ -115,7 +111,7 @@ String _resolveToken(
   return 'push-${event.kind}-${event.payload.toString()}';
 }
 
-AppPushAction? _parseAction(String? raw, {String? legacyTargetPage}) {
+AppPushAction? _parseAction(String? raw) {
   final normalized = _normalizeKey(raw ?? '');
   return switch (normalized) {
     'appblock' || 'forceapp' || 'forceblock' => AppPushAction.appBlock,
@@ -123,11 +119,7 @@ AppPushAction? _parseAction(String? raw, {String? legacyTargetPage}) {
     'campaigndialog' ||
     'campaign' ||
     'activitydialog' => AppPushAction.campaignDialog,
-    'homecelebration' || 'celebration' => AppPushAction.homeCelebration,
-    _ =>
-      _normalizeKey(legacyTargetPage ?? '') == 'homecelebration'
-          ? AppPushAction.homeCelebration
-          : null,
+    _ => null,
   };
 }
 

@@ -6,15 +6,13 @@ import 'package:go_router/go_router.dart';
 import 'package:fundex/features/auth/presentation/support/intl_code_picker_field.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/widgets/stellavia_wordmark.dart';
 import '../controllers/auth_controller.dart';
 import '../providers/auth_providers.dart';
 import '../support/code_send_cooldown.dart';
 import '../state/auth_state.dart';
 
 enum _LoginChannel { mobile, email }
-
-const String _loginBrandLockupAssetPath =
-    'assets/images/stellavia.logoAndText.light.png';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({
@@ -325,7 +323,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       children: <Widget>[
                         _LoginChannelSegmentedControl(
                           emailButtonKey: const Key('login_mode_email_button'),
-                          mobileButtonKey: const Key('login_mode_mobile_button'),
+                          mobileButtonKey: const Key(
+                            'login_mode_mobile_button',
+                          ),
                           emailLabel: l10n.authModeEmail,
                           mobileLabel: l10n.authModeMobile,
                           selectedChannel: _loginChannel,
@@ -422,7 +422,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           controller: _codeController,
                           labelText: l10n.loginCodeLabel,
                           hintText: l10n.loginCodeLabel,
-                          sendCodeLabel: _sendCodeButtonLabel(l10n.loginSendCode),
+                          sendCodeLabel: _sendCodeButtonLabel(
+                            l10n.loginSendCode,
+                          ),
                           inputKey: const Key('login_code_input'),
                           sendButtonKey: const Key('login_send_code_button'),
                           isSendingCode: state.isSendingCode,
@@ -564,22 +566,27 @@ class _LoginHeroHeader extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        color: heroForegroundColor.withValues(alpha: 0.12),
-                        blurRadius: 28,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                  ),
-                  child: Image.asset(
-                    _loginBrandLockupAssetPath,
-                    width: 132,
-                    fit: BoxFit.contain,
+                Flexible(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                          color: heroForegroundColor.withValues(alpha: 0.12),
+                          blurRadius: 28,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: Image.asset(
+                      'assets/images/stellavia.logo.light.png',
+                      height: 80,
+                      excludeFromSemantics: true,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
+                const SizedBox(height: 4),
+                StellaviaWordmark(color: heroForegroundColor),
                 const SizedBox(height: 16),
                 Text(
                   subtitle,
