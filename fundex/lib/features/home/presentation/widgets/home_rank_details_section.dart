@@ -9,8 +9,7 @@ import 'home_rank_detail_card.dart';
 import '../support/home_text_styles.dart';
 
 class HomeRankDetailsSection extends ConsumerWidget {
-  const HomeRankDetailsSection({super.key, this.onDetails});
-  final VoidCallback? onDetails;
+  const HomeRankDetailsSection({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
@@ -65,15 +64,6 @@ class HomeRankDetailsSection extends ConsumerWidget {
                   ),
               ],
             ),
-            if (onDetails != null)
-              AppButton(
-                label: l.homeRankDetails,
-                onPressed: onDetails,
-                variant: AppButtonVariant.secondary,
-                style: OutlinedButton.styleFrom(
-                  backgroundColor: context.appColors.surface,
-                ),
-              ),
           ],
         ),
       ),

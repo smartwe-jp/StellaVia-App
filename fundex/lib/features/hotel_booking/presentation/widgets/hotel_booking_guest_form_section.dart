@@ -1,6 +1,8 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
+import '../support/hotel_booking_text_styles.dart';
+
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_phone_intl_codes.dart';
@@ -77,10 +79,9 @@ class HotelBookingGuestFormSection extends StatelessWidget {
         if (showTitle) ...<Widget>[
           _SectionHeader(
             title: title,
-            titleStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: colors.textPrimary,
-              fontWeight: FontWeight.w700,
-            ),
+            titleStyle: HotelBookingTextStyles.heading(
+              context,
+            ).copyWith(color: colors.textPrimary, fontWeight: FontWeight.w700),
             onSavedContactTap: onSavedContactTap,
           ),
         ],
@@ -88,10 +89,9 @@ class HotelBookingGuestFormSection extends StatelessWidget {
           if (showTitle) const SizedBox(height: 6),
           _SectionHeader(
             title: roomName!,
-            titleStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: colors.textPrimary,
-              fontWeight: FontWeight.w700,
-            ),
+            titleStyle: HotelBookingTextStyles.heading(
+              context,
+            ).copyWith(color: colors.textPrimary, fontWeight: FontWeight.w700),
             onSavedContactTap: showTitle ? null : onSavedContactTap,
           ),
         ],
@@ -135,10 +135,9 @@ class HotelBookingGuestFormSection extends StatelessWidget {
               child: Text(
                 priceTipText,
                 textAlign: TextAlign.right,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: colors.danger,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: HotelBookingTextStyles.label(
+                  context,
+                ).copyWith(color: colors.danger),
               ),
             ),
             const SizedBox(height: 10),
@@ -201,9 +200,9 @@ class _SectionHeader extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               minimumSize: const Size(0, 34),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              textStyle: Theme.of(
+              textStyle: HotelBookingTextStyles.label(
                 context,
-              ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
+              ).copyWith(fontWeight: FontWeight.w800),
             ),
           ),
         ],
@@ -275,6 +274,7 @@ class _CountryDropdown extends StatelessWidget {
       label: context.l10n.hotelBookingCountryRegion,
       requiredMark: isRequired,
       child: DropdownButtonFormField<String>(
+        style: HotelBookingTextStyles.value(context),
         initialValue: _resolveValue,
         isExpanded: true,
         decoration: InputDecoration(
@@ -299,7 +299,7 @@ class _CountryDropdown extends StatelessWidget {
                 child: Text(
                   country.name,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  style: HotelBookingTextStyles.value(context).copyWith(
                     color: colors.textPrimary,
                     fontWeight: FontWeight.w700,
                   ),
@@ -349,7 +349,9 @@ class _PhoneFields extends StatelessWidget {
           SizedBox(
             width: 104,
             child: DropdownButtonFormField<String>(
+              style: HotelBookingTextStyles.value(context),
               initialValue: selectedIntlCode,
+              isExpanded: true,
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                 enabledBorder: OutlineInputBorder(
@@ -411,12 +413,12 @@ class _LabeledField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         RichText(
+          textScaler: MediaQuery.textScalerOf(context),
           text: TextSpan(
             text: label,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: colors.textSecondary,
-              fontWeight: FontWeight.w800,
-            ),
+            style: HotelBookingTextStyles.label(
+              context,
+            ).copyWith(color: colors.textSecondary),
             children: <InlineSpan>[
               if (requiredMark)
                 TextSpan(
@@ -457,12 +459,12 @@ class _CounterRow extends StatelessWidget {
       children: <Widget>[
         Expanded(
           child: RichText(
+            textScaler: MediaQuery.textScalerOf(context),
             text: TextSpan(
               text: label,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: colors.textSecondary,
-                fontWeight: FontWeight.w800,
-              ),
+              style: HotelBookingTextStyles.label(
+                context,
+              ).copyWith(color: colors.textSecondary),
               children: <InlineSpan>[
                 if (requiredMark)
                   TextSpan(
@@ -484,10 +486,9 @@ class _CounterRow extends StatelessWidget {
           child: Text(
             value.toString(),
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: colors.textPrimary,
-              fontWeight: FontWeight.w800,
-            ),
+            style: HotelBookingTextStyles.count(
+              context,
+            ).copyWith(color: colors.textPrimary),
           ),
         ),
         _CounterButton(
@@ -517,9 +518,7 @@ class _CounterButton extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: onTap == null ? colors.surface : colors.primary,
-          border: Border.all(
-            color: colors.primaryAlt.withValues(alpha: 0.4),
-          ),
+          border: Border.all(color: colors.primaryAlt.withValues(alpha: 0.4)),
         ),
         child: SizedBox(
           width: 34,

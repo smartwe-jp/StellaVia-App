@@ -1,10 +1,14 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+
 import 'package:intl/intl.dart';
+
+import '../support/hotel_order_text_styles.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
+import '../support/hotel_order_amount_display.dart';
 import 'hotel_detail_image_placeholder.dart';
 import 'hotel_payment_countdown_badge.dart';
 
@@ -74,181 +78,177 @@ class HotelOrderSummaryCard extends StatelessWidget {
     final checkIn = _dateTimeParts(order.checkIn);
     final checkOut = _dateTimeParts(order.checkOut);
     final statusBadge = _statusBadge(context, colors);
-    final amountText = presenter.price(order.totalAmount);
+    final amount = hotelOrderAmountDisplay(
+      context,
+      presenter,
+      mile: order.mile,
+      totalAmount: order.totalAmount,
+      priceLabel: context.l10n.hotelOrdersAmountLabel,
+    );
     final canCancel = _canCancel(order);
     final canPay = _canPay(order);
     final hasActions = canCancel || canPay;
     final showPaymentCountdown = order.orderStatusCode == 1;
 
-    return 
+    return
     // AspectRatio(
     //   aspectRatio: 4.2 / 3,
-    //   child: 
-      Material(
-        color: colors.brandWhite,
-        elevation: 3,
-        shadowColor: colors.brandPrimaryDark.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(UiTokens.radius28),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onTap,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(UiTokens.radius28),
-              border: Border.all(color: colors.borderSoft),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(18, 14, 18, 16),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          '${context.l10n.hotelOrdersOrderNoPrefix}${order.id}',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(
-                                color: colors.textSecondary,
-                                fontWeight: FontWeight.w800,
-                              ),
-                        ),
+    //   child:
+    Material(
+      color: colors.brandWhite,
+      elevation: 3,
+      shadowColor: colors.brandPrimaryDark.withValues(alpha: 0.08),
+      borderRadius: BorderRadius.circular(UiTokens.radius28),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(UiTokens.radius28),
+            border: Border.all(color: colors.borderSoft),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(18, 14, 18, 16),
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        '${context.l10n.hotelOrdersOrderNoPrefix}${order.id}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: HotelOrderTextStyles.value(
+                          context,
+                        ).copyWith(color: colors.textSecondary),
                       ),
-                      if (statusBadge != null) ...<Widget>[
-                        const SizedBox(width: 8),
-                        _OrderStatusBadge(data: statusBadge),
-                      ],
-                      if (showPaymentCountdown) ...<Widget>[
-                        const SizedBox(width: 6),
-                        HotelPaymentCountdownBadge(
-                          baseTime: order.bookingOrderTime,
-                          onExpired: onPaymentCountdownExpired,
-                        ),
-                      ],
+                    ),
+                    if (statusBadge != null) ...<Widget>[
+                      const SizedBox(width: 8),
+                      _OrderStatusBadge(data: statusBadge),
                     ],
-                  ),
-                  const SizedBox(height: 12),
-                  Divider(color: colors.borderSoft, height: 1),
-                  const SizedBox(height: 14),
-                  Row(
-                    spacing: 12,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: AspectRatio(
-                          aspectRatio: 1.0,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                              UiTokens.radius12,
-                            ),
-                            child: AppRemoteImage(
-                              imageUrl: order.hotelImageUrl,
-                              fit: BoxFit.cover,
-                              placeholder: const HotelDetailImagePlaceholder(),
-                              errorWidget: const HotelDetailImagePlaceholder(),
-                            ),
+                    if (showPaymentCountdown) ...<Widget>[
+                      const SizedBox(width: 6),
+                      HotelPaymentCountdownBadge(
+                        baseTime: order.bookingOrderTime,
+                        onExpired: onPaymentCountdownExpired,
+                      ),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Divider(color: colors.borderSoft, height: 1),
+                const SizedBox(height: 14),
+                Row(
+                  spacing: 12,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: AspectRatio(
+                        aspectRatio: 1.0,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            UiTokens.radius12,
+                          ),
+                          child: AppRemoteImage(
+                            imageUrl: order.hotelImageUrl,
+                            fit: BoxFit.cover,
+                            placeholder: const HotelDetailImagePlaceholder(),
+                            errorWidget: const HotelDetailImagePlaceholder(),
                           ),
                         ),
                       ),
+                    ),
 
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              title,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.titleMedium
-                                  ?.copyWith(
-                                    color: colors.textPrimary,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              order.hotelAddress.isNotEmpty
-                                  ? order.hotelAddress
-                                  : order.buildingName,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(
-                                    color: colors.textSecondary,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                            ),
-                            const SizedBox(height: 10),
-                            _OrderStayDatePanel(
-                              checkIn: checkIn,
-                              checkOut: checkOut,
-                            ),
-                          ],
-                        ),
+                    Expanded(
+                      flex: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: HotelOrderTextStyles.hotelName(
+                              context,
+                            ).copyWith(color: colors.textPrimary),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            order.hotelAddress.isNotEmpty
+                                ? order.hotelAddress
+                                : order.buildingName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: HotelOrderTextStyles.label(
+                              context,
+                            ).copyWith(color: colors.textSecondary),
+                          ),
+                          const SizedBox(height: 10),
+                          _OrderStayDatePanel(
+                            checkIn: checkIn,
+                            checkOut: checkOut,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
 
-                  const SizedBox(height: 6),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              context.l10n.hotelOrdersAmountLabel,
-                              style: Theme.of(context).textTheme.labelMedium
-                                  ?.copyWith(
-                                    color: colors.textSecondary,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              amountText.isEmpty ? '--' : amountText,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.headlineSmall
-                                  ?.copyWith(
-                                    color: colors.brandAlert,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                            ),
-                          ],
-                        ),
+                const SizedBox(height: 6),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            amount.label,
+                            style: HotelOrderTextStyles.label(
+                              context,
+                            ).copyWith(color: colors.textSecondary),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            amount.value.isEmpty ? '--' : amount.value,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: HotelOrderTextStyles.amount(
+                              context,
+                            ).copyWith(color: colors.textPrimary),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 10),
-                      if (canCancel) ...<Widget>[
-                        _OrderActionButton(
-                          label: context.l10n.hotelOrdersCancelAction,
-                          onTap: onCancel,
-                          foregroundColor: colors.brandAlert,
-                          backgroundColor: colors.brandWhite,
-                          borderColor: colors.dangerBorder,
-                        ),
-                        const SizedBox(width: 8),
-                      ],
-                      if (canPay)
-                        _OrderActionButton(
-                          label: context.l10n.hotelBookingResultPay,
-                          onTap: onPay,
-                          foregroundColor: colors.onDark,
-                          backgroundColor: colors.brandPrimary,
-                          borderColor: colors.brandPrimary,
-                        ),
-                      if (!hasActions) const _OrderNextIndicator(),
+                    ),
+                    const SizedBox(width: 10),
+                    if (canCancel) ...<Widget>[
+                      _OrderActionButton(
+                        label: context.l10n.hotelOrdersCancelAction,
+                        onTap: onCancel,
+                        foregroundColor: colors.primary,
+                        backgroundColor: colors.brandWhite,
+                        borderColor: colors.primary,
+                      ),
+                      const SizedBox(width: 8),
                     ],
-                  ),
-                ],
-              ),
+                    if (canPay)
+                      _OrderActionButton(
+                        label: context.l10n.hotelBookingResultPay,
+                        onTap: onPay,
+                        foregroundColor: colors.onDark,
+                        backgroundColor: colors.brandPrimary,
+                        borderColor: colors.brandPrimary,
+                      ),
+                    if (!hasActions) const _OrderNextIndicator(),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
+      ),
       //),
     );
   }
@@ -371,10 +371,9 @@ class _OrderStatusBadge extends StatelessWidget {
           data.label,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: data.foregroundColor,
-            fontWeight: FontWeight.w600,
-          ),
+          style: HotelOrderTextStyles.label(
+            context,
+          ).copyWith(color: data.foregroundColor),
         ),
       ),
     );
@@ -461,10 +460,9 @@ class _OrderStayDateColumn extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           textAlign: textAlign,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: colors.textSecondary,
-            fontWeight: FontWeight.w800,
-          ),
+          style: HotelOrderTextStyles.label(
+            context,
+          ).copyWith(color: colors.textSecondary),
         ),
         const SizedBox(height: 4),
         Text(
@@ -472,21 +470,18 @@ class _OrderStayDateColumn extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           textAlign: textAlign,
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            color: colors.brandPrimaryDark,
-            fontWeight: FontWeight.w800,
-          ),
+          style: HotelOrderTextStyles.heading(
+            context,
+          ).copyWith(color: colors.brandPrimaryDark),
         ),
         Text(
           parts.time,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           textAlign: textAlign,
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            color: colors.brandPrimaryDark,
-            fontWeight: FontWeight.w800,
-            height: 1.05,
-          ),
+          style: HotelOrderTextStyles.heading(
+            context,
+          ).copyWith(color: colors.brandPrimaryDark, height: 1.05),
         ),
       ],
     );
@@ -522,10 +517,9 @@ class _OrderActionButton extends StatelessWidget {
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: foregroundColor,
-              fontWeight: FontWeight.w800,
-            ),
+            style: HotelOrderTextStyles.action(
+              context,
+            ).copyWith(color: foregroundColor),
           ),
         ),
       ),
@@ -592,10 +586,9 @@ class HotelOrderListLoadMoreButton extends StatelessWidget {
               )
             : Text(
                 context.l10n.hotelOrdersLoadMore,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: colors.brandPrimary,
-                  fontWeight: FontWeight.w800,
-                ),
+                style: HotelOrderTextStyles.hotelName(
+                  context,
+                ).copyWith(color: colors.brandPrimary),
               ),
       ),
     );

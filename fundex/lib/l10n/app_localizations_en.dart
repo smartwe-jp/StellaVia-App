@@ -6567,6 +6567,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeServiceAboutTitle => 'Invest in tomorrow and today.';
 
   @override
+  String get homeServiceVideoPending => 'Video coming soon';
+
+  @override
   String get homeServiceAboutBody =>
       'Build your assets while enjoying time with family, your partner and the people who matter today. Host benefits combine investment returns with host miles that can be used for hotel stays. This is the new approach to investing proposed by STELLAVIA.';
 

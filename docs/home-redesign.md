@@ -97,3 +97,9 @@ Information-page validation: 24 targeted tests passed (auth redirects plus navig
 首页在最新基金之后展示「泊まれるホテル」。按宿主マイル入口的默认入住日期查询 stayBenefit=true，展示最多四家本次入住有参考里程、可预订且未售罄的酒店。「一覧を見る」打开 /hotel-booking/host-miles。酒店卡片携带当前查询条件和楼栋代码打开所选酒店的宿主マイル详情页，空列表也保留入口。首页不再展示或刷新二级市场列表。
 
 - The guest home header shows a settings button to the right of Login. It opens the existing guest settings page at `/profile/settings`.
+
+- 2026-11-18：宿主优待详情页移除等级卡下方「ランク制度を詳しく見る」按钮及对应区块间距。
+
+- 2026-11-18：首页精选区块的「一覧を見る」入口统一为13／500，通过AppSectionHeader可选actionTextStyle配置；区块标题使用15／700。
+
+- 2026-11-18：宿主优待ABOUT首图区域改为视频入口，复用基金详情的直链／YouTube／外链播放组件。HOME_SERVICE_VIDEO_URL构建配置留空时显示原图封面和本地化准备中状态；后续提供真实链接后配置，无链接不初始化播放器。

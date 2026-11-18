@@ -193,7 +193,7 @@ void main() {
   });
 
   testWidgets(
-    'service to ranks preserves scroll and back; guest registration and member CTA work',
+    'service omits rank detail CTA; registration, member CTA and back work',
     (tester) async {
       tester.view.physicalSize = const Size(390, 844);
       tester.view.devicePixelRatio = 1;
@@ -204,27 +204,7 @@ void main() {
         await tester.pumpWidget(app(router, member: member));
         router.push('/home/service');
         await tester.pumpAndSettle();
-        final details = find.text('ランク制度を詳しく見る');
-        await tester.ensureVisible(details);
-        await tester.pumpAndSettle();
-        final scroll = tester
-            .state<ScrollableState>(find.byType(Scrollable).first)
-            .position
-            .pixels;
-        await tester.tap(details);
-        await tester.pumpAndSettle();
-        expect(find.byType(HomeRankDetailsPage), findsOneWidget);
-        expect(find.text('0.525%'), findsOneWidget);
-        await tester.tap(find.byType(AppNavigationIconButton));
-        await tester.pumpAndSettle();
-        expect(find.byType(HomeServiceIntroductionPage), findsOneWidget);
-        expect(
-          tester
-              .state<ScrollableState>(find.byType(Scrollable).first)
-              .position
-              .pixels,
-          closeTo(scroll, 1),
-        );
+        expect(find.text('ランク制度を詳しく見る'), findsNothing);
         final cta = find.descendant(
           of: find.byType(SafeArea).last,
           matching: find.byType(AppButton),

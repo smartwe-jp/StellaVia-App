@@ -188,6 +188,7 @@ class HotelOrderListController extends StateNotifier<HotelOrderListState> {
             orderStatus: '',
             orderStatusCode: 5,
             payCode: order.payCode,
+            mile: order.mile,
             totalAmount: order.totalAmount,
             canPay: false,
             canRefund: false,

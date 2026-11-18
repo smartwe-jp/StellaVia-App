@@ -1,6 +1,8 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
+import '../support/hotel_booking_text_styles.dart';
+
 import '../../../../app/localization/app_localizations_ext.dart';
 import 'hotel_booking_section_card.dart';
 
@@ -33,10 +35,9 @@ class HotelBookingPaymentSection extends StatelessWidget {
         children: <Widget>[
           Text(
             context.l10n.hotelBookingPaymentTitle,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: colors.textPrimary,
-              fontWeight: FontWeight.w700,
-            ),
+            style: HotelBookingTextStyles.heading(
+              context,
+            ).copyWith(color: colors.textPrimary, fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 18),
           _PaymentTile(
@@ -123,18 +124,17 @@ class _PaymentTile extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    style: HotelBookingTextStyles.value(context).copyWith(
                       color: isEnabled
                           ? colors.textPrimary
                           : colors.textTertiary,
-                      fontWeight: FontWeight.w800,
                     ),
                   ),
                   if (subtitle != null) ...<Widget>[
                     const SizedBox(height: 4),
                     Text(
                       subtitle!,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      style: HotelBookingTextStyles.label(context).copyWith(
                         color: isEnabled
                             ? colors.textSecondary
                             : colors.textTertiary,

@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
+import '../support/hotel_order_text_styles.dart';
+import '../support/hotel_coupon_display.dart';
 
 class HotelCouponCard extends StatelessWidget {
   const HotelCouponCard({
@@ -24,6 +26,7 @@ class HotelCouponCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
+    final hotelNames = hotelCouponHotelNames(coupon.hotelNames);
     final badge = _couponBadge(context, coupon, pageTexts);
     final borderColor = isSelected ? colors.brandPrimary : colors.borderSoft;
     return Material(
@@ -49,7 +52,7 @@ class HotelCouponCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   SizedBox(
-                    width: 118,
+                    width: 96,
                     child: DecoratedBox(
                       decoration: BoxDecoration(color: colors.primary),
                       child: Padding(
@@ -65,23 +68,20 @@ class HotelCouponCard extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.headlineSmall
-                                  ?.copyWith(
-                                    color: colors.onDark,
-                                    fontWeight: FontWeight.w900,
-                                  ),
+                              style: HotelOrderTextStyles.amount(
+                                context,
+                              ).copyWith(color: colors.onDark),
                             ),
                             const SizedBox(height: 2),
                             Text(
                               badge.secondary,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.labelLarge
-                                  ?.copyWith(
+                              style: HotelOrderTextStyles.label(context)
+                                  .copyWith(
                                     color: colors.onDark.withValues(
                                       alpha: 0.88,
                                     ),
-                                    fontWeight: FontWeight.w800,
                                   ),
                             ),
                           ],
@@ -106,13 +106,11 @@ class HotelCouponCard extends StatelessWidget {
                               Expanded(
                                 child: Text(
                                   coupon.name.isEmpty ? '--' : coupon.name,
-                                  maxLines: 1,
+                                  maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context).textTheme.titleMedium
-                                      ?.copyWith(
-                                        color: colors.textPrimary,
-                                        fontWeight: FontWeight.w800,
-                                      ),
+                                  style: HotelOrderTextStyles.heading(
+                                    context,
+                                  ).copyWith(color: colors.textPrimary),
                                 ),
                               ),
                               const SizedBox(width: 8),
@@ -141,11 +139,11 @@ class HotelCouponCard extends StatelessWidget {
                             icon: Icons.event_available_rounded,
                             text: _validPeriodText(context, coupon),
                           ),
-                          if (coupon.hotelNames.isNotEmpty) ...<Widget>[
+                          if (hotelNames.isNotEmpty) ...<Widget>[
                             const SizedBox(height: 7),
                             _CouponMetaLine(
                               icon: Icons.apartment_rounded,
-                              text: coupon.hotelNames,
+                              text: hotelNames,
                             ),
                           ],
                         ],
@@ -631,18 +629,17 @@ class _CouponTypeChip extends StatelessWidget {
     final colors = Theme.of(context).appColors;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: colors.warningSoft,
+        color: colors.surfaceAlt,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: colors.warningBorder),
+        border: Border.all(color: colors.borderSoft),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Text(
           label,
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: colors.warningForeground,
-            fontWeight: FontWeight.w800,
-          ),
+          style: Theme.of(
+            context,
+          ).textTheme.labelSmall?.copyWith(color: colors.primary),
         ),
       ),
     );
@@ -665,12 +662,11 @@ class _CouponMetaLine extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            maxLines: 1,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: colors.textSecondary,
-              fontWeight: FontWeight.w600,
-            ),
+            style: HotelOrderTextStyles.label(
+              context,
+            ).copyWith(color: colors.textSecondary),
           ),
         ),
       ],

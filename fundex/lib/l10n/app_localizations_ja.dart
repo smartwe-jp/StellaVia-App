@@ -6235,6 +6235,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeServiceAboutTitle => '未来と、今に投資しよう。';
 
   @override
+  String get homeServiceVideoPending => '動画準備中';
+
+  @override
   String get homeServiceAboutBody =>
       '将来のために今を我慢するのではなく、資産を育てながら、家族やパートナー、大切な人との“今”の時間も楽しむ。ファンドへの投資で、運用によるリターンに加えて、ホテルの宿泊に使える「宿主マイル」が貯まる『宿主優待』。それが、STELLAVIAが提案する新しい投資のかたちです。';
 

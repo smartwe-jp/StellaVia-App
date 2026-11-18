@@ -26,6 +26,10 @@ abstract final class HomeTextStyles {
       context.appTextTheme.bodyStrong.copyWith(fontSize: 15);
   static TextStyle smallLink(BuildContext context) =>
       context.appTextTheme.link.copyWith(fontSize: 11);
+  static TextStyle sectionAction(BuildContext context) => context
+      .appTextTheme
+      .button
+      .copyWith(fontSize: 13, fontWeight: FontWeight.w500);
   static TextStyle sectionLink(BuildContext context) =>
       context.appTextTheme.link.copyWith(fontSize: 13);
   static TextStyle rankPreviewEyebrow(BuildContext context) => context

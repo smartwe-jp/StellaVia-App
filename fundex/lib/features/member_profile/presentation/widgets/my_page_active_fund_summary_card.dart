@@ -1,6 +1,8 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
+import '../support/active_fund_card_typography.dart';
+
 class MyPageActiveFundSummaryCardData {
   const MyPageActiveFundSummaryCardData({
     required this.title,
@@ -95,7 +97,7 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: appText.cardTitle.copyWith(
                         color: colors.textPrimary,
-                        fontSize: 13,
+                        fontSize: 12,
                         height: 1.3,
                         fontWeight: FontWeight.w700,
                       ),
@@ -167,9 +169,9 @@ class MyPageActiveFundSummaryCard extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             data.detailLabel!,
-                            style: appText.caption.copyWith(
+                            style: appText.micro.copyWith(
                               color: colors.primary,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                           const SizedBox(width: 2),
@@ -234,26 +236,18 @@ class _ActiveFundMiddlePanel extends StatelessWidget {
           _ActiveFundMetricRow(
             label: investmentAmountLabel,
             value: investmentAmountValue,
-            valueStyle: appText.caption.copyWith(
-              color: colors.infoForeground,
-              fontWeight: FontWeight.w800,
-            ),
           ),
           if (investmentUnitsLabel != null && investmentUnitsValue != null)
             _ActiveFundMetricRow(
               label: investmentUnitsLabel!,
               value: investmentUnitsValue!,
-              valueStyle: appText.caption.copyWith(
-                color: colors.infoForeground,
-                fontWeight: FontWeight.w800,
-              ),
             ),
           _ActiveFundMetricRow(
             label: investorCode,
             value: returnText,
             valueStyle: appText.micro.copyWith(
               color: colors.infoForeground,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w500,
             ),
           ),
 
@@ -271,12 +265,12 @@ class _ActiveFundMetricRow extends StatelessWidget {
   const _ActiveFundMetricRow({
     required this.label,
     required this.value,
-    required this.valueStyle,
+    this.valueStyle,
   });
 
   final String label;
   final String value;
-  final TextStyle valueStyle;
+  final TextStyle? valueStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -298,8 +292,10 @@ class _ActiveFundMetricRow extends StatelessWidget {
 
         //const SizedBox(width: 8),
         Expanded(
-          child: Text(
-            value,
+          child: Text.rich(
+            valueStyle == null
+                ? activeFundNumericSpan(context, value)
+                : TextSpan(text: value, style: valueStyle),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.right,
@@ -344,13 +340,12 @@ class _AccumulatedEarningsPill extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 6),
-          Text(
-            value,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: appText.caption.copyWith(
-              color: colors.infoForeground,
-              fontWeight: FontWeight.w800,
+          Expanded(
+            child: Text.rich(
+              activeFundNumericSpan(context, value),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.end,
             ),
           ),
         ],

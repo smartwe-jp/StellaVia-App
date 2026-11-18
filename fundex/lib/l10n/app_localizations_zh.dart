@@ -6176,6 +6176,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeServiceAboutTitle => '投资未来，也投资当下。';
 
   @override
+  String get homeServiceVideoPending => '视频准备中';
+
+  @override
   String get homeServiceAboutBody =>
       '不必为了未来而牺牲当下。在积累资产的同时，也享受与家人、伴侣和重要之人共度的时光。通过基金投资，除获得投资回报外，还能积累用于酒店住宿的「宿主里程」。这就是 STELLAVIA 提出的全新投资方式——「宿主优待」。';
 
@@ -13319,6 +13322,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get homeServiceAboutTitle => '投資未來，也投資當下。';
+
+  @override
+  String get homeServiceVideoPending => '影片準備中';
 
   @override
   String get homeServiceAboutBody =>

@@ -1,6 +1,8 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
+import '../support/hotel_booking_text_styles.dart';
+
 import '../../../../app/localization/app_localizations_ext.dart';
 import 'hotel_booking_section_card.dart';
 
@@ -28,7 +30,7 @@ class HotelBookingCouponRow extends StatelessWidget {
           children: <Widget>[
             Text(
               context.l10n.hotelBookingCoupons,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              style: HotelBookingTextStyles.heading(context).copyWith(
                 color: colors.textPrimary,
                 fontWeight: FontWeight.w700,
               ),
@@ -44,10 +46,9 @@ class HotelBookingCouponRow extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.end,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: colors.textTertiary,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: HotelBookingTextStyles.value(
+                  context,
+                ).copyWith(color: colors.textTertiary),
               ),
             ),
             const SizedBox(width: 6),
@@ -80,10 +81,9 @@ class HotelBookingInvoiceSection extends StatelessWidget {
         children: <Widget>[
           Text(
             context.l10n.hotelBookingInvoice,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: colors.textPrimary,
-              fontWeight: FontWeight.w700,
-            ),
+            style: HotelBookingTextStyles.heading(
+              context,
+            ).copyWith(color: colors.textPrimary, fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 10),
           CheckboxListTile(
@@ -93,10 +93,9 @@ class HotelBookingInvoiceSection extends StatelessWidget {
             onChanged: (value) => onUseGuestNameChanged(value ?? false),
             title: Text(
               context.l10n.hotelBookingUseGuestName,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: colors.textSecondary,
-                fontWeight: FontWeight.w600,
-              ),
+              style: HotelBookingTextStyles.value(
+                context,
+              ).copyWith(color: colors.textSecondary),
             ),
           ),
           HotelBookingTextField(
@@ -123,18 +122,16 @@ class HotelBookingMessageSection extends StatelessWidget {
         children: <Widget>[
           Text(
             context.l10n.hotelBookingMessageTitle,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: colors.textPrimary,
-              fontWeight: FontWeight.w700,
-            ),
+            style: HotelBookingTextStyles.heading(
+              context,
+            ).copyWith(color: colors.textPrimary, fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 12),
           Text(
             context.l10n.hotelBookingMessageHint,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: colors.textSecondary,
-              fontWeight: FontWeight.w600,
-            ),
+            style: HotelBookingTextStyles.label(
+              context,
+            ).copyWith(color: colors.textSecondary),
           ),
           const SizedBox(height: 8),
           HotelBookingTextField(controller: controller, maxLines: 4),
@@ -185,19 +182,16 @@ class HotelBookingConfirmBottomBar extends StatelessWidget {
                   children: <Widget>[
                     Text(
                       amountLabel,
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: colors.textSecondary,
-                        fontWeight: FontWeight.w800,
-                      ),
+                      style: HotelBookingTextStyles.label(
+                        context,
+                      ).copyWith(color: colors.textSecondary),
                     ),
                     const SizedBox(height: 5),
                     Text(
                       amount,
-                      style: Theme.of(context).textTheme.headlineSmall
-                          ?.copyWith(
-                            color: colors.brandAlert,
-                            fontWeight: FontWeight.w900,
-                          ),
+                      style: HotelBookingTextStyles.total(
+                        context,
+                      ).copyWith(color: colors.brandAlert),
                     ),
                   ],
                 ),
@@ -229,11 +223,9 @@ class HotelBookingConfirmBottomBar extends StatelessWidget {
                         )
                       : Text(
                           context.l10n.hotelBookingConfirmAction,
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(
-                                color: colors.onDark,
-                                fontWeight: FontWeight.w900,
-                              ),
+                          style: HotelBookingTextStyles.value(
+                            context,
+                          ).copyWith(color: colors.onDark),
                         ),
                 ),
               ),

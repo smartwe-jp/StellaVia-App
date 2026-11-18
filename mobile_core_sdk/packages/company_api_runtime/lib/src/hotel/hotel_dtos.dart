@@ -1040,6 +1040,7 @@ abstract class HotelOrderDto with _$HotelOrderDto {
     int? adultCount,
     int? childCount,
     num? paidAmount,
+    @JsonKey(readValue: hotelOrderMilesReadValue, fromJson: _hotelNumFromJson, includeIfNull: false) num? mile,
     num? totalAmount,
     String? payName,
     String? payCode,
@@ -1083,6 +1084,11 @@ abstract class HotelOrderFundBenefitTicketDto
 
   factory HotelOrderFundBenefitTicketDto.fromJson(Map<String, dynamic> json) =>
       _$HotelOrderFundBenefitTicketDtoFromJson(json);
+}
+
+// Prefer explicit mile, including zero; older responses use stellaPoints.
+Object? hotelOrderMilesReadValue(Map<dynamic, dynamic> json, String key) {
+  return json[key] ?? json['stellaPoints'];
 }
 
 Object? hotelOrderIdReadValue(Map<dynamic, dynamic> json, String key) {

@@ -1,11 +1,14 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+
+import '../support/hotel_order_text_styles.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
+import '../support/hotel_order_amount_display.dart';
 import '../support/hotel_map_app_picker.dart';
 import 'hotel_detail_image_placeholder.dart';
 import 'hotel_payment_countdown_badge.dart';
@@ -152,19 +155,16 @@ class _OrderDetailHero extends StatelessWidget {
             const SizedBox(height: 18),
             Text(
               context.l10n.hotelOrderDetailTitle,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: colors.onDark,
-                fontWeight: FontWeight.w900,
-                height: 1.18,
-              ),
+              style: HotelOrderTextStyles.pageTitle(
+                context,
+              ).copyWith(color: colors.onDark, height: 1.18),
             ),
             const SizedBox(height: 8),
             Text(
               '${context.l10n.hotelOrdersOrderNoPrefix}${detail.summary.id}',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: colors.onDark.withValues(alpha: 0.72),
-                fontWeight: FontWeight.w700,
-              ),
+              style: HotelOrderTextStyles.value(
+                context,
+              ).copyWith(color: colors.onDark.withValues(alpha: 0.72)),
             ),
             const SizedBox(height: 14),
             Wrap(
@@ -238,17 +238,17 @@ class _StatusBadge extends StatelessWidget {
     final colors = Theme.of(context).appColors;
     final (background, border, foreground) = switch (tone) {
       _StatusBadgeTone.success => (
-        colors.successSoft,
+        colors.successSubtle,
         colors.successBorder,
         colors.successForeground,
       ),
       _StatusBadgeTone.danger => (
         colors.infoSoft.withValues(alpha: 0.10),
         colors.infoBorder,
-        colors.onDark.withValues(alpha: 0.72),
+        colors.textSecondary,
       ),
       _StatusBadgeTone.warning => (
-        colors.warningSoft,
+        colors.warningSubtle,
         colors.warningBorder,
         colors.warningForeground,
       ),
@@ -268,10 +268,9 @@ class _StatusBadge extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
         child: Text(
           label,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: foreground,
-            fontWeight: FontWeight.w900,
-          ),
+          style: HotelOrderTextStyles.label(
+            context,
+          ).copyWith(color: foreground),
         ),
       ),
     );
@@ -280,12 +279,19 @@ class _StatusBadge extends StatelessWidget {
 
 _StatusBadgeTone _orderStatusTone(int? code) {
   switch (code) {
+    case 2:
+    case 3:
     case 80:
       return _StatusBadgeTone.success;
+    case 1:
+    case 4:
+    case 41:
     case 25:
     case 30:
     case 40:
       return _StatusBadgeTone.warning;
+    case 5:
+    case 6:
     case 70:
     case 98:
       return _StatusBadgeTone.danger;
@@ -354,6 +360,13 @@ class _OrderHotelOverviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final amount = hotelOrderAmountDisplay(
+      context,
+      presenter,
+      mile: detail.summary.mile,
+      totalAmount: detail.summary.totalAmount,
+      priceLabel: context.l10n.hotelOrderDetailTotalAmount,
+    );
     final colors = Theme.of(context).appColors;
     final title = detail.summary.hotelName.isNotEmpty
         ? detail.summary.hotelName
@@ -392,22 +405,18 @@ class _OrderHotelOverviewCard extends StatelessWidget {
                       title,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: colors.textPrimary,
-                        fontWeight: FontWeight.w900,
-                        height: 1.25,
-                      ),
+                      style: HotelOrderTextStyles.heading(
+                        context,
+                      ).copyWith(color: colors.textPrimary, height: 1.25),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       address,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: colors.textSecondary,
-                        fontWeight: FontWeight.w700,
-                        height: 1.35,
-                      ),
+                      style: HotelOrderTextStyles.label(
+                        context,
+                      ).copyWith(color: colors.textSecondary, height: 1.35),
                     ),
                     const SizedBox(height: 10),
                     Wrap(
@@ -443,9 +452,10 @@ class _OrderHotelOverviewCard extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: _MiniInfoTile(
-                  label: context.l10n.hotelOrderDetailTotalAmount,
-                  value: presenter.price(detail.summary.totalAmount),
+                  label: amount.label,
+                  value: amount.value,
                   isAmount: true,
+                  usesMiles: amount.usesMiles,
                 ),
               ),
             ],
@@ -518,20 +528,17 @@ class _StayDateColumn extends StatelessWidget {
       children: <Widget>[
         Text(
           label,
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: colors.textSecondary,
-            fontWeight: FontWeight.w900,
-          ),
+          style: HotelOrderTextStyles.label(
+            context,
+          ).copyWith(color: colors.textSecondary),
         ),
         const SizedBox(height: 5),
         Text(
           '${parts.date}\n${parts.time}',
           textAlign: alignEnd ? TextAlign.end : TextAlign.start,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            color: colors.brandPrimaryDark,
-            fontWeight: FontWeight.w900,
-            height: 1.12,
-          ),
+          style: HotelOrderTextStyles.heading(
+            context,
+          ).copyWith(color: colors.brandPrimaryDark, height: 1.12),
         ),
       ],
     );
@@ -543,11 +550,13 @@ class _MiniInfoTile extends StatelessWidget {
     required this.label,
     required this.value,
     this.isAmount = false,
+    this.usesMiles = false,
   });
 
   final String label;
   final String value;
   final bool isAmount;
+  final bool usesMiles;
 
   @override
   Widget build(BuildContext context) {
@@ -565,21 +574,25 @@ class _MiniInfoTile extends StatelessWidget {
           children: <Widget>[
             Text(
               label,
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                color: colors.textTertiary,
-                fontWeight: FontWeight.w900,
-              ),
+              style: HotelOrderTextStyles.label(
+                context,
+              ).copyWith(color: colors.textTertiary),
             ),
             const SizedBox(height: 5),
             Text(
               value.isEmpty ? '-' : value,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: isAmount ? colors.brandAlert : colors.brandPrimaryDark,
-                fontWeight: FontWeight.w900,
-                height: 1.24,
-              ),
+              style:
+                  (isAmount
+                          ? HotelOrderTextStyles.amount(context)
+                          : HotelOrderTextStyles.value(context))
+                      .copyWith(
+                        color: usesMiles
+                            ? colors.infoForeground
+                            : colors.textPrimary,
+                        height: 1.24,
+                      ),
             ),
           ],
         ),
@@ -617,19 +630,17 @@ class _OrderCheckInGuideCard extends StatelessWidget {
           ),
           DecoratedBox(
             decoration: BoxDecoration(
-              color: colors.warningSubtle,
+              color: colors.surfaceAlt,
               borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: colors.warningBorder),
+              border: Border.all(color: colors.borderSoft),
             ),
             child: Padding(
               padding: const EdgeInsets.all(14),
               child: Text(
                 guide.isEmpty ? context.l10n.hotelOrderDetailNoGuide : guide,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: colors.textSecondary,
-                  height: 1.65,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: HotelOrderTextStyles.label(
+                  context,
+                ).copyWith(color: colors.textSecondary, height: 1.65),
               ),
             ),
           ),
@@ -651,20 +662,16 @@ class _OrderCheckInGuideCard extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             context.l10n.hotelOrderDetailGatePassword,
-                            style: Theme.of(context).textTheme.labelSmall
-                                ?.copyWith(
-                                  color: colors.textTertiary,
-                                  fontWeight: FontWeight.w900,
-                                ),
+                            style: HotelOrderTextStyles.label(
+                              context,
+                            ).copyWith(color: colors.textTertiary),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             password,
-                            style: Theme.of(context).textTheme.titleLarge
-                                ?.copyWith(
-                                  color: colors.brandPrimaryDark,
-                                  fontWeight: FontWeight.w900,
-                                ),
+                            style: HotelOrderTextStyles.heading(
+                              context,
+                            ).copyWith(color: colors.brandPrimaryDark),
                           ),
                         ],
                       ),
@@ -703,6 +710,13 @@ class _OrderPaymentInfoSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final amount = hotelOrderAmountDisplay(
+      context,
+      presenter,
+      mile: detail.summary.mile,
+      totalAmount: detail.summary.totalAmount,
+      priceLabel: context.l10n.hotelOrderDetailPaidAmount,
+    );
     final couponDiscountAmount = detail.couponDiscountAmount ?? 0;
     final fundBenefitTicket = detail.fundBenefitTicket;
     final createdTime = detail.createdTime.trim().isNotEmpty
@@ -724,25 +738,29 @@ class _OrderPaymentInfoSection extends StatelessWidget {
               _orderStatusLabel(context, detail.summary, paymentExpired),
             ),
           ),
-          _InfoLine(
-            data: _InfoLineData.payment(
-              context.l10n.hotelOrderDetailCouponDiscount,
-              fundBenefitTicket != null
-                  ? context.l10n.hotelOrderDetailStayBenefitDiscount(
-                      presenter.price(
-                        fundBenefitTicket.benefitAmount ??
-                            fundBenefitTicket.deductionAmount,
-                      ),
-                      fundBenefitTicket.ticketNo.isEmpty
-                          ? '--'
-                          : fundBenefitTicket.ticketNo,
-                    )
-                  : couponDiscountAmount > 0
-                  ? presenter.price(couponDiscountAmount)
-                  : context.l10n.hotelOrderDetailCouponUnused,
+          if (!amount.usesMiles)
+            _InfoLine(
+              data: _InfoLineData.payment(
+                context.l10n.hotelOrderDetailCouponDiscount,
+                fundBenefitTicket != null
+                    ? context.l10n.hotelOrderDetailStayBenefitDiscount(
+                        presenter.price(
+                          fundBenefitTicket.benefitAmount ??
+                              fundBenefitTicket.deductionAmount,
+                        ),
+                        fundBenefitTicket.ticketNo.isEmpty
+                            ? '--'
+                            : fundBenefitTicket.ticketNo,
+                      )
+                    : couponDiscountAmount > 0
+                    ? presenter.price(couponDiscountAmount)
+                    : context.l10n.hotelOrderDetailCouponUnused,
+              ),
             ),
-          ),
-          _PaymentAmountLine(detail: detail, presenter: presenter),
+          if (amount.usesMiles)
+            _InfoLine(data: _InfoLineData.payment(amount.label, amount.value))
+          else
+            _PaymentAmountLine(detail: detail, presenter: presenter),
           _InfoLine(
             data: _InfoLineData.payment(
               context.l10n.hotelOrderDetailPaymentStatus,
@@ -785,11 +803,9 @@ class _PaymentAmountLine extends StatelessWidget {
               width: 92,
               child: Text(
                 context.l10n.hotelOrderDetailPaidAmount,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: colors.brandPrimaryDark,
-                  fontWeight: FontWeight.w900,
-                  height: 1.45,
-                ),
+                style: HotelOrderTextStyles.label(
+                  context,
+                ).copyWith(color: colors.brandPrimaryDark, height: 1.45),
               ),
             ),
             const SizedBox(width: 12),
@@ -799,25 +815,22 @@ class _PaymentAmountLine extends StatelessWidget {
                 child: actualAmount == null
                     ? Text(
                         '-',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: colors.textSecondary,
-                          fontWeight: FontWeight.w700,
-                          height: 1.45,
-                        ),
+                        style: HotelOrderTextStyles.label(
+                          context,
+                        ).copyWith(color: colors.textSecondary, height: 1.45),
                       )
                     : RichText(
                         textAlign: TextAlign.start,
                         text: TextSpan(
-                          style: Theme.of(
+                          style: HotelOrderTextStyles.label(
                             context,
-                          ).textTheme.bodySmall?.copyWith(height: 1.45),
+                          ).copyWith(height: 1.45),
                           children: <InlineSpan>[
                             if (originalAmount != null) ...<InlineSpan>[
                               TextSpan(
                                 text: presenter.price(originalAmount),
                                 style: TextStyle(
                                   color: colors.textTertiary,
-                                  fontWeight: FontWeight.w700,
                                   decoration: TextDecoration.lineThrough,
                                   decorationColor: colors.textTertiary,
                                 ),
@@ -826,10 +839,7 @@ class _PaymentAmountLine extends StatelessWidget {
                             ],
                             TextSpan(
                               text: presenter.price(actualAmount),
-                              style: TextStyle(
-                                color: colors.brandAlert,
-                                fontWeight: FontWeight.w900,
-                              ),
+                              style: TextStyle(color: colors.textPrimary),
                             ),
                           ],
                         ),
@@ -933,10 +943,9 @@ class _GuestLine extends StatelessWidget {
                 child: Center(
                   child: Text(
                     index.toString(),
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: colors.onDark,
-                      fontWeight: FontWeight.w900,
-                    ),
+                    style: HotelOrderTextStyles.label(
+                      context,
+                    ).copyWith(color: colors.onDark),
                   ),
                 ),
               ),
@@ -948,19 +957,16 @@ class _GuestLine extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     guest.name.isEmpty ? '-' : guest.name,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: colors.textPrimary,
-                      fontWeight: FontWeight.w800,
-                    ),
+                    style: HotelOrderTextStyles.value(
+                      context,
+                    ).copyWith(color: colors.textPrimary),
                   ),
                   const SizedBox(height: 3),
                   Text(
                     _guestSubtitle(context, guest),
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: colors.textTertiary,
-                      height: 1.35,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: HotelOrderTextStyles.label(
+                      context,
+                    ).copyWith(color: colors.textTertiary, height: 1.35),
                   ),
                   const SizedBox(height: 8),
                   _GuestMetaLine(
@@ -998,11 +1004,9 @@ class _GuestMetaLine extends StatelessWidget {
       padding: const EdgeInsets.only(top: 3),
       child: Text(
         '$label: ${value.trim().isEmpty ? '-' : value}',
-        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-          color: colors.textSecondary,
-          height: 1.35,
-          fontWeight: FontWeight.w700,
-        ),
+        style: HotelOrderTextStyles.label(
+          context,
+        ).copyWith(color: colors.textSecondary, height: 1.35),
       ),
     );
   }
@@ -1039,10 +1043,9 @@ class _RoomLine extends StatelessWidget {
           Expanded(
             child: Text(
               room.name,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: colors.textPrimary,
-                fontWeight: FontWeight.w800,
-              ),
+              style: HotelOrderTextStyles.value(
+                context,
+              ).copyWith(color: colors.textPrimary),
             ),
           ),
           if (room.roomCount != null) _MutedChip(label: 'x ${room.roomCount}'),
@@ -1075,11 +1078,9 @@ class _OrderLocationSection extends StatelessWidget {
           if (address.isNotEmpty)
             Text(
               address,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: colors.textSecondary,
-                height: 1.45,
-                fontWeight: FontWeight.w700,
-              ),
+              style: HotelOrderTextStyles.label(
+                context,
+              ).copyWith(color: colors.textSecondary, height: 1.45),
             ),
           const SizedBox(height: 12),
           LayoutBuilder(
@@ -1139,11 +1140,9 @@ class _OrderCancelPolicySection extends StatelessWidget {
       title: context.l10n.hotelOrderDetailCancelPolicy,
       child: Text(
         text,
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: colors.textSecondary,
-          height: 1.65,
-          fontWeight: FontWeight.w600,
-        ),
+        style: HotelOrderTextStyles.label(
+          context,
+        ).copyWith(color: colors.textSecondary, height: 1.65),
       ),
     );
   }
@@ -1195,8 +1194,9 @@ class _OrderDetailBottomActions extends StatelessWidget {
                 Expanded(
                   child: FilledButton(
                     style: FilledButton.styleFrom(
-                      backgroundColor: colors.brandAlert,
-                      foregroundColor: colors.onDark,
+                      backgroundColor: colors.surface,
+                      foregroundColor: colors.primary,
+                      side: BorderSide(color: colors.primary),
                     ),
                     onPressed: onCancel,
                     child: Text(context.l10n.hotelOrdersCancelAction),
@@ -1311,11 +1311,9 @@ class _SectionHeader extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: colors.brandPrimaryDark,
-                fontWeight: FontWeight.w900,
-                height: 1.25,
-              ),
+              style: HotelOrderTextStyles.heading(
+                context,
+              ).copyWith(color: colors.brandPrimaryDark, height: 1.25),
             ),
           ),
           if (trailing != null) ...<Widget>[
@@ -1332,7 +1330,7 @@ class _InfoLineData {
   const _InfoLineData(
     this.label,
     this.value, {
-    this.valueFontWeight = FontWeight.w600,
+    this.valueFontWeight = FontWeight.w400,
     this.showEmptyFallback = false,
   });
 
@@ -1340,7 +1338,7 @@ class _InfoLineData {
     : this(
         label,
         value,
-        valueFontWeight: FontWeight.w700,
+        valueFontWeight: FontWeight.w400,
         showEmptyFallback: true,
       );
 
@@ -1371,11 +1369,9 @@ class _InfoLine extends StatelessWidget {
               width: 92,
               child: Text(
                 data.label,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: colors.brandPrimaryDark,
-                  fontWeight: FontWeight.w900,
-                  height: 1.45,
-                ),
+                style: HotelOrderTextStyles.label(
+                  context,
+                ).copyWith(color: colors.brandPrimaryDark, height: 1.45),
               ),
             ),
             const SizedBox(width: 12),
@@ -1384,7 +1380,7 @@ class _InfoLine extends StatelessWidget {
                 data.value.trim().isEmpty && data.showEmptyFallback
                     ? '-'
                     : data.value,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                style: HotelOrderTextStyles.value(context).copyWith(
                   color: colors.textSecondary,
                   fontWeight: data.valueFontWeight,
                   height: 1.45,
@@ -1415,10 +1411,9 @@ class _MutedChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
         child: Text(
           label,
-          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-            color: colors.textSecondary,
-            fontWeight: FontWeight.w800,
-          ),
+          style: HotelOrderTextStyles.label(
+            context,
+          ).copyWith(color: colors.textSecondary),
         ),
       ),
     );

@@ -12,11 +12,13 @@ class AppSectionHeader extends StatelessWidget {
     this.leading,
     this.actionLabel,
     this.onActionTap,
+    this.actionTextStyle,
   });
   final String title;
   final Widget? leading;
   final String? actionLabel;
   final VoidCallback? onActionTap;
+  final TextStyle? actionTextStyle;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -41,6 +43,7 @@ class AppSectionHeader extends StatelessWidget {
               onPressed: onActionTap,
               style: TextButton.styleFrom(
                 minimumSize: const Size(0, UiTokens.controlHeight),
+                textStyle: actionTextStyle,
               ),
               child: Text(actionLabel!, textAlign: TextAlign.end),
             ),

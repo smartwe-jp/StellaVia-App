@@ -11889,6 +11889,12 @@ abstract class AppLocalizations {
   /// **'Invest in tomorrow and today.'**
   String get homeServiceAboutTitle;
 
+  /// No description provided for @homeServiceVideoPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Video coming soon'**
+  String get homeServiceVideoPending;
+
   /// No description provided for @homeServiceAboutBody.
   ///
   /// In en, this message translates to:

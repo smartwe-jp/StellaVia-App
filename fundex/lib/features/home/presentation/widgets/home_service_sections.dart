@@ -2,6 +2,7 @@ import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../support/home_text_styles.dart';
+import 'home_service_video.dart';
 
 class HomeServiceAboutSection extends StatelessWidget {
   const HomeServiceAboutSection({super.key});
@@ -16,15 +17,7 @@ class HomeServiceAboutSection extends StatelessWidget {
         context.l10n.homeServiceAboutBody,
         style: HomeTextStyles.readingBody(context),
       ),
-      ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: Image.asset(
-          'assets/images/home_service_about.png',
-          height: 220,
-          width: double.infinity,
-          fit: BoxFit.cover,
-        ),
-      ),
+      const HomeServiceVideo(),
     ],
   );
 }

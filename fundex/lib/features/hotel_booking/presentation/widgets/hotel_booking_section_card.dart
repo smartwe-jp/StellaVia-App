@@ -1,6 +1,8 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
+import '../support/hotel_booking_text_styles.dart';
+
 class HotelBookingSectionCard extends StatelessWidget {
   const HotelBookingSectionCard({
     super.key,
@@ -56,16 +58,14 @@ class HotelBookingTextField extends StatelessWidget {
       enabled: enabled,
       keyboardType: keyboardType,
       maxLines: maxLines,
-      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-        color: colors.textPrimary,
-        fontWeight: FontWeight.w600,
-      ),
+      style: HotelBookingTextStyles.value(
+        context,
+      ).copyWith(color: colors.textPrimary),
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-          color: colors.textTertiary,
-          fontWeight: FontWeight.w600,
-        ),
+        hintStyle: HotelBookingTextStyles.value(
+          context,
+        ).copyWith(color: colors.textTertiary),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 14,
           vertical: 12,

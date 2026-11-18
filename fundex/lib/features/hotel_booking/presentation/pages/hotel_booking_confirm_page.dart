@@ -1,5 +1,7 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+
+import '../support/hotel_booking_text_styles.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -930,10 +932,9 @@ class _UseBookerInfoCheckbox extends StatelessWidget {
       onChanged: (nextValue) => onChanged(nextValue ?? false),
       title: Text(
         context.l10n.hotelBookingUseBookerInfoForGuest,
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-          color: colors.textSecondary,
-          fontWeight: FontWeight.w700,
-        ),
+        style: HotelBookingTextStyles.value(
+          context,
+        ).copyWith(color: colors.textSecondary, fontWeight: FontWeight.w700),
       ),
       controlAffinity: ListTileControlAffinity.leading,
     );
@@ -955,10 +956,9 @@ class _RoomGuestFormsCard extends StatelessWidget {
         children: <Widget>[
           Text(
             title,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: colors.textPrimary,
-              fontWeight: FontWeight.w700,
-            ),
+            style: HotelBookingTextStyles.heading(
+              context,
+            ).copyWith(color: colors.textPrimary, fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 18),
           for (var index = 0; index < children.length; index += 1) ...<Widget>[

@@ -27,16 +27,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   bool _isLoggingOut = false;
   bool _isRunningTokenRefreshProbe = false;
 
-  Future<void> _openAvatarEditor() async {
-    final uploadedUrl = await context.push<String>('/profile/avatar');
-    if (!mounted || (uploadedUrl?.trim().isNotEmpty ?? false) == false) {
-      return;
-    }
-    await ref.refresh(currentAuthUserProvider.future).catchError((Object _) {
-      return null;
-    });
-  }
-
   Future<void> _switchLanguage(AppLanguage language) async {
     await ref.read(appLanguageProvider.notifier).setLanguage(language);
     if (!mounted) {
@@ -320,8 +310,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final currentTextScale = ref.watch(appTextScalePreferenceProvider);
     final isAuthenticated =
         ref.watch(isAuthenticatedProvider).asData?.value ?? false;
-    final currentUser = ref.watch(currentAuthUserProvider).asData?.value;
-    final currentAvatarUrl = currentUser?.avatar?.trim() ?? '';
     final localeTag = Localizations.localeOf(context).toLanguageTag();
     final appVersionAsync = ref.watch(settingsAppVersionProvider);
     final operatingCompanyAsync = ref.watch(
@@ -362,49 +350,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             AppMenuSection(
               title: l10n.menuSectionAccount,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 2),
-                  child: Material(
-                    color: colors.surface,
-                    borderRadius: BorderRadius.circular(UiTokens.radius12),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(UiTokens.radius12),
-                      onTap: _openAvatarEditor,
-                      child: Ink(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            UiTokens.radius12,
-                          ),
-                          border: Border.all(color: colors.border),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            AppUserAvatar(
-                              avatarUrl: currentAvatarUrl,
-                              size: 34,
-                              fontSize: 14,
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Text(
-                                l10n.discussionAvatarPageTitle,
-                                style: appText.cardTitle.copyWith(
-                                  color: colors.textPrimary,
-                                ),
-                              ),
-                            ),
-                            Icon(
-                              Icons.chevron_right_rounded,
-                              size: 18,
-                              color: colors.textTertiary,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
                 AppMenuItem(
                   icon: Icons.person_rounded,
                   label: l10n.menuItemEditProfile,
@@ -425,15 +370,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   iconBackgroundColor: colors.infoSubtle,
                   iconForegroundColor: colors.info,
                   onTap: () => context.push('/profile/settings/credit-card'),
-                ),
-                AppMenuItem(
-                  icon: Icons.alternate_email_rounded,
-                  label: l10n.xAccountSettingsTitle,
-                  iconBackgroundColor: colors.textPrimary.withValues(
-                    alpha: 0.08,
-                  ),
-                  iconForegroundColor: colors.textPrimary,
-                  onTap: () => context.push('/profile/settings/x-account'),
                 ),
                 AppMenuItem(
                   icon: Icons.group_add_rounded,

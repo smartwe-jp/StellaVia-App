@@ -1,6 +1,9 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+
 import 'package:intl/intl.dart';
+
+import '../support/hotel_order_text_styles.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
@@ -167,10 +170,9 @@ class _CheckInRoomDetailCard extends StatelessWidget {
                         textAlign: TextAlign.center,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: colors.textPrimary,
-                          fontWeight: FontWeight.w900,
-                        ),
+                        style: HotelOrderTextStyles.hotelName(
+                          context,
+                        ).copyWith(color: colors.textPrimary),
                       ),
                       if (address.isNotEmpty) ...<Widget>[
                         const SizedBox(height: 6),
@@ -373,10 +375,9 @@ class _CheckInDetailAddressLine extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: colors.brandSecondary,
-                  fontWeight: FontWeight.w800,
-                ),
+                style: HotelOrderTextStyles.value(
+                  context,
+                ).copyWith(color: colors.brandSecondary),
               ),
             ),
           ],
@@ -403,10 +404,9 @@ class _RoomCountBadge extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 8),
         child: Text(
           text,
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: colors.textPrimary,
-            fontWeight: FontWeight.w800,
-          ),
+          style: HotelOrderTextStyles.value(
+            context,
+          ).copyWith(color: colors.textPrimary),
         ),
       ),
     );
@@ -434,9 +434,8 @@ class _InfoRow extends StatelessWidget {
         children: <Widget>[
           Text(
             label,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: emphasize ? colors.dangerForeground : colors.textPrimary,
-              fontWeight: FontWeight.w800,
+            style: HotelOrderTextStyles.label(context).copyWith(
+              color: emphasize ? colors.infoForeground : colors.textPrimary,
             ),
           ),
           const SizedBox(width: 10),
@@ -444,11 +443,8 @@ class _InfoRow extends StatelessWidget {
             child: Text(
               value.trim().isEmpty ? '--' : value.trim(),
               textAlign: TextAlign.end,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: emphasize
-                    ? colors.dangerForeground
-                    : colors.textSecondary,
-                fontWeight: FontWeight.w700,
+              style: HotelOrderTextStyles.value(context).copyWith(
+                color: emphasize ? colors.infoForeground : colors.textSecondary,
               ),
             ),
           ),
@@ -473,10 +469,9 @@ class _WifiInfoRow extends StatelessWidget {
             flex: 4,
             child: Text(
               context.l10n.hotelTodayCheckInWifiLabel,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: colors.textPrimary,
-                fontWeight: FontWeight.w800,
-              ),
+              style: HotelOrderTextStyles.label(
+                context,
+              ).copyWith(color: colors.textPrimary),
             ),
           ),
           const SizedBox(width: 16),
@@ -485,10 +480,9 @@ class _WifiInfoRow extends StatelessWidget {
             child: Text(
               context.l10n.hotelTodayCheckInWifiValue,
               textAlign: TextAlign.end,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: colors.textSecondary,
-                fontWeight: FontWeight.w700,
-              ),
+              style: HotelOrderTextStyles.value(
+                context,
+              ).copyWith(color: colors.textSecondary),
             ),
           ),
         ],
@@ -524,10 +518,9 @@ class _CheckInSubmitButton extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            color: colors.onDark,
-            fontWeight: FontWeight.w800,
-          ),
+          style: HotelOrderTextStyles.action(
+            context,
+          ).copyWith(color: colors.onDark),
         ),
       ),
     );

@@ -874,6 +874,7 @@ class HotelTodayCheckIn {
     required this.orderStatusCode,
     required this.paymentStatus,
     required this.paymentStatusCode,
+    this.mile,
     required this.totalAmount,
     required this.roomNo,
     required this.checkedIn,
@@ -890,6 +891,7 @@ class HotelTodayCheckIn {
   final int? orderStatusCode;
   final String paymentStatus;
   final int? paymentStatusCode;
+  final num? mile;
   final num? totalAmount;
   final String roomNo;
   final bool checkedIn;
@@ -917,6 +919,7 @@ class HotelOrderSummary {
     required this.orderStatus,
     required this.orderStatusCode,
     required this.payCode,
+    this.mile,
     required this.totalAmount,
     required this.canPay,
     required this.canRefund,
@@ -935,6 +938,7 @@ class HotelOrderSummary {
   final String orderStatus;
   final int? orderStatusCode;
   final String payCode;
+  final num? mile;
   final num? totalAmount;
   final bool canPay;
   final bool canRefund;

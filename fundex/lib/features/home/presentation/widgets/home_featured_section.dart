@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
+import '../support/home_text_styles.dart';
+
 class HomeFeaturedSection extends StatelessWidget {
   const HomeFeaturedSection({
     super.key,
@@ -30,6 +32,7 @@ class HomeFeaturedSection extends StatelessWidget {
           child: AppSectionHeader(
             title: title,
             actionLabel: actionLabel,
+            actionTextStyle: HomeTextStyles.sectionAction(context),
             onActionTap: onActionTap,
           ),
         ),

@@ -30,19 +30,17 @@ class HomeServiceIntroductionPage extends ConsumerWidget {
           },
         ),
       ),
-      body: SafeArea(
+      body: const SafeArea(
         top: false,
         bottom: false,
         child: SingleChildScrollView(
-          key: const PageStorageKey('home_service_introduction'),
+          key: PageStorageKey('home_service_introduction'),
           child: Column(
             children: [
-              const HomeServiceAboutSection(),
-              const HomeServiceReturnsSection(),
-              HomeRankDetailsSection(
-                onDetails: () => context.push('/home/ranks'),
-              ),
-              const HomeServiceStartSection(),
+              HomeServiceAboutSection(),
+              HomeServiceReturnsSection(),
+              HomeRankDetailsSection(),
+              HomeServiceStartSection(),
             ],
           ),
         ),

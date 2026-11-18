@@ -1,10 +1,14 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+
 import 'package:intl/intl.dart';
+
+import '../support/hotel_order_text_styles.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
+import '../support/hotel_order_amount_display.dart';
 import 'hotel_detail_image_placeholder.dart';
 
 class HotelTodayCheckInCard extends StatelessWidget {
@@ -32,7 +36,13 @@ class HotelTodayCheckInCard extends StatelessWidget {
         : item.buildingName;
     final checkIn = _dateTimeParts(item.checkIn);
     final checkOut = _dateTimeParts(item.checkOut);
-    final amountText = presenter.price(item.totalAmount);
+    final amount = hotelOrderAmountDisplay(
+      context,
+      presenter,
+      mile: item.mile,
+      totalAmount: item.totalAmount,
+      priceLabel: context.l10n.hotelOrdersAmountLabel,
+    );
     final canCheckIn = !item.checkedIn;
     final statusBadge = _statusBadge(context, colors);
 
@@ -60,10 +70,9 @@ class HotelTodayCheckInCard extends StatelessWidget {
                         '${context.l10n.hotelOrdersOrderNoPrefix}${item.id}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: colors.textSecondary,
-                          fontWeight: FontWeight.w800,
-                        ),
+                        style: HotelOrderTextStyles.value(
+                          context,
+                        ).copyWith(color: colors.textSecondary),
                       ),
                     ),
                     if (statusBadge != null) ...<Widget>[
@@ -94,11 +103,9 @@ class HotelTodayCheckInCard extends StatelessWidget {
                                 : title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.titleMedium
-                                ?.copyWith(
-                                  color: colors.textPrimary,
-                                  fontWeight: FontWeight.w800,
-                                ),
+                            style: HotelOrderTextStyles.hotelName(
+                              context,
+                            ).copyWith(color: colors.textPrimary),
                           ),
                           const SizedBox(height: 5),
                           if (subtitle.isNotEmpty)
@@ -106,11 +113,9 @@ class HotelTodayCheckInCard extends StatelessWidget {
                               subtitle,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(
-                                    color: colors.textSecondary,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                              style: HotelOrderTextStyles.label(
+                                context,
+                              ).copyWith(color: colors.textSecondary),
                             ),
                           if (item.roomNo.isNotEmpty) ...<Widget>[
                             const SizedBox(height: 5),
@@ -118,11 +123,9 @@ class HotelTodayCheckInCard extends StatelessWidget {
                               context.l10n.hotelTodayCheckInRoomNo(item.roomNo),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(
-                                    color: colors.textSecondary,
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                              style: HotelOrderTextStyles.label(
+                                context,
+                              ).copyWith(color: colors.textSecondary),
                             ),
                           ],
                           const SizedBox(height: 10),
@@ -144,23 +147,19 @@ class HotelTodayCheckInCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            context.l10n.hotelOrdersAmountLabel,
-                            style: Theme.of(context).textTheme.labelMedium
-                                ?.copyWith(
-                                  color: colors.textSecondary,
-                                  fontWeight: FontWeight.w800,
-                                ),
+                            amount.label,
+                            style: HotelOrderTextStyles.label(
+                              context,
+                            ).copyWith(color: colors.textSecondary),
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            amountText.isEmpty ? '--' : amountText,
+                            amount.value.isEmpty ? '--' : amount.value,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.headlineSmall
-                                ?.copyWith(
-                                  color: colors.brandAlert,
-                                  fontWeight: FontWeight.w800,
-                                ),
+                            style: HotelOrderTextStyles.amount(
+                              context,
+                            ).copyWith(color: colors.textPrimary),
                           ),
                         ],
                       ),
@@ -289,10 +288,9 @@ class _CheckInStatusBadge extends StatelessWidget {
           data.label,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: data.foregroundColor,
-            fontWeight: FontWeight.w600,
-          ),
+          style: HotelOrderTextStyles.label(
+            context,
+          ).copyWith(color: data.foregroundColor),
         ),
       ),
     );
@@ -379,10 +377,9 @@ class _CheckInStayDateColumn extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           textAlign: textAlign,
-          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-            color: colors.textSecondary,
-            fontWeight: FontWeight.w800,
-          ),
+          style: HotelOrderTextStyles.label(
+            context,
+          ).copyWith(color: colors.textSecondary),
         ),
         const SizedBox(height: 4),
         Text(
@@ -390,21 +387,18 @@ class _CheckInStayDateColumn extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           textAlign: textAlign,
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            color: colors.brandPrimaryDark,
-            fontWeight: FontWeight.w800,
-          ),
+          style: HotelOrderTextStyles.heading(
+            context,
+          ).copyWith(color: colors.brandPrimaryDark),
         ),
         Text(
           parts.time,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           textAlign: textAlign,
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-            color: colors.brandPrimaryDark,
-            fontWeight: FontWeight.w800,
-            height: 1.05,
-          ),
+          style: HotelOrderTextStyles.heading(
+            context,
+          ).copyWith(color: colors.brandPrimaryDark, height: 1.05),
         ),
       ],
     );
@@ -440,10 +434,9 @@ class _CheckInActionButton extends StatelessWidget {
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-              color: foregroundColor,
-              fontWeight: FontWeight.w800,
-            ),
+            style: HotelOrderTextStyles.action(
+              context,
+            ).copyWith(color: foregroundColor),
           ),
         ),
       ),

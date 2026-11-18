@@ -1,6 +1,8 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
+import '../support/hotel_booking_text_styles.dart';
+
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
@@ -108,10 +110,7 @@ class HotelBookingOrderSummaryCard extends StatelessWidget {
                         child: Text(
                           context.l10n.hotelBookingOfficialBooking,
                           style: Theme.of(context).textTheme.labelMedium
-                              ?.copyWith(
-                                color: colors.infoForeground,
-                                fontWeight: FontWeight.w600,
-                              ),
+                              ?.copyWith(color: colors.infoForeground),
                         ),
                       ),
                     ),
@@ -120,7 +119,7 @@ class HotelBookingOrderSummaryCard extends StatelessWidget {
                       seed.detail.name,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      style: HotelBookingTextStyles.heading(context).copyWith(
                         color: colors.textPrimary,
                         fontWeight: FontWeight.w700,
                       ),
@@ -130,7 +129,7 @@ class HotelBookingOrderSummaryCard extends StatelessWidget {
                       seed.detail.address,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      style: HotelBookingTextStyles.label(context).copyWith(
                         color: colors.textSecondary,
                         fontWeight: FontWeight.w700,
                       ),
@@ -145,10 +144,9 @@ class HotelBookingOrderSummaryCard extends StatelessWidget {
           const SizedBox(height: 18),
           Text(
             context.l10n.hotelBookingSelectedRooms,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: colors.textPrimary,
-              fontWeight: FontWeight.w700,
-            ),
+            style: HotelBookingTextStyles.heading(
+              context,
+            ).copyWith(color: colors.textPrimary, fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 14),
           ...seed.selectedRooms.map(
@@ -160,7 +158,7 @@ class HotelBookingOrderSummaryCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       selection.room.name,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      style: HotelBookingTextStyles.label(context).copyWith(
                         color: colors.textSecondary,
                         fontWeight: FontWeight.w700,
                       ),
@@ -169,7 +167,7 @@ class HotelBookingOrderSummaryCard extends StatelessWidget {
                   const SizedBox(width: 12),
                   Text(
                     '* ${selection.quantity}',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    style: HotelBookingTextStyles.label(context).copyWith(
                       color: colors.textPrimary,
                       fontWeight: FontWeight.w700,
                     ),
@@ -189,10 +187,9 @@ class HotelBookingOrderSummaryCard extends StatelessWidget {
               ),
               child: Text(
                 context.l10n.hotelBookingEditContent,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: colors.warningForeground,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: HotelBookingTextStyles.label(
+                  context,
+                ).copyWith(color: colors.warningForeground),
               ),
             ),
           ),
@@ -203,10 +200,9 @@ class HotelBookingOrderSummaryCard extends StatelessWidget {
             seed.hostMiles
                 ? context.l10n.hotelDetailRequiredMiles
                 : context.l10n.hotelDetailPayableAmount,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: colors.textPrimary,
-              fontWeight: FontWeight.w700,
-            ),
+            style: HotelBookingTextStyles.heading(
+              context,
+            ).copyWith(color: colors.textPrimary, fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 20),
           Row(
@@ -214,7 +210,7 @@ class HotelBookingOrderSummaryCard extends StatelessWidget {
             children: <Widget>[
               Text(
                 context.l10n.hotelSearchNights(seed.criteria.nights),
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                style: HotelBookingTextStyles.heading(context).copyWith(
                   color: colors.textPrimary,
                   fontWeight: FontWeight.w500,
                 ),
@@ -237,8 +233,8 @@ class HotelBookingOrderSummaryCard extends StatelessWidget {
                         if (shouldShowOriginalPrice)
                           Text(
                             _priceWithCurrencyCode(context, originalAmount),
-                            style: Theme.of(context).textTheme.titleLarge
-                                ?.copyWith(
+                            style: HotelBookingTextStyles.heading(context)
+                                .copyWith(
                                   color: colors.textTertiary,
                                   fontWeight: FontWeight.w700,
                                   decoration: TextDecoration.lineThrough,
@@ -254,11 +250,10 @@ class HotelBookingOrderSummaryCard extends StatelessWidget {
                                         amount!,
                                       ))
                               : _priceWithCurrencyCode(context, amount),
-                          style: Theme.of(context).textTheme.headlineSmall
-                              ?.copyWith(
-                                color: colors.brandAlert,
-                                fontWeight: FontWeight.w700,
-                              ),
+                          style: HotelBookingTextStyles.count(context).copyWith(
+                            color: colors.brandAlert,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ],
                     ),
@@ -348,7 +343,6 @@ class _CouponSummaryBadge extends StatelessWidget {
               label,
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
                 color: colors.warningForeground,
-                fontWeight: FontWeight.w900,
               ),
             ),
           ],
@@ -371,18 +365,16 @@ class _DateBlock extends StatelessWidget {
       children: <Widget>[
         Text(
           label,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            color: colors.textSecondary,
-            fontWeight: FontWeight.w800,
-          ),
+          style: HotelBookingTextStyles.label(
+            context,
+          ).copyWith(color: colors.textSecondary),
         ),
         const SizedBox(height: 10),
         Text(
           value,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            color: colors.textPrimary,
-            fontWeight: FontWeight.w600,
-          ),
+          style: HotelBookingTextStyles.heading(
+            context,
+          ).copyWith(color: colors.textPrimary),
         ),
       ],
     );

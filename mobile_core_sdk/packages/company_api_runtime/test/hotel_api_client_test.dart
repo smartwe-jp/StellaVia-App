@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:company_api_runtime/company_api_runtime.dart';
 import 'package:core_network/core_network.dart';
@@ -939,7 +940,7 @@ void main() {
             }),
           );
           return _jsonOk(
-            '{"code":200,"msg":"success","data":{"startPage":1,"limit":20,"count":1,"bookingOrderList":[{"id":"order-1","hotelName":"Tokyo Business Stay","buildingName":"Tokyo Stay","hotelImage":"https://cdn.example.com/hotel.jpg","hotelAddress":"Shinagawa","paymentStatus":"支払い待ち","paymentStatusCode":40,"orderStatusStr":"キャンセル済み","orderStatusCode":5,"totalAmount":36000,"checkIn":"2026-06-01 15:00:00","checkOut":"2026-06-03 10:00:00","pay":false,"refund":true,"roomTypeCount":1}]}}',
+            '{"code":200,"msg":"success","data":{"startPage":1,"limit":20,"count":1,"bookingOrderList":[{"id":"order-1","hotelName":"Tokyo Business Stay","buildingName":"Tokyo Stay","hotelImage":"https://cdn.example.com/hotel.jpg","hotelAddress":"Shinagawa","paymentStatus":"支払い待ち","paymentStatusCode":40,"orderStatusStr":"キャンセル済み","orderStatusCode":5,"totalAmount":36000,"stellaPoints":"27100","checkIn":"2026-06-01 15:00:00","checkOut":"2026-06-03 10:00:00","pay":false,"refund":true,"roomTypeCount":1}]}}',
           );
         }
 
@@ -961,6 +962,7 @@ void main() {
       expect(orders.limit, equals(20));
       expect(orders.count, equals(1));
       expect(orders.orders.first.orderId, equals('order-1'));
+      expect(orders.orders.first.mile, equals(27100));
       expect(orders.orders.first.totalAmount, equals(36000));
       expect(orders.orders.first.hotelImage, contains('hotel.jpg'));
       expect(orders.orders.first.paymentStatusCode, equals(40));
@@ -1083,6 +1085,57 @@ void main() {
       );
     });
 
+    test('order list accepts both miles fields and preserves zero', () async {
+      final client = _buildClient(
+        (_) async => _jsonOk(
+          jsonEncode({
+            'code': 200,
+            'data': {
+              'bookingOrderList': [
+                {'id': '1', 'stellaPoints': '20900'},
+                {'id': '2', 'stellaPoints': 20900, 'mile': 17250},
+                {'id': '3', 'stellaPoints': 20900, 'mile': 0},
+                {'id': '4', 'stellaPoints': 20900, 'mile': null},
+                {'id': '5', 'totalAmount': 19000},
+              ],
+            },
+          }),
+        ),
+      );
+      final result = await HotelApiClient(client).fetchOrderList(lang: 'JP');
+      expect(result.orders.map((order) => order.mile), [
+        20900,
+        17250,
+        0,
+        20900,
+        null,
+      ]);
+    });
+
+    test(
+      'order detail accepts stellaPoints and preserves explicit mile',
+      () async {
+        for (final fields in [
+          {'stellaPoints': '20900'},
+          {'stellaPoints': 20900, 'mile': 17250},
+          {'stellaPoints': 20900, 'mile': 0},
+        ]) {
+          final client = _buildClient(
+            (_) async => _jsonOk(
+              jsonEncode({
+                'code': 200,
+                'data': {'orderId': '1232824', ...fields},
+              }),
+            ),
+          );
+          final detail = await HotelApiClient(
+            client,
+          ).fetchOrderDetail(orderId: '1232824', lang: 'JP');
+          expect(detail.mile, fields['mile'] ?? 20900);
+        }
+      },
+    );
+
     test('fetchOrderDetail parses authenticated detail payload', () async {
       final client = _buildClient((options) async {
         expect(options.method, equals('POST'));
@@ -1093,7 +1146,7 @@ void main() {
           equals(<String, dynamic>{'orderId': '1290689', 'lang': 'JP'}),
         );
         return _jsonOk(
-          '{"code":200,"msg":"success","data":{"orderId":1290689,"hotelId":7,"hotelName":"谷町君・ホテル・恵美須町72","buildingName":"谷町君･ホテル･恵美須72","hotelHomeImage":"https://img.example.com/hotel.jpg","address":"大阪府大阪市浪速区日本橋東3丁目8-5","lng":135.5,"lat":34.6,"checkIn":"2026-05-25 15:00:00","checkOut":"2026-05-26 10:00:00","contactIntlCode":"81","contactMobile":"08042039590","nationalityText":"日本","checkInGuide":"guide","cancelRule":"policy","priceElement":{"price":8528,"originalPrice":10000},"roomTypeCount":[{"name":"スーペリアツイン","roomCount":1,"roomPictures":[{"relativeUrl":"https://img.example.com/room.jpg"}],"roomIdCustNums":[{"roomTypeName":"スーペリアツイン","custName":"侯 景雁","custNum":1,"password":"1234"}]}]}}',
+          '{"code":200,"msg":"success","data":{"orderId":1290689,"mile":17250,"hotelId":7,"hotelName":"谷町君・ホテル・恵美須町72","buildingName":"谷町君･ホテル･恵美須72","hotelHomeImage":"https://img.example.com/hotel.jpg","address":"大阪府大阪市浪速区日本橋東3丁目8-5","lng":135.5,"lat":34.6,"checkIn":"2026-05-25 15:00:00","checkOut":"2026-05-26 10:00:00","contactIntlCode":"81","contactMobile":"08042039590","nationalityText":"日本","checkInGuide":"guide","cancelRule":"policy","priceElement":{"price":8528,"originalPrice":10000},"roomTypeCount":[{"name":"スーペリアツイン","roomCount":1,"roomPictures":[{"relativeUrl":"https://img.example.com/room.jpg"}],"roomIdCustNums":[{"roomTypeName":"スーペリアツイン","custName":"侯 景雁","custNum":1,"password":"1234"}]}]}}',
         );
       });
       final api = HotelApiClient(client);
@@ -1101,6 +1154,7 @@ void main() {
       final detail = await api.fetchOrderDetail(orderId: '1290689', lang: 'JP');
 
       expect(detail.orderId, equals('1290689'));
+      expect(detail.mile, equals(17250));
       expect(detail.hotelId, equals('7'));
       expect(detail.hotelHomeImage, contains('hotel.jpg'));
       expect(detail.address, contains('大阪府'));
