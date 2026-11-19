@@ -98,6 +98,12 @@ void main() {
                 ),
               ),
             );
+            await tester.runAsync(() async {
+              await precacheImage(
+                const AssetImage('assets/images/stellavia_wordmark_purple.png'),
+                tester.element(find.byType(HomeRedesignHeader)),
+              );
+            });
             await tester.pumpAndSettle();
             expect(
               tester.takeException(),

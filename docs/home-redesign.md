@@ -103,3 +103,7 @@ Information-page validation: 24 targeted tests passed (auth redirects plus navig
 - 2026-11-18：首页精选区块的「一覧を見る」入口统一为13／500，通过AppSectionHeader可选actionTextStyle配置；区块标题使用15／700。
 
 - 2026-11-18：宿主优待ABOUT首图区域改为视频入口，复用基金详情的直链／YouTube／外链播放组件。HOME_SERVICE_VIDEO_URL构建配置留空时显示原图封面和本地化准备中状态；后续提供真实链接后配置，无链接不初始化播放器。
+
+## 2026-11-19 首页导航品牌 Logo
+
+登录和未登录首页共用原始透明底 `SV_purple_wordmark.png` 品牌图（英文及日文组合），替换文字排版的 STELLAVIA。56 高导航栏内按 120×39 居中、左侧16留白，与右侧操作区间隔12；窄屏可等比缩小。深色主题使用同套白色原始图。登录页面与其他页面的文字标识不在本次范围。
