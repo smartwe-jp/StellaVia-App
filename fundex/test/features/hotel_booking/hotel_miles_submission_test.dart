@@ -92,7 +92,7 @@ void main() {
                 pageTexts: {},
                 countryCodes: [],
                 coupons: [],
-                couponsAvailableCount: 0,
+                couponsAvailableCount: 2,
                 contactsCount: 0,
                 registeredCardCount: 0,
                 quotedPrice: null,
@@ -124,6 +124,7 @@ void main() {
         l.hotelMilesReferenceStay('8,500'),
       );
       expect(find.byType(HotelBookingPaymentSection), findsNothing);
+      expect(find.byType(HotelBookingCouponRow), findsNothing);
       await tester.tap(find.text(l.hotelBookingConfirmAction));
       await tester.pumpAndSettle();
       await tester.pump(const Duration(seconds: 2));
@@ -131,6 +132,7 @@ void main() {
       expect(bar, findsOneWidget);
       await tester.tap(find.text(l.hotelBookingConfirmAction));
       await tester.pumpAndSettle();
+      expect(repository.orders.last.selectedCoupons, isEmpty);
       expect(repository.orders.last.totalAmount, 18000);
       expect(repository.orders.last.roomGuests.single.children, 1);
       expect(find.text('1232815'), findsOneWidget);

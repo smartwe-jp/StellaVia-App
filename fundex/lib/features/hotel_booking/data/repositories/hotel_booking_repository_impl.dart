@@ -914,7 +914,7 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
 
     return HotelBookingCreateRequestDto(
       fundBenefitTicketNo: draft.fundBenefitTicketNo,
-      couponsCounts: draft.selectedCoupons.isEmpty
+      couponsCounts: seed.hostMiles || draft.selectedCoupons.isEmpty
           ? null
           : draft.selectedCoupons
                 .map(

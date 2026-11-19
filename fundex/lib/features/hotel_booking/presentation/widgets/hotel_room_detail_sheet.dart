@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
+import '../support/hotel_room_detail_text_styles.dart';
 import 'hotel_detail_image_placeholder.dart';
 
 Future<void> showHotelRoomDetailSheet({
@@ -55,7 +56,7 @@ class _HotelRoomDetailSheet extends StatelessWidget {
                 ),
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(18, 24, 18, 22),
+                    padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
                     child: _RoomHeader(detail: detail, room: room),
                   ),
                 ),
@@ -205,19 +206,16 @@ class _RoomHeader extends StatelessWidget {
       children: <Widget>[
         Text(
           room.name.isEmpty ? context.l10n.hotelUnnamedProperty : room.name,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            color: colors.textPrimary,
-            fontWeight: FontWeight.w800,
-            height: 1.16,
-          ),
+          style: HotelRoomDetailTextStyles.title(
+            context,
+          ).copyWith(color: colors.textPrimary),
         ),
         const SizedBox(height: 12),
         Text(
           detail.name.isEmpty ? context.l10n.hotelUnnamedProperty : detail.name,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            color: colors.textTertiary,
-            fontWeight: FontWeight.w700,
-          ),
+          style: HotelRoomDetailTextStyles.fact(
+            context,
+          ).copyWith(color: colors.textTertiary),
         ),
         if (facts.isNotEmpty) ...<Widget>[
           const SizedBox(height: 16),
@@ -246,16 +244,15 @@ class _FacilitySection extends StatelessWidget {
         .where((category) => category.items.isNotEmpty)
         .toList(growable: false);
     return Padding(
-      padding: const EdgeInsets.fromLTRB(18, 26, 18, 8),
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             context.l10n.hotelRoomFacilitiesTitle,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: colors.textPrimary,
-              fontWeight: FontWeight.w800,
-            ),
+            style: HotelRoomDetailTextStyles.heading(
+              context,
+            ).copyWith(color: colors.textPrimary),
           ),
           const SizedBox(height: 18),
           for (var index = 0; index < visibleCategories.length; index++) ...[
@@ -288,13 +285,18 @@ class _FacilityCategoryBlock extends StatelessWidget {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Icon(_categoryIcon(category.code), color: colors.textPrimary),
+            Icon(
+              _categoryIcon(category.code),
+              size: 18,
+              color: colors.textPrimary,
+            ),
             const SizedBox(width: 6),
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: colors.textPrimary,
-                fontWeight: FontWeight.w800,
+            Expanded(
+              child: Text(
+                title,
+                style: HotelRoomDetailTextStyles.facility(
+                  context,
+                ).copyWith(color: colors.textPrimary),
               ),
             ),
           ],
@@ -321,24 +323,22 @@ class _DescriptionSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(18, 26, 18, 8),
+      padding: const EdgeInsets.fromLTRB(16, 18, 16, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
             context.l10n.hotelRoomDescriptionTitle,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: colors.textPrimary,
-              fontWeight: FontWeight.w800,
-            ),
+            style: HotelRoomDetailTextStyles.heading(
+              context,
+            ).copyWith(color: colors.textPrimary),
           ),
           const SizedBox(height: 14),
           Text(
             description,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: colors.textPrimary,
-              height: 1.45,
-            ),
+            style: HotelRoomDetailTextStyles.body(
+              context,
+            ).copyWith(color: colors.textPrimary),
           ),
         ],
       ),
@@ -358,13 +358,14 @@ class _FactItem extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Icon(icon, size: 24, color: colors.textTertiary),
+        Icon(icon, size: 18, color: colors.textTertiary),
         const SizedBox(width: 5),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            color: colors.textPrimary,
-            fontWeight: FontWeight.w500,
+        Flexible(
+          child: Text(
+            label,
+            style: HotelRoomDetailTextStyles.fact(
+              context,
+            ).copyWith(color: colors.textPrimary),
           ),
         ),
       ],
@@ -386,13 +387,12 @@ class _FacilityChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(UiTokens.radius8),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         child: Text(
           label,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: colors.textPrimary,
-            fontWeight: FontWeight.w500,
-          ),
+          style: HotelRoomDetailTextStyles.facility(
+            context,
+          ).copyWith(color: colors.textPrimary),
         ),
       ),
     );
@@ -414,9 +414,9 @@ class _CloseButton extends StatelessWidget {
         customBorder: const CircleBorder(),
         onTap: onPressed,
         child: SizedBox(
-          width: 48,
-          height: 48,
-          child: Icon(Icons.close_rounded, color: colors.textPrimary, size: 30),
+          width: 44,
+          height: 44,
+          child: Icon(Icons.close_rounded, color: colors.textPrimary, size: 22),
         ),
       ),
     );
@@ -432,7 +432,7 @@ class _SectionDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return ColoredBox(
       color: colors.surfaceAlt,
-      child: const SizedBox(height: 12),
+      child: const SizedBox(height: 8),
     );
   }
 }

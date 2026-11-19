@@ -6,6 +6,7 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_detail_display.dart';
 import '../support/hotel_detail_styles.dart';
+import '../support/hotel_room_detail_text_styles.dart';
 import 'hotel_detail_map_section.dart';
 
 class HotelDetailGuide extends StatelessWidget {
@@ -38,7 +39,12 @@ class HotelDetailGuide extends StatelessWidget {
         if (text.isNotEmpty) {
           yield _Section(
             title: section.$1,
-            child: Text(text, style: HotelDetailStyles.body(c)),
+            child: Text(
+              text,
+              style: HotelRoomDetailTextStyles.body(
+                c,
+              ).copyWith(color: c.appColors.textSecondary),
+            ),
           );
         }
       }
@@ -72,7 +78,12 @@ class HotelDetailGuide extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   if (travel.isNotEmpty)
-                    Text(travel, style: HotelDetailStyles.body(c)),
+                    Text(
+                      travel,
+                      style: HotelRoomDetailTextStyles.body(
+                        c,
+                      ).copyWith(color: c.appColors.textSecondary),
+                    ),
                   if (travel.isNotEmpty && showMap) const SizedBox(height: 12),
                   if (showMap) HotelDetailMapSection(detail: detail),
                 ],
@@ -123,7 +134,7 @@ class _Section extends StatelessWidget {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(title, style: HotelDetailStyles.heading(c)),
+        Text(title, style: HotelRoomDetailTextStyles.heading(c)),
         const SizedBox(height: 16),
         Divider(height: 1, color: c.appColors.borderSoft),
         const SizedBox(height: 16),

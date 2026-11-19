@@ -5,11 +5,13 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
-import '../providers/settings_contract_documents_providers.dart';
 import '../providers/settings_content_providers.dart';
+import '../providers/settings_contract_documents_providers.dart';
 import '../support/settings_contract_default_documents.dart';
 import '../support/settings_contract_document_models.dart';
+import '../support/settings_contract_text_styles.dart';
 import '../support/settings_operating_company_content.dart';
+import '../widgets/settings_contract_file_tile.dart';
 
 class SettingsContractDocumentDetailPage extends ConsumerWidget {
   const SettingsContractDocumentDetailPage({
@@ -91,16 +93,18 @@ class SettingsContractDocumentDetailPage extends ConsumerWidget {
               const SizedBox(height: 22),
               Text(
                 l10n.settingsContractDetailRelatedFilesTitle,
-                style: appText.sectionTitle.copyWith(color: colors.textPrimary),
+                style: SettingsContractTextStyles.sectionTitle(
+                  context,
+                ).copyWith(color: colors.textPrimary),
               ),
               const SizedBox(height: 12),
               if (project.documents.isEmpty)
                 FundDetailContentCard(
                   child: Text(
                     l10n.settingsContractDetailNoPdfAvailable,
-                    style: appText.bodyMuted.copyWith(
-                      color: colors.textSecondary,
-                    ),
+                    style: SettingsContractTextStyles.description(
+                      context,
+                    ).copyWith(color: colors.textSecondary),
                   ),
                 )
               else
@@ -174,7 +178,6 @@ class _ProjectHeaderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
-    final appText = theme.appTextTheme;
     return DecoratedBox(
       decoration: BoxDecoration(
         color: colors.surfaceAlt,
@@ -185,10 +188,9 @@ class _ProjectHeaderCard extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(18, 20, 18, 20),
         child: Text(
           project.projectName,
-          style: appText.pageTitle.copyWith(
-            color: colors.textPrimary,
-            height: 1.25,
-          ),
+          style: SettingsContractTextStyles.projectTitle(
+            context,
+          ).copyWith(color: colors.textPrimary, height: 1.25),
         ),
       ),
     );
@@ -222,24 +224,23 @@ class _DocumentSection extends StatelessWidget {
           FundDetailContentCard(
             child: Text(
               context.l10n.settingsContractDetailNoPdfAvailable,
-              style: appText.bodyMuted.copyWith(color: colors.textSecondary),
+              style: SettingsContractTextStyles.description(
+                context,
+              ).copyWith(color: colors.textSecondary),
             ),
           )
         else
-          FundDetailDocumentList(
-            items: availableFiles
-                .asMap()
-                .entries
-                .map((entry) {
-                  final file = entry.value;
-                  return FundDetailDocumentItemData(
-                    title: _resolveItemTitle(document, file, entry.key),
-                    subtitle: _resolveItemSubtitle(context, file),
-                    onTap: () => onOpenPdf(file),
-                  );
-                })
-                .toList(growable: false),
-          ),
+          for (final entry in availableFiles.asMap().entries)
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: entry.key == availableFiles.length - 1 ? 0 : 8,
+              ),
+              child: SettingsContractFileTile(
+                title: _resolveItemTitle(document, entry.value, entry.key),
+                subtitle: _resolveItemSubtitle(context, entry.value),
+                onTap: () => onOpenPdf(entry.value),
+              ),
+            ),
       ],
     );
   }

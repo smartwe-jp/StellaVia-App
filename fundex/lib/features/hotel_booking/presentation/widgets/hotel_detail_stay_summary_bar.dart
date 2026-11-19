@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
+import '../support/hotel_detail_styles.dart';
 
 class HotelDetailStaySummaryBar extends StatelessWidget {
   const HotelDetailStaySummaryBar({
@@ -107,7 +108,7 @@ class _SummaryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
     final content = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,17 +116,16 @@ class _SummaryItem extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Icon(icon, size: 18, color: colors.brandSecondary),
+              Icon(icon, size: 16, color: colors.brandSecondary),
               const SizedBox(width: 4),
               Expanded(
                 child: Text(
                   label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: colors.brandSecondary,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: HotelDetailStyles.stayLabel(
+                    context,
+                  ).copyWith(color: colors.brandSecondary),
                 ),
               ),
             ],
@@ -135,11 +135,9 @@ class _SummaryItem extends StatelessWidget {
             value,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: colors.brandPrimaryDark,
-              fontWeight: FontWeight.w600,
-              height: 1.12,
-            ),
+            style: HotelDetailStyles.stayValue(
+              context,
+            ).copyWith(color: colors.brandPrimaryDark),
           ),
         ],
       ),

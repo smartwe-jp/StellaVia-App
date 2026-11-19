@@ -50,7 +50,7 @@ class HotelDescriptionSection extends StatelessWidget {
       );
     }
 
-    final heading = HotelDetailStyles.heading(context);
+    final heading = HotelDetailStyles.intro(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: LayoutBuilder(

@@ -5,10 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
-import '../providers/settings_contract_documents_providers.dart';
 import '../providers/settings_content_providers.dart';
+import '../providers/settings_contract_documents_providers.dart';
 import '../support/settings_contract_default_documents.dart';
 import '../support/settings_contract_document_models.dart';
+import '../support/settings_contract_text_styles.dart';
 import '../support/settings_operating_company_content.dart';
 
 class SettingsContractDocumentsPage extends ConsumerWidget {
@@ -117,7 +118,9 @@ class _ContractProjectList extends StatelessWidget {
         if (index == 0) {
           return Text(
             l10n.settingsContractListDescription,
-            style: appText.body.copyWith(color: colors.textSecondary),
+            style: SettingsContractTextStyles.description(
+              context,
+            ).copyWith(color: colors.textSecondary),
           );
         }
 
@@ -153,7 +156,7 @@ class _ContractProjectCard extends StatelessWidget {
         project.routeKey == settingsContractDefaultProjectId;
 
     return Material(
-      color: Colors.transparent,
+      color: colors.surface.withValues(alpha: 0),
       child: InkWell(
         borderRadius: BorderRadius.circular(UiTokens.radius20),
         onTap: onTap,
@@ -223,7 +226,7 @@ class _ContractProjectCard extends StatelessWidget {
                             : latestUpdatedAt == null
                             ? l10n.settingsContractListPendingLabel
                             : '${l10n.settingsContractListLatestUpdatedLabel} ${dateFormatter.format(latestUpdatedAt)}',
-                        style: appText.bodyMuted.copyWith(
+                        style: appText.helper.copyWith(
                           color: colors.textSecondary,
                         ),
                       ),

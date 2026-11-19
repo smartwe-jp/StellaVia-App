@@ -134,6 +134,7 @@ class HotelDetailRoomCard extends StatelessWidget {
                       onPressed: onDetails,
                       style: TextButton.styleFrom(
                         minimumSize: const Size(48, 36),
+                        textStyle: HotelDetailStyles.roomDetailAction(c),
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),

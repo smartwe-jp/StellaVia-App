@@ -148,7 +148,7 @@ class HotelDetailRedesignContent extends StatelessWidget {
                         child: Text(
                           c.l10n.hotelDetailAvailableRooms,
                           textAlign: TextAlign.start,
-                          style: HotelDetailStyles.label(
+                          style: HotelDetailStyles.roomSectionTitle(
                             c,
                           ).copyWith(color: c.appColors.primary),
                         ),

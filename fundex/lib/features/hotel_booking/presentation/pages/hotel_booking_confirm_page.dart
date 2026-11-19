@@ -234,8 +234,8 @@ class _HotelBookingConfirmPageState
                       showOriginalAmount: usesFundBenefitTicket,
                       onEdit: () => Navigator.of(context).maybePop(),
                     ),
-                    const SizedBox(height: 14),
-                    if (!miles)
+                    if (!miles) ...<Widget>[
+                      const SizedBox(height: 14),
                       HotelBookingCouponRow(
                         availableCount: couponEntryCount,
                         selectedCouponName: _couponRowSelectedName(presenter),
@@ -243,6 +243,7 @@ class _HotelBookingConfirmPageState
                             ? _showComingSoon
                             : () => _openCouponPicker(preparation),
                       ),
+                    ],
                     if (!miles && !usesFundBenefitTicket) ...<Widget>[
                       const SizedBox(height: 14),
                       HotelBookingPaymentSection(
@@ -716,7 +717,7 @@ class _HotelBookingConfirmPageState
           ? booker.fullName
           : _invoiceController.text.trim(),
       comment: _messageController.text.trim(),
-      selectedCoupons: _selectedCoupon?.id == null
+      selectedCoupons: widget.seed.hostMiles || _selectedCoupon?.id == null
           ? const <HotelBookingSelectedCoupon>[]
           : <HotelBookingSelectedCoupon>[
               HotelBookingSelectedCoupon(couponId: _selectedCoupon!.id!),
@@ -764,7 +765,7 @@ class _HotelBookingConfirmPageState
           occupancy: _roomAdults[index] + _roomKids[index],
         ),
       ),
-      coupons: coupon?.id == null
+      coupons: widget.seed.hostMiles || coupon?.id == null
           ? const <HotelBookingSelectedCoupon>[]
           : <HotelBookingSelectedCoupon>[
               HotelBookingSelectedCoupon(couponId: coupon!.id!),

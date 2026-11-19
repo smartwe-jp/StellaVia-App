@@ -4,7 +4,23 @@ import 'package:flutter/material.dart';
 /// Typography for 04 ホテル詳細, derived from the app's locale-aware fonts.
 abstract final class HotelDetailStyles {
   static TextStyle title(BuildContext c) =>
-      c.appTextTheme.pageTitle.copyWith(fontSize: 26, height: 1.4);
+      c.appTextTheme.pageTitle.copyWith(fontSize: 20, height: 1.35);
+  static TextStyle intro(BuildContext c) => c.appTextTheme.body.copyWith(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    height: 1.5,
+  );
+  static TextStyle roomSectionTitle(BuildContext c) =>
+      c.appTextTheme.bodyStrong.copyWith(fontSize: 14);
+  static TextStyle stayLabel(BuildContext c) =>
+      c.appTextTheme.body.copyWith(fontSize: 12, fontWeight: FontWeight.w500);
+  static TextStyle stayValue(BuildContext c) => c.appTextTheme.body.copyWith(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    height: 1.35,
+  );
+  static TextStyle roomDetailAction(BuildContext c) =>
+      c.appTextTheme.button.copyWith(fontSize: 14);
   static TextStyle heading(BuildContext c) =>
       c.appTextTheme.bodyStrong.copyWith(fontSize: 17);
   static TextStyle body(BuildContext c) => c.appTextTheme.body.copyWith(
