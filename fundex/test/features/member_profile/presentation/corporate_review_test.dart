@@ -80,8 +80,10 @@ void main() {
                           settings: const RouteSettings(
                             name: 'corporate-verification/review',
                           ),
-                          builder: (_) =>
-                              CorporateReviewPage(draft: CorporateFormDraft()),
+                          builder: (_) => CorporateReviewPage(
+                            draft: CorporateFormDraft()
+                              ..handler = CorporateHandler.delegate,
+                          ),
                         ),
                       ),
                       child: const Text('review'),
@@ -121,7 +123,8 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(CorporateReviewPage), findsNothing);
       expect(find.text(l.corpProgressSuccess), findsOneWidget);
-      expect(find.text(l.corpProgressMailHint), findsOneWidget);
+      expect(find.text(l.corpMailDelegateOriginals), findsOneWidget);
+      expect(find.text(l.corpMailDestination), findsOneWidget);
       expect(repo.detailReads, 1);
       final open = find.text(l.corpProgressOpen);
       await tester.scrollUntilVisible(
@@ -132,6 +135,13 @@ void main() {
       await tester.tap(open);
       await tester.pumpAndSettle();
       expect(find.byType(CorporateProgressPage), findsOneWidget);
+      expect(find.text(l.corpMailDestination), findsOneWidget);
+      expect(find.text(l.corpProgressMailHint), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.byType(CorporateProgressTimeline),
+        250,
+        scrollable: find.byType(Scrollable).first,
+      );
       expect(
         tester
             .widget<CorporateProgressTimeline>(

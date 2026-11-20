@@ -7335,6 +7335,12 @@ abstract class AppLocalizations {
   /// **'Receipt No:'**
   String get lotteryApplyReceiptLabel;
 
+  /// No description provided for @corporateInvestmentVerificationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Corporate verification must be complete before you can apply for or purchase a fund. View your application progress in Member Information.'**
+  String get corporateInvestmentVerificationRequired;
+
   /// No description provided for @fundApplyVerificationRequiredTitle.
   ///
   /// In en, this message translates to:
@@ -14421,11 +14427,35 @@ abstract class AppLocalizations {
   /// **'Next steps'**
   String get corpProgressNext;
 
+  /// No description provided for @corpMailDestinationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mailing address'**
+  String get corpMailDestinationTitle;
+
+  /// No description provided for @corpMailRepresentativeOriginal.
+  ///
+  /// In en, this message translates to:
+  /// **'Mail the original certificate of registered matters.'**
+  String get corpMailRepresentativeOriginal;
+
+  /// No description provided for @corpMailDelegateOriginals.
+  ///
+  /// In en, this message translates to:
+  /// **'Mail both the original certificate of registered matters and the original completed and stamped power of attorney.'**
+  String get corpMailDelegateOriginals;
+
   /// No description provided for @corpProgressMailHint.
   ///
   /// In en, this message translates to:
-  /// **'Mail the original registry certificate to the address provided in your instructions. If you submitted a power of attorney, enclose its original as well.'**
+  /// **'Mail the original certificate of registered matters. If a delegate is handling the application, also enclose the original completed and stamped power of attorney.'**
   String get corpProgressMailHint;
+
+  /// No description provided for @corpMailDestination.
+  ///
+  /// In en, this message translates to:
+  /// **'〒543-0061\n大阪府大阪市天王寺区伶人町2-31\nStella Asset株式会社\n「StellaVia」事務局 宛'**
+  String get corpMailDestination;
 
   /// No description provided for @corpProgressApplicant.
   ///

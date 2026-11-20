@@ -4038,6 +4038,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lotteryApplyReceiptLabel => 'Receipt No:';
 
   @override
+  String get corporateInvestmentVerificationRequired =>
+      'Corporate verification must be complete before you can apply for or purchase a fund. View your application progress in Member Information.';
+
+  @override
   String get fundApplyVerificationRequiredTitle => 'Verification required';
 
   @override
@@ -7991,8 +7995,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get corpProgressNext => 'Next steps';
 
   @override
+  String get corpMailDestinationTitle => 'Mailing address';
+
+  @override
+  String get corpMailRepresentativeOriginal =>
+      'Mail the original certificate of registered matters.';
+
+  @override
+  String get corpMailDelegateOriginals =>
+      'Mail both the original certificate of registered matters and the original completed and stamped power of attorney.';
+
+  @override
   String get corpProgressMailHint =>
-      'Mail the original registry certificate to the address provided in your instructions. If you submitted a power of attorney, enclose its original as well.';
+      'Mail the original certificate of registered matters. If a delegate is handling the application, also enclose the original completed and stamped power of attorney.';
+
+  @override
+  String get corpMailDestination =>
+      '〒543-0061\n大阪府大阪市天王寺区伶人町2-31\nStella Asset株式会社\n「StellaVia」事務局 宛';
 
   @override
   String get corpProgressApplicant => 'Applicant company';

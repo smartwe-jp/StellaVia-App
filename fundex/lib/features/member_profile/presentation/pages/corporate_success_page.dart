@@ -2,14 +2,21 @@ import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../domain/entities/corporate_form_draft.dart';
+import '../widgets/corporate_mailing_instructions.dart';
 import '../providers/verification_entry_provider.dart';
 import '../support/corporate_flow_navigation.dart';
 import '../widgets/corporate_flow_scaffold.dart';
 import 'corporate_progress_page.dart';
 
 class CorporateSuccessPage extends ConsumerWidget {
-  const CorporateSuccessPage({super.key, required this.companyName});
+  const CorporateSuccessPage({
+    super.key,
+    required this.companyName,
+    required this.handler,
+  });
   final String companyName;
+  final CorporateHandler? handler;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n, theme = Theme.of(context);
@@ -26,23 +33,8 @@ class CorporateSuccessPage extends ConsumerWidget {
         children: [
           Text(l.corpProgressSuccessBody),
           const SizedBox(height: 24),
-          Card(
-            color: theme.appColors.surfaceAlt,
-            margin: EdgeInsets.zero,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(l.corpProgressNext, style: theme.textTheme.titleMedium),
-                  const SizedBox(height: 8),
-                  Text(l.corpProgressMailHint),
-                ],
-              ),
-            ),
+          CorporateMailingInstructions(
+            handler: handler ?? entry?.submittedForm?.handler,
           ),
           const SizedBox(height: 16),
           if (name.isNotEmpty) ...[

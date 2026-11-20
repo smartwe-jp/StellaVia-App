@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../../../member_profile/domain/repositories/verification_entry_repository.dart';
+import '../support/investment_verification_guard.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../domain/entities/fund_project.dart';
@@ -17,7 +19,6 @@ import 'fund_lottery_apply/fund_lottery_apply_confirm_step.dart';
 import 'fund_lottery_apply/fund_lottery_apply_documents_step.dart';
 import 'fund_lottery_apply/fund_lottery_apply_selected_step.dart';
 import 'fund_lottery_apply/fund_lottery_apply_submitted_step.dart';
-import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../../member_profile/presentation/support/mypage_section_support.dart';
 import '../../../wallet/presentation/providers/wallet_providers.dart';
@@ -62,7 +63,7 @@ class _FundLotteryApplyFlowPageState
   int _selectedUnits = _minimumUnits;
   int _currentMaximumUnits = _defaultMaxMultiplier;
   bool _isSyncingUnitsController = false;
-  bool _didCheckApplyAccess = false;
+  bool _accessGranted = false;
   final Set<int> _checkedDocuments = <int>{};
   final Set<int> _openedDocuments = <int>{};
   bool _agreedToApply = false;
@@ -250,23 +251,8 @@ class _FundLotteryApplyFlowPageState
       _currentStep == FundLotteryApplyStep.submitted &&
       _blocksBackOnSubmittedStep;
 
-  Future<void> _showFundApplyVerificationRequiredDialog() {
-    final l10n = context.l10n;
-    return AppDialogs.showAdaptiveAlert<void>(
-      context: context,
-      title: l10n.fundApplyVerificationRequiredTitle,
-      message: l10n.fundApplyVerificationRequiredMessage,
-      actions: <AppDialogAction<void>>[
-        AppDialogAction<void>(label: l10n.commonOk, isDefaultAction: true),
-      ],
-    );
-  }
-
   Future<void> _ensureVerifiedApplicationAccess() async {
-    if (_didCheckApplyAccess || !_requiresVerifiedApplicationAccess) {
-      return;
-    }
-    _didCheckApplyAccess = true;
+    if (!mounted) return;
     final isAuthenticated = ref.read(isAuthenticatedProvider).asData?.value;
     if (isAuthenticated != true) {
       if (!mounted) {
@@ -276,27 +262,17 @@ class _FundLotteryApplyFlowPageState
       return;
     }
 
-    var isFundApplyVerified = false;
-    try {
-      await refreshMemberProfileVerificationState(
-        ref,
-        isMounted: () => mounted,
-      );
-      if (!mounted) {
-        return;
-      }
-      isFundApplyVerified = await ref.read(isFundApplyVerifiedProvider.future);
-    } catch (_) {
-      isFundApplyVerified = false;
-    }
-    if (!mounted || isFundApplyVerified) {
+    final entry = await checkInvestmentAccess(
+      context,
+      ref,
+      InvestmentAction.fundApplication,
+    );
+    if (!mounted) return;
+    if (entry != null) {
+      setState(() => _accessGranted = true);
       return;
     }
-
-    await _showFundApplyVerificationRequiredDialog();
-    if (!mounted) {
-      return;
-    }
+    if (ModalRoute.of(context)?.isCurrent != true) return;
     if (context.canPop()) {
       context.pop();
       return;
@@ -512,7 +488,14 @@ class _FundLotteryApplyFlowPageState
       _isApplying = true;
     });
 
+    VerificationEntry? verified;
     try {
+      verified = await checkInvestmentAccess(
+        context,
+        ref,
+        InvestmentAction.fundApplication,
+      );
+      if (!mounted || verified == null) return;
       await ref
           .read(submitFundLotteryApplyUseCaseProvider)
           .call(projectId: project.id, units: units, amount: totalAmount);
@@ -525,7 +508,8 @@ class _FundLotteryApplyFlowPageState
       if (!mounted) {
         return;
       }
-      if (_shouldBypassIdentityVerificationError(error)) {
+      if (verified?.kind == VerificationEntryKind.personal &&
+          _shouldBypassIdentityVerificationError(error)) {
         _showToast(_identityVerificationBypassNotice);
         _blocksBackOnSubmittedStep = true;
         _goNextStep();
@@ -698,6 +682,9 @@ class _FundLotteryApplyFlowPageState
 
   @override
   Widget build(BuildContext context) {
+    if (_requiresVerifiedApplicationAccess && !_accessGranted) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     final l10n = context.l10n;
     final colors = context.appColors;
     final detailAsync = ref.watch(fundProjectDetailProvider(widget.projectId));

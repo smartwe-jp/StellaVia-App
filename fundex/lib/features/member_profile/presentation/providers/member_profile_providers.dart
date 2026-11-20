@@ -209,15 +209,6 @@ final isMemberProfileCompletedProvider = FutureProvider<bool>((ref) async {
   return ref.watch(isMemberProfileCompletedUseCaseProvider).call();
 });
 
-final isFundApplyVerifiedProvider = FutureProvider<bool>((ref) async {
-  ref.watch(authSessionProvider);
-  final user = await ref
-      .watch(currentAuthUserProvider.future)
-      .catchError((Object _) => null);
-  final status = user?.status;
-  return status == 4 || status == 5;
-});
-
 Future<void> refreshMemberProfileVerificationState(
   WidgetRef ref, {
   bool Function()? isMounted,
@@ -232,7 +223,6 @@ Future<void> refreshMemberProfileVerificationState(
   ref.invalidate(currentAuthUserProvider);
   ref.invalidate(memberProfileDetailsProvider);
   ref.invalidate(isMemberProfileCompletedProvider);
-  ref.invalidate(isFundApplyVerifiedProvider);
 }
 
 Future<void> refreshMemberProfileVerificationStateFromProvider(Ref ref) async {
@@ -240,7 +230,6 @@ Future<void> refreshMemberProfileVerificationStateFromProvider(Ref ref) async {
   ref.invalidate(currentAuthUserProvider);
   ref.invalidate(memberProfileDetailsProvider);
   ref.invalidate(isMemberProfileCompletedProvider);
-  ref.invalidate(isFundApplyVerifiedProvider);
 }
 
 final profileDocumentImagePickerProvider = Provider<ProfileDocumentImagePicker>(

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../support/investment_verification_guard.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
@@ -83,6 +84,12 @@ class _SecondaryMarketBuyConfirmPageState
         throw StateError(l10n.secondaryMarketDetailUnavailable);
       }
       if (!mounted) return;
+      final eligible = await checkInvestmentAccess(
+        context,
+        ref,
+        InvestmentAction.secondaryPurchase,
+      );
+      if (!mounted || eligible == null) return;
       await ref
           .read(submitMyPageSecondaryMarketPurchaseUseCaseProvider)
           .call(id: widget.draft.orderId, buyNum: widget.draft.buyNum);

@@ -3814,6 +3814,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get lotteryApplyReceiptLabel => '受理商品：';
 
   @override
+  String get corporateInvestmentVerificationRequired =>
+      '完成法人认证后才能申购或购买基金。请前往会员资料查看认证进度。';
+
+  @override
   String get fundApplyVerificationRequiredTitle => '未认证';
 
   @override
@@ -7537,7 +7541,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get corpProgressNext => '请确认后续步骤';
 
   @override
-  String get corpProgressMailHint => '请将登记事项证明书原件寄到通知中的地址。如已提交委任状，请一并寄送原件。';
+  String get corpMailDestinationTitle => '邮寄地址';
+
+  @override
+  String get corpMailRepresentativeOriginal => '请寄送登记事项证明书（誊本）原件。';
+
+  @override
+  String get corpMailDelegateOriginals => '请一并寄送登记事项证明书（誊本）原件和已填写并盖章的委任状原件。';
+
+  @override
+  String get corpProgressMailHint =>
+      '请寄送登记事项证明书（誊本）原件。由受任者办理时，请一并寄送已填写并盖章的委任状原件。';
+
+  @override
+  String get corpMailDestination =>
+      '〒543-0061\n大阪府大阪市天王寺区伶人町2-31\nStella Asset株式会社\n「StellaVia」事務局 宛';
 
   @override
   String get corpProgressApplicant => '申请法人';
@@ -11594,6 +11612,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get lotteryApplyReceiptLabel => '受理商品：';
 
   @override
+  String get corporateInvestmentVerificationRequired =>
+      '完成法人認證後才能申購或購買基金。請前往會員資料查看認證進度。';
+
+  @override
   String get fundApplyVerificationRequiredTitle => '未認證';
 
   @override
@@ -15317,7 +15339,21 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get corpProgressNext => '請確認後續步驟';
 
   @override
-  String get corpProgressMailHint => '請將登記事項證明書正本寄至通知中的地址。如已提交委任狀，請一併寄送正本。';
+  String get corpMailDestinationTitle => '郵寄地址';
+
+  @override
+  String get corpMailRepresentativeOriginal => '請寄送登記事項證明書（謄本）正本。';
+
+  @override
+  String get corpMailDelegateOriginals => '請一併寄送登記事項證明書（謄本）正本及已填妥並蓋章的委任狀正本。';
+
+  @override
+  String get corpProgressMailHint =>
+      '請寄送登記事項證明書（謄本）正本。由受任者辦理時，請一併寄送已填妥並蓋章的委任狀正本。';
+
+  @override
+  String get corpMailDestination =>
+      '〒543-0061\n大阪府大阪市天王寺区伶人町2-31\nStella Asset株式会社\n「StellaVia」事務局 宛';
 
   @override
   String get corpProgressApplicant => '申請法人';

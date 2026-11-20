@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
+import '../support/investment_verification_guard.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
@@ -71,10 +72,17 @@ class SecondaryMarketMarketplaceDetailPage extends ConsumerWidget {
                               context.push('/login');
                               return;
                             }
+                            final entry = await checkInvestmentAccess(
+                              context,
+                              ref,
+                              InvestmentAction.secondaryPurchase,
+                            );
+                            if (!context.mounted || entry == null) return;
                             await context.push(
                               '/free-market/${record.id}/buy',
                               extra: buildSecondaryMarketBuySeed(record),
                             );
+                            if (!context.mounted) return;
                             ref.invalidate(
                               secondaryMarketOrderProvider(orderId),
                             );

@@ -442,22 +442,14 @@ class FundReminderCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
-    final palette = _paletteFor(context, data.tone);
     final cardRadius = BorderRadius.circular(UiTokens.radius16);
 
     final card = Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: palette.backgroundGradientColors.first,
+        color: colors.surface,
         borderRadius: cardRadius,
-        border: Border.all(color: palette.borderColor, width: 1.5),
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: palette.borderColor.withValues(alpha: 0.12),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        border: Border.all(color: colors.borderSoft),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(14, 6, 12, 6),
@@ -465,7 +457,7 @@ class FundReminderCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             IconTheme(
-              data: IconThemeData(color: palette.titleColor),
+              data: IconThemeData(color: colors.textSecondary),
               child: data.leading,
             ),
             const SizedBox(width: 12),
@@ -478,9 +470,7 @@ class FundReminderCard extends StatelessWidget {
                     data.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: appText.cardTitle.copyWith(
-                      color: palette.titleColor,
-                    ),
+                    style: appText.cardTitle.copyWith(color: colors.danger),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -500,7 +490,7 @@ class FundReminderCard extends StatelessWidget {
             Icon(
               Icons.chevron_right_rounded,
               size: 24,
-              color: palette.titleColor,
+              color: colors.textSecondary,
             ),
           ],
         ),
@@ -645,91 +635,6 @@ class _FundGradientProgressBar extends StatelessWidget {
   ) {
     final t = ((value - start) / (end - start)).clamp(0, 1).toDouble();
     return startOutput + ((endOutput - startOutput) * t);
-  }
-}
-
-class _FundReminderPalette {
-  const _FundReminderPalette({
-    required this.backgroundGradientColors,
-    required this.borderColor,
-    required this.titleColor,
-    required this.messageColor,
-    required this.dotColor,
-    required this.badgeBackgroundColor,
-    required this.badgeForegroundColor,
-    required this.progressTrackColor,
-    required this.progressFillColor,
-    required this.actionTextColor,
-    required this.actionBorderColor,
-  });
-
-  final List<Color> backgroundGradientColors;
-  final Color borderColor;
-  final Color titleColor;
-  final Color messageColor;
-  final Color dotColor;
-  final Color badgeBackgroundColor;
-  final Color badgeForegroundColor;
-  final Color progressTrackColor;
-  final Color progressFillColor;
-  final Color actionTextColor;
-  final Color actionBorderColor;
-}
-
-_FundReminderPalette _paletteFor(BuildContext context, FundReminderTone tone) {
-  final colors = Theme.of(context).appColors;
-
-  switch (tone) {
-    case FundReminderTone.danger:
-    case FundReminderTone.warning:
-    case FundReminderTone.info:
-      return _FundReminderPalette(
-        backgroundGradientColors: <Color>[
-          colors.dangerSubtle,
-          colors.dangerSoft,
-        ],
-        borderColor: colors.dangerBorder,
-        titleColor: colors.danger,
-        messageColor: colors.dangerForeground,
-        dotColor: colors.danger,
-        badgeBackgroundColor: colors.danger,
-        badgeForegroundColor: colors.onDark,
-        progressTrackColor: colors.dangerSubtle,
-        progressFillColor: colors.danger,
-        actionTextColor: colors.dangerForeground,
-        actionBorderColor: colors.dangerBorder,
-      );
-    // case FundReminderTone.warning:
-    //   return _FundReminderPalette(
-    //     backgroundGradientColors: <Color>[
-    //       colors.warningSubtle,
-    //       colors.warningSoft,
-    //     ],
-    //     borderColor: colors.warningBorder,
-    //     titleColor: colors.warning,
-    //     messageColor: colors.warningForeground,
-    //     dotColor: colors.warning,
-    //     badgeBackgroundColor: colors.warning,
-    //     badgeForegroundColor: colors.onDark,
-    //     progressTrackColor: colors.warningSubtle,
-    //     progressFillColor: colors.warning,
-    //     actionTextColor: colors.warningAction,
-    //     actionBorderColor: colors.warningBorder,
-    //   );
-    // case FundReminderTone.info:
-    //   return _FundReminderPalette(
-    //     backgroundGradientColors: <Color>[colors.infoSubtle, colors.infoSoft],
-    //     borderColor: colors.infoBorder,
-    //     titleColor: colors.info,
-    //     messageColor: colors.infoForeground,
-    //     dotColor: colors.info,
-    //     badgeBackgroundColor: colors.info,
-    //     badgeForegroundColor: colors.onDark,
-    //     progressTrackColor: colors.infoSubtle,
-    //     progressFillColor: colors.info,
-    //     actionTextColor: colors.infoForeground,
-    //     actionBorderColor: colors.infoBorder,
-    //   );
   }
 }
 

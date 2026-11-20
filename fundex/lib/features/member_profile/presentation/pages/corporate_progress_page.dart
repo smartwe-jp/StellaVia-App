@@ -6,6 +6,7 @@ import '../providers/verification_entry_provider.dart';
 import '../../domain/repositories/verification_entry_repository.dart';
 import 'corporate_mail_action_page.dart';
 import '../widgets/corporate_application_summary.dart';
+import '../widgets/corporate_mailing_instructions.dart';
 import '../widgets/corporate_flow_scaffold.dart';
 import '../support/corporate_progress.dart';
 import '../widgets/corporate_progress_timeline.dart';
@@ -76,6 +77,12 @@ class CorporateProgressPage extends ConsumerWidget {
                 const SizedBox(height: 24),
                 CorporateStatusNotice(entry: e),
                 const SizedBox(height: 16),
+                if (e.userOps.contains(CorporateMailAction.sent.code)) ...[
+                  CorporateMailingInstructions(
+                    handler: e.submittedForm?.handler,
+                  ),
+                  const SizedBox(height: 16),
+                ],
                 for (final action in CorporateMailAction.values)
                   if (e.userOps.contains(action.code))
                     Padding(

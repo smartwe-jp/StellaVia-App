@@ -3848,6 +3848,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get lotteryApplyReceiptLabel => '受付商品：';
 
   @override
+  String get corporateInvestmentVerificationRequired =>
+      '法人のお客様は法人認証が完了すると、ファンドの申込み・購入ができます。会員情報で申請状況をご確認ください。';
+
+  @override
   String get fundApplyVerificationRequiredTitle => '未認証';
 
   @override
@@ -7601,8 +7605,22 @@ class AppLocalizationsJa extends AppLocalizations {
   String get corpProgressNext => '次の手順をご確認ください';
 
   @override
+  String get corpMailDestinationTitle => '郵送先';
+
+  @override
+  String get corpMailRepresentativeOriginal => '登記事項証明書（謄本）の原本をご郵送ください。';
+
+  @override
+  String get corpMailDelegateOriginals =>
+      '登記事項証明書（謄本）と、記入・押印済みの委任状の原本を同封してご郵送ください。';
+
+  @override
   String get corpProgressMailHint =>
-      '登記事項証明書の原本を、案内された宛先へ郵送してください。委任状を提出した場合は、その原本も同封してください。';
+      '登記事項証明書（謄本）の原本をご郵送ください。受任者がお手続きの場合は、記入・押印済みの委任状の原本も同封してください。';
+
+  @override
+  String get corpMailDestination =>
+      '〒543-0061\n大阪府大阪市天王寺区伶人町2-31\nStella Asset株式会社\n「StellaVia」事務局 宛';
 
   @override
   String get corpProgressApplicant => '申請した法人';

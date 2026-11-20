@@ -41,9 +41,11 @@ class _CorporateReviewPageState extends ConsumerState<CorporateReviewPage> {
         CorporateSection.company,
         CorporateField.businessName,
       );
+      final handler = widget.draft.handler;
       nav.pushAndRemoveUntil(
         MaterialPageRoute<void>(
-          builder: (_) => CorporateSuccessPage(companyName: name),
+          builder: (_) =>
+              CorporateSuccessPage(companyName: name, handler: handler),
         ),
         atEntry,
       );

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../support/investment_verification_guard.dart';
 import '../../../../app/config/environment_provider.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
-import '../../../member_profile/presentation/providers/member_profile_providers.dart';
 import '../../../settings/presentation/providers/settings_content_providers.dart';
 import '../../domain/entities/fund_project.dart';
 import '../providers/fund_project_favorite_providers.dart';
@@ -62,18 +62,6 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
     context.go('/funds');
   }
 
-  Future<void> _showFundApplyVerificationRequiredDialog() {
-    final l10n = context.l10n;
-    return AppDialogs.showAdaptiveAlert<void>(
-      context: context,
-      title: l10n.fundApplyVerificationRequiredTitle,
-      message: l10n.fundApplyVerificationRequiredMessage,
-      actions: <AppDialogAction<void>>[
-        AppDialogAction<void>(label: l10n.commonOk, isDefaultAction: true),
-      ],
-    );
-  }
-
   Future<void> _handleLotteryApplyTap(
     String projectId, {
     required bool isAuthenticated,
@@ -82,26 +70,12 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
       context.push('/login');
       return;
     }
-    var isFundApplyVerified = false;
-    try {
-      await refreshMemberProfileVerificationState(
-        ref,
-        isMounted: () => mounted,
-      );
-      if (!mounted) {
-        return;
-      }
-      isFundApplyVerified = await ref.read(isFundApplyVerifiedProvider.future);
-    } catch (_) {
-      isFundApplyVerified = false;
-    }
-    if (!mounted) {
-      return;
-    }
-    if (!isFundApplyVerified) {
-      await _showFundApplyVerificationRequiredDialog();
-      return;
-    }
+    final entry = await checkInvestmentAccess(
+      context,
+      ref,
+      InvestmentAction.fundApplication,
+    );
+    if (!mounted || entry == null) return;
     context.push('/funds/$projectId/lottery-apply');
   }
 
