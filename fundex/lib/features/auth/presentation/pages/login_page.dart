@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:fundex/features/auth/presentation/support/intl_code_picker_field.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
-import '../../../../app/widgets/stellavia_wordmark.dart';
 import '../controllers/auth_controller.dart';
 import '../providers/auth_providers.dart';
 import '../support/code_send_cooldown.dart';
@@ -307,10 +306,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         duration: const Duration(milliseconds: 260),
                         curve: Curves.easeOutCubic,
                         offset: Offset(0, isEditingInput ? -1.0 : 0),
-                        child: _LoginHeroHeader(
-                          subtitle: l10n.loginTitle,
-                          onClose: _continueWithoutLogin,
-                        ),
+                        child: _LoginHeroHeader(onClose: _continueWithoutLogin),
                       ),
                     ),
                   ),
@@ -516,9 +512,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 }
 
 class _LoginHeroHeader extends StatelessWidget {
-  const _LoginHeroHeader({required this.subtitle, required this.onClose});
+  const _LoginHeroHeader({required this.onClose});
 
-  final String subtitle;
   final VoidCallback onClose;
 
   @override
@@ -562,40 +557,11 @@ class _LoginHeroHeader extends StatelessWidget {
                 bottom: Radius.circular(32),
               ),
             ),
-            padding: const EdgeInsets.fromLTRB(24, 26, 24, 34),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Flexible(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      boxShadow: <BoxShadow>[
-                        BoxShadow(
-                          color: heroForegroundColor.withValues(alpha: 0.12),
-                          blurRadius: 28,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: Image.asset(
-                      'assets/images/stellavia.logo.light.png',
-                      height: 80,
-                      excludeFromSemantics: true,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                StellaviaWordmark(color: heroForegroundColor),
-                const SizedBox(height: 16),
-                Text(
-                  subtitle,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: heroForegroundColor.withValues(alpha: 0.72),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
+            padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 26),
+            child: Image.asset(
+              'assets/images/stellavia_login_white.png',
+              fit: BoxFit.contain,
+              semanticLabel: 'StellaVia',
             ),
           ),
           Positioned(
