@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'app_dashed_border_painter.dart';
 import 'app_image_viewer.dart';
 import 'app_theme_extensions.dart';
 
@@ -897,7 +898,7 @@ class MemberProfileUploadTile extends StatelessWidget {
                     ),
                   )
                 : CustomPaint(
-                    painter: _RoundedDashedBorderPainter(
+                    painter: AppDashedBorderPainter(
                       color: completedBorderColor,
                       radius: 16,
                       strokeWidth: 2,
@@ -1346,55 +1347,5 @@ class _SegmentedTextFieldState extends State<_SegmentedTextField> {
         ),
       ),
     );
-  }
-}
-
-class _RoundedDashedBorderPainter extends CustomPainter {
-  const _RoundedDashedBorderPainter({
-    required this.color,
-    required this.radius,
-    required this.strokeWidth,
-    required this.dash,
-    required this.gap,
-  });
-
-  final Color color;
-  final double radius;
-  final double strokeWidth;
-  final double dash;
-  final double gap;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final RRect rrect = RRect.fromRectAndRadius(
-      Offset.zero & size,
-      Radius.circular(radius),
-    );
-    final Paint paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth;
-
-    final Path source = Path()..addRRect(rrect);
-    for (final metric in source.computeMetrics()) {
-      double distance = 0;
-      while (distance < metric.length) {
-        final double segmentLength = math.min(dash, metric.length - distance);
-        canvas.drawPath(
-          metric.extractPath(distance, distance + segmentLength),
-          paint,
-        );
-        distance += dash + gap;
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _RoundedDashedBorderPainter oldDelegate) {
-    return color != oldDelegate.color ||
-        radius != oldDelegate.radius ||
-        strokeWidth != oldDelegate.strokeWidth ||
-        dash != oldDelegate.dash ||
-        gap != oldDelegate.gap;
   }
 }

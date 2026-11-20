@@ -1946,13 +1946,13 @@ abstract class AppLocalizations {
   /// No description provided for @homeReminderProfileTitle.
   ///
   /// In en, this message translates to:
-  /// **'Complete your profile to get started'**
+  /// **'Complete your verification'**
   String get homeReminderProfileTitle;
 
   /// No description provided for @homeReminderProfileBody.
   ///
   /// In en, this message translates to:
-  /// **'Identity verification required. 3 steps remaining.'**
+  /// **'Check your registration details and continue verification.'**
   String get homeReminderProfileBody;
 
   /// No description provided for @homeReminderProfileBadge.
@@ -13676,6 +13676,1140 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No buy applications'**
   String get tradeEmptyHistoryBuy;
+
+  /// No description provided for @investorTypeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an investor type'**
+  String get investorTypeTitle;
+
+  /// No description provided for @personalInvestor.
+  ///
+  /// In en, this message translates to:
+  /// **'Individual investor'**
+  String get personalInvestor;
+
+  /// No description provided for @corporateInvestor.
+  ///
+  /// In en, this message translates to:
+  /// **'Corporate investor'**
+  String get corporateInvestor;
+
+  /// No description provided for @personalInvestorNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply in your own name.'**
+  String get personalInvestorNote;
+
+  /// No description provided for @corporateInvestorNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply on behalf of a company.'**
+  String get corporateInvestorNote;
+
+  /// No description provided for @corporateVerificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Corporate verification'**
+  String get corporateVerificationTitle;
+
+  /// No description provided for @corporateStatusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Application status'**
+  String get corporateStatusTitle;
+
+  /// No description provided for @corporatePrepareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What to prepare'**
+  String get corporatePrepareTitle;
+
+  /// No description provided for @corporateProcessNote.
+  ///
+  /// In en, this message translates to:
+  /// **'After submitting company information and documents, follow the instructions to mail the originals. Verification is complete after receipt of our letter and final confirmation.'**
+  String get corporateProcessNote;
+
+  /// No description provided for @corporatePrepareBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Prepare the company registration certificate, representative’s ID and domestic corporate bank account details. Delegates also need a letter of authorization and their own ID.'**
+  String get corporatePrepareBody;
+
+  /// No description provided for @corporateRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh status'**
+  String get corporateRefresh;
+
+  /// No description provided for @corporateStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'{status, select, DRAFT{Not submitted} SUBMITTED{Submitted} CUSTOMER_MAILED{Originals mailed} APPROVED{Document review passed} ADMIN_MAILED{Letter dispatched} MAILED{Letter dispatched} RECEIVED{Received, awaiting final confirmation} CONFIRMED{Verified} REJECTED{Changes required} EXPIRED{Expired} other{Status unavailable}}'**
+  String corporateStatus(String status);
+
+  /// No description provided for @corpFormCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Company information'**
+  String get corpFormCompany;
+
+  /// No description provided for @corpFormRep.
+  ///
+  /// In en, this message translates to:
+  /// **'Representative information'**
+  String get corpFormRep;
+
+  /// No description provided for @corpFormHandler.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction handler'**
+  String get corpFormHandler;
+
+  /// No description provided for @corpFormStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start application'**
+  String get corpFormStart;
+
+  /// No description provided for @corpFormResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume entry'**
+  String get corpFormResume;
+
+  /// No description provided for @corpFormReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Review entries'**
+  String get corpFormReview;
+
+  /// No description provided for @corpFormReviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Review and submit'**
+  String get corpFormReviewTitle;
+
+  /// No description provided for @corpFormBusinessName.
+  ///
+  /// In en, this message translates to:
+  /// **'Registered company name'**
+  String get corpFormBusinessName;
+
+  /// No description provided for @corpFormBusinessKana.
+  ///
+  /// In en, this message translates to:
+  /// **'Company name in katakana'**
+  String get corpFormBusinessKana;
+
+  /// No description provided for @corpFormForm.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal form'**
+  String get corpFormForm;
+
+  /// No description provided for @corpFormNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Corporate number'**
+  String get corpFormNumber;
+
+  /// No description provided for @corpFormPostal.
+  ///
+  /// In en, this message translates to:
+  /// **'Postal code'**
+  String get corpFormPostal;
+
+  /// No description provided for @corpFormOffice.
+  ///
+  /// In en, this message translates to:
+  /// **'Registered office address'**
+  String get corpFormOffice;
+
+  /// No description provided for @corpFormFounded.
+  ///
+  /// In en, this message translates to:
+  /// **'Date established'**
+  String get corpFormFounded;
+
+  /// No description provided for @corpFormPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get corpFormPhone;
+
+  /// No description provided for @corpFormBusiness.
+  ///
+  /// In en, this message translates to:
+  /// **'Business activities'**
+  String get corpFormBusiness;
+
+  /// No description provided for @corpFormPurpose.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction purpose'**
+  String get corpFormPurpose;
+
+  /// No description provided for @corpFormOtherPurpose.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the purpose'**
+  String get corpFormOtherPurpose;
+
+  /// No description provided for @corpFormName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name'**
+  String get corpFormName;
+
+  /// No description provided for @corpFormKana.
+  ///
+  /// In en, this message translates to:
+  /// **'Name in katakana'**
+  String get corpFormKana;
+
+  /// No description provided for @corpFormRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Position'**
+  String get corpFormRole;
+
+  /// No description provided for @corpFormAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Residential address'**
+  String get corpFormAddress;
+
+  /// No description provided for @corpFormBirth.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth'**
+  String get corpFormBirth;
+
+  /// No description provided for @corpFormEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email address'**
+  String get corpFormEmail;
+
+  /// No description provided for @corpFormDepartment.
+  ///
+  /// In en, this message translates to:
+  /// **'Department and position'**
+  String get corpFormDepartment;
+
+  /// No description provided for @corpFormSelf.
+  ///
+  /// In en, this message translates to:
+  /// **'The representative'**
+  String get corpFormSelf;
+
+  /// No description provided for @corpFormDelegate.
+  ///
+  /// In en, this message translates to:
+  /// **'An authorized delegate'**
+  String get corpFormDelegate;
+
+  /// No description provided for @corpFormRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get corpFormRequired;
+
+  /// No description provided for @corpFormMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter or select a value.'**
+  String get corpFormMissing;
+
+  /// No description provided for @corpFormInvalidKana.
+  ///
+  /// In en, this message translates to:
+  /// **'Use full-width katakana.'**
+  String get corpFormInvalidKana;
+
+  /// No description provided for @corpFormInvalidNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter 13 digits.'**
+  String get corpFormInvalidNumber;
+
+  /// No description provided for @corpFormInvalidPostal.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a 7-digit postal code.'**
+  String get corpFormInvalidPostal;
+
+  /// No description provided for @corpFormInvalidDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid date as YYYY-MM-DD.'**
+  String get corpFormInvalidDate;
+
+  /// No description provided for @corpFormInvalidEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address.'**
+  String get corpFormInvalidEmail;
+
+  /// No description provided for @corpFormSurplus.
+  ///
+  /// In en, this message translates to:
+  /// **'Invest surplus funds'**
+  String get corpFormSurplus;
+
+  /// No description provided for @corpFormAsset.
+  ///
+  /// In en, this message translates to:
+  /// **'Asset management'**
+  String get corpFormAsset;
+
+  /// No description provided for @corpFormOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get corpFormOther;
+
+  /// No description provided for @corpFormMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration'**
+  String get corpFormMember;
+
+  /// No description provided for @corpFormStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Step'**
+  String get corpFormStep;
+
+  /// No description provided for @corpFormRepHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the representative listed on the company register.'**
+  String get corpFormRepHint;
+
+  /// No description provided for @corpFormCompanyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the registered company details.'**
+  String get corpFormCompanyHint;
+
+  /// No description provided for @corpFormHandlerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose who will handle the application.'**
+  String get corpFormHandlerHint;
+
+  /// No description provided for @corpFormSelfHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the representative’s information.'**
+  String get corpFormSelfHint;
+
+  /// No description provided for @corpFormDelegateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A delegate acts on the representative’s authority.'**
+  String get corpFormDelegateHint;
+
+  /// No description provided for @corpOwnerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Beneficial owners'**
+  String get corpOwnerTitle;
+
+  /// No description provided for @corpOwnerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us who ultimately controls the company.'**
+  String get corpOwnerHint;
+
+  /// No description provided for @corpOwnerDefinition.
+  ///
+  /// In en, this message translates to:
+  /// **'Include people who hold more than 25% of the equity or voting rights, or exercise material influence through other means.'**
+  String get corpOwnerDefinition;
+
+  /// No description provided for @corpOwnerYes.
+  ///
+  /// In en, this message translates to:
+  /// **'There are beneficial owners'**
+  String get corpOwnerYes;
+
+  /// No description provided for @corpOwnerNo.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no beneficial owners'**
+  String get corpOwnerNo;
+
+  /// No description provided for @corpOwnerUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get corpOwnerUnknown;
+
+  /// No description provided for @corpOwnerMinimum.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one beneficial owner.'**
+  String get corpOwnerMinimum;
+
+  /// No description provided for @corpOwnerList.
+  ///
+  /// In en, this message translates to:
+  /// **'People added'**
+  String get corpOwnerList;
+
+  /// No description provided for @corpOwnerAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a beneficial owner'**
+  String get corpOwnerAdd;
+
+  /// No description provided for @corpOwnerEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit beneficial owner'**
+  String get corpOwnerEdit;
+
+  /// No description provided for @corpOwnerDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get corpOwnerDelete;
+
+  /// No description provided for @corpOwnerDeletePrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this person?'**
+  String get corpOwnerDeletePrompt;
+
+  /// No description provided for @corpOwnerCountry.
+  ///
+  /// In en, this message translates to:
+  /// **'Nationality / country of residence'**
+  String get corpOwnerCountry;
+
+  /// No description provided for @corpOwnerControl.
+  ///
+  /// In en, this message translates to:
+  /// **'Type of control'**
+  String get corpOwnerControl;
+
+  /// No description provided for @corpOwnerOwnership.
+  ///
+  /// In en, this message translates to:
+  /// **'More than 25% of equity or voting rights'**
+  String get corpOwnerOwnership;
+
+  /// No description provided for @corpOwnerInfluence.
+  ///
+  /// In en, this message translates to:
+  /// **'Other material influence'**
+  String get corpOwnerInfluence;
+
+  /// No description provided for @corpOwnerPercentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Ownership percentage'**
+  String get corpOwnerPercentage;
+
+  /// No description provided for @corpOwnerSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get corpOwnerSave;
+
+  /// No description provided for @corpOwnerConfirmAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add person'**
+  String get corpOwnerConfirmAdd;
+
+  /// No description provided for @corpBankTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal account'**
+  String get corpBankTitle;
+
+  /// No description provided for @corpBankHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Register this account with your initial application.'**
+  String get corpBankHint;
+
+  /// No description provided for @corpBankNoticeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Domestic corporate account'**
+  String get corpBankNoticeTitle;
+
+  /// No description provided for @corpBankNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the details of a Japanese bank account held in the company’s name.'**
+  String get corpBankNotice;
+
+  /// No description provided for @corpBankOtherHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Other to enter your bank name.'**
+  String get corpBankOtherHint;
+
+  /// No description provided for @corpBankManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Other bank name'**
+  String get corpBankManual;
+
+  /// No description provided for @corpBankSavings.
+  ///
+  /// In en, this message translates to:
+  /// **'Savings'**
+  String get corpBankSavings;
+
+  /// No description provided for @corpBankBranchError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a three-digit branch code.'**
+  String get corpBankBranchError;
+
+  /// No description provided for @corpBankNumberError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a seven-digit account number.'**
+  String get corpBankNumberError;
+
+  /// No description provided for @corpDocsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Required documents'**
+  String get corpDocsTitle;
+
+  /// No description provided for @corpDocsCompany.
+  ///
+  /// In en, this message translates to:
+  /// **'Company documents'**
+  String get corpDocsCompany;
+
+  /// No description provided for @corpDocsIdentity.
+  ///
+  /// In en, this message translates to:
+  /// **'Identity documents'**
+  String get corpDocsIdentity;
+
+  /// No description provided for @corpDocsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose clearly legible files, up to 10 MB each.'**
+  String get corpDocsHint;
+
+  /// No description provided for @corpDocsRegistry.
+  ///
+  /// In en, this message translates to:
+  /// **'Certificate of registered matters'**
+  String get corpDocsRegistry;
+
+  /// No description provided for @corpDocsSeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Corporate seal certificate'**
+  String get corpDocsSeal;
+
+  /// No description provided for @corpDocsDelegation.
+  ///
+  /// In en, this message translates to:
+  /// **'Power of attorney'**
+  String get corpDocsDelegation;
+
+  /// No description provided for @corpDocsEvidence.
+  ///
+  /// In en, this message translates to:
+  /// **'Beneficial ownership evidence'**
+  String get corpDocsEvidence;
+
+  /// No description provided for @corpDocsFront.
+  ///
+  /// In en, this message translates to:
+  /// **'Front'**
+  String get corpDocsFront;
+
+  /// No description provided for @corpDocsBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get corpDocsBack;
+
+  /// No description provided for @corpDocsType.
+  ///
+  /// In en, this message translates to:
+  /// **'Document type'**
+  String get corpDocsType;
+
+  /// No description provided for @corpDocsSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'＋ Select file'**
+  String get corpDocsSelect;
+
+  /// No description provided for @corpDocsReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get corpDocsReplace;
+
+  /// No description provided for @corpDocsUploading.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading…'**
+  String get corpDocsUploading;
+
+  /// No description provided for @corpDocsFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload failed. Retry or choose another file.'**
+  String get corpDocsFailed;
+
+  /// No description provided for @corpDocsInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the file format and size. Empty files cannot be used.'**
+  String get corpDocsInvalid;
+
+  /// No description provided for @corpDocsMail.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload a registry certificate issued within the last six months and mail the original after applying.'**
+  String get corpDocsMail;
+
+  /// No description provided for @corpDocsSides.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload both sides of a driver’s license or residence card. For a My Number card, upload only the front.'**
+  String get corpDocsSides;
+
+  /// No description provided for @corpDocsDiscard.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard selection'**
+  String get corpDocsDiscard;
+
+  /// No description provided for @corpReviewHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Review the details before submitting your application.'**
+  String get corpReviewHint;
+
+  /// No description provided for @corpReviewTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Required declarations'**
+  String get corpReviewTerms;
+
+  /// No description provided for @corpReviewAnti.
+  ///
+  /// In en, this message translates to:
+  /// **'The company and related parties are not affiliated with antisocial forces.'**
+  String get corpReviewAnti;
+
+  /// No description provided for @corpReviewAntiBody.
+  ///
+  /// In en, this message translates to:
+  /// **'I have verified this declaration for the company and its related parties.'**
+  String get corpReviewAntiBody;
+
+  /// No description provided for @corpReviewMail.
+  ///
+  /// In en, this message translates to:
+  /// **'I acknowledge the mailing procedure.'**
+  String get corpReviewMail;
+
+  /// No description provided for @corpReviewMailBody.
+  ///
+  /// In en, this message translates to:
+  /// **'I will mail the required originals and receive the mailed documents.'**
+  String get corpReviewMailBody;
+
+  /// No description provided for @corpReviewSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Agree and submit'**
+  String get corpReviewSubmit;
+
+  /// No description provided for @corpReviewEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit application details'**
+  String get corpReviewEdit;
+
+  /// No description provided for @corpReviewMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Not attached'**
+  String get corpReviewMissing;
+
+  /// No description provided for @corpReviewFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The application was declined. Please review your details.'**
+  String get corpReviewFailed;
+
+  /// No description provided for @corpReviewUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'The submission result is unknown. Check the application status before submitting again.'**
+  String get corpReviewUnknown;
+
+  /// No description provided for @corpReviewCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Check application status'**
+  String get corpReviewCheck;
+
+  /// No description provided for @corpReviewAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Your corporate verification application has been received.'**
+  String get corpReviewAccepted;
+
+  /// No description provided for @corpReviewUnconfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'No submitted application was found. Review the details and declarations before trying again.'**
+  String get corpReviewUnconfirmed;
+
+  /// No description provided for @corpProgressSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Application received'**
+  String get corpProgressSuccess;
+
+  /// No description provided for @corpProgressSuccessBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your corporate verification application has been submitted.'**
+  String get corpProgressSuccessBody;
+
+  /// No description provided for @corpProgressNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next steps'**
+  String get corpProgressNext;
+
+  /// No description provided for @corpProgressMailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Mail the original registry certificate to the address provided in your instructions. If you submitted a power of attorney, enclose its original as well.'**
+  String get corpProgressMailHint;
+
+  /// No description provided for @corpProgressApplicant.
+  ///
+  /// In en, this message translates to:
+  /// **'Applicant company'**
+  String get corpProgressApplicant;
+
+  /// No description provided for @corpProgressTrading.
+  ///
+  /// In en, this message translates to:
+  /// **'When you can invest'**
+  String get corpProgressTrading;
+
+  /// No description provided for @corpProgressTradingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You can apply to invest after document review, receipt of the mailed documents and final verification.'**
+  String get corpProgressTradingHint;
+
+  /// No description provided for @corpProgressOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Check application status'**
+  String get corpProgressOpen;
+
+  /// No description provided for @corpProgressMyPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to My Page'**
+  String get corpProgressMyPage;
+
+  /// No description provided for @corpProgressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Corporate verification status'**
+  String get corpProgressTitle;
+
+  /// No description provided for @corpProgressCorrection.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application needs changes'**
+  String get corpProgressCorrection;
+
+  /// No description provided for @corpProgressOriginal.
+  ///
+  /// In en, this message translates to:
+  /// **'Mail originals'**
+  String get corpProgressOriginal;
+
+  /// No description provided for @corpProgressReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Document review'**
+  String get corpProgressReview;
+
+  /// No description provided for @corpProgressCompanyMail.
+  ///
+  /// In en, this message translates to:
+  /// **'Documents mailed by us'**
+  String get corpProgressCompanyMail;
+
+  /// No description provided for @corpProgressReceipt.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive documents'**
+  String get corpProgressReceipt;
+
+  /// No description provided for @corpProgressFinal.
+  ///
+  /// In en, this message translates to:
+  /// **'Final verification'**
+  String get corpProgressFinal;
+
+  /// No description provided for @corpProgressSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Application submitted'**
+  String get corpProgressSubmitted;
+
+  /// No description provided for @corpProgressAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Action required'**
+  String get corpProgressAction;
+
+  /// No description provided for @corpProgressReviewing.
+  ///
+  /// In en, this message translates to:
+  /// **'Your documents are under review. Please wait for the result.'**
+  String get corpProgressReviewing;
+
+  /// No description provided for @corpProgressReceiptHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm receipt after the mailed documents arrive.'**
+  String get corpProgressReceiptHint;
+
+  /// No description provided for @corpProgressLatest.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest update'**
+  String get corpProgressLatest;
+
+  /// No description provided for @corpProgressSendOriginal.
+  ///
+  /// In en, this message translates to:
+  /// **'Mail your original documents'**
+  String get corpProgressSendOriginal;
+
+  /// No description provided for @corpProgressCheckReceipt.
+  ///
+  /// In en, this message translates to:
+  /// **'Have your documents arrived?'**
+  String get corpProgressCheckReceipt;
+
+  /// No description provided for @corpMailSent.
+  ///
+  /// In en, this message translates to:
+  /// **'I mailed the originals'**
+  String get corpMailSent;
+
+  /// No description provided for @corpMailReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'I received the documents'**
+  String get corpMailReceived;
+
+  /// No description provided for @corpMailDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us about your shipment.'**
+  String get corpMailDetails;
+
+  /// No description provided for @corpMailAfterSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Notify us after mailing'**
+  String get corpMailAfterSend;
+
+  /// No description provided for @corpMailOriginals.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm that you mailed the original registry certificate and, if applicable, the original power of attorney.'**
+  String get corpMailOriginals;
+
+  /// No description provided for @corpMailMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipment details'**
+  String get corpMailMessage;
+
+  /// No description provided for @corpMailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the mailing date, delivery method or tracking number. You can describe the shipment without a tracking number.'**
+  String get corpMailHint;
+
+  /// No description provided for @corpMailAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'After sending'**
+  String get corpMailAfter;
+
+  /// No description provided for @corpMailAfterBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You will return to the updated application status.'**
+  String get corpMailAfterBody;
+
+  /// No description provided for @corpMailSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Report shipment'**
+  String get corpMailSubmit;
+
+  /// No description provided for @corpMailConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm receipt'**
+  String get corpMailConfirmTitle;
+
+  /// No description provided for @corpMailQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Have you received the documents we mailed?'**
+  String get corpMailQuestion;
+
+  /// No description provided for @corpMailConfirmAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm only after receipt'**
+  String get corpMailConfirmAfter;
+
+  /// No description provided for @corpMailConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'After receiving the documents, press the button below to confirm.'**
+  String get corpMailConfirmBody;
+
+  /// No description provided for @corpMailNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get corpMailNote;
+
+  /// No description provided for @corpMailNoteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a note if needed'**
+  String get corpMailNoteHint;
+
+  /// No description provided for @corpMailFinalCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'After you confirm receipt, we will complete the final verification.'**
+  String get corpMailFinalCheck;
+
+  /// No description provided for @corpMailConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm receipt'**
+  String get corpMailConfirm;
+
+  /// No description provided for @corpMailNotYet.
+  ///
+  /// In en, this message translates to:
+  /// **'I have not received them yet'**
+  String get corpMailNotYet;
+
+  /// No description provided for @corpMailUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'This action is no longer available. Check the application status.'**
+  String get corpMailUnavailable;
+
+  /// No description provided for @corpMailUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'The result could not be confirmed. Check the latest application status.'**
+  String get corpMailUnknown;
+
+  /// No description provided for @corpDetailView.
+  ///
+  /// In en, this message translates to:
+  /// **'View application'**
+  String get corpDetailView;
+
+  /// No description provided for @corpDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Corporate member details'**
+  String get corpDetailTitle;
+
+  /// No description provided for @corpDetailInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Review the information submitted with your application.'**
+  String get corpDetailInfo;
+
+  /// No description provided for @corpDetailPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'Representative and contact person'**
+  String get corpDetailPeople;
+
+  /// No description provided for @corpDetailExpand.
+  ///
+  /// In en, this message translates to:
+  /// **'View details'**
+  String get corpDetailExpand;
+
+  /// No description provided for @corpDetailFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted documents'**
+  String get corpDetailFiles;
+
+  /// No description provided for @corpDetailPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview submitted documents'**
+  String get corpDetailPreview;
+
+  /// No description provided for @corpDetailEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No information on file'**
+  String get corpDetailEmpty;
+
+  /// No description provided for @corpDetailCorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct application'**
+  String get corpDetailCorrect;
+
+  /// No description provided for @corpDetailEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct registered information'**
+  String get corpDetailEditTitle;
+
+  /// No description provided for @corpDetailPrefill.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current application details will be prefilled.'**
+  String get corpDetailPrefill;
+
+  /// No description provided for @corpDetailScopeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What you can change'**
+  String get corpDetailScopeTitle;
+
+  /// No description provided for @corpDetailScope.
+  ///
+  /// In en, this message translates to:
+  /// **'You can update company, representative, contact, beneficial owner and document details.'**
+  String get corpDetailScope;
+
+  /// No description provided for @corpDetailBank.
+  ///
+  /// In en, this message translates to:
+  /// **'Your registered bank account is kept when correcting an application.'**
+  String get corpDetailBank;
+
+  /// No description provided for @corpDetailResubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit the details → Review documents → Agree and resubmit'**
+  String get corpDetailResubmit;
+
+  /// No description provided for @corpDetailChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes take effect after you resubmit from the final review screen.'**
+  String get corpDetailChanges;
+
+  /// No description provided for @corpDetailStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start correction'**
+  String get corpDetailStart;
+
+  /// No description provided for @corpDetailHide.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse'**
+  String get corpDetailHide;
+
+  /// No description provided for @corpVerifiedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Corporate verification complete'**
+  String get corpVerifiedTitle;
+
+  /// No description provided for @corpVerifiedThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for completing verification.'**
+  String get corpVerifiedThanks;
+
+  /// No description provided for @corpVerifiedInvestorNote.
+  ///
+  /// In en, this message translates to:
+  /// **'You can now use your corporate investor account.'**
+  String get corpVerifiedInvestorNote;
+
+  /// No description provided for @corpVerifiedNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next steps'**
+  String get corpVerifiedNext;
+
+  /// No description provided for @corpVerifiedFundNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse funds that are accepting applications to get started.'**
+  String get corpVerifiedFundNote;
+
+  /// No description provided for @corpVerifiedType.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration type'**
+  String get corpVerifiedType;
+
+  /// No description provided for @corpVerifiedStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification status'**
+  String get corpVerifiedStatus;
+
+  /// No description provided for @corpVerifiedDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete'**
+  String get corpVerifiedDone;
+
+  /// No description provided for @corpVerifiedView.
+  ///
+  /// In en, this message translates to:
+  /// **'View registered corporate information'**
+  String get corpVerifiedView;
+
+  /// No description provided for @corpVerifiedFunds.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse funds'**
+  String get corpVerifiedFunds;
 }
 
 class _AppLocalizationsDelegate

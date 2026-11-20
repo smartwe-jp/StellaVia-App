@@ -51,3 +51,4 @@ export 'src/app_dropdown_selector.dart';
 
 export 'src/app_scroll_chrome.dart';
 export 'src/app_memory_pdf_view.dart';
+export 'src/app_dashed_border_painter.dart';

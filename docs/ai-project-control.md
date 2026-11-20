@@ -34,6 +34,11 @@ Use three layers of coordination:
 
 ## Current Implemented Areas
 
+### Corporate verification planning (2026-11-19)
+
+- Member information now branches by fresh index-new applicant type. Corporate accounts load the read-only verification detail. Corporate preparation now opens the first four editable steps (company, representative, handler, beneficial owners), with a session-local draft and partial review. Corporate submission and transaction eligibility remain separate tickets.
+- See [Corporate verification roadmap](corporate-verification-roadmap.md) for the supplied API contract, conditional fields, Figma screens, implementation tickets and unresolved backend questions, including existing personal status `5` compatibility.
+
 ### Secondary market restoration (2026-11-05)
 
 - Market filtering, contract metadata, separate buy/sell management, available-holding sale entry and refresh are restored. Buyer and seller electronic contract viewing and signing are connected per application. Deposit operations are deferred.
@@ -313,3 +318,9 @@ My Page 首页在六个快捷入口处结束。首页进入和刷新只读取会
 サマリー里程余额卡的「マイル履歴」已连接真实交易分页接口，支持按月分组、到期日及交易类型；接口与分页规则见 [StellaVia 数据接入](stellavia-data-integration.md)。
 
 宿主ファンド管理采用 Figma SP 的五个业务区块，复用 App 的基金卡片和筛选条。申请、持仓和分红的数据规则见[数据接入记录](stellavia-data-integration.md)。
+
+- 法人认证初回表单已接入 C08「出金口座」，自行修正跳过银行录入。模式判定与联调事项见 `docs/corporate-verification-roadmap.md`。
+- C09/C10 已接法人上传接口，初回与自行修正共用必要书类两页，必填文件上传成功后可进入资料核对。
+- C11 确认页已接法人 submit。提交成功后显示成功页并刷新法人详情，修正申请完全省略 bank。
+- 法人认证成功后显示原本邮寄提示，可从成功页或会员信息进入六节点进度。详情的 verificationStatus、userOps 与 auditLogs 共同决定当前环节。
+- 法人进度页已接 C21/C22 寄件与收件。userOps 控制操作，寄件必填说明，收件经二次确认才写入 review，成功后重新读取详情。

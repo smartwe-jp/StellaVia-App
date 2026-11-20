@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:convert';
 import 'dart:io';
 
@@ -5,12 +6,18 @@ import 'package:core_network/core_network.dart';
 
 import '../envelope/legacy_envelope_codec.dart';
 import 'member_profile_region_dto.dart';
+import 'corporate_detail_dto.dart';
 
 typedef MemberProfileDioForPath = Dio Function(String path);
 
 class MemberProfileApiPaths {
   const MemberProfileApiPaths._();
 
+  static const corporateUpload =
+      '/crowdfunding/corporate-verification/upload/photo';
+  static const corporateReview = '/crowdfunding/corporate-verification/review';
+  static const corporateSubmit = '/crowdfunding/corporate-verification/submit';
+  static const corporateDetail = '/crowdfunding/corporate-verification/detail';
   static const String saveMemberInfo = '/crowdfunding/user/save-member-info';
   static const String uploadPhoto = '/crowdfunding/user/upload/photo';
   // Third-party contract: see fundex/README_API.md (ZipCloud postal lookup).
@@ -44,6 +51,126 @@ class MemberProfileApiClient {
   final String regionByZipPath;
   final String uploadRealPersonPhotoPath;
   final String uploadAvatarPath;
+
+  Future<({String fileId, String url})> uploadCorporateDocument({
+    required String filename,
+    required List<int> bytes,
+    required String mimeType,
+  }) async {
+    const path = MemberProfileApiPaths.corporateUpload;
+    final response = await _dioForPath(path).post<dynamic>(
+      path,
+      data: FormData.fromMap({
+        'file': MultipartFile.fromBytes(
+          bytes,
+          filename: filename,
+          contentType: DioMediaType.parse(mimeType),
+        ),
+      }),
+      options: authRequired(
+        true,
+      ).copyWith(contentType: Headers.multipartFormDataContentType),
+    );
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    _envelopeCodec.assertSuccessIfEnvelope(
+      payload,
+      fallbackMessage: 'Corporate document upload failed.',
+    );
+    final data = _envelopeCodec.toJsonMap(payload['data'] ?? payload);
+    final url = data['url'];
+    if (url is! String || url.trim().isEmpty) {
+      throw const FormatException('Missing corporate document URL');
+    }
+    return (fileId: data['fileId']?.toString() ?? '', url: url.trim());
+  }
+
+  Future<void> submitCorporate(Map<String, dynamic> application) =>
+      _postCorporate(MemberProfileApiPaths.corporateSubmit, application);
+
+  Future<void> reviewCorporate({
+    required int id,
+    required String reviewOp,
+    required String customerMessage,
+  }) {
+    final message = customerMessage.trim();
+    if (id <= 0 ||
+        !const {'CUSTOMER_MAILED', 'RECEIVED'}.contains(reviewOp) ||
+        (reviewOp == 'CUSTOMER_MAILED' && message.isEmpty)) {
+      throw ArgumentError('Invalid corporate member action');
+    }
+    return _postCorporate(MemberProfileApiPaths.corporateReview, {
+      'id': id,
+      'reviewOp': reviewOp,
+      if (message.isNotEmpty) 'customerMessage': message,
+    });
+  }
+
+  Future<void> _postCorporate(
+    String path,
+    Map<String, dynamic> application,
+  ) async {
+    final response = await _dioForPath(
+      path,
+    ).post<dynamic>(path, data: application, options: authRequired(true));
+    const codec = LegacyEnvelopeCodec();
+    final payload = codec.toJsonMap(response.data);
+    if (payload['code'] == null) {
+      throw const FormatException('Missing submission result');
+    }
+    if (!codec.isSuccessCode(payload['code'])) {
+      throw StateError(
+        codec.resolveErrorMessage(
+          payload,
+          fallbackMessage: 'Corporate application rejected.',
+        ),
+      );
+    }
+  }
+
+  Future<Uint8List> fetchCorporateAttachment(String reference) async {
+    final client = _dioForPath(MemberProfileApiPaths.corporateDetail);
+    final base = Uri.parse(client.options.baseUrl);
+    final uri = base.resolve(reference);
+    if (reference.trim().isEmpty ||
+        !(uri.isScheme('https') || uri.isScheme('http')) ||
+        uri.host.isEmpty)
+      throw const FormatException('Invalid attachment URL');
+    final response = await client.getUri<List<int>>(
+      uri,
+      options: authRequired(
+        uri.origin == base.origin,
+      ).copyWith(responseType: ResponseType.bytes),
+    );
+    final bytes = response.data;
+    if (bytes == null || bytes.isEmpty)
+      throw const FormatException('Empty attachment');
+    return bytes is Uint8List ? bytes : Uint8List.fromList(bytes);
+  }
+
+  Future<CorporateDetailDto> fetchCorporateDetail() async {
+    const path = MemberProfileApiPaths.corporateDetail;
+    final response = await _dioForPath(
+      path,
+    ).get<Map<String, dynamic>>(path, options: authRequired(true));
+    const codec = LegacyEnvelopeCodec();
+    final payload = codec.toJsonMap(response.data);
+    if (!codec.isSuccessCode(payload['code'])) {
+      throw StateError(
+        codec.resolveErrorMessage(
+          payload,
+          fallbackMessage: 'Unable to load corporate verification.',
+        ),
+      );
+    }
+    if (!payload.containsKey('data')) {
+      throw const FormatException('Missing corporate detail');
+    }
+    final data = payload['data'];
+    if (data != null && data is! Map) {
+      throw const FormatException('Invalid corporate detail');
+    }
+    return CorporateDetailDto.fromJson(codec.toJsonMap(data));
+  }
 
   Future<List<MemberProfileRegionDto>> fetchRegionsByZip({
     required String zip,

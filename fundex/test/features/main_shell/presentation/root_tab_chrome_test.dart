@@ -46,7 +46,11 @@ void main() {
           ),
           isAuthenticatedProvider.overrideWithValue(const AsyncData(false)),
           appNetworkAvailabilityProvider.overrideWith(
-            (ref) => Stream.value(AppNetworkAvailability.online),
+            (ref) => Stream.value(
+              entry.$1 == 'home'
+                  ? AppNetworkAvailability.offline
+                  : AppNetworkAvailability.online,
+            ),
           ),
           fundProjectListProvider.overrideWith((ref) async => []),
           homeFeaturedHotelsProvider.overrideWith(
@@ -124,11 +128,29 @@ void main() {
         expect(tester.takeException(), isNull);
       }
       if (entry.$1 == 'home') {
+        final banner = find.byType(AppNetworkStatusBar);
+        final list = find.byKey(const Key('home_tab_content'));
+        void expectBannerBelowNavigation() {
+          final rect = tester.getRect(banner);
+          expect(rect.top, tester.getBottomLeft(bar).dy);
+          expect(rect.left, 0);
+          expect(rect.right, 390);
+          expect(rect.bottom, tester.getTopLeft(list).dy);
+        }
+
+        expectBannerBelowNavigation();
+        final scroll = tester.widget<ListView>(list).controller!;
+        await tester.drag(banner, const Offset(0, -50));
+        await tester.pumpAndSettle();
+        expect(scroll.offset, 0);
+        expectBannerBelowNavigation();
         await tester.drag(
           find.byKey(const Key('home_tab_content')),
           const Offset(0, -180),
         );
         await tester.pumpAndSettle();
+        expectBannerBelowNavigation();
+        expect(scroll.offset, greaterThan(0));
         expect(
           container.read(mainShellChromeRevealProvider),
           lessThan(1),

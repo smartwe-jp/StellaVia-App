@@ -36,6 +36,7 @@ abstract class AuthUser with _$AuthUser {
     String? checkEmailTime,
     String? baseinfoTime,
     String? checkBaseinfoTime,
+    String? applicantType,
     int? status,
     String? frontUrl,
     String? backUrl,

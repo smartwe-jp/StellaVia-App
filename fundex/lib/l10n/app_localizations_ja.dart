@@ -959,10 +959,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeInvestmentFlowStep3Body => '厳選ファンドへの投資が可能に';
 
   @override
-  String get homeReminderProfileTitle => '本人情報を入力して出資を始めましょう';
+  String get homeReminderProfileTitle => '認証手続きを完了しましょう';
 
   @override
-  String get homeReminderProfileBody => 'ご投資・ご出金には本人確認が必要です。あと3ステップで完了します。';
+  String get homeReminderProfileBody => '登録内容を確認し、認証手続きを進めてください。';
 
   @override
   String get homeReminderProfileBadge => '要対応';
@@ -7209,4 +7209,592 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get tradeEmptyHistoryBuy => '応募の申込はありません';
+
+  @override
+  String get investorTypeTitle => '投資家タイプの選択';
+
+  @override
+  String get personalInvestor => '個人投資家';
+
+  @override
+  String get corporateInvestor => '法人投資家';
+
+  @override
+  String get personalInvestorNote => 'ご本人名義で申し込みます。';
+
+  @override
+  String get corporateInvestorNote => '法人名義で申し込みます。';
+
+  @override
+  String get corporateVerificationTitle => '法人認証';
+
+  @override
+  String get corporateStatusTitle => '現在の申請状況';
+
+  @override
+  String get corporatePrepareTitle => 'ご用意いただくもの';
+
+  @override
+  String get corporateProcessNote =>
+      '法人情報と書類を提出した後、案内に従って原本を郵送します。当社からの郵送物を受け取り、最終確認が完了すると認証完了です。';
+
+  @override
+  String get corporatePrepareBody =>
+      '登記事項証明書、代表者の本人確認書類、法人名義の国内銀行口座をご用意ください。受任者が手続きする場合は、委任状と受任者の本人確認書類も必要です。';
+
+  @override
+  String get corporateRefresh => '最新の状況を確認';
+
+  @override
+  String corporateStatus(String status) {
+    String _temp0 = intl.Intl.selectLogic(status, {
+      'DRAFT': '未提出',
+      'SUBMITTED': '申請済み',
+      'CUSTOMER_MAILED': '原本発送済み',
+      'APPROVED': '書類審査通過',
+      'ADMIN_MAILED': '当社発送済み',
+      'MAILED': '当社発送済み',
+      'RECEIVED': '受取済み・最終確認待ち',
+      'CONFIRMED': '認証完了',
+      'REJECTED': '差戻し',
+      'EXPIRED': '期限切れ',
+      'other': '状況を確認できません',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get corpFormCompany => '法人情報';
+
+  @override
+  String get corpFormRep => '代表者情報';
+
+  @override
+  String get corpFormHandler => '取引担当者';
+
+  @override
+  String get corpFormStart => '入力を始める';
+
+  @override
+  String get corpFormResume => '入力を再開する';
+
+  @override
+  String get corpFormReview => '入力内容を確認する';
+
+  @override
+  String get corpFormReviewTitle => '入力内容の確認・申込';
+
+  @override
+  String get corpFormBusinessName => '法人名';
+
+  @override
+  String get corpFormBusinessKana => '法人名カナ';
+
+  @override
+  String get corpFormForm => '法人形態';
+
+  @override
+  String get corpFormNumber => '法人番号';
+
+  @override
+  String get corpFormPostal => '郵便番号';
+
+  @override
+  String get corpFormOffice => '本店所在地';
+
+  @override
+  String get corpFormFounded => '設立年月日';
+
+  @override
+  String get corpFormPhone => '電話番号';
+
+  @override
+  String get corpFormBusiness => '事業内容';
+
+  @override
+  String get corpFormPurpose => '取引目的';
+
+  @override
+  String get corpFormOtherPurpose => '具体的な取引目的';
+
+  @override
+  String get corpFormName => '氏名';
+
+  @override
+  String get corpFormKana => '氏名カナ';
+
+  @override
+  String get corpFormRole => '役職';
+
+  @override
+  String get corpFormAddress => '現住所';
+
+  @override
+  String get corpFormBirth => '生年月日';
+
+  @override
+  String get corpFormEmail => 'メールアドレス';
+
+  @override
+  String get corpFormDepartment => '部署・役職';
+
+  @override
+  String get corpFormSelf => '代表者本人';
+
+  @override
+  String get corpFormDelegate => '受任者';
+
+  @override
+  String get corpFormRequired => '必須';
+
+  @override
+  String get corpFormMissing => '入力または選択してください。';
+
+  @override
+  String get corpFormInvalidKana => '全角カタカナで入力してください。';
+
+  @override
+  String get corpFormInvalidNumber => '13桁の数字を入力してください。';
+
+  @override
+  String get corpFormInvalidPostal => '7桁の郵便番号を入力してください。';
+
+  @override
+  String get corpFormInvalidDate => '正しい日付を YYYY-MM-DD で入力してください。';
+
+  @override
+  String get corpFormInvalidEmail => '正しいメールアドレスを入力してください。';
+
+  @override
+  String get corpFormSurplus => '余剰資金の運用';
+
+  @override
+  String get corpFormAsset => '資産運用';
+
+  @override
+  String get corpFormOther => 'その他';
+
+  @override
+  String get corpFormMember => '会員登録';
+
+  @override
+  String get corpFormStep => 'ステップ';
+
+  @override
+  String get corpFormRepHint => '登記上の代表者をご入力ください。';
+
+  @override
+  String get corpFormCompanyHint => '法人について教えてください。';
+
+  @override
+  String get corpFormHandlerHint => 'お手続きを行う方を選択してください。';
+
+  @override
+  String get corpFormSelfHint => '代表者情報を使用します。';
+
+  @override
+  String get corpFormDelegateHint => '代表者から委任を受けて手続きを行います。';
+
+  @override
+  String get corpOwnerTitle => '実質的支配者';
+
+  @override
+  String get corpOwnerHint => '法人を実質的に支配する方についてご回答ください。';
+
+  @override
+  String get corpOwnerDefinition =>
+      '出資・議決権の25%超を保有する方、またはその他の方法で実質的な支配力を持つ方が対象です。';
+
+  @override
+  String get corpOwnerYes => '該当する方がいる';
+
+  @override
+  String get corpOwnerNo => '該当する方はいない';
+
+  @override
+  String get corpOwnerUnknown => 'わからない';
+
+  @override
+  String get corpOwnerMinimum => '実質的支配者を1名以上登録してください。';
+
+  @override
+  String get corpOwnerList => '登録済みの方';
+
+  @override
+  String get corpOwnerAdd => '実質的支配者を追加';
+
+  @override
+  String get corpOwnerEdit => '実質的支配者を編集';
+
+  @override
+  String get corpOwnerDelete => '削除';
+
+  @override
+  String get corpOwnerDeletePrompt => 'この方を削除しますか？';
+
+  @override
+  String get corpOwnerCountry => '国籍・居住国';
+
+  @override
+  String get corpOwnerControl => '支配の形態';
+
+  @override
+  String get corpOwnerOwnership => '出資・議決権の25%超';
+
+  @override
+  String get corpOwnerInfluence => 'その他の実質的な支配力';
+
+  @override
+  String get corpOwnerPercentage => '保有割合';
+
+  @override
+  String get corpOwnerSave => '変更を保存';
+
+  @override
+  String get corpOwnerConfirmAdd => 'この内容で追加';
+
+  @override
+  String get corpBankTitle => '出金口座';
+
+  @override
+  String get corpBankHint => '初回申請時のみ登録します。';
+
+  @override
+  String get corpBankNoticeTitle => '法人名義の国内口座';
+
+  @override
+  String get corpBankNotice => '法人名義の口座情報を正確にご入力ください。';
+
+  @override
+  String get corpBankOtherHint => 'その他の銀行は銀行名を直接入力できます。';
+
+  @override
+  String get corpBankManual => 'その他の銀行名';
+
+  @override
+  String get corpBankSavings => '貯蓄';
+
+  @override
+  String get corpBankBranchError => '支店番号は半角数字3桁で入力してください。';
+
+  @override
+  String get corpBankNumberError => '口座番号は半角数字7桁で入力してください。';
+
+  @override
+  String get corpDocsTitle => '必要書類';
+
+  @override
+  String get corpDocsCompany => '法人の必要書類';
+
+  @override
+  String get corpDocsIdentity => '本人確認書類';
+
+  @override
+  String get corpDocsHint => '鮮明に読み取れる書類をご用意ください。各ファイル10MB以下。';
+
+  @override
+  String get corpDocsRegistry => '登記事項証明書';
+
+  @override
+  String get corpDocsSeal => '法人印鑑証明書';
+
+  @override
+  String get corpDocsDelegation => '委任状';
+
+  @override
+  String get corpDocsEvidence => '実質的支配者の確認資料';
+
+  @override
+  String get corpDocsFront => '表面';
+
+  @override
+  String get corpDocsBack => '裏面';
+
+  @override
+  String get corpDocsType => '証明書の種類';
+
+  @override
+  String get corpDocsSelect => '＋ ファイルを選択';
+
+  @override
+  String get corpDocsReplace => '変更';
+
+  @override
+  String get corpDocsUploading => 'アップロード中…';
+
+  @override
+  String get corpDocsFailed => 'アップロードできませんでした。再試行するか、ファイルを変更してください。';
+
+  @override
+  String get corpDocsInvalid => '形式とサイズをご確認ください。空のファイルは使用できません。';
+
+  @override
+  String get corpDocsMail => '登記事項証明書は発行から6か月以内のものをご用意ください。アップロード後、原本の郵送が必要です。';
+
+  @override
+  String get corpDocsSides => '運転免許証・在留カードは両面、マイナンバーカードは表面のみ提出してください。';
+
+  @override
+  String get corpDocsDiscard => '選択を取り消す';
+
+  @override
+  String get corpReviewHint => '内容をご確認のうえ申請してください。';
+
+  @override
+  String get corpReviewTerms => '同意事項';
+
+  @override
+  String get corpReviewAnti => '反社会的勢力に該当しません';
+
+  @override
+  String get corpReviewAntiBody => '法人・関係者について確認し、申告します。';
+
+  @override
+  String get corpReviewMail => '郵送手続きについて確認しました';
+
+  @override
+  String get corpReviewMailBody => '必要な原本の郵送および郵送物の受取に対応します。';
+
+  @override
+  String get corpReviewSubmit => '同意して申請する';
+
+  @override
+  String get corpReviewEdit => '入力内容を修正';
+
+  @override
+  String get corpReviewMissing => '未添付';
+
+  @override
+  String get corpReviewFailed => '申請が受け付けられませんでした。入力内容をご確認ください。';
+
+  @override
+  String get corpReviewUnknown => '申請結果を確認できませんでした。再申請する前に受付状況をご確認ください。';
+
+  @override
+  String get corpReviewCheck => '受付状況を確認';
+
+  @override
+  String get corpReviewAccepted => '法人認証の申請を受け付けました。';
+
+  @override
+  String get corpReviewUnconfirmed => '受付済みの申請を確認できませんでした。入力内容と同意事項を再確認してください。';
+
+  @override
+  String get corpProgressSuccess => '申請を受け付けました';
+
+  @override
+  String get corpProgressSuccessBody => '法人認証の申請が完了しました。';
+
+  @override
+  String get corpProgressNext => '次の手順をご確認ください';
+
+  @override
+  String get corpProgressMailHint =>
+      '登記事項証明書の原本を、案内された宛先へ郵送してください。委任状を提出した場合は、その原本も同封してください。';
+
+  @override
+  String get corpProgressApplicant => '申請した法人';
+
+  @override
+  String get corpProgressTrading => 'お取引の開始について';
+
+  @override
+  String get corpProgressTradingHint => '書類審査と郵送物の受取後、最終確認が完了するとお申込みいただけます。';
+
+  @override
+  String get corpProgressOpen => '申請状況を確認';
+
+  @override
+  String get corpProgressMyPage => 'マイページに戻る';
+
+  @override
+  String get corpProgressTitle => '法人認証の申請状況';
+
+  @override
+  String get corpProgressCorrection => '申請内容の修正が必要です';
+
+  @override
+  String get corpProgressOriginal => '原本の郵送';
+
+  @override
+  String get corpProgressReview => '書類審査';
+
+  @override
+  String get corpProgressCompanyMail => '当社からの郵送';
+
+  @override
+  String get corpProgressReceipt => '書類の受取';
+
+  @override
+  String get corpProgressFinal => '最終確認完了';
+
+  @override
+  String get corpProgressSubmitted => '提出完了';
+
+  @override
+  String get corpProgressAction => 'あなたの対応が必要です';
+
+  @override
+  String get corpProgressReviewing => '書類を確認しています。審査が完了するまでお待ちください。';
+
+  @override
+  String get corpProgressReceiptHint => '当社からの郵送物を受け取った後、受取完了をご連絡ください。';
+
+  @override
+  String get corpProgressLatest => '最新のお知らせ';
+
+  @override
+  String get corpProgressSendOriginal => '原本を郵送してください';
+
+  @override
+  String get corpProgressCheckReceipt => '郵送物は届きましたか？';
+
+  @override
+  String get corpMailSent => '原本を郵送しました';
+
+  @override
+  String get corpMailReceived => '郵送物を受け取りました';
+
+  @override
+  String get corpMailDetails => '郵送した内容をお知らせください。';
+
+  @override
+  String get corpMailAfterSend => '発送後にご連絡ください';
+
+  @override
+  String get corpMailOriginals =>
+      '登記事項証明書の原本を発送したことをご確認ください。委任状を提出した場合は、その原本も対象です。';
+
+  @override
+  String get corpMailMessage => '発送に関する備考';
+
+  @override
+  String get corpMailHint =>
+      '発送日・配送方法・追跡番号などをご記入ください。追跡番号がない場合も、発送状況をご記入いただけます。';
+
+  @override
+  String get corpMailAfter => '送信後について';
+
+  @override
+  String get corpMailAfterBody => '申請状況に戻り、最新の進捗を表示します。';
+
+  @override
+  String get corpMailSubmit => '郵送済みとして連絡する';
+
+  @override
+  String get corpMailConfirmTitle => '郵送物の受取確認';
+
+  @override
+  String get corpMailQuestion => '当社からの郵送物を受け取りましたか？';
+
+  @override
+  String get corpMailConfirmAfter => '受取後に操作してください';
+
+  @override
+  String get corpMailConfirmBody => '郵送物を受け取ったことを確認し、下のボタンを押してください。';
+
+  @override
+  String get corpMailNote => '備考（任意）';
+
+  @override
+  String get corpMailNoteHint => '連絡事項があればご記入ください';
+
+  @override
+  String get corpMailFinalCheck => '受取のご連絡後、当社の最終確認を行います。受取連絡のみでは認証完了となりません。';
+
+  @override
+  String get corpMailConfirm => '受取完了を連絡する';
+
+  @override
+  String get corpMailNotYet => 'まだ受け取っていない';
+
+  @override
+  String get corpMailUnavailable => 'この操作は現在行えません。申請状況をご確認ください。';
+
+  @override
+  String get corpMailUnknown => '送信結果を確認できませんでした。最新の申請状況をご確認ください。';
+
+  @override
+  String get corpDetailView => '申請内容を見る';
+
+  @override
+  String get corpDetailTitle => '法人の会員情報';
+
+  @override
+  String get corpDetailInfo => '登録した情報をご確認いただけます。';
+
+  @override
+  String get corpDetailPeople => '代表者・取引担当者';
+
+  @override
+  String get corpDetailExpand => '詳しく見る';
+
+  @override
+  String get corpDetailFiles => '提出済み書類';
+
+  @override
+  String get corpDetailPreview => '提出書類をプレビュー';
+
+  @override
+  String get corpDetailEmpty => '登録情報がありません';
+
+  @override
+  String get corpDetailCorrect => '内容を修正する';
+
+  @override
+  String get corpDetailEditTitle => '登録情報を修正する';
+
+  @override
+  String get corpDetailPrefill => '現在の申請内容を引き継ぎます。';
+
+  @override
+  String get corpDetailScopeTitle => '変更する内容をご確認ください';
+
+  @override
+  String get corpDetailScope => '法人情報・代表者・担当者・実質的支配者・提出書類を修正できます。';
+
+  @override
+  String get corpDetailBank => '登録済みの口座情報は、この手続きでは変更できません。';
+
+  @override
+  String get corpDetailResubmit => '内容を修正 → 書類を確認 → 同意して再提出';
+
+  @override
+  String get corpDetailChanges => '変更内容は、最後の確認画面から再提出するまで反映されません。';
+
+  @override
+  String get corpDetailStart => '修正を始める';
+
+  @override
+  String get corpDetailHide => '閉じる';
+
+  @override
+  String get corpVerifiedTitle => '法人認証が完了しました';
+
+  @override
+  String get corpVerifiedThanks => 'お手続きいただきありがとうございます。';
+
+  @override
+  String get corpVerifiedInvestorNote => '法人投資家としてご利用いただけます。';
+
+  @override
+  String get corpVerifiedNext => '次のステップ';
+
+  @override
+  String get corpVerifiedFundNote => '募集中のファンドをご覧いただき、お申込みに進めます。';
+
+  @override
+  String get corpVerifiedType => '登録種別';
+
+  @override
+  String get corpVerifiedStatus => '認証状況';
+
+  @override
+  String get corpVerifiedDone => '完了';
+
+  @override
+  String get corpVerifiedView => '登録した法人情報を見る';
+
+  @override
+  String get corpVerifiedFunds => 'ファンドを見る';
 }

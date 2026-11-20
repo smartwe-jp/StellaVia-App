@@ -1024,11 +1024,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Invest in curated fund opportunities';
 
   @override
-  String get homeReminderProfileTitle => 'Complete your profile to get started';
+  String get homeReminderProfileTitle => 'Complete your verification';
 
   @override
   String get homeReminderProfileBody =>
-      'Identity verification required. 3 steps remaining.';
+      'Check your registration details and continue verification.';
 
   @override
   String get homeReminderProfileBadge => 'Action needed';
@@ -7582,4 +7582,624 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tradeEmptyHistoryBuy => 'No buy applications';
+
+  @override
+  String get investorTypeTitle => 'Choose an investor type';
+
+  @override
+  String get personalInvestor => 'Individual investor';
+
+  @override
+  String get corporateInvestor => 'Corporate investor';
+
+  @override
+  String get personalInvestorNote => 'Apply in your own name.';
+
+  @override
+  String get corporateInvestorNote => 'Apply on behalf of a company.';
+
+  @override
+  String get corporateVerificationTitle => 'Corporate verification';
+
+  @override
+  String get corporateStatusTitle => 'Application status';
+
+  @override
+  String get corporatePrepareTitle => 'What to prepare';
+
+  @override
+  String get corporateProcessNote =>
+      'After submitting company information and documents, follow the instructions to mail the originals. Verification is complete after receipt of our letter and final confirmation.';
+
+  @override
+  String get corporatePrepareBody =>
+      'Prepare the company registration certificate, representative’s ID and domestic corporate bank account details. Delegates also need a letter of authorization and their own ID.';
+
+  @override
+  String get corporateRefresh => 'Refresh status';
+
+  @override
+  String corporateStatus(String status) {
+    String _temp0 = intl.Intl.selectLogic(status, {
+      'DRAFT': 'Not submitted',
+      'SUBMITTED': 'Submitted',
+      'CUSTOMER_MAILED': 'Originals mailed',
+      'APPROVED': 'Document review passed',
+      'ADMIN_MAILED': 'Letter dispatched',
+      'MAILED': 'Letter dispatched',
+      'RECEIVED': 'Received, awaiting final confirmation',
+      'CONFIRMED': 'Verified',
+      'REJECTED': 'Changes required',
+      'EXPIRED': 'Expired',
+      'other': 'Status unavailable',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get corpFormCompany => 'Company information';
+
+  @override
+  String get corpFormRep => 'Representative information';
+
+  @override
+  String get corpFormHandler => 'Transaction handler';
+
+  @override
+  String get corpFormStart => 'Start application';
+
+  @override
+  String get corpFormResume => 'Resume entry';
+
+  @override
+  String get corpFormReview => 'Review entries';
+
+  @override
+  String get corpFormReviewTitle => 'Review and submit';
+
+  @override
+  String get corpFormBusinessName => 'Registered company name';
+
+  @override
+  String get corpFormBusinessKana => 'Company name in katakana';
+
+  @override
+  String get corpFormForm => 'Legal form';
+
+  @override
+  String get corpFormNumber => 'Corporate number';
+
+  @override
+  String get corpFormPostal => 'Postal code';
+
+  @override
+  String get corpFormOffice => 'Registered office address';
+
+  @override
+  String get corpFormFounded => 'Date established';
+
+  @override
+  String get corpFormPhone => 'Phone number';
+
+  @override
+  String get corpFormBusiness => 'Business activities';
+
+  @override
+  String get corpFormPurpose => 'Transaction purpose';
+
+  @override
+  String get corpFormOtherPurpose => 'Describe the purpose';
+
+  @override
+  String get corpFormName => 'Full name';
+
+  @override
+  String get corpFormKana => 'Name in katakana';
+
+  @override
+  String get corpFormRole => 'Position';
+
+  @override
+  String get corpFormAddress => 'Residential address';
+
+  @override
+  String get corpFormBirth => 'Date of birth';
+
+  @override
+  String get corpFormEmail => 'Email address';
+
+  @override
+  String get corpFormDepartment => 'Department and position';
+
+  @override
+  String get corpFormSelf => 'The representative';
+
+  @override
+  String get corpFormDelegate => 'An authorized delegate';
+
+  @override
+  String get corpFormRequired => 'Required';
+
+  @override
+  String get corpFormMissing => 'Enter or select a value.';
+
+  @override
+  String get corpFormInvalidKana => 'Use full-width katakana.';
+
+  @override
+  String get corpFormInvalidNumber => 'Enter 13 digits.';
+
+  @override
+  String get corpFormInvalidPostal => 'Enter a 7-digit postal code.';
+
+  @override
+  String get corpFormInvalidDate => 'Enter a valid date as YYYY-MM-DD.';
+
+  @override
+  String get corpFormInvalidEmail => 'Enter a valid email address.';
+
+  @override
+  String get corpFormSurplus => 'Invest surplus funds';
+
+  @override
+  String get corpFormAsset => 'Asset management';
+
+  @override
+  String get corpFormOther => 'Other';
+
+  @override
+  String get corpFormMember => 'Registration';
+
+  @override
+  String get corpFormStep => 'Step';
+
+  @override
+  String get corpFormRepHint =>
+      'Enter the representative listed on the company register.';
+
+  @override
+  String get corpFormCompanyHint => 'Enter the registered company details.';
+
+  @override
+  String get corpFormHandlerHint => 'Choose who will handle the application.';
+
+  @override
+  String get corpFormSelfHint => 'Use the representative’s information.';
+
+  @override
+  String get corpFormDelegateHint =>
+      'A delegate acts on the representative’s authority.';
+
+  @override
+  String get corpOwnerTitle => 'Beneficial owners';
+
+  @override
+  String get corpOwnerHint => 'Tell us who ultimately controls the company.';
+
+  @override
+  String get corpOwnerDefinition =>
+      'Include people who hold more than 25% of the equity or voting rights, or exercise material influence through other means.';
+
+  @override
+  String get corpOwnerYes => 'There are beneficial owners';
+
+  @override
+  String get corpOwnerNo => 'There are no beneficial owners';
+
+  @override
+  String get corpOwnerUnknown => 'Unknown';
+
+  @override
+  String get corpOwnerMinimum => 'Add at least one beneficial owner.';
+
+  @override
+  String get corpOwnerList => 'People added';
+
+  @override
+  String get corpOwnerAdd => 'Add a beneficial owner';
+
+  @override
+  String get corpOwnerEdit => 'Edit beneficial owner';
+
+  @override
+  String get corpOwnerDelete => 'Delete';
+
+  @override
+  String get corpOwnerDeletePrompt => 'Remove this person?';
+
+  @override
+  String get corpOwnerCountry => 'Nationality / country of residence';
+
+  @override
+  String get corpOwnerControl => 'Type of control';
+
+  @override
+  String get corpOwnerOwnership => 'More than 25% of equity or voting rights';
+
+  @override
+  String get corpOwnerInfluence => 'Other material influence';
+
+  @override
+  String get corpOwnerPercentage => 'Ownership percentage';
+
+  @override
+  String get corpOwnerSave => 'Save changes';
+
+  @override
+  String get corpOwnerConfirmAdd => 'Add person';
+
+  @override
+  String get corpBankTitle => 'Withdrawal account';
+
+  @override
+  String get corpBankHint =>
+      'Register this account with your initial application.';
+
+  @override
+  String get corpBankNoticeTitle => 'Domestic corporate account';
+
+  @override
+  String get corpBankNotice =>
+      'Enter the details of a Japanese bank account held in the company’s name.';
+
+  @override
+  String get corpBankOtherHint => 'Select Other to enter your bank name.';
+
+  @override
+  String get corpBankManual => 'Other bank name';
+
+  @override
+  String get corpBankSavings => 'Savings';
+
+  @override
+  String get corpBankBranchError => 'Enter a three-digit branch code.';
+
+  @override
+  String get corpBankNumberError => 'Enter a seven-digit account number.';
+
+  @override
+  String get corpDocsTitle => 'Required documents';
+
+  @override
+  String get corpDocsCompany => 'Company documents';
+
+  @override
+  String get corpDocsIdentity => 'Identity documents';
+
+  @override
+  String get corpDocsHint => 'Choose clearly legible files, up to 10 MB each.';
+
+  @override
+  String get corpDocsRegistry => 'Certificate of registered matters';
+
+  @override
+  String get corpDocsSeal => 'Corporate seal certificate';
+
+  @override
+  String get corpDocsDelegation => 'Power of attorney';
+
+  @override
+  String get corpDocsEvidence => 'Beneficial ownership evidence';
+
+  @override
+  String get corpDocsFront => 'Front';
+
+  @override
+  String get corpDocsBack => 'Back';
+
+  @override
+  String get corpDocsType => 'Document type';
+
+  @override
+  String get corpDocsSelect => '＋ Select file';
+
+  @override
+  String get corpDocsReplace => 'Replace';
+
+  @override
+  String get corpDocsUploading => 'Uploading…';
+
+  @override
+  String get corpDocsFailed => 'Upload failed. Retry or choose another file.';
+
+  @override
+  String get corpDocsInvalid =>
+      'Check the file format and size. Empty files cannot be used.';
+
+  @override
+  String get corpDocsMail =>
+      'Upload a registry certificate issued within the last six months and mail the original after applying.';
+
+  @override
+  String get corpDocsSides =>
+      'Upload both sides of a driver’s license or residence card. For a My Number card, upload only the front.';
+
+  @override
+  String get corpDocsDiscard => 'Discard selection';
+
+  @override
+  String get corpReviewHint =>
+      'Review the details before submitting your application.';
+
+  @override
+  String get corpReviewTerms => 'Required declarations';
+
+  @override
+  String get corpReviewAnti =>
+      'The company and related parties are not affiliated with antisocial forces.';
+
+  @override
+  String get corpReviewAntiBody =>
+      'I have verified this declaration for the company and its related parties.';
+
+  @override
+  String get corpReviewMail => 'I acknowledge the mailing procedure.';
+
+  @override
+  String get corpReviewMailBody =>
+      'I will mail the required originals and receive the mailed documents.';
+
+  @override
+  String get corpReviewSubmit => 'Agree and submit';
+
+  @override
+  String get corpReviewEdit => 'Edit application details';
+
+  @override
+  String get corpReviewMissing => 'Not attached';
+
+  @override
+  String get corpReviewFailed =>
+      'The application was declined. Please review your details.';
+
+  @override
+  String get corpReviewUnknown =>
+      'The submission result is unknown. Check the application status before submitting again.';
+
+  @override
+  String get corpReviewCheck => 'Check application status';
+
+  @override
+  String get corpReviewAccepted =>
+      'Your corporate verification application has been received.';
+
+  @override
+  String get corpReviewUnconfirmed =>
+      'No submitted application was found. Review the details and declarations before trying again.';
+
+  @override
+  String get corpProgressSuccess => 'Application received';
+
+  @override
+  String get corpProgressSuccessBody =>
+      'Your corporate verification application has been submitted.';
+
+  @override
+  String get corpProgressNext => 'Next steps';
+
+  @override
+  String get corpProgressMailHint =>
+      'Mail the original registry certificate to the address provided in your instructions. If you submitted a power of attorney, enclose its original as well.';
+
+  @override
+  String get corpProgressApplicant => 'Applicant company';
+
+  @override
+  String get corpProgressTrading => 'When you can invest';
+
+  @override
+  String get corpProgressTradingHint =>
+      'You can apply to invest after document review, receipt of the mailed documents and final verification.';
+
+  @override
+  String get corpProgressOpen => 'Check application status';
+
+  @override
+  String get corpProgressMyPage => 'Back to My Page';
+
+  @override
+  String get corpProgressTitle => 'Corporate verification status';
+
+  @override
+  String get corpProgressCorrection => 'Your application needs changes';
+
+  @override
+  String get corpProgressOriginal => 'Mail originals';
+
+  @override
+  String get corpProgressReview => 'Document review';
+
+  @override
+  String get corpProgressCompanyMail => 'Documents mailed by us';
+
+  @override
+  String get corpProgressReceipt => 'Receive documents';
+
+  @override
+  String get corpProgressFinal => 'Final verification';
+
+  @override
+  String get corpProgressSubmitted => 'Application submitted';
+
+  @override
+  String get corpProgressAction => 'Action required';
+
+  @override
+  String get corpProgressReviewing =>
+      'Your documents are under review. Please wait for the result.';
+
+  @override
+  String get corpProgressReceiptHint =>
+      'Please confirm receipt after the mailed documents arrive.';
+
+  @override
+  String get corpProgressLatest => 'Latest update';
+
+  @override
+  String get corpProgressSendOriginal => 'Mail your original documents';
+
+  @override
+  String get corpProgressCheckReceipt => 'Have your documents arrived?';
+
+  @override
+  String get corpMailSent => 'I mailed the originals';
+
+  @override
+  String get corpMailReceived => 'I received the documents';
+
+  @override
+  String get corpMailDetails => 'Tell us about your shipment.';
+
+  @override
+  String get corpMailAfterSend => 'Notify us after mailing';
+
+  @override
+  String get corpMailOriginals =>
+      'Confirm that you mailed the original registry certificate and, if applicable, the original power of attorney.';
+
+  @override
+  String get corpMailMessage => 'Shipment details';
+
+  @override
+  String get corpMailHint =>
+      'Enter the mailing date, delivery method or tracking number. You can describe the shipment without a tracking number.';
+
+  @override
+  String get corpMailAfter => 'After sending';
+
+  @override
+  String get corpMailAfterBody =>
+      'You will return to the updated application status.';
+
+  @override
+  String get corpMailSubmit => 'Report shipment';
+
+  @override
+  String get corpMailConfirmTitle => 'Confirm receipt';
+
+  @override
+  String get corpMailQuestion => 'Have you received the documents we mailed?';
+
+  @override
+  String get corpMailConfirmAfter => 'Confirm only after receipt';
+
+  @override
+  String get corpMailConfirmBody =>
+      'After receiving the documents, press the button below to confirm.';
+
+  @override
+  String get corpMailNote => 'Note (optional)';
+
+  @override
+  String get corpMailNoteHint => 'Add a note if needed';
+
+  @override
+  String get corpMailFinalCheck =>
+      'After you confirm receipt, we will complete the final verification.';
+
+  @override
+  String get corpMailConfirm => 'Confirm receipt';
+
+  @override
+  String get corpMailNotYet => 'I have not received them yet';
+
+  @override
+  String get corpMailUnavailable =>
+      'This action is no longer available. Check the application status.';
+
+  @override
+  String get corpMailUnknown =>
+      'The result could not be confirmed. Check the latest application status.';
+
+  @override
+  String get corpDetailView => 'View application';
+
+  @override
+  String get corpDetailTitle => 'Corporate member details';
+
+  @override
+  String get corpDetailInfo =>
+      'Review the information submitted with your application.';
+
+  @override
+  String get corpDetailPeople => 'Representative and contact person';
+
+  @override
+  String get corpDetailExpand => 'View details';
+
+  @override
+  String get corpDetailFiles => 'Submitted documents';
+
+  @override
+  String get corpDetailPreview => 'Preview submitted documents';
+
+  @override
+  String get corpDetailEmpty => 'No information on file';
+
+  @override
+  String get corpDetailCorrect => 'Correct application';
+
+  @override
+  String get corpDetailEditTitle => 'Correct registered information';
+
+  @override
+  String get corpDetailPrefill =>
+      'Your current application details will be prefilled.';
+
+  @override
+  String get corpDetailScopeTitle => 'What you can change';
+
+  @override
+  String get corpDetailScope =>
+      'You can update company, representative, contact, beneficial owner and document details.';
+
+  @override
+  String get corpDetailBank =>
+      'Your registered bank account is kept when correcting an application.';
+
+  @override
+  String get corpDetailResubmit =>
+      'Edit the details → Review documents → Agree and resubmit';
+
+  @override
+  String get corpDetailChanges =>
+      'Changes take effect after you resubmit from the final review screen.';
+
+  @override
+  String get corpDetailStart => 'Start correction';
+
+  @override
+  String get corpDetailHide => 'Collapse';
+
+  @override
+  String get corpVerifiedTitle => 'Corporate verification complete';
+
+  @override
+  String get corpVerifiedThanks => 'Thank you for completing verification.';
+
+  @override
+  String get corpVerifiedInvestorNote =>
+      'You can now use your corporate investor account.';
+
+  @override
+  String get corpVerifiedNext => 'Next steps';
+
+  @override
+  String get corpVerifiedFundNote =>
+      'Browse funds that are accepting applications to get started.';
+
+  @override
+  String get corpVerifiedType => 'Registration type';
+
+  @override
+  String get corpVerifiedStatus => 'Verification status';
+
+  @override
+  String get corpVerifiedDone => 'Complete';
+
+  @override
+  String get corpVerifiedView => 'View registered corporate information';
+
+  @override
+  String get corpVerifiedFunds => 'Browse funds';
 }

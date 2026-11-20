@@ -9,6 +9,10 @@
 - Guest home: brand/login header, service teaser, existing lists, simulation teaser, rank teaser and a fixed registration action above the existing tab bar.
 - Remove the old hero, registration campaign, verification reminder feed, attraction section, investment flow and license/footer from this page only. Their external widgets, routes, verification guards and other feature implementations remain available.
 
+## Verification reminders (2026-11-20)
+
+Signed-in home shows the personal/corporate profile reminder and separate email and phone reminders. Email follows the existing settings verification state. Phone appears when the login-index response has an empty phone number. Each contact reminder opens its corresponding verification page in Settings.
+
 ## Pending features
 
 Miles booking remains a localized “coming soon” action. Miles balance, public rank rules and simulation are now integrated as recorded in the dated sections below; booking eligibility is not implemented.

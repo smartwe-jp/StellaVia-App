@@ -22,6 +22,9 @@ import '../../../notifications/presentation/providers/notifications_providers.da
 import '../widgets/home_redesign_header.dart';
 import '../widgets/home_brand_intro.dart';
 import '../widgets/home_quick_actions.dart';
+import '../widgets/home_verification_reminder.dart';
+import '../widgets/home_contact_verification_reminders.dart';
+import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 import '../widgets/home_miles_data_sections.dart';
 import '../widgets/home_miles_refresh_scope.dart';
 import '../providers/home_miles_providers.dart';
@@ -102,6 +105,19 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                 ),
               ),
             ),
+            if (networkAccessState == AppNetworkAccessState.denied ||
+                (_isApplePlatform &&
+                    networkAvailability == AppNetworkAvailability.offline))
+              AppNetworkStatusBar(
+                title: l10n.networkAccessDeniedBannerTitle,
+                message: l10n.networkAccessDeniedBannerMessage,
+                icon: Icons.wifi_find_outlined,
+              )
+            else if (networkAvailability == AppNetworkAvailability.offline)
+              AppNetworkStatusBar(
+                title: l10n.networkOfflineBannerTitle,
+                message: l10n.networkOfflineBannerMessage,
+              ),
             Expanded(
               child: MainShellTabRefreshScope(
                 tabIndex: MainShellTab.home.index,
@@ -122,22 +138,10 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            if (networkAccessState ==
-                                    AppNetworkAccessState.denied ||
-                                (_isApplePlatform &&
-                                    networkAvailability ==
-                                        AppNetworkAvailability.offline))
-                              AppNetworkStatusBar(
-                                title: l10n.networkAccessDeniedBannerTitle,
-                                message: l10n.networkAccessDeniedBannerMessage,
-                                icon: Icons.wifi_find_outlined,
-                              )
-                            else if (networkAvailability ==
-                                AppNetworkAvailability.offline)
-                              AppNetworkStatusBar(
-                                title: l10n.networkOfflineBannerTitle,
-                                message: l10n.networkOfflineBannerMessage,
-                              ),
+                            if (isAuthenticated) ...[
+                              const HomeVerificationReminder(),
+                              const HomeContactVerificationReminders(),
+                            ],
                             HomeBrandIntro(
                               ranks: homeRankNames(
                                 ref.watch(homeMilesRulesProvider).data,
@@ -226,6 +230,11 @@ bool get _isApplePlatform =>
 
 Future<void> _refreshHomeOverviewTab(WidgetRef ref) async {
   if (shouldSkipAppNetworkRefresh(ref)) return;
+  ref.invalidate(homeVerificationReminderProvider);
+  if (ref.read(isAuthenticatedProvider).asData?.value == true) {
+    ref.invalidate(settingsRemoteVerificationStatusProvider);
+    ref.invalidate(settingsEmailVerifiedProvider);
+  }
   ref.invalidate(fundProjectListProvider);
   ref.invalidate(memberProfileDetailsProvider);
   await Future.wait<void>([

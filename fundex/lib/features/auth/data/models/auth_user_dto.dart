@@ -38,6 +38,7 @@ extension AuthUserDtoMapper on AuthUserDto {
       checkEmailTime: checkEmailTime,
       baseinfoTime: baseinfoTime,
       checkBaseinfoTime: checkBaseinfoTime,
+      applicantType: applicantType,
       status: status,
       frontUrl: frontUrl,
       backUrl: backUrl,

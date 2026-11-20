@@ -1403,3 +1403,16 @@ Hotel临时来源：2026-10-14谷町君开发小组确认 `POST /pms/order/room/
 按酒店团队提供的接口契约，酒店集群接收 `POST /pms/bookingorder/stella/save`。请求头为 `Content-Type: application/json`、`Authorization: Bearer {Stella用户Token}`、`x-client-type: Stellavia-App`。请求体直接复用 `/pms/bookingorder/save/v2` 的完整 JSON，含原订单金额、房型及逐房入住人。确认页展示的里程取人数报价的 `pointsRequired`。
 
 成功示例为 `{"msg":"success","code":200,"data":1232815}`。客户端将 `data` 作为 MrT 订单号进入预订结果页。
+
+
+### 法人认证 · 会员信息入口（2026-11-19）
+
+进入会员信息时使用 OA 集群、登录凭证和成功码 200。先 GET `/crowdfunding/user/index-new`，读取根层或 baseInfo 的 applicantType 与 status。仅服务端已标记 corporate 才继续 GET `/crowdfunding/corporate-verification/detail`。入口读取 CorporateDetailVO.application.companyName 和 verificationStatus；首次选择法人仅打开材料准备页。详细状态、界面与待接入的写操作见[法人认证路线图](../docs/corporate-verification-roadmap.md)。
+
+法人材料上传使用 `POST /crowdfunding/corporate-verification/upload/photo`，要求登录，multipart 字段名为 `file`。草稿保存响应的 url 和可选 fileId。本人证件的 fileId 使用所选证件类型码 11/12/13。单文件客户端上限为 10 MiB。
+
+法人申请与自行修正均通过登录态 JSON POST `/crowdfunding/corporate-verification/submit`。两项声明均需同意，初回提交国内银行账户，自行修正省略 bank。业务成功码 200 后重新 GET 法人详情。
+
+法人寄件、收件使用登录态 JSON POST `/crowdfunding/corporate-verification/review`。id 优先取 detail.application.id，其次取 detail.id；reviewOp 取 userOps 允许的 CUSTOMER_MAILED 或 RECEIVED。寄件的 customerMessage 必填，收件备注可省略。业务成功后刷新详情，按返回的 userOps 和状态更新操作及进度。
+
+法人申请详情使用同一 detail 响应回填 application、representative、handler、beneficialOwners、bank 和 documents。修正前保留原附件 URL 和证件类型，提交前重新读取详情以核对申请 ID 和可修正状态。

@@ -677,6 +677,15 @@ class AuthApiClient {
       ...((baseInfo.isNotEmpty ? baseInfo : payload)),
     };
 
+    final rootType = _toNormalizedString(payload['applicantType']);
+    final baseType = _toNormalizedString(baseInfo['applicantType']);
+    // Either explicit corporate marker locks the entry to the corporate flow.
+    normalized['applicantType'] =
+        rootType == 'corporate' || baseType == 'corporate'
+        ? 'corporate'
+        : rootType ?? baseType;
+    if (payload['status'] != null) normalized['status'] = payload['status'];
+
     if (_toNormalizedString(normalized['frontUrl']) == null) {
       final frontImage = _toNormalizedString(
         identityInfo['documentFrontImage'],

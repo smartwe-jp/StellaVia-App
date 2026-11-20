@@ -59,7 +59,7 @@ import '../../features/investment/presentation/support/fund_lottery_apply_step.d
 import '../../features/main_shell/presentation/pages/main_shell_page.dart';
 import '../../features/member_profile/presentation/pages/member_avatar_page.dart';
 import '../../features/member_profile/presentation/pages/member_profile_edit_flow_page.dart';
-import '../../features/member_profile/presentation/pages/member_profile_overview_page.dart';
+import '../../features/member_profile/presentation/pages/verification_entry_page.dart';
 import '../../features/member_profile/presentation/pages/my_page_active_fund_detail_page.dart';
 import '../../features/member_profile/presentation/pages/my_page_secondary_market_sell_confirm_page.dart';
 import '../../features/member_profile/presentation/pages/my_page_secondary_market_sell_order_page.dart';
@@ -1040,7 +1040,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/member-profile/edit',
         builder: (BuildContext context, GoRouterState state) {
-          return const MemberProfileOverviewPage();
+          return const VerificationEntryPage();
         },
         routes: <RouteBase>[
           GoRoute(

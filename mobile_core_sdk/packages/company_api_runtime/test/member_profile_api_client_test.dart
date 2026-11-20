@@ -69,6 +69,137 @@ void main() {
     });
 
     test(
+      'attachment bytes require credentials only on the API origin',
+      () async {
+        final requests = <RequestOptions>[];
+        final api = MemberProfileApiClient(
+          dioForPath: (_) => _buildDio((options) async {
+            requests.add(options);
+            return ResponseBody.fromBytes([37, 80, 68, 70, 45], 200);
+          }),
+        );
+        for (final url in [
+          '/files/registry',
+          'https://cdn.example.com/files/registry',
+        ]) {
+          expect(await api.fetchCorporateAttachment(url), [37, 80, 68, 70, 45]);
+        }
+        expect(requests.map((o) => o.extra['auth_required']), [true, false]);
+        await expectLater(
+          api.fetchCorporateAttachment('file:///private/document'),
+          throwsFormatException,
+        );
+        expect(requests, hasLength(2));
+      },
+    );
+    test(
+      'member review validates and sends authenticated mail actions',
+      () async {
+        final requests = <dynamic>[];
+        var body = '{"code":200}';
+        final api = MemberProfileApiClient(
+          dioForPath: (_) => _buildDio((options) async {
+            expect(options.path, MemberProfileApiPaths.corporateReview);
+            expect(options.method, 'POST');
+            expect(options.extra['auth_required'], true);
+            requests.add(options.data);
+            return _jsonOk(body);
+          }),
+        );
+        expect(
+          () => api.reviewCorporate(
+            id: 7,
+            reviewOp: 'CUSTOMER_MAILED',
+            customerMessage: '  ',
+          ),
+          throwsArgumentError,
+        );
+        expect(
+          () => api.reviewCorporate(
+            id: 7,
+            reviewOp: 'APPROVED',
+            customerMessage: 'no',
+          ),
+          throwsArgumentError,
+        );
+        await api.reviewCorporate(
+          id: 7,
+          reviewOp: 'CUSTOMER_MAILED',
+          customerMessage: '  本日郵送しました  ',
+        );
+        await api.reviewCorporate(
+          id: 7,
+          reviewOp: 'RECEIVED',
+          customerMessage: '',
+        );
+        expect(requests, [
+          {
+            'id': 7,
+            'reviewOp': 'CUSTOMER_MAILED',
+            'customerMessage': '本日郵送しました',
+          },
+          {'id': 7, 'reviewOp': 'RECEIVED'},
+        ]);
+        body = '{"code":403}';
+        await expectLater(
+          api.reviewCorporate(
+            id: 7,
+            reviewOp: 'RECEIVED',
+            customerMessage: 'ok',
+          ),
+          throwsStateError,
+        );
+      },
+    );
+
+    test(
+      'corporate submit sends authenticated JSON and requires a successful business code',
+      () async {
+        var body = '{"code":200,"data":{"verificationStatus":"SUBMITTED"}}';
+        final app = {
+          'applicantType': 'corporate',
+          'declarations': {'antiSocial': true, 'mail': true},
+        };
+        final api = MemberProfileApiClient(
+          dioForPath: (_) => _buildDio((options) async {
+            expect(options.path, MemberProfileApiPaths.corporateSubmit);
+            expect(options.method, 'POST');
+            expect(options.extra['auth_required'], true);
+            expect(options.data, app);
+            return _jsonOk(body);
+          }),
+        );
+        await api.submitCorporate(app);
+        body = '{"code":400,"msg":"invalid documents"}';
+        await expectLater(api.submitCorporate(app), throwsStateError);
+        body = '{}';
+        await expectLater(api.submitCorporate(app), throwsFormatException);
+      },
+    );
+    test(
+      'uploads corporate material with auth and reads its file reference',
+      () async {
+        final dio = _buildDio((options) async {
+          expect(options.path, MemberProfileApiPaths.corporateUpload);
+          expect(options.method, 'POST');
+          expect(options.extra['auth_required'], isTrue);
+          final part = (options.data as FormData).files.single;
+          expect(part.key, 'file');
+          expect(part.value.filename, 'registry.pdf');
+          expect(part.value.contentType.toString(), 'application/pdf');
+          return _jsonOk('{"code":200,"data":{"fileId":17,"url":"/files/17"}}');
+        });
+        final result = await MemberProfileApiClient(dioForPath: (_) => dio)
+            .uploadCorporateDocument(
+              filename: 'registry.pdf',
+              bytes: '%PDF-test'.codeUnits,
+              mimeType: 'application/pdf',
+            );
+        expect(result, (fileId: '17', url: '/files/17'));
+      },
+    );
+
+    test(
       'fetchRegionsByZip maps ZipCloud address fields to existing regions',
       () async {
         final dio = _buildDio((options) async {

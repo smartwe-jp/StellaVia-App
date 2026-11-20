@@ -60,6 +60,8 @@ dependencies:
   material_symbols_icons: ^4.2951.0
   flutter_svg: ^2.3.2
   hand_signature: ^3.0.3
+  file_selector: ^1.1.0
+  cupertino_icons: ^1.0.9
 
 dev_dependencies:
   flutter_test:

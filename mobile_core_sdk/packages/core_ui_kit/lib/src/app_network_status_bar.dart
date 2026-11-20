@@ -30,7 +30,8 @@ class AppNetworkStatusBar extends StatelessWidget {
         border: Border(bottom: BorderSide(color: borderColor)),
       ),
       child: SafeArea(
-        top: true,
+        top: false,
+        bottom: false,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
           child: Row(
@@ -49,6 +50,7 @@ class AppNetworkStatusBar extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(

@@ -950,10 +950,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeInvestmentFlowStep3Body => '即可投资严选基金';
 
   @override
-  String get homeReminderProfileTitle => '填写个人资料以开始出资';
+  String get homeReminderProfileTitle => '请完成认证';
 
   @override
-  String get homeReminderProfileBody => '出资与出金需要完成身份验证，还差3步即可完成。';
+  String get homeReminderProfileBody => '请确认登记资料，继续办理认证。';
 
   @override
   String get homeReminderProfileBadge => '待处理';
@@ -7146,6 +7146,590 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tradeEmptyHistoryBuy => '暂无认购申请';
+
+  @override
+  String get investorTypeTitle => '选择投资者类型';
+
+  @override
+  String get personalInvestor => '个人投资者';
+
+  @override
+  String get corporateInvestor => '法人投资者';
+
+  @override
+  String get personalInvestorNote => '以本人名义申请。';
+
+  @override
+  String get corporateInvestorNote => '以法人名义申请。';
+
+  @override
+  String get corporateVerificationTitle => '法人认证';
+
+  @override
+  String get corporateStatusTitle => '当前申请状态';
+
+  @override
+  String get corporatePrepareTitle => '需要准备的资料';
+
+  @override
+  String get corporateProcessNote =>
+      '提交法人资料和文件后，请按指引邮寄原件。收到公司寄送的信件并完成最终确认后，法人认证才完成。';
+
+  @override
+  String get corporatePrepareBody =>
+      '请准备登记事项证明书、代表者身份证件和法人名义的日本国内银行账户。委托他人办理时，还需要委任状和受任者身份证件。';
+
+  @override
+  String get corporateRefresh => '刷新状态';
+
+  @override
+  String corporateStatus(String status) {
+    String _temp0 = intl.Intl.selectLogic(status, {
+      'DRAFT': '未提交',
+      'SUBMITTED': '已提交',
+      'CUSTOMER_MAILED': '原件已寄出',
+      'APPROVED': '资料审核通过',
+      'ADMIN_MAILED': '公司已寄出',
+      'MAILED': '公司已寄出',
+      'RECEIVED': '已收件，等待最终确认',
+      'CONFIRMED': '认证完成',
+      'REJECTED': '已退回',
+      'EXPIRED': '已过期',
+      'other': '状态暂不可用',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get corpFormCompany => '法人信息';
+
+  @override
+  String get corpFormRep => '代表者信息';
+
+  @override
+  String get corpFormHandler => '交易办理人';
+
+  @override
+  String get corpFormStart => '开始填写';
+
+  @override
+  String get corpFormResume => '继续填写';
+
+  @override
+  String get corpFormReview => '核对已填内容';
+
+  @override
+  String get corpFormReviewTitle => '核对资料与申请';
+
+  @override
+  String get corpFormBusinessName => '法人名称';
+
+  @override
+  String get corpFormBusinessKana => '法人名称（片假名）';
+
+  @override
+  String get corpFormForm => '法人类型';
+
+  @override
+  String get corpFormNumber => '法人编号';
+
+  @override
+  String get corpFormPostal => '邮政编码';
+
+  @override
+  String get corpFormOffice => '总公司所在地';
+
+  @override
+  String get corpFormFounded => '成立日期';
+
+  @override
+  String get corpFormPhone => '电话号码';
+
+  @override
+  String get corpFormBusiness => '业务内容';
+
+  @override
+  String get corpFormPurpose => '交易目的';
+
+  @override
+  String get corpFormOtherPurpose => '具体交易目的';
+
+  @override
+  String get corpFormName => '姓名';
+
+  @override
+  String get corpFormKana => '姓名（片假名）';
+
+  @override
+  String get corpFormRole => '职务';
+
+  @override
+  String get corpFormAddress => '现住址';
+
+  @override
+  String get corpFormBirth => '出生日期';
+
+  @override
+  String get corpFormEmail => '邮箱';
+
+  @override
+  String get corpFormDepartment => '部门及职务';
+
+  @override
+  String get corpFormSelf => '代表者本人';
+
+  @override
+  String get corpFormDelegate => '受任者';
+
+  @override
+  String get corpFormRequired => '必填';
+
+  @override
+  String get corpFormMissing => '请填写或选择。';
+
+  @override
+  String get corpFormInvalidKana => '请输入全角片假名。';
+
+  @override
+  String get corpFormInvalidNumber => '请输入13位数字。';
+
+  @override
+  String get corpFormInvalidPostal => '请输入7位邮编。';
+
+  @override
+  String get corpFormInvalidDate => '请按 YYYY-MM-DD 输入有效日期。';
+
+  @override
+  String get corpFormInvalidEmail => '请输入有效邮箱。';
+
+  @override
+  String get corpFormSurplus => '运用闲置资金';
+
+  @override
+  String get corpFormAsset => '资产管理';
+
+  @override
+  String get corpFormOther => '其他';
+
+  @override
+  String get corpFormMember => '会员注册';
+
+  @override
+  String get corpFormStep => '步骤';
+
+  @override
+  String get corpFormRepHint => '请填写登记的代表者资料。';
+
+  @override
+  String get corpFormCompanyHint => '请填写法人登记信息。';
+
+  @override
+  String get corpFormHandlerHint => '请选择办理人。';
+
+  @override
+  String get corpFormSelfHint => '使用已填写的代表者资料。';
+
+  @override
+  String get corpFormDelegateHint => '由获得授权的受任者办理。';
+
+  @override
+  String get corpOwnerTitle => '实质支配者';
+
+  @override
+  String get corpOwnerHint => '请填写实际控制法人的人员情况。';
+
+  @override
+  String get corpOwnerDefinition => '包括持有超过25%出资或表决权，或以其他方式实际控制法人的人员。';
+
+  @override
+  String get corpOwnerYes => '有实质支配者';
+
+  @override
+  String get corpOwnerNo => '没有实质支配者';
+
+  @override
+  String get corpOwnerUnknown => '不清楚';
+
+  @override
+  String get corpOwnerMinimum => '请至少添加一名实质支配者。';
+
+  @override
+  String get corpOwnerList => '已添加人员';
+
+  @override
+  String get corpOwnerAdd => '添加实质支配者';
+
+  @override
+  String get corpOwnerEdit => '编辑实质支配者';
+
+  @override
+  String get corpOwnerDelete => '删除';
+
+  @override
+  String get corpOwnerDeletePrompt => '删除此人吗？';
+
+  @override
+  String get corpOwnerCountry => '国籍／居住国';
+
+  @override
+  String get corpOwnerControl => '控制方式';
+
+  @override
+  String get corpOwnerOwnership => '出资或表决权超过25%';
+
+  @override
+  String get corpOwnerInfluence => '其他实质控制';
+
+  @override
+  String get corpOwnerPercentage => '持有比例';
+
+  @override
+  String get corpOwnerSave => '保存修改';
+
+  @override
+  String get corpOwnerConfirmAdd => '确认添加';
+
+  @override
+  String get corpBankTitle => '出金账户';
+
+  @override
+  String get corpBankHint => '仅首次申请时登记。';
+
+  @override
+  String get corpBankNoticeTitle => '法人名义的日本国内账户';
+
+  @override
+  String get corpBankNotice => '请准确填写以法人名义开立的日本国内银行账户。';
+
+  @override
+  String get corpBankOtherHint => '选择其他银行可手动输入银行名称。';
+
+  @override
+  String get corpBankManual => '其他银行名称';
+
+  @override
+  String get corpBankSavings => '储蓄';
+
+  @override
+  String get corpBankBranchError => '请输入3位半角数字支店代码。';
+
+  @override
+  String get corpBankNumberError => '请输入7位半角数字账号。';
+
+  @override
+  String get corpDocsTitle => '必要材料';
+
+  @override
+  String get corpDocsCompany => '法人材料';
+
+  @override
+  String get corpDocsIdentity => '身份证明材料';
+
+  @override
+  String get corpDocsHint => '请提供清晰可读的文件，每份不超过 10 MB。';
+
+  @override
+  String get corpDocsRegistry => '法人登记事项证明书';
+
+  @override
+  String get corpDocsSeal => '法人印鉴证明书';
+
+  @override
+  String get corpDocsDelegation => '委任状';
+
+  @override
+  String get corpDocsEvidence => '实际控制人证明材料';
+
+  @override
+  String get corpDocsFront => '正面';
+
+  @override
+  String get corpDocsBack => '背面';
+
+  @override
+  String get corpDocsType => '证件类型';
+
+  @override
+  String get corpDocsSelect => '＋ 选择文件';
+
+  @override
+  String get corpDocsReplace => '更换';
+
+  @override
+  String get corpDocsUploading => '上传中…';
+
+  @override
+  String get corpDocsFailed => '上传失败，请重试或更换文件。';
+
+  @override
+  String get corpDocsInvalid => '请检查文件格式和大小，不能选择空文件。';
+
+  @override
+  String get corpDocsMail => '请上传签发未满六个月的登记事项证明书，并在申请后邮寄原件。';
+
+  @override
+  String get corpDocsSides => '驾驶证和在留卡需要正反面，个人编号卡仅需正面。';
+
+  @override
+  String get corpDocsDiscard => '取消本次选择';
+
+  @override
+  String get corpReviewHint => '请核对以下资料后提交申请。';
+
+  @override
+  String get corpReviewTerms => '必填声明';
+
+  @override
+  String get corpReviewAnti => '本法人及相关人员不属于反社会势力。';
+
+  @override
+  String get corpReviewAntiBody => '我已核实法人及相关人员的情况，并作此声明。';
+
+  @override
+  String get corpReviewMail => '我已确认邮寄手续。';
+
+  @override
+  String get corpReviewMailBody => '我会寄送所需原件并签收寄来的文件。';
+
+  @override
+  String get corpReviewSubmit => '同意并申请';
+
+  @override
+  String get corpReviewEdit => '修改申请资料';
+
+  @override
+  String get corpReviewMissing => '未附上';
+
+  @override
+  String get corpReviewFailed => '申请未被接受，请核对填写内容。';
+
+  @override
+  String get corpReviewUnknown => '暂时无法确认提交结果，请先查看申请状态。';
+
+  @override
+  String get corpReviewCheck => '查看受理状态';
+
+  @override
+  String get corpReviewAccepted => '法人认证申请已受理。';
+
+  @override
+  String get corpReviewUnconfirmed => '尚未查到已受理的申请，请重新核对资料和声明。';
+
+  @override
+  String get corpProgressSuccess => '申请已受理';
+
+  @override
+  String get corpProgressSuccessBody => '法人认证申请已提交。';
+
+  @override
+  String get corpProgressNext => '请确认后续步骤';
+
+  @override
+  String get corpProgressMailHint => '请将登记事项证明书原件寄到通知中的地址。如已提交委任状，请一并寄送原件。';
+
+  @override
+  String get corpProgressApplicant => '申请法人';
+
+  @override
+  String get corpProgressTrading => '何时可以开始交易';
+
+  @override
+  String get corpProgressTradingHint => '完成书面审核、签收和最终确认后，即可申请投资。';
+
+  @override
+  String get corpProgressOpen => '查看申请进度';
+
+  @override
+  String get corpProgressMyPage => '返回我的页面';
+
+  @override
+  String get corpProgressTitle => '法人认证申请进度';
+
+  @override
+  String get corpProgressCorrection => '申请资料需要修改';
+
+  @override
+  String get corpProgressOriginal => '邮寄原件';
+
+  @override
+  String get corpProgressReview => '资料审核';
+
+  @override
+  String get corpProgressCompanyMail => '公司寄出文件';
+
+  @override
+  String get corpProgressReceipt => '签收文件';
+
+  @override
+  String get corpProgressFinal => '最终确认';
+
+  @override
+  String get corpProgressSubmitted => '申请已提交';
+
+  @override
+  String get corpProgressAction => '需要您处理';
+
+  @override
+  String get corpProgressReviewing => '资料审核中，请等待审核结果。';
+
+  @override
+  String get corpProgressReceiptHint => '收到公司寄出的文件后，请确认签收。';
+
+  @override
+  String get corpProgressLatest => '最新通知';
+
+  @override
+  String get corpProgressSendOriginal => '请邮寄原件';
+
+  @override
+  String get corpProgressCheckReceipt => '已收到邮寄文件吗？';
+
+  @override
+  String get corpMailSent => '原件已寄出';
+
+  @override
+  String get corpMailReceived => '我已收到文件';
+
+  @override
+  String get corpMailDetails => '请说明寄件情况。';
+
+  @override
+  String get corpMailAfterSend => '请在寄出后通知我们';
+
+  @override
+  String get corpMailOriginals => '请确认已寄出登记事项证明书原件。如提交过委任状，也请确认已寄出其原件。';
+
+  @override
+  String get corpMailMessage => '寄件说明';
+
+  @override
+  String get corpMailHint => '请填写寄件日期、寄送方式或追踪号码。没有追踪号码也可填写寄件情况。';
+
+  @override
+  String get corpMailAfter => '发送后';
+
+  @override
+  String get corpMailAfterBody => '将返回申请进度页并显示最新状态。';
+
+  @override
+  String get corpMailSubmit => '确认寄出并通知';
+
+  @override
+  String get corpMailConfirmTitle => '确认签收';
+
+  @override
+  String get corpMailQuestion => '您已收到我们寄出的文件吗？';
+
+  @override
+  String get corpMailConfirmAfter => '请在签收后操作';
+
+  @override
+  String get corpMailConfirmBody => '请确认已收到文件，再点击下方按钮。';
+
+  @override
+  String get corpMailNote => '备注（选填）';
+
+  @override
+  String get corpMailNoteHint => '如有需要请填写备注';
+
+  @override
+  String get corpMailFinalCheck => '确认签收后，我们将进行最终审核。';
+
+  @override
+  String get corpMailConfirm => '确认已签收';
+
+  @override
+  String get corpMailNotYet => '尚未收到';
+
+  @override
+  String get corpMailUnavailable => '当前无法执行此操作，请查看申请进度。';
+
+  @override
+  String get corpMailUnknown => '暂时无法确认发送结果，请查看最新申请进度。';
+
+  @override
+  String get corpDetailView => '查看申请内容';
+
+  @override
+  String get corpDetailTitle => '法人会员资料';
+
+  @override
+  String get corpDetailInfo => '可查看已提交的申请资料。';
+
+  @override
+  String get corpDetailPeople => '代表者及交易经办人';
+
+  @override
+  String get corpDetailExpand => '查看详情';
+
+  @override
+  String get corpDetailFiles => '已提交附件';
+
+  @override
+  String get corpDetailPreview => '预览已提交附件';
+
+  @override
+  String get corpDetailEmpty => '暂无登记资料';
+
+  @override
+  String get corpDetailCorrect => '修改申请内容';
+
+  @override
+  String get corpDetailEditTitle => '修正登记资料';
+
+  @override
+  String get corpDetailPrefill => '将回填当前申请资料。';
+
+  @override
+  String get corpDetailScopeTitle => '可修正的资料';
+
+  @override
+  String get corpDetailScope => '可修改法人、代表者、经办人、实际控制人和附件。';
+
+  @override
+  String get corpDetailBank => '修正申请沿用已登记的出金账户。';
+
+  @override
+  String get corpDetailResubmit => '修改资料 → 核对附件 → 同意并重新提交';
+
+  @override
+  String get corpDetailChanges => '修改将在最终确认页重新提交后生效。';
+
+  @override
+  String get corpDetailStart => '开始修正';
+
+  @override
+  String get corpDetailHide => '收起';
+
+  @override
+  String get corpVerifiedTitle => '法人认证已完成';
+
+  @override
+  String get corpVerifiedThanks => '感谢您完成认证。';
+
+  @override
+  String get corpVerifiedInvestorNote => '您可以使用法人投资者账户。';
+
+  @override
+  String get corpVerifiedNext => '下一步';
+
+  @override
+  String get corpVerifiedFundNote => '查看正在募集的基金，选择基金后即可进入申请流程。';
+
+  @override
+  String get corpVerifiedType => '注册类型';
+
+  @override
+  String get corpVerifiedStatus => '认证状态';
+
+  @override
+  String get corpVerifiedDone => '已完成';
+
+  @override
+  String get corpVerifiedView => '查看已登记的法人资料';
+
+  @override
+  String get corpVerifiedFunds => '查看基金';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -8095,10 +8679,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeInvestmentFlowStep3Body => '即可投資嚴選基金';
 
   @override
-  String get homeReminderProfileTitle => '填寫個人資料以開始出資';
+  String get homeReminderProfileTitle => '請完成認證';
 
   @override
-  String get homeReminderProfileBody => '出資與出金需完成身分驗證，還差3步即可完成。';
+  String get homeReminderProfileBody => '請確認登記資料，繼續辦理認證。';
 
   @override
   String get homeReminderProfileBadge => '待處理';
@@ -14294,4 +14878,588 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get tradeEmptyHistoryBuy => '暫無認購申請';
+
+  @override
+  String get investorTypeTitle => '選擇投資者類型';
+
+  @override
+  String get personalInvestor => '個人投資者';
+
+  @override
+  String get corporateInvestor => '法人投資者';
+
+  @override
+  String get personalInvestorNote => '以本人名義申請。';
+
+  @override
+  String get corporateInvestorNote => '以法人名義申請。';
+
+  @override
+  String get corporateVerificationTitle => '法人認證';
+
+  @override
+  String get corporateStatusTitle => '目前申請狀態';
+
+  @override
+  String get corporatePrepareTitle => '需要準備的資料';
+
+  @override
+  String get corporateProcessNote =>
+      '提交法人資料與文件後，請依指示郵寄正本。收到公司寄送的信件並完成最終確認後，法人認證即完成。';
+
+  @override
+  String get corporatePrepareBody =>
+      '請準備登記事項證明書、代表者身分證件及法人名義的日本國內銀行帳戶。委託他人辦理時，還需要委任狀及受任者身分證件。';
+
+  @override
+  String get corporateRefresh => '重新整理狀態';
+
+  @override
+  String corporateStatus(String status) {
+    String _temp0 = intl.Intl.selectLogic(status, {
+      'DRAFT': '未提交',
+      'SUBMITTED': '已提交',
+      'CUSTOMER_MAILED': '原件已寄出',
+      'APPROVED': '資料審核通過',
+      'ADMIN_MAILED': '公司已寄出',
+      'MAILED': '公司已寄出',
+      'RECEIVED': '已收件，等待最終確認',
+      'CONFIRMED': '認證完成',
+      'REJECTED': '已退回',
+      'EXPIRED': '已過期',
+      'other': '狀態暫不可用',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get corpFormCompany => '法人資料';
+
+  @override
+  String get corpFormRep => '代表者資料';
+
+  @override
+  String get corpFormHandler => '交易辦理人';
+
+  @override
+  String get corpFormStart => '開始填寫';
+
+  @override
+  String get corpFormResume => '繼續填寫';
+
+  @override
+  String get corpFormReview => '核對已填內容';
+
+  @override
+  String get corpFormReviewTitle => '核對資料與申請';
+
+  @override
+  String get corpFormBusinessName => '法人名稱';
+
+  @override
+  String get corpFormBusinessKana => '法人名稱（片假名）';
+
+  @override
+  String get corpFormForm => '法人類型';
+
+  @override
+  String get corpFormNumber => '法人編號';
+
+  @override
+  String get corpFormPostal => '郵遞區號';
+
+  @override
+  String get corpFormOffice => '總公司所在地';
+
+  @override
+  String get corpFormFounded => '成立日期';
+
+  @override
+  String get corpFormPhone => '電話號碼';
+
+  @override
+  String get corpFormBusiness => '業務內容';
+
+  @override
+  String get corpFormPurpose => '交易目的';
+
+  @override
+  String get corpFormOtherPurpose => '具體交易目的';
+
+  @override
+  String get corpFormName => '姓名';
+
+  @override
+  String get corpFormKana => '姓名（片假名）';
+
+  @override
+  String get corpFormRole => '職務';
+
+  @override
+  String get corpFormAddress => '現住址';
+
+  @override
+  String get corpFormBirth => '出生日期';
+
+  @override
+  String get corpFormEmail => '電子郵件';
+
+  @override
+  String get corpFormDepartment => '部門及職務';
+
+  @override
+  String get corpFormSelf => '代表者本人';
+
+  @override
+  String get corpFormDelegate => '受任者';
+
+  @override
+  String get corpFormRequired => '必填';
+
+  @override
+  String get corpFormMissing => '請填寫或選擇。';
+
+  @override
+  String get corpFormInvalidKana => '請輸入全形片假名。';
+
+  @override
+  String get corpFormInvalidNumber => '請輸入13位數字。';
+
+  @override
+  String get corpFormInvalidPostal => '請輸入7位郵遞區號。';
+
+  @override
+  String get corpFormInvalidDate => '請按 YYYY-MM-DD 輸入有效日期。';
+
+  @override
+  String get corpFormInvalidEmail => '請輸入有效電子郵件。';
+
+  @override
+  String get corpFormSurplus => '運用閒置資金';
+
+  @override
+  String get corpFormAsset => '資產管理';
+
+  @override
+  String get corpFormOther => '其他';
+
+  @override
+  String get corpFormMember => '會員註冊';
+
+  @override
+  String get corpFormStep => '步驟';
+
+  @override
+  String get corpFormRepHint => '請填寫登記的代表者資料。';
+
+  @override
+  String get corpFormCompanyHint => '請填寫法人登記資料。';
+
+  @override
+  String get corpFormHandlerHint => '請選擇辦理人。';
+
+  @override
+  String get corpFormSelfHint => '使用已填寫的代表者資料。';
+
+  @override
+  String get corpFormDelegateHint => '由獲授權的受任者辦理。';
+
+  @override
+  String get corpOwnerTitle => '實質支配者';
+
+  @override
+  String get corpOwnerHint => '請填寫實際控制法人的人員情況。';
+
+  @override
+  String get corpOwnerDefinition => '包括持有超過25%出資或表決權，或以其他方式實際控制法人的人員。';
+
+  @override
+  String get corpOwnerYes => '有實質支配者';
+
+  @override
+  String get corpOwnerNo => '沒有實質支配者';
+
+  @override
+  String get corpOwnerUnknown => '不清楚';
+
+  @override
+  String get corpOwnerMinimum => '請至少新增一名實質支配者。';
+
+  @override
+  String get corpOwnerList => '已新增人員';
+
+  @override
+  String get corpOwnerAdd => '新增實質支配者';
+
+  @override
+  String get corpOwnerEdit => '編輯實質支配者';
+
+  @override
+  String get corpOwnerDelete => '刪除';
+
+  @override
+  String get corpOwnerDeletePrompt => '刪除此人嗎？';
+
+  @override
+  String get corpOwnerCountry => '國籍／居住國';
+
+  @override
+  String get corpOwnerControl => '控制方式';
+
+  @override
+  String get corpOwnerOwnership => '出資或表決權超過25%';
+
+  @override
+  String get corpOwnerInfluence => '其他實質控制';
+
+  @override
+  String get corpOwnerPercentage => '持有比例';
+
+  @override
+  String get corpOwnerSave => '儲存變更';
+
+  @override
+  String get corpOwnerConfirmAdd => '確認新增';
+
+  @override
+  String get corpBankTitle => '出金帳戶';
+
+  @override
+  String get corpBankHint => '僅首次申請時登記。';
+
+  @override
+  String get corpBankNoticeTitle => '法人名義的日本國內帳戶';
+
+  @override
+  String get corpBankNotice => '請正確填寫以法人名義開立的日本國內銀行帳戶。';
+
+  @override
+  String get corpBankOtherHint => '選擇其他銀行可手動輸入銀行名稱。';
+
+  @override
+  String get corpBankManual => '其他銀行名稱';
+
+  @override
+  String get corpBankSavings => '儲蓄';
+
+  @override
+  String get corpBankBranchError => '請輸入3位半形數字分行代碼。';
+
+  @override
+  String get corpBankNumberError => '請輸入7位半形數字帳號。';
+
+  @override
+  String get corpDocsTitle => '必要文件';
+
+  @override
+  String get corpDocsCompany => '法人文件';
+
+  @override
+  String get corpDocsIdentity => '身分證明文件';
+
+  @override
+  String get corpDocsHint => '請提供清晰可讀的文件，每份不超過 10 MB。';
+
+  @override
+  String get corpDocsRegistry => '法人登記事項證明書';
+
+  @override
+  String get corpDocsSeal => '法人印鑑證明書';
+
+  @override
+  String get corpDocsDelegation => '委任狀';
+
+  @override
+  String get corpDocsEvidence => '實質控制人證明文件';
+
+  @override
+  String get corpDocsFront => '正面';
+
+  @override
+  String get corpDocsBack => '背面';
+
+  @override
+  String get corpDocsType => '證件類型';
+
+  @override
+  String get corpDocsSelect => '＋ 選擇檔案';
+
+  @override
+  String get corpDocsReplace => '更換';
+
+  @override
+  String get corpDocsUploading => '上傳中…';
+
+  @override
+  String get corpDocsFailed => '上傳失敗，請重試或更換檔案。';
+
+  @override
+  String get corpDocsInvalid => '請檢查檔案格式和大小，無法選擇空檔案。';
+
+  @override
+  String get corpDocsMail => '請上傳近六個月內核發的登記事項證明書，並於申請後郵寄正本。';
+
+  @override
+  String get corpDocsSides => '駕駛執照及在留卡需上傳正反面，個人編號卡僅需正面。';
+
+  @override
+  String get corpDocsDiscard => '取消本次選擇';
+
+  @override
+  String get corpReviewHint => '請核對以下資料後提交申請。';
+
+  @override
+  String get corpReviewTerms => '必填聲明';
+
+  @override
+  String get corpReviewAnti => '本法人及相關人員不屬於反社會勢力。';
+
+  @override
+  String get corpReviewAntiBody => '我已核實法人及相關人員的情況，並作此聲明。';
+
+  @override
+  String get corpReviewMail => '我已確認郵寄手續。';
+
+  @override
+  String get corpReviewMailBody => '我會寄送所需正本並簽收寄來的文件。';
+
+  @override
+  String get corpReviewSubmit => '同意並申請';
+
+  @override
+  String get corpReviewEdit => '修改申請資料';
+
+  @override
+  String get corpReviewMissing => '未附上';
+
+  @override
+  String get corpReviewFailed => '申請未獲受理，請核對填寫內容。';
+
+  @override
+  String get corpReviewUnknown => '暫時無法確認提交結果，請先查看申請狀態。';
+
+  @override
+  String get corpReviewCheck => '查看受理狀態';
+
+  @override
+  String get corpReviewAccepted => '法人認證申請已受理。';
+
+  @override
+  String get corpReviewUnconfirmed => '尚未查到已受理的申請，請重新核對資料和聲明。';
+
+  @override
+  String get corpProgressSuccess => '申請已受理';
+
+  @override
+  String get corpProgressSuccessBody => '法人認證申請已提交。';
+
+  @override
+  String get corpProgressNext => '請確認後續步驟';
+
+  @override
+  String get corpProgressMailHint => '請將登記事項證明書正本寄至通知中的地址。如已提交委任狀，請一併寄送正本。';
+
+  @override
+  String get corpProgressApplicant => '申請法人';
+
+  @override
+  String get corpProgressTrading => '何時可以開始交易';
+
+  @override
+  String get corpProgressTradingHint => '完成文件審查、簽收及最終確認後，即可申請投資。';
+
+  @override
+  String get corpProgressOpen => '查看申請進度';
+
+  @override
+  String get corpProgressMyPage => '返回我的頁面';
+
+  @override
+  String get corpProgressTitle => '法人認證申請進度';
+
+  @override
+  String get corpProgressCorrection => '申請資料需要修改';
+
+  @override
+  String get corpProgressOriginal => '郵寄正本';
+
+  @override
+  String get corpProgressReview => '文件審查';
+
+  @override
+  String get corpProgressCompanyMail => '公司寄出文件';
+
+  @override
+  String get corpProgressReceipt => '簽收文件';
+
+  @override
+  String get corpProgressFinal => '最終確認';
+
+  @override
+  String get corpProgressSubmitted => '申請已提交';
+
+  @override
+  String get corpProgressAction => '需要您處理';
+
+  @override
+  String get corpProgressReviewing => '文件審查中，請等待審查結果。';
+
+  @override
+  String get corpProgressReceiptHint => '收到公司寄出的文件後，請確認簽收。';
+
+  @override
+  String get corpProgressLatest => '最新通知';
+
+  @override
+  String get corpProgressSendOriginal => '請郵寄正本';
+
+  @override
+  String get corpProgressCheckReceipt => '已收到郵寄文件嗎？';
+
+  @override
+  String get corpMailSent => '正本已寄出';
+
+  @override
+  String get corpMailReceived => '我已收到文件';
+
+  @override
+  String get corpMailDetails => '請說明寄件情況。';
+
+  @override
+  String get corpMailAfterSend => '請在寄出後通知我們';
+
+  @override
+  String get corpMailOriginals => '請確認已寄出登記事項證明書正本。如曾提交委任狀，也請確認已寄出其正本。';
+
+  @override
+  String get corpMailMessage => '寄件說明';
+
+  @override
+  String get corpMailHint => '請填寫寄件日期、寄送方式或追蹤號碼。沒有追蹤號碼也可填寫寄件情況。';
+
+  @override
+  String get corpMailAfter => '送出後';
+
+  @override
+  String get corpMailAfterBody => '將返回申請進度頁並顯示最新狀態。';
+
+  @override
+  String get corpMailSubmit => '確認寄出並通知';
+
+  @override
+  String get corpMailConfirmTitle => '確認簽收';
+
+  @override
+  String get corpMailQuestion => '您已收到我們寄出的文件嗎？';
+
+  @override
+  String get corpMailConfirmAfter => '請在簽收後操作';
+
+  @override
+  String get corpMailConfirmBody => '請確認已收到文件，再點選下方按鈕。';
+
+  @override
+  String get corpMailNote => '備註（選填）';
+
+  @override
+  String get corpMailNoteHint => '如有需要請填寫備註';
+
+  @override
+  String get corpMailFinalCheck => '確認簽收後，我們將進行最終審核。';
+
+  @override
+  String get corpMailConfirm => '確認已簽收';
+
+  @override
+  String get corpMailNotYet => '尚未收到';
+
+  @override
+  String get corpMailUnavailable => '目前無法執行此操作，請查看申請進度。';
+
+  @override
+  String get corpMailUnknown => '暫時無法確認送出結果，請查看最新申請進度。';
+
+  @override
+  String get corpDetailView => '查看申請內容';
+
+  @override
+  String get corpDetailTitle => '法人會員資料';
+
+  @override
+  String get corpDetailInfo => '可查看已提交的申請資料。';
+
+  @override
+  String get corpDetailPeople => '代表者及交易經辦人';
+
+  @override
+  String get corpDetailExpand => '查看詳情';
+
+  @override
+  String get corpDetailFiles => '已提交附件';
+
+  @override
+  String get corpDetailPreview => '預覽已提交附件';
+
+  @override
+  String get corpDetailEmpty => '暫無登記資料';
+
+  @override
+  String get corpDetailCorrect => '修改申請內容';
+
+  @override
+  String get corpDetailEditTitle => '修正登記資料';
+
+  @override
+  String get corpDetailPrefill => '將帶入目前的申請資料。';
+
+  @override
+  String get corpDetailScopeTitle => '可修正的資料';
+
+  @override
+  String get corpDetailScope => '可修改法人、代表者、經辦人、實質控制人及附件。';
+
+  @override
+  String get corpDetailBank => '修正申請沿用已登記的出金帳戶。';
+
+  @override
+  String get corpDetailResubmit => '修改資料 → 核對附件 → 同意並重新提交';
+
+  @override
+  String get corpDetailChanges => '修改將於最終確認頁重新提交後生效。';
+
+  @override
+  String get corpDetailStart => '開始修正';
+
+  @override
+  String get corpDetailHide => '收合';
+
+  @override
+  String get corpVerifiedTitle => '法人認證已完成';
+
+  @override
+  String get corpVerifiedThanks => '感謝您完成認證。';
+
+  @override
+  String get corpVerifiedInvestorNote => '您可以使用法人投資者帳戶。';
+
+  @override
+  String get corpVerifiedNext => '下一步';
+
+  @override
+  String get corpVerifiedFundNote => '查看正在募集的基金，選擇基金後即可進入申請流程。';
+
+  @override
+  String get corpVerifiedType => '註冊類型';
+
+  @override
+  String get corpVerifiedStatus => '認證狀態';
+
+  @override
+  String get corpVerifiedDone => '已完成';
+
+  @override
+  String get corpVerifiedView => '查看已登記的法人資料';
+
+  @override
+  String get corpVerifiedFunds => '查看基金';
 }
