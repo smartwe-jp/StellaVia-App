@@ -14427,6 +14427,12 @@ abstract class AppLocalizations {
   /// **'Check application status'**
   String get corpProgressOpen;
 
+  /// No description provided for @corpBackHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Home'**
+  String get corpBackHome;
+
   /// No description provided for @corpProgressMyPage.
   ///
   /// In en, this message translates to:
@@ -14810,6 +14816,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Browse funds'**
   String get corpVerifiedFunds;
+
+  /// No description provided for @corpExitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Close verification?'**
+  String get corpExitTitle;
+
+  /// No description provided for @corpExitSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Corporate verification is still in progress. Your submitted application has been saved.'**
+  String get corpExitSaved;
+
+  /// No description provided for @corpExitDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Corporate verification is incomplete. Your current edits may be lost.'**
+  String get corpExitDraft;
+
+  /// No description provided for @corpExitStay.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue verification'**
+  String get corpExitStay;
+
+  /// No description provided for @corpMailPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting original documents'**
+  String get corpMailPending;
+
+  /// No description provided for @corpMailOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'We received your application. Please mail the required originals.'**
+  String get corpMailOverview;
+
+  /// No description provided for @corpMailProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'After mailing the originals, use the button below to provide dispatch details.'**
+  String get corpMailProgress;
+
+  /// No description provided for @corpStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current status'**
+  String get corpStatusLabel;
+
+  /// No description provided for @corpFlowLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification steps'**
+  String get corpFlowLabel;
+
+  /// No description provided for @corpApplicationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Application information'**
+  String get corpApplicationLabel;
+
+  /// No description provided for @corpProgressHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Application status'**
+  String get corpProgressHeading;
 }
 
 class _AppLocalizationsDelegate

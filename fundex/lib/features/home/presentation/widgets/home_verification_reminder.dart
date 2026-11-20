@@ -6,8 +6,8 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../member_profile/domain/repositories/verification_entry_repository.dart';
 import '../../../member_profile/presentation/providers/verification_entry_provider.dart';
-import '../../../member_profile/presentation/widgets/verification_entry_content.dart';
-import '../support/home_member_profile_reminder_support.dart';
+import '../../../member_profile/presentation/pages/corporate_verification_modal.dart';
+// import '../support/home_member_profile_reminder_support.dart';
 
 final homeVerificationReminderProvider =
     FutureProvider.autoDispose<VerificationEntry>((ref) {
@@ -27,10 +27,26 @@ class HomeVerificationReminder extends ConsumerStatefulWidget {
 class _HomeVerificationReminderState
     extends ConsumerState<HomeVerificationReminder> {
   bool opening = false;
-  Future<void> open(VerificationEntry entry) async {
+  Future<VerificationEntry?> refreshEntry() async {
+    try {
+      return await ref.refresh(homeVerificationReminderProvider.future);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.l10n.uiErrorRequestFailed)),
+        );
+      }
+      return null;
+    }
+  }
+
+  Future<void> open() async {
     if (opening) return;
     opening = true;
     try {
+      var entry = await refreshEntry();
+      if (!mounted || entry == null) return;
+      var openCorporate = entry.kind == VerificationEntryKind.corporate;
       if (entry.kind == VerificationEntryKind.choice) {
         final l = context.l10n;
         final choice = await AppDialogs.showAdaptiveAlert<_InvestorType>(
@@ -49,29 +65,19 @@ class _HomeVerificationReminderState
           ],
         );
         if (!mounted || choice == null) return;
-        final VerificationEntry latest;
-        try {
-          latest = await ref.refresh(homeVerificationReminderProvider.future);
-        } catch (_) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(context.l10n.uiErrorRequestFailed)),
-            );
-          }
-          return;
-        }
-        if (!mounted) return;
-        if (latest.kind == VerificationEntryKind.choice) {
-          if (choice == _InvestorType.corporate) {
-            await CorporateEntryContent.openPreparation(context);
-          } else {
-            await context.push('/member-profile/onboarding');
-          }
-        } else {
-          await context.push('/member-profile/edit');
-        }
+        final latest = await refreshEntry();
+        if (!mounted || latest == null) return;
+        entry = latest;
+        openCorporate = switch (latest.kind) {
+          VerificationEntryKind.corporate => true,
+          VerificationEntryKind.personal => false,
+          VerificationEntryKind.choice => choice == _InvestorType.corporate,
+        };
+      }
+      if (openCorporate) {
+        await openCorporateVerification(context, entry);
       } else {
-        await context.push('/member-profile/edit');
+        await context.push('/member-profile/onboarding?start=first');
       }
       if (mounted) ref.invalidate(homeVerificationReminderProvider);
     } finally {
@@ -82,7 +88,8 @@ class _HomeVerificationReminderState
   @override
   Widget build(BuildContext context) {
     final entry = ref.watch(homeVerificationReminderProvider).valueOrNull;
-    // if (entry == null || !shouldShowHomeMemberProfileReminder(entry)) {
+    if (entry == null) return const SizedBox.shrink();
+    // if (!shouldShowHomeMemberProfileReminder(entry)) {
     //   return const SizedBox.shrink();
     // }
     final l = context.l10n;
@@ -93,7 +100,7 @@ class _HomeVerificationReminderState
           leading: const Icon(Icons.badge_outlined),
           title: l.homeReminderProfileTitle,
           message: l.homeReminderProfileBody,
-          onTap: () => open(entry!),
+          onTap: open,
         ),
       ),
     );

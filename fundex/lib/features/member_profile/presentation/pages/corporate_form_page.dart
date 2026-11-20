@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/corporate_form_draft.dart';
 import '../support/corporate_form_fields.dart';
-import '../widgets/verification_entry_scaffold.dart';
+import '../widgets/corporate_flow_scaffold.dart';
 import '../widgets/corporate_form_inputs.dart';
 import '../widgets/corporate_form_header.dart';
 import 'corporate_documents_page.dart';
@@ -15,6 +15,19 @@ class CorporateFormPage extends StatefulWidget {
     required this.draft,
     required this.section,
   });
+  static Future<void> start(BuildContext context, CorporateFormDraft draft) =>
+      Navigator.of(context).push<void>(
+        MaterialPageRoute<void>(
+          settings: RouteSettings(
+            name: corporateStepRoute(CorporateSection.company),
+          ),
+          builder: (_) => CorporateFormPage(
+            draft: draft,
+            section: CorporateSection.company,
+          ),
+        ),
+      );
+
   final CorporateFormDraft draft;
   final CorporateSection section;
   @override
@@ -52,7 +65,10 @@ class _CorporateFormPageState extends State<CorporateFormPage> {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n, section = widget.section;
-    return VerificationEntryScaffold(
+    return CorporateFlowScaffold(
+      exitPrompt: CorporateExitPrompt.draft,
+      title: sectionTitle(l, section),
+      step: section.index,
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
         child: Form(

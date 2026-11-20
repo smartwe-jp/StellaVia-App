@@ -6,6 +6,9 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/repositories/verification_entry_repository.dart';
 import '../providers/verification_entry_provider.dart';
 import '../widgets/verification_entry_content.dart';
+import '../widgets/corporate_flow_scaffold.dart';
+import 'corporate_verification_modal.dart';
+import 'corporate_progress_page.dart';
 import '../widgets/corporate_verified_content.dart';
 import '../widgets/verification_entry_scaffold.dart';
 import 'member_profile_overview_page.dart';
@@ -21,13 +24,17 @@ class VerificationEntryPage extends ConsumerWidget {
       skipLoadingOnRefresh: false,
       data: (value) => switch (value.kind) {
         VerificationEntryKind.personal => const MemberProfileOverviewPage(),
-        VerificationEntryKind.choice => VerificationEntryScaffold(
+        VerificationEntryKind.choice => CorporateFlowScaffold(
+          title: context.l10n.investorTypeTitle,
           child: InvestorChoice(
             onPersonal: () async {
               await context.push('/member-profile/onboarding');
               if (context.mounted) refresh();
             },
-            onCorporate: () => CorporateEntryContent.openPreparation(context),
+            onCorporate: () async {
+              await openCorporateVerification(context, value);
+              if (context.mounted) refresh();
+            },
           ),
         ),
         VerificationEntryKind.corporate when value.status == 'CONFIRMED' =>
@@ -35,11 +42,15 @@ class VerificationEntryPage extends ConsumerWidget {
             resultPage: true,
             child: CorporateVerifiedContent(companyName: value.companyName),
           ),
-        VerificationEntryKind.corporate => VerificationEntryScaffold(
+        VerificationEntryKind.corporate
+            when value.status?.isNotEmpty == true && value.status != 'DRAFT' =>
+          const CorporateProgressPage(),
+        VerificationEntryKind.corporate => CorporateFlowScaffold(
+          title: context.l10n.corporateVerificationTitle,
+          refresh: refresh,
           child: CorporateEntryContent(
-            key: ValueKey(value.isCorrection),
             entry: value,
-            onRefresh: refresh,
+            key: ValueKey(value.isCorrection),
           ),
         ),
       },

@@ -835,16 +835,25 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/profile/my/secondary-market/purchases/:id',
-        builder: (context, state) => SecondaryMarketActivityDetailPage(id: state.pathParameters['id']!, sale: false),
+        builder: (context, state) => SecondaryMarketActivityDetailPage(
+          id: state.pathParameters['id']!,
+          sale: false,
+        ),
       ),
       GoRoute(
         path: '/profile/my/secondary-market/sales/:id',
-        builder: (context, state) => SecondaryMarketActivityDetailPage(id: state.pathParameters['id']!, sale: true),
+        builder: (context, state) => SecondaryMarketActivityDetailPage(
+          id: state.pathParameters['id']!,
+          sale: true,
+        ),
       ),
       GoRoute(
         path: '/profile/my/secondary-market',
         builder: (BuildContext context, GoRouterState state) {
-          return SecondaryMarketActivityPage(initialPurchases: state.uri.queryParameters['tab'] == 'buy', initialSalesHistory: state.uri.queryParameters['tab'] == 'sales');
+          return SecondaryMarketActivityPage(
+            initialPurchases: state.uri.queryParameters['tab'] == 'buy',
+            initialSalesHistory: state.uri.queryParameters['tab'] == 'sales',
+          );
         },
       ),
       GoRoute(
@@ -1033,15 +1042,23 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/member-profile/onboarding',
-        builder: (BuildContext context, GoRouterState state) {
-          return const MemberProfileEditFlowPage();
-        },
+        pageBuilder: (context, state) => MaterialPage<void>(
+          key: state.pageKey,
+          fullscreenDialog: true,
+          child: MemberProfileEditFlowPage(
+            initialStep: state.uri.queryParameters['start'] == 'first'
+                ? MemberProfileEditStep.basicInfo
+                : null,
+          ),
+        ),
       ),
       GoRoute(
         path: '/member-profile/edit',
-        builder: (BuildContext context, GoRouterState state) {
-          return const VerificationEntryPage();
-        },
+        pageBuilder: (context, state) => MaterialPage<void>(
+          key: state.pageKey,
+          fullscreenDialog: true,
+          child: const VerificationEntryPage(),
+        ),
         routes: <RouteBase>[
           GoRoute(
             path: 'section/:section',

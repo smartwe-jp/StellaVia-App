@@ -142,9 +142,9 @@ void main() {
         true,
       );
       expect(repo.detailReads, 2);
-      await tester.tap(find.text(l.menuItemEditProfile));
+      await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
-      await tester.tap(find.text(l.menuItemEditProfile));
+      await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
       expect(find.text('SUBMITTED'), findsOneWidget);
       expect(repo.writes, 1);

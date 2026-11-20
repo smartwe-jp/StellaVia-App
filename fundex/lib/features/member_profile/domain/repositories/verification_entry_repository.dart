@@ -53,6 +53,9 @@ class VerificationEntry {
   final bool hasRegisteredBank;
   final Set<String> userOps;
   final List<CorporateAuditEvent> auditLogs;
+  CorporateFormDraft? correctionDraft() =>
+      canCorrect ? submittedForm?.copyForEditing(correction: true) : null;
+
   bool get isCorrection =>
       hasRegisteredBank ||
       const {'SUBMITTED', 'REJECTED', 'EXPIRED', 'CONFIRMED'}.contains(status);

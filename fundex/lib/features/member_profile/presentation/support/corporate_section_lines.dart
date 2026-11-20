@@ -28,7 +28,7 @@ List<String> corporateSectionLines(
     ],
     for (final f in draft.fields(section))
       if (draft.value(section, f).isNotEmpty)
-        '${corporateFieldLabel(l, f)}　${pickerOptions(l, f)[draft.value(section, f)] ?? draft.value(section, f)}',
+        '${corporateFieldLabel(l, f)}　${corporateFieldValue(l, draft, section, f)}',
     if (section == CorporateSection.documents) ...[
       for (final slot in docs.companySlots(delegate))
         '${documentLabel(l, slot)}　${docs.uploaded[slot]?.filename ?? l.corpReviewMissing}',
@@ -40,4 +40,18 @@ List<String> corporateSectionLines(
       ],
     ],
   ];
+}
+
+String corporateFieldValue(
+  AppLocalizations l,
+  CorporateFormDraft draft,
+  CorporateSection section,
+  CorporateField field, {
+  bool maskAccountNumber = false,
+}) {
+  final value = draft.value(section, field);
+  if (maskAccountNumber && field == CorporateField.accountNumber) {
+    return '•••${value.substring(value.length > 4 ? value.length - 4 : 0)}';
+  }
+  return pickerOptions(l, field)[value] ?? value;
 }

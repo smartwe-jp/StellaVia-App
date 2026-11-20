@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../pages/corporate_detail_page.dart';
 import '../providers/verification_entry_provider.dart';
+import '../support/corporate_flow_navigation.dart';
 
 class CorporateVerifiedContent extends ConsumerWidget {
   const CorporateVerifiedContent({super.key, required this.companyName});
@@ -90,11 +91,11 @@ class CorporateVerifiedContent extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
           AppButton(
-            label: l.corpProgressMyPage,
+            label: l.commonClose,
             variant: AppButtonVariant.secondary,
             minHeight: 50,
             style: capsuleStyle,
-            onPressed: () => context.go('/profile'),
+            onPressed: () => leaveCorporateFlow(context),
           ),
         ],
       ),

@@ -7605,6 +7605,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get corpProgressOpen => '申請状況を確認';
 
   @override
+  String get corpBackHome => 'ホームに戻る';
+
+  @override
   String get corpProgressMyPage => 'マイページに戻る';
 
   @override
@@ -7797,4 +7800,37 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get corpVerifiedFunds => 'ファンドを見る';
+
+  @override
+  String get corpExitTitle => '認証手続きを閉じますか？';
+
+  @override
+  String get corpExitSaved => '法人認証はまだ完了していません。提出済みの申請内容は保存されています。';
+
+  @override
+  String get corpExitDraft => '法人認証はまだ完了していません。入力中の内容は保存されない場合があります。';
+
+  @override
+  String get corpExitStay => '手続きを続ける';
+
+  @override
+  String get corpMailPending => '原本の郵送待ち';
+
+  @override
+  String get corpMailOverview => '申請を受け付けました。必要書類の原本を郵送してください。';
+
+  @override
+  String get corpMailProgress => '郵送が済んだら、下のボタンから発送内容をお知らせください。';
+
+  @override
+  String get corpStatusLabel => '現在の状況';
+
+  @override
+  String get corpFlowLabel => '認証の流れ';
+
+  @override
+  String get corpApplicationLabel => '申請情報';
+
+  @override
+  String get corpProgressHeading => '申請状況';
 }

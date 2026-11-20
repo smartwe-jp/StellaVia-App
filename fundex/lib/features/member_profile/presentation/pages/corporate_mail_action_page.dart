@@ -5,7 +5,7 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/repositories/verification_entry_repository.dart';
 import '../providers/verification_entry_provider.dart';
 import '../widgets/corporate_mail_fields.dart';
-import '../widgets/verification_entry_scaffold.dart';
+import '../widgets/corporate_flow_scaffold.dart';
 
 class CorporateMailActionPage extends ConsumerStatefulWidget {
   const CorporateMailActionPage({
@@ -83,8 +83,11 @@ class _CorporateMailActionPageState
     const style = ButtonStyle(shape: WidgetStatePropertyAll(StadiumBorder()));
     return PopScope(
       canPop: !busy,
-      child: VerificationEntryScaffold(
-        resultPage: true,
+      child: CorporateFlowScaffold(
+        title: sendingOriginals ? l.corpMailSent : l.corpMailConfirmTitle,
+        exitPrompt: permitted ? CorporateExitPrompt.submitted : null,
+        locked: busy,
+
         child: CustomScrollView(
           slivers: [
             SliverPadding(

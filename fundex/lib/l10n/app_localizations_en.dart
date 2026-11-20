@@ -7995,6 +7995,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get corpProgressOpen => 'Check application status';
 
   @override
+  String get corpBackHome => 'Back to Home';
+
+  @override
   String get corpProgressMyPage => 'Back to My Page';
 
   @override
@@ -8202,4 +8205,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get corpVerifiedFunds => 'Browse funds';
+
+  @override
+  String get corpExitTitle => 'Close verification?';
+
+  @override
+  String get corpExitSaved =>
+      'Corporate verification is still in progress. Your submitted application has been saved.';
+
+  @override
+  String get corpExitDraft =>
+      'Corporate verification is incomplete. Your current edits may be lost.';
+
+  @override
+  String get corpExitStay => 'Continue verification';
+
+  @override
+  String get corpMailPending => 'Awaiting original documents';
+
+  @override
+  String get corpMailOverview =>
+      'We received your application. Please mail the required originals.';
+
+  @override
+  String get corpMailProgress =>
+      'After mailing the originals, use the button below to provide dispatch details.';
+
+  @override
+  String get corpStatusLabel => 'Current status';
+
+  @override
+  String get corpFlowLabel => 'Verification steps';
+
+  @override
+  String get corpApplicationLabel => 'Application information';
+
+  @override
+  String get corpProgressHeading => 'Application status';
 }

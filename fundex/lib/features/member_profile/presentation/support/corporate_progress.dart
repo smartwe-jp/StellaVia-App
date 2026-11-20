@@ -1,3 +1,4 @@
+import '../../../../l10n/app_localizations.dart';
 import '../../domain/repositories/verification_entry_repository.dart';
 
 enum CorporateStage {
@@ -92,4 +93,35 @@ class CorporateProgress {
           approved ? CorporateStage.finalCheck : CorporateStage.review,
         );
   }
+}
+
+(String, String?) corporateStatusSummary(
+  AppLocalizations l,
+  VerificationEntry entry, {
+  required bool overview,
+}) {
+  final progress = CorporateProgress.fromEntry(entry);
+  final mail =
+      progress?.current == CorporateStage.originalMail &&
+      progress?.actionRequired == true;
+  final receipt =
+      progress?.current == CorporateStage.receipt &&
+      progress?.actionRequired == true;
+  final status = entry.status ?? 'DRAFT';
+  final title = mail
+      ? (overview ? l.corpMailPending : l.corpProgressSendOriginal)
+      : receipt
+      ? l.corpProgressCheckReceipt
+      : l.corporateStatus(status);
+  final description = mail
+      ? (overview ? l.corpMailOverview : l.corpMailProgress)
+      : receipt
+      ? l.corpProgressReceiptHint
+      : switch (status) {
+          'REJECTED' => progress?.message ?? l.corpProgressCorrection,
+          'CUSTOMER_MAILED' || 'APPROVED' => l.corpProgressReviewing,
+          'RECEIVED' => l.corpMailFinalCheck,
+          _ => null,
+        };
+  return (title, description);
 }

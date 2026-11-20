@@ -94,7 +94,12 @@ void main() {
         final entry = await repository({
           'baseInfo': {'applicantType': type, 'status': '1'},
         }).load();
-        expect(entry.kind, VerificationEntryKind.choice);
+        expect(
+          entry.kind,
+          type == 'personal'
+              ? VerificationEntryKind.choice
+              : VerificationEntryKind.personal,
+        );
         expect(paths, [AuthApiPaths.crowdfundingUserIndex]);
       },
     );
@@ -127,46 +132,54 @@ void main() {
     );
   }
   for (final root in [true, false]) {
-    test('corporate marker at root=$root wins over personal status', () async {
-      final entry = await repository(
-        {
-          'applicantType': root ? 'corporate' : 'personal',
-          'status': 1,
-          'baseInfo': {'applicantType': root ? 'personal' : 'corporate'},
-        },
-        detail: {
-          'code': 200,
-          'data': {
-            'id': 101,
-            'application': {
-              if (root) 'id': '202',
-              'companyName': 'Example',
-              'verificationStatus': 'CONFIRMED',
-            },
-            'userOps': ['RECEIVED'],
-            'auditLogs': [
-              {
-                'id': 7,
-                'action': 'APPROVED',
-                'createdAt': '2026-11-19T15:00:00+09:00',
-                'customerMessage': '通知',
-              },
-            ],
+    test(
+      'index-new root applicant type wins when root corporate=$root',
+      () async {
+        final entry = await repository(
+          {
+            'applicantType': root ? 'corporate' : 'personal',
+            'status': 1,
+            'baseInfo': {'applicantType': root ? 'personal' : 'corporate'},
           },
-        },
-      ).load();
-      expect(paths, [
-        AuthApiPaths.crowdfundingUserIndex,
-        MemberProfileApiPaths.corporateDetail,
-      ]);
-      expect(entry.kind, VerificationEntryKind.corporate);
-      expect(entry.companyName, 'Example');
-      expect(entry.applicationId, root ? 202 : 101);
-      expect(entry.status, 'CONFIRMED');
-      expect(entry.userOps, {'RECEIVED'});
-      expect(entry.auditLogs.single.action, 'APPROVED');
-      expect(entry.auditLogs.single.createdAt, DateTime.utc(2026, 11, 19, 6));
-    });
+          detail: {
+            'code': 200,
+            'data': {
+              'id': 101,
+              'application': {
+                if (root) 'id': '202',
+                'companyName': 'Example',
+                'verificationStatus': 'CONFIRMED',
+              },
+              'userOps': ['RECEIVED'],
+              'auditLogs': [
+                {
+                  'id': 7,
+                  'action': 'APPROVED',
+                  'createdAt': '2026-11-19T15:00:00+09:00',
+                  'customerMessage': '通知',
+                },
+              ],
+            },
+          },
+        ).load();
+        if (!root) {
+          expect(paths, [AuthApiPaths.crowdfundingUserIndex]);
+          expect(entry.kind, VerificationEntryKind.choice);
+          return;
+        }
+        expect(paths, [
+          AuthApiPaths.crowdfundingUserIndex,
+          MemberProfileApiPaths.corporateDetail,
+        ]);
+        expect(entry.kind, VerificationEntryKind.corporate);
+        expect(entry.companyName, 'Example');
+        expect(entry.applicationId, root ? 202 : 101);
+        expect(entry.status, 'CONFIRMED');
+        expect(entry.userOps, {'RECEIVED'});
+        expect(entry.auditLogs.single.action, 'APPROVED');
+        expect(entry.auditLogs.single.createdAt, DateTime.utc(2026, 11, 19, 6));
+      },
+    );
   }
   test(
     'failed detail propagates instead of offering a personal entry',

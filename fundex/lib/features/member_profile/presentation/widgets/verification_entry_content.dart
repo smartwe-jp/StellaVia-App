@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/corporate_form_draft.dart';
 import '../pages/corporate_form_page.dart';
-import 'verification_entry_scaffold.dart';
-import '../pages/corporate_detail_page.dart';
+import 'corporate_application_summary.dart';
 import '../pages/corporate_progress_page.dart';
 import '../support/corporate_progress.dart';
-import '../support/corporate_form_fields.dart';
 import '../../domain/repositories/verification_entry_repository.dart';
 
 class InvestorChoice extends StatefulWidget {
@@ -30,8 +28,6 @@ class _InvestorChoiceState extends State<InvestorChoice> {
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
-        Text(l.investorTypeTitle, style: theme.textTheme.headlineSmall),
-        const SizedBox(height: 20),
         for (final option in [false, true])
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
@@ -73,61 +69,52 @@ class _InvestorChoiceState extends State<InvestorChoice> {
 }
 
 class CorporateEntryContent extends StatefulWidget {
-  const CorporateEntryContent({super.key, this.entry, this.onRefresh});
-  static Future<void> openPreparation(BuildContext context) =>
-      Navigator.of(context, rootNavigator: true).push<void>(
-        MaterialPageRoute<void>(
-          settings: const RouteSettings(
-            name: 'corporate-verification/preparation',
-          ),
-          builder: (_) =>
-              const VerificationEntryScaffold(child: CorporateEntryContent()),
-        ),
-      );
-
-  final VerificationEntry? entry;
-  final VoidCallback? onRefresh;
+  const CorporateEntryContent({super.key, this.entry, this.seed});
+  final VerificationEntry? entry, seed;
   @override
   State<CorporateEntryContent> createState() => _CorporateEntryContentState();
 }
 
 class _CorporateEntryContentState extends State<CorporateEntryContent> {
   bool _opened = false;
-  late final draftForm =
-      widget.entry?.submittedForm?.copyForEditing(
-        correction: widget.entry!.isCorrection,
-      ) ??
-      CorporateFormDraft(
-        companyName: widget.entry?.companyName,
-        isCorrection: widget.entry?.isCorrection ?? false,
-      );
+  VerificationEntry? get source => widget.seed ?? widget.entry;
+  late final CorporateFormDraft? draftForm = _initialDraft();
+
+  CorporateFormDraft? _initialDraft() {
+    final entry = source;
+    if (entry != null &&
+        (entry.isCorrection ||
+            (entry.status?.isNotEmpty == true && entry.status != 'DRAFT'))) {
+      return entry.correctionDraft();
+    }
+    return entry?.submittedForm?.copyForEditing(correction: false) ??
+        CorporateFormDraft(companyName: entry?.companyName);
+  }
+
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
     final entry = widget.entry;
-    final onRefresh = widget.onRefresh;
     final status = entry?.status;
     final draft = status == null || status.isEmpty || status == 'DRAFT';
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
-        Text(
-          l.corporateVerificationTitle,
-          style: Theme.of(context).textTheme.headlineSmall,
-        ),
-        if (entry?.companyName?.isNotEmpty == true)
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(entry!.companyName!),
-          ),
-        const SizedBox(height: 16),
-        if (entry != null)
-          Card(
-            child: ListTile(
-              title: Text(l.corporateStatusTitle),
-              subtitle: Text(l.corporateStatus(draft ? 'DRAFT' : status)),
+        if (entry != null) ...[
+          if (entry.companyName?.isNotEmpty == true)
+            Text(
+              entry.companyName!,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
+          const SizedBox(height: 36),
+          Text(
+            l.corporateVerificationTitle,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
+          const SizedBox(height: 16),
+          CorporateStatusNotice(entry: entry, overview: true),
+          const SizedBox(height: 16),
+        ],
         if (draft && entry?.isCorrection != true) ...[
           const SizedBox(height: 16),
           Text(
@@ -140,24 +127,24 @@ class _CorporateEntryContentState extends State<CorporateEntryContent> {
           Text(l.corporateProcessNote),
           const SizedBox(height: 24),
           AppButton(
-            label: draftForm.hasEntries && _opened
+            label: draftForm?.hasEntries == true && _opened
                 ? l.corpFormResume
                 : l.corpFormStart,
-            onPressed: () async {
-              _opened = true;
-              await Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  settings: RouteSettings(
-                    name: corporateStepRoute(CorporateSection.company),
-                  ),
-                  builder: (_) => CorporateFormPage(
-                    draft: draftForm,
-                    section: CorporateSection.company,
-                  ),
-                ),
-              );
-              if (mounted) setState(() {});
-            },
+            onPressed: draftForm == null
+                ? null
+                : () async {
+                    _opened = true;
+                    await CorporateFormPage.start(context, draftForm!);
+                    if (mounted) setState(() {});
+                  },
+          ),
+        ],
+        if (entry == null) ...[
+          const SizedBox(height: 12),
+          AppButton(
+            label: l.profilePrevStep,
+            variant: AppButtonVariant.secondary,
+            onPressed: () => Navigator.of(context).maybePop(),
           ),
         ],
         if (entry != null &&
@@ -165,31 +152,20 @@ class _CorporateEntryContentState extends State<CorporateEntryContent> {
             CorporateProgress.fromEntry(entry) != null)
           AppButton(
             label: l.corpProgressOpen,
+            minHeight: 55,
+            style: const ButtonStyle(
+              shape: WidgetStatePropertyAll(StadiumBorder()),
+            ),
             onPressed: () => CorporateProgressPage.open(context),
           ),
         if (entry?.submittedForm != null) ...[
-          const SizedBox(height: 12),
-          AppButton(
-            label: l.corpDetailView,
-            variant: AppButtonVariant.secondary,
-            onPressed: () => CorporateDetailPage.open(context),
+          const SizedBox(height: 40),
+          Text(
+            l.corpApplicationLabel,
+            style: Theme.of(context).textTheme.labelSmall,
           ),
-          if (entry!.canCorrect) ...[
-            const SizedBox(height: 12),
-            AppButton(
-              label: l.corpDetailCorrect,
-              onPressed: () =>
-                  CorporateDetailPage.open(context, correction: true),
-            ),
-          ],
-        ],
-        if (onRefresh != null) ...[
-          const SizedBox(height: 20),
-          AppButton(
-            variant: AppButtonVariant.secondary,
-            label: l.corporateRefresh,
-            onPressed: onRefresh,
-          ),
+          const SizedBox(height: 8),
+          CorporateApplicationLinks(entry: entry!),
         ],
       ],
     );

@@ -7,7 +7,7 @@ import "../../domain/entities/corporate_form_draft.dart";
 import "../support/beneficial_owner_labels.dart";
 import "../support/corporate_form_fields.dart";
 import "../widgets/corporate_form_header.dart";
-import "../widgets/verification_entry_scaffold.dart";
+import "../widgets/corporate_flow_scaffold.dart";
 
 class BeneficialOwnerEditor extends StatefulWidget {
   const BeneficialOwnerEditor({super.key, this.person});
@@ -96,7 +96,10 @@ class _BeneficialOwnerEditorState extends State<BeneficialOwnerEditor> {
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
-    return VerificationEntryScaffold(
+    return CorporateFlowScaffold(
+      exitPrompt: CorporateExitPrompt.draft,
+      title: l.corpOwnerTitle,
+      step: CorporateSection.owners.index,
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Form(

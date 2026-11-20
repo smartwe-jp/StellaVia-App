@@ -16,9 +16,14 @@ void main() {
       'confirmed account sees completion and destinations from progress=$progress',
       (t) async {
         final router = GoRouter(
+          initialLocation: '/profile/settings',
           routes: [
             GoRoute(
-              path: '/',
+              path: '/profile/settings',
+              builder: (_, _) => const Scaffold(body: Text('Settings')),
+            ),
+            GoRoute(
+              path: '/member-profile/edit',
               builder: (_, _) => progress
                   ? const CorporateProgressPage()
                   : const VerificationEntryPage(),
@@ -58,8 +63,19 @@ void main() {
           ),
         );
         await t.pumpAndSettle();
+        router.push('/member-profile/edit');
+        await t.pumpAndSettle();
         final l = AppLocalizations.of(t.element(find.byType(Scaffold).first));
+        expect(find.byType(CorporateProgressPage), findsOneWidget);
         expect(find.text(l.corpVerifiedTitle), findsNothing);
+        if (progress) {
+          await t.tap(find.byTooltip(l.commonClose));
+          await t.pumpAndSettle();
+          expect(find.text('Settings'), findsOneWidget);
+          expect(find.text(l.corpExitTitle), findsNothing);
+          router.push('/member-profile/edit');
+          await t.pumpAndSettle();
+        }
         container.read(status.notifier).state = 'CONFIRMED';
         await t.pumpAndSettle();
         expect(find.text(l.corpVerifiedTitle), findsOneWidget);
@@ -77,8 +93,8 @@ void main() {
         expect(find.text(l.corpDetailTitle), findsOneWidget);
         await t.binding.handlePopRoute();
         await t.pumpAndSettle();
-        await tap(progress ? l.corpProgressMyPage : l.corpVerifiedFunds);
-        expect(find.text(progress ? '/profile' : '/funds'), findsOneWidget);
+        await tap(progress ? l.commonClose : l.corpVerifiedFunds);
+        expect(find.text(progress ? 'Settings' : '/funds'), findsOneWidget);
       },
     );
   }
@@ -88,6 +104,10 @@ void main() {
     final router = GoRouter(
       routes: [
         GoRoute(path: '/', builder: (_, __) => const VerificationEntryPage()),
+        GoRoute(
+          path: '/profile',
+          builder: (_, __) => const Scaffold(body: Text('My Page')),
+        ),
         GoRoute(
           path: '/member-profile/onboarding',
           builder: (_, __) => const Scaffold(body: Text('personal intake')),
@@ -124,9 +144,27 @@ void main() {
     await tester.tap(find.text(l.corpFormStart));
     await tester.pumpAndSettle();
     expect(find.text(l.corpFormBusinessName), findsOneWidget);
-    await tester.tap(find.byIcon(Icons.arrow_back_rounded));
+    final rail = find.byType(AppStepProgressBar);
+    final rect = tester.getRect(rail);
+    await tester.drag(
+      find.byType(SingleChildScrollView),
+      const Offset(0, -300),
+    );
     await tester.pumpAndSettle();
-    await tester.tap(find.byIcon(Icons.arrow_back_rounded));
+    expect(tester.getRect(rail), rect);
+    await tester.tap(find.byTooltip(l.commonClose));
+    await tester.pumpAndSettle();
+    expect(find.text(l.corpExitDraft), findsOneWidget);
+    await tester.tap(find.text(l.corpExitStay));
+    await tester.pumpAndSettle();
+    expect(tester.getRect(rail), rect);
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip(l.commonClose));
+    await tester.pumpAndSettle();
+    expect(find.text(l.corpExitTitle), findsNothing);
+    expect(find.byType(VerificationEntryPage), findsOneWidget);
+    router.go('/');
     await tester.pumpAndSettle();
     await tester.tap(find.text(l.personalInvestor));
     await tester.pump();

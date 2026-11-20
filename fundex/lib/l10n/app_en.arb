@@ -3207,6 +3207,7 @@
   "corpProgressTrading": "When you can invest",
   "corpProgressTradingHint": "You can apply to invest after document review, receipt of the mailed documents and final verification.",
   "corpProgressOpen": "Check application status",
+  "corpBackHome": "Back to Home",
   "corpProgressMyPage": "Back to My Page",
   "corpProgressTitle": "Corporate verification status",
   "corpProgressCorrection": "Your application needs changes",
@@ -3270,5 +3271,16 @@
   "corpVerifiedStatus": "Verification status",
   "corpVerifiedDone": "Complete",
   "corpVerifiedView": "View registered corporate information",
-  "corpVerifiedFunds": "Browse funds"
+  "corpVerifiedFunds": "Browse funds",
+  "corpExitTitle": "Close verification?",
+  "corpExitSaved": "Corporate verification is still in progress. Your submitted application has been saved.",
+  "corpExitDraft": "Corporate verification is incomplete. Your current edits may be lost.",
+  "corpExitStay": "Continue verification",
+  "corpMailPending": "Awaiting original documents",
+  "corpMailOverview": "We received your application. Please mail the required originals.",
+  "corpMailProgress": "After mailing the originals, use the button below to provide dispatch details.",
+  "corpStatusLabel": "Current status",
+  "corpFlowLabel": "Verification steps",
+  "corpApplicationLabel": "Application information",
+  "corpProgressHeading": "Application status"
 }

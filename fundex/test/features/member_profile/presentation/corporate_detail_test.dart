@@ -74,7 +74,7 @@ void main() {
         t.element(find.byType(CorporateProgressPage)),
       );
       Future<void> tap(String label) async {
-        final item = find.widgetWithText(AppButton, label);
+        final item = find.text(label);
         if (item.evaluate().isEmpty) {
           await t.scrollUntilVisible(
             item,
@@ -91,11 +91,13 @@ void main() {
       await tap(l.corpDetailView);
       expect(find.byType(CorporateDetailPage), findsOneWidget);
       expect(find.textContaining('•••3456'), findsOneWidget);
-      await tap(l.corpDetailPreview);
+      expect(find.textContaining('0123456'), findsNothing);
+      expect(find.textContaining('田中'), findsOneWidget);
+      expect(find.textContaining('鈴木'), findsOneWidget);
+      expect(find.text(l.corpDetailPreview), findsNothing);
+      expect(find.textContaining(l.corpDetailExpand), findsNothing);
       expect(find.text('登記.pdf'), findsOneWidget);
-      await t.ensureVisible(find.text('登記.pdf'));
-      await t.tap(find.text('登記.pdf'));
-      await t.pumpAndSettle();
+      await tap('登記.pdf');
       expect(find.byType(InteractiveViewer), findsOneWidget);
       await t.tap(find.byType(BackButton));
       await t.pumpAndSettle();

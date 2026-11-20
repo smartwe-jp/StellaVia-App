@@ -41,11 +41,6 @@ class CorporateMailFields extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          sendingOriginals ? l.corpMailSent : l.corpMailConfirmTitle,
-          style: theme.textTheme.headlineSmall,
-        ),
-        const SizedBox(height: 12),
         Text(sendingOriginals ? l.corpMailDetails : l.corpMailQuestion),
         const SizedBox(height: 24),
         notice(

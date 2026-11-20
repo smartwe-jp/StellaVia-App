@@ -3177,6 +3177,7 @@
   "corpProgressTrading": "お取引の開始について",
   "corpProgressTradingHint": "書類審査と郵送物の受取後、最終確認が完了するとお申込みいただけます。",
   "corpProgressOpen": "申請状況を確認",
+  "corpBackHome": "ホームに戻る",
   "corpProgressMyPage": "マイページに戻る",
   "corpProgressTitle": "法人認証の申請状況",
   "corpProgressCorrection": "申請内容の修正が必要です",
@@ -3240,5 +3241,16 @@
   "corpVerifiedStatus": "認証状況",
   "corpVerifiedDone": "完了",
   "corpVerifiedView": "登録した法人情報を見る",
-  "corpVerifiedFunds": "ファンドを見る"
+  "corpVerifiedFunds": "ファンドを見る",
+  "corpExitTitle": "認証手続きを閉じますか？",
+  "corpExitSaved": "法人認証はまだ完了していません。提出済みの申請内容は保存されています。",
+  "corpExitDraft": "法人認証はまだ完了していません。入力中の内容は保存されない場合があります。",
+  "corpExitStay": "手続きを続ける",
+  "corpMailPending": "原本の郵送待ち",
+  "corpMailOverview": "申請を受け付けました。必要書類の原本を郵送してください。",
+  "corpMailProgress": "郵送が済んだら、下のボタンから発送内容をお知らせください。",
+  "corpStatusLabel": "現在の状況",
+  "corpFlowLabel": "認証の流れ",
+  "corpApplicationLabel": "申請情報",
+  "corpProgressHeading": "申請状況"
 }

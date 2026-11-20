@@ -1,119 +1,118 @@
-import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import '../pages/corporate_attachment_page.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/corporate_form_draft.dart';
-import '../support/beneficial_owner_labels.dart';
 import '../support/corporate_document_labels.dart';
+import '../support/beneficial_owner_labels.dart';
 import '../support/corporate_form_fields.dart';
 import '../support/corporate_section_lines.dart';
 
-class CorporateDetailSections extends StatefulWidget {
+class CorporateDetailSections extends StatelessWidget {
   const CorporateDetailSections({super.key, required this.form});
   final CorporateFormDraft form;
-  @override
-  State<CorporateDetailSections> createState() =>
-      _CorporateDetailSectionsState();
-}
 
-class _CorporateDetailSectionsState extends State<CorporateDetailSections> {
-  final expanded = <CorporateSection>{};
   @override
   Widget build(BuildContext context) {
-    final l = context.l10n, f = widget.form, theme = Theme.of(context);
-    String val(CorporateSection s, CorporateField key) => f.value(s, key);
-    final bank = val(CorporateSection.bank, CorporateField.accountNumber);
-    final groups = <CorporateSection, (String, String)>{
-      CorporateSection.company: (
-        l.corpFormCompany,
-        [
-          val(CorporateSection.company, CorporateField.businessName),
-          val(CorporateSection.company, CorporateField.number),
-        ].where((s) => s.isNotEmpty).join('\n'),
+    final l = context.l10n;
+    final theme = Theme.of(context);
+    final valueStyle = theme.textTheme.bodyMedium?.copyWith(
+      fontWeight: FontWeight.bold,
+    );
+    Widget row(String label, String value) => Padding(
+      padding: const EdgeInsets.symmetric(vertical: 7),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 35,
+            child: Text(label, style: theme.textTheme.bodySmall),
+          ),
+          const SizedBox(width: 12),
+          Expanded(flex: 65, child: Text(value, style: valueStyle)),
+        ],
       ),
-      CorporateSection.representative: (
-        l.corpDetailPeople,
-        [
-          val(CorporateSection.representative, CorporateField.name),
-          if (f.handler == CorporateHandler.delegate)
-            val(CorporateSection.handler, CorporateField.name),
-        ].where((s) => s.isNotEmpty).join(' ／ '),
-      ),
-      CorporateSection.owners: (
-        l.corpOwnerTitle,
-        f.ownerPresence == null ? '' : ownerPresenceLabel(l, f.ownerPresence!),
-      ),
-      CorporateSection.bank: (
-        l.corpBankTitle,
-        [
-          val(CorporateSection.bank, CorporateField.bankName),
-          val(CorporateSection.bank, CorporateField.branchName),
-          if (bank.isNotEmpty)
-            '•••${bank.substring(bank.length > 4 ? bank.length - 4 : 0)}',
-        ].where((s) => s.isNotEmpty).join(' '),
-      ),
-      CorporateSection.documents: (
-        l.corpDetailFiles,
-        f.documents.submitted
-            .map((a) => a.slot == null ? a.category : documentLabel(l, a.slot!))
-            .join(' ／ '),
-      ),
-    };
+    );
+    Iterable<Widget> fields(CorporateSection section) sync* {
+      if (section == CorporateSection.handler && form.handler != null) {
+        yield row(
+          l.corpFormHandler,
+          form.handler == CorporateHandler.delegate
+              ? l.corpFormDelegate
+              : l.corpFormSelf,
+        );
+      }
+      if (section == CorporateSection.owners && form.ownerPresence != null) {
+        yield row(l.corpOwnerTitle, ownerPresenceLabel(l, form.ownerPresence!));
+        for (final owner in form.declaredOwners) {
+          yield const Divider();
+          for (final (label, value) in [
+            (l.corpFormName, owner.name),
+            (l.corpFormBirth, owner.birthdate),
+            (l.corpOwnerCountry, owner.country),
+            (l.corpFormAddress, owner.address),
+            (l.corpOwnerControl, ownerControlLabel(l, owner.control)),
+            (l.corpOwnerPercentage, owner.percentage),
+          ]) {
+            if (value.isNotEmpty) yield row(label, value);
+          }
+        }
+      }
+      for (final field in form.fields(section)) {
+        if (form.value(section, field).isNotEmpty) {
+          yield row(
+            corporateFieldLabel(l, field),
+            corporateFieldValue(
+              l,
+              form,
+              section,
+              field,
+              maskAccountNumber: true,
+            ),
+          );
+        }
+      }
+    }
+
+    List<Widget> sectionRows(CorporateSection section) {
+      final rows = fields(section).toList();
+      return rows.isEmpty ? [Text(l.corpDetailEmpty)] : rows;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        for (final item in groups.entries) ...[
-          const SizedBox(height: 20),
-          Text(item.value.$1, style: theme.textTheme.bodySmall),
-          const SizedBox(height: 8),
+        for (final section in const [
+          CorporateSection.company,
+          CorporateSection.representative,
+          CorporateSection.handler,
+          CorporateSection.owners,
+          CorporateSection.bank,
+          CorporateSection.documents,
+        ]) ...[
+          const SizedBox(height: 24),
           Text(
-            item.value.$2.isEmpty ? l.corpDetailEmpty : item.value.$2,
-            style: theme.textTheme.titleMedium,
+            section == CorporateSection.documents
+                ? l.corpDetailFiles
+                : sectionTitle(l, section),
+            style: theme.textTheme.titleLarge,
           ),
           const Divider(),
-          if (expanded.contains(item.key))
-            if (item.key == CorporateSection.documents) ...[
-              for (final a in f.documents.submitted)
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(
-                    a.slot == null ? a.category : documentLabel(l, a.slot!),
-                  ),
-                  subtitle: Text(a.file.filename),
-                  trailing: const Icon(Icons.visibility_outlined),
-                  onTap: () => CorporateAttachmentPage.open(context, a.file),
+          if (section == CorporateSection.documents) ...[
+            if (form.documents.submitted.isEmpty) Text(l.corpDetailEmpty),
+            for (final attachment in form.documents.submitted)
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: row(
+                  attachment.slot == null
+                      ? attachment.category
+                      : documentLabel(l, attachment.slot!),
+                  attachment.file.filename,
                 ),
-            ] else ...[
-              for (final section in [
-                item.key,
-                if (item.key == CorporateSection.representative)
-                  CorporateSection.handler,
-              ]) ...[
-                if (item.key == CorporateSection.representative)
-                  Text(
-                    sectionTitle(l, section),
-                    style: theme.textTheme.labelLarge,
-                  ),
-                SelectableText(corporateSectionLines(l, f, section).join('\n')),
-              ],
-            ],
-          AppButton(
-            variant: AppButtonVariant.secondary,
-            style: const ButtonStyle(
-              shape: WidgetStatePropertyAll(StadiumBorder()),
-            ),
-            label: expanded.contains(item.key)
-                ? l.corpDetailHide
-                : item.key == CorporateSection.documents
-                ? l.corpDetailPreview
-                : '${item.value.$1} · ${l.corpDetailExpand}',
-            onPressed:
-                item.value.$2.isEmpty && item.key == CorporateSection.documents
-                ? null
-                : () => setState(() {
-                    if (!expanded.remove(item.key)) expanded.add(item.key);
-                  }),
-          ),
+                onTap: () =>
+                    CorporateAttachmentPage.open(context, attachment.file),
+              ),
+          ] else
+            ...sectionRows(section),
         ],
       ],
     );

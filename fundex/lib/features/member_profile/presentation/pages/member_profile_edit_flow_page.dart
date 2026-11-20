@@ -30,9 +30,8 @@ enum _MemberProfileEditFlowMode { flow, section }
 enum _ProfilePhotoTarget { documentFront, documentOblique, documentBack }
 
 class MemberProfileEditFlowPage extends ConsumerStatefulWidget {
-  const MemberProfileEditFlowPage({super.key})
-    : _mode = _MemberProfileEditFlowMode.flow,
-      initialStep = null;
+  const MemberProfileEditFlowPage({super.key, this.initialStep})
+    : _mode = _MemberProfileEditFlowMode.flow;
 
   const MemberProfileEditFlowPage.section({
     super.key,
@@ -446,11 +445,12 @@ class _MemberProfileEditFlowPageState
               0,
               MemberProfileEditStep.values.length - 1,
             )];
-        _currentStep = _isSingleSectionMode
-            ? _normalizeStepForFlow(
-                widget.initialStep ?? MemberProfileEditStep.basicInfo,
-              )
-            : _normalizeStepForFlow(resolvedStep);
+        _currentStep = _normalizeStepForFlow(
+          widget.initialStep ??
+              (_isSingleSectionMode
+                  ? MemberProfileEditStep.basicInfo
+                  : resolvedStep),
+        );
         if (!_isSingleSectionMode &&
             _currentStep.index > MemberProfileEditStep.ekyc.index &&
             !_isEkycStepReady) {

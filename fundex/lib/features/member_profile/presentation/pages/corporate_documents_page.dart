@@ -10,7 +10,7 @@ import '../support/corporate_document_labels.dart';
 import '../widgets/corporate_document_card.dart';
 import '../widgets/corporate_form_header.dart';
 import 'corporate_review_page.dart';
-import '../widgets/verification_entry_scaffold.dart';
+import '../widgets/corporate_flow_scaffold.dart';
 
 class CorporateDocumentsPage extends ConsumerStatefulWidget {
   const CorporateDocumentsPage({
@@ -102,7 +102,11 @@ class _CorporateDocumentsPageState
     final l = context.l10n, identity = widget.identity;
     return PopScope(
       canPop: busy == null,
-      child: VerificationEntryScaffold(
+      child: CorporateFlowScaffold(
+        exitPrompt: CorporateExitPrompt.draft,
+        title: l.corpDocsTitle,
+        step: CorporateSection.documents.index,
+        locked: busy != null,
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
           children: [

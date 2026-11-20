@@ -3177,6 +3177,7 @@
   "corpProgressTrading": "何时可以开始交易",
   "corpProgressTradingHint": "完成书面审核、签收和最终确认后，即可申请投资。",
   "corpProgressOpen": "查看申请进度",
+  "corpBackHome": "返回首页",
   "corpProgressMyPage": "返回我的页面",
   "corpProgressTitle": "法人认证申请进度",
   "corpProgressCorrection": "申请资料需要修改",
@@ -3240,5 +3241,16 @@
   "corpVerifiedStatus": "认证状态",
   "corpVerifiedDone": "已完成",
   "corpVerifiedView": "查看已登记的法人资料",
-  "corpVerifiedFunds": "查看基金"
+  "corpVerifiedFunds": "查看基金",
+  "corpExitTitle": "退出认证流程？",
+  "corpExitSaved": "法人认证尚未完成。已提交的申请资料已保存。",
+  "corpExitDraft": "法人认证尚未完成，正在填写的内容可能丢失。",
+  "corpExitStay": "继续办理",
+  "corpMailPending": "等待邮寄原件",
+  "corpMailOverview": "申请已受理，请邮寄所需材料的原件。",
+  "corpMailProgress": "寄出原件后，请点击下方按钮填写寄件说明。",
+  "corpStatusLabel": "当前状态",
+  "corpFlowLabel": "认证流程",
+  "corpApplicationLabel": "申请信息",
+  "corpProgressHeading": "申请进度"
 }

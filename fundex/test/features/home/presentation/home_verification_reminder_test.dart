@@ -1,3 +1,5 @@
+import 'package:fundex/features/member_profile/presentation/pages/corporate_form_page.dart';
+import 'package:fundex/features/member_profile/domain/entities/corporate_form_draft.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:fundex/features/home/presentation/support/home_member_profile_re
 import 'package:fundex/features/home/presentation/widgets/home_verification_reminder.dart';
 import 'package:fundex/features/member_profile/domain/repositories/verification_entry_repository.dart';
 import 'package:fundex/l10n/app_localizations.dart';
+import 'package:fundex/features/member_profile/presentation/providers/verification_entry_provider.dart';
 
 void main() {
   test('reminder only appears for actionable verification states', () {
@@ -50,28 +53,38 @@ void main() {
     'corporate',
     'changed',
     'existing',
+    'confirmed',
+    'directPersonal',
   ]) {
     testWidgets('home verification action $action', (t) async {
-      var entry = action == 'existing'
-          ? const VerificationEntry(
+      var entry = (action == 'existing' || action == 'confirmed')
+          ? VerificationEntry(
               VerificationEntryKind.corporate,
-              status: 'REJECTED',
+              applicationId: 123,
+              submittedForm: CorporateFormDraft(
+                companyName: '登録済み株式会社',
+                sourceApplicationId: 123,
+              ),
+              status: action == 'confirmed' ? 'CONFIRMED' : 'REJECTED',
+            )
+          : action == 'directPersonal'
+          ? const VerificationEntry(
+              VerificationEntryKind.personal,
+              personalStatus: 3,
             )
           : const VerificationEntry(VerificationEntryKind.choice);
       final router = GoRouter(
+        initialLocation: '/home',
         routes: [
           GoRoute(
-            path: '/',
+            path: '/home',
             builder: (_, _) => const Scaffold(body: HomeVerificationReminder()),
           ),
-          for (final path in [
-            '/member-profile/onboarding',
-            '/member-profile/edit',
-          ])
-            GoRoute(
-              path: path,
-              builder: (_, _) => Scaffold(body: Text(path)),
-            ),
+          GoRoute(
+            path: '/member-profile/onboarding',
+            builder: (_, _) =>
+                const Scaffold(body: Text('/member-profile/onboarding')),
+          ),
         ],
       );
       addTearDown(router.dispose);
@@ -79,6 +92,7 @@ void main() {
         ProviderScope(
           overrides: [
             homeVerificationReminderProvider.overrideWith((_) async => entry),
+            verificationEntryProvider.overrideWith((_) async => entry),
           ],
           child: MaterialApp.router(
             theme: AppThemeFactory.light().copyWith(
@@ -97,9 +111,41 @@ void main() {
       );
       await t.tap(find.text(l.homeReminderProfileTitle));
       await t.pumpAndSettle();
-      if (action == 'existing') {
+      Future<void> expectExitToHome() async {
+        await t.tap(find.byTooltip(l.commonClose));
+        await t.pumpAndSettle();
+        await t.tap(find.text(l.commonClose));
+        await t.pumpAndSettle();
+        expect(find.byType(HomeVerificationReminder), findsOneWidget);
+        expect(router.state.matchedLocation, '/home');
+        expect(router.canPop(), isFalse);
+      }
+
+      if (action == 'existing' || action == 'confirmed') {
         expect(find.byType(CupertinoAlertDialog), findsNothing);
-        expect(find.text('/member-profile/edit'), findsOneWidget);
+        expect(find.text(l.corporatePrepareTitle), findsOneWidget);
+        await t.ensureVisible(find.text(l.corpFormStart));
+        await t.tap(find.text(l.corpFormStart));
+        await t.pumpAndSettle();
+        expect(find.text('登録済み株式会社'), findsOneWidget);
+        final draft = t
+            .widget<CorporateFormPage>(find.byType(CorporateFormPage))
+            .draft;
+        expect(draft.isCorrection, isTrue);
+        expect(draft.sourceApplicationId, 123);
+        expect(draft.sections, isNot(contains(CorporateSection.bank)));
+        await expectExitToHome();
+        return;
+      }
+      if (action == 'directPersonal') {
+        expect(find.byType(CupertinoAlertDialog), findsNothing);
+        expect(
+          router.state.uri.toString(),
+          '/member-profile/onboarding?start=first',
+        );
+        router.pop();
+        await t.pumpAndSettle();
+        expect(router.state.matchedLocation, '/home');
         return;
       }
       expect(find.byType(CupertinoAlertDialog), findsOneWidget);
@@ -124,11 +170,21 @@ void main() {
         find.text(switch (action) {
           'cancel' => l.homeReminderProfileTitle,
           'corporate' => l.corporatePrepareTitle,
-          'changed' => '/member-profile/edit',
+          'changed' => l.corporatePrepareTitle,
           _ => '/member-profile/onboarding',
         }),
         findsOneWidget,
       );
+      if (action == 'corporate') {
+        final route =
+            ModalRoute.of(t.element(find.text(l.corporatePrepareTitle)))
+                as PageRoute;
+        expect(route.fullscreenDialog, isTrue);
+        await t.ensureVisible(find.text(l.corpFormStart));
+        await t.tap(find.text(l.corpFormStart));
+        await t.pumpAndSettle();
+        await expectExitToHome();
+      }
     });
   }
 }

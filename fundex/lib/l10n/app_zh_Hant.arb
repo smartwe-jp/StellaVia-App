@@ -3177,6 +3177,7 @@
   "corpProgressTrading": "何時可以開始交易",
   "corpProgressTradingHint": "完成文件審查、簽收及最終確認後，即可申請投資。",
   "corpProgressOpen": "查看申請進度",
+  "corpBackHome": "返回首頁",
   "corpProgressMyPage": "返回我的頁面",
   "corpProgressTitle": "法人認證申請進度",
   "corpProgressCorrection": "申請資料需要修改",
@@ -3240,5 +3241,16 @@
   "corpVerifiedStatus": "認證狀態",
   "corpVerifiedDone": "已完成",
   "corpVerifiedView": "查看已登記的法人資料",
-  "corpVerifiedFunds": "查看基金"
+  "corpVerifiedFunds": "查看基金",
+  "corpExitTitle": "退出認證流程？",
+  "corpExitSaved": "法人認證尚未完成。已提交的申請資料已儲存。",
+  "corpExitDraft": "法人認證尚未完成，正在填寫的內容可能遺失。",
+  "corpExitStay": "繼續辦理",
+  "corpMailPending": "等待郵寄正本",
+  "corpMailOverview": "申請已受理，請郵寄所需文件正本。",
+  "corpMailProgress": "寄出正本後，請點選下方按鈕填寫寄件說明。",
+  "corpStatusLabel": "目前狀態",
+  "corpFlowLabel": "認證流程",
+  "corpApplicationLabel": "申請資訊",
+  "corpProgressHeading": "申請進度"
 }

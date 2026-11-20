@@ -2,12 +2,12 @@ import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
-import '../../domain/entities/corporate_form_draft.dart';
 import '../../domain/repositories/verification_entry_repository.dart';
 import '../providers/verification_entry_provider.dart';
 import '../support/corporate_form_fields.dart';
 import '../widgets/corporate_detail_sections.dart';
 import '../widgets/verification_entry_scaffold.dart';
+import '../widgets/corporate_flow_scaffold.dart';
 import 'corporate_form_page.dart';
 
 class CorporateDetailPage extends ConsumerWidget {
@@ -61,36 +61,30 @@ class CorporateDetailPage extends ConsumerWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            editing ? l.corpDetailEditTitle : l.corpDetailTitle,
-            style: theme.textTheme.headlineSmall,
-          ),
-          const SizedBox(height: 12),
-          Text(editing ? l.corpDetailPrefill : entry.companyName ?? ''),
-          const SizedBox(height: 24),
-          Card(
-            margin: EdgeInsets.zero,
-            color: theme.appColors.surfaceAlt,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    editing
-                        ? l.corpDetailScopeTitle
-                        : l.corporateStatus(entry.status ?? ''),
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: theme.colorScheme.primary,
+          if (editing) ...[
+            const SizedBox(height: 12),
+            Text(l.corpDetailPrefill),
+            const SizedBox(height: 24),
+            Card(
+              margin: EdgeInsets.zero,
+              color: theme.appColors.surfaceAlt,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l.corpDetailScopeTitle,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: theme.colorScheme.primary,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(editing ? l.corpDetailScope : l.corpDetailInfo),
-                ],
+                    const SizedBox(height: 8),
+                    Text(l.corpDetailScope),
+                  ],
+                ),
               ),
             ),
-          ),
-          if (editing) ...[
             const SizedBox(height: 24),
             Text(l.corpBankTitle, style: theme.textTheme.bodySmall),
             Text(l.corpDetailBank),
@@ -116,27 +110,34 @@ class CorporateDetailPage extends ConsumerWidget {
                     .read(verificationEntryProvider)
                     .asData
                     ?.value;
-                if (latest?.canCorrect != true ||
-                    latest?.submittedForm == null) {
-                  return;
-                }
-                final draft = latest!.submittedForm!.copyForEditing(
-                  correction: true,
-                );
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    settings: RouteSettings(
-                      name: corporateStepRoute(CorporateSection.company),
-                    ),
-                    builder: (_) => CorporateFormPage(
-                      draft: draft,
-                      section: CorporateSection.company,
-                    ),
-                  ),
-                );
+                final draft = latest?.correctionDraft();
+                if (draft != null) CorporateFormPage.start(context, draft);
               },
             ),
           ] else ...[
+            Text(l.corpDetailTitle, style: theme.textTheme.headlineSmall),
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              decoration: BoxDecoration(
+                border: Border.all(color: theme.colorScheme.primary),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(l.corpStatusLabel, style: theme.textTheme.bodySmall),
+                  const SizedBox(height: 4),
+                  Text(
+                    l.corporateStatus(entry.status ?? ''),
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
             CorporateDetailSections(form: form),
             if (entry.canCorrect && !readOnly) ...[
               const SizedBox(height: 24),
@@ -158,19 +159,20 @@ class CorporateDetailPage extends ConsumerWidget {
       );
     }
 
-    return VerificationEntryScaffold(
-      resultPage: true,
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
-        children: [
-          result.when(
-            skipLoadingOnRefresh: false,
-            data: content,
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (_, _) => unavailable(),
-          ),
-        ],
-      ),
+    final body = ListView(
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+      children: [
+        result.when(
+          skipLoadingOnRefresh: false,
+          data: content,
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (_, _) => unavailable(),
+        ),
+      ],
     );
+    if (correction && result.asData?.value.canCorrect == true) {
+      return CorporateFlowScaffold(title: l.corpDetailEditTitle, child: body);
+    }
+    return VerificationEntryScaffold(resultPage: true, child: body);
   }
 }

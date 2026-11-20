@@ -7540,6 +7540,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get corpProgressOpen => '查看申请进度';
 
   @override
+  String get corpBackHome => '返回首页';
+
+  @override
   String get corpProgressMyPage => '返回我的页面';
 
   @override
@@ -7730,6 +7733,39 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get corpVerifiedFunds => '查看基金';
+
+  @override
+  String get corpExitTitle => '退出认证流程？';
+
+  @override
+  String get corpExitSaved => '法人认证尚未完成。已提交的申请资料已保存。';
+
+  @override
+  String get corpExitDraft => '法人认证尚未完成，正在填写的内容可能丢失。';
+
+  @override
+  String get corpExitStay => '继续办理';
+
+  @override
+  String get corpMailPending => '等待邮寄原件';
+
+  @override
+  String get corpMailOverview => '申请已受理，请邮寄所需材料的原件。';
+
+  @override
+  String get corpMailProgress => '寄出原件后，请点击下方按钮填写寄件说明。';
+
+  @override
+  String get corpStatusLabel => '当前状态';
+
+  @override
+  String get corpFlowLabel => '认证流程';
+
+  @override
+  String get corpApplicationLabel => '申请信息';
+
+  @override
+  String get corpProgressHeading => '申请进度';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -15272,6 +15308,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get corpProgressOpen => '查看申請進度';
 
   @override
+  String get corpBackHome => '返回首頁';
+
+  @override
   String get corpProgressMyPage => '返回我的頁面';
 
   @override
@@ -15462,4 +15501,37 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get corpVerifiedFunds => '查看基金';
+
+  @override
+  String get corpExitTitle => '退出認證流程？';
+
+  @override
+  String get corpExitSaved => '法人認證尚未完成。已提交的申請資料已儲存。';
+
+  @override
+  String get corpExitDraft => '法人認證尚未完成，正在填寫的內容可能遺失。';
+
+  @override
+  String get corpExitStay => '繼續辦理';
+
+  @override
+  String get corpMailPending => '等待郵寄正本';
+
+  @override
+  String get corpMailOverview => '申請已受理，請郵寄所需文件正本。';
+
+  @override
+  String get corpMailProgress => '寄出正本後，請點選下方按鈕填寫寄件說明。';
+
+  @override
+  String get corpStatusLabel => '目前狀態';
+
+  @override
+  String get corpFlowLabel => '認證流程';
+
+  @override
+  String get corpApplicationLabel => '申請資訊';
+
+  @override
+  String get corpProgressHeading => '申請進度';
 }

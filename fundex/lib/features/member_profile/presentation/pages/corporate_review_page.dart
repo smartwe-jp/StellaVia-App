@@ -7,7 +7,7 @@ import '../providers/verification_entry_provider.dart';
 import '../support/corporate_form_fields.dart';
 import '../widgets/corporate_form_header.dart';
 import '../widgets/corporate_review_section.dart';
-import '../widgets/verification_entry_scaffold.dart';
+import '../widgets/corporate_flow_scaffold.dart';
 import 'corporate_success_page.dart';
 
 class CorporateReviewPage extends ConsumerStatefulWidget {
@@ -119,7 +119,11 @@ class _CorporateReviewPageState extends ConsumerState<CorporateReviewPage> {
     final l = context.l10n, locked = busy || unknown;
     return PopScope(
       canPop: !locked,
-      child: VerificationEntryScaffold(
+      child: CorporateFlowScaffold(
+        exitPrompt: CorporateExitPrompt.draft,
+        title: l.corpFormReviewTitle,
+        step: 6,
+        locked: locked,
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
           children: [

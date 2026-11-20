@@ -1,11 +1,10 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../providers/verification_entry_provider.dart';
-import '../widgets/corporate_stage_indicator.dart';
-import '../widgets/verification_entry_scaffold.dart';
+import '../support/corporate_flow_navigation.dart';
+import '../widgets/corporate_flow_scaffold.dart';
 import 'corporate_progress_page.dart';
 
 class CorporateSuccessPage extends ConsumerWidget {
@@ -19,15 +18,12 @@ class CorporateSuccessPage extends ConsumerWidget {
     const buttonStyle = ButtonStyle(
       shape: WidgetStatePropertyAll(StadiumBorder()),
     );
-    return VerificationEntryScaffold(
-      resultPage: true,
+    return CorporateFlowScaffold(
+      title: l.corpProgressSuccess,
+
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
         children: [
-          const CorporateStageIndicator(current: 2),
-          const SizedBox(height: 24),
-          Text(l.corpProgressSuccess, style: theme.textTheme.headlineSmall),
-          const SizedBox(height: 12),
           Text(l.corpProgressSuccessBody),
           const SizedBox(height: 24),
           Card(
@@ -84,9 +80,9 @@ class CorporateSuccessPage extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
           AppButton(
-            label: l.corpProgressMyPage,
+            label: l.commonClose,
             variant: AppButtonVariant.secondary,
-            onPressed: () => context.go('/profile'),
+            onPressed: () => leaveCorporateFlow(context),
             style: buttonStyle,
           ),
         ],

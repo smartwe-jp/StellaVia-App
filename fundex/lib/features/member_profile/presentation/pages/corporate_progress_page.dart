@@ -1,12 +1,12 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../providers/verification_entry_provider.dart';
 import '../../domain/repositories/verification_entry_repository.dart';
 import 'corporate_mail_action_page.dart';
-import 'corporate_detail_page.dart';
+import '../widgets/corporate_application_summary.dart';
+import '../widgets/corporate_flow_scaffold.dart';
 import '../support/corporate_progress.dart';
 import '../widgets/corporate_progress_timeline.dart';
 import '../widgets/corporate_verified_content.dart';
@@ -28,8 +28,18 @@ class CorporateProgressPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n, theme = Theme.of(context);
     final entry = ref.watch(verificationEntryProvider);
-    return VerificationEntryScaffold(
-      resultPage: true,
+    final current = entry.asData?.value;
+    if (current?.kind == VerificationEntryKind.corporate &&
+        current?.status == 'CONFIRMED') {
+      return VerificationEntryScaffold(
+        resultPage: true,
+        child: CorporateVerifiedContent(companyName: current?.companyName),
+      );
+    }
+    return CorporateFlowScaffold(
+      title: l.corpProgressHeading,
+
+      refresh: () => ref.invalidate(verificationEntryProvider),
       child: entry.when(
         skipLoadingOnRefresh: false,
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -44,35 +54,9 @@ class CorporateProgressPage extends ConsumerWidget {
           ],
         ),
         data: (e) {
-          if (e.kind == VerificationEntryKind.corporate &&
-              e.status == 'CONFIRMED') {
-            return CorporateVerifiedContent(companyName: e.companyName);
-          }
           final progress = CorporateProgress.fromEntry(e);
           final status = e.status ?? '';
-          final heading = status == 'REJECTED'
-              ? l.corpProgressCorrection
-              : l.corpProgressTitle;
           final notice = CorporateProgress.latestNotice(e.auditLogs);
-          final calloutTitle = switch (progress?.current) {
-            CorporateStage.originalMail when progress?.actionRequired == true =>
-              l.corpProgressSendOriginal,
-            CorporateStage.receipt when progress?.actionRequired == true =>
-              l.corpProgressCheckReceipt,
-            _ => l.corporateStatus(status),
-          };
-          final description = switch (status) {
-            'SUBMITTED' when progress?.actionRequired == true =>
-              l.corpProgressMailHint,
-            'CUSTOMER_MAILED' => l.corpProgressReviewing,
-            'ADMIN_MAILED' || 'MAILED' when progress?.actionRequired == true =>
-              l.corpProgressReceiptHint,
-            'REJECTED' =>
-              progress?.message?.isNotEmpty == true
-                  ? progress!.message!
-                  : l.corpProgressCorrection,
-            _ => l.corporateStatus(status),
-          };
           return RefreshIndicator(
             onRefresh: () async {
               // The provider renders its error state with a retry action.
@@ -84,57 +68,20 @@ class CorporateProgressPage extends ConsumerWidget {
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
               children: [
-                Text(heading, style: theme.textTheme.headlineSmall),
                 if (e.companyName?.isNotEmpty == true)
                   Padding(
-                    padding: const EdgeInsets.only(top: 12),
+                    padding: EdgeInsets.zero,
                     child: Text(e.companyName!),
                   ),
                 const SizedBox(height: 24),
-                Card(
-                  color: theme.appColors.surfaceAlt,
-                  margin: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          calloutTitle,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            color: theme.colorScheme.primary,
-                          ),
-                        ),
-                        if (description != calloutTitle) ...[
-                          const SizedBox(height: 8),
-                          Text(description),
-                        ],
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                if (progress != null)
-                  CorporateProgressTimeline(progress: progress, status: status),
-                if (notice != null &&
-                    notice.customerMessage != progress?.message) ...[
-                  Text(l.corpProgressLatest, style: theme.textTheme.labelLarge),
-                  Text(
-                    MaterialLocalizations.of(
-                      context,
-                    ).formatMediumDate(notice.createdAt!.toLocal()),
-                  ),
-                  Text(notice.customerMessage!),
-                  const Divider(),
-                ],
+                CorporateStatusNotice(entry: e),
+                const SizedBox(height: 16),
                 for (final action in CorporateMailAction.values)
                   if (e.userOps.contains(action.code))
                     Padding(
                       padding: const EdgeInsets.only(bottom: 12),
                       child: AppButton(
+                        minHeight: 55,
                         label: action == CorporateMailAction.sent
                             ? l.corpMailSent
                             : l.corpMailReceived,
@@ -153,40 +100,24 @@ class CorporateProgressPage extends ConsumerWidget {
                               ),
                       ),
                     ),
-                AppButton(
-                  label: l.corpDetailView,
-                  variant: AppButtonVariant.secondary,
-                  style: const ButtonStyle(
-                    shape: WidgetStatePropertyAll(StadiumBorder()),
+                const SizedBox(height: 20),
+                if (progress != null)
+                  Text(l.corpFlowLabel, style: theme.textTheme.titleMedium),
+                const SizedBox(height: 16),
+                if (progress != null)
+                  CorporateProgressTimeline(progress: progress, status: status),
+                if (notice != null &&
+                    notice.customerMessage != progress?.message) ...[
+                  Text(l.corpProgressLatest, style: theme.textTheme.labelLarge),
+                  Text(
+                    MaterialLocalizations.of(
+                      context,
+                    ).formatMediumDate(notice.createdAt!.toLocal()),
                   ),
-                  onPressed: () => CorporateDetailPage.open(context),
-                ),
-                if (e.canCorrect) ...[
-                  const SizedBox(height: 12),
-                  AppButton(
-                    label: l.corpDetailCorrect,
-                    style: const ButtonStyle(
-                      shape: WidgetStatePropertyAll(StadiumBorder()),
-                    ),
-                    onPressed: () =>
-                        CorporateDetailPage.open(context, correction: true),
-                  ),
+                  Text(notice.customerMessage!),
+                  const Divider(),
                 ],
-                const SizedBox(height: 12),
-                AppButton(
-                  label: l.corporateRefresh,
-                  variant: AppButtonVariant.secondary,
-                  onPressed: () => ref.invalidate(verificationEntryProvider),
-                ),
-                const SizedBox(height: 12),
-                AppButton(
-                  label: l.corpProgressMyPage,
-                  variant: AppButtonVariant.secondary,
-                  onPressed: () => context.go('/profile'),
-                  style: const ButtonStyle(
-                    shape: WidgetStatePropertyAll(StadiumBorder()),
-                  ),
-                ),
+                CorporateApplicationLinks(entry: e),
               ],
             ),
           );

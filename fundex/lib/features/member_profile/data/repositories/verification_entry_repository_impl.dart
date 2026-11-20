@@ -58,12 +58,16 @@ class VerificationEntryRepositoryImpl implements VerificationEntryRepository {
       case 'corporate':
         return _corporateDetail();
       case 'personal':
-      case 'individual':
-      case null:
         return VerificationEntry(
           user.status == 1
               ? VerificationEntryKind.choice
               : VerificationEntryKind.personal,
+          personalStatus: user.status,
+        );
+      case 'individual':
+      case null:
+        return VerificationEntry(
+          VerificationEntryKind.personal,
           personalStatus: user.status,
         );
       default:
