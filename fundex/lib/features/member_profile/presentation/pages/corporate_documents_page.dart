@@ -104,6 +104,7 @@ class _CorporateDocumentsPageState
       canPop: busy == null,
       child: CorporateFlowScaffold(
         exitPrompt: CorporateExitPrompt.draft,
+        draft: widget.draft,
         title: l.corpDocsTitle,
         step: CorporateSection.documents.index,
         locked: busy != null,

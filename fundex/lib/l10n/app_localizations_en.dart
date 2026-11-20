@@ -7675,6 +7675,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get corpFormReviewTitle => 'Review and submit';
 
   @override
+  String get corpLoginEmail => 'Login email address';
+
+  @override
   String get corpFormBusinessName => 'Registered company name';
 
   @override
@@ -7853,6 +7856,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'Register this account with your initial application.';
 
   @override
+  String get corpBankDomesticError =>
+      'Enter the name of a financial institution in Japan.';
+
+  @override
+  String get corpBankUnknownBranch =>
+      'Check that the branch name and branch code match the selected bank.';
+
+  @override
+  String get corpBankHolderMismatch =>
+      'The account holder name in kana must match the company name in kana.';
+
+  @override
   String get corpBankNoticeTitle => 'Domestic corporate account';
 
   @override
@@ -7968,6 +7983,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get corpReviewFailed =>
       'The application was declined. Please review your details.';
+
+  @override
+  String get corpCorrectionPending =>
+      'Receipt of these changes is still unconfirmed. Your entries are kept on this screen. Please check the submission status again shortly.';
 
   @override
   String get corpReviewUnknown =>
@@ -8172,6 +8191,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get corpDetailEmpty => 'No information on file';
 
   @override
+  String get corpExpiredResubmit =>
+      'Your corporate verification application has expired. Select “Edit details” to review and resubmit your previous application.';
+
+  @override
   String get corpDetailCorrect => 'Correct application';
 
   @override
@@ -8244,6 +8267,22 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get corpExitSaved =>
       'Corporate verification is still in progress. Your submitted application has been saved.';
+
+  @override
+  String get corpDraftExitSave =>
+      'Closing saves your entries on this device. You can resume with the same account.';
+
+  @override
+  String get corpDraftLoadFailed =>
+      'Could not load your draft. Please try again.';
+
+  @override
+  String get corpDraftSaveFailed =>
+      'Could not save your draft. Please try again from this screen.';
+
+  @override
+  String get corpDraftClearFailed =>
+      'Your application was received. Please retry deleting the local draft.';
 
   @override
   String get corpExitDraft =>

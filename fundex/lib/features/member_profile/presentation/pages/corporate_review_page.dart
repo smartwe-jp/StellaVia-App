@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/corporate_form_draft.dart';
+import '../../domain/repositories/verification_entry_repository.dart';
 import '../providers/verification_entry_provider.dart';
+import '../providers/corporate_draft_providers.dart';
 import '../support/corporate_form_fields.dart';
 import '../widgets/corporate_form_header.dart';
 import '../widgets/corporate_review_section.dart';
 import '../widgets/corporate_flow_scaffold.dart';
 import 'corporate_success_page.dart';
+import 'verification_entry_page.dart';
+import '../support/corporate_flow_navigation.dart';
 
 class CorporateReviewPage extends ConsumerStatefulWidget {
   const CorporateReviewPage({super.key, required this.draft});
@@ -21,6 +25,8 @@ class CorporateReviewPage extends ConsumerStatefulWidget {
 class _CorporateReviewPageState extends ConsumerState<CorporateReviewPage> {
   bool antiSocial = false, mail = false, busy = false, unknown = false;
   String? error;
+  bool? cleanupAccepted;
+  UnconfirmedCorporateCorrection? pendingCorrection;
 
   void edit(CorporateSection section) {
     final route = corporateStepRoute(section);
@@ -29,9 +35,43 @@ class _CorporateReviewPageState extends ConsumerState<CorporateReviewPage> {
     ).popUntil((r) => r.settings.name == route || r.isFirst);
   }
 
-  void returnToEntry({required bool accepted}) {
+  Future<void> returnToEntry({required bool accepted}) async {
+    final account = widget.draft.localAccountKey;
+    if (!widget.draft.isCorrection && account != null) {
+      widget.draft.submitted = true;
+      setState(() => busy = true);
+      try {
+        await ref.read(corporateDraftStoreProvider).clear(account);
+      } catch (_) {
+        if (mounted) {
+          setState(() {
+            cleanupAccepted = accepted;
+            busy = false;
+            error = context.l10n.corpDraftClearFailed;
+          });
+        }
+        return;
+      }
+      if (!mounted) return;
+    }
     ref.read(corporateSubmittedProvider.notifier).state = true;
     ref.invalidate(verificationEntryProvider);
+    if (accepted && widget.draft.isCorrection) {
+      // Keep the detail alive even when this flow was launched directly from Home.
+      ref.listenManual(verificationEntryProvider, (_, __) {});
+      try {
+        await ref.read(verificationEntryProvider.future);
+      } catch (_) {
+        // Member information renders the refresh error and retries only detail.
+      }
+      if (mounted) {
+        returnToCorporateMemberProfile(
+          context,
+          (_) => const VerificationEntryPage(),
+        );
+      }
+      return;
+    }
     bool atEntry(Route<dynamic> route) =>
         route.isFirst ||
         !(route.settings.name ?? '').startsWith(corporateRoutePrefix);
@@ -55,17 +95,28 @@ class _CorporateReviewPageState extends ConsumerState<CorporateReviewPage> {
   }
 
   Future<void> checkStatus() async {
-    if (busy) return;
+    if (busy || !unknown) return;
     setState(() => busy = true);
     try {
       final entry = await ref
           .read(verificationEntryRepositoryProvider)
           .load(afterSubmission: true);
       if (!mounted) return;
+      if (widget.draft.isCorrection) {
+        if (pendingCorrection?.confirmedBy(entry) == true) {
+          await returnToEntry(accepted: true);
+        } else {
+          setState(() {
+            busy = false;
+            error = context.l10n.corpCorrectionPending;
+          });
+        }
+        return;
+      }
       if (entry.status != null &&
           entry.status!.isNotEmpty &&
           entry.status != 'DRAFT') {
-        returnToEntry(accepted: false);
+        await returnToEntry(accepted: false);
       } else {
         setState(() {
           busy = false;
@@ -79,14 +130,18 @@ class _CorporateReviewPageState extends ConsumerState<CorporateReviewPage> {
       if (mounted) {
         setState(() {
           busy = false;
-          error = context.l10n.uiErrorRequestFailed;
+          error = widget.draft.isCorrection
+              ? context.l10n.corpCorrectionPending
+              : context.l10n.uiErrorRequestFailed;
         });
       }
     }
   }
 
   Future<void> submit() async {
-    if (busy || unknown || !antiSocial || !mail) return;
+    if (busy || unknown || cleanupAccepted != null || !antiSocial || !mail) {
+      return;
+    }
     setState(() {
       busy = true;
       error = null;
@@ -103,26 +158,32 @@ class _CorporateReviewPageState extends ConsumerState<CorporateReviewPage> {
         });
       }
       return;
-    } catch (_) {
+    } catch (cause) {
       if (mounted) {
         setState(() {
+          pendingCorrection = cause is UnconfirmedCorporateCorrection
+              ? cause
+              : null;
           busy = false;
           unknown = true;
-          error = context.l10n.corpReviewUnknown;
+          error = widget.draft.isCorrection
+              ? context.l10n.corpCorrectionPending
+              : context.l10n.corpReviewUnknown;
         });
       }
       return;
     }
-    if (mounted) returnToEntry(accepted: true);
+    if (mounted) await returnToEntry(accepted: true);
   }
 
   @override
   Widget build(BuildContext context) {
-    final l = context.l10n, locked = busy || unknown;
+    final l = context.l10n, locked = busy || unknown || cleanupAccepted != null;
     return PopScope(
       canPop: !locked,
       child: CorporateFlowScaffold(
         exitPrompt: CorporateExitPrompt.draft,
+        draft: widget.draft,
         title: l.corpFormReviewTitle,
         step: 6,
         locked: locked,
@@ -173,11 +234,19 @@ class _CorporateReviewPageState extends ConsumerState<CorporateReviewPage> {
               ),
             if (busy) const LinearProgressIndicator(),
             AppButton(
-              label: unknown ? l.corpReviewCheck : l.corpReviewSubmit,
+              label: cleanupAccepted != null
+                  ? l.commonRetry
+                  : unknown
+                  ? l.corpReviewCheck
+                  : l.corpReviewSubmit,
               style: const ButtonStyle(
                 shape: WidgetStatePropertyAll(StadiumBorder()),
               ),
-              onPressed: unknown
+              onPressed: cleanupAccepted != null
+                  ? (busy
+                        ? null
+                        : () => returnToEntry(accepted: cleanupAccepted!))
+                  : unknown
                   ? (busy ? null : checkStatus)
                   : !busy && antiSocial && mail
                   ? submit

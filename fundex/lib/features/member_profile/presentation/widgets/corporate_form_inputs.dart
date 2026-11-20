@@ -1,9 +1,29 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/corporate_form_draft.dart';
 import '../support/corporate_form_fields.dart';
+
+class CorporateLoginEmail extends ConsumerWidget {
+  const CorporateLoginEmail({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = context.l10n;
+    final email = ref.watch(settingsVerifiedEmailProvider).asData?.value;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppFieldLabel(label: l.corpLoginEmail),
+        const SizedBox(height: 8),
+        Text(email ?? '—', style: Theme.of(context).textTheme.bodyLarge),
+      ],
+    );
+  }
+}
 
 class CorporateFormInput extends StatefulWidget {
   const CorporateFormInput({
@@ -11,11 +31,15 @@ class CorporateFormInput extends StatefulWidget {
     required this.draft,
     required this.section,
     required this.field,
+    this.extraValidation,
+    this.onTextChanged,
     required this.onStructureChanged,
   });
   final CorporateFormDraft draft;
   final CorporateSection section;
   final CorporateField field;
+  final String? Function()? extraValidation;
+  final ValueChanged<String>? onTextChanged;
   final VoidCallback onStructureChanged;
   @override
   State<CorporateFormInput> createState() => _CorporateFormInputState();
@@ -57,7 +81,9 @@ class _CorporateFormInputState extends State<CorporateFormInput> {
               for (final e in options.entries)
                 DropdownMenuItem(value: e.key, child: Text(e.value)),
             ],
-            validator: (v) => corporateFieldError(l, s, f, v ?? ''),
+            validator: (v) =>
+                corporateFieldError(l, s, f, v ?? '') ??
+                widget.extraValidation?.call(),
             onChanged: (v) {
               if (v == null) return;
               widget.draft.set(s, f, v);
@@ -93,8 +119,13 @@ class _CorporateFormInputState extends State<CorporateFormInput> {
         CorporateField.founded => TextInputType.datetime,
         _ => TextInputType.text,
       },
-      validator: (v) => corporateFieldError(l, s, f, v ?? ''),
-      onChanged: (v) => widget.draft.set(s, f, v),
+      validator: (v) =>
+          corporateFieldError(l, s, f, v ?? '') ??
+          widget.extraValidation?.call(),
+      onChanged: (v) {
+        widget.draft.set(s, f, v);
+        widget.onTextChanged?.call(v);
+      },
     );
   }
 }

@@ -45,15 +45,20 @@ class CorporateFormDraft {
     String? companyName,
     this.isCorrection = false,
     this.sourceApplicationId,
+    this.localAccountKey,
   }) {
     if (companyName != null) {
       set(CorporateSection.company, CorporateField.businessName, companyName);
     }
   }
-  CorporateFormDraft copyForEditing({required bool correction}) {
+  CorporateFormDraft copyForEditing({
+    required bool correction,
+    String? accountKey,
+  }) {
     final copy =
         CorporateFormDraft(
             isCorrection: correction,
+            localAccountKey: correction ? null : accountKey ?? localAccountKey,
             sourceApplicationId: sourceApplicationId,
           )
           ..handler = handler
@@ -65,11 +70,14 @@ class CorporateFormDraft {
       if (type != null) copy.documents.selectType(handler, type);
     }
     copy.documents.uploaded.addAll(documents.uploaded);
+    if (!correction) copy.documents.pending.addAll(documents.pending);
     return copy;
   }
 
   final documents = CorporateDocuments();
   final bool isCorrection;
+  final String? localAccountKey;
+  bool submitted = false;
   final int? sourceApplicationId;
   Iterable<CorporateSection> get sections => CorporateSection.values.where(
     (s) => !isCorrection || s != CorporateSection.bank,

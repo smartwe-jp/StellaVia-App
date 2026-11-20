@@ -61,6 +61,11 @@ class VerificationEntry {
       const {'SUBMITTED', 'REJECTED', 'EXPIRED', 'CONFIRMED'}.contains(status);
 }
 
+/// A correction was sent, but the server's acknowledgement was not received.
+abstract interface class UnconfirmedCorporateCorrection implements Exception {
+  bool confirmedBy(VerificationEntry detail);
+}
+
 abstract interface class VerificationEntryRepository {
   Future<VerificationEntry> load({bool afterSubmission = false});
   Future<void> review({

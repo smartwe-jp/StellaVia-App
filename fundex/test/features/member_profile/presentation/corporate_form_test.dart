@@ -9,6 +9,8 @@ import "package:fundex/features/member_profile/presentation/pages/corporate_form
 import "package:fundex/features/member_profile/presentation/support/corporate_form_fields.dart";
 import "package:fundex/l10n/app_localizations.dart";
 
+import 'package:fundex/features/settings/presentation/providers/settings_two_factor_providers.dart';
+
 void main() {
   testWidgets(
     'correction goes directly from owners to documents without a bank section',
@@ -64,6 +66,11 @@ void main() {
       }
       await tester.pumpWidget(
         ProviderScope(
+          overrides: [
+            settingsVerifiedEmailProvider.overrideWith(
+              (_) async => "account@example.com",
+            ),
+          ],
           child: MaterialApp(
             locale: const Locale("ja"),
             supportedLocales: AppLocalizations.supportedLocales,
@@ -115,7 +122,17 @@ void main() {
         ),
         l.corpFormInvalidNumber,
       );
+      expect(find.text(l.corpLoginEmail), findsOneWidget);
+      expect(
+        tester.widget<Text>(find.text("account@example.com")).data,
+        "account@example.com",
+      );
       await tap(l.corpFormRep);
+      expect(find.text(l.corpLoginEmail), findsNothing);
+      expect(
+        draft.value(CorporateSection.representative, CorporateField.email),
+        isEmpty,
+      );
       await tap(l.profilePrevStep);
       expect(find.text("1234567890123"), findsOneWidget);
       await tap(l.corpFormRep);
@@ -179,8 +196,8 @@ void main() {
       await choose(0, l.corpFormOther);
       for (final entry in {
         CorporateField.manualBankName: "京都銀行",
-        CorporateField.branchName: "大阪支店",
-        CorporateField.branchCode: "001",
+        CorporateField.branchName: "大阪営業部",
+        CorporateField.branchCode: "511",
         CorporateField.accountNumber: "0012345",
         CorporateField.accountHolder: "カ）ステラ",
       }.entries) {
@@ -193,6 +210,23 @@ void main() {
       expect(find.text("京都銀行"), findsOneWidget);
       expect(find.text("0012345"), findsOneWidget);
       await choose(1, l.accountTypeOrdinary);
+      await tap(l.corpDocsTitle);
+      expect(find.text(l.corpBankHolderMismatch), findsOneWidget);
+      Future<void> changeBankField(CorporateField field, String value) async {
+        final input = find.byKey(ValueKey(field)).last;
+        await tester.ensureVisible(input);
+        await tester.enterText(input, value);
+      }
+
+      await changeBankField(CorporateField.accountHolder, 'ﾃｽﾄ');
+      await changeBankField(CorporateField.manualBankName, '海外テスト銀行');
+      await tap(l.corpDocsTitle);
+      expect(find.text(l.corpBankDomesticError), findsOneWidget);
+      await changeBankField(CorporateField.manualBankName, '京都銀行');
+      await changeBankField(CorporateField.branchName, '海外支店');
+      await tap(l.corpDocsTitle);
+      expect(find.text(l.corpBankUnknownBranch), findsOneWidget);
+      await changeBankField(CorporateField.branchName, '大阪営業部');
       draft.documents.selectType(false, CorporateIdType.myNumber);
       draft.documents.uploaded[CorporateDocument.registry] = (
         filename: 'registry.pdf',

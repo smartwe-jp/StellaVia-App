@@ -15,5 +15,9 @@ class BeneficialOwner {
   final OwnerControl? control;
   bool get complete =>
       control != null &&
+      DateTime.tryParse(
+            birthdate,
+          )?.toIso8601String().startsWith('${birthdate}T') ==
+          true &&
       [name, birthdate, country, address].every((v) => v.trim().isNotEmpty);
 }

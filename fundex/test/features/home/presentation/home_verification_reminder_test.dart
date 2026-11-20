@@ -12,6 +12,10 @@ import 'package:fundex/features/member_profile/domain/repositories/verification_
 import 'package:fundex/l10n/app_localizations.dart';
 import 'package:fundex/features/member_profile/presentation/providers/verification_entry_provider.dart';
 
+import 'package:core_storage/core_storage.dart';
+import 'package:fundex/app/storage/app_storage_providers.dart';
+import 'package:fundex/features/member_profile/presentation/providers/corporate_draft_providers.dart';
+
 void main() {
   test('reminder only appears for actionable verification states', () {
     for (final status in [null, 0, 2, 3, 4, 5]) {
@@ -91,6 +95,10 @@ void main() {
       await t.pumpWidget(
         ProviderScope(
           overrides: [
+            corporateDraftAccountProvider.overrideWith((_) async => 'account1'),
+            secureKeyValueStorageProvider.overrideWithValue(
+              InMemoryKeyValueStorage(),
+            ),
             homeVerificationReminderProvider.overrideWith((_) async => entry),
             verificationEntryProvider.overrideWith((_) async => entry),
           ],
@@ -187,6 +195,20 @@ void main() {
         await t.ensureVisible(find.text(l.corpFormStart));
         await t.tap(find.text(l.corpFormStart));
         await t.pumpAndSettle();
+        final name = find
+            .byKey(const ValueKey(CorporateField.businessName))
+            .last;
+        await t.ensureVisible(name);
+        await t.enterText(name, '保存株式会社');
+        await expectExitToHome();
+        await t.tap(find.text(l.homeReminderProfileTitle));
+        await t.pumpAndSettle();
+        await t.tap(find.text(l.corporateInvestor));
+        await t.pumpAndSettle();
+        await t.ensureVisible(find.text(l.corpFormStart));
+        await t.tap(find.text(l.corpFormStart));
+        await t.pumpAndSettle();
+        expect(find.text('保存株式会社'), findsOneWidget);
         await expectExitToHome();
       }
     });

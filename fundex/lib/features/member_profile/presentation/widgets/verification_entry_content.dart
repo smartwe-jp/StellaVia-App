@@ -1,8 +1,11 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/corporate_draft_providers.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/corporate_form_draft.dart';
 import '../pages/corporate_form_page.dart';
+import '../pages/corporate_detail_page.dart';
 import 'corporate_application_summary.dart';
 import '../pages/corporate_progress_page.dart';
 import '../support/corporate_progress.dart';
@@ -68,17 +71,19 @@ class _InvestorChoiceState extends State<InvestorChoice> {
   }
 }
 
-class CorporateEntryContent extends StatefulWidget {
+class CorporateEntryContent extends ConsumerStatefulWidget {
   const CorporateEntryContent({super.key, this.entry, this.seed});
   final VerificationEntry? entry, seed;
   @override
-  State<CorporateEntryContent> createState() => _CorporateEntryContentState();
+  ConsumerState<CorporateEntryContent> createState() =>
+      _CorporateEntryContentState();
 }
 
-class _CorporateEntryContentState extends State<CorporateEntryContent> {
+class _CorporateEntryContentState extends ConsumerState<CorporateEntryContent> {
   bool _opened = false;
   VerificationEntry? get source => widget.seed ?? widget.entry;
-  late final CorporateFormDraft? draftForm = _initialDraft();
+  bool opening = false;
+  late CorporateFormDraft? draftForm = _initialDraft();
 
   CorporateFormDraft? _initialDraft() {
     final entry = source;
@@ -89,6 +94,41 @@ class _CorporateEntryContentState extends State<CorporateEntryContent> {
     }
     return entry?.submittedForm?.copyForEditing(correction: false) ??
         CorporateFormDraft(companyName: entry?.companyName);
+  }
+
+  Future<void> openForm() async {
+    if (opening || draftForm == null) return;
+    setState(() => opening = true);
+    try {
+      var draft = draftForm!;
+      if (!draft.isCorrection) {
+        final store = ref.read(corporateDraftStoreProvider);
+        final account = await ref.read(corporateDraftAccountProvider.future);
+        if (!mounted) return;
+        if (draft.localAccountKey != account) {
+          draft =
+              await store.read(account) ??
+              _initialDraft()!.copyForEditing(
+                correction: false,
+                accountKey: account,
+              );
+        }
+        if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
+      }
+      draftForm = draft;
+      _opened = true;
+      await CorporateFormPage.start(context, draft);
+      if (mounted && draft.submitted) {
+        draftForm = _initialDraft();
+        _opened = false;
+      }
+    } catch (_) {
+      if (mounted) {
+        AppNotice.show(context, message: context.l10n.corpDraftLoadFailed);
+      }
+    } finally {
+      if (mounted) setState(() => opening = false);
+    }
   }
 
   @override
@@ -130,13 +170,7 @@ class _CorporateEntryContentState extends State<CorporateEntryContent> {
             label: draftForm?.hasEntries == true && _opened
                 ? l.corpFormResume
                 : l.corpFormStart,
-            onPressed: draftForm == null
-                ? null
-                : () async {
-                    _opened = true;
-                    await CorporateFormPage.start(context, draftForm!);
-                    if (mounted) setState(() {});
-                  },
+            onPressed: draftForm == null || opening ? null : openForm,
           ),
         ],
         if (entry == null) ...[
@@ -166,6 +200,43 @@ class _CorporateEntryContentState extends State<CorporateEntryContent> {
           ),
           const SizedBox(height: 8),
           CorporateApplicationLinks(entry: entry!),
+        ],
+      ],
+    );
+  }
+}
+
+class CorporateExpiredContent extends StatelessWidget {
+  const CorporateExpiredContent({
+    super.key,
+    required this.entry,
+    required this.onRetry,
+  });
+
+  final VerificationEntry entry;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    return ListView(
+      padding: const EdgeInsets.all(20),
+      children: [
+        CorporateStatusNotice(entry: entry),
+        const SizedBox(height: 16),
+        if (entry.submittedForm != null && entry.applicationId != null) ...[
+          AppButton(
+            label: l.corpDetailCorrect,
+            onPressed: () =>
+                CorporateFormPage.start(context, entry.correctionDraft()!),
+          ),
+          TextButton(
+            onPressed: () => CorporateDetailPage.open(context, readOnly: true),
+            child: Text(l.corpDetailView),
+          ),
+        ] else ...[
+          Text(l.uiErrorRequestFailed),
+          AppButton(label: l.commonRetry, onPressed: onRetry),
         ],
       ],
     );

@@ -19,6 +19,7 @@ import '../pages/edit_flow_steps/member_profile_consent_step_page.dart';
 import '../pages/edit_flow_steps/member_profile_ekyc_step_page.dart';
 import '../pages/edit_flow_steps/member_profile_suitability_step_page.dart';
 import '../providers/member_profile_providers.dart';
+import '../support/member_profile_postal_address.dart';
 import '../support/member_profile_bank_account_owner_matcher.dart';
 import '../support/member_profile_edit_step.dart';
 import '../support/member_profile_edit_step_presenter.dart';
@@ -669,21 +670,9 @@ class _MemberProfileEditFlowPageState
   }
 
   void _applyResolvedAddressRows(List<MemberProfileRegion> rows) {
-    final String resolvedPrefecture = rows
-        .where((MemberProfileRegion row) => row.regionType == 0)
-        .map((MemberProfileRegion row) => row.displayName)
-        .firstWhere((String value) => value.trim().isNotEmpty, orElse: () => '')
-        .trim();
-
-    final String resolvedCityAddress = rows
-        .where(
-          (MemberProfileRegion row) =>
-              row.regionType == 1 || row.regionType == 2,
-        )
-        .map((MemberProfileRegion row) => row.displayName.trim())
-        .where((String value) => value.isNotEmpty)
-        .join(' ')
-        .trim();
+    final parts = resolveMemberProfilePostalAddress(rows);
+    final resolvedPrefecture = parts.prefecture;
+    final resolvedCityAddress = parts.cityAddress;
 
     if (resolvedPrefecture.isEmpty && resolvedCityAddress.isEmpty) {
       return;

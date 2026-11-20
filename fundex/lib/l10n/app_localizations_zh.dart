@@ -7238,6 +7238,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get corpFormReviewTitle => '核对资料与申请';
 
   @override
+  String get corpLoginEmail => '登录邮箱';
+
+  @override
   String get corpFormBusinessName => '法人名称';
 
   @override
@@ -7412,6 +7415,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get corpBankHint => '仅首次申请时登记。';
 
   @override
+  String get corpBankDomesticError => '请输入日本国内金融机构名称。';
+
+  @override
+  String get corpBankUnknownBranch => '请核对该银行的支店名称和支店编号。';
+
+  @override
+  String get corpBankHolderMismatch => '账户名义（片假名）必须与法人名片假名一致。';
+
+  @override
   String get corpBankNoticeTitle => '法人名义的日本国内账户';
 
   @override
@@ -7518,6 +7530,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get corpReviewFailed => '申请未被接受，请核对填写内容。';
+
+  @override
+  String get corpCorrectionPending =>
+      '暂时无法确认本次修正是否已受理。已填写的资料保留在当前页面，请稍后重新查询受理状态。';
 
   @override
   String get corpReviewUnknown => '暂时无法确认提交结果，请先查看申请状态。';
@@ -7705,6 +7721,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get corpDetailEmpty => '暂无登记资料';
 
   @override
+  String get corpExpiredResubmit => '法人认证申请已过期。请点击下方修改按钮，核对上次的申请资料后重新提交。';
+
+  @override
   String get corpDetailCorrect => '修改申请内容';
 
   @override
@@ -7769,6 +7788,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get corpExitSaved => '法人认证尚未完成。已提交的申请资料已保存。';
+
+  @override
+  String get corpDraftExitSave => '退出时会将已填资料保存到本机，下次使用同一账号可继续填写。';
+
+  @override
+  String get corpDraftLoadFailed => '未能读取草稿，请重试。';
+
+  @override
+  String get corpDraftSaveFailed => '未能保存草稿，请在本页重试。';
+
+  @override
+  String get corpDraftClearFailed => '申请已受理，请重试清除本地草稿。';
 
   @override
   String get corpExitDraft => '法人认证尚未完成，正在填写的内容可能丢失。';
@@ -15036,6 +15067,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get corpFormReviewTitle => '核對資料與申請';
 
   @override
+  String get corpLoginEmail => '登入用電子郵件地址';
+
+  @override
   String get corpFormBusinessName => '法人名稱';
 
   @override
@@ -15210,6 +15244,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get corpBankHint => '僅首次申請時登記。';
 
   @override
+  String get corpBankDomesticError => '請輸入日本國內金融機構名稱。';
+
+  @override
+  String get corpBankUnknownBranch => '請核對該銀行的分行名稱與分行代碼。';
+
+  @override
+  String get corpBankHolderMismatch => '帳戶名義（片假名）必須與法人名片假名一致。';
+
+  @override
   String get corpBankNoticeTitle => '法人名義的日本國內帳戶';
 
   @override
@@ -15316,6 +15359,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get corpReviewFailed => '申請未獲受理，請核對填寫內容。';
+
+  @override
+  String get corpCorrectionPending =>
+      '暫時無法確認本次修正是否已受理。已填寫的資料保留在目前頁面，請稍後重新查詢受理狀態。';
 
   @override
   String get corpReviewUnknown => '暫時無法確認提交結果，請先查看申請狀態。';
@@ -15503,6 +15550,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get corpDetailEmpty => '暫無登記資料';
 
   @override
+  String get corpExpiredResubmit => '法人認證申請已過期。請點選下方修改按鈕，核對上次的申請資料後重新提交。';
+
+  @override
   String get corpDetailCorrect => '修改申請內容';
 
   @override
@@ -15567,6 +15617,18 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get corpExitSaved => '法人認證尚未完成。已提交的申請資料已儲存。';
+
+  @override
+  String get corpDraftExitSave => '離開時會將已填資料儲存至此裝置，下次使用同一帳號可繼續填寫。';
+
+  @override
+  String get corpDraftLoadFailed => '無法讀取草稿，請重試。';
+
+  @override
+  String get corpDraftSaveFailed => '無法儲存草稿，請在本頁重試。';
+
+  @override
+  String get corpDraftClearFailed => '申請已受理，請重試清除本機草稿。';
 
   @override
   String get corpExitDraft => '法人認證尚未完成，正在填寫的內容可能遺失。';

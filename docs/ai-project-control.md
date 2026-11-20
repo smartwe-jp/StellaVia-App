@@ -36,7 +36,7 @@ Use three layers of coordination:
 
 ### Corporate verification planning (2026-11-19)
 
-- Member information now branches by fresh index-new applicant type. Corporate accounts load the read-only verification detail. Corporate preparation now opens the first four editable steps (company, representative, handler, beneficial owners), with a session-local draft and partial review. The corporate flow now supports submission and correction. Fund applications and secondary-market purchases check fresh corporate detail at entry and submission and require CONFIRMED.
+- Member information now branches by fresh index-new applicant type. Corporate accounts load the read-only verification detail. Corporate preparation now opens the first four editable steps (company, representative, handler, beneficial owners), with account-scoped local drafts for first-time applications and partial review. The corporate flow now supports submission and correction. Fund applications and secondary-market purchases check fresh corporate detail at entry and submission and require CONFIRMED.
 - See [Corporate verification roadmap](corporate-verification-roadmap.md) for the supplied API contract, conditional fields, Figma screens, implementation tickets and unresolved backend questions, including existing personal status `5` compatibility.
 
 ### Secondary market restoration (2026-11-05)

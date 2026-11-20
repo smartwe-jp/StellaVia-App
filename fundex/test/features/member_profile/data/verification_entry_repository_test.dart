@@ -1,5 +1,6 @@
 import 'package:fundex/features/member_profile/data/mappers/corporate_detail_mapper.dart';
 import 'package:core_network/core_network.dart';
+import 'package:fundex/features/member_profile/domain/entities/corporate_form_draft.dart';
 import 'package:company_api_runtime/company_api_runtime.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fundex/features/member_profile/data/repositories/verification_entry_repository_impl.dart';
@@ -113,6 +114,88 @@ void main() {
       VerificationEntryKind.personal,
     );
   });
+  for (final status in ['REJECTED', 'SUBMITTED']) {
+    test(
+      'reconcile a timed-out $status correction against the actual submission',
+      () async {
+        var writes = 0;
+        final application = {
+          'id': 81,
+          'companyName': '旧法人名',
+          'verificationStatus': status,
+        };
+        final logs = [
+          {'id': 10, 'action': 'SUBMITTED'},
+        ];
+        final data = {
+          'application': application,
+          'handler': {'type': 'representative'},
+          'beneficialOwners': {'status': 'NO'},
+          'documents': {
+            'registry': {'name': '登記.pdf', 'fileId': 'abc', 'url': '/doc'},
+            'representativeId_front': {'fileId': '12', 'url': '/front'},
+          },
+          'auditLogs': logs,
+        };
+        final dio = Dio();
+        dio.interceptors.add(
+          InterceptorsWrapper(
+            onRequest: (request, handler) {
+              if (request.method == 'POST') {
+                writes++;
+                handler.reject(
+                  DioException(
+                    requestOptions: request,
+                    type: DioExceptionType.receiveTimeout,
+                  ),
+                );
+              } else {
+                handler.resolve(
+                  Response(
+                    requestOptions: request,
+                    data: {'code': 200, 'data': data},
+                  ),
+                );
+              }
+            },
+          ),
+        );
+        final repo = VerificationEntryRepositoryImpl(
+          AuthApiClient(dioForPath: (_) => dio),
+          MemberProfileApiClient(dioForPath: (_) => dio),
+        );
+        final draft = (await repo.load(
+          afterSubmission: true,
+        )).correctionDraft()!;
+        draft.set(
+          CorporateSection.company,
+          CorporateField.businessName,
+          '修正法人名',
+        );
+        late UnconfirmedCorporateCorrection pending;
+        try {
+          await repo.submit(draft, antiSocial: true, mail: true);
+          fail('expected an unacknowledged write');
+        } on UnconfirmedCorporateCorrection catch (e) {
+          pending = e;
+        }
+        Future<bool> check() async =>
+            pending.confirmedBy(await repo.load(afterSubmission: true));
+        expect(await check(), isFalse);
+        application['verificationStatus'] = 'SUBMITTED';
+        logs.add({'id': 11, 'action': 'APPROVED'});
+        expect(await check(), isFalse);
+        logs.add({'id': 12, 'action': 'SUBMITTED'});
+        expect(await check(), isFalse); // Other submission contents.
+        application['companyName'] = '修正法人名';
+        application['id'] = 82;
+        expect(await check(), isFalse);
+        application['id'] = 81;
+        expect(await check(), isTrue);
+        expect(writes, 1);
+      },
+    );
+  }
   for (final registered in [true, false]) {
     test(
       'draft with registered bank=$registered selects application mode',

@@ -42,6 +42,12 @@ class VerificationEntryPage extends ConsumerWidget {
             resultPage: true,
             child: CorporateVerifiedContent(companyName: value.companyName),
           ),
+        VerificationEntryKind.corporate when value.status == 'EXPIRED' =>
+          CorporateFlowScaffold(
+            title: context.l10n.corporateVerificationTitle,
+            refresh: refresh,
+            child: CorporateExpiredContent(entry: value, onRetry: refresh),
+          ),
         VerificationEntryKind.corporate
             when value.status?.isNotEmpty == true && value.status != 'DRAFT' =>
           const CorporateProgressPage(),

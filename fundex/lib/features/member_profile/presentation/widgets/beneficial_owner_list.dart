@@ -18,7 +18,8 @@ class _BeneficialOwnerListState extends State<BeneficialOwnerList> {
   Future<void> edit([BeneficialOwner? previous]) async {
     final person = await Navigator.of(context).push<BeneficialOwner>(
       MaterialPageRoute(
-        builder: (_) => BeneficialOwnerEditor(person: previous),
+        builder: (_) =>
+            BeneficialOwnerEditor(person: previous, draft: widget.draft),
       ),
     );
     if (!mounted || person == null) return;

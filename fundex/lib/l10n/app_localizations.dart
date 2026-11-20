@@ -13821,6 +13821,12 @@ abstract class AppLocalizations {
   /// **'Review and submit'**
   String get corpFormReviewTitle;
 
+  /// No description provided for @corpLoginEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Login email address'**
+  String get corpLoginEmail;
+
   /// No description provided for @corpFormBusinessName.
   ///
   /// In en, this message translates to:
@@ -14169,6 +14175,24 @@ abstract class AppLocalizations {
   /// **'Register this account with your initial application.'**
   String get corpBankHint;
 
+  /// No description provided for @corpBankDomesticError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the name of a financial institution in Japan.'**
+  String get corpBankDomesticError;
+
+  /// No description provided for @corpBankUnknownBranch.
+  ///
+  /// In en, this message translates to:
+  /// **'Check that the branch name and branch code match the selected bank.'**
+  String get corpBankUnknownBranch;
+
+  /// No description provided for @corpBankHolderMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'The account holder name in kana must match the company name in kana.'**
+  String get corpBankHolderMismatch;
+
   /// No description provided for @corpBankNoticeTitle.
   ///
   /// In en, this message translates to:
@@ -14384,6 +14408,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The application was declined. Please review your details.'**
   String get corpReviewFailed;
+
+  /// No description provided for @corpCorrectionPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Receipt of these changes is still unconfirmed. Your entries are kept on this screen. Please check the submission status again shortly.'**
+  String get corpCorrectionPending;
 
   /// No description provided for @corpReviewUnknown.
   ///
@@ -14751,6 +14781,12 @@ abstract class AppLocalizations {
   /// **'No information on file'**
   String get corpDetailEmpty;
 
+  /// No description provided for @corpExpiredResubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Your corporate verification application has expired. Select “Edit details” to review and resubmit your previous application.'**
+  String get corpExpiredResubmit;
+
   /// No description provided for @corpDetailCorrect.
   ///
   /// In en, this message translates to:
@@ -14882,6 +14918,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Corporate verification is still in progress. Your submitted application has been saved.'**
   String get corpExitSaved;
+
+  /// No description provided for @corpDraftExitSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Closing saves your entries on this device. You can resume with the same account.'**
+  String get corpDraftExitSave;
+
+  /// No description provided for @corpDraftLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load your draft. Please try again.'**
+  String get corpDraftLoadFailed;
+
+  /// No description provided for @corpDraftSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not save your draft. Please try again from this screen.'**
+  String get corpDraftSaveFailed;
+
+  /// No description provided for @corpDraftClearFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application was received. Please retry deleting the local draft.'**
+  String get corpDraftClearFailed;
 
   /// No description provided for @corpExitDraft.
   ///

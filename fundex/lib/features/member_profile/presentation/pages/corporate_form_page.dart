@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/corporate_form_draft.dart';
 import '../support/corporate_form_fields.dart';
+import '../support/corporate_bank_validation.dart';
 import '../widgets/corporate_flow_scaffold.dart';
 import '../widgets/corporate_form_inputs.dart';
 import '../widgets/corporate_form_header.dart';
+import '../widgets/corporate_postal_code_input.dart';
 import 'corporate_documents_page.dart';
 import '../widgets/beneficial_owner_list.dart';
 
@@ -36,6 +38,10 @@ class CorporateFormPage extends StatefulWidget {
 
 class _CorporateFormPageState extends State<CorporateFormPage> {
   final form = GlobalKey<FormState>();
+  CorporateBankDirectory? directory;
+  bool loadingDirectory = false;
+  int addressRevision = 0;
+
   CorporateSection? get nextSection {
     final sections = widget.draft.sections.toList();
     final next = sections.indexOf(widget.section) + 1;
@@ -43,6 +49,21 @@ class _CorporateFormPageState extends State<CorporateFormPage> {
   }
 
   Future<void> advance() async {
+    if (widget.section == CorporateSection.bank && directory == null) {
+      if (loadingDirectory) return;
+      loadingDirectory = true;
+      try {
+        directory = await CorporateBankDirectory.load();
+      } catch (_) {
+        if (mounted) {
+          AppNotice.show(context, message: context.l10n.uiErrorRequestFailed);
+        }
+        return;
+      } finally {
+        loadingDirectory = false;
+      }
+      if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
+    }
     final invalid = form.currentState!.validateGranularly();
     if (invalid.isNotEmpty) {
       await Scrollable.ensureVisible(invalid.first.context, alignment: 0.18);
@@ -67,6 +88,7 @@ class _CorporateFormPageState extends State<CorporateFormPage> {
     final l = context.l10n, section = widget.section;
     return CorporateFlowScaffold(
       exitPrompt: CorporateExitPrompt.draft,
+      draft: widget.draft,
       title: sectionTitle(l, section),
       step: section.index,
       child: SingleChildScrollView(
@@ -78,6 +100,10 @@ class _CorporateFormPageState extends State<CorporateFormPage> {
             children: [
               CorporateFormHeader(section: section),
               const SizedBox(height: 24),
+              if (section == CorporateSection.company) ...[
+                const CorporateLoginEmail(),
+                const SizedBox(height: 16),
+              ],
               if (section == CorporateSection.bank)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16),
@@ -99,12 +125,28 @@ class _CorporateFormPageState extends State<CorporateFormPage> {
                 Padding(
                   key: ValueKey(field),
                   padding: const EdgeInsets.only(bottom: 16),
-                  child: CorporateFormInput(
-                    draft: widget.draft,
-                    section: section,
-                    field: field,
-                    onStructureChanged: () => setState(() {}),
-                  ),
+                  child:
+                      field == CorporateField.postal &&
+                          (section == CorporateSection.company ||
+                              section == CorporateSection.representative)
+                      ? CorporatePostalCodeInput(
+                          draft: widget.draft,
+                          section: section,
+                          onResolved: () => setState(() => addressRevision++),
+                        )
+                      : CorporateFormInput(
+                          key:
+                              field == CorporateField.office ||
+                                  field == CorporateField.address
+                              ? ValueKey(addressRevision)
+                              : null,
+                          draft: widget.draft,
+                          section: section,
+                          field: field,
+                          extraValidation: () =>
+                              directory?.validate(l, widget.draft, field),
+                          onStructureChanged: () => setState(() {}),
+                        ),
                 ),
               AppButton(
                 label: nextSection == null

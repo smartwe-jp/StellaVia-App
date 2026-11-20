@@ -7301,6 +7301,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get corpFormReviewTitle => '入力内容の確認・申込';
 
   @override
+  String get corpLoginEmail => 'ログイン用メールアドレス';
+
+  @override
   String get corpFormBusinessName => '法人名';
 
   @override
@@ -7476,6 +7479,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get corpBankHint => '初回申請時のみ登録します。';
 
   @override
+  String get corpBankDomesticError => '日本国内の金融機関名を入力してください。';
+
+  @override
+  String get corpBankUnknownBranch => '金融機関の支店名と支店番号の組み合わせをご確認ください。';
+
+  @override
+  String get corpBankHolderMismatch => '口座名義（カナ）を法人名カナと一致させてください。';
+
+  @override
   String get corpBankNoticeTitle => '法人名義の国内口座';
 
   @override
@@ -7582,6 +7594,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get corpReviewFailed => '申請が受け付けられませんでした。入力内容をご確認ください。';
+
+  @override
+  String get corpCorrectionPending =>
+      '今回の修正が受け付けられたか確認できていません。入力内容はこの画面に保持されています。少し時間をおいて、受付状況をもう一度ご確認ください。';
 
   @override
   String get corpReviewUnknown => '申請結果を確認できませんでした。再申請する前に受付状況をご確認ください。';
@@ -7772,6 +7788,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get corpDetailEmpty => '登録情報がありません';
 
   @override
+  String get corpExpiredResubmit =>
+      '法人認証の申請期限が過ぎました。「内容を修正する」から前回の申請内容を確認し、再提出してください。';
+
+  @override
   String get corpDetailCorrect => '内容を修正する';
 
   @override
@@ -7836,6 +7856,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get corpExitSaved => '法人認証はまだ完了していません。提出済みの申請内容は保存されています。';
+
+  @override
+  String get corpDraftExitSave =>
+      '閉じると、入力した内容をこの端末に保存します。次回、同じアカウントで入力を再開できます。';
+
+  @override
+  String get corpDraftLoadFailed => '下書きを読み込めませんでした。もう一度お試しください。';
+
+  @override
+  String get corpDraftSaveFailed => '下書きを保存できませんでした。この画面でもう一度お試しください。';
+
+  @override
+  String get corpDraftClearFailed => '申請は受け付けられました。端末の下書きの削除をもう一度お試しください。';
 
   @override
   String get corpExitDraft => '法人認証はまだ完了していません。入力中の内容は保存されない場合があります。';

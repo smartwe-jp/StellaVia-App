@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/corporate_form_draft.dart';
+import '../../domain/repositories/verification_entry_repository.dart';
 import '../widgets/corporate_mailing_instructions.dart';
 import '../providers/verification_entry_provider.dart';
 import '../support/corporate_flow_navigation.dart';
@@ -33,9 +34,11 @@ class CorporateSuccessPage extends ConsumerWidget {
         children: [
           Text(l.corpProgressSuccessBody),
           const SizedBox(height: 24),
-          CorporateMailingInstructions(
-            handler: handler ?? entry?.submittedForm?.handler,
-          ),
+          if (entry != null &&
+              entry.userOps.contains(CorporateMailAction.sent.code))
+            CorporateMailingInstructions(
+              handler: handler ?? entry.submittedForm?.handler,
+            ),
           const SizedBox(height: 16),
           if (name.isNotEmpty) ...[
             ListTile(

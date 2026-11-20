@@ -10,8 +10,9 @@ import "../widgets/corporate_form_header.dart";
 import "../widgets/corporate_flow_scaffold.dart";
 
 class BeneficialOwnerEditor extends StatefulWidget {
-  const BeneficialOwnerEditor({super.key, this.person});
+  const BeneficialOwnerEditor({super.key, required this.draft, this.person});
   final BeneficialOwner? person;
+  final CorporateFormDraft draft;
   @override
   State<BeneficialOwnerEditor> createState() => _BeneficialOwnerEditorState();
 }
@@ -39,16 +40,35 @@ class _BeneficialOwnerEditorState extends State<BeneficialOwnerEditor> {
       return;
     }
     form.currentState!.save();
-    Navigator.of(context).pop(
-      BeneficialOwner(
-        name: name,
-        birthdate: birthdate,
-        country: country,
-        address: address,
-        control: control!,
-        percentage: percentage,
-      ),
-    );
+    Navigator.of(context).pop(currentOwner());
+  }
+
+  BeneficialOwner currentOwner() => BeneficialOwner(
+    name: name,
+    birthdate: birthdate,
+    country: country,
+    address: address,
+    control: control,
+    percentage: percentage,
+  );
+
+  CorporateFormDraft snapshot() {
+    form.currentState!.save();
+    final draft = widget.draft.copyForEditing(correction: false);
+    final person = currentOwner();
+    if (widget.person != null) {
+      draft.owners[draft.owners.indexOf(widget.person!)] = person;
+    } else if ([
+          name,
+          birthdate,
+          country,
+          address,
+          percentage,
+        ].any((s) => s.isNotEmpty) ||
+        control != null) {
+      draft.owners.add(person);
+    }
+    return draft;
   }
 
   Widget input(
@@ -98,6 +118,8 @@ class _BeneficialOwnerEditorState extends State<BeneficialOwnerEditor> {
     final l = context.l10n;
     return CorporateFlowScaffold(
       exitPrompt: CorporateExitPrompt.draft,
+      draft: widget.draft,
+      exitSnapshot: snapshot,
       title: l.corpOwnerTitle,
       step: CorporateSection.owners.index,
       child: SingleChildScrollView(

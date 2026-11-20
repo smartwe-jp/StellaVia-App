@@ -9,8 +9,59 @@ import 'package:fundex/l10n/app_localizations.dart';
 import 'package:fundex/features/member_profile/domain/entities/corporate_form_draft.dart';
 import 'package:fundex/features/member_profile/presentation/pages/corporate_progress_page.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fundex/features/member_profile/presentation/pages/corporate_form_page.dart';
+
+import 'package:core_storage/core_storage.dart';
+import 'package:fundex/app/storage/app_storage_providers.dart';
+import 'package:fundex/features/member_profile/presentation/providers/corporate_draft_providers.dart';
 
 void main() {
+  testWidgets('expired member entry opens the prefilled correction directly', (
+    tester,
+  ) async {
+    final original = CorporateFormDraft(
+      companyName: '前回株式会社',
+      sourceApplicationId: 52,
+    );
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          verificationEntryProvider.overrideWith(
+            (_) async => VerificationEntry(
+              VerificationEntryKind.corporate,
+              status: 'EXPIRED',
+              applicationId: 52,
+              submittedForm: original,
+            ),
+          ),
+        ],
+        child: MaterialApp(
+          theme: AppThemeFactory.light(),
+          locale: const Locale('ja'),
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          home: const VerificationEntryPage(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final l = AppLocalizations.of(
+      tester.element(find.byType(VerificationEntryPage)),
+    );
+    expect(find.text(l.corpExpiredResubmit), findsOneWidget);
+    expect(find.byType(CorporateProgressPage), findsNothing);
+    await tester.tap(find.text(l.corpDetailCorrect));
+    await tester.pumpAndSettle();
+    final page = tester.widget<CorporateFormPage>(
+      find.byType(CorporateFormPage),
+    );
+    expect(page.section, CorporateSection.company);
+    expect(find.text('前回株式会社'), findsOneWidget);
+    expect(page.draft, isNot(same(original)));
+    expect(page.draft.sourceApplicationId, 52);
+    expect(page.draft.isCorrection, isTrue);
+    expect(page.draft.sections, isNot(contains(CorporateSection.bank)));
+  });
   for (final progress in [false, true]) {
     testWidgets(
       'confirmed account sees completion and destinations from progress=$progress',
@@ -118,6 +169,10 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          corporateDraftAccountProvider.overrideWith((_) async => 'account1'),
+          secureKeyValueStorageProvider.overrideWithValue(
+            InMemoryKeyValueStorage(),
+          ),
           verificationEntryProvider.overrideWith(
             (ref) async =>
                 const VerificationEntry(VerificationEntryKind.choice),
@@ -154,7 +209,7 @@ void main() {
     expect(tester.getRect(rail), rect);
     await tester.tap(find.byTooltip(l.commonClose));
     await tester.pumpAndSettle();
-    expect(find.text(l.corpExitDraft), findsOneWidget);
+    expect(find.text(l.corpDraftExitSave), findsOneWidget);
     await tester.tap(find.text(l.corpExitStay));
     await tester.pumpAndSettle();
     expect(tester.getRect(rail), rect);

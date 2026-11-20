@@ -118,6 +118,7 @@ class CorporateProgress {
       : receipt
       ? l.corpProgressReceiptHint
       : switch (status) {
+          'EXPIRED' => l.corpExpiredResubmit,
           'REJECTED' => progress?.message ?? l.corpProgressCorrection,
           'CUSTOMER_MAILED' || 'APPROVED' => l.corpProgressReviewing,
           'RECEIVED' => l.corpMailFinalCheck,
