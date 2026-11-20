@@ -7,7 +7,7 @@ import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../member_profile/domain/repositories/verification_entry_repository.dart';
 import '../../../member_profile/presentation/providers/verification_entry_provider.dart';
 import '../../../member_profile/presentation/pages/corporate_verification_modal.dart';
-// import '../support/home_member_profile_reminder_support.dart';
+import '../support/home_member_profile_reminder_support.dart';
 
 final homeVerificationReminderProvider =
     FutureProvider.autoDispose<VerificationEntry>((ref) {
@@ -89,9 +89,9 @@ class _HomeVerificationReminderState
   Widget build(BuildContext context) {
     final entry = ref.watch(homeVerificationReminderProvider).valueOrNull;
     if (entry == null) return const SizedBox.shrink();
-    // if (!shouldShowHomeMemberProfileReminder(entry)) {
-    //   return const SizedBox.shrink();
-    // }
+    if (!shouldShowHomeMemberProfileReminder(entry)) {
+      return const SizedBox.shrink();
+    }
     final l = context.l10n;
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),

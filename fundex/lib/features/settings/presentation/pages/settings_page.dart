@@ -13,6 +13,7 @@ import '../../../../app/network/app_network_providers.dart';
 import '../../../../app/observability/app_observability_providers.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../providers/settings_content_providers.dart';
+import '../../../member_profile/presentation/support/member_profile_entry_navigation.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -22,6 +23,18 @@ class SettingsPage extends ConsumerStatefulWidget {
 }
 
 class _SettingsPageState extends ConsumerState<SettingsPage> {
+  bool _isOpeningMemberProfile = false;
+
+  Future<void> _openMemberProfile() async {
+    if (_isOpeningMemberProfile) return;
+    _isOpeningMemberProfile = true;
+    try {
+      await openMemberProfileFromSettings(context, ref);
+    } finally {
+      _isOpeningMemberProfile = false;
+    }
+  }
+
   bool _showLanguageOptions = false;
   bool _showTextScaleOptions = false;
   bool _isLoggingOut = false;
@@ -355,7 +368,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   label: l10n.menuItemEditProfile,
                   iconBackgroundColor: colors.primarySubtle,
                   iconForegroundColor: colors.primary,
-                  onTap: () => context.push('/member-profile/edit'),
+                  onTap: _openMemberProfile,
                 ),
                 AppMenuItem(
                   icon: Icons.account_balance_wallet_rounded,

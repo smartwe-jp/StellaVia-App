@@ -1056,7 +1056,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/member-profile/edit',
         pageBuilder: (context, state) => MaterialPage<void>(
           key: state.pageKey,
-          fullscreenDialog: true,
+          fullscreenDialog: state.extra is bool ? state.extra as bool : true,
           child: const VerificationEntryPage(),
         ),
         routes: <RouteBase>[

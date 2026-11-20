@@ -109,6 +109,10 @@ void main() {
       final l = AppLocalizations.of(
         t.element(find.byType(HomeVerificationReminder)),
       );
+      if (action == 'confirmed') {
+        expect(find.text(l.homeReminderProfileTitle), findsNothing);
+        return;
+      }
       await t.tap(find.text(l.homeReminderProfileTitle));
       await t.pumpAndSettle();
       Future<void> expectExitToHome() async {
@@ -121,7 +125,7 @@ void main() {
         expect(router.canPop(), isFalse);
       }
 
-      if (action == 'existing' || action == 'confirmed') {
+      if (action == 'existing') {
         expect(find.byType(CupertinoAlertDialog), findsNothing);
         expect(find.text(l.corporatePrepareTitle), findsOneWidget);
         await t.ensureVisible(find.text(l.corpFormStart));
