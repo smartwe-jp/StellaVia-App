@@ -6594,6 +6594,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageMilesHistoryError => '里程明细加载失败';
 
   @override
+  String get myPageMilesHistoryMonthlyEarn => '每月定期发放';
+
+  @override
+  String get myPageMilesHistoryFirstInvestEarn => '首次投资奖励';
+
+  @override
+  String get myPageMilesHistoryFirstIdentifyEarn => '首次身份认证奖励';
+
+  @override
+  String get myPageMilesHistoryRefund => '退款';
+
+  @override
   String get myPageMilesHistoryEarn => '获得';
 
   @override
@@ -14360,6 +14372,18 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get myPageMilesHistoryError => '里程明細載入失敗';
+
+  @override
+  String get myPageMilesHistoryMonthlyEarn => '每月定期發放';
+
+  @override
+  String get myPageMilesHistoryFirstInvestEarn => '首次投資獎勵';
+
+  @override
+  String get myPageMilesHistoryFirstIdentifyEarn => '首次身分認證獎勵';
+
+  @override
+  String get myPageMilesHistoryRefund => '退款';
 
   @override
   String get myPageMilesHistoryEarn => '獲得';

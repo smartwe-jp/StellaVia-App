@@ -6654,6 +6654,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageMilesHistoryError => 'マイル履歴の取得に失敗しました';
 
   @override
+  String get myPageMilesHistoryMonthlyEarn => '毎月定期付与';
+
+  @override
+  String get myPageMilesHistoryFirstInvestEarn => '初回投資特典';
+
+  @override
+  String get myPageMilesHistoryFirstIdentifyEarn => '初回本人確認特典';
+
+  @override
+  String get myPageMilesHistoryRefund => '払い戻し';
+
+  @override
   String get myPageMilesHistoryEarn => '獲得';
 
   @override

@@ -4,6 +4,10 @@ import '../../../host_miles/domain/entities/host_miles_models.dart';
 
 enum MilesHistoryKind {
   earned,
+  monthlyEarn,
+  firstInvestEarn,
+  firstIdentifyEarn,
+  refunded,
   used,
   expired,
   expiring,
@@ -15,6 +19,17 @@ enum MilesHistoryKind {
   static final _used = RegExp(r'use|消費|消费|redeem|spend|deduct|-');
 
   static MilesHistoryKind of(HostMilesTransaction row) {
+    final known = switch (row.bizType?.trim().toUpperCase()) {
+      'EARN' => monthlyEarn,
+      'EARN_FIRST_INVEST' => firstInvestEarn,
+      'EARN_FIRST_IDENTIFY' => firstIdentifyEarn,
+      'CONSUME' => used,
+      'EXPIRE' => expired,
+      'CANCEL_CONSUMED' => refunded,
+      _ => null,
+    };
+    if (known != null) return known;
+    // Retain compatibility with legacy descriptions and transaction codes.
     final type = '${row.typeDescription} ${row.bizType ?? ''}'.toLowerCase();
     if (_expiring.hasMatch(type)) return expiring;
     if (_expired.hasMatch(type)) return expired;
@@ -30,15 +45,32 @@ enum MilesHistoryKind {
 
   String label(AppLocalizations l) => switch (this) {
     earned => l.myPageMilesHistoryEarn,
+    monthlyEarn => l.myPageMilesHistoryMonthlyEarn,
+    firstInvestEarn => l.myPageMilesHistoryFirstInvestEarn,
+    firstIdentifyEarn => l.myPageMilesHistoryFirstIdentifyEarn,
+    refunded => l.myPageMilesHistoryRefund,
     used => l.myPageMilesHistoryUse,
     expired => l.myPageMilesHistoryExpired,
     expiring => l.myPageMilesHistoryExpiring,
     other => l.myPageMilesHistoryOther,
   };
 
+  bool get isCredit => switch (this) {
+    earned ||
+    monthlyEarn ||
+    firstInvestEarn ||
+    firstIdentifyEarn ||
+    refunded => true,
+    _ => false,
+  };
+
   String amount(num? value, String locale, String unit) {
     final prefix = switch (this) {
-      earned => '+',
+      earned ||
+      monthlyEarn ||
+      firstInvestEarn ||
+      firstIdentifyEarn ||
+      refunded => '+',
       used || expired => '-',
       _ => '',
     };

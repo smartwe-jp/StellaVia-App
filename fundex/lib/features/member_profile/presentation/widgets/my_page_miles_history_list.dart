@@ -69,7 +69,7 @@ class _HistoryRow extends StatelessWidget {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: kind == MilesHistoryKind.earned
+                        color: kind.isCredit
                             ? colors.brandPrimary
                             : colors.textSecondary,
                         borderRadius: BorderRadius.circular(4),
@@ -79,7 +79,7 @@ class _HistoryRow extends StatelessWidget {
                         style: text.caption.copyWith(
                           color:
                               Theme.of(context).brightness == Brightness.dark &&
-                                  kind != MilesHistoryKind.earned
+                                  !kind.isCredit
                               ? colors.heroStart
                               : colors.onDark,
                         ),
@@ -109,9 +109,7 @@ class _HistoryRow extends StatelessWidget {
                 ),
                 textAlign: TextAlign.end,
                 style: text.numericBody.copyWith(
-                  color:
-                      kind == MilesHistoryKind.earned ||
-                          kind == MilesHistoryKind.expiring
+                  color: kind.isCredit || kind == MilesHistoryKind.expiring
                       ? colors.infoForeground
                       : colors.textSecondary,
                 ),

@@ -123,6 +123,8 @@ My Page 的サマリー入口打开 `/profile/summary`。サマリー使用 Figm
 
 サマリー里程卡的「マイル履歴」打开独立登录页，按测试站读取 POST /crowdfunding/points/user-transactions（startPage、limit）。默认每页 10 条，可选 20、50、100；切换条数回到第一页。当前页按交易时间降序、按本地年月分组，展示类型、带正负号的里程和可选有效期限，错误可重试。
 
+2026-11-20：里程履历优先精确匹配 `bizType`：`EARN` 每月定期发放、`EARN_FIRST_INVEST` 首次投资奖励、`EARN_FIRST_IDENTIFY` 首次身份认证奖励、`CONSUME` 消费、`EXPIRE` 过期、`CANCEL_CONSUMED` 退款（返还里程）。前三种及退款显示 `+绝对值`，消费和过期显示 `-绝对值`；增加类统一使用现有获得样式。四种语言均使用本地化类型文案，已识别代码不受描述或原始金额符号影响；旧类型保留原兼容逻辑。
+
 ### 宿主ファンド管理（SP）
 
 My Page 快捷入口打开 `/profile/host-funds`。以 [Figma SP](https://www.figma.com/design/xul33CFNblfWc9zdEQo4yF/?node-id=12400-41435) 的内容区块为基准，使用 AppFilterBar、FundMyPageProjectCard 和已有持仓环形图。

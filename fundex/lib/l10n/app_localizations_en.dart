@@ -6998,6 +6998,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myPageMilesHistoryError => 'Failed to load mile history';
 
   @override
+  String get myPageMilesHistoryMonthlyEarn => 'Monthly award';
+
+  @override
+  String get myPageMilesHistoryFirstInvestEarn => 'First investment reward';
+
+  @override
+  String get myPageMilesHistoryFirstIdentifyEarn =>
+      'First identity verification reward';
+
+  @override
+  String get myPageMilesHistoryRefund => 'Refund';
+
+  @override
   String get myPageMilesHistoryEarn => 'Earned';
 
   @override

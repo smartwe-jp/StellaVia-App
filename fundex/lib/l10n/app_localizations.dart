@@ -12609,6 +12609,30 @@ abstract class AppLocalizations {
   /// **'Failed to load mile history'**
   String get myPageMilesHistoryError;
 
+  /// No description provided for @myPageMilesHistoryMonthlyEarn.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly award'**
+  String get myPageMilesHistoryMonthlyEarn;
+
+  /// No description provided for @myPageMilesHistoryFirstInvestEarn.
+  ///
+  /// In en, this message translates to:
+  /// **'First investment reward'**
+  String get myPageMilesHistoryFirstInvestEarn;
+
+  /// No description provided for @myPageMilesHistoryFirstIdentifyEarn.
+  ///
+  /// In en, this message translates to:
+  /// **'First identity verification reward'**
+  String get myPageMilesHistoryFirstIdentifyEarn;
+
+  /// No description provided for @myPageMilesHistoryRefund.
+  ///
+  /// In en, this message translates to:
+  /// **'Refund'**
+  String get myPageMilesHistoryRefund;
+
   /// No description provided for @myPageMilesHistoryEarn.
   ///
   /// In en, this message translates to:
