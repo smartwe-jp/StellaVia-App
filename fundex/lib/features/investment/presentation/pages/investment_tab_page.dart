@@ -16,6 +16,7 @@ import '../providers/fund_project_favorite_providers.dart';
 import '../providers/fund_project_providers.dart';
 import '../support/fund_project_gain_type_label.dart';
 import '../support/fund_project_yield_display.dart';
+import '../widgets/fund_subscription_progress_bar.dart';
 
 enum _FundListFilter {
   all,
@@ -163,7 +164,7 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
   }
 
   String _formatProgressPercent(double? ratio) {
-    if (ratio == null) {
+    if (ratio == null || !ratio.isFinite) {
       return '--';
     }
     final percentage = ratio * 100;
@@ -651,10 +652,6 @@ class _FundProjectCard extends StatelessWidget {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final isDark = theme.brightness == Brightness.dark;
-    final achievementPalette = _resolveAchievementBarPalette(
-      colors: colors,
-      achievementRate: project.achievementRate,
-    );
     final cardRadius = BorderRadius.circular(UiTokens.radius16);
 
     return Padding(
@@ -840,30 +837,9 @@ class _FundProjectCard extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: UiTokens.spacing8),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: achievementPalette.gradientColors,
-                          ),
-                          border: Border.all(
-                            color: achievementPalette.borderColor,
-                          ),
-                        ),
-                        child: Text(
-                          appliedAmountText,
-                          textAlign: TextAlign.center,
-                          style: appText.button.copyWith(
-                            color: achievementPalette.foregroundColor,
-                          ),
-                        ),
+                      FundSubscriptionProgressBar(
+                        label: appliedAmountText,
+                        ratio: project.achievementRate,
                       ),
                       const SizedBox(height: UiTokens.spacing8),
                       Container(
@@ -939,84 +915,6 @@ class _FundProjectCard extends StatelessWidget {
       ),
     );
   }
-}
-
-class _AchievementBarPalette {
-  const _AchievementBarPalette({
-    required this.gradientColors,
-    required this.foregroundColor,
-    required this.borderColor,
-  });
-
-  final List<Color> gradientColors;
-  final Color foregroundColor;
-  final Color borderColor;
-}
-
-_AchievementBarPalette _resolveAchievementBarPalette({
-  required AppSemanticColorTheme colors,
-  required double? achievementRate,
-}) {
-  final normalizedValue = (achievementRate ?? 0).clamp(0, 1).toDouble();
-  if (normalizedValue <= 0) {
-    return _AchievementBarPalette(
-      gradientColors: const <Color>[Colors.transparent, Colors.transparent],
-      foregroundColor: colors.textPrimary,
-      borderColor: colors.border,
-    );
-  }
-
-  final trackColor = colors.surfaceAlt;
-  final visibility =
-      0.36 + (0.64 * Curves.easeOutCubic.transform(normalizedValue));
-  final blueShift = _resolveAchievementBlueShift(normalizedValue);
-  final shiftedGradientColors = <Color>[
-    Color.lerp(colors.primary, colors.brandPrimaryDark, blueShift * 0.58) ??
-        colors.brandPrimaryDark,
-    Color.lerp(colors.primaryAlt, colors.primary, blueShift) ?? colors.primary,
-  ];
-  final effectiveGradientColors = shiftedGradientColors
-      .map((Color color) => Color.lerp(trackColor, color, visibility) ?? color)
-      .toList(growable: false);
-  final foregroundColor = normalizedValue >= 0.15
-      ? colors.onDark
-      : colors.textPrimary;
-  final borderColor =
-      Color.lerp(colors.border, effectiveGradientColors.last, 0.42) ??
-      colors.border;
-
-  return _AchievementBarPalette(
-    gradientColors: effectiveGradientColors,
-    foregroundColor: foregroundColor,
-    borderColor: borderColor,
-  );
-}
-
-double _resolveAchievementBlueShift(double normalizedValue) {
-  if (normalizedValue <= 0.20) {
-    return 0.00;
-  }
-  if (normalizedValue <= 0.40) {
-    return _lerpAchievementWindow(normalizedValue, 0.20, 0.40, 0.00, 0.22);
-  }
-  if (normalizedValue <= 0.60) {
-    return _lerpAchievementWindow(normalizedValue, 0.40, 0.60, 0.22, 0.46);
-  }
-  if (normalizedValue <= 0.80) {
-    return _lerpAchievementWindow(normalizedValue, 0.60, 0.80, 0.46, 0.72);
-  }
-  return _lerpAchievementWindow(normalizedValue, 0.80, 1.00, 0.72, 0.96);
-}
-
-double _lerpAchievementWindow(
-  double value,
-  double start,
-  double end,
-  double startOutput,
-  double endOutput,
-) {
-  final t = ((value - start) / (end - start)).clamp(0, 1).toDouble();
-  return startOutput + ((endOutput - startOutput) * t);
 }
 
 class _PillTag extends StatelessWidget {
