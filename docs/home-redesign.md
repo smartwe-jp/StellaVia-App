@@ -106,7 +106,7 @@ Information-page validation: 24 targeted tests passed (auth redirects plus navig
 
 - 2026-11-18：首页精选区块的「一覧を見る」入口统一为13／500，通过AppSectionHeader可选actionTextStyle配置；区块标题使用15／700。
 
-- 2026-11-18：宿主优待ABOUT首图区域改为视频入口，复用基金详情的直链／YouTube／外链播放组件。HOME_SERVICE_VIDEO_URL构建配置留空时显示原图封面和本地化准备中状态；后续提供真实链接后配置，无链接不初始化播放器。
+- 2026-11-18：宿主优待ABOUT首图区域改为视频入口，复用基金详情的直链／YouTube／外链播放组件。默认播放 https://testoa.gutingjun.com/vid/stella_0002.mp4 。可通过 HOME_SERVICE_VIDEO_URL 覆盖，显式传空值时显示准备中封面。
 
 ## 2026-11-19 首页导航品牌 Logo
 

@@ -60,7 +60,7 @@ MemberProfileEditStep? memberProfileEditStepFromRouteValue(String? raw) {
     'address-info' => MemberProfileEditStep.addressInfo,
     'suitability' => MemberProfileEditStep.suitability,
     'ekyc' => MemberProfileEditStep.ekyc,
-    'real-person-auth' => MemberProfileEditStep.consent,
+    'real-person-auth' => MemberProfileEditStep.realPersonAuth,
     'bank-account' => MemberProfileEditStep.bankAccount,
     'consent' => MemberProfileEditStep.consent,
     _ => null,

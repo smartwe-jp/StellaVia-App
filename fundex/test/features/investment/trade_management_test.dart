@@ -1,3 +1,7 @@
+import 'package:fundex/features/investment/data/models/fund_project_dto.dart';
+import 'package:fundex/features/investment/domain/entities/fund_project.dart';
+import 'package:fundex/features/investment/domain/repositories/fund_project_repository.dart';
+import 'package:fundex/features/investment/presentation/providers/fund_project_providers.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +15,25 @@ import 'package:fundex/features/member_profile/presentation/providers/mypage_mem
 import 'package:fundex/features/member_profile/presentation/support/mypage_secondary_market_models.dart';
 import 'package:fundex/features/member_profile/presentation/widgets/my_page_shortcuts.dart';
 import 'package:fundex/l10n/app_localizations.dart';
+
+class _OfferingRepository implements FundProjectRepository {
+  @override
+  Future<List<FundProject>> fetchFundProjectList() async => [
+    for (final (name, status, units) in [
+      ('募集中', 1, 14),
+      ('完売', 1, 0),
+      ('募集終了', 7, 99),
+    ])
+      FundProjectDto.fromJson({
+        'id': name,
+        'projectName': name,
+        'projectStatus': status,
+        'currentOpenInvestor': {'avaliableApplyTotal': units},
+      }).toEntity(),
+  ];
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
 
 class _Trades implements MyPageRepository {
   final calls = <(int, int?, String?)>[];
@@ -108,6 +131,9 @@ void main() {
               'user',
             )),
             myPageRepositoryProvider.overrideWithValue(repo),
+            fundProjectRepositoryProvider.overrideWithValue(
+              _OfferingRepository(),
+            ),
             secondaryMarketHoldingsProvider.overrideWith((_) async {
               holdingsCalls++;
               return [
@@ -157,6 +183,13 @@ void main() {
       router.pop();
       await tester.pumpAndSettle();
       await tap('ファンドを買う');
+      expect(find.text('新規募集'), findsOneWidget);
+      expect(find.text('募集中'), findsOneWidget);
+      expect(find.text('14 口'), findsOneWidget);
+      expect(find.text('募集終了'), findsNothing);
+      expect(find.text('完売'), findsNothing);
+      expect(repo.calls, isEmpty);
+      await tap('会員間譲渡');
       expect(repo.calls.last, (1, null, 'VALID'));
       expect(find.text('sold out'), findsNothing);
       await tap('次へ');

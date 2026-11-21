@@ -102,7 +102,7 @@ void main() {
     });
 
     test(
-      'returns true for completed 5-step edit profile without bank',
+      'returns true for completed personal verification edit profile without bank',
       () async {
         final repository = _FakeMemberProfileRepository(
           profile: const MemberProfileDetails(
@@ -112,6 +112,7 @@ void main() {
             givenNameEn: 'TARO',
             birthday: '1994-02-10',
             sex: 1,
+            nationality: '日本',
             taxcountry: '日本',
             zipCode: '1000001',
             prefectureCode: 'tokyo',
@@ -120,6 +121,8 @@ void main() {
             phoneIntlCode: '81',
             phone: '09012345678',
             email: 'taro@example.com',
+            employer: 'ACME',
+            industry: 'IT',
             occupationCode: 'employee',
             annualIncomeCode: '5_10m',
             financialAssetsCode: '5_10m',
@@ -130,7 +133,9 @@ void main() {
             ekycDocumentType: 'drivers_license',
             idDocumentObliquePhotoPath: '/tmp/angle.jpg',
             idDocumentPhotoPath: '/tmp/front.jpg',
-            selfiePhotoPath: '/tmp/selfie.jpg',
+            idDocumentBackPhotoPath: '/tmp/back.jpg',
+            faceVerified: true,
+            skipBankAccount: true,
             electronicDeliveryConsent: true,
             antiSocialForcesConsent: true,
             privacyPolicyConsent: true,
@@ -139,33 +144,48 @@ void main() {
         final useCase = IsMemberProfileCompletedUseCase(repository);
 
         expect(await useCase.call(), isTrue);
+        final complete = repository.profile!;
+        for (final invalid in [
+          complete.copyWith(employer: '  '),
+          complete.copyWith(industry: ''),
+          complete.copyWith(industry: 'UNKNOWN'),
+        ]) {
+          repository.profile = invalid;
+          expect(await useCase.call(), isFalse);
+        }
       },
     );
 
-    test('tracks 5-step progress count from the new edit flow', () {
-      const profile = MemberProfileDetails(
-        nameKanji: '田中 太郎',
-        katakana: 'タナカ タロウ',
-        familyNameEn: 'TANAKA',
-        givenNameEn: 'TARO',
-        birthday: '1994-02-10',
-        sex: 1,
-        taxcountry: '日本',
-        zipCode: '1000001',
-        prefectureCode: 'tokyo',
-        cityAddress: '千代田区丸の内1-1-1',
-        phone: '09012345678',
-        occupationCode: 'employee',
-        annualIncomeCode: '5_10m',
-        financialAssetsCode: '5_10m',
-        investmentPurposeCode: 'growth',
-        fundSourceCode: 'ok',
-        riskToleranceCode: 'accept_loss',
-      );
+    test(
+      'tracks personal verification progress count from the new edit flow',
+      () {
+        const profile = MemberProfileDetails(
+          nameKanji: '田中 太郎',
+          katakana: 'タナカ タロウ',
+          familyNameEn: 'TANAKA',
+          givenNameEn: 'TARO',
+          birthday: '1994-02-10',
+          sex: 1,
+          nationality: '日本',
+          taxcountry: '日本',
+          zipCode: '1000001',
+          prefectureCode: 'tokyo',
+          cityAddress: '千代田区丸の内1-1-1',
+          phone: '09012345678',
+          employer: 'ACME',
+          industry: 'IT',
+          occupationCode: 'employee',
+          annualIncomeCode: '5_10m',
+          financialAssetsCode: '5_10m',
+          investmentPurposeCode: 'growth',
+          fundSourceCode: 'ok',
+          riskToleranceCode: 'accept_loss',
+        );
 
-      expect(profile.completedFlowStepCount, 3);
-      expect(profile.currentFlowStepIndex, 3);
-      expect(profile.isEditFlowComplete, isFalse);
-    });
+        expect(profile.completedFlowStepCount, 3);
+        expect(profile.currentFlowStepIndex, 3);
+        expect(profile.isEditFlowComplete, isFalse);
+      },
+    );
   });
 }

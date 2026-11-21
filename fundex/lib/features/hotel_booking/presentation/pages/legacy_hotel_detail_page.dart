@@ -115,7 +115,7 @@ class _LegacyHotelDetailPageState extends ConsumerState<LegacyHotelDetailPage> {
               maxBenefitAmountState: maxBenefitAmountState,
               isAssigningOccupancy: _isAssigningOccupancy,
               onBack: _handleBack,
-              onEditDates: () => _editStayDates(detail),
+              onEditDates: _editStayDates,
               onEditGuests: _editGuests,
               onInfoSectionExpandedChanged: _setInfoSectionExpanded,
               onRoomQuantityChanged: (change) =>
@@ -136,7 +136,7 @@ class _LegacyHotelDetailPageState extends ConsumerState<LegacyHotelDetailPage> {
     context.go('/hotel-booking');
   }
 
-  Future<void> _editStayDates(HotelDetail detail) async {
+  Future<void> _editStayDates() async {
     final stayBenefitPeriods =
         ref
             .read(hotelStayBenefitPeriodsForHotelProvider(widget.hotelId))
@@ -145,7 +145,6 @@ class _LegacyHotelDetailPageState extends ConsumerState<LegacyHotelDetailPage> {
     final nextCriteria = await pickHotelStayDates(
       context: context,
       criteria: _criteria,
-      priceCalendarByDate: detail.priceCalendarByDate,
       stayBenefitSelectableDates: _stayBenefitDates(stayBenefitPeriods),
       selectionMode: _criteria.stayBenefit
           ? HotelStayDateSelectionMode.stayBenefitSingleNight

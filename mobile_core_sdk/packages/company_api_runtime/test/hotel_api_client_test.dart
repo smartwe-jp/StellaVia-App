@@ -56,6 +56,25 @@ CoreHttpClient _buildClient(
 
 void main() {
   group('HotelApiClient', () {
+    test('points search is public and maps reference dates and points', () async {
+      final api = HotelApiClient(
+        _buildClient((options) async {
+          expect(options.method, 'POST');
+          expect(options.path, '/hotel/stella/pointsSearch');
+          expect(options.extra['auth_required'], isFalse);
+          expect(options.data, {'points': 63000});
+          return _jsonOk(
+            '{"code":200,"data":[{"hotelId":42,"hotelName":"Kyoto","startingPoints":"15400","referenceCheckIn":"2026-11-22","referenceCheckOut":"2026-11-23"}]}',
+          );
+        }),
+      );
+      final hotel = (await api.searchHotelsByPoints(63000)).single;
+      expect(hotel.id, '42');
+      expect(hotel.startingPoints, 15400);
+      expect(hotel.referenceCheckIn, DateTime(2026, 11, 22));
+      expect(hotel.referenceCheckOut, DateTime(2026, 11, 23));
+    });
+
     test('searchHotels follows Swagger path and parses hotel list', () async {
       final client = _buildClient((options) async {
         expect(options.method, equals('POST'));

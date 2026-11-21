@@ -317,6 +317,15 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                 },
                 routes: <RouteBase>[
                   GoRoute(
+                    path: 'verification',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    pageBuilder: (context, state) => MaterialPage<void>(
+                      key: state.pageKey,
+                      fullscreenDialog: true,
+                      child: const VerificationEntryPage(),
+                    ),
+                  ),
+                  GoRoute(
                     path: 'simulation',
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) => const HomeSimulationPage(),
@@ -450,7 +459,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   GoRoute(
                     path: 'host-miles',
                     parentNavigatorKey: _rootNavigatorKey,
-                    builder: (context, state) => const HotelHostMilesPage(),
+                    builder: (context, state) => HotelHostMilesPage(
+                      initialCriteria: state.extra is HotelSearchCriteria ? state.extra as HotelSearchCriteria : null,
+                    ),
                   ),
                   GoRoute(
                     path: 'stay-benefits',

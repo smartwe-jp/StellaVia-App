@@ -39,6 +39,12 @@ class HomeRankDetailsSection extends ConsumerWidget {
                 context,
               ).copyWith(color: context.appColors.onDark),
             ),
+            Text(
+              l.homeRankEligibilityNote,
+              style: context.appTextTheme.caption.copyWith(
+                color: context.appColors.onDark,
+              ),
+            ),
             if (state.isLoading || state.hasError)
               AppCard(
                 child: HomeDataStatus(

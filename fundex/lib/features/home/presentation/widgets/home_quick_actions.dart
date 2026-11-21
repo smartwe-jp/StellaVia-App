@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../support/home_text_styles.dart';
+import 'home_action_icon.dart';
 
 class HomeQuickActions extends StatelessWidget {
   const HomeQuickActions({
@@ -53,12 +54,12 @@ class _Action extends StatelessWidget {
   @override
   Widget build(BuildContext context) => AppCard(
     onTap: onTap,
-    padding: const EdgeInsets.all(12),
+    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
     child: ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 48),
       child: Row(
         children: [
-          Icon(icon, color: context.appColors.primary, size: 22),
+          HomeActionIcon(icon),
           const SizedBox(width: 8),
           Expanded(
             child: Text(

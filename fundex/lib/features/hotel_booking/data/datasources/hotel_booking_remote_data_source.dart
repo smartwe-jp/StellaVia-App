@@ -1,6 +1,8 @@
 import 'package:company_api_runtime/company_api_runtime.dart';
 
 abstract class HotelBookingRemoteDataSource {
+  Future<List<PointsHotelDto>> searchHotelsByPoints(int points);
+
   Future<HotelSearchResultDto> searchHotels(HotelSearchRequestDto request);
 
   Future<HotelDetailDto> fetchHotelDetail(HotelDetailRequestDto request);
@@ -154,6 +156,10 @@ class HotelBookingRemoteDataSourceImpl implements HotelBookingRemoteDataSource {
   const HotelBookingRemoteDataSourceImpl(this._client);
 
   final HotelApiClient _client;
+
+  @override
+  Future<List<PointsHotelDto>> searchHotelsByPoints(int points) =>
+      _client.searchHotelsByPoints(points);
 
   @override
   Future<HotelSearchResultDto> searchHotels(HotelSearchRequestDto request) {

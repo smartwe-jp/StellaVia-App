@@ -1,6 +1,8 @@
 import '../entities/hotel_models.dart';
 
 abstract class HotelBookingRepository {
+  Future<List<PointsHotel>> searchHotelsByPoints(int points);
+
   Future<HotelSearchResult> searchHotels({
     required HotelSearchCriteria criteria,
     required String languageCode,

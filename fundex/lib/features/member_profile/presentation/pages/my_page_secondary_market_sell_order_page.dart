@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../app/config/environment_provider.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../investment/presentation/widgets/secondary_market_buy_flow_sections.dart';
@@ -24,8 +23,6 @@ class MyPageSecondaryMarketSellOrderPage extends ConsumerStatefulWidget {
 class _MyPageSecondaryMarketSellOrderPageState
     extends ConsumerState<MyPageSecondaryMarketSellOrderPage> {
   late final TextEditingController _sellUnitsController;
-
-  bool _agreed = false;
 
   @override
   void initState() {
@@ -54,7 +51,6 @@ class _MyPageSecondaryMarketSellOrderPageState
     final sellUnits = _sellUnits;
     final hasProcessId = widget.seed.fromProcessId.trim().isNotEmpty;
     return hasProcessId &&
-        _agreed &&
         sellUnits != null &&
         sellUnits > 0 &&
         sellUnits <= widget.seed.availableUnits &&
@@ -89,30 +85,6 @@ class _MyPageSecondaryMarketSellOrderPageState
     _setSellUnits(current - 1);
   }
 
-  String get _sampleDocumentUrl {
-    final oaApiBaseUrl = ref.read(oaApiBaseUrlProvider);
-    return _buildSampleContractUrl(oaApiBaseUrl);
-  }
-
-  void _openContractSample(BuildContext context) {
-    final l10n = context.l10n;
-    openAppPdfViewer(
-      context,
-      url: _sampleDocumentUrl,
-      title: l10n.myPageResaleAgreementSampleLabel,
-      texts: AppPdfViewerTexts(
-        pageTitle: l10n.pdfViewerPageTitle,
-        openExternalTooltip: l10n.pdfViewerOpenExternalTooltip,
-        openExternalLabel: l10n.pdfViewerOpenExternalLabel,
-        loadingLabel: l10n.pdfViewerLoadingLabel,
-        loadFailedLabel: l10n.pdfViewerLoadFailedLabel,
-        retryLabel: l10n.fundListRetry,
-        invalidUrlNotice: l10n.pdfViewerInvalidUrlNotice,
-        openExternalFailedNotice: l10n.pdfViewerOpenExternalFailedNotice,
-      ),
-    );
-  }
-
   void _goConfirm(int price) {
     if (!_isValid(price)) {
       return;
@@ -126,7 +98,6 @@ class _MyPageSecondaryMarketSellOrderPageState
       price: price,
       investorCode: widget.seed.investorCode,
       earningRatio: widget.seed.earningRatio,
-      agreed: _agreed,
     );
     context.push('/my/secondary-market/sell/confirm', extra: draft);
   }
@@ -225,21 +196,6 @@ class _MyPageSecondaryMarketSellOrderPageState
                   onSelectPreset: _setSellUnits,
                   enabled: widget.seed.availableUnits > 0,
                 ),
-                const SizedBox(height: 14),
-                SecondaryMarketTradeAgreementCard(
-                  title: l10n.myPageResaleAgreementSectionTitle,
-                  body: l10n.myPageResaleAgreementBody,
-                  agreed: _agreed,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _agreed = value;
-                    });
-                  },
-                  documentLabel: l10n.myPageResaleAgreementSampleLabel,
-                  documentActionLabel: l10n.secondaryMarketDocumentOpenAction,
-                  documentAvailable: true,
-                  onOpenDocument: () => _openContractSample(context),
-                ),
               ],
             ),
           ),
@@ -247,14 +203,4 @@ class _MyPageSecondaryMarketSellOrderPageState
       ),
     );
   }
-}
-
-String _buildSampleContractUrl(String oaApiBaseUrl) {
-  final uri = Uri.tryParse(oaApiBaseUrl);
-  if (uri == null || uri.scheme.isEmpty || uri.host.isEmpty) {
-    return 'https://testoa.gutingjun.com/keiyakusho.pdf';
-  }
-  final origin =
-      '${uri.scheme}://${uri.host}${uri.hasPort ? ':${uri.port}' : ''}';
-  return '$origin/keiyakusho.pdf';
 }

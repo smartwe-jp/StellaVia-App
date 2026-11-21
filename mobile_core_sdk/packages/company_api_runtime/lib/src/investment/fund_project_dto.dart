@@ -22,6 +22,7 @@ class FundProjectDto {
     this.currentlySubscribed,
     this.daysRemaining,
     this.projectStatus,
+    this.currentOpenInvestor,
     this.operatingCompany,
     this.operatingCompanyAccount,
     this.periodType,
@@ -42,7 +43,11 @@ class FundProjectDto {
   factory FundProjectDto.fromJson(Map<String, dynamic> json) {
     final detailData = _detailDataFrom(json['detail']);
 
+    final openInvestor = _mapOrNull(json['currentOpenInvestor']);
     return FundProjectDto(
+      currentOpenInvestor: openInvestor == null
+          ? null
+          : FundProjectApplyInvestorDto.fromJson(openInvestor),
       id: _stringOrEmpty(json['id']),
       projectName: _stringOrEmpty(json['projectName']),
       expectedDistributionRatioMax: _doubleOrNull(
@@ -132,6 +137,7 @@ class FundProjectDto {
   final int? currentlySubscribed;
   final int? daysRemaining;
   final int? projectStatus;
+  final FundProjectApplyInvestorDto? currentOpenInvestor;
   final String? operatingCompany;
   final int? operatingCompanyAccount;
   final String? periodType;

@@ -286,7 +286,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     return Scaffold(
       key: const Key('login_page'),
       body: DecoratedBox(
-        decoration: BoxDecoration(color: theme.appColors.brandPrimaryDark),
+        decoration: BoxDecoration(color: theme.appColors.brandPrimary),
         child: SafeArea(
           bottom: false,
           child: DecoratedBox(
@@ -520,23 +520,6 @@ class _LoginHeroHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colors = theme.appColors;
-    final isDark = theme.brightness == Brightness.dark;
-    final heroGradientColors = isDark
-        ? <Color>[
-            Color.alphaBlend(
-              colors.brandPrimaryDark.withValues(alpha: 0.34),
-              colors.surface,
-            ),
-            Color.alphaBlend(
-              colors.brandPrimary.withValues(alpha: 0.24),
-              colors.surfaceAlt,
-            ),
-            Color.alphaBlend(
-              colors.brandPrimaryBright.withValues(alpha: 0.18),
-              colors.surface,
-            ),
-          ]
-        : <Color>[colors.heroStart, colors.heroMiddle, colors.heroEnd];
     final heroForegroundColor = colors.onDark;
 
     return SizedBox(
@@ -548,11 +531,7 @@ class _LoginHeroHeader extends StatelessWidget {
             width: double.infinity,
             height: 220,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: heroGradientColors,
-              ),
+              color: colors.brandPrimary,
               borderRadius: const BorderRadius.vertical(
                 bottom: Radius.circular(32),
               ),

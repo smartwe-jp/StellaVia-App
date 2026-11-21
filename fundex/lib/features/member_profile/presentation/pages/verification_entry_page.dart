@@ -24,18 +24,15 @@ class VerificationEntryPage extends ConsumerWidget {
       skipLoadingOnRefresh: false,
       data: (value) => switch (value.kind) {
         VerificationEntryKind.personal => const MemberProfileOverviewPage(),
-        VerificationEntryKind.choice => CorporateFlowScaffold(
-          title: context.l10n.investorTypeTitle,
-          child: InvestorChoice(
-            onPersonal: () async {
-              await context.push('/member-profile/onboarding');
-              if (context.mounted) refresh();
-            },
-            onCorporate: () async {
-              await openCorporateVerification(context, value);
-              if (context.mounted) refresh();
-            },
-          ),
+        VerificationEntryKind.choice => InvestorChoice(
+          onPersonal: () async {
+            await context.push('/member-profile/onboarding');
+            if (context.mounted) refresh();
+          },
+          onCorporate: () async {
+            await openCorporateVerification(context, value);
+            if (context.mounted) refresh();
+          },
         ),
         VerificationEntryKind.corporate when value.status == 'CONFIRMED' =>
           VerificationEntryScaffold(

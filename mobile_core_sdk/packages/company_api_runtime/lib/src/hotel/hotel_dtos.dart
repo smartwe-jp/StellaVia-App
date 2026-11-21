@@ -7,6 +7,26 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'hotel_dtos.freezed.dart';
 part 'hotel_dtos.g.dart';
 
+class PointsHotelDto {
+  PointsHotelDto.fromJson(Map<String, dynamic> data)
+    : id = (data['hotelId'] ?? data['id'])?.toString().trim() ?? '',
+      name = (data['hotelName'] ?? data['name'])?.toString().trim() ?? '',
+      startingPoints = num.tryParse(
+        data['startingPoints']?.toString().trim() ?? '',
+      ),
+      buildingCode = data['buildingCode']?.toString() ?? '',
+      referenceCheckIn = DateTime.tryParse(
+        data['referenceCheckIn']?.toString() ?? '',
+      ),
+      referenceCheckOut = DateTime.tryParse(
+        data['referenceCheckOut']?.toString() ?? '',
+      );
+
+  final String id, name, buildingCode;
+  final num? startingPoints;
+  final DateTime? referenceCheckIn, referenceCheckOut;
+}
+
 @freezed
 abstract class HotelSearchRequestDto with _$HotelSearchRequestDto {
   @JsonSerializable(includeIfNull: false)

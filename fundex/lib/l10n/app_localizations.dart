@@ -9894,7 +9894,7 @@ abstract class AppLocalizations {
   /// No description provided for @myPageResaleValidationMessage.
   ///
   /// In en, this message translates to:
-  /// **'Enter the number of units and agree to the document terms.'**
+  /// **'Enter a quantity within the available units.'**
   String get myPageResaleValidationMessage;
 
   /// No description provided for @myPageResalePriceUnavailable.
@@ -9942,7 +9942,7 @@ abstract class AppLocalizations {
   /// No description provided for @myPageResaleFlowOrderSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Set the quantity, asking price, and document confirmation before moving to the review step.'**
+  /// **'Review the units to sell and the unit price.'**
   String get myPageResaleFlowOrderSubtitle;
 
   /// No description provided for @myPageResaleFlowConfirmTitle.
@@ -10244,6 +10244,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'1.65% of transaction amount'**
   String get secondaryMarketBuyFeeValue;
+
+  /// No description provided for @secondaryMarketElectronicTradeDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Important information about electronic transactions'**
+  String get secondaryMarketElectronicTradeDocument;
 
   /// No description provided for @secondaryMarketBuyAgreementLabel.
   ///
@@ -10587,10 +10593,22 @@ abstract class AppLocalizations {
   /// **'Other'**
   String get memberProfileSexOther;
 
+  /// No description provided for @memberProfileNationalityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Nationality'**
+  String get memberProfileNationalityLabel;
+
+  /// No description provided for @memberProfileDocumentExample.
+  ///
+  /// In en, this message translates to:
+  /// **'Example photo'**
+  String get memberProfileDocumentExample;
+
   /// No description provided for @memberProfileTaxCountryLabel.
   ///
   /// In en, this message translates to:
-  /// **'Country of residence'**
+  /// **'Country of tax residence'**
   String get memberProfileTaxCountryLabel;
 
   /// No description provided for @memberProfileTaxCountryHint.
@@ -10707,6 +10725,72 @@ abstract class AppLocalizations {
   /// **'We confirm your investment experience under Article 25 of the Real Estate Specified Joint Enterprise Act.'**
   String get memberProfileStep3Description;
 
+  /// No description provided for @memberIndustryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Industry'**
+  String get memberIndustryLabel;
+
+  /// No description provided for @memberEmployerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Employer'**
+  String get memberEmployerLabel;
+
+  /// No description provided for @memberIndustryIt.
+  ///
+  /// In en, this message translates to:
+  /// **'IT and telecommunications'**
+  String get memberIndustryIt;
+
+  /// No description provided for @memberIndustryFinance.
+  ///
+  /// In en, this message translates to:
+  /// **'Finance and insurance'**
+  String get memberIndustryFinance;
+
+  /// No description provided for @memberIndustryManufacturing.
+  ///
+  /// In en, this message translates to:
+  /// **'Manufacturing'**
+  String get memberIndustryManufacturing;
+
+  /// No description provided for @memberIndustryRetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Retail and services'**
+  String get memberIndustryRetail;
+
+  /// No description provided for @memberIndustryRealEstate.
+  ///
+  /// In en, this message translates to:
+  /// **'Real estate'**
+  String get memberIndustryRealEstate;
+
+  /// No description provided for @memberIndustryMedical.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthcare and social welfare'**
+  String get memberIndustryMedical;
+
+  /// No description provided for @memberIndustryPublic.
+  ///
+  /// In en, this message translates to:
+  /// **'Government and organizations'**
+  String get memberIndustryPublic;
+
+  /// No description provided for @memberIndustryEducation.
+  ///
+  /// In en, this message translates to:
+  /// **'Education'**
+  String get memberIndustryEducation;
+
+  /// No description provided for @memberIndustryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get memberIndustryOther;
+
   /// No description provided for @memberProfileOccupationLabel.
   ///
   /// In en, this message translates to:
@@ -10788,7 +10872,7 @@ abstract class AppLocalizations {
   /// No description provided for @memberProfileDocumentGuideBody.
   ///
   /// In en, this message translates to:
-  /// **'Please submit one of the following identity verification documents.\n\n1. Residents\n- Individual Number Card (My Number Card, front side only)\n- Residence card\n- Special Permanent Resident Certificate\n- Driver\'s license\n\n2. Non-residents\n- Government-issued photo ID from your home country\n- Passport (photo page and bearer information page)\n\n3. Corporations (corporate account)\nPlease submit the following documents:\n- Certificate of Registered Matters (full historical record)\n- Identity verification document for the representative or transaction agent\n- If required, documents regarding beneficial owners'**
+  /// **'Please submit one of the following identity verification documents.\n\n1. Residents\n- Individual Number Card (My Number Card, front side only)\n- Residence card\n- Special Permanent Resident Certificate\n- Driver\'s license\n\n2. Non-residents\n- Government-issued photo ID from your home country\n- Passport (photo page and bearer information page)'**
   String get memberProfileDocumentGuideBody;
 
   /// No description provided for @memberProfileDocumentTypeLabel.
@@ -10878,7 +10962,7 @@ abstract class AppLocalizations {
   /// No description provided for @memberProfileStep5RealPersonDescription.
   ///
   /// In en, this message translates to:
-  /// **'Upload your selfie, then complete the live face verification.'**
+  /// **'Use the camera to complete live face verification.'**
   String get memberProfileStep5RealPersonDescription;
 
   /// No description provided for @memberProfileStep5RealPersonSelfieRequired.
@@ -10968,7 +11052,7 @@ abstract class AppLocalizations {
   /// No description provided for @memberProfileStep6Title.
   ///
   /// In en, this message translates to:
-  /// **'Step 5: Consent'**
+  /// **'Step 7: Consent'**
   String get memberProfileStep6Title;
 
   /// No description provided for @memberProfileStep6Description.
@@ -11886,13 +11970,13 @@ abstract class AppLocalizations {
   /// No description provided for @homeServiceAboutEyebrow.
   ///
   /// In en, this message translates to:
-  /// **'ABOUT'**
+  /// **'WHY STELLAVIA'**
   String get homeServiceAboutEyebrow;
 
   /// No description provided for @homeServiceAboutTitle.
   ///
   /// In en, this message translates to:
-  /// **'Invest in tomorrow and today.'**
+  /// **'Grow future security, and enrich life today.'**
   String get homeServiceAboutTitle;
 
   /// No description provided for @homeServiceVideoPending.
@@ -11904,7 +11988,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeServiceAboutBody.
   ///
   /// In en, this message translates to:
-  /// **'Build your assets while enjoying time with family, your partner and the people who matter today. Host benefits combine investment returns with host miles that can be used for hotel stays. This is the new approach to investing proposed by STELLAVIA.'**
+  /// **'Rather than sacrificing today for the future, grow your assets while enjoying the present with family, your partner, and the people who matter. By investing in Host Funds, you can earn investment returns as well as “Host Miles” for hotel stays through our Host Benefits program. This is STELLAVIA’s new approach to investing.'**
   String get homeServiceAboutBody;
 
   /// No description provided for @homeServiceReturnsEyebrow.
@@ -11934,13 +12018,13 @@ abstract class AppLocalizations {
   /// No description provided for @homeServiceFinancialTitle.
   ///
   /// In en, this message translates to:
-  /// **'Investment returns'**
+  /// **'Investing that grows the future'**
   String get homeServiceFinancialTitle;
 
   /// No description provided for @homeServiceFinancialBody.
   ///
   /// In en, this message translates to:
-  /// **'Invest in hotel funds with an expected yield of 6–10%. Aim to build assets over the medium to long term through fixed yields.'**
+  /// **'Invest in Host Funds from ¥10,000 per unit. Compare each fund’s expected yield and investment term. Actual returns are not guaranteed.'**
   String get homeServiceFinancialBody;
 
   /// No description provided for @homeServiceNowEyebrow.
@@ -11958,13 +12042,13 @@ abstract class AppLocalizations {
   /// No description provided for @homeServiceExperienceTitle.
   ///
   /// In en, this message translates to:
-  /// **'Travel with host miles'**
+  /// **'Travel enriches life today'**
   String get homeServiceExperienceTitle;
 
   /// No description provided for @homeServiceExperienceBody.
   ///
   /// In en, this message translates to:
-  /// **'Use accumulated host miles to book STELLAVIA hotels. Enjoy returns in the form of travel experiences too.'**
+  /// **'Use accumulated Host Miles to book STELLAVIA hotels. Enjoy not only investment returns, but the experience of travel today.'**
   String get homeServiceExperienceBody;
 
   /// No description provided for @homeRankDetailTitle.
@@ -11978,6 +12062,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Five membership ranks are based on your invested balance. Higher ranks increase your host-mile earning rate, extend the advance booking window and lengthen mile validity. Continued investing gives you more freedom to travel.'**
   String get homeRankDetailBody;
+
+  /// No description provided for @homeRankEligibilityNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Only amounts invested in funds that open for subscriptions on or after December 1, 2026 count toward your rank and Host Miles. Funds that opened for subscriptions before that date are excluded.'**
+  String get homeRankEligibilityNote;
 
   /// No description provided for @homeRankDraftNotice.
   ///
@@ -12084,49 +12174,55 @@ abstract class AppLocalizations {
   /// No description provided for @homeServiceStartTitle.
   ///
   /// In en, this message translates to:
-  /// **'Getting started with STELLAVIA'**
+  /// **'How to start with STELLAVIA'**
   String get homeServiceStartTitle;
+
+  /// No description provided for @homeServiceStep1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Register as a Host for free'**
+  String get homeServiceStep1Title;
 
   /// No description provided for @homeServiceStep1Body.
   ///
   /// In en, this message translates to:
-  /// **'Register easily on your phone, anytime and anywhere.'**
+  /// **'Register easily anytime, anywhere, using only your smartphone.'**
   String get homeServiceStep1Body;
 
   /// No description provided for @homeServiceStep2Title.
   ///
   /// In en, this message translates to:
-  /// **'Choose a host fund'**
+  /// **'Choose a Host Fund'**
   String get homeServiceStep2Title;
 
   /// No description provided for @homeServiceStep2Body.
   ///
   /// In en, this message translates to:
-  /// **'Review the investment period and expected yield before choosing.'**
+  /// **'Review the estimated yield and operating period, then choose a Host Fund.'**
   String get homeServiceStep2Body;
 
   /// No description provided for @homeServiceStep3Title.
   ///
   /// In en, this message translates to:
-  /// **'Earn host miles'**
+  /// **'Earn Host Miles'**
   String get homeServiceStep3Title;
 
   /// No description provided for @homeServiceStep3Body.
   ///
   /// In en, this message translates to:
-  /// **'Miles accrue monthly based on your invested balance.'**
+  /// **'Host Miles are added every month based on your balance and rank.'**
   String get homeServiceStep3Body;
 
   /// No description provided for @homeServiceStep4Title.
   ///
   /// In en, this message translates to:
-  /// **'Stay at a hotel'**
+  /// **'Stay at hotels'**
   String get homeServiceStep4Title;
 
   /// No description provided for @homeServiceStep4Body.
   ///
   /// In en, this message translates to:
-  /// **'Use your miles for a stay at a STELLAVIA hotel.'**
+  /// **'Use your Host Miles to book a STELLAVIA hotel.'**
   String get homeServiceStep4Body;
 
   /// No description provided for @homeServiceMemberNote.
@@ -12272,6 +12368,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No rank information is available yet.'**
   String get homeRankRulesEmpty;
+
+  /// No description provided for @simRunAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulate'**
+  String get simRunAction;
+
+  /// No description provided for @simPointsHotelsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hotels within your estimated miles'**
+  String get simPointsHotelsTitle;
+
+  /// No description provided for @simPointsHotelsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No hotels were found for this many miles.'**
+  String get simPointsHotelsEmpty;
+
+  /// No description provided for @simPointsHotelStay.
+  ///
+  /// In en, this message translates to:
+  /// **'From {points} miles per night · {nights, plural, =1{About 1 night} other{About {nights} nights}}'**
+  String simPointsHotelStay(String points, int nights);
 
   /// No description provided for @simTitle.
   ///
@@ -12519,6 +12639,12 @@ abstract class AppLocalizations {
   /// **'Standby cash for deposits, withdrawals, and investments'**
   String get myPageChartCashHint;
 
+  /// No description provided for @hostManageDividendYenUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'(Unit: ¥)'**
+  String get hostManageDividendYenUnit;
+
   /// No description provided for @myPageChartDividendUnit.
   ///
   /// In en, this message translates to:
@@ -12698,6 +12824,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'(unit: ¥10,000)'**
   String get hostManageFundExpectPrincipalUnit;
+
+  /// No description provided for @hostManageResidencyUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Your residency could not be confirmed. Deposit account details are unavailable.'**
+  String get hostManageResidencyUnknown;
+
+  /// No description provided for @hostManageOverseasBankEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No overseas deposit account is available for this fund.'**
+  String get hostManageOverseasBankEmpty;
 
   /// No description provided for @hostManageFundBankEmpty.
   ///
@@ -13688,6 +13826,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No funds available to sell'**
   String get tradeEmptySell;
+
+  /// No description provided for @tradeNewOfferings.
+  ///
+  /// In en, this message translates to:
+  /// **'New offerings'**
+  String get tradeNewOfferings;
+
+  /// No description provided for @tradeMemberTransfers.
+  ///
+  /// In en, this message translates to:
+  /// **'Member transfers'**
+  String get tradeMemberTransfers;
+
+  /// No description provided for @tradeAvailableApplyUnits.
+  ///
+  /// In en, this message translates to:
+  /// **'Units available to subscribe'**
+  String get tradeAvailableApplyUnits;
 
   /// No description provided for @tradeEmptyBuy.
   ///

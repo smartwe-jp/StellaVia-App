@@ -113,12 +113,12 @@ class _FundProjectDetailVideoPlayerState
       return;
     }
 
-    final player = CachedVideoPlayerPlus.networkUrl(
-      uri,
-      invalidateCacheIfOlderThan: const Duration(days: 30),
-    );
-
+    CachedVideoPlayerPlus? player;
     try {
+      player = CachedVideoPlayerPlus.networkUrl(
+        uri,
+        invalidateCacheIfOlderThan: const Duration(days: 30),
+      );
       await player.initialize();
       if (!mounted || generation != _loadGeneration) {
         await player.dispose();
@@ -133,7 +133,7 @@ class _FundProjectDetailVideoPlayerState
         _loadError = null;
       });
     } catch (error) {
-      await player.dispose();
+      await player?.dispose();
       if (!mounted || generation != _loadGeneration) {
         return;
       }
@@ -671,8 +671,8 @@ class _FundProjectVideoErrorState extends StatelessWidget {
       child: ColoredBox(
         color: colors.heroStart,
         child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[

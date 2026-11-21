@@ -7,7 +7,10 @@ import '../../../investment/presentation/widgets/fund_project_detail_video_playe
 class HomeServiceVideo extends StatelessWidget {
   const HomeServiceVideo({
     super.key,
-    this.videoUrl = const String.fromEnvironment('HOME_SERVICE_VIDEO_URL'),
+    this.videoUrl = const String.fromEnvironment(
+      'HOME_SERVICE_VIDEO_URL',
+      defaultValue: 'https://testoa.gutingjun.com/vid/stella_0002.mp4',
+    ),
   });
 
   final String videoUrl;

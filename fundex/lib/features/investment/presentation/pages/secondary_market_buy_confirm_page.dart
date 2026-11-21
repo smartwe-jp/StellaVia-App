@@ -1,3 +1,4 @@
+import '../widgets/secondary_market_buy_documents.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../support/secondary_market_trade_support.dart';
 import '../controllers/secondary_market_controller.dart';
@@ -67,7 +68,9 @@ class _SecondaryMarketBuyConfirmPageState
       }
 
       final draft = widget.draft;
-      if (!draft.agreed || draft.buyNum <= 0 || draft.unitPrice <= 0) {
+      if (!hasAllTradeDocumentTypes(draft.confirmedDocuments) ||
+          draft.buyNum <= 0 ||
+          draft.unitPrice <= 0) {
         throw StateError(l10n.secondaryMarketBuyValidationMessage);
       }
       final latest = await ref.refresh(
@@ -198,9 +201,13 @@ class _SecondaryMarketBuyConfirmPageState
                     ),
                     SecondaryMarketTradeInfoRowData(
                       label: l10n.secondaryMarketBuyAgreementLabel,
-                      value: widget.draft.sampleDocumentUrl == null
-                          ? l10n.secondaryMarketDocumentPending
-                          : l10n.secondaryMarketBuyAgreementSampleLabel,
+                      value: widget.draft.confirmedDocuments
+                          .map(
+                            (doc) => doc.name.isEmpty
+                                ? tradeDocumentTitle(l10n, doc.type)
+                                : doc.name,
+                          )
+                          .join('\n'),
                     ),
                   ],
                 ),

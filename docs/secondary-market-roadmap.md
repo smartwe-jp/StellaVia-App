@@ -22,6 +22,8 @@ https://sit-admin.gutingjun.com/api/crowdfunding/v2/api-docs
 
 ## 已实现
 
+- 买入使用与官方基金申购相同的项目详情 PDF。契约成立前（type 1）、契约成立时（type 3）、电子交易重要事项（type 2）三类均须有文件，每份打开并勾选后才可核对订单。缺少类别时可重新查询。卖出挂单填写口数并核对金额即可提交，后续电子签约按原交易流程进行。
+
 - 运用详情顶部大卡片下方新增出售中挂单入口，按当前账号、当前 projectId 与购买 processId 对应的 fromProcessId 筛选 VALID 且未售罄的挂单；可进入既有挂单详情。
 
 - 运用详情数量区并列展示投资口数、剩余口数（investNumValid）、可售口数（investNumRemaining）；出售填写和确认步骤明确提示当前订单最多可出售口数。
@@ -52,7 +54,7 @@ https://sit-admin.gutingjun.com/api/crowdfunding/v2/api-docs
 My Page 快捷入口进入交易管理，默认「ファンドを売る」。按[测试站的管理区块](https://testoa.gutingjun.com/mypage#secondary)使用 AppFilterBar 和 App 基金卡片。筛选切换回到第一页，每页 10 条。
 
 - 出售从 available 读取当前账户的逐笔持仓，先过滤可售口数大于零的记录再本地分页。出售沿用该笔购买的 processId 和口数上限。
-- 购买按页查询 VALID 挂单，显示剩余口数大于零的记录。点击进入 App 的市场详情与购买流程。
+- 购买分为「新規募集」和「会員間譲渡」。默认显示新规募集，读取官方基金列表中募集中且 currentOpenInvestor.avaliableApplyTotal 大于零的项目，点击查看官方基金详情并申购。会员间转让按页查询 VALID 挂单，显示剩余口数大于零的记录。点击进入 App 的市场详情与购买流程。
 - 売買履歴默认「売却」，以当前用户 ID 查询所有挂单；「応募」以 marketType=2 查询购买申请。详情保留状态、合同信息与已有撤销流程。售出或购买提交成功后进入相应履历。
 - 页面仅在进入后读取所选区块。分页依据接口总数，保留同一基金下不同订单的独立记录。
 

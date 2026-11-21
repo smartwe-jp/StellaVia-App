@@ -93,10 +93,35 @@ void main() {
       expect(find.text(l.myPageResalePriceUnavailable), findsNothing);
     },
   );
+  test(
+    'a missing required type or invalid PDF cannot satisfy purchase review',
+    () {
+      final documents = requiredTradeDocuments(const [
+        FundProjectPdfDocument(
+          type: 1,
+          urls: [FundProjectPdfUrl(url: 'https://example.com/a.pdf')],
+        ),
+        FundProjectPdfDocument(
+          type: 3,
+          urls: [FundProjectPdfUrl(url: 'https://example.com/b.pdf')],
+        ),
+        FundProjectPdfDocument(
+          type: 2,
+          urls: [FundProjectPdfUrl(url: 'invalid')],
+        ),
+        FundProjectPdfDocument(
+          type: 4,
+          urls: [FundProjectPdfUrl(url: 'https://example.com/extra.pdf')],
+        ),
+      ]);
+      expect(documents.length, 2);
+      expect(hasAllTradeDocumentTypes(documents), isFalse);
+    },
+  );
   for (final sell in [true, false]) {
     final side = sell ? 'sell' : 'buy';
     testWidgets(
-      '$side updates the estimate and requires consent before review',
+      '$side updates the estimate and applies its document requirements',
       (tester) async {
         tester.view.devicePixelRatio = 2;
         tester.view.physicalSize = const Size(780, 1688);
@@ -150,6 +175,24 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
+              fundProjectDetailProvider('p').overrideWith(
+                (ref) async => FundProject(
+                  id: 'p',
+                  projectName: '京都',
+                  pdfDocuments: [
+                    for (final type in [1, 2, 3])
+                      FundProjectPdfDocument(
+                        type: type,
+                        urls: [
+                          FundProjectPdfUrl(
+                            name: 'File $type',
+                            url: 'https://example.com/$type.pdf',
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
               submitMyPageSecondaryMarketCreateUseCaseProvider
                   .overrideWithValue(saleSubmission),
             ],
@@ -189,15 +232,40 @@ void main() {
         await capture('order');
         expect(
           tester.widget<AppButton>(find.byType(AppButton)).onPressed,
-          isNull,
+          sell ? isNotNull : isNull,
         );
         await tester.tap(find.byIcon(Icons.add_rounded));
         await tester.pumpAndSettle();
         expect(find.textContaining('20,000'), findsWidgets);
         await tester.drag(find.byType(ListView), const Offset(0, -600));
         await tester.pumpAndSettle();
-        await tester.tap(find.byType(CheckboxListTile));
-        await tester.pumpAndSettle();
+        if (sell) {
+          expect(find.byType(Checkbox), findsNothing);
+        } else {
+          for (final type in [1, 3, 2]) {
+            final tile = find.widgetWithText(ListTile, 'File $type');
+            await tester.ensureVisible(tile);
+            final checkbox = find.descendant(
+              of: tile,
+              matching: find.byType(Checkbox),
+            );
+            expect(tester.widget<Checkbox>(checkbox).onChanged, isNull);
+            expect(
+              tester.widget<AppButton>(find.byType(AppButton)).onPressed,
+              isNull,
+            );
+            final navigator = Navigator.of(
+              tester.element(tile),
+              rootNavigator: true,
+            );
+            tester.widget<ListTile>(tile).onTap!();
+            expect(navigator.canPop(), isTrue);
+            navigator.pop();
+            await tester.pumpAndSettle();
+            await tester.tap(checkbox);
+            await tester.pumpAndSettle();
+          }
+        }
         await tester.tap(find.byType(AppButton));
         await tester.pumpAndSettle();
         expect(

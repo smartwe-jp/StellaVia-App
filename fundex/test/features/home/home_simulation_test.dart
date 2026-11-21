@@ -1,4 +1,8 @@
 import 'dart:io';
+import 'package:fundex/features/home/presentation/providers/simulation_hotels_provider.dart';
+import 'package:fundex/features/home/presentation/widgets/simulation_hotel_results.dart';
+import 'package:fundex/features/hotel_booking/presentation/support/hotel_detail_route_args.dart';
+import 'package:fundex/features/hotel_booking/domain/entities/hotel_models.dart';
 import 'dart:ui' as ui;
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +103,40 @@ void main() {
     );
   });
   testWidgets(
+    'a failed hotel lookup offers retry and never supplies sample hotels',
+    (tester) async {
+      var requests = 0;
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            simulationHotelsProvider.overrideWith((ref, points) async {
+              expect(points, 63000);
+              if (++requests == 1) throw StateError('offline');
+              return [];
+            }),
+          ],
+          child: MaterialApp(
+            theme: AppThemeFactory.light(locale: const Locale('ja')),
+            locale: const Locale('ja'),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const Scaffold(body: SimulationHotelResults(points: 63000)),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final l = AppLocalizations.of(
+        tester.element(find.byType(SimulationHotelResults)),
+      );
+      expect(find.text(l.homeDataLoadError), findsOneWidget);
+      expect(find.byType(ListTile), findsNothing);
+      await tester.tap(find.text(l.commonRetry));
+      await tester.pumpAndSettle();
+      expect(find.text(l.simPointsHotelsEmpty), findsOneWidget);
+      expect(requests, 2);
+    },
+  );
+  testWidgets(
     'interactive inputs, payout type, navigation and narrow localized layout',
     (tester) async {
       final font = FontLoader('Jost')
@@ -137,6 +175,16 @@ void main() {
                 ),
               ),
               GoRoute(
+                path: '/hotel-booking/:id',
+                builder: (_, state) {
+                  final args = state.extra! as HotelDetailRouteArgs;
+                  expect(args.mode, HotelBookingMode.hostMiles);
+                  expect(args.criteria.checkInDate, DateTime(2026, 11, 22));
+                  expect(args.criteria.checkOutDate, DateTime(2026, 11, 23));
+                  return const Scaffold(body: Text('Hotel detail'));
+                },
+              ),
+              GoRoute(
                 path: '/funds',
                 builder: (_, __) => const Scaffold(body: Text('funds')),
               ),
@@ -146,6 +194,18 @@ void main() {
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
+                simulationHotelsProvider.overrideWith(
+                  (ref, points) async => [
+                    PointsHotel(
+                      id: '42',
+                      name: 'Kyoto Test',
+                      buildingCode: '01',
+                      nightlyPoints: 15400,
+                      referenceCheckIn: DateTime(2026, 11, 22),
+                      referenceCheckOut: DateTime(2026, 11, 23),
+                    ),
+                  ],
+                ),
                 isAuthenticatedProvider.overrideWithValue(AsyncData(member)),
                 hostMilesRepositoryProvider.overrideWithValue(FakeRules()),
               ],
@@ -208,7 +268,44 @@ void main() {
             );
             await tester.pumpAndSettle();
           }
-          final amount = find.byType(TextField);
+          final strings = AppLocalizations.of(
+            tester.element(find.byType(HomeSimulationPage)),
+          );
+          final run = find.text(strings.simRunAction);
+          await tester.ensureVisible(run);
+          await tester.tap(run);
+          await tester.pumpAndSettle();
+          expect(find.text('Kyoto Test'), findsOneWidget);
+          expect(
+            find.text(strings.simPointsHotelStay('15,400', 4)),
+            findsOneWidget,
+          );
+          await tester.ensureVisible(find.text('Kyoto Test'));
+          await tester.tap(find.text('Kyoto Test'));
+          await tester.pumpAndSettle();
+          expect(find.text('Hotel detail'), findsOneWidget);
+          router.pop();
+          await tester.pumpAndSettle();
+          final rate = find.descendant(
+            of: find.byKey(const ValueKey('simulation-rate-input')),
+            matching: find.byType(TextField),
+          );
+          await tester.ensureVisible(rate);
+          await tester.enterText(rate, '6.5');
+          await tester.pumpAndSettle();
+          expect(
+            tester
+                .widget<Slider>(find.byKey(const ValueKey('simulation-rate')))
+                .value,
+            65,
+          );
+          await tester.enterText(rate, '6');
+          await tester.testTextInput.receiveAction(TextInputAction.done);
+          await tester.pumpAndSettle();
+          final amount = find.descendant(
+            of: find.byKey(const ValueKey('simulation-amount-input')),
+            matching: find.byType(TextField),
+          );
           await tester.ensureVisible(amount);
           await tester.enterText(amount, '200');
           await tester.pumpAndSettle();

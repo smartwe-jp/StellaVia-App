@@ -127,6 +127,8 @@ My Page 的サマリー入口打开 `/profile/summary`。サマリー使用 Figm
 
 ### 项目入金
 
+宿主基金管理的「入金前」按会员 liveJp 分流。居住者优先使用完整的口座池资料，缺失或请求失败时回退项目 liveJapanBank。非居住者直接使用项目 notLiveJapanBank。身份未知时提示无法显示汇款账户。
+
 入金详情和基金中签后的入金步骤优先读取登录会员的 `GET /member/bank-account/info`。请求失败、未返回专用口座或缺少银行、支店、账号、户名时，国内汇款沿用项目详情的 `liveJapanBank`。海外汇款沿用项目的 `notLiveJapanBank`。
 
 ### 宿主ファンド管理（SP）

@@ -242,7 +242,7 @@ class HotelDetailRoomCard extends StatelessWidget {
                       ),
                       style: HotelDetailStyles.caption(c),
                     ),
-                  if (minimum != null && minimum > nights) ...[
+                  if (!miles && minimum != null && minimum > nights) ...[
                     const SizedBox(height: 8),
                     Text(
                       c.l10n.hotelDetailMinimumStay(minimum),

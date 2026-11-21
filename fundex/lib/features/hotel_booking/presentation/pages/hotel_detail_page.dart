@@ -117,7 +117,6 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage>
                       .valueOrNull
                       ?.leadTimeMonths
                 : null,
-            priceCalendarByDate: value.priceCalendarByDate,
             selectionMode: HotelStayDateSelectionMode.range,
           );
           if (next != null && mounted) setState(() => _criteria = next);

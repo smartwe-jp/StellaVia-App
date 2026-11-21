@@ -61,8 +61,7 @@ class _MyPageSecondaryMarketSellConfirmPageState
       }
 
       final draft = widget.draft;
-      if (!draft.agreed ||
-          draft.fromProcessId.trim().isEmpty ||
+      if (draft.fromProcessId.trim().isEmpty ||
           draft.sellNum <= 0 ||
           draft.sellNum > draft.availableUnits ||
           draft.price <= 0) {
@@ -180,10 +179,6 @@ class _MyPageSecondaryMarketSellConfirmPageState
                       label: l10n.myPageResaleUnitPriceLabel,
                       value:
                           '${formatter.format(widget.draft.price)} ${l10n.myPageResaleYenSuffix}',
-                    ),
-                    SecondaryMarketTradeInfoRowData(
-                      label: l10n.myPageResaleAgreementLabel,
-                      value: l10n.myPageResaleAgreementSampleLabel,
                     ),
                   ],
                 ),

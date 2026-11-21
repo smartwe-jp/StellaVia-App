@@ -127,6 +127,35 @@ void main() {
         tester.widget<Text>(find.text("account@example.com")).data,
         "account@example.com",
       );
+      await tap('2001-02-03');
+      final calendar = tester.widget<CalendarDatePicker>(
+        find.byType(CalendarDatePicker),
+      );
+      expect(calendar.initialDate, DateTime(2001, 2, 3));
+      final dialogLabels = MaterialLocalizations.of(
+        tester.element(find.byType(DatePickerDialog)),
+      );
+      await tap('4');
+      await tap(dialogLabels.cancelButtonLabel);
+      expect(
+        draft.value(CorporateSection.company, CorporateField.founded),
+        '2001-02-03',
+      );
+      await tap('2001-02-03');
+      await tap('4');
+      await tap(dialogLabels.okButtonLabel);
+      expect(
+        draft.value(CorporateSection.company, CorporateField.founded),
+        '2001-02-04',
+      );
+      const description = 'ホテルの運営・管理\n宿泊施設の予約サービス';
+      final business = find.byKey(const ValueKey(CorporateField.business)).last;
+      await tester.ensureVisible(business);
+      await tester.enterText(business, description);
+      expect(
+        draft.value(CorporateSection.company, CorporateField.business),
+        description,
+      );
       await tap(l.corpFormRep);
       expect(find.text(l.corpLoginEmail), findsNothing);
       expect(
@@ -135,6 +164,7 @@ void main() {
       );
       await tap(l.profilePrevStep);
       expect(find.text("1234567890123"), findsOneWidget);
+      expect(find.text(description), findsOneWidget);
       await tap(l.corpFormRep);
       await tap(l.corpFormHandler);
       await tap(l.corpFormDelegate);
@@ -149,10 +179,14 @@ void main() {
       Future<void> addPerson(String name) async {
         await tap(l.corpOwnerAdd);
         final inputs = find.byType(TextFormField);
-        for (final (i, value) in [name, "1980-01-02", "日本", "東京都"].indexed) {
+        for (final (i, value) in [(0, name), (2, "日本"), (3, "東京都")]) {
           await tester.ensureVisible(inputs.at(i));
           await tester.enterText(inputs.at(i), value);
         }
+        await tester.ensureVisible(inputs.at(1));
+        await tester.tap(inputs.at(1));
+        await tester.pumpAndSettle();
+        await tap(dialogLabels.okButtonLabel);
         final dropdown = find.byType(DropdownButtonFormField<OwnerControl>);
         FocusManager.instance.primaryFocus?.unfocus();
         await tester.pumpAndSettle();
@@ -222,11 +256,9 @@ void main() {
       await changeBankField(CorporateField.manualBankName, '海外テスト銀行');
       await tap(l.corpDocsTitle);
       expect(find.text(l.corpBankDomesticError), findsOneWidget);
-      await changeBankField(CorporateField.manualBankName, '京都銀行');
-      await changeBankField(CorporateField.branchName, '海外支店');
-      await tap(l.corpDocsTitle);
-      expect(find.text(l.corpBankUnknownBranch), findsOneWidget);
-      await changeBankField(CorporateField.branchName, '大阪営業部');
+      await changeBankField(CorporateField.manualBankName, 'paypay');
+      await changeBankField(CorporateField.branchName, '北区408');
+      await changeBankField(CorporateField.branchCode, '000');
       draft.documents.selectType(false, CorporateIdType.myNumber);
       draft.documents.uploaded[CorporateDocument.registry] = (
         filename: 'registry.pdf',

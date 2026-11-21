@@ -114,7 +114,7 @@ class HomeServiceStartSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = context.l10n;
     final steps = [
-      (l.homeRegisterFree, l.homeServiceStep1Body),
+      (l.homeServiceStep1Title, l.homeServiceStep1Body),
       (l.homeServiceStep2Title, l.homeServiceStep2Body),
       (l.homeServiceStep3Title, l.homeServiceStep3Body),
       (l.homeServiceStep4Title, l.homeServiceStep4Body),

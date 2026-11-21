@@ -7,6 +7,7 @@ import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../member_profile/domain/repositories/verification_entry_repository.dart';
 import '../../../member_profile/presentation/providers/verification_entry_provider.dart';
 import '../../../member_profile/presentation/pages/corporate_verification_modal.dart';
+import '../../../member_profile/presentation/widgets/verification_entry_content.dart';
 import '../support/home_member_profile_reminder_support.dart';
 
 final homeVerificationReminderProvider =
@@ -48,22 +49,18 @@ class _HomeVerificationReminderState
       if (!mounted || entry == null) return;
       var openCorporate = entry.kind == VerificationEntryKind.corporate;
       if (entry.kind == VerificationEntryKind.choice) {
-        final l = context.l10n;
-        final choice = await AppDialogs.showAdaptiveAlert<_InvestorType>(
-          context: context,
-          title: l.investorTypeTitle,
-          actions: [
-            AppDialogAction(
-              label: l.personalInvestor,
-              value: _InvestorType.personal,
-            ),
-            AppDialogAction(
-              label: l.corporateInvestor,
-              value: _InvestorType.corporate,
-            ),
-            AppDialogAction(label: l.commonCancel),
-          ],
-        );
+        final choice = await Navigator.of(context, rootNavigator: true)
+            .push<_InvestorType>(
+              MaterialPageRoute<_InvestorType>(
+                fullscreenDialog: true,
+                builder: (context) => InvestorChoice(
+                  onPersonal: () =>
+                      Navigator.pop(context, _InvestorType.personal),
+                  onCorporate: () =>
+                      Navigator.pop(context, _InvestorType.corporate),
+                ),
+              ),
+            );
         if (!mounted || choice == null) return;
         final latest = await refreshEntry();
         if (!mounted || latest == null) return;

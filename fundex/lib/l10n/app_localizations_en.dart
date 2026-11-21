@@ -5461,7 +5461,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myPageResaleValidationMessage =>
-      'Enter the number of units and agree to the document terms.';
+      'Enter a quantity within the available units.';
 
   @override
   String get myPageResalePriceUnavailable =>
@@ -5487,7 +5487,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myPageResaleFlowOrderSubtitle =>
-      'Set the quantity, asking price, and document confirmation before moving to the review step.';
+      'Review the units to sell and the unit price.';
 
   @override
   String get myPageResaleFlowConfirmTitle => 'Review resale details';
@@ -5654,6 +5654,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get secondaryMarketBuyFeeValue => '1.65% of transaction amount';
+
+  @override
+  String get secondaryMarketElectronicTradeDocument =>
+      'Important information about electronic transactions';
 
   @override
   String get secondaryMarketBuyAgreementLabel => 'Document Confirmation';
@@ -5841,7 +5845,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memberProfileSexOther => 'Other';
 
   @override
-  String get memberProfileTaxCountryLabel => 'Country of residence';
+  String get memberProfileNationalityLabel => 'Nationality';
+
+  @override
+  String get memberProfileDocumentExample => 'Example photo';
+
+  @override
+  String get memberProfileTaxCountryLabel => 'Country of tax residence';
 
   @override
   String get memberProfileTaxCountryHint => 'Japan';
@@ -5908,6 +5918,39 @@ class AppLocalizationsEn extends AppLocalizations {
       'We confirm your investment experience under Article 25 of the Real Estate Specified Joint Enterprise Act.';
 
   @override
+  String get memberIndustryLabel => 'Industry';
+
+  @override
+  String get memberEmployerLabel => 'Employer';
+
+  @override
+  String get memberIndustryIt => 'IT and telecommunications';
+
+  @override
+  String get memberIndustryFinance => 'Finance and insurance';
+
+  @override
+  String get memberIndustryManufacturing => 'Manufacturing';
+
+  @override
+  String get memberIndustryRetail => 'Retail and services';
+
+  @override
+  String get memberIndustryRealEstate => 'Real estate';
+
+  @override
+  String get memberIndustryMedical => 'Healthcare and social welfare';
+
+  @override
+  String get memberIndustryPublic => 'Government and organizations';
+
+  @override
+  String get memberIndustryEducation => 'Education';
+
+  @override
+  String get memberIndustryOther => 'Other';
+
+  @override
   String get memberProfileOccupationLabel => 'Occupation';
 
   @override
@@ -5952,7 +5995,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get memberProfileDocumentGuideBody =>
-      'Please submit one of the following identity verification documents.\n\n1. Residents\n- Individual Number Card (My Number Card, front side only)\n- Residence card\n- Special Permanent Resident Certificate\n- Driver\'s license\n\n2. Non-residents\n- Government-issued photo ID from your home country\n- Passport (photo page and bearer information page)\n\n3. Corporations (corporate account)\nPlease submit the following documents:\n- Certificate of Registered Matters (full historical record)\n- Identity verification document for the representative or transaction agent\n- If required, documents regarding beneficial owners';
+      'Please submit one of the following identity verification documents.\n\n1. Residents\n- Individual Number Card (My Number Card, front side only)\n- Residence card\n- Special Permanent Resident Certificate\n- Driver\'s license\n\n2. Non-residents\n- Government-issued photo ID from your home country\n- Passport (photo page and bearer information page)';
 
   @override
   String get memberProfileDocumentTypeLabel => 'Select document';
@@ -6004,7 +6047,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get memberProfileStep5RealPersonDescription =>
-      'Upload your selfie, then complete the live face verification.';
+      'Use the camera to complete live face verification.';
 
   @override
   String get memberProfileStep5RealPersonSelfieRequired =>
@@ -6051,7 +6094,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memberProfileNextConsent => 'Next: Consent Confirmation';
 
   @override
-  String get memberProfileStep6Title => 'Step 5: Consent';
+  String get memberProfileStep6Title => 'Step 7: Consent';
 
   @override
   String get memberProfileStep6Description =>
@@ -6565,17 +6608,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeServiceTitle => 'About host benefits';
 
   @override
-  String get homeServiceAboutEyebrow => 'ABOUT';
+  String get homeServiceAboutEyebrow => 'WHY STELLAVIA';
 
   @override
-  String get homeServiceAboutTitle => 'Invest in tomorrow and today.';
+  String get homeServiceAboutTitle =>
+      'Grow future security, and enrich life today.';
 
   @override
   String get homeServiceVideoPending => 'Video coming soon';
 
   @override
   String get homeServiceAboutBody =>
-      'Build your assets while enjoying time with family, your partner and the people who matter today. Host benefits combine investment returns with host miles that can be used for hotel stays. This is the new approach to investing proposed by STELLAVIA.';
+      'Rather than sacrificing today for the future, grow your assets while enjoying the present with family, your partner, and the people who matter. By investing in Host Funds, you can earn investment returns as well as “Host Miles” for hotel stays through our Host Benefits program. This is STELLAVIA’s new approach to investing.';
 
   @override
   String get homeServiceReturnsEyebrow => 'TWO RETURNS';
@@ -6590,11 +6634,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeServiceFinancialEyebrow => 'FINANCIAL RETURN';
 
   @override
-  String get homeServiceFinancialTitle => 'Investment returns';
+  String get homeServiceFinancialTitle => 'Investing that grows the future';
 
   @override
   String get homeServiceFinancialBody =>
-      'Invest in hotel funds with an expected yield of 6–10%. Aim to build assets over the medium to long term through fixed yields.';
+      'Invest in Host Funds from ¥10,000 per unit. Compare each fund’s expected yield and investment term. Actual returns are not guaranteed.';
 
   @override
   String get homeServiceNowEyebrow => 'NOW';
@@ -6603,11 +6647,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeServiceExperienceEyebrow => 'EXPERIENCE RETURN';
 
   @override
-  String get homeServiceExperienceTitle => 'Travel with host miles';
+  String get homeServiceExperienceTitle => 'Travel enriches life today';
 
   @override
   String get homeServiceExperienceBody =>
-      'Use accumulated host miles to book STELLAVIA hotels. Enjoy returns in the form of travel experiences too.';
+      'Use accumulated Host Miles to book STELLAVIA hotels. Enjoy not only investment returns, but the experience of travel today.';
 
   @override
   String get homeRankDetailTitle => 'Keep investing. Travel more freely.';
@@ -6615,6 +6659,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get homeRankDetailBody =>
       'Five membership ranks are based on your invested balance. Higher ranks increase your host-mile earning rate, extend the advance booking window and lengthen mile validity. Continued investing gives you more freedom to travel.';
+
+  @override
+  String get homeRankEligibilityNote =>
+      'Only amounts invested in funds that open for subscriptions on or after December 1, 2026 count toward your rank and Host Miles. Funds that opened for subscriptions before that date are excluded.';
 
   @override
   String get homeRankDraftNotice =>
@@ -6675,32 +6723,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeServiceStartEyebrow => 'HOW TO START';
 
   @override
-  String get homeServiceStartTitle => 'Getting started with STELLAVIA';
+  String get homeServiceStartTitle => 'How to start with STELLAVIA';
+
+  @override
+  String get homeServiceStep1Title => 'Register as a Host for free';
 
   @override
   String get homeServiceStep1Body =>
-      'Register easily on your phone, anytime and anywhere.';
+      'Register easily anytime, anywhere, using only your smartphone.';
 
   @override
-  String get homeServiceStep2Title => 'Choose a host fund';
+  String get homeServiceStep2Title => 'Choose a Host Fund';
 
   @override
   String get homeServiceStep2Body =>
-      'Review the investment period and expected yield before choosing.';
+      'Review the estimated yield and operating period, then choose a Host Fund.';
 
   @override
-  String get homeServiceStep3Title => 'Earn host miles';
+  String get homeServiceStep3Title => 'Earn Host Miles';
 
   @override
   String get homeServiceStep3Body =>
-      'Miles accrue monthly based on your invested balance.';
+      'Host Miles are added every month based on your balance and rank.';
 
   @override
-  String get homeServiceStep4Title => 'Stay at a hotel';
+  String get homeServiceStep4Title => 'Stay at hotels';
 
   @override
   String get homeServiceStep4Body =>
-      'Use your miles for a stay at a STELLAVIA hotel.';
+      'Use your Host Miles to book a STELLAVIA hotel.';
 
   @override
   String get homeServiceMemberNote =>
@@ -6808,6 +6859,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeRankRulesEmpty => 'No rank information is available yet.';
+
+  @override
+  String get simRunAction => 'Simulate';
+
+  @override
+  String get simPointsHotelsTitle => 'Hotels within your estimated miles';
+
+  @override
+  String get simPointsHotelsEmpty =>
+      'No hotels were found for this many miles.';
+
+  @override
+  String simPointsHotelStay(String points, int nights) {
+    String _temp0 = intl.Intl.pluralLogic(
+      nights,
+      locale: localeName,
+      other: 'About $nights nights',
+      one: 'About 1 night',
+    );
+    return 'From $points miles per night · $_temp0';
+  }
 
   @override
   String get simTitle => 'Simulation';
@@ -6945,6 +7017,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Standby cash for deposits, withdrawals, and investments';
 
   @override
+  String get hostManageDividendYenUnit => '(Unit: ¥)';
+
+  @override
   String get myPageChartDividendUnit => '(Unit: ¥1,000)';
 
   @override
@@ -7046,6 +7121,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hostManageFundExpectPrincipalUnit => '(unit: ¥10,000)';
+
+  @override
+  String get hostManageResidencyUnknown =>
+      'Your residency could not be confirmed. Deposit account details are unavailable.';
+
+  @override
+  String get hostManageOverseasBankEmpty =>
+      'No overseas deposit account is available for this fund.';
 
   @override
   String get hostManageFundBankEmpty => 'No transfer account available';
@@ -7590,6 +7673,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tradeEmptySell => 'No funds available to sell';
+
+  @override
+  String get tradeNewOfferings => 'New offerings';
+
+  @override
+  String get tradeMemberTransfers => 'Member transfers';
+
+  @override
+  String get tradeAvailableApplyUnits => 'Units available to subscribe';
 
   @override
   String get tradeEmptyBuy => 'No funds available to buy';

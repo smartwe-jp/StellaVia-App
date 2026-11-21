@@ -12,8 +12,9 @@ abstract class AuthRemoteDataSource {
     required String code,
     String? intlCode,
   });
+  Future<AuthLoginResultDto> loginWithRegistrationUuid(String uuid);
   Future<AuthUserDto?> fetchCurrentUser();
-  Future<void> registerApply({
+  Future<String?> registerApply({
     required String account,
     required String code,
     required String intlCode,
@@ -76,12 +77,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
+  Future<AuthLoginResultDto> loginWithRegistrationUuid(String uuid) =>
+      _apiClient.loginWithRegistrationUuid(uuid);
+
+  @override
   Future<AuthUserDto?> fetchCurrentUser() async {
     return _apiClient.fetchCurrentUser();
   }
 
   @override
-  Future<void> registerApply({
+  Future<String?> registerApply({
     required String account,
     required String code,
     required String intlCode,

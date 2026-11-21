@@ -30,7 +30,6 @@ class MyPageSecondaryMarketSellDraft {
     required this.price,
     this.investorCode,
     this.earningRatio,
-    this.agreed = false,
   });
 
   final String projectId;
@@ -41,7 +40,6 @@ class MyPageSecondaryMarketSellDraft {
   final int price;
   final String? investorCode;
   final double? earningRatio;
-  final bool agreed;
 
   num get totalAmount => sellNum * price;
 }

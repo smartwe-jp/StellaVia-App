@@ -41,7 +41,17 @@ class MemberProfileApiPayloadMapper {
 
     final bank = _buildBankPayload(profile: profile, authUser: authUser);
 
+    final nationality = _firstNonEmpty([
+      profile.nationality,
+      authUser?.nationality ?? '',
+    ]);
+    final taxCountry = _firstNonEmpty([
+      profile.taxcountry,
+      authUser?.taxcountry ?? '',
+    ]);
     final baseInfo = <String, dynamic>{
+      if (profile.employer.trim().isNotEmpty)
+        'employer': profile.employer.trim(),
       'firstName': familyName,
       'lastName': givenName,
       'firstNameEn': givenNameEn,
@@ -64,17 +74,10 @@ class MemberProfileApiPayloadMapper {
       ]),
       'sex': profile.sex ?? authUser?.sex ?? 1,
       'liveJp': authUser?.liveJp ?? 1,
-      'nationality': _firstNonEmpty(<String>[
-        authUser?.nationality ?? '',
-        '日本',
-      ]),
-      'taxcountry': _firstNonEmpty(<String>[
-        profile.taxcountry,
-        authUser?.taxcountry ?? '',
-        '日本',
-      ]),
+      if (nationality.isNotEmpty) 'nationality': nationality,
+      if (taxCountry.isNotEmpty) 'taxcountry': taxCountry,
     };
-    if (bank.isNotEmpty) {
+    if (!profile.skipBankAccount && bank.isNotEmpty) {
       baseInfo['bank'] = bank;
     }
 
@@ -258,6 +261,8 @@ class MemberProfileApiPayloadMapper {
     final riskTolerance = _mapRiskToleranceOrNull(profile.riskToleranceCode);
 
     final payload = <String, dynamic>{
+      if (memberIndustryCodes.contains(profile.industry))
+        'industry': profile.industry,
       'occupation': occupation,
       'annualIncome': annualIncome,
       'financialAssets': financialAssets,

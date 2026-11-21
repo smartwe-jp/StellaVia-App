@@ -9,6 +9,7 @@ class MemberProfileCurrentUserPayloadMapper {
       return null;
     }
 
+    payload = {..._jsonMap(payload['baseInfo']), ...payload};
     final authUser = AuthUserDto.tryFromCurrentUserPayload(payload);
     final identityInfo = _jsonMap(
       payload['identityInfo'] ?? payload['identityVerification'],
@@ -78,6 +79,7 @@ class MemberProfileCurrentUserPayloadMapper {
         ]),
       ),
       sex: sex,
+      nationality: _string(payload['nationality']),
       taxcountry: taxcountry,
       zipCode: zipCode,
       prefectureCode: prefectureCode,
@@ -96,6 +98,10 @@ class MemberProfileCurrentUserPayloadMapper {
         _string(payload['email']),
         authUser?.email ?? '',
       ]),
+      employer: _string(
+        _jsonMap(payload['baseInfo'])['employer'] ?? payload['employer'],
+      ),
+      industry: _string(suitabilityInfo['industry']),
       occupationCode: _mapOccupationFromRemote(
         _string(suitabilityInfo['occupation']),
       ),

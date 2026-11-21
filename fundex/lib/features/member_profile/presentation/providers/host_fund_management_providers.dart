@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../asset_statistics/presentation/providers/asset_statistics_providers.dart';
 import '../../../asset_statistics/domain/entities/asset_statistics_models.dart';
 import '../../../investment/presentation/providers/fund_project_providers.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../wallet/presentation/providers/wallet_providers.dart';
 import '../../../wallet/domain/entities/wallet_bank_account_info.dart';
 import '../../domain/entities/mypage_models.dart';
@@ -71,36 +72,56 @@ final hostFundDividendsProvider = FutureProvider.autoDispose
       );
     });
 
+enum HostFundBankSource {
+  pool,
+  domesticProject,
+  overseasProject,
+  unknownResidency,
+}
+
+typedef HostFundDepositAccount = ({
+  WalletBankAccountInfo? bank,
+  HostFundBankSource source,
+});
+
 final hostFundBankProvider = FutureProvider.autoDispose
-    .family<({WalletBankAccountInfo? bank, bool projectAccount}), String?>((
-      ref,
-      projectId,
-    ) async {
+    .family<HostFundDepositAccount, String?>((ref, projectId) async {
       _requireMember(ref);
       final wallet = ref.watch(walletRepositoryProvider);
       final fetchProject = ref.watch(fetchFundProjectDetailUseCaseProvider);
-      WalletBankAccountInfo? account;
-      try {
-        account = await wallet.fetchBankAccountInfo();
-      } catch (_) {
-        if (projectId == null) rethrow;
+      final user = await ref.watch(currentAuthUserProvider.future);
+      final residency = user?.liveJp;
+      if (residency != 0 && residency != 1) {
+        return (bank: null, source: HostFundBankSource.unknownResidency);
       }
-      if (account != null &&
+      final resident = residency == 1;
+      if (resident) {
+        WalletBankAccountInfo? account;
+        try {
+          account = await wallet.fetchBankAccountInfo();
+        } catch (_) {
+          if (projectId == null || projectId.isEmpty) rethrow;
+        }
+        if (account?.hasDepositDetails == true) {
+          return (bank: account, source: HostFundBankSource.pool);
+        }
+      }
+      final source = resident
+          ? HostFundBankSource.domesticProject
+          : HostFundBankSource.overseasProject;
+      if (projectId == null || projectId.isEmpty)
+        return (bank: null, source: source);
+      final project = await fetchProject(id: projectId);
+      final b = resident ? project.liveJapanBank : project.notLiveJapanBank;
+      if (b == null ||
           [
-            account.bankName,
-            account.branchName,
-            account.accountNumber,
-            account.accountHolder,
-          ].any((s) => s.trim().isNotEmpty && s != '--')) {
-        return (bank: account, projectAccount: false);
+            b.bankName,
+            b.bankNumber,
+          ].any((v) => v == null || v.trim().isEmpty || v.trim() == '--')) {
+        return (bank: null, source: source);
       }
-      if (projectId == null || projectId.isEmpty) {
-        return (bank: null, projectAccount: false);
-      }
-      final b = (await fetchProject(id: projectId)).liveJapanBank;
-      if (b == null) return (bank: null, projectAccount: false);
       return (
-        projectAccount: true,
+        source: source,
         bank: WalletBankAccountInfo(
           bankName: b.bankName ?? '',
           branchName: b.branchBankName ?? '',
@@ -108,6 +129,10 @@ final hostFundBankProvider = FutureProvider.autoDispose
           accountType: b.bankAccountType ?? '',
           accountNumber: b.bankNumber ?? '',
           accountHolder: b.bankAccountOwnerName ?? '',
+          swiftCode: b.bankAccountSwiftCode,
+          bankCountry: b.bankCountry,
+          branchAddress: b.branchBankAddress,
+          accountHolderAddress: b.bankAccountOwnerAddress,
         ),
       );
     });

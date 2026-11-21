@@ -251,7 +251,11 @@ Map<String, dynamic> _normalizedUserJson(Map<String, dynamic> json) {
     'nationality': _normalizedOptionalString(json['nationality']),
     'taxOffice': _normalizedOptionalString(json['taxOffice']),
     'sex': _intOrNull(json['sex']),
-    'liveJp': _intOrNull(json['liveJp']),
+    'liveJp': switch (json['liveJp']?.toString().trim().toLowerCase()) {
+      '1' || 'true' => 1,
+      '0' || 'false' => 0,
+      _ => null,
+    },
     'birthday': _normalizedOptionalString(json['birthday']),
     'zipCode': _normalizedOptionalString(json['zipCode']),
     'address': _normalizedOptionalString(json['address']),

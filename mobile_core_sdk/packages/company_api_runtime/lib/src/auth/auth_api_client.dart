@@ -350,6 +350,29 @@ class AuthApiClient {
       rethrow;
     }
 
+    return _loginResult(response);
+  }
+
+  Future<AuthLoginResultDto> loginWithRegistrationUuid(String uuid) async {
+    final response = await _dioForPath(oauthTokenPath)
+        .post<Map<String, dynamic>>(
+          oauthTokenPath,
+          data: FormData.fromMap({
+            'username': uuid,
+            'password': uuid,
+            'grant_type': 'password',
+            'scope': 'stellavia_app',
+            'auth_type': 'uuid',
+            'code': '86',
+          }),
+          options: authRequired(
+            false,
+          ).copyWith(contentType: Headers.multipartFormDataContentType),
+        );
+    return _loginResult(response);
+  }
+
+  AuthLoginResultDto _loginResult(Response<Map<String, dynamic>> response) {
     final payload = _extractTokenPayload(
       _envelopeCodec.toJsonMap(response.data),
       fallbackMessage: 'Login failed.',
@@ -386,7 +409,7 @@ class AuthApiClient {
     return normalizedPayload;
   }
 
-  Future<void> registerApply({
+  Future<String?> registerApply({
     required String account,
     required String code,
     required String intlCode,
@@ -409,7 +432,7 @@ class AuthApiClient {
 
     if (isEmail) {
       final response = await _dioForPath(verifyRegisterEmailCodePath)
-          .put<Map<String, dynamic>>(
+          .put<dynamic>(
             verifyRegisterEmailCodePath,
             data: <String, dynamic>{
               'email': normalizedAccount,
@@ -421,11 +444,7 @@ class AuthApiClient {
               false,
             ).copyWith(contentType: Headers.jsonContentType),
           );
-      _assertEnvelopeSuccessAllowZero(
-        _envelopeCodec.toJsonMap(response.data),
-        fallbackMessage: 'Registration failed.',
-      );
-      return;
+      return _registrationUuid(response);
     }
 
     final payload = <String, dynamic>{
@@ -440,18 +459,35 @@ class AuthApiClient {
       payload['email'] = normalizedContact;
     }
 
-    final response = await _dioForPath(registerApplyPath)
-        .post<Map<String, dynamic>>(
-          registerApplyPath,
-          data: payload,
-          options: authRequired(
-            false,
-          ).copyWith(contentType: Headers.jsonContentType),
-        );
-    _assertLegacyBoolSuccessIfPresent(
-      _envelopeCodec.toJsonMap(response.data),
+    final response = await _dioForPath(registerApplyPath).post<dynamic>(
+      registerApplyPath,
+      data: payload,
+      options: authRequired(
+        false,
+      ).copyWith(contentType: Headers.jsonContentType),
+    );
+    return _registrationUuid(response);
+  }
+
+  String? _registrationUuid(Response<dynamic> response) {
+    final body = response.data;
+    if (body is String && body.trim().isNotEmpty) return body.trim();
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    _assertEnvelopeSuccessAllowZero(
+      payload,
       fallbackMessage: 'Registration failed.',
     );
+    final data = payload['data'];
+    if (!_envelopeCodec.isTruthyData(data)) {
+      throw StateError(
+        _envelopeCodec.resolveErrorMessage(
+          payload,
+          fallbackMessage: 'Registration failed.',
+        ),
+      );
+    }
+    final uuid = data is Map ? data['uuid'] : payload['uuid'] ?? data;
+    return uuid is String && uuid.trim().isNotEmpty ? uuid.trim() : null;
   }
 
   Future<AuthSessionDto?> refreshSession({required String refreshToken}) async {
@@ -677,6 +713,8 @@ class AuthApiClient {
       ...((baseInfo.isNotEmpty ? baseInfo : payload)),
     };
 
+    normalized['liveJp'] =
+        baseInfo['liveJp'] ?? payload['liveJp'] ?? identityInfo['liveJp'];
     final rootType = _toNormalizedString(payload['applicantType']);
     final baseType = _toNormalizedString(baseInfo['applicantType']);
     normalized['applicantType'] = rootType ?? baseType;

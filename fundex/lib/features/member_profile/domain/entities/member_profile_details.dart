@@ -6,7 +6,7 @@ part 'member_profile_details.freezed.dart';
 abstract class MemberProfileDetails with _$MemberProfileDetails {
   const MemberProfileDetails._();
 
-  static const int flowStepCount = 5;
+  static const int flowStepCount = 7;
 
   const factory MemberProfileDetails({
     @Default('') String familyName,
@@ -20,6 +20,9 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
     @Default('') String address,
     String? birthday,
     int? sex,
+    @Default('') String nationality,
+    @Default(false) bool faceVerified,
+    @Default(false) bool skipBankAccount,
     @Default('') String taxcountry,
     @Default('') String zipCode,
     @Default('') String prefectureCode,
@@ -27,6 +30,8 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
     @Default('81') String phoneIntlCode,
     @Default('') String phone,
     @Default('') String email,
+    @Default('') String employer,
+    @Default('') String industry,
     @Default('') String occupationCode,
     @Default('') String annualIncomeCode,
     @Default('') String financialAssetsCode,
@@ -70,6 +75,8 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       _isAddressInfoStepComplete,
       _isSuitabilityStepComplete,
       _isEkycStepComplete,
+      faceVerified,
+      skipBankAccount || bankNumber.trim().isNotEmpty,
       _isConsentStepComplete,
     ];
 
@@ -99,11 +106,14 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       address.trim().isNotEmpty ||
       (birthday?.trim().isNotEmpty ?? false) ||
       sex != null ||
+      nationality.trim().isNotEmpty ||
       taxcountry.trim().isNotEmpty ||
       zipCode.trim().isNotEmpty ||
       prefectureCode.trim().isNotEmpty ||
       cityAddress.trim().isNotEmpty ||
       email.trim().isNotEmpty ||
+      employer.trim().isNotEmpty ||
+      industry.isNotEmpty ||
       occupationCode.trim().isNotEmpty ||
       annualIncomeCode.trim().isNotEmpty ||
       financialAssetsCode.trim().isNotEmpty ||
@@ -181,6 +191,7 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       familyNameEn.trim().isNotEmpty &&
       givenNameEn.trim().isNotEmpty &&
       sex != null &&
+      nationality.trim().isNotEmpty &&
       taxcountry.trim().isNotEmpty &&
       (birthday?.trim().isNotEmpty ?? false);
 
@@ -190,6 +201,8 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       (cityAddress.trim().isNotEmpty || address.trim().isNotEmpty);
 
   bool get _isSuitabilityStepComplete =>
+      employer.trim().isNotEmpty &&
+      memberIndustryCodes.contains(industry) &&
       occupationCode.trim().isNotEmpty &&
       annualIncomeCode.trim().isNotEmpty &&
       financialAssetsCode.trim().isNotEmpty &&
@@ -201,7 +214,8 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       ekycDocumentType.trim().isNotEmpty &&
       (idDocumentObliquePhotoPath?.trim().isNotEmpty ?? false) &&
       (idDocumentPhotoPath?.trim().isNotEmpty ?? false) &&
-      (selfiePhotoPath?.trim().isNotEmpty ?? false);
+      (ekycDocumentType == 'my_number' ||
+          (idDocumentBackPhotoPath?.trim().isNotEmpty ?? false));
 
   bool get _isConsentStepComplete =>
       electronicDeliveryConsent &&
@@ -213,6 +227,7 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       _isAddressInfoStepComplete &&
       _isSuitabilityStepComplete &&
       _isEkycStepComplete &&
+      faceVerified &&
       _isConsentStepComplete;
 
   static String? mergeNullableString(String? current, String? seed) {
@@ -224,3 +239,15 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
     return normalizedSeed.isEmpty ? null : normalizedSeed;
   }
 }
+
+const memberIndustryCodes = [
+  'IT',
+  'FINANCE',
+  'MANUFACTURING',
+  'RETAIL',
+  'REAL_ESTATE',
+  'MEDICAL',
+  'PUBLIC',
+  'EDUCATION',
+  'OTHER',
+];

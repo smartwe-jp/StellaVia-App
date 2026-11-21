@@ -64,7 +64,7 @@ class _HotelBookingTabContentState
           children: [
             AppScrollNavigationBar(
               reveal: ref.watch(mainShellChromeRevealProvider),
-              backgroundColor: colors.background,
+              backgroundColor: colors.surface,
               navigationBar: const HotelHomeNavigationBar(),
             ),
             Expanded(

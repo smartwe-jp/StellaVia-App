@@ -83,6 +83,7 @@ flutter:
     - assets/fonts/ZenKakuGothicAntique-OFL.txt
     - assets/content/
     - assets/images/
+    - assets/images/id-examples/
     - assets/images/avatars/
     - assets/images/hotel-booking-ui/
   fonts:
@@ -97,6 +98,8 @@ flutter:
           weight: 500
         - asset: assets/fonts/ZenKakuGothicAntique-Bold.ttf
           weight: 700
+        - asset: assets/fonts/ZenKakuGothicAntique-Black.ttf
+          weight: 900
     - family: Noto Sans JP
       fonts:
         - asset: assets/fonts/NotoSansJP.ttf

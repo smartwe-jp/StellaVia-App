@@ -1,5 +1,6 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import '../support/member_industry_label.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -219,6 +220,13 @@ class _MemberProfileOverviewPageState
                                   ),
                                 ),
                                 _OverviewFieldRow(
+                                  label: l10n.memberProfileNationalityLabel,
+                                  value: _displayValue(
+                                    profile.nationality,
+                                    l10n,
+                                  ),
+                                ),
+                                _OverviewFieldRow(
                                   label: l10n.memberProfileTaxCountryLabel,
                                   value: _displayValue(
                                     profile.taxcountry,
@@ -309,6 +317,17 @@ class _MemberProfileOverviewPageState
                                     ),
                                     l10n,
                                   ),
+                                ),
+                                _OverviewFieldRow(
+                                  label: l10n.memberIndustryLabel,
+                                  value: _displayValue(
+                                    memberIndustryLabel(l10n, profile.industry),
+                                    l10n,
+                                  ),
+                                ),
+                                _OverviewFieldRow(
+                                  label: l10n.memberEmployerLabel,
+                                  value: _displayValue(profile.employer, l10n),
                                 ),
                                 _OverviewFieldRow(
                                   label: l10n.memberProfileAnnualIncomeLabel,

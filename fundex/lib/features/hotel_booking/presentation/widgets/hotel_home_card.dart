@@ -95,7 +95,7 @@ class HotelHomeCard extends StatelessWidget {
               child: Text(
                 context.l10n.hotelMilesDateIneligible,
                 textAlign: TextAlign.right,
-                style: text.labelSmall?.copyWith(color: colors.brandSecondary),
+                style: text.labelSmall?.copyWith(color: colors.textSecondary),
               ),
             ),
           ] else if (!isMiles) ...[
@@ -114,6 +114,7 @@ class HotelHomeCard extends StatelessWidget {
             children: [
               HotelRemainingRoomsLabel(
                 count: count ?? -1,
+                textColor: isMiles ? colors.textPrimary : null,
                 showFullBadge: stock == 0 || !isMiles,
                 unit: hotelRemainingUnitForHotelSummary(
                   buildingCode: hotel.buildingCode,

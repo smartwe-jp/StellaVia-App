@@ -8,13 +8,43 @@ import '../controllers/home_simulation_controller.dart';
 import '../providers/home_miles_providers.dart';
 import '../support/home_simulation_theme.dart';
 import '../widgets/home_simulation_inputs.dart';
+import '../widgets/simulation_hotel_results.dart';
+import '../providers/simulation_hotels_provider.dart';
 import '../widgets/home_simulation_result.dart';
 import '../widgets/home_data_status.dart';
 
-class HomeSimulationPage extends ConsumerWidget {
+class HomeSimulationPage extends ConsumerStatefulWidget {
   const HomeSimulationPage({super.key});
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeSimulationPage> createState() => _HomeSimulationPageState();
+}
+
+class _HomeSimulationPageState extends ConsumerState<HomeSimulationPage> {
+  final _resultKey = GlobalKey();
+  bool _showHotels = false;
+
+  void _run(int? points) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (_showHotels && points != null) {
+      ref.invalidate(simulationHotelsProvider(points));
+    }
+    setState(() => _showHotels = true);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final target = _resultKey.currentContext;
+      if (target != null) {
+        Scrollable.ensureVisible(
+          target,
+          duration: const Duration(milliseconds: 250),
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen(homeSimulationInputProvider, (_, __) {
+      if (!_showHotels) setState(() => _showHotels = true);
+    });
     final l = context.l10n;
     final input = ref.watch(homeSimulationInputProvider);
     final controller = ref.read(homeSimulationInputProvider.notifier);
@@ -55,7 +85,16 @@ class HomeSimulationPage extends ConsumerWidget {
                 onType: controller.setType,
               ),
               const SizedBox(height: 12),
-              HomeSimulationResultCard(result: result, input: input),
+              AppButton(
+                label: l.simRunAction,
+                onPressed: () => _run(result.miles),
+              ),
+              const SizedBox(height: 12),
+              HomeSimulationResultCard(
+                key: _resultKey,
+                result: result,
+                input: input,
+              ),
               if (rules.isLoading || rules.hasError)
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
@@ -69,6 +108,10 @@ class HomeSimulationPage extends ConsumerWidget {
                 ),
               const SizedBox(height: 12),
               Text(l.simEstimateNote, style: context.appTextTheme.caption),
+              if (_showHotels && result.miles != null) ...[
+                const SizedBox(height: 16),
+                SimulationHotelResults(points: result.miles!),
+              ],
             ],
           ),
         ),

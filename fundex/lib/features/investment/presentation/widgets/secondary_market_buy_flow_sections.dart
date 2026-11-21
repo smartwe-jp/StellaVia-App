@@ -737,63 +737,6 @@ class SecondaryMarketTradeSummaryCard extends StatelessWidget {
   }
 }
 
-class SecondaryMarketTradeAgreementCard extends StatelessWidget {
-  const SecondaryMarketTradeAgreementCard({
-    super.key,
-    required this.title,
-    required this.body,
-    required this.agreed,
-    required this.onChanged,
-    required this.documentLabel,
-    required this.documentActionLabel,
-    required this.documentAvailable,
-    this.onOpenDocument,
-  });
-
-  final String title;
-  final String body;
-  final bool agreed;
-  final ValueChanged<bool> onChanged;
-  final String documentLabel;
-  final String documentActionLabel;
-  final bool documentAvailable;
-  final VoidCallback? onOpenDocument;
-
-  @override
-  Widget build(BuildContext context) {
-    return SecondaryMarketTradePanelCard(
-      title: title,
-      child: Column(
-        children: [
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            leading: Icon(
-              Icons.description_outlined,
-              color: context.appColors.primary,
-            ),
-            title: Text(documentLabel, style: context.appTextTheme.bodyStrong),
-            subtitle: Text(documentActionLabel),
-            trailing: Icon(
-              documentAvailable
-                  ? Icons.chevron_right_rounded
-                  : Icons.schedule_rounded,
-            ),
-            enabled: documentAvailable,
-            onTap: documentAvailable ? onOpenDocument : null,
-          ),
-          CheckboxListTile(
-            contentPadding: EdgeInsets.zero,
-            controlAffinity: ListTileControlAffinity.leading,
-            value: agreed,
-            onChanged: (value) => onChanged(value ?? false),
-            title: Text(body, style: context.appTextTheme.body),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class SecondaryMarketTradeFinalNoticeCard extends StatelessWidget {
   const SecondaryMarketTradeFinalNoticeCard({
     super.key,

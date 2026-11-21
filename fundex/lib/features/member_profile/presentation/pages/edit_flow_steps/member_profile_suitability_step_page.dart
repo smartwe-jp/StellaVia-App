@@ -3,10 +3,15 @@ import 'package:flutter/material.dart';
 
 import '../../../../../app/localization/app_localizations_ext.dart';
 import '../../support/member_profile_option_item.dart';
+import '../../support/member_industry_label.dart';
+import '../../../domain/entities/member_profile_details.dart';
 
 class MemberProfileSuitabilityStepPage extends StatelessWidget {
   const MemberProfileSuitabilityStepPage({
     super.key,
+    required this.employerController,
+    required this.industry,
+    required this.onIndustryChanged,
     required this.occupation,
     required this.annualIncome,
     required this.financialAssets,
@@ -39,6 +44,9 @@ class MemberProfileSuitabilityStepPage extends StatelessWidget {
     this.onNext,
   });
 
+  final TextEditingController employerController;
+  final String? industry;
+  final ValueChanged<String?> onIndustryChanged;
   final String? occupation;
   final String? annualIncome;
   final String? financialAssets;
@@ -92,6 +100,26 @@ class MemberProfileSuitabilityStepPage extends StatelessWidget {
             value: occupation,
             items: occupationItems,
             onChanged: onOccupationChanged,
+          ),
+          const SizedBox(height: 14),
+          MemberProfileSelectField<String>(
+            label: l10n.memberIndustryLabel,
+            isRequired: true,
+            value: industry,
+            items: [
+              for (final code in memberIndustryCodes)
+                DropdownMenuItem(
+                  value: code,
+                  child: Text(memberIndustryLabel(l10n, code)),
+                ),
+            ],
+            onChanged: onIndustryChanged,
+          ),
+          const SizedBox(height: 14),
+          MemberProfileTextField(
+            label: l10n.memberEmployerLabel,
+            controller: employerController,
+            isRequired: true,
           ),
           const SizedBox(height: 14),
           MemberProfileSelectField<String>(

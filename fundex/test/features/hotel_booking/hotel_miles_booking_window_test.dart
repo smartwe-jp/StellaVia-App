@@ -27,7 +27,6 @@ void main() {
     ) async {
       final now = DateTime.now();
       final date = DateTime(now.year, now.month, now.day);
-      final dateKey = date.toIso8601String().split('T').first;
       await tester.pumpWidget(
         MaterialApp(
           theme: AppThemeFactory.light(locale: const Locale('en')),
@@ -41,7 +40,6 @@ void main() {
                   criteria: HotelSearchCriteria.initial(date),
                   hostMiles: hostMiles,
                   leadTimeMonths: hostMiles ? 2 : null,
-                  priceCalendarByDate: {dateKey: 51800},
                 ),
                 child: const Text('Open calendar'),
               ),
@@ -52,7 +50,7 @@ void main() {
       await tester.tap(find.text('Open calendar'));
       await tester.pumpAndSettle();
       expect(find.byType(HotelStayDateRangePicker), findsOneWidget);
-      expect(find.text('¥51800'), hostMiles ? findsNothing : findsOneWidget);
+      expect(find.textContaining('¥'), findsNothing);
     });
   }
 
@@ -71,7 +69,6 @@ void main() {
               firstDate: DateTime(2027, 5, 1),
               lastCheckIn: DateTime(2027, 5, 11),
               lastDate: DateTime(2027, 5, 12),
-              priceCalendarByDate: const {},
             ),
           ),
         ),

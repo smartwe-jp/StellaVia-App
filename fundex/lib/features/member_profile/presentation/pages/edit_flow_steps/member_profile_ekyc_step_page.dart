@@ -1,3 +1,4 @@
+import '../../widgets/member_document_examples.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
@@ -76,6 +77,10 @@ class MemberProfileEkycStepPage extends StatelessWidget {
             onChanged: onDocumentTypeChanged,
           ),
           const SizedBox(height: 14),
+          if (documentType != null) ...[
+            MemberDocumentExamples(documentType: documentType),
+            const SizedBox(height: 14),
+          ],
           MemberProfileUploadTile(
             icon: Icons.camera_alt_outlined,
             title: l10n.memberProfilePhotoDocumentFrontTitle,

@@ -9,7 +9,6 @@ import '../../domain/utils/hotel_miles_booking_window.dart';
 Future<HotelSearchCriteria?> pickHotelStayDates({
   required BuildContext context,
   required HotelSearchCriteria criteria,
-  Map<String, Object?> priceCalendarByDate = const <String, Object?>{},
   Set<DateTime> stayBenefitSelectableDates = const <DateTime>{},
   HotelStayDateSelectionMode selectionMode = HotelStayDateSelectionMode.range,
   bool hostMiles = false,
@@ -43,7 +42,6 @@ Future<HotelSearchCriteria?> pickHotelStayDates({
       firstDate: firstDate,
       lastDate: window?.lastCheckout ?? lastDate,
       lastCheckIn: window?.lastNight,
-      priceCalendarByDate: hostMiles ? const {} : priceCalendarByDate,
       stayBenefitSelectableDates: stayBenefitSelectableDates,
       selectionMode: selectionMode,
       guidanceText: leadTimeMonths != null && leadTimeMonths >= 0
@@ -209,7 +207,6 @@ class HotelStayDateRangePicker extends StatefulWidget {
     required this.initialEndDate,
     required this.firstDate,
     required this.lastDate,
-    required this.priceCalendarByDate,
     this.stayBenefitSelectableDates = const <DateTime>{},
     this.selectionMode = HotelStayDateSelectionMode.range,
     this.guidanceText,
@@ -220,7 +217,6 @@ class HotelStayDateRangePicker extends StatefulWidget {
   final DateTime initialEndDate;
   final DateTime firstDate;
   final DateTime lastDate;
-  final Map<String, Object?> priceCalendarByDate;
   final Set<DateTime> stayBenefitSelectableDates;
   final HotelStayDateSelectionMode selectionMode;
   final String? guidanceText;
@@ -352,7 +348,6 @@ class _HotelStayDateRangePickerState extends State<HotelStayDateRangePicker> {
                 endDate: _endDate,
                 firstDate: widget.firstDate,
                 lastDate: lastSelectable,
-                priceCalendarByDate: widget.priceCalendarByDate,
                 stayBenefitSelectableDateKeys: _stayBenefitSelectableDateKeys,
                 selectionMode: widget.selectionMode,
                 onDateTap: _selectDate,
@@ -516,7 +511,6 @@ class _MonthGrid extends StatelessWidget {
     required this.endDate,
     required this.firstDate,
     required this.lastDate,
-    required this.priceCalendarByDate,
     required this.stayBenefitSelectableDateKeys,
     required this.selectionMode,
     required this.onDateTap,
@@ -527,7 +521,6 @@ class _MonthGrid extends StatelessWidget {
   final DateTime? endDate;
   final DateTime firstDate;
   final DateTime lastDate;
-  final Map<String, Object?> priceCalendarByDate;
   final Set<String> stayBenefitSelectableDateKeys;
   final HotelStayDateSelectionMode selectionMode;
   final ValueChanged<DateTime> onDateTap;
@@ -551,9 +544,6 @@ class _MonthGrid extends StatelessWidget {
                     endDate: endDate,
                     firstDate: firstDate,
                     lastDate: lastDate,
-                    priceText: priceCalendarByDate.isEmpty
-                        ? null
-                        : _priceTextFor(date, priceCalendarByDate),
                     isStayBenefitSelectable: stayBenefitSelectableDateKeys
                         .contains(_wireDate(date)),
                     selectionMode: selectionMode,
@@ -577,7 +567,6 @@ class _CalendarDayCell extends StatelessWidget {
     required this.endDate,
     required this.firstDate,
     required this.lastDate,
-    required this.priceText,
     required this.isStayBenefitSelectable,
     required this.selectionMode,
     required this.onTap,
@@ -589,7 +578,6 @@ class _CalendarDayCell extends StatelessWidget {
   final DateTime? endDate;
   final DateTime firstDate;
   final DateTime lastDate;
-  final String? priceText;
   final bool isStayBenefitSelectable;
   final HotelStayDateSelectionMode selectionMode;
   final ValueChanged<DateTime> onTap;
@@ -626,11 +614,6 @@ class _CalendarDayCell extends StatelessWidget {
         : enabled && isCurrentMonth
         ? colors.textPrimary
         : colors.textTertiary;
-    final priceColor = (isSelectedEdge || isInRange)
-        ? colors.onDark
-        : enabled && isCurrentMonth
-        ? colors.textTertiary
-        : colors.textTertiary.withValues(alpha: 0.58);
     final shouldShowStayBenefitRing =
         isStayBenefitMode &&
         isStayBenefitSelectable &&
@@ -671,18 +654,6 @@ class _CalendarDayCell extends StatelessWidget {
                           : FontWeight.w600,
                     ),
                   ),
-                  if (priceText != null) ...[
-                    const SizedBox(height: 2),
-                    Text(
-                      priceText!,
-                      maxLines: 1,
-                      overflow: TextOverflow.clip,
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: priceColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
                 ],
               ),
             ),
@@ -721,48 +692,6 @@ bool _sameDay(DateTime first, DateTime second) {
   return first.year == second.year &&
       first.month == second.month &&
       first.day == second.day;
-}
-
-String _priceTextFor(DateTime date, Map<String, Object?> priceCalendarByDate) {
-  final value = priceCalendarByDate[_wireDate(date)];
-  return _priceDisplayText(value);
-}
-
-String _priceDisplayText(Object? value) {
-  if (value is num) {
-    final text = value % 1 == 0 ? value.toInt().toString() : value.toString();
-    return '¥$text';
-  }
-  if (value is String) {
-    final trimmed = value.trim();
-    if (trimmed.isEmpty) {
-      return '';
-    }
-    final numeric = num.tryParse(trimmed.replaceAll(',', ''));
-    if (numeric == null) {
-      return trimmed;
-    }
-    final text = numeric % 1 == 0
-        ? numeric.toInt().toString()
-        : numeric.toString();
-    return '¥$text';
-  }
-  if (value is Map) {
-    for (final key in <String>[
-      'price',
-      'amount',
-      'minPrice',
-      'lowestPrice',
-      'roomPrice',
-      'salePrice',
-    ]) {
-      final text = _priceDisplayText(value[key]);
-      if (text.isNotEmpty) {
-        return text;
-      }
-    }
-  }
-  return '';
 }
 
 String _wireDate(DateTime value) {

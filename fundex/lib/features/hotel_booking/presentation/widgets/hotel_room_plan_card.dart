@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
+import '../support/hotel_detail_display.dart';
 import 'hotel_detail_image_placeholder.dart';
 import 'hotel_discount_badge.dart';
 import 'hotel_remaining_rooms_label.dart';
@@ -159,27 +160,11 @@ class HotelRoomPlanCard extends StatelessWidget {
       bed.quantity ?? 1,
       unit,
     );
-    final width = _formatBedWidth(context, bed.width);
+    final width = hotelBedWidthLabel(context, bed.width);
     if (width.isEmpty) {
       return summary;
     }
     return context.l10n.hotelRoomBedSummaryWithWidth(summary, width);
-  }
-
-  String _formatBedWidth(BuildContext context, String raw) {
-    final value = _normalizeBedWidth(raw);
-    if (value.isEmpty) {
-      return '';
-    }
-    return context.l10n.hotelRoomBedWidth(value);
-  }
-
-  String _normalizeBedWidth(String raw) {
-    return raw
-        .trim()
-        .replaceAll(RegExp(r'cm$', caseSensitive: false), '')
-        .replaceAll(RegExp(r'^(幅|宽|寬)'), '')
-        .trim();
   }
 
   bool _isFuton(String name) {
@@ -352,32 +337,32 @@ class _RoomPlanCardContent extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             //if (showQuantityControls)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  if (extraGuestCount > 0) ...<Widget>[
-                    _ExtraGuestPriceNotice(
-                      extraGuestCount: extraGuestCount,
-                      extraGuestPrice: extraGuestPrice,
-                    ),
-                    const SizedBox(height: 8),
-                  ],
-                  _RoomQuantityStepper(
-                    quantity: quantity,
-                    remainingRooms: remainingRooms,
-                    minimumStayNights: minimumStayNights,
-                    remainingUnit: remainingUnit,
-                    onDecrement: isBusy ? null : onDecrement,
-                    onIncrement: isBusy || !canIncrement ? null : onIncrement,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                if (extraGuestCount > 0) ...<Widget>[
+                  _ExtraGuestPriceNotice(
+                    extraGuestCount: extraGuestCount,
+                    extraGuestPrice: extraGuestPrice,
                   ),
+                  const SizedBox(height: 8),
                 ],
-              )
+                _RoomQuantityStepper(
+                  quantity: quantity,
+                  remainingRooms: remainingRooms,
+                  minimumStayNights: minimumStayNights,
+                  remainingUnit: remainingUnit,
+                  onDecrement: isBusy ? null : onDecrement,
+                  onIncrement: isBusy || !canIncrement ? null : onIncrement,
+                ),
+              ],
+            ),
             //else if (remainingRooms != null && remainingRooms! >= 0)
-              // HotelRemainingRoomsLabel(
-              //   count: remainingRooms!,
-              //   unit: remainingUnit,
-              //   textAlign: TextAlign.end,
-              // ),
+            // HotelRemainingRoomsLabel(
+            //   count: remainingRooms!,
+            //   unit: remainingUnit,
+            //   textAlign: TextAlign.end,
+            // ),
           ],
         ),
       ],
@@ -485,7 +470,9 @@ class _RoomQuantityStepper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).appColors;
-    if (remainingRooms == 0 && quantity == 0 && onIncrement == null) return const HotelFullBadge();
+    if (remainingRooms == 0 && quantity == 0 && onIncrement == null) {
+      return const HotelFullBadge();
+    }
     final shouldShowRemaining = remainingRooms != null && remainingRooms! >= 0;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,

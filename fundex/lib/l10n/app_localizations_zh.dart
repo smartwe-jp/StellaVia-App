@@ -5151,7 +5151,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageResaleNetAmountLabel => '预计到账金额';
 
   @override
-  String get myPageResaleValidationMessage => '请输入卖出口数并同意相关文件。';
+  String get myPageResaleValidationMessage => '请输入可卖范围内的口数。';
 
   @override
   String get myPageResalePriceUnavailable => '暂时无法获取卖出单价。';
@@ -5175,7 +5175,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageResaleFlowOrderTitle => '填写卖出内容';
 
   @override
-  String get myPageResaleFlowOrderSubtitle => '先完成口数、卖出单价与书面确认，再进入最终确认步骤。';
+  String get myPageResaleFlowOrderSubtitle => '请核对卖出口数及单价。';
 
   @override
   String get myPageResaleFlowConfirmTitle => '最终确认卖出内容';
@@ -5333,6 +5333,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get secondaryMarketBuyFeeValue => '交易金额的1.65%';
+
+  @override
+  String get secondaryMarketElectronicTradeDocument => '电子交易重要事项说明书';
 
   @override
   String get secondaryMarketBuyAgreementLabel => '文件确认';
@@ -5509,7 +5512,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileSexOther => '其他';
 
   @override
-  String get memberProfileTaxCountryLabel => '居住国';
+  String get memberProfileNationalityLabel => '国籍';
+
+  @override
+  String get memberProfileDocumentExample => '拍摄示例';
+
+  @override
+  String get memberProfileTaxCountryLabel => '纳税国';
 
   @override
   String get memberProfileTaxCountryHint => '日本';
@@ -5570,6 +5579,39 @@ class AppLocalizationsZh extends AppLocalizations {
       '根据不动产特定共同事业法第 25 条，需要确认你的投资经验等信息。';
 
   @override
+  String get memberIndustryLabel => '行业';
+
+  @override
+  String get memberEmployerLabel => '工作单位';
+
+  @override
+  String get memberIndustryIt => '信息技术与通信';
+
+  @override
+  String get memberIndustryFinance => '金融与保险';
+
+  @override
+  String get memberIndustryManufacturing => '制造业';
+
+  @override
+  String get memberIndustryRetail => '零售与服务';
+
+  @override
+  String get memberIndustryRealEstate => '房地产';
+
+  @override
+  String get memberIndustryMedical => '医疗与社会福利';
+
+  @override
+  String get memberIndustryPublic => '政府机关与团体';
+
+  @override
+  String get memberIndustryEducation => '教育';
+
+  @override
+  String get memberIndustryOther => '其他';
+
+  @override
   String get memberProfileOccupationLabel => '职业';
 
   @override
@@ -5612,7 +5654,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get memberProfileDocumentGuideBody =>
-      '请提交以下任一本人验证文件。\n\n① 居住者\n・个人编号卡（My Number 卡，仅正面）\n・在留卡\n・特别永住者证明书\n・驾照\n\n② 非居住者\n・母国政府核发之附照片身份证明文件\n・护照（照片页及持有人资料页）\n\n③ 法人（公司名义）\n请提交以下资料：\n・公司登记簿誊本（履历事项全部证明书）\n・代表者或实际办理人的本人验证文件\n・必要时，实质支配者相关资料';
+      '请提交以下任一本人验证文件。\n\n① 居住者\n・个人编号卡（My Number 卡，仅正面）\n・在留卡\n・特别永住者证明书\n・驾照\n\n② 非居住者\n・母国政府核发之附照片身份证明文件\n・护照（照片页及持有人资料页）';
 
   @override
   String get memberProfileDocumentTypeLabel => '选择证件';
@@ -5658,7 +5700,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileStep5RealPersonTitle => 'Step 5：实人认证（人脸活体）';
 
   @override
-  String get memberProfileStep5RealPersonDescription => '请先上传自拍照，再进行人脸活体核验';
+  String get memberProfileStep5RealPersonDescription => '请使用摄像头完成人脸活体识别。';
 
   @override
   String get memberProfileStep5RealPersonSelfieRequired => '请先完成自拍照上传。';
@@ -5703,7 +5745,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileNextConsent => '下一步：确认同意事项';
 
   @override
-  String get memberProfileStep6Title => 'Step 5：确认同意事项';
+  String get memberProfileStep6Title => 'Step 7：确认同意事项';
 
   @override
   String get memberProfileStep6Description => '请确认以下事项，并全部同意。';
@@ -6174,17 +6216,17 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeServiceTitle => '关于宿主优待';
 
   @override
-  String get homeServiceAboutEyebrow => 'ABOUT';
+  String get homeServiceAboutEyebrow => 'WHY STELLAVIA';
 
   @override
-  String get homeServiceAboutTitle => '投资未来，也投资当下。';
+  String get homeServiceAboutTitle => '培养未来的安心，也让当下的人生更丰盛。';
 
   @override
   String get homeServiceVideoPending => '视频准备中';
 
   @override
   String get homeServiceAboutBody =>
-      '不必为了未来而牺牲当下。在积累资产的同时，也享受与家人、伴侣和重要之人共度的时光。通过基金投资，除获得投资回报外，还能积累用于酒店住宿的「宿主里程」。这就是 STELLAVIA 提出的全新投资方式——「宿主优待」。';
+      '无需为了未来而牺牲当下，在培育资产的同时，也享受与家人、伴侣及重要之人共度的此刻。投资宿主基金，除了获得投资回报，还可通过“宿主礼遇”积累可用于酒店住宿的“宿主里程”。这就是 STELLAVIA 提出的全新投资方式。';
 
   @override
   String get homeServiceReturnsEyebrow => 'TWO RETURNS';
@@ -6199,11 +6241,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeServiceFinancialEyebrow => 'FINANCIAL RETURN';
 
   @override
-  String get homeServiceFinancialTitle => '投资回报';
+  String get homeServiceFinancialTitle => '投资，培育未来';
 
   @override
   String get homeServiceFinancialBody =>
-      '投资于预期收益率为6～10%的酒店基金，以固定收益率为目标，进行中长期资产积累。';
+      '宿主基金每份 1 万日元起投。可按各基金的预期收益率和运作期限选择，实际收益不受保证。';
 
   @override
   String get homeServiceNowEyebrow => 'NOW';
@@ -6212,11 +6254,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeServiceExperienceEyebrow => 'EXPERIENCE RETURN';
 
   @override
-  String get homeServiceExperienceTitle => '用宿主里程，开启旅程';
+  String get homeServiceExperienceTitle => '旅行丰盈当下';
 
   @override
   String get homeServiceExperienceBody =>
-      '使用积累的宿主里程预约 STELLAVIA 酒店，以旅行体验收获另一份回报。';
+      '使用积累的宿主里程预约 STELLAVIA 酒店。除了投资回报，也能在当下享受旅行体验。';
 
   @override
   String get homeRankDetailTitle => '持续投资，让旅行更自由。';
@@ -6224,6 +6266,10 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get homeRankDetailBody =>
       '根据投资余额划分五个等级。等级越高，宿主里程获取率越高，可提前预约的时间与里程有效期也越长。持续投资，让旅行更自由。';
+
+  @override
+  String get homeRankEligibilityNote =>
+      '等级评定和宿主里程发放仅按投资于 2026 年 12 月 1 日起开始募集的基金的金额计算（此前已开始募集的基金不计入）。';
 
   @override
   String get homeRankDraftNotice =>
@@ -6284,28 +6330,31 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeServiceStartEyebrow => 'HOW TO START';
 
   @override
-  String get homeServiceStartTitle => '如何开始使用 STELLAVIA';
+  String get homeServiceStartTitle => 'STELLAVIA 入门方式';
 
   @override
-  String get homeServiceStep1Body => '只需一部手机，随时随地轻松注册。';
+  String get homeServiceStep1Title => '免费注册成为宿主';
+
+  @override
+  String get homeServiceStep1Body => '只需一部手机，随时随地即可轻松完成会员（宿主）注册。';
 
   @override
   String get homeServiceStep2Title => '选择宿主基金';
 
   @override
-  String get homeServiceStep2Body => '确认投资期限及预期收益率后进行选择。';
+  String get homeServiceStep2Body => '确认预估收益率与运用期间后，选择要投资的宿主基金。';
 
   @override
   String get homeServiceStep3Title => '积累宿主里程';
 
   @override
-  String get homeServiceStep3Body => '根据投资余额每月积累里程。';
+  String get homeServiceStep3Body => '根据运用余额及对应等级，每月积累宿主里程。';
 
   @override
   String get homeServiceStep4Title => '入住酒店';
 
   @override
-  String get homeServiceStep4Body => '使用积累的里程入住 STELLAVIA 酒店。';
+  String get homeServiceStep4Body => '使用积累的宿主里程，预订 STELLAVIA 酒店。';
 
   @override
   String get homeServiceMemberNote => '已成为正式会员的用户可直接选择基金。';
@@ -6408,6 +6457,20 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get homeRankRulesEmpty => '暂无等级信息。';
+
+  @override
+  String get simRunAction => '试算';
+
+  @override
+  String get simPointsHotelsTitle => '预计里程可住的酒店';
+
+  @override
+  String get simPointsHotelsEmpty => '当前预计里程没有可住的酒店。';
+
+  @override
+  String simPointsHotelStay(String points, int nights) {
+    return '每晚 $points 里程起 · 约 $nights 晚';
+  }
 
   @override
   String get simTitle => '模拟试算';
@@ -6542,6 +6605,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get myPageChartCashHint => '可用于入出金与投资的待机资金';
 
   @override
+  String get hostManageDividendYenUnit => '（单位：日元）';
+
+  @override
   String get myPageChartDividendUnit => '（单位：千日元）';
 
   @override
@@ -6640,6 +6706,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get hostManageFundExpectPrincipalUnit => '(单位: 万日元)';
+
+  @override
+  String get hostManageResidencyUnknown => '暂时无法确认居住者身份，无法显示入金账户。';
+
+  @override
+  String get hostManageOverseasBankEmpty => '该基金暂无海外入金账户。';
 
   @override
   String get hostManageFundBankEmpty => '暂无收款账户资料';
@@ -7153,6 +7225,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tradeEmptySell => '暂无可卖出的基金';
+
+  @override
+  String get tradeNewOfferings => '新规募集';
+
+  @override
+  String get tradeMemberTransfers => '会员间转让';
+
+  @override
+  String get tradeAvailableApplyUnits => '可申购口数';
 
   @override
   String get tradeEmptyBuy => '暂无可买入的基金';
@@ -12980,7 +13061,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageResaleNetAmountLabel => '預計入帳金額';
 
   @override
-  String get myPageResaleValidationMessage => '請輸入賣出口數並同意相關文件。';
+  String get myPageResaleValidationMessage => '請輸入可賣範圍內的口數。';
 
   @override
   String get myPageResalePriceUnavailable => '暫時無法取得賣出單價。';
@@ -13004,7 +13085,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageResaleFlowOrderTitle => '填寫賣出內容';
 
   @override
-  String get myPageResaleFlowOrderSubtitle => '先完成口數、賣出單價與書面確認，再進入最終確認步驟。';
+  String get myPageResaleFlowOrderSubtitle => '請核對賣出口數及單價。';
 
   @override
   String get myPageResaleFlowConfirmTitle => '最終確認賣出內容';
@@ -13162,6 +13243,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get secondaryMarketBuyFeeValue => '交易金額的1.65%';
+
+  @override
+  String get secondaryMarketElectronicTradeDocument => '電子交易重要事項說明書';
 
   @override
   String get secondaryMarketBuyAgreementLabel => '文件確認';
@@ -13338,7 +13422,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileSexOther => '其他';
 
   @override
-  String get memberProfileTaxCountryLabel => '居住國';
+  String get memberProfileNationalityLabel => '國籍';
+
+  @override
+  String get memberProfileDocumentExample => '拍攝範例';
+
+  @override
+  String get memberProfileTaxCountryLabel => '納稅國';
 
   @override
   String get memberProfileTaxCountryHint => '日本';
@@ -13399,6 +13489,39 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
       '根據不動產特定共同事業法第25條，我們將確認您的投資經驗等資訊。';
 
   @override
+  String get memberIndustryLabel => '行業';
+
+  @override
+  String get memberEmployerLabel => '工作單位';
+
+  @override
+  String get memberIndustryIt => '資訊科技與通訊';
+
+  @override
+  String get memberIndustryFinance => '金融與保險';
+
+  @override
+  String get memberIndustryManufacturing => '製造業';
+
+  @override
+  String get memberIndustryRetail => '零售與服務';
+
+  @override
+  String get memberIndustryRealEstate => '房地產';
+
+  @override
+  String get memberIndustryMedical => '醫療與社會福利';
+
+  @override
+  String get memberIndustryPublic => '政府機關與團體';
+
+  @override
+  String get memberIndustryEducation => '教育';
+
+  @override
+  String get memberIndustryOther => '其他';
+
+  @override
   String get memberProfileOccupationLabel => '職業';
 
   @override
@@ -13441,7 +13564,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get memberProfileDocumentGuideBody =>
-      '請提交以下任一本人驗證文件。\n\n① 居住者\n・個人編號卡（My Number 卡，僅正面）\n・在留卡\n・特別永住者證明書\n・駕照\n\n② 非居住者\n・母國政府核發之附照片身分證明文件\n・護照（照片頁及持有人資料頁）\n\n③ 法人（公司名義）\n請提交以下資料：\n・公司登記簿謄本（履歷事項全部證明書）\n・代表者或實際辦理人的本人驗證文件\n・必要時，實質支配者相關資料';
+      '請提交以下任一本人驗證文件。\n\n① 居住者\n・個人編號卡（My Number 卡，僅正面）\n・在留卡\n・特別永住者證明書\n・駕照\n\n② 非居住者\n・母國政府核發之附照片身分證明文件\n・護照（照片頁及持有人資料頁）';
 
   @override
   String get memberProfileDocumentTypeLabel => '選擇文件';
@@ -13487,7 +13610,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileStep5RealPersonTitle => 'Step 5：真人認證（活體）';
 
   @override
-  String get memberProfileStep5RealPersonDescription => '請先上傳自拍照，再進行人臉活體核驗';
+  String get memberProfileStep5RealPersonDescription => '請使用相機完成人臉活體辨識。';
 
   @override
   String get memberProfileStep5RealPersonSelfieRequired => '請先完成自拍照上傳。';
@@ -13532,7 +13655,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileNextConsent => '下一步：確認同意事項';
 
   @override
-  String get memberProfileStep6Title => 'Step 5：同意事項確認';
+  String get memberProfileStep6Title => 'Step 7：同意事項確認';
 
   @override
   String get memberProfileStep6Description => '請確認以下事項，並全部同意。';
@@ -14003,17 +14126,17 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeServiceTitle => '關於宿主優待';
 
   @override
-  String get homeServiceAboutEyebrow => 'ABOUT';
+  String get homeServiceAboutEyebrow => 'WHY STELLAVIA';
 
   @override
-  String get homeServiceAboutTitle => '投資未來，也投資當下。';
+  String get homeServiceAboutTitle => '培養未來的安心，也讓當下的人生更豐盛。';
 
   @override
   String get homeServiceVideoPending => '影片準備中';
 
   @override
   String get homeServiceAboutBody =>
-      '不必為了未來而犧牲當下。在累積資產的同時，也享受與家人、伴侶和重要之人共度的時光。透過基金投資，除獲得投資回報外，還能累積用於飯店住宿的「宿主里程」。這就是 STELLAVIA 提出的全新投資方式——「宿主優待」。';
+      '無需為了未來而犧牲當下，在培育資產的同時，也享受與家人、伴侶及重要之人共度的此刻。投資宿主基金，除了獲得投資回報，還可透過「宿主禮遇」累積可用於飯店住宿的「宿主里程」。這就是 STELLAVIA 提出的全新投資方式。';
 
   @override
   String get homeServiceReturnsEyebrow => 'TWO RETURNS';
@@ -14028,11 +14151,11 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeServiceFinancialEyebrow => 'FINANCIAL RETURN';
 
   @override
-  String get homeServiceFinancialTitle => '投資回報';
+  String get homeServiceFinancialTitle => '投資，培育未來';
 
   @override
   String get homeServiceFinancialBody =>
-      '投資於預期收益率為6～10%的飯店基金，以固定收益率為目標，進行中長期資產累積。';
+      '宿主基金每單位 1 萬日圓起投。可依各基金的預估收益率與運用期間選擇，實際收益不受保證。';
 
   @override
   String get homeServiceNowEyebrow => 'NOW';
@@ -14041,11 +14164,11 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeServiceExperienceEyebrow => 'EXPERIENCE RETURN';
 
   @override
-  String get homeServiceExperienceTitle => '用宿主里程，開啟旅程';
+  String get homeServiceExperienceTitle => '旅行豐盈當下';
 
   @override
   String get homeServiceExperienceBody =>
-      '使用累積的宿主里程預約 STELLAVIA 飯店，以旅行體驗收穫另一份回報。';
+      '使用累積的宿主里程預訂 STELLAVIA 飯店。除了投資回報，也能在當下享受旅行體驗。';
 
   @override
   String get homeRankDetailTitle => '持續投資，讓旅行更自由。';
@@ -14053,6 +14176,10 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String get homeRankDetailBody =>
       '根據投資餘額劃分五個等級。等級越高，宿主里程獲取率越高，可提前預約的時間與里程有效期也越長。持續投資，讓旅行更自由。';
+
+  @override
+  String get homeRankEligibilityNote =>
+      '等級評定與宿主里程發放僅計入對 2026 年 12 月 1 日起開始募集的基金所投入的金額（此前已開始募集的基金不列入計算）。';
 
   @override
   String get homeRankDraftNotice =>
@@ -14113,28 +14240,31 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeServiceStartEyebrow => 'HOW TO START';
 
   @override
-  String get homeServiceStartTitle => '如何開始使用 STELLAVIA';
+  String get homeServiceStartTitle => 'STELLAVIA 入門方式';
 
   @override
-  String get homeServiceStep1Body => '只需一部手機，隨時隨地輕鬆註冊。';
+  String get homeServiceStep1Title => '免費註冊成為宿主';
+
+  @override
+  String get homeServiceStep1Body => '只需一支手機，隨時隨地即可輕鬆完成會員（宿主）註冊。';
 
   @override
   String get homeServiceStep2Title => '選擇宿主基金';
 
   @override
-  String get homeServiceStep2Body => '確認投資期限及預期收益率後進行選擇。';
+  String get homeServiceStep2Body => '確認預估收益率與運用期間後，選擇要投資的宿主基金。';
 
   @override
   String get homeServiceStep3Title => '累積宿主里程';
 
   @override
-  String get homeServiceStep3Body => '根據投資餘額每月累積里程。';
+  String get homeServiceStep3Body => '依運用餘額及對應等級，每月累積宿主里程。';
 
   @override
   String get homeServiceStep4Title => '入住飯店';
 
   @override
-  String get homeServiceStep4Body => '使用累積的里程入住 STELLAVIA 飯店。';
+  String get homeServiceStep4Body => '使用累積的宿主里程，預訂 STELLAVIA 飯店。';
 
   @override
   String get homeServiceMemberNote => '已成為正式會員的用戶可直接選擇基金。';
@@ -14237,6 +14367,20 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get homeRankRulesEmpty => '暫無等級資訊。';
+
+  @override
+  String get simRunAction => '試算';
+
+  @override
+  String get simPointsHotelsTitle => '預估里程可入住的飯店';
+
+  @override
+  String get simPointsHotelsEmpty => '目前預估里程沒有可入住的飯店。';
+
+  @override
+  String simPointsHotelStay(String points, int nights) {
+    return '每晚 $points 里程起 · 約 $nights 晚';
+  }
 
   @override
   String get simTitle => '模擬試算';
@@ -14371,6 +14515,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get myPageChartCashHint => '可用於入出金與投資的待機資金';
 
   @override
+  String get hostManageDividendYenUnit => '（單位：日圓）';
+
+  @override
   String get myPageChartDividendUnit => '（單位：千日圓）';
 
   @override
@@ -14469,6 +14616,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hostManageFundExpectPrincipalUnit => '(單位: 萬日圓)';
+
+  @override
+  String get hostManageResidencyUnknown => '暫時無法確認居住者身分，無法顯示入金帳戶。';
+
+  @override
+  String get hostManageOverseasBankEmpty => '此基金暫無海外入金帳戶。';
 
   @override
   String get hostManageFundBankEmpty => '暫無匯款帳戶資料';
@@ -14982,6 +15135,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get tradeEmptySell => '暫無可賣出的基金';
+
+  @override
+  String get tradeNewOfferings => '新規募集';
+
+  @override
+  String get tradeMemberTransfers => '會員間轉讓';
+
+  @override
+  String get tradeAvailableApplyUnits => '可申購口數';
 
   @override
   String get tradeEmptyBuy => '暫無可買入的基金';

@@ -131,7 +131,7 @@ class AuthRepositoryImpl implements AuthRepository {
     String? contact,
     String? inviteCode,
   }) async {
-    await _remote.registerApply(
+    final uuid = await _remote.registerApply(
       account: account,
       code: code,
       intlCode: intlCode,
@@ -139,10 +139,19 @@ class AuthRepositoryImpl implements AuthRepository {
       inviteCode: inviteCode,
     );
 
-    final accessToken = await _tokenStore.readAccessToken();
-    if (accessToken != null && accessToken.trim().isNotEmpty) {
-      await _syncCurrentUserCacheBestEffort();
+    if (uuid == null) throw const RegistrationSignInRequired();
+    try {
+      final result = await _remote.loginWithRegistrationUuid(uuid);
+      await _tokenStore.save(
+        TokenPair(
+          accessToken: result.session.accessToken,
+          refreshToken: result.session.refreshToken,
+        ),
+      );
+    } catch (_) {
+      throw const RegistrationSignInRequired();
     }
+    await _syncCurrentUserCacheBestEffort();
   }
 
   @override

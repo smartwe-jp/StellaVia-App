@@ -6,6 +6,7 @@ import '../../../settings/presentation/providers/settings_two_factor_providers.d
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/corporate_form_draft.dart';
 import '../support/corporate_form_fields.dart';
+import 'corporate_date_field.dart';
 
 class CorporateLoginEmail extends ConsumerWidget {
   const CorporateLoginEmail({super.key});
@@ -101,22 +102,35 @@ class _CorporateFormInputState extends State<CorporateFormInput> {
         ],
       );
     }
-    final date = f == CorporateField.birth || f == CorporateField.founded;
+    if (f == CorporateField.birth || f == CorporateField.founded) {
+      return CorporateDateField(
+        key: ValueKey(f),
+        label: label,
+        requiredLabel: required,
+        initialValue: widget.draft.value(s, f),
+        validator: (v) =>
+            corporateFieldError(l, s, f, v ?? '') ??
+            widget.extraValidation?.call(),
+        onChanged: (v) {
+          widget.draft.set(s, f, v);
+          widget.onTextChanged?.call(v);
+        },
+      );
+    }
     return AppTextField(
       inputKey: ValueKey(f),
       controller: controller,
       label: label,
       requiredLabel: required,
-      hintText: date ? 'YYYY-MM-DD' : null,
+      maxLines: f == CorporateField.business ? 4 : 1,
       keyboardType: switch (f) {
+        CorporateField.business => TextInputType.multiline,
         CorporateField.branchCode ||
         CorporateField.accountNumber ||
         CorporateField.number ||
         CorporateField.postal => TextInputType.number,
         CorporateField.phone => TextInputType.phone,
         CorporateField.email => TextInputType.emailAddress,
-        CorporateField.birth ||
-        CorporateField.founded => TextInputType.datetime,
         _ => TextInputType.text,
       },
       validator: (v) =>

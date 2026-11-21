@@ -159,7 +159,7 @@ void main() {
           expect(body['password'], '123456');
           expect(body['grant_type'], 'password');
           expect(body['auth_type'], 'email');
-          expect(body['scope'], 'app');
+          expect(body['scope'], 'stellavia_app');
 
           return _jsonOk(
             '{"msg":"success","code":200,"data":{"access_token":"newA","refresh_token":"newR","expires_in":3600,"userId":126575,"memberLevel":10,"usename":"user@example.com","intlTelCode":""}}',
@@ -213,7 +213,7 @@ void main() {
           expect(options.path, AuthApiPaths.crowdfundingUserIndex);
           expect(options.extra['auth_required'], true);
           return _jsonOk(
-            '{"msg":"success","code":200,"data":{"baseInfo":{"id":"438786029784006656","memberId":125530,"accountId":"0125530","email":"dennis.diao@51fanxing.co.jp","firstName":"张","lastName":"冠李戴","intlTelCode":81,"phone":"09085309521","address":"東今里１－７－２４","status":4},"identityInfo":{"documentType":11,"documentFrontImage":"https://example.com/front-from-identity.jpg","documentBackImage":"https://example.com/back-from-identity.jpg"},"suitabilityInfo":{"occupation":"COMPANY_EMPLOYEE","annualIncome":"FROM_5M_TO_7M"}}}',
+            '{"msg":"success","code":200,"data":{"baseInfo":{"id":"438786029784006656","memberId":125530,"accountId":"0125530","email":"dennis.diao@51fanxing.co.jp","firstName":"张","lastName":"冠李戴","intlTelCode":81,"phone":"09085309521","address":"東今里１－７－２４","status":4},"identityInfo":{"liveJp":false,"documentType":11,"documentFrontImage":"https://example.com/front-from-identity.jpg","documentBackImage":"https://example.com/back-from-identity.jpg"},"suitabilityInfo":{"occupation":"COMPANY_EMPLOYEE","annualIncome":"FROM_5M_TO_7M"}}}',
           );
         });
         final source = AuthRemoteDataSourceImpl(client);
@@ -233,6 +233,7 @@ void main() {
         expect(user?.lastName, '冠李戴');
         expect(user?.address, '東今里１－７－２４');
         expect(user?.status, 4);
+        expect(user?.liveJp, 0);
         expect(user?.frontUrl, 'https://example.com/front-from-identity.jpg');
         expect(user?.backUrl, 'https://example.com/back-from-identity.jpg');
       },
@@ -333,6 +334,38 @@ void main() {
           intlCode: '81',
           inviteCode: 'STLV-ABCD1234',
         );
+      },
+    );
+
+    test(
+      'registration UUID is exchanged as a one-time multipart credential',
+      () async {
+        final client = _buildClient((options) async {
+          if (options.path == AuthApiPaths.verifyRegisterEmailCode) {
+            return _jsonOk('{"code":200,"data":"test-uuid"}');
+          }
+          expect(options.method, 'POST');
+          expect(options.path, AuthApiPaths.oauthToken);
+          expect(options.headers.containsKey('Authorization'), isFalse);
+          expect(options.extra['auth_required'], false);
+          expect(Map.fromEntries((options.data as FormData).fields), {
+            'username': 'test-uuid',
+            'password': 'test-uuid',
+            'grant_type': 'password',
+            'scope': 'stellavia_app',
+            'auth_type': 'uuid',
+            'code': '86',
+          });
+          return _jsonOk('{"access_token":"access","refresh_token":"refresh"}');
+        });
+        final source = AuthRemoteDataSourceImpl(client);
+        final uuid = await source.registerApply(
+          account: 'user@example.com',
+          code: '123456',
+          intlCode: '81',
+        );
+        final result = await source.loginWithRegistrationUuid(uuid!);
+        expect(result.session.accessToken, 'access');
       },
     );
 

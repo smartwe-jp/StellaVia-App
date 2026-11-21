@@ -69,7 +69,7 @@ class _Shortcut extends StatelessWidget {
       button: true,
       enabled: onTap != null,
       child: Material(
-        color: colors.background,
+        color: colors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: radius,
           side: BorderSide(color: colors.borderSoft),

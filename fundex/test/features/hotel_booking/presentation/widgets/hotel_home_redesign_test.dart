@@ -30,7 +30,7 @@ Widget app(
   overrides: [
     isAuthenticatedProvider.overrideWithValue(const AsyncData(true)),
     hotelBuildingFiltersProvider.overrideWith((ref) async => []),
-    hotelHostMilesProvider.overrideWith((ref) {
+    hotelHostMilesProvider.overrideWith((ref, criteria) {
       final c = milesController(HotelsFake(eligible: eligible), MilesFake());
       Future.microtask(c.refresh);
       return c;
@@ -238,7 +238,11 @@ void main() {
         await tester.ensureVisible(find.text('API Hotel').first);
         await tester.tap(find.text('API Hotel').first);
         await tester.pumpAndSettle();
-        expect(find.text(l.hotelMilesDateIneligible), findsWidgets);
+        final notice = find.text(l.hotelMilesDateIneligible).first;
+        expect(
+          tester.widget<Text>(notice).style?.color,
+          tester.element(notice).appColors.textSecondary,
+        );
         expect(find.text(l.hotelMilesDateEligible), findsNothing);
         expect(
           find.text(l.hotelMilesReferenceStayFrom('12,800')),
@@ -285,7 +289,11 @@ void main() {
     final l = AppLocalizations.of(tester.element(find.byType(HotelHomeCard)));
     expect(find.text(l.hotelMilesDateEligible), findsNothing);
     expect(find.text(l.hotelMilesDateIneligible), findsNothing);
-    expect(find.text(l.hotelDetailRemainingRoomsShort(3)), findsOneWidget);
+    final remaining = find.text(l.hotelDetailRemainingRoomsShort(3));
+    expect(
+      tester.widget<Text>(remaining).style?.color,
+      tester.element(remaining).appColors.textPrimary,
+    );
     await tester.tap(find.text('API Hotel'));
     await tester.pumpAndSettle();
     expect(args?.mode, HotelBookingMode.hostMiles);

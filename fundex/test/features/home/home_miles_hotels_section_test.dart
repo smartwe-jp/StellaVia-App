@@ -64,7 +64,13 @@ void main() {
         routes: [
           GoRoute(
             path: '/',
-            builder: (_, __) => const Scaffold(body: HomeMilesHotelsSection()),
+            builder: (_, __) => Consumer(
+              builder: (_, ref, _) => Scaffold(
+                body: HomeMilesHotelsSection(
+                  state: ref.watch(homeFeaturedHotelsProvider),
+                ),
+              ),
+            ),
           ),
           GoRoute(
             path: '/hotel-booking/host-miles',

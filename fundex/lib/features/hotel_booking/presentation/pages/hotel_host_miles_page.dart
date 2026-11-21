@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../domain/entities/hotel_models.dart';
 import '../providers/hotel_host_miles_provider.dart';
 import '../support/hotel_booking_presenter.dart';
 import '../support/hotel_detail_route_args.dart';
@@ -12,7 +13,8 @@ import '../widgets/hotel_host_miles_header.dart';
 import '../widgets/hotel_state_views.dart';
 
 class HotelHostMilesPage extends ConsumerStatefulWidget {
-  const HotelHostMilesPage({super.key});
+  const HotelHostMilesPage({super.key, this.initialCriteria});
+  final HotelSearchCriteria? initialCriteria;
   @override
   ConsumerState<HotelHostMilesPage> createState() => _HotelHostMilesPageState();
 }
@@ -36,14 +38,18 @@ class _HotelHostMilesPageState extends ConsumerState<HotelHostMilesPage>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed &&
         (ModalRoute.of(context)?.isCurrent ?? false)) {
-      ref.read(hotelHostMilesProvider.notifier).refresh();
+      ref
+          .read(hotelHostMilesProvider(widget.initialCriteria).notifier)
+          .refresh();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(hotelHostMilesProvider);
-    final controller = ref.read(hotelHostMilesProvider.notifier);
+    final state = ref.watch(hotelHostMilesProvider(widget.initialCriteria));
+    final controller = ref.read(
+      hotelHostMilesProvider(widget.initialCriteria).notifier,
+    );
     final hotels = state.hotels;
     final presenter = HotelBookingPresenter(
       Localizations.localeOf(context).toLanguageTag(),
@@ -80,7 +86,11 @@ class _HotelHostMilesPageState extends ConsumerState<HotelHostMilesPage>
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 _loadMoreScheduled = false;
                 if (mounted && (ModalRoute.of(context)?.isCurrent ?? false)) {
-                  ref.read(hotelHostMilesProvider.notifier).loadMore();
+                  ref
+                      .read(
+                        hotelHostMilesProvider(widget.initialCriteria).notifier,
+                      )
+                      .loadMore();
                 }
               });
             }
@@ -97,7 +107,13 @@ class _HotelHostMilesPageState extends ConsumerState<HotelHostMilesPage>
                 onLogin: () async {
                   await context.push('/login');
                   if (mounted) {
-                    ref.read(hotelHostMilesProvider.notifier).refresh();
+                    ref
+                        .read(
+                          hotelHostMilesProvider(
+                            widget.initialCriteria,
+                          ).notifier,
+                        )
+                        .refresh();
                   }
                 },
                 onRetry: controller.refreshMembership,

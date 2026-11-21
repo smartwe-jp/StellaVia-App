@@ -89,6 +89,8 @@ void main() {
           phoneIntlCode: '81',
           phone: '09012345678',
           email: 'aaron@example.com',
+          employer: 'ACME',
+          industry: 'IT',
           occupationCode: 'employee',
           annualIncomeCode: '5_10m',
           financialAssetsCode: '5_10m',
@@ -127,6 +129,8 @@ void main() {
       expect(restored?.phoneIntlCode, '81');
       expect(restored?.phone, '09012345678');
       expect(restored?.email, 'aaron@example.com');
+      expect(restored?.employer, 'ACME');
+      expect(restored?.industry, 'IT');
       expect(restored?.occupationCode, 'employee');
       expect(restored?.investmentExperienceCodes, const <String>[
         'stocks',

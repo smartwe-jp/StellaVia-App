@@ -12,7 +12,6 @@ SecondaryMarketBuySeed buildSecondaryMarketBuySeed(
     unitPrice: (record.price ?? 0).toInt(),
     investorCode: record.investorType?.investorCode,
     earningRatio: record.investorType?.earningsRadio,
-    pdfDocuments: record.pdfDocuments,
   );
 }
 

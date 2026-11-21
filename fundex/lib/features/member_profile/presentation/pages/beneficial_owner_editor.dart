@@ -7,6 +7,7 @@ import "../../domain/entities/corporate_form_draft.dart";
 import "../support/beneficial_owner_labels.dart";
 import "../support/corporate_form_fields.dart";
 import "../widgets/corporate_form_header.dart";
+import "../widgets/corporate_date_field.dart";
 import "../widgets/corporate_flow_scaffold.dart";
 
 class BeneficialOwnerEditor extends StatefulWidget {
@@ -76,7 +77,6 @@ class _BeneficialOwnerEditorState extends State<BeneficialOwnerEditor> {
     String initial,
     ValueChanged<String> onSave, {
     bool optional = false,
-    bool date = false,
   }) {
     final l = context.l10n;
     return Padding(
@@ -91,19 +91,9 @@ class _BeneficialOwnerEditorState extends State<BeneficialOwnerEditor> {
           const SizedBox(height: 8),
           TextFormField(
             initialValue: initial,
-            keyboardType: date ? TextInputType.datetime : TextInputType.text,
-            decoration: InputDecoration(hintText: date ? "YYYY-MM-DD" : null),
             validator: (value) {
               final text = value?.trim() ?? "";
               if (optional) return null;
-              if (date) {
-                return corporateFieldError(
-                  l,
-                  CorporateSection.owners,
-                  CorporateField.birth,
-                  text,
-                );
-              }
               return text.isEmpty ? l.corpFormMissing : null;
             },
             onSaved: (value) => onSave(value!.trim()),
@@ -137,11 +127,20 @@ class _BeneficialOwnerEditorState extends State<BeneficialOwnerEditor> {
               ),
               const SizedBox(height: 20),
               input(l.corpFormName, name, (v) => name = v),
-              input(
-                l.corpFormBirth,
-                birthdate,
-                (v) => birthdate = v,
-                date: true,
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: CorporateDateField(
+                  label: l.corpFormBirth,
+                  requiredLabel: l.corpFormRequired,
+                  initialValue: birthdate,
+                  validator: (value) => corporateFieldError(
+                    l,
+                    CorporateSection.owners,
+                    CorporateField.birth,
+                    value ?? '',
+                  ),
+                  onChanged: (value) => birthdate = value,
+                ),
               ),
               input(l.corpOwnerCountry, country, (v) => country = v),
               input(l.corpFormAddress, address, (v) => address = v),

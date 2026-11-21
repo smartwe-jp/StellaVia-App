@@ -88,7 +88,8 @@ class HotelDetailSelectionController extends ChangeNotifier {
     return !busy &&
         detail.isBookable &&
         (mode != HotelBookingMode.hostMiles || room.pointsRequired != null) &&
-        (room.minimumStayNights == null ||
+        (mode == HotelBookingMode.hostMiles ||
+            room.minimumStayNights == null ||
             criteria.nights >= room.minimumStayNights!) &&
         (left == null || count <= left) &&
         (milesShortfall(index, balance, count: count) ?? 0) == 0;

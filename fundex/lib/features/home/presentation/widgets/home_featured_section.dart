@@ -31,6 +31,9 @@ class HomeFeaturedSection extends StatelessWidget {
           padding: inset,
           child: AppSectionHeader(
             title: title,
+            titleTextStyle: context.appTextTheme.sectionTitle.copyWith(
+              fontWeight: FontWeight.w800,
+            ),
             actionLabel: actionLabel,
             actionTextStyle: HomeTextStyles.sectionAction(context),
             onActionTap: onActionTap,

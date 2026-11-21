@@ -13,6 +13,35 @@ final loggedIn = StateProvider<bool>((ref) => false);
 final identity = StateProvider<String>((ref) => 'A');
 Future<void> flush() => Future<void>.delayed(Duration.zero);
 void main() {
+  test(
+    'first miles search uses the previous list criteria after loading the tier',
+    () async {
+      final hotels = HotelsFake();
+      final criteria = HotelSearchCriteria(
+        checkInDate: DateTime(2026, 11, 24),
+        checkOutDate: DateTime(2026, 11, 27),
+        occupancy: 3,
+        kids: 2,
+        roomCount: 2,
+        area: 'kyoto',
+        priceSort: HotelPriceSort.descending,
+      );
+      final controller = milesController(
+        hotels,
+        MilesFake(),
+        initialCriteria: criteria,
+      );
+      addTearDown(controller.dispose);
+      await controller.initialize();
+      final request = hotels.criteria.single;
+      expect(request.checkInDate, criteria.checkInDate);
+      expect(request.checkOutDate, criteria.checkOutDate);
+      expect([request.occupancy, request.kids, request.roomCount], [3, 2, 2]);
+      expect(request.area, 'kyoto');
+      expect(request.priceSort, HotelPriceSort.descending);
+      expect(request.stayBenefit, true);
+    },
+  );
   test('provider clears membership when session changes', () async {
     final m = MilesFake();
     final container = ProviderContainer(
@@ -31,7 +60,7 @@ void main() {
       ],
     );
     addTearDown(container.dispose);
-    container.listen(hotelHostMilesProvider, (_, __) {});
+    container.listen(hotelHostMilesProvider(null), (_, __) {});
     await flush();
     await flush();
     expect(m.calls, 0);
@@ -40,24 +69,30 @@ void main() {
     await flush();
     expect(
       container
-          .read(hotelHostMilesProvider)
+          .read(hotelHostMilesProvider(null))
           .account
           .valueOrNull
           ?.availablePoints,
       23456,
     );
-    final previous = container.read(hotelHostMilesProvider.notifier);
+    final previous = container.read(hotelHostMilesProvider(null).notifier);
     container.read(identity.notifier).state = 'B';
     await flush();
     await flush();
     expect(
-      identical(previous, container.read(hotelHostMilesProvider.notifier)),
+      identical(
+        previous,
+        container.read(hotelHostMilesProvider(null).notifier),
+      ),
       false,
     );
     expect(previous.mounted, false);
     container.read(loggedIn.notifier).state = false;
     await flush();
-    expect(container.read(hotelHostMilesProvider).account.valueOrNull, isNull);
+    expect(
+      container.read(hotelHostMilesProvider(null)).account.valueOrNull,
+      isNull,
+    );
   });
   test(
     'real membership, multi-night search, pagination, refresh failure keeps data',

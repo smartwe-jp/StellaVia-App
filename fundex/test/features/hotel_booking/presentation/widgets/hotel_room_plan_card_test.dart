@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fundex/features/hotel_booking/domain/entities/hotel_models.dart';
 import 'package:fundex/features/hotel_booking/presentation/support/hotel_booking_presenter.dart';
+import 'package:fundex/features/hotel_booking/presentation/support/hotel_detail_display.dart';
 import 'package:fundex/features/hotel_booking/presentation/widgets/hotel_room_plan_card.dart';
 import 'package:fundex/features/hotel_booking/presentation/widgets/hotel_remaining_rooms_label.dart';
 import 'package:fundex/l10n/app_localizations.dart';
@@ -10,6 +11,38 @@ import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
   setUpAll(() => initializeDateFormatting('zh'));
+
+  testWidgets(
+    'room facts display centimeters once, including without a bed count',
+    (tester) async {
+      final room = _room(
+        minimumStayNights: null,
+        beds: const [
+          HotelRoomBed(name: 'A', quantity: 2, width: '120'),
+          HotelRoomBed(name: 'B', quantity: null, width: '幅140 CM'),
+          HotelRoomBed(name: 'C', quantity: 1, width: ''),
+        ],
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('ja'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Builder(
+            builder: (context) => Column(
+              children: [
+                for (final fact in hotelDetailRoomFacts(context, room))
+                  Text(fact.$2),
+              ],
+            ),
+          ),
+        ),
+      );
+      expect(find.text('A: 2台 幅120cm'), findsOneWidget);
+      expect(find.text('B (幅140cm)'), findsOneWidget);
+      expect(find.text('C: 1台'), findsOneWidget);
+    },
+  );
 
   testWidgets('vacancy labels show the exact count and web threshold colors', (
     tester,
@@ -115,7 +148,10 @@ void main() {
   });
 }
 
-HotelRoomPlan _room({required int? minimumStayNights}) {
+HotelRoomPlan _room({
+  required int? minimumStayNights,
+  List<HotelRoomBed> beds = const [],
+}) {
   return HotelRoomPlan(
     id: 'room-1',
     name: 'Twin room',
@@ -135,6 +171,6 @@ HotelRoomPlan _room({required int? minimumStayNights}) {
     description: '',
     facilityCategories: const <HotelRoomFacilityCategory>[],
     images: const <HotelDetailImage>[],
-    beds: const <HotelRoomBed>[],
+    beds: beds,
   );
 }

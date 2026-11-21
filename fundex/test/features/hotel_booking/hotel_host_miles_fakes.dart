@@ -91,7 +91,9 @@ HotelHostMilesController milesController(
   HotelsFake hotels,
   MilesFake miles, {
   bool member = true,
+  HotelSearchCriteria? initialCriteria,
 }) => HotelHostMilesController(
+  initialCriteria: initialCriteria,
   search: SearchHotelsUseCase(hotels),
   membership: LoadHostMilesHomeUseCase(miles),
   languageCode: 'JP',

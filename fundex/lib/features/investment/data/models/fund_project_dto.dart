@@ -43,6 +43,7 @@ extension FundProjectDtoMapper on FundProjectDto {
       currentlySubscribed: currentlySubscribed,
       daysRemaining: daysRemaining,
       projectStatus: projectStatus,
+      currentOpenInvestor: currentOpenInvestor?.toEntity(),
       operatingCompany: operatingCompany,
       operatingCompanyAccount: operatingCompanyAccount,
       periodType: periodType,

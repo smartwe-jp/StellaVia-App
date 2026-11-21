@@ -23,6 +23,7 @@ class FundProject {
     this.currentlySubscribed,
     this.daysRemaining,
     this.projectStatus,
+    this.currentOpenInvestor,
     this.operatingCompany,
     this.operatingCompanyAccount,
     this.periodType,
@@ -60,6 +61,7 @@ class FundProject {
   final int? currentlySubscribed;
   final int? daysRemaining;
   final int? projectStatus;
+  final FundProjectApplyInvestor? currentOpenInvestor;
   final String? operatingCompany;
   final int? operatingCompanyAccount;
   final String? periodType;

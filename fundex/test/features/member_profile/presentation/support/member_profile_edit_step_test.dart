@@ -3,12 +3,23 @@ import 'package:fundex/features/member_profile/presentation/support/member_profi
 
 void main() {
   group('MemberProfileEditStep', () {
-    test('shows real-person auth in overview steps', () {
+    test('document upload leads to face verification, bank and consent', () {
       expect(
-        memberProfileOverviewSteps,
-        contains(MemberProfileEditStep.realPersonAuth),
+        MemberProfileEditStep.ekyc.next,
+        MemberProfileEditStep.realPersonAuth,
       );
-      expect(MemberProfileEditStep.realPersonAuth.appearsInOverview, isTrue);
+      expect(
+        memberProfileEditStepFromRouteValue('real-person-auth'),
+        MemberProfileEditStep.realPersonAuth,
+      );
+      expect(
+        MemberProfileEditStep.realPersonAuth.next,
+        MemberProfileEditStep.bankAccount,
+      );
+      expect(
+        MemberProfileEditStep.bankAccount.next,
+        MemberProfileEditStep.consent,
+      );
     });
 
     test('excludes bank account from overview steps', () {

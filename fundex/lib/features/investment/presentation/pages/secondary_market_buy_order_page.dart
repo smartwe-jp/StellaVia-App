@@ -5,7 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
-import '../../../member_profile/domain/entities/mypage_models.dart';
+import '../providers/fund_project_providers.dart';
+import '../widgets/secondary_market_buy_documents.dart';
 import '../support/secondary_market_trade_models.dart';
 import '../widgets/secondary_market_buy_flow_sections.dart';
 
@@ -22,7 +23,8 @@ class SecondaryMarketBuyOrderPage extends ConsumerStatefulWidget {
 class _SecondaryMarketBuyOrderPageState
     extends ConsumerState<SecondaryMarketBuyOrderPage> {
   late final TextEditingController _buyUnitsController;
-  bool _agreed = false;
+  final _opened = <TradeDocument>{};
+  final _checked = <TradeDocument>{};
 
   @override
   void initState() {
@@ -40,10 +42,11 @@ class _SecondaryMarketBuyOrderPageState
 
   int? get _buyUnits => int.tryParse(_buyUnitsController.text.trim());
 
-  bool get _isValid {
+  bool _isValid(List<TradeDocument> docs) {
     final buyUnits = _buyUnits;
     return widget.seed.orderId.trim().isNotEmpty &&
-        _agreed &&
+        hasAllTradeDocumentTypes(docs) &&
+        docs.every(_checked.contains) &&
         buyUnits != null &&
         buyUnits > 0 &&
         buyUnits <= widget.seed.availableUnits;
@@ -76,39 +79,8 @@ class _SecondaryMarketBuyOrderPageState
     _setBuyUnits(current - 1);
   }
 
-  String? get _sampleDocumentUrl {
-    for (final MyPagePdfDocument document in widget.seed.pdfDocuments) {
-      for (final MyPagePdfUrl url in document.urls) {
-        final value = url.url?.trim();
-        if (value != null && value.isNotEmpty) {
-          return value;
-        }
-      }
-    }
-    return null;
-  }
-
-  void _openSampleDocument(BuildContext context, String url) {
-    final l10n = context.l10n;
-    openAppPdfViewer(
-      context,
-      url: url,
-      title: l10n.secondaryMarketBuyAgreementSampleLabel,
-      texts: AppPdfViewerTexts(
-        pageTitle: l10n.pdfViewerPageTitle,
-        openExternalTooltip: l10n.pdfViewerOpenExternalTooltip,
-        openExternalLabel: l10n.pdfViewerOpenExternalLabel,
-        loadingLabel: l10n.pdfViewerLoadingLabel,
-        loadFailedLabel: l10n.pdfViewerLoadFailedLabel,
-        retryLabel: l10n.fundListRetry,
-        invalidUrlNotice: l10n.pdfViewerInvalidUrlNotice,
-        openExternalFailedNotice: l10n.pdfViewerOpenExternalFailedNotice,
-      ),
-    );
-  }
-
-  void _goConfirm() {
-    if (!_isValid) {
+  void _goConfirm(List<TradeDocument> docs) {
+    if (!_isValid(docs)) {
       return;
     }
     final draft = SecondaryMarketBuyDraft(
@@ -120,8 +92,7 @@ class _SecondaryMarketBuyOrderPageState
       unitPrice: widget.seed.unitPrice,
       investorCode: widget.seed.investorCode,
       earningRatio: widget.seed.earningRatio,
-      agreed: _agreed,
-      sampleDocumentUrl: _sampleDocumentUrl,
+      confirmedDocuments: List.unmodifiable(docs),
     );
     context.push(
       '/free-market/${widget.seed.orderId}/buy/confirm',
@@ -139,18 +110,13 @@ class _SecondaryMarketBuyOrderPageState
       symbol: '¥',
       decimalDigits: 0,
     );
-    final preview = SecondaryMarketBuyDraft(
-      orderId: widget.seed.orderId,
-      projectId: widget.seed.projectId,
-      projectName: widget.seed.projectName,
-      availableUnits: widget.seed.availableUnits,
-      buyNum: _buyUnits ?? 0,
-      unitPrice: widget.seed.unitPrice,
-      investorCode: widget.seed.investorCode,
-      earningRatio: widget.seed.earningRatio,
-      agreed: _agreed,
-      sampleDocumentUrl: _sampleDocumentUrl,
+    final provider = fundProjectDetailProvider(widget.seed.projectId);
+    final project = ref.watch(provider);
+    final docs = requiredTradeDocuments(
+      project.asData?.value.pdfDocuments ?? [],
     );
+    final valid = _isValid(docs);
+    final totalAmount = (_buyUnits ?? 0) * widget.seed.unitPrice;
     final formulaValue =
         '${_buyUnits ?? 0}${l10n.myPageResaleUnitsSuffix} × ${formatter.format(widget.seed.unitPrice)}';
 
@@ -165,10 +131,10 @@ class _SecondaryMarketBuyOrderPageState
       ),
       bottomNavigationBar: SecondaryMarketTradeStickyActionBar(
         amountLabel: l10n.secondaryMarketBuyStickyAmountLabel,
-        amountValue: formatter.format(preview.totalAmount),
-        helperText: _isValid ? null : l10n.secondaryMarketBuyValidationMessage,
+        amountValue: formatter.format(totalAmount),
+        helperText: valid ? null : l10n.secondaryMarketBuyValidationMessage,
         primaryLabel: l10n.secondaryMarketBuyConfirmButton,
-        onPrimaryPressed: _isValid ? _goConfirm : null,
+        onPrimaryPressed: valid ? () => _goConfirm(docs) : null,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -192,7 +158,7 @@ class _SecondaryMarketBuyOrderPageState
                   formulaLabel: l10n.secondaryMarketBuyLiveEstimateFormulaLabel,
                   formulaValue: formulaValue,
                   paymentLabel: l10n.secondaryMarketBuyPaymentAmountLabel,
-                  paymentValue: formatter.format(preview.totalAmount),
+                  paymentValue: formatter.format(totalAmount),
                   controller: _buyUnitsController,
                   selectedUnits: _buyUnits ?? 0,
                   availableUnits: widget.seed.availableUnits,
@@ -209,24 +175,23 @@ class _SecondaryMarketBuyOrderPageState
                   enabled: widget.seed.availableUnits > 0,
                 ),
                 const SizedBox(height: 14),
-                SecondaryMarketTradeAgreementCard(
-                  title: l10n.secondaryMarketBuyAgreementSectionTitle,
-                  body: l10n.secondaryMarketBuyAgreementBody,
-                  agreed: _agreed,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _agreed = value;
-                    });
-                  },
-                  documentLabel: l10n.secondaryMarketBuyAgreementSampleLabel,
-                  documentActionLabel: _sampleDocumentUrl == null
-                      ? l10n.secondaryMarketDocumentPending
-                      : l10n.secondaryMarketDocumentOpenAction,
-                  documentAvailable: _sampleDocumentUrl != null,
-                  onOpenDocument: _sampleDocumentUrl == null
-                      ? null
-                      : () => _openSampleDocument(context, _sampleDocumentUrl!),
-                ),
+                if (project.isLoading)
+                  const LinearProgressIndicator()
+                else
+                  SecondaryMarketBuyDocuments(
+                    documents: docs,
+                    opened: _opened,
+                    checked: _checked,
+                    onOpened: (doc) => setState(() => _opened.add(doc)),
+                    onChanged: (doc, checked) => setState(() {
+                      if (checked) {
+                        _checked.add(doc);
+                      } else {
+                        _checked.remove(doc);
+                      }
+                    }),
+                    retry: () => ref.invalidate(provider),
+                  ),
               ],
             ),
           ),

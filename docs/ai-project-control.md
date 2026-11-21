@@ -34,6 +34,14 @@ Use three layers of coordination:
 
 ## Current Implemented Areas
 
+Home, registration and member information share the full-screen investor type selector when both verification options are available.
+
+Successful registration exchanges the one-time UUID immediately for an OAuth session and opens the verification entry over Home. If the exchange fails after account creation, manual login is available without registering again.
+
+Personal verification collects nationality and country of tax residence separately. After document upload, the member completes live face verification, then fills or skips the bank account before consent. Skipping the bank omits it from the submission. Document examples are bundled with the app.
+
+Personal member suitability requires an industry from the nine supported codes and a nonblank employer for every occupation. Read the industry from `suitabilityInfo.industry` and submit it in `suitabilityRequest.industry`. Read and submit the employer in `baseInfo.employer`.
+
 ### Corporate verification planning (2026-11-19)
 
 - Member information now branches by fresh index-new applicant type. Corporate accounts load the read-only verification detail. Corporate preparation now opens the first four editable steps (company, representative, handler, beneficial owners), with account-scoped local drafts for first-time applications and partial review. The corporate flow now supports submission and correction. Fund applications and secondary-market purchases check fresh corporate detail at entry and submission and require CONFIRMED.

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import 'home_data_status.dart';
 import '../support/home_text_styles.dart';
+import 'home_action_icon.dart';
 
 class HomeMilesCard extends StatelessWidget {
   const HomeMilesCard({
@@ -27,13 +28,8 @@ class HomeMilesCard extends StatelessWidget {
         InkWell(
           onTap: onTap,
           child: Row(
-            
             children: [
-              Icon(
-                Icons.card_giftcard_outlined,
-                color: context.appColors.primary,
-                size: 22,
-              ),
+              const HomeActionIcon(Icons.card_giftcard_outlined),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -59,12 +55,14 @@ class HomeMilesCard extends StatelessWidget {
                   ],
                 ),
               ),
-              //const Spacer(),
-              Text(
+              Flexible(
+                child: Text(
                   context.l10n.homeBookWithMiles,
+                  textAlign: TextAlign.end,
                   style: HomeTextStyles.smallLink(context),
                 ),
-              
+              ),
+
               Icon(
                 Icons.chevron_right,
                 size: 16,

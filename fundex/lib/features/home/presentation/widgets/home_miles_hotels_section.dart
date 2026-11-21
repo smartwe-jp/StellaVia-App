@@ -6,17 +6,17 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../hotel_booking/presentation/support/hotel_booking_presenter.dart';
 import '../../../hotel_booking/presentation/support/hotel_detail_route_args.dart';
 import '../../../hotel_booking/presentation/widgets/hotel_home_card.dart';
-import '../../../hotel_booking/presentation/widgets/hotel_state_views.dart';
 import '../providers/home_featured_hotels_provider.dart';
 
 import 'home_featured_section.dart';
 
-class HomeMilesHotelsSection extends ConsumerWidget {
-  const HomeMilesHotelsSection({super.key});
+class HomeMilesHotelsSection extends StatelessWidget {
+  const HomeMilesHotelsSection({super.key, required this.state});
+
+  final AsyncValue<HomeFeaturedHotels> state;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(homeFeaturedHotelsProvider);
+  Widget build(BuildContext context) {
     final l = context.l10n;
     final presenter = HotelBookingPresenter(
       Localizations.localeOf(context).toLanguageTag(),
@@ -30,9 +30,7 @@ class HomeMilesHotelsSection extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           if (state.hasError)
-            HotelInlineErrorNotice(
-              onRetry: () => ref.invalidate(homeFeaturedHotelsProvider),
-            ),
+            Text(l.hotelRefreshFailed, style: context.appTextTheme.bodyMuted),
           if (state.isLoading && (preview?.hotels.isEmpty ?? true))
             const Center(child: CircularProgressIndicator.adaptive()),
           if (state.hasValue &&

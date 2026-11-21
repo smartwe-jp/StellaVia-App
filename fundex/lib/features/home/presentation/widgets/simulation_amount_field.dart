@@ -5,6 +5,7 @@ import '../support/home_simulation_theme.dart';
 class SimulationAmountField extends StatefulWidget {
   const SimulationAmountField({
     super.key,
+    this.tenths = false,
     required this.value,
     required this.display,
     required this.label,
@@ -12,6 +13,7 @@ class SimulationAmountField extends StatefulWidget {
     required this.max,
     required this.onChanged,
   });
+  final bool tenths;
   final int value, min, max;
   final String display, label;
   final ValueChanged<double> onChanged;
@@ -24,20 +26,29 @@ class _SimulationAmountFieldState extends State<SimulationAmountField> {
   late final _controller = TextEditingController(text: widget.display);
   late final _focus = FocusNode()..addListener(_focusChanged);
 
+  int? _parse(String raw) {
+    if (!widget.tenths) return int.tryParse(raw);
+    final rate = double.tryParse(raw);
+    return rate == null ? null : (rate * 10).round();
+  }
+
+  String _editText(int value) =>
+      widget.tenths ? (value / 10).toStringAsFixed(1) : value.toString();
+
   void _focusChanged() {
     if (_focus.hasFocus) {
-      final digits = widget.value.toString();
+      final digits = _editText(widget.value);
       _controller.value = TextEditingValue(
         text: digits,
         selection: TextSelection(baseOffset: 0, extentOffset: digits.length),
       );
     } else {
-      final entered = int.tryParse(_controller.text);
+      final entered = _parse(_controller.text);
       final units = entered?.clamp(widget.min, widget.max) ?? widget.value;
       if (units != widget.value) widget.onChanged(units.toDouble());
       _controller.text = units == widget.value
           ? widget.display
-          : units.toString();
+          : _editText(units);
     }
   }
 
@@ -47,8 +58,8 @@ class _SimulationAmountFieldState extends State<SimulationAmountField> {
     if (!_focus.hasFocus) {
       if (_controller.text != widget.display) _controller.text = widget.display;
     } else if (oldWidget.value != widget.value &&
-        int.tryParse(_controller.text) != widget.value) {
-      _controller.text = widget.value.toString();
+        _parse(_controller.text) != widget.value) {
+      _controller.text = _editText(widget.value);
     }
   }
 
@@ -67,7 +78,7 @@ class _SimulationAmountFieldState extends State<SimulationAmountField> {
       controller: _controller,
       focusNode: _focus,
       textAlign: TextAlign.end,
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.numberWithOptions(decimal: widget.tenths),
       textInputAction: TextInputAction.done,
       style: HomeSimulationTheme.inputNumber(context),
       decoration: InputDecoration(
@@ -76,12 +87,18 @@ class _SimulationAmountFieldState extends State<SimulationAmountField> {
         contentPadding: const EdgeInsets.symmetric(vertical: 8),
       ),
       inputFormatters: [
-        FilteringTextInputFormatter.digitsOnly,
+        if (widget.tenths)
+          TextInputFormatter.withFunction(
+            (old, next) =>
+                RegExp(r'^\d{0,2}(?:\.\d?)?$').hasMatch(next.text) ? next : old,
+          )
+        else
+          FilteringTextInputFormatter.digitsOnly,
         LengthLimitingTextInputFormatter(8),
       ],
       onTapOutside: (_) => _focus.unfocus(),
       onChanged: (text) {
-        final units = int.tryParse(text);
+        final units = _parse(text);
         if (units != null && units >= widget.min && units <= widget.max) {
           widget.onChanged(units.toDouble());
         }

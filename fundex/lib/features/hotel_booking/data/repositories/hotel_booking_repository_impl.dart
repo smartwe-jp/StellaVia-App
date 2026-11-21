@@ -16,6 +16,33 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
   final DateFormat _wireDateTimeFormat = DateFormat('yyyy-MM-dd 00:00:00');
 
   @override
+  Future<List<PointsHotel>> searchHotelsByPoints(int points) async {
+    final rows = await _remote.searchHotelsByPoints(points);
+    final hotels = <PointsHotel>[];
+    for (final row in rows) {
+      final cost = row.startingPoints;
+      if (row.id.isEmpty ||
+          cost == null ||
+          !cost.isFinite ||
+          cost < 1 ||
+          cost > points) {
+        continue;
+      }
+      hotels.add(
+        PointsHotel(
+          id: row.id,
+          name: row.name,
+          buildingCode: row.buildingCode,
+          nightlyPoints: cost.ceil(),
+          referenceCheckIn: row.referenceCheckIn,
+          referenceCheckOut: row.referenceCheckOut,
+        ),
+      );
+    }
+    return hotels..sort((a, b) => b.nightlyPoints.compareTo(a.nightlyPoints));
+  }
+
+  @override
   Future<HotelSearchResult> searchHotels({
     required HotelSearchCriteria criteria,
     required String languageCode,
@@ -138,17 +165,11 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
           hotelId: hotelId,
         )
         .catchError((_) => '');
-    final priceCalendarFuture = _remote
-        .fetchPriceByDate(hotelInfoId: hotelId)
-        .catchError((_) => const HotelPriceCalendarDto());
-
     final detail = await detailFuture;
     final refundPolicyText = await refundPolicyFuture;
-    final priceCalendar = await priceCalendarFuture;
     return _mapHotelDetail(
       detail,
       refundPolicyText: refundPolicyText,
-      priceCalendarByDate: priceCalendar.pricesByDate,
     );
   }
 
@@ -1147,7 +1168,6 @@ String _formatBookingType(Object? raw) {
 HotelDetail _mapHotelDetail(
   HotelDetailDto dto, {
   required String refundPolicyText,
-  required Map<String, Object?> priceCalendarByDate,
 }) {
   return HotelDetail(
     id: dto.id.trim(),
@@ -1177,7 +1197,6 @@ HotelDetail _mapHotelDetail(
         .map((tag) => tag.trim())
         .where((tag) => tag.isNotEmpty)
         .toList(growable: false),
-    priceCalendarByDate: Map<String, Object?>.unmodifiable(priceCalendarByDate),
   );
 }
 

@@ -6,11 +6,15 @@ import 'package:fundex/features/auth/data/models/auth_login_result_dto.dart';
 import 'package:fundex/features/auth/data/models/auth_session_dto.dart';
 import 'package:fundex/features/auth/data/models/auth_user_dto.dart';
 import 'package:fundex/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:fundex/features/auth/domain/repositories/auth_repository.dart';
 
 class _FakeRemoteDataSource implements AuthRemoteDataSource {
   String? lastSendCodeAccount;
   String? lastRegisterCodeAccount;
   String? lastRegisterIntlCode;
+  String? registrationUuid = 'registered-uuid';
+  bool exchangeExpired = false;
+  int exchangeCount = 0;
   String? lastRegisterAccount;
   String? lastRegisterCode;
   String? lastRegisterContact;
@@ -85,7 +89,15 @@ class _FakeRemoteDataSource implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> registerApply({
+  Future<AuthLoginResultDto> loginWithRegistrationUuid(String uuid) async {
+    exchangeCount++;
+    if (exchangeExpired) throw StateError('expired');
+    expect(uuid, 'registered-uuid');
+    return loginResult;
+  }
+
+  @override
+  Future<String?> registerApply({
     required String account,
     required String code,
     required String intlCode,
@@ -97,6 +109,7 @@ class _FakeRemoteDataSource implements AuthRemoteDataSource {
     lastRegisterIntlCode = intlCode;
     lastRegisterContact = contact;
     lastRegisterInviteCode = inviteCode;
+    return registrationUuid;
   }
 
   @override
@@ -267,7 +280,7 @@ void main() {
     );
 
     test(
-      'registerAccount refreshes current user cache when access token already exists',
+      'registerAccount exchanges the uuid, saves new tokens and refreshes the user',
       () async {
         await tokenStore.save(
           const TokenPair(accessToken: 'access', refreshToken: 'refresh'),
@@ -286,6 +299,8 @@ void main() {
           inviteCode: 'STLV-ABCD1234',
         );
 
+        expect(await tokenStore.readAccessToken(), 'login-access');
+        expect(await tokenStore.readRefreshToken(), 'login-refresh');
         expect(remote.lastRegisterAccount, 'user@example.com');
         expect(remote.lastRegisterInviteCode, 'STLV-ABCD1234');
         expect(remote.fetchCurrentUserCallCount, 1);
@@ -369,6 +384,26 @@ void main() {
       expect(remote.lastSendCodeAccount, '13900000000');
       expect(remote.lastSendLoginIntlCode, '86');
     });
+
+    for (final expired in [false, true]) {
+      test(
+        'registered account can sign in manually when UUID is ${expired ? "expired" : "missing"}',
+        () async {
+          remote.registrationUuid = expired ? 'registered-uuid' : null;
+          remote.exchangeExpired = expired;
+          await expectLater(
+            repository.registerAccount(
+              account: 'new@example.com',
+              code: '123456',
+              intlCode: '81',
+            ),
+            throwsA(isA<RegistrationSignInRequired>()),
+          );
+          expect(remote.exchangeCount, expired ? 1 : 0);
+          expect(await tokenStore.readAccessToken(), isNull);
+        },
+      );
+    }
 
     test('registerAccount forwards register payload', () async {
       await repository.registerAccount(

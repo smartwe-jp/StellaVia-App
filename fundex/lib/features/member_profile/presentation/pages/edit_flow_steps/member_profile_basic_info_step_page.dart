@@ -16,6 +16,7 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
     required this.birthdayController,
     required this.sexValue,
     required this.sexItems,
+    required this.nationalityController,
     required this.taxCountryController,
     required this.showAgeWarning,
     this.primaryButtonEnabled = true,
@@ -39,6 +40,7 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
   final TextEditingController birthdayController;
   final int? sexValue;
   final List<DropdownMenuItem<int>> sexItems;
+  final TextEditingController nationalityController;
   final TextEditingController taxCountryController;
   final bool showAgeWarning;
   final bool primaryButtonEnabled;
@@ -145,6 +147,12 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 14),
+          MemberProfileTextField(
+            label: l10n.memberProfileNationalityLabel,
+            controller: nationalityController,
+            isRequired: true,
           ),
           if (showAgeWarning) ...<Widget>[
             const SizedBox(height: 12),

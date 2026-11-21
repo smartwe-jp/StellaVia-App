@@ -13,12 +13,14 @@ class AppSectionHeader extends StatelessWidget {
     this.actionLabel,
     this.onActionTap,
     this.actionTextStyle,
+    this.titleTextStyle,
   });
   final String title;
   final Widget? leading;
   final String? actionLabel;
   final VoidCallback? onActionTap;
   final TextStyle? actionTextStyle;
+  final TextStyle? titleTextStyle;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -30,7 +32,10 @@ class AppSectionHeader extends StatelessWidget {
       Expanded(
         child: Semantics(
           header: true,
-          child: Text(title, style: context.appTextTheme.sectionTitle),
+          child: Text(
+            title,
+            style: titleTextStyle ?? context.appTextTheme.sectionTitle,
+          ),
         ),
       ),
       if (actionLabel != null) ...[

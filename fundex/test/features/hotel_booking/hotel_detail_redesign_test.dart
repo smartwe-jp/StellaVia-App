@@ -73,7 +73,6 @@ HotelDetail detail({int stock = 2, int minStay = 1, num? points = 6000}) =>
       images: [],
       roomPlans: [room(stock: stock, minStay: minStay, points: points)],
       tags: ['京都'],
-      priceCalendarByDate: {},
     );
 const assigned = HotelAssignOccupancyResult(
   pointsRequired: 7200,
@@ -109,27 +108,34 @@ void main() {
   testWidgets(
     'zero remaining rooms replace the stepper until a selected room needs removal',
     (tester) async {
-      Future<void> showCard(int quantity) => tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('ja'),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppThemeFactory.light(locale: const Locale('ja')),
-          home: Scaffold(
-            body: HotelDetailRoomCard(
-              room: room(),
-              quantity: quantity,
-              remaining: 0,
-              miles: true,
-              nights: 1,
-              onDetails: () {},
-              onMinus: quantity > 0 ? () {} : null,
-              onPlus: null,
+      Future<void> showCard(int quantity, {bool miles = true}) =>
+          tester.pumpWidget(
+            MaterialApp(
+              locale: const Locale('ja'),
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              theme: AppThemeFactory.light(locale: const Locale('ja')),
+              home: Scaffold(
+                body: HotelDetailRoomCard(
+                  room: room(minStay: 3),
+                  quantity: quantity,
+                  remaining: 0,
+                  miles: miles,
+                  nights: 1,
+                  onDetails: () {},
+                  onMinus: quantity > 0 ? () {} : null,
+                  onPlus: null,
+                ),
+              ),
             ),
-          ),
-        ),
-      );
+          );
+      await showCard(0, miles: false);
+      final minimum = AppLocalizations.of(
+        tester.element(find.byType(HotelDetailRoomCard)),
+      ).hotelDetailMinimumStay(3);
+      expect(find.text(minimum), findsOneWidget);
       await showCard(0);
+      expect(find.text(minimum), findsNothing);
       expect(find.text('満室'), findsOneWidget);
       expect(find.text('残り0室'), findsNothing);
       expect(find.byType(IconButton), findsNothing);
@@ -333,7 +339,10 @@ void main() {
       final min = controller(hotel: detail(minStay: 9));
       addTearDown(min.dispose);
       expect(min.canAdd(0), isFalse);
-      final c = controller(mode: HotelBookingMode.hostMiles);
+      final c = controller(
+        mode: HotelBookingMode.hostMiles,
+        hotel: detail(minStay: 9),
+      );
       addTearDown(c.dispose);
       await c.change(0, 1, roomLimit: 1);
       expect(c.canAdd(0, roomLimit: 1), isFalse);

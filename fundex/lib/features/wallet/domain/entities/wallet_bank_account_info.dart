@@ -30,4 +30,11 @@ class WalletBankAccountInfo {
   final String? bankCountry;
   final String? branchAddress;
   final String? expireTime;
+
+  bool get hasDepositDetails => [
+    bankName,
+    branchName,
+    accountNumber,
+    accountHolder,
+  ].every((value) => value.trim().isNotEmpty && value.trim() != '--');
 }

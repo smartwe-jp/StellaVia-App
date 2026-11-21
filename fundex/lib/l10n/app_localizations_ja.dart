@@ -5196,7 +5196,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageResaleNetAmountLabel => '受取予定額';
 
   @override
-  String get myPageResaleValidationMessage => '売却口数を入力し、書面の内容に同意してください。';
+  String get myPageResaleValidationMessage => '売却可能口数の範囲内で口数を入力してください。';
 
   @override
   String get myPageResalePriceUnavailable => '売却単価を取得できません。';
@@ -5220,7 +5220,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageResaleFlowOrderTitle => '売却内容を入力';
 
   @override
-  String get myPageResaleFlowOrderSubtitle => '口数と売却単価、書面確認を済ませて次の確認ステップへ進みます。';
+  String get myPageResaleFlowOrderSubtitle => '売却口数と単価をご確認ください。';
 
   @override
   String get myPageResaleFlowConfirmTitle => '売却内容を最終確認';
@@ -5379,6 +5379,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get secondaryMarketBuyFeeValue => '取引金額の1.65%';
+
+  @override
+  String get secondaryMarketElectronicTradeDocument => '電子取引に係る重要事項説明書';
 
   @override
   String get secondaryMarketBuyAgreementLabel => '書面確認';
@@ -5560,7 +5563,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfileSexOther => 'その他';
 
   @override
-  String get memberProfileTaxCountryLabel => '居住国';
+  String get memberProfileNationalityLabel => '国籍';
+
+  @override
+  String get memberProfileDocumentExample => '撮影例';
+
+  @override
+  String get memberProfileTaxCountryLabel => '納税国';
 
   @override
   String get memberProfileTaxCountryHint => '日本';
@@ -5621,6 +5630,39 @@ class AppLocalizationsJa extends AppLocalizations {
       '不動産特定共同事業法第25条に基づき、お客様の投資経験等を確認いたします。';
 
   @override
+  String get memberIndustryLabel => '業種';
+
+  @override
+  String get memberEmployerLabel => '勤務先';
+
+  @override
+  String get memberIndustryIt => 'IT・通信';
+
+  @override
+  String get memberIndustryFinance => '金融・保険';
+
+  @override
+  String get memberIndustryManufacturing => '製造';
+
+  @override
+  String get memberIndustryRetail => '小売・サービス';
+
+  @override
+  String get memberIndustryRealEstate => '不動産';
+
+  @override
+  String get memberIndustryMedical => '医療・福祉';
+
+  @override
+  String get memberIndustryPublic => '官公庁・団体';
+
+  @override
+  String get memberIndustryEducation => '教育';
+
+  @override
+  String get memberIndustryOther => 'その他';
+
+  @override
   String get memberProfileOccupationLabel => 'ご職業';
 
   @override
@@ -5663,7 +5705,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get memberProfileDocumentGuideBody =>
-      '以下のいずれかの本人確認書類をご提出ください。\n\n① 居住者の方\n・個人番号カード（マイナンバーカード、表面のみ）\n・在留カード\n・特別永住者証明書\n・運転免許証\n\n② 非居住者の方\n・本国政府発行の顔写真付き本人確認書類\n・パスポート（顔写真ページおよび所持人情報ページ）\n\n③ 法人（法人名義）\n以下の資料をご提出ください。\n・登記事項証明書（履歴事項全部証明書）\n・代表者または取引担当者の本人確認書類\n・必要に応じて、実質的支配者に関する資料';
+      '以下のいずれかの本人確認書類をご提出ください。\n\n① 居住者の方\n・個人番号カード（マイナンバーカード、表面のみ）\n・在留カード\n・特別永住者証明書\n・運転免許証\n\n② 非居住者の方\n・本国政府発行の顔写真付き本人確認書類\n・パスポート（顔写真ページおよび所持人情報ページ）';
 
   @override
   String get memberProfileDocumentTypeLabel => '書類を選択';
@@ -5709,8 +5751,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfileStep5RealPersonTitle => 'Step 5：実人確認（顔認証）';
 
   @override
-  String get memberProfileStep5RealPersonDescription =>
-      '自撮り写真をアップロードし、顔のライブ認証を行ってください';
+  String get memberProfileStep5RealPersonDescription => 'カメラを使って顔のライブ認証を行います。';
 
   @override
   String get memberProfileStep5RealPersonSelfieRequired =>
@@ -5756,7 +5797,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memberProfileNextConsent => '次へ：同意事項の確認';
 
   @override
-  String get memberProfileStep6Title => 'Step 5：同意事項の確認';
+  String get memberProfileStep6Title => 'Step 7：同意事項の確認';
 
   @override
   String get memberProfileStep6Description => '以下の事項をご確認いただき、すべてに同意してください。';
@@ -6233,17 +6274,17 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeServiceTitle => '宿主優待について';
 
   @override
-  String get homeServiceAboutEyebrow => 'ABOUT';
+  String get homeServiceAboutEyebrow => 'WHY STELLAVIA';
 
   @override
-  String get homeServiceAboutTitle => '未来と、今に投資しよう。';
+  String get homeServiceAboutTitle => '未来の安心を育て、今の人生も豊かに。';
 
   @override
   String get homeServiceVideoPending => '動画準備中';
 
   @override
   String get homeServiceAboutBody =>
-      '将来のために今を我慢するのではなく、資産を育てながら、家族やパートナー、大切な人との“今”の時間も楽しむ。ファンドへの投資で、運用によるリターンに加えて、ホテルの宿泊に使える「宿主マイル」が貯まる『宿主優待』。それが、STELLAVIAが提案する新しい投資のかたちです。';
+      '将来のために今を我慢するのではなく、資産を育てながら、家族やパートナー、大切な人との“今”の時間も楽しむ。宿主ファンドへの投資で、運用によるリターンに加えて、ホテルの宿泊に使える「宿主マイル」が貯まる『宿主優待』。それが、STELLAVIAが提案する新しい投資のかたちです。';
 
   @override
   String get homeServiceReturnsEyebrow => 'TWO RETURNS';
@@ -6258,11 +6299,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeServiceFinancialEyebrow => 'FINANCIAL RETURN';
 
   @override
-  String get homeServiceFinancialTitle => '運用によるリターン';
+  String get homeServiceFinancialTitle => '投資が、未来を育てる';
 
   @override
   String get homeServiceFinancialBody =>
-      '想定利回り6〜10%のホテルファンドへ投資。固定利回りで、中長期の資産形成を目指します。';
+      '宿主ファンドには1口1万円から投資できます。ファンドごとの想定利回りと運用期間を確認してお選びください。将来の運用成果を保証するものではありません。';
 
   @override
   String get homeServiceNowEyebrow => 'NOW';
@@ -6271,11 +6312,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeServiceExperienceEyebrow => 'EXPERIENCE RETURN';
 
   @override
-  String get homeServiceExperienceTitle => '宿主マイルで、旅に出る';
+  String get homeServiceExperienceTitle => '旅が、今を豊かにする';
 
   @override
   String get homeServiceExperienceBody =>
-      '貯まった宿主マイルを使って、STELLAVIAのホテルを予約。旅という体験でも還元します。';
+      '貯まった宿主マイルを使って、STELLAVIAのホテルを予約。運用によるリターンだけでなく、旅という体験で今も楽しめます。';
 
   @override
   String get homeRankDetailTitle => '続けるほど、旅がもっと自由に。';
@@ -6283,6 +6324,10 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get homeRankDetailBody =>
       '運用残高に応じた5段階のランク。ランクが上がるほど、宿主マイルの獲得率だけでなく、宿泊の予約可能期間や宿主マイルの有効期限が広がります。続けるほど、旅がもっと自由になる設計です。';
+
+  @override
+  String get homeRankEligibilityNote =>
+      'ランク判定と宿主マイル付与は、2026年12月1日以降に募集を開始したファンドへの投資額のみで算定します（施行日前に募集開始したファンドは対象外）。';
 
   @override
   String get homeRankDraftNotice =>
@@ -6346,25 +6391,28 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeServiceStartTitle => 'STELLAVIAの始め方';
 
   @override
-  String get homeServiceStep1Body => 'スマホひとつで、いつでもどこでもかんたんに会員登録できます。';
+  String get homeServiceStep1Title => '無料で宿主登録';
+
+  @override
+  String get homeServiceStep1Body => 'スマホひとつで、いつでもどこでもかんたんに会員登録（宿主登録）できます。';
 
   @override
   String get homeServiceStep2Title => '宿主ファンドを選ぶ';
 
   @override
-  String get homeServiceStep2Body => '運用期間や想定利回りを確認して選びます。';
+  String get homeServiceStep2Body => '想定利回りや運用期間などを確認し、投資する宿主ファンドを選びます。';
 
   @override
   String get homeServiceStep3Title => '宿主マイルを貯める';
 
   @override
-  String get homeServiceStep3Body => '運用残高に応じて毎月貯まります。';
+  String get homeServiceStep3Body => '運用残高を基準として、各ランクに応じた宿主マイルが毎月貯まります。';
 
   @override
   String get homeServiceStep4Title => 'ホテルに泊まる';
 
   @override
-  String get homeServiceStep4Body => '貯まったマイルでSTELLAVIAのホテルへ。';
+  String get homeServiceStep4Body => '貯まった宿主マイルを使って、STELLAVIAのホテルを予約します。';
 
   @override
   String get homeServiceMemberNote => 'すでに本会員の方は、そのままファンドをお選びいただけます。';
@@ -6468,6 +6516,20 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get homeRankRulesEmpty => 'ランク情報はまだありません。';
+
+  @override
+  String get simRunAction => 'シミュレーションする';
+
+  @override
+  String get simPointsHotelsTitle => 'このマイルで泊まれるホテル';
+
+  @override
+  String get simPointsHotelsEmpty => 'このマイル数で泊まれるホテルは見つかりませんでした。';
+
+  @override
+  String simPointsHotelStay(String points, int nights) {
+    return '1泊 $points マイル〜 · 約$nights泊';
+  }
 
   @override
   String get simTitle => 'シミュレーション';
@@ -6602,6 +6664,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get myPageChartCashHint => '入出金・投資に使える待機資金';
 
   @override
+  String get hostManageDividendYenUnit => '(単位: 円)';
+
+  @override
   String get myPageChartDividendUnit => '(単位: 千円)';
 
   @override
@@ -6700,6 +6765,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get hostManageFundExpectPrincipalUnit => '(単位: 万円)';
+
+  @override
+  String get hostManageResidencyUnknown => '居住区分を確認できないため、振込先口座を表示できません。';
+
+  @override
+  String get hostManageOverseasBankEmpty => 'このファンドには海外送金用の口座が登録されていません。';
 
   @override
   String get hostManageFundBankEmpty => '振込先口座情報がありません';
@@ -7216,6 +7287,15 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get tradeEmptySell => '売却できるファンドはありません';
+
+  @override
+  String get tradeNewOfferings => '新規募集';
+
+  @override
+  String get tradeMemberTransfers => '会員間譲渡';
+
+  @override
+  String get tradeAvailableApplyUnits => '申込可能口数';
 
   @override
   String get tradeEmptyBuy => '購入できるファンドはありません';

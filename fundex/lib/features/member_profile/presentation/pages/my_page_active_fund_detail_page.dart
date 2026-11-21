@@ -20,7 +20,7 @@ import '../support/mypage_section_support.dart';
 import '../widgets/my_page_hiwari_info_card.dart';
 import '../widgets/mypage_active_fund_detail_sections.dart';
 
-class MyPageActiveFundDetailPage extends ConsumerWidget {
+class MyPageActiveFundDetailPage extends ConsumerStatefulWidget {
   const MyPageActiveFundDetailPage({
     super.key,
     required this.projectId,
@@ -31,7 +31,18 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
   final MyPageActiveFundDetailSeed? initialSeed;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyPageActiveFundDetailPage> createState() =>
+      _MyPageActiveFundDetailState();
+}
+
+class _MyPageActiveFundDetailState
+    extends ConsumerState<MyPageActiveFundDetailPage> {
+  String? _loadingReportId;
+
+  @override
+  Widget build(BuildContext context) {
+    final projectId = widget.projectId;
+    final initialSeed = widget.initialSeed;
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = theme.appColors;
@@ -257,23 +268,36 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
                               children: <Widget>[
                                 OutlinedButton(
                                   onPressed:
-                                      detail.id != null &&
+                                      _loadingReportId == null &&
+                                          detail.id != null &&
                                           detail.id!.trim().isNotEmpty
-                                      ? () => _openBenefitReport(
-                                          context,
-                                          ref,
-                                          benefitId: detail.id!,
-                                          title:
-                                              l10n.myPageActiveFundReportTitle,
-                                        )
+                                      ? () => _openBenefitReport(detail.id!)
                                       : null,
                                   style: _detailOutlineButtonStyle(
                                     context,
                                     borderColor: colors.infoForeground,
                                     foregroundColor: colors.infoForeground,
                                   ),
-                                  child: Text(
-                                    l10n.myPageActiveFundReportAction,
+                                  child: IndexedStack(
+                                    alignment: Alignment.center,
+                                    index:
+                                        detail.id != null &&
+                                            detail.id == _loadingReportId
+                                        ? 1
+                                        : 0,
+                                    children: [
+                                      Text(l10n.myPageActiveFundReportAction),
+                                      if (detail.id != null &&
+                                          detail.id == _loadingReportId)
+                                        SizedBox.square(
+                                          dimension: 16,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            semanticsLabel:
+                                                l10n.pdfViewerLoadingLabel,
+                                          ),
+                                        ),
+                                    ],
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -325,71 +349,70 @@ class MyPageActiveFundDetailPage extends ConsumerWidget {
       ),
     );
   }
-}
 
-Future<void> _openBenefitReport(
-  BuildContext context,
-  WidgetRef ref, {
-  required String benefitId,
-  required String title,
-}) async {
-  final l10n = context.l10n;
-  try {
-    final pdfBytes =
-        (await ref
-                .read(downloadMyPageBenefitReportUseCaseProvider)
-                .call(benefitId: benefitId))
-            .toList(growable: false);
-    if (!context.mounted) {
-      return;
-    }
-    if (pdfBytes.isEmpty) {
+  Future<void> _openBenefitReport(String benefitId) async {
+    if (_loadingReportId != null) return;
+    setState(() => _loadingReportId = benefitId);
+    final l10n = context.l10n;
+    try {
+      final pdfBytes =
+          (await ref
+                  .read(downloadMyPageBenefitReportUseCaseProvider)
+                  .call(benefitId: benefitId))
+              .toList(growable: false);
+      if (!mounted) {
+        return;
+      }
+      if (pdfBytes.isEmpty) {
+        AppNotice.show(
+          context,
+          message: l10n.myPageActiveFundReportUnavailableNotice,
+        );
+        return;
+      }
+
+      final tempDir = await Directory.systemTemp.createTemp(
+        'fundex_benefit_report_',
+      );
+      final file = File('${tempDir.path}/benefit_report.pdf');
+      await file.writeAsBytes(pdfBytes, flush: true);
+      if (!mounted) {
+        return;
+      }
+
+      final viewerTexts = AppPdfViewerTexts(
+        pageTitle: l10n.pdfViewerPageTitle,
+        openExternalTooltip: l10n.pdfViewerOpenExternalTooltip,
+        openExternalLabel: l10n.pdfViewerOpenExternalLabel,
+        shareTooltip: l10n.pdfViewerShareTooltip,
+        shareLabel: l10n.pdfViewerShareLabel,
+        loadingLabel: l10n.pdfViewerLoadingLabel,
+        loadFailedLabel: l10n.pdfViewerLoadFailedLabel,
+        retryLabel: l10n.fundListRetry,
+        invalidUrlNotice: l10n.pdfViewerInvalidUrlNotice,
+        openExternalFailedNotice: l10n.pdfViewerOpenExternalFailedNotice,
+        shareFailedNotice: l10n.pdfViewerShareFailedNotice,
+      );
+      await openAppPdfViewerFile(
+        context,
+        filePath: file.path,
+        title: l10n.myPageActiveFundReportTitle,
+        texts: viewerTexts,
+      );
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
       AppNotice.show(
         context,
-        message: l10n.myPageActiveFundReportUnavailableNotice,
+        message: resolveAppRequestErrorMessage(
+          error,
+          l10n.myPageActiveFundReportUnavailableNotice,
+        ),
       );
-      return;
+    } finally {
+      if (mounted) setState(() => _loadingReportId = null);
     }
-
-    final tempDir = await Directory.systemTemp.createTemp(
-      'fundex_benefit_report_',
-    );
-    final file = File('${tempDir.path}/benefit_report.pdf');
-    await file.writeAsBytes(pdfBytes, flush: true);
-    if (!context.mounted) {
-      return;
-    }
-
-    final viewerTexts = AppPdfViewerTexts(
-      pageTitle: l10n.pdfViewerPageTitle,
-      openExternalTooltip: l10n.pdfViewerOpenExternalTooltip,
-      openExternalLabel: l10n.pdfViewerOpenExternalLabel,
-      shareTooltip: l10n.pdfViewerShareTooltip,
-      shareLabel: l10n.pdfViewerShareLabel,
-      loadingLabel: l10n.pdfViewerLoadingLabel,
-      loadFailedLabel: l10n.pdfViewerLoadFailedLabel,
-      retryLabel: l10n.fundListRetry,
-      invalidUrlNotice: l10n.pdfViewerInvalidUrlNotice,
-      openExternalFailedNotice: l10n.pdfViewerOpenExternalFailedNotice,
-      shareFailedNotice: l10n.pdfViewerShareFailedNotice,
-    );
-    await openAppPdfViewerFile(
-      context,
-      filePath: file.path,
-      title: title,
-      texts: viewerTexts,
-    );
-  } catch (error) {
-    if (!context.mounted) {
-      return;
-    }
-    AppNotice.show(
-      context,
-      message: resolveAppRequestErrorMessage(
-        error,
-        l10n.myPageActiveFundReportUnavailableNotice,
-      ),
-    );
   }
 }
 

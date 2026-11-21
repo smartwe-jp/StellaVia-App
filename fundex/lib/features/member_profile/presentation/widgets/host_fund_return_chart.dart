@@ -178,7 +178,13 @@ class _ReturnPainter extends CustomPainter {
       } else {
         final half = math.min(slot * .33, 12.0);
         canvas.drawRect(
-          Rect.fromLTRB(pt.dx - half, y, pt.dx + half, s.height),
+          Rect.fromLTRB(
+            pt.dx - half,
+            // A positive amount at the logarithmic baseline still needs a visible bar.
+            math.min(y, s.height - 2),
+            pt.dx + half,
+            s.height,
+          ),
           paint,
         );
       }

@@ -12,22 +12,26 @@ class HotelRemainingRoomsLabel extends StatelessWidget {
     this.unit = HotelRemainingUnit.room,
     this.textAlign = TextAlign.start,
     this.showFullBadge = true,
+    this.textColor,
   });
 
   final int count;
   final bool showFullBadge;
+  final Color? textColor;
   final HotelRemainingUnit unit;
   final TextAlign textAlign;
 
   @override
   Widget build(BuildContext context) {
-    if (count == 0 && showFullBadge) return const HotelFullBadge();
+    if (count == 0 && showFullBadge) {
+      return HotelFullBadge(textColor: textColor);
+    }
     if (count < 0) return const SizedBox.shrink();
     return Text(
       _label(context),
       textAlign: textAlign,
       style: Theme.of(context).textTheme.labelMedium?.copyWith(
-        color: HotelVacancyTheme.textColor(context, count),
+        color: textColor ?? HotelVacancyTheme.textColor(context, count),
         fontWeight: FontWeight.w900,
       ),
     );
@@ -46,7 +50,9 @@ class HotelRemainingRoomsLabel extends StatelessWidget {
 }
 
 class HotelFullBadge extends StatelessWidget {
-  const HotelFullBadge({super.key});
+  const HotelFullBadge({super.key, this.textColor});
+
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) => DecoratedBox(
@@ -59,7 +65,7 @@ class HotelFullBadge extends StatelessWidget {
       child: Text(
         context.l10n.hotelDetailNoVacancy,
         style: context.appTextTheme.chip.copyWith(
-          color: context.appColors.primary,
+          color: textColor ?? context.appColors.primary,
         ),
       ),
     ),

@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../investment/domain/entities/fund_project.dart';
-import '../../domain/entities/wallet_bank_account_info.dart';
 import '../providers/wallet_providers.dart';
 import '../support/wallet_deposit_copy_support.dart';
 import 'wallet_deposit_transfer_notice.dart';
@@ -79,7 +78,7 @@ class ProjectDepositBankCard extends ConsumerWidget {
       return const Center(child: CircularProgressIndicator());
     }
     final account = result.asData?.value;
-    final dedicated = _usableDedicatedAccount(account);
+    final dedicated = account?.hasDepositDetails == true;
     final domestic = dedicated
         ? FundProjectLiveJapanBank(
             bankName: account!.bankName,
@@ -101,15 +100,6 @@ class ProjectDepositBankCard extends ConsumerWidget {
     );
   }
 }
-
-bool _usableDedicatedAccount(WalletBankAccountInfo? account) =>
-    account != null &&
-    [
-      account.bankName,
-      account.branchName,
-      account.accountNumber,
-      account.accountHolder,
-    ].every((field) => field.trim().isNotEmpty && field.trim() != '--');
 
 class _DepositBankCard extends StatefulWidget {
   const _DepositBankCard({

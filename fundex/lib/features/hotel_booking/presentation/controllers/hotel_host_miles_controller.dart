@@ -33,18 +33,21 @@ class HotelHostMilesController extends StateNotifier<HotelHostMilesState> {
     required this.membership,
     required this.languageCode,
     required this.canLoadMembership,
+    this.initialCriteria,
     DateTime? now,
   }) : _now = now,
        super(
          HotelHostMilesState(
            hotels: HotelBookingState(
-             criteria: HotelSearchCriteria.initial(
-               now ?? DateTime.now(),
-             ).copyWith(stayBenefit: true),
+             criteria:
+                 (initialCriteria ??
+                         HotelSearchCriteria.initial(now ?? DateTime.now()))
+                     .copyWith(stayBenefit: true),
              isLoading: true,
            ),
          ),
        );
+  final HotelSearchCriteria? initialCriteria;
   final DateTime? _now;
   final SearchHotelsUseCase search;
   final LoadHostMilesHomeUseCase membership;
@@ -52,6 +55,15 @@ class HotelHostMilesController extends StateNotifier<HotelHostMilesState> {
   final bool canLoadMembership;
   int _generation = 0;
   Future<void>? _summaryPending;
+  Future<void> initialize() async {
+    final seed = initialCriteria;
+    if (seed == null) return refresh();
+    // Resolve the booking window before searching with the transferred dates.
+    final generation = _generation;
+    await refreshMembership();
+    if (mounted && generation == _generation) await applyCriteria(seed);
+  }
+
   Future<void> refresh() async {
     await Future.wait([refreshMembership(), refreshHotels()]);
   }

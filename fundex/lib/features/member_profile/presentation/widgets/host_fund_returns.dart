@@ -72,6 +72,12 @@ class _Forecast extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = context.l10n,
         locale = Localizations.localeOf(context).toLanguageTag();
+    final useYen = months.any(
+      (month) => month.benefit > 0 && month.benefit < 1000,
+    );
+    final dividendUnit = useYen
+        ? l.hostManageDividendYenUnit
+        : l.myPageChartDividendUnit;
     final labels = months
         .map((m) => DateFormat('yyyy.MM').format(m.month))
         .toList();
@@ -117,7 +123,7 @@ class _Forecast extends StatelessWidget {
                 Text(
                   principal
                       ? l.hostManageFundExpectPrincipalUnit
-                      : l.myPageChartDividendUnit,
+                      : dividendUnit,
                   style: context.appTextTheme.caption,
                 ),
                 HostFundReturnChart(
@@ -126,7 +132,7 @@ class _Forecast extends StatelessWidget {
                   amounts: [
                     for (final m in months) principal ? m.principal : m.benefit,
                   ],
-                  unitScale: principal ? 10000 : 1000,
+                  unitScale: principal ? 10000 : (useYen ? 1 : 1000),
                   color: principal
                       ? context.appColors.brandPrimaryBright
                       : context.appColors.brandPrimary,

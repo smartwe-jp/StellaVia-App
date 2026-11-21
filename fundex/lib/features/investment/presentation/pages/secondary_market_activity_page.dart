@@ -54,14 +54,16 @@ class _SectionsState extends ConsumerState<_Sections> {
   late TradeList history = widget.purchases
       ? TradeList.purchaseHistory
       : TradeList.salesHistory;
+  TradeList buying = TradeList.offerings;
   int page = 1;
   TradeList get list => switch (section) {
     _Section.sell => TradeList.sell,
-    _Section.buy => TradeList.buy,
+    _Section.buy => buying,
     _Section.history => history,
   };
   Future<void> refresh() async {
     final provider = tradePageProvider((list: list, page: page));
+    if (list == TradeList.offerings) ref.invalidate(tradeOfferingsProvider);
     if (list == TradeList.sell) ref.invalidate(secondaryMarketHoldingsProvider);
     await ref
         .refresh(provider.future)
@@ -93,7 +95,7 @@ class _SectionsState extends ConsumerState<_Sections> {
               page = 1;
             }),
           ),
-          if (section == _Section.history)
+          if (section != _Section.sell)
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
               child: AppDualSegmentedControl<TradeList>(
@@ -107,17 +109,29 @@ class _SectionsState extends ConsumerState<_Sections> {
                   ),
                   selectedBackgroundColor: context.appColors.surface,
                 ),
-                value: history,
+                value: list,
                 first: AppDualSegmentItem(
-                  value: TradeList.salesHistory,
-                  label: l.tradeSubSell,
+                  value: section == _Section.buy
+                      ? TradeList.offerings
+                      : TradeList.salesHistory,
+                  label: section == _Section.buy
+                      ? l.tradeNewOfferings
+                      : l.tradeSubSell,
                 ),
                 second: AppDualSegmentItem(
-                  value: TradeList.purchaseHistory,
-                  label: l.tradeSubBuy,
+                  value: section == _Section.buy
+                      ? TradeList.buy
+                      : TradeList.purchaseHistory,
+                  label: section == _Section.buy
+                      ? l.tradeMemberTransfers
+                      : l.tradeSubBuy,
                 ),
                 onChanged: (value) => setState(() {
-                  history = value;
+                  if (section == _Section.buy) {
+                    buying = value;
+                  } else {
+                    history = value;
+                  }
                   page = 1;
                 }),
               ),

@@ -13,6 +13,7 @@ import 'package:fundex/features/host_miles/domain/entities/host_miles_models.dar
 import 'package:fundex/features/host_miles/domain/repositories/host_miles_repository.dart';
 import 'package:fundex/features/host_miles/presentation/providers/host_miles_providers.dart';
 import 'package:fundex/features/home/presentation/support/home_rank_content.dart';
+import 'package:fundex/features/home/presentation/widgets/home_rank_details_section.dart';
 import 'package:fundex/features/auth/presentation/providers/auth_providers.dart';
 import 'package:fundex/features/home/presentation/pages/home_rank_details_page.dart';
 import 'package:fundex/features/home/presentation/pages/home_service_introduction_page.dart';
@@ -167,7 +168,10 @@ void main() {
       await tester.pumpWidget(app(router, repository: repo));
       await tester.pumpAndSettle();
       expect(find.text('MASTER'), findsNothing);
-      final retry = find.text('再試行');
+      final retry = find.descendant(
+        of: find.byType(HomeRankDetailsSection),
+        matching: find.text('再試行'),
+      );
       await tester.ensureVisible(retry);
       repo.fail = false;
       repo.rules = [

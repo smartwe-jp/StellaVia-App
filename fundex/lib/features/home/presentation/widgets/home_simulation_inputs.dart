@@ -127,17 +127,16 @@ class _SimulationSlider extends StatelessWidget {
             child: Text(label, style: HomeSimulationTheme.inputLabel(context)),
           ),
           const SizedBox(width: 8),
-          if (id == 'amount')
-            SimulationAmountField(
-              value: value.toInt(),
-              display: display,
-              label: label,
-              min: min.toInt(),
-              max: max.toInt(),
-              onChanged: onChanged,
-            )
-          else
-            Text(display, style: HomeSimulationTheme.inputNumber(context)),
+          SimulationAmountField(
+            key: ValueKey('simulation-$id-input'),
+            tenths: id == 'rate',
+            value: value.toInt(),
+            display: display,
+            label: label,
+            min: min.toInt(),
+            max: max.toInt(),
+            onChanged: onChanged,
+          ),
           Text(unit, style: HomeSimulationTheme.inputUnit(context)),
         ],
       ),

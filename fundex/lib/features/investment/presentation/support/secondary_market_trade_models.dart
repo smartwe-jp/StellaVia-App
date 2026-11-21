@@ -1,4 +1,4 @@
-import '../../../member_profile/domain/entities/mypage_models.dart';
+import '../../domain/entities/fund_project.dart';
 
 class SecondaryMarketBuySeed {
   const SecondaryMarketBuySeed({
@@ -9,7 +9,6 @@ class SecondaryMarketBuySeed {
     required this.unitPrice,
     this.investorCode,
     this.earningRatio,
-    this.pdfDocuments = const <MyPagePdfDocument>[],
   });
 
   final String orderId;
@@ -19,7 +18,6 @@ class SecondaryMarketBuySeed {
   final int unitPrice;
   final String? investorCode;
   final double? earningRatio;
-  final List<MyPagePdfDocument> pdfDocuments;
 }
 
 class SecondaryMarketBuyDraft {
@@ -32,8 +30,7 @@ class SecondaryMarketBuyDraft {
     required this.unitPrice,
     this.investorCode,
     this.earningRatio,
-    this.agreed = false,
-    this.sampleDocumentUrl,
+    required this.confirmedDocuments,
   });
 
   final String orderId;
@@ -44,8 +41,43 @@ class SecondaryMarketBuyDraft {
   final int unitPrice;
   final String? investorCode;
   final double? earningRatio;
-  final bool agreed;
-  final String? sampleDocumentUrl;
+  final List<TradeDocument> confirmedDocuments;
 
   num get totalAmount => buyNum * unitPrice;
 }
+
+typedef TradeDocument = ({int type, String url, String name, String version});
+
+const tradeDocumentTypes = [1, 3, 2];
+
+List<TradeDocument> requiredTradeDocuments(
+  List<FundProjectPdfDocument> groups,
+) {
+  final documents = <TradeDocument>{};
+  for (final type in tradeDocumentTypes) {
+    for (final group in groups.where((group) => group.type == type)) {
+      for (final file in group.urls) {
+        final url = file.url?.trim() ?? '';
+        final uri = Uri.tryParse(url);
+        if (uri == null ||
+            !uri.hasAuthority ||
+            uri.host.isEmpty ||
+            !(uri.isScheme('https') || uri.isScheme('http'))) {
+          continue;
+        }
+        documents.add((
+          type: type,
+          url: url,
+          name: file.name?.trim() ?? '',
+          version: file.createTime ?? '',
+        ));
+      }
+    }
+  }
+  return documents.toList(growable: false);
+}
+
+bool hasAllTradeDocumentTypes(List<TradeDocument> documents) =>
+    tradeDocumentTypes.every(
+      (type) => documents.any((doc) => doc.type == type),
+    );

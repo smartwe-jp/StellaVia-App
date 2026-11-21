@@ -65,6 +65,9 @@ class _MemberProfileEditFlowPageState
   late final TextEditingController _familyNameRomanController;
   late final TextEditingController _givenNameRomanController;
   late final TextEditingController _birthdayController;
+  final _nationalityController = TextEditingController();
+  bool _skipBankAccount = false;
+  bool _facePassed = false;
   late final TextEditingController _taxCountryController;
   late final TextEditingController _postalCodeController;
   late final TextEditingController _prefectureController;
@@ -83,6 +86,8 @@ class _MemberProfileEditFlowPageState
   MemberProfileEditStep _currentStep = MemberProfileEditStep.basicInfo;
   DateTime? _birthday;
   int? _sex;
+  String? _industry;
+  final _employerController = TextEditingController();
   String? _occupation;
   String? _annualIncome;
   String? _financialAssets;
@@ -115,9 +120,7 @@ class _MemberProfileEditFlowPageState
   void initState() {
     super.initState();
     if (_isSingleSectionMode) {
-      _currentStep = _normalizeStepForFlow(
-        widget.initialStep ?? MemberProfileEditStep.basicInfo,
-      );
+      _currentStep = widget.initialStep ?? MemberProfileEditStep.basicInfo;
     }
     _familyNameController = TextEditingController();
     _givenNameController = TextEditingController();
@@ -154,9 +157,11 @@ class _MemberProfileEditFlowPageState
     _familyNameRomanController.dispose();
     _givenNameRomanController.dispose();
     _birthdayController.dispose();
+    _nationalityController.dispose();
     _taxCountryController.dispose();
     _postalCodeController.dispose();
     _prefectureController.dispose();
+    _employerController.dispose();
     _cityAddressController.dispose();
     _bankNameController.dispose();
     _branchNameController.dispose();
@@ -192,9 +197,11 @@ class _MemberProfileEditFlowPageState
         _familyNameRomanController,
         _givenNameRomanController,
         _birthdayController,
+        _nationalityController,
         _taxCountryController,
         _postalCodeController,
         _prefectureController,
+        _employerController,
         _cityAddressController,
         _bankNameController,
         _branchNameController,
@@ -274,6 +281,16 @@ class _MemberProfileEditFlowPageState
       final MemberProfileDetails? savedProfile = shouldImportDraft
           ? onboardingDraft
           : officialProfile;
+      final resumeAfterFace =
+          !_isSingleSectionMode &&
+          (widget.initialStep?.index ?? savedProfile?.lastEditingStep ?? 0) >
+              MemberProfileEditStep.realPersonAuth.index;
+      if (!mounted) return;
+      if (resumeAfterFace) {
+        _facePassed = await ref
+            .read(settingsRealPersonVerifiedProvider.future)
+            .catchError((Object _) => false);
+      }
       final (String savedPrefectureFromAddress, String savedCityFromAddress) =
           _splitAddressFields(savedProfile?.address ?? '');
       final (String authPrefectureFromAddress, String authCityFromAddress) =
@@ -344,6 +361,11 @@ class _MemberProfileEditFlowPageState
             ? ''
             : _formatDate(_birthday!);
         _sex = _normalizeSex(savedProfile?.sex ?? authUser?.sex);
+        _skipBankAccount = savedProfile?.skipBankAccount == true;
+        _nationalityController.text = _firstNonEmpty([
+          savedProfile?.nationality ?? '',
+          authUser?.nationality ?? '',
+        ]);
         _taxCountryController.text = _firstNonEmpty(<String>[
           savedProfile?.taxcountry ?? '',
           authUser?.taxcountry ?? '',
@@ -353,6 +375,10 @@ class _MemberProfileEditFlowPageState
           authPrefectureFromAddress,
           _prefectureInputValue(l10n, savedProfile?.prefectureCode ?? ''),
         ]);
+        _employerController.text = savedProfile?.employer ?? '';
+        _industry = memberIndustryCodes.contains(savedProfile?.industry)
+            ? savedProfile!.industry
+            : null;
         _occupation = _emptyToNull(savedProfile?.occupationCode);
         _annualIncome = _emptyToNull(savedProfile?.annualIncomeCode);
         _financialAssets = _emptyToNull(savedProfile?.financialAssetsCode);
@@ -446,16 +472,26 @@ class _MemberProfileEditFlowPageState
               0,
               MemberProfileEditStep.values.length - 1,
             )];
-        _currentStep = _normalizeStepForFlow(
-          widget.initialStep ??
-              (_isSingleSectionMode
-                  ? MemberProfileEditStep.basicInfo
-                  : resolvedStep),
-        );
+        _currentStep =
+            widget.initialStep ??
+            (_isSingleSectionMode
+                ? MemberProfileEditStep.basicInfo
+                : resolvedStep);
         if (!_isSingleSectionMode &&
             _currentStep.index > MemberProfileEditStep.ekyc.index &&
             !_isEkycStepReady) {
           _currentStep = MemberProfileEditStep.ekyc;
+        }
+        if (!_isSingleSectionMode &&
+            _currentStep.index > MemberProfileEditStep.realPersonAuth.index &&
+            !_facePassed) {
+          _currentStep = MemberProfileEditStep.realPersonAuth;
+        }
+        if (!_isSingleSectionMode &&
+            _currentStep == MemberProfileEditStep.consent &&
+            !_skipBankAccount &&
+            !_isBankAccountStepReady) {
+          _currentStep = MemberProfileEditStep.bankAccount;
         }
         _isLoading = false;
       });
@@ -702,7 +738,29 @@ class _MemberProfileEditFlowPageState
       return;
     }
 
+    if (_currentStep == MemberProfileEditStep.bankAccount) {
+      _skipBankAccount = false;
+    }
     await _advanceToNextStep();
+  }
+
+  Future<void> _verifyFaceAndContinue() async {
+    if (_isSubmitting) return;
+    setState(() => _isSubmitting = true);
+    try {
+      if (!_facePassed) {
+        final verified = await context.push<bool>('/auth/real-person');
+        if (!mounted || verified != true) return;
+        _facePassed = true;
+      }
+      if (_isSingleSectionMode) {
+        context.pop();
+      } else {
+        await _advanceToNextStep();
+      }
+    } finally {
+      if (mounted) setState(() => _isSubmitting = false);
+    }
   }
 
   Future<void> _skipBankAccountStep() async {
@@ -712,6 +770,7 @@ class _MemberProfileEditFlowPageState
     if (_currentStep != MemberProfileEditStep.bankAccount) {
       return;
     }
+    _skipBankAccount = true;
     await _advanceToNextStep();
   }
 
@@ -723,7 +782,7 @@ class _MemberProfileEditFlowPageState
     if (!mounted) {
       return;
     }
-    final MemberProfileEditStep? previous = _previousStep(_currentStep);
+    final MemberProfileEditStep? previous = _currentStep.previous;
     if (previous == null) {
       context.pop();
       return;
@@ -736,6 +795,21 @@ class _MemberProfileEditFlowPageState
 
   Future<void> _completeFlow() async {
     if (_isSubmitting || _isUploadingPhoto) {
+      return;
+    }
+    if (!_isFilled(_nationalityController.text) ||
+        !_isFilled(_taxCountryController.text)) {
+      setState(() => _currentStep = MemberProfileEditStep.basicInfo);
+      return;
+    }
+    if (!_facePassed) {
+      setState(() => _currentStep = MemberProfileEditStep.realPersonAuth);
+      return;
+    }
+    if (!memberIndustryCodes.contains(_industry) ||
+        !_isFilled(_employerController.text)) {
+      setState(() => _currentStep = MemberProfileEditStep.suitability);
+      await _persistOnboardingDraft();
       return;
     }
     final l10n = context.l10n;
@@ -863,7 +937,7 @@ class _MemberProfileEditFlowPageState
       case MemberProfileEditStep.ekyc:
         return _isEkycStepReady;
       case MemberProfileEditStep.realPersonAuth:
-        return _isConsentStepReady;
+        return _facePassed;
       case MemberProfileEditStep.bankAccount:
         return _isBankAccountStepReady;
       case MemberProfileEditStep.consent:
@@ -894,61 +968,11 @@ class _MemberProfileEditFlowPageState
     return false;
   }
 
-  List<MemberProfileEditStep> _flowSteps() {
-    return <MemberProfileEditStep>[
-      MemberProfileEditStep.basicInfo,
-      MemberProfileEditStep.addressInfo,
-      MemberProfileEditStep.suitability,
-      MemberProfileEditStep.ekyc,
-      MemberProfileEditStep.consent,
-    ];
-  }
-
-  MemberProfileEditStep _normalizeStepForFlow(MemberProfileEditStep step) {
-    if (step == MemberProfileEditStep.realPersonAuth) {
-      return MemberProfileEditStep.consent;
-    }
-    if (_isSingleSectionMode) {
-      return step;
-    }
-    final flowSteps = _flowSteps();
-    if (flowSteps.contains(step)) {
-      return step;
-    }
-    if (step == MemberProfileEditStep.bankAccount) {
-      return MemberProfileEditStep.consent;
-    }
-    return MemberProfileEditStep.basicInfo;
-  }
-
-  MemberProfileEditStep? _nextStep(MemberProfileEditStep step) {
-    if (_isSingleSectionMode) {
-      return step.next;
-    }
-    final flowSteps = _flowSteps();
-    final currentIndex = flowSteps.indexOf(step);
-    if (currentIndex < 0 || currentIndex >= flowSteps.length - 1) {
-      return null;
-    }
-    return flowSteps[currentIndex + 1];
-  }
-
-  MemberProfileEditStep? _previousStep(MemberProfileEditStep step) {
-    if (_isSingleSectionMode) {
-      return step.previous;
-    }
-    final flowSteps = _flowSteps();
-    final currentIndex = flowSteps.indexOf(step);
-    if (currentIndex <= 0) {
-      return null;
-    }
-    return flowSteps[currentIndex - 1];
-  }
-
   bool get _isBasicInfoStepReady =>
       _isFilled(_familyNameController.text) &&
       _isFilled(_givenNameController.text) &&
       _sex != null &&
+      _isFilled(_nationalityController.text) &&
       _isFilled(_taxCountryController.text) &&
       _isFilled(_birthdayController.text);
 
@@ -958,6 +982,8 @@ class _MemberProfileEditFlowPageState
       _isFilled(_cityAddressController.text);
 
   bool get _isSuitabilityStepReady =>
+      memberIndustryCodes.contains(_industry) &&
+      _isFilled(_employerController.text) &&
       _isFilled(_occupation) &&
       _isFilled(_annualIncome) &&
       _isFilled(_financialAssets) &&
@@ -997,7 +1023,7 @@ class _MemberProfileEditFlowPageState
     });
 
     try {
-      final MemberProfileEditStep? next = _nextStep(_currentStep);
+      final MemberProfileEditStep? next = _currentStep.next;
       if (next == null) {
         return;
       }
@@ -1156,6 +1182,12 @@ class _MemberProfileEditFlowPageState
       address: composedAddress,
       birthday: _emptyToNull(_birthdayController.text),
       sex: _sex,
+      nationality: _nationalityController.text.trim(),
+      faceVerified: _facePassed,
+      skipBankAccount:
+          _skipBankAccount &&
+          !(_isSingleSectionMode &&
+              _currentStep == MemberProfileEditStep.bankAccount),
       taxcountry: _taxCountryController.text.trim(),
       zipCode: _postalCodeController.text.trim(),
       prefectureCode: prefecture,
@@ -1163,6 +1195,8 @@ class _MemberProfileEditFlowPageState
       phoneIntlCode: _phoneIntlCode,
       phone: _phone,
       email: _email,
+      employer: _employerController.text.trim(),
+      industry: _industry ?? '',
       occupationCode: _occupation ?? '',
       annualIncomeCode: _annualIncome ?? '',
       financialAssetsCode: _financialAssets ?? '',
@@ -1430,7 +1464,7 @@ class _MemberProfileEditFlowPageState
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final colors = theme.appColors;
-    final flowSteps = _flowSteps();
+    const flowSteps = MemberProfileEditStep.values;
     final currentStepIndex = flowSteps.contains(_currentStep)
         ? flowSteps.indexOf(_currentStep)
         : 0;
@@ -1534,6 +1568,7 @@ class _MemberProfileEditFlowPageState
           birthdayController: _birthdayController,
           sexValue: _sex,
           sexItems: _sexItems(context),
+          nationalityController: _nationalityController,
           taxCountryController: _taxCountryController,
           showAgeWarning: _showAgeWarning,
           primaryButtonEnabled: isActionEnabled,
@@ -1583,6 +1618,10 @@ class _MemberProfileEditFlowPageState
         );
       case MemberProfileEditStep.suitability:
         return MemberProfileSuitabilityStepPage(
+          employerController: _employerController,
+          industry: _industry,
+          onIndustryChanged: (value) =>
+              _applyUserChange(() => _industry = value),
           occupation: _occupation,
           annualIncome: _annualIncome,
           financialAssets: _financialAssets,
@@ -1698,6 +1737,22 @@ class _MemberProfileEditFlowPageState
           onNext: _isSingleSectionMode ? _saveCurrentSection : _goNextStep,
         );
       case MemberProfileEditStep.realPersonAuth:
+        return MemberProfileEditStepScaffold(
+          title: _stepTitle,
+          description: l10n.memberProfileStep5RealPersonDescription,
+          secondaryButtonLabel: secondaryButtonLabel,
+          onSecondaryPressed: onSecondaryPressed,
+          primaryButtonLabel: _facePassed
+              ? l10n.commonNext
+              : l10n.identityAuthStartAction,
+          primaryButtonEnabled: !_isSubmitting,
+          onPrimaryPressed: _verifyFaceAndContinue,
+          child: Icon(
+            Icons.face_outlined,
+            size: 64,
+            color: context.appColors.primary,
+          ),
+        );
       case MemberProfileEditStep.consent:
         final localeTag = Localizations.localeOf(context).toLanguageTag();
         final operatingCompanyContent = ref

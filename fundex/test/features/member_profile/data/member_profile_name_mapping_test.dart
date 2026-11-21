@@ -4,6 +4,32 @@ import 'package:fundex/features/member_profile/data/mappers/member_profile_curre
 import 'package:fundex/features/member_profile/domain/entities/member_profile_details.dart';
 
 void main() {
+  test(
+    'country fields round trip independently and skipped bank is omitted',
+    () {
+      final profile = MemberProfileCurrentUserPayloadMapper.toEntity({
+        'baseInfo': {'nationality': '中国', 'taxcountry': '日本'},
+      })!;
+      final request = MemberProfileApiPayloadMapper.toSaveMemberInfoRequest(
+        profile: profile.copyWith(skipBankAccount: true, bankName: 'partial'),
+      );
+      final base = request['baseInfo'] as Map<String, dynamic>;
+      expect(base['nationality'], '中国');
+      expect(base['taxcountry'], '日本');
+      expect(base.containsKey('bank'), isFalse);
+    },
+  );
+  test('saves employer and industry in their respective API sections', () {
+    final profile = MemberProfileCurrentUserPayloadMapper.toEntity({
+      'baseInfo': {'employer': 'ACME'},
+      'suitabilityInfo': {'industry': 'IT'},
+    })!;
+    final request = MemberProfileApiPayloadMapper.toSaveMemberInfoRequest(
+      profile: profile,
+    );
+    expect(request['baseInfo']['employer'], 'ACME');
+    expect(request['suitabilityRequest']['industry'], 'IT');
+  });
   group('member profile name mapping', () {
     test(
       'reads server lastNameEn as family roman name and firstNameEn as given roman name',

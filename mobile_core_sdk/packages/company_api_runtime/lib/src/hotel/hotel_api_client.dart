@@ -6,6 +6,7 @@ import 'hotel_dtos.dart';
 class HotelApiPaths {
   const HotelApiPaths._();
 
+  static const String pointsSearch = '/hotel/stella/pointsSearch';
   static const String hotelSearch = '/hotel/hotelSearch';
   static const String bookingOrder = '/booking/order';
   static const String bookingOrderSendPaymentLink =
@@ -159,6 +160,22 @@ class HotelApiClient {
   final String cardPayByIdPath;
   final String cardUnregisterByIdPath;
   final String cardRegisterPath;
+
+  Future<List<PointsHotelDto>> searchHotelsByPoints(int points) async {
+    final response = await _client.dio.post<Map<String, dynamic>>(
+      HotelApiPaths.pointsSearch,
+      data: {'points': points},
+      options: authRequired(false),
+    );
+    final payload = _envelopeCodec.toJsonMap(response.data);
+    final rows = _envelopeCodec.extractDataList(
+      payload,
+      fallbackMessage: 'Failed to load hotels for points.',
+    );
+    if (payload['data'] is! List)
+      throw const FormatException('Expected a hotel list.');
+    return rows.map(PointsHotelDto.fromJson).toList();
+  }
 
   Future<HotelSearchResultDto> searchHotels(
     HotelSearchRequestDto request,

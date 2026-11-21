@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../settings/presentation/providers/settings_content_providers.dart';
+import '../../domain/repositories/auth_repository.dart';
 import '../providers/auth_providers.dart';
 import '../support/code_send_cooldown.dart';
 import '../widgets/register_invite_code_section.dart';
@@ -163,7 +164,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     if (!await _ensureValidAccountInput()) {
       return;
     }
-    if (!mounted) {
+    if (!mounted || _isSubmitting) {
       return;
     }
 
@@ -180,6 +181,11 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             intlCode: AuthApiDefaults.defaultIntlCode,
             inviteCode: _inviteCodeController.text.trim(),
           );
+    } on RegistrationSignInRequired {
+      if (!mounted) return;
+      AppNotice.show(context, message: l10n.registerSuccessMessage);
+      context.go('/login', extra: _accountValue);
+      return;
     } catch (error) {
       if (!mounted) {
         return;
@@ -202,17 +208,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       return;
     }
 
-    setState(() {
-      _isSubmitting = false;
-    });
-    await ref
-        .read(authLocalDataSourceProvider)
-        .saveLastSignedOutAccount(_accountValue);
-    if (!mounted) {
-      return;
-    }
-    AppNotice.show(context, message: l10n.registerSuccessMessage);
-    context.go('/login', extra: _accountValue);
+    final router = GoRouter.of(context);
+    ref.read(authSessionProvider.notifier).markAuthenticated();
+    router.go('/home/verification');
   }
 
   @override
@@ -225,11 +223,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         .watch(settingsOperatingCompanyContentProvider(localeTag))
         .asData
         ?.value;
-    final travelTheme = theme.extension<AppFTKTheme>();
-    final navBorderColor =
-        travelTheme?.cardBorderColor.withValues(alpha: 0.9) ??
-        theme.dividerColor;
-
     return Scaffold(
       key: const Key('register_page'),
       backgroundColor: theme.colorScheme.surface,

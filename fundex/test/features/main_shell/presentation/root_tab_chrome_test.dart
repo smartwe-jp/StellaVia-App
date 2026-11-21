@@ -39,6 +39,7 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
       addTearDown(tester.view.resetPadding);
+      var hotelLoads = 0;
       final container = ProviderContainer(
         overrides: [
           homeMilesRulesProvider.overrideWith(
@@ -53,12 +54,13 @@ void main() {
             ),
           ),
           fundProjectListProvider.overrideWith((ref) async => []),
-          homeFeaturedHotelsProvider.overrideWith(
-            (ref) async => HomeFeaturedHotels(
+          homeFeaturedHotelsProvider.overrideWith((ref) async {
+            hotelLoads++;
+            return HomeFeaturedHotels(
               criteria: HotelSearchCriteria.initial(DateTime(2026, 10, 30)),
               hotels: [],
-            ),
-          ),
+            );
+          }),
           hotelManagementIdentityProvider.overrideWith((ref) => null),
           hotelBuildingFiltersProvider.overrideWith((ref) async => []),
           hotelBookingControllerProvider.overrideWith(
@@ -162,6 +164,13 @@ void main() {
         );
         await tester.pumpAndSettle();
         expect(container.read(mainShellChromeRevealProvider), 1);
+        for (var i = 0; i < 2; i++) {
+          scroll.jumpTo(scroll.position.maxScrollExtent);
+          await tester.pumpAndSettle();
+          scroll.jumpTo(0);
+          await tester.pumpAndSettle();
+        }
+        expect(hotelLoads, 1);
         expect(tester.takeException(), isNull);
       }
       await tester.pumpWidget(const SizedBox());

@@ -71,6 +71,20 @@ class HotelSearchCriteria {
 
 enum HotelPriceSort { none, ascending, descending }
 
+class PointsHotel {
+  const PointsHotel({
+    required this.id,
+    required this.name,
+    required this.nightlyPoints,
+    required this.buildingCode,
+    required this.referenceCheckIn,
+    required this.referenceCheckOut,
+  });
+  final String id, name, buildingCode;
+  final int nightlyPoints;
+  final DateTime? referenceCheckIn, referenceCheckOut;
+}
+
 class HotelSearchResult {
   const HotelSearchResult({required this.hotels, required this.totalCount});
 
@@ -325,7 +339,6 @@ class HotelDetail {
     required this.images,
     required this.roomPlans,
     required this.tags,
-    required this.priceCalendarByDate,
   });
 
   final String id;
@@ -352,7 +365,6 @@ class HotelDetail {
   final List<HotelDetailImage> images;
   final List<HotelRoomPlan> roomPlans;
   final List<String> tags;
-  final Map<String, Object?> priceCalendarByDate;
 
   num? get lowestRoomPrice {
     final prices = roomPlans

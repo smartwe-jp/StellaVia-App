@@ -15,6 +15,7 @@ class HotelMilesSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = HostMilesRankTheme.of(rank);
+    final textTheme = Theme.of(context).textTheme;
     return AppCard(
       padding: EdgeInsets.zero,
       variant: AppCardVariant.filled,
@@ -26,11 +27,23 @@ class HotelMilesSummary extends StatelessWidget {
           Container(
             decoration: palette.headerDecoration,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: Text(
-              rank,
-              style: Theme.of(
-                context,
-              ).textTheme.labelSmall?.copyWith(color: palette.headerInk),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.l10n.homeRankLabel,
+                  style: textTheme.labelSmall?.copyWith(
+                    color: palette.headerInk,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  rank,
+                  style: textTheme.titleLarge?.copyWith(
+                    color: palette.headerInk,
+                  ),
+                ),
+              ],
             ),
           ),
           Padding(

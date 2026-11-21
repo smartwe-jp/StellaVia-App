@@ -40,6 +40,16 @@ class _Project implements FetchFundProjectDetailUseCase {
     return FundProject(
       id: id,
       projectName: 'Fund',
+      notLiveJapanBank: id == 'missing'
+          ? null
+          : const FundProjectLiveJapanBank(
+              bankName: 'International bank',
+              bankNumber: '98765',
+              bankAccountSwiftCode: 'SWIFT',
+              branchBankAddress: 'Tokyo',
+              bankCountry: 'JP',
+              bankAccountOwnerAddress: 'Osaka',
+            ),
       liveJapanBank: const FundProjectLiveJapanBank(
         bankName: 'Project bank',
         bankNumber: '654321',
@@ -51,7 +61,14 @@ class _Project implements FetchFundProjectDetailUseCase {
 class _Wallet implements WalletRepository {
   WalletBankAccountInfo? account;
   @override
-  Future<WalletBankAccountInfo?> fetchBankAccountInfo() async => account;
+  Future<WalletBankAccountInfo?> fetchBankAccountInfo() async {
+    requests++;
+    if (fail) throw StateError('offline');
+    return account;
+  }
+
+  int requests = 0;
+  bool fail = false;
   @override
   dynamic noSuchMethod(Invocation i) => super.noSuchMethod(i);
 }
@@ -150,6 +167,13 @@ class _Assets implements AssetStatisticsRepository {
       expectBenefitList: [
         AssetExpectedBenefit(yearMonth: month, expectBenefit: 1000),
         AssetExpectedBenefit(yearMonth: month, expectBenefit: 2000),
+        AssetExpectedBenefit(
+          yearMonth: DateTime(
+            DateTime.now().year,
+            DateTime.now().month + 15,
+          ).toIso8601String().substring(0, 7),
+          expectBenefit: 1,
+        ),
       ],
       expectPrincipalList: [
         AssetExpectedPrincipal(yearMonth: month, expectPrincipal: 100000),
@@ -204,6 +228,9 @@ void main() {
       final wallet = _Wallet(), project = _Project();
       final container = ProviderContainer(
         overrides: [
+          currentAuthUserProvider.overrideWith(
+            (_) async => const AuthUser(username: 'test', liveJp: 1),
+          ),
           myPageMembershipIdentityProvider.overrideWithValue(('1', 1, 'test')),
           walletRepositoryProvider.overrideWithValue(wallet),
           fetchFundProjectDetailUseCaseProvider.overrideWithValue(project),
@@ -219,15 +246,69 @@ void main() {
       );
       final dedicated = await container.read(hostFundBankProvider('a').future);
       expect(dedicated.bank?.bankName, 'Dedicated');
-      expect(dedicated.projectAccount, false);
+      expect(dedicated.source, HostFundBankSource.pool);
       expect(project.requests, isEmpty);
       wallet.account = null;
       final fallback = await container.read(hostFundBankProvider('b').future);
       expect(fallback.bank?.accountNumber, '654321');
-      expect(fallback.projectAccount, true);
-      expect(project.requests, ['b']);
+      expect(fallback.source, HostFundBankSource.domesticProject);
+      wallet.account = const WalletBankAccountInfo(
+        bankName: 'Partial',
+        branchName: '--',
+        accountNumber: '111',
+        accountType: '',
+        accountHolder: 'Test',
+      );
+      expect(
+        (await container.read(hostFundBankProvider('c').future)).bank?.bankName,
+        'Project bank',
+      );
+      wallet.fail = true;
+      expect(
+        (await container.read(hostFundBankProvider('d').future)).source,
+        HostFundBankSource.domesticProject,
+      );
+      expect(project.requests, ['b', 'c', 'd']);
     },
   );
+  for (final residency in [0, null]) {
+    test(
+      'residency $residency never requests the pool or falls back to a domestic account',
+      () async {
+        final wallet = _Wallet(), project = _Project();
+        final container = ProviderContainer(
+          overrides: [
+            myPageMembershipIdentityProvider.overrideWithValue((
+              '1',
+              1,
+              'test',
+            )),
+            currentAuthUserProvider.overrideWith(
+              (_) async => AuthUser(username: 'test', liveJp: residency),
+            ),
+            walletRepositoryProvider.overrideWithValue(wallet),
+            fetchFundProjectDetailUseCaseProvider.overrideWithValue(project),
+          ],
+        );
+        addTearDown(container.dispose);
+        final result = await container.read(hostFundBankProvider('a').future);
+        expect(
+          result.source,
+          residency == 0
+              ? HostFundBankSource.overseasProject
+              : HostFundBankSource.unknownResidency,
+        );
+        expect(result.bank?.swiftCode, residency == 0 ? 'SWIFT' : null);
+        expect(result.bank?.branchAddress, residency == 0 ? 'Tokyo' : null);
+        expect(
+          (await container.read(hostFundBankProvider('missing').future)).bank,
+          isNull,
+        );
+        expect(project.requests, residency == 0 ? ['a', 'missing'] : isEmpty);
+        expect(wallet.requests, 0);
+      },
+    );
+  }
   testWidgets(
     'My Page shortcut opens all six fund sections with independent data and actions',
     (tester) async {
@@ -285,7 +366,7 @@ void main() {
             memberBasicProfileProvider.overrideWithValue(null),
             hostFundBankProvider('p').overrideWith(
               (ref) async => (
-                projectAccount: false,
+                source: HostFundBankSource.pool,
                 bank: const WalletBankAccountInfo(
                   bankName: 'テスト銀行',
                   branchName: '京都',
@@ -372,9 +453,22 @@ void main() {
       await tap('償還・配当予定');
       expect(find.text('103,000 円'), findsOneWidget);
       expect(find.byType(HostFundReturnChart), findsNWidgets(2));
+      expect(
+        tester
+            .widget<HostFundReturnChart>(find.byType(HostFundReturnChart).first)
+            .unitScale,
+        1000,
+      );
       await preview('forecast');
       await tap('未来1年間');
       await tap('未来3年間');
+      expect(find.text('(単位: 円)'), findsOneWidget);
+      expect(
+        tester
+            .widget<HostFundReturnChart>(find.byType(HostFundReturnChart).first)
+            .unitScale,
+        1,
+      );
       final now = DateTime.now();
       expect(assets.endMonth, DateTime(now.year, now.month + 37));
       await tap('配当実績');

@@ -28,11 +28,15 @@ class HotelHomeHeader extends StatelessWidget {
             const SizedBox(height: 18),
             AppCard(
               key: const Key('hotel_host_miles_entry'),
+              backgroundColor: context.appColors.primarySubtle,
               borderRadius: BorderRadius.circular(20),
               borderColor: context.appColors.primary,
               borderWidth: 1.5,
               padding: const EdgeInsets.all(14),
-              onTap: () => context.push('/hotel-booking/host-miles'),
+              onTap: () => context.push(
+                '/hotel-booking/host-miles',
+                extra: state.criteria,
+              ),
               child: Row(
                 children: [
                   Expanded(
@@ -56,7 +60,13 @@ class HotelHomeHeader extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Icon(Icons.chevron_right, color: context.appColors.primary),
+                  const SizedBox(width: 12),
+                  CircleAvatar(
+                    radius: 16,
+                    backgroundColor: context.appColors.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    child: const Icon(Icons.chevron_right, size: 22),
+                  ),
                 ],
               ),
             ),

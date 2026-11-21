@@ -1,5 +1,6 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import '../support/hotel_detail_display.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
@@ -488,14 +489,11 @@ String _formatBed(BuildContext context, HotelRoomBed bed) {
     bed.quantity ?? 1,
     unit,
   );
-  final width = _normalizeBedWidth(bed.width);
+  final width = hotelBedWidthLabel(context, bed.width);
   if (width.isEmpty) {
     return summary;
   }
-  return context.l10n.hotelRoomBedSummaryWithWidth(
-    summary,
-    context.l10n.hotelRoomBedWidth(width),
-  );
+  return context.l10n.hotelRoomBedSummaryWithWidth(summary, width);
 }
 
 String _fallbackCategoryName(BuildContext context, String code) {
@@ -532,14 +530,6 @@ String _plainTextFromHtml(String raw) {
       .map((line) => line.trim())
       .where((line) => line.isNotEmpty)
       .join('\n');
-}
-
-String _normalizeBedWidth(String raw) {
-  return raw
-      .trim()
-      .replaceAll(RegExp(r'cm$', caseSensitive: false), '')
-      .replaceAll(RegExp(r'^(幅|宽|寬)'), '')
-      .trim();
 }
 
 bool _isFuton(String name) {

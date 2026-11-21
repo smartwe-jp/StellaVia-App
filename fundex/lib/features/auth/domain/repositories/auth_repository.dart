@@ -1,5 +1,9 @@
 import '../entities/auth_session.dart';
 
+class RegistrationSignInRequired implements Exception {
+  const RegistrationSignInRequired();
+}
+
 abstract class AuthRepository {
   Future<void> sendLoginCode({required String account, String? intlCode});
   Future<void> sendRegisterCode({

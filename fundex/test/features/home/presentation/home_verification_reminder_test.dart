@@ -160,7 +160,8 @@ void main() {
         expect(router.state.matchedLocation, '/home');
         return;
       }
-      expect(find.byType(CupertinoAlertDialog), findsOneWidget);
+      expect(find.byType(CupertinoAlertDialog), findsNothing);
+      expect(find.text(l.investorTypeTitle), findsOneWidget);
       expect(find.text(l.personalInvestor), findsOneWidget);
       expect(find.text(l.corporateInvestor), findsOneWidget);
       if (action == 'changed') {
@@ -169,13 +170,17 @@ void main() {
           status: 'SUBMITTED',
         );
       }
-      await t.tap(
-        find.text(switch (action) {
-          'cancel' => l.commonCancel,
-          'corporate' => l.corporateInvestor,
-          _ => l.personalInvestor,
-        }),
-      );
+      if (action == 'cancel') {
+        await t.tap(find.byTooltip(l.commonClose));
+      } else {
+        await t.tap(
+          find.text(
+            action == 'corporate' ? l.corporateInvestor : l.personalInvestor,
+          ),
+        );
+        await t.pumpAndSettle();
+        await t.tap(find.text(l.profileNextStep));
+      }
       await t.pumpAndSettle();
       expect(find.byType(CupertinoAlertDialog), findsNothing);
       expect(
@@ -204,6 +209,8 @@ void main() {
         await t.tap(find.text(l.homeReminderProfileTitle));
         await t.pumpAndSettle();
         await t.tap(find.text(l.corporateInvestor));
+        await t.pumpAndSettle();
+        await t.tap(find.text(l.profileNextStep));
         await t.pumpAndSettle();
         await t.ensureVisible(find.text(l.corpFormStart));
         await t.tap(find.text(l.corpFormStart));

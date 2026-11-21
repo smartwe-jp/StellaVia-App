@@ -16,6 +16,10 @@ import 'package:fundex/features/auth/data/models/auth_user_dto.dart';
 import 'package:fundex/features/auth/domain/entities/auth_session.dart';
 import 'package:fundex/features/auth/domain/repositories/auth_repository.dart';
 import 'package:fundex/features/auth/presentation/providers/auth_providers.dart';
+import 'package:fundex/features/member_profile/domain/repositories/verification_entry_repository.dart';
+import 'package:fundex/features/member_profile/presentation/providers/verification_entry_provider.dart';
+import 'package:fundex/features/member_profile/presentation/widgets/verification_entry_content.dart';
+import 'package:fundex/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 class _NoopAppLogger implements AppLogger {
@@ -191,13 +195,18 @@ Future<void> _pumpApp(WidgetTester tester) async {
           _InMemoryAuthLocalDataSource(),
         ),
         authRepositoryProvider.overrideWithValue(_FakeAuthRepository()),
+        verificationEntryProvider.overrideWith(
+          (_) async => const VerificationEntry(
+            VerificationEntryKind.choice,
+            personalStatus: 1,
+          ),
+        ),
       ],
       child: const MemberTemplateApp(),
     ),
   );
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 2600));
-  await tester.pumpAndSettle();
 }
 
 Future<void> _openLoginPage(WidgetTester tester) async {
@@ -236,6 +245,52 @@ void main() {
       expect(find.byKey(const Key('login_page')), findsOneWidget);
     });
 
+    testWidgets('registration opens investor selection over home', (
+      tester,
+    ) async {
+      await _pumpApp(tester);
+      await tester.binding.setSurfaceSize(const Size(480, 1600));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      await _openRoute(tester, '/register');
+      final page = find.byKey(const Key('register_page'));
+      final l = AppLocalizations.of(tester.element(page));
+      await tester.enterText(
+        find.byKey(const Key('register_account_input')),
+        'new@example.com',
+      );
+      await tester.enterText(
+        find.byKey(const Key('register_code_input')),
+        '123456',
+      );
+      for (final text in [
+        l.registerAcceptPolicy,
+        l.registerElectronicDeliveryDocumentTitle,
+        l.registerAntiSocialDocumentTitle,
+        l.registerPersonalInformationDocumentTitle,
+      ]) {
+        await tester.ensureVisible(find.text(text));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(text));
+        await tester.pump();
+      }
+      final submit = find.byKey(const Key('register_submit_button'));
+      await tester.ensureVisible(submit);
+      await tester.tap(submit);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump();
+      final choice = tester.element(find.byType(InvestorChoice));
+      expect(find.text(l.personalInvestor), findsWidgets);
+      expect(find.text(l.corporateInvestor), findsWidgets);
+      final router = GoRouter.of(choice);
+      expect(router.state.uri.path, '/home/verification');
+      router.pop();
+      await tester.pump();
+      expect(router.routerDelegate.currentConfiguration.uri.path, '/home');
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump(const Duration(seconds: 3));
+    });
+
     testWidgets('opens forgot password route and returns to login', (
       tester,
     ) async {
@@ -249,6 +304,7 @@ void main() {
       await tester.tap(find.byKey(const Key('forgot_back_login_button')));
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('login_page')), findsOneWidget);
+      await tester.pump(const Duration(seconds: 3));
     });
 
     testWidgets('refreshes login account when route extra changes', (

@@ -66,6 +66,7 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
             ),
           )
         : 0;
+    final featuredHotels = ref.watch(homeFeaturedHotelsProvider);
     final asyncProjects = ref.watch(fundProjectListProvider);
     final projects = asyncProjects.valueOrNull ?? const <FundProject>[];
     final featuredProjects = projects.take(4).toList(growable: false);
@@ -124,7 +125,8 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                 onRefresh: _refreshHomeOverviewTab,
                 scrollController: _scrollController,
                 child: RefreshIndicator(
-                  onRefresh: () => _refreshHomeOverviewTab(ref),
+                  onRefresh: () =>
+                      _refreshHomeOverviewTab(ref, refreshHotels: true),
                   child: ListView(
                     key: const Key('home_tab_content'),
                     controller: _scrollController,
@@ -201,7 +203,7 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                         ),
                         const SizedBox(height: 20),
                       ],
-                      const HomeMilesHotelsSection(),
+                      HomeMilesHotelsSection(state: featuredHotels),
                       const SizedBox(height: 20),
                     ],
                   ),
@@ -228,7 +230,10 @@ bool get _isApplePlatform =>
     (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS);
 
-Future<void> _refreshHomeOverviewTab(WidgetRef ref) async {
+Future<void> _refreshHomeOverviewTab(
+  WidgetRef ref, {
+  bool refreshHotels = false,
+}) async {
   if (shouldSkipAppNetworkRefresh(ref)) return;
   ref.invalidate(homeVerificationReminderProvider);
   if (ref.read(isAuthenticatedProvider).asData?.value == true) {
@@ -241,9 +246,10 @@ Future<void> _refreshHomeOverviewTab(WidgetRef ref) async {
     _refreshHomeMiles(ref),
     refreshRootTabSharedData(ref),
     ref.refresh(fundProjectListProvider.future).then((_) {}),
-    ref
-        .refresh(homeFeaturedHotelsProvider.future)
-        .then<void>((_) {}, onError: (Object _) {}),
+    if (refreshHotels)
+      ref
+          .refresh(homeFeaturedHotelsProvider.future)
+          .then<void>((_) {}, onError: (Object _) {}),
     ref.refresh(memberProfileDetailsProvider.future).then((_) {}),
   ]);
 }

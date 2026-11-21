@@ -33,10 +33,34 @@ class TradeManagementList extends ConsumerWidget {
           AppCard(
             child: Text(switch (list) {
               TradeList.sell => l.tradeEmptySell,
-              TradeList.buy => l.tradeEmptyBuy,
+              TradeList.offerings || TradeList.buy => l.tradeEmptyBuy,
               TradeList.salesHistory => l.tradeEmptyHistorySell,
               TradeList.purchaseHistory => l.tradeEmptyHistoryBuy,
             }),
+          ),
+        for (final project in data.offerings)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: FundMyPageProjectCard(
+              title: project.projectName,
+              accentColor: context.appColors.primaryAlt,
+              rows: [
+                FundLabeledValue(
+                  label: l.tradeAvailableApplyUnits,
+                  value:
+                      '${project.currentOpenInvestor!.availableApplyTotal} ${l.myPageResaleUnitsSuffix}',
+                ),
+              ],
+              footer: AppButton(
+                label: l.homeFeaturedFundViewDetailAction,
+                onPressed: () async {
+                  await context.push(
+                    '/funds/${Uri.encodeComponent(project.id)}',
+                  );
+                  if (context.mounted) ref.invalidate(tradeOfferingsProvider);
+                },
+              ),
+            ),
           ),
         for (final h in data.holdings) _SellableHoldingCard(holding: h),
         for (final order in data.orders)
@@ -67,10 +91,11 @@ class TradeManagementList extends ConsumerWidget {
                     await context.push(
                       '/profile/my/secondary-market/purchases/${Uri.encodeComponent(record.processId!)}',
                     );
-                    if (context.mounted)
+                    if (context.mounted) {
                       ref.invalidate(
                         tradePageProvider((list: list, page: page)),
                       );
+                    }
                   },
           ),
         ],

@@ -2,6 +2,7 @@ import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/corporate_draft_providers.dart';
+import 'corporate_flow_scaffold.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/corporate_form_draft.dart';
 import '../pages/corporate_form_page.dart';
@@ -28,45 +29,50 @@ class _InvestorChoiceState extends State<InvestorChoice> {
   Widget build(BuildContext context) {
     final l = context.l10n;
     final theme = Theme.of(context);
-    return ListView(
-      padding: const EdgeInsets.all(20),
-      children: [
-        for (final option in [false, true])
-          Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                side: BorderSide(
-                  color: corporate == option
-                      ? theme.colorScheme.primary
-                      : theme.colorScheme.outlineVariant,
+    return CorporateFlowScaffold(
+      title: l.investorTypeTitle,
+      child: ListView(
+        padding: const EdgeInsets.all(20),
+        children: [
+          for (final option in [false, true])
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: BorderSide(
+                    color: corporate == option
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.outlineVariant,
+                  ),
                 ),
-              ),
-              child: ListTile(
-                selected: corporate == option,
-                leading: Icon(
-                  corporate == option
-                      ? Icons.radio_button_checked
-                      : Icons.radio_button_unchecked,
+                child: ListTile(
+                  selected: corporate == option,
+                  leading: Icon(
+                    corporate == option
+                        ? Icons.radio_button_checked
+                        : Icons.radio_button_unchecked,
+                  ),
+                  title: Text(
+                    option ? l.corporateInvestor : l.personalInvestor,
+                  ),
+                  subtitle: Text(
+                    option ? l.corporateInvestorNote : l.personalInvestorNote,
+                  ),
+                  onTap: () => setState(() => corporate = option),
                 ),
-                title: Text(option ? l.corporateInvestor : l.personalInvestor),
-                subtitle: Text(
-                  option ? l.corporateInvestorNote : l.personalInvestorNote,
-                ),
-                onTap: () => setState(() => corporate = option),
               ),
             ),
+          AppButton(
+            label: l.profileNextStep,
+            onPressed: corporate == null
+                ? null
+                : corporate!
+                ? widget.onCorporate
+                : widget.onPersonal,
           ),
-        AppButton(
-          label: l.profileNextStep,
-          onPressed: corporate == null
-              ? null
-              : corporate!
-              ? widget.onCorporate
-              : widget.onPersonal,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
