@@ -149,7 +149,7 @@ void main() {
       ], 'ja');
       expect(ranks.first.name, 'START');
       expect(ranks[1].rate, '0.7125%');
-      expect(ranks[1].investmentRange, '¥1,234,567以上');
+      expect(ranks[1].investmentRange, '123.4567万円以上');
       expect(ranks[1].validityMonths, 31);
       expect(ranks[1].advanceMonths, 8);
       expect(ranks[1].rooms, 9);
@@ -259,12 +259,31 @@ void main() {
       }
       final output = Platform.environment['HOME_INFO_PREVIEW_DIR'];
       if (output != null) {
-        for (final kind in ['service', 'ranks']) {
-          tester.view.physicalSize = Size(393, kind == 'service' ? 5400 : 3100);
-          final router = routerFor('/home/$kind');
+        for (final kind in ['service', 'ranks', 'silver']) {
+          tester.view.physicalSize = Size(
+            393,
+            kind == 'service'
+                ? 5400
+                : kind == 'silver'
+                ? 852
+                : 3100,
+          );
+          final router = routerFor(
+            kind == 'silver' ? '/home/service' : '/home/$kind',
+          );
           final key = GlobalKey();
-          await tester.pumpWidget(app(router, capture: key));
+          await tester.pumpWidget(
+            app(router, capture: key, member: kind == 'silver'),
+          );
           await tester.pumpAndSettle();
+          if (kind == 'silver') {
+            await Scrollable.ensureVisible(
+              tester.element(find.byKey(const ValueKey('rank-SILVER'))),
+              alignment: 0.04,
+            );
+            await tester.pumpAndSettle();
+            expect(find.text('200万円 ～ 500万円'), findsOneWidget);
+          }
           if (kind == 'service') {
             await tester.runAsync(
               () => precacheImage(
@@ -278,7 +297,9 @@ void main() {
           final boundary =
               key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
           await tester.runAsync(() async {
-            final image = await boundary.toImage();
+            final image = await boundary.toImage(
+              pixelRatio: kind == 'silver' ? 3 : 1,
+            );
             final bytes = await image.toByteData(
               format: ui.ImageByteFormat.png,
             );

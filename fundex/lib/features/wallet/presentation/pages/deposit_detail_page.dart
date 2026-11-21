@@ -41,6 +41,7 @@ class DepositDetailPage extends ConsumerWidget {
     return AppRootRouteRefreshScope(
       onRefresh: (WidgetRef ref) async {
         ref.invalidate(walletPendingDepositRecordProvider(projectId));
+        ref.invalidate(depositBankAccountProvider);
         ref.invalidate(fundProjectDetailProvider(projectId));
         await Future.wait<void>(<Future<void>>[
           ref.refresh(walletPendingDepositRecordProvider(projectId).future),
@@ -268,9 +269,6 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final l10n = context.l10n;
-    final hasDepositBank =
-        widget.project.liveJapanBank != null ||
-        _isUsableOverseasDepositBank(widget.project.notLiveJapanBank);
     final depositAmount = resolveDepositAmount(widget.record)?.round();
     final formatter = NumberFormat.currency(
       locale: Localizations.localeOf(context).toLanguageTag(),
@@ -316,21 +314,15 @@ class _DepositDetailBodyState extends ConsumerState<_DepositDetailBody> {
       children: <Widget>[
         DepositProjectCard(record: widget.record),
         const SizedBox(height: 16),
-        if (!hasDepositBank)
-          DepositLoadState(
-            icon: Icons.account_balance_outlined,
-            message: l10n.walletProjectDepositAccountUnavailableMessage,
-          )
-        else
-          ProjectDepositBankCard(
-            liveJapanBank: widget.project.liveJapanBank,
-            notLiveJapanBank: widget.project.notLiveJapanBank,
-            texts: _buildProjectDepositBankCardTexts(
-              context,
-              transferNoticeAccountId: transferNoticeAccountId,
-              overseasTransferNoticeAccountId: overseasTransferNoticeAccountId,
-            ),
+        ProjectDepositBankCard(
+          liveJapanBank: widget.project.liveJapanBank,
+          notLiveJapanBank: widget.project.notLiveJapanBank,
+          texts: _buildProjectDepositBankCardTexts(
+            context,
+            transferNoticeAccountId: transferNoticeAccountId,
+            overseasTransferNoticeAccountId: overseasTransferNoticeAccountId,
           ),
+        ),
         const SizedBox(height: 20),
         if (_isOperationCompleted)
           OutlinedButton(
@@ -408,11 +400,6 @@ String _resolveDepositProjectName(
   }
   final projectName = project.projectName.trim();
   return projectName.isEmpty ? '--' : projectName;
-}
-
-bool _isUsableOverseasDepositBank(FundProjectLiveJapanBank? bank) {
-  return (bank?.bankName?.trim().isNotEmpty ?? false) &&
-      (bank?.bankNumber?.trim().isNotEmpty ?? false);
 }
 
 ProjectDepositBankCardTexts _buildProjectDepositBankCardTexts(

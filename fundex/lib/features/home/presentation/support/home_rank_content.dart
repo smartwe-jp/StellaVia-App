@@ -21,11 +21,9 @@ List<HomeRankContent> homeRankContent(
   List<HostMilesTierRule> rules,
   String locale,
 ) {
-  final currency = NumberFormat.currency(
-    locale: locale,
-    symbol: '¥',
-    decimalDigits: 0,
-  );
+  final amount = NumberFormat.decimalPattern(locale)..maximumFractionDigits = 4;
+  String formatAmount(num yen) =>
+      '${amount.format(yen / 10000)}${l10n.simTenThousandYen}';
   final percentage = NumberFormat.decimalPattern(locale)
     ..maximumFractionDigits = 6;
   final sorted = [...rules]
@@ -41,10 +39,10 @@ List<HomeRankContent> homeRankContent(
         final range = minimum == null
             ? '—'
             : maximum == null
-            ? l10n.homeRankRangeFrom(currency.format(minimum))
+            ? l10n.homeRankRangeFrom(formatAmount(minimum))
             : l10n.homeRankRangeBetween(
-                currency.format(minimum),
-                currency.format(maximum),
+                formatAmount(minimum),
+                formatAmount(maximum),
               );
         return HomeRankContent(
           rule.tierCode?.trim().isNotEmpty == true

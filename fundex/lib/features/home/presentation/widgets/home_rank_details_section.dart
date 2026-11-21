@@ -9,7 +9,8 @@ import 'home_rank_detail_card.dart';
 import '../support/home_text_styles.dart';
 
 class HomeRankDetailsSection extends ConsumerWidget {
-  const HomeRankDetailsSection({super.key});
+  const HomeRankDetailsSection({super.key, this.rankTextScaler});
+  final TextScaler? rankTextScaler;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
@@ -61,6 +62,7 @@ class HomeRankDetailsSection extends ConsumerWidget {
                   HomeRankDetailCard(
                     key: ValueKey('rank-${rank.name}'),
                     rank: rank,
+                    rankTextScaler: rankTextScaler,
                   ),
               ],
             ),

@@ -6,7 +6,12 @@ import '../support/home_rank_content.dart';
 import '../support/home_text_styles.dart';
 
 class HomeRankDetailCard extends StatelessWidget {
-  const HomeRankDetailCard({super.key, required this.rank});
+  const HomeRankDetailCard({
+    super.key,
+    required this.rank,
+    this.rankTextScaler,
+  });
+  final TextScaler? rankTextScaler;
   final HomeRankContent rank;
   @override
   Widget build(BuildContext context) {
@@ -36,6 +41,7 @@ class HomeRankDetailCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   rank.name,
+                  textScaler: rankTextScaler,
                   style: HomeTextStyles.rankName(
                     context,
                   ).copyWith(color: palette.headerInk),
@@ -58,6 +64,7 @@ class HomeRankDetailCard extends StatelessWidget {
                   label: l.homeRankRateLabel,
                   value: rank.rate,
                   prominent: true,
+                  valueTextScaler: rankTextScaler,
                 ),
                 _Metric(
                   label: l.homeRankValidityLabel,
@@ -95,9 +102,11 @@ class _Metric extends StatelessWidget {
     required this.label,
     required this.value,
     this.prominent = false,
+    this.valueTextScaler,
   });
   final String label, value;
   final bool prominent;
+  final TextScaler? valueTextScaler;
   @override
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,6 +120,7 @@ class _Metric extends StatelessWidget {
       const SizedBox(height: 4),
       Text(
         value,
+        textScaler: valueTextScaler,
         style: prominent
             ? HomeTextStyles.rankRate(
                 context,

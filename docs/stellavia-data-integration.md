@@ -125,6 +125,10 @@ My Page 的サマリー入口打开 `/profile/summary`。サマリー使用 Figm
 
 2026-11-20：里程履历优先精确匹配 `bizType`：`EARN` 每月定期发放、`EARN_FIRST_INVEST` 首次投资奖励、`EARN_FIRST_IDENTIFY` 首次身份认证奖励、`CONSUME` 消费、`EXPIRE` 过期、`CANCEL_CONSUMED` 退款（返还里程）。前三种及退款显示 `+绝对值`，消费和过期显示 `-绝对值`；增加类统一使用现有获得样式。四种语言均使用本地化类型文案，已识别代码不受描述或原始金额符号影响；旧类型保留原兼容逻辑。
 
+### 项目入金
+
+入金详情和基金中签后的入金步骤优先读取登录会员的 `GET /member/bank-account/info`。请求失败、未返回专用口座或缺少银行、支店、账号、户名时，国内汇款沿用项目详情的 `liveJapanBank`。海外汇款沿用项目的 `notLiveJapanBank`。
+
 ### 宿主ファンド管理（SP）
 
 My Page 快捷入口打开 `/profile/host-funds`。以 [Figma SP](https://www.figma.com/design/xul33CFNblfWc9zdEQo4yF/?node-id=12400-41435) 的内容区块为基准，使用 AppFilterBar、FundMyPageProjectCard 和已有持仓环形图。

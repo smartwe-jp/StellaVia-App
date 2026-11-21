@@ -1,8 +1,12 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../investment/domain/entities/fund_project.dart';
+import '../../domain/entities/wallet_bank_account_info.dart';
+import '../providers/wallet_providers.dart';
 import '../support/wallet_deposit_copy_support.dart';
 import 'wallet_deposit_transfer_notice.dart';
 
@@ -56,7 +60,7 @@ class ProjectDepositBankCardTexts {
   final String transferNameCopyButtonLabel;
 }
 
-class ProjectDepositBankCard extends StatefulWidget {
+class ProjectDepositBankCard extends ConsumerWidget {
   const ProjectDepositBankCard({
     super.key,
     required this.liveJapanBank,
@@ -69,10 +73,62 @@ class ProjectDepositBankCard extends StatefulWidget {
   final ProjectDepositBankCardTexts texts;
 
   @override
-  State<ProjectDepositBankCard> createState() => _ProjectDepositBankCardState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final result = ref.watch(depositBankAccountProvider);
+    if (result.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    final account = result.asData?.value;
+    final dedicated = _usableDedicatedAccount(account);
+    final domestic = dedicated
+        ? FundProjectLiveJapanBank(
+            bankName: account!.bankName,
+            branchBankName: account.branchName,
+            bankNumber: account.accountNumber,
+            bankAccountOwnerName: account.accountHolder,
+          )
+        : liveJapanBank;
+    if (domestic == null &&
+        !(_hasText(notLiveJapanBank?.bankName) &&
+            _hasText(notLiveJapanBank?.bankNumber))) {
+      return Text(context.l10n.walletProjectDepositAccountUnavailableMessage);
+    }
+    return _DepositBankCard(
+      liveJapanBank: domestic,
+      notLiveJapanBank: notLiveJapanBank,
+      texts: texts,
+      dedicated: dedicated,
+    );
+  }
 }
 
-class _ProjectDepositBankCardState extends State<ProjectDepositBankCard> {
+bool _usableDedicatedAccount(WalletBankAccountInfo? account) =>
+    account != null &&
+    [
+      account.bankName,
+      account.branchName,
+      account.accountNumber,
+      account.accountHolder,
+    ].every((field) => field.trim().isNotEmpty && field.trim() != '--');
+
+class _DepositBankCard extends StatefulWidget {
+  const _DepositBankCard({
+    required this.liveJapanBank,
+    required this.notLiveJapanBank,
+    required this.texts,
+    required this.dedicated,
+  });
+
+  final FundProjectLiveJapanBank? liveJapanBank;
+  final FundProjectLiveJapanBank? notLiveJapanBank;
+  final ProjectDepositBankCardTexts texts;
+  final bool dedicated;
+
+  @override
+  State<_DepositBankCard> createState() => _ProjectDepositBankCardState();
+}
+
+class _ProjectDepositBankCardState extends State<_DepositBankCard> {
   ProjectDepositBankAccountKind _selectedKind =
       ProjectDepositBankAccountKind.domestic;
 
@@ -90,7 +146,7 @@ class _ProjectDepositBankCardState extends State<ProjectDepositBankCard> {
   }
 
   @override
-  void didUpdateWidget(covariant ProjectDepositBankCard oldWidget) {
+  void didUpdateWidget(covariant _DepositBankCard oldWidget) {
     super.didUpdateWidget(oldWidget);
     final nextKind = _resolveSelectedKind();
     if (nextKind == _selectedKind) {
@@ -122,6 +178,8 @@ class _ProjectDepositBankCardState extends State<ProjectDepositBankCard> {
         _hasOverseasAccount;
     final title = showOverseas
         ? widget.texts.overseasTitle
+        : widget.dedicated
+        ? context.l10n.walletDedicatedAccountTitle
         : widget.texts.domesticTitle;
     final rows = showOverseas
         ? _buildOverseasRows(widget.notLiveJapanBank)
@@ -207,13 +265,15 @@ class _ProjectDepositBankCardState extends State<ProjectDepositBankCard> {
                 copyLabel: widget.texts.copyLabel,
                 onCopy: (String value) => _copy(context, value),
               ),
-            const SizedBox(height: 12),
-            WalletDepositTransferNotice(
-              message: transferNotice,
-              transferName: transferName,
-              copyButtonLabel: widget.texts.transferNameCopyButtonLabel,
-              copyDoneMessage: widget.texts.copyDoneMessage,
-            ),
+            if (showOverseas || !widget.dedicated) ...[
+              const SizedBox(height: 12),
+              WalletDepositTransferNotice(
+                message: transferNotice,
+                transferName: transferName,
+                copyButtonLabel: widget.texts.transferNameCopyButtonLabel,
+                copyDoneMessage: widget.texts.copyDoneMessage,
+              ),
+            ],
           ],
         ),
       ),

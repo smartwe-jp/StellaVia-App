@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/network/app_network_providers.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
 import '../../../member_profile/presentation/providers/mypage_providers.dart';
 import '../../data/datasources/wallet_remote_data_source.dart';
@@ -146,6 +147,12 @@ final walletHistoryProvider =
       return ref
           .watch(fetchWalletAccountHistoryUseCaseProvider)
           .call(accountType: 0);
+    });
+
+final depositBankAccountProvider =
+    FutureProvider.autoDispose<WalletBankAccountInfo?>((ref) {
+      ref.watch(authSessionProvider);
+      return ref.watch(fetchWalletBankAccountInfoUseCaseProvider).call();
     });
 
 final walletBankAccountListProvider =
