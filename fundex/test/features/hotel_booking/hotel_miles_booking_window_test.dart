@@ -21,6 +21,41 @@ void main() {
     expect(HotelMilesBookingWindow(today, 0).lastNight, today);
   });
 
+  for (final hostMiles in [true, false]) {
+    testWidgets('daily cash price visibility with hostMiles=$hostMiles', (
+      tester,
+    ) async {
+      final now = DateTime.now();
+      final date = DateTime(now.year, now.month, now.day);
+      final dateKey = date.toIso8601String().split('T').first;
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppThemeFactory.light(locale: const Locale('en')),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => TextButton(
+                onPressed: () => pickHotelStayDates(
+                  context: context,
+                  criteria: HotelSearchCriteria.initial(date),
+                  hostMiles: hostMiles,
+                  leadTimeMonths: hostMiles ? 2 : null,
+                  priceCalendarByDate: {dateKey: 51800},
+                ),
+                child: const Text('Open calendar'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('Open calendar'));
+      await tester.pumpAndSettle();
+      expect(find.byType(HotelStayDateRangePicker), findsOneWidget);
+      expect(find.text('¥51800'), hostMiles ? findsNothing : findsOneWidget);
+    });
+  }
+
   testWidgets(
     'final night is selectable and the following day is checkout only',
     (tester) async {

@@ -213,13 +213,10 @@ void main() {
         final l = AppLocalizations.of(
           tester.element(find.byType(HotelHomeCard)),
         );
+        expect(find.text(l.hotelMilesDateEligible), findsNothing);
         expect(
-          find.text(
-            hotel.stayBenefitParticipate
-                ? l.hotelMilesDateEligible
-                : l.hotelMilesDateIneligible,
-          ),
-          findsOneWidget,
+          find.text(l.hotelMilesDateIneligible),
+          hotel.stayBenefitParticipate ? findsNothing : findsOneWidget,
         );
         if (c.$5 == null) {
           expect(

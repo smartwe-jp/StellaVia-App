@@ -43,7 +43,7 @@ Future<HotelSearchCriteria?> pickHotelStayDates({
       firstDate: firstDate,
       lastDate: window?.lastCheckout ?? lastDate,
       lastCheckIn: window?.lastNight,
-      priceCalendarByDate: priceCalendarByDate,
+      priceCalendarByDate: hostMiles ? const {} : priceCalendarByDate,
       stayBenefitSelectableDates: stayBenefitSelectableDates,
       selectionMode: selectionMode,
       guidanceText: leadTimeMonths != null && leadTimeMonths >= 0
@@ -551,7 +551,9 @@ class _MonthGrid extends StatelessWidget {
                     endDate: endDate,
                     firstDate: firstDate,
                     lastDate: lastDate,
-                    priceText: _priceTextFor(date, priceCalendarByDate),
+                    priceText: priceCalendarByDate.isEmpty
+                        ? null
+                        : _priceTextFor(date, priceCalendarByDate),
                     isStayBenefitSelectable: stayBenefitSelectableDateKeys
                         .contains(_wireDate(date)),
                     selectionMode: selectionMode,
@@ -587,7 +589,7 @@ class _CalendarDayCell extends StatelessWidget {
   final DateTime? endDate;
   final DateTime firstDate;
   final DateTime lastDate;
-  final String priceText;
+  final String? priceText;
   final bool isStayBenefitSelectable;
   final HotelStayDateSelectionMode selectionMode;
   final ValueChanged<DateTime> onTap;
@@ -669,16 +671,18 @@ class _CalendarDayCell extends StatelessWidget {
                           : FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    priceText,
-                    maxLines: 1,
-                    overflow: TextOverflow.clip,
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: priceColor,
-                      fontWeight: FontWeight.w600,
+                  if (priceText != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      priceText!,
+                      maxLines: 1,
+                      overflow: TextOverflow.clip,
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: priceColor,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
+                  ],
                 ],
               ),
             ),

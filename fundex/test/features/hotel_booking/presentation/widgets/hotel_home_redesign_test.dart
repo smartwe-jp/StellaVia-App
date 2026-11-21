@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:fundex/features/hotel_booking/presentation/support/hotel_miles_display.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fundex/features/hotel_booking/presentation/support/hotel_detail_route_args.dart';
 import 'package:fundex/features/hotel_booking/presentation/widgets/hotel_home_card.dart';
@@ -50,6 +51,14 @@ Widget app(
   ),
 );
 void main() {
+  test('miles bookable room count accounts for quota and dated stock', () {
+    expect(milesBookableRoomCount(5, 2), 2);
+    expect(milesBookableRoomCount(1, 2), 1);
+    expect(milesBookableRoomCount(0, null), 0);
+    expect(milesBookableRoomCount(null, 0), 0);
+    expect(milesBookableRoomCount(null, 2), isNull);
+    expect(milesBookableRoomCount(3, null), isNull);
+  });
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     final manifest =
@@ -273,6 +282,10 @@ void main() {
     await tester.scrollUntilVisible(find.byType(HotelHomeCard).first, 300);
     await tester.ensureVisible(find.text('API Hotel'));
     await tester.pumpAndSettle();
+    final l = AppLocalizations.of(tester.element(find.byType(HotelHomeCard)));
+    expect(find.text(l.hotelMilesDateEligible), findsNothing);
+    expect(find.text(l.hotelMilesDateIneligible), findsNothing);
+    expect(find.text(l.hotelDetailRemainingRoomsShort(3)), findsOneWidget);
     await tester.tap(find.text('API Hotel'));
     await tester.pumpAndSettle();
     expect(args?.mode, HotelBookingMode.hostMiles);

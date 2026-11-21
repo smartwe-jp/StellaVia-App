@@ -4,6 +4,7 @@ import 'package:intl/intl.dart' show NumberFormat;
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/home_simulation.dart';
 import '../support/home_simulation_theme.dart';
+import 'simulation_amount_field.dart';
 
 class HomeSimulationInputs extends StatelessWidget {
   const HomeSimulationInputs({
@@ -126,7 +127,17 @@ class _SimulationSlider extends StatelessWidget {
             child: Text(label, style: HomeSimulationTheme.inputLabel(context)),
           ),
           const SizedBox(width: 8),
-          Text(display, style: HomeSimulationTheme.inputNumber(context)),
+          if (id == 'amount')
+            SimulationAmountField(
+              value: value.toInt(),
+              display: display,
+              label: label,
+              min: min.toInt(),
+              max: max.toInt(),
+              onChanged: onChanged,
+            )
+          else
+            Text(display, style: HomeSimulationTheme.inputNumber(context)),
           Text(unit, style: HomeSimulationTheme.inputUnit(context)),
         ],
       ),

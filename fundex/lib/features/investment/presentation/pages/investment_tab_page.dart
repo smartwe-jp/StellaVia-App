@@ -19,6 +19,7 @@ import '../support/fund_project_yield_display.dart';
 
 enum _FundListFilter {
   all,
+  upcoming,
   opening,
   completed,
   operating,
@@ -31,6 +32,8 @@ extension on _FundListFilter {
     switch (this) {
       case _FundListFilter.all:
         return null;
+      case _FundListFilter.upcoming:
+        return 0;
       case _FundListFilter.opening:
         return 1;
       case _FundListFilter.completed:
@@ -97,6 +100,10 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
       _FundListFilterOption(
         filter: _FundListFilter.all,
         label: l10n.fundListFilterAll,
+      ),
+      _FundListFilterOption(
+        filter: _FundListFilter.upcoming,
+        label: l10n.fundListFilterUpcoming,
       ),
       _FundListFilterOption(
         filter: _FundListFilter.opening,
@@ -637,7 +644,10 @@ class _FundProjectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final statusColors = fundProjectStatusColors(context, project.projectStatus);
+    final statusColors = fundProjectStatusColors(
+      context,
+      project.projectStatus,
+    );
     final colors = theme.appColors;
     final appText = theme.appTextTheme;
     final isDark = theme.brightness == Brightness.dark;

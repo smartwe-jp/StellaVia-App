@@ -1,6 +1,7 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import '../support/hotel_reference_miles_display.dart';
+import '../support/hotel_miles_display.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
@@ -19,6 +20,7 @@ class HotelHomeCard extends StatelessWidget {
     this.onDiscountTap,
     this.requiredMiles,
     this.hostMilesMode = false,
+    this.memberRoomLimit,
     this.previewImageAsset,
   });
   final HotelSummary hotel;
@@ -28,6 +30,7 @@ class HotelHomeCard extends StatelessWidget {
   final VoidCallback? onDiscountTap;
   final int? requiredMiles;
   final bool hostMilesMode;
+  final int? memberRoomLimit;
   final String? previewImageAsset;
   @override
   Widget build(BuildContext context) {
@@ -37,6 +40,10 @@ class HotelHomeCard extends StatelessWidget {
         requiredMiles ?? (hostMilesMode ? hotel.startingPoints : null);
     final isMiles = hostMilesMode || miles != null;
     final disabled = isMiles && !hotel.stayBenefitParticipate;
+    final stock = hotel.isBookable ? hotel.remainingRooms : 0;
+    final count = isMiles
+        ? milesBookableRoomCount(stock, memberRoomLimit)
+        : stock;
     final radius = BorderRadius.circular(20);
     final card = AppCard(
       backgroundColor: colors.surface,
@@ -81,24 +88,24 @@ class HotelHomeCard extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 10),
-          if (isMiles)
+          if (disabled) ...[
+            const SizedBox(height: 10),
             Align(
               alignment: Alignment.centerRight,
               child: Text(
-                hotel.stayBenefitParticipate
-                    ? context.l10n.hotelMilesDateEligible
-                    : context.l10n.hotelMilesDateIneligible,
+                context.l10n.hotelMilesDateIneligible,
                 textAlign: TextAlign.right,
                 style: text.labelSmall?.copyWith(color: colors.brandSecondary),
               ),
-            )
-          else
+            ),
+          ] else if (!isMiles) ...[
+            const SizedBox(height: 10),
             HotelDiscountBadge(
               name: hotel.discountName,
               discount: hotel.discount,
               onTap: onDiscountTap,
             ),
+          ],
           const Divider(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -106,7 +113,8 @@ class HotelHomeCard extends StatelessWidget {
             spacing: 12,
             children: [
               HotelRemainingRoomsLabel(
-                count: hotel.isBookable ? hotel.remainingRooms ?? -1 : 0,
+                count: count ?? -1,
+                showFullBadge: stock == 0 || !isMiles,
                 unit: hotelRemainingUnitForHotelSummary(
                   buildingCode: hotel.buildingCode,
                 ),

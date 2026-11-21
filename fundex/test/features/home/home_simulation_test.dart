@@ -208,6 +208,20 @@ void main() {
             );
             await tester.pumpAndSettle();
           }
+          final amount = find.byType(TextField);
+          await tester.ensureVisible(amount);
+          await tester.enterText(amount, '200');
+          await tester.pumpAndSettle();
+          final amountSlider = find.byKey(const ValueKey('simulation-amount'));
+          expect(tester.widget<Slider>(amountSlider).value, 200);
+          tester.widget<Slider>(amountSlider).onChanged!(100);
+          await tester.pumpAndSettle();
+          expect(tester.widget<TextField>(amount).controller!.text, '100');
+          await tester.testTextInput.receiveAction(TextInputAction.done);
+          await tester.ensureVisible(
+            find.byKey(const ValueKey('simulation-capital')),
+          );
+          await tester.pumpAndSettle();
           final slider = tester.widget<Slider>(
             find.byKey(const ValueKey('simulation-months')),
           );

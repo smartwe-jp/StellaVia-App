@@ -116,6 +116,8 @@ class _HotelHostMilesPageState extends ConsumerState<HotelHostMilesPage>
                     hotel: hotel,
                     presenter: presenter,
                     hostMilesMode: true,
+                    memberRoomLimit:
+                        state.tier.valueOrNull?.remainingBookingRooms,
                     onTap: () => context.push(
                       '/hotel-booking/${Uri.encodeComponent(hotel.id)}',
                       extra: HotelDetailRouteArgs(
