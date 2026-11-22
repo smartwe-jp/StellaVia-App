@@ -3337,5 +3337,10 @@
   "corpStatusLabel": "Current status",
   "corpFlowLabel": "Verification steps",
   "corpApplicationLabel": "Application information",
-  "corpProgressHeading": "Application status"
+  "corpProgressHeading": "Application status",
+  "fundListComingSoonLabel": "COMING SOON",
+  "fundListNoMatchLabel": "NO MATCH",
+  "fundListPreparingTitle": "New funds are coming soon",
+  "fundListPreparingBody": "We are preparing new host funds. Please check back for upcoming listings.",
+  "fundListNoMatchBody": "Try changing your filters or check back later."
 }

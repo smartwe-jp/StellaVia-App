@@ -8,8 +8,11 @@ class MyPageChartState {
 }
 
 class MyPageChartController extends StateNotifier<MyPageChartState> {
-  MyPageChartController(this.load, {this.localHistory = false})
-    : super(const MyPageChartState());
+  MyPageChartController(
+    this.load, {
+    this.localHistory = false,
+    int initialYears = 1,
+  }) : super(MyPageChartState(years: initialYears));
   final Future<MyPageChartData> Function(int years) load;
   final bool localHistory;
   MyPageChartData? _history;

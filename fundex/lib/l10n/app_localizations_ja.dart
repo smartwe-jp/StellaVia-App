@@ -7976,4 +7976,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get corpProgressHeading => '申請状況';
+
+  @override
+  String get fundListComingSoonLabel => 'COMING SOON';
+
+  @override
+  String get fundListNoMatchLabel => 'NO MATCH';
+
+  @override
+  String get fundListPreparingTitle => '準備中です。しばらくお待ちください';
+
+  @override
+  String get fundListPreparingBody => '新しい宿主ファンドを準備しています。公開まで今しばらくお待ちください。';
+
+  @override
+  String get fundListNoMatchBody => '条件を変えるか、しばらくしてから再度お試しください。';
 }

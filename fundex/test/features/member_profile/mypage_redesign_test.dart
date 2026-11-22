@@ -24,7 +24,7 @@ void main() {
     }
   });
   for (final locale in AppLocalizations.supportedLocales) {
-    testWidgets('overview privacy and actions, holding layout $locale', (
+    testWidgets('compact overview and holding action layout $locale', (
       tester,
     ) async {
       tester.view.physicalSize = const Size(393, 1000);
@@ -117,17 +117,16 @@ void main() {
         find.text(l10n.memberProfileOverviewStatusPending),
         findsOneWidget,
       );
-      await tester.tap(find.byTooltip(l10n.myPageHideAmounts));
-      await tester.pump();
+      // The compact header retains identity only; assets/actions live on
+      // dedicated pages after the My Page shortcut redesign.
+      expect(find.text(l10n.myPageAssetGreeting('田中')), findsOneWidget);
+      expect(find.byTooltip(l10n.myPageHideAmounts), findsNothing);
       expect(find.text('¥1,234,567'), findsNothing);
       expect(find.text('¥900,000'), findsNothing);
-      await tester.tap(find.byTooltip(l10n.myPageShowAmounts));
-      await tester.pump();
-      expect(find.text('¥1,234,567'), findsOneWidget);
-      await tester.tap(find.text(l10n.myPageDepositAction));
-      await tester.tap(find.text(l10n.myPageWithdrawAction));
+      expect(find.text(l10n.myPageDepositAction), findsNothing);
+      expect(find.text(l10n.myPageWithdrawAction), findsNothing);
       await tester.tap(find.text('Amber Echoland Stella Asset Fund'));
-      expect([deposits, withdrawals, details], [1, 1, 1]);
+      expect([deposits, withdrawals, details], [0, 0, 1]);
       if (locale.languageCode == 'ja') {
         await tester.pumpAndSettle();
         await tester.runAsync(() async {

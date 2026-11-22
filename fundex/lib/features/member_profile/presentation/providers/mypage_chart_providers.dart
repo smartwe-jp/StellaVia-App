@@ -35,12 +35,16 @@ final myPageChartProvider = StateNotifierProvider.autoDispose
             )
           : null;
       final useCase = ref.watch(loadMyPageChartProvider);
-      final controller = MyPageChartController((years) {
-        if (!authenticated || identity == null) {
-          return Future.error(StateError('Authenticated user required'));
-        }
-        return useCase(kind, years, DateTime.now());
-      }, localHistory: kind == MyPageChartKind.available);
+      final controller = MyPageChartController(
+        (years) {
+          if (!authenticated || identity == null) {
+            return Future.error(StateError('Authenticated user required'));
+          }
+          return useCase(kind, years, DateTime.now());
+        },
+        localHistory: kind == MyPageChartKind.available,
+        initialYears: kind == MyPageChartKind.dividends ? 5 : 1,
+      );
       if (authenticated && identity != null) {
         scheduleMicrotask(() {
           if (controller.mounted) unawaited(controller.refresh());

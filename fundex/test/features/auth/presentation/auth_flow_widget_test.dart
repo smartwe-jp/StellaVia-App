@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:core_tool_kit/core_tool_kit.dart';
+import 'package:go_router/go_router.dart';
+import 'package:fundex/app/observability/app_observability_providers.dart';
 import 'package:core_network/core_network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,6 +19,45 @@ import 'package:fundex/features/auth/domain/entities/auth_session.dart';
 import 'package:fundex/features/auth/domain/repositories/auth_repository.dart';
 import 'package:fundex/features/auth/presentation/providers/auth_providers.dart';
 import 'package:fundex/features/member_profile/presentation/providers/member_profile_providers.dart';
+
+class _NoopAppLogger implements AppLogger {
+  @override
+  void debug(String message, {Map<String, Object?> context = const {}}) {}
+
+  @override
+  Future<void> dispose() async {}
+
+  @override
+  void error(
+    String message, {
+    Object? error,
+    StackTrace? stackTrace,
+    Map<String, Object?> context = const {},
+  }) {}
+
+  @override
+  Future<File> exportLogs({Directory? outputDirectory}) {
+    throw UnsupportedError('No log file is available in widget tests.');
+  }
+
+  @override
+  void info(String message, {Map<String, Object?> context = const {}}) {}
+
+  @override
+  Future<List<File>> listLogFiles() async => <File>[];
+
+  @override
+  void log(
+    AppLogLevel level,
+    String message, {
+    Object? error,
+    StackTrace? stackTrace,
+    Map<String, Object?> context = const {},
+  }) {}
+
+  @override
+  void warning(String message, {Map<String, Object?> context = const {}}) {}
+}
 
 class _SeededTokenStore implements TokenStore {
   _SeededTokenStore({String? accessToken, String? refreshToken})
@@ -154,6 +198,7 @@ Future<void> _pumpApp(
     ProviderScope(
       overrides: <Override>[
         appEnvironmentProvider.overrideWithValue(environment),
+        appLoggerProvider.overrideWithValue(_NoopAppLogger()),
         tokenStoreProvider.overrideWithValue(tokenStore),
         tokenRefresherProvider.overrideWithValue(tokenRefresher),
         authLocalDataSourceProvider.overrideWithValue(
@@ -167,7 +212,6 @@ Future<void> _pumpApp(
   );
   await tester.pump();
   await tester.pump(const Duration(milliseconds: 2600));
-  await tester.pumpAndSettle();
 }
 
 Future<void> _pumpUntilVisible(
@@ -196,6 +240,8 @@ void main() {
         authRepository: repository,
       );
 
+      GoRouter.of(tester.element(find.byType(Navigator).first)).go('/login');
+      await tester.pumpAndSettle();
       await _pumpUntilVisible(tester, find.byType(TextField));
       expect(find.byKey(const Key('login_page')), findsOneWidget);
       await tester.ensureVisible(
@@ -221,37 +267,53 @@ void main() {
       expect(repository.loginCalled, isTrue);
       await _pumpUntilVisible(tester, find.byKey(const Key('main_tab_bar')));
       expect(find.byKey(const Key('main_tab_bar')), findsOneWidget);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pump(const Duration(seconds: 3));
     });
 
-    testWidgets('home logout triggers repository logout and routes to login', (
-      tester,
-    ) async {
-      final repository = _FakeAuthRepository();
-      await _pumpApp(
-        tester,
-        tokenStore: _SeededTokenStore(
-          accessToken: 'token-a',
-          refreshToken: 'token-r',
-        ),
-        tokenRefresher: _FakeTokenRefresher((_) async => null),
-        authRepository: repository,
-      );
+    testWidgets(
+      'settings logout confirms then calls repository and routes to login',
+      (tester) async {
+        final repository = _FakeAuthRepository();
+        await _pumpApp(
+          tester,
+          tokenStore: _SeededTokenStore(
+            accessToken: 'token-a',
+            refreshToken: 'token-r',
+          ),
+          tokenRefresher: _FakeTokenRefresher((_) async => null),
+          authRepository: repository,
+        );
 
-      final homeContext = tester.element(find.byKey(const Key('home_page')));
-      final l10n = homeContext.l10n;
-      await tester.tap(find.text(l10n.mainTabProfile));
-      await tester.pumpAndSettle();
+        final routerContext = tester.element(find.byType(Navigator).first);
+        final l10n = routerContext.l10n;
+        GoRouter.of(routerContext).push('/profile/settings');
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 400));
+        final logout = find.text(l10n.homeLogout);
+        await tester.scrollUntilVisible(
+          logout,
+          400,
+          scrollable: find.descendant(
+            of: find.byKey(const Key('settings_tab_content')),
+            matching: find.byType(Scrollable),
+          ),
+        );
+        await tester.tap(logout);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
+        expect(find.text(l10n.settingsLogoutConfirmTitle), findsOneWidget);
+        expect(repository.logoutCalled, isFalse);
+        await tester.tap(find.text(l10n.homeLogout).last);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 300));
 
-      await _pumpUntilVisible(tester, find.byKey(const Key('logout_button')));
-      expect(find.byKey(const Key('logout_button')), findsOneWidget);
-
-      await tester.tap(find.byKey(const Key('logout_button')));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 200));
-
-      expect(repository.logoutCalled, isTrue);
-      await _pumpUntilVisible(tester, find.byKey(const Key('login_page')));
-      expect(find.byKey(const Key('login_page')), findsOneWidget);
-    });
+        expect(repository.logoutCalled, isTrue);
+        await _pumpUntilVisible(tester, find.byKey(const Key('login_page')));
+        expect(find.byKey(const Key('login_page')), findsOneWidget);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump(const Duration(seconds: 3));
+      },
+    );
   });
 }

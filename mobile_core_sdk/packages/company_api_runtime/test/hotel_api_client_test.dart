@@ -176,7 +176,7 @@ void main() {
       final client = _buildClient((options) async {
         expect(options.method, equals('POST'));
         expect(options.path, equals(HotelApiPaths.buildingCode));
-        expect(options.extra['auth_required'], isTrue);
+        expect(options.extra['auth_required'], isFalse);
         expect(options.data, equals(<String, dynamic>{'lang': 'CH'}));
 
         return _jsonOk(

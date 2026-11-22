@@ -105,51 +105,50 @@ void main() {
     },
   );
 
-  testWidgets(
-    'shows a single yield when only one open investor type exists',
-    (WidgetTester tester) async {
-      const project = FundProject(
-        id: 'project-single-open',
-        projectName: 'Single Open Fund',
-        expectedDistributionRatioMin: 0.01,
-        expectedDistributionRatioMax: 0.02,
-        investorTypes: <FundProjectInvestorType>[
-          FundProjectInvestorType(
-            investorCode: '優先出資者A',
-            earningsRadio: 0.06,
-            isOpen: true,
-          ),
-          FundProjectInvestorType(
-            investorCode: '任意組合員',
-            earningsRadio: 0.10,
-            isOpen: false,
-          ),
-        ],
-      );
-
-      late FundProjectDetailViewData viewData;
-
-      await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('ja'),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppThemeFactory.light(locale: const Locale('ja')),
-          home: Builder(
-            builder: (BuildContext context) {
-              viewData = FundProjectDetailViewDataBuilder.build(
-                context: context,
-                project: project,
-              );
-              return const SizedBox.shrink();
-            },
-          ),
+  testWidgets('shows a single yield when only one open investor type exists', (
+    WidgetTester tester,
+  ) async {
+    const project = FundProject(
+      id: 'project-single-open',
+      projectName: 'Single Open Fund',
+      expectedDistributionRatioMin: 0.01,
+      expectedDistributionRatioMax: 0.02,
+      investorTypes: <FundProjectInvestorType>[
+        FundProjectInvestorType(
+          investorCode: '優先出資者A',
+          earningsRadio: 0.06,
+          isOpen: true,
         ),
-      );
+        FundProjectInvestorType(
+          investorCode: '任意組合員',
+          earningsRadio: 0.10,
+          isOpen: false,
+        ),
+      ],
+    );
 
-      expect(viewData.yieldDisplay, '6%');
-    },
-  );
+    late FundProjectDetailViewData viewData;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('ja'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme: AppThemeFactory.light(locale: const Locale('ja')),
+        home: Builder(
+          builder: (BuildContext context) {
+            viewData = FundProjectDetailViewDataBuilder.build(
+              context: context,
+              project: project,
+            );
+            return const SizedBox.shrink();
+          },
+        ),
+      ),
+    );
+
+    expect(viewData.yieldDisplay, '6%');
+  });
 
   testWidgets(
     'uses operating company content for fund detail operator information',
@@ -171,6 +170,7 @@ void main() {
         representative: '代表取締役 谷中 譲',
         headOffice: '大阪府大阪市北区天満2-1-12',
         tel: '06-6940-4777',
+        email: 'support@example.com',
         established: '2012年12月11日',
         business: '不動産特定共同事業、Eコマース等',
         manager: '瀬戸口 愛',
@@ -252,92 +252,76 @@ void main() {
     },
   );
 
-  testWidgets(
-    'maps key facts and schedule items to the requested fields',
-    (WidgetTester tester) async {
-      const project = FundProject(
-        id: 'project-schedule',
-        projectName: 'Schedule Fund',
-        distributionDate: '各計算期間の属する月の2ヶ月後応当月の最終営業日まで',
-        investmentPeriod: '12ヶ月',
-        scheduledStartDate: '2025-09-01',
-        scheduledEndDate: '2026-08-31',
-        offeringStartDatetime: '2025-08-01 10:00:00',
-        offeringEndDatetime: '2025-08-31 17:00:00',
-        typeOfOffering: 'LOTTERY',
-        offeringMethod: 'LOTTERY',
-        gainType: 'INCOME_GAIN',
-        investmentUnit: 1000000,
-        maximumInvestmentPerPerson: 1250000000,
-        amountApplication: 1250000000,
-        currentlySubscribed: 1405000000,
-        daysRemaining: 0,
-        detailData: <String, Object?>{
-          'contractType': '匿名組合型',
-        },
-      );
+  testWidgets('maps key facts and schedule items to the requested fields', (
+    WidgetTester tester,
+  ) async {
+    const project = FundProject(
+      id: 'project-schedule',
+      projectName: 'Schedule Fund',
+      distributionDate: '各計算期間の属する月の2ヶ月後応当月の最終営業日まで',
+      investmentPeriod: '12ヶ月',
+      scheduledStartDate: '2025-09-01',
+      scheduledEndDate: '2026-08-31',
+      offeringStartDatetime: '2025-08-01 10:00:00',
+      offeringEndDatetime: '2025-08-31 17:00:00',
+      typeOfOffering: 'LOTTERY',
+      offeringMethod: 'LOTTERY',
+      gainType: 'INCOME_GAIN',
+      investmentUnit: 1000000,
+      maximumInvestmentPerPerson: 1250000000,
+      amountApplication: 1250000000,
+      currentlySubscribed: 1405000000,
+      daysRemaining: 0,
+      detailData: <String, Object?>{'contractType': '匿名組合型'},
+    );
 
-      late FundProjectDetailViewData viewData;
+    late FundProjectDetailViewData viewData;
 
-      await tester.pumpWidget(
-        MaterialApp(
-          locale: const Locale('ja'),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          theme: AppThemeFactory.light(locale: const Locale('ja')),
-          home: Builder(
-            builder: (BuildContext context) {
-              viewData = FundProjectDetailViewDataBuilder.build(
-                context: context,
-                project: project,
-              );
-              return const SizedBox.shrink();
-            },
-          ),
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('ja'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        theme: AppThemeFactory.light(locale: const Locale('ja')),
+        home: Builder(
+          builder: (BuildContext context) {
+            viewData = FundProjectDetailViewDataBuilder.build(
+              context: context,
+              project: project,
+            );
+            return const SizedBox.shrink();
+          },
         ),
-      );
+      ),
+    );
 
-      expect(
-        viewData.infoItems.map((FundDetailInfoItemData item) => item.label),
-        containsAll(<String>[
-          '目標金額',
-          '投資単位',
-          '一人当たり\n投資可能上限金額',
-          '募集金額',
-          '運用期間',
-        ]),
-      );
-      expect(
-        viewData.infoItems.firstWhere(
-          (FundDetailInfoItemData item) => item.label == '目標金額',
-        ).value,
-        '1,250,000,000円',
-      );
-      expect(
-        viewData.infoItems.firstWhere(
-          (FundDetailInfoItemData item) => item.label == '募集金額',
-        ).value,
-        '1,405,000,000円',
-      );
-      expect(
-        viewData.contractScheduleItems.map(
-          (FundDetailInfoItemData item) => item.label,
-        ),
-        containsAll(<String>[
-          '募集期間',
-          '運用期間',
-          '募集方式',
-          '募集種別',
-          '残り日数',
-          '配当日',
-        ]),
-      );
-      expect(
-        viewData.contractScheduleItems.firstWhere(
-          (FundDetailInfoItemData item) => item.label == '募集種別',
-        ).value,
-        '匿名組合型',
-      );
-    },
-  );
+    expect(
+      viewData.infoItems.map((FundDetailInfoItemData item) => item.label),
+      containsAll(<String>['募集金額', '投資単位', '応募金額', '運用期間']),
+    );
+    expect(
+      viewData.infoItems
+          .firstWhere((FundDetailInfoItemData item) => item.label == '募集金額')
+          .value,
+      '1,250,000,000円',
+    );
+    expect(
+      viewData.infoItems
+          .firstWhere((FundDetailInfoItemData item) => item.label == '応募金額')
+          .value,
+      '1,405,000,000円',
+    );
+    expect(
+      viewData.contractScheduleItems.map(
+        (FundDetailInfoItemData item) => item.label,
+      ),
+      containsAll(<String>['募集期間', '運用期間', '募集方式', '募集種別', '残り日数', '配当日']),
+    );
+    expect(
+      viewData.contractScheduleItems
+          .firstWhere((FundDetailInfoItemData item) => item.label == '募集種別')
+          .value,
+      '匿名組合型',
+    );
+  });
 }

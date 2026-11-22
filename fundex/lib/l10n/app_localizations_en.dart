@@ -8405,4 +8405,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get corpProgressHeading => 'Application status';
+
+  @override
+  String get fundListComingSoonLabel => 'COMING SOON';
+
+  @override
+  String get fundListNoMatchLabel => 'NO MATCH';
+
+  @override
+  String get fundListPreparingTitle => 'New funds are coming soon';
+
+  @override
+  String get fundListPreparingBody =>
+      'We are preparing new host funds. Please check back for upcoming listings.';
+
+  @override
+  String get fundListNoMatchBody =>
+      'Try changing your filters or check back later.';
 }

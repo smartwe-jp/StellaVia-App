@@ -69,11 +69,12 @@ class AssetsFake implements AssetStatisticsRepository {
   Future<AssetCumulativeBenefit> fetchCumulativeBenefit({
     required DateTime startDate,
     required DateTime endDate,
-  }) async => const AssetCumulativeBenefit(
-    total: 1200,
-    dates: ['2025-01-01', '2025-10-01', '2026-01-01'],
-    values: [100, 600, 1200],
-  );
+  }) async =>
+      const AssetCumulativeBenefit(
+        total: 1200,
+        dates: ['2025-01-01', '2025-10-01', '2026-01-01'],
+        values: [100, 600, 1200],
+      );
   @override
   dynamic noSuchMethod(Invocation i) => super.noSuchMethod(i);
 }
@@ -99,29 +100,30 @@ class MilesFake implements HostMilesRepository {
 }
 
 MyPageChartData chart(int years) => MyPageChartData(
-  start: years == 1 ? DateTime(2025, 11) : DateTime(2027 - years),
-  end: DateTime(2026, 10, 29),
-  total: 9020314,
-  holdings: const [
-    AssetInvestment(
-      projectName: 'Fund A',
-      investMoneyValid: 5412188,
-      beginDate: '2025-01-01',
-      endDate: '2027-12-31',
-    ),
-    AssetInvestment(projectName: 'Fund B', investMoneyValid: 3608126),
-  ],
-  points: [
-    for (var i = 0; i <= 12; i++)
-      MyPageChartPoint(
-        DateTime(2026, 10 - 12 * years + i * years, 29),
-        3000 + i * 800,
-      ),
-  ],
-);
+      start: years == 1 ? DateTime(2025, 11) : DateTime(2027 - years),
+      end: DateTime(2026, 10, 29),
+      total: 9020314,
+      holdings: const [
+        AssetInvestment(
+          projectName: 'Fund A',
+          investMoneyValid: 5412188,
+          beginDate: '2025-01-01',
+          endDate: '2027-12-31',
+        ),
+        AssetInvestment(projectName: 'Fund B', investMoneyValid: 3608126),
+      ],
+      points: [
+        for (var i = 0; i <= 12; i++)
+          MyPageChartPoint(
+            DateTime(2026, 10 - 12 * years + i * years, 29),
+            3000 + i * 800,
+          ),
+      ],
+    );
 
 class LoaderFake implements LoadMyPageChartUseCase {
   int calls = 0;
+  final requests = <(MyPageChartKind, int)>[];
   @override
   Future<MyPageChartData> call(
     MyPageChartKind kind,
@@ -129,6 +131,7 @@ class LoaderFake implements LoadMyPageChartUseCase {
     DateTime now,
   ) async {
     calls++;
+    requests.add((kind, years));
     return chart(years);
   }
 
@@ -140,6 +143,70 @@ final signedIn = StateProvider<bool>((ref) => false);
 final identity = StateProvider<String>((ref) => 'A');
 Future<void> flush() => Future<void>.delayed(Duration.zero);
 void main() {
+  testWidgets('Japanese dividend card shows five years on first load',
+      (tester) async {
+    final loader = LoaderFake();
+    await tester.pumpWidget(ProviderScope(
+      overrides: [
+        isAuthenticatedProvider.overrideWith((_) => const AsyncData(true)),
+        currentAuthUserProvider
+            .overrideWith((_) async => const AuthUser(username: 'A')),
+        loadMyPageChartProvider.overrideWithValue(loader),
+      ],
+      child: MaterialApp(
+        locale: const Locale('ja'),
+        theme: AppThemeFactory.light(locale: const Locale('ja')),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: const Scaffold(
+            body: MyPageSummaryChartCard(kind: MyPageChartKind.dividends)),
+      ),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.text('累計配当額'), findsOneWidget);
+    expect(find.text('直近5年間'), findsOneWidget);
+    expect(find.text('直近1年間'), findsNothing);
+    expect(loader.requests.last, (MyPageChartKind.dividends, 5));
+  });
+
+  test(
+    'summary dividends initially request five years and preserve range on refresh',
+    () async {
+      final loader = LoaderFake();
+      final container = ProviderContainer(
+        overrides: [
+          isAuthenticatedProvider.overrideWith((_) => const AsyncData(true)),
+          currentAuthUserProvider.overrideWith(
+            (_) async => const AuthUser(username: 'A'),
+          ),
+          loadMyPageChartProvider.overrideWithValue(loader),
+        ],
+      );
+      addTearDown(container.dispose);
+      final dividends = myPageChartProvider(MyPageChartKind.dividends);
+      container.listen(dividends, (_, __) {});
+      await flush();
+      await flush();
+      expect(container.read(dividends).years, 5);
+      expect(loader.requests, contains((MyPageChartKind.dividends, 5)));
+      expect(loader.requests, isNot(contains((MyPageChartKind.dividends, 1))));
+      final controller = container.read(dividends.notifier);
+      await controller.selectYears(3);
+      await controller.refresh();
+      expect(loader.requests.last, (MyPageChartKind.dividends, 3));
+      expect(container.read(dividends).years, 3);
+      for (final kind in [
+        MyPageChartKind.miles,
+        MyPageChartKind.operating,
+        MyPageChartKind.available,
+      ]) {
+        final provider = myPageChartProvider(kind);
+        container.listen(provider, (_, __) {});
+        expect(container.read(provider).years, 1);
+      }
+    },
+  );
+
   test(
     'provider skips private endpoints for guests and clears old account charts',
     () async {
@@ -312,67 +379,68 @@ void main() {
     GlobalKey? capture,
     bool dark = false,
     bool summary = false,
-  }) => ProviderScope(
-    overrides: [
-      myPageAccountStatisticProvider.overrideWith(
-        (ref) async =>
-            const MyPageAccountStatistic(firstLevelAccountTotal: 14500),
-      ),
-      ...[
-        myPageMilesExpiryProvider.overrideWith((ref) async => []),
-        myPageTierProvider.overrideWith((ref) {
-          final c = MyPageMembershipController(
-            () async => const HostMilesTier(
-              pointsBalance: 30000,
-              currentTier: 'BRONZE',
-              pointRate: .00525,
-              maxRooms: 3,
-              currentBookingRooms: 1,
-              currentAum: 600000,
-              nextTierGap: 900000,
-            ),
-          );
-          Future.microtask(c.refresh);
-          return c;
-        }),
-        myPageMilesAccountProvider.overrideWith((ref) {
-          final c = MyPageMembershipController(
-            () async => const HostMilesAccount(
-              availablePoints: 30000,
-              expiringSoonPoints: 1200,
-            ),
-          );
-          Future.microtask(c.refresh);
-          return c;
-        }),
-      ],
-      for (final kind in MyPageChartKind.values)
-        myPageChartProvider(kind).overrideWith((ref) {
-          final c = MyPageChartController((years) async => chart(years));
-          Future.microtask(c.refresh);
-          return c;
-        }),
-    ],
-    child: MaterialApp(
-      locale: locale,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: dark
-          ? AppThemeFactory.dark(locale: locale)
-          : AppThemeFactory.light(locale: locale),
-      builder: (context, child) => MediaQuery(
-        data: MediaQuery.of(
-          context,
-        ).copyWith(textScaler: TextScaler.linear(scale)),
-        child: RepaintBoundary(key: capture, child: child!),
-      ),
-      home: summary
-          ? const MyPageSummaryPage()
-          : const Scaffold(
-              body: SingleChildScrollView(child: MyPageSummaryCharts()),
-            ),
-    ),
-  );
+  }) =>
+      ProviderScope(
+        overrides: [
+          myPageAccountStatisticProvider.overrideWith(
+            (ref) async =>
+                const MyPageAccountStatistic(firstLevelAccountTotal: 14500),
+          ),
+          ...[
+            myPageMilesExpiryProvider.overrideWith((ref) async => []),
+            myPageTierProvider.overrideWith((ref) {
+              final c = MyPageMembershipController(
+                () async => const HostMilesTier(
+                  pointsBalance: 30000,
+                  currentTier: 'BRONZE',
+                  pointRate: .00525,
+                  maxRooms: 3,
+                  currentBookingRooms: 1,
+                  currentAum: 600000,
+                  nextTierGap: 900000,
+                ),
+              );
+              Future.microtask(c.refresh);
+              return c;
+            }),
+            myPageMilesAccountProvider.overrideWith((ref) {
+              final c = MyPageMembershipController(
+                () async => const HostMilesAccount(
+                  availablePoints: 30000,
+                  expiringSoonPoints: 1200,
+                ),
+              );
+              Future.microtask(c.refresh);
+              return c;
+            }),
+          ],
+          for (final kind in MyPageChartKind.values)
+            myPageChartProvider(kind).overrideWith((ref) {
+              final c = MyPageChartController((years) async => chart(years));
+              Future.microtask(c.refresh);
+              return c;
+            }),
+        ],
+        child: MaterialApp(
+          locale: locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: dark
+              ? AppThemeFactory.dark(locale: locale)
+              : AppThemeFactory.light(locale: locale),
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(
+              context,
+            ).copyWith(textScaler: TextScaler.linear(scale)),
+            child: RepaintBoundary(key: capture, child: child!),
+          ),
+          home: summary
+              ? const MyPageSummaryPage()
+              : const Scaffold(
+                  body: SingleChildScrollView(child: MyPageSummaryCharts()),
+                ),
+        ),
+      );
   testWidgets(
     'four locales, narrow layout, independent range selectors and dark theme',
     (tester) async {
@@ -465,9 +533,8 @@ void main() {
       of: card,
       matching: find.byIcon(Icons.chevron_right_rounded),
     );
-    final expiryRow = find
-        .ancestor(of: arrow, matching: find.byType(AppCard))
-        .first;
+    final expiryRow =
+        find.ancestor(of: arrow, matching: find.byType(AppCard)).first;
     expect(tester.getSize(expiryRow).height, 45);
     await tester.tap(arrow);
     await tester.pumpAndSettle();

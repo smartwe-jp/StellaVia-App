@@ -15152,6 +15152,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Application status'**
   String get corpProgressHeading;
+
+  /// No description provided for @fundListComingSoonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'COMING SOON'**
+  String get fundListComingSoonLabel;
+
+  /// No description provided for @fundListNoMatchLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'NO MATCH'**
+  String get fundListNoMatchLabel;
+
+  /// No description provided for @fundListPreparingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New funds are coming soon'**
+  String get fundListPreparingTitle;
+
+  /// No description provided for @fundListPreparingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We are preparing new host funds. Please check back for upcoming listings.'**
+  String get fundListPreparingBody;
+
+  /// No description provided for @fundListNoMatchBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Try changing your filters or check back later.'**
+  String get fundListNoMatchBody;
 }
 
 class _AppLocalizationsDelegate

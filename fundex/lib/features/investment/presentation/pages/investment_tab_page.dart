@@ -17,6 +17,7 @@ import '../providers/fund_project_providers.dart';
 import '../support/fund_project_gain_type_label.dart';
 import '../support/fund_project_yield_display.dart';
 import '../widgets/fund_subscription_progress_bar.dart';
+import '../widgets/fund_list_empty_state.dart';
 
 enum _FundListFilter {
   all,
@@ -469,20 +470,11 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                                 controller: _scrollController,
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                      20,
-                                      80,
-                                      20,
-                                      20,
-                                    ),
-                                    child: Text(
-                                      l10n.fundListEmpty,
-                                      textAlign: TextAlign.center,
-                                      style: appText.bodyMuted.copyWith(
-                                        color: colors.textSecondary,
-                                      ),
-                                    ),
+                                  FundListEmptyState(
+                                    isPreparing:
+                                        projects.isEmpty &&
+                                        _effectiveSelectedFilter ==
+                                            _FundListFilter.all,
                                   ),
                                 ],
                               ),

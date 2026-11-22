@@ -3307,5 +3307,10 @@
   "corpStatusLabel": "当前状态",
   "corpFlowLabel": "认证流程",
   "corpApplicationLabel": "申请信息",
-  "corpProgressHeading": "申请进度"
+  "corpProgressHeading": "申请进度",
+  "fundListComingSoonLabel": "即将上线",
+  "fundListNoMatchLabel": "暂无匹配",
+  "fundListPreparingTitle": "新项目准备中，敬请期待",
+  "fundListPreparingBody": "我们正在筹备新的宿主基金，敬请期待项目公开。",
+  "fundListNoMatchBody": "请调整筛选条件，或稍后再试。"
 }

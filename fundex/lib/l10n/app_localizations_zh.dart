@@ -7908,6 +7908,21 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get corpProgressHeading => '申请进度';
+
+  @override
+  String get fundListComingSoonLabel => '即将上线';
+
+  @override
+  String get fundListNoMatchLabel => '暂无匹配';
+
+  @override
+  String get fundListPreparingTitle => '新项目准备中，敬请期待';
+
+  @override
+  String get fundListPreparingBody => '我们正在筹备新的宿主基金，敬请期待项目公开。';
+
+  @override
+  String get fundListNoMatchBody => '请调整筛选条件，或稍后再试。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -15818,4 +15833,19 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get corpProgressHeading => '申請進度';
+
+  @override
+  String get fundListComingSoonLabel => '即將上線';
+
+  @override
+  String get fundListNoMatchLabel => '暫無符合項目';
+
+  @override
+  String get fundListPreparingTitle => '新專案準備中，敬請期待';
+
+  @override
+  String get fundListPreparingBody => '我們正在籌備新的宿主基金，敬請期待專案公開。';
+
+  @override
+  String get fundListNoMatchBody => '請調整篩選條件，或稍後再試。';
 }

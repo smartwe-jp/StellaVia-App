@@ -29,6 +29,13 @@ class _FakeFundProjectRemoteDataSource implements FundProjectRemoteDataSource {
   }
 
   @override
+  Future<FundProjectApplyDetailDto> fetchFundProjectApplyDetail({
+    required String projectId,
+  }) async {
+    throw StateError('Unexpected application-detail request for $projectId');
+  }
+
+  @override
   Future<void> submitLotteryApply({
     required String projectId,
     required int units,

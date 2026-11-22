@@ -28,11 +28,13 @@ class HomeMilesCard extends StatelessWidget {
         InkWell(
           onTap: onTap,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const HomeActionIcon(Icons.card_giftcard_outlined),
               const SizedBox(width: 12),
-              Expanded(
-                child: Column(
+              // Expanded(
+              //   child: 
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -54,14 +56,16 @@ class HomeMilesCard extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
-              Flexible(
-                child: Text(
+              //),
+              const Spacer(),
+              //Flexible(
+                //child: 
+                Text(
                   context.l10n.homeBookWithMiles,
                   textAlign: TextAlign.end,
                   style: HomeTextStyles.smallLink(context),
                 ),
-              ),
+              //),
 
               Icon(
                 Icons.chevron_right,

@@ -3307,5 +3307,10 @@
   "corpStatusLabel": "現在の状況",
   "corpFlowLabel": "認証の流れ",
   "corpApplicationLabel": "申請情報",
-  "corpProgressHeading": "申請状況"
+  "corpProgressHeading": "申請状況",
+  "fundListComingSoonLabel": "COMING SOON",
+  "fundListNoMatchLabel": "NO MATCH",
+  "fundListPreparingTitle": "準備中です。しばらくお待ちください",
+  "fundListPreparingBody": "新しい宿主ファンドを準備しています。公開まで今しばらくお待ちください。",
+  "fundListNoMatchBody": "条件を変えるか、しばらくしてから再度お試しください。"
 }
