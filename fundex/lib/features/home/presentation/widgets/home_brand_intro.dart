@@ -48,7 +48,7 @@ class HomeBrandIntro extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  l10n.homeRankTitle,
+                  l10n.homeGuestBenefitsBody,
                   style: HomeTextStyles.caption(
                     context,
                   ).copyWith(color: colors.onDark),

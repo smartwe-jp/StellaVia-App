@@ -13,3 +13,10 @@ bool shouldShowHomeMemberProfileReminder(VerificationEntry entry) =>
         'EXPIRED',
       }.contains(entry.status),
     };
+
+bool hasCompletedHomeIdentityVerification(VerificationEntry? entry) =>
+    switch (entry?.kind) {
+      VerificationEntryKind.personal => entry?.personalStatus == 4,
+      VerificationEntryKind.corporate => entry?.status == 'CONFIRMED',
+      VerificationEntryKind.choice || null => false,
+    };

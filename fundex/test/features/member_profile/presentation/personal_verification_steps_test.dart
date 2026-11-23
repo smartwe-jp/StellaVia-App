@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:fundex/features/auth/presentation/providers/auth_providers.dart';
 import 'package:fundex/features/member_profile/domain/entities/member_profile_details.dart';
 import 'package:fundex/features/member_profile/domain/repositories/member_profile_repository.dart';
+import 'package:fundex/features/member_profile/presentation/pages/edit_flow_steps/member_profile_basic_info_step_page.dart';
 import 'package:fundex/features/member_profile/presentation/pages/edit_flow_steps/member_profile_bank_account_step_page.dart';
 import 'package:fundex/features/member_profile/presentation/pages/edit_flow_steps/member_profile_consent_step_page.dart';
 import 'package:fundex/features/member_profile/presentation/pages/member_profile_edit_flow_page.dart';
@@ -15,10 +16,14 @@ import 'package:fundex/features/member_profile/presentation/widgets/member_docum
 import 'package:fundex/l10n/app_localizations.dart';
 
 class _Profiles implements MemberProfileRepository {
+  _Profiles({this.nationality = '', this.taxcountry = ''});
+  final String nationality, taxcountry;
   MemberProfileDetails? draft;
   @override
   Future<MemberProfileDetails?> readLocalProfile() async =>
-      const MemberProfileDetails(
+      MemberProfileDetails(
+        nationality: nationality,
+        taxcountry: taxcountry,
         ekycDocumentType: 'my_number',
         idDocumentPhotoPath: 'https://example.com/front.jpg',
         idDocumentObliquePhotoPath: 'https://example.com/tilt.jpg',
@@ -33,6 +38,43 @@ class _Profiles implements MemberProfileRepository {
 }
 
 void main() {
+  for (final (nationality, taxcountry) in [('', ''), ('中国', ''), ('', '米国')]) {
+    testWidgets(
+      'prefill blank countries independently [$nationality, $taxcountry]',
+      (tester) async {
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              memberProfileRepositoryProvider.overrideWithValue(
+                _Profiles(nationality: nationality, taxcountry: taxcountry),
+              ),
+              currentAuthUserProvider.overrideWith((_) async => null),
+            ],
+            child: MaterialApp(
+              locale: const Locale('ja'),
+              supportedLocales: AppLocalizations.supportedLocales,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              theme: AppThemeFactory.light(),
+              home: const MemberProfileEditFlowPage(),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final form = tester.widget<MemberProfileBasicInfoStepPage>(
+          find.byType(MemberProfileBasicInfoStepPage),
+        );
+        expect(
+          form.nationalityController.text,
+          nationality.isEmpty ? '日本' : nationality,
+        );
+        expect(
+          form.taxCountryController.text,
+          taxcountry.isEmpty ? '日本' : taxcountry,
+        );
+      },
+    );
+  }
+
   testWidgets(
     'face cancellation stays on step and successful check leads to optional bank',
     (tester) async {

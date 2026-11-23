@@ -253,6 +253,14 @@ void main() {
           final router = routerFor(path);
           await tester.pumpWidget(app(router, locale: locale, scale: 1.3));
           await tester.pumpAndSettle();
+          if (path == '/home/service') {
+            final l = AppLocalizations.of(
+              tester.element(find.byType(HomeServiceIntroductionPage)),
+            );
+            expect(find.text('HOST BENEFITS'), findsOneWidget);
+            expect(find.text(l.homeServiceBenefitsTitle), findsOneWidget);
+            expect(find.text(l.homeServiceBenefitsBody), findsOneWidget);
+          }
           await tester.ensureVisible(find.text('MASTER'));
           await tester.pumpAndSettle();
           expect(tester.takeException(), isNull, reason: '$locale $path');

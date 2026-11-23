@@ -11991,6 +11991,24 @@ abstract class AppLocalizations {
   /// **'Rather than sacrificing today for the future, grow your assets while enjoying the present with family, your partner, and the people who matter. By investing in Host Funds, you can earn investment returns as well as “Host Miles” for hotel stays through our Host Benefits program. This is STELLAVIA’s new approach to investing.'**
   String get homeServiceAboutBody;
 
+  /// No description provided for @homeServiceBenefitsEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'HOST BENEFITS'**
+  String get homeServiceBenefitsEyebrow;
+
+  /// No description provided for @homeServiceBenefitsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel with Host Benefits'**
+  String get homeServiceBenefitsTitle;
+
+  /// No description provided for @homeServiceBenefitsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Host Benefits are exclusively for hosts. Each month, you earn Host Miles based on your Host Fund investment balance. Use your miles to book a stay at a STELLAVIA hotel and set off on your next trip. The longer you invest, the more choices and flexibility you have when you travel. That’s the idea behind STELLAVIA’s Host Benefits.'**
+  String get homeServiceBenefitsBody;
+
   /// No description provided for @homeServiceReturnsEyebrow.
   ///
   /// In en, this message translates to:

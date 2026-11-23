@@ -15,6 +15,23 @@ import 'package:fundex/features/home/presentation/widgets/home_miles_card.dart';
 import 'package:fundex/features/home/presentation/widgets/home_simulation_card.dart';
 
 void main() {
+  testWidgets('benefits card shows the localized tagline', (tester) async {
+    for (final locale in AppLocalizations.supportedLocales) {
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          theme: AppThemeFactory.light(locale: locale),
+          home: Scaffold(body: HomeBrandIntro(ranks: const [], onServiceTap: () {})),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final l10n = AppLocalizations.of(tester.element(find.byType(HomeBrandIntro)));
+      expect(find.text(l10n.homeGuestBenefitsBody), findsOneWidget);
+    }
+  });
+
   testWidgets(
     'home sections fit small screens and localized text; actions remain usable',
     (tester) async {

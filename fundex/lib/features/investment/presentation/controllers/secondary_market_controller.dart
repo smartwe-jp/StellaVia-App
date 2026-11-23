@@ -179,7 +179,7 @@ final secondaryMarketApplicationProvider = FutureProvider.autoDispose
       for (var page = 1; ; page++) {
         final rows = await ref
             .read(fetchMyPageApplyListUseCaseProvider)
-            .call(marketType: 2, startPage: page, limit: 100);
+            .call(startPage: page, limit: 100);
         for (final row in rows) {
           if (row.processId == processId) return row;
         }

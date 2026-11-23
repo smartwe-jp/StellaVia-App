@@ -6229,6 +6229,16 @@ class AppLocalizationsZh extends AppLocalizations {
       '无需为了未来而牺牲当下，在培育资产的同时，也享受与家人、伴侣及重要之人共度的此刻。投资宿主基金，除了获得投资回报，还可通过“宿主礼遇”积累可用于酒店住宿的“宿主里程”。这就是 STELLAVIA 提出的全新投资方式。';
 
   @override
+  String get homeServiceBenefitsEyebrow => 'HOST BENEFITS';
+
+  @override
+  String get homeServiceBenefitsTitle => '用宿主礼遇，开启旅程';
+
+  @override
+  String get homeServiceBenefitsBody =>
+      '“宿主礼遇”是宿主专享的福利。每月，您都会根据宿主基金的投资余额累积“宿主里程”。用攒下的里程预订 STELLAVIA 酒店，就能踏上旅途。投资越久，旅行的选择就越多，行程安排也越自由。这就是 STELLAVIA 的“宿主礼遇”。';
+
+  @override
   String get homeServiceReturnsEyebrow => 'TWO RETURNS';
 
   @override
@@ -14152,6 +14162,16 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String get homeServiceAboutBody =>
       '無需為了未來而犧牲當下，在培育資產的同時，也享受與家人、伴侶及重要之人共度的此刻。投資宿主基金，除了獲得投資回報，還可透過「宿主禮遇」累積可用於飯店住宿的「宿主里程」。這就是 STELLAVIA 提出的全新投資方式。';
+
+  @override
+  String get homeServiceBenefitsEyebrow => 'HOST BENEFITS';
+
+  @override
+  String get homeServiceBenefitsTitle => '用宿主禮遇，踏上旅程';
+
+  @override
+  String get homeServiceBenefitsBody =>
+      '「宿主禮遇」是宿主專享的福利。每月，您都會依宿主基金的投資餘額累積「宿主里程」。用累積的里程預訂 STELLAVIA 飯店，就能踏上旅途。投資越久，旅行的選擇就越多，行程安排也越自由。這就是 STELLAVIA 的「宿主禮遇」。';
 
   @override
   String get homeServiceReturnsEyebrow => 'TWO RETURNS';

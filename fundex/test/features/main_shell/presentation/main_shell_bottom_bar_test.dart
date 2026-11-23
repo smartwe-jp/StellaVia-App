@@ -116,11 +116,18 @@ void main() {
         final bar = tester.widget<AppBottomTabBar>(
           find.byType(AppBottomTabBar),
         );
-        expect(bar.items.length, 5);
+        final labels = await AppLocalizations.delegate.load(locale);
+        expect(bar.items.map((item) => item.label), [
+          labels.mainTabHome,
+          labels.mainTabHotel,
+          labels.mainTabInvestment,
+          labels.mainTabBookings,
+          labels.mainTabProfile,
+        ]);
         for (final item in bar.items) {
           await tester.tap(find.text(item.label));
         }
-        expect(taps, [0, 1, 2, 3, 4]);
+        expect(taps, [0, 2, 1, 3, 4]);
         expect(tester.takeException(), isNull);
         await tester.pumpWidget(const SizedBox());
       }

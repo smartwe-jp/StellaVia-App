@@ -6287,6 +6287,16 @@ class AppLocalizationsJa extends AppLocalizations {
       '将来のために今を我慢するのではなく、資産を育てながら、家族やパートナー、大切な人との“今”の時間も楽しむ。宿主ファンドへの投資で、運用によるリターンに加えて、ホテルの宿泊に使える「宿主マイル」が貯まる『宿主優待』。それが、STELLAVIAが提案する新しい投資のかたちです。';
 
   @override
+  String get homeServiceBenefitsEyebrow => 'HOST BENEFITS';
+
+  @override
+  String get homeServiceBenefitsTitle => '宿主優待で、旅に出る';
+
+  @override
+  String get homeServiceBenefitsBody =>
+      '『宿主優待』は、宿主ファンドの運用残高に応じて「宿主マイル」が毎月貯まる、宿主だけの特典。 貯まった「宿主マイル」でSTELLAVIAのホテルを予約し、旅に出る。 投資を続けるほど、旅の選択肢や自由度が増えていく。 それが、STELLAVIAが提案する『宿主優待』です。';
+
+  @override
   String get homeServiceReturnsEyebrow => 'TWO RETURNS';
 
   @override

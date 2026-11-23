@@ -41,6 +41,7 @@ class HomeServiceIntroductionPage extends ConsumerWidget {
             child: Column(
               children: [
                 const HomeServiceAboutSection(),
+                const HomeServiceBenefitsSection(),
                 const HomeServiceReturnsSection(),
                 HomeRankDetailsSection(rankTextScaler: media.textScaler),
                 const HomeServiceStartSection(),

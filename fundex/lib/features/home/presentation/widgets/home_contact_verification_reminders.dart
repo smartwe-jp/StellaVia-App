@@ -6,6 +6,9 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 
+import '../support/home_member_profile_reminder_support.dart';
+import 'home_verification_reminder.dart';
+
 class HomeContactVerificationReminders extends ConsumerWidget {
   const HomeContactVerificationReminders({super.key});
 
@@ -15,6 +18,7 @@ class HomeContactVerificationReminders extends ConsumerWidget {
         .watch(settingsEmailVerifiedProvider)
         .asData
         ?.value;
+    final entry = ref.watch(homeVerificationReminderProvider).asData?.value;
     final status = ref
         .watch(settingsRemoteVerificationStatusProvider)
         .asData
@@ -28,7 +32,8 @@ class HomeContactVerificationReminders extends ConsumerWidget {
           message: l.homeReminderEmailVerificationBody,
           onTap: () => context.push('/profile/settings/two-factor/email'),
         ),
-      if (status?.isPhoneVerified == false)
+      if (hasCompletedHomeIdentityVerification(entry) &&
+          status?.isPhoneVerified == false)
         FundReminderData(
           leading: const Icon(Icons.smartphone_rounded, size: 30),
           title: l.homeReminderPhoneVerificationTitle,

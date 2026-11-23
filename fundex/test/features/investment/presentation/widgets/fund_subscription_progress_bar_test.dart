@@ -30,6 +30,7 @@ void main() {
       (0.0, '応募金額 ¥0（0.00%）'),
       (0.385, '応募金額 ¥38,500,000（38.50%）'),
       (0.85, '応募金額 ¥85,000,000（85.00%）'),
+      (1.0, '応募金額 ¥100,000,000（100.00%）'),
       (1.1265, '応募金額 ¥112,650,000（112.65%）'),
     ];
     await tester.pumpWidget(
@@ -63,6 +64,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+    Color? previousFill;
     for (final example in examples) {
       final bar = find.bySemanticsLabel(example.$2);
       expect(bar, findsOneWidget);
@@ -74,6 +76,20 @@ void main() {
         of: fill,
         matching: find.byType(DecoratedBox),
       );
+      final decoration =
+          tester.widget<DecoratedBox>(paint).decoration as BoxDecoration;
+      expect(decoration.gradient, isNull);
+      final color = decoration.color!;
+      if (example.$1 >= 1) {
+        expect(color, AppColorTokens.brandPurple);
+      }
+      if (previousFill != null && example.$1 <= 1) {
+        expect(
+          color.computeLuminance(),
+          lessThan(previousFill.computeLuminance()),
+        );
+      }
+      previousFill = color;
       expect(
         tester.getSize(paint).width,
         closeTo(tester.getSize(fill).width * example.$1.clamp(0, 1), 0.01),

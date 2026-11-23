@@ -14,8 +14,8 @@ class MainShellBottomBar extends StatelessWidget {
   final ValueChanged<int> onSelected;
   static const tabs = [
     MainShellTab.home,
-    MainShellTab.investment,
     MainShellTab.hotel,
+    MainShellTab.investment,
     MainShellTab.bookings,
     MainShellTab.profile,
   ];
@@ -24,12 +24,12 @@ class MainShellBottomBar extends StatelessWidget {
     final l = context.l10n;
     final labels = [
       l.mainTabHome,
-      l.mainTabInvestment,
       l.mainTabHotel,
+      l.mainTabInvestment,
       l.mainTabBookings,
       l.mainTabProfile,
     ];
-    const assets = ['home', 'funds', 'hotel', 'bookings', 'profile'];
+    const assets = ['home', 'hotel', 'funds', 'bookings', 'profile'];
     final selected = tabs.indexWhere((tab) => tab.index == currentTabIndex);
     return AppBottomTabBar(
       key: const Key('main_tab_bar'),

@@ -365,10 +365,12 @@ class _MemberProfileEditFlowPageState
         _nationalityController.text = _firstNonEmpty([
           savedProfile?.nationality ?? '',
           authUser?.nationality ?? '',
+          l10n.memberProfileTaxCountryHint,
         ]);
         _taxCountryController.text = _firstNonEmpty(<String>[
           savedProfile?.taxcountry ?? '',
           authUser?.taxcountry ?? '',
+          l10n.memberProfileTaxCountryHint,
         ]);
         _prefectureController.text = _firstNonEmpty(<String>[
           savedPrefectureFromAddress,

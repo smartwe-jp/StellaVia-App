@@ -114,6 +114,26 @@ void main() {
       expect(rows.last.totalAccount, 150000);
     });
 
+    test('history and fund management query applications across markets', () async {
+      final bodies = <Object?>[];
+      final source = MyPageRemoteDataSourceImpl(_buildClient((options) async {
+        expect(options.path, UserInvestmentApiPaths.applyList);
+        bodies.add(options.data);
+        return _jsonOk('{"code":200,"data":{"rows":[],"total":0}}');
+      }));
+
+      await source.fetchTradeApplications(page: 2);
+      for (final status in [0, 2]) {
+        await source.fetchFundManagementApplications(page: 2, status: status);
+      }
+
+      expect(bodies, [
+        {'startPage': 2, 'limit': 10},
+        for (final status in [0, 2])
+          {'startPage': 2, 'limit': 10, 'status': [status]},
+      ]);
+    });
+
     test('fetchApplyList posts payload and parses rows envelope', () async {
       final client = _buildClient((options) async {
         expect(options.method, 'POST');

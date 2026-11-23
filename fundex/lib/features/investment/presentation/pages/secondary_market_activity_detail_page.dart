@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../member_profile/domain/entities/mypage_models.dart';
+import '../../../member_profile/presentation/providers/host_fund_management_providers.dart';
 import '../../../member_profile/presentation/support/mypage_withdraw_action.dart';
 import '../controllers/secondary_market_controller.dart';
 import '../support/secondary_market_status.dart';
@@ -88,6 +89,7 @@ class _SecondaryMarketActivityDetailPageState
         );
       }
       if (success && mounted) {
+        if (application != null) ref.invalidate(hostFundApplicationsProvider);
         refreshSecondaryMarket(ref);
         await _refresh();
       }
@@ -188,6 +190,13 @@ class _SecondaryMarketActivityDetailPageState
                   record: purchase,
                   showApplicationTime: false,
                   showPayment: true,
+                  onCancel:
+                      !busy &&
+                          !loading &&
+                          !error &&
+                          canWithdrawSecondaryApplication(purchase)
+                      ? () => _cancel(application: purchase)
+                      : null,
                   onContract: (sign) => _openContract(purchase, sign),
                 ),
                 SecondaryPurchaseBreakdown(record: purchase),

@@ -101,7 +101,7 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
   final UserInvestmentApiClient _apiClient;
 
   @override
-  Future<({List<MyPageApplyRecordDto> rows, int total})> fetchTradeApplications({required int page}) => _apiClient.fetchApplyPage(startPage: page, limit: 10, marketType: 2);
+  Future<({List<MyPageApplyRecordDto> rows, int total})> fetchTradeApplications({required int page}) => _apiClient.fetchApplyPage(startPage: page, limit: 10);
 
   @override
   Future<({List<MyPageOrderInquiryRecordDto> rows, int total})> fetchTradeListings({required int page, int? userId, String? status}) => _apiClient.fetchOrderInquiryPage(startPage: page, limit: 10, userId: userId, status: status);
@@ -127,7 +127,7 @@ class MyPageRemoteDataSourceImpl implements MyPageRemoteDataSource {
     required int page,
     required int status,
   }) =>
-      _apiClient.fetchApplyPage(startPage: page, limit: 10, statuses: [status], marketType: 1);
+      _apiClient.fetchApplyPage(startPage: page, limit: 10, statuses: [status]);
 
   @override
   Future<List<MyPageApplyRecordDto>> fetchApplyList({

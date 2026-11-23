@@ -22,6 +22,27 @@ class HomeServiceAboutSection extends StatelessWidget {
   );
 }
 
+class HomeServiceBenefitsSection extends StatelessWidget {
+  const HomeServiceBenefitsSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    return _Section(
+      children: [
+        AppBrandHeading(
+          eyebrow: l.homeServiceBenefitsEyebrow,
+          title: l.homeServiceBenefitsTitle,
+        ),
+        Text(
+          l.homeServiceBenefitsBody,
+          style: HomeTextStyles.readingBody(context),
+        ),
+      ],
+    );
+  }
+}
+
 class HomeServiceReturnsSection extends StatelessWidget {
   const HomeServiceReturnsSection({super.key});
   @override

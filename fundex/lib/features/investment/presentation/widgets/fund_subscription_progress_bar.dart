@@ -40,8 +40,10 @@ class FundSubscriptionProgressBar extends StatelessWidget {
                 widthFactor: fraction,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [colors.brandPrimaryDark, colors.primary],
+                    color: Color.lerp(
+                      AppColorTokens.brandLilac,
+                      colors.brandPrimary,
+                      fraction,
                     ),
                   ),
                 ),
