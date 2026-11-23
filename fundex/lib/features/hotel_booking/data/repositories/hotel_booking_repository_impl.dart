@@ -30,6 +30,8 @@ class HotelBookingRepositoryImpl implements HotelBookingRepository {
       }
       hotels.add(
         PointsHotel(
+          location: row.location,
+          imageUrl: row.imageUrl,
           id: row.id,
           name: row.name,
           buildingCode: row.buildingCode,

@@ -6979,6 +6979,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hotelDetailEstimateNotice => '此处为预估，实际里程与室数将在预约确认时更新。';
 
   @override
+  String get hotelBookWithoutMiles => '不使用里程预订';
+
+  @override
+  String get hotelAcceptCancellationPolicy => '我同意取消政策';
+
+  @override
+  String get hotelCancellationPolicyUnavailable => '暂时无法获取取消政策。';
+
+  @override
   String get hotelDetailMilesInsufficient => '宿主里程不足。';
 
   @override
@@ -14912,6 +14921,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get hotelDetailEstimateNotice => '此處為預估，實際里程與室數將在預約確認時更新。';
+
+  @override
+  String get hotelBookWithoutMiles => '不使用里程預訂';
+
+  @override
+  String get hotelAcceptCancellationPolicy => '我同意取消政策';
+
+  @override
+  String get hotelCancellationPolicyUnavailable => '暫時無法取得取消政策。';
 
   @override
   String get hotelDetailMilesInsufficient => '宿主里程不足。';

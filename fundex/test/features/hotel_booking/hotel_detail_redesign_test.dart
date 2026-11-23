@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fundex/features/hotel_booking/presentation/pages/hotel_detail_page.dart';
 import 'package:fundex/features/hotel_booking/presentation/providers/hotel_booking_providers.dart';
@@ -250,6 +251,95 @@ void main() {
     expect(cash.canAdd(0), true);
     expect(zero.canAdd(0), true);
   });
+  test(
+    'insufficient miles offer ordinary booking before selection and after the final quote',
+    () async {
+      final c = controller(mode: HotelBookingMode.hostMiles);
+      addTearDown(c.dispose);
+      expect(c.bookingShortfall(3000, 2), (
+        shortfall: 3000,
+        offerRegular: true,
+      ));
+      await c.change(0, 1, balance: 7000);
+      expect(c.bookingShortfall(7000, 2), (
+        shortfall: 1500,
+        offerRegular: true,
+      ));
+      expect(c.bookingShortfall(8500, 1), (shortfall: 0, offerRegular: false));
+    },
+  );
+
+  testWidgets(
+    'insufficient balance blocks miles checkout and offers the same stay at regular rates',
+    (tester) async {
+      final c = controller(mode: HotelBookingMode.hostMiles);
+      addTearDown(c.dispose);
+      await c.change(0, 1);
+      HotelDetailRouteArgs? opened;
+      final router = GoRouter(
+        routes: [
+          GoRoute(
+            path: '/',
+            builder: (_, _) => Scaffold(
+              body: HotelDetailRedesignContent(
+                detail: c.detail,
+                criteria: c.criteria,
+                selection: c,
+                account: const HostMilesAccount(availablePoints: 3000),
+                onDates: () {},
+                onGuests: () {},
+                onBook: () => fail('opened miles checkout'),
+                openingConfirmation: false,
+                membershipFailed: false,
+                onMembershipRetry: () {},
+              ),
+            ),
+          ),
+          GoRoute(
+            path: '/hotel-booking/1',
+            builder: (_, state) {
+              opened = state.extra! as HotelDetailRouteArgs;
+              return const Scaffold();
+            },
+          ),
+        ],
+      );
+      addTearDown(router.dispose);
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: router,
+          theme: AppThemeFactory.light(),
+          locale: const Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+      );
+      await tester.pumpAndSettle();
+      final l = AppLocalizations.of(
+        tester.element(find.byType(HotelDetailReservationPanel)),
+      );
+      expect(
+        find.textContaining(l.hotelDetailMilesShortfall('5,500')),
+        findsWidgets,
+      );
+      expect(
+        tester
+            .widget<AppButton>(
+              find.widgetWithText(AppButton, l.hotelDetailProceed),
+            )
+            .onPressed,
+        isNull,
+      );
+      await tester.tap(find.text(l.hotelBookWithoutMiles));
+      await tester.pumpAndSettle();
+      expect(opened?.mode, HotelBookingMode.regular);
+      expect(opened?.criteria.stayBenefit, false);
+      expect(opened?.criteria.checkInDate, criteria.checkInDate);
+      expect(opened?.criteria.checkOutDate, criteria.checkOutDate);
+      expect(opened?.criteria.occupancy, criteria.occupancy);
+      expect(opened?.criteria.kids, criteria.kids);
+    },
+  );
   test('detail cache separates cash and miles requests', () {
     final regular = HotelDetailQuery(hotelId: '1', criteria: criteria);
     final miles = HotelDetailQuery(

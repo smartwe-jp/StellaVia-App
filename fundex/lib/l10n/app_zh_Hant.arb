@@ -2984,6 +2984,9 @@
     }
   },
   "hotelDetailEstimateNotice": "此處為預估，實際里程與室數將在預約確認時更新。",
+  "hotelBookWithoutMiles": "不使用里程預訂",
+  "hotelAcceptCancellationPolicy": "我同意取消政策",
+  "hotelCancellationPolicyUnavailable": "暫時無法取得取消政策。",
   "hotelDetailMilesInsufficient": "宿主里程不足。",
   "hotelDetailRoomsInsufficient": "超出可預約室數。",
   "hotelDetailMilesUnavailable": "無法取得目前條件的里程報價。",

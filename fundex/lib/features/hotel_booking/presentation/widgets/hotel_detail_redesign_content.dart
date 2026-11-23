@@ -48,6 +48,7 @@ class HotelDetailRedesignContent extends StatelessWidget {
     );
     final roomLimit = miles ? tier?.remainingBookingRooms : null;
     final balance = account?.availablePoints ?? tier?.pointsBalance;
+    final budget = selection.bookingShortfall(balance, roomLimit);
     final extraGuestsByRoom = {
       for (final row
           in selection.assignment?.roomTypeExtraGuestPrices ??
@@ -236,6 +237,8 @@ class HotelDetailRedesignContent extends StatelessWidget {
         ),
         HotelDetailReservationPanel(
           selection: selection,
+          shortfall: budget.shortfall,
+          showRegularBooking: budget.offerRegular,
           withinAllowance:
               !miles ||
               ((roomLimit == null || selection.roomCount <= roomLimit) &&

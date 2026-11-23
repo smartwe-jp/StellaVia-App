@@ -7416,6 +7416,17 @@ class AppLocalizationsEn extends AppLocalizations {
       'These are estimates. Miles and room allowance are updated when the booking is confirmed.';
 
   @override
+  String get hotelBookWithoutMiles => 'Book without miles';
+
+  @override
+  String get hotelAcceptCancellationPolicy =>
+      'I agree to the cancellation policy';
+
+  @override
+  String get hotelCancellationPolicyUnavailable =>
+      'The cancellation policy could not be loaded.';
+
+  @override
   String get hotelDetailMilesInsufficient => 'Insufficient host miles.';
 
   @override

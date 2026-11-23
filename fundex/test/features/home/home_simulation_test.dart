@@ -196,14 +196,15 @@ void main() {
               overrides: [
                 simulationHotelsProvider.overrideWith(
                   (ref, points) async => [
-                    PointsHotel(
-                      id: '42',
-                      name: 'Kyoto Test',
-                      buildingCode: '01',
-                      nightlyPoints: 15400,
-                      referenceCheckIn: DateTime(2026, 11, 22),
-                      referenceCheckOut: DateTime(2026, 11, 23),
-                    ),
+                    for (var i = 0; i < 8; i++)
+                      PointsHotel(
+                        id: (42 + i).toString(),
+                        name: i == 0 ? 'Kyoto Test' : 'Hotel $i',
+                        buildingCode: '01',
+                        nightlyPoints: 15400,
+                        referenceCheckIn: DateTime(2026, 11, 22),
+                        referenceCheckOut: DateTime(2026, 11, 23),
+                      ),
                   ],
                 ),
                 isAuthenticatedProvider.overrideWithValue(AsyncData(member)),
@@ -278,13 +279,34 @@ void main() {
           expect(find.text('Kyoto Test'), findsOneWidget);
           expect(
             find.text(strings.simPointsHotelStay('15,400', 4)),
-            findsOneWidget,
+            findsNWidgets(6),
           );
           await tester.ensureVisible(find.text('Kyoto Test'));
           await tester.tap(find.text('Kyoto Test'));
           await tester.pumpAndSettle();
           expect(find.text('Hotel detail'), findsOneWidget);
           router.pop();
+          await tester.pumpAndSettle();
+          expect(find.text('Hotel 6'), findsNothing);
+          final more = find.text(strings.homeShowMoreAction);
+          await tester.ensureVisible(more);
+          await tester.tap(more);
+          await tester.pumpAndSettle();
+          await tester.scrollUntilVisible(
+            find.text('Hotel 7'),
+            350,
+            scrollable: find.byType(Scrollable).last,
+          );
+          await tester.pumpAndSettle();
+          await tester.ensureVisible(find.text('Hotel 7'));
+          await tester.pumpAndSettle();
+          await tester.tap(find.text('Hotel 7'));
+          await tester.pumpAndSettle();
+          expect(find.text('Hotel detail'), findsOneWidget);
+          router.pop();
+          await tester.pumpAndSettle();
+          expect(find.text('Hotel 7'), findsOneWidget);
+          await tester.tap(find.byType(BackButton));
           await tester.pumpAndSettle();
           final rate = find.descendant(
             of: find.byKey(const ValueKey('simulation-rate-input')),

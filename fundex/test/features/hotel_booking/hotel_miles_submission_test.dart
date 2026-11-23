@@ -16,6 +16,8 @@ import 'package:fundex/features/hotel_booking/presentation/widgets/hotel_booking
 import 'package:fundex/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:fundex/features/host_miles/domain/entities/host_miles_models.dart';
+import 'package:fundex/features/hotel_booking/presentation/providers/hotel_detail_membership_provider.dart';
 import 'hotel_detail_redesign_test.dart' as fixtures;
 
 class _Repository extends Fake implements HotelBookingRepository {
@@ -76,7 +78,18 @@ void main() {
         ProviderScope(
           overrides: [
             hotelBookingRepositoryProvider.overrideWithValue(repository),
-            hotelManagementIdentityProvider.overrideWithValue(null),
+            hotelManagementIdentityProvider.overrideWithValue((
+              null,
+              null,
+              'guest',
+            )),
+            hotelDetailAccountProvider.overrideWith(
+              (_, _) async => const HostMilesAccount(availablePoints: 10000),
+            ),
+            hotelManagementTierResourceProvider.overrideWith(
+              (_, _) async =>
+                  const HostMilesTier(maxRooms: 5, currentBookingRooms: 1),
+            ),
             hotelLocaleLanguageCodeProvider.overrideWithValue('EN'),
             currentAuthUserProvider.overrideWith(
               (_) async => const AuthUser(
@@ -125,6 +138,24 @@ void main() {
       );
       expect(find.byType(HotelBookingPaymentSection), findsNothing);
       expect(find.byType(HotelBookingCouponRow), findsNothing);
+      expect(
+        tester.widget<HotelBookingConfirmBottomBar>(bar).onConfirm,
+        isNull,
+      );
+      final consent = find.text(l.hotelAcceptCancellationPolicy);
+      await tester.scrollUntilVisible(
+        consent,
+        450,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('API cancellation policy'), findsOneWidget);
+      expect(find.text('10,000 ${l.myPageChartMileUnit}'), findsOneWidget);
+      expect(find.text('1,500 ${l.myPageChartMileUnit}'), findsOneWidget);
+      expect(find.text(l.hotelMilesRoomValue(3)), findsOneWidget);
+      await tester.ensureVisible(consent);
+      await tester.tap(consent);
+      await tester.pumpAndSettle();
       await tester.tap(find.text(l.hotelBookingConfirmAction));
       await tester.pumpAndSettle();
       await tester.pump(const Duration(seconds: 2));

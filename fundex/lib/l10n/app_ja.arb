@@ -2984,6 +2984,9 @@
     }
   },
   "hotelDetailEstimateNotice": "表示は見込みです。実際のマイル・室数は予約確定時に反映されます。",
+  "hotelBookWithoutMiles": "マイルを使わずに予約する",
+  "hotelAcceptCancellationPolicy": "キャンセルポリシーに同意する",
+  "hotelCancellationPolicyUnavailable": "キャンセルポリシーを取得できませんでした。",
   "hotelDetailMilesInsufficient": "宿主マイルが不足しています。",
   "hotelDetailRoomsInsufficient": "予約可能室数を超えています。",
   "hotelDetailMilesUnavailable": "この条件のマイル見積もりは取得できません。",

@@ -82,6 +82,28 @@ class HotelDetailSelectionController extends ChangeNotifier {
     return math.max(0, price * count - math.max(0, balance - used));
   }
 
+  ({num shortfall, bool offerRegular}) bookingShortfall(
+    num? balance,
+    int? roomLimit,
+  ) {
+    if (mode != HotelBookingMode.hostMiles || balance == null) {
+      return (shortfall: 0, offerRegular: false);
+    }
+    num? cheapestShortfall;
+    var blockedRoom = false;
+    for (var i = 0; i < detail.roomPlans.length; i++) {
+      if ((additionalRooms(i, roomLimit: roomLimit) ?? 1) <= 0) continue;
+      final missing = milesShortfall(i, balance);
+      if (missing == null) continue;
+      cheapestShortfall = math.min(cheapestShortfall ?? missing, missing);
+      if (missing > 0) blockedRoom = true;
+    }
+    final shortfall = roomCount == 0
+        ? cheapestShortfall ?? 0
+        : math.max<num>(0, (amount ?? 0) - balance);
+    return (shortfall: shortfall, offerRegular: blockedRoom || shortfall > 0);
+  }
+
   bool canAdd(int index, {int? roomLimit, num? balance, int count = 1}) {
     final room = detail.roomPlans[index];
     final left = additionalRooms(index, roomLimit: roomLimit);

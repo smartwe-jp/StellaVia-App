@@ -13341,6 +13341,24 @@ abstract class AppLocalizations {
   /// **'These are estimates. Miles and room allowance are updated when the booking is confirmed.'**
   String get hotelDetailEstimateNotice;
 
+  /// No description provided for @hotelBookWithoutMiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Book without miles'**
+  String get hotelBookWithoutMiles;
+
+  /// No description provided for @hotelAcceptCancellationPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the cancellation policy'**
+  String get hotelAcceptCancellationPolicy;
+
+  /// No description provided for @hotelCancellationPolicyUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The cancellation policy could not be loaded.'**
+  String get hotelCancellationPolicyUnavailable;
+
   /// No description provided for @hotelDetailMilesInsufficient.
   ///
   /// In en, this message translates to:

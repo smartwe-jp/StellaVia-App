@@ -103,7 +103,9 @@ class _HotelDetailPageState extends ConsumerState<HotelDetailPage>
       data: (value) => HotelDetailSession(
         key: ValueKey((value, _criteria, identity, language, widget.mode)),
         detail: value,
-        criteria: _criteria,
+        criteria: _criteria.copyWith(
+          buildingCode: widget.buildingCode ?? _criteria.buildingCode,
+        ),
         mode: widget.mode,
         onDates: () async {
           final next = await pickHotelStayDates(
@@ -301,6 +303,36 @@ class _HotelDetailSessionState extends ConsumerState<HotelDetailSession> {
         roomTypeCustNums: assigned.roomTypeCustNums,
       );
       if (hostMiles) {
+        final identity = ref.read(hotelManagementIdentityProvider);
+        final tier = identity == null
+            ? null
+            : ref
+                  .read(hotelManagementTierResourceProvider(identity))
+                  .valueOrNull;
+        final balance = identity == null
+            ? null
+            : ref
+                      .read(hotelDetailAccountProvider(identity))
+                      .valueOrNull
+                      ?.availablePoints ??
+                  tier?.pointsBalance;
+        if (balance == null || selection.amount! > balance) {
+          AppNotice.show(
+            context,
+            message: balance == null
+                ? context.l10n.homeMilesUnavailable
+                : context.l10n.hotelDetailMilesInsufficient,
+          );
+          return;
+        }
+        if (tier?.remainingBookingRooms != null &&
+            selection.roomCount > tier!.remainingBookingRooms!) {
+          AppNotice.show(
+            context,
+            message: context.l10n.hotelDetailRoomsInsufficient,
+          );
+          return;
+        }
         final guests = buildHotelRoomGuestTargets(seed);
         final adults = guests.fold(
           0,

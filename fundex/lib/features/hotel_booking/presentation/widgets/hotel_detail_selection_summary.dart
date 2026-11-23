@@ -1,5 +1,6 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'hotel_regular_booking_button.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../host_miles/domain/entities/host_miles_models.dart';
 import '../controllers/hotel_detail_selection_controller.dart';
@@ -146,11 +147,15 @@ class HotelDetailReservationPanel extends StatelessWidget {
     super.key,
     required this.selection,
     this.withinAllowance = true,
+    this.shortfall,
+    this.showRegularBooking = false,
     required this.onBook,
     required this.busy,
   });
   final HotelDetailSelectionController selection;
   final bool withinAllowance;
+  final num? shortfall;
+  final bool showRegularBooking;
   final VoidCallback onBook;
   final bool busy;
   @override
@@ -219,6 +224,19 @@ class HotelDetailReservationPanel extends StatelessWidget {
                       )
                     : null,
               ),
+              if ((shortfall ?? 0) > 0)
+                Text(
+                  '${c.l10n.hotelDetailMilesInsufficient} ${c.l10n.hotelDetailMilesShortfall(presenter.amount(shortfall!))}',
+                  style: c.appTextTheme.body.copyWith(
+                    color: c.appColors.danger,
+                  ),
+                ),
+              if (showRegularBooking)
+                HotelRegularBookingButton(
+                  hotelId: selection.detail.id,
+                  criteria: selection.criteria,
+                  enabled: !busy,
+                ),
               AppButton(
                 label: c.l10n.hotelDetailProceed,
                 onPressed:

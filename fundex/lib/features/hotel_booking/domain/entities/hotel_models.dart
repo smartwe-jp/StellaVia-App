@@ -73,6 +73,8 @@ enum HotelPriceSort { none, ascending, descending }
 
 class PointsHotel {
   const PointsHotel({
+    this.imageUrl = '',
+    this.location = '',
     required this.id,
     required this.name,
     required this.nightlyPoints,
@@ -80,7 +82,7 @@ class PointsHotel {
     required this.referenceCheckIn,
     required this.referenceCheckOut,
   });
-  final String id, name, buildingCode;
+  final String id, name, buildingCode, imageUrl, location;
   final int nightlyPoints;
   final DateTime? referenceCheckIn, referenceCheckOut;
 }

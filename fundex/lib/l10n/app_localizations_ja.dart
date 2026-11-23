@@ -7039,6 +7039,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hotelDetailEstimateNotice => '表示は見込みです。実際のマイル・室数は予約確定時に反映されます。';
 
   @override
+  String get hotelBookWithoutMiles => 'マイルを使わずに予約する';
+
+  @override
+  String get hotelAcceptCancellationPolicy => 'キャンセルポリシーに同意する';
+
+  @override
+  String get hotelCancellationPolicyUnavailable => 'キャンセルポリシーを取得できませんでした。';
+
+  @override
   String get hotelDetailMilesInsufficient => '宿主マイルが不足しています。';
 
   @override

@@ -6,6 +6,7 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../../domain/entities/hotel_models.dart';
 import '../support/hotel_booking_presenter.dart';
 import 'hotel_discount_badge.dart';
+import 'hotel_property_card.dart';
 import 'hotel_remaining_rooms_label.dart';
 import '../support/hotel_home_text_styles.dart';
 
@@ -45,117 +46,80 @@ class HotelHomeCard extends StatelessWidget {
         ? milesBookableRoomCount(stock, memberRoomLimit)
         : stock;
     final radius = BorderRadius.circular(20);
-    final card = AppCard(
-      backgroundColor: colors.surface,
-      borderColor: colors.borderSoft,
-      borderRadius: radius,
+    final card = HotelPropertyCard(
+      name: hotel.name,
+      location: hotel.address.isNotEmpty ? hotel.address : hotel.area,
+      imageUrl: hotel.imageUrl,
+      previewImageAsset: previewImageAsset,
       onTap: disabled ? null : onTap,
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: AspectRatio(
-              aspectRatio: 334 / 164,
-              child: previewImageAsset != null
-                  ? Image.asset(previewImageAsset!, fit: BoxFit.cover)
-                  : AppRemoteImage(
-                      imageUrl: hotel.imageUrl,
-                      fit: BoxFit.cover,
-                      errorWidget: ColoredBox(
-                        color: colors.surfaceAlt,
-                        child: Icon(
-                          Icons.hotel_outlined,
-                          color: colors.textTertiary,
-                        ),
-                      ),
-                    ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          InkWell(
-            onTap: disabled ? null : onMapTap,
+      onMapTap: disabled ? null : onMapTap,
+      details: [
+        if (disabled) ...[
+          const SizedBox(height: 10),
+          Align(
+            alignment: Alignment.centerRight,
             child: Text(
-              hotel.address.isNotEmpty ? hotel.address : hotel.area,
-              style: text.labelMedium?.copyWith(color: colors.brandSecondary),
+              context.l10n.hotelMilesDateIneligible,
+              textAlign: TextAlign.right,
+              style: text.labelSmall?.copyWith(color: colors.textSecondary),
             ),
           ),
-          const SizedBox(height: 6),
-          Text(
-            hotel.name.isEmpty ? context.l10n.hotelUnnamedProperty : hotel.name,
-            style: HotelHomeTextStyles.hotelName(context),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+        ] else if (!isMiles) ...[
+          const SizedBox(height: 10),
+          HotelDiscountBadge(
+            name: hotel.discountName,
+            discount: hotel.discount,
+            onTap: onDiscountTap,
           ),
-          if (disabled) ...[
-            const SizedBox(height: 10),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                context.l10n.hotelMilesDateIneligible,
-                textAlign: TextAlign.right,
-                style: text.labelSmall?.copyWith(color: colors.textSecondary),
+        ],
+        const Divider(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 12,
+          children: [
+            HotelRemainingRoomsLabel(
+              count: count ?? -1,
+              textColor: isMiles ? colors.textPrimary : null,
+              showFullBadge: stock == 0 || !isMiles,
+              unit: hotelRemainingUnitForHotelSummary(
+                buildingCode: hotel.buildingCode,
               ),
             ),
-          ] else if (!isMiles) ...[
-            const SizedBox(height: 10),
-            HotelDiscountBadge(
-              name: hotel.discountName,
-              discount: hotel.discount,
-              onTap: onDiscountTap,
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  if (!isMiles &&
+                      hotel.lowestPrice != null &&
+                      (hotel.beforeDiscountPrice ?? 0) > hotel.lowestPrice!)
+                    Text(
+                      presenter.price(hotel.beforeDiscountPrice),
+                      style: text.labelSmall?.copyWith(
+                        color: colors.textTertiary,
+                        decoration: TextDecoration.lineThrough,
+                      ),
+                    ),
+                  Text(
+                    isMiles
+                        ? miles == null
+                              ? context.l10n.hotelMilesRequiredUnknown
+                              : hotelReferenceMilesLabel(
+                                  context,
+                                  miles,
+                                  starting: true,
+                                )
+                        : hotel.lowestPrice == null
+                        ? context.l10n.hotelPriceAsk
+                        : '${presenter.price(hotel.lowestPrice)}${context.l10n.hotelPricePerNight}',
+                    style: HotelHomeTextStyles.sectionTitle(context),
+                  ),
+                ],
+              ),
             ),
           ],
-          const Divider(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 12,
-            children: [
-              HotelRemainingRoomsLabel(
-                count: count ?? -1,
-                textColor: isMiles ? colors.textPrimary : null,
-                showFullBadge: stock == 0 || !isMiles,
-                unit: hotelRemainingUnitForHotelSummary(
-                  buildingCode: hotel.buildingCode,
-                ),
-              ),
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    if (!isMiles &&
-                        hotel.lowestPrice != null &&
-                        (hotel.beforeDiscountPrice ?? 0) > hotel.lowestPrice!)
-                      Text(
-                        presenter.price(hotel.beforeDiscountPrice),
-                        style: text.labelSmall?.copyWith(
-                          color: colors.textTertiary,
-                          decoration: TextDecoration.lineThrough,
-                        ),
-                      ),
-                    Text(
-                      isMiles
-                          ? miles == null
-                                ? context.l10n.hotelMilesRequiredUnknown
-                                : hotelReferenceMilesLabel(
-                                    context,
-                                    miles,
-                                    starting: true,
-                                  )
-                          : hotel.lowestPrice == null
-                          ? context.l10n.hotelPriceAsk
-                          : '${presenter.price(hotel.lowestPrice)}${context.l10n.hotelPricePerNight}',
-                      style: HotelHomeTextStyles.sectionTitle(context),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-        ],
-      ),
+        ),
+      ],
     );
     if (!disabled) return card;
     return Semantics(

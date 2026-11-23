@@ -23,6 +23,9 @@ import '../support/hotel_room_guest_form_targets.dart';
 import '../widgets/hotel_booking_extra_sections.dart';
 import '../widgets/hotel_booking_guest_form_section.dart';
 import '../widgets/hotel_booking_order_summary_card.dart';
+import '../widgets/hotel_booking_miles_review.dart';
+import '../widgets/hotel_regular_booking_button.dart';
+import '../support/hotel_detail_display.dart';
 import '../widgets/hotel_booking_payment_section.dart';
 import '../widgets/hotel_booking_service_footer.dart';
 import '../widgets/hotel_booking_section_card.dart';
@@ -65,6 +68,7 @@ class _HotelBookingConfirmPageState
   bool _useBookerInfoForFirstRoomGuest = true;
   bool _didApplyBookerAuthUser = false;
   bool _isSubmitting = false;
+  bool _acceptedPolicy = false;
   bool _isQuoting = false;
   num? _requiredMiles;
   int _quoteRevision = 0;
@@ -151,18 +155,35 @@ class _HotelBookingConfirmPageState
         ? null
         : ref.watch(myPageAccountStatisticProvider);
     final identity = miles ? ref.watch(hotelManagementIdentityProvider) : null;
+    final tier = identity == null
+        ? null
+        : ref.watch(hotelManagementTierResourceProvider(identity)).valueOrNull;
     final balance = identity == null
         ? null
         : ref
                   .watch(hotelDetailAccountProvider(identity))
                   .valueOrNull
                   ?.availablePoints ??
-              ref
-                  .watch(hotelManagementTierResourceProvider(identity))
-                  .valueOrNull
-                  ?.pointsBalance;
+              tier?.pointsBalance;
+    final roomLimit = tier?.remainingBookingRooms;
+    final roomCount = _roomGuestTargets.length;
     final insufficient =
         _requiredMiles != null && balance != null && _requiredMiles! > balance;
+    final tooManyRooms = roomLimit != null && roomCount > roomLimit;
+    final policyQuery = HotelDetailQuery(
+      hotelId: widget.seed.detail.id,
+      criteria: widget.seed.criteria,
+    );
+    var policy = hotelDetailPlainText(widget.seed.detail.refundPolicyText);
+    if (miles && policy.isEmpty) {
+      policy = hotelDetailPlainText(
+        ref
+                .watch(hotelDetailProvider(policyQuery))
+                .valueOrNull
+                ?.refundPolicyText ??
+            '',
+      );
+    }
     _scheduleBookerAuthUserApply(authUserState.valueOrNull);
     final preparation = preparationState.valueOrNull;
     final effectiveRoomPriceElements = _roomPriceElements.isNotEmpty
@@ -222,8 +243,28 @@ class _HotelBookingConfirmPageState
                       ),
                     if (miles && !_isQuoting && _requiredMiles == null)
                       HotelInlineErrorNotice(onRetry: _requoteCurrentGuests),
-                    if (insufficient)
-                      Text(context.l10n.hotelDetailMilesInsufficient),
+                    if (miles && balance == null && identity != null)
+                      HotelInlineErrorNotice(
+                        onRetry: () {
+                          ref.invalidate(hotelDetailAccountProvider(identity));
+                          ref.invalidate(
+                            hotelManagementTierResourceProvider(identity),
+                          );
+                        },
+                      ),
+                    if (tooManyRooms)
+                      Text(context.l10n.hotelDetailRoomsInsufficient),
+                    if (insufficient) ...[
+                      Text(
+                        context.l10n.hotelDetailMilesShortfall(
+                          presenter.amount(_requiredMiles! - balance),
+                        ),
+                      ),
+                      HotelRegularBookingButton(
+                        hotelId: widget.seed.detail.id,
+                        criteria: widget.seed.criteria,
+                      ),
+                    ],
                     HotelBookingOrderSummaryCard(
                       seed: widget.seed,
                       presenter: presenter,
@@ -350,6 +391,21 @@ class _HotelBookingConfirmPageState
                     const SizedBox(height: 14),
                     HotelBookingMessageSection(controller: _messageController),
                     const SizedBox(height: 18),
+                    if (miles) ...[
+                      HotelBookingMilesReview(
+                        balance: balance,
+                        cost: _requiredMiles,
+                        roomCount: roomCount,
+                        roomLimit: roomLimit,
+                        policy: policy,
+                        accepted: _acceptedPolicy,
+                        onChanged: (value) =>
+                            setState(() => _acceptedPolicy = value),
+                        onRetryPolicy: () =>
+                            ref.invalidate(hotelDetailProvider(policyQuery)),
+                      ),
+                      const SizedBox(height: 18),
+                    ],
                     const HotelBookingServiceFooter(),
                   ]),
                 ),
@@ -384,7 +440,13 @@ class _HotelBookingConfirmPageState
                   : context.l10n.hotelDetailPayableAmount,
               onConfirm:
                   miles &&
-                      (_isQuoting || _requiredMiles == null || insufficient)
+                      (_isQuoting ||
+                          _requiredMiles == null ||
+                          balance == null ||
+                          insufficient ||
+                          tooManyRooms ||
+                          !_acceptedPolicy ||
+                          policy.isEmpty)
                   ? null
                   : () => _submitBooking(payableAmount),
               isSubmitting: _isSubmitting,
@@ -622,7 +684,8 @@ class _HotelBookingConfirmPageState
 
   Future<void> _submitBooking(num? amount) async {
     if (_isSubmitting ||
-        (widget.seed.hostMiles && (_isQuoting || _requiredMiles == null))) {
+        (widget.seed.hostMiles &&
+            (!_acceptedPolicy || _isQuoting || _requiredMiles == null))) {
       return;
     }
     final draft = _buildCreateDraft(amount);

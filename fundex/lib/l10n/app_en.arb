@@ -3014,6 +3014,9 @@
     }
   },
   "hotelDetailEstimateNotice": "These are estimates. Miles and room allowance are updated when the booking is confirmed.",
+  "hotelBookWithoutMiles": "Book without miles",
+  "hotelAcceptCancellationPolicy": "I agree to the cancellation policy",
+  "hotelCancellationPolicyUnavailable": "The cancellation policy could not be loaded.",
   "hotelDetailMilesInsufficient": "Insufficient host miles.",
   "hotelDetailRoomsInsufficient": "Room allowance exceeded.",
   "hotelDetailMilesUnavailable": "A miles quote is unavailable for this selection.",

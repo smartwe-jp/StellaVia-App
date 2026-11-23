@@ -11,6 +11,8 @@ class PointsHotelDto {
   PointsHotelDto.fromJson(Map<String, dynamic> data)
     : id = (data['hotelId'] ?? data['id'])?.toString().trim() ?? '',
       name = (data['hotelName'] ?? data['name'])?.toString().trim() ?? '',
+      imageUrl = data['image']?.toString().trim() ?? '',
+      location = data['addressThumb']?.toString().trim() ?? '',
       startingPoints = num.tryParse(
         data['startingPoints']?.toString().trim() ?? '',
       ),
@@ -22,7 +24,7 @@ class PointsHotelDto {
         data['referenceCheckOut']?.toString() ?? '',
       );
 
-  final String id, name, buildingCode;
+  final String id, name, buildingCode, imageUrl, location;
   final num? startingPoints;
   final DateTime? referenceCheckIn, referenceCheckOut;
 }
