@@ -11,7 +11,7 @@ bool shouldPresentMemberProfileEntry(VerificationEntry entry) =>
       VerificationEntryKind.corporate => entry.status != 'CONFIRMED',
     };
 
-Future<void> openMemberProfileFromSettings(
+Future<void> openMemberProfileEntry(
   BuildContext context,
   WidgetRef ref,
 ) async {

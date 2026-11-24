@@ -29,7 +29,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     if (_isOpeningMemberProfile) return;
     _isOpeningMemberProfile = true;
     try {
-      await openMemberProfileFromSettings(context, ref);
+      await openMemberProfileEntry(context, ref);
     } finally {
       _isOpeningMemberProfile = false;
     }

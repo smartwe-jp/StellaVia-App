@@ -229,6 +229,22 @@ void main() {
 
         expect(find.byType(TextField), findsOneWidget);
         expect(find.textContaining('手数料'), findsNothing);
+        if (sell) {
+          InkWell adjustButton(IconData icon) => tester.widget<InkWell>(
+            find
+                .ancestor(of: find.byIcon(icon), matching: find.byType(InkWell))
+                .first,
+          );
+          expect(adjustButton(Icons.remove_rounded).onTap, isNull);
+          await tester.tap(find.text('MAX'));
+          await tester.pumpAndSettle();
+          expect(adjustButton(Icons.add_rounded).onTap, isNull);
+          expect(adjustButton(Icons.remove_rounded).onTap, isNotNull);
+          await tester.enterText(find.byType(TextField), '1');
+          await tester.pumpAndSettle();
+          expect(adjustButton(Icons.remove_rounded).onTap, isNull);
+          expect(adjustButton(Icons.add_rounded).onTap, isNotNull);
+        }
         await capture('order');
         expect(
           tester.widget<AppButton>(find.byType(AppButton)).onPressed,

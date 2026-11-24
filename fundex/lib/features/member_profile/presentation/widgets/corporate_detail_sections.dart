@@ -1,3 +1,4 @@
+import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import '../pages/corporate_attachment_page.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
@@ -100,16 +101,60 @@ class CorporateDetailSections extends StatelessWidget {
           if (section == CorporateSection.documents) ...[
             if (form.documents.submitted.isEmpty) Text(l.corpDetailEmpty),
             for (final attachment in form.documents.submitted)
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: row(
-                  attachment.slot == null
-                      ? attachment.category
-                      : documentLabel(l, attachment.slot!),
-                  attachment.file.filename,
+              Padding(
+                padding: const EdgeInsets.only(top: UiTokens.spacing8),
+                child: Material(
+                  color: theme.appColors.surfaceAlt,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(UiTokens.radius12),
+                    side: BorderSide(color: theme.appColors.borderSoft),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: UiTokens.spacing12,
+                      vertical: UiTokens.spacing4,
+                    ),
+                    leading: Icon(
+                      Icons.description_outlined,
+                      color: theme.appColors.primary,
+                    ),
+                    title: Text(
+                      attachment.slot == null
+                          ? attachment.category
+                          : documentLabel(l, attachment.slot!),
+                      style: theme.appTextTheme.bodyStrong,
+                    ),
+                    subtitle:
+                        attachment.file.filename == attachment.slot?.apiKey ||
+                            attachment.file.filename == attachment.category
+                        ? null
+                        : Text(
+                            attachment.file.filename,
+                            style: theme.appTextTheme.caption,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          l.memberProfilePhotoPreviewAction,
+                          style: theme.appTextTheme.chip.copyWith(
+                            color: theme.appColors.primary,
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right_rounded,
+                          color: theme.appColors.primary,
+                          size: 18,
+                        ),
+                      ],
+                    ),
+                    onTap: () =>
+                        CorporateAttachmentPage.open(context, attachment.file),
+                  ),
                 ),
-                onTap: () =>
-                    CorporateAttachmentPage.open(context, attachment.file),
               ),
           ] else
             ...sectionRows(section),

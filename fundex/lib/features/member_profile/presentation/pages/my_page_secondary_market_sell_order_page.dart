@@ -68,23 +68,6 @@ class _MyPageSecondaryMarketSellOrderPageState
     setState(() {});
   }
 
-  void _increaseUnits() {
-    final current = _sellUnits ?? 0;
-    if (current >= widget.seed.availableUnits) {
-      return;
-    }
-    _setSellUnits(current + 1);
-  }
-
-  void _decreaseUnits() {
-    final current = _sellUnits ?? 0;
-    if (current <= 1) {
-      _setSellUnits(0);
-      return;
-    }
-    _setSellUnits(current - 1);
-  }
-
   void _goConfirm(int price) {
     if (!_isValid(price)) {
       return;
@@ -182,16 +165,14 @@ class _MyPageSecondaryMarketSellOrderPageState
                   paymentLabel: l10n.myPageResaleNetAmountLabel,
                   paymentValue: total,
                   controller: _sellUnitsController,
-                  selectedUnits: _sellUnits ?? 0,
+                  selectedUnits: units,
                   availableUnits: widget.seed.availableUnits,
                   unitLabel: l10n.myPageResaleUnitsSuffix,
                   maxChipLabel: l10n.myPageResaleQuickMax,
                   onChanged: (_) => setState(() {}),
-                  onDecrease: widget.seed.availableUnits > 0
-                      ? _decreaseUnits
-                      : null,
-                  onIncrease: widget.seed.availableUnits > 0
-                      ? _increaseUnits
+                  onDecrease: units > 1 ? () => _setSellUnits(units - 1) : null,
+                  onIncrease: units < widget.seed.availableUnits
+                      ? () => _setSellUnits(units + 1)
                       : null,
                   onSelectPreset: _setSellUnits,
                   enabled: widget.seed.availableUnits > 0,

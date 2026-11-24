@@ -20,7 +20,7 @@ void main() {
     ),
     const VerificationEntry(VerificationEntryKind.corporate, status: 'DRAFT'),
   ]) {
-    testWidgets('settings entry ${entry.kind} ${entry.status}', (tester) async {
+    testWidgets('member profile entry ${entry.kind} ${entry.status}', (tester) async {
       var loads = 0;
       final router = GoRouter(
         routes: [
@@ -29,7 +29,7 @@ void main() {
             builder: (_, __) => Consumer(
               builder: (context, ref, _) => Scaffold(
                 body: TextButton(
-                  onPressed: () => openMemberProfileFromSettings(context, ref),
+                  onPressed: () => openMemberProfileEntry(context, ref),
                   child: const Text('Open'),
                 ),
               ),

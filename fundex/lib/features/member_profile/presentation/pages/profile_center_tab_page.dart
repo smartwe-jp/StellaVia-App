@@ -9,6 +9,7 @@ import '../../../main_shell/presentation/providers/main_shell_providers.dart';
 import '../../../main_shell/presentation/widgets/main_shell_tab_refresh_scope.dart';
 import '../../../notifications/presentation/providers/notifications_providers.dart';
 import '../providers/member_profile_providers.dart';
+import '../support/member_profile_entry_navigation.dart';
 import '../widgets/my_page_identity_header.dart';
 import '../widgets/my_page_asset_summary.dart';
 import '../widgets/my_page_shortcuts.dart';
@@ -26,6 +27,18 @@ class ProfileCenterTabPage extends ConsumerStatefulWidget {
 
 class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
   final ScrollController _scrollController = ScrollController();
+
+  bool _openingMemberProfile = false;
+
+  Future<void> _openMemberProfile() async {
+    if (_openingMemberProfile) return;
+    _openingMemberProfile = true;
+    try {
+      await openMemberProfileEntry(context, ref);
+    } finally {
+      _openingMemberProfile = false;
+    }
+  }
 
   @override
   void dispose() {
@@ -76,7 +89,7 @@ class _ProfileCenterTabPageState extends ConsumerState<ProfileCenterTabPage> {
                   onFunds: () => context.push('/profile/host-funds'),
                   onTrades: () => context.push('/profile/my/secondary-market'),
                   onMiles: () => context.push('/profile/miles'),
-                  onMember: () => context.push('/member-profile/edit'),
+                  onMember: _openMemberProfile,
                   onDocuments: () =>
                       context.push('/profile/settings/contracts'),
                 ),

@@ -18,7 +18,8 @@ class HotelMilesSummary extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     return AppCard(
       padding: EdgeInsets.zero,
-      variant: AppCardVariant.filled,
+      variant: AppCardVariant.outlined,
+      borderColor: context.appColors.borderSoft,
       backgroundColor: palette.surface,
       borderRadius: BorderRadius.circular(20),
       child: Column(

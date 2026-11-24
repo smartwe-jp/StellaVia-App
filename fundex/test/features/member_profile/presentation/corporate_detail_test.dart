@@ -97,7 +97,8 @@ void main() {
       expect(find.text(l.corpDetailPreview), findsNothing);
       expect(find.textContaining(l.corpDetailExpand), findsNothing);
       expect(find.text('登記.pdf'), findsOneWidget);
-      await tap('登記.pdf');
+      expect(find.text(l.memberProfilePhotoPreviewAction), findsOneWidget);
+      await tap(l.memberProfilePhotoPreviewAction);
       expect(find.byType(InteractiveViewer), findsOneWidget);
       await t.tap(find.byType(BackButton));
       await t.pumpAndSettle();
