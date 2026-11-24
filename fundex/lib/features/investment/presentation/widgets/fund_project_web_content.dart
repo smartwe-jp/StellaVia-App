@@ -121,7 +121,7 @@ class _FundProjectWebContentState extends State<FundProjectWebContent> {
                         ),
                       ],
                     )
-                  : const CircularProgressIndicator.adaptive(),
+                  : const AppLoadingIndicator(),
             ),
           ),
       ],

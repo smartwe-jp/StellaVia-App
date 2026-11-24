@@ -217,7 +217,7 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
                             onPressed: _refreshInitialDetailData,
                             child: Text(context.l10n.fundListRetry),
                           )
-                        : const CircularProgressIndicator.adaptive(),
+                        : const AppLoadingIndicator(),
                   ),
                 ),
               ),
@@ -226,7 +226,7 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
     return detailAsync.when(
       loading: () => FundProjectDetailScaffold(
         onBack: _handleBack,
-        body: const Center(child: CircularProgressIndicator.adaptive()),
+        body: const Center(child: AppLoadingIndicator()),
       ),
       error: (Object error, StackTrace stackTrace) => FundProjectDetailScaffold(
         onBack: _handleBack,
@@ -265,7 +265,7 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
         if (applyDetailAsync.isLoading) {
           return FundProjectDetailScaffold(
             onBack: _handleBack,
-            body: const Center(child: CircularProgressIndicator.adaptive()),
+            body: const Center(child: AppLoadingIndicator()),
           );
         }
         if (applyDetailAsync.hasError || !applyDetailAsync.hasValue) {

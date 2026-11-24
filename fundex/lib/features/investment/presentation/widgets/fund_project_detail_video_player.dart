@@ -203,7 +203,7 @@ class _FundProjectDetailVideoPlayerState
     if (_isLoading) {
       return const AspectRatio(
         aspectRatio: 16 / 9,
-        child: Center(child: CircularProgressIndicator.adaptive()),
+        child: Center(child: AppLoadingIndicator()),
       );
     }
     if (_loadError != null ||
@@ -441,14 +441,7 @@ class _FundProjectDetailYoutubePlayerState
           bufferedColor: colors.onDark.withValues(alpha: 0.42),
           backgroundColor: colors.onDark.withValues(alpha: 0.22),
         ),
-        bufferIndicator: Center(
-          child: SizedBox.square(
-            dimension: 34,
-            child: CircularProgressIndicator.adaptive(
-              valueColor: AlwaysStoppedAnimation<Color>(colors.textPrimary),
-            ),
-          ),
-        ),
+        bufferIndicator: const Center(child: AppLoadingIndicator()),
       ),
     );
   }
@@ -467,7 +460,6 @@ class _FundProjectVideoReadyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).appColors;
     final value = controller.value;
     final position = _normalizedPosition(value);
     final duration = value.duration;
@@ -496,16 +488,7 @@ class _FundProjectVideoReadyState extends StatelessWidget {
             ),
           ),
           if (value.isBuffering)
-            Center(
-              child: SizedBox.square(
-                dimension: 34,
-                child: CircularProgressIndicator.adaptive(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    colors.primaryAlt,
-                  ),
-                ),
-              ),
-            ),
+            const Center(child: AppLoadingIndicator()),
           if (!value.isPlaying)
             Center(
               child: _FundProjectVideoCenterButton(onPressed: onTogglePlayback),
