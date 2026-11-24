@@ -94,8 +94,9 @@ class ProfileDocumentImageMultiPickResult {
 
 abstract class ProfileDocumentImagePicker {
   Future<ProfileDocumentImagePickResult> pick(
-    ProfileDocumentImageSource source,
-  );
+    ProfileDocumentImageSource source, {
+    bool frontCamera = false,
+  });
 
   Future<ProfileDocumentImageMultiPickResult> pickMultipleFromGallery({
     required int limit,
@@ -114,8 +115,9 @@ class DeviceProfileDocumentImagePicker implements ProfileDocumentImagePicker {
 
   @override
   Future<ProfileDocumentImagePickResult> pick(
-    ProfileDocumentImageSource source,
-  ) async {
+    ProfileDocumentImageSource source, {
+    bool frontCamera = false,
+  }) async {
     final permissionFailure = await _ensurePermission(source);
     if (permissionFailure != null) {
       return permissionFailure;
@@ -126,6 +128,9 @@ class DeviceProfileDocumentImagePicker implements ProfileDocumentImagePicker {
         source: source == ProfileDocumentImageSource.camera
             ? ImageSource.camera
             : ImageSource.gallery,
+        preferredCameraDevice: frontCamera
+            ? CameraDevice.front
+            : CameraDevice.rear,
         imageQuality: 88,
         maxWidth: 1800,
       );

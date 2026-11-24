@@ -14085,6 +14085,18 @@ abstract class AppLocalizations {
   /// **'Corporate number'**
   String get corpFormNumber;
 
+  /// No description provided for @corpPostalReentryMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the postal code and enter it again.'**
+  String get corpPostalReentryMessage;
+
+  /// No description provided for @corpPostalReenter.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-enter postal code'**
+  String get corpPostalReenter;
+
   /// No description provided for @corpFormPostal.
   ///
   /// In en, this message translates to:

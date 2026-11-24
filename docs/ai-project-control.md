@@ -36,6 +36,8 @@ Use three layers of coordination:
 
 Home, registration and member information share the full-screen investor type selector when both verification options are available.
 
+Personal verification requires a successfully uploaded selfie (front camera or photo library) before live face verification. In both personal onboarding and Settings identity verification on dev/staging using the test member server, a failed selfie upload after photo selection allows the user to proceed to live verification; the resulting draft flag is accepted only in that test environment. Closing the onboarding flow from the navigation bar prompts to continue or save the current step locally and exit.
+
 Successful registration exchanges the one-time UUID immediately for an OAuth session and opens the verification entry over Home. If the exchange fails after account creation, manual login is available without registering again.
 
 Personal verification collects nationality and country of tax residence separately. After document upload, the member completes live face verification, then fills or skips the bank account before consent. Skipping the bank omits it from the submission. Document examples are bundled with the app.

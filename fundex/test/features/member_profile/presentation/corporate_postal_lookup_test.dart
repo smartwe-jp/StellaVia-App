@@ -27,6 +27,7 @@ void main() {
   for (final section in [
     CorporateSection.company,
     CorporateSection.representative,
+    CorporateSection.handler,
   ]) {
     testWidgets('postal lookup fills the editable address in $section', (
       tester,
@@ -50,6 +51,11 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
+      if (section == CorporateSection.handler) {
+        expect(find.text('住所検索'), findsNothing);
+        await tester.tap(find.text('受任者'));
+        await tester.pumpAndSettle();
+      }
       final postal = find.byKey(const ValueKey(CorporateField.postal)).last;
       final field = section == CorporateSection.company
           ? CorporateField.office
@@ -61,10 +67,21 @@ void main() {
         await tester.pump();
       }
 
+      final search = find.text('住所検索');
+      Future<void> searchAddress() async {
+        await tester.ensureVisible(search);
+        await tester.tap(search);
+        await tester.pump();
+      }
+
       await input(postal, '530');
       expect(lookup.requests, isEmpty);
       await input(postal, '530-0043');
+      expect(lookup.requests, isEmpty);
+      await searchAddress();
       await input(postal, '1000001');
+      expect(lookup.requests, ['5300043']);
+      await searchAddress();
       const rows = [
         MemberProfileRegion(
           jpName: '東京都',
@@ -87,15 +104,46 @@ void main() {
       lookup.responses[1].complete(rows);
       await tester.pumpAndSettle();
       expect(find.text('東京都千代田区'), findsOneWidget);
-      final search = find.text('住所検索');
       await tester.ensureVisible(search);
+      final button = find.ancestor(
+        of: search,
+        matching: find.byType(FilledButton),
+      );
+      expect(
+        tester.getRect(button).left,
+        greaterThan(tester.getRect(postal).right),
+      );
+      expect(
+        tester.getRect(button).top,
+        closeTo(tester.getRect(postal).top, 4),
+      );
       await tester.tap(search);
       await tester.pump();
+      final spinner = find.byType(CircularProgressIndicator);
+      final busy = find.ancestor(
+        of: spinner,
+        matching: find.byType(FilledButton),
+      );
+      expect(tester.widget<FilledButton>(busy).onPressed, isNull);
       await input(address, '東京都千代田区千代田1-1');
       lookup.responses.last.complete(rows);
       await tester.pumpAndSettle();
       expect(draft.value(section, field), '東京都千代田区千代田1-1');
       expect(lookup.requests, ['5300043', '1000001', '1000001']);
+
+      await input(postal, '0000000');
+      expect(lookup.requests, hasLength(3));
+      await searchAddress();
+      lookup.responses.last.complete([]);
+      await tester.pumpAndSettle();
+      expect(find.text('該当する住所が見つかりませんでした。'), findsOneWidget);
+      await tester.tap(find.text('再入力'));
+      await tester.pumpAndSettle();
+      final editable = tester.widget<EditableText>(
+        find.descendant(of: postal, matching: find.byType(EditableText)),
+      );
+      expect(editable.focusNode.hasFocus, isTrue);
+      expect(draft.value(section, field), '東京都千代田区千代田1-1');
     });
   }
 }

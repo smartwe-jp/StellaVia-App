@@ -7374,6 +7374,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get corpFormNumber => '法人编号';
 
   @override
+  String get corpPostalReentryMessage => '请核对邮编后重新输入。';
+
+  @override
+  String get corpPostalReenter => '重新输入';
+
+  @override
   String get corpFormPostal => '邮政编码';
 
   @override
@@ -15337,6 +15343,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get corpFormNumber => '法人編號';
+
+  @override
+  String get corpPostalReentryMessage => '請核對郵遞區號後重新輸入。';
+
+  @override
+  String get corpPostalReenter => '重新輸入';
 
   @override
   String get corpFormPostal => '郵遞區號';

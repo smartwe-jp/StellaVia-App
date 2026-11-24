@@ -125,10 +125,7 @@ class _CorporateFormPageState extends State<CorporateFormPage> {
                 Padding(
                   key: ValueKey(field),
                   padding: const EdgeInsets.only(bottom: 16),
-                  child:
-                      field == CorporateField.postal &&
-                          (section == CorporateSection.company ||
-                              section == CorporateSection.representative)
+                  child: field == CorporateField.postal
                       ? CorporatePostalCodeInput(
                           draft: widget.draft,
                           section: section,

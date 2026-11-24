@@ -3160,6 +3160,8 @@
   "corpFormBusinessKana": "Company name in katakana",
   "corpFormForm": "Legal form",
   "corpFormNumber": "Corporate number",
+  "corpPostalReentryMessage": "Check the postal code and enter it again.",
+  "corpPostalReenter": "Re-enter postal code",
   "corpFormPostal": "Postal code",
   "corpFormOffice": "Registered office address",
   "corpFormFounded": "Date established",

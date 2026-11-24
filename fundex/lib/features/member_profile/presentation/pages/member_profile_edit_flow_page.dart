@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/config/environment_provider.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/support/app_permission_dialogs.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -11,6 +12,8 @@ import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../settings/presentation/providers/settings_content_providers.dart';
 import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 import '../../domain/entities/member_profile_details.dart';
+import '../../domain/constants/member_profile_upload_markers.dart';
+import 'edit_flow_steps/member_profile_real_person_auth_step_page.dart';
 import '../../domain/entities/member_profile_region.dart';
 import '../pages/edit_flow_steps/member_profile_address_info_step_page.dart';
 import '../pages/edit_flow_steps/member_profile_bank_account_step_page.dart';
@@ -20,6 +23,7 @@ import '../pages/edit_flow_steps/member_profile_ekyc_step_page.dart';
 import '../pages/edit_flow_steps/member_profile_suitability_step_page.dart';
 import '../providers/member_profile_providers.dart';
 import '../support/member_profile_postal_address.dart';
+import '../widgets/postal_lookup_dialog.dart';
 import '../support/member_profile_bank_account_owner_matcher.dart';
 import '../support/member_profile_edit_step.dart';
 import '../support/member_profile_edit_step_presenter.dart';
@@ -28,7 +32,12 @@ import '../support/profile_document_image_picker.dart';
 
 enum _MemberProfileEditFlowMode { flow, section }
 
-enum _ProfilePhotoTarget { documentFront, documentOblique, documentBack }
+enum _ProfilePhotoTarget {
+  documentFront,
+  documentOblique,
+  documentBack,
+  selfie,
+}
 
 class MemberProfileEditFlowPage extends ConsumerStatefulWidget {
   const MemberProfileEditFlowPage({super.key, this.initialStep})
@@ -113,6 +122,12 @@ class _MemberProfileEditFlowPageState
   bool _isSubmitting = false;
   bool _isUploadingPhoto = false;
   bool _isAddressSearching = false;
+  final _postalFocus = FocusNode();
+
+  bool get _selfieUploaded =>
+      isUploadedSelfie(_selfiePhotoPath) ||
+      (_selfiePhotoPath == testSelfieUploadFallbackMarker &&
+          ref.read(appEnvironmentProvider).allowsTestSelfieUploadFailure);
 
   bool get _isSingleSectionMode => widget.isSingleSectionMode;
 
@@ -159,6 +174,7 @@ class _MemberProfileEditFlowPageState
     _birthdayController.dispose();
     _nationalityController.dispose();
     _taxCountryController.dispose();
+    _postalFocus.dispose();
     _postalCodeController.dispose();
     _prefectureController.dispose();
     _employerController.dispose();
@@ -486,7 +502,7 @@ class _MemberProfileEditFlowPageState
         }
         if (!_isSingleSectionMode &&
             _currentStep.index > MemberProfileEditStep.realPersonAuth.index &&
-            !_facePassed) {
+            (!_facePassed || !_selfieUploaded)) {
           _currentStep = MemberProfileEditStep.realPersonAuth;
         }
         if (!_isSingleSectionMode &&
@@ -559,31 +575,41 @@ class _MemberProfileEditFlowPageState
             );
           },
         );
-    if (source == null) {
-      return;
-    }
-    final result = await ref
-        .read(profileDocumentImagePickerProvider)
-        .pick(source);
-    if (!mounted) {
-      return;
-    }
-    final String? path = await _resolvePickedImagePath(result, source);
-    if (!mounted || path == null || path.trim().isEmpty) {
+    if (!mounted || source == null) {
       return;
     }
     setState(() {
       _isUploadingPhoto = true;
     });
     try {
+      final result = await ref
+          .read(profileDocumentImagePickerProvider)
+          .pick(source, frontCamera: target == _ProfilePhotoTarget.selfie);
+      if (!mounted) {
+        return;
+      }
+      final String? path = await _resolvePickedImagePath(result, source);
+      if (!mounted || path == null || path.trim().isEmpty) {
+        return;
+      }
+      final isSelfie = target == _ProfilePhotoTarget.selfie;
       final uploadedUrl = await ref
           .read(uploadMemberProfilePhotoUseCaseProvider)
-          .call(filePath: path.trim(), isSelfie: false);
+          .call(
+            filePath: path.trim(),
+            isSelfie: isSelfie,
+            allowTestSelfieUploadFailure:
+                isSelfie &&
+                ref.read(appEnvironmentProvider).allowsTestSelfieUploadFailure,
+          );
       if (!mounted) {
         return;
       }
       setState(() {
-        if (target == _documentFrontPhotoTarget) {
+        if (target == _ProfilePhotoTarget.selfie) {
+          _selfiePhotoPath = uploadedUrl.trim();
+          _facePassed = false;
+        } else if (target == _documentFrontPhotoTarget) {
           _documentPhotoPath = uploadedUrl.trim();
         } else if (target == _documentObliquePhotoTarget) {
           _documentObliquePhotoPath = uploadedUrl.trim();
@@ -597,7 +623,9 @@ class _MemberProfileEditFlowPageState
       }
       AppNotice.show(
         context,
-        message: context.l10n.memberProfilePhotoUploadSuccess,
+        message: uploadedUrl == testSelfieUploadFallbackMarker
+            ? context.l10n.memberProfileSelfieUploadBypassedNotice
+            : context.l10n.memberProfilePhotoUploadSuccess,
       );
     } catch (error) {
       if (!mounted) {
@@ -672,28 +700,38 @@ class _MemberProfileEditFlowPageState
       _isAddressSearching = true;
     });
 
+    final prefecture = _prefectureController.text;
+    final city = _cityAddressController.text;
+    bool stillCurrent() =>
+        _currentStep == MemberProfileEditStep.addressInfo &&
+        ModalRoute.of(context)?.isCurrent == true &&
+        _normalizePostalCode(_postalCodeController.text) == zip &&
+        _prefectureController.text == prefecture &&
+        _cityAddressController.text == city;
     try {
       final List<MemberProfileRegion> rows = await ref
           .read(fetchMemberProfileRegionsByZipUseCaseProvider)
           .call(zip: zip);
-      if (!mounted) {
+      if (!mounted || !stillCurrent()) return;
+      final parts = resolveMemberProfilePostalAddress(rows);
+      if (parts.prefecture.isEmpty && parts.cityAddress.isEmpty) {
+        setState(() => _isAddressSearching = false);
+        final reenter = await showPostalLookupEmptyDialog(context);
+        if (mounted && reenter == true && stillCurrent()) {
+          _postalFocus.requestFocus();
+        }
         return;
       }
-
-      if (rows.isEmpty) {
-        AppNotice.show(context, message: l10n.memberProfileAddressSearchEmpty);
-        return;
-      }
-
-      if (!mounted) {
-        return;
-      }
-
-      _applyResolvedAddressRows(rows);
+      setState(() {
+        if (parts.prefecture.isNotEmpty) {
+          _prefectureController.text = parts.prefecture;
+        }
+        if (parts.cityAddress.isNotEmpty) {
+          _cityAddressController.text = parts.cityAddress;
+        }
+      });
     } catch (error) {
-      if (!mounted) {
-        return;
-      }
+      if (!mounted || !stillCurrent()) return;
       AppNotice.show(
         context,
         message: _resolveSubmitErrorMessage(error, l10n.uiErrorRequestFailed),
@@ -705,25 +743,6 @@ class _MemberProfileEditFlowPageState
         });
       }
     }
-  }
-
-  void _applyResolvedAddressRows(List<MemberProfileRegion> rows) {
-    final parts = resolveMemberProfilePostalAddress(rows);
-    final resolvedPrefecture = parts.prefecture;
-    final resolvedCityAddress = parts.cityAddress;
-
-    if (resolvedPrefecture.isEmpty && resolvedCityAddress.isEmpty) {
-      return;
-    }
-
-    setState(() {
-      if (resolvedPrefecture.isNotEmpty) {
-        _prefectureController.text = resolvedPrefecture;
-      }
-      if (resolvedCityAddress.isNotEmpty) {
-        _cityAddressController.text = resolvedCityAddress;
-      }
-    });
   }
 
   Future<void> _goNextStep() async {
@@ -747,7 +766,7 @@ class _MemberProfileEditFlowPageState
   }
 
   Future<void> _verifyFaceAndContinue() async {
-    if (_isSubmitting) return;
+    if (_isSubmitting || _isUploadingPhoto || !_selfieUploaded) return;
     setState(() => _isSubmitting = true);
     try {
       if (!_facePassed) {
@@ -804,7 +823,7 @@ class _MemberProfileEditFlowPageState
       setState(() => _currentStep = MemberProfileEditStep.basicInfo);
       return;
     }
-    if (!_facePassed) {
+    if (!_facePassed || !_selfieUploaded) {
       setState(() => _currentStep = MemberProfileEditStep.realPersonAuth);
       return;
     }
@@ -939,7 +958,7 @@ class _MemberProfileEditFlowPageState
       case MemberProfileEditStep.ekyc:
         return _isEkycStepReady;
       case MemberProfileEditStep.realPersonAuth:
-        return _facePassed;
+        return _facePassed && _selfieUploaded;
       case MemberProfileEditStep.bankAccount:
         return _isBankAccountStepReady;
       case MemberProfileEditStep.consent:
@@ -1097,7 +1116,10 @@ class _MemberProfileEditFlowPageState
     _completedAt = profile.completedAt;
   }
 
-  Future<void> _persistOnboardingDraft({bool markCompleted = false}) async {
+  Future<void> _persistOnboardingDraft({
+    bool markCompleted = false,
+    bool requireSave = false,
+  }) async {
     if (_isSingleSectionMode) {
       return;
     }
@@ -1107,13 +1129,39 @@ class _MemberProfileEditFlowPageState
           : _completedAt,
       editingStep: _currentStep.index,
     );
-    await ref
-        .read(memberProfileRepositoryProvider)
-        .saveOnboardingDraft(profile);
+    try {
+      await ref
+          .read(memberProfileRepositoryProvider)
+          .saveOnboardingDraft(profile);
+    } catch (_) {
+      if (requireSave) rethrow;
+    }
     _completedAt = profile.completedAt;
   }
 
-  Future<void> _saveOnboardingDraftTemporarily() async {
+  Future<void> _confirmExit() async {
+    final l = context.l10n;
+    final exit = await AppDialogs.showAdaptiveAlert<bool>(
+      context: context,
+      title: l.corpExitTitle,
+      message: l.corpDraftExitSave,
+      actions: [
+        AppDialogAction(
+          label: l.corpExitStay,
+          value: false,
+          isDefaultAction: true,
+        ),
+        AppDialogAction(label: l.commonClose, value: true),
+      ],
+    );
+    if (mounted && exit == true) {
+      await _saveOnboardingDraftTemporarily(exitAfterSave: true);
+    }
+  }
+
+  Future<void> _saveOnboardingDraftTemporarily({
+    bool exitAfterSave = false,
+  }) async {
     if (_isSingleSectionMode ||
         _isLoading ||
         _isSubmitting ||
@@ -1125,8 +1173,14 @@ class _MemberProfileEditFlowPageState
       _isSubmitting = true;
     });
     try {
-      await _persistOnboardingDraft();
-      if (!mounted) {
+      await _persistOnboardingDraft(requireSave: true);
+      if (!mounted) return;
+      if (exitAfterSave) {
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/home');
+        }
         return;
       }
       AppNotice.show(
@@ -1490,6 +1544,15 @@ class _MemberProfileEditFlowPageState
               : l10n.memberProfileFlowTitle,
           backgroundColor: colors.surface,
           foregroundColor: colors.textPrimary,
+          trailing: _isSingleSectionMode
+              ? null
+              : IconButton(
+                  tooltip: l10n.commonClose,
+                  icon: const Icon(Icons.close),
+                  onPressed: _isLoading || _isSubmitting || _isUploadingPhoto
+                      ? null
+                      : _confirmExit,
+                ),
           leading: SizedBox.square(
             dimension: 32,
             child: Material(
@@ -1608,9 +1671,9 @@ class _MemberProfileEditFlowPageState
           primaryButtonLabelOverride: _isSingleSectionMode
               ? _primaryActionLabel
               : null,
-          onAddressSearch: _isAddressSearching
-              ? null
-              : _searchAddressByPostalCode,
+          isAddressSearching: _isAddressSearching,
+          postalFocus: _postalFocus,
+          onAddressSearch: _searchAddressByPostalCode,
           onNext: _isSingleSectionMode ? _saveCurrentSection : _goNextStep,
           onSkip: _isSingleSectionMode
               ? null
@@ -1739,21 +1802,25 @@ class _MemberProfileEditFlowPageState
           onNext: _isSingleSectionMode ? _saveCurrentSection : _goNextStep,
         );
       case MemberProfileEditStep.realPersonAuth:
-        return MemberProfileEditStepScaffold(
-          title: _stepTitle,
-          description: l10n.memberProfileStep5RealPersonDescription,
-          secondaryButtonLabel: secondaryButtonLabel,
+        final busy = _isSubmitting || _isUploadingPhoto;
+        return MemberProfileRealPersonAuthStepPage(
+          titleOverride: _stepTitle,
+          secondaryButtonLabelOverride: secondaryButtonLabel,
           onSecondaryPressed: onSecondaryPressed,
-          primaryButtonLabel: _facePassed
+          primaryButtonLabelOverride: _facePassed
               ? l10n.commonNext
               : l10n.identityAuthStartAction,
-          primaryButtonEnabled: !_isSubmitting,
-          onPrimaryPressed: _verifyFaceAndContinue,
-          child: Icon(
-            Icons.face_outlined,
-            size: 64,
-            color: context.appColors.primary,
-          ),
+          isProcessing: _isUploadingPhoto,
+          selfieUploaded: _selfieUploaded,
+          selfiePreviewUrl: _isRemoteImageUrl(_selfiePhotoPath)
+              ? _selfiePhotoPath
+              : null,
+          previewActionLabel: l10n.memberProfilePhotoPreviewAction,
+          primaryButtonEnabled: _selfieUploaded && !busy,
+          onUploadSelfie: busy
+              ? null
+              : () => _pickAndSaveImage(target: _ProfilePhotoTarget.selfie),
+          onStartVerification: _verifyFaceAndContinue,
         );
       case MemberProfileEditStep.consent:
         final localeTag = Localizations.localeOf(context).toLanguageTag();

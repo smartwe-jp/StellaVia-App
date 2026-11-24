@@ -8,10 +8,12 @@ class CorporateDateField extends StatefulWidget {
     required this.label,
     required this.requiredLabel,
     required this.initialValue,
+    this.lastDate,
     required this.validator,
     required this.onChanged,
   });
 
+  final DateTime? lastDate;
   final String label, initialValue;
   final String? requiredLabel;
   final FormFieldValidator<String> validator;
@@ -31,17 +33,17 @@ class _CorporateDateFieldState extends State<CorporateDateField> {
   }
 
   Future<void> pickDate() async {
-    final today = DateUtils.dateOnly(DateTime.now());
+    final latest = widget.lastDate ?? DateUtils.dateOnly(DateTime.now());
     final current = DateTime.tryParse(controller.text);
     final first = DateTime(1);
     final picked = await showDatePicker(
       context: context,
       initialDate:
-          current != null && !current.isBefore(first) && !current.isAfter(today)
+          current != null && !current.isBefore(first) && !current.isAfter(latest)
           ? current
-          : today,
+          : latest,
       firstDate: first,
-      lastDate: today,
+      lastDate: latest,
     );
     if (picked == null || !mounted) return;
     final value = picked.toIso8601String().split('T').first;
@@ -60,6 +62,7 @@ class _CorporateDateFieldState extends State<CorporateDateField> {
         readOnly: true,
         onTap: pickDate,
         validator: widget.validator,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: const InputDecoration(
           hintText: 'YYYY-MM-DD',
           suffixIcon: Icon(CupertinoIcons.calendar),

@@ -129,7 +129,11 @@ class MemberProfileLocalDataSourceImpl implements MemberProfileLocalDataSource {
 
   @override
   Future<void> saveProfile(MemberProfileDetailsDto profile) async {
-    await _save(profile, _profileKeyPrefix);
+    try {
+      await _save(profile, _profileKeyPrefix);
+    } catch (_) {
+      // Keep profile intake usable when caching the current profile fails.
+    }
   }
 
   @override
@@ -138,11 +142,7 @@ class MemberProfileLocalDataSourceImpl implements MemberProfileLocalDataSource {
   }
 
   Future<void> _save(MemberProfileDetailsDto profile, String prefix) async {
-    try {
-      final key = await _resolveStorageKey(prefix);
-      await _largeDataStore.put<String>(key, jsonEncode(profile.toJson()));
-    } catch (_) {
-      // Keep profile intake flow usable even when local storage write fails.
-    }
+    final key = await _resolveStorageKey(prefix);
+    await _largeDataStore.put<String>(key, jsonEncode(profile.toJson()));
   }
 }

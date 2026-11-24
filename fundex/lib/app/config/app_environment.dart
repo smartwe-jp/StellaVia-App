@@ -23,6 +23,10 @@ class AppEnvironment {
 
   bool get isProduction => flavor == AppFlavor.prod;
 
+  bool get allowsTestSelfieUploadFailure =>
+      !isProduction &&
+      Uri.tryParse(memberApiBaseUrl)?.host == 'testoa.gutingjun.com';
+
   AppEnvironment copyWith({
     AppFlavor? flavor,
     String? appName,

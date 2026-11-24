@@ -12,6 +12,49 @@ import "package:fundex/l10n/app_localizations.dart";
 import 'package:fundex/features/settings/presentation/providers/settings_two_factor_providers.dart';
 
 void main() {
+  test('delegate email is optional and validates a provided address', () {
+    final l = lookupAppLocalizations(const Locale('ja'));
+    String? validate(String value) => corporateFieldError(
+      l,
+      CorporateSection.handler,
+      CorporateField.email,
+      value,
+    );
+    expect(validate(''), isNull);
+    expect(validate('invalid'), l.corpFormInvalidEmail);
+    expect(validate('delegate@example.com'), isNull);
+  });
+
+  test('corporate birthdays require age 18 from midnight in Japan', () {
+    final l = lookupAppLocalizations(const Locale('ja'));
+    for (final section in [
+      CorporateSection.representative,
+      CorporateSection.handler,
+      CorporateSection.owners,
+    ]) {
+      String? check(DateTime instant, String birth) => corporateFieldError(
+        l,
+        section,
+        CorporateField.birth,
+        birth,
+        now: instant,
+      );
+      expect(
+        check(DateTime.utc(2026, 11, 23, 14, 59), '2008-11-24'),
+        l.memberProfileUnderageTitle,
+      );
+      expect(check(DateTime.utc(2026, 11, 23, 15), '2008-11-24'), isNull);
+      expect(
+        check(DateTime.utc(2026, 11, 23, 15), '2008-11-25'),
+        l.memberProfileUnderageTitle,
+      );
+      expect(
+        check(DateTime.utc(2026, 11, 23, 15), '2008-02-30'),
+        l.corpFormInvalidDate,
+      );
+    }
+  });
+
   testWidgets(
     'correction goes directly from owners to documents without a bank section',
     (tester) async {

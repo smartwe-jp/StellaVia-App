@@ -6,6 +6,7 @@ import "../../domain/entities/beneficial_owner.dart";
 import "../../domain/entities/corporate_form_draft.dart";
 import "../pages/beneficial_owner_editor.dart";
 import "../support/beneficial_owner_labels.dart";
+import "../support/corporate_form_fields.dart";
 
 class BeneficialOwnerList extends StatefulWidget {
   const BeneficialOwnerList({super.key, required this.draft});
@@ -59,13 +60,22 @@ class _BeneficialOwnerListState extends State<BeneficialOwnerList> {
     return FormField<OwnerPresence>(
       initialValue: draft.ownerPresence,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: (value) => value == null
-          ? l.corpFormMissing
-          : draft.ownersComplete
-          ? null
-          : draft.owners.isEmpty
-          ? l.corpOwnerMinimum
-          : l.corpFormMissing,
+      validator: (value) {
+        if (value == null) return l.corpFormMissing;
+        if (value == OwnerPresence.yes) {
+          for (final owner in draft.owners) {
+            final error = corporateFieldError(
+              l,
+              CorporateSection.owners,
+              CorporateField.birth,
+              owner.birthdate,
+            );
+            if (error != null) return error;
+          }
+        }
+        if (draft.ownersComplete) return null;
+        return draft.owners.isEmpty ? l.corpOwnerMinimum : l.corpFormMissing;
+      },
       builder: (field) => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

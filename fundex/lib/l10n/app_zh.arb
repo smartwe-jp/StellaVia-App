@@ -3130,6 +3130,8 @@
   "corpFormBusinessKana": "法人名称（片假名）",
   "corpFormForm": "法人类型",
   "corpFormNumber": "法人编号",
+  "corpPostalReentryMessage": "请核对邮编后重新输入。",
+  "corpPostalReenter": "重新输入",
   "corpFormPostal": "邮政编码",
   "corpFormOffice": "总公司所在地",
   "corpFormFounded": "成立日期",

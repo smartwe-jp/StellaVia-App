@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/config/environment_provider.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../../app/support/app_request_error_message_resolver.dart';
 import '../../../../app/support/app_permission_dialogs.dart';
@@ -31,23 +32,10 @@ class _SettingsFaceVerificationPageState
   bool _isRunningVerification = false;
   bool _isVerified = false;
 
-  bool _isSelfieUploaded(String? path) {
-    final normalized = path?.trim() ?? '';
-    //return normalized.isNotEmpty;
-    if (normalized.isEmpty) {
-      return false;
-    }
-    if (normalized == selfieUploadCompletedMarker) {
-      return true;
-    }
-    return normalized.startsWith('http://') ||
-        normalized.startsWith('https://');
-  }
-
   Future<String?> _pickImagePath(ProfileDocumentImageSource source) async {
     final result = await ref
         .read(profileDocumentImagePickerProvider)
-        .pick(source);
+        .pick(source, frontCamera: true);
     if (!mounted) {
       return null;
     }
@@ -120,7 +108,7 @@ class _SettingsFaceVerificationPageState
         );
       },
     );
-    if (source == null) {
+    if (!mounted || source == null) {
       return;
     }
 
@@ -137,7 +125,13 @@ class _SettingsFaceVerificationPageState
     try {
       final uploadedUrl = await ref
           .read(uploadMemberProfilePhotoUseCaseProvider)
-          .call(filePath: path.trim(), isSelfie: true);
+          .call(
+            filePath: path.trim(),
+            isSelfie: true,
+            allowTestSelfieUploadFailure: ref
+                .read(appEnvironmentProvider)
+                .allowsTestSelfieUploadFailure,
+          );
       if (!mounted) {
         return;
       }
@@ -146,7 +140,9 @@ class _SettingsFaceVerificationPageState
       });
       AppNotice.show(
         context,
-        message: context.l10n.memberProfilePhotoUploadSuccess,
+        message: uploadedUrl == testSelfieUploadFallbackMarker
+            ? context.l10n.memberProfileSelfieUploadBypassedNotice
+            : context.l10n.memberProfilePhotoUploadSuccess,
       );
       await _startVerification(forceLiveness: true);
     } catch (error) {
@@ -331,7 +327,10 @@ class _SettingsFaceVerificationPageState
     final appText = theme.appTextTheme;
     final l10n = context.l10n;
     final verifiedAsync = ref.watch(settingsRealPersonVerifiedProvider);
-    final selfieUploaded = _isSelfieUploaded(_selfiePhotoPath);
+    final selfieUploaded =
+        isUploadedSelfie(_selfiePhotoPath) ||
+        (_selfiePhotoPath == testSelfieUploadFallbackMarker &&
+            ref.read(appEnvironmentProvider).allowsTestSelfieUploadFailure);
     final verified = _isVerified || (verifiedAsync.asData?.value == true);
     final showUploadSection = !verified;
     final canStartVerification =

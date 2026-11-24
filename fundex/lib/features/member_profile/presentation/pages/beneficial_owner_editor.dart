@@ -130,6 +130,7 @@ class _BeneficialOwnerEditorState extends State<BeneficialOwnerEditor> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 16),
                 child: CorporateDateField(
+                  lastDate: latestAdultBirthDate(),
                   label: l.corpFormBirth,
                   requiredLabel: l.corpFormRequired,
                   initialValue: birthdate,

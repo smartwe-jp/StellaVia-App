@@ -7826,6 +7826,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get corpFormNumber => 'Corporate number';
 
   @override
+  String get corpPostalReentryMessage =>
+      'Check the postal code and enter it again.';
+
+  @override
+  String get corpPostalReenter => 'Re-enter postal code';
+
+  @override
   String get corpFormPostal => 'Postal code';
 
   @override

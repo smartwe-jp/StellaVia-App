@@ -3130,6 +3130,8 @@
   "corpFormBusinessKana": "法人名カナ",
   "corpFormForm": "法人形態",
   "corpFormNumber": "法人番号",
+  "corpPostalReentryMessage": "郵便番号を確認して、もう一度入力してください。",
+  "corpPostalReenter": "再入力",
   "corpFormPostal": "郵便番号",
   "corpFormOffice": "本店所在地",
   "corpFormFounded": "設立年月日",

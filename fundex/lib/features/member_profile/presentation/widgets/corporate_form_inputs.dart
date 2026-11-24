@@ -34,6 +34,8 @@ class CorporateFormInput extends StatefulWidget {
     required this.field,
     this.extraValidation,
     this.onTextChanged,
+    this.focusNode,
+    this.trailingAction,
     required this.onStructureChanged,
   });
   final CorporateFormDraft draft;
@@ -41,6 +43,8 @@ class CorporateFormInput extends StatefulWidget {
   final CorporateField field;
   final String? Function()? extraValidation;
   final ValueChanged<String>? onTextChanged;
+  final FocusNode? focusNode;
+  final Widget? trailingAction;
   final VoidCallback onStructureChanged;
   @override
   State<CorporateFormInput> createState() => _CorporateFormInputState();
@@ -104,6 +108,7 @@ class _CorporateFormInputState extends State<CorporateFormInput> {
     }
     if (f == CorporateField.birth || f == CorporateField.founded) {
       return CorporateDateField(
+        lastDate: f == CorporateField.birth ? latestAdultBirthDate() : null,
         key: ValueKey(f),
         label: label,
         requiredLabel: required,
@@ -117,10 +122,12 @@ class _CorporateFormInputState extends State<CorporateFormInput> {
         },
       );
     }
-    return AppTextField(
+    final action = widget.trailingAction;
+    final input = AppTextField(
       inputKey: ValueKey(f),
       controller: controller,
-      label: label,
+      focusNode: widget.focusNode,
+      label: action == null ? label : null,
       requiredLabel: required,
       maxLines: f == CorporateField.business ? 4 : 1,
       keyboardType: switch (f) {
@@ -140,6 +147,22 @@ class _CorporateFormInputState extends State<CorporateFormInput> {
         widget.draft.set(s, f, v);
         widget.onTextChanged?.call(v);
       },
+    );
+    if (action == null) return input;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppFieldLabel(label: label, requiredLabel: required),
+        const SizedBox(height: UiTokens.spacing8),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(flex: 3, child: Semantics(label: label, child: input)),
+            const SizedBox(width: UiTokens.spacing8),
+            Expanded(flex: 2, child: action),
+          ],
+        ),
+      ],
     );
   }
 }

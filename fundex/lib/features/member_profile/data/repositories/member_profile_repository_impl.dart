@@ -62,15 +62,8 @@ class MemberProfileRepositoryImpl implements MemberProfileRepository {
   }
 
   @override
-  Future<void> saveOnboardingDraft(MemberProfileDetails profile) async {
-    try {
-      await _local.saveOnboardingDraft(
-        MemberProfileDetailsDto.fromEntity(profile),
-      );
-    } catch (_) {
-      // Keep onboarding draft flow available even when local cache fails.
-    }
-  }
+  Future<void> saveOnboardingDraft(MemberProfileDetails profile) =>
+      _local.saveOnboardingDraft(MemberProfileDetailsDto.fromEntity(profile));
 
   @override
   Future<void> clearOnboardingDraft() async {

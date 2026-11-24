@@ -7437,6 +7437,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get corpFormNumber => '法人番号';
 
   @override
+  String get corpPostalReentryMessage => '郵便番号を確認して、もう一度入力してください。';
+
+  @override
+  String get corpPostalReenter => '再入力';
+
+  @override
   String get corpFormPostal => '郵便番号';
 
   @override

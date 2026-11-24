@@ -7,6 +7,7 @@ import '../../domain/entities/corporate_form_draft.dart';
 import '../providers/member_profile_providers.dart';
 import '../support/member_profile_postal_address.dart';
 import 'corporate_form_inputs.dart';
+import 'postal_lookup_dialog.dart';
 
 class CorporatePostalCodeInput extends ConsumerStatefulWidget {
   const CorporatePostalCodeInput({
@@ -28,18 +29,26 @@ class CorporatePostalCodeInput extends ConsumerStatefulWidget {
 class _CorporatePostalCodeInputState
     extends ConsumerState<CorporatePostalCodeInput> {
   static final validPostal = RegExp(r'^\d{3}-?\d{4}$');
+  final postalFocus = FocusNode();
+
+  @override
+  void dispose() {
+    postalFocus.dispose();
+    super.dispose();
+  }
+
   int revision = 0;
   bool searching = false;
 
-  Future<void> lookup(String raw, {bool automatic = false}) async {
+  Future<void> lookup() async {
+    if (searching) return;
     final request = ++revision;
-    final postal = raw.trim();
+    final postal = widget.draft
+        .value(widget.section, CorporateField.postal)
+        .trim();
     final l = context.l10n;
     if (!validPostal.hasMatch(postal)) {
-      if (searching) setState(() => searching = false);
-      if (!automatic) {
-        AppNotice.show(context, message: l.memberProfileAddressSearchZipError);
-      }
+      AppNotice.show(context, message: l.memberProfileAddressSearchZipError);
       return;
     }
     final address = widget.section == CorporateSection.company
@@ -59,7 +68,11 @@ class _CorporatePostalCodeInputState
       final parts = resolveMemberProfilePostalAddress(rows);
       final result = '${parts.prefecture}${parts.cityAddress}';
       if (result.isEmpty) {
-        AppNotice.show(context, message: l.memberProfileAddressSearchEmpty);
+        setState(() => searching = false);
+        final reenter = await showPostalLookupEmptyDialog(context);
+        if (mounted && reenter == true && stillCurrent()) {
+          postalFocus.requestFocus();
+        }
         return;
       }
       widget.draft.set(widget.section, address, result);
@@ -69,29 +82,27 @@ class _CorporatePostalCodeInputState
         AppNotice.show(context, message: l.uiErrorRequestFailed);
       }
     } finally {
-      if (mounted && request == revision) setState(() => searching = false);
+      if (mounted && request == revision && searching) {
+        setState(() => searching = false);
+      }
     }
   }
 
   @override
-  Widget build(BuildContext context) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      CorporateFormInput(
-        draft: widget.draft,
-        section: widget.section,
-        field: CorporateField.postal,
-        onStructureChanged: widget.onResolved,
-        onTextChanged: (value) => lookup(value, automatic: true),
-      ),
-      TextButton(
-        onPressed: searching
-            ? null
-            : () => lookup(
-                widget.draft.value(widget.section, CorporateField.postal),
-              ),
-        child: Text(context.l10n.memberProfileAddressSearch),
-      ),
-    ],
+  Widget build(BuildContext context) => CorporateFormInput(
+    draft: widget.draft,
+    section: widget.section,
+    field: CorporateField.postal,
+    focusNode: postalFocus,
+    onStructureChanged: widget.onResolved,
+    onTextChanged: (_) {
+      revision++;
+      if (searching) setState(() => searching = false);
+    },
+    trailingAction: AppButton(
+      label: context.l10n.memberProfileAddressSearch,
+      isLoading: searching,
+      onPressed: lookup,
+    ),
   );
 }

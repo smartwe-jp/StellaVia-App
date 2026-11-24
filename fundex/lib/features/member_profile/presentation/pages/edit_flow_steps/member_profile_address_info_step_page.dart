@@ -16,6 +16,8 @@ class MemberProfileAddressInfoStepPage extends StatelessWidget {
     this.onSecondaryPressed,
     this.primaryButtonLabelOverride,
     this.onAddressSearch,
+    this.isAddressSearching = false,
+    this.postalFocus,
     this.onNext,
     this.onSkip,
   });
@@ -30,6 +32,8 @@ class MemberProfileAddressInfoStepPage extends StatelessWidget {
   final VoidCallback? onSecondaryPressed;
   final String? primaryButtonLabelOverride;
   final VoidCallback? onAddressSearch;
+  final bool isAddressSearching;
+  final FocusNode? postalFocus;
   final VoidCallback? onNext;
   final VoidCallback? onSkip;
 
@@ -52,7 +56,8 @@ class MemberProfileAddressInfoStepPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Expanded(
-                child: MemberProfileTextField(
+                child: AppTextField(
+                  focusNode: postalFocus,
                   label: l10n.memberProfilePostalCodeLabel,
                   controller: postalCodeController,
                   hintText: l10n.memberProfilePostalCodeHint,
@@ -61,7 +66,8 @@ class MemberProfileAddressInfoStepPage extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: MemberProfileOutlineButton(
+                child: AppButton(
+                  isLoading: isAddressSearching,
                   onPressed: onAddressSearch,
                   label: l10n.memberProfileAddressSearch,
                 ),

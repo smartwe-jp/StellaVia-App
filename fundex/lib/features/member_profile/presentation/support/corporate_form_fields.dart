@@ -77,13 +77,15 @@ Map<String, String> pickerOptions(AppLocalizations l, CorporateField f) =>
       _ => {},
     };
 bool requiredField(CorporateSection s, CorporateField f) =>
-    !(s == CorporateSection.representative && f == CorporateField.email);
+    f != CorporateField.email ||
+    (s != CorporateSection.representative && s != CorporateSection.handler);
 String? corporateFieldError(
   AppLocalizations l,
   CorporateSection s,
   CorporateField f,
-  String raw,
-) {
+  String raw, {
+  DateTime? now,
+}) {
   final v = raw.trim();
   if (v.isEmpty) return requiredField(s, f) ? l.corpFormMissing : null;
   switch (f) {
@@ -109,11 +111,16 @@ String? corporateFieldError(
     case CorporateField.birth:
     case CorporateField.founded:
       final date = DateTime.tryParse(v);
-      return RegExp(r'^\d{4}-\d\d-\d\d$').hasMatch(v) &&
-              date != null &&
-              date.toIso8601String().startsWith('${v}T')
-          ? null
-          : l.corpFormInvalidDate;
+      if (!RegExp(r'^\d{4}-\d\d-\d\d$').hasMatch(v) ||
+          date == null ||
+          !date.toIso8601String().startsWith('${v}T')) {
+        return l.corpFormInvalidDate;
+      }
+      if (f == CorporateField.birth &&
+          date.isAfter(latestAdultBirthDate(now))) {
+        return l.memberProfileUnderageTitle;
+      }
+      return null;
     case CorporateField.email:
       return RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(v)
           ? null
@@ -121,6 +128,13 @@ String? corporateFieldError(
     default:
       return null;
   }
+}
+
+DateTime latestAdultBirthDate([DateTime? now]) {
+  final today = (now ?? DateTime.now()).toUtc().add(const Duration(hours: 9));
+  final cutoff = DateTime(today.year - 18, today.month, today.day);
+  // February 29 can normalize to March 1 in the birth year.
+  return cutoff.month == today.month ? cutoff : DateTime(cutoff.year, 2, 28);
 }
 
 const corporateRoutePrefix = 'corporate-verification/';
