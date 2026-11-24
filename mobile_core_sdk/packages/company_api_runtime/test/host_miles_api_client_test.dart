@@ -145,6 +145,21 @@ void main() {
     expect(value.totalEarnedPoints, 900);
     expect(value.frozenPoints, 30);
   });
+  test('fetchAccount reads null point balances as zero', () async {
+    final api = HostMilesApiClient(
+      dioForPath: (_) => fixtureDio({
+        'availablePoints': null,
+        'frozenPoints': null,
+        'totalEarnedPoints': null,
+        'expiringSoonPoints': null,
+      }),
+    );
+    final account = await api.fetchAccount();
+    expect(account.availablePoints, 0);
+    expect(account.frozenPoints, 0);
+    expect(account.totalEarnedPoints, 0);
+    expect(account.expiringSoonPoints, 0);
+  });
   test('fetchAccount rejects backend failure', () async {
     final api = HostMilesApiClient(
       dioForPath: (_) => fixtureDio({

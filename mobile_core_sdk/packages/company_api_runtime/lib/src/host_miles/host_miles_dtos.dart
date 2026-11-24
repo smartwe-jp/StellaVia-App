@@ -82,10 +82,10 @@ class HostMilesAccountDto {
   final int? totalEarnedPoints;
   factory HostMilesAccountDto.fromJson(Map<String, dynamic> json) =>
       HostMilesAccountDto(
-        availablePoints: readInteger(json['availablePoints']),
-        expiringSoonPoints: readInteger(json['expiringSoonPoints']),
-        frozenPoints: readInteger(json['frozenPoints']),
-        totalEarnedPoints: readInteger(json['totalEarnedPoints']),
+        availablePoints: readInteger(json['availablePoints'] ?? 0),
+        expiringSoonPoints: readInteger(json['expiringSoonPoints'] ?? 0),
+        frozenPoints: readInteger(json['frozenPoints'] ?? 0),
+        totalEarnedPoints: readInteger(json['totalEarnedPoints'] ?? 0),
       );
 }
 

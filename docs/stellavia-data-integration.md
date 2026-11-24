@@ -17,7 +17,7 @@
 | 模块 / SDK 方法 | 方法与路径 | 参数 | 返回 |
 | --- | --- | --- | --- |
 | HostMiles.fetchTier | GET /points/user-tier-info | 无 | 等级、比例、预约窗口、室数、有效资产、下一等级 |
-| HostMiles.fetchAccount | GET /points/user-account-summary | 无 | availablePoints / frozenPoints / expiringSoonPoints / totalEarnedPoints |
+| HostMiles.fetchAccount | GET /points/user-account-summary | 无 | availablePoints / frozenPoints / expiringSoonPoints / totalEarnedPoints；成功响应中这四项各自为 null 或缺失时按 0 解析 |
 | HostMiles.fetchExpiryAlerts | GET /points/user-expire-alert | 无 | amount / expireDate 列表 |
 | HostMiles.fetchTierRules | GET /offline/listRules | 无，公开 | tierCode / minAum / maxAum / pointRate / expireMonths / leadTimeMonths / maxRooms |
 | HostMiles.fetchChart | POST /points/chart | startDate / endDate，yyyy-MM-dd | date / points 列表，暂不赋予未确认的统计口径 |
