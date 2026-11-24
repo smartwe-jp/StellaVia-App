@@ -277,6 +277,18 @@ void main() {
           await tester.tap(run);
           await tester.pumpAndSettle();
           expect(find.text('Kyoto Test'), findsOneWidget);
+          final rail = find.descendant(
+            of: find.byType(SimulationHotelResults),
+            matching: find.byType(SingleChildScrollView),
+          );
+          final viewport = tester.getRect(rail);
+          final page = tester.getRect(find.byType(HomeSimulationPage));
+          expect(viewport.left, page.left);
+          expect(viewport.right, page.right);
+          expect(
+            tester.widget<SingleChildScrollView>(rail).padding,
+            const EdgeInsets.symmetric(horizontal: UiTokens.spacing20),
+          );
           expect(
             find.text(strings.simPointsHotelStay('15,400', 4)),
             findsNWidgets(6),
@@ -358,7 +370,17 @@ void main() {
           final l = AppLocalizations.of(
             tester.element(find.byType(HomeSimulationPage)),
           );
-          await tester.tap(find.text(member ? l.homeFindFunds : l.simRegister));
+          final action = find.text(member ? l.homeFindFunds : l.simRegister);
+          expect(
+            find.ancestor(
+              of: action,
+              matching: find.byType(SingleChildScrollView),
+            ),
+            findsWidgets,
+          );
+          await tester.ensureVisible(action);
+          await tester.pumpAndSettle();
+          await tester.tap(action);
           await tester.pumpAndSettle();
           expect(find.text(member ? 'funds' : 'register=1'), findsOneWidget);
           await tester.pumpWidget(const SizedBox());

@@ -29,6 +29,7 @@ class SecondaryMarketActivityPage extends ConsumerWidget {
     ),
     body: SafeArea(
       top: false,
+      bottom: false,
       child: _Sections(
         key: ValueKey((
           ref.watch(myPageMembershipIdentityProvider),
@@ -141,7 +142,12 @@ class _SectionsState extends ConsumerState<_Sections> {
               onRefresh: refresh,
               child: ListView(
                 key: ValueKey((list, page)),
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+                padding: EdgeInsets.fromLTRB(
+                  UiTokens.spacing16,
+                  UiTokens.spacing12,
+                  UiTokens.spacing16,
+                  UiTokens.spacing24 + MediaQuery.paddingOf(context).bottom,
+                ),
                 physics: const AlwaysScrollableScrollPhysics(),
                 children: [
                   if (state.isLoading) const LinearProgressIndicator(),

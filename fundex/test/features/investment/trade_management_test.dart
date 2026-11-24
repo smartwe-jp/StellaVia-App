@@ -86,6 +86,8 @@ void main() {
     (tester) async {
       tester.view.devicePixelRatio = 1;
       tester.view.physicalSize = const Size(390, 844);
+      tester.view.padding = const FakeViewPadding(bottom: 34);
+      addTearDown(tester.view.resetPadding);
       addTearDown(tester.view.resetDevicePixelRatio);
       addTearDown(tester.view.resetPhysicalSize);
       final repo = _Trades();
@@ -173,6 +175,12 @@ void main() {
 
       expect(holdingsCalls, 0);
       await tap('売買管理');
+      final list = find.byType(ListView).last;
+      expect(tester.getRect(list).bottom, tester.view.physicalSize.height);
+      expect(
+        tester.widget<ListView>(list).padding,
+        const EdgeInsets.fromLTRB(16, 12, 16, 58),
+      );
       expect(holdingsCalls, 1);
       expect(repo.calls, isEmpty);
       expect(find.text('Fund 0'), findsNothing);

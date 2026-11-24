@@ -73,62 +73,74 @@ class _HomeSimulationPageState extends ConsumerState<HomeSimulationPage> {
       ),
       body: SafeArea(
         top: false,
+        bottom: false,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+          padding: EdgeInsets.only(
+            bottom: UiTokens.spacing20 + MediaQuery.paddingOf(context).bottom,
+          ),
           child: Column(
             children: [
-              HomeSimulationInputs(
-                input: input,
-                onUnits: controller.setUnits,
-                onRate: controller.setRate,
-                onMonths: controller.setMonths,
-                onType: controller.setType,
-              ),
-              const SizedBox(height: 12),
-              AppButton(
-                label: l.simRunAction,
-                onPressed: () => _run(result.miles),
-              ),
-              const SizedBox(height: 12),
-              HomeSimulationResultCard(
-                key: _resultKey,
-                result: result,
-                input: input,
-              ),
-              if (rules.isLoading || rules.hasError)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: HomeDataStatus(
-                    isLoading: rules.isLoading,
-                    hasError: rules.hasError,
-                    onRetry: () => ref
-                        .read(homeRankDetailsRulesProvider.notifier)
-                        .refresh(),
-                  ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: UiTokens.spacing20,
                 ),
-              const SizedBox(height: 12),
-              Text(l.simEstimateNote, style: context.appTextTheme.caption),
+                child: Column(
+                  children: [
+                    HomeSimulationInputs(
+                      input: input,
+                      onUnits: controller.setUnits,
+                      onRate: controller.setRate,
+                      onMonths: controller.setMonths,
+                      onType: controller.setType,
+                    ),
+                    const SizedBox(height: 12),
+                    AppButton(
+                      label: l.simRunAction,
+                      onPressed: () => _run(result.miles),
+                    ),
+                    const SizedBox(height: 12),
+                    HomeSimulationResultCard(
+                      key: _resultKey,
+                      result: result,
+                      input: input,
+                    ),
+                    if (rules.isLoading || rules.hasError)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: HomeDataStatus(
+                          isLoading: rules.isLoading,
+                          hasError: rules.hasError,
+                          onRetry: () => ref
+                              .read(homeRankDetailsRulesProvider.notifier)
+                              .refresh(),
+                        ),
+                      ),
+                    const SizedBox(height: 12),
+                    Text(
+                      l.simEstimateNote,
+                      style: context.appTextTheme.caption,
+                    ),
+                  ],
+                ),
+              ),
               if (_showHotels && result.miles != null) ...[
                 const SizedBox(height: 16),
                 SimulationHotelResults(points: result.miles!),
               ],
+              const SizedBox(height: UiTokens.spacing16),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: UiTokens.spacing20,
+                ),
+                child: AppButton(
+                  label: member ? l.homeFindFunds : l.simRegister,
+                  minHeight: 50,
+                  onPressed: () => member
+                      ? context.go('/funds')
+                      : context.push('/login?openRegister=1'),
+                ),
+              ),
             ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: ColoredBox(
-        color: context.appColors.surface,
-        child: SafeArea(
-          top: false,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
-            child: AppButton(
-              label: member ? l.homeFindFunds : l.simRegister,
-              minHeight: 50,
-              onPressed: () => member
-                  ? context.go('/funds')
-                  : context.push('/login?openRegister=1'),
-            ),
           ),
         ),
       ),

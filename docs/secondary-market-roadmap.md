@@ -53,7 +53,7 @@ https://sit-admin.gutingjun.com/api/crowdfunding/v2/api-docs
 
 My Page 快捷入口进入交易管理，默认「ファンドを売る」。按[测试站的管理区块](https://testoa.gutingjun.com/mypage#secondary)使用 AppFilterBar 和 App 基金卡片。筛选切换回到第一页，每页 10 条。
 
-- 出售从 available 读取当前账户的逐笔持仓，先过滤可售口数大于零的记录再本地分页。出售沿用该笔购买的 processId 和口数上限。
+- 出售从 available 读取当前账户的逐笔持仓，成功响应中的 `data: null` 显示为暂无可卖出的基金。列表有数据时，先过滤可售口数大于零的记录再本地分页。出售沿用该笔购买的 processId 和口数上限。
 - 购买分为「新規募集」和「会員間譲渡」。默认显示新规募集，读取官方基金列表中募集中且 currentOpenInvestor.avaliableApplyTotal 大于零的项目，点击查看官方基金详情并申购。会员间转让按页查询 VALID 挂单，显示剩余口数大于零的记录。点击进入 App 的市场详情与购买流程。
 - 売買履歴默认「売却」，以当前用户 ID 查询所有挂单；「応募」以 marketType=2 查询购买申请。详情保留状态、合同信息与已有撤销流程。售出或购买提交成功后进入相应履历。
 - 页面仅在进入后读取所选区块。分页依据接口总数，保留同一基金下不同订单的独立记录。

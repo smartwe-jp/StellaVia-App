@@ -435,9 +435,15 @@ class UserInvestmentApiClient {
       requireTruthyData: false,
     );
     final body = payload['data'];
+    if (body == null &&
+        payload.containsKey('data') &&
+        _envelopeCodec.isSuccessCode(payload[_envelopeCodec.profile.codeKey])) {
+      return const <SecondaryMarketHoldingDto>[];
+    }
     final data = body is Map ? body['list'] : body;
-    if (data is! List)
+    if (data is! List) {
       throw const FormatException('Expected available holdings list.');
+    }
     return data
         .map(
           (row) =>

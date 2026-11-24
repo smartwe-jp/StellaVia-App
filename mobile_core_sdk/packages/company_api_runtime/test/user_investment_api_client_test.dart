@@ -68,6 +68,18 @@ void main() {
       expect(page.total,15);
       expect(page.rows.map((r) => r.availableNum),[0,3]);
     });
+    test('available holdings treat explicit null as empty only on success', () async {
+      var response = '{"msg":"success","code":200,"data":null}';
+      final dio = _buildDio((_) async => _jsonOk(response));
+      final api = UserInvestmentApiClient(dioForPath: (_) => dio);
+      expect(await api.fetchSecondaryMarketHoldings(), isEmpty);
+
+      response = '{"msg":"failed","code":500,"data":null}';
+      await expectLater(api.fetchSecondaryMarketHoldings(), throwsStateError);
+
+      response = '{"msg":"success","code":200}';
+      await expectLater(api.fetchSecondaryMarketHoldings(), throwsFormatException);
+    });
     test('available holdings preserve process identity and server availability', () async {
       final dio = _buildDio((options) async {
         expect(options.path, '/crowdfunding/secondary/market/available');

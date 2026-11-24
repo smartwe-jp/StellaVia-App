@@ -19,31 +19,46 @@ class SimulationHotelResults extends ConsumerWidget {
     final provider = simulationHotelsProvider(points);
     final hotels = ref.watch(provider);
     final l = context.l10n;
+    const inset = EdgeInsets.symmetric(horizontal: UiTokens.spacing20);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(l.simPointsHotelsTitle, style: context.appTextTheme.sectionTitle),
+        Padding(
+          padding: inset,
+          child: Text(
+            l.simPointsHotelsTitle,
+            style: context.appTextTheme.sectionTitle,
+          ),
+        ),
         const SizedBox(height: 8),
         hotels.when(
           skipLoadingOnRefresh: false,
-          loading: () => const LinearProgressIndicator(),
-          error: (_, __) => HomeDataStatus(
-            isLoading: false,
-            hasError: true,
-            onRetry: () => ref.invalidate(provider),
+          loading: () =>
+              const Padding(padding: inset, child: LinearProgressIndicator()),
+          error: (_, __) => Padding(
+            padding: inset,
+            child: HomeDataStatus(
+              isLoading: false,
+              hasError: true,
+              onRetry: () => ref.invalidate(provider),
+            ),
           ),
           data: (items) => items.isEmpty
-              ? Text(l.simPointsHotelsEmpty)
+              ? Padding(padding: inset, child: Text(l.simPointsHotelsEmpty))
               : LayoutBuilder(
                   builder: (context, constraints) => SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
+                    padding: inset,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       spacing: 12,
                       children: [
                         for (final hotel in items.take(6))
                           SizedBox(
-                            width: math.min(320.0, constraints.maxWidth * .9),
+                            width: math.min(
+                              320.0,
+                              (constraints.maxWidth - inset.horizontal) * .9,
+                            ),
                             child: SimulationHotelCard(
                               hotel: hotel,
                               points: points,
