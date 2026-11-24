@@ -7,6 +7,37 @@ import 'package:fundex/features/settings/presentation/support/settings_operating
 import 'package:fundex/l10n/app_localizations.dart';
 
 void main() {
+  testWidgets('native application button follows project status', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        locale: const Locale('ja'),
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) {
+            final labels = AppLocalizations.of(context)!;
+            for (final (status, label, enabled) in [
+              (0, labels.fundDetailOpenSoonAction, true),
+              (1, labels.fundDetailApplyNowAction, true),
+              (2, labels.fundDetailUnavailableAction, false),
+            ]) {
+              final project = FundProject(
+                id: '1',
+                projectName: 'Fund',
+                projectStatus: status,
+              );
+              expect(resolveFundDetailActionLabel(context, project), label);
+              expect(isFundDetailActionEnabled(project), enabled);
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+      ),
+    );
+  });
+
   testWidgets(
     'builds yield display without exposing offering targets in key facts',
     (WidgetTester tester) async {

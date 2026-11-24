@@ -111,8 +111,8 @@ class FundProjectDetailViewDataBuilder {
       propertyLocation: propertyLocation,
       propertyCoordinate: propertyCoordinate,
       yieldDisplay: resolveFundProjectYieldDisplay(project),
-      actionLabel: _resolveActionLabel(context, project),
-      actionEnabled: _isActionEnabled(project),
+      actionLabel: resolveFundDetailActionLabel(context, project),
+      actionEnabled: isFundDetailActionEnabled(project),
       operatorMetaText: _buildOperatorMetaText(
         context,
         project,
@@ -674,10 +674,7 @@ List<Color> _resolveHeroGradientColors(BuildContext context, int? status) {
         colors.primaryAlt,
       ];
     case 0:
-      return <Color>[
-        colors.heroStart,
-        colors.heroEnd,
-      ];
+      return <Color>[colors.heroStart, colors.heroEnd];
     case 4:
       return <Color>[colors.infoForeground, colors.primary, colors.primaryAlt];
     case 5:
@@ -695,7 +692,7 @@ List<Color> _resolveHeroGradientColors(BuildContext context, int? status) {
   }
 }
 
-String _resolveActionLabel(BuildContext context, FundProject project) {
+String resolveFundDetailActionLabel(BuildContext context, FundProject project) {
   switch (project.projectStatus) {
     case 1:
       return context.l10n.fundDetailApplyNowAction;
@@ -706,7 +703,7 @@ String _resolveActionLabel(BuildContext context, FundProject project) {
   }
 }
 
-bool _isActionEnabled(FundProject project) {
+bool isFundDetailActionEnabled(FundProject project) {
   return project.projectStatus == 1 || project.projectStatus == 0;
 }
 

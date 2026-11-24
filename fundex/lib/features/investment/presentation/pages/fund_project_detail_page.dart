@@ -18,6 +18,8 @@ import '../support/fund_project_detail_view_data.dart';
 import '../widgets/fund_project_detail_comments_section.dart';
 import '../widgets/fund_project_detail_documents_section.dart';
 import '../widgets/fund_project_detail_scaffold.dart';
+import '../widgets/fund_project_web_content.dart';
+import '../widgets/fund_project_web_navigation.dart';
 import '../widgets/fund_project_detail_tabs_section.dart';
 import '../widgets/fund_project_detail_title_block.dart';
 import '../widgets/fund_project_detail_video_player.dart';
@@ -35,6 +37,7 @@ class FundProjectDetailPage extends ConsumerStatefulWidget {
 
 class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
   int _selectedDetailTabIndex = 0;
+  bool _webNavigationVisible = true;
   final GlobalKey _gainTypeDescriptionSectionKey = GlobalKey();
   bool _didRequestInitialRefresh = false;
 
@@ -147,6 +150,79 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
     final favoriteAddedMessage = context.l10n.favoriteAddedToast;
     final favoriteRemovedMessage = context.l10n.favoriteRemovedToast;
 
+    FundDetailStickyActionBar buildActionBar(FundProject project) =>
+        FundDetailStickyActionBar(
+          label: resolveFundDetailActionLabel(context, project),
+          enabled: isFundDetailActionEnabled(project),
+          onTap: () => _handleLotteryApplyTap(
+            projectId,
+            isAuthenticated: isAuthenticated,
+          ),
+        );
+    final environment = ref.watch(appEnvironmentProvider);
+    if (!environment.isProduction) {
+      final project = detailAsync.asData?.value;
+      final favoriteProjectId = project?.id.trim().isNotEmpty == true
+          ? project!.id.trim()
+          : projectId;
+      final isFavorite = favoriteProjectIds.contains(favoriteProjectId);
+      final uri = Uri.parse(
+        environment.oaApiBaseUrl,
+      ).replace(pathSegments: ['app', 'fund', projectId]);
+      return Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: FundProjectWebNavigation(
+          visible: _webNavigationVisible,
+          isFavorite: isFavorite,
+          onBack: _handleBack,
+          onFavorite: () {
+            ref
+                .read(fundProjectFavoritesControllerProvider.notifier)
+                .toggleFavorite(favoriteProjectId);
+            AppNotice.show(
+              context,
+              message: isFavorite
+                  ? favoriteRemovedMessage
+                  : favoriteAddedMessage,
+            );
+          },
+          onShare: project == null ? null : () => _shareFundProject(project),
+        ),
+        body: SafeArea(
+          top: false,
+          bottom: false,
+          child: FundProjectWebContent(
+            key: ValueKey(uri),
+            uri: uri,
+            onNavigationVisibilityChanged: (visible) {
+              if (mounted && visible != _webNavigationVisible) {
+                setState(() => _webNavigationVisible = visible);
+              }
+            },
+          ),
+        ),
+        bottomNavigationBar:
+            project != null &&
+                applyDetailAsync.hasValue &&
+                !applyDetailAsync.hasError &&
+                !applyDetailAsync.isLoading
+            ? buildActionBar(project)
+            : SafeArea(
+                top: false,
+                child: SizedBox(
+                  height: 56,
+                  child: Center(
+                    child: detailAsync.hasError || applyDetailAsync.hasError
+                        ? TextButton(
+                            onPressed: _refreshInitialDetailData,
+                            child: Text(context.l10n.fundListRetry),
+                          )
+                        : const CircularProgressIndicator.adaptive(),
+                  ),
+                ),
+              ),
+      );
+    }
     return detailAsync.when(
       loading: () => FundProjectDetailScaffold(
         onBack: _handleBack,
@@ -233,6 +309,7 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
             ? projectId.trim()
             : project.id.trim();
         final isFavorite = favoriteProjectIds.contains(favoriteProjectId);
+        final actionBar = buildActionBar(project);
         final normalizedPhotoUrls = project.photos
             .map((String url) => url.trim())
             .where((String url) => url.isNotEmpty)
@@ -290,14 +367,7 @@ class _FundProjectDetailPageState extends ConsumerState<FundProjectDetailPage> {
             videoLink != null && isFundProjectYoutubeVideoUrl(videoLink);
 
         return FundProjectDetailScaffold(
-          actionBar: FundDetailStickyActionBar(
-            label: viewData.actionLabel,
-            enabled: viewData.actionEnabled,
-            onTap: () => _handleLotteryApplyTap(
-              projectId,
-              isAuthenticated: isAuthenticated,
-            ),
-          ),
+          actionBar: actionBar,
           body: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[

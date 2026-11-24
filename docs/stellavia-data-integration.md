@@ -145,3 +145,9 @@ My Page 快捷入口打开 `/profile/host-funds`。以 [Figma SP](https://www.fi
 My Page 的 /profile/miles 按[测试站里程管理页](https://testoa.gutingjun.com/mypage/miles)排列内容。余额折线按日期查询，累计获得面积图按月份查询，两图独立选择近 1、3、5 年。上月与本月按 yearMonth 取实际获得值，下月取预计值。等级卡和累计图共用累计序列末值，缺失时依次回退等级接口累计字段及余额，避免将投资金额 currentAum 显示成里程。到期明细、等级说明和履历复用现有 App 入口。
 
 - 2026-11-18：运用中持仓卡标题采用12／700，金额和口数采用Jost 14／400，货币及单位10，收益说明12／500，详情入口12／500。字段标签维持12／700；本地化金额字符串保持原内容，由presentation support划分数字和单位样式。
+
+Dev and staging fund detail screens embed the OA web origin at /app/fund/{projectId}. The fixed application button uses the native project status, login and verification flow. Production retains its native detail body pending the web rollout.
+
+The embedded fund detail extends behind a transparent native navigation bar and status bar so the web hero begins at the top screen edge. The bottom native application action remains in the scaffold bottom bar.
+
+The web fund header has no title. Back, favorite and share use pale circular surfaces. Scrolling down hides the native header, scrolling up or returning to the top reveals it with a short slide/fade animation.
