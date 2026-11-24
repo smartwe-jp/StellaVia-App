@@ -1,5 +1,6 @@
 import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/mypage_models.dart';
+import 'mypage_section_support.dart';
 
 class MyPageHiwariCardDisplayData {
   const MyPageHiwariCardDisplayData({
@@ -30,61 +31,59 @@ class MyPageHiwariCardRowData {
 
 MyPageHiwariCardDisplayData buildMyPageHiwariCardDisplayData(
   AppLocalizations l10n,
-  List<MyPageHiwariJob> jobs,
-) {
-  if (jobs.isEmpty) {
-    return const MyPageHiwariCardDisplayData();
+  List<MyPageHiwariJob> jobs, {
+  required String? operationStart,
+}) {
+  if (jobs.isEmpty) return const MyPageHiwariCardDisplayData();
+  final operationDay = formatDateOrNull(operationStart);
+  String period(String? start, String? end) {
+    final first = formatDateOrNull(start);
+    final last = formatDateOrNull(end);
+    final missing = l10n.myPageHiwariMissingValue;
+    if (first == null && last == null) return missing;
+    return l10n.myPageHiwariPeriodRange(first ?? missing, last ?? missing);
   }
 
-  final hasPreOperationJob = jobs.any(
-    (MyPageHiwariJob job) => job.isPreOperation,
-  );
   return MyPageHiwariCardDisplayData(
-    explanation: hasPreOperationJob ? l10n.myPageHiwariPreOpExplain : null,
+    explanation: l10n.myPageHiwariPaymentExplanation,
     blocks: jobs
-        .map(
-          (MyPageHiwariJob job) => job.isPreOperation
-              ? MyPageHiwariCardBlockData(
-                  badgeLabel: l10n.myPageHiwariPreOpProRataBadge,
-                  rows: <MyPageHiwariCardRowData>[
-                    MyPageHiwariCardRowData(
-                      label: l10n.myPageHiwariReturnPeriod,
-                      value: l10n.myPageHiwariPeriodRange(
-                        _displayValue(job.startDate, l10n),
-                        _displayValue(job.endDate, l10n),
-                      ),
-                    ),
-                    MyPageHiwariCardRowData(
-                      label: l10n.myPageHiwariEffectiveDays,
-                      value: _displayNum(job.num, l10n),
-                    ),
-                  ],
-                )
-              : MyPageHiwariCardBlockData(
-                  rows: <MyPageHiwariCardRowData>[
-                    MyPageHiwariCardRowData(
-                      label: l10n.myPageHiwariRevenueBaseDate,
-                      value: _displayValue(job.startDate, l10n),
-                    ),
-                    MyPageHiwariCardRowData(
-                      label: l10n.myPageHiwariContractUnits,
-                      value: _displayNum(job.num, l10n),
-                    ),
-                  ],
-                ),
-        )
+        .map((job) {
+          final start = formatDateOrNull(job.startDate);
+          final isTransfer = job.processId != job.fromProcessId;
+          String? badge;
+          var dateLabel = l10n.myPageHiwariRevenueBaseDate;
+          if (isTransfer) {
+            badge = l10n.myPageHiwariTransfer;
+          } else if (operationDay != null && start != null) {
+            if (start.compareTo(operationDay) < 0) {
+              badge = l10n.myPageHiwariDeposit;
+            } else {
+              badge = l10n.myPageHiwariContract;
+              dateLabel = l10n.myPageHiwariContractDate;
+            }
+          }
+          return MyPageHiwariCardBlockData(
+            badgeLabel: badge,
+            rows: [
+              MyPageHiwariCardRowData(
+                label: l10n.myPageHiwariCalculationPeriod,
+                value: period(job.startDate, job.endDate),
+              ),
+              MyPageHiwariCardRowData(
+                label: l10n.myPageHiwariDistributionPeriod,
+                value: period(job.headStartDate, job.headEndDate),
+              ),
+              MyPageHiwariCardRowData(
+                label: l10n.myPageHiwariEffectiveDays,
+                value: job.num?.toString() ?? l10n.myPageHiwariMissingValue,
+              ),
+              MyPageHiwariCardRowData(
+                label: dateLabel,
+                value: start ?? l10n.myPageHiwariMissingValue,
+              ),
+            ],
+          );
+        })
         .toList(growable: false),
   );
-}
-
-String _displayValue(String? value, AppLocalizations l10n) {
-  final normalized = value?.trim();
-  if (normalized == null || normalized.isEmpty) {
-    return l10n.myPageHiwariMissingValue;
-  }
-  return normalized;
-}
-
-String _displayNum(int? value, AppLocalizations l10n) {
-  return value?.toString() ?? l10n.myPageHiwariMissingValue;
 }

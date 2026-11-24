@@ -197,17 +197,21 @@ class MyPageOrderInquiryRecord {
 class MyPageHiwariJob {
   const MyPageHiwariJob({
     this.processId,
+    this.fromProcessId,
+    this.headStartDate,
+    this.headEndDate,
     this.startDate,
     this.endDate,
     this.num,
   });
 
   final String? processId;
+  final String? fromProcessId;
+  final String? headStartDate;
+  final String? headEndDate;
   final String? startDate;
   final String? endDate;
   final int? num;
-
-  bool get isPreOperation => processId == null || processId!.trim().isEmpty;
 }
 
 class MyPageInvestmentRecord {

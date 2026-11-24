@@ -1039,6 +1039,9 @@ Response
 }
 
 - 9 我的投资
+
+    运用中基金详情按每条 hiwariJobs 展示日割计算期间（startDate～endDate）及合并支付的分配期间（headStartDate～headEndDate）。processId 与 fromProcessId 不同时为譲渡；相同时按日比较 startDate 与项目 scheduledStartDate，早于运用开始日为入金，当日及以后为成約。
+
     Request URL
     https://testoa.gutingjun.com/api/crowdfunding/user/invest/list
     Request Method

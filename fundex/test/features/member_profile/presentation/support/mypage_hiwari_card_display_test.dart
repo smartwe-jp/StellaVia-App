@@ -6,53 +6,56 @@ import 'package:fundex/l10n/app_localizations_ja.dart';
 void main() {
   final l10n = AppLocalizationsJa();
 
-  test('builds pre-operation explanation, badge, period, and day count', () {
-    final display = buildMyPageHiwariCardDisplayData(
-      l10n,
-      const <MyPageHiwariJob>[
+  test(
+    'classifies each job and renders its own calculation and payout period',
+    () {
+      final display = buildMyPageHiwariCardDisplayData(l10n, const [
+        MyPageHiwariJob(processId: 'a', fromProcessId: 'b'),
         MyPageHiwariJob(
-          startDate: '2024-01-01',
-          endDate: '2024-04-17',
-          num: 20,
+          processId: 'a',
+          fromProcessId: 'a',
+          startDate: '2024-10-27',
         ),
-      ],
-    );
+        MyPageHiwariJob(
+          processId: 'a',
+          fromProcessId: 'a',
+          startDate: '2024-10-28',
+          endDate: '2024-12-31',
+          headStartDate: '2024-10-01',
+          headEndDate: '2024-12-31',
+          num: 7,
+        ),
+        MyPageHiwariJob(
+          processId: 'a',
+          fromProcessId: 'a',
+          startDate: '2024-10-29',
+        ),
+      ], operationStart: '2024-10-28 12:00:00');
+      expect(display.blocks.map((block) => block.badgeLabel), [
+        '譲渡による日割り',
+        '入金による日割り',
+        '成約による日割り',
+        '成約による日割り',
+      ]);
+      expect(display.blocks[2].rows.map((row) => row.value), [
+        '2024/10/28～2024/12/31',
+        '2024/10/01～2024/12/31',
+        '7',
+        '2024/10/28',
+      ]);
+      expect(display.blocks.first.rows.first.value, '—');
+    },
+  );
 
-    expect(display.explanation, l10n.myPageHiwariPreOpExplain);
-    expect(display.blocks, hasLength(1));
-    expect(
-      display.blocks.single.badgeLabel,
-      l10n.myPageHiwariPreOpProRataBadge,
-    );
-    expect(display.blocks.single.rows.first.label, '収益期間');
-    expect(display.blocks.single.rows.first.value, '2024-01-01～2024-04-17');
-    expect(display.blocks.single.rows.last.label, '対象日数');
-    expect(display.blocks.single.rows.last.value, '20');
-  });
-
-  test('builds revenue base date and contracted units for a process job', () {
-    final display = buildMyPageHiwariCardDisplayData(
-      l10n,
-      const <MyPageHiwariJob>[
-        MyPageHiwariJob(processId: 'proc-1', startDate: '2026-05-20', num: 2),
-      ],
-    );
-
-    expect(display.explanation, isNull);
+  test('keeps period visible when operation start is missing', () {
+    final display = buildMyPageHiwariCardDisplayData(l10n, const [
+      MyPageHiwariJob(
+        processId: 'a',
+        fromProcessId: 'a',
+        startDate: '2024-10-28',
+      ),
+    ], operationStart: null);
     expect(display.blocks.single.badgeLabel, isNull);
-    expect(display.blocks.single.rows.first.label, '収益基準日');
-    expect(display.blocks.single.rows.first.value, '2026-05-20');
-    expect(display.blocks.single.rows.last.label, '約定口数');
-    expect(display.blocks.single.rows.last.value, '2');
-  });
-
-  test('uses the localized missing-value marker', () {
-    final display = buildMyPageHiwariCardDisplayData(
-      l10n,
-      const <MyPageHiwariJob>[MyPageHiwariJob(processId: 'proc-1')],
-    );
-
-    expect(display.blocks.single.rows.first.value, '—');
-    expect(display.blocks.single.rows.last.value, '—');
+    expect(display.blocks.single.rows.first.value, '2024/10/28～—');
   });
 }

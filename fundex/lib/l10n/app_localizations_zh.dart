@@ -4941,6 +4941,27 @@ class AppLocalizationsZh extends AppLocalizations {
       '如果在运用开始日前完成购买和入金，从完成后至运用开始日前一天期间，也会按照本基金的预期收益率按日产生收益。';
 
   @override
+  String get myPageHiwariTransfer => '转让日割';
+
+  @override
+  String get myPageHiwariDeposit => '入金日割';
+
+  @override
+  String get myPageHiwariContract => '成交日割';
+
+  @override
+  String get myPageHiwariCalculationPeriod => '计算期间';
+
+  @override
+  String get myPageHiwariDistributionPeriod => '合并支付的分配期间';
+
+  @override
+  String get myPageHiwariPaymentExplanation => '日割收益将与对应分配期间的常规收益一并支付。';
+
+  @override
+  String get myPageHiwariContractDate => '成交日';
+
+  @override
   String get myPageHiwariInfoTitle => '按日收益信息';
 
   @override
@@ -12883,6 +12904,27 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   @override
   String get myPageHiwariPreOpExplain =>
       '若在運用開始日前完成購買及入金，從完成後至運用開始日前一天期間，也會依照本基金的預期收益率按日產生收益。';
+
+  @override
+  String get myPageHiwariTransfer => '轉讓日割';
+
+  @override
+  String get myPageHiwariDeposit => '入金日割';
+
+  @override
+  String get myPageHiwariContract => '成交日割';
+
+  @override
+  String get myPageHiwariCalculationPeriod => '計算期間';
+
+  @override
+  String get myPageHiwariDistributionPeriod => '合併支付的分配期間';
+
+  @override
+  String get myPageHiwariPaymentExplanation => '日割收益將與對應分配期間的常規收益一併支付。';
+
+  @override
+  String get myPageHiwariContractDate => '成交日';
 
   @override
   String get myPageHiwariInfoTitle => '按日收益資訊';

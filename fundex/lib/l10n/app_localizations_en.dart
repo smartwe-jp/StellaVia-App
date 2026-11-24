@@ -5241,6 +5241,29 @@ class AppLocalizationsEn extends AppLocalizations {
       'When your purchase and payment are completed before operations begin, earnings accrue daily through the day before the operation start date based on the fund\'s assumed yield.';
 
   @override
+  String get myPageHiwariTransfer => 'Proration on transfer';
+
+  @override
+  String get myPageHiwariDeposit => 'Proration on deposit';
+
+  @override
+  String get myPageHiwariContract => 'Proration on purchase';
+
+  @override
+  String get myPageHiwariCalculationPeriod => 'Calculation period';
+
+  @override
+  String get myPageHiwariDistributionPeriod =>
+      'Distribution period for payment';
+
+  @override
+  String get myPageHiwariPaymentExplanation =>
+      'Prorated earnings are paid together with the regular distribution for the period shown.';
+
+  @override
+  String get myPageHiwariContractDate => 'Contract date';
+
+  @override
   String get myPageHiwariInfoTitle => 'Prorated Earnings Details';
 
   @override

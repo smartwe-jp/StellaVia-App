@@ -9495,6 +9495,48 @@ abstract class AppLocalizations {
   /// **'When your purchase and payment are completed before operations begin, earnings accrue daily through the day before the operation start date based on the fund\'s assumed yield.'**
   String get myPageHiwariPreOpExplain;
 
+  /// No description provided for @myPageHiwariTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Proration on transfer'**
+  String get myPageHiwariTransfer;
+
+  /// No description provided for @myPageHiwariDeposit.
+  ///
+  /// In en, this message translates to:
+  /// **'Proration on deposit'**
+  String get myPageHiwariDeposit;
+
+  /// No description provided for @myPageHiwariContract.
+  ///
+  /// In en, this message translates to:
+  /// **'Proration on purchase'**
+  String get myPageHiwariContract;
+
+  /// No description provided for @myPageHiwariCalculationPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculation period'**
+  String get myPageHiwariCalculationPeriod;
+
+  /// No description provided for @myPageHiwariDistributionPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Distribution period for payment'**
+  String get myPageHiwariDistributionPeriod;
+
+  /// No description provided for @myPageHiwariPaymentExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Prorated earnings are paid together with the regular distribution for the period shown.'**
+  String get myPageHiwariPaymentExplanation;
+
+  /// No description provided for @myPageHiwariContractDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract date'**
+  String get myPageHiwariContractDate;
+
   /// No description provided for @myPageHiwariInfoTitle.
   ///
   /// In en, this message translates to:

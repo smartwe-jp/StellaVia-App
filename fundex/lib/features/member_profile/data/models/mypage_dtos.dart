@@ -254,6 +254,9 @@ extension MyPageInvestmentRecordDtoMapper on MyPageInvestmentRecordDto {
 extension MyPageHiwariJobDtoMapper on MyPageHiwariJobDto {
   MyPageHiwariJob toEntity() {
     return MyPageHiwariJob(
+      fromProcessId: fromProcessId,
+      headStartDate: headStartDate,
+      headEndDate: headEndDate,
       processId: processId,
       startDate: startDate,
       endDate: endDate,

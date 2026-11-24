@@ -4985,6 +4985,28 @@ class AppLocalizationsJa extends AppLocalizations {
       '運用開始日前に購入・入金が完了した場合、運用開始日の前日までの間も、当ファンドの想定利回りに基づき日割りで収益が発生します。';
 
   @override
+  String get myPageHiwariTransfer => '譲渡による日割り';
+
+  @override
+  String get myPageHiwariDeposit => '入金による日割り';
+
+  @override
+  String get myPageHiwariContract => '成約による日割り';
+
+  @override
+  String get myPageHiwariCalculationPeriod => '計算期間';
+
+  @override
+  String get myPageHiwariDistributionPeriod => 'まとめて支払う分配期間';
+
+  @override
+  String get myPageHiwariPaymentExplanation =>
+      '日割り計算期間の収益は、対応する分配期間の収益とまとめてお支払いします。';
+
+  @override
+  String get myPageHiwariContractDate => '成約日';
+
+  @override
   String get myPageHiwariInfoTitle => '日割り収益情報';
 
   @override

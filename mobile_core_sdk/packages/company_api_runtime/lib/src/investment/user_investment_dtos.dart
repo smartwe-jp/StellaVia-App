@@ -521,6 +521,9 @@ class UserInvestmentOrderInquiryRecordDto {
 class UserInvestmentHiwariJobDto {
   const UserInvestmentHiwariJobDto({
     this.processId,
+    this.fromProcessId,
+    this.headStartDate,
+    this.headEndDate,
     this.startDate,
     this.endDate,
     this.num,
@@ -529,6 +532,9 @@ class UserInvestmentHiwariJobDto {
   factory UserInvestmentHiwariJobDto.fromJson(Map<String, dynamic> json) {
     return UserInvestmentHiwariJobDto(
       processId: _stringOrNull(json['processId']),
+      fromProcessId: _stringOrNull(json['fromProcessId']),
+      headStartDate: _stringOrNull(json['headStartDate']),
+      headEndDate: _stringOrNull(json['headEndDate']),
       startDate: _stringOrNull(json['startDate']),
       endDate: _stringOrNull(json['endDate']),
       num: _intOrNull(json['num']),
@@ -536,6 +542,9 @@ class UserInvestmentHiwariJobDto {
   }
 
   final String? processId;
+  final String? fromProcessId;
+  final String? headStartDate;
+  final String? headEndDate;
   final String? startDate;
   final String? endDate;
   final int? num;

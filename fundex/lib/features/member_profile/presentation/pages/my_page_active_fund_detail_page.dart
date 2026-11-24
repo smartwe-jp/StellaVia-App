@@ -83,6 +83,7 @@ class _MyPageActiveFundDetailState
       records
           .expand((MyPageInvestmentRecord record) => record.hiwariJobs)
           .toList(growable: false),
+      operationStart: project?.scheduledStartDate,
     );
     final sellingUnits = _subtractCounts(
       summary.investNum,
