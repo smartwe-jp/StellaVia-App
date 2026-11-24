@@ -19,9 +19,11 @@ class CorporateFlowScaffold extends ConsumerStatefulWidget {
     this.exitPrompt,
     this.draft,
     this.exitSnapshot,
+    this.onReviewBack,
     this.locked = false,
     this.refresh,
   });
+  final VoidCallback? onReviewBack;
   final CorporateFormDraft? draft;
   final CorporateFormDraft Function()? exitSnapshot;
   final String title;
@@ -85,6 +87,27 @@ class _CorporateFlowScaffoldState extends ConsumerState<CorporateFlowScaffold> {
     final theme = Theme.of(context);
     final index = widget.step;
     final title = widget.title;
+    final reviewBack = widget.onReviewBack;
+    if (reviewBack != null) {
+      return PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop && !widget.locked) reviewBack();
+        },
+        child: Scaffold(
+          backgroundColor: theme.appColors.surface,
+          appBar: AppBar(
+            title: Text(title),
+            leading: IconButton(
+              icon: const BackButtonIcon(),
+              tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+              onPressed: widget.locked ? null : reviewBack,
+            ),
+          ),
+          body: SafeArea(top: false, child: widget.child),
+        ),
+      );
+    }
     return PopScope(
       canPop: !saving,
       child: AbsorbPointer(

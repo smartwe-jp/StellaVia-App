@@ -34,7 +34,35 @@ class CorporateReviewSection extends StatelessWidget {
             children: [Text(sectionTitle(l, section)), Text(l.commonEditText)],
           ),
         ),
-        SelectableText(lines.join('\n'), style: theme.textTheme.bodyMedium),
+        for (final line in lines)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 7),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 35,
+                  child: Text(
+                    line.label ?? '',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  flex: 65,
+                  child: SelectableText(
+                    line.value,
+                    textAlign: TextAlign.start,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         const SizedBox(height: 8),
         const Divider(),
       ],

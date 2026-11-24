@@ -8,6 +8,8 @@ import 'package:fundex/features/member_profile/domain/entities/corporate_documen
 import 'package:fundex/features/member_profile/domain/entities/corporate_form_draft.dart';
 import 'package:fundex/features/member_profile/presentation/pages/corporate_documents_page.dart';
 import 'package:fundex/features/member_profile/presentation/providers/corporate_document_upload_provider.dart';
+import 'package:fundex/features/member_profile/presentation/pages/corporate_attachment_page.dart';
+import 'package:fundex/features/member_profile/presentation/providers/verification_entry_provider.dart';
 import 'package:fundex/l10n/app_localizations.dart';
 
 void main() {
@@ -67,7 +69,16 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            corporateDocumentPickerProvider.overrideWithValue((slot) async {
+            corporateDocumentPickerProvider.overrideWithValue((
+              slot,
+              source,
+            ) async {
+              expect(
+                source,
+                slot.identity
+                    ? CorporateDocumentSource.gallery
+                    : CorporateDocumentSource.files,
+              );
               picks++;
               return XFile.fromData(
                 Uint8List.fromList(
@@ -76,6 +87,10 @@ void main() {
                 name: slot.identity ? 'front.jpg' : 'registry.pdf',
                 path: slot.identity ? 'front.jpg' : 'registry.pdf',
               );
+            }),
+            corporateAttachmentProvider.overrideWith((ref, url) async {
+              expect(url, '/uploaded/registry.pdf');
+              return Uint8List(0);
             }),
             corporateUploadProvider.overrideWithValue((file) async {
               if (++attempts == 1) throw StateError('offline');
@@ -96,6 +111,13 @@ void main() {
         tester.element(find.byType(CorporateDocumentsPage)),
       );
       Future<void> tap(Finder target) async {
+        if (target.evaluate().isEmpty) {
+          await tester.scrollUntilVisible(
+            target,
+            200,
+            scrollable: find.byType(Scrollable).first,
+          );
+        }
         await tester.ensureVisible(target);
         await tester.pumpAndSettle();
         await tester.tap(target);
@@ -109,6 +131,15 @@ void main() {
         draft.documents.uploaded[CorporateDocument.registry]?.fileId,
         'abc',
       );
+      await tap(find.textContaining('registry.pdf'));
+      expect(picks, 1);
+      await tap(find.text(l.memberProfilePhotoPreviewAction));
+      expect(find.byType(CorporateAttachmentPage), findsOneWidget);
+      expect(picks, 1);
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      await tap(find.text(l.corpDocsReplace));
+      expect(picks, 2);
       await tap(find.text(l.corpDocsIdentity));
       await tap(find.byType(DropdownButtonFormField<CorporateIdType>));
       await tap(find.text(l.documentTypeMyNumber).last);
@@ -119,6 +150,8 @@ void main() {
       await tap(
         find.byKey(const ValueKey(CorporateDocument.representativeIdFront)),
       );
+      expect(find.text(l.corpDocsPickFromFiles), findsOneWidget);
+      await tap(find.text(l.profileDocumentPickFromGallery));
       expect(
         draft
             .documents
@@ -132,6 +165,8 @@ void main() {
       expect(find.textContaining('front.jpg'), findsOneWidget);
       await tap(find.text(l.corpFormReview));
       expect(find.text(l.corpFormReviewTitle), findsOneWidget);
+      await tap(find.text(l.profilePrevStep));
+      expect(find.textContaining('front.jpg'), findsOneWidget);
     },
   );
 }

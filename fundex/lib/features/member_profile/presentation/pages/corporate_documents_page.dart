@@ -1,3 +1,4 @@
+import '../support/corporate_draft_autosave.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,9 @@ import '../../domain/entities/corporate_form_draft.dart';
 import '../providers/corporate_document_upload_provider.dart';
 import '../support/corporate_document_labels.dart';
 import '../widgets/corporate_document_card.dart';
+import '../widgets/corporate_document_source_sheet.dart';
 import '../widgets/corporate_form_header.dart';
+import 'corporate_attachment_page.dart';
 import 'corporate_review_page.dart';
 import '../widgets/corporate_flow_scaffold.dart';
 
@@ -17,9 +20,11 @@ class CorporateDocumentsPage extends ConsumerStatefulWidget {
     super.key,
     required this.draft,
     this.identity = false,
+    this.reviewEdit = false,
   });
   final CorporateFormDraft draft;
   final bool identity;
+  final bool reviewEdit;
   @override
   ConsumerState<CorporateDocumentsPage> createState() =>
       _CorporateDocumentsPageState();
@@ -42,7 +47,14 @@ class _CorporateDocumentsPageState
     });
     try {
       if (!retry) {
-        final selected = await ref.read(corporateDocumentPickerProvider)(slot);
+        final source = slot.extensions.contains('jpg')
+            ? await showCorporateDocumentSourceSheet(context)
+            : CorporateDocumentSource.files;
+        if (source == null || !mounted) return;
+        final selected = await ref.read(corporateDocumentPickerProvider)(
+          slot,
+          source,
+        );
         if (selected == null || !mounted) return;
         if (await selected.length() > CorporateDocument.maxBytes) {
           errors[slot] = l.corpDocsInvalid;
@@ -54,11 +66,13 @@ class _CorporateDocumentsPageState
           errors[slot] = l.corpDocsInvalid;
           return;
         }
+        if (!mounted) return;
         documents.pending[slot] = (
           filename: selected.name,
           bytes: bytes,
           mimeType: mime,
         );
+        autosaveCorporateDraft(context, widget.draft);
       }
       if (!mounted) return;
       final file = documents.pending[slot]!;
@@ -72,6 +86,7 @@ class _CorporateDocumentsPageState
         url: result.url,
       );
       documents.pending.remove(slot);
+      if (mounted) autosaveCorporateDraft(context, widget.draft);
     } catch (_) {
       if (!documents.pending.containsKey(slot)) {
         errors[slot] = l.corpDocsInvalid;
@@ -81,17 +96,30 @@ class _CorporateDocumentsPageState
     }
   }
 
+  void finishReviewEdit() {
+    if (busy != null) return;
+    if (!docs.complete(false, delegate) || !docs.complete(true, delegate)) {
+      AppNotice.show(context, message: context.l10n.corpFormMissing);
+      return;
+    }
+    Navigator.of(context).pop();
+  }
+
   Widget card(CorporateDocument slot) => CorporateDocumentCard(
     key: ValueKey(slot),
     slot: slot,
     documents: docs,
     busy: busy == slot,
     error: errors[slot],
+    onView: busy == null
+        ? (file) => CorporateAttachmentPage.open(context, file)
+        : null,
     onPick: busy == null ? () => attach(slot) : null,
     onRetry: busy == null ? () => attach(slot, retry: true) : null,
     onDiscard: busy == null
         ? () => setState(() {
             docs.pending.remove(slot);
+            autosaveCorporateDraft(context, widget.draft);
             errors.remove(slot);
           })
         : null,
@@ -106,6 +134,7 @@ class _CorporateDocumentsPageState
         exitPrompt: CorporateExitPrompt.draft,
         draft: widget.draft,
         title: l.corpDocsTitle,
+        onReviewBack: widget.reviewEdit ? finishReviewEdit : null,
         step: CorporateSection.documents.index,
         locked: busy != null,
         child: ListView(
@@ -124,7 +153,13 @@ class _CorporateDocumentsPageState
                   child: Text(l.corpDocsMail),
                 ),
               ),
-            ] else ...[
+            ],
+            if (identity || widget.reviewEdit) ...[
+              if (widget.reviewEdit)
+                Text(
+                  l.corpDocsIdentity,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
               for (final handler in [false, if (delegate) true]) ...[
                 Text(
                   handler ? l.corpFormHandler : l.corpFormRep,
@@ -156,6 +191,7 @@ class _CorporateDocumentsPageState
                               errors.remove(s);
                             }
                             docs.selectType(handler, t);
+                            autosaveCorporateDraft(context, widget.draft);
                           });
                         },
                 ),
@@ -165,40 +201,47 @@ class _CorporateDocumentsPageState
               Text(l.corpDocsSides),
             ],
             const SizedBox(height: 24),
-            AppButton(
-              label: identity ? l.corpFormReview : l.corpDocsIdentity,
-              style: const ButtonStyle(
-                shape: WidgetStatePropertyAll(StadiumBorder()),
-              ),
-              onPressed: busy != null || !docs.complete(identity, delegate)
-                  ? null
-                  : () => Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        settings: RouteSettings(
-                          name: identity
-                              ? 'corporate-verification/review'
-                              : 'corporate-verification/identity',
+            if (widget.reviewEdit)
+              AppButton(
+                label: l.corpEditDone,
+                onPressed: busy == null ? finishReviewEdit : null,
+              )
+            else ...[
+              AppButton(
+                label: identity ? l.corpFormReview : l.corpDocsIdentity,
+                style: const ButtonStyle(
+                  shape: WidgetStatePropertyAll(StadiumBorder()),
+                ),
+                onPressed: busy != null || !docs.complete(identity, delegate)
+                    ? null
+                    : () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          settings: RouteSettings(
+                            name: identity
+                                ? 'corporate-verification/review'
+                                : 'corporate-verification/identity',
+                          ),
+                          builder: (_) => identity
+                              ? CorporateReviewPage(draft: widget.draft)
+                              : CorporateDocumentsPage(
+                                  draft: widget.draft,
+                                  identity: true,
+                                ),
                         ),
-                        builder: (_) => identity
-                            ? CorporateReviewPage(draft: widget.draft)
-                            : CorporateDocumentsPage(
-                                draft: widget.draft,
-                                identity: true,
-                              ),
                       ),
-                    ),
-            ),
-            const SizedBox(height: 12),
-            AppButton(
-              label: l.profilePrevStep,
-              variant: AppButtonVariant.secondary,
-              style: const ButtonStyle(
-                shape: WidgetStatePropertyAll(StadiumBorder()),
               ),
-              onPressed: busy == null
-                  ? () => Navigator.of(context).maybePop()
-                  : null,
-            ),
+              const SizedBox(height: 12),
+              AppButton(
+                label: l.profilePrevStep,
+                variant: AppButtonVariant.secondary,
+                style: const ButtonStyle(
+                  shape: WidgetStatePropertyAll(StadiumBorder()),
+                ),
+                onPressed: busy == null
+                    ? () => Navigator.of(context).maybePop()
+                    : null,
+              ),
+            ],
           ],
         ),
       ),

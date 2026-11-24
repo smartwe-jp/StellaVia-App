@@ -76,8 +76,9 @@ class MemberProfileApiClient {
       payload,
       fallbackMessage: 'Corporate document upload failed.',
     );
-    final data = _envelopeCodec.toJsonMap(payload['data'] ?? payload);
-    final url = data['url'];
+    final document = payload['data'] ?? payload;
+    final data = _envelopeCodec.toJsonMap(document);
+    final url = document is String ? document : data['url'];
     if (url is! String || url.trim().isEmpty) {
       throw const FormatException('Missing corporate document URL');
     }

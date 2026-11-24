@@ -14547,6 +14547,12 @@ abstract class AppLocalizations {
   /// **'Document type'**
   String get corpDocsType;
 
+  /// No description provided for @corpDocsPickFromFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse files'**
+  String get corpDocsPickFromFiles;
+
   /// No description provided for @corpDocsSelect.
   ///
   /// In en, this message translates to:
@@ -15134,6 +15140,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Verification status'**
   String get corpVerifiedStatus;
+
+  /// No description provided for @corpEditDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get corpEditDone;
 
   /// No description provided for @corpVerifiedDone.
   ///

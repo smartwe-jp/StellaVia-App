@@ -1,3 +1,6 @@
+import 'package:core_storage/core_storage.dart';
+import 'package:fundex/features/member_profile/data/datasources/corporate_draft_store.dart';
+import 'package:fundex/features/member_profile/presentation/providers/corporate_draft_providers.dart';
 import "package:core_ui_kit/core_ui_kit.dart";
 import "package:flutter/material.dart";
 import "package:fundex/features/member_profile/domain/entities/corporate_documents.dart";
@@ -12,6 +15,38 @@ import "package:fundex/l10n/app_localizations.dart";
 import 'package:fundex/features/settings/presentation/providers/settings_two_factor_providers.dart';
 
 void main() {
+  testWidgets('unfinished input survives leaving without confirming exit', (
+    tester,
+  ) async {
+    final storage = InMemoryKeyValueStorage();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          corporateDraftStoreProvider.overrideWithValue(
+            CorporateDraftStore(storage),
+          ),
+        ],
+        child: MaterialApp(
+          theme: AppThemeFactory.light(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: CorporateFormPage(
+            draft: CorporateFormDraft(localAccountKey: 'test-account'),
+            section: CorporateSection.representative,
+          ),
+        ),
+      ),
+    );
+    final name = find.byKey(const ValueKey(CorporateField.name)).last;
+    await tester.enterText(name, '山');
+    await tester.enterText(name, '山田');
+    await tester.pumpWidget(const SizedBox.shrink());
+    final restored = await CorporateDraftStore(storage).read('test-account');
+    expect(
+      restored?.value(CorporateSection.representative, CorporateField.name),
+      '山田',
+    );
+  });
   test('delegate email is optional and validates a provided address', () {
     final l = lookupAppLocalizations(const Locale('ja'));
     String? validate(String value) => corporateFieldError(

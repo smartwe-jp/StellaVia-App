@@ -70,6 +70,41 @@ Future<void> submitReview(WidgetTester tester, AppLocalizations l) async {
 }
 
 void main() {
+  testWidgets('section edit returns directly to review with back or done', (
+    tester,
+  ) async {
+    final draft = CorporateFormDraft()
+      ..handler = CorporateHandler.representative;
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(
+          theme: AppThemeFactory.light(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: CorporateReviewPage(draft: draft),
+        ),
+      ),
+    );
+    final l = AppLocalizations.of(
+      tester.element(find.byType(CorporateReviewPage)),
+    );
+    for (final useBack in [true, false]) {
+      final edit = find.widgetWithText(TextButton, l.corpFormHandler);
+      await tester.ensureVisible(edit);
+      await tester.tap(edit);
+      await tester.pumpAndSettle();
+      expect(find.byType(AppBar), findsOneWidget);
+      expect(find.byTooltip(l.commonClose), findsNothing);
+      expect(find.text(l.profilePrevStep), findsNothing);
+      final action = useBack
+          ? find.byType(BackButtonIcon)
+          : find.text(l.corpEditDone);
+      await tester.ensureVisible(action);
+      await tester.tap(action);
+      await tester.pumpAndSettle();
+      expect(find.byType(CorporateReviewPage), findsOneWidget);
+    }
+  });
   testWidgets(
     'requires both declarations, submits once and returns to refreshed detail',
     (tester) async {

@@ -199,6 +199,25 @@ void main() {
       },
     );
 
+    test('accepts corporate upload URL strings only on success', () async {
+      const url = 'https://example.com/uploads/registry.pdf';
+      var body = '{"msg":"success","code":200,"data":"$url"}';
+      final api = MemberProfileApiClient(
+        dioForPath: (_) => _buildDio((_) async => _jsonOk(body)),
+      );
+      Future<({String fileId, String url})> upload() =>
+          api.uploadCorporateDocument(
+            filename: 'registry.pdf',
+            bytes: '%PDF-test'.codeUnits,
+            mimeType: 'application/pdf',
+          );
+      expect(await upload(), (fileId: '', url: url));
+      body = '{"code":400,"data":"$url"}';
+      await expectLater(upload(), throwsStateError);
+      body = '{"code":200,"data":" "}';
+      await expectLater(upload(), throwsFormatException);
+    });
+
     test(
       'fetchRegionsByZip maps ZipCloud address fields to existing regions',
       () async {

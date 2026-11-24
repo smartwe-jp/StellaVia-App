@@ -1,3 +1,4 @@
+import '../support/corporate_draft_autosave.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -92,6 +93,7 @@ class _CorporateFormInputState extends State<CorporateFormInput> {
             onChanged: (v) {
               if (v == null) return;
               widget.draft.set(s, f, v);
+              autosaveCorporateDraft(context, widget.draft);
               widget.onStructureChanged();
             },
           ),
@@ -118,6 +120,7 @@ class _CorporateFormInputState extends State<CorporateFormInput> {
             widget.extraValidation?.call(),
         onChanged: (v) {
           widget.draft.set(s, f, v);
+          autosaveCorporateDraft(context, widget.draft);
           widget.onTextChanged?.call(v);
         },
       );
@@ -145,6 +148,7 @@ class _CorporateFormInputState extends State<CorporateFormInput> {
           widget.extraValidation?.call(),
       onChanged: (v) {
         widget.draft.set(s, f, v);
+        autosaveCorporateDraft(context, widget.draft);
         widget.onTextChanged?.call(v);
       },
     );
@@ -157,7 +161,10 @@ class _CorporateFormInputState extends State<CorporateFormInput> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(flex: 3, child: Semantics(label: label, child: input)),
+            Expanded(
+              flex: 3,
+              child: Semantics(label: label, child: input),
+            ),
             const SizedBox(width: UiTokens.spacing8),
             Expanded(flex: 2, child: action),
           ],
@@ -215,6 +222,7 @@ class CorporateHandlerChoice extends StatelessWidget {
                   ),
                   onTap: () {
                     draft.handler = type;
+                    autosaveCorporateDraft(context, draft);
                     field.didChange(type);
                     onChanged();
                   },

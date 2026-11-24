@@ -8066,6 +8066,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get corpDocsType => 'Document type';
 
   @override
+  String get corpDocsPickFromFiles => 'Browse files';
+
+  @override
   String get corpDocsSelect => '＋ Select file';
 
   @override
@@ -8394,6 +8397,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get corpVerifiedStatus => 'Verification status';
+
+  @override
+  String get corpEditDone => 'Done';
 
   @override
   String get corpVerifiedDone => 'Complete';

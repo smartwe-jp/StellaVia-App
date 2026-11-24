@@ -7605,6 +7605,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get corpDocsType => '证件类型';
 
   @override
+  String get corpDocsPickFromFiles => '从文件中选择';
+
+  @override
   String get corpDocsSelect => '＋ 选择文件';
 
   @override
@@ -7900,6 +7903,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get corpVerifiedStatus => '认证状态';
+
+  @override
+  String get corpEditDone => '完成';
 
   @override
   String get corpVerifiedDone => '已完成';
@@ -15576,6 +15582,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get corpDocsType => '證件類型';
 
   @override
+  String get corpDocsPickFromFiles => '從檔案中選擇';
+
+  @override
   String get corpDocsSelect => '＋ 選擇檔案';
 
   @override
@@ -15871,6 +15880,9 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get corpVerifiedStatus => '認證狀態';
+
+  @override
+  String get corpEditDone => '完成';
 
   @override
   String get corpVerifiedDone => '已完成';

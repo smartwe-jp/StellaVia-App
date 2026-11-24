@@ -16,6 +16,7 @@ class CorporateFormPage extends StatefulWidget {
     super.key,
     required this.draft,
     required this.section,
+    this.reviewEdit = false,
   });
   static Future<void> start(BuildContext context, CorporateFormDraft draft) =>
       Navigator.of(context).push<void>(
@@ -30,6 +31,7 @@ class CorporateFormPage extends StatefulWidget {
         ),
       );
 
+  final bool reviewEdit;
   final CorporateFormDraft draft;
   final CorporateSection section;
   @override
@@ -71,6 +73,10 @@ class _CorporateFormPageState extends State<CorporateFormPage> {
     }
     if (!mounted) return;
     FocusScope.of(context).unfocus();
+    if (widget.reviewEdit) {
+      Navigator.of(context).pop();
+      return;
+    }
     final section = nextSection;
     final next = section == CorporateSection.documents
         ? CorporateDocumentsPage(draft: widget.draft)
@@ -89,6 +95,7 @@ class _CorporateFormPageState extends State<CorporateFormPage> {
     return CorporateFlowScaffold(
       exitPrompt: CorporateExitPrompt.draft,
       draft: widget.draft,
+      onReviewBack: widget.reviewEdit ? advance : null,
       title: sectionTitle(l, section),
       step: section.index,
       child: SingleChildScrollView(
@@ -120,7 +127,10 @@ class _CorporateFormPageState extends State<CorporateFormPage> {
                   onChanged: () => setState(() {}),
                 ),
               if (section == CorporateSection.owners)
-                BeneficialOwnerList(draft: widget.draft),
+                BeneficialOwnerList(
+                  draft: widget.draft,
+                  reviewEdit: widget.reviewEdit,
+                ),
               for (final field in widget.draft.fields(section))
                 Padding(
                   key: ValueKey(field),
@@ -146,7 +156,9 @@ class _CorporateFormPageState extends State<CorporateFormPage> {
                         ),
                 ),
               AppButton(
-                label: nextSection == null
+                label: widget.reviewEdit
+                    ? l.corpEditDone
+                    : nextSection == null
                     ? l.corpFormReview
                     : sectionTitle(l, nextSection!),
                 onPressed: advance,
@@ -154,15 +166,17 @@ class _CorporateFormPageState extends State<CorporateFormPage> {
                   shape: WidgetStatePropertyAll(StadiumBorder()),
                 ),
               ),
-              const SizedBox(height: 12),
-              AppButton(
-                label: l.profilePrevStep,
-                variant: AppButtonVariant.secondary,
-                onPressed: () => Navigator.of(context).pop(),
-                style: const ButtonStyle(
-                  shape: WidgetStatePropertyAll(StadiumBorder()),
+              if (!widget.reviewEdit) ...[
+                const SizedBox(height: 12),
+                AppButton(
+                  label: l.profilePrevStep,
+                  variant: AppButtonVariant.secondary,
+                  onPressed: () => Navigator.of(context).pop(),
+                  style: const ButtonStyle(
+                    shape: WidgetStatePropertyAll(StadiumBorder()),
+                  ),
                 ),
-              ),
+              ],
             ],
           ),
         ),

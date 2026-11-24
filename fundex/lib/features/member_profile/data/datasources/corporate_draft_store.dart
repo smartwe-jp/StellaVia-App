@@ -5,11 +5,20 @@ import '../../domain/entities/corporate_documents.dart';
 import '../../domain/entities/corporate_form_draft.dart';
 
 class CorporateDraftStore {
-  const CorporateDraftStore(this.storage);
+  CorporateDraftStore(this.storage);
   final KeyValueStorage storage;
   String _key(String account) => 'corporate.initial.v1.$account';
 
-  Future<void> clear(String account) => storage.remove(_key(account));
+  Future<void> _writes = Future.value();
+
+  Future<void> _enqueue(Future<void> Function() operation) {
+    final next = _writes.then((_) => operation());
+    _writes = next.catchError((Object _) {});
+    return next;
+  }
+
+  Future<void> clear(String account) =>
+      _enqueue(() => storage.remove(_key(account)));
 
   Future<void> save(CorporateFormDraft draft) {
     final account = draft.localAccountKey;
@@ -57,10 +66,12 @@ class CorporateDraftStore {
           },
       },
     };
-    return storage.write(_key(account), jsonEncode(data));
+    final encoded = jsonEncode(data);
+    return _enqueue(() => storage.write(_key(account), encoded));
   }
 
   Future<CorporateFormDraft?> read(String account) async {
+    await _writes;
     final raw = await storage.read(_key(account));
     if (raw == null) return null;
     final data = jsonDecode(raw) as Map<String, dynamic>;

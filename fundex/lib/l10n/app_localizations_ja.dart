@@ -7669,6 +7669,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get corpDocsType => '証明書の種類';
 
   @override
+  String get corpDocsPickFromFiles => 'ファイルから選択';
+
+  @override
   String get corpDocsSelect => '＋ ファイルを選択';
 
   @override
@@ -7968,6 +7971,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get corpVerifiedStatus => '認証状況';
+
+  @override
+  String get corpEditDone => '完了';
 
   @override
   String get corpVerifiedDone => '完了';

@@ -11,6 +11,7 @@ class CorporateDocumentCard extends StatelessWidget {
     required this.documents,
     required this.busy,
     required this.onPick,
+    required this.onView,
     required this.onRetry,
     required this.onDiscard,
     this.error,
@@ -19,6 +20,7 @@ class CorporateDocumentCard extends StatelessWidget {
   final CorporateDocuments documents;
   final bool busy;
   final String? error;
+  final ValueChanged<CorporateAttachment>? onView;
   final VoidCallback? onPick, onRetry, onDiscard;
 
   @override
@@ -43,7 +45,7 @@ class CorporateDocumentCard extends StatelessWidget {
           ),
           child: InkWell(
             borderRadius: BorderRadius.circular(12),
-            onTap: onPick,
+            onTap: file == null && failed == null ? onPick : null,
             child: Container(
               constraints: const BoxConstraints(minHeight: 118),
               padding: const EdgeInsets.all(16),
@@ -86,11 +88,34 @@ class CorporateDocumentCard extends StatelessWidget {
                         ),
                       ],
                     ),
+                  ] else if (file != null) ...[
+                    Text(
+                      '${l.profileDocumentAttachedBadge} · ${file.filename}',
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextButton(
+                            onPressed: onView == null
+                                ? null
+                                : () => onView!(file),
+                            child: Text(l.memberProfilePhotoPreviewAction),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: TextButton(
+                            onPressed: onPick,
+                            child: Text(l.corpDocsReplace),
+                          ),
+                        ),
+                      ],
+                    ),
                   ] else
                     Text(
-                      file == null
-                          ? l.corpDocsSelect
-                          : '${l.profileDocumentAttachedBadge} · ${file.filename}   ${l.corpDocsReplace}',
+                      l.corpDocsSelect,
                       textAlign: TextAlign.center,
                       style: theme.textTheme.labelLarge?.copyWith(
                         color: colors.primary,

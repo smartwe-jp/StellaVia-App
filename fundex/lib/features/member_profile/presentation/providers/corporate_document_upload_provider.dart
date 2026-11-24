@@ -1,11 +1,20 @@
 import 'package:company_api_runtime/company_api_runtime.dart';
 import 'package:file_selector/file_selector.dart';
+import 'package:image_picker/image_picker.dart' show ImagePicker, ImageSource;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/network/app_network_providers.dart';
 import '../../domain/entities/corporate_documents.dart';
 
+enum CorporateDocumentSource { gallery, files }
+
 final corporateDocumentPickerProvider = Provider(
-  (ref) => (CorporateDocument slot) {
+  (ref) => (CorporateDocument slot, CorporateDocumentSource source) {
+    if (source == CorporateDocumentSource.gallery) {
+      return ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        requestFullMetadata: false,
+      );
+    }
     final extensions = slot.extensions;
     return openFile(
       acceptedTypeGroups: [

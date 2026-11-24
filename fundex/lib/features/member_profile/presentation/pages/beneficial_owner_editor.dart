@@ -1,3 +1,4 @@
+import '../support/corporate_draft_autosave.dart';
 import "package:core_ui_kit/core_ui_kit.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
@@ -11,7 +12,13 @@ import "../widgets/corporate_date_field.dart";
 import "../widgets/corporate_flow_scaffold.dart";
 
 class BeneficialOwnerEditor extends StatefulWidget {
-  const BeneficialOwnerEditor({super.key, required this.draft, this.person});
+  const BeneficialOwnerEditor({
+    super.key,
+    required this.draft,
+    this.person,
+    this.reviewEdit = false,
+  });
+  final bool reviewEdit;
   final BeneficialOwner? person;
   final CorporateFormDraft draft;
   @override
@@ -54,7 +61,6 @@ class _BeneficialOwnerEditorState extends State<BeneficialOwnerEditor> {
   );
 
   CorporateFormDraft snapshot() {
-    form.currentState!.save();
     final draft = widget.draft.copyForEditing(correction: false);
     final person = currentOwner();
     if (widget.person != null) {
@@ -70,6 +76,12 @@ class _BeneficialOwnerEditorState extends State<BeneficialOwnerEditor> {
       draft.owners.add(person);
     }
     return draft;
+  }
+
+  void autosaveOwner() {
+    if (widget.draft.localAccountKey != null) {
+      autosaveCorporateDraft(context, snapshot());
+    }
   }
 
   Widget input(
@@ -96,6 +108,10 @@ class _BeneficialOwnerEditorState extends State<BeneficialOwnerEditor> {
               if (optional) return null;
               return text.isEmpty ? l.corpFormMissing : null;
             },
+            onChanged: (value) {
+              onSave(value);
+              autosaveOwner();
+            },
             onSaved: (value) => onSave(value!.trim()),
           ),
         ],
@@ -110,6 +126,7 @@ class _BeneficialOwnerEditorState extends State<BeneficialOwnerEditor> {
       exitPrompt: CorporateExitPrompt.draft,
       draft: widget.draft,
       exitSnapshot: snapshot,
+      onReviewBack: widget.reviewEdit ? save : null,
       title: l.corpOwnerTitle,
       step: CorporateSection.owners.index,
       child: SingleChildScrollView(
@@ -140,7 +157,10 @@ class _BeneficialOwnerEditorState extends State<BeneficialOwnerEditor> {
                     CorporateField.birth,
                     value ?? '',
                   ),
-                  onChanged: (value) => birthdate = value,
+                  onChanged: (value) {
+                    birthdate = value;
+                    autosaveOwner();
+                  },
                 ),
               ),
               input(l.corpOwnerCountry, country, (v) => country = v),
@@ -161,7 +181,10 @@ class _BeneficialOwnerEditorState extends State<BeneficialOwnerEditor> {
                       child: Text(ownerControlLabel(l, type)),
                     ),
                 ],
-                onChanged: (v) => control = v,
+                onChanged: (v) {
+                  control = v;
+                  autosaveOwner();
+                },
                 validator: (v) => v == null ? l.corpFormMissing : null,
               ),
               const SizedBox(height: 16),
@@ -172,7 +195,9 @@ class _BeneficialOwnerEditorState extends State<BeneficialOwnerEditor> {
                 optional: true,
               ),
               AppButton(
-                label: widget.person == null
+                label: widget.reviewEdit
+                    ? l.corpEditDone
+                    : widget.person == null
                     ? l.corpOwnerConfirmAdd
                     : l.corpOwnerSave,
                 onPressed: save,

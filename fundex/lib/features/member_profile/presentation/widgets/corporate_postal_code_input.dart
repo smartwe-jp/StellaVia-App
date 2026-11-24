@@ -1,3 +1,4 @@
+import '../support/corporate_draft_autosave.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -76,6 +77,7 @@ class _CorporatePostalCodeInputState
         return;
       }
       widget.draft.set(widget.section, address, result);
+      autosaveCorporateDraft(context, widget.draft);
       widget.onResolved();
     } catch (_) {
       if (mounted && stillCurrent()) {

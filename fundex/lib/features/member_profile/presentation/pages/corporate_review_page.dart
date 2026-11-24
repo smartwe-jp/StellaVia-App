@@ -7,6 +7,8 @@ import '../../domain/repositories/verification_entry_repository.dart';
 import '../providers/verification_entry_provider.dart';
 import '../providers/corporate_draft_providers.dart';
 import '../support/corporate_form_fields.dart';
+import 'corporate_form_page.dart';
+import 'corporate_documents_page.dart';
 import '../widgets/corporate_form_header.dart';
 import '../widgets/corporate_review_section.dart';
 import '../widgets/corporate_flow_scaffold.dart';
@@ -28,11 +30,22 @@ class _CorporateReviewPageState extends ConsumerState<CorporateReviewPage> {
   bool? cleanupAccepted;
   UnconfirmedCorporateCorrection? pendingCorrection;
 
-  void edit(CorporateSection section) {
-    final route = corporateStepRoute(section);
-    Navigator.of(
-      context,
-    ).popUntil((r) => r.settings.name == route || r.isFirst);
+  Future<void> edit(CorporateSection section) async {
+    await Navigator.of(context).push<void>(
+      MaterialPageRoute<void>(
+        settings: RouteSettings(
+          name: '${corporateRoutePrefix}review-edit/${section.name}',
+        ),
+        builder: (_) => section == CorporateSection.documents
+            ? CorporateDocumentsPage(draft: widget.draft, reviewEdit: true)
+            : CorporateFormPage(
+                draft: widget.draft,
+                section: section,
+                reviewEdit: true,
+              ),
+      ),
+    );
+    if (mounted) setState(() {});
   }
 
   Future<void> returnToEntry({required bool accepted}) async {
@@ -254,12 +267,12 @@ class _CorporateReviewPageState extends ConsumerState<CorporateReviewPage> {
             ),
             const SizedBox(height: 12),
             AppButton(
-              label: l.corpReviewEdit,
+              label: l.profilePrevStep,
               variant: AppButtonVariant.secondary,
               style: const ButtonStyle(
                 shape: WidgetStatePropertyAll(StadiumBorder()),
               ),
-              onPressed: locked ? null : () => edit(CorporateSection.company),
+              onPressed: locked ? null : () => Navigator.of(context).maybePop(),
             ),
           ],
         ),

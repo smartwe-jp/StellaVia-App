@@ -1,3 +1,4 @@
+import '../support/corporate_draft_autosave.dart';
 import "package:core_ui_kit/core_ui_kit.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
@@ -9,7 +10,12 @@ import "../support/beneficial_owner_labels.dart";
 import "../support/corporate_form_fields.dart";
 
 class BeneficialOwnerList extends StatefulWidget {
-  const BeneficialOwnerList({super.key, required this.draft});
+  const BeneficialOwnerList({
+    super.key,
+    required this.draft,
+    this.reviewEdit = false,
+  });
+  final bool reviewEdit;
   final CorporateFormDraft draft;
   @override
   State<BeneficialOwnerList> createState() => _BeneficialOwnerListState();
@@ -19,11 +25,18 @@ class _BeneficialOwnerListState extends State<BeneficialOwnerList> {
   Future<void> edit([BeneficialOwner? previous]) async {
     final person = await Navigator.of(context).push<BeneficialOwner>(
       MaterialPageRoute(
-        builder: (_) =>
-            BeneficialOwnerEditor(person: previous, draft: widget.draft),
+        builder: (_) => BeneficialOwnerEditor(
+          person: previous,
+          draft: widget.draft,
+          reviewEdit: widget.reviewEdit,
+        ),
       ),
     );
-    if (!mounted || person == null) return;
+    if (!mounted || ModalRoute.of(context)?.isCurrent != true) return;
+    if (person == null) {
+      autosaveCorporateDraft(context, widget.draft);
+      return;
+    }
     final owners = widget.draft.owners;
     setState(() {
       if (previous == null) {
@@ -32,6 +45,7 @@ class _BeneficialOwnerListState extends State<BeneficialOwnerList> {
         owners[owners.indexOf(previous)] = person;
       }
     });
+    autosaveCorporateDraft(context, widget.draft);
   }
 
   Future<void> remove(BeneficialOwner person) async {
@@ -51,6 +65,7 @@ class _BeneficialOwnerListState extends State<BeneficialOwnerList> {
     );
     if (mounted && confirmed == true) {
       setState(() => widget.draft.owners.remove(person));
+      autosaveCorporateDraft(context, widget.draft);
     }
   }
 
@@ -105,6 +120,7 @@ class _BeneficialOwnerListState extends State<BeneficialOwnerList> {
                 title: Text(ownerPresenceLabel(l, status)),
                 onTap: () {
                   draft.ownerPresence = status;
+                  autosaveCorporateDraft(context, draft);
                   field.didChange(status);
                 },
               ),
