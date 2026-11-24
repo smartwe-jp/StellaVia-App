@@ -1,6 +1,7 @@
 import 'package:company_api_runtime/company_api_runtime.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fundex/features/auth/presentation/support/intl_code_picker_field.dart';
@@ -283,10 +284,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       }
     });
 
-    return Scaffold(
+    final scaffold = Scaffold(
       key: const Key('login_page'),
       body: DecoratedBox(
-        decoration: BoxDecoration(color: theme.appColors.brandPrimary),
+        decoration: BoxDecoration(color: theme.appColors.brandPrimaryDark),
         child: SafeArea(
           bottom: false,
           child: DecoratedBox(
@@ -508,6 +509,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         ),
       ),
     );
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: theme.appColors.brandPrimaryDark.withValues(alpha: 0),
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+      ),
+      child: scaffold,
+    );
   }
 }
 
@@ -531,7 +540,7 @@ class _LoginHeroHeader extends StatelessWidget {
             width: double.infinity,
             height: 220,
             decoration: BoxDecoration(
-              color: colors.brandPrimary,
+              color: colors.brandPrimaryDark,
               borderRadius: const BorderRadius.vertical(
                 bottom: Radius.circular(32),
               ),
