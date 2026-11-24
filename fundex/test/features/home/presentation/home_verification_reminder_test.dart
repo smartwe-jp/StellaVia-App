@@ -1,4 +1,5 @@
 import 'package:fundex/features/member_profile/presentation/pages/corporate_form_page.dart';
+import 'package:fundex/features/member_profile/presentation/pages/verification_entry_page.dart';
 import 'package:fundex/features/member_profile/domain/entities/corporate_form_draft.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/cupertino.dart';
@@ -85,6 +86,10 @@ void main() {
             builder: (_, _) => const Scaffold(body: HomeVerificationReminder()),
           ),
           GoRoute(
+            path: '/member-profile/edit',
+            builder: (_, _) => const VerificationEntryPage(),
+          ),
+          GoRoute(
             path: '/member-profile/onboarding',
             builder: (_, _) =>
                 const Scaffold(body: Text('/member-profile/onboarding')),
@@ -134,10 +139,15 @@ void main() {
       }
 
       if (action == 'existing') {
-        expect(find.byType(CupertinoAlertDialog), findsNothing);
-        expect(find.text(l.corporatePrepareTitle), findsOneWidget);
-        await t.ensureVisible(find.text(l.corpFormStart));
-        await t.tap(find.text(l.corpFormStart));
+        expect(router.state.matchedLocation, '/member-profile/edit');
+        expect(find.text(l.corporatePrepareTitle), findsNothing);
+        await t.scrollUntilVisible(find.text(l.corpDetailCorrect), 300);
+        expect(find.text(l.corpDetailView), findsOneWidget);
+        await t.ensureVisible(find.text(l.corpDetailCorrect));
+        await t.tap(find.text(l.corpDetailCorrect));
+        await t.pumpAndSettle();
+        await t.ensureVisible(find.text(l.corpDetailStart));
+        await t.tap(find.text(l.corpDetailStart));
         await t.pumpAndSettle();
         expect(find.text('登録済み株式会社'), findsOneWidget);
         final draft = t
@@ -187,7 +197,7 @@ void main() {
         find.text(switch (action) {
           'cancel' => l.homeReminderProfileTitle,
           'corporate' => l.corporatePrepareTitle,
-          'changed' => l.corporatePrepareTitle,
+          'changed' => l.corpProgressHeading,
           _ => '/member-profile/onboarding',
         }),
         findsOneWidget,

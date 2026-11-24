@@ -7,6 +7,7 @@ import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../member_profile/domain/repositories/verification_entry_repository.dart';
 import '../../../member_profile/presentation/providers/verification_entry_provider.dart';
 import '../../../member_profile/presentation/pages/corporate_verification_modal.dart';
+import '../../../member_profile/presentation/support/member_profile_entry_navigation.dart';
 import '../../../member_profile/presentation/widgets/verification_entry_content.dart';
 import '../support/home_member_profile_reminder_support.dart';
 
@@ -47,7 +48,7 @@ class _HomeVerificationReminderState
     try {
       var entry = await refreshEntry();
       if (!mounted || entry == null) return;
-      var openCorporate = entry.kind == VerificationEntryKind.corporate;
+      _InvestorType? selectedType;
       if (entry.kind == VerificationEntryKind.choice) {
         final choice = await Navigator.of(context, rootNavigator: true)
             .push<_InvestorType>(
@@ -65,13 +66,16 @@ class _HomeVerificationReminderState
         final latest = await refreshEntry();
         if (!mounted || latest == null) return;
         entry = latest;
-        openCorporate = switch (latest.kind) {
-          VerificationEntryKind.corporate => true,
-          VerificationEntryKind.personal => false,
-          VerificationEntryKind.choice => choice == _InvestorType.corporate,
-        };
+        selectedType = choice;
       }
-      if (openCorporate) {
+      if (entry.kind == VerificationEntryKind.corporate) {
+        ref.invalidate(verificationEntryProvider);
+        await context.push(
+          '/member-profile/edit',
+          extra: shouldPresentMemberProfileEntry(entry),
+        );
+      } else if (entry.kind == VerificationEntryKind.choice &&
+          selectedType == _InvestorType.corporate) {
         await openCorporateVerification(context, entry);
       } else {
         await context.push('/member-profile/onboarding?start=first');

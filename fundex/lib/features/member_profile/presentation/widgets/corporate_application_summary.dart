@@ -1,3 +1,4 @@
+import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
@@ -24,27 +25,35 @@ class CorporateStatusNotice extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: theme.colorScheme.onSurface.withValues(alpha: .05),
-        border: Border(
-          left: BorderSide(width: 3, color: theme.colorScheme.primary),
-        ),
+        color: theme.appColors.surfaceAlt,
+        borderRadius: BorderRadius.circular(UiTokens.radius8),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.all(UiTokens.spacing16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l.corpStatusLabel, style: theme.textTheme.labelSmall),
+          Text(
+            l.corpStatusLabel,
+            style: theme.appTextTheme.helper.copyWith(
+              color: theme.appColors.textSecondary,
+            ),
+          ),
           const SizedBox(height: 4),
           Text(
             title,
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              fontSize: 23,
+            style: theme.appTextTheme.cardTitle.copyWith(
+              color: theme.appColors.primary,
             ),
           ),
           if (description != null) ...[
             const SizedBox(height: 8),
-            Text(description, style: theme.textTheme.bodyMedium),
+            Text(
+              description,
+              style: theme.appTextTheme.body.copyWith(
+                color: theme.appColors.textPrimary,
+                height: 1.55,
+              ),
+            ),
           ],
         ],
       ),
