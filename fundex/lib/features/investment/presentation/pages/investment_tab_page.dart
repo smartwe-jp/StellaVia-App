@@ -785,12 +785,11 @@ class _FundProjectCard extends StatelessWidget {
                               project.projectName,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: appText.cardTitle.copyWith(
+                              style: appText.pageTitle.copyWith(
                                 color: colors.onDark.withValues(
                                   alpha: isDark ? 0.94 : 1,
                                 ),
                                 fontWeight: FontWeight.w800,
-                                fontSize: 16,
                                 height: 1.25,
                                 shadows: <Shadow>[
                                   Shadow(

@@ -960,7 +960,7 @@ class FundFeaturedFundCard extends StatelessWidget {
                             data.title,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: appText.bodyStrong.copyWith(
+                            style: appText.sectionTitle.copyWith(
                               color: primaryTextColor,
                               height: 1.35,
                             ),
