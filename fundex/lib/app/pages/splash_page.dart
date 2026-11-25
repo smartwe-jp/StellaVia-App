@@ -14,6 +14,29 @@ String resolveSplashNavigationTarget() {
   return '/home';
 }
 
+CustomTransitionPage<void> buildSplashCurtainPage({
+  required LocalKey key,
+  required bool reduceMotion,
+}) {
+  return CustomTransitionPage<void>(
+    key: key,
+    transitionDuration: Duration.zero,
+    reverseTransitionDuration: reduceMotion
+        ? Duration.zero
+        : const Duration(milliseconds: 900),
+    child: const SplashPage(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0, -1),
+          end: Offset.zero,
+        ).chain(CurveTween(curve: Curves.easeOutCubic)).animate(animation),
+        child: child,
+      );
+    },
+  );
+}
+
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
 
@@ -22,17 +45,14 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
-  late final DateTime _enteredAt;
   late final AnimationController _logoPulseController;
   late final Animation<double> _logoScaleAnimation;
   late final AnimationController _progressController;
   Timer? _deferredNavigationTimer;
-  bool _hasNavigated = false;
 
   @override
   void initState() {
     super.initState();
-    _enteredAt = DateTime.now();
 
     _logoPulseController = AnimationController(
       vsync: this,
@@ -48,8 +68,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       duration: _progressFillDuration,
     )..forward();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scheduleNavigation();
+    _deferredNavigationTimer = Timer(_minimumSplashDuration, () {
+      if (mounted && ModalRoute.of(context)?.isActive == true) {
+        context.go(resolveSplashNavigationTarget());
+      }
     });
   }
 
@@ -61,38 +83,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  void _scheduleNavigation() {
-    if (!mounted || _hasNavigated) {
-      return;
-    }
-
-    final targetRoute = resolveSplashNavigationTarget();
-    final elapsed = DateTime.now().difference(_enteredAt);
-    final remaining = _minimumSplashDuration - elapsed;
-
-    _deferredNavigationTimer?.cancel();
-    if (remaining <= Duration.zero) {
-      _navigate(targetRoute);
-      return;
-    }
-
-    _deferredNavigationTimer = Timer(remaining, () {
-      _navigate(targetRoute);
-    });
-  }
-
-  void _navigate(String targetRoute) {
-    if (!mounted || _hasNavigated) {
-      return;
-    }
-    _hasNavigated = true;
-    context.go(targetRoute);
-  }
-
   @override
   Widget build(BuildContext context) {
-    _scheduleNavigation();
-
     final theme = Theme.of(context);
     final colors = theme.appColors;
     final onDark = colors.onDark;

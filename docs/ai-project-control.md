@@ -79,6 +79,8 @@ Personal member suitability requires an industry from the nine supported codes a
 
 ### App Infrastructure
 
+- The startup entry `/splash` opens the brand animation over Home. After 2.5 seconds the splash lifts upward for 900 ms, revealing the stationary Home screen. Reduced-motion settings skip the curtain transition.
+
 - Flavor/config/router/bootstrap structure exists in `fundex/lib/app`.
 - Routing uses `go_router` with `StatefulShellRoute.indexedStack` for root tabs.
 - Global auth redirect is centralized in `fundex/lib/app/router/app_router.dart`.

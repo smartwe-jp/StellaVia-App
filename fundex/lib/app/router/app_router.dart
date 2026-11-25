@@ -166,7 +166,7 @@ String? resolveAuthRedirect({
       location == '/profile/settings/faq' ||
       location == '/profile/settings/contact' ||
       location == '/profile/settings/company';
-  final isSplash = location == '/splash';
+  final isSplash = location == '/splash' || location == '/home/splash';
   final isLogin = location == '/login';
   final isRegister = location == '/register';
   final isForgotPassword = location == '/forgot-password';
@@ -223,12 +223,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       );
     },
     routes: <RouteBase>[
-      GoRoute(
-        path: '/splash',
-        builder: (BuildContext context, GoRouterState state) {
-          return const SplashPage();
-        },
-      ),
+      GoRoute(path: '/splash', redirect: (_, _) => '/home/splash'),
       GoRoute(
         path: '/login',
         builder: (BuildContext context, GoRouterState state) {
@@ -316,6 +311,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   return const HomeOverviewTabPage();
                 },
                 routes: <RouteBase>[
+                  GoRoute(
+                    path: 'splash',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    pageBuilder: (context, state) => buildSplashCurtainPage(
+                      key: state.pageKey,
+                      reduceMotion: MediaQuery.disableAnimationsOf(context),
+                    ),
+                  ),
                   GoRoute(
                     path: 'verification',
                     parentNavigatorKey: _rootNavigatorKey,
