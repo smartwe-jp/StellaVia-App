@@ -1,4 +1,16 @@
+import 'package:fundex/features/auth/presentation/pages/register_page.dart';
+import 'package:fundex/features/guest_onboarding/presentation/pages/guest_welcome_page.dart';
+import 'package:fundex/features/home/presentation/controllers/home_simulation_controller.dart';
+import 'package:fundex/features/home/presentation/pages/home_simulation_page.dart';
 import 'dart:io';
+import 'package:fundex/features/investment/data/datasources/fund_project_favorites_local_data_source.dart';
+import 'package:fundex/features/investment/presentation/providers/fund_project_favorite_providers.dart';
+import 'package:fundex/features/home/presentation/widgets/home_featured_section.dart';
+import 'package:fundex/features/investment/domain/entities/fund_project.dart';
+import 'package:fundex/features/investment/presentation/providers/fund_project_providers.dart';
+import 'package:fundex/features/main_shell/presentation/widgets/main_shell_bottom_bar.dart';
+import 'package:core_ui_kit/core_ui_kit.dart' show AppBottomTabBar, AppButton;
+import 'package:fundex/features/home/presentation/pages/home_overview_tab_page.dart';
 
 import 'package:core_network/core_network.dart';
 import 'package:core_tool_kit/core_tool_kit.dart';
@@ -21,6 +33,15 @@ import 'package:fundex/features/member_profile/presentation/providers/verificati
 import 'package:fundex/features/member_profile/presentation/widgets/verification_entry_content.dart';
 import 'package:fundex/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+
+class _Favorites implements FundProjectFavoritesLocalDataSource {
+  Set<String> _ids = {};
+  @override
+  Future<Set<String>> readFavoriteProjectIds() async => _ids;
+  @override
+  Future<void> saveFavoriteProjectIds(Set<String> projectIds) async =>
+      _ids = projectIds;
+}
 
 class _NoopAppLogger implements AppLogger {
   @override
@@ -179,15 +200,28 @@ class _FakeAuthRepository implements AuthRepository {
   }) async {}
 }
 
-Future<void> _pumpApp(WidgetTester tester) async {
+Future<void> _pumpApp(WidgetTester tester, {bool member = false}) async {
   final environment = EnvironmentFactory.fromFlavor(AppFlavor.dev);
 
   await tester.pumpWidget(
     ProviderScope(
       overrides: <Override>[
+        fundProjectFavoritesLocalDataSourceProvider.overrideWithValue(
+          _Favorites(),
+        ),
+        fundProjectListProvider.overrideWith(
+          (_) async => const [FundProject(id: '1', projectName: 'Guest fund')],
+        ),
         appEnvironmentProvider.overrideWithValue(environment),
         appLoggerProvider.overrideWithValue(_NoopAppLogger()),
-        tokenStoreProvider.overrideWithValue(_SeededTokenStore()),
+        tokenStoreProvider.overrideWithValue(
+          member
+              ? _SeededTokenStore(
+                  accessToken: 'access',
+                  refreshToken: 'refresh',
+                )
+              : _SeededTokenStore(),
+        ),
         tokenRefresherProvider.overrideWithValue(
           _FakeTokenRefresher((_) async => null),
         ),
@@ -235,61 +269,179 @@ void main() {
       await tester.ensureVisible(find.byKey(const Key('to_register_button')));
       await tester.tap(find.byKey(const Key('to_register_button')));
       await tester.pumpAndSettle();
-      expect(find.byKey(const Key('register_page')), findsOneWidget);
-
-      await tester.ensureVisible(
-        find.byKey(const Key('register_back_login_button')),
-      );
-      await tester.tap(find.byKey(const Key('register_back_login_button')));
+      final page = find.byType(RegisterPage);
+      final l = AppLocalizations.of(tester.element(page));
+      expect(find.text(l.guestSendCode), findsOneWidget);
+      await tester.tap(find.byTooltip(l.commonBack));
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('login_page')), findsOneWidget);
     });
 
-    testWidgets('registration opens investor selection over home', (
+    testWidgets(
+      'closing login opens guest home with the video welcome underneath',
+      (tester) async {
+        await _pumpApp(tester);
+        await _openLoginPage(tester);
+        await tester.tap(find.byKey(const Key('login_close_button')));
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+        expect(find.byType(HomeOverviewTabPage), findsOneWidget);
+        expect(find.byType(AppBottomTabBar), findsNothing);
+        await tester.dragFrom(const Offset(1, 120), const Offset(700, 0));
+        await tester.pump();
+        await tester.pump(const Duration(seconds: 1));
+        expect(find.byType(GuestWelcomePage), findsOneWidget);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump(const Duration(seconds: 3));
+      },
+      variant: TargetPlatformVariant.only(TargetPlatform.iOS),
+    );
+
+    testWidgets('restored member startup reveals the member home', (
       tester,
     ) async {
-      await _pumpApp(tester);
-      await tester.binding.setSurfaceSize(const Size(480, 1600));
-      addTearDown(() => tester.binding.setSurfaceSize(null));
-      await _openRoute(tester, '/register');
-      final page = find.byKey(const Key('register_page'));
-      final l = AppLocalizations.of(tester.element(page));
-      await tester.enterText(
-        find.byKey(const Key('register_account_input')),
-        'new@example.com',
+      await _pumpApp(tester, member: true);
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 3));
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+      final context = tester.element(find.byType(Navigator).first);
+      expect(
+        GoRouter.of(context).routerDelegate.currentConfiguration.uri.path,
+        '/home',
       );
-      await tester.enterText(
-        find.byKey(const Key('register_code_input')),
-        '123456',
-      );
-      for (final text in [
-        l.registerAcceptPolicy,
-        l.registerElectronicDeliveryDocumentTitle,
-        l.registerAntiSocialDocumentTitle,
-        l.registerPersonalInformationDocumentTitle,
-      ]) {
-        await tester.ensureVisible(find.text(text));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text(text));
-        await tester.pump();
-      }
-      final submit = find.byKey(const Key('register_submit_button'));
-      await tester.ensureVisible(submit);
-      await tester.tap(submit);
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 500));
-      await tester.pump();
-      final choice = tester.element(find.byType(InvestorChoice));
-      expect(find.text(l.personalInvestor), findsWidgets);
-      expect(find.text(l.corporateInvestor), findsWidgets);
-      final router = GoRouter.of(choice);
-      expect(router.state.uri.path, '/home/verification');
-      router.pop();
-      await tester.pump();
-      expect(router.routerDelegate.currentConfiguration.uri.path, '/home');
+      expect(find.byType(GuestWelcomePage), findsNothing);
       await tester.pumpWidget(const SizedBox.shrink());
       await tester.pump(const Duration(seconds: 3));
     });
+
+    testWidgets(
+      'guest startup opens the guide and registers after email verification',
+      (tester) async {
+        Future<void> finishNavigation() async {
+          await tester.pump();
+          await tester.pump(const Duration(seconds: 1));
+          await tester.pump();
+        }
+
+        await _pumpApp(tester);
+        await tester.binding.setSurfaceSize(const Size(480, 1600));
+        addTearDown(() => tester.binding.setSurfaceSize(null));
+        await finishNavigation();
+        final welcome = find.byType(GuestWelcomePage);
+        expect(welcome, findsOneWidget);
+        final l = AppLocalizations.of(tester.element(welcome));
+        await tester.tap(find.text(l.guestGuideLearn));
+        await finishNavigation();
+        expect(find.byType(HomeOverviewTabPage), findsOneWidget);
+        expect(find.byType(AppBottomTabBar), findsNothing);
+        expect(find.text(l.homeLearnService), findsOneWidget);
+        tester.view.padding = FakeViewPadding(
+          bottom: 34 * tester.view.devicePixelRatio,
+        );
+        addTearDown(tester.view.resetPadding);
+        await tester.pump();
+        final back = find.byTooltip(
+          MaterialLocalizations.of(
+            tester.element(find.byType(HomeOverviewTabPage)),
+          ).backButtonTooltip,
+        );
+        final register = find.text(l.homeRegisterFree);
+        expect(back, findsNothing);
+        final registerButton = find.ancestor(
+          of: register,
+          matching: find.byType(AppButton),
+        );
+        final pageBottom = tester
+            .getBottomLeft(find.byType(HomeOverviewTabPage))
+            .dy;
+        expect(pageBottom - tester.getBottomLeft(registerButton).dy, 34);
+        await tester.dragFrom(const Offset(1, 120), const Offset(400, 0));
+        await finishNavigation();
+        expect(welcome, findsOneWidget);
+        await tester.tap(find.text(l.guestGuideLearn));
+        await finishNavigation();
+        for (final entry in {
+          l.homeFeaturedFundsTitle: l.fundListTitle,
+          l.homeFeaturedHotelsTitle: l.homeBookWithMiles,
+        }.entries) {
+          final section = find.byWidgetPredicate(
+            (w) => w is HomeFeaturedSection && w.title == entry.key,
+          );
+          final action = find.descendant(
+            of: section,
+            matching: find.text(l.homeViewAllAction),
+          );
+          await tester.ensureVisible(action);
+          await tester.tap(action);
+          await finishNavigation();
+          expect(find.text(entry.value), findsOneWidget);
+          expect(find.byType(MainShellBottomBar), findsNothing);
+          await tester.tap(find.byIcon(Icons.arrow_back_rounded).first);
+          await finishNavigation();
+          expect(find.byType(HomeOverviewTabPage), findsOneWidget);
+        }
+        await tester.ensureVisible(find.text(l.homeSimulationTitle));
+        await tester.tap(find.text(l.homeSimulationTitle));
+        await finishNavigation();
+        final scope = ProviderScope.containerOf(
+          tester.element(find.byType(HomeSimulationPage)),
+        );
+        expect(scope.read(homeSimulationInputProvider).principal, 100000);
+        await tester.ensureVisible(find.text(l.simRegister));
+        await tester.tap(find.text(l.simRegister));
+        await finishNavigation();
+        await tester.enterText(find.byType(TextField).first, 'new@example.com');
+        await tester.pump();
+        await tester.tap(find.text(l.guestSendCode));
+        await finishNavigation();
+        expect(find.text(l.guestGuideCheckEmail), findsOneWidget);
+        await tester.enterText(find.byType(TextField).first, '123456');
+        for (final label in [
+          l.settingsCompanyLinkTerms,
+          l.guestElectronic,
+          l.guestAntiSocial,
+          l.guestPersonal,
+        ]) {
+          await tester.ensureVisible(find.bySemanticsLabel(label).first);
+          await tester.tap(find.bySemanticsLabel(label).first);
+          await tester.pump();
+        }
+        await tester.ensureVisible(
+          find.byKey(const Key('guest_register_submit')),
+        );
+        await tester.tap(find.byKey(const Key('guest_register_submit')));
+        await finishNavigation();
+        expect(find.text(l.guestGuideCreated), findsOneWidget);
+        await tester.tap(find.text(l.guestGuideVerify));
+        await finishNavigation();
+        expect(find.byType(InvestorChoice), findsOneWidget);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pump(const Duration(seconds: 3));
+      },
+      variant: TargetPlatformVariant.only(TargetPlatform.iOS),
+    );
+
+    for (final path in [
+      '/register?ref=demo',
+      '/login?openRegister=1&ref=demo',
+    ]) {
+      testWidgets('legacy registration entry $path opens the new form', (
+        tester,
+      ) async {
+        await _pumpApp(tester);
+        await _openLoginPage(tester);
+        await _openRoute(tester, path);
+        final page = find.byType(RegisterPage);
+        final context = tester.element(page);
+        expect(GoRouter.of(context).state.uri.path, '/guest-guide/register');
+        expect(tester.widget<RegisterPage>(page).initialInviteCode, 'demo');
+        expect(
+          find.text(AppLocalizations.of(context).guestSendCode),
+          findsOneWidget,
+        );
+      });
+    }
 
     testWidgets('opens forgot password route and returns to login', (
       tester,

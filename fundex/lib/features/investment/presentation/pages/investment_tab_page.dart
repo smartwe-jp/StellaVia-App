@@ -75,7 +75,10 @@ class _FundStatusPalette {
 }
 
 class InvestmentTabPage extends ConsumerStatefulWidget {
-  const InvestmentTabPage({super.key});
+  const InvestmentTabPage({super.key}) : _standalone = false;
+  const InvestmentTabPage.standalone({super.key}) : _standalone = true;
+
+  final bool _standalone;
 
   @override
   ConsumerState<InvestmentTabPage> createState() => _InvestmentTabPageState();
@@ -361,7 +364,19 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
     final asyncProjects = ref.watch(fundProjectListProvider);
     final filterOptions = _buildFilterOptions(context);
 
-    return AnnotatedRegion<SystemUiOverlayStyle>(
+    Widget wrapList(Widget child) => widget._standalone
+        ? child
+        : MainShellTabRefreshScope(
+            tabIndex: MainShellTab.investment.index,
+            onRefresh: _refreshInvestmentTab,
+            scrollController: _scrollController,
+            child: child,
+          );
+
+    Widget wrapHeader(Widget child) =>
+        widget._standalone ? child : MainShellChromeVisibility(child: child);
+
+    final content = AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark.copyWith(
         statusBarColor: Colors.transparent,
       ),
@@ -370,35 +385,33 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
         child: SafeArea(
           child: ColoredBox(
             color: colors.background,
-            child: MainShellTabRefreshScope(
-              tabIndex: MainShellTab.investment.index,
-              onRefresh: _refreshInvestmentTab,
-              scrollController: _scrollController,
-              child: Container(
+            child: wrapList(
+              Container(
                 key: const Key('investment_tab_content'),
                 color: colors.background,
                 child: Column(
                   children: <Widget>[
-                    MainShellChromeVisibility(
-                      child: Container(
+                    wrapHeader(
+                      Container(
                         width: double.infinity,
                         color: colors.surface,
                         padding: const EdgeInsets.fromLTRB(0, 14, 0, 12),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: 16,
-                                right: 16,
-                              ),
-                              child: Text(
-                                l10n.fundListTitle,
-                                style: appText.pageTitle.copyWith(
-                                  color: colors.textPrimary,
+                            if (!widget._standalone)
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 16,
+                                  right: 16,
+                                ),
+                                child: Text(
+                                  l10n.fundListTitle,
+                                  style: appText.pageTitle.copyWith(
+                                    color: colors.textPrimary,
+                                  ),
                                 ),
                               ),
-                            ),
                             const SizedBox(height: 10),
                             AppFilterBar<_FundListFilter>(
                               padding: const EdgeInsets.symmetric(
@@ -577,6 +590,21 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
           ),
         ),
       ),
+    );
+    if (!widget._standalone) return content;
+    return Scaffold(
+      appBar: AppNavigationBar(
+        title: l10n.fundListTitle,
+        backgroundColor: colors.surface,
+        foregroundColor: colors.textPrimary,
+        leading: AppNavigationIconButton(
+          icon: Icons.arrow_back_rounded,
+          backgroundColor: colors.surface.withValues(alpha: 0),
+          foregroundColor: colors.textPrimary,
+          onTap: () => context.pop(),
+        ),
+      ),
+      body: content,
     );
   }
 }

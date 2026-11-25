@@ -108,14 +108,17 @@ void main() {
       expect(redirect, isNull);
     });
 
-    test('keeps unauthenticated user on guest-accessible home route', () {
-      final redirect = resolveAuthRedirect(
-        authState: const AsyncData<bool>(false),
-        location: '/home',
-      );
+    test(
+      'routes unauthenticated home entries through the video welcome stack',
+      () {
+        final redirect = resolveAuthRedirect(
+          authState: const AsyncData<bool>(false),
+          location: '/home',
+        );
 
-      expect(redirect, isNull);
-    });
+        expect(redirect, '/guest-guide/discover');
+      },
+    );
 
     test('keeps unauthenticated user on guest-accessible funds route', () {
       final redirect = resolveAuthRedirect(

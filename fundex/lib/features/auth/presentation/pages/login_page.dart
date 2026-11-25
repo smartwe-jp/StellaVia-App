@@ -15,13 +15,8 @@ import '../state/auth_state.dart';
 enum _LoginChannel { mobile, email }
 
 class LoginPage extends ConsumerStatefulWidget {
-  const LoginPage({
-    super.key,
-    this.openRegisterOnEnter = false,
-    this.initialAccount,
-  });
+  const LoginPage({super.key, this.initialAccount});
 
-  final bool openRegisterOnEnter;
   final String? initialAccount;
 
   @override
@@ -37,7 +32,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   String? _localValidationError;
   late final CodeSendCooldown _sendCodeCooldown;
   String _selectedIntlCode = AuthApiDefaults.defaultIntlCode;
-  bool _didOpenRegisterOnEnter = false;
 
   bool get _isEmailMode => _loginChannel == _LoginChannel.email;
 
@@ -152,7 +146,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   void _continueWithoutLogin() {
-    context.go('/home');
+    context.go('/guest-guide/discover');
   }
 
   String _sendCodeButtonLabel(String defaultLabel) {
@@ -177,13 +171,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (!_applyInitialAccount(rebuild: false)) {
       _prefillLastSignedOutAccount();
     }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted || _didOpenRegisterOnEnter || !widget.openRegisterOnEnter) {
-        return;
-      }
-      _didOpenRegisterOnEnter = true;
-      context.push('/register');
-    });
   }
 
   @override
@@ -475,7 +462,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         Center(
                           child: TextButton(
                             key: const Key('to_register_button'),
-                            onPressed: () => context.push('/register'),
+                            onPressed: () =>
+                                context.push('/guest-guide/register'),
                             child: Text(l10n.loginCreateAccount),
                           ),
                         ),

@@ -8479,4 +8479,109 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get fundListNoMatchBody =>
       'Try changing your filters or check back later.';
+
+  @override
+  String get guestWelcomeReading => '';
+
+  @override
+  String get guestWelcomeDisclaimer =>
+      'Future investment performance is not guaranteed.';
+
+  @override
+  String get guestGuideLearn => 'How host benefits work';
+
+  @override
+  String get guestGuideMechanism => 'How host benefits work';
+
+  @override
+  String get guestGuideSummary =>
+      'Explore eligible funds and use your earned host miles for stays at participating hotels.';
+
+  @override
+  String get guestGuideSimulation => 'Try it with ¥100,000';
+
+  @override
+  String get guestGuideEstimate => 'Estimate dividends and host miles.';
+
+  @override
+  String get guestGuideTagline => 'Invest More, Travel More';
+
+  @override
+  String get guestGuideEmailIntro =>
+      'Register with a code sent to your email. You can verify your identity later.';
+
+  @override
+  String get guestAccountEyebrow => 'ACCOUNT';
+
+  @override
+  String get guestCreatedEyebrow => 'ACCOUNT CREATED';
+
+  @override
+  String get guestSendCode => 'Send verification code';
+
+  @override
+  String get guestSpamHint =>
+      'If the email hasn’t arrived, check your spam folder.';
+
+  @override
+  String get guestExistingLogin => 'Already a member? Log in';
+
+  @override
+  String guestSentTo(String email) {
+    return 'We sent a verification code to $email.';
+  }
+
+  @override
+  String get guestCodeHint => 'Enter verification code';
+
+  @override
+  String guestResendIn(int seconds) {
+    return 'Resend in ${seconds}s';
+  }
+
+  @override
+  String get guestInviteToggle => 'Have an invitation code?';
+
+  @override
+  String get guestAgreements => 'Review and agree';
+
+  @override
+  String get guestElectronic => 'Electronic delivery of information';
+
+  @override
+  String get guestAntiSocial => 'Exclusion of antisocial forces';
+
+  @override
+  String get guestPersonal => 'Handling of personal information';
+
+  @override
+  String get guestSubmitHint =>
+      'Enter the code and agree to all four items to register.';
+
+  @override
+  String get guestNextSteps =>
+      'Continue with identity verification or browse the funds.';
+
+  @override
+  String get guestVerifyRequired =>
+      'Identity verification is required to invest.';
+
+  @override
+  String get guestGuideCheckEmail => 'Check your email';
+
+  @override
+  String get guestGuideChangeEmail => 'Change email address';
+
+  @override
+  String get guestGuideCreated => 'Registration complete';
+
+  @override
+  String get guestGuideVerify => 'Verify identity';
+
+  @override
+  String get guestGuideLater => 'Verify later and browse funds';
+
+  @override
+  String get guestGuideVerifyIntro =>
+      'Choose individual or corporate verification on the next screen.';
 }

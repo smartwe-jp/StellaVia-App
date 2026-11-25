@@ -11,8 +11,13 @@ import '../providers/home_featured_hotels_provider.dart';
 import 'home_featured_section.dart';
 
 class HomeMilesHotelsSection extends StatelessWidget {
-  const HomeMilesHotelsSection({super.key, required this.state});
+  const HomeMilesHotelsSection({
+    super.key,
+    required this.state,
+    required this.onViewAll,
+  });
 
+  final VoidCallback onViewAll;
   final AsyncValue<HomeFeaturedHotels> state;
 
   @override
@@ -25,7 +30,7 @@ class HomeMilesHotelsSection extends StatelessWidget {
     return HomeFeaturedSection(
       title: l.homeFeaturedHotelsTitle,
       actionLabel: l.homeViewAllAction,
-      onActionTap: () => context.push('/hotel-booking/host-miles'),
+      onActionTap: onViewAll,
       status: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

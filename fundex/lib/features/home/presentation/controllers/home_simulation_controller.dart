@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/home_simulation.dart';
 
 class HomeSimulationController extends StateNotifier<HomeSimulationInput> {
-  HomeSimulationController() : super(const HomeSimulationInput());
+  HomeSimulationController([super.initial = const HomeSimulationInput()]);
   void setUnits(double value) =>
       state = state.copyWith(units: value.round().clamp(1, 5000));
   void setRate(double value) =>

@@ -7975,6 +7975,103 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get fundListNoMatchBody => '请调整筛选条件，或稍后再试。';
+
+  @override
+  String get guestWelcomeReading => '';
+
+  @override
+  String get guestWelcomeDisclaimer => '※ 不保证未来的投资表现。';
+
+  @override
+  String get guestGuideLearn => '了解宿主优待机制';
+
+  @override
+  String get guestGuideMechanism => '宿主优待机制';
+
+  @override
+  String get guestGuideSummary => '投资符合条件的基金有机会获得分红，累积的宿主里程可用于入住指定酒店。';
+
+  @override
+  String get guestGuideSimulation => '用10万日元试算';
+
+  @override
+  String get guestGuideEstimate => '估算可获得的分红和宿主里程。';
+
+  @override
+  String get guestGuideTagline => 'Invest More, Travel More';
+
+  @override
+  String get guestGuideEmailIntro => '使用邮箱验证码注册，身份认证可在注册后完成。';
+
+  @override
+  String get guestAccountEyebrow => 'ACCOUNT';
+
+  @override
+  String get guestCreatedEyebrow => 'ACCOUNT CREATED';
+
+  @override
+  String get guestSendCode => '发送验证码';
+
+  @override
+  String get guestSpamHint => '若未收到，请查看垃圾邮件文件夹。';
+
+  @override
+  String get guestExistingLogin => '已有账户？登录';
+
+  @override
+  String guestSentTo(String email) {
+    return '验证码已发送至 $email。';
+  }
+
+  @override
+  String get guestCodeHint => '输入验证码';
+
+  @override
+  String guestResendIn(int seconds) {
+    return '$seconds 秒后可重新发送';
+  }
+
+  @override
+  String get guestInviteToggle => '我有邀请码';
+
+  @override
+  String get guestAgreements => '确认及同意事项';
+
+  @override
+  String get guestElectronic => '以电子方式提供信息';
+
+  @override
+  String get guestAntiSocial => '排除反社会势力';
+
+  @override
+  String get guestPersonal => '个人信息处理';
+
+  @override
+  String get guestSubmitHint => '输入验证码并同意以上四项后即可注册。';
+
+  @override
+  String get guestNextSteps => '可以继续进行身份认证，也可以返回基金列表浏览。';
+
+  @override
+  String get guestVerifyRequired => '申请投资需完成身份认证。';
+
+  @override
+  String get guestGuideCheckEmail => '请查看邮箱';
+
+  @override
+  String get guestGuideChangeEmail => '更换邮箱';
+
+  @override
+  String get guestGuideCreated => '注册已完成';
+
+  @override
+  String get guestGuideVerify => '前往身份认证';
+
+  @override
+  String get guestGuideLater => '稍后认证，返回基金列表';
+
+  @override
+  String get guestGuideVerifyIntro => '下一步可选择个人或法人认证。';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
@@ -15952,4 +16049,101 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get fundListNoMatchBody => '請調整篩選條件，或稍後再試。';
+
+  @override
+  String get guestWelcomeReading => '';
+
+  @override
+  String get guestWelcomeDisclaimer => '※ 不保證未來的投資表現。';
+
+  @override
+  String get guestGuideLearn => '瞭解宿主優待機制';
+
+  @override
+  String get guestGuideMechanism => '宿主優待機制';
+
+  @override
+  String get guestGuideSummary => '投資符合條件的基金有機會獲得配息，累積的宿主里程可用於入住指定飯店。';
+
+  @override
+  String get guestGuideSimulation => '以10萬日圓試算';
+
+  @override
+  String get guestGuideEstimate => '估算可獲得的配息與宿主里程。';
+
+  @override
+  String get guestGuideTagline => 'Invest More, Travel More';
+
+  @override
+  String get guestGuideEmailIntro => '使用電子郵件驗證碼註冊，身分驗證可於註冊後完成。';
+
+  @override
+  String get guestAccountEyebrow => 'ACCOUNT';
+
+  @override
+  String get guestCreatedEyebrow => 'ACCOUNT CREATED';
+
+  @override
+  String get guestSendCode => '傳送驗證碼';
+
+  @override
+  String get guestSpamHint => '若未收到，請查看垃圾郵件資料夾。';
+
+  @override
+  String get guestExistingLogin => '已有帳戶？登入';
+
+  @override
+  String guestSentTo(String email) {
+    return '驗證碼已傳送至 $email。';
+  }
+
+  @override
+  String get guestCodeHint => '輸入驗證碼';
+
+  @override
+  String guestResendIn(int seconds) {
+    return '$seconds 秒後可重新傳送';
+  }
+
+  @override
+  String get guestInviteToggle => '我有邀請碼';
+
+  @override
+  String get guestAgreements => '確認及同意事項';
+
+  @override
+  String get guestElectronic => '以電子方式提供資訊';
+
+  @override
+  String get guestAntiSocial => '排除反社會勢力';
+
+  @override
+  String get guestPersonal => '個人資料處理';
+
+  @override
+  String get guestSubmitHint => '輸入驗證碼並同意以上四項後即可註冊。';
+
+  @override
+  String get guestNextSteps => '可以繼續進行身分驗證，也可以返回基金列表瀏覽。';
+
+  @override
+  String get guestVerifyRequired => '申請投資須完成身分驗證。';
+
+  @override
+  String get guestGuideCheckEmail => '請查看電子郵件';
+
+  @override
+  String get guestGuideChangeEmail => '變更電子郵件';
+
+  @override
+  String get guestGuideCreated => '註冊已完成';
+
+  @override
+  String get guestGuideVerify => '前往身分驗證';
+
+  @override
+  String get guestGuideLater => '稍後驗證，返回基金列表';
+
+  @override
+  String get guestGuideVerifyIntro => '下一步可選擇個人或法人驗證。';
 }

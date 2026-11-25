@@ -10,13 +10,10 @@ const Duration _logoPulseDuration = Duration(milliseconds: 2000);
 const String _brandLockupAssetPath =
     'assets/images/stellavia.logoAndText.light.png';
 
-String resolveSplashNavigationTarget() {
-  return '/home';
-}
-
 CustomTransitionPage<void> buildSplashCurtainPage({
   required LocalKey key,
   required bool reduceMotion,
+  required Widget child,
 }) {
   return CustomTransitionPage<void>(
     key: key,
@@ -24,7 +21,7 @@ CustomTransitionPage<void> buildSplashCurtainPage({
     reverseTransitionDuration: reduceMotion
         ? Duration.zero
         : const Duration(milliseconds: 900),
-    child: const SplashPage(),
+    child: child,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return SlideTransition(
         position: Tween<Offset>(
@@ -38,7 +35,8 @@ CustomTransitionPage<void> buildSplashCurtainPage({
 }
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
+  const SplashPage({super.key, required this.destination});
+  final String? destination;
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -49,6 +47,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   late final Animation<double> _logoScaleAnimation;
   late final AnimationController _progressController;
   Timer? _deferredNavigationTimer;
+  bool _minimumElapsed = false;
 
   @override
   void initState() {
@@ -69,10 +68,23 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     )..forward();
 
     _deferredNavigationTimer = Timer(_minimumSplashDuration, () {
-      if (mounted && ModalRoute.of(context)?.isActive == true) {
-        context.go(resolveSplashNavigationTarget());
-      }
+      _minimumElapsed = true;
+      _finishIfReady();
     });
+  }
+
+  @override
+  void didUpdateWidget(SplashPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (_minimumElapsed && oldWidget.destination != widget.destination) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _finishIfReady());
+    }
+  }
+
+  void _finishIfReady() {
+    if (!mounted || ModalRoute.of(context)?.isActive != true) return;
+    final destination = widget.destination;
+    if (destination != null) context.go(destination);
   }
 
   @override

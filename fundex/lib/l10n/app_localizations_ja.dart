@@ -8044,4 +8044,101 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get fundListNoMatchBody => '条件を変えるか、しばらくしてから再度お試しください。';
+
+  @override
+  String get guestWelcomeReading => 'やどぬし';
+
+  @override
+  String get guestWelcomeDisclaimer => '※将来の運用成果を保証するものではありません。';
+
+  @override
+  String get guestGuideLearn => '宿主優待のしくみを見る';
+
+  @override
+  String get guestGuideMechanism => '宿主優待のしくみ';
+
+  @override
+  String get guestGuideSummary => '対象ファンドへの投資で配当を目指し、貯めた宿主マイルでホテルに泊まれます。';
+
+  @override
+  String get guestGuideSimulation => '10万円で試算してみる';
+
+  @override
+  String get guestGuideEstimate => '配当と宿主マイルの目安を確認できます。';
+
+  @override
+  String get guestGuideTagline => 'Invest More, Travel More';
+
+  @override
+  String get guestGuideEmailIntro => 'メールで届く認証コードを使います。\n本人確認は登録後に行えます。';
+
+  @override
+  String get guestAccountEyebrow => 'ACCOUNT';
+
+  @override
+  String get guestCreatedEyebrow => 'ACCOUNT CREATED';
+
+  @override
+  String get guestSendCode => '認証コードを送る';
+
+  @override
+  String get guestSpamHint => '届かない場合は、迷惑メールフォルダもご確認ください。';
+
+  @override
+  String get guestExistingLogin => 'すでに会員の方はログイン';
+
+  @override
+  String guestSentTo(String email) {
+    return '$email に認証コードを送りました。';
+  }
+
+  @override
+  String get guestCodeHint => '認証コードを入力';
+
+  @override
+  String guestResendIn(int seconds) {
+    return '再送信まで $seconds 秒';
+  }
+
+  @override
+  String get guestInviteToggle => '招待コードをお持ちの方';
+
+  @override
+  String get guestAgreements => 'ご確認・同意事項';
+
+  @override
+  String get guestElectronic => '電磁的方法による情報提供';
+
+  @override
+  String get guestAntiSocial => '反社会的勢力の排除';
+
+  @override
+  String get guestPersonal => '個人情報の取扱い';
+
+  @override
+  String get guestSubmitHint => 'コード入力と4項目への同意で登録できます。';
+
+  @override
+  String get guestNextSteps => '続けて本人確認を始めるか、\nファンド一覧に戻って閲覧できます。';
+
+  @override
+  String get guestVerifyRequired => '投資のお申し込みには本人確認が必要です。';
+
+  @override
+  String get guestGuideCheckEmail => 'メールを確認してください';
+
+  @override
+  String get guestGuideChangeEmail => 'メールアドレスを変更';
+
+  @override
+  String get guestGuideCreated => 'ご登録が完了しました。';
+
+  @override
+  String get guestGuideVerify => '本人確認に進む';
+
+  @override
+  String get guestGuideLater => 'あとで確認する・ファンドに戻る';
+
+  @override
+  String get guestGuideVerifyIntro => '次の画面で個人・法人を選択できます。';
 }

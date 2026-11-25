@@ -15284,6 +15284,192 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try changing your filters or check back later.'**
   String get fundListNoMatchBody;
+
+  /// No description provided for @guestWelcomeReading.
+  ///
+  /// In en, this message translates to:
+  /// **''**
+  String get guestWelcomeReading;
+
+  /// No description provided for @guestWelcomeDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Future investment performance is not guaranteed.'**
+  String get guestWelcomeDisclaimer;
+
+  /// No description provided for @guestGuideLearn.
+  ///
+  /// In en, this message translates to:
+  /// **'How host benefits work'**
+  String get guestGuideLearn;
+
+  /// No description provided for @guestGuideMechanism.
+  ///
+  /// In en, this message translates to:
+  /// **'How host benefits work'**
+  String get guestGuideMechanism;
+
+  /// No description provided for @guestGuideSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore eligible funds and use your earned host miles for stays at participating hotels.'**
+  String get guestGuideSummary;
+
+  /// No description provided for @guestGuideSimulation.
+  ///
+  /// In en, this message translates to:
+  /// **'Try it with ¥100,000'**
+  String get guestGuideSimulation;
+
+  /// No description provided for @guestGuideEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimate dividends and host miles.'**
+  String get guestGuideEstimate;
+
+  /// No description provided for @guestGuideTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Invest More, Travel More'**
+  String get guestGuideTagline;
+
+  /// No description provided for @guestGuideEmailIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Register with a code sent to your email. You can verify your identity later.'**
+  String get guestGuideEmailIntro;
+
+  /// No description provided for @guestAccountEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'ACCOUNT'**
+  String get guestAccountEyebrow;
+
+  /// No description provided for @guestCreatedEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'ACCOUNT CREATED'**
+  String get guestCreatedEyebrow;
+
+  /// No description provided for @guestSendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Send verification code'**
+  String get guestSendCode;
+
+  /// No description provided for @guestSpamHint.
+  ///
+  /// In en, this message translates to:
+  /// **'If the email hasn’t arrived, check your spam folder.'**
+  String get guestSpamHint;
+
+  /// No description provided for @guestExistingLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Already a member? Log in'**
+  String get guestExistingLogin;
+
+  /// No description provided for @guestSentTo.
+  ///
+  /// In en, this message translates to:
+  /// **'We sent a verification code to {email}.'**
+  String guestSentTo(String email);
+
+  /// No description provided for @guestCodeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter verification code'**
+  String get guestCodeHint;
+
+  /// No description provided for @guestResendIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend in {seconds}s'**
+  String guestResendIn(int seconds);
+
+  /// No description provided for @guestInviteToggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Have an invitation code?'**
+  String get guestInviteToggle;
+
+  /// No description provided for @guestAgreements.
+  ///
+  /// In en, this message translates to:
+  /// **'Review and agree'**
+  String get guestAgreements;
+
+  /// No description provided for @guestElectronic.
+  ///
+  /// In en, this message translates to:
+  /// **'Electronic delivery of information'**
+  String get guestElectronic;
+
+  /// No description provided for @guestAntiSocial.
+  ///
+  /// In en, this message translates to:
+  /// **'Exclusion of antisocial forces'**
+  String get guestAntiSocial;
+
+  /// No description provided for @guestPersonal.
+  ///
+  /// In en, this message translates to:
+  /// **'Handling of personal information'**
+  String get guestPersonal;
+
+  /// No description provided for @guestSubmitHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the code and agree to all four items to register.'**
+  String get guestSubmitHint;
+
+  /// No description provided for @guestNextSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with identity verification or browse the funds.'**
+  String get guestNextSteps;
+
+  /// No description provided for @guestVerifyRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Identity verification is required to invest.'**
+  String get guestVerifyRequired;
+
+  /// No description provided for @guestGuideCheckEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your email'**
+  String get guestGuideCheckEmail;
+
+  /// No description provided for @guestGuideChangeEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Change email address'**
+  String get guestGuideChangeEmail;
+
+  /// No description provided for @guestGuideCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration complete'**
+  String get guestGuideCreated;
+
+  /// No description provided for @guestGuideVerify.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify identity'**
+  String get guestGuideVerify;
+
+  /// No description provided for @guestGuideLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify later and browse funds'**
+  String get guestGuideLater;
+
+  /// No description provided for @guestGuideVerifyIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose individual or corporate verification on the next screen.'**
+  String get guestGuideVerifyIntro;
 }
 
 class _AppLocalizationsDelegate

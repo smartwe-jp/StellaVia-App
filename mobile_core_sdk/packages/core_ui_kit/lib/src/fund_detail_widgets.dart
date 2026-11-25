@@ -4,6 +4,7 @@ import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
 
+import 'app_navigation_bar.dart';
 import 'app_remote_image.dart';
 import 'app_theme_extensions.dart';
 import 'fund_favorite_button.dart';
@@ -453,8 +454,12 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
           Positioned(
             top: topInset,
             left: 12,
-            child: _DetailGlassIconButton(
-              icon: Icons.arrow_back_ios_new_rounded,
+            child: AppNavigationIconButton(
+              size: 38 * 0.8,
+              borderRadius: 99,
+              backgroundColor: colors.scrim.withValues(alpha: 0.24),
+              foregroundColor: colors.onDark,
+              icon: Icons.arrow_back_rounded,
               onTap: widget.onBackTap,
             ),
           ),
@@ -463,6 +468,8 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
             right: 72,
             child: FundFavoriteButton(
               selected: widget.isFavorite,
+              size: 34 * 0.8,
+              iconSize: 18 * 0.8,
               onTap: widget.onFavoriteTap,
               style: FundFavoriteButtonStyle.overlay,
               selectedToastMessage: widget.favoriteAddedMessage,
@@ -471,21 +478,22 @@ class _FundDetailHeroHeaderState extends State<FundDetailHeroHeader> {
           ),
 
           Positioned(
-            top: topInset-4,
+            top: topInset - 3.2,
             right: 16,
-            width: 42,
-            height: 42,
-            child: Container(
+            width: 42 * 0.8,
+            height: 42 * 0.8,
+            child: DecoratedBox(
               decoration: BoxDecoration(
                 color: colors.scrim,
-                borderRadius: BorderRadius.all(Radius.circular(999))
-                
+                shape: BoxShape.circle,
               ),
               child: IconButton(
-              onPressed: widget.onShareTap,
-              tooltip: widget.shareTooltip,
-              icon: Icon(Icons.ios_share_rounded, color: colors.onDark),
-                        ),
+                onPressed: widget.onShareTap,
+                tooltip: widget.shareTooltip,
+                padding: EdgeInsets.zero,
+                iconSize: 24 * 0.8,
+                icon: Icon(Icons.ios_share_rounded, color: colors.onDark),
+              ),
             ),
           ),
 
@@ -1198,30 +1206,6 @@ class _FundDetailHeroFallbackBackground extends StatelessWidget {
         ),
         if (showArtworkOverlay) const _FundDetailArtworkLayer(),
       ],
-    );
-  }
-}
-
-class _DetailGlassIconButton extends StatelessWidget {
-  const _DetailGlassIconButton({required this.icon, required this.onTap});
-
-  final IconData icon;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).appColors;
-    return Material(
-      color: colors.scrim.withValues(alpha: 0.24),
-      borderRadius: BorderRadius.circular(999),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(999),
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Icon(icon, color: colors.onDark, size: 18),
-        ),
-      ),
     );
   }
 }

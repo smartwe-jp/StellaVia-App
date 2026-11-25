@@ -1,3 +1,8 @@
+import '../../features/guest_onboarding/presentation/pages/guest_welcome_page.dart';
+import '../../features/guest_onboarding/presentation/pages/guest_discovery_page.dart';
+import '../../features/guest_onboarding/presentation/pages/guest_registration_complete_page.dart';
+import '../../features/home/presentation/controllers/home_simulation_controller.dart';
+import '../../features/home/domain/entities/home_simulation.dart';
 import '../../features/member_profile/presentation/pages/host_fund_management_page.dart';
 import '../../features/member_profile/presentation/pages/my_page_summary_page.dart';
 import '../../features/member_profile/presentation/pages/my_page_miles_history_page.dart';
@@ -136,6 +141,9 @@ CustomTransitionPage<void> _buildDiscussionBoardBottomUpPage({
   );
 }
 
+String _launchDestination(AsyncValue<bool> auth) =>
+    auth.asData?.value == true ? '/home' : '/guest-guide';
+
 String? resolveAuthRedirect({
   required AsyncValue<bool> authState,
   required String location,
@@ -151,6 +159,12 @@ String? resolveAuthRedirect({
       location.endsWith('/result');
   final isGuestAccessibleRoute =
       location == '/home' ||
+      location == '/guest-guide' ||
+      location == '/guest-guide/discover' ||
+      location == '/guest-guide/funds' ||
+      location == '/guest-guide/hotels' ||
+      location == '/guest-guide/register' ||
+      location == '/guest-guide/simulation' ||
       location == '/home/service' ||
       location == '/home/ranks' ||
       location == '/home/simulation' ||
@@ -166,7 +180,10 @@ String? resolveAuthRedirect({
       location == '/profile/settings/faq' ||
       location == '/profile/settings/contact' ||
       location == '/profile/settings/company';
-  final isSplash = location == '/splash' || location == '/home/splash';
+  final isSplash =
+      location == '/splash' ||
+      location == '/home/splash' ||
+      location == '/guest-guide/splash';
   final isLogin = location == '/login';
   final isRegister = location == '/register';
   final isForgotPassword = location == '/forgot-password';
@@ -180,7 +197,9 @@ String? resolveAuthRedirect({
       isGuestAccessibleRoute;
 
   if (isSplash) {
-    return null;
+    if (location == '/splash' || authState.isLoading) return null;
+    final curtain = '${_launchDestination(authState)}/splash';
+    return location == curtain ? null : curtain;
   }
 
   if (authState.isLoading) {
@@ -193,14 +212,33 @@ String? resolveAuthRedirect({
 
   final isAuthenticated = authState.asData?.value ?? false;
   if (!isAuthenticated) {
+    if (location == '/home') return '/guest-guide/discover';
     return isPublicRoute ? null : '/login';
   }
 
-  if (isAuthRoute) {
+  if (isAuthRoute || location == '/guest-guide/register') {
     return '/home';
   }
 
   return null;
+}
+
+CustomTransitionPage<void> _startupCurtain(
+  BuildContext context,
+  GoRouterState state,
+) {
+  return buildSplashCurtainPage(
+    key: const ValueKey('launch-curtain'),
+    reduceMotion: MediaQuery.disableAnimationsOf(context),
+    child: Consumer(
+      builder: (context, ref, _) {
+        final auth = ref.watch(isAuthenticatedProvider);
+        return SplashPage(
+          destination: auth.isLoading ? null : _launchDestination(auth),
+        );
+      },
+    ),
+  );
 }
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -223,26 +261,71 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       );
     },
     routes: <RouteBase>[
-      GoRoute(path: '/splash', redirect: (_, _) => '/home/splash'),
+      GoRoute(
+        path: '/splash',
+        redirect: (_, _) =>
+            '${_launchDestination(ref.read(isAuthenticatedProvider))}/splash',
+      ),
+
+      GoRoute(
+        path: '/guest-guide',
+        builder: (_, _) => const GuestWelcomePage(),
+        routes: [
+          GoRoute(path: 'splash', pageBuilder: _startupCurtain),
+          GoRoute(
+            path: 'funds',
+            builder: (_, _) => const InvestmentTabPage.standalone(),
+          ),
+          GoRoute(
+            path: 'hotels',
+            builder: (_, _) => const HotelHostMilesPage(),
+          ),
+          GoRoute(
+            path: 'discover',
+            builder: (_, _) => const GuestDiscoveryPage(),
+          ),
+          GoRoute(
+            path: 'register',
+            builder: (_, state) => RegisterPage(initialInviteCode: state.uri.queryParameters['ref']),
+          ),
+          GoRoute(
+            path: 'simulation',
+            builder: (_, _) => ProviderScope(
+              overrides: [
+                homeSimulationInputProvider.overrideWith(
+                  (ref) => HomeSimulationController(
+                    const HomeSimulationInput(units: 10),
+                  ),
+                ),
+              ],
+              child: const HomeSimulationPage(),
+            ),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/guest-registration-complete',
+        builder: (_, _) => const GuestRegistrationCompletePage(),
+      ),
       GoRoute(
         path: '/login',
+        redirect: (_, state) => state.uri.queryParameters['openRegister'] == '1'
+            ? state.uri.replace(path: '/guest-guide/register', queryParameters: {
+                ...state.uri.queryParameters,
+              }..remove('openRegister')).toString()
+            : null,
         builder: (BuildContext context, GoRouterState state) {
-          final shouldOpenRegister =
-              state.uri.queryParameters['openRegister'] == '1';
           final initialAccount = state.extra is String
               ? (state.extra! as String)
               : null;
           return LoginPage(
-            openRegisterOnEnter: shouldOpenRegister,
             initialAccount: initialAccount,
           );
         },
       ),
       GoRoute(
         path: '/register',
-        builder: (BuildContext context, GoRouterState state) {
-          return const RegisterPage();
-        },
+        redirect: (_, state) => state.uri.replace(path: '/guest-guide/register').toString(),
       ),
       GoRoute(
         path: '/forgot-password',
@@ -314,10 +397,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                   GoRoute(
                     path: 'splash',
                     parentNavigatorKey: _rootNavigatorKey,
-                    pageBuilder: (context, state) => buildSplashCurtainPage(
-                      key: state.pageKey,
-                      reduceMotion: MediaQuery.disableAnimationsOf(context),
-                    ),
+                    pageBuilder: _startupCurtain,
                   ),
                   GoRoute(
                     path: 'verification',

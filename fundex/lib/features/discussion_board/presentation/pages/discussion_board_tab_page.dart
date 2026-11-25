@@ -1215,7 +1215,7 @@ class _DiscussionBoardTabPageState
                                   message: l10n.kizunarkGuestLoginPrompt,
                                   onLoginTap: () => context.push('/login'),
                                   onRegisterTap: () =>
-                                      context.push('/login?openRegister=1'),
+                                      context.push('/guest-guide/register'),
                                 ),
                         ),
                         Padding(

@@ -65,9 +65,10 @@ void main() {
           GoRoute(
             path: '/',
             builder: (_, __) => Consumer(
-              builder: (_, ref, _) => Scaffold(
+              builder: (context, ref, _) => Scaffold(
                 body: HomeMilesHotelsSection(
                   state: ref.watch(homeFeaturedHotelsProvider),
+                  onViewAll: () => context.push('/hotel-booking/host-miles'),
                 ),
               ),
             ),

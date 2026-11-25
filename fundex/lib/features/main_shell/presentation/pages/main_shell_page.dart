@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../discussion_board/presentation/providers/discussion_board_providers.dart';
 import '../../../discussion_board/presentation/state/discussion_send_queue_state.dart';
 import '../providers/main_shell_providers.dart';
@@ -94,50 +95,56 @@ class _MainShellPageState extends ConsumerState<MainShellPage>
             bottom: false,
             child: widget.navigationShell,
           ),
-          bottomNavigationBar: DecoratedBox(
-            decoration: BoxDecoration(color: colors.surface),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                _DiscussionSendQueueBar(
-                  state: sendQueueState,
-                  title: l10n.kizunarkSendingQueueTitle(
-                    sendQueueState.pendingCount,
-                  ),
-                  cancelLabel: l10n.commonCancel,
-                  onCancel: () => ref
-                      .read(discussionSendQueueProvider.notifier)
-                      .cancelAll(),
-                ),
-                ClipRect(
-                  clipBehavior: Clip.none,
-                  child: Opacity(
-                    opacity: chromeReveal,
-                    child: Align(
-                      heightFactor: chromeReveal,
-                      alignment: Alignment.bottomCenter,
-                      child: FractionalTranslation(
-                        translation: Offset(0, 1 - chromeReveal),
-                        child: IgnorePointer(
-                          ignoring: chromeReveal <= 0.01,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              MainShellBottomBar(
-                                currentTabIndex: currentTabIndex,
-                                onSelected: (index) =>
-                                    _onDestinationSelected(context, index),
+          bottomNavigationBar:
+              ref.watch(isAuthenticatedProvider).valueOrNull != true
+              ? null
+              : DecoratedBox(
+                  decoration: BoxDecoration(color: colors.surface),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      _DiscussionSendQueueBar(
+                        state: sendQueueState,
+                        title: l10n.kizunarkSendingQueueTitle(
+                          sendQueueState.pendingCount,
+                        ),
+                        cancelLabel: l10n.commonCancel,
+                        onCancel: () => ref
+                            .read(discussionSendQueueProvider.notifier)
+                            .cancelAll(),
+                      ),
+                      ClipRect(
+                        clipBehavior: Clip.none,
+                        child: Opacity(
+                          opacity: chromeReveal,
+                          child: Align(
+                            heightFactor: chromeReveal,
+                            alignment: Alignment.bottomCenter,
+                            child: FractionalTranslation(
+                              translation: Offset(0, 1 - chromeReveal),
+                              child: IgnorePointer(
+                                ignoring: chromeReveal <= 0.01,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    MainShellBottomBar(
+                                      currentTabIndex: currentTabIndex,
+                                      onSelected: (index) =>
+                                          _onDestinationSelected(
+                                            context,
+                                            index,
+                                          ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
         ),
       ),
     );

@@ -29,13 +29,9 @@ class HomeFeaturedSection extends StatelessWidget {
       children: [
         Padding(
           padding: inset,
-          child: AppSectionHeader(
+          child: HomeFeaturedSectionHeader(
             title: title,
-            titleTextStyle: context.appTextTheme.sectionTitle.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
             actionLabel: actionLabel,
-            actionTextStyle: HomeTextStyles.sectionAction(context),
             onActionTap: onActionTap,
           ),
         ),
@@ -67,4 +63,26 @@ class HomeFeaturedSection extends StatelessWidget {
       ],
     );
   }
+}
+
+class HomeFeaturedSectionHeader extends StatelessWidget {
+  const HomeFeaturedSectionHeader({
+    super.key,
+    required this.title,
+    required this.actionLabel,
+    required this.onActionTap,
+  });
+  final String title;
+  final String actionLabel;
+  final VoidCallback onActionTap;
+  @override
+  Widget build(BuildContext context) => AppSectionHeader(
+    title: title,
+    titleTextStyle: context.appTextTheme.sectionTitle.copyWith(
+      fontWeight: FontWeight.w800,
+    ),
+    actionLabel: actionLabel,
+    actionTextStyle: HomeTextStyles.sectionAction(context),
+    onActionTap: onActionTap,
+  );
 }

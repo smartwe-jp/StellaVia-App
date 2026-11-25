@@ -167,12 +167,8 @@ void main() {
                 builder: (_, __) => const Scaffold(body: Text('home')),
               ),
               GoRoute(
-                path: '/login',
-                builder: (_, state) => Scaffold(
-                  body: Text(
-                    'register=${state.uri.queryParameters['openRegister']}',
-                  ),
-                ),
+                path: '/guest-guide/register',
+                builder: (_, state) => Scaffold(body: Text(state.uri.path)),
               ),
               GoRoute(
                 path: '/hotel-booking/:id',
@@ -376,13 +372,16 @@ void main() {
               of: action,
               matching: find.byType(SingleChildScrollView),
             ),
-            findsWidgets,
+            member ? findsWidgets : findsNothing,
           );
-          await tester.ensureVisible(action);
+          if (member) await tester.ensureVisible(action);
           await tester.pumpAndSettle();
           await tester.tap(action);
           await tester.pumpAndSettle();
-          expect(find.text(member ? 'funds' : 'register=1'), findsOneWidget);
+          expect(
+            find.text(member ? 'funds' : '/guest-guide/register'),
+            findsOneWidget,
+          );
           await tester.pumpWidget(const SizedBox());
           router.dispose();
         }

@@ -22,7 +22,7 @@ Miles booking remains a localized “coming soon” action. Miles balance, publi
 - [14 宿主優待について（内容紹介）](https://www.figma.com/design/I9xMTxYMyek9AvMWtDvkFi?node-id=8201-760) is implemented at `/home/service`: ABOUT, TWO RETURNS, the five membership tiers and HOW TO START. The Figma photograph (8221:765) is bundled as `assets/images/home_service_about.png`, displayed at 220-point height with cover cropping.
 - [15 ランク制度を詳しく見る](https://www.figma.com/design/I9xMTxYMyek9AvMWtDvkFi?node-id=8224-919) is implemented at `/home/ranks`, reusing the feature-owned rank section/cards.
 - Both routes are explicitly public and open above the root tab shell. Home entry points use push; the service-page rank button pushes the rank page. Back pops the prior page, retaining service scroll position; direct entry falls back to `/home`.
-- Guest service CTA opens `/login?openRegister=1`. For authenticated users it becomes the existing fund-browsing CTA at `/funds`, avoiding an unnecessary registration route.
+- Guest service CTA opens `/guest-guide/register`. For authenticated users it becomes the existing fund-browsing CTA at `/funds`, avoiding an unnecessary registration route.
 - Rank thresholds, rates, validity, advance windows and room counts reproduce the design's provisional information. The design's internal-draft/change notice remains visible. These values are presentation content only, not an account state or booking policy. Investment-return copy also follows the supplied design; no live financial calculations or backend contracts are added.
 - All copy is localized in the four ARB files. `home_rank_content.dart` maps display content; `home_rank_detail_card.dart`, `home_rank_details_section.dart` and `home_service_sections.dart` own feature UI. Generic cards/buttons/headings continue to use `core_ui_kit`.
 - User-confirmed subsequent home changes are preserved: featured hotels are hidden, the miles card is removed from the composition, and simulation is shown in both auth states. Existing hotel construction remains and currently produces an unused-local warning; it was not changed as part of these two pages.
@@ -66,7 +66,7 @@ Information-page validation: 24 targeted tests passed (auth redirects plus navig
 
 ## 2026-10-29 首页试算器
 
-- 按 [13 シミュレーション](https://www.figma.com/design/I9xMTxYMyek9AvMWtDvkFi?node-id=8190-2037) 实现公开路由 `/home/simulation`，首页两种登录状态均可进入。游客 CTA 注册，会员 CTA 浏览基金。Tab 不变。
+- 按 [13 シミュレーション](https://www.figma.com/design/I9xMTxYMyek9AvMWtDvkFi?node-id=8190-2037) 实现公开路由 `/home/simulation`，首页两种登录状态均可进入。游客注册按钮固定在试算页底部安全区上方，会员的浏览基金按钮位于滚动列表末尾。Tab 不变。
 - 金额 1–5000 万日元（步长 1 万）、年利率 3–10%（步长 0.1%）、期限 1–36 月；默认 100 万、6%、12 月。支持每月分红 / 到期分红切换。
 - 税前单利：月分红 = 本金 × 年利率 / 12；期间分红 = 本金 × 年利率 × 月数 / 12；总额 = 本金 + 期间分红，日元向下取整。每月分红模式总额包含期间已发放分红，并非最后一笔到账金额；页面说明该口径。
 - 用输入金额独立匹配公开 listRules（minAum 包含、maxAum 不包含），不叠加登录用户资产；估算里程 = 本金 × 等级 pointRate × 月数，向下取整。不模拟到期失效或未来等级变化。规则缺失/加载失败时里程及晚数显示未知，支持重试。
@@ -111,3 +111,11 @@ Information-page validation: 24 targeted tests passed (auth redirects plus navig
 ## 2026-11-19 首页导航品牌 Logo
 
 登录和未登录首页共用原始透明底 `SV_purple_wordmark.png` 品牌图（英文及日文组合），替换文字排版的 STELLAVIA。56 高导航栏内按 120×39 居中、左侧16留白，与右侧操作区间隔12；窄屏可等比缩小。深色主题使用同套白色原始图。登录页面与其他页面的文字标识不在本次范围。
+
+## 2026-11-25 独立访客引导
+
+App 启动时等待会话恢复，未登录直接揭幕到 `/guest-guide` 视频欢迎页，已登录揭幕到会员首页。访客可在视频欢迎页选择注册或了解机制。视频取当前 OA 站点的同款素材，无法播放时显示内置封面。发现页提供服务详情、基金与宿主里程酒店的列表及详情入口，预览使用现有数据源。引导试算复用完整试算页，并以独立状态从 10 万日元开始。引导注册复用现有发码、协议、注册与换取会话流程，按邮箱和验证码分步展示，成功后可认证或进入基金列表。所有 App 内注册入口统一打开此流程，旧注册路径兼容重定向。
+
+访客发现页直接复用原首页的访客视图，位于主 Tab 路由之外。页头、服务介绍、试算卡、基金与酒店区块以及底部注册按钮均随原首页更新。引导试算保留独立路由，注册使用全 App 共用流程。
+未登录时，基金和酒店的「一覧を見る」分别 push 到独立基金列表和宿主里程酒店列表，返回保留首页位置。底部 TabBar 仅在已登录时显示。
+关闭登录页或未登录时前往 /home 都进入 /guest-guide/discover，视频欢迎页位于其下，可通过系统返回手势回去。底部注册按钮保留系统安全距离。

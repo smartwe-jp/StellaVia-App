@@ -10,10 +10,11 @@ import '../../../settings/presentation/providers/settings_content_providers.dart
 import '../../domain/repositories/auth_repository.dart';
 import '../providers/auth_providers.dart';
 import '../support/code_send_cooldown.dart';
-import '../widgets/register_invite_code_section.dart';
+import '../widgets/guest_registration_form.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
-  const RegisterPage({super.key});
+  const RegisterPage({super.key, this.initialInviteCode});
+  final String? initialInviteCode;
 
   @override
   ConsumerState<RegisterPage> createState() => _RegisterPageState();
@@ -27,6 +28,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   bool _acceptElectronicDelivery = false;
   bool _acceptAntiSocial = false;
   bool _acceptPersonalInformation = false;
+  bool _codeSent = false;
   bool _isSubmitting = false;
   bool _isSendingCode = false;
   late final CodeSendCooldown _sendCodeCooldown;
@@ -36,7 +38,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     super.initState();
     _accountController = TextEditingController();
     _codeController = TextEditingController();
-    _inviteCodeController = TextEditingController();
+    _inviteCodeController = TextEditingController(
+      text: widget.initialInviteCode,
+    );
     _sendCodeCooldown = CodeSendCooldown(
       onChanged: () {
         if (mounted) {
@@ -112,13 +116,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     return fallback;
   }
 
-  String _sendCodeButtonLabel(String defaultLabel) {
-    if (!_sendCodeCooldown.isActive) {
-      return defaultLabel;
-    }
-    return '${_sendCodeCooldown.remainingSeconds}s';
-  }
-
   Future<void> _sendCode() async {
     final l10n = context.l10n;
     if (!await _ensureValidAccountInput()) {
@@ -141,6 +138,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         return;
       }
       _sendCodeCooldown.start();
+      setState(() => _codeSent = true);
       AppNotice.show(context, message: l10n.registerSendCodeSuccess);
     } catch (error) {
       if (!mounted) {
@@ -210,267 +208,136 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
     final router = GoRouter.of(context);
     ref.read(authSessionProvider.notifier).markAuthenticated();
-    router.go('/home/verification');
+    router.go('/guest-registration-complete');
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final theme = Theme.of(context);
-    final actionColor = theme.appColors.primary;
     final localeTag = Localizations.localeOf(context).toLanguageTag();
     final operatingCompanyContent = ref
         .watch(settingsOperatingCompanyContentProvider(localeTag))
         .asData
         ?.value;
-    return Scaffold(
-      key: const Key('register_page'),
-      backgroundColor: theme.colorScheme.surface,
-      appBar: AppNavigationBar(
-        backgroundColor: theme.colorScheme.surface,
-        leading: IconButton(
-          key: const Key('register_back_button'),
-          onPressed: () => context.pop(),
-          icon: const Icon(Icons.arrow_back),
-        ),
-        title: l10n.registerTitle,
-        foregroundColor: theme.appColors.textPrimary,
-      ),
-      body: DecoratedBox(
-        decoration: BoxDecoration(color: theme.colorScheme.surface),
-        child: SafeArea(
-          top: false,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  l10n.registerQuickTitle,
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: UiTokens.spacing4),
-                Text(
-                  l10n.registerQuickSubtitle,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.textTheme.bodySmall?.color?.withValues(
-                      alpha: 0.74,
-                    ),
-                    height: 1.45,
-                  ),
-                ),
-                const SizedBox(height: UiTokens.spacing20),
-                EmailTextField(
-                  controller: _accountController,
-                  inputKey: const Key('register_account_input'),
-                  labelText: l10n.registerEmailAccountLabel,
-                  hintText: l10n.registerEmailAccountLabel,
-                  leadingIcon: Icons.alternate_email_rounded,
-                  trailing: Tooltip(
-                    message: _sendCodeButtonLabel(l10n.registerSendCode),
-                    child: AppNavigationIconButton(
-                      key: const Key('register_account_send_code_button'),
-                      icon: Icons.send_rounded,
-                      size: 34,
-                      borderRadius: 10,
-                      backgroundColor: actionColor.withValues(
-                        alpha: _canSendCode ? 1 : 0.42,
-                      ),
-                      foregroundColor: _canSendCode
-                          ? theme.appColors.onDark
-                          : theme.appColors.onDark.withValues(alpha: 0.4),
-                      onTap: _canSendCode ? _sendCode : null,
-                    ),
-                  ),
-                  onChanged: (_) => setState(() {}),
-                ),
-                const SizedBox(height: UiTokens.spacing12),
-                VerificationCodeField(
-                  key: const Key('register_code_field'),
-                  controller: _codeController,
-                  labelText: l10n.registerCodeLabel,
-                  hintText: l10n.registerCodeLabel,
-                  sendCodeLabel: _sendCodeButtonLabel(l10n.registerSendCode),
-                  inputKey: const Key('register_code_input'),
-                  sendButtonKey: const Key('register_send_code_button'),
-                  isSendingCode: _isSendingCode,
-                  sendButtonBackgroundColor: actionColor,
-                  sendButtonForegroundColor: theme.appColors.onDark,
-                  sendButtonFilled: true,
-                  onChanged: (_) => setState(() {}),
-                  onSendCode: _canSendCode ? _sendCode : null,
-                  buttonWidth: 132,
-                ),
-                const SizedBox(height: UiTokens.spacing12),
-                RegisterInviteCodeSection(
-                  controller: _inviteCodeController,
-                  labelText: l10n.registerInviteCodeLabel,
-                  titleText: l10n.registerInviteCodeTitle,
-                  holderOnlyText: l10n.registerInviteCodeHolderOnly,
-                  hintText: l10n.registerInviteCodeHint,
-                  helperText: l10n.registerInviteCodeHelper,
-                  optionalLabel: l10n.registerOptionalBadge,
-                  onChanged: (_) => setState(() {}),
-                ),
-                const SizedBox(height: UiTokens.spacing12),
-                _RegisterPolicyRow(
-                  checked: _acceptPolicy,
-                  text: l10n.registerAcceptPolicy,
-                  actionLabel: l10n.registerPolicyButton,
-                  onTap: () => setState(() => _acceptPolicy = !_acceptPolicy),
-                  onActionTap: () => _showPolicySheet(
-                    title: l10n.registerPolicyTitle,
-                    url: operatingCompanyContent?.termsConditionsUrl,
-                  ),
-                ),
-                const SizedBox(height: UiTokens.spacing12),
-                _RegisterPolicyRow(
-                  checked: _acceptElectronicDelivery,
-                  text: l10n.registerElectronicDeliveryDocumentTitle,
-                  actionLabel: l10n.registerPolicyButton,
-                  onTap: () => setState(
-                    () =>
-                        _acceptElectronicDelivery = !_acceptElectronicDelivery,
-                  ),
-                  onActionTap: () => _showPolicySheet(
-                    title: l10n.registerElectronicDeliveryDocumentTitle,
-                    url: operatingCompanyContent?.electronicInformationUrl,
-                  ),
-                ),
-                const SizedBox(height: UiTokens.spacing12),
-                _RegisterPolicyRow(
-                  checked: _acceptAntiSocial,
-                  text: l10n.registerAntiSocialDocumentTitle,
-                  actionLabel: l10n.registerPolicyButton,
-                  onTap: () =>
-                      setState(() => _acceptAntiSocial = !_acceptAntiSocial),
-                  onActionTap: () => _showPolicySheet(
-                    title: l10n.registerAntiSocialDocumentTitle,
-                    url: operatingCompanyContent?.antiSocialRuleUrl,
-                  ),
-                ),
-                const SizedBox(height: UiTokens.spacing12),
-                _RegisterPolicyRow(
-                  checked: _acceptPersonalInformation,
-                  text: l10n.registerPersonalInformationDocumentTitle,
-                  actionLabel: l10n.registerPolicyButton,
-                  onTap: () => setState(
-                    () => _acceptPersonalInformation =
-                        !_acceptPersonalInformation,
-                  ),
-                  onActionTap: () => _showPolicySheet(
-                    title: l10n.registerPersonalInformationDocumentTitle,
-                    url: operatingCompanyContent?.personalInformationUrl,
-                  ),
-                ),
-                const SizedBox(height: UiTokens.spacing16),
-                PrimaryCtaButton(
-                  key: const Key('register_submit_button'),
-                  label: l10n.registerSubmit,
-                  isLoading: _isSubmitting,
-                  horizontalPadding: 0,
-                  onPressed: _canSubmit ? _submit : null,
-                ),
-                const SizedBox(height: UiTokens.spacing12),
-                Center(
-                  child: TextButton(
-                    key: const Key('register_back_login_button'),
-                    onPressed: () => context.go('/login'),
-                    child: Text(l10n.registerBackToLogin),
-                  ),
-                ),
-              ],
-            ),
-          ),
+    final policyRows = <Widget>[
+      _RegisterPolicyRow(
+        checked: _acceptPolicy,
+        label: l10n.settingsCompanyLinkTerms,
+        onTap: () => setState(() => _acceptPolicy = !_acceptPolicy),
+        onActionTap: () => _showPolicySheet(
+          title: l10n.registerPolicyTitle,
+          url: operatingCompanyContent?.termsConditionsUrl,
         ),
       ),
+      _RegisterPolicyRow(
+        checked: _acceptElectronicDelivery,
+        label: l10n.guestElectronic,
+        onTap: () => setState(
+          () => _acceptElectronicDelivery = !_acceptElectronicDelivery,
+        ),
+        onActionTap: () => _showPolicySheet(
+          title: l10n.registerElectronicDeliveryDocumentTitle,
+          url: operatingCompanyContent?.electronicInformationUrl,
+        ),
+      ),
+      _RegisterPolicyRow(
+        checked: _acceptAntiSocial,
+        label: l10n.guestAntiSocial,
+        onTap: () => setState(() => _acceptAntiSocial = !_acceptAntiSocial),
+        onActionTap: () => _showPolicySheet(
+          title: l10n.registerAntiSocialDocumentTitle,
+          url: operatingCompanyContent?.antiSocialRuleUrl,
+        ),
+      ),
+      _RegisterPolicyRow(
+        checked: _acceptPersonalInformation,
+        label: l10n.guestPersonal,
+        onTap: () => setState(
+          () => _acceptPersonalInformation = !_acceptPersonalInformation,
+        ),
+        onActionTap: () => _showPolicySheet(
+          title: l10n.registerPersonalInformationDocumentTitle,
+          url: operatingCompanyContent?.personalInformationUrl,
+        ),
+      ),
+    ];
+    return GuestRegistrationForm(
+      email: _accountController,
+      code: _codeController,
+      invite: _inviteCodeController,
+      codeSent: _codeSent,
+      busy: _isSendingCode || _isSubmitting,
+      policyRows: policyRows,
+      remainingSeconds: _sendCodeCooldown.remainingSeconds,
+      onSend: _canSendCode && !_isSubmitting ? _sendCode : null,
+      onSubmit: _canSubmit && !_isSendingCode ? _submit : null,
+      onChanged: () => setState(() {}),
+      onChangeEmail: () => setState(() {
+        _codeSent = false;
+        _codeController.clear();
+      }),
     );
   }
 }
 
 class _RegisterPolicyRow extends StatelessWidget {
   const _RegisterPolicyRow({
+    required this.label,
     required this.checked,
-    required this.text,
-    required this.actionLabel,
     required this.onTap,
     required this.onActionTap,
   });
 
+  final String label;
   final bool checked;
-  final String text;
-  final String actionLabel;
   final VoidCallback onTap;
   final VoidCallback onActionTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final accentColor = theme.colorScheme.primary;
-    final borderColor =
-        (theme.extension<AppFTKTheme>()?.cardBorderColor ?? theme.dividerColor)
-            .withValues(alpha: 0.9);
-
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(UiTokens.radius12),
-        child: Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(UiTokens.radius12),
-            border: Border.all(color: borderColor),
-            color: theme.colorScheme.surface,
-          ),
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 140),
-                width: 20,
-                height: 20,
-                margin: const EdgeInsets.only(top: 1),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  border: Border.all(
-                    color: checked ? accentColor : borderColor,
-                    width: 1.5,
-                  ),
-                  color: checked ? accentColor : Colors.transparent,
-                ),
-                child: checked
-                    ? Icon(Icons.check, size: 14, color: theme.appColors.onDark)
-                    : null,
-              ),
-              const SizedBox(width: UiTokens.spacing8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(text, style: theme.textTheme.bodySmall),
-                    const SizedBox(height: UiTokens.spacing4),
-                    TextButton(
-                      key: const Key('register_policy_button'),
-                      onPressed: onActionTap,
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        alignment: Alignment.centerLeft,
-                      ),
-                      child: Text(actionLabel),
-                    ),
-                  ],
+    return Row(
+      children: [
+        Semantics(
+          checked: checked,
+          label: label,
+          child: InkWell(
+            onTap: onTap,
+            child: SizedBox(
+              width: 32,
+              height: 36,
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Icon(
+                  checked ? Icons.check_box : Icons.check_box_outline_blank,
+                  size: 18,
+                  color: checked
+                      ? context.appColors.primary
+                      : context.appColors.textSecondary,
                 ),
               ),
-            ],
+            ),
           ),
         ),
-      ),
+        Flexible(
+          child: InkWell(
+            onTap: onActionTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: Text(label, style: theme.textTheme.bodyMedium),
+                  ),
+                  const SizedBox(width: 12),
+                  const Icon(Icons.chevron_right, size: 14),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

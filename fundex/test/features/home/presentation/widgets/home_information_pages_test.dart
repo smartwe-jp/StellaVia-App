@@ -92,10 +92,8 @@ GoRouter routerFor(String initial) => GoRouter(
       builder: (_, _) => const HomeRankDetailsPage(),
     ),
     GoRoute(
-      path: '/login',
-      builder: (_, state) => Scaffold(
-        body: Text('register=${state.uri.queryParameters['openRegister']}'),
-      ),
+      path: '/guest-guide/register',
+      builder: (_, state) => Scaffold(body: Text(state.uri.path)),
     ),
     GoRoute(
       path: '/funds',
@@ -215,7 +213,10 @@ void main() {
         );
         await tester.tap(cta);
         await tester.pumpAndSettle();
-        expect(find.text(member ? 'funds' : 'register=1'), findsOneWidget);
+        expect(
+          find.text(member ? 'funds' : '/guest-guide/register'),
+          findsOneWidget,
+        );
         await tester.pumpWidget(const SizedBox());
         router.dispose();
       }

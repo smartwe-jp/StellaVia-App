@@ -58,16 +58,27 @@ class FundProjectWebNavigation extends StatelessWidget
                     disabledBackgroundColor: colors.surfaceAlt.withValues(
                       alpha: 0.92,
                     ),
-                    minimumSize: const Size.square(44),
+                    minimumSize: const Size.square(44 * 0.8),
+                    fixedSize: const Size.square(44 * 0.8),
+                    iconSize: 24 * 0.8,
+                    padding: EdgeInsets.zero,
                     shape: const CircleBorder(),
                   ),
                 ),
                 child: Row(
                   children: [
-                    IconButton(
-                      tooltip: context.l10n.commonBack,
-                      onPressed: onBack,
-                      icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                    Tooltip(
+                      message: context.l10n.commonBack,
+                      child: AppNavigationIconButton(
+                        size: 44 * 0.8,
+                        borderRadius: 99,
+                        backgroundColor: colors.surfaceAlt.withValues(
+                          alpha: 0.92,
+                        ),
+                        foregroundColor: colors.textPrimary,
+                        icon: Icons.arrow_back_rounded,
+                        onTap: onBack,
+                      ),
                     ),
                     const Spacer(),
                     IconButton(

@@ -33,7 +33,10 @@ import '../support/home_design_theme.dart';
 import '../support/home_miles_display.dart';
 
 class HomeOverviewTabPage extends ConsumerStatefulWidget {
-  const HomeOverviewTabPage({super.key});
+  const HomeOverviewTabPage({super.key}) : _guestGuide = false;
+  const HomeOverviewTabPage.guestGuide({super.key}) : _guestGuide = true;
+
+  final bool _guestGuide;
 
   @override
   ConsumerState<HomeOverviewTabPage> createState() =>
@@ -83,6 +86,7 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
         )
         .toList(growable: false);
     final loadError = asyncProjects.asError;
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
 
     return HomeMilesRefreshScope(
       onRefresh: () => _refreshHomeMiles(ref),
@@ -91,7 +95,9 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
         child: Column(
           children: [
             AppScrollNavigationBar(
-              reveal: ref.watch(mainShellChromeRevealProvider),
+              reveal: widget._guestGuide
+                  ? 1
+                  : ref.watch(mainShellChromeRevealProvider),
               backgroundColor: isAuthenticated
                   ? context.appColors.surface
                   : HomeDesignTheme.background(context),
@@ -120,11 +126,8 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                 message: l10n.networkOfflineBannerMessage,
               ),
             Expanded(
-              child: MainShellTabRefreshScope(
-                tabIndex: MainShellTab.home.index,
-                onRefresh: _refreshHomeOverviewTab,
-                scrollController: _scrollController,
-                child: RefreshIndicator(
+              child: _withTabRefresh(
+                RefreshIndicator(
                   onRefresh: () =>
                       _refreshHomeOverviewTab(ref, refreshHotels: true),
                   child: ListView(
@@ -152,7 +155,11 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                             ),
                             const SizedBox(height: 20),
                             HomeSimulationCard(
-                              onTap: () => context.push('/home/simulation'),
+                              onTap: () => context.push(
+                                widget._guestGuide
+                                    ? '/guest-guide/simulation'
+                                    : '/home/simulation',
+                              ),
                             ),
 
                             const SizedBox(height: 20),
@@ -198,12 +205,25 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                         HomeFeaturedSection(
                           title: l10n.homeFeaturedFundsTitle,
                           actionLabel: l10n.homeViewAllAction,
-                          onActionTap: () => context.go('/funds'),
+                          onActionTap: () {
+                            if (isAuthenticated) {
+                              context.go('/funds');
+                            } else {
+                              context.push('/guest-guide/funds');
+                            }
+                          },
                           cards: featuredFundCards,
                         ),
                         const SizedBox(height: 20),
                       ],
-                      HomeMilesHotelsSection(state: featuredHotels),
+                      HomeMilesHotelsSection(
+                        state: featuredHotels,
+                        onViewAll: () => context.push(
+                          isAuthenticated
+                              ? '/hotel-booking/host-miles'
+                              : '/guest-guide/hotels',
+                        ),
+                      ),
                       const SizedBox(height: 20),
                     ],
                   ),
@@ -212,15 +232,30 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
             ),
             if (!isAuthenticated)
               Padding(
-                padding: const EdgeInsets.fromLTRB(18, 12, 18, 12),
+                padding: EdgeInsets.fromLTRB(
+                  18,
+                  12,
+                  18,
+                  widget._guestGuide ? bottomInset : 12,
+                ),
                 child: AppButton(
                   label: l10n.homeRegisterFree,
-                  onPressed: () => context.push('/login?openRegister=1'),
+                  onPressed: () => context.push('/guest-guide/register'),
                 ),
               ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _withTabRefresh(Widget child) {
+    if (widget._guestGuide) return child;
+    return MainShellTabRefreshScope(
+      tabIndex: MainShellTab.home.index,
+      onRefresh: _refreshHomeOverviewTab,
+      scrollController: _scrollController,
+      child: child,
     );
   }
 }

@@ -5,13 +5,6 @@ import 'package:fundex/app/pages/splash_page.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
-  group('resolveSplashNavigationTarget', () {
-    test('always routes to home', () {
-      final target = resolveSplashNavigationTarget();
-      expect(target, '/home');
-    });
-  });
-
   testWidgets('splash lifts over a stationary home page', (tester) async {
     const homeKey = Key('home');
     final router = GoRouter(
@@ -26,6 +19,7 @@ void main() {
               pageBuilder: (_, state) => buildSplashCurtainPage(
                 key: state.pageKey,
                 reduceMotion: false,
+                child: const SplashPage(destination: '/home'),
               ),
             ),
           ],

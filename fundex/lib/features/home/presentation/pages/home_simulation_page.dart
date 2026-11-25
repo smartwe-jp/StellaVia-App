@@ -71,12 +71,27 @@ class _HomeSimulationPageState extends ConsumerState<HomeSimulationPage> {
           },
         ),
       ),
+      bottomNavigationBar: member
+          ? null
+          : SafeArea(
+              top: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 12),
+                child: AppButton(
+                  label: l.simRegister,
+                  minHeight: 50,
+                  onPressed: () => context.push('/guest-guide/register'),
+                ),
+              ),
+            ),
       body: SafeArea(
         top: false,
         bottom: false,
         child: SingleChildScrollView(
           padding: EdgeInsets.only(
-            bottom: UiTokens.spacing20 + MediaQuery.paddingOf(context).bottom,
+            bottom:
+                UiTokens.spacing20 +
+                (member ? MediaQuery.paddingOf(context).bottom : 0),
           ),
           child: Column(
             children: [
@@ -127,19 +142,19 @@ class _HomeSimulationPageState extends ConsumerState<HomeSimulationPage> {
                 const SizedBox(height: 16),
                 SimulationHotelResults(points: result.miles!),
               ],
-              const SizedBox(height: UiTokens.spacing16),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: UiTokens.spacing20,
+              if (member) ...[
+                const SizedBox(height: UiTokens.spacing16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: UiTokens.spacing20,
+                  ),
+                  child: AppButton(
+                    label: l.homeFindFunds,
+                    minHeight: 50,
+                    onPressed: () => context.go('/funds'),
+                  ),
                 ),
-                child: AppButton(
-                  label: member ? l.homeFindFunds : l.simRegister,
-                  minHeight: 50,
-                  onPressed: () => member
-                      ? context.go('/funds')
-                      : context.push('/login?openRegister=1'),
-                ),
-              ),
+              ],
             ],
           ),
         ),

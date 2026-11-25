@@ -62,7 +62,7 @@ class HomeServiceIntroductionPage extends ConsumerWidget {
                 if (member) {
                   context.go('/funds');
                 } else {
-                  context.push('/login?openRegister=1');
+                  context.push('/guest-guide/register');
                 }
               },
             ),
