@@ -332,10 +332,10 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
     }
 
     final amount = _formatCurrency(
-      project.currentlySubscribed,
+      project.seniorInvestorApplication,
       currencyFormatter,
     );
-    final progress = _formatProgressPercent(project.achievementRate);
+    final progress = _formatProgressPercent(project.seniorRate);
     return l10n.fundListAppliedAmount(amount, progress);
   }
 
@@ -548,6 +548,10 @@ class _InvestmentTabPageState extends ConsumerState<InvestmentTabPage> {
                                   yieldLabel: l10n.fundListYieldLabel,
                                   periodLabel: l10n.fundListPeriodLabel,
                                   methodTitleLabel: l10n.fundListMethodLabel,
+                                  fundingTargetText: _formatCurrency(
+                                    project.seniorInvestorTotal,
+                                    currencyFormatter,
+                                  ),
                                   appliedAmountText: _resolveAmountBannerText(
                                     context,
                                     project,
@@ -628,6 +632,7 @@ class _FundProjectCard extends StatelessWidget {
     required this.yieldLabel,
     required this.periodLabel,
     required this.methodTitleLabel,
+    required this.fundingTargetText,
     required this.appliedAmountText,
     required this.annualYieldText,
     required this.periodValueText,
@@ -650,6 +655,7 @@ class _FundProjectCard extends StatelessWidget {
   final String yieldLabel;
   final String periodLabel;
   final String methodTitleLabel;
+  final String fundingTargetText;
   final String appliedAmountText;
   final String annualYieldText;
   final String periodValueText;
@@ -857,9 +863,14 @@ class _FundProjectCard extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: UiTokens.spacing8),
+                      Text(
+                        '${context.l10n.fundDetailFundTotalLabel} $fundingTargetText',
+                        style: appText.meta,
+                      ),
+                      const SizedBox(height: UiTokens.spacing4),
                       FundSubscriptionProgressBar(
                         label: appliedAmountText,
-                        ratio: project.achievementRate,
+                        ratio: project.seniorRate,
                       ),
                       const SizedBox(height: UiTokens.spacing8),
                       Container(

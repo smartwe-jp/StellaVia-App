@@ -17,6 +17,9 @@ class FundProjectDto {
     this.gainType,
     this.investmentUnit,
     this.maximumInvestmentPerPerson,
+    this.seniorRate,
+    this.seniorInvestorTotal,
+    this.seniorInvestorApplication,
     this.achievementRate,
     this.amountApplication,
     this.currentlySubscribed,
@@ -75,6 +78,9 @@ class FundProjectDto {
       maximumInvestmentPerPerson: _intOrNull(
         json['maximumInvestmentPerPerson'],
       ),
+      seniorRate: _doubleOrNull(json['seniorRate']),
+      seniorInvestorTotal: _intOrNull(json['seniorInvestorTotal']),
+      seniorInvestorApplication: _intOrNull(json['seniorInvestorApplication']),
       achievementRate: _doubleOrNull(json['achievementRate']),
       amountApplication: _intOrNull(json['amountApplication']),
       currentlySubscribed: _intOrNull(json['currentlySubscribed']),
@@ -132,6 +138,9 @@ class FundProjectDto {
   final String? gainType;
   final int? investmentUnit;
   final int? maximumInvestmentPerPerson;
+  final double? seniorRate;
+  final int? seniorInvestorTotal;
+  final int? seniorInvestorApplication;
   final double? achievementRate;
   final int? amountApplication;
   final int? currentlySubscribed;

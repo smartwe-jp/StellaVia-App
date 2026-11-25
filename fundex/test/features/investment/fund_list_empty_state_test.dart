@@ -68,6 +68,29 @@ void main() {
       'MaterialIcons',
     )..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'))).load();
   });
+  testWidgets(
+    'fund card displays senior funding target, applications and progress',
+    (tester) async {
+      await pumpList(
+        tester,
+        () async => const [
+          FundProject(
+            id: '1',
+            projectName: 'Test fund',
+            seniorRate: 1,
+            seniorInvestorTotal: 1000000,
+            seniorInvestorApplication: 900000,
+            currentlySubscribed: 700000,
+            achievementRate: 0.7,
+          ),
+        ],
+      );
+      await tester.pumpAndSettle();
+      expect(find.textContaining('募集金額 ¥1,000,000'), findsOneWidget);
+      expect(find.textContaining('応募金額 ¥900,000（100.00%）'), findsWidgets);
+    },
+  );
+
   testWidgets('empty all, filtered no-match and pull-to-refresh recovery', (
     tester,
   ) async {

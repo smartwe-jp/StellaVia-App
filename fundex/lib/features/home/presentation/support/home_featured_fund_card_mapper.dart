@@ -27,7 +27,7 @@ FundFeaturedFundCardData buildHomeFeaturedFundCardData(
       locale,
     ),
     metadata: metadata,
-    progress: _normalizeProgress(project.achievementRate),
+    progress: _normalizeProgress(project.seniorRate),
     daysRemaining: _buildDaysRemainingLabel(context, project.daysRemaining),
     actionLabel: status == 1
         ? context.l10n.homeFeaturedFundApplyAction
@@ -35,7 +35,7 @@ FundFeaturedFundCardData buildHomeFeaturedFundCardData(
     actionTone: status == 1
         ? FundFeaturedFundActionTone.apply
         : FundFeaturedFundActionTone.details,
-    progressLabel: _formatProgressPercent(project.achievementRate),
+    progressLabel: _formatProgressPercent(project.seniorRate),
     tags: <FundFeaturedFundTagData>[
       statusTag,
       if (methodTag != null) methodTag,

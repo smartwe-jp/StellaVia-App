@@ -1419,3 +1419,5 @@ Hotel临时来源：2026-10-14谷町君开发小组确认 `POST /pms/order/room/
 法人寄件、收件使用登录态 JSON POST `/crowdfunding/corporate-verification/review`。id 优先取 detail.application.id，其次取 detail.id；reviewOp 取 userOps 允许的 CUSTOMER_MAILED 或 RECEIVED。寄件的 customerMessage 必填，收件备注可省略。业务成功后刷新详情，按返回的 userOps 和状态更新操作及进度。
 
 法人申请详情使用同一 detail 响应回填 application、representative、handler、beneficialOwners、bank 和 documents。修正前保留原附件 URL 和证件类型，提交前重新读取详情以核对申请 ID 和可修正状态。
+
+基金列表卡片使用列表响应的 `seniorRate`（1.0 = 100%）、`seniorInvestorTotal`（募集金额，日元）和 `seniorInvestorApplication`（申请金额，日元）。首页精选基金进度也使用 `seniorRate`。

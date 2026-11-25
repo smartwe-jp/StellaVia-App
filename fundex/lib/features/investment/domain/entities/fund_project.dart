@@ -18,6 +18,9 @@ class FundProject {
     this.gainType,
     this.investmentUnit,
     this.maximumInvestmentPerPerson,
+    this.seniorRate,
+    this.seniorInvestorTotal,
+    this.seniorInvestorApplication,
     this.achievementRate,
     this.amountApplication,
     this.currentlySubscribed,
@@ -56,6 +59,9 @@ class FundProject {
   final String? gainType;
   final int? investmentUnit;
   final int? maximumInvestmentPerPerson;
+  final double? seniorRate;
+  final int? seniorInvestorTotal;
+  final int? seniorInvestorApplication;
   final double? achievementRate;
   final int? amountApplication;
   final int? currentlySubscribed;
