@@ -11,6 +11,9 @@ import 'package:fundex/features/member_profile/domain/usecases/download_mypage_b
 import 'package:fundex/features/member_profile/presentation/pages/my_page_active_fund_detail_page.dart';
 import 'package:fundex/features/member_profile/presentation/providers/mypage_providers.dart';
 import 'package:fundex/l10n/app_localizations.dart';
+import 'package:fundex/features/member_profile/presentation/support/mypage_section_support.dart';
+import 'package:fundex/features/member_profile/presentation/widgets/secondary_market_sell_entry.dart';
+import 'package:go_router/go_router.dart';
 
 class _Download implements DownloadMyPageBenefitReportUseCase {
   final result = Completer<Uint8List>();
@@ -23,6 +26,63 @@ class _Download implements DownloadMyPageBenefitReportUseCase {
 }
 
 void main() {
+  testWidgets(
+    'sell entry scrolls with the holding details and opens the sell form',
+    (tester) async {
+      const record = MyPageInvestmentRecord(
+        projectId: 'p',
+        projectName: 'Fund',
+        processId: 'order',
+        projectStatus: 4,
+        investNumRemaining: 1,
+      );
+      final router = GoRouter(
+        routes: [
+          GoRoute(
+            path: '/',
+            builder: (_, _) => MyPageActiveFundDetailPage(
+              projectId: 'p',
+              initialSeed: MyPageActiveFundDetailSeed.fromRecord(record),
+            ),
+          ),
+          GoRoute(
+            path: '/my/secondary-market/sell',
+            builder: (_, _) => const Scaffold(body: Text('Sell form')),
+          ),
+        ],
+      );
+      addTearDown(router.dispose);
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            myPageProjectBenefitProvider('p').overrideWith(
+              (_) async => const MyPageProjectBenefit(details: []),
+            ),
+            myPageInvestmentListProvider.overrideWith((_) async => [record]),
+            fundProjectListProvider.overrideWith((_) async => []),
+          ],
+          child: MaterialApp.router(
+            theme: AppThemeFactory.light(),
+            routerConfig: router,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final entry = find.descendant(
+        of: find.byType(ListView),
+        matching: find.byType(SecondaryMarketSellEntry),
+      );
+      await tester.scrollUntilVisible(entry, 200);
+      await tester.tap(
+        find.descendant(of: entry, matching: find.byType(AppButton)),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Sell form'), findsOneWidget);
+    },
+  );
+
   testWidgets('report shows progress, ignores repeated taps and allows retry', (
     tester,
   ) async {

@@ -1,115 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../app/config/environment_provider.dart';
 
-class GuestGuideVideoBackground extends ConsumerStatefulWidget {
+import '../../../../app/config/environment_provider.dart';
+import '../../../../app/widgets/looping_video_background.dart';
+
+class GuestGuideVideoBackground extends ConsumerWidget {
   const GuestGuideVideoBackground({super.key, required this.posterAsset});
+
   final String posterAsset;
 
   @override
-  ConsumerState<GuestGuideVideoBackground> createState() =>
-      _GuestGuideVideoBackgroundState();
-}
-
-class _GuestGuideVideoBackgroundState
-    extends ConsumerState<GuestGuideVideoBackground>
-    with WidgetsBindingObserver {
-  VideoPlayerController? _player;
-  bool _visible = false;
-  bool _foreground = true;
-  bool _ready = false;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    final state = WidgetsBinding.instance.lifecycleState;
-    _foreground = state == null || state == AppLifecycleState.resumed;
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _visible =
-        ModalRoute.isCurrentOf(context) == true &&
-        !MediaQuery.disableAnimationsOf(context);
-    if (_visible && _player == null) {
-      _initialize();
-    } else {
-      _sync();
-    }
-  }
-
-  Future<void> _initialize() async {
-    final player = VideoPlayerController.networkUrl(
-      Uri.parse(
-        ref.read(appEnvironmentProvider).oaApiBaseUrl,
-      ).resolve('/vid/stella_0002.mp4'),
-      videoPlayerOptions: VideoPlayerOptions(
-        mixWithOthers: true,
-        allowBackgroundPlayback: true,
-      ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final uri = Uri.parse(
+      ref.watch(appEnvironmentProvider).oaApiBaseUrl,
+    ).resolve('/vid/stella_0002.mp4');
+    return LoopingVideoBackground(
+      key: ValueKey(uri),
+      uri: uri,
+      posterAsset: posterAsset,
     );
-    _player = player;
-    try {
-      await player.initialize();
-      if (!mounted) return;
-      await player.setVolume(0);
-      if (!mounted) return;
-      await player.setLooping(true);
-      if (!mounted) return;
-      setState(() => _ready = true);
-      _sync();
-    } catch (_) {
-      // The bundled poster remains usable when the remote video is unavailable.
-    }
   }
-
-  void _sync() {
-    if (!_ready) return;
-    if (_visible && _foreground) {
-      _player!.play();
-    } else {
-      _player!.pause();
-    }
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    _foreground = state == AppLifecycleState.resumed;
-    _sync();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    _player?.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => Stack(
-    fit: StackFit.expand,
-    children: [
-      Image.asset(
-        widget.posterAsset,
-        fit: BoxFit.cover,
-        excludeFromSemantics: true,
-      ),
-      if (_ready && _visible)
-        ValueListenableBuilder<VideoPlayerValue>(
-          valueListenable: _player!,
-          builder: (_, value, video) => value.hasError || value.size.isEmpty
-              ? const SizedBox.shrink()
-              : ClipRect(
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: SizedBox.fromSize(size: value.size, child: video),
-                  ),
-                ),
-          child: VideoPlayer(_player!),
-        ),
-    ],
-  );
 }

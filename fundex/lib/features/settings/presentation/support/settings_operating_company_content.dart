@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
-import '../../../../app/support/localized_static_document_url.dart';
-
 @immutable
 class SettingsOperatingCompanyContent {
   const SettingsOperatingCompanyContent({
@@ -22,10 +20,7 @@ class SettingsOperatingCompanyContent {
     required this.links,
   });
 
-  factory SettingsOperatingCompanyContent.fromJson(
-    Map<String, dynamic> json, {
-    String? localeTag,
-  }) {
+  factory SettingsOperatingCompanyContent.fromJson(Map<String, dynamic> json) {
     return SettingsOperatingCompanyContent(
       tradeName: json['tradeName']?.toString() ?? '',
       licenseNumber: json['licenseNumber']?.toString() ?? '',
@@ -38,14 +33,9 @@ class SettingsOperatingCompanyContent {
       business: json['business']?.toString() ?? '',
       manager: json['manager']?.toString() ?? '',
       copyright: json['copyright']?.toString() ?? '',
-      links: _listOfMap(json['links'])
-          .map(SettingsOperatingCompanyLink.fromJson)
-          .map(
-            (SettingsOperatingCompanyLink link) => localeTag == null
-                ? link
-                : link.withUrl(localizedStaticPdfUrl(link.url, localeTag)),
-          )
-          .toList(growable: false),
+      links: _listOfMap(
+        json['links'],
+      ).map(SettingsOperatingCompanyLink.fromJson).toList(growable: false),
     );
   }
 
@@ -114,7 +104,6 @@ class SettingsOperatingCompanyContent {
       );
       return SettingsOperatingCompanyContent.fromJson(
         Map<String, dynamic>.from(jsonDecode(raw) as Map),
-        localeTag: localeTag,
       );
     } catch (_) {
       final raw = await rootBundle.loadString(
@@ -122,7 +111,6 @@ class SettingsOperatingCompanyContent {
       );
       return SettingsOperatingCompanyContent.fromJson(
         Map<String, dynamic>.from(jsonDecode(raw) as Map),
-        localeTag: 'ja',
       );
     }
   }
@@ -158,11 +146,4 @@ class SettingsOperatingCompanyLink {
   final String title;
   final String icon;
   final String url;
-
-  SettingsOperatingCompanyLink withUrl(String url) {
-    if (url == this.url) {
-      return this;
-    }
-    return SettingsOperatingCompanyLink(title: title, icon: icon, url: url);
-  }
 }

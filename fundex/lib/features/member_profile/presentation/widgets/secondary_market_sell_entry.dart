@@ -15,31 +15,26 @@ class SecondaryMarketSellEntry extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final seed = buildDisplayedRecordSellSeed(record);
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: AppButton(
-          label: context.l10n.myPageResaleTabOrder,
-          onPressed: seed == null || seed.availableUnits <= 0
-              ? null
-              : () async {
-                  if (kDebugMode) {
-                    debugPrint(
-                      '[SecondaryMarketSellEntry] projectId=${seed.projectId} '
-                      'processId=${seed.fromProcessId} '
-                      'investNum=${record?.investNum} '
-                      'investNumValid=${record?.investNumValid} '
-                      'investNumRemaining=${record?.investNumRemaining} '
-                      'sellLimit=${seed.availableUnits}',
-                    );
-                  }
-                  await context.push('/my/secondary-market/sell', extra: seed);
-                  if (context.mounted) {
-                    ref.invalidate(myPageInvestmentListProvider);
-                  }
-                },
-        ),
-      ),
+    return AppButton(
+      label: context.l10n.myPageResaleTabOrder,
+      onPressed: seed == null || seed.availableUnits <= 0
+          ? null
+          : () async {
+              if (kDebugMode) {
+                debugPrint(
+                  '[SecondaryMarketSellEntry] projectId=${seed.projectId} '
+                  'processId=${seed.fromProcessId} '
+                  'investNum=${record?.investNum} '
+                  'investNumValid=${record?.investNumValid} '
+                  'investNumRemaining=${record?.investNumRemaining} '
+                  'sellLimit=${seed.availableUnits}',
+                );
+              }
+              await context.push('/my/secondary-market/sell', extra: seed);
+              if (context.mounted) {
+                ref.invalidate(myPageInvestmentListProvider);
+              }
+            },
     );
   }
 }

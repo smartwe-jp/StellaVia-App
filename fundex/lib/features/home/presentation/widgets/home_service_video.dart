@@ -1,6 +1,7 @@
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../app/widgets/looping_video_background.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../investment/presentation/widgets/fund_project_detail_video_player.dart';
 
@@ -20,10 +21,26 @@ class HomeServiceVideo extends StatelessWidget {
     final url = videoUrl.trim();
     if (url.isNotEmpty) {
       if (isFundProjectDirectPlayableVideoUrl(url)) {
-        return FundProjectDetailVideoPlayer(videoUrl: url);
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(UiTokens.radius16),
+          child: AspectRatio(
+            aspectRatio: 16 / 9,
+            child: LoopingVideoBackground(
+              key: ValueKey(url),
+              uri: Uri.parse(url),
+              posterAsset: 'assets/images/home_service_about.png',
+            ),
+          ),
+        );
       }
       if (isFundProjectYoutubeVideoUrl(url)) {
-        return FundProjectDetailYoutubePlayer(videoUrl: url);
+        return ModalRoute.isCurrentOf(context) == false
+            ? const AspectRatio(aspectRatio: 16 / 9)
+            : FundProjectDetailYoutubePlayer(
+                key: ValueKey(url),
+                videoUrl: url,
+                autoplayLoop: true,
+              );
       }
       return FundProjectDetailExternalVideoLinkRow(videoUrl: url);
     }

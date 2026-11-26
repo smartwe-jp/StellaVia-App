@@ -111,15 +111,15 @@ class _MyPageActiveFundDetailState
         ),
       ),
 
-      bottomNavigationBar: summary.projectStatus == 4
-          ? SecondaryMarketSellEntry(
-              record: initialSeed?.projectId == projectId ? initialSeed : null,
-            )
-          : null,
       body: RefreshIndicator(
         onRefresh: () => _refresh(ref, projectId: projectId),
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          padding: EdgeInsets.fromLTRB(
+            16,
+            16,
+            16,
+            24 + MediaQuery.paddingOf(context).bottom,
+          ),
           children: <Widget>[
             ActiveFundOverviewHeroCard(
               title: projectName,
@@ -345,6 +345,14 @@ class _MyPageActiveFundDetailState
                     ref.invalidate(myPageProjectBenefitProvider(projectId)),
               ),
             ),
+            if (summary.projectStatus == 4) ...[
+              const SizedBox(height: 16),
+              SecondaryMarketSellEntry(
+                record: initialSeed?.projectId == projectId
+                    ? initialSeed
+                    : null,
+              ),
+            ],
           ],
         ),
       ),

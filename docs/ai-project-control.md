@@ -28,6 +28,7 @@ Use three layers of coordination:
 - Shared SDK: `mobile_core_sdk/`
 - Main architecture: Clean Architecture + Riverpod.
 - Main feature layout: `data / domain / presentation` inside each feature.
+- Online policy PDFs use the Japanese document URLs in every UI language. Server-issued contract and report files are opened as supplied.
 - Shared UI, tokens, dialogs, cards, avatar, PDF/image/video helpers live in `mobile_core_sdk/packages/core_ui_kit`.
 - Shared API clients, DTOs, envelope parsing, push sync, auth, investment, wallet, member profile and contact clients live in `mobile_core_sdk/packages/company_api_runtime`.
 - Release/CI documentation lives in `docs/github-actions-release-flow.md`.

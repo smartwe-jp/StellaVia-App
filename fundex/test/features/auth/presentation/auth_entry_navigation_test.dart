@@ -331,7 +331,7 @@ void main() {
         final welcome = find.byType(GuestWelcomePage);
         expect(welcome, findsOneWidget);
         final l = AppLocalizations.of(tester.element(welcome));
-        await tester.tap(find.text(l.guestGuideLearn));
+        await tester.tap(find.byIcon(Icons.arrow_downward_rounded));
         await finishNavigation();
         expect(find.byType(HomeOverviewTabPage), findsOneWidget);
         expect(find.byType(AppBottomTabBar), findsNothing);
@@ -359,7 +359,19 @@ void main() {
         await tester.dragFrom(const Offset(1, 120), const Offset(400, 0));
         await finishNavigation();
         expect(welcome, findsOneWidget);
-        await tester.tap(find.text(l.guestGuideLearn));
+        final tagline = find.text(l.guestGuideTagline);
+        final restingY = tester.getCenter(tagline).dy;
+        final drag = await tester.startGesture(const Offset(160, 390));
+        await drag.moveBy(const Offset(0, -40));
+        await tester.pump();
+        await drag.moveBy(const Offset(0, -59));
+        await tester.pump();
+        expect(tester.getCenter(tagline).dy, lessThan(restingY));
+        await drag.up();
+        await finishNavigation();
+        expect(welcome, findsOneWidget);
+        expect(tester.getCenter(tagline).dy, closeTo(restingY, 1));
+        await tester.dragFrom(const Offset(160, 390), const Offset(0, -100));
         await finishNavigation();
         for (final entry in {
           l.homeFeaturedFundsTitle: l.fundListTitle,

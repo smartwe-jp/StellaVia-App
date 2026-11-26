@@ -325,7 +325,13 @@ String? extractFundProjectYoutubeVideoId(String rawUrl) {
 }
 
 class FundProjectDetailYoutubePlayer extends StatefulWidget {
-  const FundProjectDetailYoutubePlayer({super.key, required this.videoUrl});
+  const FundProjectDetailYoutubePlayer({
+    super.key,
+    required this.videoUrl,
+    this.autoplayLoop = false,
+  });
+
+  final bool autoplayLoop;
 
   final String videoUrl;
 
@@ -359,6 +365,7 @@ class _FundProjectDetailYoutubePlayerState
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
+        if (widget.autoplayLoop) _controller?.play();
         break;
       case AppLifecycleState.inactive:
       case AppLifecycleState.hidden:
@@ -391,9 +398,13 @@ class _FundProjectDetailYoutubePlayerState
     }
     final nextController = YoutubePlayerController(
       initialVideoId: videoId,
-      flags: const YoutubePlayerFlags(
-        autoPlay: false,
-        controlsVisibleAtStart: true,
+      flags: YoutubePlayerFlags(
+        autoPlay: widget.autoplayLoop,
+        loop: widget.autoplayLoop,
+        mute: widget.autoplayLoop,
+        hideControls: widget.autoplayLoop,
+        disableDragSeek: widget.autoplayLoop,
+        controlsVisibleAtStart: !widget.autoplayLoop,
         enableCaption: false,
       ),
     );
@@ -425,7 +436,7 @@ class _FundProjectDetailYoutubePlayerState
       child: YoutubePlayer(
         controller: controller,
         aspectRatio: 16 / 9,
-        showVideoProgressIndicator: true,
+        showVideoProgressIndicator: !widget.autoplayLoop,
         bottomActions: const <Widget>[
           SizedBox(width: 14),
           CurrentPosition(),
@@ -441,7 +452,9 @@ class _FundProjectDetailYoutubePlayerState
           bufferedColor: colors.onDark.withValues(alpha: 0.42),
           backgroundColor: colors.onDark.withValues(alpha: 0.22),
         ),
-        bufferIndicator: const Center(child: AppLoadingIndicator()),
+        bufferIndicator: widget.autoplayLoop
+            ? const SizedBox.shrink()
+            : const Center(child: AppLoadingIndicator()),
       ),
     );
   }
@@ -487,8 +500,7 @@ class _FundProjectVideoReadyState extends StatelessWidget {
               ),
             ),
           ),
-          if (value.isBuffering)
-            const Center(child: AppLoadingIndicator()),
+          if (value.isBuffering) const Center(child: AppLoadingIndicator()),
           if (!value.isPlaying)
             Center(
               child: _FundProjectVideoCenterButton(onPressed: onTogglePlayback),

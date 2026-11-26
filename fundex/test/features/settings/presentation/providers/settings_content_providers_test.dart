@@ -19,11 +19,11 @@ void main() {
       expect(traditional.business, '不動產特定共同事業、電子商務等業務');
       expect(
         simplified.termsConditionsUrl,
-        'https://stellavia.co.jp/terms_conditions.zh-hans.pdf',
+        'https://stellavia.co.jp/terms_conditions.ja.pdf',
       );
       expect(
         traditional.termsConditionsUrl,
-        'https://stellavia.co.jp/terms_conditions.zh-hant.pdf',
+        'https://stellavia.co.jp/terms_conditions.ja.pdf',
       );
     });
 
@@ -37,31 +37,40 @@ void main() {
       );
       expect(
         fallback.termsConditionsUrl,
-        'https://stellavia.co.jp/terms_conditions.en.pdf',
+        'https://stellavia.co.jp/terms_conditions.ja.pdf',
       );
     });
 
     test(
-      'uses localized pdf suffix while keeping document lookup available',
+      'every UI language opens the same five Japanese policy PDFs',
       () async {
-        final japanese = await SettingsOperatingCompanyContent.load('ja-JP');
-
-        expect(
-          japanese.termsConditionsUrl,
-          'https://stellavia.co.jp/terms_conditions.ja.pdf',
-        );
-        expect(
-          japanese.electronicInformationUrl,
-          'https://stellavia.co.jp/electronic_information.ja.pdf',
-        );
-        expect(
-          japanese.personalInformationUrl,
-          'https://stellavia.co.jp/personal_information.ja.pdf',
-        );
-        expect(
-          japanese.antiSocialRuleUrl,
-          'https://stellavia.co.jp/antisocialrule.ja.pdf',
-        );
+        for (final locale in [
+          'ja-JP',
+          'en-US',
+          'zh-CN',
+          'zh-Hant-HK',
+          'fr-FR',
+        ]) {
+          final content = await SettingsOperatingCompanyContent.load(locale);
+          const base = 'https://stellavia.co.jp/';
+          expect(content.termsConditionsUrl, '${base}terms_conditions.ja.pdf');
+          expect(
+            content.electronicInformationUrl,
+            '${base}electronic_information.ja.pdf',
+          );
+          expect(
+            content.personalInformationUrl,
+            '${base}personal_information.ja.pdf',
+          );
+          expect(content.antiSocialRuleUrl, '${base}antisocialrule.ja.pdf');
+          expect(content.links.map((link) => link.url), [
+            content.termsConditionsUrl,
+            content.electronicInformationUrl,
+            content.personalInformationUrl,
+            '${base}solicitation_policy.ja.pdf',
+            content.antiSocialRuleUrl,
+          ]);
+        }
       },
     );
   });
