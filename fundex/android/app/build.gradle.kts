@@ -119,16 +119,16 @@ android {
         create("dev") {
             dimension = "environment"
             versionNameSuffix = "-dev"
-            resValue("string", "app_name", "StellaVia Dev")
+            resValue("string", "app_name", "STELLAVIA DEV")
         }
         create("staging") {
             dimension = "environment"
             versionNameSuffix = "-staging"
-            resValue("string", "app_name", "StellaVia Staging")
+            resValue("string", "app_name", "STELLAVIA STAGING")
         }
         create("prod") {
             dimension = "environment"
-            resValue("string", "app_name", "StellaVia")
+            resValue("string", "app_name", "STELLAVIA")
         }
     }
 

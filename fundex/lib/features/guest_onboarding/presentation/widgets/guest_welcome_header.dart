@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/localization/app_locale_providers.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/widgets/stellavia_wordmark.dart';
 
 class GuestWelcomeHeader extends ConsumerWidget {
   const GuestWelcomeHeader({super.key});
@@ -23,16 +24,7 @@ class GuestWelcomeHeader extends ConsumerWidget {
             alignment: Alignment.centerLeft,
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: Text(
-                'STELLAVIA',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontFamily: 'Jost',
-                  color: white,
-                  fontSize: 21,
-                  letterSpacing: 2.8,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              child: StellaviaWordmark(color: white),
             ),
           ),
         ),

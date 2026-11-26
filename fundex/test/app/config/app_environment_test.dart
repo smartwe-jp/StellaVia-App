@@ -8,7 +8,7 @@ void main() {
       final env = EnvironmentFactory.fromFlavor(AppFlavor.dev);
 
       expect(env.flavor, AppFlavor.dev);
-      expect(env.appName, 'StellaVia Dev');
+      expect(env.appName, 'STELLAVIA DEV');
       expect(env.memberApiBaseUrl, 'https://testoa.gutingjun.com/api');
       expect(env.hotelApiBaseUrl, 'https://hotel-sit.gutingjun.com/api');
       expect(env.oaApiBaseUrl, 'https://testoa.gutingjun.com/api');
@@ -21,7 +21,7 @@ void main() {
       final env = EnvironmentFactory.fromFlavor(AppFlavor.staging);
 
       expect(env.flavor, AppFlavor.staging);
-      expect(env.appName, 'StellaVia Staging');
+      expect(env.appName, 'STELLAVIA STAGING');
       expect(env.memberApiBaseUrl, 'https://testoa.gutingjun.com/api');
       expect(env.hotelApiBaseUrl, 'https://hotel-sit.gutingjun.com/api');
       expect(env.oaApiBaseUrl, 'https://testoa.gutingjun.com/api');
@@ -34,7 +34,7 @@ void main() {
       final env = EnvironmentFactory.fromFlavor(AppFlavor.prod);
 
       expect(env.flavor, AppFlavor.prod);
-      expect(env.appName, 'StellaVia');
+      expect(env.appName, 'STELLAVIA');
       expect(env.memberApiBaseUrl, 'https://stellavia.co.jp/api');
       expect(env.hotelApiBaseUrl, 'https://hotel.gutingjun.com/api');
       expect(env.oaApiBaseUrl, 'https://stellavia.co.jp/api');

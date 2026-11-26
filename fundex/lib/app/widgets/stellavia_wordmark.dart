@@ -1,4 +1,3 @@
-import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 
 class StellaviaWordmark extends StatelessWidget {
@@ -9,11 +8,12 @@ class StellaviaWordmark extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Text(
     'STELLAVIA',
-    style: context.appTextTheme.numericTitle.copyWith(
+    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+      fontFamily: 'Jost',
       color: color,
-      fontSize: 18,
-      fontWeight: FontWeight.w600,
-      letterSpacing: 0,
+      fontSize: 21,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 2.8,
     ),
   );
 }

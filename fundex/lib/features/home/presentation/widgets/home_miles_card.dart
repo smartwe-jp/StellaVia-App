@@ -32,9 +32,8 @@ class HomeMilesCard extends StatelessWidget {
             children: [
               const HomeActionIcon(Icons.card_giftcard_outlined),
               const SizedBox(width: 12),
-              // Expanded(
-              //   child: 
-                Column(
+              Expanded(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -56,17 +55,18 @@ class HomeMilesCard extends StatelessWidget {
                     ),
                   ],
                 ),
-              //),
-              const Spacer(),
-              //Flexible(
-                //child: 
-                Text(
-                  context.l10n.homeBookWithMiles,
-                  textAlign: TextAlign.end,
-                  style: HomeTextStyles.smallLink(context),
+              ),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: Text(
+                    context.l10n.homeBookWithMiles,
+                    textAlign: TextAlign.end,
+                    style: HomeTextStyles.smallLink(context),
+                  ),
                 ),
-              //),
-
+              ),
               Icon(
                 Icons.chevron_right,
                 size: 16,

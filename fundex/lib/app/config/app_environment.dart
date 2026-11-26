@@ -94,7 +94,7 @@ class EnvironmentFactory {
       case AppFlavor.dev:
         return const AppEnvironment(
           flavor: AppFlavor.dev,
-          appName: 'StellaVia Dev',
+          appName: 'STELLAVIA DEV',
           memberApiBaseUrl: 'https://testoa.gutingjun.com/api',
           hotelApiBaseUrl: 'https://hotel-sit.gutingjun.com/api',
           oaApiBaseUrl: 'https://testoa.gutingjun.com/api',
@@ -105,7 +105,7 @@ class EnvironmentFactory {
       case AppFlavor.staging:
         return const AppEnvironment(
           flavor: AppFlavor.staging,
-          appName: 'StellaVia Staging',
+          appName: 'STELLAVIA STAGING',
           memberApiBaseUrl: 'https://testoa.gutingjun.com/api',
           hotelApiBaseUrl: 'https://hotel-sit.gutingjun.com/api',
           oaApiBaseUrl: 'https://testoa.gutingjun.com/api',
@@ -116,7 +116,7 @@ class EnvironmentFactory {
       case AppFlavor.prod:
         return const AppEnvironment(
           flavor: AppFlavor.prod,
-          appName: 'StellaVia',
+          appName: 'STELLAVIA',
           memberApiBaseUrl: 'https://stellavia.co.jp/api',
           hotelApiBaseUrl: 'https://hotel.gutingjun.com/api',
           oaApiBaseUrl: 'https://stellavia.co.jp/api',

@@ -23,11 +23,15 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           theme: AppThemeFactory.light(locale: locale),
-          home: Scaffold(body: HomeBrandIntro(ranks: const [], onServiceTap: () {})),
+          home: Scaffold(
+            body: HomeBrandIntro(ranks: const [], onServiceTap: () {}),
+          ),
         ),
       );
       await tester.pumpAndSettle();
-      final l10n = AppLocalizations.of(tester.element(find.byType(HomeBrandIntro)));
+      final l10n = AppLocalizations.of(
+        tester.element(find.byType(HomeBrandIntro)),
+      );
       expect(find.text(l10n.homeGuestBenefitsBody), findsOneWidget);
     }
   });
@@ -115,12 +119,6 @@ void main() {
                 ),
               ),
             );
-            await tester.runAsync(() async {
-              await precacheImage(
-                const AssetImage('assets/images/stellavia_wordmark_purple.png'),
-                tester.element(find.byType(HomeRedesignHeader)),
-              );
-            });
             await tester.pumpAndSettle();
             expect(
               tester.takeException(),
@@ -128,6 +126,14 @@ void main() {
               reason: '$locale member=$member width=$width',
             );
             final context = tester.element(find.byType(HomeBrandIntro));
+            final wordmark = tester.widget<Text>(
+              find.descendant(
+                of: find.byType(HomeRedesignHeader),
+                matching: find.text('STELLAVIA'),
+              ),
+            );
+            expect(wordmark.style?.fontSize, 21);
+            expect(wordmark.style?.color, context.appColors.primary);
             final l10n = AppLocalizations.of(context);
             final settings = find.byTooltip(l10n.mainTabSettings);
             if (member) {

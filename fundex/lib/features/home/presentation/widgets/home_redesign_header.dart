@@ -4,6 +4,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import '../../../member_profile/presentation/widgets/my_page_asset_summary.dart'
     show MyPageHeaderAction;
 import '../../../../app/localization/app_localizations_ext.dart';
+import '../../../../app/widgets/stellavia_wordmark.dart';
 
 class HomeRedesignHeader extends StatelessWidget {
   const HomeRedesignHeader({
@@ -39,15 +40,7 @@ class HomeRedesignHeader extends StatelessWidget {
                   child: FittedBox(
                     alignment: AlignmentDirectional.centerStart,
                     fit: BoxFit.scaleDown,
-                    child: Image.asset(
-                      Theme.of(context).brightness == Brightness.dark
-                          ? 'assets/images/stellavia_wordmark_white.png'
-                          : 'assets/images/stellavia_wordmark_purple.png',
-                      width: 120,
-                      height: 39,
-                      fit: BoxFit.contain,
-                      semanticLabel: 'STELLAVIA',
-                    ),
+                    child: StellaviaWordmark(color: colors.primary),
                   ),
                 ),
                 const SizedBox(width: 12),
