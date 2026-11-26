@@ -145,8 +145,10 @@ void main() {
 
         expect(await useCase.call(), isTrue);
         final complete = repository.profile!;
+        repository.profile = complete.copyWith(employer: '  ');
+        expect(await useCase.call(), isTrue);
         for (final invalid in [
-          complete.copyWith(employer: '  '),
+          complete.copyWith(occupationCode: ''),
           complete.copyWith(industry: ''),
           complete.copyWith(industry: 'UNKNOWN'),
         ]) {

@@ -5838,13 +5838,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memberProfileGivenNameKanaHint => 'TARO';
 
   @override
-  String get memberProfileFamilyNameRomanLabel => 'Family name (Roman)';
+  String get memberProfileFamilyNameRomanLabel =>
+      'Family name (Roman, uppercase)';
 
   @override
   String get memberProfileFamilyNameRomanHint => 'TANAKA';
 
   @override
-  String get memberProfileGivenNameRomanLabel => 'Given name (Roman)';
+  String get memberProfileGivenNameRomanLabel =>
+      'Given name (Roman, uppercase)';
 
   @override
   String get memberProfileGivenNameRomanHint => 'TARO';
@@ -5866,6 +5868,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get memberProfileSexOther => 'Other';
+
+  @override
+  String get memberCountryJapan => 'Japan';
+
+  @override
+  String get memberCountryUnitedStates => 'United States';
+
+  @override
+  String get memberCountryCanada => 'Canada';
+
+  @override
+  String get memberCountrySingapore => 'Singapore';
+
+  @override
+  String get memberCountryUnitedKingdom => 'United Kingdom';
+
+  @override
+  String get memberCountryChina => 'China';
+
+  @override
+  String get memberCountryHongKong => 'Hong Kong';
+
+  @override
+  String get memberCountryTaiwan => 'Taiwan';
+
+  @override
+  String get memberCountrySouthKorea => 'South Korea';
+
+  @override
+  String get memberCountryTurkey => 'Turkey';
+
+  @override
+  String get memberCountryGermany => 'Germany';
+
+  @override
+  String get memberCountryFrance => 'France';
+
+  @override
+  String get memberCountryThailand => 'Thailand';
+
+  @override
+  String get memberCountryMalaysia => 'Malaysia';
+
+  @override
+  String get memberCountryAustralia => 'Australia';
+
+  @override
+  String get memberCountryRussia => 'Russia';
+
+  @override
+  String get memberCountryPhilippines => 'Philippines';
+
+  @override
+  String get memberCountryOther => 'Other';
 
   @override
   String get memberProfileNationalityLabel => 'Nationality';

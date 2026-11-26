@@ -381,12 +381,12 @@ class _MemberProfileEditFlowPageState
         _nationalityController.text = _firstNonEmpty([
           savedProfile?.nationality ?? '',
           authUser?.nationality ?? '',
-          l10n.memberProfileTaxCountryHint,
+          '日本',
         ]);
         _taxCountryController.text = _firstNonEmpty(<String>[
           savedProfile?.taxcountry ?? '',
           authUser?.taxcountry ?? '',
-          l10n.memberProfileTaxCountryHint,
+          '日本',
         ]);
         _prefectureController.text = _firstNonEmpty(<String>[
           savedPrefectureFromAddress,
@@ -827,8 +827,7 @@ class _MemberProfileEditFlowPageState
       setState(() => _currentStep = MemberProfileEditStep.realPersonAuth);
       return;
     }
-    if (!memberIndustryCodes.contains(_industry) ||
-        !_isFilled(_employerController.text)) {
+    if (!memberIndustryCodes.contains(_industry) || !_isFilled(_occupation)) {
       setState(() => _currentStep = MemberProfileEditStep.suitability);
       await _persistOnboardingDraft();
       return;
@@ -1004,7 +1003,6 @@ class _MemberProfileEditFlowPageState
 
   bool get _isSuitabilityStepReady =>
       memberIndustryCodes.contains(_industry) &&
-      _isFilled(_employerController.text) &&
       _isFilled(_occupation) &&
       _isFilled(_annualIncome) &&
       _isFilled(_financialAssets) &&

@@ -238,6 +238,37 @@ void main() {
           form.taxCountryController.text,
           taxcountry.isEmpty ? '日本' : taxcountry,
         );
+        final selectors = tester.widgetList<MemberProfileSelectField<String>>(
+          find.byType(MemberProfileSelectField<String>),
+        );
+        expect(selectors, hasLength(2));
+        for (final selector in selectors) {
+          expect(selector.items.take(7).map((item) => item.value), [
+            '日本',
+            'アメリカ',
+            'カナダ',
+            'シンガポール',
+            'イギリス',
+            '中国',
+            '香港',
+          ]);
+          expect(
+            selector.items.any((item) => item.value == selector.value),
+            isTrue,
+          );
+        }
+        expect(
+          (form.sexItems.singleWhere((item) => item.value == 2).child as Text)
+              .data,
+          'その他',
+        );
+        selectors.first.onChanged!('カナダ');
+        await tester.pump();
+        expect(form.nationalityController.text, 'カナダ');
+        expect(
+          form.taxCountryController.text,
+          taxcountry.isEmpty ? '日本' : taxcountry,
+        );
       },
     );
   }

@@ -10578,7 +10578,7 @@ abstract class AppLocalizations {
   /// No description provided for @memberProfileFamilyNameRomanLabel.
   ///
   /// In en, this message translates to:
-  /// **'Family name (Roman)'**
+  /// **'Family name (Roman, uppercase)'**
   String get memberProfileFamilyNameRomanLabel;
 
   /// No description provided for @memberProfileFamilyNameRomanHint.
@@ -10590,7 +10590,7 @@ abstract class AppLocalizations {
   /// No description provided for @memberProfileGivenNameRomanLabel.
   ///
   /// In en, this message translates to:
-  /// **'Given name (Roman)'**
+  /// **'Given name (Roman, uppercase)'**
   String get memberProfileGivenNameRomanLabel;
 
   /// No description provided for @memberProfileGivenNameRomanHint.
@@ -10634,6 +10634,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Other'**
   String get memberProfileSexOther;
+
+  /// No description provided for @memberCountryJapan.
+  ///
+  /// In en, this message translates to:
+  /// **'Japan'**
+  String get memberCountryJapan;
+
+  /// No description provided for @memberCountryUnitedStates.
+  ///
+  /// In en, this message translates to:
+  /// **'United States'**
+  String get memberCountryUnitedStates;
+
+  /// No description provided for @memberCountryCanada.
+  ///
+  /// In en, this message translates to:
+  /// **'Canada'**
+  String get memberCountryCanada;
+
+  /// No description provided for @memberCountrySingapore.
+  ///
+  /// In en, this message translates to:
+  /// **'Singapore'**
+  String get memberCountrySingapore;
+
+  /// No description provided for @memberCountryUnitedKingdom.
+  ///
+  /// In en, this message translates to:
+  /// **'United Kingdom'**
+  String get memberCountryUnitedKingdom;
+
+  /// No description provided for @memberCountryChina.
+  ///
+  /// In en, this message translates to:
+  /// **'China'**
+  String get memberCountryChina;
+
+  /// No description provided for @memberCountryHongKong.
+  ///
+  /// In en, this message translates to:
+  /// **'Hong Kong'**
+  String get memberCountryHongKong;
+
+  /// No description provided for @memberCountryTaiwan.
+  ///
+  /// In en, this message translates to:
+  /// **'Taiwan'**
+  String get memberCountryTaiwan;
+
+  /// No description provided for @memberCountrySouthKorea.
+  ///
+  /// In en, this message translates to:
+  /// **'South Korea'**
+  String get memberCountrySouthKorea;
+
+  /// No description provided for @memberCountryTurkey.
+  ///
+  /// In en, this message translates to:
+  /// **'Turkey'**
+  String get memberCountryTurkey;
+
+  /// No description provided for @memberCountryGermany.
+  ///
+  /// In en, this message translates to:
+  /// **'Germany'**
+  String get memberCountryGermany;
+
+  /// No description provided for @memberCountryFrance.
+  ///
+  /// In en, this message translates to:
+  /// **'France'**
+  String get memberCountryFrance;
+
+  /// No description provided for @memberCountryThailand.
+  ///
+  /// In en, this message translates to:
+  /// **'Thailand'**
+  String get memberCountryThailand;
+
+  /// No description provided for @memberCountryMalaysia.
+  ///
+  /// In en, this message translates to:
+  /// **'Malaysia'**
+  String get memberCountryMalaysia;
+
+  /// No description provided for @memberCountryAustralia.
+  ///
+  /// In en, this message translates to:
+  /// **'Australia'**
+  String get memberCountryAustralia;
+
+  /// No description provided for @memberCountryRussia.
+  ///
+  /// In en, this message translates to:
+  /// **'Russia'**
+  String get memberCountryRussia;
+
+  /// No description provided for @memberCountryPhilippines.
+  ///
+  /// In en, this message translates to:
+  /// **'Philippines'**
+  String get memberCountryPhilippines;
+
+  /// No description provided for @memberCountryOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get memberCountryOther;
 
   /// No description provided for @memberProfileNationalityLabel.
   ///

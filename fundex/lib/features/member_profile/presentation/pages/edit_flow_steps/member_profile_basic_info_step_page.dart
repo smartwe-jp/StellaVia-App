@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../../../app/localization/app_localizations_ext.dart';
+import '../../widgets/member_profile_country_field.dart';
 
 class MemberProfileBasicInfoStepPage extends StatelessWidget {
   const MemberProfileBasicInfoStepPage({
@@ -125,34 +126,22 @@ class MemberProfileBasicInfoStepPage extends StatelessWidget {
             isRequired: true,
           ),
           const SizedBox(height: 14),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: MemberProfileSelectField<int>(
-                  label: l10n.memberProfileSexLabel,
-                  value: sexValue,
-                  items: sexItems,
-                  onChanged: onSexChanged,
-                  isRequired: true,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: MemberProfileTextField(
-                  label: l10n.memberProfileTaxCountryLabel,
-                  controller: taxCountryController,
-                  hintText: l10n.memberProfileTaxCountryHint,
-                  isRequired: true,
-                ),
-              ),
-            ],
+          MemberProfileSelectField<int>(
+            label: l10n.memberProfileSexLabel,
+            value: sexValue,
+            items: sexItems,
+            onChanged: onSexChanged,
+            isRequired: true,
           ),
           const SizedBox(height: 14),
-          MemberProfileTextField(
+          MemberProfileCountryField(
             label: l10n.memberProfileNationalityLabel,
             controller: nationalityController,
-            isRequired: true,
+          ),
+          const SizedBox(height: 14),
+          MemberProfileCountryField(
+            label: l10n.memberProfileTaxCountryLabel,
+            controller: taxCountryController,
           ),
           if (showAgeWarning) ...<Widget>[
             const SizedBox(height: 12),

@@ -97,6 +97,7 @@ class MemberProfileSuitabilityStepPage extends StatelessWidget {
         children: <Widget>[
           MemberProfileSelectField<String>(
             label: l10n.memberProfileOccupationLabel,
+            isRequired: true,
             value: occupation,
             items: occupationItems,
             onChanged: onOccupationChanged,
@@ -119,7 +120,6 @@ class MemberProfileSuitabilityStepPage extends StatelessWidget {
           MemberProfileTextField(
             label: l10n.memberEmployerLabel,
             controller: employerController,
-            isRequired: true,
           ),
           const SizedBox(height: 14),
           MemberProfileSelectField<String>(

@@ -43,7 +43,7 @@ Successful registration exchanges the one-time UUID immediately for an OAuth ses
 
 Personal verification collects nationality and country of tax residence separately. After document upload, the member completes live face verification, then fills or skips the bank account before consent. Skipping the bank omits it from the submission. Document examples are bundled with the app.
 
-Personal member suitability requires an industry from the nine supported codes and a nonblank employer for every occupation. Read the industry from `suitabilityInfo.industry` and submit it in `suitabilityRequest.industry`. Read and submit the employer in `baseInfo.employer`.
+Nationality and tax residence use the same ordered country list and preserve legacy text values. Personal suitability requires occupation and an industry from the nine supported codes. Employer is optional, and clearing it submits an empty string. Read the industry from `suitabilityInfo.industry` and submit it in `suitabilityRequest.industry`. Read and submit the employer in `baseInfo.employer`.
 
 ### Corporate verification planning (2026-11-19)
 

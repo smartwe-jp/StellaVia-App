@@ -201,7 +201,6 @@ abstract class MemberProfileDetails with _$MemberProfileDetails {
       (cityAddress.trim().isNotEmpty || address.trim().isNotEmpty);
 
   bool get _isSuitabilityStepComplete =>
-      employer.trim().isNotEmpty &&
       memberIndustryCodes.contains(industry) &&
       occupationCode.trim().isNotEmpty &&
       annualIncomeCode.trim().isNotEmpty &&

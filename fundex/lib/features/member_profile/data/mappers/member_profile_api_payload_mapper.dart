@@ -50,8 +50,7 @@ class MemberProfileApiPayloadMapper {
       authUser?.taxcountry ?? '',
     ]);
     final baseInfo = <String, dynamic>{
-      if (profile.employer.trim().isNotEmpty)
-        'employer': profile.employer.trim(),
+      'employer': profile.employer.trim(),
       'firstName': familyName,
       'lastName': givenName,
       'firstNameEn': givenNameEn,

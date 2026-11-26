@@ -5503,13 +5503,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get memberProfileGivenNameKanaHint => 'タロウ';
 
   @override
-  String get memberProfileFamilyNameRomanLabel => '姓（罗马字）';
+  String get memberProfileFamilyNameRomanLabel => '姓（罗马字/大写）';
 
   @override
   String get memberProfileFamilyNameRomanHint => 'TANAKA';
 
   @override
-  String get memberProfileGivenNameRomanLabel => '名（罗马字）';
+  String get memberProfileGivenNameRomanLabel => '名（罗马字/大写）';
 
   @override
   String get memberProfileGivenNameRomanHint => 'TARO';
@@ -5531,6 +5531,60 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get memberProfileSexOther => '其他';
+
+  @override
+  String get memberCountryJapan => '日本';
+
+  @override
+  String get memberCountryUnitedStates => '美国';
+
+  @override
+  String get memberCountryCanada => '加拿大';
+
+  @override
+  String get memberCountrySingapore => '新加坡';
+
+  @override
+  String get memberCountryUnitedKingdom => '英国';
+
+  @override
+  String get memberCountryChina => '中国';
+
+  @override
+  String get memberCountryHongKong => '香港';
+
+  @override
+  String get memberCountryTaiwan => '台湾';
+
+  @override
+  String get memberCountrySouthKorea => '韩国';
+
+  @override
+  String get memberCountryTurkey => '土耳其';
+
+  @override
+  String get memberCountryGermany => '德国';
+
+  @override
+  String get memberCountryFrance => '法国';
+
+  @override
+  String get memberCountryThailand => '泰国';
+
+  @override
+  String get memberCountryMalaysia => '马来西亚';
+
+  @override
+  String get memberCountryAustralia => '澳大利亚';
+
+  @override
+  String get memberCountryRussia => '俄罗斯';
+
+  @override
+  String get memberCountryPhilippines => '菲律宾';
+
+  @override
+  String get memberCountryOther => '其他';
 
   @override
   String get memberProfileNationalityLabel => '国籍';
@@ -13577,13 +13631,13 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get memberProfileGivenNameKanaHint => 'タロウ';
 
   @override
-  String get memberProfileFamilyNameRomanLabel => '姓（羅馬字）';
+  String get memberProfileFamilyNameRomanLabel => '姓（羅馬字/大寫）';
 
   @override
   String get memberProfileFamilyNameRomanHint => 'TANAKA';
 
   @override
-  String get memberProfileGivenNameRomanLabel => '名（羅馬字）';
+  String get memberProfileGivenNameRomanLabel => '名（羅馬字/大寫）';
 
   @override
   String get memberProfileGivenNameRomanHint => 'TARO';
@@ -13605,6 +13659,60 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get memberProfileSexOther => '其他';
+
+  @override
+  String get memberCountryJapan => '日本';
+
+  @override
+  String get memberCountryUnitedStates => '美國';
+
+  @override
+  String get memberCountryCanada => '加拿大';
+
+  @override
+  String get memberCountrySingapore => '新加坡';
+
+  @override
+  String get memberCountryUnitedKingdom => '英國';
+
+  @override
+  String get memberCountryChina => '中國';
+
+  @override
+  String get memberCountryHongKong => '香港';
+
+  @override
+  String get memberCountryTaiwan => '台灣';
+
+  @override
+  String get memberCountrySouthKorea => '韓國';
+
+  @override
+  String get memberCountryTurkey => '土耳其';
+
+  @override
+  String get memberCountryGermany => '德國';
+
+  @override
+  String get memberCountryFrance => '法國';
+
+  @override
+  String get memberCountryThailand => '泰國';
+
+  @override
+  String get memberCountryMalaysia => '馬來西亞';
+
+  @override
+  String get memberCountryAustralia => '澳洲';
+
+  @override
+  String get memberCountryRussia => '俄羅斯';
+
+  @override
+  String get memberCountryPhilippines => '菲律賓';
+
+  @override
+  String get memberCountryOther => '其他';
 
   @override
   String get memberProfileNationalityLabel => '國籍';

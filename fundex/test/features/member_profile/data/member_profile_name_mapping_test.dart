@@ -30,6 +30,15 @@ void main() {
     expect(request['baseInfo']['employer'], 'ACME');
     expect(request['suitabilityRequest']['industry'], 'IT');
   });
+  test('sends a cleared employer', () {
+    final profile = MemberProfileCurrentUserPayloadMapper.toEntity({
+      'baseInfo': {'employer': 'ACME'},
+    })!;
+    final request = MemberProfileApiPayloadMapper.toSaveMemberInfoRequest(
+      profile: profile.copyWith(employer: '  '),
+    );
+    expect(request['baseInfo']['employer'], '');
+  });
   group('member profile name mapping', () {
     test(
       'reads server lastNameEn as family roman name and firstNameEn as given roman name',
