@@ -2,6 +2,7 @@ export 'src/envelope/legacy_envelope_codec.dart';
 export 'src/envelope/company_api_response_profiles.dart';
 export 'src/routing/api_cluster_router.dart';
 export 'src/auth/auth_api_client.dart';
+export 'src/auth/auth_error_message.dart';
 export 'src/auth/auth_dtos.dart';
 export 'src/channel/channel_api_client.dart';
 export 'src/channel/channel_dtos.dart';

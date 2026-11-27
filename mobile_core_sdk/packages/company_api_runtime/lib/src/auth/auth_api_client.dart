@@ -3,6 +3,7 @@ import 'package:encrypt/encrypt.dart' as crypto;
 
 import '../envelope/legacy_envelope_codec.dart';
 import 'auth_dtos.dart';
+import 'auth_error_message.dart';
 
 typedef AuthDioForPath = Dio Function(String path);
 
@@ -97,9 +98,9 @@ class AuthApiClient {
             queryParameters: <String, dynamic>{'email': normalizedAccount},
             options: authRequired(false),
           );
-      _assertLegacyBoolSuccessIfPresent(
+      _checkAuthEnvelope(
         _envelopeCodec.toJsonMap(response.data),
-        fallbackMessage: 'Failed to send login code.',
+        requireTruthyData: true,
       );
       return;
     }
@@ -115,9 +116,9 @@ class AuthApiClient {
         false,
       ).copyWith(contentType: Headers.formUrlEncodedContentType),
     );
-    _assertLegacyBoolSuccessIfPresent(
+    _checkAuthEnvelope(
       _envelopeCodec.toJsonMap(response.data),
-      fallbackMessage: 'Failed to send login code.',
+      requireTruthyData: true,
     );
   }
 
@@ -137,9 +138,9 @@ class AuthApiClient {
             queryParameters: <String, dynamic>{'email': normalizedAccount},
             options: authRequired(false),
           );
-      _assertEnvelopeSuccessAllowZero(
+      _checkAuthEnvelope(
         _envelopeCodec.toJsonMap(response.data),
-        fallbackMessage: 'Failed to send registration code.',
+        allowZero: true,
       );
       return;
     }
@@ -156,9 +157,9 @@ class AuthApiClient {
             false,
           ).copyWith(contentType: Headers.formUrlEncodedContentType),
         );
-    _assertLegacyBoolSuccessIfPresent(
+    _checkAuthEnvelope(
       _envelopeCodec.toJsonMap(response.data),
-      fallbackMessage: 'Failed to send registration code.',
+      requireTruthyData: true,
     );
   }
 
@@ -338,15 +339,8 @@ class AuthApiClient {
         ),
       );
     } on DioException catch (error) {
-      final payload = _envelopeCodec.toJsonMap(error.response?.data);
-      if (payload.isNotEmpty) {
-        throw StateError(
-          _envelopeCodec.resolveErrorMessage(
-            payload,
-            fallbackMessage: 'Login failed.',
-          ),
-        );
-      }
+      final message = authErrorMessage(error);
+      if (message != null) throw StateError(message);
       rethrow;
     }
 
@@ -373,10 +367,15 @@ class AuthApiClient {
   }
 
   AuthLoginResultDto _loginResult(Response<Map<String, dynamic>> response) {
-    final payload = _extractTokenPayload(
-      _envelopeCodec.toJsonMap(response.data),
-      fallbackMessage: 'Login failed.',
-    );
+    final body = _envelopeCodec.toJsonMap(response.data);
+    if (!_hasOauthTokenFields(body)) {
+      if (_looksLikeOauthErrorPayload(body))
+        throw StateError(authResponseMessage(body) ?? '');
+      _checkAuthEnvelope(body);
+    }
+    final payload = _hasOauthTokenFields(body)
+        ? body
+        : _envelopeCodec.extractDataMap(body, fallbackMessage: '');
     final session = AuthSessionDto.fromJson(payload);
     final user = AuthUserDto.tryFromLoginPayload(payload);
     return AuthLoginResultDto(session: session, user: user);
@@ -473,19 +472,8 @@ class AuthApiClient {
     final body = response.data;
     if (body is String && body.trim().isNotEmpty) return body.trim();
     final payload = _envelopeCodec.toJsonMap(response.data);
-    _assertEnvelopeSuccessAllowZero(
-      payload,
-      fallbackMessage: 'Registration failed.',
-    );
+    _checkAuthEnvelope(payload, allowZero: true, requireTruthyData: true);
     final data = payload['data'];
-    if (!_envelopeCodec.isTruthyData(data)) {
-      throw StateError(
-        _envelopeCodec.resolveErrorMessage(
-          payload,
-          fallbackMessage: 'Registration failed.',
-        ),
-      );
-    }
     final uuid = data is Map ? data['uuid'] : payload['uuid'] ?? data;
     return uuid is String && uuid.trim().isNotEmpty ? uuid.trim() : null;
   }
@@ -595,15 +583,22 @@ class AuthApiClient {
         payload.containsKey('error');
   }
 
-  void _assertLegacyBoolSuccessIfPresent(
+  void _checkAuthEnvelope(
     Map<String, dynamic> payload, {
-    required String fallbackMessage,
+    bool allowZero = false,
+    bool requireTruthyData = false,
   }) {
-    _envelopeCodec.assertSuccessIfEnvelope(
-      payload,
-      fallbackMessage: fallbackMessage,
-      requireTruthyData: true,
-    );
+    if (!_envelopeCodec.looksLikeEnvelope(payload)) return;
+    final profile = _envelopeCodec.profile;
+    final code = payload[profile.codeKey];
+    final success = allowZero
+        ? const {'0', '200'}.contains(code?.toString().trim())
+        : _envelopeCodec.isSuccessCode(code);
+    if (!success ||
+        (requireTruthyData &&
+            !_envelopeCodec.isTruthyData(payload[profile.dataKey]))) {
+      throw StateError(authResponseMessage(payload) ?? '');
+    }
   }
 
   void _assertEnvelopeSuccessAllowZero(

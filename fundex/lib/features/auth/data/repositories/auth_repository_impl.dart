@@ -1,3 +1,5 @@
+import 'package:company_api_runtime/company_api_runtime.dart'
+    show authErrorMessage;
 import 'package:core_network/core_network.dart';
 
 import '../../domain/entities/auth_session.dart';
@@ -140,8 +142,12 @@ class AuthRepositoryImpl implements AuthRepository {
     );
 
     if (uuid == null) throw const RegistrationSignInRequired();
+    final result = await _remote.loginWithRegistrationUuid(uuid).catchError((
+      Object error,
+    ) {
+      throw RegistrationSignInRequired(authErrorMessage(error));
+    });
     try {
-      final result = await _remote.loginWithRegistrationUuid(uuid);
       await _tokenStore.save(
         TokenPair(
           accessToken: result.session.accessToken,

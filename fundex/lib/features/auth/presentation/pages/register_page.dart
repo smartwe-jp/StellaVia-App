@@ -1,5 +1,4 @@
 import 'package:company_api_runtime/company_api_runtime.dart';
-import 'package:core_network/core_network.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -106,16 +105,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     return openAppPdfViewer(context, url: normalizedUrl, title: title);
   }
 
-  String _resolveErrorMessage(Object error, String fallback) {
-    if (error is StateError) {
-      return error.message.toString();
-    }
-    if (error is NetworkFailure) {
-      return error.message;
-    }
-    return fallback;
-  }
-
   Future<void> _sendCode() async {
     final l10n = context.l10n;
     if (!await _ensureValidAccountInput()) {
@@ -146,7 +135,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       }
       AppNotice.show(
         context,
-        message: _resolveErrorMessage(error, l10n.registerSubmitFailed),
+        message: authErrorMessage(error) ?? l10n.loginErrorSendCodeFailed,
       );
     } finally {
       if (mounted) {
@@ -179,9 +168,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
             intlCode: AuthApiDefaults.defaultIntlCode,
             inviteCode: _inviteCodeController.text.trim(),
           );
-    } on RegistrationSignInRequired {
+    } on RegistrationSignInRequired catch (error) {
       if (!mounted) return;
-      AppNotice.show(context, message: l10n.registerSuccessMessage);
+      AppNotice.show(
+        context,
+        message: [l10n.registerSuccessMessage, ?error.serverMessage].join('\n'),
+      );
       context.go('/login', extra: _accountValue);
       return;
     } catch (error) {
@@ -194,7 +186,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       await AppDialogs.showAdaptiveAlert<void>(
         context: context,
         title: l10n.registerPolicyTitle,
-        message: _resolveErrorMessage(error, l10n.registerSubmitFailed),
+        message: authErrorMessage(error) ?? l10n.registerSubmitFailed,
         actions: <AppDialogAction<void>>[
           AppDialogAction<void>(label: l10n.commonOk, isDefaultAction: true),
         ],

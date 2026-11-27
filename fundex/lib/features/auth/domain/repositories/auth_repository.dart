@@ -1,7 +1,8 @@
 import '../entities/auth_session.dart';
 
 class RegistrationSignInRequired implements Exception {
-  const RegistrationSignInRequired();
+  const RegistrationSignInRequired([this.serverMessage]);
+  final String? serverMessage;
 }
 
 abstract class AuthRepository {

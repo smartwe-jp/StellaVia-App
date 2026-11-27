@@ -102,6 +102,7 @@ void main() {
     await controller.sendCode();
 
     expect(controller.state.errorKey, AuthErrorKey.sendCodeFailed);
+    expect(controller.state.errorMessage, isNull);
   });
 
   test('login failure keeps backend message', () async {

@@ -1,4 +1,4 @@
-import 'package:core_network/core_network.dart';
+import 'package:company_api_runtime/company_api_runtime.dart';
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,16 +57,6 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
         !_isSubmitting;
   }
 
-  String _resolveErrorMessage(Object error, String fallback) {
-    if (error is StateError) {
-      return error.message.toString();
-    }
-    if (error is NetworkFailure) {
-      return error.message;
-    }
-    return fallback;
-  }
-
   String _sendCodeButtonLabel(String defaultLabel) {
     if (!_sendCodeCooldown.isActive) {
       return defaultLabel;
@@ -98,10 +88,8 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
       }
       AppNotice.show(
         context,
-        message: _resolveErrorMessage(
-          error,
-          context.l10n.forgotPasswordRecoverFailed,
-        ),
+        message:
+            authErrorMessage(error) ?? context.l10n.loginErrorSendCodeFailed,
       );
     } finally {
       if (mounted) {
@@ -137,7 +125,7 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
       await AppDialogs.showAdaptiveAlert<void>(
         context: context,
         title: l10n.forgotPasswordTitle,
-        message: _resolveErrorMessage(error, l10n.forgotPasswordRecoverFailed),
+        message: authErrorMessage(error) ?? l10n.forgotPasswordRecoverFailed,
         actions: <AppDialogAction<void>>[
           AppDialogAction<void>(label: l10n.commonOk, isDefaultAction: true),
         ],
