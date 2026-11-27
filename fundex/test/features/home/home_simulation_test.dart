@@ -186,12 +186,14 @@ void main() {
               ),
             ],
           );
+          final hotelRequests = <int>[];
           final capture = GlobalKey();
           await tester.pumpWidget(
             ProviderScope(
               overrides: [
-                simulationHotelsProvider.overrideWith(
-                  (ref, points) async => [
+                simulationHotelsProvider.overrideWith((ref, points) async {
+                  hotelRequests.add(points);
+                  return [
                     for (var i = 0; i < 8; i++)
                       PointsHotel(
                         id: (42 + i).toString(),
@@ -201,8 +203,8 @@ void main() {
                         referenceCheckIn: DateTime(2026, 11, 22),
                         referenceCheckOut: DateTime(2026, 11, 23),
                       ),
-                  ],
-                ),
+                  ];
+                }),
                 isAuthenticatedProvider.overrideWithValue(AsyncData(member)),
                 hostMilesRepositoryProvider.overrideWithValue(FakeRules()),
               ],
@@ -219,6 +221,25 @@ void main() {
           );
           await tester.pumpAndSettle();
           expect(tester.takeException(), isNull);
+          expect(hotelRequests, isEmpty);
+          expect(find.text('¥5,000'), findsNothing);
+          final strings = AppLocalizations.of(
+            tester.element(find.byType(HomeSimulationPage)),
+          );
+          final initialSlider = tester.widget<Slider>(
+            find.byKey(const ValueKey('simulation-amount')),
+          );
+          for (final value in [101.0, 105.0, 100.0]) {
+            initialSlider.onChanged!(value);
+            await tester.pump(const Duration(milliseconds: 400));
+          }
+          expect(find.text(strings.simReadyToRun), findsOneWidget);
+          expect(hotelRequests, isEmpty);
+          final run = find.text(strings.simRunAction);
+          await tester.ensureVisible(run);
+          await tester.tap(run);
+          await tester.pumpAndSettle();
+          expect(hotelRequests, [63000]);
           expect(find.text('¥5,000'), findsOneWidget);
           expect(find.text('¥1,060,000'), findsOneWidget);
           expect(find.text('FINANCIAL RETURN'), findsOneWidget);
@@ -265,13 +286,6 @@ void main() {
             );
             await tester.pumpAndSettle();
           }
-          final strings = AppLocalizations.of(
-            tester.element(find.byType(HomeSimulationPage)),
-          );
-          final run = find.text(strings.simRunAction);
-          await tester.ensureVisible(run);
-          await tester.tap(run);
-          await tester.pumpAndSettle();
           expect(find.text('Kyoto Test'), findsOneWidget);
           final rail = find.descendant(
             of: find.byType(SimulationHotelResults),
@@ -354,11 +368,23 @@ void main() {
           );
           slider.onChanged!(24);
           await tester.pumpAndSettle();
-          expect(find.text('¥1,120,000'), findsOneWidget);
-          expect(find.text('¥120,000'), findsOneWidget);
-          await tester.tap(find.byKey(const ValueKey('simulation-capital')));
+          expect(find.text(strings.simConditionsChanged), findsOneWidget);
+          expect(find.text('¥1,060,000'), findsOneWidget);
+          expect(find.text('¥1,120,000'), findsNothing);
+          expect(find.byType(SimulationHotelResults), findsNothing);
+          expect(hotelRequests, [63000]);
+          final capital = find.byKey(const ValueKey('simulation-capital'));
+          await tester.ensureVisible(capital);
+          await tester.tap(capital);
           await tester.pumpAndSettle();
+          expect(hotelRequests, [63000]);
+          await tester.ensureVisible(run);
+          await tester.tap(run);
+          await tester.pumpAndSettle();
+          expect(find.text(strings.simConditionsChanged), findsNothing);
+          expect(find.text('¥1,120,000'), findsOneWidget);
           expect(find.text('¥120,000'), findsNWidgets(2));
+          expect(hotelRequests, [63000, 126000]);
           tester.view.physicalSize = const Size(320, 852);
           tester.platformDispatcher.textScaleFactorTestValue = 1.3;
           await tester.pumpAndSettle();

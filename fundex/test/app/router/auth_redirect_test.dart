@@ -35,6 +35,8 @@ void main() {
         ]) {
           for (final path in [
             '/home/service',
+            '/home/features',
+            '/home/miles',
             '/home/ranks',
             '/home/simulation',
           ]) {

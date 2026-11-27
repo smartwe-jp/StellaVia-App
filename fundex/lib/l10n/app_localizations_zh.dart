@@ -6255,6 +6255,216 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeGuestBenefitsBody => '未来的安心，当下的乐趣。';
 
   @override
+  String get bannerFeatures => '服务特色';
+
+  @override
+  String get featuresInvestmentKicker => 'Why STELLAVIA — Investment';
+
+  @override
+  String get featuresStayKicker => 'Why STELLAVIA — Hotel Stay';
+
+  @override
+  String get featuresFaqEyebrow => 'FAQ';
+
+  @override
+  String get featuresDetailTitle => 'STELLAVIA 服务特色';
+
+  @override
+  String get featuresFuture1Title => '每份1万日元起，\n成为酒店宿主';
+
+  @override
+  String get featuresFuture1Body => '每份1万日元起即可投资宿主基金。无需大额资金，也能从小额开始投资酒店。';
+
+  @override
+  String get featuresFuture2Title => '不必受日常买卖判断束缚，\n培育未来资产';
+
+  @override
+  String get featuresFuture2Body =>
+      '预期收益率与运用期间在募集时明确告知，因此无需盯着行情判断买卖，可迈向中长期资产形成。';
+
+  @override
+  String get featuresFuture3Title => '手续费免费，\n亦可中途出售';
+
+  @override
+  String get featuresFuture3Body => '一边领取每月分红，一边可免费手续费中途出售。可随人生规划变化，灵活制定投资计划。';
+
+  @override
+  String get featuresFutureNote =>
+      '※ 收益率与运用期间均为预估，不保证未来的运用成果。\n※ 受房地产市场等因素影响，损益可能波动。\n※ 每月分红仅限收入增益型适用基金。分配仅在基金产生利益时进行。\n※ 仅在找到买方时才能出售，不保证变现。\n※ 免费对象为我们公司收取的转让手续费。';
+
+  @override
+  String get featuresNow1Title => '持有投资，\n每月积累宿主里程';
+
+  @override
+  String get featuresNow1Body => '根据宿主基金的运用余额，每月获得可用于住宿的“宿主里程”。获取率与预约期限因等级而异。';
+
+  @override
+  String get featuresNow2Title => '使用宿主里程，\n预约酒店';
+
+  @override
+  String get featuresNow2Body => '使用积累的宿主里程预约 STELLAVIA 酒店。除了投资回报，也能在当下享受旅行体验。';
+
+  @override
+  String get featuresNow3Title => '入住预约的酒店，\n亲身体验';
+
+  @override
+  String get featuresNow3Body => '亲自入住所投资或预约的酒店，切身感受数字和照片无法传达的魅力。';
+
+  @override
+  String get featuresNowNote => '※ 宿主里程制度今后可能发生变更。\n※ 当前等级及里程获取率请在个人中心确认。';
+
+  @override
+  String get featuresFaqTitle => '常见问题';
+
+  @override
+  String get featuresFaqCta => '查看全部 FAQ';
+
+  @override
+  String get featuresFaq1Q => 'STELLAVIA 是什么样的服务？';
+
+  @override
+  String get featuresFaq1A =>
+      '可从每份1万日元起投资酒店类宿主基金。除分配收益外，还可根据运用余额积累用于住宿的“宿主里程”，“宿主礼遇”是其最大特色。';
+
+  @override
+  String get featuresFaq2Q => '宿主注册（会员注册）收费吗？';
+
+  @override
+  String get featuresFaq2A => '宿主注册免费。';
+
+  @override
+  String get featuresFaq3Q => '最低可以投资多少？';
+
+  @override
+  String get featuresFaq3A => '每份1万日元起即可投资。';
+
+  @override
+  String get featuresFaq4Q => '如何积累宿主里程？';
+
+  @override
+  String get featuresFaq4A => '每月将全部基金的运用余额乘以对应宿主等级的获取率（月0.5～0.6%），即可获得宿主里程。';
+
+  @override
+  String get featuresFaq5Q => '如何使用宿主里程预约？';
+
+  @override
+  String get featuresFaq5A =>
+      '请在个人中心的“可住宿酒店”中选择有空房的日期、人数和客房。扣除宿主里程后预约即告成立，并会立即收到确认邮件。';
+
+  @override
+  String get featuresReturnsFutureH => '追求投资回报';
+
+  @override
+  String get featuresReturnsFutureBody =>
+      '投资预期年化 6〜10% 的宿主基金。\n无需盯着行情判断买卖，迈向中长期资产形成。';
+
+  @override
+  String get featuresReturnsFutureNote =>
+      '※预期年化收益因募集的宿主基金而异，不保证未来运用成果。\n※受不动产市况等因素影响，损益可能发生变动。';
+
+  @override
+  String get featuresReturnsNowH => '用宿主里程开启旅程';
+
+  @override
+  String get featuresReturnsNowBody => '使用积累的宿主里程预订 STELLAVIA 酒店，在当下享受旅行体验。';
+
+  @override
+  String get benefitsStoriesEn => 'EARNING MILEAGE';
+
+  @override
+  String get benefitsStory1Label => 'STORY 01';
+
+  @override
+  String get benefitsStory1TagAmount => '投资额 10万日元';
+
+  @override
+  String get benefitsStoryTerm => '运用期间 12个月';
+
+  @override
+  String get benefitsStory1Step2Sub => '运用中';
+
+  @override
+  String get benefitsStory2Label => 'STORY 02';
+
+  @override
+  String get benefitsStory2TagAmount => '投资额 10万＋100万日元';
+
+  @override
+  String get benefitsStory2RankUp => 'RANK UP ↑';
+
+  @override
+  String get benefitsStepEndSub => '运用结束';
+
+  @override
+  String get benefitsResultRankLabel => '等级';
+
+  @override
+  String get benefitsAssetLabel => '运用资产';
+
+  @override
+  String get benefitsMilesUnit => '里程';
+
+  @override
+  String get benefitsFundA => '基金A';
+
+  @override
+  String get benefitsFundB => '基金B';
+
+  @override
+  String get benefitsSimEyebrow => 'SIMULATION';
+
+  @override
+  String get benefitsSimLead => '输入投资金额，即可估算可获得的分配收益与宿主里程。';
+
+  @override
+  String get benefitsStoriesJp => '宿主里程获取示例';
+
+  @override
+  String get benefitsStoriesLead => '投资方式不同，宿主里程与等级会如何变化？用两个例子说明。';
+
+  @override
+  String get benefitsStoriesNote => '※ 获得里程为参考值。等级与获取率随运用余额变化。';
+
+  @override
+  String get benefitsTotalMilesLabel => '累计获得里程';
+
+  @override
+  String get benefitsMonth1Full => '第1个月';
+
+  @override
+  String get benefitsMonth6Full => '第6个月';
+
+  @override
+  String get benefitsMonth12Full => '第12个月';
+
+  @override
+  String get benefitsMilesPerMonth => '里程／月';
+
+  @override
+  String get benefitsStory1Title => '从10万日元开始尝试';
+
+  @override
+  String get benefitsStory2Title => '追加投资，等级升级';
+
+  @override
+  String get benefitsStory1Step1Action => '投资10万日元';
+
+  @override
+  String get benefitsStory1Step2Action => '每月积累里程';
+
+  @override
+  String get benefitsStory1Step3Action => '10万日元＋运用收益';
+
+  @override
+  String get benefitsStory2Step2Action => '追加投资100万日元';
+
+  @override
+  String get benefitsStory2Step3Action => '110万日元＋运用收益';
+
+  @override
+  String get benefitsAfter12Months => 'AFTER 12 MONTHS';
+
+  @override
   String get homeLearnService => '查看服务详情';
 
   @override
@@ -6279,7 +6489,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeMemberEyebrow => 'YADONUSHI MEMBER';
 
   @override
-  String get homeGuestEyebrow => 'YADONUSHI';
+  String get homeGuestEyebrow => 'やどぬし';
 
   @override
   String get homeSimulationEyebrow => 'MILE SIMULATION';
@@ -6288,7 +6498,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeRankEyebrow => 'RANK';
 
   @override
-  String get homeServiceTitle => '关于宿主优待';
+  String get homeServiceTitle => '宿主礼遇';
 
   @override
   String get homeServiceAboutEyebrow => 'WHY STELLAVIA';
@@ -6307,11 +6517,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeServiceBenefitsEyebrow => 'HOST BENEFITS';
 
   @override
-  String get homeServiceBenefitsTitle => '用宿主礼遇，开启旅程';
+  String get homeServiceBenefitsTitle => '通过宿主礼遇，开启旅程';
 
   @override
   String get homeServiceBenefitsBody =>
-      '“宿主礼遇”是宿主专享的福利。每月，您都会根据宿主基金的投资余额累积“宿主里程”。用攒下的里程预订 STELLAVIA 酒店，就能踏上旅途。投资越久，旅行的选择就越多，行程安排也越自由。这就是 STELLAVIA 的“宿主礼遇”。';
+      '“宿主礼遇”是宿主专属权益，会根据宿主基金的运用余额每月积累“宿主里程”。使用积累的宿主里程预约 STELLAVIA 酒店，开启旅程。投资越持久，旅行的选择和自由度越高。这就是 STELLAVIA 提出的“宿主礼遇”。';
 
   @override
   String get homeServiceReturnsEyebrow => 'TWO RETURNS';
@@ -6346,15 +6556,15 @@ class AppLocalizationsZh extends AppLocalizations {
       '使用积累的宿主里程预约 STELLAVIA 酒店。除了投资回报，也能在当下享受旅行体验。';
 
   @override
-  String get homeRankDetailTitle => '持续投资，让旅行更自由。';
+  String get homeRankDetailTitle => '投资越多，旅行越广。';
 
   @override
   String get homeRankDetailBody =>
-      '根据投资余额划分五个等级。等级越高，宿主里程获取率越高，可提前预约的时间与里程有效期也越长。持续投资，让旅行更自由。';
+      '根据运用余额分为5个等级。等级越高，宿主里程获取率越高，可预约住宿的时间范围越长，里程有效期也会延长。持续投资，让旅行更加自由。';
 
   @override
   String get homeRankEligibilityNote =>
-      '等级评定和宿主里程发放仅按投资于 2026 年 12 月 1 日起开始募集的基金的金额计算（此前已开始募集的基金不计入）。';
+      '※页面显示的投资运用额为全部持有基金合计。等级判定与宿主里程发放，仅按《宿主里程服务规约》施行日（2026年12月1日）及之后开始募集的基金投资额计算（施行日前开始募集的基金不在对象内）。';
 
   @override
   String get homeRankDraftNotice =>
@@ -6364,7 +6574,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeRankProvisionalLabel => '宿主等级（暂定）';
 
   @override
-  String get homeRankInvestmentLabel => '投资金额';
+  String get homeRankInvestmentLabel => '运用余额';
 
   @override
   String get homeRankRegularRange => '不足50万日元';
@@ -6541,16 +6751,29 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeRankLabel => '宿主等级';
 
   @override
-  String get homeRankRulesEmpty => '暂无等级信息。';
+  String get homeRankRulesEmpty => '无法获取等级信息。';
+
+  @override
+  String get simResultTitle => '试算结果';
+
+  @override
+  String get simHotelPriceNote =>
+      '※ 所示里程为未来一年内可预订日期中的最低参考值，实际所需里程因入住日期、房型及空房情况而异。';
+
+  @override
+  String get simReadyToRun => '输入条件后点击\n「开始试算」\n即可查看分红与宿主优待预估。';
+
+  @override
+  String get simConditionsChanged => '条件已变更，请重新试算。';
 
   @override
   String get simRunAction => '试算';
 
   @override
-  String get simPointsHotelsTitle => '预计里程可住的酒店';
+  String get simPointsHotelsTitle => '当前里程可入住的酒店';
 
   @override
-  String get simPointsHotelsEmpty => '当前预计里程没有可住的酒店。';
+  String get simPointsHotelsEmpty => '当前里程暂无可入住酒店';
 
   @override
   String simPointsHotelStay(String points, int nights) {
@@ -6615,7 +6838,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get simEstimateNote =>
-      '按税前单利估算，累计收取包括本金和期间全部分红。里程按试算金额对应等级计算，不代表实际发放承诺。';
+      '※ 收益率与运用期间均为预估，不保证未来的运用成果。\n※ 宿主里程制度今后可能发生变更。\n※ 本模拟结果仅为概算。住宿所需里程按当前标准估算，并会因酒店及季节而异。\n※ 显示的等级及可获得里程为首次投资时的参考。当前等级及获取率请在个人中心确认。';
 
   @override
   String get simRegister => '免费注册会员并开始';
@@ -14383,6 +14606,216 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeGuestBenefitsBody => '未來的安心，當下的樂趣。';
 
   @override
+  String get bannerFeatures => '服務特色';
+
+  @override
+  String get featuresInvestmentKicker => 'Why STELLAVIA — Investment';
+
+  @override
+  String get featuresStayKicker => 'Why STELLAVIA — Hotel Stay';
+
+  @override
+  String get featuresFaqEyebrow => 'FAQ';
+
+  @override
+  String get featuresDetailTitle => 'STELLAVIA 服務特色';
+
+  @override
+  String get featuresFuture1Title => '每份1萬日圓起，\n成為飯店宿主';
+
+  @override
+  String get featuresFuture1Body => '每份1萬日圓起即可投資宿主基金。無需大額資金，也能從小額開始投資飯店。';
+
+  @override
+  String get featuresFuture2Title => '不必受日常買賣判斷束縛，\n培育未來資產';
+
+  @override
+  String get featuresFuture2Body =>
+      '預期收益率與運用期間在募集時明確告知，因此無需盯著行情判斷買賣，可邁向中長期資產形成。';
+
+  @override
+  String get featuresFuture3Title => '手續費免費，\n亦可中途出售';
+
+  @override
+  String get featuresFuture3Body => '一邊領取每月分紅，一邊可免費手續費中途出售。可隨人生規劃變化，靈活制定投資計畫。';
+
+  @override
+  String get featuresFutureNote =>
+      '※ 收益率與運用期間均為預估，不保證未來的運用成果。\n※ 受不動產市場等因素影響，損益可能波動。\n※ 每月分紅僅限收入增益型適用基金。分配僅在基金產生利益時進行。\n※ 僅在找到買方時才能出售，不保證變現。\n※ 免費對象為我們公司收取的轉讓手續費。';
+
+  @override
+  String get featuresNow1Title => '持有投資，\n每月累積宿主里程';
+
+  @override
+  String get featuresNow1Body => '依宿主基金的運用餘額，每月獲得可用於住宿的「宿主里程」。獲取率與預約期間因等級而異。';
+
+  @override
+  String get featuresNow2Title => '使用宿主里程，\n預約飯店';
+
+  @override
+  String get featuresNow2Body => '使用累積的宿主里程預訂 STELLAVIA 飯店。除了投資回報，也能在當下享受旅行體驗。';
+
+  @override
+  String get featuresNow3Title => '入住預約的飯店，\n親身體驗';
+
+  @override
+  String get featuresNow3Body => '親自入住所投資或預約的飯店，切身感受數字與照片無法傳達的魅力。';
+
+  @override
+  String get featuresNowNote => '※ 宿主里程制度日後可能有所變更。\n※ 目前等級及里程獲取率請至我的頁面確認。';
+
+  @override
+  String get featuresFaqTitle => '常見問題';
+
+  @override
+  String get featuresFaqCta => '查看全部 FAQ';
+
+  @override
+  String get featuresFaq1Q => 'STELLAVIA 是什麼樣的服務？';
+
+  @override
+  String get featuresFaq1A =>
+      '可從每份1萬日圓起投資飯店類宿主基金。除分配收益外，還可依運用餘額累積用於住宿的「宿主里程」，「宿主禮遇」是其最大特色。';
+
+  @override
+  String get featuresFaq2Q => '宿主註冊（會員註冊）需要費用嗎？';
+
+  @override
+  String get featuresFaq2A => '宿主註冊免費。';
+
+  @override
+  String get featuresFaq3Q => '最低可以投資多少？';
+
+  @override
+  String get featuresFaq3A => '每份1萬日圓起即可投資。';
+
+  @override
+  String get featuresFaq4Q => '如何累積宿主里程？';
+
+  @override
+  String get featuresFaq4A => '每月將全部基金的運用餘額乘以對應宿主等級的獲取率（月0.5～0.6%），即可獲得宿主里程。';
+
+  @override
+  String get featuresFaq5Q => '如何使用宿主里程預約？';
+
+  @override
+  String get featuresFaq5A =>
+      '請在我的頁面的「可住宿飯店」中選擇有空房的日期、人數與客房。扣除宿主里程後預約即成立，並會立即收到確認郵件。';
+
+  @override
+  String get featuresReturnsFutureH => '追求投資回報';
+
+  @override
+  String get featuresReturnsFutureBody =>
+      '投資預期年化 6〜10% 的宿主基金。\n無需盯著行情判斷買賣，邁向中長期資產形成。';
+
+  @override
+  String get featuresReturnsFutureNote =>
+      '※預期年化收益因募集的宿主基金而異，不保證未來運用成果。\n※受不動產市況等因素影響，損益可能發生變動。';
+
+  @override
+  String get featuresReturnsNowH => '用宿主里程開啟旅程';
+
+  @override
+  String get featuresReturnsNowBody => '使用累積的宿主里程預訂 STELLAVIA 飯店，在當下享受旅行體驗。';
+
+  @override
+  String get benefitsStoriesEn => 'EARNING MILEAGE';
+
+  @override
+  String get benefitsStory1Label => 'STORY 01';
+
+  @override
+  String get benefitsStory1TagAmount => '投資額 10萬日圓';
+
+  @override
+  String get benefitsStoryTerm => '運用期間 12個月';
+
+  @override
+  String get benefitsStory1Step2Sub => '運用中';
+
+  @override
+  String get benefitsStory2Label => 'STORY 02';
+
+  @override
+  String get benefitsStory2TagAmount => '投資額 10萬＋100萬日圓';
+
+  @override
+  String get benefitsStory2RankUp => 'RANK UP ↑';
+
+  @override
+  String get benefitsStepEndSub => '運用結束';
+
+  @override
+  String get benefitsResultRankLabel => '等級';
+
+  @override
+  String get benefitsAssetLabel => '運用資產';
+
+  @override
+  String get benefitsMilesUnit => '里程';
+
+  @override
+  String get benefitsFundA => '基金A';
+
+  @override
+  String get benefitsFundB => '基金B';
+
+  @override
+  String get benefitsSimEyebrow => 'SIMULATION';
+
+  @override
+  String get benefitsSimLead => '輸入投資金額，即可估算可獲得的分配收益與宿主里程。';
+
+  @override
+  String get benefitsStoriesJp => '宿主里程獲取示例';
+
+  @override
+  String get benefitsStoriesLead => '投資方式不同，宿主里程與等級會如何變化？用兩個例子說明。';
+
+  @override
+  String get benefitsStoriesNote => '※ 獲得里程為參考值。等級與獲取率隨運用餘額變化。';
+
+  @override
+  String get benefitsTotalMilesLabel => '累計獲得里程';
+
+  @override
+  String get benefitsMonth1Full => '第1個月';
+
+  @override
+  String get benefitsMonth6Full => '第6個月';
+
+  @override
+  String get benefitsMonth12Full => '第12個月';
+
+  @override
+  String get benefitsMilesPerMonth => '里程／月';
+
+  @override
+  String get benefitsStory1Title => '從10萬日圓開始嘗試';
+
+  @override
+  String get benefitsStory2Title => '追加投資，等級升級';
+
+  @override
+  String get benefitsStory1Step1Action => '投資10萬日圓';
+
+  @override
+  String get benefitsStory1Step2Action => '每月累積里程';
+
+  @override
+  String get benefitsStory1Step3Action => '10萬日圓＋運用收益';
+
+  @override
+  String get benefitsStory2Step2Action => '追加投資100萬日圓';
+
+  @override
+  String get benefitsStory2Step3Action => '110萬日圓＋運用收益';
+
+  @override
+  String get benefitsAfter12Months => 'AFTER 12 MONTHS';
+
+  @override
   String get homeLearnService => '查看服務詳情';
 
   @override
@@ -14407,7 +14840,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeMemberEyebrow => 'YADONUSHI MEMBER';
 
   @override
-  String get homeGuestEyebrow => 'YADONUSHI';
+  String get homeGuestEyebrow => 'やどぬし';
 
   @override
   String get homeSimulationEyebrow => 'MILE SIMULATION';
@@ -14416,7 +14849,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeRankEyebrow => 'RANK';
 
   @override
-  String get homeServiceTitle => '關於宿主優待';
+  String get homeServiceTitle => '宿主禮遇';
 
   @override
   String get homeServiceAboutEyebrow => 'WHY STELLAVIA';
@@ -14435,11 +14868,11 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeServiceBenefitsEyebrow => 'HOST BENEFITS';
 
   @override
-  String get homeServiceBenefitsTitle => '用宿主禮遇，踏上旅程';
+  String get homeServiceBenefitsTitle => '透過宿主禮遇，開啟旅程';
 
   @override
   String get homeServiceBenefitsBody =>
-      '「宿主禮遇」是宿主專享的福利。每月，您都會依宿主基金的投資餘額累積「宿主里程」。用累積的里程預訂 STELLAVIA 飯店，就能踏上旅途。投資越久，旅行的選擇就越多，行程安排也越自由。這就是 STELLAVIA 的「宿主禮遇」。';
+      '「宿主禮遇」是宿主專屬權益，會依宿主基金的運用餘額每月累積「宿主里程」。使用累積的宿主里程預訂 STELLAVIA 飯店，開啟旅程。投資越持久，旅行的選擇與自由度越高。這就是 STELLAVIA 提出的「宿主禮遇」。';
 
   @override
   String get homeServiceReturnsEyebrow => 'TWO RETURNS';
@@ -14474,15 +14907,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
       '使用累積的宿主里程預訂 STELLAVIA 飯店。除了投資回報，也能在當下享受旅行體驗。';
 
   @override
-  String get homeRankDetailTitle => '持續投資，讓旅行更自由。';
+  String get homeRankDetailTitle => '投資越多，旅行越廣。';
 
   @override
   String get homeRankDetailBody =>
-      '根據投資餘額劃分五個等級。等級越高，宿主里程獲取率越高，可提前預約的時間與里程有效期也越長。持續投資，讓旅行更自由。';
+      '依運用餘額分為5個等級。等級越高，宿主里程獲取率越高，可預約住宿的期間越長，里程有效期限也會延長。持續投資，讓旅行更加自由。';
 
   @override
   String get homeRankEligibilityNote =>
-      '等級評定與宿主里程發放僅計入對 2026 年 12 月 1 日起開始募集的基金所投入的金額（此前已開始募集的基金不列入計算）。';
+      '※頁面顯示的投資運用額為全部持有基金合計。等級判定與宿主里程發放，僅按《宿主里程服務規約》施行日（2026年12月1日）及之後開始募集的基金投資額計算（施行日前開始募集的基金不在對象內）。';
 
   @override
   String get homeRankDraftNotice =>
@@ -14492,7 +14925,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeRankProvisionalLabel => '宿主等級（暫定）';
 
   @override
-  String get homeRankInvestmentLabel => '投資金額';
+  String get homeRankInvestmentLabel => '運用餘額';
 
   @override
   String get homeRankRegularRange => '不足50萬日圓';
@@ -14669,16 +15102,29 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeRankLabel => '宿主等級';
 
   @override
-  String get homeRankRulesEmpty => '暫無等級資訊。';
+  String get homeRankRulesEmpty => '無法取得等級資訊。';
+
+  @override
+  String get simResultTitle => '試算結果';
+
+  @override
+  String get simHotelPriceNote =>
+      '※ 所示里程為未來一年內可預訂日期中的最低參考值，實際所需里程因入住日期、房型及空房情況而異。';
+
+  @override
+  String get simReadyToRun => '輸入條件後點擊\n「開始試算」\n即可查看配息與宿主優待預估。';
+
+  @override
+  String get simConditionsChanged => '條件已變更，請重新試算。';
 
   @override
   String get simRunAction => '試算';
 
   @override
-  String get simPointsHotelsTitle => '預估里程可入住的飯店';
+  String get simPointsHotelsTitle => '目前里程可入住的飯店';
 
   @override
-  String get simPointsHotelsEmpty => '目前預估里程沒有可入住的飯店。';
+  String get simPointsHotelsEmpty => '目前里程暫無可入住飯店';
 
   @override
   String simPointsHotelStay(String points, int nights) {
@@ -14743,7 +15189,7 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get simEstimateNote =>
-      '按稅前單利估算，累計收取包括本金和期間全部分紅。里程按試算金額對應等級計算，不代表實際發放承諾。';
+      '※ 收益率與運用期間均為預估，不保證未來的運用成果。\n※ 宿主里程制度日後可能有所變更。\n※ 本模擬結果僅為概算。住宿所需里程依目前標準估算，並會因飯店及季節而異。\n※ 顯示的等級及可獲得里程為首次投資時的參考。目前等級及獲取率請至我的頁面確認。';
 
   @override
   String get simRegister => '免費註冊會員並開始';

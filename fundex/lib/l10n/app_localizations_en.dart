@@ -6650,6 +6650,231 @@ class AppLocalizationsEn extends AppLocalizations {
       'Peace of mind for tomorrow. Joy for today.';
 
   @override
+  String get bannerFeatures => 'Service features';
+
+  @override
+  String get featuresInvestmentKicker => 'Why STELLAVIA — Investment';
+
+  @override
+  String get featuresStayKicker => 'Why STELLAVIA — Hotel Stay';
+
+  @override
+  String get featuresFaqEyebrow => 'FAQ';
+
+  @override
+  String get featuresDetailTitle => 'STELLAVIA features';
+
+  @override
+  String get featuresFuture1Title =>
+      'Become a hotel Host from ¥10,000 per unit';
+
+  @override
+  String get featuresFuture1Body =>
+      'Invest in Host Funds from ¥10,000 per unit. Start investing in hotels with a small amount, without needing substantial capital.';
+
+  @override
+  String get featuresFuture2Title =>
+      'Grow future assets without daily trading decisions';
+
+  @override
+  String get featuresFuture2Body =>
+      'Expected yield and operating period are clearly stated at fundraising, so you can aim for medium- to long-term wealth building without watching the market to decide when to buy or sell.';
+
+  @override
+  String get featuresFuture3Title => 'Early exit also possible with no fees';
+
+  @override
+  String get featuresFuture3Body =>
+      'Receive monthly distributions while also being able to exit early with no fees. Adjust your investment plan flexibly as your life plans change.';
+
+  @override
+  String get featuresFutureNote =>
+      '* Yields and operating periods are estimates and do not guarantee future performance. * Profits and losses may fluctuate due to real estate market conditions and other factors. * Monthly distributions apply only to income-gain-type eligible funds. Distributions are made only when the fund generates a profit. * A sale is possible only when a buyer is found; liquidity is not guaranteed. * “No fees” refers to transfer fees received by our company.';
+
+  @override
+  String get featuresNow1Title =>
+      'Hold your investment and earn Host Miles monthly';
+
+  @override
+  String get featuresNow1Body =>
+      'Earn Host Miles for hotel stays every month based on your Host Fund balance. Earning rates and booking windows vary by rank.';
+
+  @override
+  String get featuresNow2Title => 'Book hotels with Host Miles';
+
+  @override
+  String get featuresNow2Body =>
+      'Use accumulated Host Miles to book STELLAVIA hotels. Enjoy not only investment returns, but the experience of travel today.';
+
+  @override
+  String get featuresNow3Title =>
+      'Stay at your booked hotel and experience it firsthand';
+
+  @override
+  String get featuresNow3Body =>
+      'Stay at a hotel you invested in or booked, and experience its appeal firsthand—beyond numbers and photos.';
+
+  @override
+  String get featuresNowNote =>
+      '* The Host Miles program may be changed in the future. * Check My Page for your current rank and mileage earning rate.';
+
+  @override
+  String get featuresFaqTitle => 'FAQ';
+
+  @override
+  String get featuresFaqCta => 'See all FAQs';
+
+  @override
+  String get featuresFaq1Q => 'What kind of service is STELLAVIA?';
+
+  @override
+  String get featuresFaq1A =>
+      'A service that lets you invest in hotel-focused Host Funds from ¥10,000 per unit. In addition to distributions, its key feature is Host Benefits, which earns Host Miles for hotel stays based on your assets under management.';
+
+  @override
+  String get featuresFaq2Q => 'Is there a fee to register as a Host?';
+
+  @override
+  String get featuresFaq2A => 'Host registration is free.';
+
+  @override
+  String get featuresFaq3Q => 'How much do I need to start investing?';
+
+  @override
+  String get featuresFaq3A => 'You can invest from ¥10,000 per unit.';
+
+  @override
+  String get featuresFaq4Q => 'How do I earn Host Miles?';
+
+  @override
+  String get featuresFaq4A =>
+      'Each month, Host Miles are earned by applying your rank rate (0.5–0.6% monthly) to your total assets under management across all funds.';
+
+  @override
+  String get featuresFaq5Q => 'How do I book with Host Miles?';
+
+  @override
+  String get featuresFaq5A =>
+      'From “Hotels You Can Stay At” on My Page, choose an available date, number of guests, and room. Your booking is confirmed when the miles are used, and a confirmation email is sent immediately.';
+
+  @override
+  String get featuresReturnsFutureH => 'Aim for investment returns';
+
+  @override
+  String get featuresReturnsFutureBody =>
+      'Invest in host funds with expected annual yields of 6–10%. Build medium- to long-term wealth without watching the market to decide when to buy or sell.';
+
+  @override
+  String get featuresReturnsFutureNote =>
+      '* Expected annual yields vary by Host Fund offering and do not guarantee future performance. * Returns may fluctuate due to real estate market conditions and other factors.';
+
+  @override
+  String get featuresReturnsNowH => 'Travel with Host Miles';
+
+  @override
+  String get featuresReturnsNowBody =>
+      'Use your Host Miles to book STELLAVIA hotels and enjoy the experience of travel today.';
+
+  @override
+  String get benefitsStoriesEn => 'EARNING MILEAGE';
+
+  @override
+  String get benefitsStory1Label => 'STORY 01';
+
+  @override
+  String get benefitsStory1TagAmount => 'Investment ¥100,000';
+
+  @override
+  String get benefitsStoryTerm => 'Term 12 months';
+
+  @override
+  String get benefitsStory1Step2Sub => 'In progress';
+
+  @override
+  String get benefitsStory2Label => 'STORY 02';
+
+  @override
+  String get benefitsStory2TagAmount => 'Investment ¥100,000 + ¥1,000,000';
+
+  @override
+  String get benefitsStory2RankUp => 'RANK UP ↑';
+
+  @override
+  String get benefitsStepEndSub => 'Completed';
+
+  @override
+  String get benefitsResultRankLabel => 'Rank';
+
+  @override
+  String get benefitsAssetLabel => 'Portfolio value';
+
+  @override
+  String get benefitsMilesUnit => 'miles';
+
+  @override
+  String get benefitsFundA => 'Fund A';
+
+  @override
+  String get benefitsFundB => 'Fund B';
+
+  @override
+  String get benefitsSimEyebrow => 'SIMULATION';
+
+  @override
+  String get benefitsSimLead =>
+      'Enter an investment amount to estimate your distributions and Host Miles.';
+
+  @override
+  String get benefitsStoriesJp => 'How Host Miles Accumulate';
+
+  @override
+  String get benefitsStoriesLead =>
+      'See how Host Miles and rank change with two different investment styles.';
+
+  @override
+  String get benefitsStoriesNote =>
+      '* Miles are estimates. Rank and earn rate depend on AUM.';
+
+  @override
+  String get benefitsTotalMilesLabel => 'Total miles earned';
+
+  @override
+  String get benefitsMonth1Full => 'Month 1';
+
+  @override
+  String get benefitsMonth6Full => 'Month 6';
+
+  @override
+  String get benefitsMonth12Full => 'Month 12';
+
+  @override
+  String get benefitsMilesPerMonth => 'miles / mo';
+
+  @override
+  String get benefitsStory1Title => 'Start small with ¥100,000';
+
+  @override
+  String get benefitsStory2Title => 'Add more and rank up';
+
+  @override
+  String get benefitsStory1Step1Action => 'Invest ¥100,000';
+
+  @override
+  String get benefitsStory1Step2Action => 'Miles every month';
+
+  @override
+  String get benefitsStory1Step3Action => '¥100,000 + returns';
+
+  @override
+  String get benefitsStory2Step2Action => 'Add ¥1,000,000';
+
+  @override
+  String get benefitsStory2Step3Action => '¥1,100,000 + returns';
+
+  @override
+  String get benefitsAfter12Months => 'AFTER 12 MONTHS';
+
+  @override
   String get homeLearnService => 'View service details';
 
   @override
@@ -6675,7 +6900,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeMemberEyebrow => 'YADONUSHI MEMBER';
 
   @override
-  String get homeGuestEyebrow => 'YADONUSHI';
+  String get homeGuestEyebrow => 'やどぬし';
 
   @override
   String get homeSimulationEyebrow => 'MILE SIMULATION';
@@ -6684,7 +6909,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeRankEyebrow => 'RANK';
 
   @override
-  String get homeServiceTitle => 'About host benefits';
+  String get homeServiceTitle => 'About Host Benefits';
 
   @override
   String get homeServiceAboutEyebrow => 'WHY STELLAVIA';
@@ -6708,7 +6933,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeServiceBenefitsBody =>
-      'Host Benefits are exclusively for hosts. Each month, you earn Host Miles based on your Host Fund investment balance. Use your miles to book a stay at a STELLAVIA hotel and set off on your next trip. The longer you invest, the more choices and flexibility you have when you travel. That’s the idea behind STELLAVIA’s Host Benefits.';
+      'Host Benefits are exclusive benefits for Hosts, with Host Miles added monthly based on the balance of your Host Funds. Use your accumulated Host Miles to book STELLAVIA hotels and travel. The longer you invest, the more choices and freedom you gain. This is STELLAVIA’s Host Benefits program.';
 
   @override
   String get homeServiceReturnsEyebrow => 'TWO RETURNS';
@@ -6743,15 +6968,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'Use accumulated Host Miles to book STELLAVIA hotels. Enjoy not only investment returns, but the experience of travel today.';
 
   @override
-  String get homeRankDetailTitle => 'Keep investing. Travel more freely.';
+  String get homeRankDetailTitle =>
+      'The more you invest, the further you travel.';
 
   @override
   String get homeRankDetailBody =>
-      'Five membership ranks are based on your invested balance. Higher ranks increase your host-mile earning rate, extend the advance booking window and lengthen mile validity. Continued investing gives you more freedom to travel.';
+      'Five rank levels based on your assets under management. As your rank rises, your Host Miles earning rate increases, your booking window expands, and your miles remain valid longer. The longer you continue, the more freedom you have to travel.';
 
   @override
   String get homeRankEligibilityNote =>
-      'Only amounts invested in funds that open for subscriptions on or after December 1, 2026 count toward your rank and Host Miles. Funds that opened for subscriptions before that date are excluded.';
+      '* The displayed AUM is the total of all holdings. Rank and host-mile issuance are calculated only from investments in funds whose offering started on or after the Host Mile Service Terms effective date (December 1, 2026); funds that began offering before that date are excluded.';
 
   @override
   String get homeRankDraftNotice =>
@@ -6761,7 +6987,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeRankProvisionalLabel => 'Host rank (provisional)';
 
   @override
-  String get homeRankInvestmentLabel => 'Invested balance';
+  String get homeRankInvestmentLabel => 'Outstanding balance';
 
   @override
   String get homeRankRegularRange => 'Below ¥500,000';
@@ -6947,17 +7173,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeRankLabel => 'Host rank';
 
   @override
-  String get homeRankRulesEmpty => 'No rank information is available yet.';
+  String get homeRankRulesEmpty => 'Unable to load rank information.';
+
+  @override
+  String get simResultTitle => 'Simulation result';
+
+  @override
+  String get simHotelPriceNote =>
+      '※ Miles shown are the lowest estimate among dates bookable within the next year. Actual miles required vary by stay date, room type, and availability.';
+
+  @override
+  String get simReadyToRun =>
+      'Enter conditions and tap\nSimulate to see estimated\ndividends and Host Benefits.';
+
+  @override
+  String get simConditionsChanged =>
+      'Conditions changed. Please simulate again.';
 
   @override
   String get simRunAction => 'Simulate';
 
   @override
-  String get simPointsHotelsTitle => 'Hotels within your estimated miles';
+  String get simPointsHotelsTitle => 'Hotels you can book with current miles';
 
   @override
-  String get simPointsHotelsEmpty =>
-      'No hotels were found for this many miles.';
+  String get simPointsHotelsEmpty => 'No hotels available with current miles';
 
   @override
   String simPointsHotelStay(String points, int nights) {
@@ -7028,7 +7268,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get simEstimateNote =>
-      'Pretax simple-interest estimate. Total received includes principal and all dividends during the term. Miles use the tier for the simulated investment and are not guaranteed awards.';
+      '* Yields and operating periods are estimates and do not guarantee future performance.\n* The Host Miles program may be changed in the future.\n* This simulation is an estimate. Miles required for a stay are based on current rates and vary by hotel and season.\n* The displayed rank and Host Miles are estimates for a first-time investment. Check My Page for your current rank and earning rate.';
 
   @override
   String get simRegister => 'Register free to get started';

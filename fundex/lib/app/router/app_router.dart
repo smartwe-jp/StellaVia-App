@@ -50,6 +50,7 @@ import '../../features/discussion_board/presentation/widgets/kizunark_draft_list
 import '../../features/discussion_board/presentation/widgets/kizunark_thread_detail_page.dart';
 import '../../features/home/presentation/pages/home_overview_tab_page.dart';
 import '../../features/home/presentation/pages/home_service_introduction_page.dart';
+import '../../features/home/presentation/pages/home_service_detail_page.dart';
 import '../../features/home/presentation/pages/home_rank_details_page.dart';
 import '../../features/benefit_lottery/presentation/pages/benefit_lottery_status_page.dart';
 import '../../features/investment/presentation/pages/fund_project_detail_page.dart';
@@ -166,6 +167,8 @@ String? resolveAuthRedirect({
       location == '/guest-guide/register' ||
       location == '/guest-guide/simulation' ||
       location == '/home/service' ||
+      location == '/home/features' ||
+      location == '/home/miles' ||
       location == '/home/ranks' ||
       location == '/home/simulation' ||
       location == '/home/free-market' ||
@@ -412,6 +415,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
                     path: 'simulation',
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) => const HomeSimulationPage(),
+                  ),
+                  GoRoute(
+                    path: 'features',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, __) => const HomeServiceDetailPage.features(),
+                  ),
+                  GoRoute(
+                    path: 'miles',
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (_, __) => const HomeServiceDetailPage.benefits(),
                   ),
                   GoRoute(
                     path: 'service',

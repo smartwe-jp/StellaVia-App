@@ -32,7 +32,7 @@ void main() {
       final l10n = AppLocalizations.of(
         tester.element(find.byType(HomeBrandIntro)),
       );
-      expect(find.text(l10n.homeGuestBenefitsBody), findsOneWidget);
+      expect(find.text(l10n.homeServiceBenefitsTitle), findsOneWidget);
     }
   });
 
@@ -149,7 +149,9 @@ void main() {
               await tester.tap(settings);
               expect(settingsTaps, before + 1);
             }
-            final label = AppLocalizations.of(context).homeLearnService;
+            final label = AppLocalizations.of(
+              context,
+            ).homeFeaturedFundViewDetailAction;
             expect(
               find.text(AppLocalizations.of(context).homeRankDetails),
               findsNothing,

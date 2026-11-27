@@ -12,7 +12,9 @@ class SimulationAmountField extends StatefulWidget {
     required this.min,
     required this.max,
     required this.onChanged,
+    required this.onTextEdited,
   });
+  final VoidCallback onTextEdited;
   final bool tenths;
   final int value, min, max;
   final String display, label;
@@ -98,6 +100,7 @@ class _SimulationAmountFieldState extends State<SimulationAmountField> {
       ],
       onTapOutside: (_) => _focus.unfocus(),
       onChanged: (text) {
+        widget.onTextEdited();
         final units = _parse(text);
         if (units != null && units >= widget.min && units <= widget.max) {
           widget.onChanged(units.toDouble());

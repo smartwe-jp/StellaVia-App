@@ -30,6 +30,11 @@ class HomeSimulationResultCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          Text(
+            l.simResultTitle,
+            style: HomeSimulationTheme.resultSectionTitle(context),
+          ),
+          const SizedBox(height: 12),
           _ResultHeading(
             eyebrow: l.simFinancialEyebrow,
             title: l.simFinancialTitle,

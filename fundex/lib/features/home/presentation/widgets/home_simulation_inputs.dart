@@ -10,12 +10,14 @@ class HomeSimulationInputs extends StatelessWidget {
   const HomeSimulationInputs({
     super.key,
     required this.input,
+    required this.onTextEdited,
     required this.onUnits,
     required this.onRate,
     required this.onMonths,
     required this.onType,
   });
   final HomeSimulationInput input;
+  final VoidCallback onTextEdited;
   final ValueChanged<double> onUnits, onRate, onMonths;
   final ValueChanged<SimulationDividendType> onType;
   @override
@@ -30,6 +32,7 @@ class HomeSimulationInputs extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _SimulationSlider(
+            onTextEdited: onTextEdited,
             id: 'amount',
             label: l.simInvestment,
             value: input.units.toDouble(),
@@ -44,6 +47,7 @@ class HomeSimulationInputs extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           _SimulationSlider(
+            onTextEdited: onTextEdited,
             id: 'rate',
             label: l.simAnnualRate,
             value: input.annualRateTenths.toDouble(),
@@ -58,6 +62,7 @@ class HomeSimulationInputs extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           _SimulationSlider(
+            onTextEdited: onTextEdited,
             id: 'months',
             label: l.simTerm,
             value: input.months.toDouble(),
@@ -103,6 +108,7 @@ class HomeSimulationInputs extends StatelessWidget {
 class _SimulationSlider extends StatelessWidget {
   const _SimulationSlider({
     required this.id,
+    required this.onTextEdited,
     required this.label,
     required this.value,
     required this.min,
@@ -114,6 +120,7 @@ class _SimulationSlider extends StatelessWidget {
     required this.maximum,
     required this.onChanged,
   });
+  final VoidCallback onTextEdited;
   final String id, label, display, unit, minimum, maximum;
   final double value, min, max;
   final int divisions;
@@ -129,6 +136,7 @@ class _SimulationSlider extends StatelessWidget {
           const SizedBox(width: 8),
           SimulationAmountField(
             key: ValueKey('simulation-$id-input'),
+            onTextEdited: onTextEdited,
             tenths: id == 'rate',
             value: value.toInt(),
             display: display,

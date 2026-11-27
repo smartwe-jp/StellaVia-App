@@ -1,5 +1,9 @@
+import 'package:fundex/features/home/presentation/widgets/home_brand_intro.dart';
+import 'package:fundex/features/home/presentation/widgets/home_service_features_card.dart';
 import 'dart:convert';
 import 'dart:io';
+import 'package:fundex/features/home/presentation/widgets/home_service_banners.dart';
+import 'package:fundex/features/home/presentation/pages/home_service_detail_page.dart';
 import 'dart:ui' as ui;
 import 'package:core_ui_kit/core_ui_kit.dart';
 import 'package:flutter/material.dart';
@@ -84,6 +88,18 @@ GoRouter routerFor(String initial) => GoRouter(
       builder: (_, _) => const Scaffold(body: Text('home')),
     ),
     GoRoute(
+      path: '/banners',
+      builder: (_, _) => const Scaffold(body: HomeServiceBanners()),
+    ),
+    GoRoute(
+      path: '/home/features',
+      builder: (_, _) => const HomeServiceDetailPage.features(),
+    ),
+    GoRoute(
+      path: '/home/miles',
+      builder: (_, _) => const HomeServiceDetailPage.benefits(),
+    ),
+    GoRoute(
       path: '/home/service',
       builder: (_, _) => const HomeServiceIntroductionPage(),
     ),
@@ -130,6 +146,155 @@ Widget app(
   ),
 );
 void main() {
+  testWidgets('two returns panels stack on phones and align on wide screens', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final router = routerFor('/home/features');
+    addTearDown(router.dispose);
+    for (final width in [320.0, 1024.0]) {
+      tester.view.physicalSize = Size(width, 900);
+      await tester.pumpWidget(app(router, scale: 1.3));
+      await tester.pumpAndSettle();
+      final heading = find.text('TWO RETURNS');
+      await tester.scrollUntilVisible(
+        heading,
+        300,
+        scrollable: find.byType(Scrollable).first,
+      );
+      final future = tester.getTopLeft(find.text('FINANCIAL RETURN').first);
+      final now = tester.getTopLeft(find.text('EXPERIENCE RETURN').first);
+      if (width == 320) {
+        expect(now.dx, future.dx);
+        expect(now.dy, greaterThan(future.dy));
+      } else {
+        expect(now.dy, future.dy);
+        expect(now.dx, greaterThan(future.dx));
+      }
+      expect(tester.takeException(), isNull);
+    }
+  });
+  testWidgets('banners advance every ten seconds and wrap to the first card', (
+    tester,
+  ) async {
+    final router = routerFor('/banners');
+    addTearDown(router.dispose);
+    await tester.pumpWidget(app(router));
+    await tester.pumpAndSettle();
+    final l = AppLocalizations.of(
+      tester.element(find.byType(HomeServiceBanners)),
+    );
+    await tester.pump(const Duration(seconds: 9));
+    expect(find.text(l.bannerFeatures).hitTestable(), findsOneWidget);
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pumpAndSettle();
+    expect(find.text(l.homeGuestBenefitsTitle).hitTestable(), findsOneWidget);
+    await tester.pump(const Duration(seconds: 10));
+    await tester.pumpAndSettle();
+    expect(find.text(l.bannerFeatures).hitTestable(), findsOneWidget);
+    await tester.pumpWidget(const SizedBox());
+  });
+  for (final member in [false, true]) {
+    testWidgets(
+      'home banners swipe and open distinct native details member=$member',
+      (tester) async {
+        final router = routerFor('/banners');
+        addTearDown(router.dispose);
+        tester.view.devicePixelRatio = 1;
+        tester.view.physicalSize = Size(member ? 320 : 390, 844);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        addTearDown(tester.view.resetPhysicalSize);
+        await tester.pumpWidget(
+          app(router, member: member, scale: member ? 1.3 : 1),
+        );
+        await tester.pumpAndSettle();
+        final l = AppLocalizations.of(
+          tester.element(find.byType(HomeServiceBanners)),
+        );
+        expect(
+          tester.getSize(find.byType(HomeServiceFeaturesCard).first).height,
+          tester.getSize(find.byType(HomeBrandIntro).first).height,
+        );
+        if (member) {
+          await tester.tap(find.text(l.bannerFeatures).hitTestable());
+        } else {
+          final card = tester.getRect(
+            find.byType(HomeServiceFeaturesCard).first,
+          );
+          await tester.tapAt(card.bottomLeft + const Offset(16, -16));
+        }
+        await tester.pumpAndSettle();
+        expect(find.text(l.featuresDetailTitle), findsOneWidget);
+        expect(
+          find.widgetWithText(AppBrandHeading, l.homeServiceAboutTitle),
+          findsOneWidget,
+        );
+        expect(
+          find.text(member ? l.homeFindFunds : l.homeRegisterFree),
+          findsOneWidget,
+        );
+        final scroll = find.byType(Scrollable).first;
+        await tester.scrollUntilVisible(
+          find.text(l.featuresFaq1Q),
+          450,
+          scrollable: scroll,
+        );
+        expect(find.text(l.featuresFaq1A), findsOneWidget);
+        await tester.scrollUntilVisible(
+          find.text(l.featuresFaq2Q).hitTestable(),
+          160,
+          scrollable: scroll,
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(find.text(l.featuresFaq2Q));
+        await tester.pumpAndSettle();
+        expect(find.text(l.featuresFaq2A), findsOneWidget);
+        expect(find.text(l.featuresFaq1A), findsNothing);
+        await tester.tap(find.text(l.featuresFaq2Q));
+        await tester.pumpAndSettle();
+        expect(find.text(l.featuresFaq2A), findsNothing);
+        await tester.tap(find.byIcon(Icons.arrow_back_rounded));
+        await tester.pumpAndSettle();
+        await tester.drag(
+          find.byType(SingleChildScrollView),
+          Offset(
+            -tester.getSize(find.byType(HomeServiceBanners)).width * .8,
+            0,
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text(l.homeGuestEyebrow).hitTestable(), findsOneWidget);
+        expect(find.text('MASTER').hitTestable(), findsOneWidget);
+        await tester.tap(
+          find
+              .text(
+                member
+                    ? l.homeFeaturedFundViewDetailAction
+                    : l.homeGuestBenefitsTitle,
+              )
+              .hitTestable(),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text(l.homeServiceTitle), findsOneWidget);
+        await tester.scrollUntilVisible(
+          find.text(l.benefitsStory2Title),
+          450,
+          scrollable: find.byType(Scrollable).first,
+        );
+        expect(find.text(l.benefitsStory2TagAmount), findsOneWidget);
+        expect(find.text(l.benefitsStory2RankUp), findsOneWidget);
+        expect(find.text(l.benefitsResultRankLabel), findsNWidgets(2));
+        expect(find.textContaining('37,650'), findsOneWidget);
+        await tester.tap(find.byIcon(Icons.arrow_back_rounded));
+        await tester.pumpAndSettle();
+        expect(find.byType(HomeServiceBanners), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
   test(
     'rule mapping uses returned numbers, retains unknowns and sorts thresholds',
     () async {

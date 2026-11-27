@@ -130,7 +130,8 @@ class _ReturnCard extends StatelessWidget {
 }
 
 class HomeServiceStartSection extends StatelessWidget {
-  const HomeServiceStartSection({super.key});
+  const HomeServiceStartSection({super.key, this.showMemberNote = true});
+  final bool showMemberNote;
   @override
   Widget build(BuildContext context) {
     final l = context.l10n;
@@ -181,12 +182,13 @@ class HomeServiceStartSection extends StatelessWidget {
               ),
             ],
           ),
-        Text(
-          l.homeServiceMemberNote,
-          style: HomeTextStyles.stepDescription(
-            context,
-          ).copyWith(color: context.appColors.onDark),
-        ),
+        if (showMemberNote)
+          Text(
+            l.homeServiceMemberNote,
+            style: HomeTextStyles.stepDescription(
+              context,
+            ).copyWith(color: context.appColors.onDark),
+          ),
       ],
     );
   }

@@ -20,7 +20,7 @@ import '../../../member_profile/presentation/providers/member_profile_providers.
 import '../../../notifications/presentation/providers/notifications_providers.dart';
 
 import '../widgets/home_redesign_header.dart';
-import '../widgets/home_brand_intro.dart';
+import '../widgets/home_service_banners.dart';
 import '../widgets/home_quick_actions.dart';
 import '../widgets/home_verification_reminder.dart';
 import '../widgets/home_contact_verification_reminders.dart';
@@ -30,7 +30,6 @@ import '../widgets/home_miles_refresh_scope.dart';
 import '../providers/home_miles_providers.dart';
 import '../widgets/home_simulation_card.dart';
 import '../support/home_design_theme.dart';
-import '../support/home_miles_display.dart';
 
 class HomeOverviewTabPage extends ConsumerStatefulWidget {
   const HomeOverviewTabPage({super.key}) : _guestGuide = false;
@@ -143,17 +142,12 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
+                            const HomeServiceBanners(),
+                            const SizedBox(height: 20),
                             if (isAuthenticated) ...[
                               const HomeVerificationReminder(),
                               const HomeContactVerificationReminders(),
                             ],
-                            HomeBrandIntro(
-                              ranks: homeRankNames(
-                                ref.watch(homeMilesRulesProvider).data,
-                              ),
-                              onServiceTap: () => context.push('/home/service'),
-                            ),
-                            const SizedBox(height: 20),
                             HomeSimulationCard(
                               onTap: () => context.push(
                                 widget._guestGuide

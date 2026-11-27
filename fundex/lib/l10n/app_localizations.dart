@@ -12045,6 +12045,414 @@ abstract class AppLocalizations {
   /// **'Peace of mind for tomorrow. Joy for today.'**
   String get homeGuestBenefitsBody;
 
+  /// No description provided for @bannerFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Service features'**
+  String get bannerFeatures;
+
+  /// No description provided for @featuresInvestmentKicker.
+  ///
+  /// In en, this message translates to:
+  /// **'Why STELLAVIA — Investment'**
+  String get featuresInvestmentKicker;
+
+  /// No description provided for @featuresStayKicker.
+  ///
+  /// In en, this message translates to:
+  /// **'Why STELLAVIA — Hotel Stay'**
+  String get featuresStayKicker;
+
+  /// No description provided for @featuresFaqEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'FAQ'**
+  String get featuresFaqEyebrow;
+
+  /// No description provided for @featuresDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'STELLAVIA features'**
+  String get featuresDetailTitle;
+
+  /// No description provided for @featuresFuture1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Become a hotel Host from ¥10,000 per unit'**
+  String get featuresFuture1Title;
+
+  /// No description provided for @featuresFuture1Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Invest in Host Funds from ¥10,000 per unit. Start investing in hotels with a small amount, without needing substantial capital.'**
+  String get featuresFuture1Body;
+
+  /// No description provided for @featuresFuture2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Grow future assets without daily trading decisions'**
+  String get featuresFuture2Title;
+
+  /// No description provided for @featuresFuture2Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Expected yield and operating period are clearly stated at fundraising, so you can aim for medium- to long-term wealth building without watching the market to decide when to buy or sell.'**
+  String get featuresFuture2Body;
+
+  /// No description provided for @featuresFuture3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Early exit also possible with no fees'**
+  String get featuresFuture3Title;
+
+  /// No description provided for @featuresFuture3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive monthly distributions while also being able to exit early with no fees. Adjust your investment plan flexibly as your life plans change.'**
+  String get featuresFuture3Body;
+
+  /// No description provided for @featuresFutureNote.
+  ///
+  /// In en, this message translates to:
+  /// **'* Yields and operating periods are estimates and do not guarantee future performance. * Profits and losses may fluctuate due to real estate market conditions and other factors. * Monthly distributions apply only to income-gain-type eligible funds. Distributions are made only when the fund generates a profit. * A sale is possible only when a buyer is found; liquidity is not guaranteed. * “No fees” refers to transfer fees received by our company.'**
+  String get featuresFutureNote;
+
+  /// No description provided for @featuresNow1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold your investment and earn Host Miles monthly'**
+  String get featuresNow1Title;
+
+  /// No description provided for @featuresNow1Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Earn Host Miles for hotel stays every month based on your Host Fund balance. Earning rates and booking windows vary by rank.'**
+  String get featuresNow1Body;
+
+  /// No description provided for @featuresNow2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Book hotels with Host Miles'**
+  String get featuresNow2Title;
+
+  /// No description provided for @featuresNow2Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Use accumulated Host Miles to book STELLAVIA hotels. Enjoy not only investment returns, but the experience of travel today.'**
+  String get featuresNow2Body;
+
+  /// No description provided for @featuresNow3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay at your booked hotel and experience it firsthand'**
+  String get featuresNow3Title;
+
+  /// No description provided for @featuresNow3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay at a hotel you invested in or booked, and experience its appeal firsthand—beyond numbers and photos.'**
+  String get featuresNow3Body;
+
+  /// No description provided for @featuresNowNote.
+  ///
+  /// In en, this message translates to:
+  /// **'* The Host Miles program may be changed in the future. * Check My Page for your current rank and mileage earning rate.'**
+  String get featuresNowNote;
+
+  /// No description provided for @featuresFaqTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'FAQ'**
+  String get featuresFaqTitle;
+
+  /// No description provided for @featuresFaqCta.
+  ///
+  /// In en, this message translates to:
+  /// **'See all FAQs'**
+  String get featuresFaqCta;
+
+  /// No description provided for @featuresFaq1Q.
+  ///
+  /// In en, this message translates to:
+  /// **'What kind of service is STELLAVIA?'**
+  String get featuresFaq1Q;
+
+  /// No description provided for @featuresFaq1A.
+  ///
+  /// In en, this message translates to:
+  /// **'A service that lets you invest in hotel-focused Host Funds from ¥10,000 per unit. In addition to distributions, its key feature is Host Benefits, which earns Host Miles for hotel stays based on your assets under management.'**
+  String get featuresFaq1A;
+
+  /// No description provided for @featuresFaq2Q.
+  ///
+  /// In en, this message translates to:
+  /// **'Is there a fee to register as a Host?'**
+  String get featuresFaq2Q;
+
+  /// No description provided for @featuresFaq2A.
+  ///
+  /// In en, this message translates to:
+  /// **'Host registration is free.'**
+  String get featuresFaq2A;
+
+  /// No description provided for @featuresFaq3Q.
+  ///
+  /// In en, this message translates to:
+  /// **'How much do I need to start investing?'**
+  String get featuresFaq3Q;
+
+  /// No description provided for @featuresFaq3A.
+  ///
+  /// In en, this message translates to:
+  /// **'You can invest from ¥10,000 per unit.'**
+  String get featuresFaq3A;
+
+  /// No description provided for @featuresFaq4Q.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I earn Host Miles?'**
+  String get featuresFaq4Q;
+
+  /// No description provided for @featuresFaq4A.
+  ///
+  /// In en, this message translates to:
+  /// **'Each month, Host Miles are earned by applying your rank rate (0.5–0.6% monthly) to your total assets under management across all funds.'**
+  String get featuresFaq4A;
+
+  /// No description provided for @featuresFaq5Q.
+  ///
+  /// In en, this message translates to:
+  /// **'How do I book with Host Miles?'**
+  String get featuresFaq5Q;
+
+  /// No description provided for @featuresFaq5A.
+  ///
+  /// In en, this message translates to:
+  /// **'From “Hotels You Can Stay At” on My Page, choose an available date, number of guests, and room. Your booking is confirmed when the miles are used, and a confirmation email is sent immediately.'**
+  String get featuresFaq5A;
+
+  /// No description provided for @featuresReturnsFutureH.
+  ///
+  /// In en, this message translates to:
+  /// **'Aim for investment returns'**
+  String get featuresReturnsFutureH;
+
+  /// No description provided for @featuresReturnsFutureBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Invest in host funds with expected annual yields of 6–10%. Build medium- to long-term wealth without watching the market to decide when to buy or sell.'**
+  String get featuresReturnsFutureBody;
+
+  /// No description provided for @featuresReturnsFutureNote.
+  ///
+  /// In en, this message translates to:
+  /// **'* Expected annual yields vary by Host Fund offering and do not guarantee future performance. * Returns may fluctuate due to real estate market conditions and other factors.'**
+  String get featuresReturnsFutureNote;
+
+  /// No description provided for @featuresReturnsNowH.
+  ///
+  /// In en, this message translates to:
+  /// **'Travel with Host Miles'**
+  String get featuresReturnsNowH;
+
+  /// No description provided for @featuresReturnsNowBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Use your Host Miles to book STELLAVIA hotels and enjoy the experience of travel today.'**
+  String get featuresReturnsNowBody;
+
+  /// No description provided for @benefitsStoriesEn.
+  ///
+  /// In en, this message translates to:
+  /// **'EARNING MILEAGE'**
+  String get benefitsStoriesEn;
+
+  /// No description provided for @benefitsStory1Label.
+  ///
+  /// In en, this message translates to:
+  /// **'STORY 01'**
+  String get benefitsStory1Label;
+
+  /// No description provided for @benefitsStory1TagAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Investment ¥100,000'**
+  String get benefitsStory1TagAmount;
+
+  /// No description provided for @benefitsStoryTerm.
+  ///
+  /// In en, this message translates to:
+  /// **'Term 12 months'**
+  String get benefitsStoryTerm;
+
+  /// No description provided for @benefitsStory1Step2Sub.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get benefitsStory1Step2Sub;
+
+  /// No description provided for @benefitsStory2Label.
+  ///
+  /// In en, this message translates to:
+  /// **'STORY 02'**
+  String get benefitsStory2Label;
+
+  /// No description provided for @benefitsStory2TagAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Investment ¥100,000 + ¥1,000,000'**
+  String get benefitsStory2TagAmount;
+
+  /// No description provided for @benefitsStory2RankUp.
+  ///
+  /// In en, this message translates to:
+  /// **'RANK UP ↑'**
+  String get benefitsStory2RankUp;
+
+  /// No description provided for @benefitsStepEndSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get benefitsStepEndSub;
+
+  /// No description provided for @benefitsResultRankLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Rank'**
+  String get benefitsResultRankLabel;
+
+  /// No description provided for @benefitsAssetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Portfolio value'**
+  String get benefitsAssetLabel;
+
+  /// No description provided for @benefitsMilesUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'miles'**
+  String get benefitsMilesUnit;
+
+  /// No description provided for @benefitsFundA.
+  ///
+  /// In en, this message translates to:
+  /// **'Fund A'**
+  String get benefitsFundA;
+
+  /// No description provided for @benefitsFundB.
+  ///
+  /// In en, this message translates to:
+  /// **'Fund B'**
+  String get benefitsFundB;
+
+  /// No description provided for @benefitsSimEyebrow.
+  ///
+  /// In en, this message translates to:
+  /// **'SIMULATION'**
+  String get benefitsSimEyebrow;
+
+  /// No description provided for @benefitsSimLead.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an investment amount to estimate your distributions and Host Miles.'**
+  String get benefitsSimLead;
+
+  /// No description provided for @benefitsStoriesJp.
+  ///
+  /// In en, this message translates to:
+  /// **'How Host Miles Accumulate'**
+  String get benefitsStoriesJp;
+
+  /// No description provided for @benefitsStoriesLead.
+  ///
+  /// In en, this message translates to:
+  /// **'See how Host Miles and rank change with two different investment styles.'**
+  String get benefitsStoriesLead;
+
+  /// No description provided for @benefitsStoriesNote.
+  ///
+  /// In en, this message translates to:
+  /// **'* Miles are estimates. Rank and earn rate depend on AUM.'**
+  String get benefitsStoriesNote;
+
+  /// No description provided for @benefitsTotalMilesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total miles earned'**
+  String get benefitsTotalMilesLabel;
+
+  /// No description provided for @benefitsMonth1Full.
+  ///
+  /// In en, this message translates to:
+  /// **'Month 1'**
+  String get benefitsMonth1Full;
+
+  /// No description provided for @benefitsMonth6Full.
+  ///
+  /// In en, this message translates to:
+  /// **'Month 6'**
+  String get benefitsMonth6Full;
+
+  /// No description provided for @benefitsMonth12Full.
+  ///
+  /// In en, this message translates to:
+  /// **'Month 12'**
+  String get benefitsMonth12Full;
+
+  /// No description provided for @benefitsMilesPerMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'miles / mo'**
+  String get benefitsMilesPerMonth;
+
+  /// No description provided for @benefitsStory1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Start small with ¥100,000'**
+  String get benefitsStory1Title;
+
+  /// No description provided for @benefitsStory2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Add more and rank up'**
+  String get benefitsStory2Title;
+
+  /// No description provided for @benefitsStory1Step1Action.
+  ///
+  /// In en, this message translates to:
+  /// **'Invest ¥100,000'**
+  String get benefitsStory1Step1Action;
+
+  /// No description provided for @benefitsStory1Step2Action.
+  ///
+  /// In en, this message translates to:
+  /// **'Miles every month'**
+  String get benefitsStory1Step2Action;
+
+  /// No description provided for @benefitsStory1Step3Action.
+  ///
+  /// In en, this message translates to:
+  /// **'¥100,000 + returns'**
+  String get benefitsStory1Step3Action;
+
+  /// No description provided for @benefitsStory2Step2Action.
+  ///
+  /// In en, this message translates to:
+  /// **'Add ¥1,000,000'**
+  String get benefitsStory2Step2Action;
+
+  /// No description provided for @benefitsStory2Step3Action.
+  ///
+  /// In en, this message translates to:
+  /// **'¥1,100,000 + returns'**
+  String get benefitsStory2Step3Action;
+
+  /// No description provided for @benefitsAfter12Months.
+  ///
+  /// In en, this message translates to:
+  /// **'AFTER 12 MONTHS'**
+  String get benefitsAfter12Months;
+
   /// No description provided for @homeLearnService.
   ///
   /// In en, this message translates to:
@@ -12096,7 +12504,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeGuestEyebrow.
   ///
   /// In en, this message translates to:
-  /// **'YADONUSHI'**
+  /// **'やどぬし'**
   String get homeGuestEyebrow;
 
   /// No description provided for @homeSimulationEyebrow.
@@ -12114,7 +12522,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeServiceTitle.
   ///
   /// In en, this message translates to:
-  /// **'About host benefits'**
+  /// **'About Host Benefits'**
   String get homeServiceTitle;
 
   /// No description provided for @homeServiceAboutEyebrow.
@@ -12156,7 +12564,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeServiceBenefitsBody.
   ///
   /// In en, this message translates to:
-  /// **'Host Benefits are exclusively for hosts. Each month, you earn Host Miles based on your Host Fund investment balance. Use your miles to book a stay at a STELLAVIA hotel and set off on your next trip. The longer you invest, the more choices and flexibility you have when you travel. That’s the idea behind STELLAVIA’s Host Benefits.'**
+  /// **'Host Benefits are exclusive benefits for Hosts, with Host Miles added monthly based on the balance of your Host Funds. Use your accumulated Host Miles to book STELLAVIA hotels and travel. The longer you invest, the more choices and freedom you gain. This is STELLAVIA’s Host Benefits program.'**
   String get homeServiceBenefitsBody;
 
   /// No description provided for @homeServiceReturnsEyebrow.
@@ -12222,19 +12630,19 @@ abstract class AppLocalizations {
   /// No description provided for @homeRankDetailTitle.
   ///
   /// In en, this message translates to:
-  /// **'Keep investing. Travel more freely.'**
+  /// **'The more you invest, the further you travel.'**
   String get homeRankDetailTitle;
 
   /// No description provided for @homeRankDetailBody.
   ///
   /// In en, this message translates to:
-  /// **'Five membership ranks are based on your invested balance. Higher ranks increase your host-mile earning rate, extend the advance booking window and lengthen mile validity. Continued investing gives you more freedom to travel.'**
+  /// **'Five rank levels based on your assets under management. As your rank rises, your Host Miles earning rate increases, your booking window expands, and your miles remain valid longer. The longer you continue, the more freedom you have to travel.'**
   String get homeRankDetailBody;
 
   /// No description provided for @homeRankEligibilityNote.
   ///
   /// In en, this message translates to:
-  /// **'Only amounts invested in funds that open for subscriptions on or after December 1, 2026 count toward your rank and Host Miles. Funds that opened for subscriptions before that date are excluded.'**
+  /// **'* The displayed AUM is the total of all holdings. Rank and host-mile issuance are calculated only from investments in funds whose offering started on or after the Host Mile Service Terms effective date (December 1, 2026); funds that began offering before that date are excluded.'**
   String get homeRankEligibilityNote;
 
   /// No description provided for @homeRankDraftNotice.
@@ -12252,7 +12660,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeRankInvestmentLabel.
   ///
   /// In en, this message translates to:
-  /// **'Invested balance'**
+  /// **'Outstanding balance'**
   String get homeRankInvestmentLabel;
 
   /// No description provided for @homeRankRegularRange.
@@ -12534,8 +12942,32 @@ abstract class AppLocalizations {
   /// No description provided for @homeRankRulesEmpty.
   ///
   /// In en, this message translates to:
-  /// **'No rank information is available yet.'**
+  /// **'Unable to load rank information.'**
   String get homeRankRulesEmpty;
+
+  /// No description provided for @simResultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Simulation result'**
+  String get simResultTitle;
+
+  /// No description provided for @simHotelPriceNote.
+  ///
+  /// In en, this message translates to:
+  /// **'※ Miles shown are the lowest estimate among dates bookable within the next year. Actual miles required vary by stay date, room type, and availability.'**
+  String get simHotelPriceNote;
+
+  /// No description provided for @simReadyToRun.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter conditions and tap\nSimulate to see estimated\ndividends and Host Benefits.'**
+  String get simReadyToRun;
+
+  /// No description provided for @simConditionsChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Conditions changed. Please simulate again.'**
+  String get simConditionsChanged;
 
   /// No description provided for @simRunAction.
   ///
@@ -12546,13 +12978,13 @@ abstract class AppLocalizations {
   /// No description provided for @simPointsHotelsTitle.
   ///
   /// In en, this message translates to:
-  /// **'Hotels within your estimated miles'**
+  /// **'Hotels you can book with current miles'**
   String get simPointsHotelsTitle;
 
   /// No description provided for @simPointsHotelsEmpty.
   ///
   /// In en, this message translates to:
-  /// **'No hotels were found for this many miles.'**
+  /// **'No hotels available with current miles'**
   String get simPointsHotelsEmpty;
 
   /// No description provided for @simPointsHotelStay.
@@ -12672,7 +13104,7 @@ abstract class AppLocalizations {
   /// No description provided for @simEstimateNote.
   ///
   /// In en, this message translates to:
-  /// **'Pretax simple-interest estimate. Total received includes principal and all dividends during the term. Miles use the tier for the simulated investment and are not guaranteed awards.'**
+  /// **'* Yields and operating periods are estimates and do not guarantee future performance.\n* The Host Miles program may be changed in the future.\n* This simulation is an estimate. Miles required for a stay are based on current rates and vary by hotel and season.\n* The displayed rank and Host Miles are estimates for a first-time investment. Check My Page for your current rank and earning rate.'**
   String get simEstimateNote;
 
   /// No description provided for @simRegister.

@@ -32,8 +32,8 @@ class HomeRankDetailCard extends StatelessWidget {
               children: [
                 Text(
                   palette.number == null
-                      ? l.homeRankLabel
-                      : '${l.homeRankLabel} ${palette.number}',
+                      ? l.homeRankEyebrow
+                      : '${l.homeRankEyebrow} ${palette.number}',
                   style: HomeTextStyles.rankEyebrow(
                     context,
                   ).copyWith(color: palette.headerInk.withValues(alpha: .75)),

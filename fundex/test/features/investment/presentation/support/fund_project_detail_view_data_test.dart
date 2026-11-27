@@ -19,7 +19,7 @@ void main() {
           builder: (context) {
             final labels = AppLocalizations.of(context)!;
             for (final (status, label, enabled) in [
-              (0, labels.fundDetailOpenSoonAction, true),
+              (0, labels.fundDetailOpenSoonAction, false),
               (1, labels.fundDetailApplyNowAction, true),
               (2, labels.fundDetailUnavailableAction, false),
             ]) {

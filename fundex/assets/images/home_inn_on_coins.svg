@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 120" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Three milled coin edges; the roof and walls occupy the back of the top face. -->
+  <path d="M26 76c-7 2-12 5-12 9 0 8 25 14 56 14s56-6 56-14c0-4-6-8-15-10"/>
+  <path d="M14 85v6c0 8 25 14 56 14s56-6 56-14v-6"/>
+  <path d="M17 96v3c0 8 25 14 56 14s56-6 56-14v-4c0-2-1-4-4-5"/>
+  <path d="M17 99c3 6 26 11 55 11 31 0 55-6 57-13" stroke-width="1"/>
+  <path d="M15 102c-2 1-3 3-3 4v2c0 7 26 12 56 12s56-5 56-12v-3" transform="translate(1 -2)"/>
+  <path d="M28 94v4m6-3v4m6-3v4m55-3v4m6-5v4m6-6v4" stroke-width="1.3"/>
+  <!-- Timber inn, with a shallow tiled roof, lattice windows and split noren. -->
+  <path d="m21 49 19-28 47-8 32 27-17 6-28-22-25 29-28 3z"/>
+  <path d="m40 21 34 3m0 0 13-11m-41 38 29-5 26 4 18-7v-3M49 53l26-29"/>
+  <path d="m37 40 10-15m2 13 9-13m38-3 14 13" stroke-width="1.2"/>
+  <path d="m27 56 1 20 46 12 38-15V46M74 88V48M31 73l40 11m6 0 32-12"/>
+  <path d="m34 58 12 2v12l-12-3zm6 1v11m-6-7 12 3m9-6 13 2v20l-13-3z"/>
+  <path d="m53 59 17 3-1 7-6-1v-4l-1 4-8-2z" stroke-width="1.3"/>
+  <path d="m82 55 20-7v14l-20 7zm6-2v14m7-17v14m-13-3 20-7" stroke-width="1.5"/>
+</svg>

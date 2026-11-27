@@ -704,7 +704,7 @@ String resolveFundDetailActionLabel(BuildContext context, FundProject project) {
 }
 
 bool isFundDetailActionEnabled(FundProject project) {
-  return project.projectStatus == 1 || project.projectStatus == 0;
+  return project.projectStatus == 1;
 }
 
 String _resolveMethodLabel(BuildContext context, String? offeringMethod) {

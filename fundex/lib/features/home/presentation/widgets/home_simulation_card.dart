@@ -4,7 +4,13 @@ import '../../../../app/localization/app_localizations_ext.dart';
 import '../support/home_text_styles.dart';
 
 class HomeSimulationCard extends StatelessWidget {
-  const HomeSimulationCard({super.key, required this.onTap});
+  const HomeSimulationCard({
+    super.key,
+    required this.onTap,
+    this.eyebrow,
+    this.title,
+  });
+  final String? eyebrow, title;
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
@@ -36,14 +42,14 @@ class HomeSimulationCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  context.l10n.homeSimulationEyebrow,
+                  eyebrow ?? context.l10n.homeSimulationEyebrow,
                   style: HomeTextStyles.simulationEyebrow(
                     context,
                   ).copyWith(color: colors.onDark),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  context.l10n.homeSimulationTitle,
+                  title ?? context.l10n.homeSimulationTitle,
                   style: HomeTextStyles.entryTitle(
                     context,
                   ).copyWith(color: colors.onDark),

@@ -31,6 +31,11 @@ class SimulationHotelResults extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 8),
+        Padding(
+          padding: inset,
+          child: Text(l.simHotelPriceNote, style: context.appTextTheme.caption),
+        ),
+        const SizedBox(height: 8),
         hotels.when(
           skipLoadingOnRefresh: false,
           loading: () =>

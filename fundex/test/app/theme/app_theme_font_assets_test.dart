@@ -62,7 +62,7 @@ void main() {
                   children: [
                     const SizedBox(height: 32),
                     Text('STELLAVIA', style: text.numericHeadline),
-                    Text('未来の安心も、今の楽しみも。', style: text.pageTitle),
+                    Text('未来のゆとりも、今の楽しみも。', style: text.pageTitle),
                     const SizedBox(height: 24),
                     Card(
                       child: Padding(

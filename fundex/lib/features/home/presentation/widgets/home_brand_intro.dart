@@ -48,7 +48,7 @@ class HomeBrandIntro extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  l10n.homeGuestBenefitsBody,
+                  l10n.homeServiceBenefitsTitle,
                   style: HomeTextStyles.caption(
                     context,
                   ).copyWith(color: colors.onDark),
@@ -74,7 +74,7 @@ class HomeBrandIntro extends StatelessWidget {
                       bottom: 0,
                     ),
                     child: AppButton(
-                      label: l10n.homeLearnService,
+                      label: l10n.homeFeaturedFundViewDetailAction,
                       fullWidth: false,
                       minHeight: 34,
                       variant: AppButtonVariant.secondary,

@@ -60,6 +60,7 @@ Nationality and tax residence use the same ordered country list and preserve leg
 - Member and guest home now follow the app redesign frames, preserving the existing tabs and live fund/hotel lists. Old home sections are detached from this page; external implementations remain.
 - Service introduction and rank details now have public pages at `/home/service` and `/home/ranks`, with localized Figma content, back navigation and registration/fund actions. Rank values remain provisional display content, not eligibility rules. Simulation/miles features remain pending.
 - Later user-confirmed home composition hides hotels and the miles card and shows simulation for both auth states; external implementations are retained.
+- Home opens two public native detail pages from its swipeable banners: `/home/features` and `/home/miles`.
 - See [Home redesign](home-redesign.md) for scope, assets and validation.
 
 ### StellaVia Theme Foundation (2026-10-23)
@@ -276,7 +277,7 @@ Update these files by scope:
 
 ### 2026-10-29 试算器 Web 规则对齐
 
-试算器结果改为 FINANCIAL RETURN 配当 / EXPERIENCE RETURN 宿主優待；展示实际期间累计配当、领取时机、等级月率/月里程/累计里程。删除之前每晚10,000里程假设及晚数，用户确认不加入示例酒店。App仍实时计算。Web算法来源与边界见 `docs/home-redesign.md` 最新章节。
+试算器结果改为 FINANCIAL RETURN 配当 / EXPERIENCE RETURN 宿主優待；展示实际期间累计配当、领取时机、等级月率/月里程/累计里程。删除之前每晚10,000里程假设及晚数，用户确认不加入示例酒店。App 仅在点击试算按钮后计算并查询酒店。修改条件时标记上次结果过期并提示重新试算。Web算法来源与边界见 `docs/home-redesign.md` 最新章节。
 
 ### 2026-10-29 宿主マイル酒店首页
 
@@ -315,6 +316,8 @@ Hotel detail now shares the 04 room-selection layout for ordinary and host-miles
 ### 2026-11-09 StellaVia 通用界面颜色
 
 通用操作、金额、状态、转盘和筛选已按 Figma「02｜カラー」迁移。金色仅用于 Gold 会员等级；默认浅色页面背景仍为 `#F5F5F2`。SDK 兼容映射及各颜色用途见 [主题规范](stellavia-theme-foundation.md)。
+
+基金详情的申请按钮仅在募集中（状态 1）启用。募集前（状态 0）显示灰色禁用按钮，原生详情与内嵌 Web 详情共用此规则。
 
 基金状态标签按 Figma 第 06 节统一映射，状态码与配色详见[主题规范](stellavia-theme-foundation.md)。
 

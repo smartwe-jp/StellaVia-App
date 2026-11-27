@@ -6311,7 +6311,226 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeGuestBenefitsTitle => '宿主優待';
 
   @override
-  String get homeGuestBenefitsBody => '未来の安心も、今の楽しみも。';
+  String get homeGuestBenefitsBody => '未来のゆとりも、今の楽しみも。';
+
+  @override
+  String get bannerFeatures => 'サービス特徴';
+
+  @override
+  String get featuresInvestmentKicker => 'Why STELLAVIA — Investment';
+
+  @override
+  String get featuresStayKicker => 'Why STELLAVIA — Hotel Stay';
+
+  @override
+  String get featuresFaqEyebrow => 'FAQ';
+
+  @override
+  String get featuresDetailTitle => 'STELLAVIAのサービス特徴';
+
+  @override
+  String get featuresFuture1Title => '1口1万円から、\nホテルの宿主になる';
+
+  @override
+  String get featuresFuture1Body =>
+      '1口1万円から宿主ファンドへ投資可能。まとまった資金がなくても、少額からホテルへの投資をはじめられます。';
+
+  @override
+  String get featuresFuture2Title => '日々の売買判断にとらわれず、\n未来の資産を育てる';
+
+  @override
+  String get featuresFuture2Body =>
+      '想定利回りと運用期間を募集時に明確にしているため、日々の相場を見て売買を判断する必要がなく、中長期の資産形成を目指せます。';
+
+  @override
+  String get featuresFuture3Title => '手数料無料で、\n途中売却も可能';
+
+  @override
+  String get featuresFuture3Body =>
+      '毎月配当を受け取りながら、手数料無料で途中売却も可能。ライフプランの変化にあわせて、柔軟に投資計画が立てられます。';
+
+  @override
+  String get featuresFutureNote =>
+      '※ 利回りと運用期間は想定であり、将来の運用成果を保証するものではありません。\n※ 不動産市況などの要因で、損益が変動することがあります。\n※ 毎月配当は、インカムゲイン型の対象ファンドに限ります。分配は、ファンドに利益が生じた場合に行われます。\n※ 売却は買い手が見つかった場合にのみ可能となります。換金保証ではありません。\n※ 無料となるのは、当社が受領する譲渡手数料です。';
+
+  @override
+  String get featuresNow1Title => '持っているだけで、\n宿主マイルが毎月貯まる';
+
+  @override
+  String get featuresNow1Body =>
+      '宿主ファンドの運用残高に応じて、宿泊に使える「宿主マイル」を毎月獲得。ランクによって、獲得率や予約可能期間が変わります。';
+
+  @override
+  String get featuresNow2Title => '宿主マイルで、\nホテルを予約する';
+
+  @override
+  String get featuresNow2Body =>
+      '貯まった宿主マイルを使って、STELLAVIAのホテルを予約。運用によるリターンだけでなく、旅という体験で今も楽しめます。';
+
+  @override
+  String get featuresNow3Title => '予約したホテルに、\n泊まって体験する';
+
+  @override
+  String get featuresNow3Body =>
+      '自分が投資したホテルや予約したホテルに実際に宿泊。数字や写真だけではわからないホテルの魅力を、自分自身でリアルに体験できます。';
+
+  @override
+  String get featuresNowNote =>
+      '※ 宿主マイル制度の内容は、今後変更となる場合があります。\n※ 現在のランクやマイル獲得率は、マイページをご確認ください。';
+
+  @override
+  String get featuresFaqTitle => 'よくあるご質問';
+
+  @override
+  String get featuresFaqCta => 'FAQ一覧へ';
+
+  @override
+  String get featuresFaq1Q => 'STELLAVIAはどのようなサービスですか？';
+
+  @override
+  String get featuresFaq1A =>
+      'ホテルを対象とした宿主ファンドに、1口1万円から投資できるサービスです。運用による配当に加えて、運用残高に応じて宿泊に使える「宿主マイル」が貯まる『宿主優待』が最大の特徴です。';
+
+  @override
+  String get featuresFaq2Q => '宿主登録（会員登録）に費用はかかりますか？';
+
+  @override
+  String get featuresFaq2A => '宿主登録は無料です。';
+
+  @override
+  String get featuresFaq3Q => 'いくらから投資できますか？';
+
+  @override
+  String get featuresFaq3A => '1口1万円から投資できます。';
+
+  @override
+  String get featuresFaq4Q => '宿主マイルはどのように貯まりますか？';
+
+  @override
+  String get featuresFaq4A =>
+      '運用残高（すべてのファンドの合計）に、宿主ランクごとの獲得率（月0.5〜0.6％）をかけた宿主マイルが、毎月貯まります。';
+
+  @override
+  String get featuresFaq5Q => '宿主マイルでの予約方法を教えてください。';
+
+  @override
+  String get featuresFaq5A =>
+      'マイページの「泊まれるホテル」から、空室がある日の中から日付・人数・客室を選んでご予約ください。宿主マイルを消費した時点で予約が確定し、予約確認のメールがすぐに届きます。';
+
+  @override
+  String get featuresReturnsFutureH => '運用によるリターンを狙う';
+
+  @override
+  String get featuresReturnsFutureBody =>
+      '想定年利回り6〜10%の宿主ファンドへ投資。日々の相場を見て売買を判断する必要がなく、中長期の資産形成を目指せます。';
+
+  @override
+  String get featuresReturnsFutureNote =>
+      '※想定年利回りは、募集する宿主ファンドごとに異なります。将来の運用成果を保証するものではありません。\n※不動産市況などの要因で、損益が変動することがあります。';
+
+  @override
+  String get featuresReturnsNowH => '宿主マイルで旅に出る';
+
+  @override
+  String get featuresReturnsNowBody =>
+      '貯まった宿主マイルを使って、STELLAVIAのホテルを予約。旅という体験で今も楽しめます。';
+
+  @override
+  String get benefitsStoriesEn => 'EARNING MILEAGE';
+
+  @override
+  String get benefitsStory1Label => 'STORY 01';
+
+  @override
+  String get benefitsStory1TagAmount => '投資額 10万円';
+
+  @override
+  String get benefitsStoryTerm => '運用期間 12ヶ月';
+
+  @override
+  String get benefitsStory1Step2Sub => '運用中';
+
+  @override
+  String get benefitsStory2Label => 'STORY 02';
+
+  @override
+  String get benefitsStory2TagAmount => '投資額 10万円＋100万円';
+
+  @override
+  String get benefitsStory2RankUp => 'RANK UP ↑';
+
+  @override
+  String get benefitsStepEndSub => '運用終了';
+
+  @override
+  String get benefitsResultRankLabel => 'ランク';
+
+  @override
+  String get benefitsAssetLabel => '運用資産';
+
+  @override
+  String get benefitsMilesUnit => 'マイル';
+
+  @override
+  String get benefitsFundA => 'ファンドA';
+
+  @override
+  String get benefitsFundB => 'ファンドB';
+
+  @override
+  String get benefitsSimEyebrow => 'SIMULATION';
+
+  @override
+  String get benefitsSimLead => '投資額を入力すると、もらえる配当と貯まる宿主マイルの目安がわかります。';
+
+  @override
+  String get benefitsStoriesJp => '宿主マイル獲得のイメージ';
+
+  @override
+  String get benefitsStoriesLead =>
+      '投資の仕方によって、貯まる宿主マイルとランクがどう変わるのか。2つの例でご紹介します。';
+
+  @override
+  String get benefitsStoriesNote => '※ 獲得マイルは目安です。ランク・獲得率は運用残高により変わります。';
+
+  @override
+  String get benefitsTotalMilesLabel => '累計獲得マイル';
+
+  @override
+  String get benefitsMonth1Full => '1ヶ月目';
+
+  @override
+  String get benefitsMonth6Full => '6ヶ月目';
+
+  @override
+  String get benefitsMonth12Full => '12ヶ月目';
+
+  @override
+  String get benefitsMilesPerMonth => 'マイル／月';
+
+  @override
+  String get benefitsStory1Title => '10万円から、まずはじめてみる';
+
+  @override
+  String get benefitsStory2Title => '追加投資で、ランクアップ';
+
+  @override
+  String get benefitsStory1Step1Action => '10万円を投資';
+
+  @override
+  String get benefitsStory1Step2Action => '毎月マイルが貯まる';
+
+  @override
+  String get benefitsStory1Step3Action => '10万円＋運用益';
+
+  @override
+  String get benefitsStory2Step2Action => '100万円を追加投資';
+
+  @override
+  String get benefitsStory2Step3Action => '110万円＋運用益';
+
+  @override
+  String get benefitsAfter12Months => 'AFTER 12 MONTHS';
 
   @override
   String get homeLearnService => 'サービス詳細を見る';
@@ -6338,7 +6557,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeMemberEyebrow => 'YADONUSHI MEMBER';
 
   @override
-  String get homeGuestEyebrow => 'YADONUSHI';
+  String get homeGuestEyebrow => 'やどぬし';
 
   @override
   String get homeSimulationEyebrow => 'MILE SIMULATION';
@@ -6353,7 +6572,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeServiceAboutEyebrow => 'WHY STELLAVIA';
 
   @override
-  String get homeServiceAboutTitle => '未来の安心を育て、今の人生も豊かに。';
+  String get homeServiceAboutTitle => '未来のゆとりも、今の楽しみも。';
 
   @override
   String get homeServiceVideoPending => '動画準備中';
@@ -6370,7 +6589,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get homeServiceBenefitsBody =>
-      '『宿主優待』は、宿主ファンドの運用残高に応じて「宿主マイル」が毎月貯まる、宿主だけの特典。 貯まった「宿主マイル」でSTELLAVIAのホテルを予約し、旅に出る。 投資を続けるほど、旅の選択肢や自由度が増えていく。 それが、STELLAVIAが提案する『宿主優待』です。';
+      '『宿主優待』は、宿主ファンドの運用残高に応じて「宿主マイル」が毎月貯まる、宿主だけの特典。貯まった「宿主マイル」でSTELLAVIAのホテルを予約し、旅に出る。投資を続けるほど、旅の選択肢や自由度が増えていく。それが、STELLAVIAが提案する『宿主優待』です。';
 
   @override
   String get homeServiceReturnsEyebrow => 'TWO RETURNS';
@@ -6405,15 +6624,15 @@ class AppLocalizationsJa extends AppLocalizations {
       '貯まった宿主マイルを使って、STELLAVIAのホテルを予約。運用によるリターンだけでなく、旅という体験で今も楽しめます。';
 
   @override
-  String get homeRankDetailTitle => '続けるほど、旅がもっと自由に。';
+  String get homeRankDetailTitle => '投資するほど、旅がひろがる。';
 
   @override
   String get homeRankDetailBody =>
-      '運用残高に応じた5段階のランク。ランクが上がるほど、宿主マイルの獲得率だけでなく、宿泊の予約可能期間や宿主マイルの有効期限が広がります。続けるほど、旅がもっと自由になる設計です。';
+      '運用残高に応じた5段階のランク。ランクが上がるほど、宿主マイルの獲得率だけでなく、宿泊の予約可能期間が広がり、宿主マイルの有効期限も延びます。続けるほど、旅がもっと自由になる設計です。';
 
   @override
   String get homeRankEligibilityNote =>
-      'ランク判定と宿主マイル付与は、2026年12月1日以降に募集を開始したファンドへの投資額のみで算定します（施行日前に募集開始したファンドは対象外）。';
+      '※表示の運用残高は保有ファンド全体の合計です。ランク判定と宿主マイル付与は、2026年12月1日以降に募集を開始したファンドへの投資額のみで算定します（2026年12月1日前に募集開始したファンドは対象外）。';
 
   @override
   String get homeRankDraftNotice =>
@@ -6423,7 +6642,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeRankProvisionalLabel => '宿主ランク（仮）';
 
   @override
-  String get homeRankInvestmentLabel => '投資運用額';
+  String get homeRankInvestmentLabel => '運用残高';
 
   @override
   String get homeRankRegularRange => '50万円未満';
@@ -6601,16 +6820,29 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeRankLabel => '宿主ランク';
 
   @override
-  String get homeRankRulesEmpty => 'ランク情報はまだありません。';
+  String get homeRankRulesEmpty => 'ランク情報を取得できませんでした。';
+
+  @override
+  String get simResultTitle => 'シミュレーション結果';
+
+  @override
+  String get simHotelPriceNote =>
+      '※ 表示の必要マイル数は、今後1年以内にご予約可能な日程のうち最も低い目安です。宿泊日・客室等により実際の必要マイルは変動します。';
+
+  @override
+  String get simReadyToRun => '条件を入力して\n「シミュレーションする」を押すと、\n配当と宿主優待の目安が表示されます。';
+
+  @override
+  String get simConditionsChanged => '条件が変更されています。再度シミュレーションしてください。';
 
   @override
   String get simRunAction => 'シミュレーションする';
 
   @override
-  String get simPointsHotelsTitle => 'このマイルで泊まれるホテル';
+  String get simPointsHotelsTitle => '今のマイルで泊まれるホテル';
 
   @override
-  String get simPointsHotelsEmpty => 'このマイル数で泊まれるホテルは見つかりませんでした。';
+  String get simPointsHotelsEmpty => '今のマイルで泊まれるホテルはありません';
 
   @override
   String simPointsHotelStay(String points, int nights) {
@@ -6675,7 +6907,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get simEstimateNote =>
-      '税引前・単利の概算です。トータル受取額は元本と期間中の配当の合計です。マイルは試算額のランクで算出し、実際の付与を保証するものではありません。';
+      '※ 利回りと運用期間は想定であり、将来の運用成果を保証するものではありません。\n※ 宿主マイル制度の内容は、今後変更となる場合があります。\n※ 本シミュレーションは概算です。宿泊に必要なマイル数は、現在のレートによる目安であり、ホテル・時期により変動します。\n※ 表示されるランクと獲得できる宿主マイルは、初めて投資する場合の目安です。現在のランクやマイル獲得率は、マイページをご確認ください。';
 
   @override
   String get simRegister => '無料で会員登録して始める';

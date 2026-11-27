@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../app/localization/app_localizations_ext.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
+import '../../domain/entities/home_simulation.dart';
 import '../controllers/home_simulation_controller.dart';
 import '../providers/home_miles_providers.dart';
 import '../support/home_simulation_theme.dart';
@@ -21,14 +22,31 @@ class HomeSimulationPage extends ConsumerStatefulWidget {
 
 class _HomeSimulationPageState extends ConsumerState<HomeSimulationPage> {
   final _resultKey = GlobalKey();
-  bool _showHotels = false;
+  HomeSimulationInput? _submittedInput;
+  HomeSimulationResult? _result;
+  bool _dirty = false;
 
-  void _run(int? points) {
+  void _markDirty() {
+    if (!_dirty) setState(() => _dirty = true);
+  }
+
+  void _run() {
     FocusManager.instance.primaryFocus?.unfocus();
-    if (_showHotels && points != null) {
-      ref.invalidate(simulationHotelsProvider(points));
+    FocusManager.instance.applyFocusChangesIfNeeded();
+    final input = ref.read(homeSimulationInputProvider);
+    final rules = ref.read(homeRankDetailsRulesProvider);
+    final result = ref.read(homeSimulationCalculatorProvider)(
+      input,
+      rules.data ?? const [],
+    );
+    if (!_dirty && _result?.miles == result.miles && result.miles != null) {
+      ref.invalidate(simulationHotelsProvider(result.miles!));
     }
-    setState(() => _showHotels = true);
+    setState(() {
+      _submittedInput = input;
+      _result = result;
+      _dirty = false;
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final target = _resultKey.currentContext;
       if (target != null) {
@@ -43,14 +61,13 @@ class _HomeSimulationPageState extends ConsumerState<HomeSimulationPage> {
   @override
   Widget build(BuildContext context) {
     ref.listen(homeSimulationInputProvider, (_, __) {
-      if (!_showHotels) setState(() => _showHotels = true);
+      _markDirty();
     });
     final l = context.l10n;
     final input = ref.watch(homeSimulationInputProvider);
     final controller = ref.read(homeSimulationInputProvider.notifier);
     final rules = ref.watch(homeRankDetailsRulesProvider);
-    final calculator = ref.watch(homeSimulationCalculatorProvider);
-    final result = calculator(input, rules.data ?? const []);
+    final result = _result;
     final member = ref.watch(isAuthenticatedProvider).asData?.value == true;
     return Scaffold(
       backgroundColor: HomeSimulationTheme.background(context),
@@ -101,24 +118,37 @@ class _HomeSimulationPageState extends ConsumerState<HomeSimulationPage> {
                 ),
                 child: Column(
                   children: [
+                    Text(l.benefitsSimLead, style: context.appTextTheme.body),
+                    const SizedBox(height: 12),
                     HomeSimulationInputs(
                       input: input,
+                      onTextEdited: _markDirty,
                       onUnits: controller.setUnits,
                       onRate: controller.setRate,
                       onMonths: controller.setMonths,
                       onType: controller.setType,
                     ),
                     const SizedBox(height: 12),
+                    if (result == null || _dirty) ...[
+                      Text(
+                        result == null
+                            ? l.simReadyToRun
+                            : l.simConditionsChanged,
+                        style: context.appTextTheme.bodyStrong,
+                      ),
+                      const SizedBox(height: 8),
+                    ],
                     AppButton(
                       label: l.simRunAction,
-                      onPressed: () => _run(result.miles),
+                      onPressed: rules.isLoading ? null : _run,
                     ),
                     const SizedBox(height: 12),
-                    HomeSimulationResultCard(
-                      key: _resultKey,
-                      result: result,
-                      input: input,
-                    ),
+                    if (result != null)
+                      HomeSimulationResultCard(
+                        key: _resultKey,
+                        result: result,
+                        input: _submittedInput!,
+                      ),
                     if (rules.isLoading || rules.hasError)
                       Padding(
                         padding: const EdgeInsets.only(top: 8),
@@ -138,9 +168,9 @@ class _HomeSimulationPageState extends ConsumerState<HomeSimulationPage> {
                   ],
                 ),
               ),
-              if (_showHotels && result.miles != null) ...[
+              if (!_dirty && result?.miles != null) ...[
                 const SizedBox(height: 16),
-                SimulationHotelResults(points: result.miles!),
+                SimulationHotelResults(points: result!.miles!),
               ],
               if (member) ...[
                 const SizedBox(height: UiTokens.spacing16),
