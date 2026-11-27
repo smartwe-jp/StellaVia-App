@@ -6246,6 +6246,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeHostMiles => '宿主里程';
 
   @override
+  String get homeMembershipExample => '以下会员信息和数值为示例';
+
+  @override
+  String get homeViewReservations => '查看预订';
+
+  @override
+  String get homeViewHeldFunds => '查看持有基金';
+
+  @override
   String get homeBookWithMiles => '使用宿主里程预约';
 
   @override
@@ -14595,6 +14604,15 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get homeHostMiles => '宿主里程';
+
+  @override
+  String get homeMembershipExample => '以下會員資訊及數值為範例';
+
+  @override
+  String get homeViewReservations => '查看預訂';
+
+  @override
+  String get homeViewHeldFunds => '查看持有基金';
 
   @override
   String get homeBookWithMiles => '使用宿主里程預約';

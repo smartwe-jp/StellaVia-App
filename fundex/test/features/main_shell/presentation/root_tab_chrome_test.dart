@@ -1,3 +1,7 @@
+import 'package:fundex/features/home/presentation/widgets/home_simulation_card.dart';
+import 'package:fundex/features/home/presentation/widgets/home_quick_actions.dart';
+import 'package:fundex/features/home/presentation/widgets/home_miles_data_sections.dart';
+import 'package:fundex/features/home/presentation/widgets/home_service_banners.dart';
 import 'package:fundex/features/main_shell/presentation/pages/main_shell_page.dart';
 import 'package:fundex/features/home/presentation/providers/home_miles_providers.dart';
 import 'package:fundex/features/home/presentation/controllers/home_resource_controller.dart';
@@ -140,6 +144,21 @@ void main() {
           expect(rect.bottom, tester.getTopLeft(list).dy);
         }
 
+        final carousel = tester.getRect(find.byType(HomeServiceBanners));
+        expect(carousel.topLeft, tester.getTopLeft(list));
+        expect(carousel.width, tester.getSize(list).width);
+        expect(
+          tester.getTopLeft(find.text('WHY STELLAVIA').hitTestable()).dy,
+          carousel.top + 18,
+        );
+        final strings = AppLocalizations.of(tester.element(list));
+        expect(find.text(strings.homeQuickActionsTitle), findsNothing);
+        expect(find.byType(HomeMilesAccountSection), findsNothing);
+        expect(find.byType(HomeQuickActions), findsNothing);
+        expect(
+          tester.getTopLeft(find.byType(HomeSimulationCard)).dy,
+          carousel.bottom + 12,
+        );
         expectBannerBelowNavigation();
         final scroll = tester.widget<ListView>(list).controller!;
         await tester.drag(banner, const Offset(0, -50));
@@ -160,7 +179,7 @@ void main() {
         );
         await tester.drag(
           find.byKey(const Key('home_tab_content')),
-          const Offset(0, 40),
+          const Offset(0, 180),
         );
         await tester.pumpAndSettle();
         expect(container.read(mainShellChromeRevealProvider), 1);

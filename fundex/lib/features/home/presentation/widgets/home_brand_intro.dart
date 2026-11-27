@@ -20,10 +20,7 @@ class HomeBrandIntro extends StatelessWidget {
     return Container(
       width: double.infinity,
       clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: colors.heroStart,
-        borderRadius: BorderRadius.circular(18),
-      ),
+      decoration: BoxDecoration(color: colors.heroStart),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

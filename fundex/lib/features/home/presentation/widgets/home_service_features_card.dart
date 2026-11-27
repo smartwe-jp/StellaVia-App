@@ -20,7 +20,7 @@ class HomeServiceFeaturesCard extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: colors.surface,
-          borderRadius: BorderRadius.circular(UiTokens.radius16),
+
           image: const DecorationImage(
             image: AssetImage('assets/images/home_service_chalet.png'),
             fit: BoxFit.fitWidth,

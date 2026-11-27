@@ -6305,6 +6305,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get homeHostMiles => '宿主マイル';
 
   @override
+  String get homeMembershipExample => '以下の会員情報・数値は表示例';
+
+  @override
+  String get homeViewReservations => '予約を確認';
+
+  @override
+  String get homeViewHeldFunds => '保有ファンドを確認';
+
+  @override
   String get homeBookWithMiles => '宿主マイルで予約';
 
   @override

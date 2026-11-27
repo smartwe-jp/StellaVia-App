@@ -26,6 +26,7 @@ import '../widgets/home_verification_reminder.dart';
 import '../widgets/home_contact_verification_reminders.dart';
 import '../../../settings/presentation/providers/settings_two_factor_providers.dart';
 import '../widgets/home_miles_data_sections.dart';
+import '../../../member_profile/presentation/providers/mypage_membership_providers.dart';
 import '../widgets/home_miles_refresh_scope.dart';
 import '../providers/home_miles_providers.dart';
 import '../widgets/home_simulation_card.dart';
@@ -133,8 +134,9 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                     key: const Key('home_tab_content'),
                     controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.only(top: 16, bottom: 24),
+                    padding: const EdgeInsets.only(bottom: 24),
                     children: [
+                      const HomeServiceBanners(),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: UiTokens.spacing16,
@@ -142,11 +144,23 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            const HomeServiceBanners(),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 12),
                             if (isAuthenticated) ...[
-                              const HomeVerificationReminder(),
-                              const HomeContactVerificationReminders(),
+                              HomeMilesAccountSection(
+                                onTap: () =>
+                                    context.push('/hotel-booking/host-miles'),
+                              ),
+                              const SizedBox(height: 12),
+                              HomeQuickActions(
+                                onFunds: () => context.go('/funds'),
+                                onHotels: () => context.go('/hotel-booking'),
+                                onReservations: () =>
+                                    context.push('/bookings/history'),
+                                onHeldFunds: () => context.push(
+                                  '/profile/my/section-list?type=active',
+                                ),
+                              ),
+                              const SizedBox(height: 12),
                             ],
                             HomeSimulationCard(
                               onTap: () => context.push(
@@ -155,20 +169,11 @@ class _HomeOverviewTabPageState extends ConsumerState<HomeOverviewTabPage> {
                                     : '/home/simulation',
                               ),
                             ),
-
                             const SizedBox(height: 20),
                             if (isAuthenticated) ...[
-                              HomeQuickActions(
-                                onFunds: () => context.go('/funds'),
-                                onHotels: () => context.go('/hotel-booking'),
-                              ),
-                              const SizedBox(height: 20),
+                              const HomeVerificationReminder(),
+                              const HomeContactVerificationReminders(),
                             ],
-                            if (isAuthenticated)
-                              HomeMilesAccountSection(
-                                onTap: () =>
-                                    context.push('/hotel-booking/host-miles'),
-                              ),
                             if (asyncProjects.isLoading && projects.isEmpty)
                               const Padding(
                                 padding: EdgeInsets.all(16),
@@ -289,5 +294,7 @@ Future<void> _refreshHomeMiles(WidgetRef ref) async {
     ref.read(homeMilesRulesProvider.notifier).refresh(),
     if (ref.read(isAuthenticatedProvider).asData?.value == true)
       ref.read(homeMilesAccountProvider.notifier).refresh(),
+    if (ref.read(myPageMembershipIdentityProvider) != null)
+      ref.read(myPageTierProvider.notifier).refresh(),
   ]);
 }

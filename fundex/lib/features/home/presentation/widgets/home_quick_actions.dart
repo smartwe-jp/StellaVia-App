@@ -10,39 +10,59 @@ class HomeQuickActions extends StatelessWidget {
     super.key,
     required this.onFunds,
     required this.onHotels,
+    required this.onReservations,
+    required this.onHeldFunds,
   });
   final VoidCallback onFunds;
   final VoidCallback onHotels;
+  final VoidCallback onReservations;
+  final VoidCallback onHeldFunds;
   @override
   Widget build(BuildContext context) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
-        context.l10n.homeQuickActionsTitle,
-        style: context.appTextTheme.bodyStrong,
+      _ActionRow(
+        left: _Action(
+          icon: Symbols.monitoring,
+          label: context.l10n.homeFindFunds,
+          onTap: onFunds,
+        ),
+        right: _Action(
+          icon: Symbols.hotel,
+          label: context.l10n.homeFindHotels,
+          onTap: onHotels,
+        ),
       ),
-      const SizedBox(height: 8),
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: _Action(
-              icon: Symbols.monitoring,
-              label: context.l10n.homeFindFunds,
-              onTap: onFunds,
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: _Action(
-              icon: Symbols.hotel,
-              label: context.l10n.homeFindHotels,
-              onTap: onHotels,
-            ),
-          ),
-        ],
+      const SizedBox(height: 12),
+      _ActionRow(
+        left: _Action(
+          icon: Icons.event_available_outlined,
+          label: context.l10n.homeViewReservations,
+          onTap: onReservations,
+        ),
+        right: _Action(
+          icon: Icons.account_balance_wallet_outlined,
+          label: context.l10n.homeViewHeldFunds,
+          onTap: onHeldFunds,
+        ),
       ),
     ],
+  );
+}
+
+class _ActionRow extends StatelessWidget {
+  const _ActionRow({required this.left, required this.right});
+  final Widget left, right;
+  @override
+  Widget build(BuildContext context) => IntrinsicHeight(
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(child: left),
+        const SizedBox(width: 16),
+        Expanded(child: right),
+      ],
+    ),
   );
 }
 

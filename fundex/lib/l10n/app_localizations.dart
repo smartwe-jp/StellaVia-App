@@ -12027,6 +12027,24 @@ abstract class AppLocalizations {
   /// **'Host miles'**
   String get homeHostMiles;
 
+  /// No description provided for @homeMembershipExample.
+  ///
+  /// In en, this message translates to:
+  /// **'Sample membership details and balances'**
+  String get homeMembershipExample;
+
+  /// No description provided for @homeViewReservations.
+  ///
+  /// In en, this message translates to:
+  /// **'View reservations'**
+  String get homeViewReservations;
+
+  /// No description provided for @homeViewHeldFunds.
+  ///
+  /// In en, this message translates to:
+  /// **'View my funds'**
+  String get homeViewHeldFunds;
+
   /// No description provided for @homeBookWithMiles.
   ///
   /// In en, this message translates to:

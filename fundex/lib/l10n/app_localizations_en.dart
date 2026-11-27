@@ -6640,6 +6640,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeHostMiles => 'Host miles';
 
   @override
+  String get homeMembershipExample => 'Sample membership details and balances';
+
+  @override
+  String get homeViewReservations => 'View reservations';
+
+  @override
+  String get homeViewHeldFunds => 'View my funds';
+
+  @override
   String get homeBookWithMiles => 'Book with miles';
 
   @override

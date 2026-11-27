@@ -102,6 +102,8 @@ void main() {
                                     HomeQuickActions(
                                       onFunds: () => taps++,
                                       onHotels: () => taps++,
+                                      onReservations: () => taps++,
+                                      onHeldFunds: () => taps++,
                                     ),
                                   const SizedBox(height: 20),
                                   if (member)
